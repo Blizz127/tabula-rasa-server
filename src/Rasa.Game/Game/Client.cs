@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Buffers;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Rasa.Game
 {
@@ -44,7 +47,25 @@ namespace Rasa.Game
         private readonly object _clientLock = new();
         private readonly ClientPacketHandler _handler;
         private readonly PacketQueue _packetQueue = new();
+
+        // Inbound byte stream. Owned exclusively by the MainLoop thread: it is only ever
+        // touched from Update()/DecodeNextPacket() and (after disconnect) Close().
         private readonly NonContiguousMemoryStream _incomingDataQueue = new();
+
+        // Hand-off from socket completion threads to the MainLoop. OnReceive() runs on an
+        // IOCP thread and must not mutate _incomingDataQueue (its backing List<> is not
+        // thread-safe; the MainLoop enumerates and RemoveRange()s it while decoding). It
+        // rents a pooled array, copies the chunk in, and enqueues it here; Update() drains
+        // the queue into the stream on the MainLoop. Receives are serialized per socket,
+        // so there is exactly one producer per client and byte order is preserved.
+        private readonly ConcurrentQueue<(byte[] Buffer, int Length)> _pendingChunks = new();
+
+        // Bytes enqueued but not yet drained. Bounded so a client that floods faster than
+        // the MainLoop consumes cannot grow memory without limit. Legitimate traffic is a
+        // few KB/s and a single frame is capped at 8 KB by LengthedSocket, so this only
+        // trips on a misbehaving client or a MainLoop stalled for many seconds.
+        private int _pendingBytes;
+        private const int MaxPendingBytes = 512 * 1024;
 
 
         private static PacketRouter<ClientPacketHandler, GameOpcode> PacketRouter { get; } = new PacketRouter<ClientPacketHandler, GameOpcode>();
@@ -92,6 +113,8 @@ namespace Rasa.Game
             // takes the whole world down, not just this connection.
             try
             {
+                DrainPendingChunks();
+
                 foreach (var protocolPacket in DecodeIncomingPackets())
                 {
                     try
@@ -151,6 +174,8 @@ namespace Rasa.Game
                 Socket.Close();
 
                 Server.Disconnect(this);
+
+                DiscardPendingChunks();
 
                 try
                 {
@@ -434,7 +459,49 @@ namespace Rasa.Game
 		
         private void OnReceive(BufferData data)
         {
-            _incomingDataQueue.CopyFromArray(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
+            // IOCP thread. Do not touch _incomingDataQueue here - see the field comment.
+            var count = data.RemainingLength;
+            if (count <= 0 || State == ClientState.Disconnected)
+                return;
+
+            // Same rent-and-copy CopyFromArray() used to do; only the List.Add is deferred.
+            var chunk = ArrayPool<byte>.Shared.Rent(count);
+            Buffer.BlockCopy(data.Buffer, data.BaseOffset + data.Offset, chunk, 0, count);
+
+            var pending = Interlocked.Add(ref _pendingBytes, count);
+            if (pending > MaxPendingBytes)
+            {
+                ArrayPool<byte>.Shared.Return(chunk);
+                Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} has {pending} bytes of undrained input (limit {MaxPendingBytes}), disconnecting.");
+                Close(false);
+                return;
+            }
+
+            _pendingChunks.Enqueue((chunk, count));
+        }
+
+        // MainLoop thread. Moves everything the socket thread has handed off into the
+        // stream. AddSharedPoolArray takes ownership of the pooled array; RemoveBytes
+        // returns it to the pool once it has been consumed, exactly as before.
+        private void DrainPendingChunks()
+        {
+            while (_pendingChunks.TryDequeue(out var chunk))
+            {
+                Interlocked.Add(ref _pendingBytes, -chunk.Length);
+                _incomingDataQueue.AddSharedPoolArray(chunk.Buffer, chunk.Length);
+            }
+        }
+
+        // Called from Close() after State is Disconnected, so OnReceive() no longer
+        // enqueues. A completion already past that check can still slip one chunk in
+        // afterwards; that array is simply collected by the GC, which is harmless.
+        private void DiscardPendingChunks()
+        {
+            while (_pendingChunks.TryDequeue(out var chunk))
+            {
+                Interlocked.Add(ref _pendingBytes, -chunk.Length);
+                ArrayPool<byte>.Shared.Return(chunk.Buffer);
+            }
         }
 
         private IEnumerable<ProtocolPacket> DecodeIncomingPackets()
