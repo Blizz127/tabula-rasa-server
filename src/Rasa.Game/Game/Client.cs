@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -88,22 +87,51 @@ namespace Rasa.Game
 
         public void Update(long delta)
         {
-            foreach (var protocolPacket in DecodeIncomingPackets())
+            // Nothing in this method may throw: Update() is driven by the single MainLoop
+            // thread that services every client and every manager. An escaping exception
+            // takes the whole world down, not just this connection.
+            try
             {
-                try
+                foreach (var protocolPacket in DecodeIncomingPackets())
                 {
-                    HandleProtocolPacket(protocolPacket);
-                }
-                catch (InvalidClientMessageException)
-                {
-                    Close();
+                    try
+                    {
+                        HandleProtocolPacket(protocolPacket);
+                    }
+                    catch (InvalidClientMessageException)
+                    {
+                        Close();
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.WriteLog(LogType.Error, $"Error handling {protocolPacket.Type} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                        Close();
+                        return;
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                // DecodeIncomingPackets() can throw while advancing the iterator (desynced
+                // or malformed stream), which the inner try above would never see.
+                Logger.WriteLog(LogType.Error, $"Error decoding packet stream from {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+                return;
+            }
 
-            IBasePacket packet;
+            try
+            {
+                IBasePacket packet;
 
-            while ((packet = _packetQueue.PopOutgoing()) != null)
-                SendPacket(packet);
+                while ((packet = _packetQueue.PopOutgoing()) != null)
+                    SendPacket(packet);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+            }
         }
 
         public void Close(bool sendPacket = true)
@@ -124,7 +152,17 @@ namespace Rasa.Game
 
                 Server.Disconnect(this);
 
-                SaveCharacter();
+                try
+                {
+                    SaveCharacter();
+                }
+                catch (Exception e)
+                {
+                    // Close() is reached from socket completion threads (OnError) as well as
+                    // from the MainLoop. A throw here used to terminate the process on every
+                    // disconnect that happened before a character was loaded.
+                    Logger.WriteLog(LogType.Error, $"Failed to save character on disconnect: {e}");
+                }
             }
         }
 
@@ -204,7 +242,7 @@ namespace Rasa.Game
             var pPacket = packet as ProtocolPacket;
             if (pPacket == null)
             {
-                Debugger.Break();
+                Logger.WriteLog(LogType.Error, $"SendPacket() called with a non-ProtocolPacket ({packet?.GetType().Name ?? "null"}), dropping it.");
                 return;
             }
 
@@ -448,7 +486,10 @@ namespace Rasa.Game
                 // If an out of sequence packet arrived, then throw it away
                 if (rawPacket.SequenceNumber < ReceiveSequence[rawPacket.Channel])
                 {
-                    Debugger.Break(); // todo: test and remove later
+                    // Movement arrives on a sequenced channel, so this is reachable in normal
+                    // play. Dropping the stale packet is correct; breaking into a debugger on
+                    // a headless server is not.
+                    Logger.WriteLog(LogType.Debug, $"Dropped out-of-order packet on channel {rawPacket.Channel} (seq {rawPacket.SequenceNumber} < {ReceiveSequence[rawPacket.Channel]}) from {Socket.RemoteAddress}.");
 
                     return null;
                 }
@@ -461,7 +502,7 @@ namespace Rasa.Game
             if (rawPacket.Type == ClientMessageOpcode.None)
             {
                 if (rawPacket.Size != 4)
-                    Debugger.Break(); // If it's not send timeout check, let's investigate...
+                    Logger.WriteLog(LogType.Debug, $"Skipped an untyped packet of size {rawPacket.Size} (expected the 4-byte send-timeout check) from {Socket.RemoteAddress}.");
 
                 return null;
             }
@@ -473,7 +514,12 @@ namespace Rasa.Game
         public void SaveCharacter()
         {
             var player = Player;
-            if (player == null)
+
+            // Player is field-initialized to an empty Manifestation, so a null check alone
+            // never fires. A client that disconnects before entering the world (character
+            // selection, failed login, idle timeout) still has Id == 0, and looking that up
+            // throws EntityNotFoundException.
+            if (player == null || player.Id == 0)
             {
                 return;
             }

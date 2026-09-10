@@ -41,6 +41,22 @@ namespace Rasa.Queue
 
         private void OnReceive(BufferData data)
         {
+            // Runs on a socket completion thread: an exception escaping here is unhandled and
+            // terminates the process, so a malformed or unexpected queue packet must only ever
+            // cost this one connection.
+            try
+            {
+                HandleReceive(data);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error handling queue packet from {Socket.RemoteAddress}, disconnecting: {e}");
+                Close();
+            }
+        }
+
+        private void HandleReceive(BufferData data)
+        {
             switch (State)
             {
                 case QueueState.Authenticating:

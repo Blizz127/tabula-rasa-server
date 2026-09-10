@@ -44,8 +44,8 @@ namespace Rasa.Packets.Protocol
 
             if (Size > br.BaseStream.Length)
             {
-                Debugger.Break();
-
+                // Caller (Client.Update) logs and disconnects this client; do not break into
+                // a debugger on a headless server.
                 throw new Exception($"Fragmented receive, should not happen! Packet size: {Size} <-> Buffer length: {br.BaseStream.Length}");
             }
 
@@ -88,7 +88,10 @@ namespace Rasa.Packets.Protocol
 
                 if (someType == 1)
                 {
-                    Debugger.Break(); // TODO: test
+                    // Untested path: the client normally sends uncompressed bodies. If this
+                    // ever fires, Client.Update() logs and drops the connection rather than
+                    // the server breaking into a debugger.
+                    Logger.WriteLog(LogType.Debug, "Received a deflate-compressed message body (untested decompression path).");
 
                     var uncompressedSize = br.ReadInt32();
 
