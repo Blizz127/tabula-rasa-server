@@ -62,7 +62,7 @@ namespace Rasa.Managers
          *  - CharacterName
          *  - RaceId
          *  - PlayerAfk                        => implemented
-         *  - PlayerInactiveWarning
+         *  - PlayerInactiveWarning            => implemented
          *  - ClanId
          *  - IsTrialAccount                   => implemented (always false)
          *  - PlayerEnteredCombat
@@ -792,14 +792,19 @@ namespace Rasa.Managers
             client.CallMethod(client.Player.EntityId, new IsRunningPacket(client.Player.IsRunning));
         }
 
+        /// <summary>Idle time before PlayerInactiveWarning, which also marks the player AFK.</summary>
+        public const long InactiveWarningMs = 5 * 60 * 1000;
+
+        /// <summary>Idle time before the player is sent back to character selection.</summary>
+        public const long InactiveLogoutMs = 15 * 60 * 1000;
+
         /// <summary>
-        /// Client traffic that does not mean the player is at the keyboard, so it must not
-        /// clear AFK. Everything else the client sends counts as activity: movement,
-        /// abilities, weapons, chat, inventory, targeting and so on.
+        /// Client traffic that does not mean the player is at the keyboard. It neither resets
+        /// the inactivity timer nor clears AFK. Everything else the client sends counts as
+        /// activity: movement, abilities, weapons, chat, inventory, targeting and so on.
         /// </summary>
-        private static readonly HashSet<GameOpcode> NonActivityOpcodes = new()
+        private static readonly HashSet<GameOpcode> AutomaticOpcodes = new()
         {
-            GameOpcode.ToggleAfk,           // would immediately undo the flag being set
             GameOpcode.Ping,                // client resends every 1s from RequestNetworkStats()
             GameOpcode.AutoFireKeepAlive,   // client resends every 2.5s while autofire runs
             GameOpcode.MapLoaded,           // sent automatically once a zone finishes loading
@@ -807,22 +812,85 @@ namespace Rasa.Managers
         };
 
         /// <summary>
-        /// Called for every inbound client message. Clears AFK (and tells everyone in range)
-        /// the first time the player actually does something.
+        /// Called for every inbound client method call. Resets the inactivity timer and clears
+        /// AFK (telling everyone in range) the first time the player actually does something.
         /// </summary>
         public void NotifyPlayerActivity(Client client, GameOpcode opcode)
         {
-            if (NonActivityOpcodes.Contains(opcode))
+            if (AutomaticOpcodes.Contains(opcode))
                 return;
 
-            NotifyPlayerActivity(client);
+            ResetInactivity(client);
+
+            // /afk is a deliberate action, so it resets the timer above, but clearing AFK here
+            // would immediately undo the flag it is setting.
+            if (opcode == GameOpcode.ToggleAfk)
+                return;
+
+            SetAfk(client, false);
         }
 
+        /// <summary>Called for movement, which arrives outside CallServerMethod.</summary>
         public void NotifyPlayerActivity(Client client)
         {
+            ResetInactivity(client);
+
             // SetAfk returns immediately when the flag is already clear, so this costs one
             // bool comparison on the movement path and only broadcasts on a real transition.
             SetAfk(client, false);
+        }
+
+        /// <summary>
+        /// Starts a fresh idle stretch. Also called when a player enters the world or finishes
+        /// a teleport, so time spent on a loading screen never counts as idle.
+        /// </summary>
+        public void ResetInactivity(Client client)
+        {
+            client.Player.LastActivityTick = Environment.TickCount64;
+            client.Player.InactiveWarningSent = false;
+        }
+
+        /// <summary>
+        /// Run from the MapChannelWorker every tick, ahead of its removal pass. At
+        /// InactiveWarningMs the player is marked AFK and warned; at InactiveLogoutMs they are
+        /// flagged the same way CharacterLogout flags a /logout, so the removal pass returns
+        /// them to character selection on the same tick.
+        /// </summary>
+        public void CheckInactivity(MapChannel mapChannel)
+        {
+            var now = Environment.TickCount64;
+
+            foreach (var client in mapChannel.ClientList)
+            {
+                // Loading, teleporting, already leaving, or a dropped connection awaiting removal.
+                if (client == null || client.State != ClientState.Ingame || client.Player.RemoveFromMap || client.Player.Disconected)
+                    continue;
+
+                var idle = now - client.Player.LastActivityTick;
+
+                if (idle >= InactiveLogoutMs)
+                {
+                    Logger.WriteLog(LogType.Network, $"{client.Player.FamilyName} inactive for {idle / 60000} minutes, returning to character selection");
+
+                    // Same effect as MapChannelManager.CharacterLogout, without its LogoutActive
+                    // gate: that flag only exists to confirm the client asked to leave.
+                    // Recv_BeginCharacterSelection switches the client to character selection
+                    // from any input state, so the client does not need to cooperate.
+                    client.State = ClientState.LoggedIn;
+                    client.Player.RemoveFromMap = true;
+                    continue;
+                }
+
+                if (idle >= InactiveWarningMs && !client.Player.InactiveWarningSent)
+                {
+                    client.Player.InactiveWarningSent = true;
+
+                    // AFK first, so the player reads "You are now AFK" followed by the warning,
+                    // and everyone in range sees the idle marker.
+                    SetAfk(client, true);
+                    client.CallMethod(client.Player.EntityId, new PlayerInactiveWarningPacket());
+                }
+            }
         }
 
         public void ToggleAfk(Client client)

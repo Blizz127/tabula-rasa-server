@@ -47,6 +47,15 @@ namespace Rasa.Structures
         public bool IsAFK { get; set; }
 
         /// <summary>
+        /// Environment.TickCount64 at the player's last movement or action. Monotonic, so a
+        /// wall-clock change on the server cannot make everyone idle at once.
+        /// </summary>
+        public long LastActivityTick { get; set; } = Environment.TickCount64;
+
+        /// <summary>Whether PlayerInactiveWarning has gone out for the current idle stretch.</summary>
+        public bool InactiveWarningSent { get; set; }
+
+        /// <summary>
         /// Always false: this server has no trial accounts. The single source for every packet
         /// that reports the flag (IsTrialAccount, WhoAck), so the client never shows the trial
         /// tag and no trial-only restriction - whisper, party or clan invites, trial chat

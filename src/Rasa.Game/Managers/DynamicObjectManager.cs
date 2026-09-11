@@ -418,6 +418,7 @@ namespace Rasa.Managers
                                     break;
                                 case ClientState.Teleporting:
                                     dropship.Client.State = ClientState.Ingame;
+                                    ManifestationManager.Instance.ResetInactivity(dropship.Client);
                                     break;
                                 default:
                                     Logger.WriteLog(LogType.Error, $"Unsupported CLientState {dropship.Client.State}");

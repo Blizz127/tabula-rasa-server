@@ -173,8 +173,11 @@ namespace Rasa.Managers
                     if (Timer.IsTriggered("ClientEffectUpdate"))
                         GameEffectManager.Instance.DoWork(mapChannel, delta);
 
-                    // check for players leaving the map: /logout, and dropped connections
-                    // flagged by Client.Close()
+                    // warn idle players and flag long-idle ones for removal below
+                    ManifestationManager.Instance.CheckInactivity(mapChannel);
+
+                    // check for players leaving the map: /logout, inactivity, and dropped
+                    // connections flagged by Client.Close()
                     foreach (var client in mapChannel.ClientList)
                         if (client != null && client.Player.RemoveFromMap)
                         {
@@ -230,6 +233,7 @@ namespace Rasa.Managers
             }
 
             client.State = ClientState.Ingame;
+            ManifestationManager.Instance.ResetInactivity(client);
             InventoryManager.Instance.InitForClient(client);
             ManifestationManager.Instance.UpdateStatsValues(client, true);
 
