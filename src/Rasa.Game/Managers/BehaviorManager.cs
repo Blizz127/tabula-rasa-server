@@ -37,6 +37,20 @@ namespace Rasa.Managers
         private const long CreatureThinkInterval = 250;
         private readonly long CreatureRestTime = 15000;
 
+        /// <summary>
+        /// How long a creature that has left combat ignores everything before looking for a new
+        /// target. This was 30 seconds, which also applied to a freshly spawned creature, so a
+        /// creature that had just fought - or that the server had only just spawned - stood there
+        /// while a player walked past it.
+        /// </summary>
+        private const long AggroScanDelayMs = 3000;
+
+        /// <summary>How often a chasing creature may recalculate its path to a moving target.</summary>
+        private const long ChasePathUpdateMs = 500;
+
+        /// <summary>How far the target may drift from the point the current chase path aims at.</summary>
+        private const float ChaseRepathDistance = 2.0f;
+
         private static BehaviorManager _instance;
         private static readonly object InstanceLock = new object();
         public static BehaviorManager Instance
@@ -69,12 +83,15 @@ namespace Rasa.Managers
             var foundEntity_distance = range + 100.0f; // value that is guaranteed to be higher than the found creature
             var foundEntity_entityId = 0ul;
 
+            // AFS do not attack AFS
+            var attacksPlayers = creature.Faction != Factions.AFS;
+
             foreach (var cellSeed in creature.Cells)
             {
                 foreach (var client in mapChannel.MapCellInfo.Cells[cellSeed].ClientList)
                 {
-                    // AFS do not attack AFS
-                    if (creature.Faction == Factions.AFS)
+                    // Cell lists can hold a client whose character is already gone.
+                    if (!attacksPlayers || client.Player == null)
                         continue;
 
                     if (client.Player.GmFlagAlwaysFriendly)
@@ -221,7 +238,7 @@ namespace Rasa.Managers
             if (creature.Controller.CurrentAction == BehaviorActionWander)
             {
                 // scan for enemy
-                if (creature.LastAgression >= 30000)    // 30 sec
+                if (creature.LastAgression >= AggroScanDelayMs)
                     if (CheckForAttackableEntityInRange(mapChannel, creature, creature.AggroRange))
                     {
                         // enemy found!
@@ -478,60 +495,56 @@ namespace Rasa.Managers
                 if (targetDistSqr <= 3.0f * 3.0f)
                     return;// near enough, dont move
 
-                // after checking for melee and range attack without success, do pathing
-                // invalidate path if the target moved away too far from the original path destination
-                var tempPos = targetPosition;
+                // After checking for melee and ranged attacks without success, chase.
+                //
+                // The path was only ever built when there was none, and nothing ever emptied it:
+                // a creature walked to the spot its target stood in when the fight started and
+                // then held that node forever, standing still while the player moved around it
+                // and shot at it. The path is now rebuilt whenever the target has moved away from
+                // the point it aims at, at most every ChasePathUpdateMs.
+                var targetDrift = Vector3.Distance(targetPosition, creature.Controller.ActionFighting.LockedTargetPosition);
 
-                // generate path if there is no current
-                if (creature.Controller.TimerPathUpdateLock <= 0)
+                if (creature.Controller.Path.Count == 0
+                    || (targetDrift > ChaseRepathDistance && creature.Controller.TimerPathUpdateLock <= 0))
                 {
-                    if (creature.Controller.Path.Count == 0)
+                    creature.Controller.TimerPathUpdateLock = ChasePathUpdateMs;
+
+                    var pathTarget = new Vector3();
+
+                    if (targetDistSqr < 0.1f)
                     {
-                        // update path update lock timer
-                        creature.Controller.TimerPathUpdateLock = 5000;
-
-                        var pathTarget = new Vector3();
-                        if (targetDistSqr < 0.1f)
-                        {
-                            // if too near, move out of enemy by running to random point somewhere x units around the creature
-                            var angle = (new Random().Next() / 32767.0f) * 6.28318f; // random angle
-                            var distance = 2.5f; // keep 2.5 meter distance
-                            pathTarget.X = targetPosition.X + (float)Math.Cos(angle) * distance;
-                            pathTarget.Y = targetPosition.Y;
-                            pathTarget.Z = targetPosition.Z + (float)Math.Sin(angle) * distance;
-                        }
-                        else
-                        {
-                            // run to nearest point that maintains distance to creature
-                            var vecV2A = new float[2]; // vector2D victim->attacker
-                            vecV2A[0] = -targetDistX;
-                            vecV2A[1] = -targetDistZ;
-                            // normalize
-                            var vecV2ALen = (float)Math.Sqrt(targetDistSqr);
-                            vecV2A[0] /= vecV2ALen;
-                            vecV2A[1] /= vecV2ALen;
-                            // use vector to calculate nearest melee point from our current position
-                            var distance = 2.5f; // keep 2.5 meter distance
-                            pathTarget.X = targetPosition.X + vecV2A[0] * distance;
-                            pathTarget.Y = targetPosition.Y;
-                            pathTarget.Z = targetPosition.Z + vecV2A[1] * distance;
-                        }
-
-                        var endPos = pathTarget;
-
-                        creature.Controller.PathIndex = 0;
-                        creature.Controller.Path.Add(endPos);
-
-                        if (creature.Controller.Path == null)
-                        {
-                            Logger.WriteLog(LogType.Error, "Cannot find path");
-                            return;
-                        }
-
-                        // also update path target variable (using creature position, not path target position)
-                        creature.Controller.ActionFighting.LockedTargetPosition = targetPosition;
+                        // if too near, move out of enemy by running to random point somewhere x units around the creature
+                        var angle = (new Random().Next() / 32767.0f) * 6.28318f; // random angle
+                        var distance = 2.5f; // keep 2.5 meter distance
+                        pathTarget.X = targetPosition.X + (float)Math.Cos(angle) * distance;
+                        pathTarget.Y = targetPosition.Y;
+                        pathTarget.Z = targetPosition.Z + (float)Math.Sin(angle) * distance;
                     }
+                    else
+                    {
+                        // run to nearest point that maintains distance to creature
+                        var vecV2A = new float[2]; // vector2D victim->attacker
+                        vecV2A[0] = -targetDistX;
+                        vecV2A[1] = -targetDistZ;
+                        // normalize
+                        var vecV2ALen = (float)Math.Sqrt(targetDistSqr);
+                        vecV2A[0] /= vecV2ALen;
+                        vecV2A[1] /= vecV2ALen;
+                        // use vector to calculate nearest melee point from our current position
+                        var distance = 2.5f; // keep 2.5 meter distance
+                        pathTarget.X = targetPosition.X + vecV2A[0] * distance;
+                        pathTarget.Y = targetPosition.Y;
+                        pathTarget.Z = targetPosition.Z + vecV2A[1] * distance;
+                    }
+
+                    creature.Controller.Path.Clear();
+                    creature.Controller.PathIndex = 0;
+                    creature.Controller.Path.Add(pathTarget);
+
+                    // where the target was when this path was built
+                    creature.Controller.ActionFighting.LockedTargetPosition = targetPosition;
                 }
+
                 // follow path
                 if (creature.Controller.PathIndex < creature.Controller.Path.Count)
                 {
@@ -560,28 +573,38 @@ namespace Rasa.Managers
                     if (dist < 0.9f || skipDetected)
                     {
                         creature.Controller.PathIndex++; // goto next node
+
                         if (creature.Controller.PathIndex >= creature.Controller.Path.Count)
+                        {
+                            // Path walked. Dropping it lets the next think build one for wherever
+                            // the target is now, instead of holding this node for good.
+                            creature.Controller.Path.Clear();
                             creature.Controller.PathIndex = 0;
+                        }
                     }
                 }
             }//---fighting
         }
 
+        /// <summary>
+        /// A wander destination around the creature's home, far enough from where it stands to be
+        /// worth walking to. Every candidate sits within WanderDistance of home, so a creature
+        /// that ended a chase further from home than that can never draw one - the loop used to
+        /// run forever, on the MainLoop thread. It gives up after a fixed number of tries and
+        /// walks home instead.
+        /// </summary>
         private Vector3 GetDestiantion(Creature creature)
         {
-            var dest = new Vector3();
-
-            while (true)
+            for (var attempt = 0; attempt < 20; attempt++)
             {
-                var rndVector = GetRandomVector();
-                dest = creature.HomePos.Position + rndVector;
+                var dest = creature.HomePos.Position + GetRandomVector();
                 var distance = GetDistanceSqr(creature.Position, dest);
 
                 if (distance > WanderDistance / 3 && distance < WanderDistance)
-                    break;
+                    return dest;
             }
 
-            return dest;
+            return creature.HomePos.Position;
         }
 
         private double GetDistanceSqr(Vector3 p1, Vector3 p2)
@@ -704,7 +727,11 @@ namespace Rasa.Managers
         public void SetActionFighting(Creature creature, ulong targetEntityId)
         {
             creature.Controller.CurrentAction = BehaviorActionFighting;
+            // Whatever the creature was walking towards is not where the fight is: without this
+            // it chased its last wander node before ever heading for its target.
+            creature.Controller.Path.Clear();
             creature.Controller.PathIndex = 0;
+            creature.Controller.TimerPathUpdateLock = 0;
             creature.Controller.ActionFighting.TargetEntityId = targetEntityId;
             creature.LastAgression = 0;
         }
@@ -724,6 +751,7 @@ namespace Rasa.Managers
         {
             creature.Controller.CurrentAction = BehaviorActionWander;
             creature.Controller.ActionWander.State = WanderIdle;
+            creature.Controller.Path.Clear();
             creature.Controller.PathIndex = 0;
         }
 
