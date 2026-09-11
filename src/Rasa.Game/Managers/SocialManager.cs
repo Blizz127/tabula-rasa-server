@@ -14,7 +14,7 @@ namespace Rasa.Managers
     public class SocialManager
     {
         /*      Social Packets:
-         * - AddFriend
+         * - AddFriend                        => implemented
          * - AddFriendByName                  => implemented
          * - FriendList
          * - FriendLoggedOff
@@ -69,6 +69,25 @@ namespace Rasa.Managers
 
         #endregion
 
+        /// <summary>shared/gameconstants.py:253. The social window disables its Add button at
+        /// this count, but the radial menu and the console do not check it.</summary>
+        private const int MaxFriendsListCount = 200;
+
+        internal void AddFriend(Client client, AddFriendPacket packet)
+        {
+            GameAccountEntry account = null;
+
+            if (packet.AccountId.HasValue)
+            {
+                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                account = unitOfWork.GameAccounts.Find(packet.AccountId.Value);
+            }
+
+            // An id that matches no account has no family name to report; the id itself is the
+            // most useful thing to put in PM_FAILED_FRIEND_ADD's %(player)s.
+            RequestFriend(client, account, packet.AccountId?.ToString() ?? string.Empty);
+        }
+
         internal void AddFriendByName(Client client, AddFriendByNamePacket packet)
         {
             var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
@@ -81,15 +100,24 @@ namespace Rasa.Managers
                 account = unitOfWork.GameAccounts.FindByFamilyName(requestedName);
             }
 
-            // Unknown name, or the player's own family. Compared by id: family names are
-            // matched case-insensitively now, so a name comparison could miss "self".
+            RequestFriend(client, account, requestedName);
+        }
+
+        /// <summary>
+        /// Checks shared by AddFriend and AddFriendByName, then adds the friend. Every refusal is
+        /// acked with PM_FAILED_FRIEND_ADD; success is announced by FriendAdded alone.
+        /// </summary>
+        private void RequestFriend(Client client, GameAccountEntry account, string requestedName)
+        {
+            // Unknown account, or the player's own. Compared by id: family names are matched
+            // case-insensitively, so a name comparison could miss "self".
             if (account == null || account.Id == client.AccountEntry.Id)
             {
-                CommunicatorManager.Instance.AddFriendAck(client, requestedName, false);
+                CommunicatorManager.Instance.AddFriendAck(client, account?.FamilyName ?? requestedName, false);
                 return;
             }
 
-            if (client.Player.Friends.Contains(account.Id))
+            if (client.Player.Friends.Contains(account.Id) || client.Player.Friends.Count >= MaxFriendsListCount)
             {
                 CommunicatorManager.Instance.AddFriendAck(client, account.FamilyName, false);
                 return;

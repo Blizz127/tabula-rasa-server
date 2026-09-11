@@ -908,6 +908,12 @@
 
         #region Social
 
+        [PacketHandler(GameOpcode.AddFriend)]
+        private void AddFriend(AddFriendPacket packet)
+        {
+            SocialManager.Instance.AddFriend(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.AddFriendByName)]
         private void AddFriendByName(AddFriendByNamePacket packet)
         {
