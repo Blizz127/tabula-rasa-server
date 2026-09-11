@@ -568,7 +568,7 @@
         [PacketHandler(GameOpcode.Shout)]
         private void Shout(ShoutPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: ShoutPacket");
+            CommunicatorManager.Instance.Shout(Client, packet.TextMsg);
         }
 
         [PacketHandler(GameOpcode.SurrenderClanFeud)]

@@ -73,7 +73,7 @@ namespace Rasa.Managers
          * - Emote
          * - PartyChat
          * - Radial
-         * - Shout
+         * - Shout                              => implemented
          * - Whisper
          */
 
@@ -369,6 +369,41 @@ namespace Rasa.Managers
                         }
                     );
                 }
+            }
+        }
+
+        /// <summary>
+        /// How far a shout carries, in world units. RadialChat uses 70, "about the range the
+        /// client is visible". Shout is deliberately wider: the client renders it in the chat
+        /// window only, with no overhead bubble and no sender entity id, so the shouter does
+        /// not need to be visible to the listener. The client ships no chat-range table, so
+        /// this figure is ours to pick - raise it toward map size if a shout should reach the
+        /// whole zone.
+        /// </summary>
+        private const float ShoutRange = 150.0f;
+
+        public void Shout(Client client, string textMsg)
+        {
+            if (client.Player == null)
+                return;
+
+            // Same iteration style as RadialChat: the map channel's client list does not
+            // change while we are on the main loop, so no extra synchronisation is needed.
+            var mapChannel = client.Player.MapChannel;
+
+            for (var i = 0; i < mapChannel.ClientList.Count; i++)
+            {
+                var tempClient = mapChannel.ClientList[i];
+
+                if (tempClient.Player == null)
+                    continue;
+
+                if (Vector3.Distance(client.Player.Position, tempClient.Player.Position) <= ShoutRange)
+                    tempClient.CallMethod(SysEntity.CommunicatorId, new ShoutPacket
+                    {
+                        FamilyName = client.Player.FamilyName,
+                        TextMsg = textMsg
+                    });
             }
         }
 
