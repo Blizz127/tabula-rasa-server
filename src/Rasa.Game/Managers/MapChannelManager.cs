@@ -298,6 +298,7 @@ namespace Rasa.Managers
             CellManager.Instance.RemoveFromWorld(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
+            LookingForGroupManager.Instance.RemovePlayer(client);
 
             if (logout)
                 if (client.Player.Disconected == false)

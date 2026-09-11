@@ -8,6 +8,7 @@
     using Packets.Communicator.Both;
     using Packets.Communicator.Client;
     using Packets.Inventory.Client;
+    using Packets.LookingForGroup.Client;
     using Packets.LootDispenser.Client;
     using Packets.Party.Both;
     using Packets.Party.Client;
@@ -727,6 +728,28 @@
         {
             LootDispenserManager.Instance.RequestLootAllFromCorpse(Client, packet);
         }
+        #endregion
+
+        #region LookingForGroup
+
+        [PacketHandler(GameOpcode.RemoveLookingForGroupAd)]
+        private void RemoveLookingForGroupAd(RemoveLookingForGroupAdPacket packet)
+        {
+            LookingForGroupManager.Instance.RemoveLookingForGroupAd(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestCreateLookingForGroupAd)]
+        private void RequestCreateLookingForGroupAd(RequestCreateLookingForGroupAdPacket packet)
+        {
+            LookingForGroupManager.Instance.RequestCreateLookingForGroupAd(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestLookingForGroupSearch)]
+        private void RequestLookingForGroupSearch(RequestLookingForGroupSearchPacket packet)
+        {
+            LookingForGroupManager.Instance.RequestLookingForGroupSearch(Client, packet);
+        }
+
         #endregion
 
         #region Party
