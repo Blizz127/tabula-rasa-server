@@ -13,7 +13,8 @@ namespace Rasa.Structures
         //public int TimerMissileUpdate { get; set; }
         //public int TimerDynObjUpdate { get; set; }
         public long MapChannelElapsed { get; set; }
-        //public int TimerController { get; set; }
+        /// <summary>Milliseconds since this map's creatures last ran BehaviorManager.CreatureThink.</summary>
+        public long ControllerElapsed { get; set; }
         //public int TimerPlayerUpdate { get; set; }
         // player
         public int PlayerLimit { get; set; }

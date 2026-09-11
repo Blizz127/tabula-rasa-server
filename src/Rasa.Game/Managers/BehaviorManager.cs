@@ -28,7 +28,13 @@ namespace Rasa.Managers
         public const byte WanderIdle = 0;
         public const byte WanderMoving = 1;
 
-        private long PassedTime = 0;
+        /// <summary>
+        /// How often creature AI runs per map. The original server ran controller_mapChannelThink
+        /// every 250 ms (MapChannel.cpp:1052); this port ran it every 100 ms, and because the step
+        /// size was a fixed quarter of the creature's speed, creatures covered 2.5x the ground
+        /// they should while the movement packet still reported their real speed.
+        /// </summary>
+        private const long CreatureThinkInterval = 250;
         private readonly long CreatureRestTime = 15000;
 
         private static BehaviorManager _instance;
@@ -279,11 +285,10 @@ namespace Rasa.Managers
                     // wander target location reached
                     if (dist > 0.01f) // to avoid division by zero
                     {
-                        var distanceMoved = UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true);
+                        var distanceMoved = UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true, delta);
                         creature.Controller.Path.RemoveAt(0);
-                        // sometimes it is possible the creature walks past the pathnode a tiny bit,
-                        // which will force him to move back a step, it does look ugly so here is a tiny workaround
-                        if (distanceMoved > dist) // distance moved greater than distance left?
+                        // the step is clamped to the distance left, so reaching the node shows up as equal
+                        if (distanceMoved >= dist) // distance moved covers the distance left?
                             dist = 0.0f; // mark pathnode reached
                     }
 
@@ -332,7 +337,7 @@ namespace Rasa.Managers
 
                 // wander target location reached
                 if (dist > 0.01f) // to avoid division by zero
-                    UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true);
+                    UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true, delta);
 
                 if (dist < 0.8f)
                 {
@@ -451,7 +456,7 @@ namespace Rasa.Managers
                         continue;   // action on cooldown
 
                     // rotate
-                    UpdateEntityMovement(targetDistX, targetDistY, targetDistZ, creature, mapChannel, 0.0f, false);
+                    UpdateEntityMovement(targetDistX, targetDistY, targetDistZ, creature, mapChannel, 0.0f, false, delta);
 
                     // execute action and quit
                     var dmg = (int)(action.MinDamage + (new Random().Next() % (action.MaxDamage - action.MinDamage + 1)));
@@ -540,7 +545,7 @@ namespace Rasa.Managers
 
                     if (dist > 0.01f) // to avoid division by zero
                     {
-                        UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.RunSpeed, true);
+                        UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.RunSpeed, true, delta);
                         // on high movement speeds the movement steps can be large, check if creature didn't run too far
                         difX = nextPathNodePos.X - creature.Position.X;
                         difY = nextPathNodePos.Y - creature.Position.Y;
@@ -601,10 +606,15 @@ namespace Rasa.Managers
         
         public void MapChannelThink(MapChannel mapChannel, long delta)
         {
-            PassedTime += delta;
+            // Accumulated per map. This used to be one field on the singleton shared by every
+            // map channel, so with two maps active each one's creatures ran on the other's time.
+            mapChannel.ControllerElapsed += delta;
 
-            if (PassedTime < 100)
+            if (mapChannel.ControllerElapsed < CreatureThinkInterval)
                 return;
+
+            var elapsed = mapChannel.ControllerElapsed;
+            mapChannel.ControllerElapsed = 0;
 
             // creature deletion and update queue
             var queue_creatureDeletion = new List<Creature>();
@@ -627,7 +637,7 @@ namespace Rasa.Managers
 
                     for (var f = 0; f < mapCell.CreatureList.Count; f++)
                     {
-                        CreatureThink(mapChannel, mapCell.CreatureList[f], PassedTime, out var needDeletion, out var needCellUpdate); // update time hardcoded, see todo
+                        CreatureThink(mapChannel, mapCell.CreatureList[f], elapsed, out var needDeletion, out var needCellUpdate);
 
                         if (needDeletion)
                             queue_creatureDeletion.Add(mapCell.CreatureList[f]);
@@ -689,8 +699,6 @@ namespace Rasa.Managers
                         SpawnPoolManager.Instance.DecreaseDeadCreatureCount(creatureList[f].SpawnPool);
                 }
             }
-
-            PassedTime = 0;
         }
         
         public void SetActionFighting(Creature creature, ulong targetEntityId)
@@ -730,36 +738,38 @@ namespace Rasa.Managers
                 action.CooldownTimer -= delta;
         }
         
-        // returns the distance moved
-        float UpdateEntityMovement(double difX, double difY, double difZ, Creature creature, MapChannel mapChannel, float speeddiv, bool isMoved)
+        /// <summary>
+        /// Steps a creature toward (difX, difY, difZ) and broadcasts the movement.
+        /// </summary>
+        /// <param name="speed">Units per second; also what the client is told to extrapolate at.</param>
+        /// <param name="elapsedMs">Time since the creature last moved.</param>
+        /// <returns>The distance actually moved.</returns>
+        float UpdateEntityMovement(double difX, double difY, double difZ, Creature creature, MapChannel mapChannel, float speed, bool isMoved, long elapsedMs)
         {
-            var length = 1.0d / Math.Sqrt(difX * difX + difY * difY + difZ * difZ);
-            var velocity = 0.0f;
+            var remaining = Math.Sqrt(difX * difX + difY * difY + difZ * difZ);
+            var length = 1.0d / remaining;
             difX *= length;
             difY *= length;
             difZ *= length;
             var vX = (float)Math.Atan2(-difX, -difZ);
 
-            // multiplicate with speed
-            if (isMoved == true)
-                velocity = speeddiv;
-            else
-                velocity = 0.0f;
-            velocity /= 4.0f;
-            difX *= velocity;
-            difY *= velocity;
-            difZ *= velocity;
+            var velocity = isMoved ? speed : 0.0f;
 
-            // move unit
-            if (isMoved == true)
-                creature.Position += new Vector3((float)difX, (float)difY, (float)difZ);
+            // Distance from elapsed time rather than a fixed speed/4 per call. The fixed step was
+            // calibrated for the original 250 ms think rate; tying it to real time keeps creatures
+            // at their stated speed however the MainLoop ticks land. Clamped to the distance left
+            // so a large step cannot carry the creature past its node.
+            var step = (float)Math.Min(velocity * elapsedMs / 1000.0d, remaining);
+
+            if (isMoved)
+                creature.Position += new Vector3((float)(difX * step), (float)(difY * step), (float)(difZ * step));
 
             // send movement update
-            var movement = new Movement(new Vector3(creature.Position.X, creature.Position.Y, creature.Position.Z), velocity * 4.0f, 0x08, new Vector2(vX, 0f));
+            var movement = new Movement(new Vector3(creature.Position.X, creature.Position.Y, creature.Position.Z), velocity, 0x08, new Vector2(vX, 0f));
 
             CellManager.Instance.CellMoveObject(creature, movement);
 
-            return velocity;
+            return step;
         }
     }
 }
