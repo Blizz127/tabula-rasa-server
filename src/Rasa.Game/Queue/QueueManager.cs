@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices.ComTypes;
@@ -21,6 +22,25 @@ namespace Rasa.Queue
         public Server Server { get; }
         public LengthedSocket Socket { get; }
         public int QueuedClients => _queuedClients.Count;
+
+        /// <summary>Queue connections handed off to the world port that are still open.</summary>
+        public int RedirectingClients
+        {
+            get
+            {
+                lock (Clients)
+                    return Clients.Count(c => c.State == QueueState.Redirecting);
+            }
+        }
+
+        /// <summary>Accounts with a live, authenticated queue connection.</summary>
+        public HashSet<uint> ConnectedUserIds()
+        {
+            lock (Clients)
+                return new HashSet<uint>(Clients
+                    .Where(c => c.State == QueueState.Authenticated || c.State == QueueState.InQueue || c.State == QueueState.Redirecting)
+                    .Select(c => c.UserId));
+        }
         public RedirectDelegate OnRedirect { get; set; }
         public QueueConfig Config => Server.Config.QueueConfig;
 

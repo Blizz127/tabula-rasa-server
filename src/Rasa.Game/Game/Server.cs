@@ -45,7 +45,30 @@ namespace Rasa.Game
         public Timer Timer { get; } = new Timer();
         public bool Running => Loop != null && Loop.Running;
         public bool IsFull => CurrentPlayers >= Config.ServerInfoConfig.MaxPlayers;
-        public ushort CurrentPlayers { get; set; }
+
+        /// <summary>
+        /// Players holding a slot: every world connection past login (character selection,
+        /// loading, in world, teleporting), plus queue clients already handed off to the world
+        /// port but not yet logged in there - without those, a burst of arrivals all see a free
+        /// slot before any of them reaches the world. Computed on demand; it used to be a settable
+        /// property nothing ever set, so it read 0, IsFull was never true, the queue let everyone
+        /// straight through and the server list always showed an empty server.
+        /// </summary>
+        public ushort CurrentPlayers
+        {
+            get
+            {
+                int count;
+
+                lock (Clients)
+                    count = Clients.Count(c => c.IsAuthenticated());
+
+                if (QueueManager != null)
+                    count += QueueManager.RedirectingClients;
+
+                return (ushort)Math.Min(count, ushort.MaxValue);
+            }
+        }
 
         private readonly List<Client> _clientsToRemove = new List<Client>();
         private readonly PacketRouter<Server, CommOpcode> _router = new PacketRouter<Server, CommOpcode>();
@@ -173,8 +196,19 @@ namespace Rasa.Game
             {
                 var toRemove = new List<uint>();
 
+                // A redirect session lasts one minute, which used to be harmless because the queue
+                // never held anyone. With a real player count it does: keep the session alive while
+                // its account is still connected to the queue, so a player who waited more than a
+                // minute is not refused at the world login. Once the queue lets go of them they have
+                // the usual minute to arrive.
+                var queued = QueueManager?.ConnectedUserIds() ?? new HashSet<uint>();
+
                 lock (IncomingClients)
                 {
+                    foreach (var entry in IncomingClients)
+                        if (queued.Contains(entry.Key))
+                            entry.Value.ExpireTime = DateTime.Now.AddMinutes(1);
+
                     toRemove.AddRange(IncomingClients.Where(ic => ic.Value.ExpireTime < DateTime.Now).Select(ic => ic.Key));
 
                     foreach (var rem in toRemove)
@@ -380,7 +414,9 @@ namespace Rasa.Game
                 CurrentPlayers = CurrentPlayers,
                 GamePort = Config.GameConfig.Port,
                 QueuePort = Config.QueueConfig.Port,
-                MaxPlayers = (ushort) Config.SocketAsyncConfig.MaxClients
+                // The configured cap the queue enforces. This used to report the socket pool size
+                // (SocketAsyncConfig.MaxClients), which the auth server list showed as capacity.
+                MaxPlayers = Config.ServerInfoConfig.MaxPlayers
             });
         }
 
