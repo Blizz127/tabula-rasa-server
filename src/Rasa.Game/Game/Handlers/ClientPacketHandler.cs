@@ -13,6 +13,7 @@
     using Packets.Party.Both;
     using Packets.Party.Client;
     using Packets.Social.Client;
+    using Packets.Trade.Client;
 
     public partial class ClientPacketHandler
     {
@@ -849,6 +850,58 @@
         [PacketHandler(GameOpcode.SendJoinRequestToSquadLeader)]
         private void SendJoinRequestToSquadLeader(SendJoinRequestToSquadLeaderPacket packet)
         {
+        }
+
+        #endregion
+
+        #region Trade
+
+        [PacketHandler(GameOpcode.RequestAcceptTradeRequest)]
+        private void RequestAcceptTradeRequest(RequestAcceptTradeRequestPacket packet)
+        {
+            TradeManager.Instance.RequestAcceptTradeRequest(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestAddItemToTrade)]
+        private void RequestAddItemToTrade(RequestAddItemToTradePacket packet)
+        {
+            TradeManager.Instance.RequestAddItemToTrade(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestCancelTrade)]
+        private void RequestCancelTrade(RequestCancelTradePacket packet)
+        {
+            TradeManager.Instance.RequestCancelTrade(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestChangeEnergyUnitAmount)]
+        private void RequestChangeEnergyUnitAmount(RequestChangeEnergyUnitAmountPacket packet)
+        {
+            TradeManager.Instance.RequestChangeEnergyUnitAmount(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestConfirmTrade)]
+        private void RequestConfirmTrade(RequestConfirmTradePacket packet)
+        {
+            TradeManager.Instance.RequestConfirmTrade(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestRemoveItemFromTrade)]
+        private void RequestRemoveItemFromTrade(RequestRemoveItemFromTradePacket packet)
+        {
+            TradeManager.Instance.RequestRemoveItemFromTrade(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestTrade)]
+        private void RequestTrade(RequestTradePacket packet)
+        {
+            TradeManager.Instance.RequestTrade(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestUnconfirmTrade)]
+        private void RequestUnconfirmTrade(RequestUnconfirmTradePacket packet)
+        {
+            TradeManager.Instance.RequestUnconfirmTrade(Client, packet);
         }
 
         #endregion
