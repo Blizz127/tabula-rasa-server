@@ -598,7 +598,6 @@
         [PacketHandler(GameOpcode.Who)]
         private void Who(WhoPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: WhoPacket");
             CommunicatorManager.Instance.Who(Client, packet);
         }
 

@@ -16,7 +16,7 @@ namespace Rasa.Managers
     {
         /*      Communicator Packets:
          *      -- WorldMsg
-         * - Who
+         * - Who                                => implemented
          * - ChangeClanName
          * - ChallengeClanToFeud
          * - FeudChallengeResponse
@@ -51,7 +51,7 @@ namespace Rasa.Managers
          * - FriendList
          * - IgnoreList
          * - LoginOk
-         * - PlayerCountAck
+         * - PlayerCountAck                     => implemented (Who result count)
          * - PlayerLogin
          * - PlayerLogout
          * - PreviewMOTD
@@ -62,8 +62,8 @@ namespace Rasa.Managers
          * - WhisperAck
          * - WhisperFailAck
          * - WhisperSelf
-         * - WhoAck
-         * - WhoFailAck
+         * - WhoAck                             => implemented
+         * - WhoFailAck                         => implemented
          * 
          *      Client and server packets:
          * - RadialChat
@@ -203,12 +203,67 @@ namespace Rasa.Managers
             });
         }
 
+        /// <summary>
+        /// Most results the server will report for one /who. The client prints a line per
+        /// result into the chat window, so an unbounded list on a busy server would flood it.
+        /// </summary>
+        private const int WhoResultLimit = 50;
+
         internal void Who(Client client, WhoPacket packet)
         {
-            // msgId from playermessagelanguage.py
-            var msgId = 7u;
+            var search = (packet.SearchText ?? string.Empty).Trim();
 
-            client.CallMethod(SysEntity.CommunicatorId, new WhoFailAckPacket(packet.FamilyName, msgId));
+            var matches = new List<Client>();
+
+            foreach (var candidate in Server.Clients)
+            {
+                if (candidate.State != ClientState.Ingame || candidate.Player == null)
+                    continue;
+
+                // No argument lists everyone online; otherwise match either name, since
+                // /who, /lookup and /whois all send free text rather than a specific field.
+                if (search.Length > 0
+                    && (candidate.Player.Name == null
+                        || candidate.Player.Name.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0)
+                    && (candidate.Player.FamilyName == null
+                        || candidate.Player.FamilyName.IndexOf(search, StringComparison.OrdinalIgnoreCase) < 0))
+                    continue;
+
+                matches.Add(candidate);
+
+                if (matches.Count >= WhoResultLimit)
+                    break;
+            }
+
+            if (matches.Count == 0)
+            {
+                client.CallMethod(SysEntity.CommunicatorId,
+                    new WhoFailAckPacket(search, (uint)PlayerMessage.PmNoSuchUser));
+
+                return;
+            }
+
+            foreach (var match in matches)
+                client.CallMethod(SysEntity.CommunicatorId, new WhoAckPacket
+                {
+                    CharacterName = match.Player.Name,
+                    FamilyName = match.Player.FamilyName,
+                    ClanName = match.Player.ClanName,
+                    // The client omits the title when this is None, and titledata has no
+                    // entry for 0, which is what an untitled character carries.
+                    TitleId = match.Player.CurrentTitle == 0 ? null : match.Player.CurrentTitle,
+                    CharacterClass = match.Player.Class,
+                    Level = match.Player.Level,
+                    ContextId = match.Player.MapContextId,
+                    // One instance per map today, so there is no ordinal to disambiguate;
+                    // sending a value would make the client render "MapName(1)".
+                    CurrentGameContextOrdinal = null,
+                    IsAfk = match.Player.IsAFK,
+                    IsTrialAccount = false
+                });
+
+            client.CallMethod(SysEntity.CommunicatorId,
+                new PlayerCountAckPacket((uint)PlayerMessage.PmWhoCount, (uint)matches.Count));
         }
 
         #endregion
