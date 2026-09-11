@@ -791,6 +791,39 @@ namespace Rasa.Managers
             client.CallMethod(client.Player.EntityId, new IsRunningPacket(client.Player.IsRunning));
         }
 
+        /// <summary>
+        /// Client traffic that does not mean the player is at the keyboard, so it must not
+        /// clear AFK. Everything else the client sends counts as activity: movement,
+        /// abilities, weapons, chat, inventory, targeting and so on.
+        /// </summary>
+        private static readonly HashSet<GameOpcode> NonActivityOpcodes = new()
+        {
+            GameOpcode.ToggleAfk,           // would immediately undo the flag being set
+            GameOpcode.Ping,                // client resends every 1s from RequestNetworkStats()
+            GameOpcode.AutoFireKeepAlive,   // client resends every 2.5s while autofire runs
+            GameOpcode.MapLoaded,           // sent automatically once a zone finishes loading
+            GameOpcode.TeleportAcknowledge  // automatic reply to a server-initiated teleport
+        };
+
+        /// <summary>
+        /// Called for every inbound client message. Clears AFK (and tells everyone in range)
+        /// the first time the player actually does something.
+        /// </summary>
+        public void NotifyPlayerActivity(Client client, GameOpcode opcode)
+        {
+            if (NonActivityOpcodes.Contains(opcode))
+                return;
+
+            NotifyPlayerActivity(client);
+        }
+
+        public void NotifyPlayerActivity(Client client)
+        {
+            // SetAfk returns immediately when the flag is already clear, so this costs one
+            // bool comparison on the movement path and only broadcasts on a real transition.
+            SetAfk(client, false);
+        }
+
         public void ToggleAfk(Client client)
         {
             SetAfk(client, !client.Player.IsAFK);

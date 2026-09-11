@@ -376,6 +376,8 @@ namespace Rasa.Game
                     Player.Rotation = moveMessage.Movement.ViewDirection.X;
                     Movement = moveMessage.Movement;
 
+                    ManifestationManager.Instance.NotifyPlayerActivity(this);
+
                     // send your movement to other players in visibility range
                     var moveObjectMessage = new MoveObjectMessage(Player.EntityId, moveMessage.Movement);
                     CellMoveObject(this, moveObjectMessage, true);
@@ -390,6 +392,9 @@ namespace Rasa.Game
                         Close(true);
                         return;
                     }
+
+                    // MethodId, not Packet.Opcode: an opcode with no handler leaves Packet null.
+                    ManifestationManager.Instance.NotifyPlayerActivity(this, csmPacket.MethodId);
 
                     PacketRouter.RoutePacket(_handler, csmPacket.Packet);
                     break;
