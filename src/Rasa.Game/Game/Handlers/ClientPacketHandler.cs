@@ -49,7 +49,7 @@
         [PacketHandler(GameOpcode.CancelLogoutRequest)]
         private void CancelLogoutRequest(CancelLogoutRequestPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo CancelLogoutRequest");  // gues nothing to do here
+            MapChannelManager.Instance.CancelLogoutRequest(Client);
         }
 
         [PacketHandler(GameOpcode.ChangeShowHelmet)]

@@ -75,7 +75,11 @@ namespace Rasa.Structures
         internal List<uint> IgnoredPlayers = new();
         public MapChannel MapChannel { get; set; }
         public bool Disconected { get; set; }
+        /// <summary>Set by RequestLogout, cleared by CancelLogoutRequest.</summary>
         public bool LogoutActive { get; set; }
+
+        /// <summary>Environment.TickCount64 when the pending logout was requested.</summary>
+        public long LogoutRequestedTick { get; set; }
         public bool RemoveFromMap { get; set; }
         // chat
         public int JoinedChannels { get; set; }

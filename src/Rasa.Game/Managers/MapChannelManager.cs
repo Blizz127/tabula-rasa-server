@@ -44,13 +44,53 @@ namespace Rasa.Managers
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
         }
 
+        /// <summary>
+        /// Wait between RequestLogout and an honoured CharacterLogout. Sent to the client as
+        /// LogoutTimeRemaining, which keeps the logout window's Logout button disabled until it
+        /// has elapsed.
+        /// </summary>
+        public const int LogoutDelayMs = 5000;
+
+        /// <summary>
+        /// Allowance for clock-rate drift on the early-logout check. A normal client cannot be
+        /// early: it starts its countdown when LogoutTimeRemaining arrives, which is after the
+        /// server recorded the request.
+        /// </summary>
+        private const int LogoutDelayToleranceMs = 250;
+
         public void CharacterLogout(Client client)
         {
+            // Nothing requested, or the request was cancelled.
             if (client.Player.LogoutActive == false)
                 return;
 
+            // The delay used to be advisory - enforced only by the client's disabled button - so a
+            // client that skipped the countdown could leave instantly, mid-fight. Refuse it until
+            // the countdown the server announced has actually run.
+            var waited = Environment.TickCount64 - client.Player.LogoutRequestedTick;
+
+            if (waited < LogoutDelayMs - LogoutDelayToleranceMs)
+            {
+                Logger.WriteLog(LogType.Security, $"{client.Player.FamilyName} sent CharacterLogout {waited} ms into a {LogoutDelayMs} ms logout countdown; ignored");
+                return;
+            }
+
             client.Player.RemoveFromMap = true;
             client.State = ClientState.LoggedIn;
+        }
+
+        /// <summary>
+        /// The logout window's Cancel button (client/ui/logoutwindow.py:108). Withdraws a pending
+        /// logout, so a CharacterLogout that follows is ignored until the player requests again.
+        /// </summary>
+        public void CancelLogoutRequest(Client client)
+        {
+            // Once CharacterLogout has flagged the player for removal the logout is under way;
+            // a late cancel does not pull them back.
+            if (!client.Player.LogoutActive || client.Player.RemoveFromMap)
+                return;
+
+            client.Player.LogoutActive = false;
         }
 
         public MapChannel FindByContextId(uint contextId)
@@ -342,8 +382,11 @@ namespace Rasa.Managers
 
         public void RequestLogout(Client client)
         {
-            client.CallMethod(SysEntity.ClientMethodId, new LogoutTimeRemainingPacket());
+            // A repeated request restarts the countdown, matching the fresh one the client shows.
             client.Player.LogoutActive = true;
+            client.Player.LogoutRequestedTick = Environment.TickCount64;
+
+            client.CallMethod(SysEntity.ClientMethodId, new LogoutTimeRemainingPacket(LogoutDelayMs));
         }
 
         public MapInstance GetMapInstance(uint mapContextId)
