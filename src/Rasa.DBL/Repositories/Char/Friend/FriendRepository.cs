@@ -16,7 +16,7 @@ namespace Rasa.Repositories.Char.Friend
             _charContext = charContext;
         }
 
-        public void AddFriend(uint accountId, uint friendAccountId)
+        public bool AddFriend(uint accountId, uint friendAccountId)
         {
             var entry = new FriendEntry(accountId, friendAccountId);
 
@@ -24,11 +24,13 @@ namespace Rasa.Repositories.Char.Friend
             {
                 _charContext.FriendEntries.Add(entry);
                 _charContext.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, "Error adding friend:");
                 Logger.WriteLog(LogType.Error, e);
+                return false;
             }
         }
 

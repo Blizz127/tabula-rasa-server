@@ -62,6 +62,8 @@ namespace Rasa.Context.Char
             SetupCharacterOptionsTable(modelBuilder);
             SetupClanMemberTable(modelBuilder);
             SetupClanTable(modelBuilder);
+            SetupFriendTable(modelBuilder);
+            SetupIgnoredTable(modelBuilder);
             SetupUserOptionsTable(modelBuilder);
         }
 
@@ -297,6 +299,20 @@ namespace Rasa.Context.Char
             modelBuilder.Entity<ClanEntry>()
                 .Property(e => e.CreatedAt)
                 .AsCurrentDateTime(_dbContextPropertyModifier);
+        }
+
+        // One row per (owner, contact). These were keyed on account_id alone, which capped
+        // every account at a single friend and a single ignored player.
+        private void SetupFriendTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FriendEntry>()
+                .HasKey(e => new { e.AccountId, e.FriendAccountId });
+        }
+
+        private void SetupIgnoredTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IgnoredEntry>()
+                .HasKey(e => new { e.AccountId, e.IgnoredAccountId });
         }
 
         private void SetupUserOptionsTable(ModelBuilder modelBuilder)

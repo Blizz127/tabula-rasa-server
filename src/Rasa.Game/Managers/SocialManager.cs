@@ -15,7 +15,7 @@ namespace Rasa.Managers
     {
         /*      Social Packets:
          * - AddFriend
-         * - AddFriendByName
+         * - AddFriendByName                  => implemented
          * - FriendList
          * - FriendLoggedOff
          * - InviteFriendToJoin
@@ -71,33 +71,43 @@ namespace Rasa.Managers
 
         internal void AddFriendByName(Client client, AddFriendByNamePacket packet)
         {
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var account = unitOfWork.GameAccounts.Get(packet.FamilyName);
+            var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
 
-            if (account == null || account.FamilyName == client.AccountEntry.FamilyName)
+            GameAccountEntry account = null;
+
+            if (requestedName.Length > 0)
             {
-                CommunicatorManager.Instance.AddFriendAck(client, packet.FamilyName, false);
+                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                account = unitOfWork.GameAccounts.FindByFamilyName(requestedName);
+            }
+
+            // Unknown name, or the player's own family. Compared by id: family names are
+            // matched case-insensitively now, so a name comparison could miss "self".
+            if (account == null || account.Id == client.AccountEntry.Id)
+            {
+                CommunicatorManager.Instance.AddFriendAck(client, requestedName, false);
                 return;
             }
 
-            foreach (var friendAccountId in client.Player.Friends)
-                if (friendAccountId == account.Id)
-                {
-                    CommunicatorManager.Instance.AddFriendAck(client, packet.FamilyName, false);
-                    return;
-                }
+            if (client.Player.Friends.Contains(account.Id))
+            {
+                CommunicatorManager.Instance.AddFriendAck(client, account.FamilyName, false);
+                return;
+            }
 
-            AddFriend(client, account.Id);
+            if (!AddFriend(client, account.Id))
+                return;
 
+            // Befriending lifts an ignore; the two lists are kept mutually exclusive.
             RemoveIgnoredPlayer(client, account.Id);
         }
 
         internal void AddIgnore(Client client, AddIgnorePacket packet)
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var account = unitOfWork.GameAccounts.Get(packet.AccountId);
+            var account = unitOfWork.GameAccounts.Find(packet.AccountId);
 
-            IgnoreById(client, account);
+            IgnoreById(client, account, string.Empty);
         }
 
         internal void AddIgnoreByName(Client client, AddIgnoreByNamePacket packet)
@@ -105,7 +115,7 @@ namespace Rasa.Managers
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
             var account = unitOfWork.GameAccounts.Get(packet.FamilyName);
 
-            IgnoreById(client, account);
+            IgnoreById(client, account, packet.FamilyName);
         }
         
         internal void RemoveFriend(Client client, RemoveFriendPacket packet)
@@ -154,14 +164,36 @@ namespace Rasa.Managers
 
         #region Helper Functions
 
-        internal void AddFriend(Client client, uint accountId)
+        /// <returns>false, with the failure already acknowledged to the client, when nothing was added.</returns>
+        internal bool AddFriend(Client client, uint accountId)
         {
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
             var friend = GetFriendById(accountId);
 
-            client.CallMethod(SysEntity.ClientSocialManagerId, new FriendAddedPacket(friend));
+            if (friend == null)
+            {
+                CommunicatorManager.Instance.AddFriendAck(client, string.Empty, false);
+                return false;
+            }
+
+            // Persist before telling the client. FriendAdded puts the row in the client's
+            // friend window immediately, so announcing a friend the database then refused
+            // would show one that silently vanishes at the next login.
+            using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
+            {
+                if (!unitOfWork.Friends.AddFriend(client.AccountEntry.Id, accountId))
+                {
+                    CommunicatorManager.Instance.AddFriendAck(client, friend.FamilyName, false);
+                    return false;
+                }
+            }
+
             client.Player.Friends.Add(accountId);
-            unitOfWork.Friends.AddFriend(client.AccountEntry.Id, accountId);
+
+            // No AddFriendAck on success: Recv_FriendAdded already posts PM_ADDED_TO_FRIEND_LIST
+            // (client/social.py:196), so acking as well would print the message twice.
+            client.CallMethod(SysEntity.ClientSocialManagerId, new FriendAddedPacket(friend));
+
+            return true;
         }
         
         internal void AddIgnoredPlayer(Client client, uint accountId)
@@ -201,61 +233,56 @@ namespace Rasa.Managers
             // ToDo
         }
         
+        /// <summary>
+        /// The friend-list row for an account, live when they are in game and from the
+        /// database otherwise. Null when the account no longer exists; SetSocialContactList
+        /// already skips nulls, so a stale row cannot break login.
+        /// </summary>
         internal Friend GetFriendById(uint accountId)
         {
-            var client = Server.Clients.Find(c => c.AccountEntry.Id == accountId && c.State == ClientState.Ingame);
+            var online = FindIngameClient(accountId);
 
-            Friend friend = null;
-
-            if (client != null)
-            {
-                friend = new Friend(client);
-                return friend;
-            }
+            if (online != null)
+                return new Friend(online);
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var friendEntry = unitOfWork.GameAccounts.Get(client.AccountEntry.Id);
-            // friend is offline
-            friend = new Friend
-            {
-                UserId = accountId,
-                FamilyName = friendEntry.FamilyName,
-                IsOnline = false
-            };
+            var account = unitOfWork.GameAccounts.Find(accountId);
 
-            return friend;
-
+            return account == null ? null : new Friend(account);
         }
 
+        /// <summary>Same contract as GetFriendById, for the ignore list.</summary>
         internal IgnoredPlayer GetIgnoredById(uint accountId)
         {
-            var client = Server.Clients.Find(c => c.AccountEntry.Id == accountId);
-            IgnoredPlayer ignoredPlayer = null;
+            var online = FindIngameClient(accountId);
 
-            if (client != null)
-            {
-                ignoredPlayer = new IgnoredPlayer(client);
-                return ignoredPlayer;
-            }
+            if (online != null)
+                return new IgnoredPlayer(online);
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var ignoredEntry = unitOfWork.GameAccounts.Get(client.AccountEntry.Id);
-            // ignoredPlayer is offline
-            ignoredPlayer = new IgnoredPlayer
-            {
-                UserId = accountId,
-                FamilyName = ignoredEntry.FamilyName,
-                IsOnline = false
-            };
+            var account = unitOfWork.GameAccounts.Find(accountId);
 
-            return ignoredPlayer;
+            return account == null ? null : new IgnoredPlayer(account);
+        }
+
+        /// <summary>
+        /// Server.Clients holds every accepted connection, and AccountEntry is only assigned
+        /// once the login message is processed - so the null check has to come before .Id,
+        /// or a single half-connected client throws for everyone searching the list.
+        /// </summary>
+        private static Client FindIngameClient(uint accountId)
+        {
+            return Server.Clients.Find(c =>
+                c.State == ClientState.Ingame && c.AccountEntry != null && c.AccountEntry.Id == accountId);
         }
         
-        internal void IgnoreById(Client client, GameAccountEntry account)
+        internal void IgnoreById(Client client, GameAccountEntry account, string requestedName)
         {
-            if (account == null || account.FamilyName == client.AccountEntry.FamilyName)
+            // The ack used to read account.FamilyName, which is exactly the null this branch
+            // exists to catch.
+            if (account == null || account.Id == client.AccountEntry.Id)
             {
-                CommunicatorManager.Instance.AddIgnoreAck(client, account.FamilyName, false);
+                CommunicatorManager.Instance.AddIgnoreAck(client, account?.FamilyName ?? requestedName, false);
                 return;
             }
             

@@ -498,7 +498,6 @@ namespace Rasa.Migrations.SqliteChar
             modelBuilder.Entity("Rasa.Structures.Char.FriendEntry", b =>
                 {
                     b.Property<uint>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasColumnName("account_id");
 
@@ -506,7 +505,7 @@ namespace Rasa.Migrations.SqliteChar
                         .HasColumnType("INTEGER")
                         .HasColumnName("friend_account_id");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("AccountId", "FriendAccountId");
 
                     b.ToTable("friend");
                 });
@@ -581,7 +580,6 @@ namespace Rasa.Migrations.SqliteChar
             modelBuilder.Entity("Rasa.Structures.Char.IgnoredEntry", b =>
                 {
                     b.Property<uint>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasColumnName("account_id");
 
@@ -589,7 +587,7 @@ namespace Rasa.Migrations.SqliteChar
                         .HasColumnType("INTEGER")
                         .HasColumnName("ignored_account_id");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("AccountId", "IgnoredAccountId");
 
                     b.ToTable("ignored");
                 });

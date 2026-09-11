@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rasa.Context.Char;
 
 namespace Rasa.Migrations.MySqlChar
 {
     [DbContext(typeof(MySqlCharContext))]
-    partial class MySqlCharContextModelSnapshot : ModelSnapshot
+    [Migration("20260911054802_Fix_friend_and_ignored_tables")]
+    partial class Fix_friend_and_ignored_tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
