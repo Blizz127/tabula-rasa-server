@@ -508,7 +508,7 @@
         [PacketHandler(GameOpcode.Emote)]
         private void Emote(EmotePacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: EmotePacket");
+            CommunicatorManager.Instance.Emote(Client, packet);
         }
 
         [PacketHandler(GameOpcode.FeudChallengeResponse)]

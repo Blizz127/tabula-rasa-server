@@ -35,7 +35,7 @@ namespace Rasa.Managers
          * - ClanLeadersChat
          * - ChangeLastName
          * - ChangeFirstName
-         * - Emote
+         * - Emote                              => implemented
          *      -- ActorMethod
          * - RequestLOSReport
          * - ToggleAfk                          => implemented (ManifestationManager)
@@ -70,7 +70,7 @@ namespace Rasa.Managers
          * - ChannelChat
          * - ClanChat
          * - ClanLeadersChat
-         * - Emote
+         * - Emote                              => implemented
          * - PartyChat
          * - Radial
          * - Shout                              => implemented
@@ -120,8 +120,25 @@ namespace Rasa.Managers
 
         internal void Emote(Client client, EmotePacket packet)
         {
-            client.CallMethod(SysEntity.CommunicatorId, new EmotePacket(client.Player.Name, packet.Emote));
-            CellManager.Instance.CellCallMethod(client.Player.MapChannel, client.Player, new PerformWindupPacket(PerformType.TwoArgs, ActionId.Gesture, (uint)new Random().Next(1, 100)));   // ToDo: just testing
+            if (client.Player == null)
+                return;
+
+            // The client files this under RADIAL_EMOTE, so it is local chat like RadialChat
+            // rather than something wider. Recv_Emote renders link(sender) + " " + msg, and
+            // sender is the same string the rest of the chat system uses - FamilyName, which
+            // is what Whisper and Reply resolve a target by.
+            var mapChannel = client.Player.MapChannel;
+
+            for (var i = 0; i < mapChannel.ClientList.Count; i++)
+            {
+                var tempClient = mapChannel.ClientList[i];
+
+                if (tempClient.Player == null)
+                    continue;
+
+                if (Vector3.Distance(client.Player.Position, tempClient.Player.Position) <= RadialRange)
+                    tempClient.CallMethod(SysEntity.CommunicatorId, new EmotePacket(client.Player.FamilyName, packet.Emote));
+            }
         }
 
         internal void Reply(Client client, ReplyPacket packet)
@@ -360,7 +377,7 @@ namespace Rasa.Managers
                 if (tempClient.Player != null)
                 {
                     var distance = Vector3.Distance(client.Player.Position, tempClient.Player.Position);
-                    if (distance <= 70.0) // 70 is about the range the client is visible
+                    if (distance <= RadialRange)
                         tempClient.CallMethod(SysEntity.CommunicatorId, new RadialChatPacket
                         {
                             FamilyName = client.Player.FamilyName,
@@ -381,6 +398,12 @@ namespace Rasa.Managers
         /// whole zone.
         /// </summary>
         private const float ShoutRange = 150.0f;
+
+        /// <summary>
+        /// Range of the local chat types (RadialChat, Emote). "70 is about the range the
+        /// client is visible", per the original comment on RadialChat.
+        /// </summary>
+        private const float RadialRange = 70.0f;
 
         public void Shout(Client client, string textMsg)
         {
