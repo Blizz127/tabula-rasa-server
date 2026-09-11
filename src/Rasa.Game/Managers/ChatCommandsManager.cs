@@ -90,6 +90,7 @@ namespace Rasa.Managers
             RegisterCommand(".forcestate", ForceStateCommand);
             RegisterCommand(".help", HelpGmCommand);
             RegisterCommand(".near", NearCommand);
+            RegisterCommand(".notify", NotifyCommand);
             RegisterCommand(".npcinfo", NpcInfoCommand);
             RegisterCommand(".reloadcreatures", ReloadCreaturesCommand);
             RegisterCommand(".removeobj", RemoveObjectCommand);
@@ -158,6 +159,136 @@ namespace Rasa.Managers
                 if (ulong.TryParse(parts[1], out var creatureEntityId))
                     if (uint.TryParse(parts[2], out var barkId))
                         _client.CallMethod(creatureEntityId, new BarkPackage(barkId));
+        }
+
+        /// <summary>
+        /// Fires a Notification at yourself, or at everyone who can see an entity for the ones
+        /// that are about a place. The ids come from the client's own tables: timer types from
+        /// generated/client/timertype.py, animation ids from animationdata.py
+        /// objectAnimationSpecification, audio ids from audiodata.py audioSpecification.
+        /// </summary>
+        private void NotifyCommand(string[] parts)
+        {
+            var manager = NotificationManager.Instance;
+            var mapChannel = _client.Player.MapChannel;
+
+            switch (parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty)
+            {
+                case "timer" when parts.Length >= 4 && uint.TryParse(parts[2], out var timerType) && int.TryParse(parts[3], out var seconds):
+                    manager.DisplayTimer(_client, (TimerType)timerType, seconds, parts.Length <= 4 || parts[4] != "0");
+                    return;
+
+                case "stoptimer":
+                    manager.StopTimer(_client);
+                    return;
+
+                case "anim" when parts.Length >= 4 && uint.TryParse(parts[3], out var animationSpecId):
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.PlayObjectAnimation(mapChannel, NotifyPosition(target), target, animationSpecId);
+
+                        return;
+                    }
+
+                case "stopanim" when parts.Length >= 3:
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.StopObjectAnimation(mapChannel, NotifyPosition(target), target);
+
+                        return;
+                    }
+
+                case "bgaudio" when parts.Length >= 3 && uint.TryParse(parts[2], out var audioSpecId):
+                    manager.PlayBackgroundAudio(_client, audioSpecId);
+                    return;
+
+                case "locaudio" when parts.Length >= 4 && uint.TryParse(parts[3], out var locationAudioSpecId):
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.PlayLocationAudio(mapChannel, NotifyPosition(target), target, locationAudioSpecId);
+
+                        return;
+                    }
+
+                case "stoplocaudio" when parts.Length >= 3:
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.StopLocationAudio(mapChannel, NotifyPosition(target), target);
+
+                        return;
+                    }
+
+                case "raw" when parts.Length >= 3 && uint.TryParse(parts[2], out var notificationId):
+                    {
+                        var args = new List<long>();
+
+                        for (var i = 3; i < parts.Length; i++)
+                            if (long.TryParse(parts[i], out var arg))
+                                args.Add(arg);
+
+                        manager.Send(_client, NotificationPacket.Raw((NotificationId)notificationId, args.ToArray()));
+                        return;
+                    }
+            }
+
+            CommunicatorManager.Instance.SystemMessage(_client, "usage: .notify timer <type 1-7> <seconds> [countdown 0|1]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify stoptimer");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify anim|stopanim <me|target|entityId> [animationSpecId]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify bgaudio <audioSpecId>");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify locaudio|stoplocaudio <me|target|entityId> [audioSpecId]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify raw <notificationId> [int args...]");
+        }
+
+        /// <summary>me, target, or an entity id.</summary>
+        private ulong NotifyTarget(string value)
+        {
+            switch (value.ToLowerInvariant())
+            {
+                case "me":
+                    return _client.Player.EntityId;
+
+                case "target":
+                    if (_client.Player.Target == 0)
+                        CommunicatorManager.Instance.SystemMessage(_client, "no target selected");
+
+                    return _client.Player.Target;
+
+                default:
+                    if (ulong.TryParse(value, out var entityId))
+                        return entityId;
+
+                    CommunicatorManager.Instance.SystemMessage(_client, $"not an entity id: {value}");
+                    return 0;
+            }
+        }
+
+        /// <summary>Where to broadcast from: the entity's own position when the server knows it.</summary>
+        private Vector3 NotifyPosition(ulong entityId)
+        {
+            var entityType = EntityManager.Instance.GetEntityType(entityId);
+
+            switch (entityType)
+            {
+                case EntityType.Creature:
+                    return EntityManager.Instance.GetCreature(entityId)?.Position ?? _client.Player.Position;
+
+                case EntityType.Character:
+                    return EntityManager.Instance.GetPlayer(entityId)?.Position ?? _client.Player.Position;
+
+                case EntityType.Object:
+                    return EntityManager.Instance.GetObject(entityId)?.Position ?? _client.Player.Position;
+
+                default:
+                    return _client.Player.Position;
+            }
         }
 
         private void ComeHereCommand(string[] parts)
