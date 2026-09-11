@@ -62,7 +62,7 @@
          *  - BuryMe                    => ToDo
          *  - ReviveMe                  => ToDo
          *  - RequestActionInterrupt    => ToDo
-         *  - RequestDetachGameEffect   => ToDo
+         *  - RequestDetachGameEffect   => gesture effects only, GestureManager
          *  - RequestVisualCombatMode   => ToDo
          *  - SetDesiredCrouchState     => ToDo
          *  - TeleportAcknowledge       => ToDo

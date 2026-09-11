@@ -79,6 +79,9 @@ namespace Rasa.Managers
         {
             switch (action.ActionId)
             {
+                case ActionId.Gesture:
+                    GestureManager.Instance.PerformRecovery(mapChannel, action);
+                    break;
                 case ActionId.AaRecruitLightning:
                     MissileManager.Instance.MissileLaunch(mapChannel, action, new Random().Next(233, 311 + 1));
                     break;

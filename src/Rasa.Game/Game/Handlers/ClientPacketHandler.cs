@@ -184,10 +184,16 @@
             ManifestationManager.Instance.RequestCustomization(Client, packet);
         }
         
+        [PacketHandler(GameOpcode.RequestDetachGameEffect)]
+        private void RequestDetachGameEffect(RequestDetachGameEffectPacket packet)
+        {
+            GestureManager.Instance.RequestDetachGameEffect(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RequestGesture)]
         private void RequestGesture(RequestGesturePacket packet)
         {
-            // ToDo
+            GestureManager.Instance.RequestGesture(Client, packet);
         }
 
         /*[PacketHandler(GameOpcode.RequestGestureWeapon)]
