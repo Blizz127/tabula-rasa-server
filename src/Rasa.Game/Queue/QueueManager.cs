@@ -33,6 +33,19 @@ namespace Rasa.Queue
             }
         }
 
+        /// <summary>Closes every queue connection belonging to an account.</summary>
+        public void Disconnect(uint userId)
+        {
+            List<QueueClient> matches;
+
+            lock (Clients)
+                matches = Clients.Where(c => c.UserId == userId && c.State != QueueState.Disconnected).ToList();
+
+            // QueueClient.Close removes the client from Clients, so close outside the lock.
+            foreach (var client in matches)
+                client.Close();
+        }
+
         /// <summary>Accounts with a live, authenticated queue connection.</summary>
         public HashSet<uint> ConnectedUserIds()
         {

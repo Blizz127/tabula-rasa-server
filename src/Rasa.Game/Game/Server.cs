@@ -71,6 +71,13 @@ namespace Rasa.Game
         }
 
         private readonly List<Client> _clientsToRemove = new List<Client>();
+
+        /// <summary>
+        /// Accounts Auth has reported as banned while this process was connected to it. Auth refuses
+        /// a locked account at login, so this only has to cover players who were already past that
+        /// check when the ban landed - a redirect in flight is refused at the world login.
+        /// </summary>
+        private readonly HashSet<uint> _lockedAccounts = new HashSet<uint>();
         private readonly PacketRouter<Server, CommOpcode> _router = new PacketRouter<Server, CommOpcode>();
         public Server(
             IHostApplicationLifetime hostApplicationLifetime,
@@ -279,7 +286,8 @@ namespace Rasa.Game
 
         public bool IsBanned(uint accountId)
         {
-            return false; // TODO
+            lock (_lockedAccounts)
+                return _lockedAccounts.Contains(accountId);
         }
 
         public bool IsAlreadyLoggedIn(uint accountId)
@@ -418,6 +426,43 @@ namespace Rasa.Game
                 // (SocketAsyncConfig.MaxClients), which the auth server list showed as capacity.
                 MaxPlayers = Config.ServerInfoConfig.MaxPlayers
             });
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        [PacketHandler(CommOpcode.AccountLockChanged)]
+        private void MsgAccountLockChanged(AccountLockChangedPacket packet)
+        {
+            lock (_lockedAccounts)
+            {
+                if (packet.Locked)
+                    _lockedAccounts.Add(packet.AccountId);
+                else
+                    _lockedAccounts.Remove(packet.AccountId);
+            }
+
+            if (!packet.Locked)
+            {
+                Logger.WriteLog(LogType.Security, $"Account {packet.AccountId} unbanned by Auth.");
+                return;
+            }
+
+            // Leave any pending IncomingClients entry in place: the world login consumes it and then
+            // reaches IsBanned, so the player is told "account locked" instead of a generic
+            // authentication failure. It expires on its own if they never arrive.
+            QueueManager?.Disconnect(packet.AccountId);
+
+            List<Client> online;
+
+            // AccountEntry is null until the world login message is processed.
+            lock (Clients)
+                online = Clients.Where(c => c.AccountEntry != null && c.AccountEntry.Id == packet.AccountId).ToList();
+
+            // Close() runs from socket threads already (OnError), saves the character and flags an
+            // in-world player for removal on the MainLoop, so it is safe from this communicator thread.
+            foreach (var client in online)
+                client.Close();
+
+            Logger.WriteLog(LogType.Security, $"Account {packet.AccountId} banned by Auth; disconnected {online.Count} world connection(s).");
         }
 
         // ReSharper disable once UnusedMember.Local

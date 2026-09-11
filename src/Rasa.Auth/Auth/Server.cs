@@ -18,6 +18,7 @@ namespace Rasa.Auth
     using Packets.Auth.Server;
     using Repositories.UnitOfWork;
     using Structures;
+    using Structures.Auth;
     using Threading;
     using Timer;
 
@@ -65,6 +66,8 @@ namespace Rasa.Auth
             CommandProcessor.RegisterCommand("exit", ProcessExitCommand);
             CommandProcessor.RegisterCommand("reload", ProcessReloadCommand);
             CommandProcessor.RegisterCommand("create", ProcessCreateCommand);
+            CommandProcessor.RegisterCommand("ban", parts => ProcessLockCommand(parts, true));
+            CommandProcessor.RegisterCommand("unban", parts => ProcessLockCommand(parts, false));
         }
 
         ~Server()
@@ -447,6 +450,70 @@ namespace Rasa.Auth
             }
 
             Logger.WriteLog(LogType.Command, "Invalid reload command!");
+        }
+
+        /// <summary>
+        /// ban &lt;username&gt; / unban &lt;username&gt;. Sets account.locked, which GetByUserName
+        /// already refuses at login, then deals with anyone already past that check: the player's
+        /// auth connection (server list screen) is closed here, and every connected game server is
+        /// told so it can kick them from the queue or world and refuse a pending handoff.
+        /// </summary>
+        private void ProcessLockCommand(string[] parts, bool locked)
+        {
+            var command = locked ? "ban" : "unban";
+
+            if (parts.Length < 2)
+            {
+                Logger.WriteLog(LogType.Command, $"Invalid {command} command! Usage: {command} <username>");
+                return;
+            }
+
+            AuthAccountEntry account;
+
+            try
+            {
+                using var unitOfWork = _authUnitOfWorkFactory.Create();
+                account = unitOfWork.AuthAccountRepository.SetLocked(parts[1], locked);
+                unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Could not {command} {parts[1]}: {e.Message}");
+                return;
+            }
+
+            if (account == null)
+            {
+                Logger.WriteLog(LogType.Command, $"No account with username {parts[1]}.");
+                return;
+            }
+
+            if (locked)
+            {
+                List<Client> connected;
+
+                // AccountEntry is null until a client has logged in.
+                lock (Clients)
+                    connected = Clients.Where(c => c.AccountEntry != null && c.AccountEntry.Id == account.Id).ToList();
+
+                foreach (var client in connected)
+                    client.Close();
+            }
+
+            var notice = new AccountLockChangedPacket { AccountId = account.Id, Locked = locked };
+            var notified = 0;
+
+            lock (GameServers)
+                foreach (var server in GameServers.Values)
+                {
+                    if (!server.Connected)
+                        continue;
+
+                    server.Socket.Send(notice);
+                    notified++;
+                }
+
+            Logger.WriteLog(LogType.Command, $"{(locked ? "Banned" : "Unbanned")} account {account.Username} ({account.Id}); notified {notified} game server(s).");
         }
 
         private void ProcessCreateCommand(string[] parts)
