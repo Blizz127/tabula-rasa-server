@@ -68,7 +68,8 @@ namespace Rasa.Structures
 
         // Party
         internal uint PartyId { get; set; }
-        internal ulong PartyInviterId { get; set; }
+        /// <summary>AcceptPartyInvitesChanged; invitations to a player who turned them off are refused.</summary>
+        internal bool AcceptPartyInvites { get; set; } = true;
 
         // Social
         internal List<uint> Friends = new();

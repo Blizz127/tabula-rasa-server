@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -277,7 +277,7 @@ namespace Rasa.Managers
                 // Client constructor hardcodes it to false - so read it off the live player
                 // where there is one. The details window greys out AFK names.
                 var online = Server.Clients.FirstOrDefault(
-                    c => c.State == ClientState.Ingame && c.Player.EntityId == member.MemberId);
+                    c => c.State == ClientState.Ingame && c.AccountEntry != null && c.AccountEntry.Id == member.UserId);
 
                 roster.Add(online != null ? Snapshot(online) : member);
             }
@@ -288,7 +288,7 @@ namespace Rasa.Managers
         private static PartyMember Snapshot(Client client)
         {
             return new PartyMember(
-                client.Player.EntityId,
+                client.AccountEntry.Id,
                 client.Player.FamilyName,
                 client.Player.Class,
                 client.Player.Level,

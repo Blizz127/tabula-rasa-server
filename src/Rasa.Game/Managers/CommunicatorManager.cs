@@ -150,21 +150,33 @@ namespace Rasa.Managers
 
         internal void PartyChat(Client client, PartyChatPacket packet)
         {
-            var party = PartyManager.Instance.Parties[client.Player.PartyId];
+            var party = PartyManager.Instance.PartyOf(client);
 
+            if (party == null)
+            {
+                client.CallMethod(SysEntity.CommunicatorId,
+                    new DisplayClientMessagePacket(PlayerMessage.PmActionFailedNoParty, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            // Recv_PartyChat(sender, msg, senderUserId, senderEntityId): senderUserId is compared
+            // with the party leader's userId and GetCurrentUserId() to pick the leader colour, and
+            // senderEntityId places the chat bubble. Members whose spot is held are skipped.
             foreach (var partyMember in party.Members)
             {
-                var tempClient = Server.Clients.Find(c => c.Player.EntityId == partyMember.MemberId);
-                
-                tempClient.CallMethod(SysEntity.CommunicatorId, new PartyChatPacket
+                if (!partyMember.IsOnline)
+                    continue;
+
+                var tempClient = Server.Clients.Find(c =>
+                    c.State == ClientState.Ingame && c.AccountEntry != null && c.AccountEntry.Id == partyMember.UserId);
+
+                tempClient?.CallMethod(SysEntity.CommunicatorId, new PartyChatPacket
                 {
                     Sender = client.Player.FamilyName,
                     Message = packet.Message,
-                    SenderUserId = client.Player.EntityId,
+                    SenderUserId = client.AccountEntry.Id,
                     SenderEntityId = client.Player.EntityId
                 });
-
-                // ToDo: check what's SenderUserId and SenderEntityId variables do
             }
         }
 

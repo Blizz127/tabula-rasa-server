@@ -4,17 +4,17 @@
     using Memory;
 
     /// <summary>
-    /// client/party.py Recv_AddSquadMember(userId, entityId): links a party member to their
-    /// manifestation, which lights up their health bar in the party window and their overhead name.
+    /// client/party.py Recv_RemoveSquadMember(userId, entityId): unlinks the member's manifestation,
+    /// greying their row, without removing them from the party.
     /// </summary>
-    public class AddSquadMemberPacket : ServerPythonPacket
+    public class RemoveSquadMemberPacket : ServerPythonPacket
     {
-        public override GameOpcode Opcode { get; } = GameOpcode.AddSquadMember;
+        public override GameOpcode Opcode { get; } = GameOpcode.RemoveSquadMember;
 
         internal uint UserId { get; set; }
         internal ulong EntityId { get; set; }
 
-        internal AddSquadMemberPacket(uint userId, ulong entityId)
+        internal RemoveSquadMemberPacket(uint userId, ulong entityId)
         {
             UserId = userId;
             EntityId = entityId;

@@ -166,6 +166,8 @@ namespace Rasa.Managers
         {
             Timer.Update(delta);
 
+            PartyManager.Instance.ExpireHeldMembers();
+
             foreach (var t in MapChannelArray)
             {
                 var mapChannel = t.Value;
@@ -289,6 +291,7 @@ namespace Rasa.Managers
             ClanManager.Instance.InitializePlayerClanData(client);
             InventoryManager.Instance.InitClanInventory(client);
             CommunicatorManager.Instance.PlayerEnterMap(client);
+            PartyManager.Instance.PlayerEnteredWorld(client);
         }
 
         public void PassClientToCharacterSelection(Client client)
@@ -359,6 +362,7 @@ namespace Rasa.Managers
             ClanManager.Instance.RemovePlayer(client);
             LookingForGroupManager.Instance.RemovePlayer(client);
             TradeManager.Instance.RemovePlayer(client);
+            PartyManager.Instance.RemovePlayer(client);
 
             if (logout)
                 if (client.Player.Disconected == false)

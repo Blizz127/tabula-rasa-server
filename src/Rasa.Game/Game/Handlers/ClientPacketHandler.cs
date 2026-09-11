@@ -764,7 +764,7 @@
         [PacketHandler(GameOpcode.AcceptPartyInvitesChanged)]
         private void AcceptPartyInvitesChanged(AcceptPartyInvitesChangedPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, $"ToDo: AcceptPartyInvitesChangedPacket");
+            PartyManager.Instance.AcceptPartyInvitesChanged(Client, packet);
         }
 
         [PacketHandler(GameOpcode.CancelSquadInviteRequest)]
@@ -830,11 +830,13 @@
         [PacketHandler(GameOpcode.MakeUserPartyLeader)]
         private void MakeUserPartyLeader(MakeUserPartyLeaderPacket packet)
         {
+            PartyManager.Instance.MakeUserPartyLeader(Client, packet);
         }
 
         [PacketHandler(GameOpcode.MakeUserPartyLeaderById)]
         private void MakeUserPartyLeaderById(MakeUserPartyLeaderByIdPacket packet)
         {
+            PartyManager.Instance.MakeUserPartyLeaderById(Client, packet);
         }
 
         [PacketHandler(GameOpcode.PartyInvitationResponse)]

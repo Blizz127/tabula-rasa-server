@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
     using Data;
     using Game;
     using Packets.Communicator.Server;
+    using Packets.Party.Both;
     using Packets.Party.Client;
     using Packets.Party.Server;
-    using Rasa.Packets.Party.Both;
     using Structures;
 
+    /// <summary>
+    /// Squads. Members are identified by account id (the client's userId) and stay in the
+    /// party while they are out of the world: a member who logs out, drops or changes map is
+    /// greyed out for the others and rejoins automatically when they next enter the world,
+    /// unless HeldSpotMs passes first. Everything here runs on the main loop.
+    /// </summary>
     public class PartyManager
     {
         /*   Party Packets:
@@ -93,6 +101,12 @@ namespace Rasa.Managers
 
         #endregion
 
+        /// <summary>shared/gameconstants.py MAX_PARTY_SIZE.</summary>
+        public const int MaxPartySize = 6;
+
+        /// <summary>How long a member's spot is kept after they leave the world.</summary>
+        public const long HeldSpotMs = 5 * 60 * 1000;
+
         public uint GetPartyId
         {
             get
@@ -120,59 +134,118 @@ namespace Rasa.Managers
                     _freePartyIds.Add(id);
         }
 
-
         internal Dictionary<uint, Party> Parties = new Dictionary<uint, Party>();
 
-        internal void ChangePartyLootMethod(Client client, ChangePartyLootMethodPacket packet)
+        /// <summary>
+        /// Open invitations, keyed by invitee account id. PartyInvitationResponse carries only
+        /// (accepted,) - no sender - so an invitee can hold one invitation at a time, and
+        /// PM_CAN_ONLY_INVITE_ONE_PERSON_AT_A_TIME limits an inviter to one as well.
+        /// </summary>
+        private readonly Dictionary<uint, PendingInvite> _invites = new Dictionary<uint, PendingInvite>();
+
+        private sealed class PendingInvite
         {
-            var party = Parties[client.Player.PartyId];
-            var clients = Server.Clients.FindAll(c => c.Player.PartyId == client.Player.PartyId);
-
-            party.LootMethod = packet.PartyLootMethod;
-
-            foreach (var partyMember in clients)
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new ChangePartyLootMethodPacket(packet.PartyLootMethod));
+            public uint InviterId;
+            public string InviterName;
+            public uint InviteeId;
+            public string InviteeName;
         }
 
-        internal void ChangePartyLootThreshold(Client client, ChangePartyLootThresholdPacket packet)
-        {
-            var clients = Server.Clients.FindAll(c => c.Player.PartyId == client.Player.PartyId);
-            var party = Parties[client.Player.PartyId];
-
-            party.LootThreshold = packet.PartyLootThreshold;
-
-            foreach (var partyMember in clients)
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new ChangePartyLootThresholdPacket(packet.PartyLootThreshold));
-        }
-
-        internal void DisbandParty(Client client)
-        {
-            var partyMembers = Server.Clients.FindAll(c => c.Player.PartyId == client.Player.PartyId);
-
-            foreach (var partyMember in partyMembers)
-            {
-                partyMember.Player.PartyId = 0;
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0));
-            }
-
-            Parties.Remove(client.Player.PartyId);
-        }
+        #region Handlers
 
         internal void InviteUserToPartyByName(Client client, InviteUserToPartyByNamePacket packet)
         {
-            var inviteeClient = Server.Clients.Find(c => c.AccountEntry.FamilyName == packet.FamilyName && c.State == ClientState.Ingame);
+            if (!InWorld(client))
+                return;
 
-            List<PartyMember> SenderSquadInfo = new List<PartyMember>();
+            var name = packet.FamilyName?.Trim() ?? string.Empty;
+            var party = PartyOf(client);
 
-            if (client.Player.PartyId != 0)
-                SenderSquadInfo = Parties[client.Player.PartyId].Members;
-            else
-                SenderSquadInfo.Add(new PartyMember(client));
+            if (party != null && party.PartyLeaderId != client.AccountEntry.Id)
+            {
+                Message(client, PlayerMessage.PmYouAreNotPartyLeader);
+                return;
+            }
 
-            inviteeClient.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(client.Player.FamilyName, SenderSquadInfo));
-            inviteeClient.Player.PartyInviterId = client.Player.EntityId;
+            var invitee = FindIngame(name);
 
-            client.CallMethod(SysEntity.ClientPartyManagerId, new InvitedPlayerToPartyPacket(packet.FamilyName, inviteeClient.Player.IsAFK));
+            if (invitee == null)
+            {
+                Message(client, PlayerMessage.PmWhisperTargetNotInGame, "player", name);
+                return;
+            }
+
+            var inviteeName = invitee.Player.FamilyName;
+
+            if (invitee == client)
+                return;
+
+            if (party?.Find(invitee.AccountEntry.Id) != null)
+            {
+                Message(client, PlayerMessage.PmTheyAreAlreadyInYourParty, "invitee", inviteeName);
+                return;
+            }
+
+            if (PartyOf(invitee) != null)
+            {
+                Message(client, PlayerMessage.PmTheyAreAlreadyInAParty, "invitee", inviteeName);
+                return;
+            }
+
+            if (!invitee.Player.AcceptPartyInvites)
+            {
+                Message(client, PlayerMessage.PmPartyNotAcceptingInvite);
+                return;
+            }
+
+            if (_invites.ContainsKey(invitee.AccountEntry.Id))
+            {
+                // Includes a repeat invitation from this inviter: every InviteToParty adds
+                // another pending indicator on the invitee's screen.
+                Message(client, PlayerMessage.PmUserAlreadyInvited, "name", inviteeName);
+                return;
+            }
+
+            if (_invites.Values.Any(i => i.InviterId == client.AccountEntry.Id))
+            {
+                Message(client, PlayerMessage.PmCanOnlyInviteOnePersonAtATime);
+                return;
+            }
+
+            if (party != null && party.Members.Count >= MaxPartySize)
+            {
+                Message(client, PlayerMessage.PmPartyIsFull);
+                return;
+            }
+
+            _invites[invitee.AccountEntry.Id] = new PendingInvite
+            {
+                InviterId = client.AccountEntry.Id,
+                InviterName = client.Player.FamilyName,
+                InviteeId = invitee.AccountEntry.Id,
+                InviteeName = inviteeName
+            };
+
+            var squadInfo = party != null ? LiveMembers(party) : new List<PartyMember> { new PartyMember(client) };
+
+            invitee.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(client.Player.FamilyName, squadInfo));
+            client.CallMethod(SysEntity.ClientPartyManagerId, new InvitedPlayerToPartyPacket(inviteeName, invitee.Player.IsAFK));
+        }
+
+        internal void CancelSquadInviteRequest(Client client, CancelSquadInviteRequestPacket packet)
+        {
+            if (client.AccountEntry == null)
+                return;
+
+            var invite = _invites.Values.FirstOrDefault(i =>
+                i.InviterId == client.AccountEntry.Id && string.Equals(i.InviteeName, packet.FamilyName?.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (invite == null)
+                return;
+
+            _invites.Remove(invite.InviteeId);
+
+            FindIngame(invite.InviteeId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(invite.InviterName));
         }
 
         internal void CancelSquadJoinRequest(Client client, CancelSquadJoinRequestPacket packet)
@@ -180,146 +253,528 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.AI, $"CancelSquadJoinRequest ToDo");
         }
 
-        internal void CancelSquadInviteRequest(Client client, CancelSquadInviteRequestPacket packet)
-        {
-            var inviteeClient = Server.Clients.Find(c => c.AccountEntry.FamilyName == packet.FamilyName && c.State == ClientState.Ingame);
-
-            inviteeClient.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(client.Player.FamilyName));
-        }
-
         internal void PartyInvitationResponse(Client client, PartyInvitationResponsePacket packet)
         {
-            var receiverClient = Server.Clients.Find(c => c.Player.EntityId == client.Player.PartyInviterId && c.State == ClientState.Ingame);
+            if (!InWorld(client))
+                return;
 
-            client.Player.PartyInviterId = 0;
-
-            if (packet.Response)
+            if (!_invites.Remove(client.AccountEntry.Id, out var invite))
             {
-                List<PartyMember> SenderSquadInfo = new List<PartyMember>();
+                if (packet.Response)
+                    Message(client, PlayerMessage.PmPartyInvitationHasBeenRevoked);
 
-                foreach (var onlineMember in Server.Clients)
-                    SenderSquadInfo.Add(new PartyMember(onlineMember));
-
-                receiverClient.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
-
-                if (receiverClient.Player.PartyId == 0)
-                    CreateParty(receiverClient, client);
-                else
-                    AddNewPartyMember(receiverClient, client);
+                return;
             }
+
+            var inviter = FindIngame(invite.InviterId);
+
+            if (inviter == null)
+            {
+                if (packet.Response)
+                    Message(client, PlayerMessage.PmPartyInvitationHasBeenRevoked);
+
+                return;
+            }
+
+            if (!packet.Response)
+            {
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestDeclinedPacket(client.Player.FamilyName));
+                return;
+            }
+
+            // The world may have moved on since the invitation was sent.
+            var party = PartyOf(inviter);
+
+            if (PartyOf(client) != null || (party != null && party.PartyLeaderId != inviter.AccountEntry.Id))
+            {
+                Message(client, PlayerMessage.PmPartyInvitationHasBeenRevoked);
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
+                return;
+            }
+
+            if (party != null && party.Members.Count >= MaxPartySize)
+            {
+                Message(client, PlayerMessage.PmPartyIsFull);
+                Message(inviter, PlayerMessage.PmPartyIsFull);
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
+                return;
+            }
+
+            inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
+            Message(inviter, PlayerMessage.PmPartyInvitationAccepted, "invitee", client.Player.FamilyName);
+
+            if (party == null)
+                CreateParty(inviter, client);
             else
-                receiverClient.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestDeclinedPacket(client.Player.FamilyName));
+                AddMember(party, client);
         }
 
         internal void InviteSquad(Client client, InviteSquadPacket packet)
         {
-
         }
 
-        internal void KickUserFromParty(Client client, KickUserFromPartyPacket packet)
+        internal void AcceptPartyInvitesChanged(Client client, AcceptPartyInvitesChangedPacket packet)
         {
-
-        }
-
-        internal void KickUserFromPartyById(Client client, KickUserFromPartyByIdPacket packet)
-        {
-            var partyMembers = Server.Clients.FindAll(c => c.Player.PartyId == client.Player.PartyId);
-            var kickedMember = partyMembers.Find(c => c.Player.EntityId == packet.MemberId);
-
-            foreach (var partyMember in partyMembers)
-            {
-                if (partyMember == kickedMember)
-                    continue;
-
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new RemovePartyMemberPacket(packet.MemberId, true));
-            }
-
-            kickedMember.Player.PartyId = 0;
-            kickedMember.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0, true));
-
-            var party = Parties[client.Player.PartyId];
-            var memberToRemove = party.Members.Find(m => m.MemberId == packet.MemberId);
-
-            party.Members.Remove(memberToRemove);
-
-            if (party.Members.Count == 1)
-            {
-                client.Player.PartyId = 0;
-
-                Parties.Remove(client.Player.PartyId);
-
-                client.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0));
-            }
+            if (client.Player != null)
+                client.Player.AcceptPartyInvites = packet.Accept;
         }
 
         internal void LeaveParty(Client client)
         {
-            var party = Parties[client.Player.PartyId];
-            var memberToRemove = party.Members.Find(m => m.MemberId == client.Player.EntityId);
-            var partyMembers = Server.Clients.FindAll(c => c.Player.PartyId == party.Id);
+            if (!InWorld(client))
+                return;
 
-            foreach(var partyMember in partyMembers)
+            var party = PartyOf(client);
+
+            if (party == null)
             {
-                if (partyMember == client)
+                // Nothing to leave here, but the client thinks otherwise: bring it back in line.
+                ResetClient(client, false);
+                return;
+            }
+
+            RemoveMember(party, party.Find(client.AccountEntry.Id), false);
+        }
+
+        internal void DisbandParty(Client client)
+        {
+            if (!InWorld(client))
+                return;
+
+            var party = PartyOf(client);
+
+            if (party == null)
+            {
+                ResetClient(client, false);
+                return;
+            }
+
+            if (party.PartyLeaderId != client.AccountEntry.Id)
+            {
+                Message(client, PlayerMessage.PmYouAreNotPartyLeader);
+                return;
+            }
+
+            Disband(party);
+        }
+
+        internal void KickUserFromParty(Client client, KickUserFromPartyPacket packet)
+        {
+            var party = LedParty(client);
+
+            var target = party?.Members.Find(m => string.Equals(m.MemberName, packet.FamilyName, StringComparison.OrdinalIgnoreCase));
+
+            if (target == null)
+            {
+                if (party != null)
+                    Message(client, PlayerMessage.PmWhisperTargetNotInGame, "player", packet.FamilyName);
+
+                return;
+            }
+
+            Kick(party, client, target);
+        }
+
+        internal void KickUserFromPartyById(Client client, KickUserFromPartyByIdPacket packet)
+        {
+            var party = LedParty(client);
+            var target = party?.Find(packet.UserId);
+
+            if (target != null)
+                Kick(party, client, target);
+        }
+
+        internal void MakeUserPartyLeader(Client client, MakeUserPartyLeaderPacket packet)
+        {
+            var party = LedParty(client);
+            var target = party?.Members.Find(m => string.Equals(m.MemberName, packet.FamilyName, StringComparison.OrdinalIgnoreCase));
+
+            if (target != null)
+                SetLeader(party, target);
+        }
+
+        internal void MakeUserPartyLeaderById(Client client, MakeUserPartyLeaderByIdPacket packet)
+        {
+            var party = LedParty(client);
+            var target = party?.Find(packet.UserId);
+
+            if (target != null)
+                SetLeader(party, target);
+        }
+
+        internal void ChangePartyLootMethod(Client client, ChangePartyLootMethodPacket packet)
+        {
+            var party = LedParty(client);
+
+            if (party == null)
+                return;
+
+            party.LootMethod = packet.PartyLootMethod;
+
+            foreach (var member in OnlineClients(party))
+                member.CallMethod(SysEntity.ClientPartyManagerId, new ChangePartyLootMethodPacket(packet.PartyLootMethod));
+        }
+
+        internal void ChangePartyLootThreshold(Client client, ChangePartyLootThresholdPacket packet)
+        {
+            var party = LedParty(client);
+
+            if (party == null)
+                return;
+
+            party.LootThreshold = packet.PartyLootThreshold;
+
+            foreach (var member in OnlineClients(party))
+                member.CallMethod(SysEntity.ClientPartyManagerId, new ChangePartyLootThresholdPacket(packet.PartyLootThreshold));
+        }
+
+        #endregion
+
+        #region World entry and exit
+
+        /// <summary>
+        /// MapChannelManager.RemovePlayer: logout, inactivity logout, dropped connection, and
+        /// the GM teleport between maps. The member's spot is held rather than given up.
+        /// </summary>
+        public void RemovePlayer(Client client)
+        {
+            if (client.AccountEntry == null)
+                return;
+
+            DropInvites(client.AccountEntry.Id);
+
+            var party = FindPartyOfAccount(client.AccountEntry.Id);
+
+            if (client.Player != null)
+                client.Player.PartyId = 0;
+
+            var member = party?.Find(client.AccountEntry.Id);
+
+            if (member == null || !member.IsOnline)
+                return;
+
+            var entityId = member.EntityId;
+
+            member.EntityId = 0;
+            member.OfflineSinceTick = Environment.TickCount64;
+
+            foreach (var other in OnlineClients(party))
+            {
+                other.CallMethod(SysEntity.ClientPartyManagerId, new RemoveSquadMemberPacket(member.UserId, entityId));
+                Message(other, PlayerMessage.PmPartyMemberLoggedOut, "player", member.MemberName);
+            }
+
+            // A squad whose leader is away cannot invite; leadership moves to someone present.
+            if (party.PartyLeaderId == member.UserId)
+                PassLeadership(party);
+        }
+
+        /// <summary>
+        /// MapChannelManager.MapLoaded, when a character enters the world (not on a dropship
+        /// teleport, which keeps the same manifestation). Rejoins a held spot, or clears any
+        /// party the client still remembers from before it left the world.
+        /// </summary>
+        public void PlayerEnteredWorld(Client client)
+        {
+            var party = FindPartyOfAccount(client.AccountEntry.Id);
+
+            if (party == null)
+            {
+                ResetClient(client, false);
+                return;
+            }
+
+            var member = party.Find(client.AccountEntry.Id);
+
+            member.Refresh(client);
+            member.OfflineSinceTick = 0;
+            client.Player.PartyId = party.Id;
+
+            foreach (var other in OnlineClients(party))
+            {
+                if (other == client)
                     continue;
 
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new RemovePartyMemberPacket(client.Player.EntityId));
+                other.CallMethod(SysEntity.ClientPartyManagerId, new UpdatePartyMemberInfoPacket(member));
+                other.CallMethod(SysEntity.ClientPartyManagerId, new AddSquadMemberPacket(member.UserId, member.EntityId));
+                Message(other, PlayerMessage.PmPartyMemberLoggedIn, "player", member.MemberName);
             }
 
-            party.Members.Remove(memberToRemove);
+            SendPartyState(party, client);
 
-            if (party.Members.Count == 1)
-            {
-                var lastPartyMember = Server.Clients.Find(c => c.Player.EntityId == party.Members[0].MemberId);
-
-                lastPartyMember.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0));
-                lastPartyMember.Player.PartyId = 0;
-
-                Parties.Remove(client.Player.PartyId);
-            }
-
-            client.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0));
-            client.Player.PartyId = 0;
+            if (party.Find(party.PartyLeaderId)?.IsOnline != true)
+                PassLeadership(party);
         }
+
+        /// <summary>Called every MapChannelWorker tick. Gives up spots held longer than HeldSpotMs.</summary>
+        public void ExpireHeldMembers()
+        {
+            if (Parties.Count == 0)
+                return;
+
+            var now = Environment.TickCount64;
+
+            foreach (var party in Parties.Values.ToList())
+                foreach (var member in party.Members.Where(m => !m.IsOnline && now - m.OfflineSinceTick >= HeldSpotMs).ToList())
+                    if (Parties.ContainsKey(party.Id))
+                        RemoveMember(party, member, false);
+        }
+
+        #endregion
 
         #region Helper Functions
-        public void CreateParty(Client leader, Client member)
+
+        private void CreateParty(Client leader, Client member)
         {
-            var partyId = GetPartyId;
-            var partyMembers = new List<PartyMember>();
-            partyMembers.Add(new PartyMember(leader));
-            partyMembers.Add(new PartyMember(member));
+            var party = new Party(GetPartyId, leader.AccountEntry.Id, new List<PartyMember>
+            {
+                new PartyMember(leader),
+                new PartyMember(member)
+            });
 
-            var party = new Party(partyId, leader.AccountEntry.Id, partyMembers);
+            Parties[party.Id] = party;
+            leader.Player.PartyId = party.Id;
+            member.Player.PartyId = party.Id;
 
-            Parties.Add(partyId, party);
-
-            leader.Player.PartyId = partyId;
-            member.Player.PartyId = partyId;
-
-            leader.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(partyId));
-            leader.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(party.PartyLeaderId));
-            leader.CallMethod(SysEntity.ClientPartyManagerId, new PartyMemberListPacket(partyMembers));
-
-            member.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(partyId));
-            member.CallMethod(SysEntity.ClientPartyManagerId, new PartyMemberListPacket(partyMembers));
+            SendPartyState(party, leader);
+            SendPartyState(party, member);
+            Message(member, PlayerMessage.PmYouJoinedTheParty);
         }
 
-        public void AddNewPartyMember(Client leader, Client newMember)
+        private void AddMember(Party party, Client client)
         {
-            var partyId = leader.Player.PartyId;
-            var partyMembers = Server.Clients.FindAll(c => c.Player.PartyId == partyId);
-            var newPartyMember = new PartyMember(newMember);
+            var member = new PartyMember(client);
 
-            foreach (var partyMember in partyMembers)
-                partyMember.CallMethod(SysEntity.ClientPartyManagerId, new AddPartyMemberPacket(newPartyMember));
+            foreach (var other in OnlineClients(party))
+            {
+                other.CallMethod(SysEntity.ClientPartyManagerId, new AddPartyMemberPacket(member));
+                other.CallMethod(SysEntity.ClientPartyManagerId, new AddSquadMemberPacket(member.UserId, member.EntityId));
+            }
 
-            newMember.Player.PartyId = partyId;
+            party.Members.Add(member);
+            client.Player.PartyId = party.Id;
 
-            Parties[partyId].Members.Add(newPartyMember);
+            SendPartyState(party, client);
+            Message(client, PlayerMessage.PmYouJoinedTheParty);
+        }
 
-            newMember.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(partyId));
-            newMember.CallMethod(SysEntity.ClientPartyManagerId, new PartyMemberListPacket(Parties[partyId].Members));
+        /// <summary>
+        /// Everything a client needs to show the party it is in. Recv_SetCurrentPartyId raises
+        /// if the client already has a party id, and a client that went back to character
+        /// select still has the one it left with, so it is cleared first; with no party id on
+        /// the client that clear does nothing visible.
+        /// </summary>
+        private void SendPartyState(Party party, Client client)
+        {
+            var others = LiveMembers(party).Where(m => m.UserId != client.AccountEntry.Id).ToList();
+
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0));
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(party.Id));
+            // The recipient is not in their own list: g_partyMembers holds everyone else
+            // (party.py GetFullPartyMembersCopy adds the current player itself). Sending the
+            // recipient too put them in their own party window.
+            client.CallMethod(SysEntity.ClientPartyManagerId, new PartyMemberListPacket(others));
+            // After the list: SetPartyLeader resolves the id against it.
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(party.PartyLeaderId));
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SquadMemberListPacket(
+                others.Where(m => m.IsOnline).Select(m => (m.UserId, m.EntityId)).ToList()));
+        }
+
+        private void RemoveMember(Party party, PartyMember member, bool kicked)
+        {
+            if (member == null)
+                return;
+
+            party.Members.Remove(member);
+
+            if (member.IsOnline)
+            {
+                var leaver = FindIngame(member.UserId);
+
+                if (leaver != null)
+                {
+                    leaver.Player.PartyId = 0;
+                    ResetClient(leaver, kicked);
+                }
+            }
+
+            foreach (var other in OnlineClients(party))
+                other.CallMethod(SysEntity.ClientPartyManagerId, new RemovePartyMemberPacket(member.UserId, kicked));
+
+            if (party.Members.Count < 2)
+            {
+                Disband(party);
+                return;
+            }
+
+            if (party.PartyLeaderId == member.UserId)
+                PassLeadership(party);
+        }
+
+        private void Kick(Party party, Client leader, PartyMember target)
+        {
+            if (target.UserId == leader.AccountEntry.Id)
+                return;
+
+            RemoveMember(party, target, true);
+        }
+
+        private void Disband(Party party)
+        {
+            foreach (var member in OnlineClients(party))
+            {
+                member.Player.PartyId = 0;
+                member.CallMethod(SysEntity.ClientPartyManagerId, new PartyDisbandedPacket());
+            }
+
+            party.Members.Clear();
+            Parties.Remove(party.Id);
+            FreePartyId(party.Id);
+        }
+
+        /// <summary>
+        /// Hands leadership to the first member in the world, in join order. With nobody in
+        /// the world the current leader keeps it.
+        /// </summary>
+        private void PassLeadership(Party party)
+        {
+            var next = party.Members.FirstOrDefault(m => m.IsOnline && m.UserId != party.PartyLeaderId)
+                       ?? party.Members.FirstOrDefault(m => m.IsOnline);
+
+            if (next == null && party.Find(party.PartyLeaderId) == null)
+                next = party.Members.FirstOrDefault();
+
+            if (next != null && next.UserId != party.PartyLeaderId)
+                SetLeader(party, next);
+        }
+
+        private void SetLeader(Party party, PartyMember leader)
+        {
+            if (party.PartyLeaderId == leader.UserId)
+                return;
+
+            party.PartyLeaderId = leader.UserId;
+
+            foreach (var member in OnlineClients(party))
+                member.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(leader.UserId));
+        }
+
+        /// <summary>SetCurrentPartyId(None) and SetPartyLeader(None): the client's "not in a squad" state.</summary>
+        private static void ResetClient(Client client, bool kicked)
+        {
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SetCurrentPartyIdPacket(0, kicked));
+            client.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(0));
+        }
+
+        private void DropInvites(uint accountId)
+        {
+            if (_invites.Remove(accountId, out var received))
+            {
+                var inviter = FindIngame(received.InviterId);
+
+                if (inviter != null)
+                {
+                    // Success is the only message that closes the inviter's revoke dialog as
+                    // well as the pending indicator, and it prints nothing of its own.
+                    inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(received.InviteeName));
+                    Message(inviter, PlayerMessage.PmInviteeLoggedOut, "name", received.InviteeName);
+                }
+            }
+
+            foreach (var sent in _invites.Values.Where(i => i.InviterId == accountId).ToList())
+            {
+                _invites.Remove(sent.InviteeId);
+                FindIngame(sent.InviteeId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(sent.InviterName));
+            }
+        }
+
+        /// <summary>The members with name, level and AFK read from the live character where there is one.</summary>
+        private static List<PartyMember> LiveMembers(Party party)
+        {
+            foreach (var member in party.Members.Where(m => m.IsOnline))
+            {
+                var client = FindIngame(member.UserId);
+
+                if (client != null)
+                    member.Refresh(client);
+            }
+
+            return party.Members.ToList();
+        }
+
+        private static List<Client> OnlineClients(Party party)
+        {
+            var clients = new List<Client>();
+
+            foreach (var member in party.Members)
+            {
+                if (!member.IsOnline)
+                    continue;
+
+                var client = FindIngame(member.UserId);
+
+                if (client != null)
+                    clients.Add(client);
+            }
+
+            return clients;
+        }
+
+        internal Party PartyOf(Client client)
+        {
+            if (client?.Player == null || client.Player.PartyId == 0)
+                return null;
+
+            return Parties.TryGetValue(client.Player.PartyId, out var party) && party.Find(client.AccountEntry.Id) != null
+                ? party
+                : null;
+        }
+
+        private Party FindPartyOfAccount(uint accountId) => Parties.Values.FirstOrDefault(p => p.Find(accountId) != null);
+
+        /// <summary>The caller's party if they lead it; otherwise tells them why not and returns null.</summary>
+        private Party LedParty(Client client)
+        {
+            if (!InWorld(client))
+                return null;
+
+            var party = PartyOf(client);
+
+            if (party == null)
+            {
+                Message(client, PlayerMessage.PmActionFailedNoParty);
+                return null;
+            }
+
+            if (party.PartyLeaderId != client.AccountEntry.Id)
+            {
+                Message(client, PlayerMessage.PmYouAreNotPartyLeader);
+                return null;
+            }
+
+            return party;
+        }
+
+        private static bool InWorld(Client client) =>
+            client?.Player != null && client.AccountEntry != null && client.State == ClientState.Ingame;
+
+        private static Client FindIngame(uint accountId) =>
+            Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null && c.AccountEntry != null && c.AccountEntry.Id == accountId);
+
+        private static Client FindIngame(string familyName) =>
+            string.IsNullOrEmpty(familyName)
+                ? null
+                : Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null && c.AccountEntry != null
+                                           && string.Equals(c.Player.FamilyName, familyName, StringComparison.OrdinalIgnoreCase));
+
+        private static void Message(Client client, PlayerMessage message, string key = null, string value = null)
+        {
+            var args = new Dictionary<string, string>();
+
+            if (key != null)
+                args[key] = value ?? string.Empty;
+
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(message, args, MsgFilterId.GeneralSystemMessages));
         }
 
         #endregion
