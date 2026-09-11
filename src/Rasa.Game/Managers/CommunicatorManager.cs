@@ -25,13 +25,13 @@ namespace Rasa.Managers
          * - SurrenderWargame
          *      -- UserMethod
          * - PrivilegedCommand
-         * - Whisper
+         * - Whisper                            => implemented
          * - PartyChat
          * - GuildChat
          * - Shout
          * - RadialChat
          * - ChannelChat
-         * - Reply
+         * - Reply                              => implemented
          * - ClanLeadersChat
          * - ChangeLastName
          * - ChangeFirstName
@@ -59,9 +59,9 @@ namespace Rasa.Managers
          * - RemoveIgnoreAck
          * - SendMOTD
          * - SystemMessage
-         * - WhisperAck
-         * - WhisperFailAck
-         * - WhisperSelf
+         * - WhisperAck                         => implemented
+         * - WhisperFailAck                     => implemented
+         * - WhisperSelf                        => implemented
          * - WhoAck                             => implemented
          * - WhoFailAck                         => implemented
          * 
@@ -74,7 +74,7 @@ namespace Rasa.Managers
          * - PartyChat
          * - Radial
          * - Shout                              => implemented
-         * - Whisper
+         * - Whisper                            => implemented
          */
 
         private static CommunicatorManager _instance;
@@ -143,23 +143,9 @@ namespace Rasa.Managers
 
         internal void Reply(Client client, ReplyPacket packet)
         {
-            var reciver = Server.Clients.Find(c => c.Player.FamilyName == packet.Reciver);
-            
-            // send message to self
-            client.CallMethod(SysEntity.CommunicatorId, new WhisperPacket
-            {
-                Sender = client.Player.FamilyName,
-                Message = packet.Message,
-                SenderEntityId = client.Player.EntityId
-            });
-
-            // send message to target
-            reciver.CallMethod(SysEntity.CommunicatorId, new WhisperPacket
-            {
-                Sender = client.Player.FamilyName,
-                Message = packet.Message,
-                SenderEntityId = client.Player.EntityId
-            });
+            // /r carries the name from the last Recv_Whisper, which is the family name this
+            // server sent as the sender, so it resolves exactly like /w.
+            DeliverWhisper(client, packet.Reciver, packet.Message);
         }
 
         internal void PartyChat(Client client, PartyChatPacket packet)
@@ -184,23 +170,59 @@ namespace Rasa.Managers
 
         internal void Whisper(Client client, WhisperPacket packet)
         {
-            var reciver = Server.Clients.Find(c => c.Player.FamilyName == packet.Reciver);
+            DeliverWhisper(client, packet.Reciver, packet.Message);
+        }
 
-            // send message to self
-            client.CallMethod(SysEntity.CommunicatorId, new WhisperPacket
+        /// <summary>
+        /// Shared by Whisper and Reply. The sender used to be sent a Whisper from themselves,
+        /// which the client prints as an incoming message, bubbles over the sender's own head,
+        /// and pushes onto g_replyTo - so /r afterwards targeted yourself. An unknown or offline
+        /// target threw on the null receiver and disconnected the sender. WhisperAck,
+        /// WhisperFailAck and WhisperSelf were never sent at all.
+        /// </summary>
+        private void DeliverWhisper(Client sender, string targetName, string message)
+        {
+            var name = targetName?.Trim() ?? string.Empty;
+
+            if (name.Length > 0 && string.Equals(name, sender.Player.FamilyName, StringComparison.OrdinalIgnoreCase))
             {
-                Sender = client.Player.FamilyName,
-                Message = packet.Message,
-                SenderEntityId = client.Player.EntityId
+                sender.CallMethod(SysEntity.CommunicatorId, new WhisperSelfPacket(message));
+                return;
+            }
+
+            // Family names are unique; typed names should not have to match their case.
+            var target = name.Length == 0
+                ? null
+                : Server.Clients.Find(c =>
+                    c.State == ClientState.Ingame &&
+                    string.Equals(c.Player.FamilyName, name, StringComparison.OrdinalIgnoreCase));
+
+            if (target == null)
+            {
+                sender.CallMethod(SysEntity.CommunicatorId,
+                    new WhisperFailAckPacket(name, PlayerMessage.PmWhisperTargetNotInGame));
+                return;
+            }
+
+            // Ignore lists hold account ids, loaded by SocialManager.SetSocialContactList.
+            if (target.Player.IgnoredPlayers.Contains(sender.AccountEntry.Id))
+            {
+                sender.CallMethod(SysEntity.CommunicatorId,
+                    new WhisperFailAckPacket(target.Player.FamilyName, PlayerMessage.PmWhisperTargetIgnoringYou));
+                return;
+            }
+
+            target.CallMethod(SysEntity.CommunicatorId, new WhisperPacket
+            {
+                Sender = sender.Player.FamilyName,
+                Message = message,
+                SenderEntityId = sender.Player.EntityId
             });
 
-            // send message to target
-            reciver.CallMethod(SysEntity.CommunicatorId, new WhisperPacket
-            {
-                Sender = client.Player.FamilyName,
-                Message = packet.Message,
-                SenderEntityId = client.Player.EntityId
-            });
+            // The target's canonical family name, not what was typed, so the sender sees the
+            // name the way the target's family is actually spelled.
+            sender.CallMethod(SysEntity.CommunicatorId,
+                new WhisperAckPacket(target.Player.FamilyName, message, target.Player.IsAFK));
         }
 
         /// <summary>
@@ -237,8 +259,11 @@ namespace Rasa.Managers
 
             if (matches.Count == 0)
             {
+                // Recv_WhoFailAck fills only {'player': charName}. PmNoSuchUser's text uses
+                // %(name)s, so it printed a translation-substitution error instead.
+                // PmWhisperTargetNotInGame is "%(player)s could not be found."
                 client.CallMethod(SysEntity.CommunicatorId,
-                    new WhoFailAckPacket(search, (uint)PlayerMessage.PmNoSuchUser));
+                    new WhoFailAckPacket(search, (uint)PlayerMessage.PmWhisperTargetNotInGame));
 
                 return;
             }
