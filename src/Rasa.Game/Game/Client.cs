@@ -175,6 +175,21 @@ namespace Rasa.Game
 
                 Server.Disconnect(this);
 
+                // A dropped connection (Alt+F4, crash, network loss) never runs the /logout
+                // flow, and that flow was the only thing that set RemoveFromMap - so the
+                // character stayed in its map cell as a frozen copy, visible to everyone
+                // including the same player on their next login. Flag it for the
+                // MapChannelWorker instead of calling RemovePlayer here: Close() is also
+                // reached from socket completion threads, and RemovePlayer walks the cell
+                // and entity tables the MainLoop owns. Disconected goes first so the
+                // worker skips handing a dead socket back to character selection, and so
+                // the visibility and trigger passes stop treating the player as present.
+                if (Player != null && Player.MapChannel != null)
+                {
+                    Player.Disconected = true;
+                    Player.RemoveFromMap = true;
+                }
+
                 DiscardPendingChunks();
 
                 try

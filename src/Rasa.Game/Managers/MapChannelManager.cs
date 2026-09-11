@@ -173,14 +173,29 @@ namespace Rasa.Managers
                     if (Timer.IsTriggered("ClientEffectUpdate"))
                         GameEffectManager.Instance.DoWork(mapChannel, delta);
 
-                    // chack for player LogOut
+                    // check for players leaving the map: /logout, and dropped connections
+                    // flagged by Client.Close()
                     foreach (var client in mapChannel.ClientList)
-                        if (client != null)
-                            if (client.Player.RemoveFromMap == true)
+                        if (client != null && client.Player.RemoveFromMap)
+                        {
+                            // The MainLoop thread has no handler of its own, so an exception
+                            // escaping here stops the whole server ticking. Clear the flag
+                            // first and drop the entry on failure so a bad removal is logged
+                            // once instead of retried - and thrown - on every tick.
+                            client.Player.RemoveFromMap = false;
+
+                            try
                             {
                                 RemovePlayer(client, true);
-                                break;
                             }
+                            catch (Exception e)
+                            {
+                                Logger.WriteLog(LogType.Error, $"Failed to remove {client.Player.FamilyName} from map {mapChannel.MapInfo.MapContextId}: {e}");
+                                mapChannel.ClientList.Remove(client);
+                            }
+
+                            break;
+                        }
                 }
             }
         }
