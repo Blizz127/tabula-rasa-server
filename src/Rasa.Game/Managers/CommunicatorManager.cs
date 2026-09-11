@@ -284,7 +284,7 @@ namespace Rasa.Managers
                     // sending a value would make the client render "MapName(1)".
                     CurrentGameContextOrdinal = null,
                     IsAfk = match.Player.IsAFK,
-                    IsTrialAccount = false
+                    IsTrialAccount = match.Player.IsTrialAccount
                 });
 
             client.CallMethod(SysEntity.CommunicatorId,

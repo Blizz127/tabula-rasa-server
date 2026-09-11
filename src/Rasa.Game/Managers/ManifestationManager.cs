@@ -64,7 +64,7 @@ namespace Rasa.Managers
          *  - PlayerAfk                        => implemented
          *  - PlayerInactiveWarning
          *  - ClanId
-         *  - IsTrialAccount
+         *  - IsTrialAccount                   => implemented (always false)
          *  - PlayerEnteredCombat
          *  - PlayerExitedCombat
          *  - MinionAdded
@@ -537,6 +537,7 @@ namespace Rasa.Managers
                 new IsRunningPacket(player.IsRunning),
                 new TargetCategoryPacket(Factions.AFS),
                 new PlayerFlagsPacket(),
+                new IsTrialAccountPacket(player.IsTrialAccount),
                 new EquipmentInfoPacket(client.Player.Inventory.EquippedInventory)
             };
 

@@ -46,6 +46,14 @@ namespace Rasa.Structures
         public List<CharacterTeleporterEntry> GainedWaypoints = new();
         public bool IsAFK { get; set; }
 
+        /// <summary>
+        /// Always false: this server has no trial accounts. The single source for every packet
+        /// that reports the flag (IsTrialAccount, WhoAck), so the client never shows the trial
+        /// tag and no trial-only restriction - whisper, party or clan invites, trial chat
+        /// channels - ever applies.
+        /// </summary>
+        public bool IsTrialAccount => false;
+
         // Inventory
         public Inventory Inventory { get; set; } = new Inventory();
 
