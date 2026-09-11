@@ -38,7 +38,7 @@ namespace Rasa.Managers
          * - Emote
          *      -- ActorMethod
          * - RequestLOSReport
-         * - ToggleAfk
+         * - ToggleAfk                          => implemented (ManifestationManager)
          * - GotoMob
          * 
          *      Comunicator Handlers:

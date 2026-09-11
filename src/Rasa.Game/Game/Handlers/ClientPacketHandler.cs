@@ -586,7 +586,7 @@
         [PacketHandler(GameOpcode.ToggleAfk)]
         private void ToggleAfk(ToggleAfkPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: ToggleAfkPacket");
+            ManifestationManager.Instance.ToggleAfk(Client);
         }
 
         [PacketHandler(GameOpcode.Whisper)]

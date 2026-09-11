@@ -61,7 +61,7 @@ namespace Rasa.Managers
          *  - GraveyardGained
          *  - CharacterName
          *  - RaceId
-         *  - PlayerAfk
+         *  - PlayerAfk                        => implemented
          *  - PlayerInactiveWarning
          *  - ClanId
          *  - IsTrialAccount
@@ -789,6 +789,24 @@ namespace Rasa.Managers
             client.Player.IsRunning = !client.Player.IsRunning;
 
             client.CallMethod(client.Player.EntityId, new IsRunningPacket(client.Player.IsRunning));
+        }
+
+        public void ToggleAfk(Client client)
+        {
+            SetAfk(client, !client.Player.IsAFK);
+        }
+
+        public void SetAfk(Client client, bool isAfk)
+        {
+            if (client.Player.IsAFK == isAfk)
+                return;
+
+            client.Player.IsAFK = isAfk;
+
+            // Broadcast to everyone in visibility range, including the player: the client
+            // shows the "you are AFK" system message only for its own manifestation, and an
+            // idle indicator over anyone else's head.
+            client.CellCallMethod(client, client.Player.EntityId, new PlayerAfkPacket(isAfk));
         }
 
         public void RequestWeaponDraw(Client client)
