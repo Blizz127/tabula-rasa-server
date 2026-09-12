@@ -8,33 +8,53 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.WeaponInfo;
 
-        public Item Item { get; set; }
-        public EntityClass ClassInfo { get; set; }
+        private readonly uint _clipSize, _currentAmmo, _reloadTime, _altActionId, _altActionArgId;
+        private readonly uint _aeType, _aeRadius, _recoilAmount, _coolRate, _ammoPerShot;
+        private readonly double _aimRate, _heatPerShot;
+        private readonly int _toolType, _cameraProfile;
+        private readonly bool _isJammed;
+
         public WeaponInfoPacket(Item item, EntityClass classInfo)
         {
-            Item = item;
-            ClassInfo = classInfo;
+            // WeaponInfo is queued alongside later ammo/jam updates. Retain the
+            // instance and template values observed at this point in the stream.
+            var weapon = item.ItemTemplate.WeaponInfo;
+            _clipSize = classInfo.WeaponClassInfo.ClipSize;
+            _currentAmmo = item.CurrentAmmo;
+            _aimRate = weapon.AimRate;
+            _reloadTime = weapon.ReloadTime;
+            _altActionId = weapon.AltActionId;
+            _altActionArgId = weapon.AltActionArgId;
+            _aeType = weapon.AeType;
+            _aeRadius = weapon.AeRadius;
+            _recoilAmount = weapon.RecoilAmount;
+            _coolRate = weapon.CoolRate;
+            _heatPerShot = weapon.HeatPerShot;
+            _toolType = (int)weapon.ToolType;
+            _isJammed = item.IsJammed;
+            _ammoPerShot = weapon.AmmoPerShot;
+            _cameraProfile = item.CammeraProfile;
         }
         public override void Write(PythonWriter pw)
         {
             pw.WriteTuple(17);
             pw.WriteNoneStruct();       // maybe not used by client
-            pw.WriteUInt(ClassInfo.WeaponClassInfo.ClipSize);
-            pw.WriteUInt(Item.CurrentAmmo);
-            pw.WriteDouble(Item.ItemTemplate.WeaponInfo.AimRate);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.ReloadTime);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.AltActionId);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.AltActionArgId);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.AeType);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.AeRadius);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.RecoilAmount);
+            pw.WriteUInt(_clipSize);
+            pw.WriteUInt(_currentAmmo);
+            pw.WriteDouble(_aimRate);
+            pw.WriteUInt(_reloadTime);
+            pw.WriteUInt(_altActionId);
+            pw.WriteUInt(_altActionArgId);
+            pw.WriteUInt(_aeType);
+            pw.WriteUInt(_aeRadius);
+            pw.WriteUInt(_recoilAmount);
             pw.WriteNoneStruct();       // ReuseOverride ToDo
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.CoolRate);
-            pw.WriteDouble(Item.ItemTemplate.WeaponInfo.HeatPerShot);
-            pw.WriteInt((int)Item.ItemTemplate.WeaponInfo.ToolType);
-            pw.WriteBool(Item.IsJammed);
-            pw.WriteUInt(Item.ItemTemplate.WeaponInfo.AmmoPerShot);
-            pw.WriteInt(Item.CammeraProfile);
+            pw.WriteUInt(_coolRate);
+            pw.WriteDouble(_heatPerShot);
+            pw.WriteInt(_toolType);
+            pw.WriteBool(_isJammed);
+            pw.WriteUInt(_ammoPerShot);
+            pw.WriteInt(_cameraProfile);
         }
     }
 }

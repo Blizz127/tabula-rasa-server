@@ -306,6 +306,7 @@ namespace Rasa.Managers
             player.LogoutCountdown.Cancel();
             player.CurrentAbility = null;
             player.CurrentWeaponAction = null;
+            player.CurrentWeaponAttack = null;
             var map = player.MapChannel;
             if (map != null)
             {

@@ -131,54 +131,7 @@ namespace Rasa.Managers
         }
 
         public void RequestWeaponAttack(Client client, RequestWeaponAttackPacket packet)
-        {
-            ManifestationManager.Instance.PlayerTryFireWeapon(client);
-
-                /*
-
-                var weapon = InventoryManager.Instance.CurrentWeapon(client);
-
-                if (weapon == null)
-                {
-                    Logger.WriteLog(LogType.Error, "no weapon armed but player tries to shoot");
-                    return;
-                }
-
-                var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
-                var targetType = EntityManager.Instance.GetEntityType((uint)packet.TargetId);
-                var target = new Actor();
-
-                switch (targetType)
-                {
-                    case EntityType.Creature:
-                        target = EntityManager.Instance.GetCreature((uint)packet.TargetId).Actor;
-                        break;
-                    default:
-                        Logger.WriteLog(LogType.Error, $"RequestWeaponAttack:\nUnsuported targetType = {targetType}");
-                        return; ;
-                }
-
-                var distance = Vector3.Distance(client.MapClient.Player.Actor.Position, target.Position);
-                var triggerTime = (int)Math.Round(distance, 0);
-
-                var missile = new Missile
-                {
-                    ActionId = packet.ActionId,
-                    ActionArgId = packet.ActionArgId,
-                    TargetEntityId = (uint)packet.TargetId,
-                    DamageA = weaponClassInfo.DamageType,
-                    IsAbility = false,
-                    Source = client,
-                    TriggerTime = triggerTime
-                };
-
-
-                missile.TriggerTime = triggerTime;
-
-
-                QueuedMissiles.Add(missile);
-                */
-        }
+            => WeaponAttackManager.Instance.TryStart(client, packet);
 
         public void DoWork(MapChannel mapChannel, long delta)
         {
@@ -288,8 +241,8 @@ namespace Rasa.Managers
             switch (missile.ActionId)
             {
                 case ActionId.WeaponAttack:
-                // The experimental C++ WeaponMelee handler also uses weapon recovery.
-                // This recognizes action 174; melee-specific mechanics remain pending.
+                // Original action 174 inherits BaseWeaponAttack's recovery receiver.
+                // Native melee range/impact mechanics remain a separate evidence gap.
                 case ActionId.WeaponMelee:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;

@@ -76,6 +76,19 @@ namespace Rasa.Repositories.Char.Items
             _charContext.SaveChanges();
         }
 
+        public bool TrySpendWeaponAmmo(uint accountId, uint characterId, uint weaponId, uint ammoBefore, uint amount)
+        {
+            if (amount == 0 || amount > ammoBefore)
+                return false;
+            var remaining = ammoBefore - amount;
+            return _charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE items SET ammo_count = {remaining}
+                WHERE item_id = {weaponId} AND ammo_count = {ammoBefore}
+                AND EXISTS (SELECT 1 FROM character_inventory
+                    WHERE item_id = {weaponId} AND account_id = {accountId}
+                    AND character_id = {characterId} AND invenotry_type = 9)") == 1;
+        }
+
         public void UpdateItemStackSize(IItemChange item)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.ItemEntries);

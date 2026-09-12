@@ -57,7 +57,8 @@ namespace Rasa.Managers
             var current = client.Player.CurrentWeaponAction;
             if (current?.ActionId == actionId && current.ArgumentId == argumentId)
                 return false; // A same-pair failure could discard the accepted request.
-            if (!CanAct(client) || client.Player.CurrentAbility != null || client.Player.CurrentAction != 0 ||
+            if (!CanAct(client) || client.Player.CurrentAbility != null || client.Player.CurrentWeaponAttack != null ||
+                client.Player.CurrentAction != 0 ||
                 current != null && current.ActionId != ActionId.WeaponReload ||
                 GetReuseRemaining(client.Player, actionId) > 0 ||
                 !WeaponActionData.TryGet(actionId, argumentId, out var timing) ||

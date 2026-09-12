@@ -276,18 +276,21 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (srcSlot < 0 || srcSlot > 50)
+            if (srcSlot >= 50 || srcSlot >= client.Player.Inventory.PersonalInventory.Count)
                 return;
 
-            if (destSlot < 0 || destSlot > 5)
+            if (destSlot >= client.Player.Inventory.WeaponDrawer.Count)
                 return;
 
+            var previousWeaponEntityId = client.Player.Inventory.EquippedInventory[13];
             // equip item
             var entityIdEquippedItem = client.Player.Inventory.WeaponDrawer[(int)destSlot]; // the old equipped item (can be none)
             var entityIdInventoryItem = client.Player.Inventory.PersonalInventory[(int)srcSlot]; // the new equipped item (can be none)
 
             // can we equip the item
             var itemToEquip = EntityManager.Instance.GetItem(entityIdInventoryItem);
+            if (itemToEquip != null && itemToEquip.ItemTemplate?.WeaponInfo == null)
+                return;
             var canEquip = ValidateItemEquip(client, itemToEquip);
 
             if (itemToEquip == null && canEquip == false)
@@ -307,26 +310,7 @@ namespace Rasa.Managers
                 AddItemBySlot(client, InventoryType.WeaponDrawerInventory, entityIdInventoryItem, destSlot, true);
 
             if (destSlot == client.Player.ActiveWeapon)
-                if (itemToEquip == null)
-                {
-                    // remove item graphic if dequipped
-                    var prevEquippedItem = EntityManager.Instance.GetItem(entityIdEquippedItem);
-                    var equipableClassInfo = EntityClassManager.Instance.GetEquipableClassInfo(prevEquippedItem);
-
-                    RemoveItemBySlot(client, InventoryType.EquipedInventory, 13);
-                    ManifestationManager.Instance.RemoveAppearanceItem(client, equipableClassInfo.EquipmentSlotId);
-
-                    // we dont have weapon, set weaponReady to false
-                    if (client.Player.WeaponReady)
-                        ManifestationManager.Instance.WeaponReady(client, false);
-                }
-                else
-                    ManifestationManager.Instance.SetAppearanceItem(client, itemToEquip);
-
-            // Tell client that he have new weapon
-            ManifestationManager.Instance.NotifyEquipmentUpdate(client);
-
-            ManifestationManager.Instance.UpdateAppearance(client);
+                ManifestationManager.Instance.RefreshArmedWeapon(client, previousWeaponEntityId);
         }
 
         public void RequestLockboxTabPermissions(Client client)
@@ -682,8 +666,14 @@ namespace Rasa.Managers
 
         public void WeaponDrawerInventory_MoveItem(Client client, WeaponDrawerInventory_MoveItemPacket packet)
         {
+            if (packet.SrcSlot >= client.Player.Inventory.WeaponDrawer.Count ||
+                packet.DestSlot >= client.Player.Inventory.WeaponDrawer.Count || packet.SrcSlot == packet.DestSlot)
+                return;
             var srcEntityId = client.Player.Inventory.WeaponDrawer[(int)packet.SrcSlot];
             var destEntityId = client.Player.Inventory.WeaponDrawer[(int)packet.DestSlot];
+            if (srcEntityId == 0)
+                return;
+            var previousWeaponEntityId = client.Player.Inventory.EquippedInventory[13];
             // swap items on the client and server
             if (destEntityId != 0)
             {
@@ -697,6 +687,8 @@ namespace Rasa.Managers
                 RemoveItemBySlot(client, InventoryType.WeaponDrawerInventory, packet.SrcSlot);
                 AddItemBySlot(client, InventoryType.WeaponDrawerInventory, srcEntityId, packet.DestSlot, true);
             }
+            if (packet.SrcSlot == client.Player.ActiveWeapon || packet.DestSlot == client.Player.ActiveWeapon)
+                ManifestationManager.Instance.RefreshArmedWeapon(client, previousWeaponEntityId);
         }
 
         #endregion
@@ -729,8 +721,9 @@ namespace Rasa.Managers
                     client.Player.Inventory.EquippedInventory[(int)slotId] = tempItem.EntityId; // update slot
                     break;
                 case InventoryType.WeaponDrawerInventory:
-                    client.Player.Inventory.EquippedInventory[13] = tempItem.EntityId; // update slot
                     client.Player.Inventory.WeaponDrawer[(int)slotId] = tempItem.EntityId; // update slot
+                    if (slotId == client.Player.ActiveWeapon)
+                        client.Player.Inventory.EquippedInventory[13] = tempItem.EntityId;
                     break;
                 case InventoryType.ClanInventory:
                     client.Player.Inventory.ClanInventory[(int)slotId] = tempItem.EntityId; // update slot
@@ -1028,7 +1021,29 @@ namespace Rasa.Managers
         public void InitCharacterInventory(Client client)
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var getInventoryData = unitOfWork.CharacterInventories.GetItems(client.AccountEntry.Id);
+            var getInventoryData = unitOfWork.CharacterInventories.GetItems(client.AccountEntry.Id, client.Player.Id);
+
+            // Map transfer retains this Manifestation, but the original client
+            // removes all physical entities while loading the next map. Retire
+            // each old item once (the active weapon also occupies slot 13), then
+            // rebuild the fixed slot lists and publish the persisted inventory.
+            var previousItems = new Dictionary<uint, Item>();
+            var previousEntityIds = new HashSet<ulong>(client.Player.Inventory.PersonalInventory);
+            previousEntityIds.UnionWith(client.Player.Inventory.HomeInventory);
+            previousEntityIds.UnionWith(client.Player.Inventory.EquippedInventory);
+            previousEntityIds.UnionWith(client.Player.Inventory.WeaponDrawer);
+            foreach (var entityId in previousEntityIds)
+            {
+                var previousItem = EntityManager.Instance.GetItem(entityId);
+                if (previousItem == null)
+                    continue;
+                previousItems[previousItem.Id] = previousItem;
+                EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+            }
+            client.Player.Inventory.PersonalInventory.Clear();
+            client.Player.Inventory.HomeInventory.Clear();
+            client.Player.Inventory.EquippedInventory.Clear();
+            client.Player.Inventory.WeaponDrawer.Clear();
 
             // init for server inventory
             for (uint i = 0; i < 22; i++)
@@ -1045,23 +1060,52 @@ namespace Rasa.Managers
 
             foreach (var item in getInventoryData)
             {
+                var inventoryType = (InventoryType)item.InventoryType;
+                var slots = inventoryType switch
+                {
+                    InventoryType.Personal => client.Player.Inventory.PersonalInventory,
+                    InventoryType.HomeInventory => client.Player.Inventory.HomeInventory,
+                    InventoryType.EquipedInventory => client.Player.Inventory.EquippedInventory,
+                    InventoryType.WeaponDrawerInventory => client.Player.Inventory.WeaponDrawer,
+                    _ => null
+                };
+                if (slots == null || item.SlotId >= slots.Count || slots[(int)item.SlotId] != 0 ||
+                    (inventoryType == InventoryType.EquipedInventory && item.SlotId == 13))
+                {
+                    Logger.WriteLog(LogType.Error, $"Invalid inventory location for item {item.ItemId}: type {item.InventoryType}, slot {item.SlotId}");
+                    continue;
+                }
+
                 var itemData = unitOfWork.Items.GetItem(item.ItemId);
+                if (itemData == null)
+                {
+                    Logger.WriteLog(LogType.Error, $"Missing item {item.ItemId} in character inventory");
+                    continue;
+                }
                 var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
                 if (itemTemplate == null)
-                    return;
+                    continue;
 
                 var newItem = new Item
                 {
                     OwnerId = item.CharacterId,
                     OwnerSlotId = item.SlotId,
                     ItemTemplate = itemTemplate,
+                    ItemTemplateId = itemData.ItemTemplateId,
                     StackSize = itemData.StackSize,
                     CurrentHitPoints = itemData.CurrentHitPoints,
                     Color = itemData.Color,
                     Id = item.ItemId,
                     Crafter = itemData.CrafterName
                 };
+                // These existing instance fields have no database columns.
+                // Rebuilding network entities must not reset them during travel.
+                if (previousItems.TryGetValue(item.ItemId, out var previousItem))
+                {
+                    newItem.IsJammed = previousItem.IsJammed;
+                    newItem.CammeraProfile = previousItem.CammeraProfile;
+                }
 
                 // check if item is weapon
                 if (newItem.ItemTemplate.WeaponInfo != null)
@@ -1074,32 +1118,33 @@ namespace Rasa.Managers
                 // fill invenoty slot
                 ItemManager.Instance.SendItemDataToClient(client, newItem, false);
 
-                if (item.CharacterId == client.Player.Id)
+                AddItemBySlot(client, inventoryType, newItem.EntityId, newItem.OwnerSlotId, false);
+            }
+
+            client.Player.Inventory.EquippedInventory[13] = client.Player.ActiveWeapon < client.Player.Inventory.WeaponDrawer.Count
+                ? client.Player.Inventory.WeaponDrawer[client.Player.ActiveWeapon] : 0;
+            // Character appearance is loaded independently and older drawer
+            // changes could leave it stale. Reconcile before actor publication.
+            var selectedWeapon = EntityManager.Instance.GetItem(client.Player.Inventory.EquippedInventory[13]);
+            client.Player.AppearanceData.TryGetValue(EquipmentData.Weapon, out var weaponAppearance);
+            if (selectedWeapon == null)
+            {
+                if (weaponAppearance != null)
+                    weaponAppearance.Class = 0;
+                client.Player.WeaponReady = false;
+            }
+            else
+            {
+                if (weaponAppearance == null)
                 {
-                    if ((InventoryType)item.InventoryType == InventoryType.Personal)
-                        AddItemBySlot(client, InventoryType.Personal, newItem.EntityId, newItem.OwnerSlotId, false);
-
-                    else if ((InventoryType)item.InventoryType == InventoryType.EquipedInventory)
-                        AddItemBySlot(client, InventoryType.EquipedInventory, newItem.EntityId, newItem.OwnerSlotId, false);
-
-                    else if ((InventoryType)item.InventoryType == InventoryType.WeaponDrawerInventory)
-                    {
-                        AddItemBySlot(client, InventoryType.WeaponDrawerInventory, newItem.EntityId, newItem.OwnerSlotId, false);
-
-                        if (newItem.OwnerSlotId == client.Player.ActiveWeapon)
-                            client.Player.Inventory.EquippedInventory[13] = newItem.EntityId;
-                    }
+                    weaponAppearance = new AppearanceData { SlotId = EquipmentData.Weapon };
+                    client.Player.AppearanceData.Add(EquipmentData.Weapon, weaponAppearance);
                 }
-                else if (item.CharacterId == 0)
-                {
-                    if ((InventoryType)item.InventoryType == InventoryType.HomeInventory)
-                    {
-                        client.Player.Inventory.HomeInventory[(int)item.SlotId] = newItem.EntityId;
-                        // make the item appear on the client
-                        AddItemBySlot(client, InventoryType.HomeInventory, client.Player.Inventory.HomeInventory[(int)item.SlotId], item.SlotId, false);
-                    }
-                }
-
+                weaponAppearance.Class = (uint)selectedWeapon.ItemTemplate.Class;
+                weaponAppearance.Color = new Color(selectedWeapon.Color);
+                // Keep the existing loaded hue, or the existing appearance
+                // loader fallback. The original second-hue persistence is unknown.
+                weaponAppearance.Hue2 ??= new Color(2139062144);
             }
         }
 
@@ -1160,6 +1205,8 @@ namespace Rasa.Managers
                 case InventoryType.WeaponDrawerInventory:
                     entityId = client.Player.Inventory.WeaponDrawer[(int)slotIndex];
                     client.Player.Inventory.WeaponDrawer[(int)slotIndex] = 0;
+                    if (slotIndex == client.Player.ActiveWeapon)
+                        client.Player.Inventory.EquippedInventory[13] = 0;
                     break;
                 case InventoryType.ClanInventory:
                     entityId = client.Player.Inventory.ClanInventory[(int)slotIndex];

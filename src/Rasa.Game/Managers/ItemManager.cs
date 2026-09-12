@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -152,12 +153,10 @@ namespace Rasa.Managers
         
         public ItemTemplate GetItemTemplateById(uint itemTemplateId)
         {
-            if (ItemTemplateItemClass.ContainsKey(itemTemplateId))
-            {
-                var classId = ItemTemplateItemClass[itemTemplateId];
-
-                return EntityClassManager.Instance.LoadedEntityClasses[classId].ItemTemplates[itemTemplateId];
-            }
+            if (ItemTemplateItemClass.TryGetValue(itemTemplateId, out var classId) &&
+                EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(classId, out var classInfo) &&
+                classInfo.ItemTemplates.TryGetValue(itemTemplateId, out var itemTemplate))
+                return itemTemplate;
 
             Logger.WriteLog(LogType.Error, $"Unknown itemTemplateId = {itemTemplateId}");
 
@@ -199,14 +198,19 @@ namespace Rasa.Managers
 
             // add item requirements to itemTemplate
             var itemReqs = unitOfWork.Equipment.GetRequirementsGeneric();
+            var templatesByClass = LoadedItemTemplates.Values.ToLookup(template => (uint)template.Class);
 
             foreach (var itemReq in itemReqs)
             {
-
-                if (LoadedItemTemplates.ContainsKey(itemReq.Id))
+                // Original Item.__init__ reads itemclass.reqData by classId.
+                // Race and skill requirements above are separately template-keyed.
+                if (templatesByClass.Contains(itemReq.Id))
                 {
-                    LoadedItemTemplates[itemReq.Id].ItemInfo.Requirements.Add((RequirementsType)itemReq.RequirementType, itemReq.RequirementValue);
-                    loaded++;
+                    foreach (var template in templatesByClass[itemReq.Id])
+                    {
+                        template.ItemInfo.Requirements.Add((RequirementsType)itemReq.RequirementType, itemReq.RequirementValue);
+                        loaded++;
+                    }
                 }
                 else
                     skipped++;
@@ -247,7 +251,7 @@ namespace Rasa.Managers
             }
 
             Logger.WriteLog(LogType.Initialize, $"Loaded {weaponTemplates.Count} WeaponTemplates.");
-            Logger.WriteLog(LogType.Initialize, $"ItemReqs = {itemReqs.Count}, loaded = {loaded}, skipped = {skipped}");
+            Logger.WriteLog(LogType.Initialize, $"ItemReqs = {itemReqs.Count}, template assignments = {loaded}, unmapped classes = {skipped}");
         }
         
         public void SendItemDataToClient(Client client, Item item, bool updateOnly)

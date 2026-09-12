@@ -96,6 +96,7 @@ namespace Rasa.Managers
         private static ManifestationManager _instance;
         private static readonly object InstanceLock = new object();
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
+        private readonly WeaponAttackManager _weaponAttacks;
 
         private static List<AutoFireTimer> AutoFire = new List<AutoFireTimer>();
         public static byte MaxPlayerLevel = 50;
@@ -121,8 +122,14 @@ namespace Rasa.Managers
         }
 
         private ManifestationManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory)
+            : this(gameUnitOfWorkFactory, WeaponAttackManager.Instance)
+        {
+        }
+
+        public ManifestationManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory, WeaponAttackManager weaponAttacks)
         {
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
+            _weaponAttacks = weaponAttacks ?? throw new ArgumentNullException(nameof(weaponAttacks));
         }
 
         #region Handlers
@@ -157,45 +164,7 @@ namespace Rasa.Managers
         }
 
         public bool PlayerTryFireWeapon(Client client)
-        {
-            if (!WeaponActionManager.CanAct(client) || ActorActionManager.Instance.HasActiveAction(client.Player))
-                return false;
-            var weapon = WeaponActionManager.CurrentWeapon(client);
-            var weaponClassInfo = WeaponActionManager.ClassInfo(weapon);
-            if (weaponClassInfo == null)
-                return false;
-            // ToDo: isOverheated, isJammed, and some other checks
-            if (!client.Player.WeaponReady)
-            {
-                WeaponActionManager.Instance.Request(client, ActionId.WeaponDraw, false);
-                return false;
-            }
-
-            // do we need to reload?
-            if (weapon.CurrentAmmo < weapon.ItemTemplate.WeaponInfo.AmmoPerShot)
-            {
-                RequestWeaponReload(client, true);
-                return false;
-            }
-
-            // decrease ammo count
-            weapon.CurrentAmmo -= weapon.ItemTemplate.WeaponInfo.AmmoPerShot;
-            client.CallMethod(weapon.EntityId, new WeaponAmmoInfoPacket(weapon.CurrentAmmo));
-
-            // should we update db per shot? it will be a lot of db calls
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            unitOfWork.Items.UpdateAmmo(weapon);
-
-            // let's calculate damage
-            var damageRange = weaponClassInfo.MaxDamage - weaponClassInfo.MinDamage;
-            var damage = weaponClassInfo.MinDamage + new Random().Next(0, damageRange + 1);
-            var action = new ActionData(client.Player, weaponClassInfo.WeaponAttackActionId, weaponClassInfo.WeaponAttackArgId, client.Player.Target, 0);
-            // launch correct missile type depending on weapon type
-            MissileManager.Instance.MissileLaunch(client.Player.MapChannel, action, damage,
-                (DamageType)weaponClassInfo.DamageType);
-            
-            return true;
-        }
+            => _weaponAttacks.TryAutoFire(client);
 
         public void RequestArmAbility(Client client, int abilityDrawerSlot)
         {
@@ -208,25 +177,42 @@ namespace Rasa.Managers
         {
             if (!WeaponActionManager.CanAct(client) || requestedWeaponDrawerSlot >= client.Player.Inventory.WeaponDrawer.Count)
                 return;
-            if (requestedWeaponDrawerSlot != client.Player.ActiveWeapon)
-                WeaponActionManager.Instance.Cancel(client, true);
+            var previousWeaponEntityId = client.Player.Inventory.EquippedInventory[13];
             client.Player.ActiveWeapon = (byte)requestedWeaponDrawerSlot;
 
             client.CallMethod(client.Player.EntityId, new WeaponDrawerSlotPacket(requestedWeaponDrawerSlot, true));
 
-            var weapon = EntityManager.Instance.GetItem(client.Player.Inventory.WeaponDrawer[client.Player.ActiveWeapon]);
+            RefreshArmedWeapon(client, previousWeaponEntityId);
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+            unitOfWork.Characters.UpdateCharacterActiveWeapon(client.Player.Id, client.Player.ActiveWeapon);
+        }
 
-            if (weapon == null)
-                return;
-
-            client.Player.Inventory.EquippedInventory[13] = weapon.EntityId;
+        public void RefreshArmedWeapon(Client client, ulong previousWeaponEntityId)
+        {
+            var drawer = client.Player.Inventory.WeaponDrawer;
+            var weaponEntityId = client.Player.ActiveWeapon < drawer.Count ? drawer[client.Player.ActiveWeapon] : 0;
+            var weapon = EntityManager.Instance.GetItem(weaponEntityId);
+            client.Player.Inventory.EquippedInventory[13] = weapon?.EntityId ?? 0;
+            if (previousWeaponEntityId != client.Player.Inventory.EquippedInventory[13])
+            {
+                WeaponActionManager.Instance.Cancel(client, true);
+                _weaponAttacks.Cancel(client, true);
+            }
 
             NotifyEquipmentUpdate(client);
-            SetAppearanceItem(client, weapon);
+            if (weapon == null)
+            {
+                if (client.Player.AppearanceData.ContainsKey(EquipmentData.Weapon))
+                    RemoveAppearanceItem(client, EquipmentData.Weapon);
+                if (client.Player.WeaponReady)
+                    WeaponReady(client, false);
+            }
+            else
+            {
+                SetAppearanceItem(client, weapon);
+                client.CallMethod(weapon.EntityId, new WeaponAmmoInfoPacket(weapon.CurrentAmmo));
+            }
             UpdateAppearance(client);
-            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.ActiveWeapon, (byte)requestedWeaponDrawerSlot);
-            // update ammo info
-            client.CallMethod(weapon.EntityId, new WeaponAmmoInfoPacket(weapon.CurrentAmmo));
         }
 
         public void RequestSetAbilitySlot(Client client, RequestSetAbilitySlotPacket packet)
@@ -310,7 +296,12 @@ namespace Rasa.Managers
                 return;
             RegisterAutoFire(client);
             ActorManager.Instance.RequestVisualCombatMode(client, true);
-            PlayerTryFireWeapon(client);
+            if (PlayerTryFireWeapon(client))
+            {
+                var timer = AutoFire.Find(entry => entry.Client == client);
+                timer.RefireTime = _weaponAttacks.GetNextAttemptDelay(client);
+                timer.Delay = timer.RefireTime;
+            }
         }
 
         public void StopAutoFire(Client client)
@@ -432,7 +423,7 @@ namespace Rasa.Managers
                 {
                     if (PlayerTryFireWeapon(timer.Client))
                     {
-                        timer.RefireTime = WeaponActionManager.CurrentWeapon(timer.Client).ItemTemplate.WeaponInfo.Refire;
+                        timer.RefireTime = _weaponAttacks.GetNextAttemptDelay(timer.Client);
                         timer.Delay = timer.RefireTime;
                     }
                     else
@@ -690,7 +681,7 @@ namespace Rasa.Managers
             var weapon = WeaponActionManager.CurrentWeapon(client);
             if (weapon == null)
                 return;
-            var timer = new AutoFireTimer(client, weapon.ItemTemplate.WeaponInfo.Refire, weapon.ItemTemplate.WeaponInfo.Refire);
+            var timer = new AutoFireTimer(client, 0, 0);
             // Existing grace policy, pending original-server evidence. The original
             // client sends its first 2500 ms keepalive immediately after StartAutoFire.
             timer.MaxAliveTime = 10000;

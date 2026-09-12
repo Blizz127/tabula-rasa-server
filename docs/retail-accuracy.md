@@ -582,3 +582,87 @@ Rollback image: `rasa_net:before-retail-weapon-20260912`. Retag it as
 `rasa_net:latest` and recreate game with `--no-deps --no-build`; code rollback
 requires no database restoration. The full final-live preservation goal
 remains active.
+
+
+## Primary attacks and inventory sessions — 2026-09-12
+
+The [original primary attack catalog](weapon-attack-client-evidence.md) now
+supplies all 198 action-1/action-174 rows to a captured execution lifecycle.
+Manual requests retain their action pair, entity-or-location target, and
+alternate flag. Admission checks the equipped primary pair, readiness, jam,
+ammunition, current action and shared reuse. An unsupported specialized or
+alternate request cannot execute an ordinary primary shot in its place.
+
+The attack resolves after its original windup, remains busy through recovery,
+and observes action-ID reuse across arguments. The 1/66 no-reuse flag and
+174/32 literal 4/5/2 ms stages remain intact. Autofire schedules its first and
+subsequent repeats from these stages instead of uniform template refire data.
+Movement preserves these original primary actions. Interruption before
+resolution causes no magazine debit or damage; later interruption preserves
+already-spent ammunition and reuse.
+
+Resolved attacks use the requested eligible target rather than the actor's
+separate tracking target. Missing/dead/friendly targets become blind shots,
+and an entity number reused by another object cannot receive a captured shot.
+Ammo commits conditionally against the expected stored count and the captured
+weapon's account/character/drawer ownership before memory changes. The original
+server's precise ammo debit/impact ordering remains an inference. Native
+geometry, LOS, target categories beyond the existing creature path, damage
+modifiers and specialized/alternate behavior remain required reconstruction.
+
+The [inventory session fixes](inventory-session-evidence.md) filter private
+items by selected character before entity publication, retain the active drawer
+through login and swaps, and persist empty weapon selections. Invalid stored
+rows no longer prevent valid items from loading. Equipment, appearance and
+weapon-information packets snapshot their queued values so later mutations do
+not alter earlier updates. Map changes retire the prior inventory entities and
+rebuild fixed-capacity lists before republishing items; reusing the character
+object no longer grows those lists or skips occupied slots. Initial weapon
+appearance is reconciled with the selected item before actor publication, and
+an empty selection clears appearance/readiness. Existing second-hue persistence
+and original packet-order details remain evidence gaps.
+
+The [world equipment audit](world-equipment-client-audit.md) found exact numeric
+matches for all 2,946 weapon classes, 3,377 armor classes and 30,225 template/class
+mappings. No bulk rewrite is warranted. The weapon archetype field now reads
+the original template ID rather than the class-row ID. All 2,440 weapon template
+records still have the same 22 fields, and original server-supplied instance
+stats cannot be reconstructed from the class table alone. The audit preserves
+4,341 original nulls currently flattened to database zero as a separate gap.
+
+Generic item requirements were incorrectly joined by template ID. The original
+client reads those 5,293 requirement rows by item class; this distinction changes
+expected requirements for 19,576 loaded templates. Correcting the loader uses
+the existing original-matching rows without migrating stored world data.
+Skill/race requirement rows and equipment slot mappings also match the original
+tables; complete equipment eligibility still needs its own implementation audit.
+
+
+The final candidate built with zero errors and the same five existing unused
+variable/field warnings. **All 380 tests passed**, with zero failures/skips,
+inside that candidate image without production database mounts or networking.
+The image's source exactly matched the reviewed workspace excluding generated
+`bin`/`obj`. Independent review closed first-autofire repeat scheduling and
+repeated map-load/initial appearance defects before the final build. The final
+suite includes 27 primary lifecycle cases, 18 inventory session cases and two
+real-loader requirement cases alongside the prior regressions.
+These tests verify implementation behavior; they do not supply missing original
+server evidence or certify a complete final-live client session.
+
+
+Tested game image
+`sha256:ba9950bab9556f4932c973822a5730dedcc360bcfaf07517a69b7f15497668e2`
+was deployed at **20:05:38 UTC** and reported `Server ready!` at
+**20:05:48 UTC**. Initial checks show the expected image running with zero
+restarts and no error/unhandled/OOM/fatal startup lines. Auth's image and start
+time are unchanged. This pass has no schema migration or bulk world-data rewrite.
+
+All three fresh SQLite backups passed integrity checks. Private deployment
+configuration, source/docs, review patch, build/test logs, source comparison,
+and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T200524Z-retail-attack/`.
+Rollback image: `rasa_net:before-retail-attack-20260912`. Retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`; code
+rollback needs no database restoration. The full final-live preservation goal
+remains active, including original-client session verification and the gaps
+in the linked evidence reports.

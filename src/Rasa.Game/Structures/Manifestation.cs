@@ -32,6 +32,7 @@ namespace Rasa.Structures
         public List<ResistanceData> ResistanceData = new();
         public AbilityExecution CurrentAbility { get; set; }
         public WeaponActionExecution CurrentWeaponAction { get; set; }
+        public WeaponAttackExecution CurrentWeaponAttack { get; set; }
         public Dictionary<ActionId, long> AbilityReuseDeadlines { get; } = new();
         public int SpentBody { get; set; }
         public int SpentMind { get; set; }

@@ -122,7 +122,7 @@ namespace Rasa.Structures
 
         public WeaponClassInfo(WeaponClassEntry weaponInfo)
         {
-            WeaponTemplateid = weaponInfo.Id;
+            WeaponTemplateid = weaponInfo.WeaponTemplatId;
             WeaponAttackActionId = (ActionId)weaponInfo.AttackActionId;
             WeaponAttackArgId = weaponInfo.AttackActionArgId;
             DrawActionId = weaponInfo.DrawActionId;

@@ -7,7 +7,7 @@ namespace Rasa.Repositories.Char.CharacterInventory
     {
         void AddInvItem(uint accountId, uint characteId, uint inventoryType, uint slotId, uint itemId);
         void DeleteInvItem(uint accountId, uint characteId, uint inventoryType, uint slotIndex);
-        List<CharacterInventoryEntry> GetItems(uint accountId);
+        List<CharacterInventoryEntry> GetItems(uint accountId, uint characterId);
         void MoveInvItem(uint accountId, uint characteId, uint inventoryType, uint slotId, uint itemId);
     }
 }

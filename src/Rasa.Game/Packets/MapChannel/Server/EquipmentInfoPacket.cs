@@ -9,32 +9,24 @@ namespace Rasa.Packets.MapChannel.Server
     {
         public override GameOpcode Opcode { get; } = GameOpcode.EquipmentInfo;
 
-        public List<ulong> EquipmentInfo { get; set; }
-        public Dictionary<uint, ulong> ActualEquipment = new Dictionary<uint, ulong>();
+        private readonly List<(uint Slot, ulong EntityId)> _equipment = new();
 
         public EquipmentInfoPacket(List<ulong> equipmentInfo)
         {
-            EquipmentInfo = equipmentInfo;
+            for (var slot = 0; slot < equipmentInfo.Count; slot++)
+                if (equipmentInfo[slot] != 0)
+                    _equipment.Add(((uint)slot, equipmentInfo[slot]));
         }
 
         public override void Write(PythonWriter pw)
         {
-            uint count = 0;
-            foreach (var entry in EquipmentInfo)
-            {
-                if (entry != 0)
-                    ActualEquipment.Add(count, entry);
-
-                count++;
-            }
-
             pw.WriteTuple(1);
-            pw.WriteList(ActualEquipment.Count);
-            foreach (var entry in ActualEquipment)
+            pw.WriteList(_equipment.Count);
+            foreach (var entry in _equipment)
             {
                 pw.WriteTuple(2);
-                pw.WriteUInt(entry.Key);
-                pw.WriteULong(entry.Value);
+                pw.WriteUInt(entry.Slot);
+                pw.WriteULong(entry.EntityId);
             }
         }
     }

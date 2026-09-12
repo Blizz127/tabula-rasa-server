@@ -48,7 +48,7 @@ namespace Rasa.Managers
             var current = player.CurrentAbility;
             if (current != null && current.Resolved && _getMonotonicMilliseconds() >= current.RecoveryEndsAt)
                 player.CurrentAbility = null;
-            return player.CurrentAbility == null && player.CurrentAction == 0 &&
+            return player.CurrentAbility == null && player.CurrentWeaponAttack == null && player.CurrentAction == 0 &&
                 (player.CurrentWeaponAction == null || player.CurrentWeaponAction.ActionId == ActionId.WeaponReload);
         }
 
@@ -185,7 +185,8 @@ namespace Rasa.Managers
         public bool HasActiveAction(Actor actor)
         {
             return actor.CurrentAction != 0 || actor is Manifestation { CurrentAbility: not null } ||
-                actor is Manifestation { CurrentWeaponAction: not null };
+                actor is Manifestation { CurrentWeaponAction: not null } ||
+                actor is Manifestation { CurrentWeaponAttack: not null };
         }
 
         public void DoWork(MapChannel mapChannel, long delta)
@@ -195,6 +196,7 @@ namespace Rasa.Managers
                 foreach (var client in mapChannel.ClientList)
                     if (client?.Player != null)
                     {
+                        WeaponAttackManager.Instance.Update(client, now);
                         WeaponActionManager.Instance.Update(client, now);
                         UpdateAbility(mapChannel, client, now);
                     }

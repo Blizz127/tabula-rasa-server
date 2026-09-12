@@ -41,12 +41,17 @@ namespace Rasa.Repositories.Char.CharacterInventory
             _charContext.SaveChanges();
         }
 
-        public List<CharacterInventoryEntry> GetItems(uint accountId)
+        public List<CharacterInventoryEntry> GetItems(uint accountId, uint characterId)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterInventoryEntries);
-            var characterInventoryEntries = query.Where(e => e.AccountId == accountId).ToList();
-
-            return characterInventoryEntries;
+            // Personal (1), equipped (8) and weapon drawer (9) belong to a
+            // character. Home storage (2) belongs to the account, with owner 0.
+            return query.Where(e => e.AccountId == accountId &&
+                    ((characterId != 0 && e.CharacterId == characterId &&
+                        (e.InventoryType == 1 || e.InventoryType == 8 || e.InventoryType == 9)) ||
+                     (e.CharacterId == 0 && e.InventoryType == 2)))
+                .OrderBy(e => e.InventoryType).ThenBy(e => e.SlotId).ThenBy(e => e.ItemId)
+                .ToList();
         }
 
         public void MoveInvItem(uint accountId, uint characterId, uint inventoryType, uint slotId, uint itemId)
