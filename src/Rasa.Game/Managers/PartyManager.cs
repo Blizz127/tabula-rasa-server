@@ -61,7 +61,7 @@ namespace Rasa.Managers
          * - RequestToJoinLeaderConfirmationRequest(inviteeName)
          * - SquadRequestDeclined(receiverName)
          * - PartyDisbanded()
-         * - DisplayPartyMessage(msgId, args = { })
+         * - DisplayPartyMessage(msgId, args = { })              => implemented
          * - PartyMemberRoll(itemClassId, winnerUserId, rolls, isGreedRoll)
          * - PartyMemberLoot(userId, creatureEntityId, lootClassIds, moneyAmount)
          * - VoiceChatAvailable(isAvail)
@@ -679,10 +679,9 @@ namespace Rasa.Managers
             member.OfflineSinceTick = Environment.TickCount64;
 
             foreach (var other in OnlineClients(party))
-            {
                 other.CallMethod(SysEntity.ClientPartyManagerId, new RemoveSquadMemberPacket(member.UserId, entityId));
-                Message(other, PlayerMessage.PmPartyMemberLoggedOut, "player", member.MemberName);
-            }
+
+            MessageParty(party, PlayerMessage.PmPartyMemberLoggedOut, "player", member.MemberName);
 
             // A squad whose leader is away cannot invite; leadership moves to someone present.
             if (party.PartyLeaderId == member.UserId)
@@ -717,8 +716,10 @@ namespace Rasa.Managers
 
                 other.CallMethod(SysEntity.ClientPartyManagerId, new UpdatePartyMemberInfoPacket(member));
                 other.CallMethod(SysEntity.ClientPartyManagerId, new AddSquadMemberPacket(member.UserId, member.EntityId));
-                Message(other, PlayerMessage.PmPartyMemberLoggedIn, "player", member.MemberName);
             }
+
+            // The returning member is not told they logged in; everyone else is.
+            MessageParty(party, PlayerMessage.PmPartyMemberLoggedIn, "player", member.MemberName, client);
 
             SendPartyState(party, client);
 
@@ -1304,6 +1305,25 @@ namespace Rasa.Managers
                 ? null
                 : Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null && c.AccountEntry != null
                                            && string.Equals(c.Player.FamilyName, familyName, StringComparison.OrdinalIgnoreCase));
+
+        /// <summary>
+        /// One message to everyone in the squad who is in the world, on the party manager's own
+        /// channel. Recv_DisplayPartyMessage puts it in the chat window exactly as the per-client
+        /// Message does - the id-aware handling that channel can do (voice-overs, big text, status
+        /// icons) covers no party message - so this is about the shape of the call rather than what
+        /// the player sees: a squad-wide announcement said once, by the manager that owns the squad.
+        /// </summary>
+        private static void MessageParty(Party party, PlayerMessage message, string key = null, string value = null, Client except = null)
+        {
+            var args = new Dictionary<string, string>();
+
+            if (key != null)
+                args[key] = value ?? string.Empty;
+
+            foreach (var member in OnlineClients(party))
+                if (member != except)
+                    member.CallMethod(SysEntity.ClientPartyManagerId, new DisplayPartyMessagePacket(message, args));
+        }
 
         private static void Message(Client client, PlayerMessage message, string key = null, string value = null)
         {
