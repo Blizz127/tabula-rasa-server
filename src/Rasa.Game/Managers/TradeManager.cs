@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -7,8 +8,12 @@ namespace Rasa.Managers
     using Data;
     using Game;
     using Packets.Communicator.Server;
+    using Packets.Inventory.Server;
+    using Packets.Manifestation.Server;
+    using Packets.MapChannel.Server;
     using Packets.Trade.Client;
     using Packets.Trade.Server;
+    using Repositories.UnitOfWork;
     using Structures;
 
     /// <summary>
@@ -21,13 +26,21 @@ namespace Rasa.Managers
     /// - RequestChangeEnergyUnitAmount       => implemented (credits)
     /// - RequestConfirmTrade                 => implemented
     /// - RequestUnconfirmTrade               => implemented
-    /// - RequestAddItemToTrade               => refused: items not implemented yet
-    /// - RequestRemoveItemFromTrade          => ignored: no item can be in a trade yet
+    /// - RequestAddItemToTrade               => implemented
+    /// - RequestRemoveItemFromTrade          => implemented
     ///
     ///     Server -> client (ClientTradeManagerId)
     /// - TradeInvite, TradeCreate, TradeDestroy, TradeCompleted,
     ///   TradeEnergyUnitsChange, TradeConfirmChange => implemented
-    /// - TradeAddItem, TradeRemoveItem, TradeUpdateItem => not sent until item trading exists
+    /// - TradeAddItem, TradeRemoveItem       => implemented
+    /// - TradeUpdateItem                     => never sent; the client marks it DEPRECATED and
+    ///   its handler draws nothing. An offer is a whole stack - RequestAddItemToTrade carries no
+    ///   quantity - so there is no stack count to update.
+    ///
+    /// Nothing is escrowed. An offered item stays in its owner's inventory and only moves at the
+    /// exchange, so a trade that is cancelled, times out or loses a player cannot strand
+    /// anything. The cost is that every offer has to be re-checked at the exchange, which
+    /// Complete does.
     ///
     /// All handlers and RemovePlayer run on the MainLoop, so the session table needs no lock.
     /// </summary>
@@ -38,6 +51,9 @@ namespace Rasa.Managers
         /// and cancels itself when a partner leaves it. The server's copy of a position trails the
         /// client's by up to a movement update, so it allows a little more before refusing.
         /// </summary>
+        /// <summary>shared/gameconstants.py DEFAULT_TRADE_INVENTORY_SIZE - five slots a side.</summary>
+        private const int TradeSlots = 5;
+
         private const float TradeRange = 6.0f;
         private const float ServerRangeSlack = 2.0f;
 
@@ -198,16 +214,106 @@ namespace Rasa.Managers
 
         internal void RequestAddItemToTrade(Client client, RequestAddItemToTradePacket packet)
         {
-            // Item trading is not implemented. The client only draws an item into the trade
-            // window when TradeAddItem arrives, so refusing leaves nothing to undo.
-            client.CallMethod(SysEntity.CommunicatorId,
-                new DisplayClientMessagePacket(PlayerMessage.PmTradeItemCanNotBeTraded, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+            if (!TryGetOpenSession(client, out var session) || !StillValid(session))
+                return;
+
+            var offered = session.ItemsOf(client);
+            var entityId = (ulong)packet.ItemEntityId;
+
+            if (offered.Contains(entityId))
+                return;
+
+            if (offered.Count >= TradeSlots)
+            {
+                Decline(client, PlayerMessage.PmTradeNotEnoughRoom);
+                return;
+            }
+
+            var item = EntityManager.Instance.GetItem(entityId);
+
+            // Ownership is checked against the player's own inventory rather than the item's
+            // OwnerId: an equipped item has the same owner and must not be tradeable from the
+            // window, and a client that names an entity id it does not hold is not making a
+            // mistake.
+            if (item == null || !HoldsInPersonalInventory(client, entityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} offered item {entityId}, which is not in their inventory.");
+
+                Decline(client, PlayerMessage.PmTradeItemCanNotBeTraded);
+                return;
+            }
+
+            if (item.ItemTemplate.BoundToCharacter)
+            {
+                Decline(client, PlayerMessage.PmTradeItemCanNotBeTraded);
+                return;
+            }
+
+            offered.Add(entityId);
+
+            // The partner has never seen this item, and their client resolves it with
+            // _entitymanager.GetEntity before it draws anything (ui/tradewindow.py:162). Without
+            // this the handler throws on a None entity and the trade window stops updating.
+            ItemManager.Instance.SendItemDataToClient(session.PartnerOf(client), item, false);
+
+            TermsChanged(session, client);
+
+            var added = new TradeAddItemPacket(client.Player.EntityId, entityId, session.ConfigurationId);
+            session.Initiator.CallMethod(SysEntity.ClientTradeManagerId, added);
+            session.Target.CallMethod(SysEntity.ClientTradeManagerId, added);
         }
 
         internal void RequestRemoveItemFromTrade(Client client, RequestRemoveItemFromTradePacket packet)
         {
-            // Nothing to remove: no item can be added yet. Handled so the call is not an
-            // unhandled opcode, which disconnects the player.
+            if (!TryGetOpenSession(client, out var session))
+                return;
+
+            var entityId = (ulong)packet.ItemEntityId;
+
+            if (!session.ItemsOf(client).Remove(entityId))
+                return;
+
+            TermsChanged(session, client);
+
+            var removed = new TradeRemoveItemPacket(client.Player.EntityId, entityId, session.ConfigurationId);
+            session.Initiator.CallMethod(SysEntity.ClientTradeManagerId, removed);
+            session.Target.CallMethod(SysEntity.ClientTradeManagerId, removed);
+
+            // Take the copy back off the partner's client. It was only ever sent so their trade
+            // window could draw it, and leaving it behind leaves an item entity they can see in
+            // no inventory.
+            Unreplicate(session.PartnerOf(client), entityId);
+        }
+
+        /// <summary>
+        /// Destroys, on one player's client, the copies of items the other had offered.
+        /// </summary>
+        private static void ReturnOfferedCopies(TradeSession session, Client viewer, List<ulong> offeredByPartner)
+        {
+            if (viewer.State == ClientState.Disconnected)
+                return;
+
+            foreach (var entityId in offeredByPartner)
+                Unreplicate(viewer, entityId);
+        }
+
+        /// <summary>True when the entity is sitting in this player's personal inventory.</summary>
+        private static bool HoldsInPersonalInventory(Client client, ulong entityId)
+        {
+            return client.Player.Inventory.PersonalInventory.Contains(entityId);
+        }
+
+        /// <summary>
+        /// Destroys an item copy on a client that was only given it to draw a trade window.
+        /// Never called on the owner: they hold the real thing.
+        /// </summary>
+        private static void Unreplicate(Client client, ulong entityId)
+        {
+            if (client.Player.Inventory.PersonalInventory.Contains(entityId))
+                return;
+
+            EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
         }
 
         #endregion
@@ -228,30 +334,80 @@ namespace Rasa.Managers
             var b = session.Target;
 
             // Everything is re-checked at the moment of exchange: either player may have moved,
-            // spent credits elsewhere, or lost their connection since confirming.
+            // spent credits elsewhere, dropped an offered item or lost their connection since
+            // confirming.
             if (!StillValid(session)
                 || session.InitiatorCredits > CreditsOnHand(a)
-                || session.TargetCredits > CreditsOnHand(b))
+                || session.TargetCredits > CreditsOnHand(b)
+                || !StillHolds(a, session.InitiatorItems)
+                || !StillHolds(b, session.TargetItems))
             {
                 End(session, notifyPartnerOf: null, message: PlayerMessage.PmTradeCancelled);
                 return;
             }
 
-            // Only the net amount moves. The debit is applied first: each update is its own
-            // database write, so if the second one fails credits are lost rather than duplicated.
-            var toB = session.InitiatorCredits - session.TargetCredits;
-            var payer = toB >= 0 ? a : b;
-            var payee = toB >= 0 ? b : a;
-            var net = Math.Abs(toB);
-
-            if (net > 0)
+            // Where each incoming item will land. Worked out before anything is written, because
+            // a player whose inventory filled up since they confirmed is the one case that has to
+            // stop the trade rather than lose an item.
+            if (!TryReserveSlots(a, b, session.InitiatorItems, out var toB)
+                || !TryReserveSlots(b, a, session.TargetItems, out var toA))
             {
-                CharacterManager.Instance.UpdateCharacter(payer, CharacterUpdate.Credits, -net);
-                CharacterManager.Instance.UpdateCharacter(payee, CharacterUpdate.Credits, net);
+                Decline(a, PlayerMessage.PmTradeNotEnoughRoom);
+                Decline(b, PlayerMessage.PmTradeNotEnoughRoom);
+                End(session, notifyPartnerOf: null, message: PlayerMessage.PmTradeCancelled);
+                return;
+            }
+
+            var net = session.InitiatorCredits - session.TargetCredits;
+            var initiatorCredits = CreditsOnHand(a) - net;
+            var targetCredits = CreditsOnHand(b) + net;
+
+            // One transaction for the whole exchange. Several of the repository methods call
+            // SaveChanges for themselves, so without it a trade of four items and two balances
+            // commits in six pieces and a failure halfway through leaves the earlier ones done -
+            // which for a trade means an item or a pile of credits existing twice, or not at all.
+            try
+            {
+                using var unitOfWork = Server.GameUnitOfWorkFactory.CreateChar();
+                using var transaction = unitOfWork.BeginTransaction();
+
+                foreach (var move in toB.Concat(toA))
+                    unitOfWork.CharacterInventories.MoveInvItem(
+                        move.To.AccountEntry.Id, move.To.Player.Id, (uint)InventoryType.Personal, move.Slot, move.Item.Id);
+
+                if (net != 0)
+                {
+                    unitOfWork.Characters.UpdateCharacterCredits(a.Player.Id, initiatorCredits);
+                    unitOfWork.Characters.UpdateCharacterCredits(b.Player.Id, targetCredits);
+                }
+
+                unitOfWork.Complete();
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                // Nothing was committed, so nothing has moved: both players still hold what they
+                // started with and the trade simply does not happen.
+                Logger.WriteLog(LogType.Error, $"Trade between {a.Player.FamilyName} and {b.Player.FamilyName} failed to commit: {e}");
+
+                End(session, notifyPartnerOf: null, message: PlayerMessage.PmTradeCancelled);
+                return;
+            }
+
+            // Only now that the database has it does the in-memory state follow.
+            foreach (var move in toB.Concat(toA))
+                HandOver(move);
+
+            if (net != 0)
+            {
+                SetCredits(a, initiatorCredits);
+                SetCredits(b, targetCredits);
             }
 
             Logger.WriteLog(LogType.Security,
-                $"Trade completed: {a.Player.FamilyName} gave {session.InitiatorCredits} credits, {b.Player.FamilyName} gave {session.TargetCredits} credits");
+                $"Trade completed: {a.Player.FamilyName} gave {session.InitiatorCredits} credits and "
+                + $"{session.InitiatorItems.Count} item(s), {b.Player.FamilyName} gave {session.TargetCredits} credits and "
+                + $"{session.TargetItems.Count} item(s)");
 
             Forget(session);
 
@@ -261,6 +417,118 @@ namespace Rasa.Managers
                 participant.CallMethod(SysEntity.CommunicatorId,
                     new DisplayClientMessagePacket(PlayerMessage.PmTradeCompleted, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
             }
+        }
+
+        /// <summary>One offered item and where it is going.</summary>
+        private class ItemMove
+        {
+            public Item Item { get; set; }
+            public Client From { get; set; }
+            public Client To { get; set; }
+            public uint FromSlot { get; set; }
+            public uint Slot { get; set; }
+        }
+
+        /// <summary>
+        /// Everything offered is still in the offering player's inventory. An item can leave
+        /// between the confirmation and the exchange - equipped, moved to the home inventory,
+        /// used up - and the offer is stale rather than the player dishonest.
+        /// </summary>
+        private static bool StillHolds(Client client, List<ulong> items)
+        {
+            return items.All(entityId => HoldsInPersonalInventory(client, entityId)
+                                         && EntityManager.Instance.GetItem(entityId) != null);
+        }
+
+        /// <summary>
+        /// Finds a free personal slot for each incoming item, in the receiver's own category
+        /// bands, without writing anything. Returns false when they do not all fit, or when the
+        /// giver has stopped holding one of them.
+        /// </summary>
+        private static bool TryReserveSlots(Client giver, Client receiver, List<ulong> items, out List<ItemMove> moves)
+        {
+            moves = new List<ItemMove>();
+
+            var taken = new HashSet<uint>();
+
+            foreach (var entityId in items)
+            {
+                var item = EntityManager.Instance.GetItem(entityId);
+
+                if (item == null)
+                    return false;
+
+                var category = (int)item.ItemTemplate.InventoryCategory - 1;
+
+                if (category < 0 || category >= 5)
+                    return false;
+
+                var slot = FindFreeSlot(receiver, (uint)(category * 50), taken);
+
+                if (slot == null)
+                    return false;
+
+                taken.Add(slot.Value);
+
+                var fromSlot = giver.Player.Inventory.PersonalInventory.IndexOf(entityId);
+
+                if (fromSlot < 0)
+                    return false;
+
+                moves.Add(new ItemMove
+                {
+                    Item = item,
+                    From = giver,
+                    To = receiver,
+                    FromSlot = (uint)fromSlot,
+                    Slot = slot.Value
+                });
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// The receiver's first empty slot in the item's own 50-slot category band, skipping any
+        /// already promised to an earlier item in the same trade.
+        /// </summary>
+        private static uint? FindFreeSlot(Client receiver, uint categoryOffset, HashSet<uint> taken)
+        {
+            for (var i = categoryOffset; i < categoryOffset + 50; i++)
+                if (receiver.Player.Inventory.PersonalInventory[(int)i] == 0 && !taken.Contains(i))
+                    return i;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Moves one item between the two players in memory and on both clients. The database
+        /// row has already been moved, inside the transaction.
+        /// </summary>
+        private static void HandOver(ItemMove move)
+        {
+            move.From.Player.Inventory.PersonalInventory[(int)move.FromSlot] = 0;
+            move.From.CallMethod(SysEntity.ClientInventoryManagerId,
+                new InventoryRemoveItemPacket(InventoryType.Personal, move.Item.EntityId));
+
+            move.Item.OwnerId = move.To.Player.Id;
+            move.Item.OwnerSlotId = move.Slot;
+
+            move.To.Player.Inventory.PersonalInventory[(int)move.Slot] = move.Item.EntityId;
+            move.To.CallMethod(SysEntity.ClientInventoryManagerId,
+                new InventoryAddItemPacket(InventoryType.Personal, move.Item.EntityId, move.Slot));
+
+            // The giver keeps an entity for something they no longer own; the receiver already
+            // has a copy from when it was offered, so only the giver's has to go.
+            EntityManager.Instance.DestroyPhysicalEntity(move.From, move.Item.EntityId, EntityType.Item);
+        }
+
+        /// <summary>Applies a new credit total in memory and tells the player.</summary>
+        private static void SetCredits(Client client, int amount)
+        {
+            client.Player.Credits[CurencyType.Credits] = amount;
+            client.CallMethod(client.Player.EntityId,
+                new UpdateCreditsPacket(CurencyType.Credits, amount, 0));
         }
 
         /// <summary>
@@ -300,6 +568,12 @@ namespace Rasa.Managers
         private void End(TradeSession session, Client notifyPartnerOf, PlayerMessage? message = null)
         {
             Forget(session);
+
+            // Each side was given a copy of whatever the other put up, so their window could draw
+            // it. A trade that ends without completing has to take those back, or both players are
+            // left holding entities for items they never received.
+            ReturnOfferedCopies(session, session.Initiator, session.TargetItems);
+            ReturnOfferedCopies(session, session.Target, session.InitiatorItems);
 
             foreach (var participant in new[] { session.Initiator, session.Target })
             {
@@ -357,6 +631,17 @@ namespace Rasa.Managers
             return _sessions.TryGetValue(client, out session) && session.Accepted;
         }
 
+        /// <summary>
+        /// Says why, and nothing else. Refusing one item out of an offer must not take the trade
+        /// window down with it - the players are still trading, they just cannot trade that.
+        /// </summary>
+        private static void Decline(Client client, PlayerMessage message)
+        {
+            client.CallMethod(SysEntity.CommunicatorId,
+                new DisplayClientMessagePacket(message, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+        }
+
+        /// <summary>Ends the trade on this client, with the reason. For refusals that stop it.</summary>
         private static void Refuse(Client client, PlayerMessage message)
         {
             // The requester's client already shows a "trade requested" indicator; TradeDestroy

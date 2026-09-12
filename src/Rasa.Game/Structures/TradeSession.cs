@@ -1,4 +1,6 @@
-﻿namespace Rasa.Structures
+﻿using System.Collections.Generic;
+
+namespace Rasa.Structures
 {
     using Game;
 
@@ -34,7 +36,18 @@
             Target = target;
         }
 
+        /// <summary>
+        /// Item entity ids each side has put up, in the order they were offered. The trade window
+        /// holds five a side (shared/gameconstants.py DEFAULT_TRADE_INVENTORY_SIZE), and the
+        /// items stay in their owner's inventory until the exchange - nothing is escrowed, so a
+        /// trade that falls over cannot strand anything.
+        /// </summary>
+        public List<ulong> InitiatorItems { get; } = new List<ulong>();
+        public List<ulong> TargetItems { get; } = new List<ulong>();
+
         public bool IsInitiator(Client client) => client == Initiator;
+
+        public List<ulong> ItemsOf(Client client) => client == Initiator ? InitiatorItems : TargetItems;
 
         public Client PartnerOf(Client client) => client == Initiator ? Target : Initiator;
 
