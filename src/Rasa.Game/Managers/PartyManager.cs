@@ -802,6 +802,8 @@ namespace Rasa.Managers
                 SendPartyState(party, client);
                 Message(client, PlayerMessage.PmYouJoinedTheParty);
             }
+
+            AdsChanged(party);
         }
 
         private void CreateParty(Client leader, Client member)
@@ -819,6 +821,8 @@ namespace Rasa.Managers
             SendPartyState(party, leader);
             SendPartyState(party, member);
             Message(member, PlayerMessage.PmYouJoinedTheParty);
+
+            AdsChanged(party);
         }
 
         /// <summary>A squad of one, for a leader who is about to be joined by another squad.</summary>
@@ -841,6 +845,8 @@ namespace Rasa.Managers
 
             SendPartyState(party, client);
             Message(client, PlayerMessage.PmYouJoinedTheParty);
+
+            AdsChanged(party);
         }
 
         /// <summary>Adds one member to a squad and tells the members it already had.</summary>
@@ -903,11 +909,15 @@ namespace Rasa.Managers
             if (party.Members.Count < 2)
             {
                 Disband(party);
+                AdsChanged(null, member.UserId);
                 return;
             }
 
             if (party.PartyLeaderId == member.UserId)
                 PassLeadership(party);
+
+            // The leaver too: their own ad now recruits for a squad they are not in.
+            AdsChanged(party, member.UserId);
         }
 
         private void Kick(Party party, Client leader, PartyMember target)
@@ -926,9 +936,13 @@ namespace Rasa.Managers
                 member.CallMethod(SysEntity.ClientPartyManagerId, new PartyDisbandedPacket());
             }
 
+            var former = party.Members.Select(m => m.UserId).ToArray();
+
             party.Members.Clear();
             Parties.Remove(party.Id);
             FreePartyId(party.Id);
+
+            AdsChanged(null, former);
         }
 
         /// <summary>
@@ -983,6 +997,7 @@ namespace Rasa.Managers
                 member.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(leader.UserId));
 
             MoveJoinRequests(previousLeaderId, leader);
+            AdsChanged(party, previousLeaderId);
         }
 
         /// <summary>
@@ -1152,6 +1167,25 @@ namespace Rasa.Managers
             }
 
             return party;
+        }
+
+        /// <summary>
+        /// A looking-for-group ad recruits for the squad its placer leads, so every change to a
+        /// squad's membership or leadership is handed to LookingForGroupManager: it drops the ad
+        /// of anyone who has stopped leading, and one whose squad has reached the size it asked
+        /// for. Accounts that have no ad cost a dictionary miss, so it is cheaper to notify
+        /// everyone involved than to work out who might be affected here.
+        /// </summary>
+        private static void AdsChanged(Party party, params uint[] alsoAccounts)
+        {
+            var lfg = LookingForGroupManager.Instance;
+
+            if (party != null)
+                foreach (var member in party.Members.ToList())
+                    lfg.PartyChanged(member.UserId);
+
+            foreach (var account in alsoAccounts)
+                lfg.PartyChanged(account);
         }
 
         private static bool InWorld(Client client) =>

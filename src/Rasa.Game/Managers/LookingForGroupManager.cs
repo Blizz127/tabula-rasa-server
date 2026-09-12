@@ -187,6 +187,61 @@ namespace Rasa.Managers
             _ads.Remove(client.AccountEntry.Id);
         }
 
+        /// <summary>
+        /// An ad belongs to whoever leads the squad it recruits for, and stops being useful once
+        /// that squad is as big as it asked for. PartyManager hands every membership and
+        /// leadership change here, for each account it touched; accounts with no ad cost a
+        /// dictionary miss. The two outcomes are the messages the client has text for but nothing
+        /// ever sent: an ad used to sit there advertising a squad the placer no longer led, or one
+        /// that had already filled up.
+        /// </summary>
+        internal void PartyChanged(uint accountId)
+        {
+            if (!_ads.TryGetValue(accountId, out var ad))
+                return;
+
+            var placer = FindIngame(accountId);
+
+            // Out of the world: RemovePlayer has the ad, or is about to.
+            if (placer == null)
+                return;
+
+            if (!IsPartyLeader(placer))
+            {
+                Drop(placer, PlayerMessage.PmLfgAdRemovedYouAreNoLongerLeader);
+                return;
+            }
+
+            // "No preference" has no target of its own, so only a full squad ends one.
+            var target = ad.SquadSize ?? MaxPartySize;
+
+            if (CurrentSquadSize(placer) >= target)
+            {
+                Drop(placer, PlayerMessage.PmLfgAdRemovedRequestedSquadSizeReached);
+                return;
+            }
+
+            ad.PartyId = placer.Player.PartyId;
+        }
+
+        /// <summary>
+        /// Takes an ad down and says why. LookingForGroupAdRemoved is what clears the client's
+        /// status indicator (client/lookingforgroupmanager.py:81); the message alone would leave
+        /// the player looking at an indicator for an ad that is gone.
+        /// </summary>
+        private void Drop(Client placer, PlayerMessage why)
+        {
+            _ads.Remove(placer.AccountEntry.Id);
+
+            placer.CallMethod(SysEntity.ClientLookingForGroupManagerId, new LookingForGroupAdRemovedPacket());
+            DisplayMessage(placer, why);
+        }
+
+        private static Client FindIngame(uint accountId) =>
+            Server.Clients.FirstOrDefault(c => c.State == ClientState.Ingame
+                                               && c.Player != null
+                                               && c.AccountEntry?.Id == accountId);
+
         private static void DisplayMessage(Client client, PlayerMessage message)
         {
             client.CallMethod(SysEntity.ClientLookingForGroupManagerId,
