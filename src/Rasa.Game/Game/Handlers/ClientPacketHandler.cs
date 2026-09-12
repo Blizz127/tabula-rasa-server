@@ -12,6 +12,7 @@
     using Packets.LootDispenser.Client;
     using Packets.Party.Both;
     using Packets.Party.Client;
+    using Packets.Petition.Client;
     using Packets.Summon.Client;
     using Packets.Social.Client;
     using Packets.Trade.Client;
@@ -948,6 +949,22 @@
         private void RequestUnconfirmTrade(RequestUnconfirmTradePacket packet)
         {
             TradeManager.Instance.RequestUnconfirmTrade(Client, packet);
+        }
+
+        #endregion
+
+        #region Petition
+
+        [PacketHandler(GameOpcode.CreateBugReport)]
+        private void CreateBugReport(CreateBugReportPacket packet)
+        {
+            PetitionManager.Instance.CreateBugReport(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.CreateHelpRequest)]
+        private void CreateHelpRequest(CreateHelpRequestPacket packet)
+        {
+            PetitionManager.Instance.CreateHelpRequest(Client, packet);
         }
 
         #endregion

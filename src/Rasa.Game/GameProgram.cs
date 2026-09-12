@@ -36,6 +36,7 @@ namespace Rasa
     using Repositories.Char.GameAccount;
     using Repositories.Char.Ignored;
     using Repositories.Char.Items;
+    using Repositories.Char.Petition;
     using Repositories.Char.UserOption;
     using Repositories.UnitOfWork;
     using Repositories.World;
@@ -112,6 +113,7 @@ namespace Rasa
             services.AddScoped<IFriendRepository, FriendRepository>();
             services.AddScoped<IIgnoredRepository, IgnoredRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IPetitionRepository, PetitionRepository>();
             services.AddScoped<IUserOptionRepository, UserOptionRepository>();
 
             // World

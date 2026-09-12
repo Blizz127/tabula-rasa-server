@@ -44,6 +44,7 @@ namespace Rasa.Context.Char
         public DbSet<FriendEntry> FriendEntries { get; set; }
         public DbSet<IgnoredEntry> IgnoredEntries { get; set; }
         public DbSet<ItemEntry> ItemEntries { get; set; }
+        public DbSet<PetitionEntry> PetitionEntries { get; set; }
         public DbSet<UserOptionEntry> UserOptionEntries { get; set; }
         protected override DatabaseConnectionConfiguration GetDatabaseConnectionConfiguration()
         {
@@ -64,6 +65,7 @@ namespace Rasa.Context.Char
             SetupClanTable(modelBuilder);
             SetupFriendTable(modelBuilder);
             SetupIgnoredTable(modelBuilder);
+            SetupPetitionTable(modelBuilder);
             SetupUserOptionsTable(modelBuilder);
         }
 
@@ -313,6 +315,35 @@ namespace Rasa.Context.Char
         {
             modelBuilder.Entity<IgnoredEntry>()
                 .HasKey(e => new { e.AccountId, e.IgnoredAccountId });
+        }
+
+        private void SetupPetitionTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.Id)
+                .AsIdColumn(_dbContextPropertyModifier);
+
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.AccountId)
+                .AsIdColumn(_dbContextPropertyModifier);
+
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.CharacterId)
+                .AsIdColumn(_dbContextPropertyModifier);
+
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.Type)
+                .AsUnsignedTinyInt(_dbContextPropertyModifier, 3)
+                .HasDefaultValue((byte)0);
+
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.MapContextId)
+                .AsUnsignedInt(_dbContextPropertyModifier, 11);
+
+            // created_at carries no SQL default on purpose. The other tables use
+            // CURRENT_TIMESTAMP, which MySQL rejects as a default for a datetime(6) column
+            // unless the fractional precision is spelled out; the timestamp is set in
+            // PetitionEntry's constructor instead, in UTC, like the rest of the server.
         }
 
         private void SetupUserOptionsTable(ModelBuilder modelBuilder)

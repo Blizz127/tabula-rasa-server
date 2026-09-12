@@ -22,6 +22,7 @@ namespace Rasa.Repositories.Char
     using Friend;
     using Ignored;
     using Items;
+    using Petition;
     using UserOption;
     using UnitOfWork;
 
@@ -48,6 +49,7 @@ namespace Rasa.Repositories.Char
             IFriendRepository friends,
             IIgnoredRepository ignoreds,
             IItemRepository items,
+            IPetitionRepository petitions,
             IUserOptionRepository userOptions
             ) : base(dbContext)
         {
@@ -70,6 +72,7 @@ namespace Rasa.Repositories.Char
             Friends = friends;
             Ignoreds = ignoreds;
             Items = items;
+            Petitions = petitions;
             UserOptions = userOptions;
         }
 
@@ -92,6 +95,7 @@ namespace Rasa.Repositories.Char
         public IGameAccountRepository GameAccounts { get; }
         public IIgnoredRepository Ignoreds { get; }
         public IItemRepository Items { get; }
+        public IPetitionRepository Petitions { get; }
         public IUserOptionRepository UserOptions { get; }
     }
 }

@@ -634,6 +634,62 @@ namespace Rasa.Migrations.MySqlChar
                     b.ToTable("items");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.Char.PetitionEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("AccountId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("body");
+
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("character_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("summary");
+
+                    b.Property<byte>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(3) unsigned")
+                        .HasDefaultValue((byte)0)
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("petition");
+                });
+
             modelBuilder.Entity("Rasa.Structures.Char.UserOptionEntry", b =>
                 {
                     b.Property<uint>("AccountId")

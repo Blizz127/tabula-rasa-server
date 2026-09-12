@@ -20,6 +20,7 @@
     using Friend;
     using Ignored;
     using Items;
+    using Petition;
     using UserOption;
 
     public interface ICharUnitOfWork : IUnitOfWork
@@ -43,6 +44,7 @@
         IGameAccountRepository GameAccounts { get; }
         IIgnoredRepository Ignoreds { get; }
         IItemRepository Items { get; }
+        IPetitionRepository Petitions { get; }
         IUserOptionRepository UserOptions { get; }
     }
 }

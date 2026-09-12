@@ -364,6 +364,7 @@ namespace Rasa.Managers
             SummonManager.Instance.RemovePlayer(client);
             TradeManager.Instance.RemovePlayer(client);
             PartyManager.Instance.RemovePlayer(client);
+            PetitionManager.Instance.RemovePlayer(client);
 
             if (logout)
                 if (client.Player.Disconected == false)
