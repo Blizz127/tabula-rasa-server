@@ -6,6 +6,7 @@ namespace Rasa.Repositories.Char.CharacterSkills
     public interface ICharacterSkillsRepository
     {
         void AddOrUpdate(uint characterId, uint skillId, int abilityId, int skillLevel);
+        void AddOrUpdate(IReadOnlyCollection<CharacterSkillsEntry> skills);
         List<CharacterSkillsEntry> GetCharacterSkills(uint characterId);
     }
 }

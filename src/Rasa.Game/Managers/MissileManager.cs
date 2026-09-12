@@ -39,10 +39,25 @@ namespace Rasa.Managers
         {
         }
 
-        private void DoDamageToCreature(MapChannel mapChannel, Missile missile)
+        private static Actor GetTargetActor(ulong entityId)
         {
-            var creature = EntityManager.Instance.GetCreature(missile.TargetEntityId);
+            var entities = EntityManager.Instance;
+            if (!entities.RegisteredEntities.TryGetValue(entityId, out var type))
+                return null;
 
+            switch (type)
+            {
+                case EntityType.Creature:
+                    return entities.Creatures.TryGetValue(entityId, out var creature) ? creature : null;
+                case EntityType.Character:
+                    return entities.Players.TryGetValue(entityId, out var player) ? player : null;
+                default:
+                    return null;
+            }
+        }
+
+        private void DoDamageToCreature(MapChannel mapChannel, Missile missile, Creature creature)
+        {
             if (creature.State == CharacterState.Dead)
                 return;
 
@@ -59,14 +74,14 @@ namespace Rasa.Managers
             if (creature.Attributes[Attributes.Health].Current <= 0)
             {
                 // fix health so it dont regenerate after death
-                missile.TargetActor.Attributes[Attributes.Health].Current = 0;
-                missile.TargetActor.Attributes[Attributes.Health].RefreshAmount = 0;
-                missile.TargetActor.Attributes[Attributes.Health].RefreshPeriod = 0;
+                creature.Attributes[Attributes.Health].Current = 0;
+                creature.Attributes[Attributes.Health].RefreshAmount = 0;
+                creature.Attributes[Attributes.Health].RefreshPeriod = 0;
 
                 // fix armor so it dont regenerate after death
-                missile.TargetActor.Attributes[Attributes.Armor].Current = 0;
-                missile.TargetActor.Attributes[Attributes.Armor].RefreshAmount = 0;
-                missile.TargetActor.Attributes[Attributes.Armor].RefreshPeriod = 0;
+                creature.Attributes[Attributes.Armor].Current = 0;
+                creature.Attributes[Attributes.Armor].RefreshAmount = 0;
+                creature.Attributes[Attributes.Armor].RefreshPeriod = 0;
                 // kill craeture
                 CreatureManager.Instance.HandleCreatureKill(mapChannel, creature, missile.Source);
             }
@@ -78,10 +93,8 @@ namespace Rasa.Managers
             }
         }
 
-        private void DoDamageToPlayer(MapChannel mapChannel, Missile missile)
+        private void DoDamageToPlayer(MapChannel mapChannel, Missile missile, Actor actor)
         {
-            var actor = EntityManager.Instance.GetActor(missile.TargetEntityId);
-            
             if (actor.State == CharacterState.Dead)
                 return;
 
@@ -184,33 +197,13 @@ namespace Rasa.Managers
 
             if (action.TargetId != 0)
             {
-                // target on entity
-                var targetType = EntityManager.Instance.GetEntityType(action.TargetId);
-
-                if (targetType == 0)
+                targetActor = GetTargetActor(action.TargetId);
+                if (targetActor == null)
                 {
-                    Logger.WriteLog(LogType.Error, $"The missile target doesnt exist: {action.TargetId}");
-                    // entity does not exist
+                    Logger.WriteLog(LogType.Error, $"The missile target is missing or not an actor: {action.TargetId}");
                     return;
                 }
-                switch (targetType)
-                {
-                    case EntityType.Creature:
-                        {
-                            targetActor = EntityManager.Instance.GetCreature(action.TargetId);
-                            missile.TargetEntityId = action.TargetId;
-                        }
-                        break;
-                    case EntityType.Character:
-                        {
-                            targetActor = EntityManager.Instance.GetPlayer(action.TargetId);
-                            missile.TargetEntityId = action.TargetId;
-                        }
-                        break;
-                    default:
-                        Logger.WriteLog(LogType.Error, $"Can't shoot that object");
-                        return;
-                };
+                missile.TargetEntityId = action.TargetId;
 
                 if (targetActor.State == CharacterState.Dead)
                     return; // actor is dead, cannot be shot at
@@ -254,39 +247,33 @@ namespace Rasa.Managers
         public void MissileTrigger(MapChannel mapChannel, Missile missile)
         {
             // ToDo: Some weapons can hit multiple targets
-            var targetType = EntityManager.Instance.GetEntityType(missile.TargetEntityId);
-            var hitData = new HitData
+            var targetActor = GetTargetActor(missile.TargetEntityId);
+            // Resolve again at impact: the target may have left, died, or its ID may
+            // have been reused since windup. A shot without a target has no hits.
+            if (targetActor != null && ReferenceEquals(targetActor, missile.TargetActor)
+                && targetActor.State != CharacterState.Dead)
             {
-                FinalAmt = missile.DamageA,
-                EntityId = missile.TargetEntityId
-            };
+                missile.Args.HitEntities.Add(missile.TargetEntityId);
+                missile.Args.HitData.Add(new HitData
+                {
+                    FinalAmt = missile.DamageA,
+                    EntityId = missile.TargetEntityId
+                });
 
-            missile.Args.HitEntities.Add(missile.TargetEntityId);
-            missile.Args.HitData.Add(hitData);     // ToDo: add suport for multiple targets
-
-            switch (targetType)
-            {
-                case 0:
-                    // no target => ToDo
-                    break;
-                case EntityType.Creature:
-                    DoDamageToCreature(mapChannel, missile);
-                    break;
-                case EntityType.Character:
-                    DoDamageToPlayer(mapChannel, missile);
-                    break;
-                default:
-                    Logger.WriteLog(LogType.Error, $"WeaponAttackRecovery: Unsuported targetType {targetType}.");
-                    break;
+                if (targetActor is Creature creature)
+                    DoDamageToCreature(mapChannel, missile, creature);
+                else
+                    DoDamageToPlayer(mapChannel, missile, targetActor);
             }
 
             switch (missile.ActionId)
             {
                 case ActionId.WeaponAttack:
+                // The experimental C++ WeaponMelee handler also uses weapon recovery.
+                // This recognizes action 174; melee-specific mechanics remain pending.
+                case ActionId.WeaponMelee:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;
-                //else if (missile->actionId == 174)
-                //    missile_ActionRecoveryHandler_WeaponMelee(mapChannel, missile);
                 case ActionId.AaRecruitLightning:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new LightningRecovery(missile));
                     break;

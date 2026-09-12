@@ -122,45 +122,6 @@ namespace Rasa.Managers
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
         }
 
-        // constant skillId data
-        public readonly int[] SkillIById = {
-            1,8,14,19,20,21,22,23,24,
-            25,26,28,30,31,32,34,35,
-            36,37,39,40,43,47,48,49,
-            50,54,55,57,58,63,66,67,
-            68,72,73,77,79,80,82,89,
-            92,102,110,111,113,114,121,135,
-            136,147,148,149,150,151,152,153,
-            154,155,156,157,158,159,160,161,
-            162,163,164,165,166,172,173,174
-        };
-        // table for skillId to skillIndex mapping
-        private readonly int[] SkillId2Idx =
-        {
-            -1,0,-1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,2,-1,-1,-1,-1,3,
-            4,5,6,7,8,9,10,-1,11,-1,12,13,14,-1,15,16,17,18,-1,19,
-            20,-1,-1,21,-1,-1,-1,22,23,24,25,-1,-1,-1,26,27,-1,28,29,-1,
-            -1,-1,-1,30,-1,-1,31,32,33,-1,-1,-1,34,35,-1,-1,-1,36,-1,37,
-            38,-1,39,-1,-1,-1,-1,-1,-1,40,-1,-1,41,-1,-1,-1,-1,-1,-1,-1,
-            -1,-1,42,-1,-1,-1,-1,-1,-1,-1,43,44,-1,45,46,-1,-1,-1,-1,-1,
-            -1,47,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,48,49,-1,-1,-1,
-            -1,-1,-1,-1,-1,-1,-1,50,51,52,53,54,55,56,57,58,59,60,61,62,
-            63,64,65,66,67,68,69,-1,-1,-1,-1,-1,70,71,72,-1,-1,-1,-1,-1,
-            -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-        };
-        // table for skillIndex to ability mapping
-        public readonly int[] SkillIdx2AbilityId =
-        {
-            -1, -1, -1, -1, 137, -1, -1, -1, -1, 178, 177, 158, -1, -1,
-            197, 186, 188, 162, 187, -1, -1, 233, 234, -1, 194, -1, -1,
-            -1, -1, -1, 301, -1, -1, 185, 251, 240, 302, 232, 229, -1,
-            231, 305, 392, 252, 282, 381, 267, 298, 246, 253, 307, 393,
-            281, 390, 295, 304, 386, 193, 385, 176, 260, 384, 383, 303,
-            388, 389, 387, 380, 401, 430, 262, 421, 446
-        };
-
-        public readonly int[] requiredSkillLevelPoints = { 0, 1, 3, 6, 10, 15 };
-
         #region Handlers
         public void AutoFireKeepAlive(Client client, int keepAliveDelay)
         {
@@ -361,9 +322,11 @@ namespace Rasa.Managers
 
         public void AllocateAttributePoints(Client client, AllocateAttributePointsPacket packet)
         {
-            client.Player.SpentBody += packet.Body;
-            client.Player.SpentMind += packet.Mind;
-            client.Player.SpentSpirit += packet.Spirit;
+            if (!AttributePointAllocation.TryAllocate(client.Player, packet.Body, packet.Mind, packet.Spirit))
+            {
+                SendAvailableAllocationPoints(client);
+                return;
+            }
 
             UpdateStatsValues(client, false);
 
@@ -372,6 +335,7 @@ namespace Rasa.Managers
 
             // Send Data to client
             client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
+            SendAvailableAllocationPoints(client);
         }
 
         public void AssignPlayer(Client client)
@@ -566,6 +530,9 @@ namespace Rasa.Managers
 
                 if (client.Player.Experience >= xpForLevelUp)
                 {
+                    var previousAttributePoints = GetAvailableAttributePoints(client.Player);
+                    var previousSkillPoints = GetSkillPointsAvailable(client.Player);
+
                     // level up
                     client.Player.Level++;
 
@@ -580,8 +547,8 @@ namespace Rasa.Managers
                     var msgArg = new Dictionary<string, string>
                     {
                         { "level", client.Player.Level.ToString() },
-                        { "attributePts", GetAvailableAttributePoints(client.Player).ToString() },  // todo: send correct number of new attribute points
-                        { "skillPts", GetSkillPointsAvailable(client.Player).ToString() }           // todo: send correct number of new skill points
+                        { "attributePts", (GetAvailableAttributePoints(client.Player) - previousAttributePoints).ToString() },
+                        { "skillPts", (GetSkillPointsAvailable(client.Player) - previousSkillPoints).ToString() }
                     };
 
                     client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmLevelIncreased, msgArg, MsgFilterId.LeveledUp));
@@ -620,12 +587,7 @@ namespace Rasa.Managers
 
         public int GetAvailableAttributePoints(Manifestation player)
         {
-            var points = 3 * (player.Level - 1);
-            points -= player.SpentBody;
-            points -= player.SpentMind;
-            points -= player.SpentSpirit;
-            //points = Math.Max(points, 0); Probably do not need this? (StaticVariable)
-            return points;
+            return AttributePointAllocation.GetAvailablePoints(player);
         }
 
         public void GetCustomizationChoices(Client client, GetCustomizationChoicesPacket packet)
@@ -649,94 +611,47 @@ namespace Rasa.Managers
             return ExpPerLevel.ExpRequred[level];
         }
 
-        public int GetSkillIndexById(int skillId)
-        {
-            return skillId < 0 ? -1 : skillId >= 200 ? -1 : SkillId2Idx[skillId];
-        }
-
         public int GetSkillPointsAvailable(Manifestation player)
         {
-            var level = player.Level;
-
-            var pointsAvailable = (player.Level - 1) * 2;
-            pointsAvailable += 5; // add five points because of the recruit skills that start at level 1
-
-            if (level >= 5)
-                pointsAvailable += 2;
-
-            if (level >= 15)
-                pointsAvailable += 2;
-
-            if (level >= 30)
-                pointsAvailable += 2;
-
-            if (level >= 50)
-                pointsAvailable += 4;
-
-            // subtract spent skill levels
-            foreach (var skill in player.Skills)
-            {
-                var skillLevel = skill.Value.SkillLevel;
-                if (skillLevel < 0 || skillLevel > 5)
-                    continue; // should not be possible
-                pointsAvailable -= requiredSkillLevelPoints[skillLevel];
-            }
-            return Math.Max(0, pointsAvailable);
+            return SkillTraining.GetAvailablePoints(player);
         }
 
         public void LevelSkills(Client client, LevelSkillsPacket packet)
         {
-            var skillPointsAvailable = GetSkillPointsAvailable(client.Player);
-            var skillLevelupArray = new Dictionary<SkillId, SkillsData>(); // used to temporarily safe skill level updates
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-
-            for (var i = 0; i < packet.ListLenght; i++)
+            if (packet.SkillIds == null || packet.ListLenght != packet.SkillIds.Length ||
+                !SkillTraining.TryPlan(client.Player, packet.SkillIds, packet.SkillLevels, out var changes))
             {
-                var skillId = (SkillId)packet.SkillIds[i];
+                client.CallMethod(client.Player.EntityId, new SkillsPacket(client.Player.Skills));
+                SendAvailableAllocationPoints(client);
+                return;
+            }
 
-                if (skillId == SkillId.None)
-                    throw new Exception("LevelSkills: Invalid skillId received. Modified or outdated client?");
-
-                var oldSkillLevel = 0;
-                var abilityId = SkillIdx2AbilityId[GetSkillIndexById(packet.SkillIds[i])];
-
-                if (client.Player.Skills.ContainsKey(skillId))
-                    oldSkillLevel = client.Player.Skills[skillId].SkillLevel;
-                else
+            if (changes.Count > 0)
+            {
+                // Persist the entire validated request before publishing new ranks.
+                var entries = new List<CharacterSkillsEntry>();
+                foreach (var skill in changes.Values)
+                    entries.Add(new CharacterSkillsEntry(client.Player.Id, (uint)skill.SkillId, skill.AbilityId, skill.SkillLevel));
+                try
                 {
-                    // create new entry in character skils
-                    client.Player.Skills.Add(skillId, new SkillsData(skillId, abilityId, 0));
+                    using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                    unitOfWork.CharacterSkills.AddOrUpdate(entries);
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException exception)
+                {
+                    Logger.WriteLog(LogType.Error, $"Skill training could not be saved: {exception.Message}");
+                    client.CallMethod(client.Player.EntityId, new SkillsPacket(client.Player.Skills));
+                    SendAvailableAllocationPoints(client);
+                    return;
                 }
 
-                var newSkillLevel = packet.SkillLevels[i];
-
-                if (newSkillLevel < oldSkillLevel || newSkillLevel > 5)
-                    throw new Exception("LevelSkills: Invalid skill level received\n");
-
-                var additionalSkillPointsRequired = requiredSkillLevelPoints[newSkillLevel] - requiredSkillLevelPoints[oldSkillLevel];
-
-                skillPointsAvailable -= additionalSkillPointsRequired;
-                skillLevelupArray.Add(skillId, new SkillsData(skillId, abilityId, newSkillLevel - oldSkillLevel));
-
+                foreach (var skill in changes)
+                    client.Player.Skills[skill.Key] = skill.Value;
             }
-            // do we have enough skill points for the skill level ups?
-            if (skillPointsAvailable < 0)
-                throw new Exception("PlayerManager.LevelSkills: Not enough skill points. Modified or outdated client?\n");
-            // everything ok, update skills!
-            foreach (var skill in skillLevelupArray)
-                client.Player.Skills[skill.Value.SkillId].SkillLevel += skillLevelupArray[skill.Value.SkillId].SkillLevel;
-            // send skill update to client
+
             client.CallMethod(client.Player.EntityId, new SkillsPacket(client.Player.Skills));
-            // set abilities
-            client.CallMethod(client.Player.EntityId, new AbilitiesPacket(client.Player.Skills));   // ToDo
-            // update allocation points
+            client.CallMethod(client.Player.EntityId, new AbilitiesPacket(client.Player.Skills));
             SendAvailableAllocationPoints(client);
-            // update database with new character skills
-            foreach (var skill in skillLevelupArray)
-            {
-                var skillToUpdate = client.Player.Skills[skill.Value.SkillId];
-                unitOfWork.CharacterSkills.AddOrUpdate(client.Player.Id, (uint)skillToUpdate.SkillId, skillToUpdate.AbilityId, skillToUpdate.SkillLevel);
-            }
         }
 
         public void NotifyEquipmentUpdate(Client client)

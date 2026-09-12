@@ -26,22 +26,24 @@ namespace Rasa.Repositories.Char.CharacterSkills
 
         public void AddOrUpdate(uint characterId, uint skillId, int abilityId, int skillLevel)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterSkillsEntries);
-            var existingSkill = query.Where(e => e.CharacterId == characterId && e.SkillId == skillId).FirstOrDefault();
+            AddOrUpdate(new[] { new CharacterSkillsEntry(characterId, skillId, abilityId, skillLevel) });
+        }
 
-            if (existingSkill != null)
+        public void AddOrUpdate(IReadOnlyCollection<CharacterSkillsEntry> skills)
+        {
+            foreach (var skill in skills)
             {
-                existingSkill.AbilityId = abilityId;
-                existingSkill.SkillLevel = skillLevel;
-                _charContext.CharacterSkillsEntries.Update(existingSkill);
+                var existingSkill = _charContext.CharacterSkillsEntries.Find(skill.CharacterId, skill.SkillId);
+                if (existingSkill != null)
+                {
+                    existingSkill.AbilityId = skill.AbilityId;
+                    existingSkill.SkillLevel = skill.SkillLevel;
+                }
+                else
+                    _charContext.CharacterSkillsEntries.Add(skill);
             }
-            else
-            {
-                var skill = new CharacterSkillsEntry(characterId, skillId, abilityId, skillLevel);
 
-                _charContext.CharacterSkillsEntries.Add(skill);
-            }
-
+            // EF saves the whole training batch in one transaction.
             _charContext.SaveChanges();
         }
     }
