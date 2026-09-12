@@ -58,7 +58,7 @@ namespace Rasa.Structures
         internal List<uint> IgnoredPlayers = new();
         public MapChannel MapChannel { get; set; }
         public bool Disconected { get; set; }
-        public bool LogoutActive { get; set; }
+        public LogoutCountdown LogoutCountdown { get; } = new();
         public bool RemoveFromMap { get; set; }
         // chat
         public int JoinedChannels { get; set; }

@@ -17,7 +17,10 @@ namespace Rasa.Repositories.Char.CharacterMission
         public List<CharacterMissionEntry> Get(uint accountId, uint characterSlot)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterMissionEntries);
-            var missions = query.ToList();
+            var missions = query.Where(mission => _charContext.CharacterEntries.Any(character =>
+                character.Id == mission.CharacterId &&
+                character.AccountId == accountId &&
+                character.Slot == characterSlot)).ToList();
 
             return missions;
         }

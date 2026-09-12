@@ -703,8 +703,8 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnType("int unsigned")
                         .HasColumnName("id");
 
-                    b.Property<byte>("CategoryId")
-                        .HasColumnType("tinyint unsigned")
+                    b.Property<uint>("CategoryId")
+                        .HasColumnType("int unsigned")
                         .HasColumnName("category_id");
 
                     b.Property<string>("Comment")

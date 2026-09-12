@@ -293,7 +293,6 @@ namespace Rasa.Migrations.MySqlChar
             modelBuilder.Entity("Rasa.Structures.Char.CharacterMissionEntry", b =>
                 {
                     b.Property<uint>("CharacterId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int unsigned")
                         .HasColumnName("character_id");
 
@@ -305,7 +304,7 @@ namespace Rasa.Migrations.MySqlChar
                         .HasColumnType("int unsigned")
                         .HasColumnName("mission_state");
 
-                    b.HasKey("CharacterId");
+                    b.HasKey("CharacterId", "MissionId");
 
                     b.ToTable("character_mission");
                 });

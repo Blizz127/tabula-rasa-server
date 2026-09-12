@@ -103,7 +103,7 @@ namespace Rasa.Memory
 
             return type switch
             {
-                0x1D => Reader.ReadByte(),
+                0x1D => Reader.ReadSByte(),
                 0x1E => Reader.ReadInt16(),
                 0x1F => Reader.ReadInt32(),
                 _ => throw new Exception($"WTF? Int type: {type:X2}"),

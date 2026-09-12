@@ -26,7 +26,7 @@ namespace Rasa.Structures
             pw.WriteInt((int)MissionState);         // missionStatus
             pw.WriteBool(Completeable);             // bCompleteable
             pw.WriteStruct(MissionConstantData);    // constantData = (missionLevel, groupType, missionCategoryId, bShareable, bRadioCompleteable, rewardInfo)
-            pw.WriteInt(0);                         // changeTime ToDo: seems that client dont use 'changeTime'
+            pw.WriteInt(ChangeTime);                // changeTime
             pw.WriteList(ObjectivesList.Count);     // objectiveList
             foreach (var objective in ObjectivesList)
             {
@@ -34,8 +34,19 @@ namespace Rasa.Structures
                 pw.WriteUInt(objective.ObjectiveId);                // objectiveId
                 pw.WriteUInt(objective.ObjectiveStatus);            // objStatus
                 pw.WriteUInt(objective.Ordinal);                    // ordinal
-                pw.WriteUInt(objective.TimeRemaining);              // objTime
-                pw.WriteNoneStruct();                               // counters
+                if (objective.TimeRemaining.HasValue)
+                    pw.WriteUInt(objective.TimeRemaining.Value);    // objTime
+                else
+                    pw.WriteNoneStruct();
+                pw.WriteDictionary(objective.CounterDict.Count);   // counterId = (count, initial, target)
+                foreach (var counter in objective.CounterDict)
+                {
+                    pw.WriteUInt(counter.Key);
+                    pw.WriteTuple(3);
+                    pw.WriteInt(counter.Value.Count);
+                    pw.WriteInt(counter.Value.InitialCount);
+                    pw.WriteInt(counter.Value.TargetCount);
+                }
                 pw.WriteDictionary(objective.ItemCounters.Count);   // itemCountDict
                 {
                     foreach (var entry in objective.ItemCounters)
@@ -53,8 +64,8 @@ namespace Rasa.Structures
                     pw.WriteTuple(4);
                     pw.WriteTuple(3);                               // position
                         pw.WriteDouble(indicator.Position.X);
-                        pw.WriteDouble(indicator.Position.X);
-                        pw.WriteDouble(indicator.Position.X);
+                        pw.WriteDouble(indicator.Position.Y);
+                        pw.WriteDouble(indicator.Position.Z);
                     pw.WriteDouble(indicator.Radius);               // radius
                     pw.WriteUInt(indicator.IndicatorId);            // indicatorId
                     pw.WriteBool(indicator.Show3DEffect);           // bShow3DEffect
@@ -67,7 +78,7 @@ namespace Rasa.Structures
     {
         public uint Level { get; set; }  // it's mission level, not required XP level
         public byte GroupType { get; set; }
-        public byte CategoryId { get; set; }
+        public uint CategoryId { get; set; }
         public bool Shareable { get; set; }
         public bool RadioCompletable { get; set; }
         public RewardInfo RewardInfo = new RewardInfo();

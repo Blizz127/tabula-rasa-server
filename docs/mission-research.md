@@ -1,10 +1,12 @@
 # Mission implementation research — 2026-09-12
 
-This is an evidence inventory, not a claim of retail mission support. No mission,
-NPC, reward, or character database rows were changed during this investigation.
+This is an evidence inventory, not a claim of retail mission support. The
+persistence corrections below were validated in isolated databases; that work
+did not change live mission, NPC, reward, or character rows or activate quests.
 The target is the user's exact final-live preservation requirement in `AGENTS.md`.
-Client 1.16.5.0 is the current emulator compatibility requirement; its identity
-with the final live client still needs original-build evidence.
+The acquired executable identifies itself as 1.16.5.0 and supplies original
+client mission structures; see [client artifacts](client-artifacts.md) for
+provenance and final-distribution authentication limits.
 
 ## Current server behavior
 
@@ -38,27 +40,131 @@ Current implementation gaps, established by reading the corresponding files:
   `MissionComplete` enum value.
 - `MissionInfo` instances belong to globally loaded definitions. Future player
   progress must use independent state rather than mutate these shared instances.
-- `CharacterMissionEntry` uses only `character_id` as primary key; that schema
-  cannot represent multiple missions for one character. Its repository `Get`
-  ignores both parameters and reads every character's rows. Character creation
-  reads those rows and creates an unused `missionData` dictionary; it does not
-  restore them to `Manifestation.Missions`.
+- The original `CharacterMissionEntry` key allowed only one mission per
+  character, and repository `Get` ignored both account and slot. The persistence
+  correction below fixes those defects. Character creation still creates an
+  unused `missionData` dictionary; it does not restore mission progress to
+  `Manifestation.Missions`. Acceptance still does not write a mission row.
 - `MissionStatusInfoPacket` exists but has no call site. Reconnect currently has
   no mission-log synchronization.
 - `NpcMissionRewardRepository.Get(missionId)` exists but is not used by gameplay.
   No reward semantics or XP reward storage are wired into mission definitions.
-- `MissionInfo.Write` serializes indicator position as X/X/X, discards
-  `CounterDict` as `None`, and dereferences `IndicatorList` without a default
-  initialization. These are concrete serialization defects to fix when adding
-  objectives. The current empty objective lists hide them.
-- `MissionConstantData.CategoryId` and `NpcMissionEntry.CategoryId` are bytes;
-  the C++ reference uses a category ID of 10000044, which cannot fit.
+- `MissionInfo.Write` now preserves X/Y/Z positions, change time, generic
+  three-value counter entries, and nullable objective timers. Empty indicator
+  lists are initialized. [Original client evidence](final-client-mission-evidence.md)
+  establishes these structures; existing empty objectives do not exercise them
+  during gameplay, and live-client rendering remains unverified.
+- `NpcMissionEntry.CategoryId` is now `uint`, with paired provider migrations
+  below. This removes the byte storage limit without assigning new categories
+  to the existing mission definitions. The packet field is also widened; the
+  original category table confirms 10000044 as a real Wilderness category.
 
 Relevant local code: `Managers/MissionManager.cs`, `Managers/NpcManager.cs`,
 `Managers/CharacterManager.cs`, `Managers/CreatureManager.cs`,
 `Structures/MissionInfo.cs`, `Structures/MissionObjective.cs` under
 `src/Rasa.Game`, and the mission repositories, structures, and migrations under
 `src/Rasa.DBL`.
+
+## Mission persistence correction — 2026-09-12
+
+This change repairs emulator storage and query defects; it does not reconstruct
+the original server's database layout or establish retail mission behavior.
+The evidence for the defects is the previous model and repository in this
+repository. Confidence is high in the corrected storage invariants, based on
+the isolated database checks below. Mission-state meanings, objectives,
+completion history, and the exact final-live quest lifecycle remain unverified
+or unimplemented.
+
+The current implementation is:
+
+- [`CharContext.SetupCharacterMissionTable`](../src/Rasa.DBL/Context/Char/CharContext.cs)
+  configures `(CharacterId, MissionId)` as the composite primary key.
+  [`CharacterMissionEntry`](../src/Rasa.DBL/Structures/Char/CharacterMissionEntry.cs)
+  no longer declares `CharacterId` as a standalone generated key. Multiple
+  missions can coexist for a character, and the same mission can coexist for
+  different characters. Duplicate character/mission pairs remain invalid.
+- [`CharacterMissionRepository.Get(accountId, characterSlot)`](../src/Rasa.DBL/Repositories/Char/CharacterMission/CharacterMissionRepository.cs)
+  keeps its existing API and untracked results. Its SQL query now requires a
+  matching character ID, account ID, and character slot. Unknown account/slot
+  combinations and orphan mission rows are not returned. The correction does
+  not delete or reassign any stored rows.
+- [`NpcMissionEntry.CategoryId`](../src/Rasa.DBL/Structures/World/NpcMissionEntry.cs)
+  uses `uint` so storage can represent category identifiers above 255.
+  Widening the representation supplies no new quest data, category assignment,
+  rewards, or prerequisites.
+
+Following `docs/setup.md`, the migrations were generated with `dotnet-ef 5.0.1`
+and the repository's EF Core 5.0.1/Pomelo 5.0.0-alpha.2 dependencies in an isolated
+.NET SDK 5.0.408 container. Generated migrations, designer files, and snapshots
+were copied unchanged from the tooling output. The schema and data changes were
+kept separate; these migrations contain no quest-content inserts or updates.
+
+| Context | Generated migration | Effect |
+| --- | --- | --- |
+| SQLite Char | [`20260912172745_CharacterMissionCompositeKey`](../src/Rasa.DBL/Migrations/SqliteChar/20260912172745_CharacterMissionCompositeKey.cs) | Rebuild the mission table with a two-column primary key and no generated character ID. |
+| MySQL Char | [`20260912172800_CharacterMissionCompositeKey`](../src/Rasa.DBL/Migrations/MySqlChar/20260912172800_CharacterMissionCompositeKey.cs) | Remove the old auto-increment identity and replace the primary key with the two-column key. |
+| SQLite World | [`20260912172817_WidenMissionCategory`](../src/Rasa.DBL/Migrations/SqliteWorld/20260912172817_WidenMissionCategory.cs) | Record the CLR model change. `Up` and `Down` are empty because both widths map to SQLite `INTEGER`. |
+| MySQL World | [`20260912172835_WidenMissionCategory`](../src/Rasa.DBL/Migrations/MySqlWorld/20260912172835_WidenMissionCategory.cs) | Widen `category_id` from `tinyint unsigned` to `int unsigned`. |
+
+Upgrade preserves each existing mission's character ID, mission ID, and state
+verbatim. The old key already guarantees uniqueness of the new pair, so no
+deduplication or state conversion is required. Existing category values also
+remain unchanged. SQLite applies pending migrations on server startup; MySQL
+requires the explicit updates described in `docs/setup.md`. Isolated validation
+does not establish that a live database has received these migrations.
+
+Validation on 2026-09-12:
+
+- Six [`CharacterMissionPersistenceTests`](../src/Rasa.Test/CharacterMissionPersistenceTests.cs)
+  passed against isolated in-memory SQLite databases. They verify account and
+  slot isolation, untracked reads, multiple missions surviving context reload,
+  updates leaving other missions/characters intact, database rejection of a
+  duplicate pair, and preservation of old rows through the actual Char
+  migration chain. They also verify a compatible downgrade/upgrade and that an
+  incompatible SQLite downgrade fails without losing either mission or its
+  applied-migration record. Synthetic states include `uint.MaxValue` to ensure
+  migration does not reinterpret stored bits; this is not a retail state claim.
+- [`MissionCategoryPersistenceTests`](../src/Rasa.Test/MissionCategoryPersistenceTests.cs)
+  passed, reloading categories 255, 10000044, and `uint.MaxValue` from isolated
+  SQLite storage. This tests storage/materialization, not a full World seed
+  migration or the validity of every number as a retail category. All seven
+  focused tests completed successfully in approximately four seconds.
+- A disposable MySQL 8.4.11 database applied the complete previous Char
+  migration chain and then the generated new Char SQL. Legacy rows, including
+  state `4294967295`, survived. A second mission for the same character could
+  be inserted and updated independently; a duplicate pair returned MySQL
+  error 1062. The generated provider SQL handled removal of auto-increment
+  before dropping the old key.
+- The generated MySQL World widening SQL was applied to an isolated
+  `npc_mission` table with the previous column definitions. Categories 1 and 2
+  survived unchanged, and 10000044 and `4294967295` stored exactly afterward.
+  This was a focused schema fixture, not a complete MySQL World migration-chain
+  test. The disposable MySQL container was removed after validation.
+
+The combined candidate subsequently passed all 105 tests and both SQLite
+migrations were verified on the deployed server. Non-migration table counts
+were unchanged and both databases passed integrity checks. Deployment records
+and the isolated MySQL SQL/scripts are retained in
+`/home/blizz/backups/rasa-net/20260912T174516Z-retail-mission`.
+The focused MySQL run did not retain separate log files; its results were
+returned in the research session's tool transcript. The combined candidate
+build/test logs are preserved. See [the work log](retail-accuracy.md).
+
+Downgrade limits are intrinsic to the old representation. Once a character has
+multiple missions, the old single-column primary key cannot preserve them.
+SQLite's generated downgrade rejects that conflict without discarding rows in
+the tested transaction. Do not assume the same rollback behavior for MySQL DDL;
+use a consistent pre-upgrade database backup when restoring the old schema.
+Likewise, MySQL's old byte category column cannot preserve values above 255.
+SQLite's empty category downgrade leaves stored values intact, but the old byte
+application model cannot faithfully represent wider values. Do not silently
+drop missions, truncate categories, or guess replacement values to downgrade.
+
+No acceptance, objective progression, reward transaction, completed-history
+semantics, or reconnect restoration was activated by this correction. The
+existing two seed definitions remain unvalidated content. Passing these tests
+establishes database behavior only; the two-character, client-visible quest
+acceptance criteria at the end of this document are still outstanding.
 
 ## Older InfiniteRasa implementation
 
@@ -148,15 +254,16 @@ or use the old 1,000 XP/250 credits as verified rewards.
 
 The next code increment can establish mechanisms without guessing content:
 
-1. Separate immutable mission definitions from per-character progress; persist
-   by composite (character ID, mission ID) identity with objective counters and
-   completed history. Correct the unfiltered repository and add reconnect state.
+1. Separate immutable mission definitions from per-character progress. The
+   composite identity and scoped repository reads are now implemented; add
+   objective-counter storage, supported completed-history semantics, lifecycle
+   writes, and reconnect restoration when their required behavior is grounded.
 2. Make offer/accept/objective/turn-in validation use the same server-owned
    eligibility state, including NPC identity, map and interaction range. Prevent
    duplicates and replayed rewards. Use a transaction for reward and completion
    persistence so a crash cannot duplicate rewards or consume a mission unpaid.
-3. Add objective completion and mission rewarded packets, correct coordinate
-   serialization, represent wide category IDs, and update nearby NPC markers
+3. Add objective completion and mission rewarded packets, verify the corrected
+   objective serialization in a running original client, and update nearby NPC markers
    when a player's state changes. Do not assume selection index and rating are
    booleans: the current C# completion parser says they are; C++ merely ignores
    them and supplies no corroboration of type.

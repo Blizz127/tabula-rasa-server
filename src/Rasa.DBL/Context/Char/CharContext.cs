@@ -57,6 +57,7 @@ namespace Rasa.Context.Char
             SetupCharacterTable(modelBuilder);
             SetupCharacterAppearanceTable(modelBuilder);
             SetupCharacterLogosTable(modelBuilder);
+            SetupCharacterMissionTable(modelBuilder);
             SetupCharacterSkillTable(modelBuilder);
             SetupCharacterTeleporterTable(modelBuilder);
             SetupCharacterOptionsTable(modelBuilder);
@@ -241,6 +242,12 @@ namespace Rasa.Context.Char
         {
             modelBuilder.Entity<CharacterOptionEntry>()
                 .HasKey(e => new { e.CharacterId, e.OptionId });
+        }
+
+        private void SetupCharacterMissionTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterMissionEntry>()
+                .HasKey(e => new { e.CharacterId, e.MissionId });
         }
 
         private void SetupCharacterSkillTable(ModelBuilder modelBuilder)

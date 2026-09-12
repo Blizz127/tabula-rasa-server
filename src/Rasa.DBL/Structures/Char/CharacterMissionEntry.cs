@@ -19,7 +19,6 @@ namespace Rasa.Structures.Char
             MissionState = mission_state;
         }
 
-        [Key]
         [Column("character_id")]
         [Required]
         public uint CharacterId { get; set; }

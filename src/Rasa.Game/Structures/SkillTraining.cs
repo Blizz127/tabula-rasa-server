@@ -22,7 +22,7 @@ namespace Rasa.Structures
         private static readonly int[] AbilityIds =
         {
             -1, -1, -1, -1, 137, -1, -1, -1, -1, 178, 177, 158, -1, -1,
-            197, 186, 188, 162, 187, -1, -1, 233, 234, -1, 194, -1, -1,
+            197, 186, 188, 162, 187, -1, -1, 233, 234, -1, 194, -1, 10000005,
             -1, -1, -1, 301, -1, -1, 185, 251, 240, 302, 232, 229, -1,
             231, 305, 392, 252, 282, 381, 267, 298, 246, 253, 307, 393,
             281, 390, 295, 304, 386, 193, 385, 176, 260, 384, 383, 303,
@@ -30,8 +30,13 @@ namespace Rasa.Structures
         };
         private static readonly int[] RankCosts = { 0, 1, 3, 6, 10, 15 };
 
-        // Class ownership and ancestry from the experimental C++ catalog at
-        // 4a9ab5f1fcdf6a18ab6911c384189cc41ddae651; see docs/skill-research.md.
+        // Client 1.16.5.0 skilldata caps these at one. Its skill window has no
+        // purchase controls for signatures; their grant path is separate.
+        // See docs/final-client-skill-evidence.md for the original bytecode.
+        private static readonly int[] SignatureSkillIds = { 20, 47, 92, 110, 149, 154, 156, 157 };
+
+        // Class ownership and ancestry verified against client 1.16.5.0
+        // skilldata and gameuiutil; see docs/final-client-skill-evidence.md.
         // Index is class ID. Inherited skills remain trainable after promotion.
         private static readonly int[][] ClassSkills =
         {
@@ -53,6 +58,10 @@ namespace Rasa.Structures
             new[] { 68, 72, 73, 136, 156 }
         };
         private static readonly int[] ParentClasses = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
+
+        private static bool IsSignature(int skillId) => Array.IndexOf(SignatureSkillIds, skillId) >= 0;
+
+        private static int GetMaximumRank(int skillId) => IsSignature(skillId) ? 1 : 5;
 
         public static bool IsAvailableToClass(uint classId, int skillId)
         {
@@ -78,7 +87,7 @@ namespace Rasa.Structures
 
             foreach (var skill in player.Skills.Values)
             {
-                if (skill.SkillLevel < 0 || skill.SkillLevel >= RankCosts.Length)
+                if (skill.SkillLevel < 0 || skill.SkillLevel > GetMaximumRank((int)skill.SkillId))
                     return 0;
                 points -= RankCosts[skill.SkillLevel];
             }
@@ -104,7 +113,11 @@ namespace Rasa.Structures
                 var id = (SkillId)skillIds[i];
                 var previous = player.Skills.TryGetValue(id, out var skill) ? skill.SkillLevel : 0;
                 var rank = ranks[i];
-                if (previous < 0 || previous >= RankCosts.Length || rank < previous || rank >= RankCosts.Length)
+                var maximumRank = GetMaximumRank(skillIds[i]);
+                if (previous < 0 || previous > maximumRank || rank < previous || rank > maximumRank)
+                    return false;
+
+                if (rank > previous && IsSignature(skillIds[i]))
                     return false;
 
                 available -= RankCosts[rank] - RankCosts[previous];

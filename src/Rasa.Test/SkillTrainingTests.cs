@@ -124,6 +124,81 @@ namespace Rasa.Test
             Assert.IsFalse(SkillTraining.TryPlan(player, new[] { 1 }, new[] { 2 }, out _));
         }
 
+        [DataTestMethod]
+        [DataRow(12, 20)]
+        [DataRow(8, 47)]
+        [DataRow(9, 92)]
+        [DataRow(11, 110)]
+        [DataRow(10, 149)]
+        [DataRow(14, 154)]
+        [DataRow(15, 156)]
+        [DataRow(13, 157)]
+        public void SignatureCannotBePurchasedOrRaisedByOrdinaryTraining(int classId, int skillId)
+        {
+            var player = Recruit(50);
+            player.Class = (uint)classId;
+            var id = (SkillId)skillId;
+
+            // Final-client signature rows have no ordinary purchase controls.
+            Assert.IsFalse(SkillTraining.TryPlan(player, new[] { skillId }, new[] { 1 }, out var changes));
+            Assert.AreEqual(0, changes.Count);
+            Assert.IsFalse(player.Skills.ContainsKey(id));
+
+            player.Skills.Add(id, new SkillsData(id, -1, 1));
+            Assert.IsTrue(SkillTraining.TryPlan(player, new[] { skillId }, new[] { 1 }, out changes));
+            Assert.AreEqual(0, changes.Count);
+            Assert.IsFalse(SkillTraining.TryPlan(player, new[] { skillId }, new[] { 2 }, out changes));
+            Assert.AreEqual(0, changes.Count);
+            Assert.AreEqual(1, player.Skills[id].SkillLevel);
+        }
+
+        [TestMethod]
+        public void SignaturePurchaseRejectsWholeBatchAndKeepsOrdinaryTrainingAvailable()
+        {
+            var player = Recruit(50);
+            player.Class = 12;
+            Assert.IsFalse(SkillTraining.TryPlan(player, new[] { 1, 20 }, new[] { 2, 1 }, out var changes));
+            Assert.AreEqual(0, changes.Count);
+            Assert.AreEqual(1, player.Skills[SkillId.Firearms].SkillLevel);
+            Assert.IsTrue(SkillTraining.TryPlan(player, new[] { 1 }, new[] { 5 }, out changes));
+            Assert.AreEqual(5, changes[SkillId.Firearms].SkillLevel);
+        }
+
+        [TestMethod]
+        public void InvalidSavedSignatureRankCannotGrantExtraTraining()
+        {
+            var player = Recruit(50);
+            player.Class = 12;
+            var signature = (SkillId)20;
+            player.Skills.Add(signature, new SkillsData(signature, 137, 2));
+            Assert.AreEqual(0, SkillTraining.GetAvailablePoints(player));
+            Assert.IsFalse(SkillTraining.TryPlan(player, new[] { 1 }, new[] { 2 }, out _));
+            Assert.AreEqual(2, player.Skills[signature].SkillLevel);
+        }
+
+        [TestMethod]
+        public void TacticalEvasionTrainingAdvertisesItsClientAbility()
+        {
+            var player = Recruit(50);
+            player.Class = 5;
+            Assert.IsTrue(SkillTraining.TryPlan(player, new[] { 54 }, new[] { 3 }, out var changes));
+            Assert.AreEqual(10000005, changes[(SkillId)54].AbilityId);
+
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            using var pw = new PythonWriter(writer);
+            new AbilitiesPacket(changes).Write(pw);
+            stream.Position = 0;
+            using var reader = new BinaryReader(stream);
+            using var pr = new PythonReader(reader);
+            Assert.AreEqual(1, pr.ReadTuple());
+            Assert.AreEqual(1, pr.ReadList());
+            Assert.AreEqual(2, pr.ReadTuple());
+            Assert.AreEqual(10000005, pr.ReadInt());
+            Assert.AreEqual(3, pr.ReadInt());
+            Assert.AreEqual(stream.Length, stream.Position);
+        }
+
         [TestMethod]
         public void RankJumpChargesEveryIntermediateRank()
         {

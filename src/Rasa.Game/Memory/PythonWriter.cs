@@ -41,7 +41,7 @@ namespace Rasa.Memory
 
         public void WriteInt(int value)
         {
-            if (value > 0x0C)
+            if (value < 0 || value > 0x0C)
             {
                 if ((sbyte) value == value)
                 {
@@ -65,7 +65,15 @@ namespace Rasa.Memory
 
         public void WriteUInt(uint value)
         {
-            WriteInt((int) value);
+            // Values with the high bit set must keep all 32 bits. Casting to a
+            // negative int and choosing a compact signed form would truncate them.
+            if (value > int.MaxValue)
+            {
+                Writer.Write((byte)0x1F);
+                Writer.Write(value);
+            }
+            else
+                WriteInt((int)value);
         }
 
         public void WriteLong(long value)

@@ -2,14 +2,18 @@
 
 Target: the **final live game immediately before shutdown**, preserved 1:1 per
 `AGENTS.md`. Client **1.16.5.0** is the current emulator compatibility requirement,
-pending original final-build verification. This is a source audit, not a claim that
-the current server implements these skills or that every table below has been
-verified against that client build.
+pending original final-build verification. This is a source audit, not a claim
+that the current server implements every skill. A subsequent same-day recovery
+of client files with embedded executable version 1.16.5.0 now verifies all 73
+skill IDs and owning classes below, class ancestry, ordinary rank costs, and
+signature rank caps. See [the original-client audit](final-client-skill-evidence.md)
+and [artifact provenance](client-artifacts.md); those findings supersede the
+earlier client-unavailable observations retained below.
 
 ## Firearms ID correction
 
-**Use skill ID 1 for Firearms.** Confidence is high for this project's protocol
-mapping, although a local retail client table has not yet been obtained.
+**Use skill ID 1 for Firearms.** The recovered client now directly confirms this
+ID in `generated/client/skilldata.pyo`; the earlier emulator comparison follows.
 
 - [Rasa.NET commit 7f1fdd7769317572e9b5858d9c4c28368ce3dfdc](https://github.com/InfiniteRasa/Rasa.NET/commit/7f1fdd7769317572e9b5858d9c4c28368ce3dfdc)
   introduced `SkillId.cs` under the message “Removing some magic numbers”. It
@@ -34,10 +38,10 @@ before migration; the spelling of an enum alone does not rewrite persisted IDs.
 The IDs and names below are facts about the C++ header linked above, with class
 IDs from its [manifestation.cpp](https://github.com/InfiniteRasa/Game-Server/blob/4a9ab5f1fcdf6a18ab6911c384189cc41ddae651/src/manifestation.cpp).
 Names are normalized for readability; “signature” reflects its `SIG_` prefix.
-All 73 header entries are accounted for. This is a useful candidate catalog,
-with **medium confidence for retail membership** until versioned client data
-confirms it. In particular, a name can be obsolete while its wire ID remains in
-use.
+All 73 header entries are accounted for. The recovered 1.16.5.0 client now
+confirms every ID and owning class in this catalog. Its internal names can still
+differ from displayed names; the decoded language tables should establish final
+presentation text.
 
 | Class ID | Class | Tier | Parent | Own skill IDs and header names |
 | --- | --- | --- | --- | --- |
@@ -92,10 +96,10 @@ must preserve that distinction when implemented.
   `0, 1, 3, 6, 10, 15` for ranks 0 through 5. A purchase from rank 2 to rank 4
   costs 7 points, including the intervening rank. These are not minimum player
   levels.
-- C++ labels eight skills as signatures, but its training handler still permits
-  every known skill up to rank 5. The header label alone does not establish a
-  different rank cap. Fansite signature rows often have only rank 1 populated;
-  this warrants investigation before charging points for nonexistent ranks.
+- The recovered client caps all eight signatures at rank 1 and provides no
+  ordinary skill purchase controls for them. The server now rejects signature
+  increases through normal training. The original grant and accounting path
+  remains unverified; see the client evidence document.
 - The C++ player creation path has a commented-out block that would clamp each
   Recruit skill to rank 1. Its points calculation adds five points with the
   explanation that Recruit skills start at rank 1. These show implementation
@@ -105,11 +109,11 @@ must preserve that distinction when implemented.
 - No authoritative per-skill/per-rank minimum player-level table was obtained.
   Do not infer rank requirements from gear levels or impose a guessed universal
   progression. A threshold of 5/15/30 for class promotion is a different rule.
-- No complete, versioned skill-to-Logos-ID prerequisite table was obtained.
-  Retrieved fansite tables display Logos names rather than numeric protocol IDs,
-  and some include replaced skills. Those names are research leads; they are
-  not sufficient to introduce production prerequisites without checking the
-  target client and the server's Logos ID mapping.
+- The recovered client supplies 54 ability-to-Logos sequences with numeric
+  protocol IDs. Its ability-use checks consume those IDs, while the normal
+  purchase buttons do not gate on Logos. Preserve that distinction; do not add
+  skill-purchase prerequisites based only on ability-use requirements. The
+  complete static skill/ability/Logos join is recorded in the client audit.
 
 The [Skills window account](https://tabularasa.fandom.com/wiki/Skills_window)
 describes previewing multiple changes before Accept, and removing a preview
@@ -119,7 +123,7 @@ ordinary training; a later respec is a separate operation.
 
 ## Remaining evidence collection
 
-Bounded checks found no extracted client tables or game client in this workspace,
+Initial bounded checks found no extracted client tables or game client in this workspace,
 `/home/blizz/Games`, `/home/blizz/Downloads`, `/mnt`, or `/media`. This is not a
 claim that no copy exists elsewhere. The upstream setup guide's old forum link
 did not yield a downloadable client in this audit. The old launcher's configured
@@ -132,7 +136,8 @@ available. It does not include the game tables itself. An original manual is
 indexed at replacementdocs, but retrieval returned HTTP 403; no manual rule is
 claimed as verified here.
 
-Next evidence needed: locate client 1.16.5.0 skill/class/Logos resources, retain
-their source version and hashes, decode the actual skill IDs and prerequisites,
-and compare both valid and rejected training in the client. A successful server
-unit test cannot prove those client-facing rules or skill effects.
+The subsequent [client acquisition](client-artifacts.md) supplied the missing
+skill/class/Logos resources and their hashes. Next evidence needed: original
+signature grants and point accounting, complete server-side effects, independent
+client authenticity, and comparison of valid/rejected training in the client.
+A successful server unit test cannot prove those client-facing rules or effects.

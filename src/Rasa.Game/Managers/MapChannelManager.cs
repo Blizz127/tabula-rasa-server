@@ -22,6 +22,7 @@ namespace Rasa.Managers
         public readonly Timer Timer = new();
 
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
+        private readonly Func<long> _getMonotonicMilliseconds;
         public static MapChannelManager Instance
         {
             get
@@ -39,14 +40,15 @@ namespace Rasa.Managers
                 return _instance;
             }
         }
-        public MapChannelManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory)
+        public MapChannelManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory, Func<long> getMonotonicMilliseconds = null)
         {
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
+            _getMonotonicMilliseconds = getMonotonicMilliseconds ?? (() => Environment.TickCount64);
         }
 
         public void CharacterLogout(Client client)
         {
-            if (client.Player.LogoutActive == false)
+            if (client.Player.RemoveFromMap || !client.Player.LogoutCountdown.TryComplete(_getMonotonicMilliseconds()))
                 return;
 
             client.Player.RemoveFromMap = true;
@@ -321,8 +323,16 @@ namespace Rasa.Managers
 
         public void RequestLogout(Client client)
         {
-            client.CallMethod(SysEntity.ClientMethodId, new LogoutTimeRemainingPacket());
-            client.Player.LogoutActive = true;
+            if (client.Player.RemoveFromMap)
+                return;
+
+            var remaining = client.Player.LogoutCountdown.Begin(_getMonotonicMilliseconds());
+            client.CallMethod(SysEntity.ClientMethodId, new LogoutTimeRemainingPacket(remaining));
+        }
+
+        public void CancelLogoutRequest(Client client)
+        {
+            client.Player.LogoutCountdown.Cancel();
         }
 
         public MapInstance GetMapInstance(uint mapContextId)

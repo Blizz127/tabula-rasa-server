@@ -27,20 +27,25 @@ D16 becoming live on 10 February, while the
 was published on 11 February. Use each date for the event it actually establishes;
 do not silently treat article dates as executable build dates.
 
-The repository's [setup guide](setup.md) requires **1.16.5.0**. That is proven as
-the emulator's supported client requirement. Its relationship to the official
-D16.5 release is consistent with the numbering, but this audit has not inspected
-a retail executable version resource, patch manifest, original binary checksum,
-or archived patch package that proves the exact correspondence.
+The repository's [setup guide](setup.md) requires **1.16.5.0**. This audit has now
+obtained an executable and client data from a community archive. Static PE
+inspection confirms embedded file and product versions **1.16.5.0**, with a
+February 2009 linker timestamp. Selected members passed ZIP size/CRC checks and
+have locally recorded SHA-256 hashes; see [client artifacts](client-artifacts.md).
+The original US D16.5 notes also corroborate the European announcement. These
+observations support the version correspondence, but an official distribution
+manifest/checksum or authenticated installation is still needed to establish
+the package's byte-for-byte authenticity and exact shutdown revision.
 
 | Question | Evidence status |
 | --- | --- |
 | Was official D16.5 released to live servers? | Proven by the original official announcement. |
 | Latest positively identified live patch in this audit | D16.5, announcement dated 17 February 2009. |
 | Is 1.16.5.0 required by this emulator? | Proven by the checked-in setup guide. |
-| Is 1.16.5.0 the exact final official executable revision? | Not yet proven by a binary or patch manifest. |
+| Does the acquired executable identify itself as 1.16.5.0? | Yes: both fixed and string PE version resources; see the artifact record. |
+| Is that executable the exact final official distribution? | Consistent with official D16.5 notes; independent official checksum/manifest and final-state authentication remain missing. |
 | Were there later unannounced client or server changes before shutdown? | Unknown; a missing later search result does not prove absence. |
-| Were all regional servers on identical final content/configuration? | Unknown; European official announcements alone cannot prove every region. |
+| Were all regional servers on identical final content/configuration? | Unknown; matching US/European patch announcements do not establish identical final server configuration. |
 | Have the final server scripts, event schedule, and content data been recovered? | No. |
 
 Do not call the last positively identified patch the conclusively final binary.
@@ -99,8 +104,10 @@ the public Wayback CDX index with these constraints:
 - Output fields: timestamp and original URL, collapsed by URL key
 
 The bounded index search did not reveal a later numbered deployment announcement.
-The archive may be incomplete. Next evidence needed: original final client
-version resources and file hashes; last official patch manifest/package; later
-server hotfix records; final US and European event captures; and versioned client
-tables. Correlate every rule and content import with that evidence before
-claiming final-retail fidelity.
+The archive may be incomplete. Client version resources, selected file hashes,
+and versioned client tables have since been recovered; their provenance and
+limits are in [client artifacts](client-artifacts.md). Next evidence needed:
+an independent official patch manifest/checksum, later server hotfix records,
+and final US and European event captures. Decode the recovered tables and
+correlate every rule and content import with that evidence before claiming
+final-retail fidelity.
