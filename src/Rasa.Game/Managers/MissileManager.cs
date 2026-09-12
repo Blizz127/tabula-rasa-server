@@ -248,20 +248,30 @@ namespace Rasa.Managers
         {
             // ToDo: Some weapons can hit multiple targets
             var targetActor = GetTargetActor(missile.TargetEntityId);
+            Creature killedCreature = null;
             // Resolve again at impact: the target may have left, died, or its ID may
             // have been reused since windup. A shot without a target has no hits.
             if (targetActor != null && ReferenceEquals(targetActor, missile.TargetActor)
                 && targetActor.State != CharacterState.Dead)
             {
                 missile.Args.HitEntities.Add(missile.TargetEntityId);
-                missile.Args.HitData.Add(new HitData
+                var hit = new HitData
                 {
+                    DamageType = missile.ActionId == ActionId.AaRecruitLightning ? DamageType.Electrical : DamageType.Physical,
                     FinalAmt = missile.DamageA,
                     EntityId = missile.TargetEntityId
-                });
+                };
+                missile.Args.HitData.Add(hit);
 
                 if (targetActor is Creature creature)
+                {
                     DoDamageToCreature(mapChannel, missile, creature);
+                    if (creature.State == CharacterState.Dead)
+                    {
+                        hit.DeathBlow = 1;
+                        killedCreature = creature;
+                    }
+                }
                 else
                     DoDamageToPlayer(mapChannel, missile, targetActor);
             }
@@ -288,6 +298,11 @@ namespace Rasa.Managers
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;
             }
+            // The killing damage announces death to source-visible observers.
+            // ActorKilled covers victim-visible observers who missed that recovery;
+            // its original client handler ignores an actor already announced dead.
+            if (killedCreature != null)
+                CellManager.Instance.CellCallMethod(mapChannel, killedCreature, new ActorKilledPacket());
         }
     }
 }

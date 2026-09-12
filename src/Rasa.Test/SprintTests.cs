@@ -46,11 +46,18 @@ namespace Rasa.Test
 
             var packets = DrainPackets(client);
             var attached = packets.OfType<GameEffectAttachedPacket>().Single();
+            var recovery = packets.OfType<SprintRecoveryPacket>().Single();
+            Assert.AreEqual((uint)rank, recovery.Rank);
+            Assert.AreEqual(client.Player.EntityId, recovery.TargetId);
+            Assert.IsFalse(attached.Announced);
+            Assert.IsTrue(packets.IndexOf(attached) < packets.IndexOf(recovery));
             Assert.IsNull(attached.Duration);
             Assert.IsNull(attached.DamageType);
             Assert.IsNull(attached.AttrId);
             CollectionAssert.AreEqual(new[] { 1.0 }, attached.EffectArguments);
             Assert.AreEqual(client.Player.EntityId, packets.OfType<UpdateChiPacket>().Single().WhoId);
+            ActorActionManager.Instance.DoWork(client.Player.MapChannel, 1);
+            Assert.AreEqual(0, DrainPackets(client).Count);
         }
 
         [TestMethod]
@@ -86,7 +93,30 @@ namespace Rasa.Test
             ActorActionManager.Instance.DoWork(client.Player.MapChannel, 0);
             Assert.AreEqual(0, client.Player.ActiveEffects.Count);
             Assert.AreEqual(29, Chi(client));
-            Assert.AreEqual(1, DrainPackets(client).OfType<UserActionFailedPacket>().Count());
+            var failures = DrainPackets(client);
+            Assert.AreEqual(1, failures.OfType<UserActionFailedPacket>().Count());
+            Assert.AreEqual(0, failures.OfType<SprintRecoveryPacket>().Count());
+        }
+
+        [TestMethod]
+        public void SprintRecoveryResolvesTheActionWithASelfHitAndNoDamagePayload()
+        {
+            var packet = new SprintRecoveryPacket(5, 0x100000002UL);
+            Assert.AreEqual(GameOpcode.PerformRecovery, packet.Opcode);
+            using var stream = new MemoryStream();
+            using var writer = new PythonWriter(new BinaryWriter(stream));
+            packet.Write(writer);
+            stream.Position = 0;
+            using var reader = new PythonReader(new BinaryReader(stream));
+            Assert.AreEqual(6, reader.ReadTuple());
+            Assert.AreEqual(401U, reader.ReadUInt());
+            Assert.AreEqual(5U, reader.ReadUInt());
+            Assert.AreEqual(1, reader.ReadList());
+            Assert.AreEqual(0x100000002UL, reader.ReadULong());
+            Assert.AreEqual(0, reader.ReadList());
+            Assert.AreEqual(0, reader.ReadList());
+            Assert.AreEqual(0, reader.ReadList());
+            Assert.AreEqual(stream.Length, stream.Position);
         }
 
         [TestMethod]

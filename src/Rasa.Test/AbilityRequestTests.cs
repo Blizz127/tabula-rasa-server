@@ -153,6 +153,8 @@ namespace Rasa.Test
         private static UserActionFailedPacket PopFailure(Client client)
         {
             var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(client);
+            var cancellation = (CallMethodMessage)((ProtocolPacket)queue.PopOutgoing()).Message;
+            Assert.AreEqual(GameOpcode.ActionFailed, cancellation.MethodId);
             var protocol = (ProtocolPacket)queue.PopOutgoing();
             var call = (CallMethodMessage)protocol.Message;
             Assert.AreEqual(client.Player.EntityId, call.EntityId);

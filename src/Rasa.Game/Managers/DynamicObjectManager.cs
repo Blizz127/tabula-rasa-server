@@ -72,7 +72,7 @@ namespace Rasa.Managers
                     {
                         client.CallMethod(client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, packet.ActionId, packet.ActionArgId));
                         client.CallMethod(packet.EntityId, new UsePacket(client.Player.EntityId, obj.StateId, 10000));
-                        client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId, packet.ActionArgId, 10000));
+                        client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId, packet.ActionArgId, 10000) { SourceId = obj.EntityId });
 
                         obj.TriggeredByPlayers.Add(client);
                         break;
@@ -81,7 +81,7 @@ namespace Rasa.Managers
                     {
                         client.CallMethod(client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, packet.ActionId, packet.ActionArgId));
                         client.CallMethod(packet.EntityId, new UsePacket(client.Player.EntityId, obj.StateId, 100));
-                        client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId, packet.ActionArgId, 100));
+                        client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId, packet.ActionArgId, 100) { SourceId = obj.EntityId });
 
                         obj.TriggeredByPlayers.Add(client);
                         break;
@@ -102,6 +102,23 @@ namespace Rasa.Managers
                     Logger.WriteLog(LogType.Debug, $"ToDo: RequestUseObjectPacket: unsuported object type {obj.DynamicObjectType}");
                     break;
             }
+        }
+
+        internal static void CancelPendingUse(MapChannel mapChannel, ActionData action)
+        {
+            if (action.ActionId != ActionId.UseObject)
+                return;
+            void RemoveTrigger(DynamicObject obj)
+            {
+                if (action.SourceId == 0 || action.SourceId == obj.EntityId)
+                    obj.TriggeredByPlayers.RemoveAll(client => client?.Player == action.Actor);
+            }
+            foreach (var obj in mapChannel.DynamicObjects)
+                RemoveTrigger(obj);
+            foreach (var obj in mapChannel.ControlPoints.Values)
+                RemoveTrigger(obj);
+            foreach (var obj in mapChannel.FootLockers.Values)
+                RemoveTrigger(obj);
         }
 
         internal void DynamicObjectWorker(MapChannel mapChannel, long delta)

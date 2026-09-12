@@ -81,11 +81,13 @@ Further original data is preserved for the next action/combat reconstruction:
 
 - All five ranks have windup **500 ms**, recovery **700 ms**, range **60**,
   reuse **1200 ms**; `ActorActionInfo.__init__` names the eight argument slots.
-  Full server timing, range and target enforcement still need implementation.
+  Timing is now reconstructed in [the action lifecycle](action-lifecycle-client-evidence.md);
+  native body-distance range, line of sight and complete target enforcement remain.
 - Attribute 6 (Power) base activation costs are **25/50/75/100/150**. No
   consumable scaling type is supplied. `CheckConsumables` applies active
   power-cost and actor ability-cost modifiers after scaling; server consumption
-  and failure ordering still need reconstruction.
+  is now implemented at successful recovery; exact original failure/consumption
+  ordering and active modifiers remain under reconstruction.
 - Rank 2 adds arc radius 12 and base arc damage 210. Rank 3 uses radius 18,
   arc damage 90, extra damage type 7 (Sonic), and extra damage percent 50.
 - Ranks 4–5 use arc radius 24/30, arc damage 210, stun chance 50 and duration 3.
@@ -97,3 +99,10 @@ Further original data is preserved for the next action/combat reconstruction:
 Lightning recovery currently emits an empty arc list and does not implement
 these extra effects. This patch must not be described as complete Lightning
 or complete retail combat.
+
+The subsequent [effect schema audit](lightning-effects-client-evidence.md)
+adds immutable original rank properties and typed damage, arc and storm
+serialization. Recovery now preserves each actual hit's amount and effect
+lists; it does not substitute one missile-wide amount for all hit records.
+Those packet foundations do not yet select arc victims or apply the extra
+Sonic/stun/storm mechanics.

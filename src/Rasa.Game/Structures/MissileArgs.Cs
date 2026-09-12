@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Rasa.Structures
 {
@@ -32,5 +33,6 @@ namespace Rasa.Structures
         public List<uint> TargetEffectIds { get; set; } // ToDo
         public List<uint> SourceEffectIds { get; set; } // ToDo
         public List<object> OnHitData { get; set; }           // ToDo
+        public IReadOnlyList<LightningArcHit> LightningArcs { get; set; } = Array.Empty<LightningArcHit>();
     }
 }

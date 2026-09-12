@@ -30,6 +30,8 @@ namespace Rasa.Structures
         public Dictionary<CurencyType, int> Credits = new();
 
         public List<ResistanceData> ResistanceData = new();
+        public AbilityExecution CurrentAbility { get; set; }
+        public Dictionary<ActionId, long> AbilityReuseDeadlines { get; } = new();
         public int SpentBody { get; set; }
         public int SpentMind { get; set; }
         public int SpentSpirit { get; set; }

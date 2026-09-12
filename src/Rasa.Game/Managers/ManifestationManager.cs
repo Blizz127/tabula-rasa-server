@@ -156,6 +156,8 @@ namespace Rasa.Managers
 
         public bool PlayerTryFireWeapon(Client client)
         {
+            if (ActorActionManager.Instance.HasActiveAction(client.Player))
+                return false;
             // ToDo: isOverheated, isJammed, and some other checks
             if (!client.Player.WeaponReady)
             {
@@ -701,16 +703,24 @@ namespace Rasa.Managers
         {
             if (client.State != ClientState.Ingame || client.Player.MapChannel == null ||
                 client.Player.RemoveFromMap ||
-                !AbilityRequirements.CanUseSkillAbility(client.Player, packet.ActionId, packet.ActionArgId))
+                !AbilityRequirements.CanUseSkillAbility(client.Player, packet.ActionId, packet.ActionArgId) ||
+                !ActorActionManager.Instance.CanBeginAbility(client.Player))
             {
-                client.CallMethod(client.Player.EntityId, new UserActionFailedPacket(packet.ActionId, packet.ActionArgId));
+                RejectAbilityRequest(client, packet);
+                return;
+            }
+
+            if (packet.ActionId == ActionId.AaRecruitLightning)
+            {
+                if (!ActorActionManager.Instance.TryStartLightning(client, packet))
+                    RejectAbilityRequest(client, packet);
                 return;
             }
 
             if (packet.ActionId == ActionId.AaRecruitSprint &&
                 !GameEffectManager.Instance.CanAttachSprint(client.Player, (uint)packet.ActionArgId))
             {
-                client.CallMethod(client.Player.EntityId, new UserActionFailedPacket(packet.ActionId, packet.ActionArgId));
+                RejectAbilityRequest(client, packet);
                 return;
             }
 
@@ -721,6 +731,24 @@ namespace Rasa.Managers
                 ItemId = packet.ItemId,
                 ClientYaw = packet.ClientYaw
             });
+        }
+
+        private static void RejectAbilityRequest(Client client, RequestPerformAbilityPacket packet)
+        {
+            var accepted = client.Player.CurrentAbility;
+            if (accepted != null && accepted.Action.ActionId == packet.ActionId &&
+                accepted.Action.ActionArgId == (uint)packet.ActionArgId)
+                return; // Same-pair failures cannot distinguish a duplicate from the accepted request.
+
+            // Cancel the client's prediction as well as its unresolved request.
+            // UserActionFailed alone leaves the local windup/reuse timers running.
+            client.CallMethod(client.Player.EntityId, new ActionFailedPacket(packet.ActionId, (uint)packet.ActionArgId));
+            client.CallMethod(client.Player.EntityId, new UserActionFailedPacket(packet.ActionId, packet.ActionArgId));
+            if (packet.ActionId == ActionId.AaRecruitLightning)
+                client.CallMethod(client.Player.EntityId, new ActionReuseTimesPacket(new[]
+                {
+                    (packet.ActionId, ActorActionManager.Instance.GetAbilityReuseRemaining(client.Player, packet.ActionId))
+                }));
         }
 
         public void RequestDetachGameEffect(Client client, RequestDetachGameEffectPacket packet)

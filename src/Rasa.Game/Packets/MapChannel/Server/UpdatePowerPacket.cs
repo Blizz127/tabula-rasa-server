@@ -8,12 +8,14 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.UpdatePower;
 
-        public ActorAttributes Power { get; set; }
-        public int WhoId { get; set; }
+        public ActorAttributes Power { get; }
+        public ulong WhoId { get; set; }
 
-        public UpdatePowerPacket(ActorAttributes power, int whoId)
+        public UpdatePowerPacket(ActorAttributes power, ulong whoId)
         {
-            Power = power;
+            // Packets are queued: retain this update even if the actor changes again.
+            Power = new ActorAttributes(power.AttributeId, power.NormalMax, power.CurrentMax,
+                power.Current, power.RefreshAmount, power.RefreshPeriod);
             WhoId = whoId;
         }
 
@@ -23,7 +25,7 @@
             pw.WriteInt(Power.Current);
             pw.WriteInt(Power.CurrentMax);
             pw.WriteInt(Power.RefreshAmount);
-            pw.WriteInt(WhoId);
+            pw.WriteULong(WhoId);
         }
     }
 }

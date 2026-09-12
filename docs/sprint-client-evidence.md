@@ -169,6 +169,49 @@ on the original server. Right-click effect cancellation is directly evidenced.
 Duplicate requests must not accumulate speed multipliers or independent Sprint
 drains; exact repeated-activation behavior remains a trace-level question.
 
+### Successful attachment must also resolve the action request
+
+`PhysicalEntity.Recv_GameEffectAttached`, original source line 601, calls
+`AttachGameEffect` (line 488), which ultimately calls `SprintEffect.OnAttach`.
+This path creates the effect and stores its bead modifier; it neither calls
+`Actor.Recv_PerformRecovery` nor removes anything from the actor's unresolved
+request list. Sending only the effect packet therefore leaves a successful
+Sprint request unresolved. This does not prove an endless current-action lock:
+Sprint has zero local windup/recovery delays and its local end can clear the
+current action independently. The pending request leak is the confirmed gap.
+
+`SprintAction`, line 27, inherits `TargetedAction.DoAction`, whose arguments
+after the actor are `hits, misses, missdata, hitdata` (line 361). It sets
+`targetType = TARGET_SELF` and `targetGameEffect = SprintEffect`.
+`TargetedAction.OnServerResolution`, line 447, calls `DoHits` for a nonempty
+hit list, then announces the target effect on those hit entities (raw offsets
+82–173). Sprint inherits `BaseActorAbility.DoHits`, which calls `DoAbility`;
+the latter, original line 195, only returns `None` (raw offsets 0–3). It does
+not read damage or per-hit data.
+
+The connected success response is consequently:
+
+```text
+PerformRecovery(401, rank, [actorEntityId], [], [], [])
+```
+
+It acknowledges the actual self target and satisfies the inherited four-list
+consumer without inventing a damage payload. The exact original server's
+unused hitdata representation has not been captured; the chosen empty list
+is justified by the inspected consumer, not presented as a recovered wire
+capture. `Actor.Recv_PerformRecovery` removes the resolved action object from
+the pending list as detailed in [action lifecycle evidence](action-lifecycle-client-evidence.md).
+
+The effect attachment now uses `announce = False`, followed by recovery with
+the self hit. This matters because `PhysicalEntity.AnnounceGameEffectAttach`,
+line 779, announces an unannounced effect and returns; if every matching effect
+is already announced, it queues a delayed announcement instead (raw offsets
+22–48 and 57–84). Keeping the previous immediate announcement and also sending
+the self-hit recovery would trigger that delayed path unnecessarily. The
+original effect receiver retains its fallback announcement when the source
+entity is unknown. Raw methods and source hashes are also retained in the
+external `action-lifecycle/` manifest and extraction script.
+
 ## Connected implementation and remaining verification
 
 The ordinary five-rank Sprint path now checks CHI before queueing and again at
@@ -205,15 +248,19 @@ unsupported damage/attribute tooltip substitutions. Optional tooltip duration
 is encoded in seconds. CHI updates preserve the source actor's full 64-bit
 entity ID.
 
-`SprintTests` passed **12/12** in the existing .NET 5 container with the network
+`SprintTests` passed **13/13** after the success-response correction in the
+existing .NET 5 container with the network
 disabled and source mounted read-only. Coverage includes all five ranks
 through request and recovery, pre-queue and recovery-time resource checks,
 duplicate rejection, elapsed-time draining and residual-resource cancellation,
 owned cancellation, all due expirations in one update, the long internal cap,
 the scalar attachment argument, optional tooltip seconds and 64-bit CHI source
-IDs. These tests verify the implementation and packet contract; they do not
+IDs. The subsequent success-response regression adds self-hit recovery
+serialization and checks all five ranks for attachment before exactly one
+recovery, deferred effect announcement, and no success response on failed
+attachment. These tests verify the implementation and packet contract; they do not
 replace the missing original-server observations. The isolated run log is
-`/tmp/rasa-sprint-tests.log`; no live service or database was changed by this
+`/tmp/rasa-sprint-recovery-tests.log`; no live service or database was changed by this
 research/test pass.
 
 ## Distinct mech entry

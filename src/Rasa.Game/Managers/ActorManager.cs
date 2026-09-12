@@ -95,6 +95,10 @@
 
         public void RequestActionInterrupt(Client client, RequestActionInterruptPacket packet)
         {
+            if (client.State != ClientState.Ingame || client.Player?.MapChannel == null || client.Player.RemoveFromMap)
+                return;
+            if (ActorActionManager.Instance.InterruptAbility(client, packet.ActionId, packet.ActionArgId))
+                return;
             foreach (var action in client.Player.MapChannel.PerformRecovery)
                 if (action.Actor == client.Player)
                     if (action.ActionId == packet.ActionId)

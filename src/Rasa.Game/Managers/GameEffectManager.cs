@@ -79,7 +79,9 @@ namespace Rasa.Managers
                 EffectId = gameEffect.EffectId,
                 EffectLevel = gameEffect.EffectLevel,
                 SourceId = actor.EntityId,
-                Announced = true,
+                // Sprint's recovery self-hit announces the effect through the
+                // original TargetedAction.OnServerResolution consumer.
+                Announced = false,
                 IsActive = true,
                 IsBuff = true,
                 // Authored description is open-ended. Do not display the internal cap.

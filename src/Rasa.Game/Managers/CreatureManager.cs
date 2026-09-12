@@ -107,11 +107,9 @@ namespace Rasa.Managers
             if (creature.State == CharacterState.Dead)
                 return; // creature already dead
 
-            // kill creature
-            var stateIds = new List<CharacterState> { CharacterState.Dead };
-
+            // MissileManager sends the killing recovery and then ActorKilled.
+            // StateChange(Dead) alone skips the client's AnnounceDeath cleanup.
             creature.State = CharacterState.Dead;
-            CellManager.Instance.CellCallMethod(mapChannel, creature, new StateChangePacket(stateIds));
 
             // tell spawnpool if set
             if (creature.SpawnPool != null)

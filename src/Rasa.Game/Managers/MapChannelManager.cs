@@ -306,6 +306,7 @@ namespace Rasa.Managers
             player.Disconected = true;
             player.RemoveFromMap = true;
             player.LogoutCountdown.Cancel();
+            player.CurrentAbility = null;
             var map = player.MapChannel;
             if (map != null)
             {

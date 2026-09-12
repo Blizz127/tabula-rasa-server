@@ -427,3 +427,81 @@ Rollback image: `rasa_net:before-retail-combat-20260912`. Retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
 rollback needs no database restoration. The broader preservation goal remains
 active, including the explicit fidelity limitations in the linked reports.
+
+## Action lifecycle and death notifications — 2026-09-12
+
+The [original action lifecycle](action-lifecycle-client-evidence.md) establishes
+Lightning's **500 ms windup, 700 ms recovery and 1200 ms subsequent reuse**.
+The same action ID shares reuse across all ranks: normally the actor remains
+busy until 1200 ms from starting and can cast Lightning again at 2400 ms.
+The server now implements these stages with monotonic deadlines, charges the
+original rank costs **25/50/75/100/150 Power** at successful recovery, and
+revalidates the actor, learned rank/Logos, available Power and original target
+identity before resolving. Spending at recovery is an explicit ordering
+inference; original-server resource transaction boundaries remain unverified.
+
+Rejected predictions receive both current-action cancellation and unresolved
+request cleanup, with actual remaining reuse time to correct a late client
+prediction. An identical request for an already accepted current pair is
+ignored so the original client's first-pending-request removal does not discard
+the accepted cast. Matching interrupts cancel unfinished casts without applying
+damage or spending Power; interruption after resolution retains reuse.
+Movement does not interrupt Lightning, matching its original class flags.
+
+Cancelled legacy object/weapon queue entries no longer perform successful
+recovery early. Object cancellation explicitly releases the corresponding
+pending user while retaining unrelated objects' users. Main-loop elapsed time
+now uses a monotonic clock, preserving the existing cadence while preventing
+calendar-clock changes from altering durations. Full legacy reload/action
+interactions still require integration with the original interruption flags.
+
+The same audit found a preceding [Sprint gap](sprint-client-evidence.md): effect
+attachment alone did not remove the original client's unresolved action.
+Successful Sprint now sends its inherited self-target recovery acknowledgement
+after attachment. Effect announcement is deferred to that recovery so it is
+announced once. Exact historical unused hit-data encoding still needs a capture.
+
+The [Lightning effect audit](lightning-effects-client-evidence.md) preserves
+original optional arc/Sonic/stun/storm properties and adds typed immutable
+damage/arc/storm packet data. Lightning recovery now serializes each actual
+hit's amount, flags and effect lists. It does not yet select arc victims or
+apply those extra mechanics. Native body-distance range, line of sight,
+damageable objects and wargames remain server validation/behavior gaps.
+
+The [death audit](player-death-client-evidence.md) corrects creature lethal-hit
+notifications. The killing recovery now carries `deathBlow`, followed by a
+victim `ActorKilled` notification covering observers who could not see the
+source. The old state-only notification skipped the client's death announcement
+and cleanup. Tests exercise source-only, shared and victim-only visibility and
+two pending shots where the first kills the target.
+
+Original player death/recovery codecs are now recorded and implemented as
+unconnected foundations. Player lethal damage still has the existing placeholder
+recovery behavior; it must be replaced together with a working original recovery
+path. Hospital IDs cannot be copied from local teleporter IDs: the audit records
+specific mismatches with the original graveyard table. Eligibility, relocation,
+restored resources, death persistence and re-login remain necessary work.
+
+The combined .NET 5 candidate built with zero errors and the same five existing
+unused-variable/field warnings. **All 250 tests passed**, zero failed/skipped.
+The candidate's source matched the reviewed workspace, excluding generated
+`bin`/`obj` directories. An independent documentation audit found no material
+contradictions between the implemented behavior and the stated evidence gaps.
+These checks validate this implementation; they do not certify original-client
+behavior or complete final-live fidelity.
+
+The game service was recreated from tested image
+`sha256:895a13fbcf52626516d16bb2d62a6d644ea55e7697b7da28c2ad636a5c7d6f2c`
+at **19:06:20 UTC** and reported `Server ready!` at **19:06:30 UTC**. Its initial
+post-deployment check was running with zero restarts and no unhandled/OOM/fatal
+startup lines. Auth's image and start time are unchanged. This pass includes no
+schema/data migration.
+
+All three fresh SQLite backups passed integrity checks. Backups, private
+deployment configuration, reviewed source, build/test logs, source comparison,
+retained old/startup logs and before/after metadata are in
+`/home/blizz/backups/rasa-net/20260912T190212Z-retail-lifecycle/`.
+Rollback image: `rasa_net:before-retail-lifecycle-20260912`. Retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
+rollback needs no database restoration. The full preservation goal remains
+active with the limitations recorded above and in the linked evidence reports.

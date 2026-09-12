@@ -12,7 +12,9 @@ namespace Rasa.Threading
 
         private static long CurrentMs()
         {
-            return (DateTime.UtcNow - new DateTime(1970, 1, 1)).Ticks / TimeSpan.TicksPerMillisecond;
+            // Gameplay durations measure elapsed time, independently of changes
+            // to the system's calendar clock (the logout timer uses this too).
+            return Environment.TickCount64;
         }
 
         public MainLoop(ILoopable obj, int loopTime)
