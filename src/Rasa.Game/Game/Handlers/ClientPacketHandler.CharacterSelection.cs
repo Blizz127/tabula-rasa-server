@@ -25,6 +25,12 @@
             CharacterManager.Instance.RequestCloneCharacterToSlot(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.CreateCharacter)]
+        private void CreateCharacter(CreateCharacterPacket packet)
+        {
+            CharacterManager.Instance.RequestCreateCharacterInSlot(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RequestCreateCharacterInSlot)]
         private void RequestCreateCharacterInSlot(RequestCreateCharacterInSlotPacket packet)
         {

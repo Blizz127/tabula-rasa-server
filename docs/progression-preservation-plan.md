@@ -34,10 +34,16 @@ the final-live rule.
   with zero initial unspent points. Creation now persists these ranks together
   with the character and items in one transaction, with failure rollback.
 - The starter pistol now receives durability from its own template.
+- The first-family six-field creation message now has a handler, with the
+  original `None` family state and persisted admission/replay checks.
 - The full initial inventory/placement, race and appearance eligibility,
   starting point, and first-login/skip state remain under reconstruction.
 - Deployment 11 rebuilt boot camp. The archived Bootcamp page marks its own
   mission list obsolete; recover the later sequence before importing missions.
+- The recovered later client identifies missions 1990, 1992, 1994 and 1995,
+  19 objectives and nine NPC dialogue bindings. The current boot-camp map has
+  no spawn-pool rows or mission definitions; start/reward/skip scripts remain
+  unrecovered. See [the boot-camp audit](bootcamp-client-evidence.md).
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

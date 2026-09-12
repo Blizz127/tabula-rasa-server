@@ -31,7 +31,10 @@ namespace Rasa.Packets.Game.Server
         public override void Write(PythonWriter pw)
         {
             pw.WriteTuple(5);
-            pw.WriteUnicodeString(FamilyName);
+            if (string.IsNullOrEmpty(FamilyName))
+                pw.WriteNoneStruct();
+            else
+                pw.WriteUnicodeString(FamilyName);
             pw.WriteBool(HasCharacters);
             pw.WriteUInt(AccountId);
 

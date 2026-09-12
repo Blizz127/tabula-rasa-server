@@ -915,3 +915,48 @@ Rollback image: `rasa_net:before-retail-creation-20260912`; retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`.
 Code rollback does not require restoring the character database. The full
 creation/tutorial segment and overall preservation target remain incomplete.
+
+## 2026-09-12: original first-family creation message
+
+Original client code sends `CreateCharacter` (436) with six fields while the
+account has no family name, and `RequestCreateCharacterInSlot` (512) with seven
+fields for later characters. The first form had no server handler. Both now
+reach the same transactional initialization; selection transmits `None` for
+an unchosen family so the client can take its original first-family branch.
+Persisted account/slot checks reject replay or duplicate initial grants even
+when cached account state is stale. Both wire shapes are checked before reading
+their fields, and oversized slot integers cannot wrap into an existing pod.
+
+[Creation evidence](new-character-client-evidence.md#first-family-protocol)
+records exact client consumers, opcode data, the slotless first-request
+compatibility choice and remaining original-session verification. The 95
+original starter appearance mappings were audited with no DB differences.
+
+The rebuilt tutorial's four mission IDs, 19 objectives and nine dialogue-package
+bindings are now preserved in [the boot-camp catalog](evidence/bootcamp-client-catalog.json)
+and explained in [the boot-camp audit](bootcamp-client-evidence.md). The original
+map was acquired and CRC/hash checked. This research does not insert speculative
+quests or move characters into an unpopulated tutorial: exact spawns, reward
+amounts, triggers, start position and skip behavior remain unresolved.
+
+The .NET 5 candidate built with zero errors and the same five existing unused
+variable/field warnings. **All 598 tests passed**, with no failures or skips,
+inside the final image without production database mounts or networking.
+Source comparison matched reviewed code excluding generated `bin`/`obj`.
+The 21 focused creation/packet cases cover both messages, persistence and
+rollback, slot/replay checks, appearance fields and family-state encoding.
+
+Tested image
+`sha256:6d635509c10b47ba63aab47f0d1fc5b2544454920d0d38f64c0205f78c08235e`
+replaced game at **22:30:10 UTC**, reporting ready at **22:30:19 UTC**.
+Verification at **22:31:25 UTC** found the expected image running, zero restarts
+and no error/unhandled/fatal/OOM lines. Auth's image and start time are unchanged.
+No schema migration or saved-character rewrite occurred in this deployment.
+
+All three fresh SQLite backups passed integrity checks. Source/docs, private
+deployment configuration, build/test logs and before/after service records:
+`/home/blizz/backups/rasa-net/20260912T223008Z-retail-entry/`.
+Rollback image: `rasa_net:before-retail-entry-20260912`; retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`.
+Code rollback requires no database restoration. Complete final-live creation,
+boot camp and new-character-to-endgame progression remain incomplete.

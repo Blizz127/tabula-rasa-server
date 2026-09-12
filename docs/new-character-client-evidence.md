@@ -89,6 +89,62 @@ disabled, so it is not evidence of a working original creation sequence.
 
 ## Implementation and verification
 
+### First-family protocol
+
+The original `client/inputstate/charactercreation.pyo::OnCreateCharacter`,
+source line 83, tests whether the known family name is `None` at offsets 0–9.
+It then sends one of two ordinary creation messages:
+
+| Account state | Method ID | Original argument tuple | Bytecode offsets |
+| --- | ---: | --- | --- |
+| Family not chosen | `CreateCharacter`, 436 | family name, first name, gender, height, appearance templates/colors, race | 19–43 |
+| Existing family | `RequestCreateCharacterInSlot`, 512 | destination slot followed by the same six fields | 111–138 |
+
+`generated/client/methodid.pyo` confirms both numbers. The former had no
+registered server handler. The two forms now use distinct packet readers and
+the same creation transaction. An unchosen family is advertised as Python
+`None` instead of an empty string, allowing the original first-family branch.
+`client/clientmethod.pyo::Recv_BeginCharacterSelection`, source line 803,
+forwards the family name into selection at offsets 118–142; selection forwards
+it unchanged into creation. `Recv_CharacterCreateSuccess`, line 878, accepts
+the resulting `(slotNum, familyName)` and returns to character selection.
+
+The six-field form contains no destination. This implementation places the
+first character in pod 1 and accepts it only while the persisted account has
+no family name and no characters. Pod 1 is the server's compatibility choice
+for this slotless message, not a recovered original server allocation routine.
+Occupied/out-of-range slots and replay against an existing family are rejected
+before any creation writes. Admission checks persisted state within the
+transaction, so stale cached account state cannot duplicate the initial grant.
+Requests outside character selection do not create records.
+
+The original customization window `_CreateCharacter`, source line 694,
+builds a dictionary of `slot -> (itemTemplateId, color)` at offsets 219–313.
+These are template IDs, not entity-class IDs. `starterinfo.pyo` contains 95
+template/class mappings; all 95 match the current world database. Its
+`starterItemTemplate` values are choice sort order, and its set table is empty.
+The window's `Init` adds choices only for hair, face, eyewear and beard at
+offsets 2199–2389. This catalog is **not** a first-login inventory grant list.
+The name fields have UI limits of 16 at offsets 2139 and 2155; that alone does
+not establish the original server's complete naming policy.
+
+Additional original-source hashes:
+
+| Archive member | SHA-256 |
+| --- | --- |
+| `generated/client/starterinfo.pyo` | `9923da5b97754dbc1161badfe09c044b081d8db06b509b99c39208c040b68b94` |
+| `client/inputstate/charactercreation.pyo` | `60a2b2cf3d3ab57dd83ac743954cf1a20e4c07916284c6a914bcf8f0f21cbccc` |
+
+`creation-code-manifest.json`, selected disassembly, original method-ID tables,
+`starter-appearance-mapping-audit.json` and their generating scripts are in the
+private research directory above. **All 21 focused creation/packet cases pass**,
+covering both registered wire formats, fields and appearance colors, unknown
+family encoding, malformed tuple lengths, slot overflow, replay, occupied slots,
+saved initial state and rollback. Actual original-client network/session
+comparison remains outstanding.
+
+### Creation save
+
 Creation now inserts the character, appearance, five skill records, existing
 starter items and first account lockbox tab within one database transaction.
 Success is published after commit. Failure rolls back all these writes,

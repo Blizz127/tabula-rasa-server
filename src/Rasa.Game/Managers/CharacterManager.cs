@@ -183,6 +183,9 @@ namespace Rasa.Managers
 
         public void RequestCreateCharacterInSlot(Client client, RequestCreateCharacterInSlotPacket packet)
         {
+            if (client.State != ClientState.CharacterSelection)
+                return;
+
             var result = packet.Validate();
             if (result != CreateCharacterResult.Success)
             {
@@ -201,6 +204,18 @@ namespace Rasa.Managers
                     // Keep the new character, appearance, starter ranks, items
                     // and first account lockbox tab in one creation transaction.
                     using var transaction = unitOfWork.BeginTransaction();
+                    var existing = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id);
+                    if (packet is CreateCharacterPacket &&
+                        (existing.Count != 0 || !string.IsNullOrEmpty(unitOfWork.GameAccounts.Get(client.AccountEntry.Id).FamilyName)))
+                    {
+                        SendCharacterCreateFailed(client, CreateCharacterResult.InvalidCharacterName);
+                        return;
+                    }
+                    if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods || existing.ContainsKey(packet.SlotNum))
+                    {
+                        SendCharacterCreateFailed(client, CreateCharacterResult.CharacterSlotInUse);
+                        return;
+                    }
                     var createdCharacterId = InternalCreate(client, packet, unitOfWork);
                     if (createdCharacterId == null)
                         return;

@@ -1,0 +1,477 @@
+{
+  "target": "Final live Tabula Rasa before shutdown",
+  "client_package_version": "1.16.5.0; community-upload authenticity caveat in docs/client-artifacts.md",
+  "purpose": "Original client text identifiers, not runnable mission definitions. Numeric ordering is not progression order.",
+  "source_hashes": {
+    "generated/client/missionconversation.pyo": "085df01e239a86fec0f6c9d1017d2af60edf54e47f6a235e4204ee8e84c3713b",
+    "generated/client/missionobjective.pyo": "330f29153493c512a5a90074f4c0ae4ab45cb3f0d4dfc4b56764a0d95d232d5f",
+    "generated/client/objectiveconversation.pyo": "55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12",
+    "generated/client/language/english/missiontextlanguage.pyo": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d"
+  },
+  "missions": [
+    {
+      "mission_id": 1990,
+      "name": "Initiation",
+      "mission_text_bindings": [
+        {
+          "text_type": 1,
+          "text_id": 21132,
+          "store_offset": 101288
+        },
+        {
+          "text_type": 2,
+          "text_id": 21133,
+          "store_offset": 101306
+        },
+        {
+          "text_type": 3,
+          "text_id": 21134,
+          "store_offset": 101324
+        },
+        {
+          "text_type": 4,
+          "text_id": 21135,
+          "store_offset": 101342
+        },
+        {
+          "text_type": 6,
+          "text_id": 21136,
+          "store_offset": 101360
+        }
+      ],
+      "objectives": [
+        {
+          "objective_id": 1,
+          "name_text_id": 21148,
+          "body_text_id": 21149,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106559
+        },
+        {
+          "objective_id": 2,
+          "name_text_id": 21150,
+          "body_text_id": 21151,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106592
+        }
+      ],
+      "objective_dialogues": [],
+      "server_definition_complete": false,
+      "unverified_server_fields": [
+        "prerequisites",
+        "start_and_finish_npcs",
+        "rewards",
+        "objective_ordinals",
+        "objective_triggers",
+        "timers",
+        "markers",
+        "state_transitions"
+      ]
+    },
+    {
+      "mission_id": 1992,
+      "name": "Gearing Up for Battle",
+      "mission_text_bindings": [
+        {
+          "text_type": 1,
+          "text_id": 21164,
+          "store_offset": 101468
+        },
+        {
+          "text_type": 2,
+          "text_id": 21165,
+          "store_offset": 101486
+        },
+        {
+          "text_type": 3,
+          "text_id": 21166,
+          "store_offset": 101504
+        },
+        {
+          "text_type": 4,
+          "text_id": 21167,
+          "store_offset": 101522
+        },
+        {
+          "text_type": 6,
+          "text_id": 21168,
+          "store_offset": 101540
+        }
+      ],
+      "objectives": [
+        {
+          "objective_id": 1,
+          "name_text_id": 21174,
+          "body_text_id": 21175,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106625
+        },
+        {
+          "objective_id": 2,
+          "name_text_id": 21176,
+          "body_text_id": 21177,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106658
+        },
+        {
+          "objective_id": 3,
+          "name_text_id": 21178,
+          "body_text_id": 21179,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106691
+        },
+        {
+          "objective_id": 4,
+          "name_text_id": 21482,
+          "body_text_id": 21483,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106724
+        },
+        {
+          "objective_id": 5,
+          "name_text_id": 21485,
+          "body_text_id": 21486,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106757
+        },
+        {
+          "objective_id": 6,
+          "name_text_id": 21489,
+          "body_text_id": 21490,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106790
+        },
+        {
+          "objective_id": 7,
+          "name_text_id": 21492,
+          "body_text_id": 21493,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106823
+        },
+        {
+          "objective_id": 8,
+          "name_text_id": 21666,
+          "body_text_id": 21667,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106856
+        },
+        {
+          "objective_id": 9,
+          "name_text_id": 21663,
+          "body_text_id": 21664,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 106889
+        }
+      ],
+      "objective_dialogues": [
+        {
+          "objective_id": 4,
+          "npc_package_id": 2560,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21484,
+          "store_offset": 40745
+        },
+        {
+          "objective_id": 5,
+          "npc_package_id": 2560,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21487,
+          "store_offset": 40772
+        },
+        {
+          "objective_id": 6,
+          "npc_package_id": 2563,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21491,
+          "store_offset": 40799
+        },
+        {
+          "objective_id": 7,
+          "npc_package_id": 2563,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21494,
+          "store_offset": 40826
+        },
+        {
+          "objective_id": 9,
+          "npc_package_id": 2563,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21665,
+          "store_offset": 40853
+        }
+      ],
+      "server_definition_complete": false,
+      "unverified_server_fields": [
+        "prerequisites",
+        "start_and_finish_npcs",
+        "rewards",
+        "objective_ordinals",
+        "objective_triggers",
+        "timers",
+        "markers",
+        "state_transitions"
+      ]
+    },
+    {
+      "mission_id": 1994,
+      "name": "Capture the Flag",
+      "mission_text_bindings": [
+        {
+          "text_type": 1,
+          "text_id": 21235,
+          "store_offset": 101648
+        },
+        {
+          "text_type": 2,
+          "text_id": 21236,
+          "store_offset": 101666
+        },
+        {
+          "text_type": 3,
+          "text_id": 21237,
+          "store_offset": 101684
+        },
+        {
+          "text_type": 4,
+          "text_id": 21238,
+          "store_offset": 101702
+        },
+        {
+          "text_type": 6,
+          "text_id": 21239,
+          "store_offset": 101720
+        }
+      ],
+      "objectives": [
+        {
+          "objective_id": 1,
+          "name_text_id": 21313,
+          "body_text_id": 21314,
+          "counter_text_ids": [
+            21315,
+            null,
+            null
+          ],
+          "store_offset": 107252
+        },
+        {
+          "objective_id": 2,
+          "name_text_id": 21336,
+          "body_text_id": 21337,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107285
+        },
+        {
+          "objective_id": 3,
+          "name_text_id": 21615,
+          "body_text_id": 21616,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107318
+        },
+        {
+          "objective_id": 4,
+          "name_text_id": 21670,
+          "body_text_id": 21671,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107351
+        }
+      ],
+      "objective_dialogues": [
+        {
+          "objective_id": 3,
+          "npc_package_id": 2561,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21617,
+          "store_offset": 41744
+        },
+        {
+          "objective_id": 4,
+          "npc_package_id": 2562,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21694,
+          "store_offset": 41771
+        }
+      ],
+      "server_definition_complete": false,
+      "unverified_server_fields": [
+        "prerequisites",
+        "start_and_finish_npcs",
+        "rewards",
+        "objective_ordinals",
+        "objective_triggers",
+        "timers",
+        "markers",
+        "state_transitions"
+      ]
+    },
+    {
+      "mission_id": 1995,
+      "name": "Calling for Reinforcements",
+      "mission_text_bindings": [
+        {
+          "text_type": 1,
+          "text_id": 21240,
+          "store_offset": 101738
+        },
+        {
+          "text_type": 2,
+          "text_id": 21241,
+          "store_offset": 101756
+        },
+        {
+          "text_type": 3,
+          "text_id": 21242,
+          "store_offset": 101774
+        },
+        {
+          "text_type": 4,
+          "text_id": 21243,
+          "store_offset": 101792
+        },
+        {
+          "text_type": 6,
+          "text_id": 21244,
+          "store_offset": 101810
+        }
+      ],
+      "objectives": [
+        {
+          "objective_id": 1,
+          "name_text_id": 21327,
+          "body_text_id": 21328,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107384
+        },
+        {
+          "objective_id": 2,
+          "name_text_id": 21556,
+          "body_text_id": 21557,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107417
+        },
+        {
+          "objective_id": 3,
+          "name_text_id": 21559,
+          "body_text_id": 21560,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107450
+        },
+        {
+          "objective_id": 4,
+          "name_text_id": 21561,
+          "body_text_id": 21562,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 107483
+        }
+      ],
+      "objective_dialogues": [
+        {
+          "objective_id": 2,
+          "npc_package_id": 2584,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21558,
+          "store_offset": 41798
+        },
+        {
+          "objective_id": 4,
+          "npc_package_id": 2564,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21864,
+          "store_offset": 41825
+        }
+      ],
+      "server_definition_complete": false,
+      "unverified_server_fields": [
+        "prerequisites",
+        "start_and_finish_npcs",
+        "rewards",
+        "objective_ordinals",
+        "objective_triggers",
+        "timers",
+        "markers",
+        "state_transitions"
+      ]
+    }
+  ]
+}

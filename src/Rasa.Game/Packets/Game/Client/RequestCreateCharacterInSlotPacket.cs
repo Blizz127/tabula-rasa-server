@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Rasa.Packets.Game.Client
@@ -28,12 +29,18 @@ namespace Rasa.Packets.Game.Client
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
+            if (pr.ReadTuple() != 7)
+                throw new InvalidDataException("Character-slot creation requires seven fields.");
 
-            SlotNum = (byte) pr.ReadInt();
+            SlotNum = checked((byte)pr.ReadInt());
+            ReadCharacterDetails(pr);
+        }
+
+        protected void ReadCharacterDetails(PythonReader pr)
+        {
             FamilyName = pr.ReadUnicodeString();
             CharacterName = pr.ReadUnicodeString();
-            Gender = (byte) pr.ReadInt();
+            Gender = checked((byte)pr.ReadInt());
             Scale = pr.ReadDouble();
 
             var appearanceCount = pr.ReadDictionary();

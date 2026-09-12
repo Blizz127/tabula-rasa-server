@@ -149,10 +149,12 @@ namespace Rasa.Test
             _connection.Dispose();
         }
 
-        [TestMethod]
-        public void CreationPersistsRecruitRanksAndUsableGearBeforePublishingSuccess()
+        [DataTestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void CreationPersistsRecruitRanksAndUsableGearBeforePublishingSuccess(bool firstFamily)
         {
-            _manager.RequestCreateCharacterInSlot(_client, Request());
+            _manager.RequestCreateCharacterInSlot(_client, firstFamily ? FirstRequest() : Request());
             var packets = Drain();
             Assert.AreEqual(1, packets.OfType<CharacterCreateSuccessPacket>().Count());
             Assert.IsFalse(packets.OfType<UserCreationFailedPacket>().Any());
@@ -214,6 +216,51 @@ namespace Rasa.Test
             Assert.AreEqual(2, Drain().OfType<CharacterCreateSuccessPacket>().Count());
         }
 
+        [TestMethod]
+        public void FirstFamilyRequestCannotBeReplayedUsingStaleAccountState()
+        {
+            _manager.RequestCreateCharacterInSlot(_client, FirstRequest());
+            _client.AccountEntry.FamilyName = "";
+            _client.AccountEntry.Characters.Clear();
+            _manager.RequestCreateCharacterInSlot(_client, FirstRequest());
+            var packets = Drain();
+            Assert.AreEqual(1, packets.OfType<CharacterCreateSuccessPacket>().Count());
+            Assert.AreEqual(CreateCharacterResult.InvalidCharacterName, packets.OfType<UserCreationFailedPacket>().Single().Result);
+            using var context = Context();
+            Assert.AreEqual(1, context.CharacterEntries.Count());
+            Assert.AreEqual("Fixture", context.GameAccountEntries.Single().FamilyName);
+            Assert.AreEqual(5, context.CharacterSkillsEntries.Count());
+            Assert.AreEqual(5, context.ItemEntries.Count());
+        }
+
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(1)]
+        [DataRow(17)]
+        public void InvalidOrOccupiedSlotCannotCreateAnotherCharacter(int slot)
+        {
+            _manager.RequestCreateCharacterInSlot(_client, Request());
+            _manager.RequestCreateCharacterInSlot(_client, Request((byte)slot, "Second"));
+            var packets = Drain();
+            Assert.AreEqual(1, packets.OfType<CharacterCreateSuccessPacket>().Count());
+            Assert.AreEqual(CreateCharacterResult.CharacterSlotInUse, packets.OfType<UserCreationFailedPacket>().Single().Result);
+            using var context = Context();
+            Assert.AreEqual(1, context.CharacterEntries.Count());
+            Assert.AreEqual(5, context.CharacterSkillsEntries.Count());
+            Assert.AreEqual(5, context.ItemEntries.Count());
+        }
+
+        [TestMethod]
+        public void CreationOutsideCharacterSelectionDoesNotWriteState()
+        {
+            _client.State = ClientState.LoggedIn;
+            _manager.RequestCreateCharacterInSlot(_client, FirstRequest());
+            Assert.AreEqual(0, Drain().Count);
+            using var context = Context();
+            Assert.AreEqual(0, context.CharacterEntries.Count());
+            Assert.AreEqual("", context.GameAccountEntries.Single().FamilyName);
+        }
+
         [DataTestMethod]
         [DataRow("character_skills", "NEW.skill_id = 49")]
         [DataRow("items", "NEW.item_template_id = 13156")]
@@ -241,6 +288,8 @@ namespace Rasa.Test
         private SqliteCharContext Context() => WeaponReloadPersistenceTests.Context(_connection);
         private static RequestCreateCharacterInSlotPacket Request(byte slot = 1, string name = "First")
             => new() { SlotNum = slot, CharacterName = name, FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+        private static CreateCharacterPacket FirstRequest()
+            => new() { CharacterName = "First", FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
         private List<ServerPythonPacket> Drain()
         {
             var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(_client);
