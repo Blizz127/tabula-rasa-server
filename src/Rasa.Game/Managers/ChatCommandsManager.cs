@@ -137,6 +137,7 @@ namespace Rasa.Managers
             RegisterCommand(".error", GmLevel.GameMaster, ErrorCommand);
             RegisterCommand(".forcestate", GmLevel.GameMaster, ForceStateCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
+            RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
             RegisterCommand(".setkillstreak", GmLevel.GameMaster, SetKillStreakCommand);
             RegisterCommand(".setregion", GmLevel.GameMaster, SetRegionCommand);
@@ -247,6 +248,100 @@ namespace Rasa.Managers
                 CommunicatorManager.Instance.FatalError(_client, (PlayerMessage)msgId, args);
             else
                 CommunicatorManager.Instance.NonFatalError(_client, (PlayerMessage)msgId, args);
+        }
+
+        /// <summary>
+        /// .msg system|big|info|alert|destination|location &lt;playerMessageId&gt; [key value ...]
+        /// .msg tutorial &lt;tutorialId|name&gt;
+        /// .msg cells &lt;type&gt; &lt;playerMessageId&gt; [key value ...]
+        ///
+        /// Drives the three player-message methods so the plumbing can be seen working; nothing
+        /// in the game sends them yet. Targets the caller, except `cells`, which is how a region
+        /// announcement would reach everyone nearby.
+        /// </summary>
+        private void MessageCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var kind = parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty;
+
+            if (kind == "tutorial")
+            {
+                if (parts.Length < 3 || !TryParseTutorial(parts[2], out var tutorial))
+                {
+                    communicator.SystemMessage(_client, "usage: .msg tutorial <tutorialId|name>");
+                    communicator.SystemMessage(_client, "e.g. .msg tutorial Levelup, or .msg tutorial 10000002");
+                    return;
+                }
+
+                communicator.DisplayPlayerTutorial(_client, tutorial);
+                return;
+            }
+
+            var toCells = kind == "cells";
+            var typeFrom = toCells ? 2 : 1;
+            var idFrom = toCells ? 3 : 2;
+
+            if (parts.Length <= idFrom || !uint.TryParse(parts[idFrom], out var msgId))
+            {
+                communicator.SystemMessage(_client, "usage: .msg system|big|info|alert|destination|location <playerMessageId> [key value ...]");
+                communicator.SystemMessage(_client, "       .msg tutorial <tutorialId|name>");
+                communicator.SystemMessage(_client, "       .msg cells <type> <playerMessageId> [key value ...]");
+                return;
+            }
+
+            var args = new Dictionary<string, string>();
+
+            for (var i = idFrom + 1; i + 1 < parts.Length; i += 2)
+                args[parts[i]] = parts[i + 1];
+
+            var typeName = parts[typeFrom].ToLowerInvariant();
+
+            // "system" is the one that is not a notification type: it goes through
+            // DisplaySystemMessage, where the client decides for itself what the message is for.
+            if (!toCells && typeName == "system")
+            {
+                communicator.DisplaySystemMessage(_client, (PlayerMessage)msgId, args);
+                return;
+            }
+
+            if (!TryParseNotificationType(typeName, out var type))
+            {
+                communicator.SystemMessage(_client,
+                    "type must be system, or one of: " + string.Join(", ", Enum.GetNames(typeof(PlayerNotificationType))).ToLowerInvariant());
+                return;
+            }
+
+            if (toCells)
+                communicator.NotifyCells(_client, type, (PlayerMessage)msgId, args);
+            else
+                communicator.DisplayPlayerNotification(_client, type, (PlayerMessage)msgId, args);
+        }
+
+        /// <summary>Accepts the client's own tutorial name or its raw id.</summary>
+        private static bool TryParseTutorial(string value, out TutorialId tutorial)
+        {
+            if (Enum.TryParse(value, true, out tutorial) && Enum.IsDefined(typeof(TutorialId), tutorial))
+                return true;
+
+            if (uint.TryParse(value, out var raw))
+            {
+                tutorial = (TutorialId)raw;
+                return Enum.IsDefined(typeof(TutorialId), tutorial);
+            }
+
+            return false;
+        }
+
+        private static bool TryParseNotificationType(string value, out PlayerNotificationType type)
+        {
+            // "location" is shorter to type than CurrentLocation and means the same thing.
+            if (value == "location")
+            {
+                type = PlayerNotificationType.CurrentLocation;
+                return true;
+            }
+
+            return Enum.TryParse(value, true, out type) && Enum.IsDefined(typeof(PlayerNotificationType), type);
         }
 
         private void NotifyCommand(string[] parts)

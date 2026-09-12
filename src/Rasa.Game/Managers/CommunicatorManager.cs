@@ -537,6 +537,52 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.CommunicatorId, new SystemMessagePacket(textMsg));
         }
 
+        #region Player messages and notifications
+
+        /// <summary>
+        /// A player message, presented however that message is meant to be presented. Unlike
+        /// DisplayClientMessage, which always prints a chat line, the client decides from the id
+        /// whether to speak it, play a sound, throw it across the screen or print it - see
+        /// DisplaySystemMessagePacket.
+        /// </summary>
+        public void DisplaySystemMessage(Client client, PlayerMessage message,
+            Dictionary<string, string> args = null, MsgFilterId filterId = MsgFilterId.GeneralSystemMessages)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new DisplaySystemMessagePacket(message, args, filterId));
+        }
+
+        /// <summary>
+        /// A player message put somewhere specific: Big across the middle of the screen,
+        /// Destination on the sub-region strip.
+        /// </summary>
+        public void DisplayPlayerNotification(Client client, PlayerNotificationType type, PlayerMessage message,
+            Dictionary<string, string> args = null)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new DisplayPlayerNotificationPacket(type, message, args));
+        }
+
+        /// <summary>Raises one of the client's own tutorial popups.</summary>
+        public void DisplayPlayerTutorial(Client client, TutorialId tutorial)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new DisplayPlayerTutorialNotificationPacket(tutorial));
+        }
+
+        /// <summary>
+        /// The same notification to everyone in the player's visibility range, the player
+        /// included - a region announcement, or big text for something that happened where
+        /// several people can see it.
+        /// </summary>
+        public void NotifyCells(Client client, PlayerNotificationType type, PlayerMessage message,
+            Dictionary<string, string> args = null)
+        {
+            // Client.CellCallMethod rather than CellManager's: that one addresses the packet to
+            // the origin entity, and these all belong to the client-method entity.
+            client.CellCallMethod(client, (ulong)SysEntity.ClientMethodId,
+                new DisplayPlayerNotificationPacket(type, message, args));
+        }
+
+        #endregion
+
         #region Error dialogs
 
         /// <summary>
