@@ -21,7 +21,7 @@ namespace Rasa.Test
             using (var context = Context())
             {
                 context.CharacterEntries.Find(101u).Credit = wallet;
-                context.CharacterLockboxEntries.Add(new CharacterLockboxEntry(10, bank, 1));
+                context.CharacterLockboxEntries.Find(10u).Credits = bank;
                 context.SaveChanges();
             }
             var client = Login();

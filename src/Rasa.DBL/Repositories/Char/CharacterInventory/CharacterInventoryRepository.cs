@@ -70,7 +70,8 @@ namespace Rasa.Repositories.Char.CharacterInventory
         }
 
         public bool TrySwapItems(uint accountId, uint characterId, uint sourceType, uint sourceSlot, uint sourceItemId,
-            uint destinationType, uint destinationSlot, uint destinationItemId)
+            uint destinationType, uint destinationSlot, uint destinationItemId,
+            uint? expectedSourceStack = null, uint? expectedDestinationStack = null, int? expectedHomeTabs = null)
         {
             if (accountId == 0 || characterId == 0 || !IsSupportedSlot(sourceType, sourceSlot) ||
                 !IsSupportedSlot(destinationType, destinationSlot) ||
@@ -78,6 +79,8 @@ namespace Rasa.Repositories.Char.CharacterInventory
                 return false;
 
             using var transaction = _charContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            if (!MatchesHomeTabs(accountId, sourceType, sourceSlot, destinationType, destinationSlot, expectedHomeTabs))
+                return false;
             var sourceOwner = sourceType == 2 ? 0u : characterId;
             var destinationOwner = destinationType == 2 ? 0u : characterId;
             var locations = _charContext.CharacterInventoryEntries.AsNoTracking().Where(e =>
@@ -94,6 +97,11 @@ namespace Rasa.Repositories.Char.CharacterInventory
             if (_charContext.ItemEntries.Count(e => e.ItemId != 0 && (e.ItemId == sourceItemId || e.ItemId == destinationItemId) &&
                     e.StackSize > 0) != expectedItems)
                 return false;
+            if (sourceItemId != 0 && expectedSourceStack.HasValue && !_charContext.ItemEntries.Any(e =>
+                    e.ItemId == sourceItemId && e.StackSize == expectedSourceStack.Value) ||
+                destinationItemId != 0 && expectedDestinationStack.HasValue && !_charContext.ItemEntries.Any(e =>
+                    e.ItemId == destinationItemId && e.StackSize == expectedDestinationStack.Value))
+                return false;
 
             if (sourceItemId != 0 && _charContext.Database.ExecuteSqlInterpolated($@"
                 UPDATE character_inventory SET character_id = {destinationOwner}, invenotry_type = {destinationType}, slot_id = {destinationSlot}
@@ -107,6 +115,59 @@ namespace Rasa.Repositories.Char.CharacterInventory
                 return false;
             transaction.Commit();
             return true;
+        }
+
+        public ItemEntry TrySplitItemStack(uint accountId, uint characterId, uint sourceType, uint sourceSlot, uint sourceItemId,
+            uint expectedStack, uint expectedTemplateId, uint destinationType, uint destinationSlot, uint quantity, int? expectedHomeTabs)
+        {
+            if (accountId == 0 || characterId == 0 || sourceItemId == 0 || quantity == 0 || quantity >= expectedStack ||
+                sourceType != 1 && sourceType != 2 || destinationType != 1 && destinationType != 2 ||
+                !IsSupportedSlot(sourceType, sourceSlot) || !IsSupportedSlot(destinationType, destinationSlot) ||
+                sourceType == destinationType && sourceSlot == destinationSlot)
+                return null;
+            using var transaction = _charContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            if (!MatchesHomeTabs(accountId, sourceType, sourceSlot, destinationType, destinationSlot, expectedHomeTabs))
+                return null;
+            var sourceOwner = sourceType == 2 ? 0u : characterId;
+            var destinationOwner = destinationType == 2 ? 0u : characterId;
+            var sourceRows = _charContext.CharacterInventoryEntries.AsNoTracking().Where(e => e.AccountId == accountId &&
+                e.CharacterId == sourceOwner && e.InventoryType == sourceType && e.SlotId == sourceSlot).ToList();
+            if (sourceRows.Count != 1 || sourceRows[0].ItemId != sourceItemId ||
+                _charContext.CharacterInventoryEntries.Any(e => e.AccountId == accountId && e.CharacterId == destinationOwner &&
+                    e.InventoryType == destinationType && e.SlotId == destinationSlot))
+                return null;
+            var source = _charContext.ItemEntries.AsNoTracking().SingleOrDefault(e => e.ItemId == sourceItemId && e.StackSize == expectedStack && e.ItemTemplateId == expectedTemplateId);
+            if (source == null)
+                return null;
+            if (_charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE items SET stack_size = {expectedStack - quantity}
+                WHERE item_id = {sourceItemId} AND stack_size = {expectedStack}") != 1)
+                return null;
+            // Copy persisted instance attributes; a split is not a new template reward.
+            var split = new ItemEntry
+            {
+                ItemTemplateId = source.ItemTemplateId, StackSize = quantity,
+                CurrentHitPoints = source.CurrentHitPoints, Color = source.Color,
+                AmmoCount = source.AmmoCount, CrafterName = source.CrafterName, CreatedAt = source.CreatedAt
+            };
+            _charContext.ItemEntries.Add(split);
+            _charContext.SaveChanges();
+            _charContext.CharacterInventoryEntries.Add(new CharacterInventoryEntry(accountId, destinationOwner,
+                destinationType, destinationSlot, split.ItemId));
+            _charContext.SaveChanges();
+            transaction.Commit();
+            return split;
+        }
+
+        private bool MatchesHomeTabs(uint accountId, uint sourceType, uint sourceSlot, uint destinationType,
+            uint destinationSlot, int? expectedTabs)
+        {
+            if (!expectedTabs.HasValue || sourceType != 2 && destinationType != 2)
+                return true;
+            var tabs = expectedTabs.Value;
+            return tabs >= 1 && tabs <= 5 && (sourceType != 2 || sourceSlot < tabs * 96) &&
+                (destinationType != 2 || destinationSlot < tabs * 96) &&
+                _charContext.CharacterLockboxEntries.Any(e => e.AccountId == accountId && e.PurashedTabs == tabs);
         }
 
         // Existing personal/equipped/drawer capacities; equipped slot 13 is the

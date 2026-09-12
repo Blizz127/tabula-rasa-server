@@ -4,6 +4,9 @@ namespace Rasa.Data
     // Provenance and consumer rules: docs/lockbox-tab-client-evidence.md.
     public static class LockboxTabs
     {
+        public static bool ContainsSlot(int unlockedTabs, uint slot)
+            => unlockedTabs >= 1 && unlockedTabs <= 5 && slot < unlockedTabs * 96;
+
         public static int? PurchasePrice(int tabId) => tabId switch
         {
             2 => 100000,

@@ -126,6 +126,7 @@ namespace Rasa.Test
             context.Database.EnsureCreated();
             context.GameAccountEntries.Add(new GameAccountEntry
                 { Id = 10, FamilyName = "Fixture", Name = "Fixture", Email = "fixture@example.invalid" });
+            context.CharacterLockboxEntries.Add(new CharacterLockboxEntry(10, 0, 1));
             context.CharacterEntries.AddRange(
                 new CharacterEntry { Id = 101, AccountId = 10, Slot = 2, Name = "First", ActiveWeapon = 1 },
                 new CharacterEntry { Id = 102, AccountId = 10, Slot = 3, Name = "Second", ActiveWeapon = 0 });
@@ -481,7 +482,7 @@ namespace Rasa.Test
             var client = new Client(null, new ClientPacketHandler())
             {
                 State = ClientState.Ingame,
-                Player = new Manifestation { Id = characterId, ActiveWeapon = character.ActiveWeapon,
+                Player = new Manifestation { Id = characterId, LockboxTabs = 1, ActiveWeapon = character.ActiveWeapon,
                     AppearanceData = new Dictionary<EquipmentData, AppearanceData>(),
                     MapChannel = map, MapContextId = 1220, Cells = new uint[1, 1], State = CharacterState.Normal, WeaponReady = true }
             };

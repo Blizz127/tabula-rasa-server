@@ -810,3 +810,43 @@ Rollback image: `rasa_net:before-retail-tabs-20260912`; retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`.
 Code rollback requires no database restoration. Full final-live preservation
 remains incomplete and the goal stays active.
+
+## 2026-09-12: original storage quantities and atomic item placement
+
+Original client calls confirm that personal/Home moves carry a selected quantity.
+The old handlers ignored it, and the Home withdrawal decoder discarded long
+quantities. The four requests now share strict decoding; whole moves and swaps
+commit both item locations before publishing changes. Selected partial amounts
+split into empty slots with one transaction covering the count decrease, new
+item and placement. Persisted instance data survives a split and reload.
+
+The original 96-slot tab ranges, personal categories, living-avatar predicate and
+no-lockbox flag govern admission. Home operations compare persisted tab ownership,
+including equipment transfers. Original combining rules for occupied stacks
+remain unverified and incomplete; this is not a claim of full inventory fidelity.
+
+Provenance, exact original consumers, validation and remaining requirements:
+[inventory placement reconstruction](inventory-placement-client-evidence.md).
+
+The final .NET 5 image built with zero errors and the same five existing unused
+variable/field warnings. **All 577 tests passed**, with no failures or skips,
+in the final image without production database mounts or networking. Source
+comparison matched the reviewed workspace excluding generated `bin`/`obj`.
+The tests prove the corrected storage invariants and packet decoding; original
+service capture comparison and complete inventory fidelity remain outstanding.
+
+Tested image
+`sha256:cd22fb83bc58e2bc111f1ff73d9a3048302a2131c605ad0bd124444d4442f9fd`
+replaced the game service at **21:06:08 UTC**, reporting `Server ready!` at
+**21:06:17 UTC**. Verification at 21:06:48 UTC found the expected image running,
+zero restarts and no error/unhandled/fatal/OOM log lines. Auth's image and start
+time are unchanged. No schema migration or historical item relocation occurred.
+
+All three fresh SQLite backups passed integrity checks. Private deployment
+configuration, reviewed source/docs, patch, build/test logs, source comparison
+and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T210552Z-retail-placement/`.
+Rollback image: `rasa_net:before-retail-placement-20260912`; retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`.
+Code rollback requires no database restoration. The full preservation goal
+remains active while original systems and verification are incomplete.

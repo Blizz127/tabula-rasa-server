@@ -106,28 +106,81 @@ namespace Rasa.Managers
 
         public void HomeInventory_MoveItem(Client client, HomeInventory_MoveItemPacket packet)
         {
-            // remove item
-            if (packet.SrcSlot == packet.DestSlot)
-                return;
-
-            if (packet.SrcSlot < 0 || packet.SrcSlot >= 480)
-                return;
-
-            if (packet.DestSlot < 0 || packet.DestSlot >= 480)
-                return;
-
-            var entityId = client.Player.Inventory.HomeInventory[(int)packet.SrcSlot];
-
-            if (entityId == 0)
-                return;
-
-            RemoveItemBySlot(client, InventoryType.HomeInventory, packet.SrcSlot);
-            // if toSlot is not empty, move current item to SrcSlot (item swap)
-            if (client.Player.Inventory.HomeInventory[(int)packet.DestSlot] != 0)
-                AddItemBySlot(client, InventoryType.HomeInventory, client.Player.Inventory.HomeInventory[(int)packet.DestSlot], packet.SrcSlot, true);
-
-            AddItemBySlot(client, InventoryType.HomeInventory, entityId, packet.DestSlot, true);
+            if (packet != null)
+                MoveStorageItem(client, InventoryType.HomeInventory, packet.SrcSlot,
+                    InventoryType.HomeInventory, packet.DestSlot, packet.Quantity);
         }
+
+        private void MoveStorageItem(Client client, InventoryType sourceType, uint sourceSlot,
+            InventoryType destinationType, uint destinationSlot, int quantity)
+        {
+            if (client?.State != ClientState.Ingame || client.AccountEntry == null || client.Player == null ||
+                client.Player.State == CharacterState.Dead || quantity <= 0 ||
+                !IsStorageSlot(client, sourceType, sourceSlot) || !IsStorageSlot(client, destinationType, destinationSlot) ||
+                sourceType == destinationType && sourceSlot == destinationSlot)
+                return;
+            var source = EntityManager.Instance.GetItem(StorageSlots(client, sourceType)[(int)sourceSlot]);
+            var destination = EntityManager.Instance.GetItem(StorageSlots(client, destinationType)[(int)destinationSlot]);
+            if (source == null || !MatchesCharacterSlot(client, sourceType, sourceSlot, source) ||
+                !MatchesCharacterSlot(client, destinationType, destinationSlot, destination) || quantity > source.StackSize ||
+                !CanStoreItem(source, destinationType, destinationSlot))
+                return;
+            if (quantity == source.StackSize)
+            {
+                if (destination != null && !CanStoreItem(destination, sourceType, sourceSlot))
+                    return;
+                TrySwapCharacterSlots(client, sourceType, sourceSlot, source, destinationType, destinationSlot, destination);
+                return;
+            }
+            // Original quantity selection supports splitting into an empty slot.
+            // Combining with an occupied stack requires separate original-server evidence.
+            if (destination != null || source.ItemTemplate == null ||
+                !EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(source.ItemTemplate.Class, out var classInfo) ||
+                classInfo.ItemClassInfo == null || classInfo.ItemClassInfo.StackSize <= 1)
+                return;
+            ItemEntry split;
+            try
+            {
+                using var work = _gameUnitOfWorkFactory.CreateChar();
+                split = work.CharacterInventories.TrySplitItemStack(client.AccountEntry.Id, client.Player.Id,
+                    (uint)sourceType, sourceSlot, source.Id, source.StackSize, source.ItemTemplateId, (uint)destinationType, destinationSlot,
+                    (uint)quantity, client.Player.LockboxTabs);
+                if (split == null)
+                    return;
+            }
+            catch (Exception exception) when (exception is System.Data.Common.DbException ||
+                exception is Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                Logger.WriteLog(LogType.Error, exception);
+                return;
+            }
+            var newItem = new Item
+            {
+                Id = split.ItemId, ItemTemplate = source.ItemTemplate, ItemTemplateId = split.ItemTemplateId,
+                StackSize = split.StackSize, CurrentHitPoints = split.CurrentHitPoints, CurrentAmmo = split.AmmoCount,
+                Color = split.Color, Crafter = split.CrafterName,
+                OwnerId = destinationType == InventoryType.HomeInventory ? 0u : client.Player.Id,
+                OwnerSlotId = destinationSlot
+            };
+            source.StackSize -= (uint)quantity;
+            client.CallMethod(source.EntityId, new SetStackCountPacket(source.StackSize));
+            EntityManager.Instance.RegisterEntity(newItem.EntityId, EntityType.Item);
+            EntityManager.Instance.RegisterItem(newItem.EntityId, newItem);
+            ItemManager.Instance.SendItemDataToClient(client, newItem, false);
+            AddItemBySlot(client, destinationType, newItem.EntityId, destinationSlot, false);
+        }
+
+        private static List<ulong> StorageSlots(Client client, InventoryType type)
+            => type == InventoryType.Personal ? client.Player.Inventory.PersonalInventory : client.Player.Inventory.HomeInventory;
+
+        private static bool IsStorageSlot(Client client, InventoryType type, uint slot)
+            => slot < StorageSlots(client, type).Count &&
+                (type != InventoryType.HomeInventory || LockboxTabs.ContainsSlot(client.Player.LockboxTabs, slot));
+
+        private static bool CanStoreItem(Item item, InventoryType type, uint slot)
+            => item.ItemTemplate != null && (type == InventoryType.HomeInventory ? !item.ItemTemplate.NotPlaceableInLockbox :
+                (int)item.ItemTemplate.InventoryCategory >= 1 && (int)item.ItemTemplate.InventoryCategory <= 5 &&
+                slot / 50 == (uint)item.ItemTemplate.InventoryCategory - 1);
 
         public void PersonalInventory_DestroyItem(Client client, PersonalInventory_DestroyItemPacket packet)
         {
@@ -141,33 +194,9 @@ namespace Rasa.Managers
 
         public void PersonalInventory_MoveItem(Client client, PersonalInventory_MoveItemPacket packet)
         {
-            // remove item
-            if (packet.SrcSlot == packet.DestSlot)
-                return;
-
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 250)
-            {
-                Logger.WriteLog(LogType.Debug, $"SrcSlot out of range => {packet.SrcSlot}");
-                return;
-            }
-
-            if (packet.DestSlot < 0 || packet.DestSlot > 250)
-            {
-                Logger.WriteLog(LogType.Debug, $"DestSlot out of range => {packet.DestSlot}");
-                return;
-            }
-
-            var entityId = client.Player.Inventory.PersonalInventory[packet.SrcSlot];
-
-            if (entityId == 0)
-                return;
-
-            RemoveItemBySlot(client, InventoryType.Personal, (uint)packet.SrcSlot);
-            // if toSlot is not empty, move current item to SrcSlot (item swap)
-            if (client.Player.Inventory.PersonalInventory[packet.DestSlot] != 0)
-                AddItemBySlot(client, InventoryType.Personal, client.Player.Inventory.PersonalInventory[packet.DestSlot], (uint)packet.SrcSlot, true);
-
-            AddItemBySlot(client, InventoryType.Personal, entityId, (uint)packet.DestSlot, true);
+            if (packet != null)
+                MoveStorageItem(client, InventoryType.Personal, (uint)packet.SrcSlot,
+                    InventoryType.Personal, (uint)packet.DestSlot, packet.Quantity);
         }
 
         public void PurchaseLockboxTab(Client client, PurchaseLockboxTabPacket packet)
@@ -260,7 +289,8 @@ namespace Rasa.Managers
         {
             var slots = EquipmentSourceSlots(client, type);
             return client?.State == ClientState.Ingame && slots != null && client.Player.State != CharacterState.Dead &&
-                slot < slots.Count && (type != InventoryType.Personal || slot < 50);
+                slot < slots.Count && (type != InventoryType.Personal || slot < 50) &&
+                (type != InventoryType.HomeInventory || LockboxTabs.ContainsSlot(client.Player.LockboxTabs, slot));
         }
 
         private static bool TryGetEquipmentClass(Item item, out EntityClass classInfo)
@@ -281,11 +311,15 @@ namespace Rasa.Managers
             if (client.AccountEntry == null || !MatchesCharacterSlot(client, sourceType, sourceSlot, source) ||
                 !MatchesCharacterSlot(client, destinationType, destinationSlot, destination))
                 return false;
+            if (sourceType == InventoryType.HomeInventory && destination != null && !CanStoreItem(destination, sourceType, sourceSlot) ||
+                destinationType == InventoryType.HomeInventory && source != null && !CanStoreItem(source, destinationType, destinationSlot))
+                return false;
             try
             {
                 using var work = _gameUnitOfWorkFactory.CreateChar();
                 if (!work.CharacterInventories.TrySwapItems(client.AccountEntry.Id, client.Player.Id,
-                        (uint)sourceType, sourceSlot, source?.Id ?? 0, (uint)destinationType, destinationSlot, destination?.Id ?? 0))
+                        (uint)sourceType, sourceSlot, source?.Id ?? 0, (uint)destinationType, destinationSlot, destination?.Id ?? 0,
+                        source?.StackSize, destination?.StackSize, client.Player.LockboxTabs))
                     return false;
             }
             catch (System.Data.Common.DbException exception)
@@ -329,24 +363,9 @@ namespace Rasa.Managers
 
         public void RequestMoveItemToHomeInventory(Client client, RequestMoveItemToHomeInventoryPacket packet)
         {
-            // remove item
-            if (packet.SrcSlot < 0 || packet.SrcSlot >= 250)
-                return;
-
-            if (packet.DestSlot < 0 || packet.DestSlot >= 480)
-                return;
-
-            var entityId = client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot];
-
-            if (entityId == 0)
-                return;
-
-            RemoveItemBySlot(client, InventoryType.Personal, packet.SrcSlot);
-            // if toSlot is not empty, move current item to SrcSlot (item swap)
-            if (client.Player.Inventory.HomeInventory[(int)packet.DestSlot] != 0)
-                AddItemBySlot(client, InventoryType.Personal, client.Player.Inventory.HomeInventory[(int)packet.DestSlot], packet.SrcSlot, true);
-
-            AddItemBySlot(client, InventoryType.HomeInventory, entityId, packet.DestSlot, true);
+            if (packet != null)
+                MoveStorageItem(client, InventoryType.Personal, packet.SrcSlot,
+                    InventoryType.HomeInventory, packet.DestSlot, packet.Quantity);
         }
 
         public void ClanLockbox_DepositItemInSlot(Client client, ClanLockbox_DepositItemInSlotPacket packet)
@@ -551,24 +570,9 @@ namespace Rasa.Managers
 
         public void RequestTakeItemFromHomeInventory(Client client, RequestTakeItemFromHomeInventoryPacket packet)
         {
-            // remove item
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 480)
-                return;
-
-            if (packet.DestSlot < 0 || packet.DestSlot > 250)
-                return;
-
-            var entityId = client.Player.Inventory.HomeInventory[(int)packet.SrcSlot];
-
-            if (entityId == 0)
-                return;
-
-            RemoveItemBySlot(client, InventoryType.HomeInventory, packet.SrcSlot);
-            // if toSlot is not empty, move current item to SrcSlot (item swap)
-            if (client.Player.Inventory.PersonalInventory[(int)packet.DestSlot] != 0)
-                AddItemBySlot(client, InventoryType.HomeInventory, client.Player.Inventory.PersonalInventory[(int)packet.DestSlot], packet.SrcSlot, true);
-
-            AddItemBySlot(client, InventoryType.Personal, entityId, packet.DestSlot, true);
+            if (packet != null)
+                MoveStorageItem(client, InventoryType.HomeInventory, packet.SrcSlot,
+                    InventoryType.Personal, packet.DestSlot, packet.Quantity);
         }
 
         public void TransferCreditToLockbox(Client client, int amount)

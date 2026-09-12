@@ -13,13 +13,10 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
-            SrcSlot = pr.ReadInt();
-            DestSlot = pr.ReadInt();
-            if( pr.PeekType() == PythonType.Int)
-                Quantity = pr.ReadInt();
-            else
-                Quantity = (int)pr.ReadLong();
+            var move = InventoryMoveReader.Read(pr);
+            SrcSlot = (int)move.source;
+            DestSlot = (int)move.destination;
+            Quantity = move.quantity;
         }
     }
 }
