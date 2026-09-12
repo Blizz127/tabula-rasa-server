@@ -64,7 +64,7 @@ namespace Rasa.Managers
          * - DisplayPartyMessage(msgId, args = { })              => implemented
          * - PartyMemberRoll(itemClassId, winnerUserId, rolls, isGreedRoll)
          * - PartyMemberLoot(userId, creatureEntityId, lootClassIds, moneyAmount)
-         * - VoiceChatAvailable(isAvail)
+         * - VoiceChatAvailable(isAvail)                        => implemented (always false)
          * - PartyMemberVoiceId(userId, voiceId)
          * - PartyMemberVoiceIds(memberList)
          * - VoiceChatConnectInfo(serverAddr, groupId, playerId, token)
@@ -106,6 +106,24 @@ namespace Rasa.Managers
 
         /// <summary>How long a member's spot is kept after they leave the world.</summary>
         public const long HeldSpotMs = 5 * 60 * 1000;
+
+        /// <summary>
+        /// Whether squad voice chat is offered. False: there is no voice server.
+        ///
+        /// The client's voice chat is complete and native - Talkback in tabula_rasa.exe, with the
+        /// Sase 3200/6500, Speex, GSM and Clear codecs, and Sase6500_ncsoft.dll beside it - but it
+        /// talks to a voice server of its own at an address this server would have to hand it, and
+        /// no such server exists. Answering false is what keeps it dormant: the client's
+        /// g_voiceAvailable starts at 0 and only Recv_VoiceChatAvailable assigns it, so it never
+        /// sends RequestJoinVoiceChannel and never opens a session for push-to-talk to feed.
+        ///
+        /// Flipping this to true is not enough on its own. It also needs VoiceChatConnectInfo
+        /// (serverAddr, groupId, playerId, token) in answer to RequestJoinVoiceChannel, handlers for
+        /// RequestJoinVoiceChannel and RequestLeaveVoiceChannel, PartyMemberVoiceId(s) to map voice
+        /// ids onto squad members for the speaking indicators, and a Talkback voice server to point
+        /// it all at.
+        /// </summary>
+        public const bool VoiceChatAvailable = false;
 
         public uint GetPartyId
         {
@@ -981,6 +999,9 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(party.PartyLeaderId));
             client.CallMethod(SysEntity.ClientPartyManagerId, new SquadMemberListPacket(
                 others.Where(m => m.IsOnline).Select(m => (m.UserId, m.EntityId)).ToList()));
+            // Said with the rest of the squad state, which is where the answer would have to go if
+            // it were ever true: the client asks to join a voice channel the moment it hears yes.
+            client.CallMethod(SysEntity.ClientPartyManagerId, new VoiceChatAvailablePacket(VoiceChatAvailable));
         }
 
         private void RemoveMember(Party party, PartyMember member, bool kicked)
