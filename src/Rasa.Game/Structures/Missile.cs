@@ -6,6 +6,7 @@
     {
         public int DamageA { get; set; }
         public int DamageB { get; set; }
+        public DamageType? DamageType { get; set; }
         public ActionId ActionId { get; set; }
         public uint ActionArgId { get; set; }
         public bool IsAbility { get; set; }         // set to true to use PerformAbility instead of Windup/Recovery

@@ -56,13 +56,18 @@ namespace Rasa.Managers
             }
         }
 
-        private void DoDamageToCreature(MapChannel mapChannel, Missile missile, Creature creature)
+        private void DoDamageToCreature(MapChannel mapChannel, Missile missile, Creature creature, HitData hit)
         {
             if (creature.State == CharacterState.Dead)
                 return;
 
             // decrease armor first
             var armorDecrease = Math.Min(missile.DamageA, creature.Attributes[Attributes.Armor].Current);
+            // Client combat messages add finalAmt + absorbed. Report the existing
+            // partition without counting armor absorption again as final damage.
+            // Overkill remains unclamped in this report, as in the previous code.
+            hit.Absorbed = (uint)armorDecrease;
+            hit.FinalAmt = missile.DamageA - armorDecrease;
             creature.Attributes[Attributes.Armor].Current -= armorDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, creature, new UpdateArmorPacket(creature.Attributes[Attributes.Armor], creature.EntityId));
 
@@ -93,13 +98,15 @@ namespace Rasa.Managers
             }
         }
 
-        private void DoDamageToPlayer(MapChannel mapChannel, Missile missile, Actor actor)
+        private void DoDamageToPlayer(MapChannel mapChannel, Missile missile, Actor actor, HitData hit)
         {
             if (actor.State == CharacterState.Dead)
                 return;
 
             // decrease armor first
             var armorDecrease = Math.Min(missile.DamageA, actor.Attributes[Attributes.Armor].Current);
+            hit.Absorbed = (uint)armorDecrease;
+            hit.FinalAmt = missile.DamageA - armorDecrease;
 
             actor.Attributes[Attributes.Armor].Current -= armorDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateArmorPacket(actor.Attributes[Attributes.Armor], 0));
@@ -183,11 +190,12 @@ namespace Rasa.Managers
             mapChannel.QueuedMissiles.Clear();
         }
 
-        public void MissileLaunch(MapChannel mapChannel, ActionData action, int damage)
+        public void MissileLaunch(MapChannel mapChannel, ActionData action, int damage, DamageType? damageType = null)
         {
             var missile = new Missile
             {
                 DamageA = damage,
+                DamageType = damageType,
                 Source = action.Actor
             };
 
@@ -257,7 +265,8 @@ namespace Rasa.Managers
                 missile.Args.HitEntities.Add(missile.TargetEntityId);
                 var hit = new HitData
                 {
-                    DamageType = missile.ActionId == ActionId.AaRecruitLightning ? DamageType.Electrical : DamageType.Physical,
+                    DamageType = missile.DamageType ??
+                        (missile.ActionId == ActionId.AaRecruitLightning ? DamageType.Electrical : DamageType.Physical),
                     FinalAmt = missile.DamageA,
                     EntityId = missile.TargetEntityId
                 };
@@ -265,7 +274,7 @@ namespace Rasa.Managers
 
                 if (targetActor is Creature creature)
                 {
-                    DoDamageToCreature(mapChannel, missile, creature);
+                    DoDamageToCreature(mapChannel, missile, creature, hit);
                     if (creature.State == CharacterState.Dead)
                     {
                         hit.DeathBlow = 1;
@@ -273,7 +282,7 @@ namespace Rasa.Managers
                     }
                 }
                 else
-                    DoDamageToPlayer(mapChannel, missile, targetActor);
+                    DoDamageToPlayer(mapChannel, missile, targetActor, hit);
             }
 
             switch (missile.ActionId)

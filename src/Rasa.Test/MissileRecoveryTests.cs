@@ -112,19 +112,35 @@ namespace Rasa.Test
         [DataTestMethod]
         [DataRow(ActionId.WeaponAttack)]
         [DataRow(ActionId.WeaponMelee)]
+        [DataRow(ActionId.AaRecruitLightning)]
         public void ExistingCreatureReceivesDamageAndKeepsOriginalActionInRecovery(ActionId actionId)
         {
             var target = RegisterCreature();
-            var missile = Launch(actionId, target.EntityId);
-
-            MissileManager.Instance.DoWork(_map, 100);
+            Missile missile;
+            if (actionId == ActionId.AaRecruitLightning)
+            {
+                missile = new Missile
+                {
+                    ActionId = actionId, ActionArgId = 1, Source = _source,
+                    TargetEntityId = target.EntityId, TargetActor = target, DamageA = 60
+                };
+                MissileManager.Instance.MissileTrigger(_map, missile);
+            }
+            else
+            {
+                missile = Launch(actionId, target.EntityId);
+                MissileManager.Instance.DoWork(_map, 100);
+            }
 
             Assert.AreEqual(0, target.Attributes[Attributes.Armor].Current);
             Assert.AreEqual(80, target.Attributes[Attributes.Health].Current);
             CollectionAssert.AreEqual(new[] { target.EntityId }, missile.Args.HitEntities);
             Assert.AreEqual(1, missile.Args.HitData.Count);
             Assert.AreEqual(target.EntityId, missile.Args.HitData[0].EntityId);
-            Assert.AreEqual(60L, missile.Args.HitData[0].FinalAmt);
+            var hit = missile.Args.HitData[0];
+            Assert.AreEqual(40U, hit.Absorbed);
+            Assert.AreEqual(20L, hit.FinalAmt);
+            Assert.AreEqual(60L, hit.Absorbed + hit.FinalAmt + hit.Resisted);
 
             using var stream = SerializeRecovery(missile);
             using var reader = new PythonReader(new BinaryReader(stream));
@@ -136,8 +152,30 @@ namespace Rasa.Test
             Assert.AreEqual(0, reader.ReadList());
             Assert.AreEqual(0, reader.ReadList());
             Assert.AreEqual(1, reader.ReadList());
-            Assert.AreEqual(3, reader.ReadTuple());
-            Assert.AreEqual(target.EntityId, reader.ReadULong());
+            Assert.AreEqual(actionId == ActionId.AaRecruitLightning ? 2 : 3, reader.ReadTuple());
+            if (actionId != ActionId.AaRecruitLightning)
+                Assert.AreEqual(target.EntityId, reader.ReadULong());
+            Assert.AreEqual(12, reader.ReadTuple());
+            Assert.AreEqual((uint)(actionId == ActionId.AaRecruitLightning
+                ? DamageType.Electrical : DamageType.Physical), reader.ReadUInt());
+            Assert.AreEqual(0U, reader.ReadUInt()); // reflected
+            Assert.AreEqual(0U, reader.ReadUInt()); // filtered
+            var absorbed = reader.ReadUInt();
+            Assert.AreEqual(40U, absorbed);
+            var resisted = reader.ReadUInt();
+            Assert.AreEqual(0U, resisted);
+            var finalAmount = reader.ReadLong();
+            Assert.AreEqual(20L, finalAmount);
+            Assert.AreEqual(60L, absorbed + resisted + finalAmount);
+            Assert.AreEqual(0, reader.ReadInt()); // critical
+            Assert.AreEqual(0, reader.ReadInt()); // death blow
+            Assert.AreEqual(0U, reader.ReadUInt()); // cover
+            Assert.AreEqual(0, reader.ReadInt()); // immune
+            Assert.AreEqual(0, reader.ReadList()); // target effects
+            Assert.AreEqual(0, reader.ReadList()); // source effects
+            Assert.AreEqual(1, reader.ReadTuple()); // on-hit data
+            Assert.AreEqual(0, reader.ReadList());
+            Assert.AreEqual(stream.Length, stream.Position);
         }
 
         [TestMethod]
@@ -156,6 +194,8 @@ namespace Rasa.Test
             Assert.AreEqual(0, player.Attributes[Attributes.Armor].Current);
             Assert.AreEqual(80, player.Attributes[Attributes.Health].Current);
             CollectionAssert.AreEqual(new[] { player.EntityId }, missile.Args.HitEntities);
+            Assert.AreEqual(40U, missile.Args.HitData[0].Absorbed);
+            Assert.AreEqual(20L, missile.Args.HitData[0].FinalAmt);
         }
 
         private Creature RegisterCreature()
@@ -185,7 +225,10 @@ namespace Rasa.Test
         {
             var stream = new MemoryStream();
             var writer = new PythonWriter(new BinaryWriter(stream));
-            new WeaponAttackRecovery(missile).Write(writer);
+            if (missile.ActionId == ActionId.AaRecruitLightning)
+                new LightningRecovery(missile).Write(writer);
+            else
+                new WeaponAttackRecovery(missile).Write(writer);
             stream.Position = 0;
             return stream;
         }

@@ -116,7 +116,6 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.Initialize, "");
             Logger.WriteLog(LogType.Initialize, "Server ready!");
 
-            Timer.Add("AutoFire", 100, true, null);
             Timer.Add("CheckForLogingClients", 1000, true, null);
             Timer.Add("CheckForObjects", 1000, true, null);
             Timer.Add("CellUpdateVisibility", 1000, true, null);
@@ -152,10 +151,6 @@ namespace Rasa.Managers
                     BehaviorManager.Instance.MapChannelThink(mapChannel, delta);
                     DynamicObjectManager.Instance.DropshipsWorker(mapChannel, delta);
 
-                    // check forAutoFIre
-                    if (Timer.IsTriggered("AutoFire"))
-                        ManifestationManager.Instance.AutoFireTimerDoWork(delta);
-
                     // CellManager worker
                     if (Timer.IsTriggered("CellUpdateVisibility"))
                         CellManager.Instance.DoWork(mapChannel);
@@ -186,6 +181,9 @@ namespace Rasa.Managers
                             }
                 }
             }
+            // The autofire list is global: advance it once per elapsed interval,
+            // independent of how many maps currently contain players.
+            ManifestationManager.Instance.AutoFireTimerDoWork(delta);
         }
 
         public void MapLoaded(Client client)
@@ -307,6 +305,7 @@ namespace Rasa.Managers
             player.RemoveFromMap = true;
             player.LogoutCountdown.Cancel();
             player.CurrentAbility = null;
+            player.CurrentWeaponAction = null;
             var map = player.MapChannel;
             if (map != null)
             {

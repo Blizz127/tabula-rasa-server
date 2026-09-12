@@ -8,12 +8,14 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.UpdateArmor;
 
-        public ActorAttributes Armor { get; set; }
+        public ActorAttributes Armor { get; }
         public ulong WhoId { get; set; }
 
         public UpdateArmorPacket(ActorAttributes armor, ulong whoId)
         {
-            Armor = armor;
+            // The queued update must survive later damage, death or regeneration.
+            Armor = new ActorAttributes(armor.AttributeId, armor.NormalMax, armor.CurrentMax,
+                armor.Current, armor.RefreshAmount, armor.RefreshPeriod);
             WhoId = whoId;
         }
 

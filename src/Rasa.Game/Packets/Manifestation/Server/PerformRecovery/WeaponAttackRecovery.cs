@@ -1,5 +1,7 @@
 ﻿namespace Rasa.Packets.MapChannel.Server.PerformRecovery
 {
+    using System;
+    using System.Linq;
     using Data;
     using Memory;
     using Structures;
@@ -8,41 +10,38 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.PerformRecovery;
 
-        public Missile Missile { get; set; }
+        private readonly ActionId _actionId;
+        private readonly uint _actionArgId;
+        private readonly ulong[] _hitEntities;
+        private readonly (ulong EntityId, DamageInfoData Damage)[] _hits;
 
         public WeaponAttackRecovery(Missile missile)
         {
-            Missile = missile;
+            if (missile == null)
+                throw new ArgumentNullException(nameof(missile));
+            _actionId = missile.ActionId;
+            _actionArgId = missile.ActionArgId;
+            _hitEntities = missile.Args.HitEntities.ToArray();
+            _hits = missile.Args.HitData.Select(hit =>
+                (hit.EntityId, DamageInfoData.FromHit(hit))).ToArray();
         }
 
         public override void Write(PythonWriter pw)
         {
             pw.WriteTuple(6);
-            pw.WriteUInt((uint)Missile.ActionId);   // actionId
-            pw.WriteUInt(Missile.ActionArgId);      // actionargId
-            pw.WriteList(Missile.Args.HitEntities.Count);    // Hits
-            foreach (var entity in Missile.Args.HitEntities)
+            pw.WriteUInt((uint)_actionId);   // actionId
+            pw.WriteUInt(_actionArgId);      // actionargId
+            pw.WriteList(_hitEntities.Length);    // Hits
+            foreach (var entity in _hitEntities)
                 pw.WriteULong(entity);
             pw.WriteList(0);                // misses
             pw.WriteList(0);                // misses data
-            pw.WriteList(Missile.Args.HitData.Count);
-            foreach (var hit in Missile.Args.HitData)
+            pw.WriteList(_hits.Length);
+            foreach (var hit in _hits)
             {
                 pw.WriteTuple(3);
                 pw.WriteULong(hit.EntityId);         // target entityid
-                pw.WriteTuple(12);              // rawinfo start
-                    pw.WriteUInt((uint)DamageType.Physical); // self.damagetype
-                    pw.WriteUInt(hit.Reflected);        // self.reflected
-                    pw.WriteUInt(hit.Filtered);         // self.filtered
-                    pw.WriteUInt(hit.Absorbed);         // self.absorbed
-                    pw.WriteUInt(hit.Resisted);         // self.resisted
-                    pw.WriteLong(Missile.DamageA);      // self.finalamt
-                    pw.WriteInt(hit.IsCritical);        // self.iscrit
-                    pw.WriteInt(hit.DeathBlow);         // self.deathblow
-                    pw.WriteUInt(hit.CoverModifier);    // self.covermodifier
-                    pw.WriteInt(hit.WasImune);          // self.wasimmune
-                    pw.WriteList(0);                    // todo: targeteffectids
-                    pw.WriteList(0);                    // todo: sourceeffectids
+                hit.Damage.Write(pw);
                 pw.WriteTuple(1);                   // OnHitData
                 pw.WriteList(0);
             }

@@ -505,3 +505,80 @@ Rollback image: `rasa_net:before-retail-lifecycle-20260912`. Retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
 rollback needs no database restoration. The full preservation goal remains
 active with the limitations recorded above and in the linked evidence reports.
+
+## Weapon lifecycle, inventory conservation and combat reports — 2026-09-12
+
+The [weapon action reconstruction](weapon-actions-client-evidence.md) now uses
+all 135 original draw/stow/reload timing rows. A captured weapon action tracks
+windup, recovery, shared action-ID reuse and manual/autofire origin. Reload
+revalidates its original weapon and inventory before transferring ammunition,
+and a delayed resolution preserves the entire unpredicted recovery interval.
+Eligible interruptions cancel unfinished reloads without consuming reserve
+stacks or applying a successful recovery. Draw/stow readiness at recovery end
+remains an explicit inference pending native animation strike evidence.
+
+Reload conserves ammunition across multiple stacks and preserves loaded rounds.
+Magazine, reserve stacks and emptied inventory links commit atomically, with
+expected-count and account/character/location checks. Inventory movement now
+updates the in-memory owner and slot alongside the persisted destination;
+withdrawing an item from home storage no longer writes a personal item under
+character ID zero. Character IDs are kept distinct from roster slots.
+
+Autofire continues when the first action draws or reloads, maintains one
+sequence per client, retries busy actions at the observed client cadence and
+advances the global timer list once per elapsed interval. Its prior per-map
+invocation incorrectly changed timing with the number of occupied maps.
+The current database's uniform 1500 ms reload values, shot/refire values,
+keepalive grace, modifiers, heat/jam and complete attack admission remain
+unverified mechanics/data; the original action catalog alone does not prove
+those server-supplied values.
+
+The [combat report audit](combat-damage-client-evidence.md) propagates the
+equipped weapon's actual damage type and separates absorbed armor from final
+damage in resolved reports. The existing universal armor-first damage policy
+still lacks the original type-specific rules, piercing, resistance and modifier
+pipeline. The recovered resistance conversion agrees with official live D14
+examples and is preserved as an unused helper awaiting authoritative inputs
+and ordering.
+
+Initial actor attributes now use the original constructor's
+`normalMax/currentMax/current` order. Queued attribute, health and armor updates
+retain their values. Body/Mind no longer keep an initial zero through stat
+calculation, and recalculation preserves remaining armor instead of replacing
+it with a regeneration accumulator. These consistency repairs do not establish
+the emulator's stat growth or regeneration formulas as final-live rules.
+
+The [hospital investigation](hospital-recovery-evidence.md) recovers six exact
+Wilderness hospital/safe-zone map markers, and distinguishes waypoint,
+graveyard, marker-entity and marker-text identity. It also recovers supplied
+friendly/acquired/PvP-safe state and the different burial/hospital UI requests.
+The marker catalog is not activated as respawn destinations: original respawn
+coordinates, graveyard joins, eligibility, resource restoration and persistence
+remain missing. Full player death and the broader final-live preservation goal
+remain incomplete.
+
+The final .NET 5 candidate built with zero errors and the same five existing
+unused-variable/field warnings. **All 315 tests passed**, zero failed/skipped.
+Its source matched the reviewed workspace excluding generated `bin`/`obj`.
+Independent review found and closed the late reload-recovery and character-ID/
+inventory-location issues; regression tests cover those paths and reopened
+SQLite state. The prior full integration run's two stale damage-report
+expectations were corrected against the original absorption contract and the
+final suite includes full Lightning report parsing. Original-client sessions
+and the unimplemented mechanics above remain separate fidelity verification.
+
+Tested image
+`sha256:c0649d7af72072c54b5e3ad9f9dc95d0c081d7e83262d38134d5416165dbba18`
+replaced the game service at **19:34:01 UTC**, with `Server ready!` at
+**19:34:10 UTC**. Initial verification found it running with zero restarts and
+no unhandled/OOM/fatal startup lines. Auth's image and start time are unchanged.
+This pass includes no schema migration or bulk world-data rewrite.
+
+All three fresh SQLite backups passed integrity checks. The private deployment
+configuration, reviewed source/docs, build/test logs, source comparison, old
+and startup logs, and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T193344Z-retail-weapon/`.
+Rollback image: `rasa_net:before-retail-weapon-20260912`. Retag it as
+`rasa_net:latest` and recreate game with `--no-deps --no-build`; code rollback
+requires no database restoration. The full final-live preservation goal
+remains active.

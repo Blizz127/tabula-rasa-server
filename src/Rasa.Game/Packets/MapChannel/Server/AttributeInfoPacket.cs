@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Packets.MapChannel.Server
 {
@@ -10,11 +11,13 @@ namespace Rasa.Packets.MapChannel.Server
     {
         public override GameOpcode Opcode { get; } = GameOpcode.AttributeInfo;
         
-        public Dictionary<Attributes, ActorAttributes> ActorAttributes { get; set; }
+        public IReadOnlyDictionary<Attributes, ActorAttributes> ActorAttributes { get; }
         
         public AttributeInfoPacket(Dictionary<Attributes, ActorAttributes> actorAttributes)
         {
-            ActorAttributes = actorAttributes;
+            ActorAttributes = actorAttributes.ToDictionary(entry => entry.Key, entry =>
+                new ActorAttributes(entry.Value.AttributeId, entry.Value.NormalMax, entry.Value.CurrentMax,
+                    entry.Value.Current, entry.Value.RefreshAmount, entry.Value.RefreshPeriod));
         }
 
         public override void Write(PythonWriter pw)
@@ -26,9 +29,11 @@ namespace Rasa.Packets.MapChannel.Server
                 var attribute = entry.Value;
                 pw.WriteInt((int)attribute.AttributeId);
                 pw.WriteTuple(5);
-                pw.WriteInt(attribute.Current);
-                pw.WriteInt(attribute.CurrentMax);
+                // Recv_AttributeInfo passes this tuple directly to ActorAttribute;
+                // its constructor order differs from that receiver's old docstring.
                 pw.WriteInt(attribute.NormalMax);
+                pw.WriteInt(attribute.CurrentMax);
+                pw.WriteInt(attribute.Current);
                 pw.WriteInt(attribute.RefreshAmount);
                 pw.WriteInt(attribute.RefreshPeriod);
             }

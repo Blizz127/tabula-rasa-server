@@ -128,9 +128,11 @@ namespace Rasa.Managers
         #region Handlers
         public void AutoFireKeepAlive(Client client, int keepAliveDelay)
         {
+            if (keepAliveDelay <= 0 || !WeaponActionManager.CanAct(client))
+                return;
             foreach (var timer in AutoFire)
                 if (timer.Client == client)
-                    timer.MaxAliveTime = keepAliveDelay*4; // 10 sec should be enof for all weapons
+                    timer.MaxAliveTime = (long)keepAliveDelay * 4; // Existing server grace policy remains unverified.
         }
 
         public void ChangeShowHelmet(Client client, ChangeShowHelmetPacket packet)
@@ -156,17 +158,18 @@ namespace Rasa.Managers
 
         public bool PlayerTryFireWeapon(Client client)
         {
-            if (ActorActionManager.Instance.HasActiveAction(client.Player))
+            if (!WeaponActionManager.CanAct(client) || ActorActionManager.Instance.HasActiveAction(client.Player))
+                return false;
+            var weapon = WeaponActionManager.CurrentWeapon(client);
+            var weaponClassInfo = WeaponActionManager.ClassInfo(weapon);
+            if (weaponClassInfo == null)
                 return false;
             // ToDo: isOverheated, isJammed, and some other checks
             if (!client.Player.WeaponReady)
             {
-                RequestWeaponDraw(client);
+                WeaponActionManager.Instance.Request(client, ActionId.WeaponDraw, false);
                 return false;
             }
-
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
 
             // do we need to reload?
             if (weapon.CurrentAmmo < weapon.ItemTemplate.WeaponInfo.AmmoPerShot)
@@ -188,7 +191,8 @@ namespace Rasa.Managers
             var damage = weaponClassInfo.MinDamage + new Random().Next(0, damageRange + 1);
             var action = new ActionData(client.Player, weaponClassInfo.WeaponAttackActionId, weaponClassInfo.WeaponAttackArgId, client.Player.Target, 0);
             // launch correct missile type depending on weapon type
-            MissileManager.Instance.MissileLaunch(client.Player.MapChannel, action, damage);
+            MissileManager.Instance.MissileLaunch(client.Player.MapChannel, action, damage,
+                (DamageType)weaponClassInfo.DamageType);
             
             return true;
         }
@@ -202,6 +206,10 @@ namespace Rasa.Managers
 
         public void RequestArmWeapon(Client client, uint requestedWeaponDrawerSlot)
         {
+            if (!WeaponActionManager.CanAct(client) || requestedWeaponDrawerSlot >= client.Player.Inventory.WeaponDrawer.Count)
+                return;
+            if (requestedWeaponDrawerSlot != client.Player.ActiveWeapon)
+                WeaponActionManager.Instance.Cancel(client, true);
             client.Player.ActiveWeapon = (byte)requestedWeaponDrawerSlot;
 
             client.CallMethod(client.Player.EntityId, new WeaponDrawerSlotPacket(requestedWeaponDrawerSlot, true));
@@ -297,11 +305,12 @@ namespace Rasa.Managers
             // yaw is probobly used to mach player and target orientation,
             // some creatures recive more damage from back then from front
 
-            if (PlayerTryFireWeapon(client))
-            {
-                ActorManager.Instance.RequestVisualCombatMode(client, true);
-                RegisterAutoFire(client);
-            }
+            if (!WeaponActionManager.CanAct(client) || WeaponActionManager.CurrentWeapon(client) == null ||
+                AutoFire.Exists(timer => timer.Client == client))
+                return;
+            RegisterAutoFire(client);
+            ActorManager.Instance.RequestVisualCombatMode(client, true);
+            PlayerTryFireWeapon(client);
         }
 
         public void StopAutoFire(Client client)
@@ -316,7 +325,6 @@ namespace Rasa.Managers
                 if (timer.Client == client)
                 {
                     AutoFire.RemoveAt(i);
-                    break;
                 }
             }
         }
@@ -404,6 +412,11 @@ namespace Rasa.Managers
             for (var i = AutoFire.Count - 1; i >= 0; i--)
             {
                 var timer = AutoFire[i];
+                if (!WeaponActionManager.CanAct(timer.Client))
+                {
+                    AutoFire.RemoveAt(i);
+                    continue;
+                }
                 // we dont want to server keep fireing if client crash 
                 timer.MaxAliveTime -= delta;
 
@@ -417,8 +430,13 @@ namespace Rasa.Managers
 
                 if (timer.Delay <= 0)
                 {
-                    PlayerTryFireWeapon(timer.Client);
-                    timer.Delay = timer.RefireTime;
+                    if (PlayerTryFireWeapon(timer.Client))
+                    {
+                        timer.RefireTime = WeaponActionManager.CurrentWeapon(timer.Client).ItemTemplate.WeaponInfo.Refire;
+                        timer.Delay = timer.RefireTime;
+                    }
+                    else
+                        timer.Delay = 100; // Original client's retry while drawing/reloading/busy.
                 }
             }
         }
@@ -666,9 +684,16 @@ namespace Rasa.Managers
 
         public void RegisterAutoFire(Client client)
         {
+            if (AutoFire.Exists(timer => timer.Client == client))
+                return;
             // create timer
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
+            var weapon = WeaponActionManager.CurrentWeapon(client);
+            if (weapon == null)
+                return;
             var timer = new AutoFireTimer(client, weapon.ItemTemplate.WeaponInfo.Refire, weapon.ItemTemplate.WeaponInfo.Refire);
+            // Existing grace policy, pending original-server evidence. The original
+            // client sends its first 2500 ms keepalive immediately after StartAutoFire.
+            timer.MaxAliveTime = 10000;
 
             AutoFire.Add(timer);
 
@@ -724,6 +749,7 @@ namespace Rasa.Managers
                 return;
             }
 
+            WeaponActionManager.Instance.InterruptForAbility(client);
             client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId,
                 (uint)packet.ActionArgId, packet.Target ?? 0, 0)
             {
@@ -769,65 +795,13 @@ namespace Rasa.Managers
         }
 
         public void RequestWeaponDraw(Client client)
-        {
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
+            => WeaponActionManager.Instance.Request(client, ActionId.WeaponDraw, true);
 
-            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, ActionId.WeaponDraw, weaponClassInfo.DrawActionId, 500));
-
-            WeaponReady(client, true);
-        }
-
-        public void RequestWeaponReload(Client client, bool isRequested)
-        {
-            // here we only check, can we reload weapon
-            // actual weapon reload happen if reaload action isn't interupted
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
-            var foundAmmo = 0u;
-
-            for (var i = 0; i < 50; i++)
-            {
-                if (client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i] == 0)
-                    continue;
-
-                var weaponAmmo = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i]);
-
-                // check is empty slot
-                if (weaponAmmo == null)
-                    return;
-
-                if (weaponAmmo.ItemTemplate.Class == weaponClassInfo.AmmoClassId)
-                {
-                    // consume ammo
-                    var ammoToGrab = Math.Min(weaponClassInfo.ClipSize - foundAmmo - weapon.CurrentAmmo, weaponAmmo.StackSize);
-                    foundAmmo = ammoToGrab + weapon.CurrentAmmo;
-                }
-
-                if (foundAmmo == weaponClassInfo.ClipSize)
-                    break;
-            }
-
-            if (foundAmmo == 0)
-                return; // no ammo found -> ToDo: Tell the client?
-
-            if (isRequested)
-                client.CellCallMethod(client, client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, ActionId.WeaponReload, (uint)weaponClassInfo.ReloadActionId));
-            else
-                client.CellIgnoreSelfCallMethod(client, new PerformWindupPacket(PerformType.TwoArgs, ActionId.WeaponReload, (uint)weaponClassInfo.ReloadActionId));
-
-            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, ActionId.WeaponReload, (uint)weaponClassInfo.ReloadActionId, foundAmmo, weapon.ItemTemplate.WeaponInfo.ReloadTime));
-        }
+        public void RequestWeaponReload(Client client, bool automatic)
+            => WeaponActionManager.Instance.Request(client, ActionId.WeaponReload, !automatic);
 
         public void RequestWeaponStow(Client client)
-        {
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
-
-            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, ActionId.WeaponStow, (uint)weaponClassInfo.StowActionId, 500));
-
-            WeaponReady(client, false);
-        }
+            => WeaponActionManager.Instance.Request(client, ActionId.WeaponStow, true);
 
         public void SaveCharacterOptions(Client client, SaveCharacterOptionsPacket packet)
         {
@@ -1041,11 +1015,11 @@ namespace Rasa.Managers
             // body
             attribute[Attributes.Body].NormalMax    = totalBody;
             attribute[Attributes.Body].CurrentMax   = attribute[Attributes.Body].NormalMax + bodyBonus;
-            attribute[Attributes.Body].Current      = attribute[Attributes.Body].Current;
+            attribute[Attributes.Body].Current      = attribute[Attributes.Body].CurrentMax;
 
             attribute[Attributes.Mind].NormalMax    = totalMind;
             attribute[Attributes.Mind].CurrentMax   = attribute[Attributes.Mind].NormalMax + mindBonus;
-            attribute[Attributes.Mind].Current      = attribute[Attributes.Mind].Current;
+            attribute[Attributes.Mind].Current      = attribute[Attributes.Mind].CurrentMax;
 
             attribute[Attributes.Spirit].NormalMax  = totalSpirit;
             attribute[Attributes.Spirit].CurrentMax = attribute[Attributes.Spirit].NormalMax + spiritBonus;
@@ -1093,15 +1067,14 @@ namespace Rasa.Managers
                     continue;
 
                 var equipmentItem = EntityManager.Instance.GetItem(client.Player.Inventory.EquippedInventory[i]);
-                var classInfo = EntityClassManager.Instance.GetClassInfo(equipmentItem.ItemTemplate.Class);
-
                 if (equipmentItem == null)
                 {
                     // this is very bad, how can the item disappear while it is still linked in the inventory?
                     Logger.WriteLog(LogType.Error, "UpdateStatsValues: Equipment item has no physical copy (item is missing)");
                     continue;
                 }
-                if (classInfo.ArmorClassInfo == null)
+                var classInfo = EntityClassManager.Instance.GetClassInfo(equipmentItem.ItemTemplate.Class);
+                if (classInfo?.ArmorClassInfo == null)
                 {
                     // how can the player equip non-armor?
                     Logger.WriteLog(LogType.Error, "UpdateStatsValues: Player try to equip non_armor item");
@@ -1113,7 +1086,6 @@ namespace Rasa.Managers
                 // what about damage absorbed? Was it used at all?
             }
             armorMax = armorMax * (1.0d + armorBonusPct);
-            attribute[Attributes.Armor].Current = armorRegenRate;
             attribute[Attributes.Armor].NormalMax = (int)Math.Round(armorMax, 0);
             attribute[Attributes.Armor].CurrentMax = attribute[Attributes.Armor].NormalMax;
             if (fullreset)
@@ -1135,55 +1107,6 @@ namespace Rasa.Managers
         {
             client.Player.WeaponReady = isReady;
             client.CallMethod(client.Player.EntityId, new WeaponReadyPacket(isReady));
-        }
-
-        public void WeaponReload(ActionData action)
-        {
-            // we reload weapon here
-            var client = Server.Clients.Find(c => c.Player.EntityId == action.Actor.EntityId);
-            var weapon = InventoryManager.Instance.CurrentWeapon(client);
-
-            if (weapon == null)
-                return;
-
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon); ;
-            var ammoClassId = weaponClassInfo.AmmoClassId;
-            var foundAmmo = 0U;
-
-            for (var i = 0; i < 50; i++)
-            {
-                if (client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i] == 0)
-                    continue;
-
-                var weaponAmmo = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i]);
-
-                // check is empty slot
-                if (weaponAmmo == null)
-                    return;
-
-                if (weaponAmmo.ItemTemplate.Class == weaponClassInfo.AmmoClassId)
-                {
-                    // consume ammo
-                    var ammoToGrab = Math.Min(weaponClassInfo.ClipSize - foundAmmo - weapon.CurrentAmmo, weaponAmmo.StackSize);
-                    foundAmmo = ammoToGrab + weapon.CurrentAmmo;
-                    InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, weaponAmmo, ammoToGrab);
-                }
-
-                if (foundAmmo == weaponClassInfo.ClipSize)
-                    break;
-            }
-
-            // update the ammo count
-            weapon.CurrentAmmo = foundAmmo;
-
-            // update db
-            ItemManager.Instance.UpdateItemCurrentAmmo(weapon);
-
-            // set current action to 0
-            client.Player.CurrentAction = 0;
-
-            // send data to client
-            client.CellCallMethod(client, client.Player.EntityId, new PerformRecoveryPacket(PerformType.ThreeArgs, action.ActionId, action.ActionArgId, foundAmmo));
         }
 
         #endregion

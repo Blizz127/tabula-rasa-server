@@ -745,6 +745,10 @@ namespace Rasa.Managers
 
             if (inventoryType == InventoryType.HomeInventory)
                 tempItem.OwnerId = 0;
+            else if (inventoryType == InventoryType.Personal || inventoryType == InventoryType.EquipedInventory ||
+                inventoryType == InventoryType.WeaponDrawerInventory)
+                tempItem.OwnerId = client.Player.Id;
+            tempItem.OwnerSlotId = slotId;
 
             // update item in database
             if (updateDB)

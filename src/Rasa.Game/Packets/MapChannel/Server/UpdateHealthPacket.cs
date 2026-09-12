@@ -8,12 +8,14 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.UpdateHealth;
 
-        public ActorAttributes Health { get; set; }
+        public ActorAttributes Health { get; }
         public ulong WhoId { get; set; }
 
         public UpdateHealthPacket(ActorAttributes health, ulong whoId)
         {
-            Health = health;
+            // The queued update must survive later damage, death or regeneration.
+            Health = new ActorAttributes(health.AttributeId, health.NormalMax, health.CurrentMax,
+                health.Current, health.RefreshAmount, health.RefreshPeriod);
             WhoId = whoId;
         }
 

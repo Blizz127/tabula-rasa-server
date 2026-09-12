@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Rasa.Repositories.Char.Items
 {
@@ -83,6 +85,57 @@ namespace Rasa.Repositories.Char.Items
 
             _charContext.Update(entry);
             _charContext.SaveChanges();
+        }
+
+        public bool TryReloadWeapon(uint accountId, uint characterId, uint weaponId, uint ammoBefore,
+            uint ammoAfter, IReadOnlyList<ReloadAmmoChange> ammunition)
+        {
+            if (ammunition == null || ammunition.Count == 0 || ammoAfter <= ammoBefore ||
+                ammunition.Any(a => a == null || a.ItemId == weaponId || a.Consumed == 0 ||
+                    a.Consumed > a.StackBefore || a.SlotId < 50 || a.SlotId >= 100) ||
+                ammunition.Select(a => a.ItemId).Distinct().Count() != ammunition.Count ||
+                ammunition.Select(a => a.SlotId).Distinct().Count() != ammunition.Count ||
+                ammunition.Sum(a => (long)a.Consumed) != (long)ammoAfter - ammoBefore)
+                return false;
+
+            // Conditional writes keep stale in-memory counts from creating ammunition.
+            // The magazine, every stack and emptied inventory links commit together.
+            using var transaction = _charContext.Database.BeginTransaction();
+            var weaponChanged = _charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE items SET ammo_count = {ammoAfter}
+                WHERE item_id = {weaponId} AND ammo_count = {ammoBefore}
+                AND EXISTS (SELECT 1 FROM character_inventory
+                    WHERE item_id = {weaponId} AND account_id = {accountId}
+                    AND character_id = {characterId} AND invenotry_type = 9)");
+            if (weaponChanged != 1)
+                return false;
+
+            foreach (var ammo in ammunition)
+            {
+                var remaining = ammo.StackBefore - ammo.Consumed;
+                var changed = _charContext.Database.ExecuteSqlInterpolated($@"
+                    UPDATE items SET stack_size = {remaining}
+                    WHERE item_id = {ammo.ItemId} AND stack_size = {ammo.StackBefore}
+                    AND EXISTS (SELECT 1 FROM character_inventory
+                        WHERE item_id = {ammo.ItemId} AND account_id = {accountId}
+                        AND character_id = {characterId} AND invenotry_type = 1
+                        AND slot_id = {ammo.SlotId})");
+                if (changed != 1)
+                    return false;
+
+                if (remaining == 0)
+                {
+                    var removed = _charContext.Database.ExecuteSqlInterpolated($@"
+                        DELETE FROM character_inventory WHERE item_id = {ammo.ItemId}
+                        AND account_id = {accountId} AND character_id = {characterId}
+                        AND invenotry_type = 1 AND slot_id = {ammo.SlotId}");
+                    if (removed != 1)
+                        return false;
+                }
+            }
+
+            transaction.Commit();
+            return true;
         }
     }
 }

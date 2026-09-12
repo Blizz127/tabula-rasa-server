@@ -48,7 +48,8 @@ namespace Rasa.Managers
             var current = player.CurrentAbility;
             if (current != null && current.Resolved && _getMonotonicMilliseconds() >= current.RecoveryEndsAt)
                 player.CurrentAbility = null;
-            return player.CurrentAbility == null && !HasActiveAction(player);
+            return player.CurrentAbility == null && player.CurrentAction == 0 &&
+                (player.CurrentWeaponAction == null || player.CurrentWeaponAction.ActionId == ActionId.WeaponReload);
         }
 
         public long GetAbilityReuseRemaining(Manifestation player, ActionId actionId)
@@ -75,6 +76,7 @@ namespace Rasa.Managers
                 power.Current < LightningAbilityData.GetPowerCost(rank))
                 return false;
 
+            WeaponActionManager.Instance.InterruptForAbility(client);
             var action = new ActionData(player, packet.ActionId, rank, target.EntityId,
                 LightningAbilityData.WindupMilliseconds)
             {
@@ -182,7 +184,8 @@ namespace Rasa.Managers
 
         public bool HasActiveAction(Actor actor)
         {
-            return actor.CurrentAction != 0 || actor is Manifestation { CurrentAbility: not null };
+            return actor.CurrentAction != 0 || actor is Manifestation { CurrentAbility: not null } ||
+                actor is Manifestation { CurrentWeaponAction: not null };
         }
 
         public void DoWork(MapChannel mapChannel, long delta)
@@ -191,7 +194,10 @@ namespace Rasa.Managers
             if (mapChannel.ClientList != null)
                 foreach (var client in mapChannel.ClientList)
                     if (client?.Player != null)
+                    {
+                        WeaponActionManager.Instance.Update(client, now);
                         UpdateAbility(mapChannel, client, now);
+                    }
 
             if (mapChannel.PerformRecovery.Count > 0)
             {
@@ -283,9 +289,6 @@ namespace Rasa.Managers
                 case ActionId.WeaponDraw:
                     CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformRecoveryPacket(PerformType.TwoArgs, action.ActionId, action.ActionArgId));
                     action.Actor.WeaponReady = true;
-                    break;
-                case ActionId.WeaponReload:
-                    ManifestationManager.Instance.WeaponReload(action);
                     break;
                 case ActionId.WeaponStow:
                     CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformRecoveryPacket(PerformType.TwoArgs, action.ActionId, action.ActionArgId));

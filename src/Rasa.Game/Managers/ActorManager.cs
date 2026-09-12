@@ -99,6 +99,8 @@
                 return;
             if (ActorActionManager.Instance.InterruptAbility(client, packet.ActionId, packet.ActionArgId))
                 return;
+            if (WeaponActionManager.Instance.Interrupt(client, packet.ActionId, packet.ActionArgId))
+                return;
             foreach (var action in client.Player.MapChannel.PerformRecovery)
                 if (action.Actor == client.Player)
                     if (action.ActionId == packet.ActionId)
