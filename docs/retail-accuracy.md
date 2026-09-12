@@ -850,3 +850,19 @@ Rollback image: `rasa_net:before-retail-placement-20260912`; retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`.
 Code rollback requires no database restoration. The full preservation goal
 remains active while original systems and verification are incomplete.
+
+## 2026-09-12: starter equipment character diagnosis
+
+A level-1 Recruit with no saved skills could not satisfy the original Firearms
+1 and Motor Assist Armor 1 equipment requirements. The user's requested
+character update trained those two skills using the existing point budget;
+three points remain. A verifier using the deployed server rules checked the
+saved result and all four owned equipment items. No gameplay source, global
+requirements, or automatic starter grants changed. See the
+[starter equipment investigation](starter-equipment-research.md).
+
+The same tested game image restarted at **21:23:43 UTC** and reported ready at
+**21:23:52 UTC**. Verification at **21:24:26 UTC** found zero restarts and no
+error/unhandled/fatal/OOM log lines; auth's image and start time are unchanged.
+Private integrity-checked backups and operation records are retained in
+`/home/blizz/backups/rasa-net/20260912T212342Z-blizz-training/`.
