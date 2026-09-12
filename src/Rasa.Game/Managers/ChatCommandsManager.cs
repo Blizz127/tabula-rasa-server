@@ -93,6 +93,7 @@ namespace Rasa.Managers
             RegisterCommand(".notify", NotifyCommand);
             RegisterCommand(".npcinfo", NpcInfoCommand);
             RegisterCommand(".reloadcreatures", ReloadCreaturesCommand);
+            RegisterCommand(".rename", RenameCommand);
             RegisterCommand(".removeobj", RemoveObjectCommand);
             RegisterCommand(".rqs", RqsWindowCommand);
             RegisterCommand(".tele", TeleCommand);
@@ -687,6 +688,37 @@ namespace Rasa.Managers
                 }
             }
             return;
+        }
+
+        /// <summary>
+        /// .rename first|last &lt;NewName&gt; [familyName] - renames yourself, or the player with
+        /// that family name. /changefirstname and /changelastname do the same for yourself.
+        /// </summary>
+        private void RenameCommand(string[] parts)
+        {
+            var familyName = parts.Length > 1 && parts[1].ToLowerInvariant() == "last";
+
+            if (parts.Length < 3 || (parts[1].ToLowerInvariant() != "first" && !familyName))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .rename first|last <NewName> [familyName of the player]");
+                return;
+            }
+
+            var target = _client;
+
+            if (parts.Length > 3)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null && c.AccountEntry != null
+                                                  && string.Equals(c.Player.FamilyName, parts[3], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    CommunicatorManager.Instance.SystemMessage(_client, $"{parts[3]} is not in the world");
+                    return;
+                }
+            }
+
+            CharacterManager.Instance.Rename(_client, target, parts[2], familyName);
         }
 
         private void RqsWindowCommand(string[] parts)

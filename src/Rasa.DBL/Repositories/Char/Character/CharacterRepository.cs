@@ -223,5 +223,28 @@ namespace Rasa.Repositories.Char.Character
             _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
+
+        public void UpdateCharacterName(uint id, string name)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
+            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+
+            if (entry == null)
+                return;
+
+            entry.Name = name;
+
+            _charContext.CharacterEntries.Update(entry);
+            _charContext.SaveChanges();
+        }
+
+        public bool IsCharacterNameTaken(string name, uint exceptCharacterId)
+        {
+            // ToLower on both sides: SQLite compares strings with BINARY collation, so = is
+            // case-sensitive there while MySQL's default collation is not.
+            var lowered = name.ToLower();
+
+            return _charContext.CharacterEntries.Any(e => e.Id != exceptCharacterId && e.Name.ToLower() == lowered);
+        }
     }
 }

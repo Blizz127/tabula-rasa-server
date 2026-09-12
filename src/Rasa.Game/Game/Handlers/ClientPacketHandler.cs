@@ -486,13 +486,13 @@
         [PacketHandler(GameOpcode.ChangeFirstName)]
         private void ChangeFirstName(ChangeFirstNamePacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: ChangeFirstNamePacket");
+            CharacterManager.Instance.ChangeFirstName(Client, packet);
         }
 
         [PacketHandler(GameOpcode.ChangeLastName)]
         private void ChangeLastName(ChangeLastNamePacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: ChangeLastNamePacket");
+            CharacterManager.Instance.ChangeLastName(Client, packet);
         }
 
         [PacketHandler(GameOpcode.ChannelChat)]

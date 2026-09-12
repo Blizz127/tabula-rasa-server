@@ -11,7 +11,11 @@ namespace Rasa.Managers
     using Packets.Game.Client;
     using Packets.Game.Server;
     using Packets.MapChannel.Server;
+    using Misc;
     using Packets.ClientMethod.Server;
+    using Packets.Communicator.Client;
+    using Packets.Communicator.Server;
+    using Packets;
     using Repositories.Char;
     using Repositories.UnitOfWork;
     using Repositories.World;
@@ -222,6 +226,172 @@ namespace Rasa.Managers
             var character = unitOfWork.Characters.Get(characterId);
             SendCharacterInfo(client, packet.SlotNum, character);
         }
+
+        #region Name changes
+
+        /// <summary>
+        /// Names the client will accept, from PM_NAME_TOO_SHORT, PM_NAME_TOO_LONG and
+        /// PM_NAME_FORMAT_INVALID: "Your name must start with a capital letter, contain only
+        /// letters, and must not contain letters repeated more than twice in a row", 3 to 20
+        /// characters.
+        /// </summary>
+        public const int MinNameLength = 3;
+        public const int MaxNameLength = 20;
+
+        /// <summary>/changefirstname: renames the character the player is on.</summary>
+        internal void ChangeFirstName(Client client, ChangeFirstNamePacket packet)
+        {
+            if (!IsNameChanger(client))
+                return;
+
+            Rename(client, client, packet.Name, false);
+        }
+
+        /// <summary>/changelastname: renames the account's family, so every character on it.</summary>
+        internal void ChangeLastName(Client client, ChangeLastNamePacket packet)
+        {
+            if (!IsNameChanger(client))
+                return;
+
+            Rename(client, client, packet.Name, true);
+        }
+
+        /// <summary>
+        /// Renames a character or an account family, telling the player who asked what went
+        /// wrong. The target can be another player, for the GM command.
+        /// </summary>
+        public bool Rename(Client requester, Client target, string newName, bool familyName)
+        {
+            if (target?.Player == null || target.AccountEntry == null)
+                return false;
+
+            var name = newName?.Trim() ?? string.Empty;
+            var oldName = familyName ? target.Player.FamilyName : target.Player.Name;
+
+            if (string.Equals(oldName, name, StringComparison.Ordinal))
+                return false;
+
+            if (!IsValidName(name, out var formatError))
+            {
+                NameMessage(requester, formatError);
+                return false;
+            }
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            if (new Censor(unitOfWork.CensoredWords.GetCensoredWords()).ContainsProfanity(name))
+            {
+                NameMessage(requester, PlayerMessage.PmNameUnacceptable);
+                return false;
+            }
+
+            if (familyName)
+            {
+                if (!unitOfWork.GameAccounts.CanChangeFamilyName(target.AccountEntry.Id, name))
+                {
+                    NameMessage(requester, PlayerMessage.PmFamilyNameReserved);
+                    return false;
+                }
+
+                unitOfWork.GameAccounts.UpdateFamilyName(target.AccountEntry.Id, name);
+                target.Player.FamilyName = name;
+            }
+            else
+            {
+                // Character creation never checked this, so duplicates can exist already; a
+                // rename at least does not add more.
+                if (unitOfWork.Characters.IsCharacterNameTaken(name, target.Player.Id))
+                {
+                    NameMessage(requester, PlayerMessage.PmNameInUse);
+                    return false;
+                }
+
+                unitOfWork.Characters.UpdateCharacterName(target.Player.Id, name);
+                target.Player.Name = name;
+            }
+
+            target.ReloadGameAccountEntry();
+
+            // CharacterName and ActorName are part of the entity data every client gets when it
+            // first sees the player (CreatePlayerEntityData); resending them updates the name on
+            // screen for everyone nearby without a relog. Characters of this account that are not
+            // in the world pick the family name up the next time they log in.
+            var mapChannel = target.Player.MapChannel;
+
+            if (mapChannel != null)
+                CellManager.Instance.CellCallMethod(mapChannel, target.Player,
+                    familyName ? new ActorNamePacket(target.Player.FamilyName) : (PythonPacket)new CharacterNamePacket(target.Player.Name));
+
+            var args = new Dictionary<string, string> { ["oldname"] = oldName ?? string.Empty, ["newname"] = name };
+            var changed = familyName ? PlayerMessage.PmLastNameChanged : PlayerMessage.PmFirstNameChanged;
+
+            target.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(changed, args, MsgFilterId.GeneralSystemMessages));
+
+            if (requester != target)
+                requester.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(changed, args, MsgFilterId.GeneralSystemMessages));
+
+            Logger.WriteLog(LogType.Command, $"{requester.AccountEntry.FamilyName} changed {(familyName ? "the family name" : "the character name")} of account {target.AccountEntry.Id} from {oldName} to {name}");
+
+            return true;
+        }
+
+        public static bool IsValidName(string name, out PlayerMessage error)
+        {
+            error = PlayerMessage.PmNameFormatInvalid;
+
+            if (string.IsNullOrEmpty(name) || name.Length < MinNameLength)
+            {
+                error = PlayerMessage.PmNameTooShort;
+                return false;
+            }
+
+            if (name.Length > MaxNameLength)
+            {
+                error = PlayerMessage.PmNameTooLong;
+                return false;
+            }
+
+            if (!char.IsUpper(name[0]))
+                return false;
+
+            for (var i = 0; i < name.Length; i++)
+            {
+                if (!char.IsLetter(name[i]))
+                    return false;
+
+                // No letter three times in a row.
+                if (i >= 2 && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 1])
+                           && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 2]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Name changes are a GM tool here: the slash commands are open to every player, and a
+        /// free rename at any moment is a way to be mistaken for someone else.
+        /// </summary>
+        private static bool IsNameChanger(Client client)
+        {
+            if (client?.AccountEntry == null || client.Player == null)
+                return false;
+
+            if (client.AccountEntry.Level > 0)
+                return true;
+
+            Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} tried to change a name without being a GM");
+            CommunicatorManager.Instance.SystemMessage(client, "Name changes are done by a GM.");
+
+            return false;
+        }
+
+        private static void NameMessage(Client client, PlayerMessage message)
+        {
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(message, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+        }
+
+        #endregion
 
         private uint? InternalCreate(Client client, RequestCreateCharacterInSlotPacket packet, ICharUnitOfWork unitOfWork)
         {
