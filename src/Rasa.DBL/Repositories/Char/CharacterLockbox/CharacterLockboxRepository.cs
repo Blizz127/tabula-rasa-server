@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Rasa.Repositories.Char.CharacterLockbox
 {
@@ -26,6 +27,29 @@ namespace Rasa.Repositories.Char.CharacterLockbox
             var lockboxInfo = query.FirstOrDefault(e => e.AccountId == accountId);
 
             return lockboxInfo;
+        }
+
+        // A positive amount deposits; a negative amount withdraws. Compare both
+        // balances so a stale session cannot overwrite another character's bank.
+        public bool TryTransferCredits(uint accountId, uint characterId, int expectedWallet, int expectedLockbox, int amount)
+        {
+            var wallet = (long)expectedWallet - amount;
+            var lockbox = (long)expectedLockbox + amount;
+            if (accountId == 0 || characterId == 0 || amount == 0 || expectedWallet < 0 || expectedLockbox < 0 ||
+                wallet < 0 || wallet > int.MaxValue || lockbox < 0 || lockbox > int.MaxValue)
+                return false;
+
+            using var transaction = _charContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            if (_charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE character SET credit = {(int)wallet}
+                WHERE id = {characterId} AND account_id = {accountId} AND credit = {expectedWallet}") != 1)
+                return false;
+            if (_charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE character_lockbox SET credits = {(int)lockbox}
+                WHERE account_id = {accountId} AND credits = {expectedLockbox}") != 1)
+                return false;
+            transaction.Commit();
+            return true;
         }
 
         public void UpdateCredits(uint accountId, int credits)

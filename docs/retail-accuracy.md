@@ -737,3 +737,40 @@ Rollback image: `rasa_net:before-retail-equipment-20260912`. Retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
 rollback needs no database restoration. The complete final-live preservation
 goal remains active.
+
+## 2026-09-12: original lockbox credit request and conserved transfers
+
+Static inspection of the 1.16.5.0 client proves that the lockbox UI accepts any
+positive integer amount, deposits it unchanged and negates it for withdrawal.
+The emulator's explicit temporary 500-credit workaround has been removed now
+that compact signed decoding is repaired. Wallet and account-bank updates commit
+in one transaction with ownership and expected-balance comparisons; failures
+leave both persisted balances and session state unchanged. A withdrawal no
+longer passes through the loot reward notification helper. No retail bank cap
+or original error message is inferred from the existing storage limits.
+
+Provenance, exact original function/offset references, implementation boundaries
+and outstanding fidelity gaps: [lockbox credit evidence](lockbox-credit-client-evidence.md).
+
+The final .NET 5 image built with zero errors and the same five existing unused
+variable/field warnings. **All 520 tests passed**, with no failures or skips,
+inside that image without production database mounts or networking. Source
+comparison matched the reviewed workspace excluding generated `bin`/`obj`.
+These checks verify the correction; original-service capture comparison and
+complete final-live fidelity remain outstanding.
+
+Tested image
+`sha256:913a80537fdc87667aa8c33803ef606bb50a5e3fa52cc8c7de8cbc26b393689c`
+replaced the game service at **20:43:25 UTC** and reported `Server ready!` at
+**20:43:36 UTC**. Startup verification found zero restarts and no error,
+unhandled, fatal or OOM log lines. Auth's image and start time are unchanged.
+No schema migration or bulk world-data rewrite was introduced.
+
+All three fresh SQLite backups passed integrity checks. Private deployment
+configuration, reviewed source/docs, patch, build/test logs, source comparison
+and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T204316Z-retail-credit/`.
+Rollback image: `rasa_net:before-retail-credit-20260912`; retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`.
+Code rollback requires no database restoration. The complete final-live
+preservation goal remains active.

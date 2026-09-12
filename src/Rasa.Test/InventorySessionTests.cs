@@ -46,6 +46,7 @@ namespace Rasa.Test
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
                     case "get_Characters": return new CharacterRepository(Context);
                     case "get_CharacterAppearances": return new CharacterAppearanceRepository(Context);
+                    case "get_CharacterLockboxes": return new Rasa.Repositories.Char.CharacterLockbox.CharacterLockboxRepository(Context);
                     case "Complete": Context.SaveChanges(); return null;
                     case "Reject": Context.ChangeTracker.Clear(); return null;
                     case "Dispose": Context.Dispose(); return null;

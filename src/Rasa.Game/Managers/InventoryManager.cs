@@ -571,52 +571,27 @@ namespace Rasa.Managers
 
         public void TransferCreditToLockbox(Client client, int amount)
         {
-            /*
-             * ToDo:
-             * there is some bug with withdraw if withdraw value is less then 256
-             * client send positive value, insted of negative one
-             * so we will set min transfer value to 500 for now
-             * we can take closer look at this later
-             */
-
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-
-            //deposit
-            if (amount >= 500)
+            if (client?.State != ClientState.Ingame || client.AccountEntry == null || client.Player == null ||
+                !client.Player.Credits.TryGetValue(CurencyType.Credits, out var wallet) || amount == 0)
+                return;
+            var lockbox = client.Player.LockboxCredits;
+            try
             {
-                if (client.Player.Credits[CurencyType.Credits] >= amount)
-                {
-                    var deposit = client.Player.LockboxCredits + amount;
-
-                    ManifestationManager.Instance.LossCredits(client, -amount);
-
-                    client.CallMethod(client.Player.EntityId, new LockboxFundsPacket(deposit));
-
-                    client.Player.LockboxCredits = deposit;
-                    unitOfWork.CharacterLockboxes.UpdateCredits(client.AccountEntry.Id, deposit);
-                }
-                else
-                    CommunicatorManager.Instance.SystemMessage(client, "Not enof credit's in inventory\nP.S. Go earn some credits :)");
+                using var work = _gameUnitOfWorkFactory.CreateChar();
+                if (!work.CharacterLockboxes.TryTransferCredits(client.AccountEntry.Id, client.Player.Id, wallet, lockbox, amount))
+                    return;
             }
-            // withdraw
-            else if (amount <= -500)
+            catch (System.Data.Common.DbException exception)
             {
-                if (client.Player.LockboxCredits >= -amount)
-                {
-                    var withdraw = client.Player.LockboxCredits + amount;
-
-                    ManifestationManager.Instance.GainCredits(client, -amount);
-                    client.CallMethod(client.Player.EntityId, new LockboxFundsPacket(withdraw));
-
-                    client.Player.LockboxCredits = withdraw;
-                    unitOfWork.CharacterLockboxes.UpdateCredits(client.AccountEntry.Id, withdraw);
-                }
-                else
-                    CommunicatorManager.Instance.SystemMessage(client, "Not enof credit's in Lockbox\nP.S. Dont be greedy :)");
+                Logger.WriteLog(LogType.Error, exception);
+                return;
             }
-            else
-                CommunicatorManager.Instance.SystemMessage(client, "Minimum transfer value is 500 credits");
-
+            // Publish only after both persisted balances commit. A withdrawal is
+            // a transfer of existing funds, so it must not use the loot helper.
+            client.Player.Credits[CurencyType.Credits] = (int)((long)wallet - amount);
+            client.Player.LockboxCredits = (int)((long)lockbox + amount);
+            client.CallMethod(client.Player.EntityId, new UpdateCreditsPacket(CurencyType.Credits, client.Player.Credits[CurencyType.Credits], 0));
+            client.CallMethod(client.Player.EntityId, new LockboxFundsPacket(client.Player.LockboxCredits));
         }
 
         public void ClanCreditTransfer(Client client, long amount, uint creditType)
