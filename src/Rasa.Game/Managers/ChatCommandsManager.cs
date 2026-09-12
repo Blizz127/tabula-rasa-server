@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -17,7 +18,20 @@ namespace Rasa.Managers
     {
         private static ChatCommandsManager _instance;
         private static readonly object InstanceLock = new object();
-        private static readonly Dictionary<string, Action<string[]>> Commands = new Dictionary<string, Action<string[]>>();
+        private static readonly Dictionary<string, ChatCommand> Commands = new Dictionary<string, ChatCommand>();
+
+        /// <summary>A registered dot command and the account level it takes to run it.</summary>
+        private class ChatCommand
+        {
+            public ChatCommand(GmLevel level, Action<string[]> handler)
+            {
+                Level = level;
+                Handler = handler;
+            }
+
+            public GmLevel Level { get; }
+            public Action<string[]> Handler { get; }
+        }
         private static Client _client { get; set; }
         public static ChatCommandsManager Instance
         {
@@ -41,26 +55,55 @@ namespace Rasa.Managers
         {
         }
 
+        /// <summary>
+        /// Every dot command comes through here, and this is the only place access is decided.
+        /// RadialChat used to check for GM before it would even call this, which meant one level
+        /// for all 33 commands; now it hands over anything starting with a dot and the level is
+        /// per command.
+        /// </summary>
         public void ProcessCommand(Client client, string command)
         {
             _client = client;
+
             if (string.IsNullOrWhiteSpace(command))
                 return;
 
             var parts = command.Split(' ');
 
-            if (Commands.ContainsKey(parts[0]))
+            if (!Commands.TryGetValue(parts[0], out var registered))
             {
-                Commands[parts[0]](parts);
+                Logger.WriteLog(LogType.Command, $"Invalid command: {command}");
+                CommunicatorManager.Instance.SystemMessage(client, $"Unknown command: {parts[0]}");
                 return;
             }
 
-            Logger.WriteLog(LogType.Command, $"Invalid command: {command}");
+            if (!HasLevel(client, registered.Level))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} (level {client.AccountEntry.Level}) tried to use "
+                    + $"{parts[0]}, which needs {(byte)registered.Level}");
+
+                // A player is told the same thing they would hear for a command that does not
+                // exist: the answer should not be a way to find out what a server can do. Someone
+                // who is already a GM gets the real reason, because they are meant to know.
+                CommunicatorManager.Instance.SystemMessage(client,
+                    client.AccountEntry.Level > 0
+                        ? $"{parts[0]} needs account level {(byte)registered.Level}; yours is {client.AccountEntry.Level}."
+                        : $"Unknown command: {parts[0]}");
+                return;
+            }
+
+            registered.Handler(parts);
         }
 
-        public void RegisterCommand(string name, Action<string[]> handler)
+        private static bool HasLevel(Client client, GmLevel required)
         {
-            Commands.Add(name, handler);
+            return client?.AccountEntry != null && client.AccountEntry.Level >= (byte)required;
+        }
+
+        public void RegisterCommand(string name, GmLevel level, Action<string[]> handler)
+        {
+            Commands.Add(name, new ChatCommand(level, handler));
         }
 
         public void RemoveCommand(string name)
@@ -71,39 +114,46 @@ namespace Rasa.Managers
 
         public void RegisterChatCommands()
         {
-            RegisterCommand(".addtitle", AddTitleCommand);
-            RegisterCommand(".actorstate", ActorStateCommand);
-            RegisterCommand(".bark", BarkCommand);
-            RegisterCommand(".comehere", ComeHereCommand);
-            RegisterCommand(".createobj", CreateObjectCommand);
-            RegisterCommand(".createobjonloc", CreateObjectOnLocationCommand);
-            RegisterCommand(".creature", CreateCreatureCommand);
-            RegisterCommand(".creatureappearance", SetCreatureAppearanceCommand);
-            RegisterCommand(".creatureloc", SetCreatureLocation);
-            RegisterCommand(".deleteobj", DeleteObjectCommand);
-            RegisterCommand(".getdistance", GetDistanceCommand);
-            RegisterCommand(".giveitem", GiveItemCommand);
-            RegisterCommand(".givelogos", GiveLogosCommand);
-            RegisterCommand(".givexp", GiveXpCommand);
-            RegisterCommand(".chg_class", ChangeClassCommand);
-            RegisterCommand(".gm", EnterGmModCommand);
-            RegisterCommand(".forcestate", ForceStateCommand);
-            RegisterCommand(".help", HelpGmCommand);
-            RegisterCommand(".near", NearCommand);
-            RegisterCommand(".error", ErrorCommand);
-            RegisterCommand(".notify", NotifyCommand);
-            RegisterCommand(".npcinfo", NpcInfoCommand);
-            RegisterCommand(".reloadcreatures", ReloadCreaturesCommand);
-            RegisterCommand(".rename", RenameCommand);
-            RegisterCommand(".removeobj", RemoveObjectCommand);
-            RegisterCommand(".rqs", RqsWindowCommand);
-            RegisterCommand(".tele", TeleCommand);
-            RegisterCommand(".teleport", TeleportCommand);
-            RegisterCommand(".teleup", TeleUpCommand);
-            RegisterCommand(".setkillstreak", SetKillStreakCommand);
-            RegisterCommand(".setregion", SetRegionCommand);
-            RegisterCommand(".speed", SpeedCommand);
-            RegisterCommand(".where", WhereCommand);
+            // Observer: reads the world, changes nothing in it.
+            RegisterCommand(".getdistance", GmLevel.Observer, GetDistanceCommand);
+            RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
+            RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
+            RegisterCommand(".near", GmLevel.Observer, NearCommand);
+            RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
+            RegisterCommand(".rqs", GmLevel.Observer, RqsWindowCommand);
+            RegisterCommand(".where", GmLevel.Observer, WhereCommand);
+
+            // GameMaster: moves you, spawns and drives scenery and creatures, drives
+            // your own client. A restart undoes all of it.
+            RegisterCommand(".actorstate", GmLevel.GameMaster, ActorStateCommand);
+            RegisterCommand(".bark", GmLevel.GameMaster, BarkCommand);
+            RegisterCommand(".comehere", GmLevel.GameMaster, ComeHereCommand);
+            RegisterCommand(".createobj", GmLevel.GameMaster, CreateObjectCommand);
+            RegisterCommand(".createobjonloc", GmLevel.GameMaster, CreateObjectOnLocationCommand);
+            RegisterCommand(".creature", GmLevel.GameMaster, CreateCreatureCommand);
+            RegisterCommand(".creatureappearance", GmLevel.GameMaster, SetCreatureAppearanceCommand);
+            RegisterCommand(".creatureloc", GmLevel.GameMaster, SetCreatureLocation);
+            RegisterCommand(".deleteobj", GmLevel.GameMaster, DeleteObjectCommand);
+            RegisterCommand(".error", GmLevel.GameMaster, ErrorCommand);
+            RegisterCommand(".forcestate", GmLevel.GameMaster, ForceStateCommand);
+            RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
+            RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
+            RegisterCommand(".setkillstreak", GmLevel.GameMaster, SetKillStreakCommand);
+            RegisterCommand(".setregion", GmLevel.GameMaster, SetRegionCommand);
+            RegisterCommand(".speed", GmLevel.GameMaster, SpeedCommand);
+            RegisterCommand(".tele", GmLevel.GameMaster, TeleCommand);
+            RegisterCommand(".teleport", GmLevel.GameMaster, TeleportCommand);
+            RegisterCommand(".teleup", GmLevel.GameMaster, TeleUpCommand);
+
+            // Admin: hands out progression, changes who a player is, reloads server data.
+            // A restart does not undo these.
+            RegisterCommand(".addtitle", GmLevel.Admin, AddTitleCommand);
+            RegisterCommand(".chg_class", GmLevel.Admin, ChangeClassCommand);
+            RegisterCommand(".giveitem", GmLevel.Admin, GiveItemCommand);
+            RegisterCommand(".givelogos", GmLevel.Admin, GiveLogosCommand);
+            RegisterCommand(".givexp", GmLevel.Admin, GiveXpCommand);
+            RegisterCommand(".reloadcreatures", GmLevel.Admin, ReloadCreaturesCommand);
+            RegisterCommand(".rename", GmLevel.Admin, RenameCommand);
         }
 
         #region RegularUser
@@ -617,13 +667,21 @@ namespace Rasa.Managers
             return;
         }
 
+        /// <summary>
+        /// Lists what this account can actually run. Printing the whole table to an Observer
+        /// would just be a list of things that answer "you do not have access to that".
+        /// </summary>
         private void HelpGmCommand(string[] parts)
         {
-            CommunicatorManager.Instance.SystemMessage(_client, "GM Commands List:");
-            foreach (var command in Commands)
-                CommunicatorManager.Instance.SystemMessage(_client, $"{command.Key}");
+            var client = _client;
 
-            return;
+            CommunicatorManager.Instance.SystemMessage(client,
+                $"Commands available at account level {client.AccountEntry.Level}:");
+
+            foreach (var command in Commands.Where(c => HasLevel(client, c.Value.Level))
+                                            .OrderBy(c => c.Value.Level)
+                                            .ThenBy(c => c.Key))
+                CommunicatorManager.Instance.SystemMessage(client, $"{command.Key} ({command.Value.Level})");
         }
 
         private void NearCommand(string[] parts)

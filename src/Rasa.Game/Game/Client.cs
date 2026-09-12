@@ -328,9 +328,11 @@ namespace Rasa.Game
 
                     using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
                     {
+                        // A new account is created at level 0, an ordinary player. Logging in used
+                        // to set every account to level 1, which made the GM check in front of the
+                        // dot commands true for everyone who could reach it. Levels are handed out
+                        // from the Game console now: gm <familyName> <level>.
                         unitOfWork.GameAccounts.CreateOrUpdate(loginEntry.Id, loginEntry.Name, loginEntry.Email);
-                        // for now set all account to GM status
-                        unitOfWork.GameAccounts.UpdateAccountLevel(loginEntry.Id, 1);
 
                         if (Server.IsBanned(loginMsg.AccountId))
                         {

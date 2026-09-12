@@ -460,18 +460,14 @@ namespace Rasa.Managers
 
         public void RadialChat(Client client, string textMsg)
         {
-            // check if it's gm command
+            // A leading dot is a command, whoever typed it. ProcessCommand decides whether this
+            // account has the level for that particular one - this used to hold a single check
+            // for all of them, which is why every command needed the same rank. Either way the
+            // message is never broadcast: a mistyped command should not land in local chat.
             if (textMsg[0] == '.')
             {
-                // it's GM command, check if client is GM
-                if (client.AccountEntry.Level > 0)
-                {
-                    // Client is GM
-                    ChatCommandsManager.Instance.ProcessCommand(client, textMsg);
-                    return;
-                }
-                else
-                    Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} tryed to use GM Command = {textMsg}");
+                ChatCommandsManager.Instance.ProcessCommand(client, textMsg);
+                return;
             } 
             if (client.Player == null)
                 return;

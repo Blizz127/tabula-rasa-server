@@ -102,6 +102,7 @@ namespace Rasa.Game
 
             CommandProcessor.RegisterCommand("exit", ProcessExitCommand);
             CommandProcessor.RegisterCommand("reload", ProcessReloadCommand);
+            CommandProcessor.RegisterCommand("gm", ProcessGmCommand);
         }
 
         ~Server()
@@ -486,6 +487,88 @@ namespace Rasa.Game
         #endregion
 
         #region Commands
+        /// <summary>
+        /// gm &lt;familyName&gt; [level] - reads or sets an account's GM level.
+        ///
+        /// This lives on the Game console rather than the Auth one because game_account.level is
+        /// in the character database, which Auth has no connection to. It is a console command
+        /// rather than an in-game one so that granting it never depends on already having it.
+        ///
+        /// The level takes effect immediately for a player who is logged in: AccountEntry is read
+        /// from the database once at login, so writing the row alone would leave them at their old
+        /// level until they relogged.
+        /// </summary>
+        private void ProcessGmCommand(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                Logger.WriteLog(LogType.Command,
+                    "Usage: gm <familyName> [level]. Levels: "
+                    + string.Join(", ", Enum.GetValues<GmLevel>().Select(l => $"{(byte)l} {l}")));
+                return;
+            }
+
+            var familyName = parts[1];
+
+            using var unitOfWork = GameUnitOfWorkFactory.CreateChar();
+
+            var account = unitOfWork.GameAccounts.FindByFamilyName(familyName);
+
+            if (account == null)
+            {
+                Logger.WriteLog(LogType.Command, $"No account has the family name {familyName}.");
+                return;
+            }
+
+            if (parts.Length == 2)
+            {
+                Logger.WriteLog(LogType.Command,
+                    $"{account.FamilyName} (account {account.Id}) is level {account.Level} ({Describe(account.Level)}).");
+                return;
+            }
+
+            if (!TryParseLevel(parts[2], out var level))
+            {
+                Logger.WriteLog(LogType.Command,
+                    $"'{parts[2]}' is not a level. Use a number 0-255, or one of: "
+                    + string.Join(", ", Enum.GetNames<GmLevel>()));
+                return;
+            }
+
+            unitOfWork.GameAccounts.UpdateAccountLevel(account.Id, level);
+
+            var online = Clients.FirstOrDefault(c => c.AccountEntry?.Id == account.Id);
+            if (online?.AccountEntry != null)
+                online.AccountEntry.Level = level;
+
+            Logger.WriteLog(LogType.Command,
+                $"{account.FamilyName} (account {account.Id}) is now level {level} ({Describe(level)})"
+                + (online == null ? "." : ", and is logged in - it applies now."));
+        }
+
+        /// <summary>Accepts a number or a rank name, so 'gm Ellimist admin' works as well as 10.</summary>
+        private static bool TryParseLevel(string value, out byte level)
+        {
+            if (byte.TryParse(value, out level))
+                return true;
+
+            if (Enum.TryParse<GmLevel>(value, true, out var named))
+            {
+                level = (byte)named;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>Names the rank a level reaches, since the levels in between are legal too.</summary>
+        private static string Describe(byte level)
+        {
+            var reached = Enum.GetValues<GmLevel>().Where(l => (byte)l <= level).ToList();
+
+            return reached.Count == 0 ? "none" : reached.Max().ToString();
+        }
+
         private void ProcessExitCommand(string[] parts)
         {
             var minutes = 0;
