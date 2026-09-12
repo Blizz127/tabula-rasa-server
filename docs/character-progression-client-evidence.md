@@ -90,6 +90,9 @@ less cumulative purchased-rank costs. Client code directly supports normal
 incremental rank costs 1, 2, 3, 4, 5, but **does not prove this total formula**,
 the initial five-point accounting convention, or awarding tier bonuses merely
 on reaching a numerical level. These were not changed by this research pass.
+The later [creation audit](new-character-client-evidence.md) recovered dated
+evidence for all five Recruit skills at rank 1 and zero initial unspent points;
+that correction resolves the initial allowance but not later bonus timing.
 
 [TaRapedia's Leveling Up article](https://tabularasa.fandom.com/wiki/Leveling_Up)
 describes two skill points per normal level, two additional points upon class
@@ -169,8 +172,9 @@ Read-only inspection of the current emulator found these gaps:
 - `CharacterManager.InternalCreateCharacter` creates the database record,
   appearance and starter items; no initial skill-grant path was found there.
   `CharacterRepository.Create` sets class 1; the database model defaults to
-  level 1 and zero clone credits. The exact original boot-camp reward sequence
-  must precede any unconditional starter skill/Logos grants.
+  level 1 and zero clone credits. This initial-rank gap is now corrected using
+  the dated evidence in [new-character initialization](new-character-client-evidence.md).
+  The boot-camp/skip reward sequence and Logos grants remain unresolved.
 - `ManifestationManager.GainExperience` directly increments levels while XP
   meets thresholds, without checking class tier. It derives point messages
   from the existing formula.

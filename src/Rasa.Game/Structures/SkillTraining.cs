@@ -59,6 +59,20 @@ namespace Rasa.Structures
         };
         private static readonly int[] ParentClasses = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
 
+        // Recruit skills begin at rank one. The five-point starting allowance
+        // below accounts for these already assigned ranks, not unspent points.
+        // See docs/new-character-client-evidence.md for dated original sources.
+        public static Dictionary<SkillId, SkillsData> CreateInitialRecruitSkills()
+        {
+            var skills = new Dictionary<SkillId, SkillsData>();
+            foreach (var id in ClassSkills[1])
+            {
+                var index = Array.IndexOf(SkillIds, id);
+                skills.Add((SkillId)id, new SkillsData((SkillId)id, AbilityIds[index], 1));
+            }
+            return skills;
+        }
+
         private static bool IsSignature(int skillId) => Array.IndexOf(SignatureSkillIds, skillId) >= 0;
 
         public static int GetMaximumRank(int skillId) => IsSignature(skillId) ? 1 : 5;

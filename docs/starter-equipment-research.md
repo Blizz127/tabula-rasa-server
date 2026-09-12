@@ -2,7 +2,9 @@
 
 The final-live preservation target in `AGENTS.md` applies. This investigation
 identified a saved-character problem exposed by the equipment eligibility
-implementation; it does not establish original automatic starter grants.
+implementation. The historical repair below did not establish original grants;
+the subsequent [new-character audit](new-character-client-evidence.md) recovered
+dated evidence and fixes creation for future characters.
 
 ## Confirmed requirements and current defect
 
@@ -23,13 +25,13 @@ provenance and original consumers are described in the
 [world equipment audit](world-equipment-client-audit.md) and
 [equipment eligibility audit](equipment-eligibility-client-evidence.md).
 
-`CharacterManager.RequestCreateCharacterInSlot` creates appearance and items,
-but does not initialize skills. `CreateCharacterManifestation` loads persisted
+The creation path inspected during this diagnosis created appearance and items,
+but did not initialize skills. `CreateCharacterManifestation` loads persisted
 skills through `MapChannelManager.GetPlayerSkills`; an empty table therefore
 produces no trained skills. The original requirement checks correctly reject
 this character's gear for missing training.
 
-There is a separate creation defect: `GiveBasicItems` grants template 145 while
+There was a separate creation defect: `GiveBasicItems` granted template 145 while
 reading maximum durability from template 17131. The inspected pistol had
 120 HP against its own maximum of 100. This is not the red-requirement cause:
 the original condition predicate rejects zero condition, not excess condition.
@@ -56,7 +58,7 @@ SQLite backups passed integrity checks. Private scripts, snapshots, validation
 logs and service metadata are retained in
 `/home/blizz/backups/rasa-net/20260912T212342Z-blizz-training/`.
 
-## Initial-grant evidence remains incomplete
+## Initial-grant evidence and subsequent correction
 
 The contemporary [boot-camp walkthrough](https://www.playtabularasaonline.com/index.php?pg=starters-guide_bootcamp1)
 shows the starter pistol being equipped and Sprint assigned before completing
@@ -66,8 +68,20 @@ points. It does not show every Recruit skill or identify the client revision.
 
 The [boot-camp bypass account](https://www.playtabularasaonline.com/index.php?pg=starters-guide_bootcamp_skip)
 distinguishes the Lightning ability from the Power Logos required to use it.
-These are supporting observations, not proof of the complete final-live
-creation/skip reward sequence. Do not infer a universal five-skill grant or
-award Logos from this character repair. The initial ledger and grant timing
-remain open as recorded in the
-[character progression audit](character-progression-client-evidence.md).
+These were supporting observations, insufficient by themselves to establish
+the complete final-live creation/skip reward sequence. A subsequent recovery
+of the September 15, 2008 Skill revision explicitly establishes all five
+Recruit skills starting at rank 1. The [new-character correction](new-character-client-evidence.md)
+records this stronger evidence and now initializes all five ranks in creation,
+leaving zero unspent points, and fixes the pistol's durability source. It does
+not award Power Logos or implement the unresolved boot-camp skip reward path.
+
+The same diagnosed character was then reconciled to that established initial
+state at **22:10:59 UTC**. A stopped-game transaction required the exact known
+level-1 Recruit and its two previously saved ranks before adding Hand to Hand
+1, Lightning 1 (ability 194), and Sprint 1 (ability 401). Its available points
+are now zero. Table hashes confirmed that only `character_skills` changed.
+No inventory, Logos, quest, appearance or other character state was rewritten.
+The tested candidate's actual initializer and equipment checker validated
+the saved result against fresh snapshots. Private records are in
+`/home/blizz/backups/rasa-net/20260912T220953Z-retail-creation/`.

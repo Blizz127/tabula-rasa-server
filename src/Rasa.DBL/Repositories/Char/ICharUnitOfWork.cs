@@ -24,6 +24,8 @@
 
     public interface ICharUnitOfWork : IUnitOfWork
     {
+        Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction BeginTransaction();
+
         ICensoredWordRepository CensoredWords { get; }
         ICharacterRepository Characters { get; }
         ICharacterAbilityDrawerRepository CharacterAbilityDrawers { get; }

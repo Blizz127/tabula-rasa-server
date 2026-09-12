@@ -104,8 +104,10 @@ must preserve that distinction when implemented.
   Recruit skill to rank 1. Its points calculation adds five points with the
   explanation that Recruit skills start at rank 1. These show implementation
   intent, but the disabled initialization does **not** establish the exact retail
-  creation/tutorial award sequence. Do not replace tutorial progression with
-  unconditional free Lightning/Logos solely on this basis.
+  creation/tutorial award sequence. The subsequent
+  [new-character audit](new-character-client-evidence.md) recovered an explicit
+  September 2008 wiki revision, corroborating all five initial rank-one skills.
+  Creation now saves them; this does not award the Logos needed for Lightning.
 - No authoritative per-skill/per-rank minimum player-level table was obtained.
   Do not infer rank requirements from gear levels or impose a guessed universal
   progression. A threshold of 5/15/30 for class promotion is a different rule.

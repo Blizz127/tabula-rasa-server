@@ -866,3 +866,52 @@ The same tested game image restarted at **21:23:43 UTC** and reported ready at
 error/unhandled/fatal/OOM log lines; auth's image and start time are unchanged.
 Private integrity-checked backups and operation records are retained in
 `/home/blizz/backups/rasa-net/20260912T212342Z-blizz-training/`.
+
+## 2026-09-12: Recruit initialization and atomic creation
+
+The user's progression order is now recorded in `AGENTS.md` and
+[the preservation sequence](progression-preservation-plan.md): creation and
+final live boot camp first, then successive class tiers through endgame.
+
+A recovered September 2008 wiki revision explicitly establishes all five
+Recruit skills at rank 1. Original-client catalog mappings, an archived
+official Recruit page and a contemporary level-1 image corroborate the result.
+Creation now persists Firearms, Hand to Hand, Motor Assist Armor, Lightning
+and Sprint at rank 1, leaving zero unspent points. Lightning retains its Power
+Logos requirement. Character, appearance, initial skills/items, family-name
+change and first bank tab commit together before creation success is sent.
+Later characters preserve existing training and account bank state. Starter
+items now receive their own maximum durability; the pistol previously used a
+different template. Full starter loadout and tutorial reward fidelity remain open.
+
+The diagnosed historical character received only its three remaining missing
+initial ranks after a guarded comparison against its known state. Fresh
+snapshot verification with the candidate's actual initializer and requirement
+checker passed before and after. Only the skills table changed; no earned
+progression, inventory or Logos was rewritten.
+
+Evidence, artifact hashes, dated revisions and remaining first-segment gaps:
+[new-character initialization](new-character-client-evidence.md).
+
+The .NET 5 candidate built with zero errors and the same five existing unused
+variable/field warnings. **All 584 tests passed**, with no failures or skips,
+inside the final image without production database mounts or networking.
+Source comparison matched the reviewed workspace excluding generated `bin`/`obj`.
+Seven new integration cases exercise creation, persistent state and rollback;
+passing tests establish implementation behavior, not full original fidelity.
+
+Tested image
+`sha256:b319d6018f9f450743315e5f13b4988d07776d14588c96f2a438178c6d07af09`
+replaced game at **22:11:21 UTC**, reporting ready at **22:11:30 UTC**.
+Verification at **22:11:50 UTC** found the expected image running, zero restarts
+and no error/unhandled/fatal/OOM log lines. Auth's image and start time are
+unchanged. No schema migration was required.
+
+All three fresh SQLite backups passed integrity checks. Reviewed source/docs,
+private deployment configuration, repair scripts, before/after snapshots,
+table hashes, build/test logs and service metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T220953Z-retail-creation/`.
+Rollback image: `rasa_net:before-retail-creation-20260912`; retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`.
+Code rollback does not require restoring the character database. The full
+creation/tutorial segment and overall preservation target remain incomplete.

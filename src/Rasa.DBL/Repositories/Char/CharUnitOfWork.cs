@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Rasa.Repositories.Char
 {
@@ -27,6 +29,8 @@ namespace Rasa.Repositories.Char
 
     public class CharUnitOfWork : UnitOfWork, ICharUnitOfWork
     {
+        private readonly CharContext _dbContext;
+
         [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter", Justification = "Required for DI")]
         public CharUnitOfWork(CharContext dbContext,
             IGameAccountRepository gameAccounts,
@@ -51,6 +55,7 @@ namespace Rasa.Repositories.Char
             IUserOptionRepository userOptions
             ) : base(dbContext)
         {
+            _dbContext = dbContext;
             GameAccounts = gameAccounts;
             CensoredWords = censoredWords;
             Characters = characters;
@@ -74,6 +79,9 @@ namespace Rasa.Repositories.Char
         }
 
         public ICensoredWordRepository CensoredWords { get; }
+        public IDbContextTransaction BeginTransaction()
+            => _dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+
         public ICharacterRepository Characters { get; }
         public ICharacterAbilityDrawerRepository CharacterAbilityDrawers { get; }
         public ICharacterAppearanceRepository CharacterAppearances { get; }

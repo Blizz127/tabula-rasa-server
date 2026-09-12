@@ -196,25 +196,37 @@ namespace Rasa.Managers
             // TODO to remove this lock, the family name check and update must be redesigned to be thread safe
             lock (_createLock)
             {
-                var createdCharacterId = InternalCreate(client, packet, unitOfWork);
-
-                if (createdCharacterId == null)
+                try
                 {
+                    // Keep the new character, appearance, starter ranks, items
+                    // and first account lockbox tab in one creation transaction.
+                    using var transaction = unitOfWork.BeginTransaction();
+                    var createdCharacterId = InternalCreate(client, packet, unitOfWork);
+                    if (createdCharacterId == null)
+                        return;
+
+                    characterId = createdCharacterId.Value;
+                    var skills = SkillTraining.CreateInitialRecruitSkills();
+                    unitOfWork.CharacterSkills.AddOrUpdate(skills.Values.Select(skill =>
+                        new CharacterSkillsEntry(characterId, (uint)skill.SkillId, skill.AbilityId, skill.SkillLevel)).ToArray());
+
+                    GiveBasicItems(client, characterId, unitOfWork);
+
+                    if (unitOfWork.CharacterLockboxes.Get(client.AccountEntry.Id) == null)
+                        unitOfWork.CharacterLockboxes.Add(client.AccountEntry.Id);
+
+                    unitOfWork.Complete();
+                    transaction.Commit();
+                }
+                catch (Exception exception) when (exception is Microsoft.EntityFrameworkCore.DbUpdateException ||
+                    exception is InvalidOperationException || exception is KeyNotFoundException)
+                {
+                    Logger.WriteLog(LogType.Error, $"Character creation could not be saved: {exception.Message}");
+                    SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
                     return;
                 }
-
-                characterId = createdCharacterId.Value;
             }
 
-            // give basic items
-            GiveBasicItems(client, characterId);
-
-            // give first lockbox tab
-            if (unitOfWork.CharacterLockboxes.Get(client.AccountEntry.Id) == null)
-                unitOfWork.CharacterLockboxes.Add(client.AccountEntry.Id);
-
-			unitOfWork.Complete();
-			
             client.CallMethod(SysEntity.ClientMethodId, new CharacterCreateSuccessPacket(packet.SlotNum, packet.FamilyName));
 
             client.ReloadGameAccountEntry();
@@ -260,7 +272,11 @@ namespace Rasa.Managers
             }
 
             var appearances = CreateCharacterAppearanceEntries(packet);
-            unitOfWork.CharacterAppearances.Add(characterEntry, appearances);
+            if (!unitOfWork.CharacterAppearances.Add(characterEntry, appearances))
+            {
+                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
+                return null;
+            }
 
             if (string.IsNullOrWhiteSpace(client.AccountEntry.FamilyName) || changeFamilyName)
             {
@@ -294,16 +310,24 @@ namespace Rasa.Managers
             return databaseEntry;
         }
 
-        private void GiveBasicItems(Client client, uint characterId)
+        private void GiveBasicItems(Client client, uint characterId, ICharUnitOfWork unitOfWork)
         {
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 0, unitOfWork.Items.CreateItem(new Item(145, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[17131]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 50, unitOfWork.Items.CreateItem(new Item(28, 100, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[28]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 1, unitOfWork.Items.CreateItem(new Item(13126, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13126]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 2, unitOfWork.Items.CreateItem(new Item(13186, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13186]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 3, unitOfWork.Items.CreateItem(new Item(13156, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13156]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            //unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 4, unitOfWork.Items.CreateItem(new Item(13066, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13066]].ItemClassInfo.MaxHitPoints, 2139062144)));
-            //unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 5, unitOfWork.Items.CreateItem(new Item(13096, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13096]].ItemClassInfo.MaxHitPoints, 2139062144)));
+            // Preserve the existing item selection pending the original complete
+            // starter-loadout audit. Durability must come from the granted item.
+            var items = new (uint Template, uint Slot, uint Quantity)[]
+            {
+                (145, 0, 1), (28, 50, 100), (13126, 1, 1), (13186, 2, 1), (13156, 3, 1)
+            };
+            foreach (var entry in items)
+            {
+                var itemClass = ItemManager.Instance.ItemTemplateItemClass[entry.Template];
+                var maximumHitPoints = EntityClassManager.Instance.LoadedEntityClasses[itemClass].ItemClassInfo.MaxHitPoints;
+                var itemId = unitOfWork.Items.CreateItem(new Item(entry.Template, entry.Quantity, maximumHitPoints, 2139062144));
+                if (itemId == 0)
+                    throw new InvalidOperationException("A starter item could not be saved.");
+                unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId,
+                    (uint)InventoryType.Personal, entry.Slot, itemId);
+            }
         }
 
         public void RequestDeleteCharacterInSlot(Client client, RequestDeleteCharacterInSlotPacket packet)

@@ -34,3 +34,15 @@ Current progress and limitations: `docs/retail-accuracy.md`. Research records:
 `docs/final-retail-target.md`, `docs/skill-research.md`, `docs/mission-research.md`,
 and `docs/death-research.md`, plus subsequent focused research documents.
 Existing deployed patches remain subject to fidelity review.
+
+# Implementation order
+
+The user explicitly requested progression from **new character to endgame in
+that order** on 2026-09-12. Follow `docs/progression-preservation-plan.md`.
+Start with creation, initial gear/skills and the final live boot camp, then
+advance through early leveling, class tiers and their content to level 50,
+endgame and final live events. Complete and verify each playable progression
+segment before prioritizing later content. Implement shared systems when the
+current segment needs them. Use original-client reverse engineering,
+contemporary websites and gameplay videos, and other emulator projects as
+evidence, with their respective provenance and limitations recorded.
