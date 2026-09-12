@@ -33,8 +33,8 @@ namespace Rasa.Managers
          * - DisbandParty', ())
          * - KickUserFromParty', (name,))
          * - KickUserFromPartyById', (id,))
-         * - MakeUserPartyLeader', (name,))
-         * - MakeUserPartyLeaderById', (id,))
+         * - MakeUserPartyLeader', (name,))                     => implemented
+         * - MakeUserPartyLeaderById', (id,))                   => implemented
          * - ChangePartyLootMethod', (option,))
          * - ChangePartyLootThreshold', (quality,))
          * - AcceptPartyInvitesChanged', (value.lower() == 'true',))
@@ -248,9 +248,7 @@ namespace Rasa.Managers
                 InviteeName = inviteeName
             };
 
-            var squadInfo = party != null ? LiveMembers(party) : new List<PartyMember> { new PartyMember(client) };
-
-            invitee.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(client.Player.FamilyName, squadInfo));
+            invitee.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(client.Player.FamilyName, SquadInfo(client)));
             client.CallMethod(SysEntity.ClientPartyManagerId, new InvitedPlayerToPartyPacket(inviteeName, invitee.Player.IsAFK));
         }
 
@@ -531,22 +529,50 @@ namespace Rasa.Managers
                 Kick(party, client, target);
         }
 
+        /// <summary>
+        /// client/party.py SendChangeLeader: the leader naming the member to hand the squad to.
+        /// Typed names reach this one, so a name that is not in the squad is answered.
+        /// </summary>
         internal void MakeUserPartyLeader(Client client, MakeUserPartyLeaderPacket packet)
         {
             var party = LedParty(client);
-            var target = party?.Members.Find(m => string.Equals(m.MemberName, packet.FamilyName, StringComparison.OrdinalIgnoreCase));
 
-            if (target != null)
-                SetLeader(party, target);
+            if (party == null)
+                return;
+
+            var name = packet.FamilyName?.Trim() ?? string.Empty;
+            var target = party.Members.Find(m => string.Equals(m.MemberName, name, StringComparison.OrdinalIgnoreCase));
+
+            if (target == null)
+            {
+                Message(client, PlayerMessage.PmWhisperTargetNotInGame, "player", name);
+                return;
+            }
+
+            HandLeadership(party, client, target);
         }
 
+        /// <summary>
+        /// client/party.py SendChangeLeaderById, from the party window. The id comes out of that
+        /// window, so one that is not in the squad means the window is behind: it is resent
+        /// rather than answered with a message about a player the leader never named.
+        /// </summary>
         internal void MakeUserPartyLeaderById(Client client, MakeUserPartyLeaderByIdPacket packet)
         {
             var party = LedParty(client);
-            var target = party?.Find(packet.UserId);
 
-            if (target != null)
-                SetLeader(party, target);
+            if (party == null)
+                return;
+
+            var target = party.Find(packet.UserId);
+
+            if (target == null)
+            {
+                SendPartyState(party, client);
+                return;
+            }
+
+            HandLeadership(party, client, target);
         }
 
         internal void ChangePartyLootMethod(Client client, ChangePartyLootMethodPacket packet)
@@ -738,11 +764,8 @@ namespace Rasa.Managers
                 DisplayName = displayName
             };
 
-            var squadInfo = requesterParty != null
-                ? LiveMembers(requesterParty)
-                : new List<PartyMember> { new PartyMember(requester) };
-
-            leader.CallMethod(SysEntity.ClientPartyManagerId, new JoinSquadRequestReceivedPacket(requester.Player.FamilyName, squadInfo, requester.AccountEntry.Id));
+            leader.CallMethod(SysEntity.ClientPartyManagerId,
+                new JoinSquadRequestReceivedPacket(requester.Player.FamilyName, SquadInfo(requester), requester.AccountEntry.Id));
             requester.CallMethod(SysEntity.ClientPartyManagerId, new JoinSquadRequestSentPacket(displayName, leader.Player.IsAFK));
         }
 
@@ -924,15 +947,85 @@ namespace Rasa.Managers
                 SetLeader(party, next);
         }
 
+        /// <summary>
+        /// The leader handing the squad to another member. A member whose spot is only being
+        /// held is refused: leading is done from the world, so a squad led by someone who is not
+        /// in it has nobody who can invite, kick, set loot or hand it on again, and the only way
+        /// out is for everyone to leave.
+        /// </summary>
+        private void HandLeadership(Party party, Client leader, PartyMember target)
+        {
+            if (target.UserId == leader.AccountEntry.Id)
+                return;
+
+            if (!target.IsOnline)
+            {
+                Message(leader, PlayerMessage.PmPartyMemberLoggedOut, "player", target.MemberName);
+                return;
+            }
+
+            SetLeader(party, target);
+        }
+
         private void SetLeader(Party party, PartyMember leader)
         {
             if (party.PartyLeaderId == leader.UserId)
                 return;
 
+            var previousLeaderId = party.PartyLeaderId;
+
             party.PartyLeaderId = leader.UserId;
 
+            // The client reads leadership off this one call: SetPartyLeader with an id that is
+            // not in that client's member list - which never contains itself - is how it learns
+            // that it is the leader now. Everyone gets it, so both sides of the handover update.
             foreach (var member in OnlineClients(party))
                 member.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(leader.UserId));
+
+            MoveJoinRequests(previousLeaderId, leader);
+        }
+
+        /// <summary>
+        /// Join requests are answered by whoever leads the squad, so a handover carries the open
+        /// ones across: the old leader's merge window is closed and the new leader's opens, with
+        /// the requester left looking at the name they asked for. If the new leader is not in the
+        /// world the request is dropped instead and the requester's dialog closed.
+        /// </summary>
+        private void MoveJoinRequests(uint previousLeaderId, PartyMember leader)
+        {
+            var pending = _joinRequests.Values.Where(r => r.LeaderId == previousLeaderId).ToList();
+
+            if (pending.Count == 0)
+                return;
+
+            var previousLeader = FindIngame(previousLeaderId);
+            var newLeader = leader.IsOnline ? FindIngame(leader.UserId) : null;
+
+            foreach (var request in pending)
+            {
+                previousLeader?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(request.RequesterName));
+
+                var requester = FindIngame(request.RequesterId);
+
+                if (newLeader == null || requester == null)
+                {
+                    _joinRequests.Remove(request.RequesterId);
+
+                    if (requester != null)
+                    {
+                        requester.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(request.DisplayName));
+                        Message(requester, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                    }
+
+                    continue;
+                }
+
+                request.LeaderId = newLeader.AccountEntry.Id;
+                request.LeaderName = newLeader.Player.FamilyName;
+
+                newLeader.CallMethod(SysEntity.ClientPartyManagerId,
+                    new JoinSquadRequestReceivedPacket(request.RequesterName, SquadInfo(requester), request.RequesterId));
+            }
         }
 
         /// <summary>SetCurrentPartyId(None) and SetPartyLeader(None): the client's "not in a squad" state.</summary>
@@ -981,6 +1074,17 @@ namespace Rasa.Managers
                 _invites.Remove(sent.InviteeId);
                 FindIngame(sent.InviteeId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(sent.InviterName));
             }
+        }
+
+        /// <summary>
+        /// The squad tuples the client's invite and join-request windows list for a player: their
+        /// whole squad, or the player on their own.
+        /// </summary>
+        private List<PartyMember> SquadInfo(Client client)
+        {
+            var party = PartyOf(client);
+
+            return party != null ? LiveMembers(party) : new List<PartyMember> { new PartyMember(client) };
         }
 
         /// <summary>The members with name, level and AFK read from the live character where there is one.</summary>
