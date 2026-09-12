@@ -52,6 +52,24 @@ namespace Rasa.Repositories.Char.CharacterLockbox
             return true;
         }
 
+        public bool TryPurchaseTab(uint accountId, uint characterId, int expectedWallet, int expectedTabs, int tabId, int price)
+        {
+            if (accountId == 0 || characterId == 0 || expectedTabs < 1 || expectedTabs >= 5 ||
+                tabId != expectedTabs + 1 || price <= 0 || expectedWallet < price)
+                return false;
+            using var transaction = _charContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            if (_charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE character SET credit = {expectedWallet - price}
+                WHERE id = {characterId} AND account_id = {accountId} AND credit = {expectedWallet}") != 1)
+                return false;
+            if (_charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE character_lockbox SET purashed_tabs = {tabId}
+                WHERE account_id = {accountId} AND purashed_tabs = {expectedTabs}") != 1)
+                return false;
+            transaction.Commit();
+            return true;
+        }
+
         public void UpdateCredits(uint accountId, int credits)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterLockboxEntries);

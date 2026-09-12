@@ -774,3 +774,39 @@ Rollback image: `rasa_net:before-retail-credit-20260912`; retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`.
 Code rollback requires no database restoration. The complete final-live
 preservation goal remains active.
+
+## 2026-09-12: original lockbox tab prices and purchase correction
+
+Recovered the original five-row lockbox tab table and its client consumers.
+Tabs contain 96 slots each; additional tabs cost 100,000, 1,000,000, 10,000,000
+and 100,000,000 wallet credits. The previous purchase handler mistakenly added
+the price through a positive signed adjustment. It now deducts the recovered
+price and unlocks only the next tab in one account-scoped transaction. The
+original living-avatar and affordability predicates are enforced, and stale
+or failed purchases publish no payment or unlock. Existing bank credits are
+preserved when changing tab ownership.
+
+Evidence and outstanding full-bank fidelity requirements:
+[lockbox tab reconstruction](lockbox-tab-client-evidence.md).
+
+The final .NET 5 image built with zero errors and the same five existing unused
+variable/field warnings. **All 541 tests passed**, with no failures or skips,
+in the final image without production database mounts or networking. Source
+comparison matched the reviewed workspace excluding generated `bin`/`obj`.
+These checks verify the implementation, not complete original-service fidelity.
+
+Tested image
+`sha256:947f2ae3a05a032a4d1355edf1a9ba7181bd085e2f7abc53ae6a1760f2acab2c`
+replaced the game service at **20:51:29 UTC**, reporting `Server ready!` at
+**20:51:39 UTC**. Verification at 20:52:04 UTC found the expected image running,
+zero restarts and no error/unhandled/fatal/OOM log lines. Auth's image and start
+time are unchanged. No schema migration or historical balance rewrite occurred.
+
+All three fresh SQLite backups passed integrity checks. Private deployment
+configuration, reviewed source/docs, patch, build/test logs, source comparison
+and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T205118Z-retail-tabs/`.
+Rollback image: `rasa_net:before-retail-tabs-20260912`; retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`.
+Code rollback requires no database restoration. Full final-live preservation
+remains incomplete and the goal stays active.

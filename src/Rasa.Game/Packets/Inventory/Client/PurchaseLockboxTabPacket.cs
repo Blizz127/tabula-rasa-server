@@ -2,6 +2,7 @@
 {
     using Data;
     using Memory;
+    using Protocol;
 
     public class PurchaseLockboxTabPacket : ClientPythonPacket
     {
@@ -11,7 +12,8 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
+            if (pr.PeekType() != PythonType.Tuple || pr.ReadTuple() != 1 || pr.PeekType() != PythonType.Int)
+                throw new InvalidClientMessageException();
             TabId = pr.ReadInt();
         }
     }

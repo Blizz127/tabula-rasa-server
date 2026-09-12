@@ -172,26 +172,28 @@ namespace Rasa.Managers
 
         public void PurchaseLockboxTab(Client client, PurchaseLockboxTabPacket packet)
         {
-            /* ToDo
-             * player credits are checked on client side
-             * should we add server side check too?
-             */
-
-            if (packet.TabId == 2)  // price is 100 000
-                ManifestationManager.Instance.LossCredits(client, 100000);
-            if (packet.TabId == 3)  // price is 1 000 000
-                ManifestationManager.Instance.LossCredits(client, 1000000);
-            if (packet.TabId == 4)  // price is 10 000 000
-                ManifestationManager.Instance.LossCredits(client, 10000000);
-            if (packet.TabId == 5)  // price is 100 000 000
-                ManifestationManager.Instance.LossCredits(client, 100000000);
-
-            // update Player
+            if (client?.State != ClientState.Ingame || client.AccountEntry == null || client.Player == null ||
+                client.Player.State == CharacterState.Dead || packet == null ||
+                !client.Player.Credits.TryGetValue(CurencyType.Credits, out var wallet))
+                return;
+            var price = LockboxTabs.PurchasePrice(packet.TabId);
+            if (!price.HasValue)
+                return;
+            try
+            {
+                using var work = _gameUnitOfWorkFactory.CreateChar();
+                if (!work.CharacterLockboxes.TryPurchaseTab(client.AccountEntry.Id, client.Player.Id,
+                        wallet, client.Player.LockboxTabs, packet.TabId, price.Value))
+                    return;
+            }
+            catch (System.Data.Common.DbException exception)
+            {
+                Logger.WriteLog(LogType.Error, exception);
+                return;
+            }
+            client.Player.Credits[CurencyType.Credits] = wallet - price.Value;
             client.Player.LockboxTabs = packet.TabId;
-            // update Db
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            unitOfWork.CharacterLockboxes.UpdatePurashedTabs(client.AccountEntry.Id, packet.TabId);
-            // send data to client
+            client.CallMethod(client.Player.EntityId, new UpdateCreditsPacket(CurencyType.Credits, wallet - price.Value, 0));
             client.CallMethod(SysEntity.ClientInventoryManagerId, new LockboxTabPermissionsPacket(packet.TabId));
         }
 
