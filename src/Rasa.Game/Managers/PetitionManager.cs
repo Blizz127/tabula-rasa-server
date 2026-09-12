@@ -7,6 +7,7 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Packets;
     using Packets.Petition.Client;
     using Packets.Petition.Server;
     using Repositories.UnitOfWork;
@@ -20,8 +21,8 @@ namespace Rasa.Managers
     /// - CreateHelpRequest                   => implemented
     /// - CancelPetition                      => implemented (no client caller)
     /// - RetrievePetition                    => implemented (no client caller)
-    /// - AddToPetition                       => no client caller
-    /// - SearchPetitions                     => no client caller
+    /// - AddToPetition                       => implemented (no client caller)
+    /// - SearchPetitions                     => implemented (no client caller)
     /// - SearchKB                            => no client caller
     /// - RetrieveKBArticle                   => no client caller
     ///
@@ -29,8 +30,8 @@ namespace Rasa.Managers
     /// - CreatePetitionAck                   => implemented
     /// - CancelPetitionAck                   => implemented (empty body in the client)
     /// - RetrievePetitionAck                 => implemented (empty body in the client)
-    /// - AddToPetitionAck                    => empty body in the client
-    /// - SearchPetitionsAck                  => empty body in the client
+    /// - AddToPetitionAck                    => implemented (empty body in the client)
+    /// - SearchPetitionsAck                  => implemented (empty body in the client)
     /// - SearchKBAck                         => empty body in the client
     /// - RetrieveKBArticleAck                => empty body in the client
     ///
@@ -53,6 +54,21 @@ namespace Rasa.Managers
         /// </summary>
         private const int MaxSummaryLength = 255;
         private const int MaxBodyLength = 8000;
+
+        /// <summary>
+        /// A petition plus everything appended to it. petition.body is MySQL TEXT, which holds
+        /// 65535 *bytes*, and a character outside ASCII costs up to three of them - so the cap
+        /// is on characters at a third of that, and the column cannot be overrun whatever is
+        /// typed into it.
+        /// </summary>
+        private const int MaxTotalBodyLength = 16000;
+
+        /// <summary>
+        /// Rows in one search answer. Bodies are left out of those rows, but the socket buffer
+        /// is 8 KB and a list has to fit in a frame; a player with more petitions than this has
+        /// a different problem.
+        /// </summary>
+        private const int SearchResultLimit = 20;
 
         /// <summary>
         /// One filing per account per half minute. The window hides itself on Send and has to be
@@ -184,6 +200,87 @@ namespace Rasa.Managers
                 new RetrievePetitionAckPacket(true, packet.PetitionId, new PetitionInfo(petition)));
         }
 
+        /// <summary>
+        /// Appends to a petition already filed - the player remembering something after the
+        /// fact. Unreachable in the shipped client; groundwork.
+        ///
+        /// The text goes onto the end of the body under a dated separator rather than into a
+        /// table of its own. A petition is read by a person, start to finish, and what they want
+        /// is the story in order; a second table would buy ordering and per-entry metadata that
+        /// nothing here has any use for.
+        ///
+        /// Only your own, and only while it is open: appending to something already answered
+        /// would put text where nobody is going to look again.
+        /// </summary>
+        internal void AddToPetition(Client client, AddToPetitionPacket packet)
+        {
+            var accountId = client.AccountEntry.Id;
+            var text = Clamp(packet.Text, MaxBodyLength);
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            var petition = unitOfWork.Petitions.GetPetition(packet.PetitionId);
+
+            if (text.Length == 0 || petition == null || petition.AccountId != accountId
+                || petition.Status != (byte)PetitionStatus.Open)
+            {
+                Logger.WriteLog(LogType.Debug,
+                    $"Account {accountId} could not add to petition #{packet.PetitionId}: "
+                    + (text.Length == 0 ? "nothing to add."
+                       : petition == null ? "no such petition."
+                       : petition.AccountId != accountId ? "it belongs to another account."
+                       : $"it is already {(PetitionStatus)petition.Status}."));
+
+                Ack(client, new AddToPetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            var addition = $"\n\n--- added {DateTime.UtcNow:yyyy-MM-dd HH:mm} UTC ---\n{text}";
+
+            if (petition.Body.Length + addition.Length > MaxTotalBodyLength)
+            {
+                Logger.WriteLog(LogType.Debug,
+                    $"Account {accountId} could not add to petition #{packet.PetitionId}: it is full.");
+
+                Ack(client, new AddToPetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            if (!unitOfWork.Petitions.UpdatePetitionBody(packet.PetitionId, petition.Body + addition))
+            {
+                Ack(client, new AddToPetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command,
+                $"Petition #{packet.PetitionId} added to by {client.Player.FamilyName} [account {accountId}].");
+
+            Ack(client, new AddToPetitionAckPacket(true, packet.PetitionId));
+        }
+
+        /// <summary>
+        /// The caller's own petitions, newest first, without their bodies.
+        ///
+        /// The request carries no arguments, so there is nothing to search by and only one thing
+        /// it can honestly mean. It is tempting to read the name as the GM-side petition queue -
+        /// that is most likely what it was in the original game, where the GM client was a
+        /// different build - but answering it with everyone's petitions would hand any client
+        /// that sends one opcode the help requests and bug reports of every player on the
+        /// server, names and all. The operator's view of the queue is the Game console's
+        /// `petition list`, which is reachable and cannot be asked for over the wire.
+        /// </summary>
+        internal void SearchPetitions(Client client, SearchPetitionsPacket packet)
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            var results = unitOfWork.Petitions
+                .ListPetitionsForAccount(client.AccountEntry.Id, SearchResultLimit)
+                .Select(p => new PetitionInfo(p))
+                .ToList();
+
+            Ack(client, new SearchPetitionsAckPacket(true, results));
+        }
+
         #endregion
 
         #region Console
@@ -309,7 +406,12 @@ namespace Rasa.Managers
 
         private static void Ack(Client client, bool success, uint petitionId)
         {
-            client.CallMethod(SysEntity.ClientPetitionManagerId, new CreatePetitionAckPacket(success, petitionId));
+            Ack(client, new CreatePetitionAckPacket(success, petitionId));
+        }
+
+        private static void Ack(Client client, PythonPacket packet)
+        {
+            client.CallMethod(SysEntity.ClientPetitionManagerId, packet);
         }
 
         private bool OnCooldown(uint accountId)

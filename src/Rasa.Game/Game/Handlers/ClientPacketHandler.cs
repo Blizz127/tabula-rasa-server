@@ -979,6 +979,18 @@
             PetitionManager.Instance.RetrievePetition(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.AddToPetition)]
+        private void AddToPetition(AddToPetitionPacket packet)
+        {
+            PetitionManager.Instance.AddToPetition(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.SearchPetitions)]
+        private void SearchPetitions(SearchPetitionsPacket packet)
+        {
+            PetitionManager.Instance.SearchPetitions(Client, packet);
+        }
+
         #endregion
 
         #region Social

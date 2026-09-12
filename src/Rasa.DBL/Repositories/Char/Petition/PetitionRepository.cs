@@ -55,6 +55,38 @@ namespace Rasa.Repositories.Char.Petition
             return query.OrderByDescending(e => e.Id).Take(limit).ToList();
         }
 
+        public List<PetitionEntry> ListPetitionsForAccount(uint accountId, int limit)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.PetitionEntries);
+
+            return query.Where(e => e.AccountId == accountId)
+                        .OrderByDescending(e => e.Id)
+                        .Take(limit)
+                        .ToList();
+        }
+
+        public bool UpdatePetitionBody(uint id, string body)
+        {
+            try
+            {
+                var entry = _charContext.GetWritable(_charContext.PetitionEntries, id);
+
+                if (entry == null)
+                    return false;
+
+                entry.Body = body;
+
+                _charContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, "Error appending to Petition:");
+                Logger.WriteLog(LogType.Error, e);
+                return false;
+            }
+        }
+
         /// <summary>
         /// Reports whether the row was found, the same way AddPetition reports its id: the
         /// cancel path runs inside a packet handler, where a throw costs the connection.

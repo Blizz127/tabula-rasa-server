@@ -21,6 +21,15 @@ namespace Rasa.Repositories.Char.Petition
         /// </summary>
         List<PetitionEntry> ListPetitions(byte? status, int limit);
 
+        /// <summary>Newest first, capped, for one account only.</summary>
+        List<PetitionEntry> ListPetitionsForAccount(uint accountId, int limit);
+
+        /// <summary>
+        /// Replaces the body. Used by AddToPetition, which appends rather than replacing - the
+        /// caller does the appending so the length rules live with the rest of them.
+        /// </summary>
+        bool UpdatePetitionBody(uint id, string body);
+
         /// <summary>
         /// Moves a petition to a new status, and reports whether the row was there to move.
         /// Resolution is stored alongside so the reason travels with the state.

@@ -59,9 +59,15 @@ namespace Rasa.Structures
             Resolution = entry.Resolution ?? string.Empty;
         }
 
-        public void Write(PythonWriter pw)
+        /// <summary>
+        /// A search result leaves the body out. Bodies are the big part of a petition and a list
+        /// of them would be a frame several times the 8 KB socket buffer - which is the likeliest
+        /// reason the protocol has both a search and a retrieve rather than one call: the list
+        /// tells you what is there, RetrievePetition fetches one in full.
+        /// </summary>
+        public void Write(PythonWriter pw, bool includeBody = true)
         {
-            pw.WriteDictionary(7);
+            pw.WriteDictionary(includeBody ? 7 : 6);
 
             pw.WriteString("id");
             pw.WriteUInt(Id);
@@ -75,8 +81,11 @@ namespace Rasa.Structures
             pw.WriteString("summary");
             pw.WriteUnicodeString(Summary);
 
-            pw.WriteString("body");
-            pw.WriteUnicodeString(Body);
+            if (includeBody)
+            {
+                pw.WriteString("body");
+                pw.WriteUnicodeString(Body);
+            }
 
             pw.WriteString("filedAt");
             pw.WriteLong(FiledAt);
