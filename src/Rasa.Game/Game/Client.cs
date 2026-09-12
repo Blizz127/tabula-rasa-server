@@ -94,6 +94,7 @@ namespace Rasa.Game
             State = ClientState.Connected;
 
             Socket.OnError += OnError;
+            Socket.QueueOverflow += OnSendQueueOverflow;
             Socket.OnReceive += OnReceive;
             Socket.OnEncrypt += OnEncrypt;
             Socket.OnDecrypt += OnDecrypt;
@@ -475,6 +476,15 @@ namespace Rasa.Game
         }
 
         private void OnError(SocketAsyncEventArgs args)
+        {
+            Close(false);
+        }
+
+        /// <summary>
+        /// The connection stopped reading long enough to fill its send queue. Close it without
+        /// trying to send anything: there is already more waiting than it can take.
+        /// </summary>
+        private void OnSendQueueOverflow()
         {
             Close(false);
         }
