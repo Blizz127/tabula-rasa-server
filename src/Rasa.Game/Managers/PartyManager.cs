@@ -22,13 +22,13 @@ namespace Rasa.Managers
     {
         /*   Party Packets:
          * - InviteUserToPartyByName', (targetName,))
-         * - SendJoinRequestToPartyByName', (targetName,))
+         * - SendJoinRequestToPartyByName', (targetName,))       => implemented
          * - InviteSquad', (targetName,))
-         * - SendJoinRequestToSquadLeader', (targetName,))
+         * - SendJoinRequestToSquadLeader', (targetName,))       => implemented
          * - CancelSquadInviteRequest', (targetName,))
          * - CancelSquadJoinRequest', (targetName,))
          * - PartyInvitationResponse', (accepted,))
-         * - PartyJoinRequestResponse', (accepted, senderUserId))
+         * - PartyJoinRequestResponse', (accepted, senderUserId)) => implemented
          * - LeaveParty', ())
          * - DisbandParty', ())
          * - KickUserFromParty', (name,))
@@ -151,6 +151,28 @@ namespace Rasa.Managers
             public string InviteeName;
         }
 
+        /// <summary>
+        /// Open join requests, keyed by the requester's account id. A leader can hold several, so
+        /// PartyJoinRequestResponse carries the requester's account id; the requester holds one,
+        /// because their revoke dialog is a single window.
+        /// </summary>
+        private readonly Dictionary<uint, PendingJoinRequest> _joinRequests = new Dictionary<uint, PendingJoinRequest>();
+
+        private sealed class PendingJoinRequest
+        {
+            public uint RequesterId;
+            public string RequesterName;
+            public uint LeaderId;
+            public string LeaderName;
+
+            /// <summary>
+            /// The name the requester's client is showing this request under - the player they
+            /// asked, who may not be the leader it was routed to. Every message that clears their
+            /// pending indicator has to use it.
+            /// </summary>
+            public string DisplayName;
+        }
+
         #region Handlers
 
         internal void InviteUserToPartyByName(Client client, InviteUserToPartyByNamePacket packet)
@@ -248,9 +270,134 @@ namespace Rasa.Managers
             FindIngame(invite.InviteeId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(invite.InviterName));
         }
 
+        /// <summary>
+        /// client/party.py SendJoinRequest: asking a player to be let into their squad. The whole
+        /// of the requester's squad joins, so they have to be leading it, and the request goes to
+        /// the leader of the squad they are asking to join.
+        /// </summary>
+        internal void SendJoinRequestToPartyByName(Client client, SendJoinRequestToPartyByNamePacket packet)
+        {
+            var target = FindJoinTarget(client, packet.FamilyName);
+
+            if (target == null)
+                return;
+
+            var targetParty = PartyOf(target);
+
+            // Asking a squad member rather than its leader: the client offers to send it on.
+            if (targetParty != null && targetParty.PartyLeaderId != target.AccountEntry.Id)
+            {
+                client.CallMethod(SysEntity.ClientPartyManagerId, new RequestToJoinLeaderConfirmationRequestPacket(target.Player.FamilyName));
+                return;
+            }
+
+            CreateJoinRequest(client, target, target.Player.FamilyName);
+        }
+
+        /// <summary>
+        /// The answer to that offer: the same name again, now to be routed to the leader of that
+        /// player's squad.
+        /// </summary>
+        internal void SendJoinRequestToSquadLeader(Client client, SendJoinRequestToSquadLeaderPacket packet)
+        {
+            var target = FindJoinTarget(client, packet.FamilyName);
+
+            if (target == null)
+                return;
+
+            var targetParty = PartyOf(target);
+            var leader = targetParty == null ? target : FindIngame(targetParty.PartyLeaderId);
+
+            if (leader == null || leader == client)
+            {
+                Message(client, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                return;
+            }
+
+            // The requester's window is showing the player they asked, so that is the name every
+            // message about this request has to carry back.
+            CreateJoinRequest(client, leader, target.Player.FamilyName);
+        }
+
         internal void CancelSquadJoinRequest(Client client, CancelSquadJoinRequestPacket packet)
         {
-            Logger.WriteLog(LogType.AI, $"CancelSquadJoinRequest ToDo");
+            if (client.AccountEntry == null || !_joinRequests.TryGetValue(client.AccountEntry.Id, out var request))
+                return;
+
+            if (!string.Equals(request.DisplayName, packet.FamilyName?.Trim(), StringComparison.OrdinalIgnoreCase))
+                return;
+
+            _joinRequests.Remove(request.RequesterId);
+
+            // Clears the leader's merge window and its pending indicator.
+            FindIngame(request.LeaderId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(request.RequesterName));
+        }
+
+        /// <summary>The leader answering a join request; the client sends the requester's account id with it.</summary>
+        internal void PartyJoinRequestResponse(Client client, PartyJoinRequestResponsePacket packet)
+        {
+            if (!InWorld(client))
+                return;
+
+            if (!_joinRequests.TryGetValue(packet.SenderUserId, out var request) || request.LeaderId != client.AccountEntry.Id)
+            {
+                Message(client, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                return;
+            }
+
+            _joinRequests.Remove(request.RequesterId);
+
+            var requester = FindIngame(request.RequesterId);
+
+            if (requester == null)
+                return;
+
+            // Closes the requester's revoke dialog and pending indicator, and says nothing itself.
+            requester.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(request.DisplayName));
+
+            if (!packet.Accepted)
+            {
+                requester.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestDeclinedPacket(client.Player.FamilyName));
+                return;
+            }
+
+            var requesterParty = PartyOf(requester);
+            var leaderParty = PartyOf(client);
+
+            // Everything is checked again: squads change while a request sits on screen.
+            if (requesterParty != null && requesterParty.PartyLeaderId != requester.AccountEntry.Id
+                || leaderParty != null && leaderParty.PartyLeaderId != client.AccountEntry.Id
+                || requesterParty != null && requesterParty == leaderParty)
+            {
+                Message(client, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                Message(requester, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                return;
+            }
+
+            if (JoiningSize(requesterParty) + (leaderParty?.Members.Count ?? 1) > MaxPartySize)
+            {
+                Message(client, PlayerMessage.PmPartyIsFull);
+                Message(requester, PlayerMessage.PmPartyIsFull);
+                return;
+            }
+
+            Message(client, PlayerMessage.PmPartyInvitationAccepted, "invitee", requester.Player.FamilyName);
+
+            if (leaderParty == null)
+            {
+                if (requesterParty == null)
+                {
+                    CreateParty(client, requester);
+                    return;
+                }
+
+                leaderParty = CreateParty(client);
+            }
+
+            if (requesterParty == null)
+                AddMember(leaderParty, requester);
+            else
+                MergeInto(leaderParty, requesterParty);
         }
 
         internal void PartyInvitationResponse(Client client, PartyInvitationResponsePacket packet)
@@ -524,6 +671,116 @@ namespace Rasa.Managers
 
         #region Helper Functions
 
+        /// <summary>
+        /// Shared checks for both join-request entry points. Returns the player being asked, or
+        /// null after telling the requester why not.
+        /// </summary>
+        private Client FindJoinTarget(Client client, string familyName)
+        {
+            if (!InWorld(client))
+                return null;
+
+            var name = familyName?.Trim() ?? string.Empty;
+            var party = PartyOf(client);
+
+            // The whole of the requester's squad joins, so a member cannot ask on its behalf.
+            if (party != null && party.PartyLeaderId != client.AccountEntry.Id)
+            {
+                Message(client, PlayerMessage.PmYouAreNotPartyLeader);
+                return null;
+            }
+
+            var target = FindIngame(name);
+
+            if (target == null)
+            {
+                Message(client, PlayerMessage.PmWhisperTargetNotInGame, "player", name);
+                return null;
+            }
+
+            if (target == client)
+                return null;
+
+            if (party?.Find(target.AccountEntry.Id) != null)
+            {
+                Message(client, PlayerMessage.PmTheyAreAlreadyInYourParty, "invitee", target.Player.FamilyName);
+                return null;
+            }
+
+            return target;
+        }
+
+        private void CreateJoinRequest(Client requester, Client leader, string displayName)
+        {
+            var requesterParty = PartyOf(requester);
+            var leaderParty = PartyOf(leader);
+
+            if (JoiningSize(requesterParty) + (leaderParty?.Members.Count ?? 1) > MaxPartySize)
+            {
+                Message(requester, PlayerMessage.PmPartyIsFull);
+                return;
+            }
+
+            // One request at a time: the requester has a single revoke dialog. A new one replaces
+            // the old, which means telling whoever was asked that it is gone.
+            if (_joinRequests.TryGetValue(requester.AccountEntry.Id, out var previous))
+            {
+                _joinRequests.Remove(previous.RequesterId);
+                FindIngame(previous.LeaderId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(previous.RequesterName));
+            }
+
+            _joinRequests[requester.AccountEntry.Id] = new PendingJoinRequest
+            {
+                RequesterId = requester.AccountEntry.Id,
+                RequesterName = requester.Player.FamilyName,
+                LeaderId = leader.AccountEntry.Id,
+                LeaderName = leader.Player.FamilyName,
+                DisplayName = displayName
+            };
+
+            var squadInfo = requesterParty != null
+                ? LiveMembers(requesterParty)
+                : new List<PartyMember> { new PartyMember(requester) };
+
+            leader.CallMethod(SysEntity.ClientPartyManagerId, new JoinSquadRequestReceivedPacket(requester.Player.FamilyName, squadInfo, requester.AccountEntry.Id));
+            requester.CallMethod(SysEntity.ClientPartyManagerId, new JoinSquadRequestSentPacket(displayName, leader.Player.IsAFK));
+        }
+
+        /// <summary>How many seats a join request needs: the requester alone, or their whole squad.</summary>
+        private static int JoiningSize(Party requesterParty) => requesterParty?.Members.Count ?? 1;
+
+        /// <summary>
+        /// Moves every member of one squad into another and drops the empty one. Members who are
+        /// out of the world keep their held spot in the squad they end up in.
+        /// </summary>
+        private void MergeInto(Party party, Party source)
+        {
+            var moving = source.Members.ToList();
+            // The members already there: the arrivals hear about each other from the member list
+            // that follows, not from one AddPartyMember per arrival.
+            var existing = OnlineClients(party);
+
+            source.Members.Clear();
+            Parties.Remove(source.Id);
+            FreePartyId(source.Id);
+
+            foreach (var member in moving)
+                AddMemberEntry(party, member, existing);
+
+            // State goes out after every member is in the list, so the arrivals see each other.
+            foreach (var member in moving)
+            {
+                var client = member.IsOnline ? FindIngame(member.UserId) : null;
+
+                if (client == null)
+                    continue;
+
+                client.Player.PartyId = party.Id;
+                SendPartyState(party, client);
+                Message(client, PlayerMessage.PmYouJoinedTheParty);
+            }
+        }
+
         private void CreateParty(Client leader, Client member)
         {
             var party = new Party(GetPartyId, leader.AccountEntry.Id, new List<PartyMember>
@@ -541,21 +798,40 @@ namespace Rasa.Managers
             Message(member, PlayerMessage.PmYouJoinedTheParty);
         }
 
+        /// <summary>A squad of one, for a leader who is about to be joined by another squad.</summary>
+        private Party CreateParty(Client leader)
+        {
+            var party = new Party(GetPartyId, leader.AccountEntry.Id, new List<PartyMember> { new PartyMember(leader) });
+
+            Parties[party.Id] = party;
+            leader.Player.PartyId = party.Id;
+            SendPartyState(party, leader);
+
+            return party;
+        }
+
         private void AddMember(Party party, Client client)
         {
-            var member = new PartyMember(client);
+            AddMemberEntry(party, new PartyMember(client), OnlineClients(party));
 
-            foreach (var other in OnlineClients(party))
-            {
-                other.CallMethod(SysEntity.ClientPartyManagerId, new AddPartyMemberPacket(member));
-                other.CallMethod(SysEntity.ClientPartyManagerId, new AddSquadMemberPacket(member.UserId, member.EntityId));
-            }
-
-            party.Members.Add(member);
             client.Player.PartyId = party.Id;
 
             SendPartyState(party, client);
             Message(client, PlayerMessage.PmYouJoinedTheParty);
+        }
+
+        /// <summary>Adds one member to a squad and tells the members it already had.</summary>
+        private static void AddMemberEntry(Party party, PartyMember member, List<Client> tell)
+        {
+            foreach (var other in tell)
+            {
+                other.CallMethod(SysEntity.ClientPartyManagerId, new AddPartyMemberPacket(member));
+
+                if (member.IsOnline)
+                    other.CallMethod(SysEntity.ClientPartyManagerId, new AddSquadMemberPacket(member.UserId, member.EntityId));
+            }
+
+            party.Members.Add(member);
         }
 
         /// <summary>
@@ -668,6 +944,25 @@ namespace Rasa.Managers
 
         private void DropInvites(uint accountId)
         {
+            if (_joinRequests.TryGetValue(accountId, out var sentRequest))
+            {
+                _joinRequests.Remove(accountId);
+                FindIngame(sentRequest.LeaderId)?.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestCanceledPacket(sentRequest.RequesterName));
+            }
+
+            foreach (var asked in _joinRequests.Values.Where(r => r.LeaderId == accountId).ToList())
+            {
+                _joinRequests.Remove(asked.RequesterId);
+
+                var requester = FindIngame(asked.RequesterId);
+
+                if (requester != null)
+                {
+                    requester.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(asked.DisplayName));
+                    Message(requester, PlayerMessage.PmInviteeLoggedOut, "name", asked.LeaderName);
+                }
+            }
+
             if (_invites.Remove(accountId, out var received))
             {
                 var inviter = FindIngame(received.InviterId);

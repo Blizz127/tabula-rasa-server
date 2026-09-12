@@ -848,16 +848,19 @@
         [PacketHandler(GameOpcode.PartyJoinRequestResponse)]
         private void PartyJoinRequestResponse(PartyJoinRequestResponsePacket packet)
         {
+            PartyManager.Instance.PartyJoinRequestResponse(Client, packet);
         }
 
         [PacketHandler(GameOpcode.SendJoinRequestToPartyByName)]
         private void SendJoinRequestToPartyByName(SendJoinRequestToPartyByNamePacket packet)
         {
+            PartyManager.Instance.SendJoinRequestToPartyByName(Client, packet);
         }
 
         [PacketHandler(GameOpcode.SendJoinRequestToSquadLeader)]
         private void SendJoinRequestToSquadLeader(SendJoinRequestToSquadLeaderPacket packet)
         {
+            PartyManager.Instance.SendJoinRequestToSquadLeader(Client, packet);
         }
 
         #endregion
