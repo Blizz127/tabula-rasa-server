@@ -7,7 +7,9 @@ namespace Rasa.Structures
 
     public class ItemInfo
     {
-        public bool Tradable { get; set; }
+        // Missing template rows previously emitted notTradable=false. Preserve
+        // that existing placeholder when using the positive property name.
+        public bool Tradable { get; set; } = true;
         public int BuyBackPrice { get; set; }
         // there is only reqXPLevel data in phyton files, but (reqBody, reqMind, reqSpirit, reqXpLevel) can be added too
         public Dictionary<RequirementsType, int> Requirements = new Dictionary<RequirementsType, int>();

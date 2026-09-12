@@ -100,6 +100,40 @@ namespace Rasa.Repositories.Char.Items
             _charContext.SaveChanges();
         }
 
+        public bool TryConsumeItemStack(uint accountId, uint characterId, uint inventoryType, uint slotId,
+            uint itemId, uint stackBefore, uint amount)
+        {
+            // Personal inventory belongs to a character; home storage uses owner 0.
+            if (itemId == 0 || amount == 0 || amount > stackBefore ||
+                !((inventoryType == 1 && characterId != 0 && slotId < 250) ||
+                  (inventoryType == 2 && characterId == 0 && slotId < 480)))
+                return false;
+
+            var remaining = stackBefore - amount;
+            using var transaction = _charContext.Database.BeginTransaction();
+            var changed = _charContext.Database.ExecuteSqlInterpolated($@"
+                UPDATE items SET stack_size = {remaining}
+                WHERE item_id = {itemId} AND stack_size = {stackBefore}
+                AND EXISTS (SELECT 1 FROM character_inventory
+                    WHERE item_id = {itemId} AND account_id = {accountId}
+                    AND character_id = {characterId} AND invenotry_type = {inventoryType}
+                    AND slot_id = {slotId})");
+            if (changed != 1)
+                return false;
+
+            if (remaining == 0)
+            {
+                var removed = _charContext.Database.ExecuteSqlInterpolated($@"
+                    DELETE FROM character_inventory WHERE item_id = {itemId}
+                    AND account_id = {accountId} AND character_id = {characterId}
+                    AND invenotry_type = {inventoryType} AND slot_id = {slotId}");
+                if (removed != 1)
+                    return false;
+            }
+            transaction.Commit();
+            return true;
+        }
+
         public bool TryReloadWeapon(uint accountId, uint characterId, uint weaponId, uint ammoBefore,
             uint ammoAfter, IReadOnlyList<ReloadAmmoChange> ammunition)
         {

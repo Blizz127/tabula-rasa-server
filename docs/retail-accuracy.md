@@ -666,3 +666,74 @@ Rollback image: `rasa_net:before-retail-attack-20260912`. Retag it as
 rollback needs no database restoration. The full final-live preservation goal
 remains active, including original-client session verification and the gaps
 in the linked evidence reports.
+
+
+## Equipment eligibility, race and item destruction — 2026-09-12
+
+The [equipment runtime](equipment-runtime-evidence.md) now checks original
+current-attribute, inclusive level, race, positive skill-minimum and condition
+rules. Integer condition preserves the original floor-division quirks and
+rejects exactly zero. Both equipment endpoints validate a living avatar and
+generated class slot before changing inventory. Personal and direct Home
+swaps/unequips now commit both exact locations atomically, preserving character
+IDs versus account-home owner zero. Failed writes leave inventory, pending
+weapon work and queued success notifications untouched.
+
+The [item-state audit](item-condition-client-evidence.md) found a missing
+`RaceId` message. Initial actor data now publishes it before control/equipment,
+allowing the original client's race checks to operate. It also found two
+opposite trade-flag interpretations: the template loader stored a negative flag
+in a positive property, and ItemInfo wrote that property as a negative flag.
+Those mistakes canceled for populated ItemInfo rows but inverted tooltips.
+The loader, ItemInfo and tooltip now agree; missing-template defaults preserve
+the prior wire value and remain explicit placeholders. ItemInfo snapshots all
+existing fields when queued.
+
+The [destruction repair](item-consumption-evidence.md) conserves partial and
+full item quantities in personal/home inventories. Expected count, registered
+instance, account, owner, location and exact item identity are checked before
+commit. Full removal updates the count and removes the correct inventory link
+atomically; memory and client updates follow success. Excess quantities cannot
+wrap, malformed wide values cannot narrow into small deletions, and a decoded
+zero quantity is a no-op. Original item wear, repair economics and retention
+policies are not inferred from these consistency fixes.
+
+The full final-live goal remains incomplete. Clan equipment routes, storage
+permissions/access, binding and uniqueness, remaining inventory operations,
+complete mech equipment, original-client sessions and the broader mechanics/
+content gaps remain tracked in the linked reports.
+
+
+Final review also corrected the appearance-save failure path: a provider or EF
+save error is logged without aborting stat/equipment refresh after a committed
+swap. An isolated trigger-induced failure verifies that both the new armor
+maximum and equipment notification still reflect the committed item. Malformed
+equipment field types now use the connection's handled message exception.
+
+
+The final .NET 5 candidate built with zero errors and the same five existing
+unused-variable/field warnings. **All 469 tests passed**, with zero failures or
+skips, inside the final image without production database mounts or networking.
+Its source exactly matched the reviewed workspace excluding generated
+`bin`/`obj`. Independent review confirmed the original eligibility predicates,
+account/character/Home ownership, transaction rollback and the repaired
+appearance-error path. Tests do not certify original-client sessions or supply
+missing final-live mechanics and server policy evidence.
+
+
+Tested image
+`sha256:f27ad2110ccb77352b7cb23a714442d51fbb12fd14957e54cb8fb9410b3ca2e6`
+replaced the game service at **20:31:30 UTC** and reported `Server ready!` at
+**20:31:39 UTC**. Initial verification found the expected image running with
+zero restarts and no error/unhandled/OOM/fatal startup lines. Auth's image and
+start time are unchanged. No schema migration or bulk world-data rewrite was
+introduced.
+
+All three fresh SQLite backups passed integrity checks. Private deployment
+configuration, reviewed source/docs, patches, build/test logs, source comparison
+and before/after metadata are retained in
+`/home/blizz/backups/rasa-net/20260912T203118Z-retail-equipment/`.
+Rollback image: `rasa_net:before-retail-equipment-20260912`. Retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
+rollback needs no database restoration. The complete final-live preservation
+goal remains active.

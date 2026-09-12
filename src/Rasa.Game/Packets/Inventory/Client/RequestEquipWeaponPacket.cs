@@ -2,6 +2,7 @@
 {
     using Data;
     using Memory;
+    using Protocol;
 
     public class RequestEquipWeaponPacket : ClientPythonPacket
     {
@@ -13,9 +14,14 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
+            if (pr.PeekType() != PythonType.Tuple || pr.ReadTuple() != 3 || pr.PeekType() != PythonType.Int)
+                throw new InvalidClientMessageException();
             SrcSlot = pr.ReadUInt();
+            if (pr.PeekType() != PythonType.Int)
+                throw new InvalidClientMessageException();
             InventoryType = (InventoryType)pr.ReadInt();
+            if (pr.PeekType() != PythonType.Int)
+                throw new InvalidClientMessageException();
             DestSlot = pr.ReadUInt();
         }
     }

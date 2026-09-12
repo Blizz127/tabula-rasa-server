@@ -33,7 +33,7 @@ namespace Rasa.Test
 {
     [TestClass]
     [DoNotParallelize]
-    public class InventorySessionTests
+    public partial class InventorySessionTests
     {
         public class UnitProxy : DispatchProxy
         {

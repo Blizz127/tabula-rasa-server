@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rasa.Data;
 using Rasa.Managers;
+using Rasa.Memory;
+using Rasa.Packets.MapChannel.Server;
 using Rasa.Repositories.Char;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
@@ -22,6 +25,7 @@ namespace Rasa.Test
             public List<ItemTemplateRequirementEntry> Generic;
             public List<ItemTemplateRequirementSkillEntry> Skills;
             public List<ItemTemplateRequirementRaceEntry> Races;
+            public List<ItemTemplateEntry> ItemTemplates = new();
             protected override object Invoke(MethodInfo method, object[] args)
             {
                 switch (method.Name)
@@ -33,7 +37,7 @@ namespace Rasa.Test
                     case "GetItemResistances": return new List<ItemTemplateResistanceEntry>();
                     case "GetWeaponItems": return new List<ItemTemplateWeaponEntry>();
                     case "GetArmorItems": return new List<ItemTemplateArmorEntry>();
-                    case "GetItemTemplates": return new List<ItemTemplateEntry>();
+                    case "GetItemTemplates": return ItemTemplates;
                     default: throw new NotSupportedException(method.Name);
                 }
             }
@@ -56,6 +60,7 @@ namespace Rasa.Test
         private readonly Dictionary<EntityClasses, EntityClass> _previousClasses = new();
         private Logger.LoggerConfig _previousLogger;
         private ItemManager _manager;
+        private EquipmentProxy _records;
 
         [TestInitialize]
         public void Initialize()
@@ -75,6 +80,7 @@ namespace Rasa.Test
             }
             var equipment = DispatchProxy.Create<IEquipmentRepository, EquipmentProxy>();
             var records = (EquipmentProxy)(object)equipment;
+            _records = records;
             records.Templates = new List<ItemTemplateItemClassEntry>
             {
                 new ItemTemplateItemClassEntry { ItemTemplateId = 145, ItemClass = 6048 },
@@ -132,6 +138,55 @@ namespace Rasa.Test
             Assert.AreEqual(0, _manager.GetItemTemplateById(500001).ItemInfo.RaceReq);
             Assert.IsNull(_manager.GetItemTemplateById(500001).EquipableInfo);
             Assert.IsNull(_manager.GetItemTemplateById(6048).EquipableInfo);
+        }
+
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(1)]
+        public void LoadedTradeFlagAgreesBetweenItemStateAndTooltip(int notTradable)
+            => AssertLoadedTradeFlag((byte)notTradable);
+
+        [TestMethod]
+        public void MissingTemplateFlagRowKeepsTheExistingNegativeWireDefault()
+            => AssertLoadedTradeFlag(null);
+
+        private void AssertLoadedTradeFlag(byte? storedFlag)
+        {
+            if (storedFlag.HasValue)
+                _records.ItemTemplates.Add(new ItemTemplateEntry { Id = 145, NotTradableFlag = storedFlag.Value });
+            var notTradable = storedFlag.GetValueOrDefault() != 0;
+            _manager.LoadItemTemplates();
+            var template = _manager.GetItemTemplateById(145);
+            Assert.AreEqual(!notTradable, template.ItemInfo.Tradable);
+            var entityClass = EntityClassManager.Instance.LoadedEntityClasses[(EntityClasses)6048];
+            entityClass.ItemClassInfo = new ItemClassInfo(new ItemClassEntry { MaxHitPoints = 160 });
+            entityClass.Augmentations.Add(AugmentationType.Item);
+
+            using var itemStream = new MemoryStream();
+            using var itemWriter = new PythonWriter(new BinaryWriter(itemStream));
+            new ItemInfoPacket(new Item { ItemTemplate = template, CurrentHitPoints = 100 }, entityClass).Write(itemWriter);
+            itemStream.Position = 0;
+            using var itemReader = new PythonReader(new BinaryReader(itemStream));
+            Assert.AreEqual(15, itemReader.ReadTuple());
+            itemReader.ReadInt(); itemReader.ReadInt(); itemReader.ReadNoneStruct(); itemReader.ReadUInt();
+            for (var i = 0; i < 4; i++) itemReader.ReadBool();
+            Assert.AreEqual(0, itemReader.ReadList());
+            Assert.AreEqual(0, itemReader.ReadList());
+            itemReader.ReadInt(); itemReader.ReadBool();
+            Assert.AreEqual(notTradable, itemReader.ReadBool());
+
+            using var tooltipStream = new MemoryStream();
+            using var tooltipWriter = new PythonWriter(new BinaryWriter(tooltipStream));
+            new ItemTemplateTooltipInfoPacket(template, entityClass).Write(tooltipWriter);
+            tooltipStream.Position = 0;
+            using var tooltipReader = new PythonReader(new BinaryReader(tooltipStream));
+            Assert.AreEqual(3, tooltipReader.ReadTuple());
+            Assert.AreEqual(145u, tooltipReader.ReadUInt());
+            Assert.AreEqual(6048u, tooltipReader.ReadUInt());
+            Assert.AreEqual(1, tooltipReader.ReadDictionary());
+            Assert.AreEqual((int)AugmentationType.Item, tooltipReader.ReadInt());
+            Assert.AreEqual(6, tooltipReader.ReadTuple());
+            Assert.AreEqual(notTradable, tooltipReader.ReadBool());
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using Data;
     using Memory;
+    using Protocol;
 
     public class HomeInventory_DestroyItemPacket : ClientPythonPacket
     {
@@ -12,9 +13,18 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
+            if (pr.PeekType() != PythonType.Tuple || pr.ReadTuple() != 2 || pr.PeekType() != PythonType.Long)
+                throw new InvalidClientMessageException();
             EntityId = pr.ReadULong();
-            Quantity = (uint)pr.ReadLong();
+            var quantity = pr.PeekType() switch
+            {
+                PythonType.Int => (long)pr.ReadInt(),
+                PythonType.Long => pr.ReadLong(),
+                _ => throw new InvalidClientMessageException()
+            };
+            if (quantity < 0 || quantity > uint.MaxValue)
+                throw new InvalidClientMessageException();
+            Quantity = (uint)quantity;
         }
     }
 }

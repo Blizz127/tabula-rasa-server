@@ -504,6 +504,7 @@ namespace Rasa.Managers
                 // Manifestation
                 new CurrentCharacterIdPacket(player.EntityId),
                 new CharacterClassPacket(player.Class),
+                new RaceIdPacket(player.Race),
                 new AttributeInfoPacket(player.Attributes),
                 new PreloadDataPacket(client.Player.Inventory.EquippedInventory[13], player.Abilities),
                 new AppearanceDataPacket(player.AppearanceData),
@@ -703,10 +704,7 @@ namespace Rasa.Managers
                 return;
 
             client.Player.AppearanceData[equipmentSlotId].Class = 0;
-            // update appearance data in database
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            unitOfWork.CharacterAppearances.AddOrUpdate(client.Player.Id, new CharacterAppearanceEntry((uint)equipmentSlotId, 0, 0));
-            unitOfWork.Complete();
+            PersistAppearance(client, new CharacterAppearanceEntry((uint)equipmentSlotId, 0, 0));
         }
 
         public void RequestCustomization(Client client, RequestCustomizationPacket packet)
@@ -832,7 +830,6 @@ namespace Rasa.Managers
         public void SetAppearanceItem(Client client, Item item)
         {
             var equipmentSlotId = EntityClassManager.Instance.GetEquipableClassInfo(item).EquipmentSlotId;
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
             if (!client.Player.AppearanceData.ContainsKey(equipmentSlotId))
                 client.Player.AppearanceData.Add(equipmentSlotId, new AppearanceData { SlotId = equipmentSlotId });
@@ -841,10 +838,24 @@ namespace Rasa.Managers
             client.Player.AppearanceData[equipmentSlotId].Color = new Color(item.Color);
             client.Player.AppearanceData[equipmentSlotId].Hue2 = new Color(item.Color);
 
-            // update appearance data in database
+            PersistAppearance(client, new CharacterAppearanceEntry((uint)equipmentSlotId, (uint)item.ItemTemplate.Class, item.Color));
+        }
 
-            unitOfWork.CharacterAppearances.AddOrUpdate(client.Player.Id, new CharacterAppearanceEntry((uint)equipmentSlotId, (uint)item.ItemTemplate.Class, item.Color));
-            unitOfWork.Complete();
+        private void PersistAppearance(Client client, CharacterAppearanceEntry appearance)
+        {
+            try
+            {
+                using var work = _gameUnitOfWorkFactory.CreateChar();
+                work.CharacterAppearances.AddOrUpdate(client.Player.Id, appearance);
+                work.Complete();
+            }
+            catch (Exception exception) when (exception is System.Data.Common.DbException ||
+                exception is Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                // Equipment locations already committed. A cosmetic save must
+                // not prevent authoritative stats/equipment from refreshing.
+                Logger.WriteLog(LogType.Error, exception);
+            }
         }
 
         public void SetDesiredCrouchState(Client client, bool crouching)

@@ -235,7 +235,7 @@ namespace Rasa.Managers
                 LoadedItemTemplates[template.Id].HasSellableFlag = template.HasSellableFlag != 0;
                 LoadedItemTemplates[template.Id].InventoryCategory = (InventoryCategory)template.InventoryCategory;
                 LoadedItemTemplates[template.Id].NotPlaceableInLockbox = template.NotPlacableInLockboxFlag != 0;
-                LoadedItemTemplates[template.Id].ItemInfo.Tradable = template.NotTradableFlag != 0;
+                LoadedItemTemplates[template.Id].ItemInfo.Tradable = template.NotTradableFlag == 0;
                 LoadedItemTemplates[template.Id].QualityId = template.QualityId;
                 LoadedItemTemplates[template.Id].SellPrice = template.SellPrice;
             }

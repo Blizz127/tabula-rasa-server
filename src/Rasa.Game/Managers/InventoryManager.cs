@@ -102,8 +102,6 @@ namespace Rasa.Managers
             var tempItem = EntityManager.Instance.GetItem(packet.EntityId);
 
             ReduceStackCount(client, InventoryType.HomeInventory, tempItem, packet.Quantity);
-
-            // ToDo delete item from db? or we sill keep all items
         }
 
         public void HomeInventory_MoveItem(Client client, HomeInventory_MoveItemPacket packet)
@@ -139,8 +137,6 @@ namespace Rasa.Managers
             var tempItem = EntityManager.Instance.GetItem(packet.EntityId);
 
             ReduceStackCount(client, InventoryType.Personal, tempItem, packet.Quantity);
-
-            // ToDo delete item from db? or we sill keep all items
         }
 
         public void PersonalInventory_MoveItem(Client client, PersonalInventory_MoveItemPacket packet)
@@ -201,116 +197,122 @@ namespace Rasa.Managers
 
         public void RequestEquipArmor(Client client, RequestEquipArmorPacket packet)
         {
-            if (packet.SrcInventory != InventoryType.Personal)
+            var inventory = client?.Player?.Inventory;
+            if (!CanEquipFrom(client, packet.SrcInventory, packet.SrcSlot) ||
+                packet.DestSlot >= inventory.EquippedInventory.Count || packet.DestSlot == 13)
+                return;
+            var incoming = EntityManager.Instance.GetItem(EquipmentSourceSlots(client, packet.SrcInventory)[(int)packet.SrcSlot]);
+            var outgoing = EntityManager.Instance.GetItem(inventory.EquippedInventory[(int)packet.DestSlot]);
+            if (incoming == null && outgoing == null)
+                return;
+            if (incoming != null && (!TryGetEquipmentClass(incoming, out var incomingClass) ||
+                    (uint)incomingClass.EquipableClassInfo.EquipmentSlotId != packet.DestSlot) ||
+                outgoing != null && (!TryGetEquipmentClass(outgoing, out var outgoingClass) ||
+                    (uint)outgoingClass.EquipableClassInfo.EquipmentSlotId != packet.DestSlot) ||
+                !ValidateItemEquip(client, incoming))
+                return;
+            if (!TrySwapCharacterSlots(client, packet.SrcInventory, packet.SrcSlot, incoming,
+                    InventoryType.EquipedInventory, packet.DestSlot, outgoing))
+                return;
+
+            if (incoming == null)
             {
-                Logger.WriteLog(LogType.Debug, $"Unsupported inventory => {packet.SrcInventory}");
-                return;
-            }
-
-            if (packet.SrcSlot < 0 || packet.SrcSlot >= 50)
-            {
-                Logger.WriteLog(LogType.Debug, $"SrcSlot out of range => {packet.SrcSlot}");
-                return;
-            }
-
-            if (packet.DestSlot < 0 || packet.DestSlot > 22)
-            {
-                Logger.WriteLog(LogType.Debug, $"DestSlot out of range => {packet.DestSlot}");
-                return;
-            }
-
-            var entityIdEquippedItem = client.Player.Inventory.EquippedInventory[(int)packet.DestSlot]; // the old equipped item (can be none)
-            var entityIdInventoryItem = client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot]; // the new equipped item (can be none)
-
-            // can we equip the item
-            var itemToEquip = EntityManager.Instance.GetItem(entityIdInventoryItem);
-            var canEquip = ValidateItemEquip(client, itemToEquip);
-
-            if (itemToEquip == null && canEquip == false)
-                return;
-
-            if (canEquip == false)
-                return;
-
-            // swap items on the client and server
-            if (client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot] != 0)
-                RemoveItemBySlot(client, InventoryType.Personal, packet.SrcSlot);
-
-            if (client.Player.Inventory.EquippedInventory[(int)packet.DestSlot] != 0)
-                RemoveItemBySlot(client, InventoryType.EquipedInventory, packet.DestSlot);
-
-            if (entityIdEquippedItem != 0)
-                AddItemBySlot(client, InventoryType.Personal, entityIdEquippedItem, packet.SrcSlot, true);
-
-            if (entityIdInventoryItem != 0)
-                AddItemBySlot(client, InventoryType.EquipedInventory, entityIdInventoryItem, packet.DestSlot, true);
-
-            // update appearance
-            if (itemToEquip == null)
-            {
-                // remove item graphic if dequipped
-                var prevEquippedItem = EntityManager.Instance.GetItem(entityIdEquippedItem);
-                var equipableClassInfo = EntityClassManager.Instance.GetEquipableClassInfo(prevEquippedItem);
-                ManifestationManager.Instance.RemoveAppearanceItem(client, equipableClassInfo.EquipmentSlotId);
+                var slot = (EquipmentData)packet.DestSlot;
+                if (client.Player.AppearanceData.ContainsKey(slot))
+                    ManifestationManager.Instance.RemoveAppearanceItem(client, slot);
             }
             else
-                ManifestationManager.Instance.SetAppearanceItem(client, itemToEquip);
-
+                ManifestationManager.Instance.SetAppearanceItem(client, incoming);
             ManifestationManager.Instance.UpdateAppearance(client);
             ManifestationManager.Instance.UpdateStatsValues(client, false);
             ManifestationManager.Instance.NotifyEquipmentUpdate(client);
-
-            // Send Data to client
             client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
         }
 
         public void RequestEquipWeapon(Client client, RequestEquipWeaponPacket packet)
         {
-            var srcSlot = packet.SrcSlot;
-            var invType = packet.InventoryType;
-            var destSlot = packet.DestSlot;
-
-            if (invType != InventoryType.Personal)
-            {
-                Console.WriteLine("unsuported inventory");
+            var inventory = client?.Player?.Inventory;
+            if (!CanEquipFrom(client, packet.InventoryType, packet.SrcSlot) ||
+                packet.DestSlot >= inventory.WeaponDrawer.Count || inventory.EquippedInventory.Count <= 13)
                 return;
-            }
-
-            if (srcSlot >= 50 || srcSlot >= client.Player.Inventory.PersonalInventory.Count)
+            var incoming = EntityManager.Instance.GetItem(EquipmentSourceSlots(client, packet.InventoryType)[(int)packet.SrcSlot]);
+            var outgoing = EntityManager.Instance.GetItem(inventory.WeaponDrawer[(int)packet.DestSlot]);
+            if (incoming == null && outgoing == null)
                 return;
-
-            if (destSlot >= client.Player.Inventory.WeaponDrawer.Count)
+            if (incoming != null && !IsDrawerWeapon(incoming) || outgoing != null && !IsDrawerWeapon(outgoing) ||
+                !ValidateItemEquip(client, incoming))
                 return;
-
-            var previousWeaponEntityId = client.Player.Inventory.EquippedInventory[13];
-            // equip item
-            var entityIdEquippedItem = client.Player.Inventory.WeaponDrawer[(int)destSlot]; // the old equipped item (can be none)
-            var entityIdInventoryItem = client.Player.Inventory.PersonalInventory[(int)srcSlot]; // the new equipped item (can be none)
-
-            // can we equip the item
-            var itemToEquip = EntityManager.Instance.GetItem(entityIdInventoryItem);
-            if (itemToEquip != null && itemToEquip.ItemTemplate?.WeaponInfo == null)
+            var previousWeaponEntityId = inventory.EquippedInventory[13];
+            if (!TrySwapCharacterSlots(client, packet.InventoryType, packet.SrcSlot, incoming,
+                    InventoryType.WeaponDrawerInventory, packet.DestSlot, outgoing))
                 return;
-            var canEquip = ValidateItemEquip(client, itemToEquip);
-
-            if (itemToEquip == null && canEquip == false)
-                return;
-
-            if (canEquip == false)
-                return;
-
-            // swap items on the client and server
-            if (client.Player.Inventory.PersonalInventory[(int)srcSlot] != 0)
-                RemoveItemBySlot(client, InventoryType.Personal, srcSlot);
-            if (client.Player.Inventory.WeaponDrawer[(int)destSlot] != 0)
-                RemoveItemBySlot(client, InventoryType.WeaponDrawerInventory, destSlot);
-            if (entityIdEquippedItem != 0)
-                AddItemBySlot(client, InventoryType.Personal, entityIdEquippedItem, srcSlot, true);
-            if (entityIdInventoryItem != 0)
-                AddItemBySlot(client, InventoryType.WeaponDrawerInventory, entityIdInventoryItem, destSlot, true);
-
-            if (destSlot == client.Player.ActiveWeapon)
+            if (packet.DestSlot == client.Player.ActiveWeapon)
                 ManifestationManager.Instance.RefreshArmedWeapon(client, previousWeaponEntityId);
+        }
+
+        private static List<ulong> EquipmentSourceSlots(Client client, InventoryType type)
+            => type == InventoryType.Personal ? client?.Player?.Inventory.PersonalInventory :
+                type == InventoryType.HomeInventory ? client?.Player?.Inventory.HomeInventory : null;
+
+        private static bool CanEquipFrom(Client client, InventoryType type, uint slot)
+        {
+            var slots = EquipmentSourceSlots(client, type);
+            return client?.State == ClientState.Ingame && slots != null && client.Player.State != CharacterState.Dead &&
+                slot < slots.Count && (type != InventoryType.Personal || slot < 50);
+        }
+
+        private static bool TryGetEquipmentClass(Item item, out EntityClass classInfo)
+        {
+            classInfo = null;
+            return item?.ItemTemplate != null &&
+                EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(item.ItemTemplate.Class, out classInfo) &&
+                classInfo.EquipableClassInfo != null;
+        }
+
+        private static bool IsDrawerWeapon(Item item)
+            => TryGetEquipmentClass(item, out var classInfo) &&
+                classInfo.EquipableClassInfo.EquipmentSlotId == EquipmentData.Weapon;
+
+        private bool TrySwapCharacterSlots(Client client, InventoryType sourceType, uint sourceSlot, Item source,
+            InventoryType destinationType, uint destinationSlot, Item destination)
+        {
+            if (client.AccountEntry == null || !MatchesCharacterSlot(client, sourceType, sourceSlot, source) ||
+                !MatchesCharacterSlot(client, destinationType, destinationSlot, destination))
+                return false;
+            try
+            {
+                using var work = _gameUnitOfWorkFactory.CreateChar();
+                if (!work.CharacterInventories.TrySwapItems(client.AccountEntry.Id, client.Player.Id,
+                        (uint)sourceType, sourceSlot, source?.Id ?? 0, (uint)destinationType, destinationSlot, destination?.Id ?? 0))
+                    return false;
+            }
+            catch (System.Data.Common.DbException exception)
+            {
+                Logger.WriteLog(LogType.Error, exception);
+                return false;
+            }
+            // Both persisted locations commit before the in-memory slots and
+            // ordered remove/add notifications change. Appearance follows below.
+            if (source != null)
+                RemoveItemBySlot(client, sourceType, sourceSlot);
+            if (destination != null)
+                RemoveItemBySlot(client, destinationType, destinationSlot);
+            if (destination != null)
+                AddItemBySlot(client, sourceType, destination.EntityId, sourceSlot, false);
+            if (source != null)
+                AddItemBySlot(client, destinationType, source.EntityId, destinationSlot, false);
+            return true;
+        }
+
+        private static bool MatchesCharacterSlot(Client client, InventoryType type, uint slot, Item item)
+        {
+            var slots = type == InventoryType.Personal ? client.Player.Inventory.PersonalInventory :
+                type == InventoryType.HomeInventory ? client.Player.Inventory.HomeInventory :
+                type == InventoryType.EquipedInventory ? client.Player.Inventory.EquippedInventory : client.Player.Inventory.WeaponDrawer;
+            var entityId = slots[(int)slot];
+            return item == null ? entityId == 0 : item.Id != 0 && item.OwnerId == (type == InventoryType.HomeInventory ? 0u : client.Player.Id) &&
+                item.OwnerSlotId == slot && entityId == item.EntityId && item.StackSize > 0 &&
+                EntityManager.Instance.Items.TryGetValue(entityId, out var registered) && ReferenceEquals(registered, item);
         }
 
         public void RequestLockboxTabPermissions(Client client)
@@ -1148,40 +1150,50 @@ namespace Rasa.Managers
             }
         }
 
-        public void ReduceStackCount(Client client, InventoryType inventoryType, Item tempItem, uint stackDecreaseCount)
+        public bool ReduceStackCount(Client client, InventoryType inventoryType, Item tempItem, uint stackDecreaseCount)
         {
-            if (tempItem.OwnerId != client.AccountEntry.SelectedSlot)
-                return; // item is not on this client's inventory
+            if (client?.State != ClientState.Ingame || client.AccountEntry == null || client.Player == null ||
+                client.Player.Disconected || client.Player.RemoveFromMap || tempItem == null || tempItem.Id == 0 ||
+                !ReferenceEquals(EntityManager.Instance.GetItem(tempItem.EntityId), tempItem) ||
+                stackDecreaseCount == 0 || stackDecreaseCount > tempItem.StackSize)
+                return false;
+
+            var slots = inventoryType switch
+            {
+                InventoryType.Personal => client.Player.Inventory.PersonalInventory,
+                InventoryType.HomeInventory => client.Player.Inventory.HomeInventory,
+                _ => null
+            };
+            var ownerId = inventoryType == InventoryType.HomeInventory ? 0u : client.Player.Id;
+            var slotId = tempItem.OwnerSlotId;
+            if (slots == null || tempItem.OwnerId != ownerId || slotId >= slots.Count ||
+                slots[(int)slotId] != tempItem.EntityId)
+                return false;
 
             var newStackCount = tempItem.StackSize - stackDecreaseCount;
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            if (newStackCount <= 0)
+            try
             {
+                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                if (!unitOfWork.Items.TryConsumeItemStack(client.AccountEntry.Id, ownerId, (uint)inventoryType,
+                    slotId, tempItem.Id, tempItem.StackSize, stackDecreaseCount))
+                    return false;
+            }
+            catch (System.Data.Common.DbException exception)
+            {
+                Logger.WriteLog(LogType.Error, $"Item consumption failed for item {tempItem.Id}: {exception.Message}");
+                return false;
+            }
 
-                // destroy item
+            tempItem.StackSize = newStackCount;
+            if (newStackCount == 0)
+            {
+                FreeSlotIndex(client.Player, inventoryType, slotId);
                 EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
-                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryRemoveItemPacket(InventoryType.Personal, tempItem.EntityId));
-                // free slot
-                FreeSlotIndex(client.Player, inventoryType, tempItem.OwnerSlotId);
-                // AddOrUpdate db
-                var characterSlot = client.AccountEntry.SelectedSlot;
-
-                if (inventoryType == InventoryType.HomeInventory)
-                    characterSlot = 0;
-
-                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, tempItem.OwnerSlotId);
-                // ToDo will we delete items from db, or we will let tham stay, so thay can be retrived
-                //ItemsTable.DeleteItem(tempItem.ItemId);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryRemoveItemPacket(inventoryType, tempItem.EntityId));
             }
             else
-            {
-                // update stack count
-                tempItem.StackSize = newStackCount;
-                // set stackcount
                 client.CallMethod(tempItem.EntityId, new SetStackCountPacket(newStackCount));
-                // update stack count in database
-                unitOfWork.Items.UpdateItemStackSize(tempItem);
-            }
+            return true;
         }
 
         public void RemoveItemBySlot(Client client, InventoryType inventoryType, uint slotIndex)
@@ -1244,93 +1256,28 @@ namespace Rasa.Managers
 
         public bool ValidateItemEquip(Client client, Item itemToEquip)
         {
-            var canEquip = true;
-            // min level criteria met?
-            if (itemToEquip != null)
+            if (itemToEquip == null)
+                return true;
+            if (!TryGetEquipmentClass(itemToEquip, out var classInfo))
+                return false;
+            var failure = EquipmentRequirements.Check(client.Player, itemToEquip, classInfo.ItemClassInfo);
+            if (failure == EquipmentRequirementFailure.None)
+                return true;
+            // Existing system-message transport; exact original localized failure
+            // notifications are recorded separately from these eligibility rules.
+            var message = failure switch
             {
-                // check requirements
-                foreach (var requirement in itemToEquip.ItemTemplate.ItemInfo.Requirements)
-                {
-                    switch (requirement.Key)
-                    {
-                        case RequirementsType.ReqXpLevel:
-                            if (client.Player.Level < itemToEquip.ItemTemplate.ItemInfo.Requirements[RequirementsType.ReqXpLevel])
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Level too low, cannot equip item.");
-                                canEquip = false;
-                            }
-
-                            break;
-                        case RequirementsType.ReqBody:
-                            if (client.Player.Attributes[Attributes.Body].Current < itemToEquip.ItemTemplate.ItemInfo.Requirements[RequirementsType.ReqBody])
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Body attribute too low, cannot equip item.");
-                                canEquip = false;
-                            }
-
-                            break;
-                        case RequirementsType.ReqMind:
-                            if (client.Player.Attributes[Attributes.Mind].Current < itemToEquip.ItemTemplate.ItemInfo.Requirements[RequirementsType.ReqMind])
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Mind attribute too low, cannot equip item.");
-                                canEquip = false;
-                            }
-
-                            break;
-                        case RequirementsType.ReqSpirit:
-                            if (client.Player.Attributes[Attributes.Spirit].Current < itemToEquip.ItemTemplate.ItemInfo.Requirements[RequirementsType.ReqSpirit])
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Spirit attribute too low, cannot equip item.");
-                                canEquip = false;
-                            }
-
-                            break;
-
-                        case RequirementsType.ReqXpLevelMax:
-                            if (client.Player.Level > itemToEquip.ItemTemplate.ItemInfo.Requirements[RequirementsType.ReqXpLevelMax])
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Level too high, cannot equip item.");
-                                canEquip = false;
-                            }
-
-                            break;
-
-                        default:
-                            Logger.WriteLog(LogType.Error, $"Unknown RequirementsType {requirement.Key}");
-                            break;
-                    }
-                }
-
-                // check race requirements
-                if (itemToEquip.ItemTemplate.ItemInfo.RaceReq != 0 && itemToEquip.ItemTemplate.ItemInfo.RaceReq != (int)client.Player.Race)
-                {
-                    CommunicatorManager.Instance.SystemMessage(client, "Item is not for your race, cannot equip it.");
-                    canEquip = false;
-                }
-
-                // check skill requrements if it's still true
-                if (canEquip)
-                    if (itemToEquip.ItemTemplate.EquipableInfo != null)
-                    {
-                        if (client.Player.Skills.ContainsKey((SkillId)itemToEquip.ItemTemplate.EquipableInfo.SkillId))
-                        {
-                            if (client.Player.Skills[(SkillId)itemToEquip.ItemTemplate.EquipableInfo.SkillId].SkillLevel >= itemToEquip.ItemTemplate.EquipableInfo.SkillLevel)
-                                canEquip = true;
-                            else
-                            {
-                                CommunicatorManager.Instance.SystemMessage(client, "Skill level to low, cannot equip item.");
-                                canEquip = false;
-                            }
-                        }
-                        else
-                        {
-                            CommunicatorManager.Instance.SystemMessage(client, $"{(SkillId)itemToEquip.ItemTemplate.EquipableInfo.SkillId} not learned, cannot equip item.");
-                            canEquip = false;
-                        }
-                    }
-            }
-
-            return canEquip;
+                EquipmentRequirementFailure.MinimumLevel => "Level too low, cannot equip item.",
+                EquipmentRequirementFailure.MaximumLevel => "Level too high, cannot equip item.",
+                EquipmentRequirementFailure.Body => "Body attribute too low, cannot equip item.",
+                EquipmentRequirementFailure.Mind => "Mind attribute too low, cannot equip item.",
+                EquipmentRequirementFailure.Spirit => "Spirit attribute too low, cannot equip item.",
+                EquipmentRequirementFailure.Race => "Item is not for your race, cannot equip it.",
+                EquipmentRequirementFailure.Skill => "Skill level too low, cannot equip item.",
+                _ => "Item is broken, cannot equip it."
+            };
+            CommunicatorManager.Instance.SystemMessage(client, message);
+            return false;
         }
 
         public void RefreshClanLockbox(uint clanId, ulong entityId, uint characterId, uint slotId, ref List<ulong> clanInventory, bool addBySlot)
