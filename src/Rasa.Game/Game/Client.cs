@@ -101,18 +101,19 @@ namespace Rasa.Game
             if (State == ClientState.Disconnected)
                 return;
 
-            foreach (var protocolPacket in DecodeIncomingPackets())
+            try
             {
-                if (State == ClientState.Disconnected)
-                    break;
-                try
+                foreach (var protocolPacket in DecodeIncomingPackets())
                 {
+                    if (State == ClientState.Disconnected)
+                        break;
                     HandleProtocolPacket(protocolPacket);
                 }
-                catch (InvalidClientMessageException)
-                {
-                    Close();
-                }
+            }
+            catch (Exception exception) when (exception is InvalidClientMessageException ||
+                exception is InvalidDataException || exception is EndOfStreamException)
+            {
+                Close();
             }
 
             IBasePacket packet;
@@ -137,6 +138,8 @@ namespace Rasa.Game
 
                 Socket?.Close();
                 while (_packetQueue.PopOutgoing() != null) { }
+                lock (_incomingDataQueue)
+                    _incomingDataQueue.Dispose();
                 // World cleanup and the final save run on the map loop after any pending logout.
                 Server?.Disconnect(this);
             }
@@ -398,13 +401,16 @@ namespace Rasa.Game
 
         private bool OnDecrypt(BufferData data)
         {
+            if (data.RemainingLength < 8 || data.RemainingLength % 8 != 0)
+                return false;
+
             var result = GameCryptManager.Decrypt(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength, Data);
             if (!result)
                 return false;
 
             var blowfishPadding = data[data.Offset] & 0xF;
-            if (blowfishPadding > 8)
-                throw new Exception("More than 8 bytes of blowfish padding was added to the packet?");
+            if (blowfishPadding > 8 || blowfishPadding > data.RemainingLength)
+                return false;
 
             data.Offset += blowfishPadding;
 
@@ -418,10 +424,12 @@ namespace Rasa.Game
 		
         private void OnReceive(BufferData data)
         {
-            if (State == ClientState.Disconnected)
-                return;
-
-            _incomingDataQueue.CopyFromArray(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
+            lock (_incomingDataQueue)
+            {
+                if (State == ClientState.Disconnected)
+                    return;
+                _incomingDataQueue.CopyFromArray(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
+            }
         }
 
         private IEnumerable<ProtocolPacket> DecodeIncomingPackets()
@@ -436,6 +444,16 @@ namespace Rasa.Game
 
         private ProtocolPacket DecodeNextPacket()
         {
+            lock (_incomingDataQueue)
+            {
+                if (State == ClientState.Disconnected)
+                    return null;
+                return ReadNextPacket();
+            }
+        }
+
+        private ProtocolPacket ReadNextPacket()
+        {
             // If there is not enough data to read the packet size at all, then stop processing
             if (_incomingDataQueue.Length < 2)
                 return null;
@@ -447,6 +465,8 @@ namespace Rasa.Game
 
             // Read the size of the next packet
             var packetSize = br.ReadUInt16();
+            if (packetSize < 4)
+                throw new InvalidDataException("Protocol frame is shorter than its header.");
 
             // Rewind the stream to the starting position
             _incomingDataQueue.Position = startPosition;
@@ -455,14 +475,13 @@ namespace Rasa.Game
             if (packetSize > _incomingDataQueue.Length)
                 return null;
 
-            // Construct and the packet
+            // Bound parsing to this frame so a malformed message cannot consume its successor.
+            using var frame = new MemoryStream(br.ReadBytes(packetSize), false);
+            using var frameReader = new BinaryReader(frame);
             var rawPacket = new ProtocolPacket();
-
-            rawPacket.Read(br);
-
-            // Check for overreading or underreading the packet
-            if (_incomingDataQueue.Position != startPosition + packetSize)
-                throw new Exception($"ProtocolPacket over or under read! Start position: {startPosition} | Packet size: {packetSize} | End position: {_incomingDataQueue.Position}!");
+            rawPacket.Read(frameReader);
+            if (frame.Position != frame.Length)
+                throw new InvalidDataException("Protocol message did not consume its frame.");
 
             // Advance the stream by removing the already processed data
             _incomingDataQueue.RemoveBytes(packetSize);
@@ -473,8 +492,6 @@ namespace Rasa.Game
                 // If an out of sequence packet arrived, then throw it away
                 if (rawPacket.SequenceNumber < ReceiveSequence[rawPacket.Channel])
                 {
-                    Debugger.Break(); // todo: test and remove later
-
                     return null;
                 }
 
@@ -486,7 +503,7 @@ namespace Rasa.Game
             if (rawPacket.Type == ClientMessageOpcode.None)
             {
                 if (rawPacket.Size != 4)
-                    Debugger.Break(); // If it's not send timeout check, let's investigate...
+                    throw new InvalidDataException("Invalid internal timeout frame.");
 
                 return null;
             }

@@ -105,12 +105,16 @@ their own handlers. Item-granted, mech, polymorph, and other non-skill abilities
 need their original authorization paths; this skill gate does not implement
 them. Many recognized skill effects themselves also remain absent.
 
-The current Lightning damage and Sprint effect retain placeholder formulas and
+At this stage Lightning damage and Sprint effects retained placeholder formulas and
 timing, explicitly visible in their existing handlers. This pass does not claim
 to have corrected those effects. Cooldowns, power/adrenaline/item consumption,
 range, target eligibility, area geometry, interruptions, post-queue revalidation,
 and exact effect payloads remain required work. The decoded client now provides
 concrete source paths for that reconstruction rather than permission to guess.
+
+Subsequent work replaces the [Lightning base damage](lightning-client-evidence.md)
+sample and reconstructs [Sprint's costs, speed and effect contract](sprint-client-evidence.md).
+Those reports separate the corrected rules from the remaining combat work.
 
 Focused tests exercise learned and lower ranks, every member of a multi-Logos
 requirement, class ownership, signature limits, dead/crouched actors, unrelated

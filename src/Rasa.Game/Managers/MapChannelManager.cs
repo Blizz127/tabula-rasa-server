@@ -119,7 +119,6 @@ namespace Rasa.Managers
             Timer.Add("AutoFire", 100, true, null);
             Timer.Add("CheckForLogingClients", 1000, true, null);
             Timer.Add("CheckForObjects", 1000, true, null);
-            Timer.Add("ClientEffectUpdate", 500, true, null);
             Timer.Add("CellUpdateVisibility", 1000, true, null);
             Timer.Add("CheckForCreatures", 1000, true, null);
             Timer.Add("CheckForMapTriggers", 1000, true, null);
@@ -173,9 +172,9 @@ namespace Rasa.Managers
                     if (Timer.IsTriggered("CheckForMapTriggers"))
                         MapTriggerManager.Instance.TriggersProximityWorker(mapChannel);
 
-                    // check for effects (buffs)
-                    if (Timer.IsTriggered("ClientEffectUpdate"))
-                        GameEffectManager.Instance.DoWork(mapChannel, delta);
+                    // Account for every elapsed interval; sampling only one delta
+                    // every 500 ms made effect durations and drain run too slowly.
+                    GameEffectManager.Instance.DoWork(mapChannel, delta);
 
                     // chack for player LogOut
                     foreach (var client in mapChannel.ClientList)

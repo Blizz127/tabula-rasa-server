@@ -230,6 +230,12 @@
             ManifestationManager.Instance.RequestPerformAbility(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.RequestDetachGameEffect)]
+        private void RequestDetachGameEffect(RequestDetachGameEffectPacket packet)
+        {
+            ManifestationManager.Instance.RequestDetachGameEffect(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RequestQueryAuctions)]
         private void RequestQueryAuctions(RequestQueryAuctionsPacket packet)
         {

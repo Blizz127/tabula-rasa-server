@@ -14,10 +14,13 @@ namespace Rasa.Packets.Login.Client
         public void Read(BinaryReader br)
         {
             var bLen = br.ReadInt32();
-            if (bLen > 64)
-                throw new Exception("Why is it bigger?");
+            if (bLen < 0 || bLen > 64)
+                throw new InvalidDataException("Invalid client key length.");
 
-            B.ReadBigEndian(br.ReadBytes(bLen), 0, bLen);
+            var keyBytes = br.ReadBytes(bLen);
+            if (keyBytes.Length != bLen)
+                throw new EndOfStreamException("Truncated client key.");
+            B.ReadBigEndian(keyBytes, 0, bLen);
         }
 
         public void Write(BinaryWriter bw)

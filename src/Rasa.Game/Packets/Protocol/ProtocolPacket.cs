@@ -34,106 +34,117 @@ namespace Rasa.Packets.Protocol
 
         public void Read(BinaryReader br)
         {
-            if (br.BaseStream.Length < 4)
-                throw new Exception("Fragmented receive, should not happen! (4 size header)");
+            var available = br.BaseStream.Length - br.BaseStream.Position;
+            if (available < 4)
+                throw new InvalidDataException("Truncated protocol frame header.");
 
             Size = br.ReadUInt16();
             Channel = br.ReadByte();
-
             br.ReadByte(); // padding
+            if (Size < 4 || Size > available)
+                throw new InvalidDataException("Invalid protocol frame size.");
 
-            if (Size > br.BaseStream.Length)
+            if (Channel == 0xFF)
             {
-                Debugger.Break();
-
-                throw new Exception($"Fragmented receive, should not happen! Packet size: {Size} <-> Buffer length: {br.BaseStream.Length}");
+                if (Size != 4)
+                    throw new InvalidDataException("Invalid internal timeout frame.");
+                return;
             }
 
-            if (Channel == 0xFF) // Internal channel: Send timeout checking, ignore the packet
-                return;
-
-            if (Channel != 0) // 0 == ReliableStreamChannel (no extra data), Move message uses channels
+            if (Channel != 0)
             {
-                SequenceNumber = br.ReadUInt32(); // Sequence number? if (previousValue - newValue < 0) { process packet; previousValue = newValue; }
+                if (Size < 16)
+                    throw new InvalidDataException("Truncated protocol channel header.");
+                SequenceNumber = br.ReadUInt32();
                 br.ReadInt32(); // 0xDEADBEEF
                 br.ReadInt32(); // skip
             }
 
             var packetBeginPosition = br.BaseStream.Position;
-
             using (var reader = new ProtocolBufferReader(br, ProtocolBufferFlags.DontFragment))
             {
                 reader.ReadProtocolFlags();
-
-
                 reader.ReadPacketType(out ushort type, out bool compress);
-
-                Type = (ClientMessageOpcode) type;
+                Type = (ClientMessageOpcode)type;
                 Compress = compress;
-
-                reader.ReadXORCheck((int) (br.BaseStream.Position - packetBeginPosition));
+                reader.ReadXORCheck((int)(br.BaseStream.Position - packetBeginPosition));
             }
 
-            var xorCheckPosition = (int) br.BaseStream.Position;
-
+            var xorCheckPosition = br.BaseStream.Position;
             var readBr = br;
-
-            byte[] uncompressedBuffer = null;
-
-            if (Compress)
+            MemoryStream decompressed = null;
+            try
             {
-                var someType = br.ReadByte(); // 0 = No compression
-                if (someType >= 2)
-                    throw new Exception("Invalid compress type received!");
-
-                if (someType == 1)
+                if (Compress)
                 {
-                    Debugger.Break(); // TODO: test
+                    var compressionType = br.ReadByte();
+                    if (compressionType > 1)
+                        throw new InvalidDataException("Invalid compression type.");
+                    if (compressionType == 1)
+                    {
+                        var declaredSize = br.ReadInt32();
+                        if (declaredSize < 0)
+                            throw new InvalidDataException("Invalid decompressed length.");
 
-                    var uncompressedSize = br.ReadInt32();
-
-                    uncompressedBuffer = ArrayPool<byte>.Shared.Rent(uncompressedSize);
-
-                    using (var deflateStream = new DeflateStream(br.BaseStream, CompressionMode.Decompress, true)) // TODO: test if the br.BaseStream is cool as the Stream input for the DeflateStream
-                        deflateStream.Read(uncompressedBuffer, 0, uncompressedSize);
-
-                    readBr = new BinaryReader(new MemoryStream(uncompressedBuffer, 0, uncompressedSize, false), Encoding.UTF8, false);
-                }
-            }
-
-            Message = Type switch
-            {
-                ClientMessageOpcode.Login => new LoginMessage(),
-                ClientMessageOpcode.Move => new MoveMessage(),
-                ClientMessageOpcode.CallServerMethod => new CallServerMethodMessage(),
-                ClientMessageOpcode.Ping => new PingMessage(),
-                _ => throw new Exception($"Unable to handle packet type {Type}, because it's a Server -> Client packet!"),
-            };
-
-            using (var reader = new ProtocolBufferReader(readBr, ProtocolBufferFlags.DontFragment))
-            {
-                reader.ReadProtocolFlags();
-
-                // Subtype and Message.Read()
-                reader.ReadDebugByte(41);
-
-                if ((Message.SubtypeFlags & ClientMessageSubtypeFlag.HasSubtype) == ClientMessageSubtypeFlag.HasSubtype)
-                {
-                    Message.RawSubtype = reader.ReadByte();
-                    if (Message.RawSubtype < Message.MinSubtype || Message.RawSubtype > Message.MaxSubtype)
-                        throw new Exception("Invalid Subtype found!");
+                        // A claimed size must not cause an allocation before bytes exist.
+                        // The input stream is bounded to one received protocol frame.
+                        decompressed = new MemoryStream();
+                        var buffer = ArrayPool<byte>.Shared.Rent(8192);
+                        try
+                        {
+                            using var deflate = new DeflateStream(br.BaseStream, CompressionMode.Decompress, true);
+                            int count;
+                            while ((count = deflate.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                if (decompressed.Length + count > declaredSize)
+                                    throw new InvalidDataException("Decompressed data exceeds its declared length.");
+                                decompressed.Write(buffer, 0, count);
+                            }
+                        }
+                        finally
+                        {
+                            ArrayPool<byte>.Shared.Return(buffer);
+                        }
+                        if (decompressed.Length != declaredSize)
+                            throw new InvalidDataException("Decompressed length does not match its declaration.");
+                        decompressed.Position = 0;
+                        readBr = new BinaryReader(decompressed, Encoding.UTF8, true);
+                        xorCheckPosition = 0;
+                    }
                 }
 
-                Message.Read(reader);
+                Message = Type switch
+                {
+                    ClientMessageOpcode.Login => new LoginMessage(),
+                    ClientMessageOpcode.Move => new MoveMessage(),
+                    ClientMessageOpcode.CallServerMethod => new CallServerMethodMessage(),
+                    ClientMessageOpcode.Ping => new PingMessage(),
+                    _ => throw new InvalidDataException($"Unsupported incoming packet type {Type}."),
+                };
 
-                reader.ReadDebugByte(42);
-
-                reader.ReadXORCheck((int) br.BaseStream.Position - xorCheckPosition);
+                using (var reader = new ProtocolBufferReader(readBr, ProtocolBufferFlags.DontFragment))
+                {
+                    reader.ReadProtocolFlags();
+                    reader.ReadDebugByte(41);
+                    if ((Message.SubtypeFlags & ClientMessageSubtypeFlag.HasSubtype) != 0)
+                    {
+                        Message.RawSubtype = reader.ReadByte();
+                        if (Message.RawSubtype < Message.MinSubtype || Message.RawSubtype > Message.MaxSubtype)
+                            throw new InvalidDataException("Invalid message subtype.");
+                    }
+                    Message.Read(reader);
+                    reader.ReadDebugByte(42);
+                    reader.ReadXORCheck((int)(readBr.BaseStream.Position - xorCheckPosition));
+                }
+                if (decompressed != null && decompressed.Position != decompressed.Length)
+                    throw new InvalidDataException("Unexpected data after decompressed message.");
             }
-
-            // If we rented a buffer for decompressing, return it
-            if (uncompressedBuffer != null) 
-                ArrayPool<byte>.Shared.Return(uncompressedBuffer);
+            finally
+            {
+                if (readBr != br)
+                    readBr.Dispose();
+                decompressed?.Dispose();
+            }
         }
 
         public void Write(BinaryWriter bw)

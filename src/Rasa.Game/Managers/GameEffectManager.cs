@@ -1,11 +1,17 @@
-﻿namespace Rasa.Managers
+using System;
+using System.Linq;
+
+namespace Rasa.Managers
 {
+    using Data;
     using Game;
     using Packets.MapChannel.Server;
     using Structures;
 
     public class GameEffectManager
     {
+        public const int SprintEffectType = 247;
+        private static readonly int[] SprintChiCost = { 0, 30, 27, 25, 20, 18 };
         private static GameEffectManager _instance;
         private static readonly object InstanceLock = new object();
         public static GameEffectManager Instance
@@ -35,25 +41,38 @@
             actor.ActiveEffects.Add(gameEffect.EffectId, gameEffect);
         }
 
-        public void AttachSprint(MapChannel mapChannel, Actor actor, uint effectLevel, int duration)
+        public bool CanAttachSprint(Actor actor, uint effectLevel)
         {
-            mapChannel.CurrentEffectId++; // generate new effectId
-            var effectId = mapChannel.CurrentEffectId;
-            // effectId -> The id used to identify the effect when sending/receiving effect related data (similiar to entityId, just for effects)
-            // typeId -> The id used to lookup the effect class and animation
-            // level -> The sub id of the effect, some effects have multiple levels (especially the ones linked with player abilities)
-            // create effect struct
+            return actor != null && actor.State != CharacterState.Dead &&
+                effectLevel >= 1 && effectLevel <= 5 &&
+                !actor.ActiveEffects.Values.Any(effect => effect.TypeId == SprintEffectType) &&
+                actor.Attributes.TryGetValue(Attributes.Chi, out var chi) &&
+                chi.Current >= SprintChiCost[effectLevel];
+        }
+
+        public bool TryAttachSprint(MapChannel mapChannel, Actor actor, uint effectLevel)
+        {
+            if (mapChannel == null || !CanAttachSprint(actor, effectLevel))
+                return false;
+
+            // Original actiondata: 401/ranks 1–5. See docs/sprint-client-evidence.md.
+            var cost = SprintChiCost[effectLevel];
             var gameEffect = new GameEffect
             {
-                // setup struct
-                Duration = duration, // 5 seconds (test)
-                EffectTime = 0, // reset timer
-                TypeId = 247,    // EFFECT_TYPE_SPRINT;
-                EffectId = effectId,
-                EffectLevel = effectLevel
+                Duration = (effectLevel == 5 ? 5000 : 3600) * 1000,
+                TypeId = SprintEffectType,
+                EffectId = ++mapChannel.CurrentEffectId,
+                EffectLevel = effectLevel,
+                DrainInterval = 2000,
+                NextDrainTime = 2000,
+                AdrenalineDrain = cost,
+                MovementBeforeAttach = actor.MovementSpeed,
+                MovementMultiplier = (110 + effectLevel * 10) / 100.0
             };
-            // add to list
+
+            actor.Attributes[Attributes.Chi].Current -= cost;
             AddToList(actor, gameEffect);
+            AnnounceChi(mapChannel, actor);
             CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
             {
                 EffectTypeId = gameEffect.TypeId,
@@ -61,51 +80,74 @@
                 EffectLevel = gameEffect.EffectLevel,
                 SourceId = actor.EntityId,
                 Announced = true,
-                Duration = gameEffect.Duration,
-                DamageType = 0,
-                AttrId = 1,
                 IsActive = true,
                 IsBuff = true,
-                IsDebuff = false,
-                IsNegativeEffect = false
+                // Authored description is open-ended. Do not display the internal cap.
+                // EFFECT_FAST_MAXBEAD_MODIFIER=100 gives a neutral accuracy multiplier.
+                EffectArguments = new[] { 1.0 }
             });
-            // do ability specific work
             UpdateMovementMod(mapChannel, actor);
+            return true;
+        }
+
+        public bool TryDetachRequestedEffect(MapChannel mapChannel, Actor actor, int effectId)
+        {
+            if (mapChannel == null || actor == null ||
+                !actor.ActiveEffects.TryGetValue(effectId, out var effect) ||
+                effect.TypeId != SprintEffectType)
+                return false;
+            DettachEffect(mapChannel, actor, effect);
+            return true;
         }
 
         public void DettachEffect(MapChannel mapChannel, Actor actor, GameEffect gameEffect)
         {
-            // inform clients (Recv_GameEffectDetached 75)
+            if (!actor.ActiveEffects.Remove(gameEffect.EffectId))
+                return;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectDetachedPacket { EffectId = gameEffect.EffectId });
-            // remove from list
-            RemoveFromList(actor, gameEffect);
-            // do ability specific work
-            if (gameEffect.TypeId == 247)
+            if (gameEffect.TypeId == SprintEffectType)
+            {
+                actor.MovementSpeed = gameEffect.MovementBeforeAttach;
                 UpdateMovementMod(mapChannel, actor);
-            // more todo..
+            }
         }
 
         public void DoWork(MapChannel mapChannel, long passedTime)
         {
+            if (passedTime <= 0 || mapChannel.ClientList == null)
+                return;
             foreach (var client in mapChannel.ClientList)
             {
-                if (client.Player == null)
+                if (client?.Player == null)
                     continue;
 
                 var actor = client.Player;
-                var gameEffect = actor.ActiveEffects;
-
-                // This need future work
-                foreach (var t in gameEffect)
+                // Detach every due effect safely, including multiple expirations in one update.
+                foreach (var effect in actor.ActiveEffects.Values.ToArray())
                 {
-                    var effect = t.Value;
-                    effect.EffectTime += (int)passedTime;
-                    // stop effect if too old
-                    if (effect.EffectTime >= effect.Duration)
+                    effect.EffectTime = passedTime > long.MaxValue - effect.EffectTime
+                        ? long.MaxValue : effect.EffectTime + passedTime;
+                    if (effect.TypeId == SprintEffectType)
                     {
-                        DettachEffect(mapChannel, actor, effect);
-                        break;
+                        var chiChanged = false;
+                        while (effect.NextDrainTime <= effect.EffectTime &&
+                            effect.NextDrainTime < effect.Duration)
+                        {
+                            if (!actor.Attributes.TryGetValue(Attributes.Chi, out var chi) ||
+                                chi.Current < effect.AdrenalineDrain)
+                            {
+                                DettachEffect(mapChannel, actor, effect);
+                                break;
+                            }
+                            chi.Current -= effect.AdrenalineDrain;
+                            chiChanged = true;
+                            effect.NextDrainTime += effect.DrainInterval;
+                        }
+                        if (chiChanged)
+                            AnnounceChi(mapChannel, actor);
                     }
+                    if (effect.Duration > 0 && effect.EffectTime >= effect.Duration)
+                        DettachEffect(mapChannel, actor, effect);
                 }
             }
         }
@@ -118,21 +160,16 @@
 
         public void UpdateMovementMod(MapChannel mapChannel, Actor actor)
         {
-            var movementMod = 1.0d;
-            // check for sprint
-            foreach (var t in actor.ActiveEffects)
-            {
-                var efect = t.Value;
-                if (efect.TypeId == 247) // ToDO curently hardcoded EFFECT_TYPE_SPRINT
-                {
-                    // apply sprint bonus
-                    movementMod += 1.0d;
-                    movementMod += efect.EffectLevel * 0.10d;
-                    break;
-                }
-            }
-            // todo: other modificators?
-            CellManager.Instance.CellCallMethod(mapChannel, actor, new MovementModChangePacket(movementMod));
+            var sprint = actor.ActiveEffects.Values.FirstOrDefault(effect => effect.TypeId == SprintEffectType);
+            if (sprint != null)
+                actor.MovementSpeed = sprint.MovementBeforeAttach * sprint.MovementMultiplier;
+            CellManager.Instance.CellCallMethod(mapChannel, actor, new MovementModChangePacket(actor.MovementSpeed));
+        }
+
+        private static void AnnounceChi(MapChannel mapChannel, Actor actor)
+        {
+            CellManager.Instance.CellCallMethod(mapChannel, actor,
+                new UpdateChiPacket(actor.Attributes[Attributes.Chi], actor.EntityId));
         }
     }
 }

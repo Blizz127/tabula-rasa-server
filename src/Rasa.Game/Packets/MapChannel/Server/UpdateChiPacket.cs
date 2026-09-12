@@ -9,9 +9,9 @@
         public override GameOpcode Opcode { get; } = GameOpcode.UpdateChi;
 
         public ActorAttributes Chi { get; set; }
-        public int WhoId { get; set; }
+        public ulong WhoId { get; set; }
 
-        public UpdateChiPacket(ActorAttributes chi, int whoId)
+        public UpdateChiPacket(ActorAttributes chi, ulong whoId)
         {
             Chi = chi;
             WhoId = whoId;
@@ -23,7 +23,7 @@
             pw.WriteInt(Chi.Current);
             pw.WriteInt(Chi.CurrentMax);
             pw.WriteInt(Chi.RefreshAmount);
-            pw.WriteInt(WhoId);
+            pw.WriteULong(WhoId);
         }
     }
 }

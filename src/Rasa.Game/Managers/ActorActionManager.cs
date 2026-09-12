@@ -12,6 +12,7 @@ namespace Rasa.Managers
         private static ActorActionManager _instance;
         private static readonly object InstanceLock = new object();
         public readonly Timer Timer = new Timer();
+        private readonly Random _damageRandom = new Random();
         public static ActorActionManager Instance
         {
             get
@@ -80,10 +81,18 @@ namespace Rasa.Managers
             switch (action.ActionId)
             {
                 case ActionId.AaRecruitLightning:
-                    MissileManager.Instance.MissileLaunch(mapChannel, action, new Random().Next(233, 311 + 1));
+                    if (action.Actor is Manifestation player && player.Level >= 1 &&
+                        action.ActionArgId >= 1 && action.ActionArgId <= 5)
+                    {
+                        var range = LightningAbilityData.GetBaseDamageRange(action.ActionArgId, player.Level);
+                        MissileManager.Instance.MissileLaunch(mapChannel, action,
+                            _damageRandom.Next(range.Minimum, range.Maximum + 1));
+                    }
                     break;
                 case ActionId.AaRecruitSprint:
-                    GameEffectManager.Instance.AttachSprint(mapChannel, action.Actor, action.ActionArgId, 500);
+                    if (!GameEffectManager.Instance.TryAttachSprint(mapChannel, action.Actor, action.ActionArgId))
+                        CellManager.Instance.CellCallMethod(mapChannel, action.Actor,
+                            new UserActionFailedPacket(action.ActionId, (int)action.ActionArgId));
                     break;
                 case ActionId.UseObject:
                     CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformRecoveryPacket(PerformType.TwoArgs, action.ActionId, action.ActionArgId));

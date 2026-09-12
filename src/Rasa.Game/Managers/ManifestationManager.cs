@@ -99,6 +99,9 @@ namespace Rasa.Managers
 
         private static List<AutoFireTimer> AutoFire = new List<AutoFireTimer>();
         public static byte MaxPlayerLevel = 50;
+        // All eight original signature costs are 1000 CHI and described as 100%.
+        // See docs/sprint-client-evidence.md for this inferred normal capacity.
+        public const int NormalAdrenalineMaximum = 1000;
         public static ManifestationManager Instance
         {
             get
@@ -704,6 +707,13 @@ namespace Rasa.Managers
                 return;
             }
 
+            if (packet.ActionId == ActionId.AaRecruitSprint &&
+                !GameEffectManager.Instance.CanAttachSprint(client.Player, (uint)packet.ActionArgId))
+            {
+                client.CallMethod(client.Player.EntityId, new UserActionFailedPacket(packet.ActionId, packet.ActionArgId));
+                return;
+            }
+
             client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId,
                 (uint)packet.ActionArgId, packet.Target ?? 0, 0)
             {
@@ -711,6 +721,16 @@ namespace Rasa.Managers
                 ItemId = packet.ItemId,
                 ClientYaw = packet.ClientYaw
             });
+        }
+
+        public void RequestDetachGameEffect(Client client, RequestDetachGameEffectPacket packet)
+        {
+            if (client.State != ClientState.Ingame || client.Player.MapChannel == null ||
+                client.Player.RemoveFromMap)
+                return;
+
+            GameEffectManager.Instance.TryDetachRequestedEffect(client.Player.MapChannel,
+                client.Player, packet.EffectId);
         }
 
         public void RequestToggleRun(Client client)
@@ -972,10 +992,6 @@ namespace Rasa.Managers
             levelBasedHealth = levelBasedHealth / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
             int totalHealth = (int)(levelBasedHealth * (totalSpirit + 2 * totalBody));
 
-            // Power
-            float basePower = basePower = (3 * level + 100) / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
-            int totalPower  = (int)(basePower * (totalBody + 2 * totalMind));
-
             // Regen
             float baseRegen = (2 * level + 100) / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
             int totalRegen = (int)(baseRegen * (totalMind + 2 * totalSpirit));
@@ -1012,8 +1028,8 @@ namespace Rasa.Managers
             attribute[Attributes.Health].CurrentMax = totalHealth;
 
             // chi/adrenaline
-            attribute[Attributes.Chi].NormalMax     = totalPower;
-            attribute[Attributes.Chi].CurrentMax    = totalPower;
+            attribute[Attributes.Chi].NormalMax     = NormalAdrenalineMaximum;
+            attribute[Attributes.Chi].CurrentMax    = NormalAdrenalineMaximum;
 
             attribute[Attributes.Regen].NormalMax   = totalRegen; // regenRate in percent
             attribute[Attributes.Regen].CurrentMax  = totalRegen;

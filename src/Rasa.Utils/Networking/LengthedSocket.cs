@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Net;
 using System.Net.Sockets;
 
@@ -30,8 +32,21 @@ namespace Rasa.Networking
         public bool CountSize { get; }
         public int LengthSize => (int) SizeHeaderLength;
         public Socket Socket { get; }
+        private int _closed;
+        private IPAddress _remoteAddress;
         public bool Connected => Socket.Connected;
-        public IPAddress RemoteAddress => ((IPEndPoint)Socket.RemoteEndPoint).Address;
+        public IPAddress RemoteAddress
+        {
+            get
+            {
+                if (_remoteAddress == null)
+                {
+                    try { _remoteAddress = (Socket.RemoteEndPoint as IPEndPoint)?.Address; }
+                    catch (ObjectDisposedException) { }
+                }
+                return _remoteAddress;
+            }
+        }
 
         public bool AutoReceive { get; set; } = true;
 
@@ -111,20 +126,14 @@ namespace Rasa.Networking
 
         private void TeardownEventArgs(SocketAsyncEventArgs args)
         {
-            switch (args.LastOperation)
+            if (args.UserToken is BufferData data)
             {
-                case SocketAsyncOperation.Receive:
-                case SocketAsyncOperation.Send:
-                    BufferManager.FreeBuffer(args.GetUserToken<BufferData>());
-
-                    args.SetBuffer(null, 0, 0);
-                    args.UserToken = null;
-                    break;
-
-                case SocketAsyncOperation.Connect:
-                    args.RemoteEndPoint = null;
-                    break;
+                BufferManager.FreeBuffer(data);
+                args.SetBuffer(null, 0, 0);
+                args.UserToken = null;
             }
+
+            args.RemoteEndPoint = null;
 
             args.AcceptSocket = null;
             args.Completed -= OperationCompleted;
@@ -135,73 +144,87 @@ namespace Rasa.Networking
 
         private void OperationCompleted(object o, SocketAsyncEventArgs args)
         {
-            if (args.SocketError != SocketError.Success || (args.LastOperation == SocketAsyncOperation.Receive && args.BytesTransferred == 0))
-                OnError?.Invoke(args);
-            else
+            var keepEventArgs = false;
+            try
             {
-                var data = args.GetUserToken<BufferData>();
-
-                switch (args.LastOperation)
+                if (args.SocketError != SocketError.Success || (args.LastOperation == SocketAsyncOperation.Receive && args.BytesTransferred == 0))
+                    OnError?.Invoke(args);
+                else
                 {
-                    case SocketAsyncOperation.Send:
-                        data.ByteCount += args.BytesTransferred;
+                    var data = args.GetUserToken<BufferData>();
 
-                        // We've transferred less bytes than we should have
-                        if (data.Length > data.ByteCount)
-                        {
-                            args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
+                    switch (args.LastOperation)
+                    {
+                        case SocketAsyncOperation.Send:
+                            data.ByteCount += args.BytesTransferred;
 
-                            // TODO: test if multiple send operations will collide (if the packet was only sent partially, and another packet is getting sent between the two parts)
-                            // TODO: create a queue for sending async, if it collides?
-                            SendAsync(args);
-                            return;
-                        }
+                            // We've transferred less bytes than we should have
+                            if (data.Length > data.ByteCount)
+                            {
+                                args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
 
-                        OnSend?.Invoke(args);
-                        break;
+                                // TODO: test if multiple send operations will collide (if the packet was only sent partially, and another packet is getting sent between the two parts)
+                                // TODO: create a queue for sending async, if it collides?
+                                keepEventArgs = true;
+                                SendAsync(args);
+                                return;
+                            }
 
-                    case SocketAsyncOperation.Receive:
-                        // This value may change in the middle of processing, causing odd behavior
-                        var receiveAfter = AutoReceive;
-                        if (ProcessInputBuffer(data, args))
-                            return;
+                            OnSend?.Invoke(args);
+                            break;
 
-                        if (receiveAfter)
-                            ReceiveAsync();
+                        case SocketAsyncOperation.Receive:
+                            // This value may change in the middle of processing, causing odd behavior
+                            var receiveAfter = AutoReceive;
+                            if (ProcessInputBuffer(data, args))
+                            {
+                                keepEventArgs = true;
+                                ReceiveAsync(args);
+                                return;
+                            }
 
-                        break;
+                            if (receiveAfter)
+                                ReceiveAsync();
 
-                    case SocketAsyncOperation.Connect:
-                        OnConnect?.Invoke(args);
-                        break;
+                            break;
 
-                    case SocketAsyncOperation.Accept:
-                        OnAccept?.Invoke(new LengthedSocket(args.AcceptSocket, SizeHeaderLength, CountSize));
-                        break;
+                        case SocketAsyncOperation.Connect:
+                            OnConnect?.Invoke(args);
+                            break;
+
+                        case SocketAsyncOperation.Accept:
+                            OnAccept?.Invoke(new LengthedSocket(args.AcceptSocket, SizeHeaderLength, CountSize));
+                            break;
+                    }
                 }
             }
-
-            TeardownEventArgs(args);
+            catch (Exception exception) when (exception is InvalidDataException || exception is EndOfStreamException)
+            {
+                args.SocketError = SocketError.InvalidArgument;
+                try { OnError?.Invoke(args); }
+                finally { Close(); }
+            }
+            finally
+            {
+                if (!keepEventArgs)
+                    TeardownEventArgs(args);
+            }
         }
 
         private int ReadSize(BufferData data)
         {
-            var headerSize = !CountSize ? LengthSize : 0;
-
-            switch (SizeHeaderLength)
+            ulong payloadLength = SizeHeaderLength switch
             {
-                case SizeType.Char:
-                    return headerSize + data[0];
+                SizeType.Char => data[0],
+                SizeType.Word => BitConverter.ToUInt16(data.Buffer, data.BaseOffset),
+                SizeType.Dword => BitConverter.ToUInt32(data.Buffer, data.BaseOffset),
+                _ => throw new NotSupportedException($"Unsupported size header: {SizeHeaderLength}")
+            };
+            var length = payloadLength + (CountSize ? 0UL : (ulong)LengthSize);
+            if (length < (ulong)LengthSize || length > (ulong)BufferManager.BlockSize)
+                throw new InvalidDataException("Frame length is outside the receive buffer bounds.");
 
-                case SizeType.Word:
-                    return headerSize + BitConverter.ToInt16(data.Buffer, data.BaseOffset);
-
-                case SizeType.Dword:
-                    return headerSize + BitConverter.ToInt32(data.Buffer, data.BaseOffset);
-
-                default:
-                    throw new NotImplementedException($"Only 1, 2 and 4 byte headers are supported! {SizeHeaderLength} is not!");
-            }
+            return (int)length;
         }
 
         private bool ProcessInputBuffer(BufferData data, SocketAsyncEventArgs args)
@@ -220,28 +243,34 @@ namespace Rasa.Networking
                     data.Length = length;
 
                     if (data.Length > data.MaxLength)
-                        throw new OutOfMemoryException($"Packet is bigger than the max packet size! Packet size: {length} | Max buffer size: {data.MaxLength}");
+                        throw new InvalidDataException("Frame length exceeds the available receive buffer.");
                 }
 
                 if (length == -1 || data.ByteCount < length)
                 {
                     args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
 
-                    ReceiveAsync(args);
                     return true;
                 }
 
                 data.Offset = LengthSize;
                 data.Length = length;
 
-                OnDecrypt?.Invoke(data);
+                if (OnDecrypt != null && !OnDecrypt(data))
+                    throw new InvalidDataException("Frame decryption failed.");
                 OnReceive?.Invoke(data);
+
+                if (Volatile.Read(ref _closed) != 0)
+                    return false;
 
                 if (data.ByteCount == length)
                     break;
 
                 data.ByteCount -= length;
-                data.BaseOffset += length;
+                // Keep the next frame at the start of this buffer block, including when
+                // its header/body is split across receives after a coalesced frame.
+                Array.Copy(data.Buffer, data.BaseOffset + length, data.Buffer, data.RealBaseOffset, data.ByteCount);
+                data.BaseOffset = data.RealBaseOffset;
                 data.Offset = 0;
                 data.Length = data.MaxLength;
             }
@@ -251,7 +280,7 @@ namespace Rasa.Networking
 
         private void CopyToOtherBuffer(BufferData source, BufferData desti)
         {
-            
+
         }
         #endregion
 
@@ -285,12 +314,24 @@ namespace Rasa.Networking
 
         public void ReceiveAsync()
         {
+            if (Volatile.Read(ref _closed) != 0)
+                return;
             ReceiveAsync(SetupEventArgs(SocketAsyncOperation.Receive));
         }
 
         private void ReceiveAsync(SocketAsyncEventArgs args)
         {
-            if (!Socket.ReceiveAsync(args))
+            bool pending;
+            try
+            {
+                pending = Socket.ReceiveAsync(args);
+            }
+            catch (Exception exception) when (exception is SocketException || exception is ObjectDisposedException)
+            {
+                FailSocketOperation(args);
+                return;
+            }
+            if (!pending)
                 OperationCompleted(Socket, args);
         }
 
@@ -331,14 +372,42 @@ namespace Rasa.Networking
 
         private void SendAsync(SocketAsyncEventArgs args)
         {
-            if (!Socket.SendAsync(args))
+            bool pending;
+            try
+            {
+                pending = Socket.SendAsync(args);
+            }
+            catch (Exception exception) when (exception is SocketException || exception is ObjectDisposedException)
+            {
+                FailSocketOperation(args);
+                return;
+            }
+            if (!pending)
                 OperationCompleted(Socket, args);
+        }
+
+        private void FailSocketOperation(SocketAsyncEventArgs args)
+        {
+            try
+            {
+                args.SocketError = SocketError.OperationAborted;
+                OnError?.Invoke(args);
+            }
+            finally
+            {
+                Close();
+                TeardownEventArgs(args);
+            }
         }
 
         public void Close()
         {
+            if (Interlocked.Exchange(ref _closed, 1) != 0)
+                return;
+
             try
             {
+                _ = RemoteAddress; // Disconnect observers can still identify a disposed socket.
                 OnDisconnect?.Invoke();
 
                 Socket.Shutdown(SocketShutdown.Both);
@@ -346,6 +415,10 @@ namespace Rasa.Networking
             catch (Exception)
             {
                 // ignored
+            }
+            finally
+            {
+                Socket.Dispose();
             }
         }
     }

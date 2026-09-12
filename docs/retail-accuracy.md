@@ -342,10 +342,88 @@ Do not restore independently active auth/character data unnecessarily.
 
 Operational observation: the previous game container restarted three times
 around **18:00 UTC**, before this candidate was deployed. Its retained stdout
-shows startup sequences without an application exception identifying a cause.
-The inspected running state reported no current OOM condition, and available
-bounded event/kernel queries supplied no cause. These observations do not prove
-the absence of a runtime failure. The replacement started with restart count
-zero; keep this unexplained earlier restart sequence open for monitoring.
+contains **three `Out of memory.` lines**, each preceding a restart's startup
+sequence, in
+`/home/blizz/backups/rasa-net/20260912T180817Z-retail-ability/rasa-game-before-ability.log`
+(also retained at `/tmp/rasa-game-before-ability.log`). No stack trace identifies
+which allocation or code path failed. The earlier search omitted that phrase;
+the logs must not be described as containing no failure evidence. Bounded
+historical Docker-event and accessible kernel-journal queries supplied no
+additional cause. The replacement remained at restart count zero in a read-only
+follow-up around **18:13 UTC**, with approximately 315 MiB container memory and
+zero `oom` / `oom_kill` events in its current cgroup. Those replacement-container
+observations do not explain the prior process failures. Keep their allocation
+source open for investigation; do not infer a kernel OOM kill or a framing
+attack from these logs alone.
 Neither unit tests nor successful startup prove sustained availability or
 original-client gameplay. Full preservation remains active and incomplete.
+
+## Sprint, Lightning base damage, and malformed frames — 2026-09-12
+
+[Sprint reconstruction](sprint-client-evidence.md) joins the final client's
+literal action properties, original effect consumers and official live notes.
+The five ranks now use movement multipliers **1.2/1.3/1.4/1.5/1.6**, with
+activation costs and two-second drain amounts **30/27/25/20/18 CHI**. The
+previous experimental short duration and speed formula are removed. Effect
+updates account for every map-loop delta. Sprint attachment carries the
+original consumer's required scalar argument, and the original right-click
+effect-cancel request now removes the actor's own Sprint. Duplicate and
+unaffordable activations do not add another effect or spend resources.
+
+Normal adrenaline capacity is **1000**, inferred from all eight original
+signature descriptions specifying 100% adrenaline and their corresponding
+1000-CHI action costs, independently corroborated by Sprint's percentage
+conversion. It no longer uses an unrelated Power/stat formula. Remaining
+adrenaline gain/decay, starting-resource rules, modifiers, precise first-tick
+phase and repeated-activation toggle behavior are explicitly unverified.
+The client duration fields are retained as long internal caps while the
+authored open-ended presentation has no countdown; final server cap behavior
+still requires direct evidence.
+
+[Lightning base damage](lightning-client-evidence.md) now follows the selected
+rank and experience-level scaling. The fixed 233–311 sample is replaced by
+original base bounds 180–240 at rank 1 and 240–300 at ranks 2–5, scaled by
+`int(base * 2 ** ((level - 1) / 8.0))`. This completes only the base-range
+correction. Arcs, Sonic damage, stun/storm effects, costs, timing, targeting,
+and the full damage/modifier pipeline remain required combat work.
+
+[Network runtime evidence](runtime-network-evidence.md) records an isolated
+reproduction: an oversized four-byte length header caused the previous socket
+callback to terminate its process with `Out of memory.`. Frames outside the
+existing receive-buffer bounds now close their connection with resources
+returned. Word lengths are unsigned, coalesced/fragmented frames are preserved,
+and failed decryption is rejected. Protocol decoding now isolates malformed
+messages inside their declared frame and handles them at the client boundary.
+Declared decompression/field lengths no longer cause eager unchecked allocation.
+Independent review also corrected endpoint access after socket disposal and
+ownership transfer before synchronous receive continuation.
+
+These tests establish a crash path and its correction, not the cause of the
+three historical restarts. Full malformed-client handling, sustained runtime
+observation and original-client session validation remain distinct work.
+
+The [continued mission audit](river-recon-client-evidence.md) retained
+conflicting historical River Recon rewards and the original live 1.4 notes
+documenting 855 replaced mission rewards. Capture date does not establish the
+data's revision. No conflicting quest amounts or items were imported.
+
+The combined .NET 5 candidate built with zero errors and the same five existing
+unused-variable/field warnings. **All 191 tests passed**, zero failed/skipped.
+An independent source comparison between the candidate image and the reviewed
+workspace found no differences (excluding generated `bin`/`obj` directories).
+
+The game service was recreated from tested image
+`sha256:f798038e3a0e3a514295bf2afc388cce8b0229f091f2cfb8ece861f8fb4a17c6`
+at **18:33:06 UTC** and reported `Server ready!` at **18:33:16 UTC**. Its first
+post-deployment check was running with zero restarts and no unhandled/OOM
+startup lines. Auth's image and start time are unchanged. No new schema/data
+migration is included in this pass.
+
+All three SQLite backups passed integrity checks. Backups, private deployment
+configuration, reviewed source, build/test logs, source comparison, retained
+old/startup logs and before/after metadata are in
+`/home/blizz/backups/rasa-net/20260912T183251Z-retail-combat/`.
+Rollback image: `rasa_net:before-retail-combat-20260912`. Retag it as
+`rasa_net:latest` and recreate only game with `--no-deps --no-build`; this code
+rollback needs no database restoration. The broader preservation goal remains
+active, including the explicit fidelity limitations in the linked reports.

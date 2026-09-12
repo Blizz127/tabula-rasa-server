@@ -206,6 +206,57 @@ Logs and reproducible fixture material are retained in the research directory's
 `mysql-validation.log`. `source-hashes.json` records the validated repository
 files. Deployment and client-visible verification remain separate checks.
 
+## Historical reward records: useful leads, unresolved versions
+
+The 2026-09-12 follow-up recovered two River Recon records. They agree on
+**1,000 credits**, but disagree on item rewards. Neither establishes the final
+live reward definition, and neither supplies an XP amount.
+
+| Source and observed date | Recorded rewards and eligibility | Fidelity assessment |
+| --- | --- | --- |
+| [Ten Ton Hammer, Alia Das Missions](https://www.tentonhammer.com/guides/alia-das-missions), RadarX, published 2007-09-26; current page also displays a 2016-03-13 update date | 1,000 credits; choice of armor-regeneration or health-regeneration weapon modifications. Level 5 is presented tentatively. | A contemporary author's walkthrough, substantially earlier than shutdown. The later website date does not identify a game revision. Its level suggestion is not an exact prerequisite rule. |
+| [DaOpa's Ellatha River Recon entry](https://www.ellatha.com/tr/missionsview.asp?key=River+Recon), current response acquired 2026-09-12; entry revision undated | 1,000 credits; Astra Direct Healing Disc and Vitalius Rifle in the reward list. Generic page text does not establish precisely which rewards are chosen or guaranteed. | Direct mission/item transcription with no recovered version provenance. Item requirements of levels 5 and 6 describe the equipment, not mission acceptance. |
+
+Ellatha's briefing and objective descriptions agree with the recovered original
+client. Its attached map identifies Rogers, the Dying Forean, and Witherspoon;
+it supplies an approximate route, not authenticated spawn coordinates. The
+rifle transcription includes percentage health regeneration. These observations
+do not resolve the item-version conflict. The full text, item statistics, and
+248×180 map image are retained outside Git.
+
+The original [RGTR patch notes dated 2008-01-29, archived 2008-02-03 at
+15:20:47 UTC](https://web.archive.org/web/20080203152047/http://www.rgtr.com/news/patch_notes/patch_notes_and_known_issues_01292008.html)
+establish a material version boundary: update 1.4 replaced reward items in
+855 missions, while leaving items already awarded in players' possession.
+They also changed mission reward rarity and converted regeneration rates to
+flat values. The document does not name River Recon among those 855 missions
+or provide its replacement items. A surviving old item, a late archive capture,
+or matching mission prose therefore cannot establish a final reward table.
+The January 17 forum reproduction encountered during discovery predates this
+live patch page and must not be cited as the live deployment date.
+
+No reward or eligibility change is implemented from these records. Final
+mission level, prerequisites, class/group assignment, share flag, radio flag,
+reward templates/modifiers/selection rules, and XP remain open. The old
+emulator's 250-credit amount has no support in either recovered mission record;
+their 1,000-credit agreement is a historical candidate, not final-state proof.
+
+The `external/` research directory retains complete HTTP response bodies,
+request/final URLs, acquisition timestamps, headers, lengths, and SHA-256
+metadata. Key filenames are `ellatha-river-current`, `tenton-alia-current`,
+`ellatha-river-map`, `official-live-14-20080203`, and `wayback-rgtr-live-14`,
+with `.body` and `.json` suffixes; selected HTML also has a derived `.txt`.
+`external/source-index.json` indexes retained files. The official patch body's
+SHA-256 is `fa54c490272f9023670549411afebd82fbea901bc64f33397d5855cde6bd3d37`.
+
+The Wayback mission-page prefix query returned 37 distinct Ellatha URL keys,
+including a 2008 mission 321 capture, but no River Recon capture in that result.
+Exact-name searches did not recover a dated River Recon completion screenshot
+or video. Wikia/Fandom access and some archive requests failed; these failures
+are recorded and do not establish that evidence never existed. Giddy Gamer's
+mission/document indexes contain Targets of Opportunity records, without a
+River Recon reward definition.
+
 ## Assemble With Lieutenant Perkins: mission 321
 
 Mission bindings are name 15, log 14, opening 16, finishing 13, and reminder
@@ -228,6 +279,36 @@ name-table keys 205 and 204 identify Cmd. Sgt. Price and Field Lt. Perkins.
 The text supports those named characters; the examined tables do not provide
 an explicit package-to-actor mapping for package 105 or a receiver package for
 Perkins. Do not assign mission 321 to Wilderness NPCs because of the old seed.
+
+An [Ellatha capture from 2008-02-08 at 07:32:19 UTC](https://web.archive.org/web/20080208073219/http://www.ellatha.com/TR/missionsview.asp?key=Assemble+With+Lieutenant+Perkins&id=88)
+adds historical candidates: a Machina counter target of **15**, **1,200 credits**,
+and Olympia Reflective Armor Vest / Pulsar Motor Assist Armor Legs in its
+reward list. It names Price and Perkins in the map legend. The listed armor
+still uses percentage-per-second regeneration, despite the archive capture
+following update 1.4. This illustrates why capture time is not a data revision.
+Final kill-credit rules and reward versions remain unverified; no candidate
+was imported. Complete response and provenance are retained as
+`external/ellatha-perkins-20080208.body` and `.json`, with derived `.txt`.
+
+## Additional original package inspection
+
+The outer ZIP directory has no filenames containing mission, quest, server,
+database, or spawn. The generated `game.zip` mission-related modules found by
+name are the already-inspected text, conversation, and enum tables, plus their
+localized variants. This is a filename inventory, not proof that no additional
+metadata exists under other names or inside native formats.
+
+A bounded HTTP range also recovered
+`data/maps/adv_foreas_concordia_wilderness/adv_foreas_concordia_wilderness.map`:
+509,133 decompressed bytes, CRC32 `93104b9f`, SHA-256
+`86a6c190377b66ece30a99fb36a038db6d3ccfcce195081186112488cbe07a5e`.
+`extract-wilderness-map.py` verifies the response range, local ZIP filename,
+compression, decompressed length, and CRC. `wilderness-map-extraction.json`
+records provenance. Static printable-string inspection found no mission,
+quest, reward, NPC, Rogers, Forean, or spawn labels. The binary map format was
+not decoded, so it supplies no verified quest definition or spawn placement.
+The extracted map and `wilderness-map-strings.json` are retained for subsequent
+format research. No game code was executed and no live database was edited.
 
 ## What remains before an authentic playable quest
 
