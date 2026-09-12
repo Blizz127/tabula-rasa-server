@@ -1267,22 +1267,30 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// A looking-for-group ad recruits for the squad its placer leads, so every change to a
-        /// squad's membership or leadership is handed to LookingForGroupManager: it drops the ad
-        /// of anyone who has stopped leading, and one whose squad has reached the size it asked
-        /// for. Accounts that have no ad cost a dictionary miss, so it is cheaper to notify
-        /// everyone involved than to work out who might be affected here.
+        /// Two things hang off squad membership and are told about every change to it, for each
+        /// account involved. A looking-for-group ad recruits for the squad its placer leads, so it
+        /// is dropped when they stop leading or the squad fills up; a pending summon is only ever
+        /// between squadmates, so it is dropped when that stops being true. An account with
+        /// neither costs two dictionary misses, which is cheaper than working out here who might
+        /// be affected.
         /// </summary>
         private static void AdsChanged(Party party, params uint[] alsoAccounts)
         {
             var lfg = LookingForGroupManager.Instance;
+            var summons = SummonManager.Instance;
 
             if (party != null)
                 foreach (var member in party.Members.ToList())
+                {
                     lfg.PartyChanged(member.UserId);
+                    summons.PartyChanged(member.UserId);
+                }
 
             foreach (var account in alsoAccounts)
+            {
                 lfg.PartyChanged(account);
+                summons.PartyChanged(account);
+            }
         }
 
         private static bool InWorld(Client client) =>

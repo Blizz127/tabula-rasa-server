@@ -12,6 +12,7 @@
     using Packets.LootDispenser.Client;
     using Packets.Party.Both;
     using Packets.Party.Client;
+    using Packets.Summon.Client;
     using Packets.Social.Client;
     using Packets.Trade.Client;
 
@@ -838,6 +839,40 @@
         {
             PartyManager.Instance.MakeUserPartyLeaderById(Client, packet);
         }
+
+        #region Summon
+
+        [PacketHandler(GameOpcode.InviteFriendToJoin)]
+        private void InviteFriendToJoin(InviteFriendToJoinPacket packet)
+        {
+            SummonManager.Instance.InviteFriendToJoin(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestInvitationToJoin)]
+        private void RequestInvitationToJoin(RequestInvitationToJoinPacket packet)
+        {
+            SummonManager.Instance.RequestInvitationToJoin(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RespondToJoinFriend)]
+        private void RespondToJoinFriend(RespondToJoinFriendPacket packet)
+        {
+            SummonManager.Instance.RespondToJoinFriend(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RespondToAddAndJoinFriend)]
+        private void RespondToAddAndJoinFriend(RespondToAddAndJoinFriendPacket packet)
+        {
+            SummonManager.Instance.RespondToAddAndJoinFriend(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RespondToRequestToJoin)]
+        private void RespondToRequestToJoin(RespondToRequestToJoinPacket packet)
+        {
+            SummonManager.Instance.RespondToRequestToJoin(Client, packet);
+        }
+
+        #endregion
 
         [PacketHandler(GameOpcode.PartyInvitationResponse)]
         private void PartyInvitationResponse(PartyInvitationResponsePacket packet)

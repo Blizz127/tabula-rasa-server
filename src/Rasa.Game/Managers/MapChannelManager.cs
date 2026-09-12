@@ -361,6 +361,7 @@ namespace Rasa.Managers
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
             LookingForGroupManager.Instance.RemovePlayer(client);
+            SummonManager.Instance.RemovePlayer(client);
             TradeManager.Instance.RemovePlayer(client);
             PartyManager.Instance.RemovePlayer(client);
 
