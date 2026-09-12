@@ -973,6 +973,12 @@
             PetitionManager.Instance.CancelPetition(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.RetrievePetition)]
+        private void RetrievePetition(RetrievePetitionPacket packet)
+        {
+            PetitionManager.Instance.RetrievePetition(Client, packet);
+        }
+
         #endregion
 
         #region Social

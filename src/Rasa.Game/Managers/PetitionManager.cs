@@ -10,6 +10,7 @@ namespace Rasa.Managers
     using Packets.Petition.Client;
     using Packets.Petition.Server;
     using Repositories.UnitOfWork;
+    using Structures;
     using Structures.Char;
 
     /// <summary>
@@ -18,8 +19,8 @@ namespace Rasa.Managers
     /// - CreateBugReport                     => implemented
     /// - CreateHelpRequest                   => implemented
     /// - CancelPetition                      => implemented (no client caller)
+    /// - RetrievePetition                    => implemented (no client caller)
     /// - AddToPetition                       => no client caller
-    /// - RetrievePetition                    => no client caller
     /// - SearchPetitions                     => no client caller
     /// - SearchKB                            => no client caller
     /// - RetrieveKBArticle                   => no client caller
@@ -27,8 +28,8 @@ namespace Rasa.Managers
     ///     Petition handlers (client/petitionmanager.py):
     /// - CreatePetitionAck                   => implemented
     /// - CancelPetitionAck                   => implemented (empty body in the client)
+    /// - RetrievePetitionAck                 => implemented (empty body in the client)
     /// - AddToPetitionAck                    => empty body in the client
-    /// - RetrievePetitionAck                 => empty body in the client
     /// - SearchPetitionsAck                  => empty body in the client
     /// - SearchKBAck                         => empty body in the client
     /// - RetrieveKBArticleAck                => empty body in the client
@@ -149,6 +150,38 @@ namespace Rasa.Managers
 
             client.CallMethod(SysEntity.ClientPetitionManagerId,
                 new CancelPetitionAckPacket(true, packet.PetitionId));
+        }
+
+        /// <summary>
+        /// Reads back one of the caller's own petitions. Unreachable in the shipped client, like
+        /// the cancel path, and refused the same way: a petition that is not yours is answered
+        /// exactly as one that does not exist, so the ack cannot be used to find out which ids
+        /// are real.
+        ///
+        /// Every status is readable, not just open ones - the point of retrieving a petition is
+        /// usually to see what was done about it.
+        /// </summary>
+        internal void RetrievePetition(Client client, RetrievePetitionPacket packet)
+        {
+            var accountId = client.AccountEntry.Id;
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            var petition = unitOfWork.Petitions.GetPetition(packet.PetitionId);
+
+            if (petition == null || petition.AccountId != accountId)
+            {
+                Logger.WriteLog(LogType.Debug,
+                    $"Account {accountId} could not retrieve petition #{packet.PetitionId}: "
+                    + (petition == null ? "no such petition." : "it belongs to another account."));
+
+                client.CallMethod(SysEntity.ClientPetitionManagerId,
+                    new RetrievePetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            client.CallMethod(SysEntity.ClientPetitionManagerId,
+                new RetrievePetitionAckPacket(true, packet.PetitionId, new PetitionInfo(petition)));
         }
 
         #endregion
