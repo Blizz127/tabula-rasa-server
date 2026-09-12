@@ -15,7 +15,9 @@ namespace Rasa.Services.Preloader
 
         protected override IEnumerable<object[]> GetRows()
         {
-            yield return new object[] { 100, 726, "test" };
+            // Original client dialogue binds Rogers to package 116. Package 726
+            // belongs to River Recon's dying Forean (see river-recon-client-evidence.md).
+            yield return new object[] { 100, 116, "test" };
             yield return new object[] { 101, 208, "test" };
         }
     }

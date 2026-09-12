@@ -338,7 +338,7 @@ namespace Rasa.Managers
 
         public void RequestSwitchToCharacterInSlot(Client client, RequestSwitchToCharacterInSlotPacket packet)
         {
-            if (packet.SlotNum < 1 || packet.SlotNum > 16)
+            if (client.State != ClientState.CharacterSelection || packet.SlotNum < 1 || packet.SlotNum > 16)
                 return;
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();

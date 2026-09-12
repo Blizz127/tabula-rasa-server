@@ -35,7 +35,17 @@ namespace Rasa.Game
         public ClientCryptData Data { get; private set; }
         public GameAccountEntry AccountEntry { get; private set; }
         public uint LoadingMap { get; set; }
-        public ClientState State { get; set; }
+        private volatile ClientState _state;
+        public ClientState State
+        {
+            get => _state;
+            set
+            {
+                lock (_clientLock)
+                    if (_state != ClientState.Disconnected)
+                        _state = value;
+            }
+        }
         public Manifestation Player = new();
         public Movement Movement { get; set; }
         public uint[] SendSequence { get; } = new uint[256];
@@ -88,8 +98,13 @@ namespace Rasa.Game
 
         public void Update(long delta)
         {
+            if (State == ClientState.Disconnected)
+                return;
+
             foreach (var protocolPacket in DecodeIncomingPackets())
             {
+                if (State == ClientState.Disconnected)
+                    break;
                 try
                 {
                     HandleProtocolPacket(protocolPacket);
@@ -116,15 +131,14 @@ namespace Rasa.Game
                 if (State == ClientState.Disconnected)
                     return;
 
-                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket.RemoteAddress);
+                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket?.RemoteAddress);
 
                 State = ClientState.Disconnected;
 
-                Socket.Close();
-
-                Server.Disconnect(this);
-
-                SaveCharacter();
+                Socket?.Close();
+                while (_packetQueue.PopOutgoing() != null) { }
+                // World cleanup and the final save run on the map loop after any pending logout.
+                Server?.Disconnect(this);
             }
         }
 
@@ -191,16 +205,24 @@ namespace Rasa.Game
 
         public void SendMessage(IClientMessage message, bool compress = false, byte channel = 0, bool delay = true)
         {
-            var protocolPacket = new ProtocolPacket(message, message.Type, compress, channel);
+            lock (_clientLock)
+            {
+                if (State == ClientState.Disconnected)
+                    return;
 
-            if (!delay)
-                SendPacket(protocolPacket);
-            else
-                _packetQueue.EnqueueOutgoing(protocolPacket);
+                var protocolPacket = new ProtocolPacket(message, message.Type, compress, channel);
+                if (!delay)
+                    SendPacket(protocolPacket);
+                else
+                    _packetQueue.EnqueueOutgoing(protocolPacket);
+            }
         }
 
         public void SendPacket(IBasePacket packet)
         {
+            if (State == ClientState.Disconnected)
+                return;
+
             var pPacket = packet as ProtocolPacket;
             if (pPacket == null)
             {
@@ -396,6 +418,9 @@ namespace Rasa.Game
 		
         private void OnReceive(BufferData data)
         {
+            if (State == ClientState.Disconnected)
+                return;
+
             _incomingDataQueue.CopyFromArray(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
         }
 
@@ -473,7 +498,7 @@ namespace Rasa.Game
         public void SaveCharacter()
         {
             var player = Player;
-            if (player == null)
+            if (player == null || player.Id == 0)
             {
                 return;
             }

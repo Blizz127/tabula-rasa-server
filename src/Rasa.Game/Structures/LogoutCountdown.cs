@@ -7,6 +7,9 @@ namespace Rasa.Structures
 
         private long? _deadline;
 
+        public bool IsWaiting(long nowMilliseconds)
+            => _deadline.HasValue && nowMilliseconds < _deadline.Value;
+
         public int Begin(long nowMilliseconds)
         {
             // Repeated requests refer to the same pending logout.

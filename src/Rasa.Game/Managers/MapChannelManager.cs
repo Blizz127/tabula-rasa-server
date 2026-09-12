@@ -48,7 +48,8 @@ namespace Rasa.Managers
 
         public void CharacterLogout(Client client)
         {
-            if (client.Player.RemoveFromMap || !client.Player.LogoutCountdown.TryComplete(_getMonotonicMilliseconds()))
+            if (client.State == ClientState.Disconnected || client.Player.RemoveFromMap ||
+                !client.Player.LogoutCountdown.TryComplete(_getMonotonicMilliseconds()))
                 return;
 
             client.Player.RemoveFromMap = true;
@@ -141,7 +142,8 @@ namespace Rasa.Managers
                         var dequedClient = mapChannel.QueuedClients.Dequeue();
 
                         // add it to list
-                        mapChannel.ClientList.Add(dequedClient);
+                        if (dequedClient.State != ClientState.Disconnected && !dequedClient.Player.Disconected)
+                            mapChannel.ClientList.Add(dequedClient);
                     }
 
                 if (mapChannel.ClientList.Count > 0)
@@ -273,57 +275,75 @@ namespace Rasa.Managers
 
         public void RemovePlayer(Client client, bool logout)
         {
+            var player = client.Player;
+            if (player == null || player.Disconected)
+                return;
+
+            client.SaveCharacter();
+
             // unregister Communicator
-            CommunicatorManager.Instance.PlayerExitMap(client);
+            if (EntityManager.Instance.Players.TryGetValue(player.EntityId, out var registered) && registered == player)
+                CommunicatorManager.Instance.PlayerExitMap(client);
             // unregister mapChannelClient
             EntityManager.Instance.UnregisterEntity(client.Player.EntityId);
             EntityManager.Instance.UnregisterPlayer(client.Player.EntityId);
             EntityManager.Instance.UnregisterActor(client.Player.EntityId);
 
             // unregister character Inventory
-            foreach (var entityId in client.Player.Inventory.EquippedInventory)
+            var inventoryIds = new HashSet<ulong>(player.Inventory.EquippedInventory);
+            inventoryIds.UnionWith(player.Inventory.HomeInventory);
+            inventoryIds.UnionWith(player.Inventory.PersonalInventory);
+            inventoryIds.UnionWith(player.Inventory.WeaponDrawer);
+            foreach (var entityId in inventoryIds)
                 if (entityId != 0)
                     EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
 
-            foreach (var entityId in client.Player.Inventory.HomeInventory)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
-            foreach (var entityId in client.Player.Inventory.PersonalInventory)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
-            foreach (var entityId in client.Player.Inventory.WeaponDrawer)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
+            if (registered == player)
+                ManifestationManager.Instance.StopAutoFire(client);
             CellManager.Instance.RemoveFromWorld(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
 
-            if (logout)
-                if (client.Player.Disconected == false)
-                {
-                    PassClientToCharacterSelection(client);
-                    client.Player.Disconected = true;
-                }
-
-            // remove from list
-            for (var i = 0; i < client.Player.MapChannel.ClientList.Count; i++)
+            player.Disconected = true;
+            player.RemoveFromMap = true;
+            player.LogoutCountdown.Cancel();
+            var map = player.MapChannel;
+            if (map != null)
             {
-                if (client == client.Player.MapChannel.ClientList[i])
+                map.ClientList.RemoveAll(candidate => candidate == client);
+                map.PerformRecovery.RemoveAll(action => action.Actor == player);
+                // A socket may close before the loading queue has admitted its character.
+                for (var remaining = map.QueuedClients.Count; remaining > 0; remaining--)
                 {
-                    client.Player.MapChannel.ClientList.RemoveAt(i);
-                    //mapClient.MapChannel.PlayerCount--;
-                    break;
+                    var queued = map.QueuedClients.Dequeue();
+                    if (queued != client)
+                        map.QueuedClients.Enqueue(queued);
                 }
             }
 
+            if (logout && client.State != ClientState.Disconnected)
+                PassClientToCharacterSelection(client);
+        }
+
+        public static bool HasWorldPresence(Client client)
+            => client.Player?.MapChannel != null && !client.Player.Disconected;
+
+        public bool TryRemoveDisconnectedClient(Client client)
+        {
+            if (client.State != ClientState.Disconnected)
+                return false;
+
+            if (HasWorldPresence(client) && client.Player.LogoutCountdown.IsWaiting(_getMonotonicMilliseconds()))
+                return false;
+
+            // No verified retail grace period exists for loss without RequestLogout.
+            RemovePlayer(client, false);
+            return true;
         }
 
         public void RequestLogout(Client client)
         {
-            if (client.Player.RemoveFromMap)
+            if (client.State == ClientState.Disconnected || client.Player.RemoveFromMap)
                 return;
 
             var remaining = client.Player.LogoutCountdown.Begin(_getMonotonicMilliseconds());
@@ -332,7 +352,8 @@ namespace Rasa.Managers
 
         public void CancelLogoutRequest(Client client)
         {
-            client.Player.LogoutCountdown.Cancel();
+            if (client.State != ClientState.Disconnected)
+                client.Player.LogoutCountdown.Cancel();
         }
 
         public MapInstance GetMapInstance(uint mapContextId)

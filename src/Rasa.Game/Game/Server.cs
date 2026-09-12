@@ -47,7 +47,7 @@ namespace Rasa.Game
         public bool IsFull => CurrentPlayers >= Config.ServerInfoConfig.MaxPlayers;
         public ushort CurrentPlayers { get; set; }
 
-        private readonly List<Client> _clientsToRemove = new List<Client>();
+        private readonly DisconnectedClientQueue _clientsToRemove = new();
         private readonly PacketRouter<Server, CommOpcode> _router = new PacketRouter<Server, CommOpcode>();
         public Server(
             IHostApplicationLifetime hostApplicationLifetime,
@@ -99,16 +99,15 @@ namespace Rasa.Game
 
         public void Disconnect(Client client)
         {
-            lock (_clientsToRemove)
-                _clientsToRemove.Add(client);
+            _clientsToRemove.Enqueue(client);
         }
 
         public void MainLoop(long delta)
         {
             Timer.Update(delta);
 
-            if (Clients.Count == 0)
-                return;
+            lock (Clients)
+                _clientsToRemove.Process(Clients, MapChannelManager.Instance);
 
             MapChannelManager.Instance.MapChannelWorker(delta);
 
@@ -117,16 +116,7 @@ namespace Rasa.Game
                 foreach (var client in Clients)
                     client.Update(delta);
 
-                if (_clientsToRemove.Count > 0)
-                {
-                    lock (_clientsToRemove)
-                    {
-                        foreach (var client in _clientsToRemove)
-                            Clients.Remove(client);
-
-                        _clientsToRemove.Clear();
-                    }
-                }
+                _clientsToRemove.Process(Clients, MapChannelManager.Instance);
             }
         }
 
@@ -252,11 +242,15 @@ namespace Rasa.Game
         {
             lock (Clients)
                 foreach (var client in Clients)
-                    if (client.IsAuthenticated() && client.AccountEntry.Id == accountId)
+                    if (OccupiesAccount(client, accountId))
                         return true;
 
             return false;
         }
+
+        public static bool OccupiesAccount(Client client, uint accountId)
+            => client.AccountEntry?.Id == accountId &&
+               (client.IsAuthenticated() || MapChannelManager.HasWorldPresence(client));
 
         public void Shutdown()
         {

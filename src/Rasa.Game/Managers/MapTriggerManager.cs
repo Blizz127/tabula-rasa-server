@@ -67,10 +67,10 @@ namespace Rasa.Managers
         {
             foreach (var client in mapChannel.ClientList)
             {
-                if (client.Player.Disconected || client.Player == null || client.State == ClientState.Loading)
+                if (client.Player == null || client.Player.Disconected || client.State == ClientState.Loading ||
+                    !mapChannel.MapCellInfo.Cells.TryGetValue(client.Player.Cells[2, 2], out var cell) ||
+                    !cell.ClientList.Contains(client))
                     continue;
-
-                var cell = mapChannel.MapCellInfo.Cells[client.Player.Cells[2, 2]];
 
                 foreach (var mapTrigger in cell.MapTriggers)
                 {

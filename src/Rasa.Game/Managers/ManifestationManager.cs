@@ -696,7 +696,21 @@ namespace Rasa.Managers
 
         public void RequestPerformAbility(Client client, RequestPerformAbilityPacket packet)
         {
-            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId, (uint)packet.ActionArgId, packet.Target, 0));
+            if (client.State != ClientState.Ingame || client.Player.MapChannel == null ||
+                client.Player.RemoveFromMap ||
+                !AbilityRequirements.CanUseSkillAbility(client.Player, packet.ActionId, packet.ActionArgId))
+            {
+                client.CallMethod(client.Player.EntityId, new UserActionFailedPacket(packet.ActionId, packet.ActionArgId));
+                return;
+            }
+
+            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, packet.ActionId,
+                (uint)packet.ActionArgId, packet.Target ?? 0, 0)
+            {
+                TargetLocation = packet.TargetLocation,
+                ItemId = packet.ItemId,
+                ClientYaw = packet.ClientYaw
+            });
         }
 
         public void RequestToggleRun(Client client)

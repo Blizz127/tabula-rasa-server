@@ -244,13 +244,16 @@ class 22637/name ID 0. Do not replace the local NPC wholesale based on its name.
 
 ## Strongest next implementation path
 
-River Recon is the best current candidate because the internal mission/objective
-IDs, a talk-based sequence, and all three NPC identities have a concrete prior
-implementation and local counterparts. Before enabling it as a complete retail
-quest, obtain matching client language/script tables or a retail-era capture to
-verify mission 429, objectives 5/4, NPC conversation packages, rewards,
-prerequisites, category, and radio/share behavior. Do not invent missing values
-or use the old 1,000 XP/250 credits as verified rewards.
+River Recon remains the best current candidate. The recovered original client
+now confirms mission 429, objective text IDs for 5/4, and dialogue package keys;
+see [River Recon client evidence](river-recon-client-evidence.md) for exact
+records, cross-references, and the correction to Rogers's package. Its narrative
+supports recon followed by reporting, but the examined client tables do not
+contain the server's complete quest script. Before enabling it as a complete
+retail quest, establish rewards, prerequisites, level/category/group and
+radio/share assignments, the Dying Forean's exact identity and placement, and
+objective transitions. Do not invent missing values or use the old 1,000 XP/250
+credits as verified rewards.
 
 The next code increment can establish mechanisms without guessing content:
 

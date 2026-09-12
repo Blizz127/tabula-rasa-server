@@ -9,7 +9,9 @@
         public uint ActionArgId { get; set; }
         public uint Args { get; set; }
         public ulong TargetId { get; set; }
-        public int ItemId { get; set; }
+        public ulong? ItemId { get; set; }
+        public (double X, double Y, double Z)? TargetLocation { get; set; }
+        public double? ClientYaw { get; set; }
         public long WaitTime { get; set; }
         public long PassedTime { get; set; }
 

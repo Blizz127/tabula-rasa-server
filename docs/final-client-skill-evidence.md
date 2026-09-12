@@ -152,3 +152,32 @@ maximum ranks, mapped abilities and Logos sequences is preserved in
 the instruction-level checks. These demonstrate the recovered client's rules;
 official whole-client authenticity, server-side grant mechanics, effects,
 point awards, and in-client end-to-end behavior remain under verification.
+
+## Raw literal validation after the decompiler audit
+
+A subsequent mission-table audit found that uncompyle6 can sometimes print
+constant indices in list literals instead of original values. Therefore the
+skill/ability/Logos join was independently checked against **raw xdis-decoded
+literal instructions**, using the locally authored strict decoder described in
+[the River Recon audit](river-recon-client-evidence.md). It accepts only literal
+construction and rejects calls, imports, branches and attribute access; no
+acquired game code was imported or run.
+
+The check parsed original `skilldata`, `characterclass`, `abilitydata`, and
+`logosstone`, then compared every catalog field for all **73 skills**: internal
+name, owning class and class name, class-level field, maximum pump, mapped
+ability, ordered Logos ID pairs and Logos internal names. **Zero differences**
+were found. The catalog's 53 non-null ability IDs exactly equal the original
+53 `skillRequirements` keys, whose lists each contain one skill. All **54**
+raw `logosSequences` entries also equal the corresponding decompiled literal
+table, including the additional sequence outside the 53 skill-linked abilities.
+Thus this catalog is not affected by that observed decompiler defect.
+
+Reproduction uses external `skill-selected/verify_catalog_raw_literals.py`
+with `/tmp/rasa-bytecode-tools/bin/python`. Results are
+`skill-selected/raw-catalog-comparison.json`; original dictionary assignments,
+bytecode store offsets and member hashes are retained in
+`skill-selected/raw-literal-table-evidence.json`, SHA-256
+`af818d4307003aa27441ad62d068d6918e1fe45dfd5114b9b43f91e11a770952`.
+The further trainer, signature-grant and point-accounting audit is in
+[character progression evidence](character-progression-client-evidence.md).

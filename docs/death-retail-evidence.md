@@ -2,8 +2,8 @@
 
 The target remains the final live game immediately before shutdown, preserved
 1:1. This updates the evidence gaps in [death-research.md](death-research.md).
-It also records the bounded normal-logout correction implemented from the
-sources below. Player death, hospital recovery, and trauma gameplay are not
+It also records the normal-logout correction and the connected immediate-quit
+lifecycle correction implemented from the sources below. Player death, hospital recovery, and trauma gameplay are not
 implemented by this change.
 
 ## Original official live patch and guide evidence
@@ -41,7 +41,8 @@ Selected `trpython.zip` members were extracted as data and statically decompiled
 with uncompyle6 3.9.3; relevant instructions were checked with xdis disassembly.
 No downloaded executable or game Python module was executed or imported. The
 bytecode is Python 2.4, magic `6df20d0a`; module headers identify compilation on
-9 February 2009. Original embedded source paths and function names below are
+10 February 2009 UTC (the decompiler displayed 9 February in the local Chicago
+time zone). Original embedded source paths and function names below are
 stable locators. Decompiled line numbers are analysis-output positions, not
 original source line numbers.
 
@@ -134,7 +135,12 @@ forwards **milliseconds**. `client/ui/logoutwindow.pyo` disables normal logout
 until that value reaches zero and sends `CancelLogoutRequest()` on cancel.
 `client/inputstate/exitgame.pyo` sends `RequestLogout()` to begin and
 `CharacterLogout()` for the completed character-select path. Its immediate quit
-path is different. The client's displayed integer rounding is retained; do not
+path calls `OnExit()` / `PostQuitRequest()` from both quit buttons without a
+`CharacterLogout()` message. Both game quit and character selection first send
+`RequestLogout()` through `_RequestLogout`. Together with D10.6's explicit
+remaining world presence, this establishes that socket closure after that
+request must preserve its original deadline. The client's displayed integer
+rounding is retained; do not
 shave a millisecond from the server's ten-second requirement to alter the UI.
 
 The server previously advertised 5000 milliseconds and accepted completion
@@ -156,11 +162,69 @@ production database mounts. The combined candidate subsequently passed all 105
 tests and was deployed successfully; see [validation log](retail-accuracy.md).
 Original-client logout interaction still needs verification.
 
-**Remaining logout gap:** this correction does not implement the official
-continued presence after immediate game quit or abrupt socket loss. The
-existing `Client.Close` / `Server.Disconnect` / map-client cleanup must be
-reconciled as a complete lifecycle, including single removal, ongoing combat,
-save timing, and reconnect. The normal timer tests do not prove that path.
+The follow-up now connects `Client.Close`, `DisconnectedClientQueue`, the server
+loop, map cleanup, and account occupancy:
+
+- Socket closure enqueues cleanup and stops packet processing/output. It does
+  not save or remove a character before an outstanding logout deadline.
+- The disconnected character stays in the map, cells, and actor registry until
+  the remaining delay elapses. Map updates run with no connected sockets, so
+  existing combat can still affect it. The deadline is checked by the server
+  loop; the existing loop scheduling resolution still applies.
+- At removal, the existing character snapshot is saved once; the existing
+  separate login-metadata update also runs once for an admitted character.
+  Entity, cell, inventory, pending action, auto-fire, and map queue references
+  are cleaned up. Duplicate closure and accepted normal logout followed by
+  socket loss converge on the same completed cleanup.
+- The existing `AlreadyLoggedIn` check counts retained world presence. This
+  prevents a second actor for that account during retention; it does not claim
+  to reproduce retail reconnect/reattachment semantics. Character selection
+  packets are accepted only in the existing character-selection state.
+- A socket lost during map loading cleans up queued/admitted references even
+  when its cell matrix has not yet been created. A default character with ID
+  zero is never passed to persistence.
+
+**Remaining logout gaps:** no original evidence recovered here establishes the
+server grace period or timeout start for network loss without `RequestLogout`.
+That path now performs the previously intended immediate cleanup instead of
+leaving a registered ghost; this is an emulator lifecycle repair, not a verified
+final-retail timing claim. Retrying a connection gets the existing login error
+while the actor is retained; authentic retail retry/reattachment behavior still
+needs a capture. The repository's character snapshot currently covers position,
+map, rotation, running, and crouching; it does not persist health, death, or
+active effects. These unimplemented persistence rules remain gaps. Original
+client smoke checks and exact server timeout behavior remain outstanding.
+
+An additional transport-ordering gap remains: `Close()` marks the connection
+disconnected before the server drains already-buffered incoming packets. A
+`RequestLogout` immediately followed by socket closure can therefore remain
+unparsed and take the no-pending-request cleanup path. The original quit UI
+normally waits for the server timer response before enabling immediate quit,
+but that does not resolve this server ordering defect. No code change for this
+gap is included in the tested lifecycle candidate.
+
+`DisconnectTests` adds seven focused cases covering remaining-deadline world
+presence and real missile damage, deferred SQLite position persistence and
+idempotence, accepted normal logout followed by loss, canceled/no-request
+cleanup, disconnected input/output and terminal connection state, replacement
+requests during removal, loss during map loading, and the unsaved default
+character. The seven cases and five `LogoutTests` passed together (12/12) in
+an isolated `rasa_net:latest` SDK container on 12 September 2026, with source
+copied from a read-only mount, `--network none`, and no production database
+mounts. The combined candidate subsequently passed all 135 tests and was
+deployed successfully; see [the work log](retail-accuracy.md). These automated
+checks validate implementation; original client interaction remains unverified.
+
+The older C++ implementation at commit
+`4a9ab5f1fcdf6a18ab6911c384189cc41ddae651`,
+[`src/MapChannel.cpp`](https://github.com/InfiniteRasa/Game-Server/blob/4a9ab5f1fcdf6a18ab6911c384189cc41ddae651/src/MapChannel.cpp),
+`mapChannel_readData`, marks immediate removal/disconnection on receive failure.
+This corroborates intended emulator cleanup only: the same source advertises a
+zero-duration logout, so it cannot establish final retail timing. Its raw copy
+is retained as `upstream-MapChannel.cpp`, SHA-256
+`69127f6d37c6a13b2a82ea42ec89dfcf697fb989b03f2f4c2b65e824e7aadbde`.
+The bounded official-note, original-client constant, and contemporary-description
+search did not produce a no-request timeout or reconnect policy.
 
 The D11 crouching rule was audited against `RequestPerformAbility`,
 `ActorActionManager`, and current consumable dispatch. Existing casting has no
@@ -183,7 +247,9 @@ restriction or invented consumable implementation was added.
 4. Attach trauma and healing lockout only after the original trigger, stacking
    refresh semantics, attribute baseline, exception rules, and persistence are
    established. The recovered constants now remove numeric guesswork.
-5. Complete logout/disconnect retention as its own connected state transition.
+5. Verify the connected logout paths with the original client and recover the
+   remaining abrupt-loss timing, reconnect, and complete character-persistence
+   rules before claiming full logout fidelity.
 6. Signature rank limits and other skill tables are handled by the separate
    [final client skill audit](final-client-skill-evidence.md). The older official
    abilities overview retains stale names and is insufficient to set final caps.

@@ -61,7 +61,14 @@ namespace Rasa.Structures
 
         private static bool IsSignature(int skillId) => Array.IndexOf(SignatureSkillIds, skillId) >= 0;
 
-        private static int GetMaximumRank(int skillId) => IsSignature(skillId) ? 1 : 5;
+        public static int GetMaximumRank(int skillId) => IsSignature(skillId) ? 1 : 5;
+
+        public static bool TryGetSkillForAbility(int abilityId, out SkillId skillId)
+        {
+            var index = abilityId > 0 ? Array.IndexOf(AbilityIds, abilityId) : -1;
+            skillId = index >= 0 ? (SkillId)SkillIds[index] : default;
+            return index >= 0;
+        }
 
         public static bool IsAvailableToClass(uint classId, int skillId)
         {

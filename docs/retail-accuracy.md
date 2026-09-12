@@ -267,3 +267,85 @@ The full preservation goal remains active. Passing these checks establishes
 the corrected implementation, not final-retail equivalence. Quest lifecycle,
 death/recovery, complete ability effects, content, final events, and real-client
 comparison still require substantial reconstruction and verification.
+
+## Ability requests, NPC dialogue, and disconnect lifecycle — 2026-09-12
+
+The [ability-use audit](ability-use-client-evidence.md) adds original-client
+request shapes and action-failure signatures. All 73 catalog rows and the
+complete skill/ability/Logos join passed independent raw-bytecode comparison;
+the resulting 53 active C# ability requirements matched with zero differences.
+The server now checks learned rank, class ancestry, signature caps, and all
+required Logos before queueing a skill ability. Lower learned ranks remain
+usable and crouching remains allowed. Non-skill actions require their own
+authorization paths; item/mech/polymorph support is still incomplete.
+
+Ability requests now preserve optional entity/location/None targets, full
+64-bit entity/item identifiers, and optional yaw. Rejected skill requests send
+the client's supported `UserActionFailed` tuple with no guessed localized
+message. Recognized ability effects, resource costs, cooldowns, targeting,
+interruptions, and Lightning/Sprint placeholder formulas still require work.
+
+[Original mission tables](river-recon-client-evidence.md) establish River Recon
+429's objective text IDs, dialogue keys and narrative sequence, plus mission
+321's Machina objective/counter label. They also prove that local Rogers was
+assigned the dying patrol member's conversation package. The fresh seed now
+uses package 116. Paired generated data migrations correct only the known
+`npc_package` row 100/value 726 combination, retaining other values and NPCs.
+No reward, prerequisite, objective trigger, NPC position, or mission assignment
+was guessed from client text. The migration's `Down` intentionally does not
+restore a known bad package or overwrite a row that was already correct.
+
+The [disconnect lifecycle](death-retail-evidence.md) now retains an actor after
+socket closure when a server-processed logout request still has time remaining.
+The original deadline continues, world combat remains active, and world removal
+and the existing character snapshot run at the end. Repeated callbacks cannot
+repeat cleanup; closed connections stop accepting input/output, retained actors
+continue occupying their accounts, and character replacement is gated to the
+selection state. Loading/normal-logout races have isolated regression coverage.
+Loss without a pending logout performs intended emulator cleanup; its exact
+retail grace period and reconnect policy remain unknown. Health, death, and
+active-effect persistence are still absent from the existing character snapshot.
+
+[Character progression research](character-progression-client-evidence.md)
+records the original trainer/class-selection and clone requests and the 5/15/30
+tier text. The server-supplied training eligibility and reward totals are not
+contained in those UI messages. Signature grants, precise point accounting,
+and complete trainer/clone transactions remain open, with no invented numeric
+replacement introduced.
+
+Validation: the final Docker build completed with zero errors and five existing
+unused-variable/field warnings. All **135 tests passed**, with zero failures or
+skips, in an isolated container with no network or production database mounts.
+This includes 16 new ability/protocol cases, seven disconnect cases, and seven
+NPC package cases. The generated package-correction SQL also passed isolated
+MySQL fixture checks; detailed logs and scope are linked in the mission record.
+
+Tested/deployed image:
+`sha256:39c7ffc84dd58fc269771d29fa27e4c41a4c8373fc516619590ab57f0a5f3fd3`,
+retained as `rasa_net:retail-ability-candidate`. Only game was recreated. Startup
+confirmed authentication to auth, world loading, and `Server ready!` at
+**18:08:28 UTC**. The running image matches the tested candidate and auth's
+image is unchanged.
+
+Fresh SQLite backups, candidate build/test logs, focused records and before/after
+deployment metadata are in
+`/home/blizz/backups/rasa-net/20260912T180817Z-retail-ability`.
+All three backups passed integrity checks. Post-startup Char/World checks also
+passed. Non-migration table counts were unchanged; Rogers's package is now 116,
+Witherspoon remains 208, and the expected World migration record was added.
+
+Rollback image: `rasa_net:before-retail-ability-20260912`. The package correction
+is compatible with that previous application, so code rollback can retain the
+corrected package. If reverting data is specifically necessary, use the verified
+pre-deployment World backup; the data migration's `Down` is intentionally empty.
+Do not restore independently active auth/character data unnecessarily.
+
+Operational observation: the previous game container restarted three times
+around **18:00 UTC**, before this candidate was deployed. Its retained stdout
+shows startup sequences without an application exception identifying a cause.
+The inspected running state reported no current OOM condition, and available
+bounded event/kernel queries supplied no cause. These observations do not prove
+the absence of a runtime failure. The replacement started with restart count
+zero; keep this unexplained earlier restart sequence open for monitoring.
+Neither unit tests nor successful startup prove sustained availability or
+original-client gameplay. Full preservation remains active and incomplete.

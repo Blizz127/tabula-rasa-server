@@ -253,30 +253,33 @@ namespace Rasa.Managers
 
         public void RemoveFromWorld(Client client)
         {
-            var mapChannel = client.Player.MapChannel;
-
-            if (client.Player == null)
+            var mapChannel = client.Player?.MapChannel;
+            if (mapChannel == null)
                 return;
 
             //notify players
-            var ListOfClients = new List<Client>();
+            var clients = new HashSet<Client>();
 
             foreach (var cellSeed in client.Player.Cells)
-                foreach (var player in mapChannel.MapCellInfo.Cells[cellSeed].ClientList)
-                    ListOfClients.Add(player);
+                if (mapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                    clients.UnionWith(cell.ClientList);
 
-            ManifestationManager.Instance.CellDiscardClientToPlayers(client, ListOfClients);
-            ManifestationManager.Instance.CellDiscardPlayersToClient(client, ListOfClients);
+            var notifyClients = new List<Client>(clients);
+            ManifestationManager.Instance.CellDiscardClientToPlayers(client, notifyClients);
+            ManifestationManager.Instance.CellDiscardPlayersToClient(client, notifyClients);
 
             // remove player from cell
-            mapChannel.MapCellInfo.Cells[client.Player.Cells[2, 2]].ClientList.Remove(client);
+            if (mapChannel.MapCellInfo.Cells.TryGetValue(client.Player.Cells[2, 2], out var center))
+                center.ClientList.RemoveAll(candidate => candidate == client);
         }
 
         public void UpdateVisibility(MapChannel mapChannel)
         {
             foreach (var client in mapChannel.ClientList)
             {
-                if (client.Player.Disconected || client.Player == null || client.State == ClientState.Loading)
+                if (client.Player == null || client.Player.Disconected || client.State == ClientState.Loading ||
+                    !mapChannel.MapCellInfo.Cells.TryGetValue(client.Player.Cells[2, 2], out var currentCell) ||
+                    !currentCell.ClientList.Contains(client))
                     continue;
 
                 var cellPosX = (uint)(client.Player.Position.X / CellSize + CellBias);
