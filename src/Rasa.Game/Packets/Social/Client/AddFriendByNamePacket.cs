@@ -12,8 +12,7 @@
     ///    server itself sent with WriteString in ActorNamePacket, so it comes back as a
     ///    0x4_ byte string;
     ///  - the social window's name box (socialwindow.py:933) passes TextEdit.GetText(),
-    ///    which comes back as a 0x5_ unicode string - the same box feeds AddIgnoreByName,
-    ///    whose packet already reads unicode.
+    ///    which comes back as a 0x5_ unicode string - the same box feeds AddIgnoreByName.
     ///
     /// This used to read ReadString only, which throws "WTF? String type: 5D" on the
     /// second path; the throw escapes ReadPacket and disconnects the player. Accepts
@@ -28,11 +27,7 @@
         public override void Read(PythonReader pr)
         {
             pr.ReadTuple();
-
-            if (pr.PeekType() == PythonType.UnicodeString)
-                FamilyName = pr.ReadUnicodeString();
-            else
-                FamilyName = pr.ReadString();
+            FamilyName = SocialArgs.ReadName(pr);
         }
     }
 }

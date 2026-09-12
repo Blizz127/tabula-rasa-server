@@ -345,6 +345,18 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.CommunicatorId, new AddIgnoreAckPacket(familyName, succsess));
         }
 
+        /// <summary>PM_REMOVED_FROM_FRIEND_LIST or PM_FAILED_FRIEND_REMOVE, by success.</summary>
+        internal void RemoveFriendAck(Client client, string familyName, bool success)
+        {
+            client.CallMethod(SysEntity.CommunicatorId, new RemoveFriendAckPacket(familyName, success));
+        }
+
+        /// <summary>PM_REMOVED_FROM_IGNORE_LIST or PM_FAILED_IGNORE_REMOVE, by success.</summary>
+        internal void RemoveIgnoreAck(Client client, string familyName, bool success)
+        {
+            client.CallMethod(SysEntity.CommunicatorId, new RemoveIgnoreAckPacket(familyName, success));
+        }
+
         public int GenerateDefaultChannelHash(int channelId, int mapContextId, int instanceId)
         {
             var v = 0;

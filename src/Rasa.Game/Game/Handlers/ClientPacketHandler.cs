@@ -949,10 +949,22 @@
             SocialManager.Instance.RemoveFriend(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.RemoveFriendByName)]
+        private void RemoveFriendByName(RemoveFriendByNamePacket packet)
+        {
+            SocialManager.Instance.RemoveFriendByName(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RemoveIgnore)]
         private void RemoveIgnore(RemoveIgnorePacket packet)
         {
             SocialManager.Instance.RemoveIgnore(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RemoveIgnoreByName)]
+        private void RemoveIgnoreByName(RemoveIgnoreByNamePacket packet)
+        {
+            SocialManager.Instance.RemoveIgnoreByName(Client, packet);
         }
         #endregion
     }

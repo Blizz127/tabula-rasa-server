@@ -24,7 +24,7 @@ namespace Rasa.Managers
          * - JoinFriendCancelled
          * - JoinFriendDeclined 
          * - RemoveFriend
-         * - RemoveFriendByName
+         * - RemoveFriendByName                => implemented
          * - RespondToAddAndJoinFriend
          * - RespondToJoinFriend
          * 
@@ -92,15 +92,7 @@ namespace Rasa.Managers
         {
             var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
 
-            GameAccountEntry account = null;
-
-            if (requestedName.Length > 0)
-            {
-                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-                account = unitOfWork.GameAccounts.FindByFamilyName(requestedName);
-            }
-
-            RequestFriend(client, account, requestedName);
+            RequestFriend(client, FindByFamilyName(requestedName), requestedName);
         }
 
         /// <summary>
@@ -140,10 +132,10 @@ namespace Rasa.Managers
 
         internal void AddIgnoreByName(Client client, AddIgnoreByNamePacket packet)
         {
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            var account = unitOfWork.GameAccounts.Get(packet.FamilyName);
+            var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
 
-            IgnoreById(client, account, packet.FamilyName);
+            // Get(string) throws for a name nobody has, and matches case-sensitively on SQLite.
+            IgnoreById(client, FindByFamilyName(requestedName), requestedName);
         }
         
         internal void RemoveFriend(Client client, RemoveFriendPacket packet)
@@ -151,9 +143,46 @@ namespace Rasa.Managers
             RemoveFriend(client, packet.AccountId);
         }
 
+        /// <summary>
+        /// /removefriend and /rfriend. The name is matched against the friends this player
+        /// actually has, so removing someone who is not on the list, or a name nobody has, is
+        /// acked as a failure rather than silently doing nothing.
+        /// </summary>
+        internal void RemoveFriendByName(Client client, RemoveFriendByNamePacket packet)
+        {
+            var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
+            var account = FindByFamilyName(requestedName);
+
+            if (account == null || !client.Player.Friends.Contains(account.Id))
+            {
+                CommunicatorManager.Instance.RemoveFriendAck(client, account?.FamilyName ?? requestedName, false);
+                return;
+            }
+
+            // No ack on success: Recv_FriendRemoved already posts PM_REMOVED_FROM_FRIEND_LIST
+            // (client/social.py:208), so acking as well would print the message twice.
+            RemoveFriend(client, account.Id);
+        }
+
         internal void RemoveIgnore(Client client, RemoveIgnorePacket packet)
         {
             RemoveIgnoredPlayer(client, packet.AccountId);
+        }
+
+        /// <summary>/removeignore and /unignore, the same way round as RemoveFriendByName.</summary>
+        internal void RemoveIgnoreByName(Client client, RemoveIgnoreByNamePacket packet)
+        {
+            var requestedName = packet.FamilyName?.Trim() ?? string.Empty;
+            var account = FindByFamilyName(requestedName);
+
+            if (account == null || !client.Player.IgnoredPlayers.Contains(account.Id))
+            {
+                CommunicatorManager.Instance.RemoveIgnoreAck(client, account?.FamilyName ?? requestedName, false);
+                return;
+            }
+
+            // Recv_IgnoreRemoved posts PM_REMOVED_FROM_IGNORE_LIST itself (client/social.py:183).
+            RemoveIgnoredPlayer(client, account.Id);
         }
 
         internal void SetSocialContactList(Client client)
@@ -191,6 +220,17 @@ namespace Rasa.Managers
         }
 
         #region Helper Functions
+
+        /// <summary>The account with this family name, or null; case-insensitive, and null-safe for an empty name.</summary>
+        private GameAccountEntry FindByFamilyName(string familyName)
+        {
+            if (string.IsNullOrEmpty(familyName))
+                return null;
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            return unitOfWork.GameAccounts.FindByFamilyName(familyName);
+        }
 
         /// <returns>false, with the failure already acknowledged to the client, when nothing was added.</returns>
         internal bool AddFriend(Client client, uint accountId)
