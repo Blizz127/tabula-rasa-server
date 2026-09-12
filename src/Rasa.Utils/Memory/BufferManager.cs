@@ -32,6 +32,16 @@ namespace Rasa.Memory
                     BufferDatas.Push(new BufferData(i));
         }
 
+        /// <summary>
+        /// Takes a buffer from the pool, or returns null when there are none left.
+        /// </summary>
+        /// <remarks>
+        /// Running out is a load problem, not a programming error. This used to throw, and the
+        /// throw happened on whichever socket thread happened to ask, where nothing caught it and
+        /// it took the process down - so one client arriving at a bad moment could end everyone
+        /// else's session. The caller drops the one connection it was about to serve instead,
+        /// which hands back that connection's buffers and lets the server carry on.
+        /// </remarks>
         public static BufferData RequestBuffer()
         {
             BufferData data;
@@ -42,7 +52,7 @@ namespace Rasa.Memory
             lock (BufferDatas)
             {
                 if (BufferDatas.Count == 0)
-                    throw new OutOfMemoryException("BufferManager has ran out of usable buffer space!");
+                    return null;
 
                 data = BufferDatas.Pop();
             }

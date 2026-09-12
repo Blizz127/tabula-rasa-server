@@ -47,7 +47,7 @@ namespace Rasa.Auth
             Timer = new Timer();
 
             Socket.OnError += OnError;
-            Socket.QueueOverflow += OnSendQueueOverflow;
+            Socket.OnDrop += OnDrop;
             Socket.OnReceive += OnReceive;
             Socket.OnDecrypt += OnDecrypt;
 
@@ -179,10 +179,10 @@ namespace Rasa.Auth
         }
 
         /// <summary>
-        /// The connection stopped reading long enough to fill its send queue. Nothing more can go
-        /// out to it, so let it go.
+        /// The socket has given up on this connection - a full send queue, a stream that stopped
+        /// framing, or no buffers left to serve it. Nothing more can pass either way, so let it go.
         /// </summary>
-        private void OnSendQueueOverflow()
+        private void OnDrop(string reason)
         {
             Close();
         }

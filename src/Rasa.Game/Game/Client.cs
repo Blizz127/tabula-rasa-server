@@ -94,7 +94,7 @@ namespace Rasa.Game
             State = ClientState.Connected;
 
             Socket.OnError += OnError;
-            Socket.QueueOverflow += OnSendQueueOverflow;
+            Socket.OnDrop += OnDrop;
             Socket.OnReceive += OnReceive;
             Socket.OnEncrypt += OnEncrypt;
             Socket.OnDecrypt += OnDecrypt;
@@ -481,10 +481,11 @@ namespace Rasa.Game
         }
 
         /// <summary>
-        /// The connection stopped reading long enough to fill its send queue. Close it without
-        /// trying to send anything: there is already more waiting than it can take.
+        /// The socket has given up on this connection - a full send queue, a stream that stopped
+        /// framing, or no buffers left to serve it. Close without trying to send anything: either
+        /// nothing can reach them, or nothing they send can be read.
         /// </summary>
-        private void OnSendQueueOverflow()
+        private void OnDrop(string reason)
         {
             Close(false);
         }

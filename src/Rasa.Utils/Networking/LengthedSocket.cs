@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Rasa.Networking
 {
@@ -23,6 +24,7 @@ namespace Rasa.Networking
         public delegate void AsyncHandler(SocketAsyncEventArgs args);
         public delegate void ReceiveHandler(BufferData data);
         public delegate void DisconnectHandler();
+        public delegate void DropHandler(string reason);
         public delegate void EncryptDelegate(BufferData data, ref int length);
         public delegate bool DecryptDelegate(BufferData data);
 
@@ -111,6 +113,12 @@ namespace Rasa.Networking
             }
         }
 
+        /// <summary>
+        /// Takes an args, and a buffer for it where the operation needs one, or returns null if
+        /// either pool is empty. Both pools are shared by every connection, so running dry is a
+        /// load condition the caller has to answer for - by dropping the connection it was about
+        /// to serve - rather than an error to throw on a socket thread that will not catch it.
+        /// </summary>
         private SocketAsyncEventArgs SetupEventArgs(SocketAsyncOperation operation)
         {
             SocketAsyncEventArgs args;
@@ -119,13 +127,22 @@ namespace Rasa.Networking
                 args = _socketAsyncEventArgsPool.Count > 0 ? _socketAsyncEventArgsPool.Pop() : null;
 
             if (args == null)
-                throw new OutOfMemoryException("All of the SocketAsyncEventArgs are being used!");
+                return null;
 
             switch (operation)
             {
                 case SocketAsyncOperation.Receive:
                 case SocketAsyncOperation.Send:
                     var data = BufferManager.RequestBuffer();
+
+                    if (data == null)
+                    {
+                        // Do not hold the args hostage to a buffer we could not get.
+                        lock (_socketAsyncEventArgsPool)
+                            _socketAsyncEventArgsPool.Push(args);
+
+                        return null;
+                    }
 
                     args.SetBuffer(BufferManager.Buffer, data.BaseOffset, data.MaxLength);
                     args.UserToken = data;
@@ -163,6 +180,11 @@ namespace Rasa.Networking
                 args.RemoteEndPoint = null;
 
             args.AcceptSocket = null;
+
+            // The listener's accept args is this socket's own and is never pooled; see AcceptAsync.
+            if (args == _acceptArgs)
+                return;
+
             args.Completed -= OperationCompleted;
 
             lock (_socketAsyncEventArgsPool)
@@ -198,8 +220,8 @@ namespace Rasa.Networking
                         {
                             args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
 
-                            // TODO: test if multiple send operations will collide (if the packet was only sent partially, and another packet is getting sent between the two parts)
-                            // TODO: create a queue for sending async, if it collides?
+                            // Sending the rest is safe now: the queue holds everything else back
+                            // until this args reports the whole buffer gone.
                             SendAsync(args);
                             return;
                         }
@@ -211,10 +233,14 @@ namespace Rasa.Networking
                     case SocketAsyncOperation.Receive:
                         // This value may change in the middle of processing, causing odd behavior
                         var receiveAfter = AutoReceive;
-                        if (ProcessInputBuffer(data, args))
+                        var result = ProcessInputBuffer(data, args);
+
+                        if (result == InputResult.Reading)
                             return;
 
-                        if (receiveAfter)
+                        // A broken stream gets its buffer back but no new receive: there is
+                        // nothing left to read that could be made sense of.
+                        if (result == InputResult.Consumed && receiveAfter)
                             ReceiveAsync();
 
                         break;
@@ -224,8 +250,14 @@ namespace Rasa.Networking
                         break;
 
                     case SocketAsyncOperation.Accept:
-                        OnAccept?.Invoke(new LengthedSocket(args.AcceptSocket, SizeHeaderLength, CountSize));
-                        break;
+                        var accepted = args.AcceptSocket;
+
+                        // Done with the args before the handler runs, because the handler's first
+                        // move is to re-arm the accept - on this same args, on this same thread.
+                        args.AcceptSocket = null;
+
+                        OnAccept?.Invoke(new LengthedSocket(accepted, SizeHeaderLength, CountSize));
+                        return;
                 }
             }
 
@@ -255,31 +287,72 @@ namespace Rasa.Networking
             }
         }
 
-        private bool ProcessInputBuffer(BufferData data, SocketAsyncEventArgs args)
+        private enum InputResult
+        {
+            /// <summary>A receive is already running on this args; leave it be.</summary>
+            Reading,
+
+            /// <summary>Everything in the buffer has been handed on; it can be freed and read into again.</summary>
+            Consumed,
+
+            /// <summary>The stream cannot be framed any further. The connection is being dropped.</summary>
+            Broken
+        }
+
+        private InputResult ProcessInputBuffer(BufferData data, SocketAsyncEventArgs args)
         {
             data.ByteCount += args.BytesTransferred;
 
             while (true)
             {
-                var length = -1;
+                // Whether the length is known is its own flag rather than a -1 in the length.
+                // ReadSize adds the header to what the other side wrote, so a client that writes
+                // -5 produces a length of -1 and used to be read as "the header has not arrived
+                // yet" - which sent the receive off with the previous frame's length still set.
+                var haveLength = data.ByteCount >= LengthSize;
+                var length = haveLength ? ReadSize(data) : 0;
 
-                if (data.ByteCount >= LengthSize)
-                    length = ReadSize(data);
-
-                if (length != -1)
+                if (haveLength)
                 {
-                    data.Length = length;
+                    // A length that no buffer could ever hold, or one too small to contain its own
+                    // header, is not a packet we are behind on - it is a length field read out of
+                    // step with the stream, or something speaking a different protocol at us.
+                    // There is no way to resynchronise a length-prefixed stream once that happens,
+                    // so the connection goes. This used to throw OutOfMemoryException on the socket
+                    // thread, where nothing caught it.
+                    if (length < LengthSize || length > BufferManager.BlockSize)
+                    {
+                        Drop($"framing lost - a frame of {length} bytes, against a {BufferManager.BlockSize} byte buffer");
+                        return InputResult.Broken;
+                    }
 
-                    if (data.Length > data.MaxLength)
-                        throw new OutOfMemoryException($"Packet is bigger than the max packet size! Packet size: {length} | Max buffer size: {data.MaxLength}");
+                    // It fits in a buffer, just not in what is left of this one behind the frames
+                    // already read out of it. Slide the unread bytes back to the front and carry
+                    // on - this is an ordinary read that ended mid-frame, not a bad packet.
+                    if (length > data.MaxLength)
+                        Compact(data);
+
+                    data.Length = length;
                 }
 
-                if (length == -1 || data.ByteCount < length)
+                if (!haveLength)
+                {
+                    // The length header itself is split across the end of the block. Slide the
+                    // bytes that did arrive back to the front first, or the receive below gets
+                    // handed whatever room is left behind the frames already read - which at the
+                    // end of a full buffer is none at all, and a zero length receive completes
+                    // immediately and reads as a closed connection.
+                    Compact(data);
+
+                    data.Length = data.MaxLength;
+                }
+
+                if (!haveLength || data.ByteCount < length)
                 {
                     args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
 
                     ReceiveAsync(args);
-                    return true;
+                    return InputResult.Reading;
                 }
 
                 data.Offset = LengthSize;
@@ -297,12 +370,22 @@ namespace Rasa.Networking
                 data.Length = data.MaxLength;
             }
 
-            return false;
+            return InputResult.Consumed;
         }
 
-        private void CopyToOtherBuffer(BufferData source, BufferData desti)
+        /// <summary>
+        /// Moves the bytes that have not been read yet back to the start of the buffer, so the
+        /// frame they belong to has the whole block to arrive into.
+        /// </summary>
+        private static void Compact(BufferData data)
         {
-            
+            if (data.BaseOffset == data.RealBaseOffset)
+                return;
+
+            Array.Copy(data.Buffer, data.BaseOffset, data.Buffer, data.RealBaseOffset, data.ByteCount);
+
+            data.BaseOffset = data.RealBaseOffset;
+            data.Offset = 0;
         }
         #endregion
 
@@ -316,17 +399,40 @@ namespace Rasa.Networking
             Socket.Listen(backlog);
         }
 
+        /// <summary>
+        /// This socket's own accept args, outside the pool.
+        ///
+        /// Accepting is how the server gets out of being short of args in the first place: a
+        /// connection that arrives and goes away frees several, and the queue server exists to
+        /// turn arrivals away politely. A listener that could not accept because the pool was
+        /// empty would stop accepting for good, since nothing but an accept re-arms the accept.
+        /// It carries no buffer and only ever has one accept outstanding, so one is enough.
+        /// </summary>
+        private SocketAsyncEventArgs _acceptArgs;
+
         public void AcceptAsync()
         {
-            var args = SetupEventArgs(SocketAsyncOperation.Accept);
+            if (_acceptArgs == null)
+            {
+                _acceptArgs = new SocketAsyncEventArgs();
+                _acceptArgs.Completed += OperationCompleted;
+            }
 
-            if (!Socket.AcceptAsync(args))
-                OperationCompleted(Socket, args);
+            _acceptArgs.AcceptSocket = null;
+
+            if (!Socket.AcceptAsync(_acceptArgs))
+                OperationCompleted(Socket, _acceptArgs);
         }
 
         public void ConnectAsync(EndPoint remote)
         {
             var args = SetupEventArgs(SocketAsyncOperation.Connect);
+
+            if (args == null)
+            {
+                Drop("no connection slots left to connect with");
+                return;
+            }
 
             args.RemoteEndPoint = remote;
 
@@ -336,7 +442,17 @@ namespace Rasa.Networking
 
         public void ReceiveAsync()
         {
-            ReceiveAsync(SetupEventArgs(SocketAsyncOperation.Receive));
+            var args = SetupEventArgs(SocketAsyncOperation.Receive);
+
+            if (args == null)
+            {
+                // Nothing left to read into. Dropping this connection is what frees the buffers
+                // the rest of them are waiting on.
+                Drop("no buffers left to receive into");
+                return;
+            }
+
+            ReceiveAsync(args);
         }
 
         private void ReceiveAsync(SocketAsyncEventArgs args)
@@ -356,6 +472,12 @@ namespace Rasa.Networking
             // that held the send lock while reaching for the pool would be waiting for a lock
             // held by a thread waiting for this one.
             var args = SetupEventArgs(SocketAsyncOperation.Send);
+
+            if (args == null)
+            {
+                Drop("no buffers left to send with");
+                return;
+            }
 
             var start = false;
             var discard = false;
@@ -436,19 +558,36 @@ namespace Rasa.Networking
             if (!overflowed)
                 return;
 
-            Logger.WriteLog(LogType.Network,
-                $"Send queue full ({MaxQueuedSends}) for {SafeRemoteAddress()}; disconnecting.");
-
             // Hand the queued buffers back here rather than leaving it to whoever handles the
-            // overflow. Nothing else will ever go out on this socket, and the pool entries the
-            // queue is sitting on belong to every other connection.
+            // drop. Nothing else will ever go out on this socket, and the pool entries the queue
+            // is sitting on belong to every other connection.
             DiscardQueuedSends();
 
-            QueueOverflow?.Invoke();
+            Drop($"send queue full at {MaxQueuedSends} packets");
         }
 
-        /// <summary>Raised when a connection falls too far behind to keep queueing for it.</summary>
-        public DisconnectHandler QueueOverflow;
+        /// <summary>
+        /// Raised when the connection cannot be carried on with: its send queue filled up, the
+        /// inbound stream stopped framing, or there were no pooled buffers left to serve it. The
+        /// reason has already been logged; the owner's job is to close the client.
+        /// </summary>
+        public DropHandler OnDrop;
+
+        private int _dropped;
+
+        /// <summary>
+        /// Logs why this connection is going and tells its owner, once. Several paths can notice
+        /// the same dying connection in the same moment, and a socket only dies once.
+        /// </summary>
+        private void Drop(string reason)
+        {
+            if (Interlocked.Exchange(ref _dropped, 1) != 0)
+                return;
+
+            Logger.WriteLog(LogType.Network, $"Dropping {SafeRemoteAddress()}: {reason}.");
+
+            OnDrop?.Invoke(reason);
+        }
 
         private string SafeRemoteAddress()
         {

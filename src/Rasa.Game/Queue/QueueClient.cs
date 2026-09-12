@@ -26,6 +26,7 @@ namespace Rasa.Queue
             Socket = socket;
             Socket.OnReceive += OnReceive;
             Socket.OnError += OnError;
+            Socket.OnDrop += OnDrop;
 
             Socket.ReceiveAsync();
 
@@ -98,6 +99,12 @@ namespace Rasa.Queue
         }
 
         private void OnError(SocketAsyncEventArgs args)
+        {
+            Close();
+        }
+
+        /// <summary>The socket gave up on this connection; the reason is already logged.</summary>
+        private void OnDrop(string reason)
         {
             Close();
         }
