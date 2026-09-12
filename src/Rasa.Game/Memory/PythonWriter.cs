@@ -31,12 +31,20 @@ namespace Rasa.Memory
             Writer.Write((byte)PythonStruct.Zero);
         }
 
+        /// <summary>
+        /// A Python bool. False is the Zero struct, not None: the marshal has both, and they are
+        /// different values. Python treats either as falsy, so anything the client only tests the
+        /// truth of cannot tell them apart - but a value it hands to a native call can. The trade
+        /// window does exactly that (tradewindow.py __ShowYourAccept passes the received
+        /// confirmValue straight into SetVisible and Enable), and a None there is not a bool.
+        /// ReadBool accepts None, True and Zero, so this still round-trips.
+        /// </summary>
         public void WriteBool(bool value)
         {
             if (value)
                 WriteTrueStruct();
             else
-                WriteNoneStruct();
+                WriteZeroStruct();
         }
 
         public void WriteInt(int value)
