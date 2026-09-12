@@ -73,6 +73,10 @@ namespace Rasa.Managers
         /// this count, but the radial menu and the console do not check it.</summary>
         private const int MaxFriendsListCount = 200;
 
+        /// <summary>shared/gameconstants.py MAX_IGNORE_LIST_COUNT. The friends list has its own,
+        /// larger limit; this one was not enforced at all.</summary>
+        private const int MaxIgnoreListCount = 50;
+
         internal void AddFriend(Client client, AddFriendPacket packet)
         {
             GameAccountEntry account = null;
@@ -264,14 +268,41 @@ namespace Rasa.Managers
             return true;
         }
         
-        internal void AddIgnoredPlayer(Client client, uint accountId)
+        /// <summary>
+        /// The mirror of AddFriend, which this had drifted away from: it announced the ignore
+        /// before writing it, took no notice of whether the write worked, and did not check that
+        /// the account it was about to describe existed.
+        /// </summary>
+        internal bool AddIgnoredPlayer(Client client, uint accountId)
         {
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
             var ignored = GetIgnoredById(accountId);
 
-            client.CallMethod(SysEntity.ClientSocialManagerId, new IgnoreAddedPacket(ignored));
+            if (ignored == null)
+            {
+                CommunicatorManager.Instance.AddIgnoreAck(client, string.Empty, false);
+                return false;
+            }
+
+            // Persist first. IgnoreAdded puts the row in the client's ignore window immediately, and
+            // the in-memory list is what every later removal is checked against - so announcing an
+            // ignore the database refused left the player ignoring someone who was not on file, and
+            // un-ignoring them afterwards looked up a row that was never written.
+            using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
+            {
+                if (!unitOfWork.Ignoreds.AddIgnored(client.AccountEntry.Id, accountId))
+                {
+                    CommunicatorManager.Instance.AddIgnoreAck(client, ignored.FamilyName, false);
+                    return false;
+                }
+            }
+
             client.Player.IgnoredPlayers.Add(accountId);
-            unitOfWork.Ignoreds.AddIgnored(client.AccountEntry.Id, accountId);
+
+            // No AddIgnoreAck on success: Recv_IgnoreAdded already posts PM_ADDED_TO_IGNORE_LIST
+            // (client/social.py:171), so acking as well would print the message twice.
+            client.CallMethod(SysEntity.ClientSocialManagerId, new IgnoreAddedPacket(ignored));
+
+            return true;
         }
 
         internal void FriendLoggedIn(Client client)
@@ -354,15 +385,17 @@ namespace Rasa.Managers
                 return;
             }
             
-            foreach (var ignoredId in client.Player.IgnoredPlayers)
-                if (ignoredId == account.Id)
-                {
-                    CommunicatorManager.Instance.AddIgnoreAck(client, account.FamilyName, false);
-                    return;
-                }
+            if (client.Player.IgnoredPlayers.Contains(account.Id)
+                || client.Player.IgnoredPlayers.Count >= MaxIgnoreListCount)
+            {
+                CommunicatorManager.Instance.AddIgnoreAck(client, account.FamilyName, false);
+                return;
+            }
 
-            AddIgnoredPlayer(client, account.Id);
+            if (!AddIgnoredPlayer(client, account.Id))
+                return;
 
+            // Ignoring lifts a friendship; the two lists are kept mutually exclusive.
             RemoveFriend(client, account.Id);
         }
 

@@ -47,6 +47,10 @@ namespace Rasa.Repositories.Char.Friend
             var query = _charContext.CreateNoTrackingQuery(_charContext.FriendEntries);
             var entry = query.Where(e => e.AccountId == accountId && e.FriendAccountId == friendAccountId).FirstOrDefault();
 
+            // As in RemoveIgnored: a row that is already gone is not worth an exception.
+            if (entry == null)
+                return;
+
             _charContext.Remove(entry);
             _charContext.SaveChanges();
         }
