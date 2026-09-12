@@ -90,6 +90,7 @@ namespace Rasa.Managers
             RegisterCommand(".forcestate", ForceStateCommand);
             RegisterCommand(".help", HelpGmCommand);
             RegisterCommand(".near", NearCommand);
+            RegisterCommand(".error", ErrorCommand);
             RegisterCommand(".notify", NotifyCommand);
             RegisterCommand(".npcinfo", NpcInfoCommand);
             RegisterCommand(".reloadcreatures", ReloadCreaturesCommand);
@@ -168,6 +169,36 @@ namespace Rasa.Managers
         /// generated/client/timertype.py, animation ids from animationdata.py
         /// objectAnimationSpecification, audio ids from audiodata.py audioSpecification.
         /// </summary>
+        /// <summary>
+        /// .error fatal|nonfatal &lt;playerMessageId&gt; [key value ...]
+        ///
+        /// Both put a modal dialog on screen built from that player message id. fatal is the one
+        /// whose OK button quits the client, so it disconnects whoever it is aimed at - it is sent
+        /// to the caller only, deliberately: there is no form of this command that can boot another
+        /// player, because the id is unvalidated and a typo should not cost someone their session.
+        /// </summary>
+        private void ErrorCommand(string[] parts)
+        {
+            var kind = parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty;
+
+            if (parts.Length < 3 || kind != "fatal" && kind != "nonfatal" || !uint.TryParse(parts[2], out var msgId))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .error fatal|nonfatal <playerMessageId> [key value ...]");
+                CommunicatorManager.Instance.SystemMessage(_client, "fatal closes your own client when you press OK. 15 is PM_TECHNICAL_DIFFICULTY.");
+                return;
+            }
+
+            var args = new Dictionary<string, string>();
+
+            for (var i = 3; i + 1 < parts.Length; i += 2)
+                args[parts[i]] = parts[i + 1];
+
+            if (kind == "fatal")
+                CommunicatorManager.Instance.FatalError(_client, (PlayerMessage)msgId, args);
+            else
+                CommunicatorManager.Instance.NonFatalError(_client, (PlayerMessage)msgId, args);
+        }
+
         private void NotifyCommand(string[] parts)
         {
             var manager = NotificationManager.Instance;

@@ -8,6 +8,8 @@ namespace Rasa.Managers
     using Game;
     using Packets.Communicator.Both;
     using Packets.Communicator.Client;
+    using Packets.ClientMethod.Server;
+    using Packets.Protocol;
     using Packets.Communicator.Server;
     using Packets.MapChannel.Server;
     using Structures;
@@ -538,5 +540,46 @@ namespace Rasa.Managers
         {
             client.CallMethod(SysEntity.CommunicatorId, new SystemMessagePacket(textMsg));
         }
+
+        #region Error dialogs
+
+        /// <summary>
+        /// A modal error the player can dismiss and carry on from. Use it only when the message
+        /// has to be acknowledged - while the dialog is up the rest of the client's UI is
+        /// suppressed - and the chat window for everything else.
+        /// </summary>
+        public void NonFatalError(Client client, PlayerMessage message, Dictionary<string, string> args = null)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new NonFatalErrorPacket(message, args));
+        }
+
+        /// <summary>
+        /// The last thing a player is told. The client's OK button on this dialog calls
+        /// PostQuitRequest, so it ends the session; send it only when the connection is going away
+        /// regardless, to replace a silent drop with a reason.
+        ///
+        /// Sent straight down the socket rather than through the packet queue. The queue is drained
+        /// by the MainLoop and Client.Close() closes the socket where it stands, so a queued fatal
+        /// error would be thrown away by the very disconnect it is explaining. Callers should send
+        /// this and then close.
+        /// </summary>
+        public void FatalError(Client client, PlayerMessage message, Dictionary<string, string> args = null)
+        {
+            if (client == null || client.State == ClientState.Disconnected)
+                return;
+
+            try
+            {
+                client.SendMessage(new CallMethodMessage((ulong)SysEntity.ClientMethodId,
+                    new FatalErrorPacket(message, args)), false, 0, false);
+            }
+            catch (Exception e)
+            {
+                // The socket is already going; the disconnect it was explaining still happens.
+                Logger.WriteLog(LogType.Network, $"Could not deliver a fatal error to a closing connection: {e.Message}");
+            }
+        }
+
+        #endregion
     }
 }
