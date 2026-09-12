@@ -476,8 +476,35 @@ namespace Rasa.Managers
             //unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId, (int)InventoryType.Personal, 5, unitOfWork.Items.CreateItem(new Item(13096, 1, EntityClassManager.Instance.LoadedEntityClasses[ItemManager.Instance.ItemTemplateItemClass[13096]].ItemClassInfo.MaxHitPoints, 2139062144)));
         }
 
+        /// <summary>
+        /// Deleting is something the character selection screen asks for, and the shipped client
+        /// only offers it there. Nothing refused the packet from a client that was in the world,
+        /// though, so a modified one could delete the character its own player was standing in -
+        /// leaving the session running against a row that no longer exists.
+        ///
+        /// The test is the connection's state rather than Player.MapChannel: RemovePlayer takes
+        /// the client out of the map's client list but leaves the channel reference on the
+        /// Manifestation, so a player who reached selection through /logout still has one, and
+        /// gating on it would refuse a delete that is perfectly legitimate.
+        ///
+        /// Any delete from in the world is refused, not just of the character being played. A
+        /// real client cannot ask for either, and deleting one of your other characters
+        /// mid-session is no more a thing the selection screen can do.
+        /// </summary>
         public void RequestDeleteCharacterInSlot(Client client, RequestDeleteCharacterInSlotPacket packet)
         {
+            if (client.State == ClientState.Ingame
+                || client.State == ClientState.Loading
+                || client.State == ClientState.Teleporting)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to delete the character in slot {packet.Slot} "
+                    + $"while in the world (state {client.State}).");
+
+                client.CallMethod(SysEntity.ClientMethodId, new DeleteCharacterFailedPacket());
+                return;
+            }
+
             try
             {
                 var charactersBySlot = client.AccountEntry.GetCharacterBySlot(packet.Slot);
@@ -493,6 +520,17 @@ namespace Rasa.Managers
                     unitOfWork.Characters.Delete(charactersBySlot.Id);
                     unitOfWork.Complete();
                 }
+
+                // Client.Player still points at the character that was just deleted - it is left
+                // loaded when the player returns to character selection. Client.SaveCharacter
+                // skips a player whose Id is 0 and otherwise looks the row up with
+                // GetWritableEnsuring, so dropping the connection from here (Alt+F4 at the
+                // selection screen) would go looking for a row that no longer exists and throw.
+                // Close() catches that, so it only ever cost a misleading "Failed to save
+                // character on disconnect" in the log - but there is genuinely nothing left to
+                // save, and the log should not say otherwise.
+                if (client.Player != null && client.Player.Id == charactersBySlot.Id)
+                    client.Player.Id = 0;
 
                 client.ReloadGameAccountEntry();
 
