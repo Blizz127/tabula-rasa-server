@@ -162,6 +162,7 @@ namespace Rasa.Test
             var character = context.CharacterEntries.Single();
             Assert.AreEqual("Fixture", context.GameAccountEntries.Single().FamilyName);
             Assert.AreEqual(3, context.CharacterAppearanceEntries.Count());
+            Assert.IsTrue(context.CharacterAppearanceEntries.All(a => a.Color == 0xffffffffu));
             var saved = new CharacterSkillsRepository(context).GetCharacterSkills(character.Id);
             CollectionAssert.AreEquivalent(new uint[] { 1, 8, 19, 49, 165 }, saved.Select(s => s.SkillId).ToArray());
             Assert.IsTrue(saved.All(s => s.SkillLevel == 1));

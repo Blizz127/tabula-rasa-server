@@ -101,6 +101,48 @@ All 95 starter template-to-class mappings agree with the current world DB.
 
 ## Current server gap and next implementation boundary
 
+### Additional placement sources checked
+
+The same versioned package's `data/maps/adv_bootcamp/audioemitters.xml` was
+range-extracted with ZIP size/CRC verification: 8,399 bytes, CRC `512198e5`,
+SHA-256 `d8c8d097d7319ae90a4464a943b71e9d6ac6cb66874cd3f2c264b86dea333bcf`.
+It contains eight audio emitters referencing sound sets 30, 487, 1160 and 1162.
+These are audio placements; they do not establish NPC or player spawns.
+Acquisition metadata and decoded positions are retained as
+`bootcamp-audio-extraction.json` and `bootcamp-audio-emitters.json` in the
+research directory below.
+
+The archived Google Code emulator
+[ltsochev-dev/tabula-rasa-server-emulator](https://github.com/ltsochev-dev/tabula-rasa-server-emulator)
+was inspected at commit `50c7b4ebce644d3b7ab7b9012b3fe5e975a0409b`.
+Its `TRE/TRE.GameService/gameData/mapInfo.txt` identifies context 1985 as
+`adv_bootcamp` but declares version 792, differing from the recovered map's 783.
+`TRE/TRE.GameService/GameMain/MapInstance/Mission/Mission.cs` has empty mission
+initialization/acceptance methods and placeholder objectives. It supplies no
+working tutorial definition. Neither that map version nor those mission stubs
+are adopted as final-live behavior; no acquired emulator code was executed.
+
+### Remaining implementation
+
+The original selection UI also constrains the skip prompt. In
+`client/ui/characterselectionwindow.pyo`, `OnPlayBtn` source line 261,
+offsets 39–156, it prompts only when the selected pod has zero logins, no last
+game context (`None`), and the account can skip boot camp. Otherwise it requests
+play with `False`. `_SkipBootcampYes` (line 472) and `_SkipBootcampNo` (line 479)
+forward `True` and `False` respectively. `client/clientmethod.pyo`,
+`Recv_BeginCharacterSelection` line 803, offsets 77–95, forwards the server's
+fifth argument to `SetCanSkipBootcamp`. Static disassembly and original member
+hashes are retained in `bootcamp-skip-code-manifest.json` and `*.skip.dis`.
+
+The server already sends its persisted account flag, whose schema default is
+false. However, `CharacterInfoPacket` publishes the assigned Wilderness context
+even for an unplayed character, so the original UI's no-last-context condition
+is not met. The selection handler also ignores the returned skip choice.
+First-login context, account completion and skip rewards must be reconciled
+together; exposing a prompt alone would still lead to the same incomplete entry
+path. No completion flag or skip entitlement is fabricated from a character's
+mere existence.
+
 The inspected world DB has context 1985 but **zero boot-camp spawn-pool rows**
 and no definitions for missions 1990, 1992, 1994 or 1995. Its only mission rows
 are 321 and 429. `CharacterRepository.Create` still assigns Wilderness context

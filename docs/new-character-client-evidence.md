@@ -145,6 +145,18 @@ comparison remains outstanding.
 
 ### Creation save
 
+The fixed Recruit boots, vest and legs now save the original preview's white
+RGBA tint, `0xffffffff`, instead of the emulator's `0x7f7f7f80`. In
+`client/ui/charactercreationwindow.pyo`, module source line 70, offsets 538–541
+assign `(255, 255, 255, 255)` to `kDefaultColorArmor`; `Init` source line 126,
+offsets 227–314 apply it to all three fixed outfit classes. This module's
+SHA-256 is `5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502`.
+The creation request supplies chosen face/hair/accessory appearances separately.
+Both creation-format integration cases verify that the fixed color persists.
+This establishes consistency with the original creation preview, not the full
+server inventory grant. Existing characters and inventory-item tints are not
+rewritten by this correction.
+
 Creation now inserts the character, appearance, five skill records, existing
 starter items and first account lockbox tab within one database transaction.
 Success is published after commit. Failure rolls back all these writes,

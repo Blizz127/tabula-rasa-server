@@ -960,3 +960,34 @@ Rollback image: `rasa_net:before-retail-entry-20260912`; retag it as
 `rasa_net:latest` and recreate only game with `--no-deps --no-build`.
 Code rollback requires no database restoration. Complete final-live creation,
 boot camp and new-character-to-endgame progression remain incomplete.
+
+
+## 2026-09-12 — Original Recruit outfit tint and tutorial entry audit
+
+New characters now persist white RGBA for the fixed Recruit boots, vest and
+legs, matching the recovered original creation window. The previous packed
+value produced gray with partial alpha. Both first-family and later-character
+integration cases verify persistence. Chosen appearance fields, inventory-item
+colors and existing character records are unaffected. Exact original source
+locations and hash are in [creation evidence](new-character-client-evidence.md).
+
+The [boot-camp audit](bootcamp-client-evidence.md) now records the original
+skip-prompt conditions and the current first-login context mismatch. Additional
+map audio placements and an archived Google Code emulator were checked; neither
+supplied the missing original spawns or working quest definitions. Full initial
+loadout, boot camp and subsequent progression remain incomplete.
+
+The .NET 5 image built with zero errors and five existing warnings. All **598
+tests passed**, zero failed/skipped, without production database mounts or
+network access. Reviewed source matched the final image excluding `bin`/`obj`.
+Image `sha256:e031437f52a415d8218001ad694c5603c8f67b08e6800456a3bc8bea51424efa`
+started game at **23:26:24 UTC**, ready at **23:26:34 UTC**. Verification at
+**23:26:49 UTC** found the expected image running with zero restarts and no
+error/unhandled/fatal/OOM lines. Auth's image and start time are unchanged.
+
+All three SQLite backups passed integrity checks. Reviewed source/docs,
+configuration, test/build logs and service records are preserved at
+`/home/blizz/backups/rasa-net/20260912T232612Z-retail-outfit/`.
+Rollback image: `rasa_net:before-retail-outfit-20260912`; retag as `rasa_net:latest`
+and recreate only game with `--no-deps --no-build`. No schema migration or saved
+character rewrite occurred; code rollback needs no database restoration.
