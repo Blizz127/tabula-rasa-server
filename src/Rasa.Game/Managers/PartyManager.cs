@@ -21,9 +21,9 @@ namespace Rasa.Managers
     public class PartyManager
     {
         /*   Party Packets:
-         * - InviteUserToPartyByName', (targetName,))
+         * - InviteUserToPartyByName', (targetName,))            => implemented
          * - SendJoinRequestToPartyByName', (targetName,))       => implemented
-         * - InviteSquad', (targetName,))
+         * - InviteSquad', (targetName,))                        => implemented
          * - SendJoinRequestToSquadLeader', (targetName,))       => implemented
          * - CancelSquadInviteRequest', (targetName,))
          * - CancelSquadJoinRequest', (targetName,))
@@ -149,6 +149,14 @@ namespace Rasa.Managers
             public string InviterName;
             public uint InviteeId;
             public string InviteeName;
+
+            /// <summary>
+            /// The name the inviter's client is showing this invitation under - the player they
+            /// named, who for a squad invitation is not the leader it was routed to. Every message
+            /// that clears their pending indicator keys off it
+            /// (client/party.py Recv_SquadRequestSuccess, Recv_SquadRequestDeclined).
+            /// </summary>
+            public string DisplayName;
         }
 
         /// <summary>
@@ -208,48 +216,73 @@ namespace Rasa.Managers
                 return;
             }
 
+            // Inviting someone who already has a squad means inviting the squad. The client
+            // offers that rather than refusing: Recv_InviteSquadConfirmationRequest puts up
+            // "<name> is already in a squad", and Accept sends InviteSquad with the same name.
             if (PartyOf(invitee) != null)
             {
-                Message(client, PlayerMessage.PmTheyAreAlreadyInAParty, "invitee", inviteeName);
+                client.CallMethod(SysEntity.ClientPartyManagerId, new InviteSquadConfirmationRequestPacket(inviteeName));
                 return;
             }
 
-            if (!invitee.Player.AcceptPartyInvites)
+            Invite(client, invitee, inviteeName);
+        }
+
+        /// <summary>
+        /// The answer to that offer: the same name again, now meaning the whole of that player's
+        /// squad. The invitation goes to the leader of it, because that is who can accept on the
+        /// squad's behalf - the mirror of SendJoinRequestToSquadLeader.
+        /// </summary>
+        internal void InviteSquad(Client client, InviteSquadPacket packet)
+        {
+            if (!InWorld(client))
+                return;
+
+            var name = packet.FamilyName?.Trim() ?? string.Empty;
+            var party = PartyOf(client);
+
+            // The invited squad joins this one, so the inviter has to be leading it.
+            if (party != null && party.PartyLeaderId != client.AccountEntry.Id)
             {
-                Message(client, PlayerMessage.PmPartyNotAcceptingInvite);
+                Message(client, PlayerMessage.PmYouAreNotPartyLeader);
                 return;
             }
 
-            if (_invites.ContainsKey(invitee.AccountEntry.Id))
+            var target = FindIngame(name);
+
+            if (target == null || target == client)
             {
-                // Includes a repeat invitation from this inviter: every InviteToParty adds
-                // another pending indicator on the invitee's screen.
-                Message(client, PlayerMessage.PmUserAlreadyInvited, "name", inviteeName);
+                Message(client, PlayerMessage.PmWhisperTargetNotInGame, "player", name);
                 return;
             }
 
-            if (_invites.Values.Any(i => i.InviterId == client.AccountEntry.Id))
+            var targetParty = PartyOf(target);
+
+            // Squads change while a dialog sits on screen. Left theirs in the meantime: this is
+            // an ordinary invitation now. Joined ours: nothing to do.
+            if (targetParty == null)
             {
-                Message(client, PlayerMessage.PmCanOnlyInviteOnePersonAtATime);
+                Invite(client, target, name);
                 return;
             }
 
-            if (party != null && party.Members.Count >= MaxPartySize)
+            if (targetParty == party)
             {
-                Message(client, PlayerMessage.PmPartyIsFull);
+                Message(client, PlayerMessage.PmTheyAreAlreadyInYourParty, "invitee", name);
                 return;
             }
 
-            _invites[invitee.AccountEntry.Id] = new PendingInvite
-            {
-                InviterId = client.AccountEntry.Id,
-                InviterName = client.Player.FamilyName,
-                InviteeId = invitee.AccountEntry.Id,
-                InviteeName = inviteeName
-            };
+            var leader = FindIngame(targetParty.PartyLeaderId);
 
-            invitee.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(client.Player.FamilyName, SquadInfo(client)));
-            client.CallMethod(SysEntity.ClientPartyManagerId, new InvitedPlayerToPartyPacket(inviteeName, invitee.Player.IsAFK));
+            if (leader == null)
+            {
+                Message(client, PlayerMessage.PmPartyRequestIsNoLongerValid);
+                return;
+            }
+
+            // The inviter's window is showing the player they named, so that is the name every
+            // message about this invitation has to carry back.
+            Invite(client, leader, name);
         }
 
         internal void CancelSquadInviteRequest(Client client, CancelSquadInviteRequestPacket packet)
@@ -258,7 +291,7 @@ namespace Rasa.Managers
                 return;
 
             var invite = _invites.Values.FirstOrDefault(i =>
-                i.InviterId == client.AccountEntry.Id && string.Equals(i.InviteeName, packet.FamilyName?.Trim(), StringComparison.OrdinalIgnoreCase));
+                i.InviterId == client.AccountEntry.Id && string.Equals(i.DisplayName, packet.FamilyName?.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (invite == null)
                 return;
@@ -423,39 +456,53 @@ namespace Rasa.Managers
 
             if (!packet.Response)
             {
-                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestDeclinedPacket(client.Player.FamilyName));
+                // Keyed by the name the inviter's indicator carries, not the decliner's:
+                // Recv_SquadRequestDeclined kills the indicator by the name it is given.
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestDeclinedPacket(invite.DisplayName));
                 return;
             }
 
             // The world may have moved on since the invitation was sent.
-            var party = PartyOf(inviter);
+            var inviterParty = PartyOf(inviter);
+            var inviteeParty = PartyOf(client);
 
-            if (PartyOf(client) != null || (party != null && party.PartyLeaderId != inviter.AccountEntry.Id))
+            // Everything is checked again, and both sides have to still lead what they are
+            // bringing: a squad invitation is answered by a leader on behalf of their squad.
+            if (inviterParty != null && inviterParty.PartyLeaderId != inviter.AccountEntry.Id
+                || inviteeParty != null && inviteeParty.PartyLeaderId != client.AccountEntry.Id
+                || inviteeParty != null && inviteeParty == inviterParty)
             {
                 Message(client, PlayerMessage.PmPartyInvitationHasBeenRevoked);
-                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(invite.DisplayName));
                 return;
             }
 
-            if (party != null && party.Members.Count >= MaxPartySize)
+            if ((inviterParty?.Members.Count ?? 1) + JoiningSize(inviteeParty) > MaxPartySize)
             {
                 Message(client, PlayerMessage.PmPartyIsFull);
                 Message(inviter, PlayerMessage.PmPartyIsFull);
-                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
+                inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(invite.DisplayName));
                 return;
             }
 
-            inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(client.Player.FamilyName));
-            Message(inviter, PlayerMessage.PmPartyInvitationAccepted, "invitee", client.Player.FamilyName);
+            inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(invite.DisplayName));
+            Message(inviter, PlayerMessage.PmPartyInvitationAccepted, "invitee", invite.DisplayName);
 
-            if (party == null)
-                CreateParty(inviter, client);
+            if (inviterParty == null)
+            {
+                if (inviteeParty == null)
+                {
+                    CreateParty(inviter, client);
+                    return;
+                }
+
+                inviterParty = CreateParty(inviter);
+            }
+
+            if (inviteeParty == null)
+                AddMember(inviterParty, client);
             else
-                AddMember(party, client);
-        }
-
-        internal void InviteSquad(Client client, InviteSquadPacket packet)
-        {
+                MergeInto(inviterParty, inviteeParty);
         }
 
         internal void AcceptPartyInvitesChanged(Client client, AcceptPartyInvitesChangedPacket packet)
@@ -734,6 +781,56 @@ namespace Rasa.Managers
             }
 
             return target;
+        }
+
+        /// <summary>
+        /// Records an invitation and puts it on both screens. Shared by the two entry points: a
+        /// plain invitation, where the recipient is the player who was named, and a squad
+        /// invitation, where it is the leader of that player's squad.
+        /// </summary>
+        private void Invite(Client inviter, Client recipient, string displayName)
+        {
+            var inviterParty = PartyOf(inviter);
+            var recipientParty = PartyOf(recipient);
+
+            if (!recipient.Player.AcceptPartyInvites)
+            {
+                Message(inviter, PlayerMessage.PmPartyNotAcceptingInvite);
+                return;
+            }
+
+            if (_invites.ContainsKey(recipient.AccountEntry.Id))
+            {
+                // Includes a repeat invitation from this inviter: every InviteToParty adds
+                // another pending indicator on the recipient's screen.
+                Message(inviter, PlayerMessage.PmUserAlreadyInvited, "name", displayName);
+                return;
+            }
+
+            if (_invites.Values.Any(i => i.InviterId == inviter.AccountEntry.Id))
+            {
+                Message(inviter, PlayerMessage.PmCanOnlyInviteOnePersonAtATime);
+                return;
+            }
+
+            // A squad invitation needs a seat for every one of its members, held spots included.
+            if ((inviterParty?.Members.Count ?? 1) + JoiningSize(recipientParty) > MaxPartySize)
+            {
+                Message(inviter, PlayerMessage.PmPartyIsFull);
+                return;
+            }
+
+            _invites[recipient.AccountEntry.Id] = new PendingInvite
+            {
+                InviterId = inviter.AccountEntry.Id,
+                InviterName = inviter.Player.FamilyName,
+                InviteeId = recipient.AccountEntry.Id,
+                InviteeName = recipient.Player.FamilyName,
+                DisplayName = displayName
+            };
+
+            recipient.CallMethod(SysEntity.ClientPartyManagerId, new InviteToPartyPacket(inviter.Player.FamilyName, SquadInfo(inviter)));
+            inviter.CallMethod(SysEntity.ClientPartyManagerId, new InvitedPlayerToPartyPacket(displayName, recipient.Player.IsAFK));
         }
 
         private void CreateJoinRequest(Client requester, Client leader, string displayName)
@@ -1079,8 +1176,8 @@ namespace Rasa.Managers
                 {
                     // Success is the only message that closes the inviter's revoke dialog as
                     // well as the pending indicator, and it prints nothing of its own.
-                    inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(received.InviteeName));
-                    Message(inviter, PlayerMessage.PmInviteeLoggedOut, "name", received.InviteeName);
+                    inviter.CallMethod(SysEntity.ClientPartyManagerId, new SquadRequestSuccessPacket(received.DisplayName));
+                    Message(inviter, PlayerMessage.PmInviteeLoggedOut, "name", received.DisplayName);
                 }
             }
 
