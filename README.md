@@ -1,6 +1,16 @@
 # Rasa.NET
 A C# implementation of a game and authentication server for the game running on .NET Core.
 
+## Preservation target for this server
+This server is being developed to preserve Tabula Rasa's final live game before
+shutdown, one-to-one. The target includes its original content, rules, and final
+updates. Implementation remains incomplete, and working emulator behavior is not
+proof of fidelity.
+
+See the [preservation requirements](AGENTS.md),
+[final retail evidence](docs/final-retail-target.md), and
+[implementation progress and gaps](docs/retail-accuracy.md).
+
 ## Before you start
 This project is in development and not complete. You may not be able to play the game in any capacity. For the latest information, we recommend [joining our Discord](https://discord.gg/Ph68FmA) chat. 
 

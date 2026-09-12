@@ -31,5 +31,6 @@ or best-effort emulator target.
   final-state requirement, or necessary verification remains incomplete.
 
 Current progress and limitations: `docs/retail-accuracy.md`. Research records:
-`docs/skill-research.md` and `docs/mission-research.md`, plus subsequent focused
-research documents. Existing deployed patches remain subject to fidelity review.
+`docs/final-retail-target.md`, `docs/skill-research.md`, `docs/mission-research.md`,
+and `docs/death-research.md`, plus subsequent focused research documents.
+Existing deployed patches remain subject to fidelity review.

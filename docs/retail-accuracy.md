@@ -16,6 +16,13 @@ No custom rates, balance changes, replacement quest content, or convenience rule
 are part of the requested end state. Unknown behavior must stay visible as a gap
 until evidence supports a faithful implementation.
 
+[Final retail evidence](final-retail-target.md) now preserves original official
+D16.4/D16.5 announcements and the final event/farewell messages, with capture
+dates and hashes. D16.5 is positively identified as live on 17 February 2009;
+the exact final executable revision and later server-only changes remain open.
+Final-patch mech access and unusual end-of-service rewards must be preserved
+when evidenced, even where they differ from earlier retail rules.
+
 Local HEAD and the GitHub default branch both resolve to
 `2a3e4bb8f9f153ebf64805cbd420f855f850c78b` (2023-12-27). The existing Compose
 network/port overrides and persistent databases predate this work.
