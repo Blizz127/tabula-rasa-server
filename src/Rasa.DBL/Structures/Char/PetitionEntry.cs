@@ -34,6 +34,7 @@ namespace Rasa.Structures.Char
             PosY = posY;
             PosZ = posZ;
             CreatedAt = DateTime.UtcNow;
+            Resolution = string.Empty;
         }
 
         [Key]
@@ -78,6 +79,19 @@ namespace Rasa.Structures.Char
         [Column("pos_z")]
         [Required]
         public double PosZ { get; set; }
+
+        /// <summary>0 open, 1 resolved, 2 cancelled by the player. See PetitionStatus.</summary>
+        [Column("status")]
+        [Required]
+        public byte Status { get; set; }
+
+        /// <summary>
+        /// What was done about it, written when a petition is resolved from the console. Empty
+        /// while it is open, and empty for one the player withdrew.
+        /// </summary>
+        [Column("resolution", TypeName = "varchar(255)")]
+        [Required]
+        public string Resolution { get; set; }
 
         [Column("created_at")]
         [Required]

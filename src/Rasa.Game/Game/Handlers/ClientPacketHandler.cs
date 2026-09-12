@@ -967,6 +967,12 @@
             PetitionManager.Instance.CreateHelpRequest(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.CancelPetition)]
+        private void CancelPetition(CancelPetitionPacket packet)
+        {
+            PetitionManager.Instance.CancelPetition(Client, packet);
+        }
+
         #endregion
 
         #region Social

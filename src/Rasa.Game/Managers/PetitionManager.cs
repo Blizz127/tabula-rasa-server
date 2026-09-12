@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -15,8 +17,8 @@ namespace Rasa.Managers
     ///     -- WorldMsg
     /// - CreateBugReport                     => implemented
     /// - CreateHelpRequest                   => implemented
+    /// - CancelPetition                      => implemented (no client caller)
     /// - AddToPetition                       => no client caller
-    /// - CancelPetition                      => no client caller
     /// - RetrievePetition                    => no client caller
     /// - SearchPetitions                     => no client caller
     /// - SearchKB                            => no client caller
@@ -24,8 +26,8 @@ namespace Rasa.Managers
     ///
     ///     Petition handlers (client/petitionmanager.py):
     /// - CreatePetitionAck                   => implemented
+    /// - CancelPetitionAck                   => implemented (empty body in the client)
     /// - AddToPetitionAck                    => empty body in the client
-    /// - CancelPetitionAck                   => empty body in the client
     /// - RetrievePetitionAck                 => empty body in the client
     /// - SearchPetitionsAck                  => empty body in the client
     /// - SearchKBAck                         => empty body in the client
@@ -101,6 +103,99 @@ namespace Rasa.Managers
         internal void CreateHelpRequest(Client client, CreateHelpRequestPacket packet)
         {
             File(client, PetitionType.HelpRequest, packet.Summary, packet.Body);
+        }
+
+        /// <summary>
+        /// Withdraws a petition the player filed. Nothing in the shipped client sends this - see
+        /// CancelPetitionPacket for the three separate reasons - so it is groundwork rather than
+        /// a feature, and it is written to be safe against the client that would reach it first,
+        /// which is a modified one.
+        ///
+        /// A petition can only be cancelled by the account that filed it, and only while it is
+        /// open. Both refusals answer with the same failure, because an ack that distinguished
+        /// "not yours" from "does not exist" would let a client walk the table.
+        /// </summary>
+        internal void CancelPetition(Client client, CancelPetitionPacket packet)
+        {
+            var accountId = client.AccountEntry.Id;
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            var petition = unitOfWork.Petitions.GetPetition(packet.PetitionId);
+
+            if (petition == null || petition.AccountId != accountId
+                                 || petition.Status != (byte)PetitionStatus.Open)
+            {
+                Logger.WriteLog(LogType.Debug,
+                    $"Account {accountId} could not cancel petition #{packet.PetitionId}: "
+                    + (petition == null ? "no such petition."
+                       : petition.AccountId != accountId ? "it belongs to another account."
+                       : $"it is already {(PetitionStatus)petition.Status}."));
+
+                client.CallMethod(SysEntity.ClientPetitionManagerId,
+                    new CancelPetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            if (!unitOfWork.Petitions.SetPetitionStatus(packet.PetitionId, (byte)PetitionStatus.Cancelled, string.Empty))
+            {
+                client.CallMethod(SysEntity.ClientPetitionManagerId,
+                    new CancelPetitionAckPacket(false, packet.PetitionId));
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command,
+                $"Petition #{packet.PetitionId} withdrawn by {client.Player.FamilyName} [account {accountId}].");
+
+            client.CallMethod(SysEntity.ClientPetitionManagerId,
+                new CancelPetitionAckPacket(true, packet.PetitionId));
+        }
+
+        #endregion
+
+        #region Console
+
+        /// <summary>Newest first. A null status means every status.</summary>
+        public List<PetitionEntry> List(PetitionStatus? status, int limit)
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            return unitOfWork.Petitions.ListPetitions((byte?)status, limit);
+        }
+
+        public PetitionEntry Get(uint id)
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            return unitOfWork.Petitions.GetPetition(id);
+        }
+
+        /// <summary>
+        /// Marks a petition dealt with. The player is told if they happen to be online - they
+        /// filed it and then heard nothing, which is most of what makes a petition system feel
+        /// broken - and nothing is sent if they are not, because there is no offline mail here.
+        /// </summary>
+        public bool Resolve(uint id, string resolution)
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            var petition = unitOfWork.Petitions.GetPetition(id);
+
+            if (petition == null || petition.Status != (byte)PetitionStatus.Open)
+                return false;
+
+            if (!unitOfWork.Petitions.SetPetitionStatus(id, (byte)PetitionStatus.Resolved, Clamp(resolution, MaxSummaryLength)))
+                return false;
+
+            var author = Server.Clients.FirstOrDefault(
+                c => c.State == ClientState.Ingame && c.AccountEntry?.Id == petition.AccountId);
+
+            if (author != null)
+                CommunicatorManager.Instance.SystemMessage(author,
+                    $"Your petition #{id} has been answered"
+                    + (string.IsNullOrWhiteSpace(resolution) ? "." : $": {Clamp(resolution, MaxSummaryLength)}"));
+
+            return true;
         }
 
         #endregion

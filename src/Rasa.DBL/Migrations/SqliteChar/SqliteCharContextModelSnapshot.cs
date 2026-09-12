@@ -673,6 +673,19 @@ namespace Rasa.Migrations.SqliteChar
                         .HasColumnType("double")
                         .HasColumnName("pos_z");
 
+                    b.Property<string>("Resolution")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)")
+                        .HasDefaultValue("")
+                        .HasColumnName("resolution");
+
+                    b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(3)")
+                        .HasDefaultValue((byte)0)
+                        .HasColumnName("status");
+
                     b.Property<string>("Summary")
                         .IsRequired()
                         .HasColumnType("varchar(255)")

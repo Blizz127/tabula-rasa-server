@@ -103,6 +103,7 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("exit", ProcessExitCommand);
             CommandProcessor.RegisterCommand("reload", ProcessReloadCommand);
             CommandProcessor.RegisterCommand("gm", ProcessGmCommand);
+            CommandProcessor.RegisterCommand("petition", ProcessPetitionCommand);
         }
 
         ~Server()
@@ -567,6 +568,141 @@ namespace Rasa.Game
             var reached = Enum.GetValues<GmLevel>().Where(l => (byte)l <= level).ToList();
 
             return reached.Count == 0 ? "none" : reached.Max().ToString();
+        }
+
+        /// <summary>
+        /// petition list [open|resolved|cancelled|all] [count] - newest first, open by default
+        /// petition show &lt;id&gt;                                 - the whole thing, body included
+        /// petition resolve &lt;id&gt; [what you did]               - close it, and tell them if online
+        ///
+        /// The client has no window that reads a petition back and the GM half of 9.5 was never
+        /// wired, so this is the read path: without it the table is only reachable with SQL.
+        /// </summary>
+        private void ProcessPetitionCommand(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                Logger.WriteLog(LogType.Command,
+                    "Usage: petition list [open|resolved|cancelled|all] [count] | petition show <id> "
+                    + "| petition resolve <id> [note]");
+                return;
+            }
+
+            switch (parts[1].ToLowerInvariant())
+            {
+                case "list":
+                    PetitionList(parts);
+                    return;
+
+                case "show":
+                    PetitionShow(parts);
+                    return;
+
+                case "resolve":
+                    PetitionResolve(parts);
+                    return;
+
+                default:
+                    Logger.WriteLog(LogType.Command, $"'{parts[1]}' is not a petition command. Use list, show or resolve.");
+                    return;
+            }
+        }
+
+        private static void PetitionList(string[] parts)
+        {
+            PetitionStatus? status = PetitionStatus.Open;
+
+            if (parts.Length > 2 && !parts[2].Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!Enum.TryParse<PetitionStatus>(parts[2], true, out var named))
+                {
+                    Logger.WriteLog(LogType.Command,
+                        $"'{parts[2]}' is not a status. Use " + string.Join(", ", Enum.GetNames<PetitionStatus>()) + " or all.");
+                    return;
+                }
+
+                status = named;
+            }
+            else if (parts.Length > 2)
+                status = null;
+
+            var limit = 20;
+            if (parts.Length > 3 && !int.TryParse(parts[3], out limit))
+            {
+                Logger.WriteLog(LogType.Command, $"'{parts[3]}' is not a count.");
+                return;
+            }
+
+            var petitions = PetitionManager.Instance.List(status, Math.Clamp(limit, 1, 200));
+
+            if (petitions.Count == 0)
+            {
+                Logger.WriteLog(LogType.Command,
+                    status == null ? "No petitions have been filed." : $"No {status} petitions.");
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command,
+                $"{petitions.Count} petition(s), newest first"
+                + (status == null ? ":" : $", {status}:"));
+
+            foreach (var petition in petitions)
+                Logger.WriteLog(LogType.Command,
+                    $"  #{petition.Id} {(PetitionType)petition.Type} {(PetitionStatus)petition.Status} "
+                    + $"account {petition.AccountId} map {petition.MapContextId} "
+                    + $"{petition.CreatedAt:yyyy-MM-dd HH:mm} - {petition.Summary}");
+        }
+
+        private static void PetitionShow(string[] parts)
+        {
+            if (parts.Length < 3 || !uint.TryParse(parts[2], out var id))
+            {
+                Logger.WriteLog(LogType.Command, "Usage: petition show <id>");
+                return;
+            }
+
+            var petition = PetitionManager.Instance.Get(id);
+
+            if (petition == null)
+            {
+                Logger.WriteLog(LogType.Command, $"There is no petition #{id}.");
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command,
+                $"Petition #{petition.Id} ({(PetitionType)petition.Type}, {(PetitionStatus)petition.Status})\n"
+                + $"  filed    {petition.CreatedAt:yyyy-MM-dd HH:mm:ss} UTC\n"
+                + $"  account  {petition.AccountId}, character {petition.CharacterId}\n"
+                + $"  where    map {petition.MapContextId} at "
+                + $"{petition.PosX:F1}, {petition.PosY:F1}, {petition.PosZ:F1}\n"
+                + $"  subject  {petition.Summary}\n"
+                + (string.IsNullOrWhiteSpace(petition.Resolution) ? "" : $"  answer   {petition.Resolution}\n")
+                + $"\n{petition.Body}");
+        }
+
+        private static void PetitionResolve(string[] parts)
+        {
+            if (parts.Length < 3 || !uint.TryParse(parts[2], out var id))
+            {
+                Logger.WriteLog(LogType.Command, "Usage: petition resolve <id> [what you did]");
+                return;
+            }
+
+            var note = parts.Length > 3 ? string.Join(" ", parts[3..]) : string.Empty;
+
+            if (!PetitionManager.Instance.Resolve(id, note))
+            {
+                var petition = PetitionManager.Instance.Get(id);
+
+                Logger.WriteLog(LogType.Command,
+                    petition == null
+                        ? $"There is no petition #{id}."
+                        : $"Petition #{id} is already {(PetitionStatus)petition.Status}.");
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command,
+                $"Petition #{id} resolved" + (string.IsNullOrWhiteSpace(note) ? "." : $": {note}"));
         }
 
         private void ProcessExitCommand(string[] parts)

@@ -340,6 +340,15 @@ namespace Rasa.Context.Char
                 .Property(e => e.MapContextId)
                 .AsUnsignedInt(_dbContextPropertyModifier, 11);
 
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.Status)
+                .AsUnsignedTinyInt(_dbContextPropertyModifier, 3)
+                .HasDefaultValue((byte)0);
+
+            modelBuilder.Entity<PetitionEntry>()
+                .Property(e => e.Resolution)
+                .HasDefaultValue(string.Empty);
+
             // created_at carries no SQL default on purpose. The other tables use
             // CURRENT_TIMESTAMP, which MySQL rejects as a default for a datetime(6) column
             // unless the fractional precision is spelled out; the timestamp is set in

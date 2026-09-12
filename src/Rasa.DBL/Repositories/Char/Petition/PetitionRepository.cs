@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Repositories.Char.Petition
 {
@@ -33,6 +35,50 @@ namespace Rasa.Repositories.Char.Petition
                 Logger.WriteLog(LogType.Error, "Error adding Petition:");
                 Logger.WriteLog(LogType.Error, e);
                 return 0;
+            }
+        }
+
+        public PetitionEntry GetPetition(uint id)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.PetitionEntries);
+
+            return query.FirstOrDefault(e => e.Id == id);
+        }
+
+        public List<PetitionEntry> ListPetitions(byte? status, int limit)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.PetitionEntries);
+
+            if (status.HasValue)
+                query = query.Where(e => e.Status == status.Value);
+
+            return query.OrderByDescending(e => e.Id).Take(limit).ToList();
+        }
+
+        /// <summary>
+        /// Reports whether the row was found, the same way AddPetition reports its id: the
+        /// cancel path runs inside a packet handler, where a throw costs the connection.
+        /// </summary>
+        public bool SetPetitionStatus(uint id, byte status, string resolution)
+        {
+            try
+            {
+                var entry = _charContext.GetWritable(_charContext.PetitionEntries, id);
+
+                if (entry == null)
+                    return false;
+
+                entry.Status = status;
+                entry.Resolution = resolution ?? string.Empty;
+
+                _charContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, "Error updating Petition:");
+                Logger.WriteLog(LogType.Error, e);
+                return false;
             }
         }
     }
