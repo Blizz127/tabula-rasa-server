@@ -579,20 +579,58 @@ namespace Rasa.Managers
 
         public void RequestVendorRepair(Client client, RequestVendorRepairPacket packet)
         {
+            if (client.Player == null)
+                return;
+
+            // The same test RequestVendorPurchase applies: the entity has to be a vendor.
+            if (!EntityManager.Instance.VendorItems.ContainsKey(packet.VendorEntityId))
+            {
+                Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked {packet.VendorEntityId} for repairs, and it is not a vendor.");
+                return;
+            }
+
+            var inventory = client.Player.Inventory;
+
             foreach (var itemEntityId in packet.ItemEntitesId)
             {
                 var item = EntityManager.Instance.GetItem(itemEntityId);
+
+                // Any entity id used to be accepted, including an item another player is
+                // carrying (repaired at this player's expense) and ids that are no item at all
+                // (a NullReferenceException in the handler).
+                if (item == null
+                    || !(inventory.PersonalInventory.Contains(itemEntityId)
+                         || inventory.EquippedInventory.Contains(itemEntityId)
+                         || inventory.WeaponDrawer.Contains(itemEntityId)))
+                {
+                    Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked to repair {itemEntityId}, which is not in their inventory.");
+                    continue;
+                }
+
                 var classInfo = EntityClassManager.Instance.GetClassInfo(item.ItemTemplate.Class);
 
-                // calculate cost
-                var cost = (double)((classInfo.ItemClassInfo.MaxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice) / 100;
-                // set itemHit points to full
-                item.CurrentHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
-                // remove player credits
-                ManifestationManager.Instance.LossCredits(client, -(int)Math.Round(cost, 0));
-                // updateItem on client
+                if (classInfo?.ItemClassInfo == null)
+                    continue;
+
+                var maxHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
+
+                // Nothing to repair - and with CurrentHitPoints above the maximum the old
+                // arithmetic produced a negative cost, which LossCredits paid to the player.
+                if (item.CurrentHitPoints >= maxHitPoints)
+                    continue;
+
+                var cost = (int)Math.Round((double)(maxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice / 100);
+
+                if (cost > client.Player.Credits[CurencyType.Credits])
+                {
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                    break;
+                }
+
+                item.CurrentHitPoints = maxHitPoints;
+                ManifestationManager.Instance.LossCredits(client, -cost);
                 ItemManager.Instance.SendItemDataToClient(client, item, true);
-                // updare item in db
+
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
                 unitOfWork.Items.UpdateCurrentHitPoints(item);
             }
