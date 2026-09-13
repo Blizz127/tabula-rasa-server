@@ -363,6 +363,7 @@ namespace Rasa.Managers
                     EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
 
             NpcManager.Instance.DiscardBuybackItems(client);
+            ActorActionManager.Instance.RemoveActor(client.Player);
 
             CellManager.Instance.RemoveFromWorld(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);

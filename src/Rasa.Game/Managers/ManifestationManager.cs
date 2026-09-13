@@ -1287,7 +1287,15 @@ namespace Rasa.Managers
         public void WeaponReload(ActionData action)
         {
             // we reload weapon here
-            var client = Server.Clients.Find(c => c.Player.EntityId == action.Actor.EntityId);
+            var client = Server.Clients.Find(c => c.Player == action.Actor);
+
+            // The reload was queued with a delay, and the player can be gone by the time it
+            // fires - the connection dropped, the character logged out or was summoned away.
+            // RemovePlayer now clears their queued actions, but this runs on the world loop,
+            // where a null here used to end the process, so it is checked as well.
+            if (client == null || client.State != ClientState.Ingame)
+                return;
+
             var weapon = InventoryManager.Instance.CurrentWeapon(client);
 
             if (weapon == null)
