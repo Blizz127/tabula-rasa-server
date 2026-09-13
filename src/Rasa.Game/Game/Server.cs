@@ -104,6 +104,7 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("reload", ProcessReloadCommand);
             CommandProcessor.RegisterCommand("gm", ProcessGmCommand);
             CommandProcessor.RegisterCommand("petition", ProcessPetitionCommand);
+            CommandProcessor.RegisterCommand("flag", ProcessFlagCommand);
         }
 
         ~Server()
@@ -126,6 +127,8 @@ namespace Rasa.Game
             Configuration.Bind(Config);
 
             Logger.UpdateConfig(Config.LoggerConfig);
+
+            ServerFlagManager.Instance.LoadConfiguredFlags(Config.GameDataConfig?.ServerFlags);
         }
         #endregion
 
@@ -578,6 +581,53 @@ namespace Rasa.Game
         /// The client has no window that reads a petition back and the GM half of 9.5 was never
         /// wired, so this is the read path: without it the table is only reachable with SQL.
         /// </summary>
+        /// <summary>
+        /// flag list | flag set &lt;name|id&gt; | flag clear &lt;name|id&gt;
+        ///
+        /// Changes apply to everyone who is in the world now and to everyone who logs in after,
+        /// but only for as long as the server runs: the set that survives a restart is the one in
+        /// GameDataConfig.ServerFlags.
+        /// </summary>
+        private void ProcessFlagCommand(string[] parts)
+        {
+            var flags = ServerFlagManager.Instance;
+
+            if (parts.Length < 2 || parts[1].ToLowerInvariant() == "list")
+            {
+                var set = flags.Flags;
+
+                Logger.WriteLog(LogType.Command,
+                    set.Count == 0
+                        ? "No server flags are set."
+                        : "Set: " + string.Join(", ", set.Select(f => $"{f} ({(uint)f})")));
+
+                Logger.WriteLog(LogType.Command, "Known: " + ServerFlagManager.KnownFlags());
+                Logger.WriteLog(LogType.Command, "Usage: flag list | flag set <name|id> | flag clear <name|id>");
+                return;
+            }
+
+            var action = parts[1].ToLowerInvariant();
+
+            if (action != "set" && action != "clear")
+            {
+                Logger.WriteLog(LogType.Command, "Usage: flag list | flag set <name|id> | flag clear <name|id>");
+                return;
+            }
+
+            if (parts.Length < 3 || !ServerFlagManager.TryParse(parts[2], out var flag))
+            {
+                Logger.WriteLog(LogType.Command,
+                    $"'{(parts.Length < 3 ? string.Empty : parts[2])}' is not a server flag. Known: "
+                    + ServerFlagManager.KnownFlags());
+                return;
+            }
+
+            var changed = action == "set" ? flags.Set(flag) : flags.Clear(flag);
+
+            if (!changed)
+                Logger.WriteLog(LogType.Command, $"{flag} was already {(action == "set" ? "set" : "clear")}.");
+        }
+
         private void ProcessPetitionCommand(string[] parts)
         {
             if (parts.Length < 2)

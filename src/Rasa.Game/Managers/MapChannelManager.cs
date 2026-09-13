@@ -260,6 +260,7 @@ namespace Rasa.Managers
                 CellManager.Instance.AddToWorld(client.Player.MapChannel, dropship);
                 DynamicObjectManager.Instance.Dropships.Add(dropship.EntityId, dropship);
                 CommunicatorManager.Instance.LoginOk(dropship.Client);
+                ServerFlagManager.Instance.SendFlags(client);
 
                 InventoryManager.Instance.InitForClient(client);
                 ManifestationManager.Instance.UpdateStatsValues(client, true);
@@ -284,6 +285,10 @@ namespace Rasa.Managers
             EntityManager.Instance.RegisterPlayer(client.Player.EntityId, client.Player);
             EntityManager.Instance.RegisterActor(client.Player.EntityId, client.Player);
             CommunicatorManager.Instance.LoginOk(client);
+
+            // Before anything the player can act on: the client asks its own flag set whether to
+            // offer a feature, and an empty set means the feature is simply missing.
+            ServerFlagManager.Instance.SendFlags(client);
 
             CellManager.Instance.AddToWorld(client); // will introduce the player to all clients, including the current owner
             ManifestationManager.Instance.AssignPlayer(client);

@@ -150,6 +150,7 @@ namespace Rasa.Managers
             // A restart does not undo these.
             RegisterCommand(".addtitle", GmLevel.Admin, AddTitleCommand);
             RegisterCommand(".chg_class", GmLevel.Admin, ChangeClassCommand);
+            RegisterCommand(".flag", GmLevel.Admin, FlagCommand);
             RegisterCommand(".giveitem", GmLevel.Admin, GiveItemCommand);
             RegisterCommand(".givelogos", GmLevel.Admin, GiveLogosCommand);
             RegisterCommand(".givexp", GmLevel.Admin, GiveXpCommand);
@@ -259,6 +260,55 @@ namespace Rasa.Managers
         /// in the game sends them yet. Targets the caller, except `cells`, which is how a region
         /// announcement would reach everyone nearby.
         /// </summary>
+        /// <summary>
+        /// .flag list | .flag set &lt;name|id&gt; | .flag clear &lt;name|id&gt;
+        ///
+        /// Admin rather than GameMaster: this is the whole server, not one player. It lasts until
+        /// the server restarts, when GameDataConfig.ServerFlags takes over again.
+        /// </summary>
+        private void FlagCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var flags = ServerFlagManager.Instance;
+            var action = parts.Length > 1 ? parts[1].ToLowerInvariant() : "list";
+
+            if (action == "list")
+            {
+                var set = flags.Flags;
+
+                communicator.SystemMessage(_client,
+                    set.Count == 0
+                        ? "No server flags are set."
+                        : "Set: " + string.Join(", ", set.Select(f => $"{f} ({(uint)f})")));
+
+                communicator.SystemMessage(_client, "Known: " + ServerFlagManager.KnownFlags());
+                return;
+            }
+
+            if (action != "set" && action != "clear")
+            {
+                communicator.SystemMessage(_client, "usage: .flag list | .flag set <name|id> | .flag clear <name|id>");
+                return;
+            }
+
+            if (parts.Length < 3 || !ServerFlagManager.TryParse(parts[2], out var flag))
+            {
+                communicator.SystemMessage(_client, "usage: .flag list | .flag set <name|id> | .flag clear <name|id>");
+                communicator.SystemMessage(_client, "known flags: " + ServerFlagManager.KnownFlags());
+                return;
+            }
+
+            if (action == "set")
+            {
+                communicator.SystemMessage(_client,
+                    flags.Set(flag) ? $"{flag} is now set for everyone." : $"{flag} was already set.");
+                return;
+            }
+
+            communicator.SystemMessage(_client,
+                flags.Clear(flag) ? $"{flag} is now clear for everyone." : $"{flag} was already clear.");
+        }
+
         private void MessageCommand(string[] parts)
         {
             var communicator = CommunicatorManager.Instance;
