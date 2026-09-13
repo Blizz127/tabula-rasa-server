@@ -835,7 +835,16 @@ namespace Rasa.Managers
 
             // item have new stackSize?
             if (stackSizeChanged)
+            {
                 client.CallMethod(item.EntityId, new SetStackCountPacket(item.StackSize));
+
+                // The rows of the stacks it was merged into were updated as it went; the
+                // remainder's own row still says the whole amount. Left like that, a purchase
+                // that half-merged and then took a free slot came back at its full size on the
+                // next login - the merged part counted twice.
+                if (item.Id != 0)
+                    unitOfWork.Items.UpdateItemStackSize(item);
+            }
 
             // find free slot
             for (var i = 0; i < 50; i++)
@@ -907,7 +916,16 @@ namespace Rasa.Managers
 
             // item have new stackSize?
             if (stackSizeChanged)
+            {
                 client.CallMethod(item.EntityId, new SetStackCountPacket(item.StackSize));
+
+                // The rows of the stacks it was merged into were updated as it went; the
+                // remainder's own row still says the whole amount. Left like that, a purchase
+                // that half-merged and then took a free slot came back at its full size on the
+                // next login - the merged part counted twice.
+                if (item.Id != 0)
+                    unitOfWork.Items.UpdateItemStackSize(item);
+            }
 
             // find free slot
             for (var i = 0; i < 500; i++)

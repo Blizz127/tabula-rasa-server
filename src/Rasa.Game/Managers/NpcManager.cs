@@ -429,59 +429,101 @@ namespace Rasa.Managers
 
         public void RequestVendorPurchase(Client client, RequestVendorPurchasePacket packet)
         {
-            var itemQuantity = packet.Quantity;
-            if (itemQuantity <= 0)
+            // Everything in the packet is the client's word. The vendor has to be one whose stock
+            // this server has laid out (RequestNPCVending registers it), and the item one of that
+            // stock: without that, any item entity id the client had ever been shown - another
+            // player's rifle, a corpse's loot - could be "bought" here at its template's BuyPrice,
+            // which is 0 for anything no vendor sells.
+            if (!EntityManager.Instance.VendorItems.TryGetValue(packet.VendorEntityId, out var stock)
+                || !stock.Contains(packet.ItemEntityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy item {packet.ItemEntityId} from {packet.VendorEntityId}, which does not sell it.");
                 return;
+            }
 
-            // get the instance of the bought item
-            var selectedVendorItem = EntityManager.Instance.GetItem(packet.ItemEntityId);
+            var vendorItem = EntityManager.Instance.GetItem(packet.ItemEntityId);
 
-            if (selectedVendorItem == null)
+            if (vendorItem == null)
             {
                 Logger.WriteLog(LogType.Error, "RequestVendorPurchase: The item instance does not exist");
                 return;
             }
-            // has the player enough credits?
-            var buyPrice = selectedVendorItem.ItemTemplate.BuyPrice * (int)itemQuantity;
 
-            if (client.Player.Credits[CurencyType.Credits] < buyPrice)
-                return; // not enough credits
+            // Quantity is unsigned on the wire. It used to be cast to int and multiplied by the
+            // price, so a value of 2^31 or more made the total negative: it passed the credit
+            // check, CreateItem clamped the stack to the class maximum, and the debit added the
+            // amount instead. A stack is the most one purchase can hand over, so that is the cap.
+            var maxStack = EntityClassManager.Instance.GetItemClassInfo(vendorItem).StackSize;
 
-            // duplicate item
+            if (packet.Quantity == 0 || packet.Quantity > maxStack)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy {packet.Quantity} of item {packet.ItemEntityId} (stack size {maxStack}).");
+                return;
+            }
+
+            var unitPrice = vendorItem.ItemTemplate.BuyPrice;
+
+            if (unitPrice < 0)
+            {
+                Logger.WriteLog(LogType.Error, $"RequestVendorPurchase: item template {vendorItem.ItemTemplate.ItemTemplateId} has a negative BuyPrice.");
+                return;
+            }
+
+            // Priced in long so nothing here can wrap; the debit below takes an int, and a
+            // purchase the player cannot afford never reaches it.
+            var total = (long) unitPrice * packet.Quantity;
+
+            if (client.Player.Credits[CurencyType.Credits] < total)
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            // A fresh item with its own row in the items table, holding the whole quantity.
             var boughtItem = ItemManager.Instance.DuplicateItem(client, packet);
 
             if (boughtItem == null)
-                return; // could not duplicate item
+                return;
 
-            var tempItem = boughtItem;
-            var desiredStacksize = tempItem.StackSize;
+            var quantity = boughtItem.StackSize;
 
-            boughtItem = InventoryManager.Instance.AddItemToInventory(client, boughtItem);
+            // Merges what it can into existing stacks, then takes a free slot for the rest. On a
+            // full merge it deletes boughtItem's row itself and returns the stack it merged into;
+            // if it runs out of room it returns null with the unplaced remainder still in
+            // boughtItem.StackSize.
+            var placedItem = InventoryManager.Instance.AddItemToInventory(client, boughtItem);
 
-            if (boughtItem == null)
+            if (placedItem == null)
             {
-                // item could not be added to inventory
-                var appliedRestStackSize = tempItem.StackSize;
-                if (appliedRestStackSize == desiredStacksize)
+                var placed = quantity - boughtItem.StackSize;
+
+                // The remainder was never placed: take its entity back from the client and its
+                // row out of the table. The row used to be left behind on both paths, and on the
+                // partial one the message below then read the null placedItem, which threw, so
+                // the player kept the merged part and was never charged for it.
+                EntityManager.Instance.DestroyPhysicalEntity(client, boughtItem.EntityId, EntityType.Item);
+
+                if (boughtItem.Id != 0)
+                    using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
+                        unitOfWork.Items.DeleteItem(boughtItem.Id);
+
+                if (placed == 0)
                 {
-                    // not even 1x item could be added to the inventory
-                    EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
                     return;
                 }
-                // we were able to at least get a part of the stack into the inventory
-                // destroy the rest and update the stacksize for the price
-                EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
-                itemQuantity = (desiredStacksize - appliedRestStackSize);
+
+                quantity = placed;
+                total = (long) unitPrice * quantity;
             }
 
             // send player message
-            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmGotLootFromUnknown, new Dictionary<string, string> { { "quantity", itemQuantity.ToString() }, { "loot", boughtItem.ItemTemplate.Class.ToString() } }, MsgFilterId.LootObtained));
-
-            // get correct buy price
-            buyPrice = boughtItem.ItemTemplate.BuyPrice * (int)itemQuantity;
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmGotLootFromUnknown, new Dictionary<string, string> { { "quantity", quantity.ToString() }, { "loot", vendorItem.ItemTemplate.Class.ToString() } }, MsgFilterId.LootObtained));
 
             // remove credits
-            ManifestationManager.Instance.LossCredits(client, -buyPrice);
+            ManifestationManager.Instance.LossCredits(client, -(int) total);
         }
 
         public void RequestVendorRepair(Client client, RequestVendorRepairPacket packet)
