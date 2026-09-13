@@ -985,6 +985,18 @@
             PetitionManager.Instance.AddToPetition(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.SearchKB)]
+        private void SearchKB(SearchKBPacket packet)
+        {
+            PetitionManager.Instance.SearchKB(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RetrieveKBArticle)]
+        private void RetrieveKBArticle(RetrieveKBArticlePacket packet)
+        {
+            PetitionManager.Instance.RetrieveKBArticle(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.SearchPetitions)]
         private void SearchPetitions(SearchPetitionsPacket packet)
         {

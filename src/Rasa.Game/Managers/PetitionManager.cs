@@ -404,6 +404,31 @@ namespace Rasa.Managers
             Ack(client, true, petitionId);
         }
 
+        /// <summary>
+        /// SearchKB(searchText) - the knowledge base, which is operator-written prose rather than
+        /// anything to do with this player's petitions, so it is answered for anyone who asks.
+        /// Empty search text lists what there is.
+        /// </summary>
+        public void SearchKB(Client client, SearchKBPacket packet)
+        {
+            var results = KnowledgeBaseManager.Instance.Search(packet.SearchText);
+
+            // success is about the search having run, not about it having found anything: a
+            // search with no matches succeeded and returned nothing.
+            Ack(client, new SearchKBAckPacket(true, results));
+        }
+
+        /// <summary>
+        /// RetrieveKBArticle(kbArticleId) - one article in full. An id nobody has an article for
+        /// is answered with success false and the id it asked about, not ignored.
+        /// </summary>
+        public void RetrieveKBArticle(Client client, RetrieveKBArticlePacket packet)
+        {
+            var article = KnowledgeBaseManager.Instance.Get(packet.ArticleId);
+
+            Ack(client, new RetrieveKBArticleAckPacket(article != null, packet.ArticleId, article));
+        }
+
         private static void Ack(Client client, bool success, uint petitionId)
         {
             Ack(client, new CreatePetitionAckPacket(success, petitionId));

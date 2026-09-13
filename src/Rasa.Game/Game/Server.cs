@@ -108,6 +108,7 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("flag", ProcessFlagCommand);
             CommandProcessor.RegisterCommand("perf", ProcessPerfCommand);
             CommandProcessor.RegisterCommand("maperrors", ProcessMapErrorsCommand);
+            CommandProcessor.RegisterCommand("kb", ProcessKbCommand);
         }
 
         ~Server()
@@ -132,6 +133,9 @@ namespace Rasa.Game
             Logger.UpdateConfig(Config.LoggerConfig);
 
             ServerFlagManager.Instance.LoadConfiguredFlags(Config.GameDataConfig?.ServerFlags);
+
+            if (!KnowledgeBaseManager.Instance.Load(Config.GameDataConfig?.KnowledgeBaseFile, out var kbProblem))
+                Logger.WriteLog(LogType.Initialize, $"Knowledge base: {kbProblem}. SearchKB will answer with nothing.");
         }
         #endregion
 
@@ -633,6 +637,60 @@ namespace Rasa.Game
         /// <summary>
         /// maperrors [clear] - what the world load and the spawn path found wrong with the data.
         /// </summary>
+        /// <summary>
+        /// kb [reload|show &lt;id&gt;] - what is in the knowledge base, and re-reading the file.
+        /// </summary>
+        private void ProcessKbCommand(string[] parts)
+        {
+            var kb = KnowledgeBaseManager.Instance;
+            var what = parts.Length > 1 ? parts[1].ToLowerInvariant() : "list";
+
+            if (what == "reload")
+            {
+                Logger.WriteLog(LogType.Command,
+                    kb.Load(Config.GameDataConfig?.KnowledgeBaseFile, out var problem)
+                        ? $"Knowledge base reloaded: {kb.Count} article(s)."
+                        : $"Knowledge base not reloaded ({problem}); the {kb.Count} already loaded are untouched.");
+                return;
+            }
+
+            if (what == "show")
+            {
+                if (parts.Length < 3 || !uint.TryParse(parts[2], out var id) || kb.Get(id) == null)
+                {
+                    Logger.WriteLog(LogType.Command, "Usage: kb show <id>");
+                    return;
+                }
+
+                var article = kb.Get(id);
+
+                Logger.WriteLog(LogType.Command, $"#{article.Id} {article.Title}");
+
+                if (article.Keywords.Count > 0)
+                    Logger.WriteLog(LogType.Command, $"   keywords: {string.Join(", ", article.Keywords)}");
+
+                foreach (var line in article.Body.Split('\n'))
+                    Logger.WriteLog(LogType.Command, $"   {line.TrimEnd()}");
+
+                return;
+            }
+
+            var all = kb.All();
+
+            if (all.Count == 0)
+            {
+                Logger.WriteLog(LogType.Command,
+                    $"No articles loaded (from {kb.LoadedFrom ?? Config.GameDataConfig?.KnowledgeBaseFile ?? "nowhere"}). "
+                    + "Usage: kb [reload|show <id>]");
+                return;
+            }
+
+            Logger.WriteLog(LogType.Command, $"{all.Count} article(s) from {kb.LoadedFrom}:");
+
+            foreach (var article in all)
+                Logger.WriteLog(LogType.Command, $"   #{article.Id} {article.Title}");
+        }
+
         private void ProcessMapErrorsCommand(string[] parts)
         {
             var errors = MapErrorManager.Instance;
