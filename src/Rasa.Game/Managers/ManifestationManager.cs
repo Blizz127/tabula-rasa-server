@@ -361,6 +361,24 @@ namespace Rasa.Managers
 
         public void AllocateAttributePoints(Client client, AllocateAttributePointsPacket packet)
         {
+            // The three counts are the client's word, and used to be added as they came: no
+            // check against the points the character has actually earned, and no check for a
+            // negative that would take spent points back. Health and armour are derived from
+            // the spent points and written to the row, so one packet with Body = 100000 was a
+            // permanent giant health pool.
+            var available = GetAvailableAttributePoints(client.Player);
+            var requested = (long) packet.Body + packet.Mind + packet.Spirit;
+
+            if (packet.Body < 0 || packet.Mind < 0 || packet.Spirit < 0 || requested <= 0 || requested > available)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to allocate {packet.Body}/{packet.Mind}/{packet.Spirit} attribute points with {available} available.");
+
+                // Whatever the client's window thinks, this is where the character stands.
+                client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
+                return;
+            }
+
             client.Player.SpentBody += packet.Body;
             client.Player.SpentMind += packet.Mind;
             client.Player.SpentSpirit += packet.Spirit;
