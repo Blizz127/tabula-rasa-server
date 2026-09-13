@@ -745,6 +745,44 @@ namespace Rasa.Managers
                 PassLeadership(party);
         }
 
+        /// <summary>
+        /// Pushes a member's current name, class, level and AFK flag to the rest of their squad.
+        ///
+        /// The party window is driven entirely by these tuples: party.py keeps g_partyMembers as
+        /// (name, classId, level, isAfk) per account id and only ever rewrites an entry from
+        /// Recv_AddPartyMember or Recv_UpdatePartyMemberInfo. Until this existed the update was
+        /// sent from one place - PlayerEnteredWorld - so anything that changed about a member
+        /// while they stayed in the world was invisible to everyone else until they relogged:
+        /// going AFK left them listed as present, and levelling left the old level on screen.
+        ///
+        /// Call it after changing anything in that tuple. Cheap and idempotent: no party, a held
+        /// spot, or a squad of one all fall through without sending.
+        /// </summary>
+        public void MemberInfoChanged(Client client)
+        {
+            if (client?.AccountEntry == null || client.Player == null)
+                return;
+
+            var party = FindPartyOfAccount(client.AccountEntry.Id);
+            var member = party?.Find(client.AccountEntry.Id);
+
+            // A member whose spot is only being held has no live character to read.
+            if (member == null || !member.IsOnline)
+                return;
+
+            member.Refresh(client);
+
+            foreach (var other in OnlineClients(party))
+            {
+                // The recipient is never in their own g_partyMembers (see SendPartyState), so
+                // has_key would miss and the call would do nothing. Skip it rather than send it.
+                if (other == client)
+                    continue;
+
+                other.CallMethod(SysEntity.ClientPartyManagerId, new UpdatePartyMemberInfoPacket(member));
+            }
+        }
+
         /// <summary>Called every MapChannelWorker tick. Gives up spots held longer than HeldSpotMs.</summary>
         public void ExpireHeldMembers()
         {

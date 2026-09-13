@@ -588,6 +588,8 @@ namespace Rasa.Managers
 
             client.CallMethod(client.Player.EntityId, new ExperienceChangedPacket(xpInfo));
 
+            var levelBefore = client.Player.Level;
+
             // check for level up
             while (client.Player.Level < MaxPlayerLevel)
             {
@@ -606,8 +608,12 @@ namespace Rasa.Managers
                     // update database
                     CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Level);
 
-                    // update client
-                    client.CallMethod(client.Player.EntityId, new LevelUpPacket(client.Player.Level));
+                    // Everyone in range, not just the player: actor.Recv_LevelUp calls
+                    // SetExperienceLevel on whichever actor it arrived for, so this is what
+                    // moves the level shown over someone's head. It guards the fanfare itself -
+                    // the tutorial popup and ACTOR_LEVEL_UP event fire only when the entity id
+                    // is the receiver's own manifestation - so onlookers just see the number.
+                    client.CellCallMethod(client, client.Player.EntityId, new LevelUpPacket(client.Player.Level));
 
                     var msgArg = new Dictionary<string, string>
                     {
@@ -618,7 +624,6 @@ namespace Rasa.Managers
 
                     client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmLevelIncreased, msgArg, MsgFilterId.LeveledUp));
 
-                    // todo: For all others send Recv_setLevel() to update level display for this player
                     // update stats
                     UpdateStatsValues(client, true);
                     client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
@@ -628,7 +633,10 @@ namespace Rasa.Managers
                     break;
             }
 
-
+            // Once, after the loop: enough experience for two levels at once is one change as
+            // far as the squad window is concerned.
+            if (client.Player.Level != levelBefore)
+                PartyManager.Instance.MemberInfoChanged(client);
         }
 
         public void DebugChgPlayerClass(Client client, uint newClassId)
@@ -636,6 +644,9 @@ namespace Rasa.Managers
             client.Player.Class = newClassId;
             client.CallMethod(client.Player.EntityId, new CharacterClassPacket(client.Player.Class));
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Class, client.Player.Class);
+
+            // Class is the third field of the same party tuple, so it goes stale the same way.
+            PartyManager.Instance.MemberInfoChanged(client);
         }
 
         public void GainCredits(Client client, int credits)
@@ -940,6 +951,11 @@ namespace Rasa.Managers
             // shows the "you are AFK" system message only for its own manifestation, and an
             // idle indicator over anyone else's head.
             client.CellCallMethod(client, client.Player.EntityId, new PlayerAfkPacket(isAfk));
+
+            // The squad window reads a different source: its own party tuples, not the
+            // manifestation. A squadmate on another map is not in visibility range at all, so
+            // without this they never learn the member went away.
+            PartyManager.Instance.MemberInfoChanged(client);
         }
 
         public void RequestWeaponDraw(Client client)
