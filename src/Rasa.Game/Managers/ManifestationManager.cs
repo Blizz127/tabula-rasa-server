@@ -1233,12 +1233,19 @@ namespace Rasa.Managers
             levelBasedHealth = levelBasedHealth / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
             int totalHealth = (int)(levelBasedHealth * (totalSpirit + 2 * totalBody));
 
+            // The per-point factor shrinks with level; the attribute totals grow. Both sides of
+            // these divisions were int, so the factor was truncated: 3 at level 1 instead of
+            // 3.43, 1 from level 20 (1.11), and 0 from level 26 for power and 39 for regen - a
+            // character that levelled far enough had no chi and no regeneration at all. The
+            // health line above already divides as float and was right.
+            float attributeDivisor = 2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10;
+
             // Power
-            float basePower = basePower = (3 * level + 100) / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
+            float basePower = (3 * level + 100) / attributeDivisor;
             int totalPower  = (int)(basePower * (totalBody + 2 * totalMind));
 
             // Regen
-            float baseRegen = (2 * level + 100) / (2 * (level - 1) + 2 * (2 * (level - 1) + 10) + 10);
+            float baseRegen = (2 * level + 100) / attributeDivisor;
             int totalRegen = (int)(baseRegen * (totalMind + 2 * totalSpirit));
           
             // Bonuses
@@ -1291,8 +1298,10 @@ namespace Rasa.Managers
             }
 
 
-            // update regen rate
-            attribute[Attributes.Regen].RefreshAmount = (int)Math.Round(2D * (attribute[Attributes.Regen].CurrentMax / 100), 0);
+            // update regen rate: 2.0 per second at 100% regen, scaled by the rate as a
+            // percentage. CurrentMax / 100 was int division, so any rate below 200% rounded
+            // to the base 2 and the rate only mattered in whole multiples of 100.
+            attribute[Attributes.Regen].RefreshAmount = (int)Math.Round(2D * attribute[Attributes.Regen].CurrentMax / 100, 0);
             // 2.0 per second is the base regeneration for health
             // calculate armor max
             var armorMax = 0.0d;
