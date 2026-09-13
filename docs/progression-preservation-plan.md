@@ -14,6 +14,11 @@ none of the segments below is currently certified as complete or 1:1.
 | 6 | Tier-four progression to level 50 | All eight final classes, original late leveling content, gear, crafting, groups and required regional/system progression |
 | 7 | Endgame and shutdown live state | Final instances, encounters, equipment and rewards, control points/PvP/social systems, final deployed content and documented final events |
 
+Where original server data is permanently lost, the user's 2026-09-13
+decision applies: reconstruct from footage, the original map and client data,
+labelling every estimated value with its provenance tier, source and
+uncertainty (see `AGENTS.md`). The boot camp is the first segment built this way.
+
 Within each segment, recover original data and observable behavior, implement
 the required server flow, and verify creation/interaction/reconnect and failure
 paths. Shared systems belong to the earliest segment that needs them. Working

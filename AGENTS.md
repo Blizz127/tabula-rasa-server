@@ -35,6 +35,31 @@ Current progress and limitations: `docs/retail-accuracy.md`. Research records:
 and `docs/death-research.md`, plus subsequent focused research documents.
 Existing deployed patches remain subject to fidelity review.
 
+# Evidence-bounded reconstruction (user decision, 2026-09-13)
+
+Some final-live server data is lost for good: no public capture, client table
+or map file records it (for example the rebuilt boot camp's spawn positions,
+NPC placements and reward amounts). For such content the user chose on
+2026-09-13 to **build it from the strongest surviving evidence — original
+gameplay footage, the original map and client data — with every estimated
+value labelled**, instead of leaving the content unplayable.
+
+- Every reconstructed row and field records its provenance tier:
+  `original` (client/map data or official notes), `observed` (read directly
+  from original footage or screenshots), `measured` (derived from observation
+  with a stated uncertainty, e.g. a position from radar/landmark matching),
+  `inferred` (logical reconstruction from text or sequence), or `analogue`
+  (no direct evidence; the closest original counterpart, used only when a
+  value is required for the content to function).
+- Each label cites its exact source (video id and timestamp, file and offset,
+  document and capture) and, for `measured`, its uncertainty. Labels live in a
+  machine-readable manifest in `docs/evidence/`, and the seeded data must be
+  verifiable against that manifest.
+- Prefer leaving an optional value out over an `analogue`. Never present an
+  estimate as original, and never use pre-rebuild (obsolete) content as an
+  analogue for rebuilt content.
+- Replace estimates when better evidence appears, and record the change.
+
 # Implementation order
 
 The user explicitly requested progression from **new character to endgame in
