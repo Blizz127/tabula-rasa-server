@@ -256,6 +256,7 @@ namespace Rasa.Managers
         /// <summary>
         /// .msg system|big|info|alert|destination|location &lt;playerMessageId&gt; [key value ...]
         /// .msg tutorial &lt;tutorialId|name&gt;
+        /// .msg audio &lt;audioSetId&gt; | .msg audio stop
         /// .msg cells &lt;type&gt; &lt;playerMessageId&gt; [key value ...]
         ///
         /// Drives the three player-message methods so the plumbing can be seen working; nothing
@@ -398,6 +399,30 @@ namespace Rasa.Managers
                 return;
             }
 
+            if (kind == "audio")
+            {
+                if (parts.Length > 2 && parts[2].ToLowerInvariant() == "stop")
+                {
+                    communicator.StopTutorialAudio(_client);
+                    communicator.SystemMessage(_client, "Stopped the tutorial voice-over.");
+                    return;
+                }
+
+                if (parts.Length < 3 || !uint.TryParse(parts[2], out var audioSetId))
+                {
+                    communicator.SystemMessage(_client, "usage: .msg audio <audioSetId> | .msg audio stop");
+                    communicator.SystemMessage(_client, "Audio set ids are the client's own, from generated.client.audiosetdata.");
+                    return;
+                }
+
+                communicator.PlayTutorialAudio(_client, audioSetId);
+
+                // No answer comes back and an id the client does not know is simply silence, so
+                // say what was sent rather than leaving a silent result looking like a failure.
+                communicator.SystemMessage(_client, $"Sent audio set {audioSetId}. Silence means the client has no such set.");
+                return;
+            }
+
             var toCells = kind == "cells";
             var typeFrom = toCells ? 2 : 1;
             var idFrom = toCells ? 3 : 2;
@@ -406,6 +431,7 @@ namespace Rasa.Managers
             {
                 communicator.SystemMessage(_client, "usage: .msg system|big|info|alert|destination|location <playerMessageId> [key value ...]");
                 communicator.SystemMessage(_client, "       .msg tutorial <tutorialId|name>");
+                communicator.SystemMessage(_client, "       .msg audio <audioSetId> | .msg audio stop");
                 communicator.SystemMessage(_client, "       .msg cells <type> <playerMessageId> [key value ...]");
                 return;
             }

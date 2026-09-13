@@ -597,6 +597,25 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Plays a tutorial voice-over on its own - no window, no text. Null stops whatever is
+        /// playing instead, which is the only way to cut one short.
+        ///
+        /// Raising a tutorial does not play its audio: the audioSetId column is None in every
+        /// tutorialdata row the client shipped with, so a tutorial with a voice-over is this
+        /// call alongside DisplayPlayerTutorial, not either on its own.
+        /// </summary>
+        public void PlayTutorialAudio(Client client, uint? audioSetId)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new PlayTutorialAudioPacket(audioSetId));
+        }
+
+        /// <summary>Stops the tutorial voice-over this player is hearing, if any.</summary>
+        public void StopTutorialAudio(Client client)
+        {
+            PlayTutorialAudio(client, null);
+        }
+
+        /// <summary>
         /// The same notification to everyone in the player's visibility range, the player
         /// included - a region announcement, or big text for something that happened where
         /// several people can see it.
