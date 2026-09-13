@@ -71,6 +71,28 @@ the final-live rule.
   switch defaults to the Wilderness start. No boot-camp content is seeded yet; the owner decisions for the
   first slice are recorded below.
 
+## S1 (Initiation) status
+
+- The S1 mechanism is implemented and committed (`3443cd6`): the mission-content runtime (rules,
+  conditions, area sweeps, radio offers, forced greetings, tutorials, Logos grants and stationary
+  creature placement) plus the packets and hooks it needs. `MissionContentRules.Implemented` now
+  declares exactly the S1 mechanics and the entry path reads as implemented, still gated by
+  `Bootcamp.EntryMode` (default `Disabled`). No boot-camp rows are seeded, so every hook is a runtime
+  no-op; the full suite (756 tests) passes.
+- S1 positions are recovered in `docs/evidence/bootcamp-d11-positions.json`: `spawn.first_login`,
+  `area.1990.1`, `area.1990.2` and `npc.mcallister`. X,Z are the verified-footage radar measurements;
+  Y is read from the decoded `adv_bootcamp` map heightmap (`t000007c1_terrain.glm`, context 1985),
+  whose decode reproduces a static prop base to 0.03 m. Each record carries its tier, uncertainty,
+  method and frames. `area.1990.2` uses the measured objective-2 marker because the build plan's
+  `ArchElohHologramPlatformLarge` anchor sits by the far Eloh hologram; the discrepancy is recorded
+  in the record.
+- The twenty footage events the S1 rows cite are extracted (with verifier corrections applied) into
+  `docs/evidence/bootcamp-d11-footage-events.json` from the A1/A2/A3 transcripts and verifications.
+- Remaining S1 content: the manifest `rows` and the `BootcampS1Initiation` migration. The mission,
+  objectives, transition, rewards, rules/actions, areas, bindings, placement, start location and
+  `name_id` 10566 are evidence-backed; `creature.class_id` and `creature.max_hp` for McAllister are
+  unrecoverable and need the OD-11 analogue research (the killed task) before the row can be seeded.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
