@@ -392,6 +392,10 @@ namespace Rasa.Managers
 
         public void RemovePlayer(Client client, bool logout)
         {
+            // A target is an entity on this map; the client does not always re-target after a
+            // map change, and MissileLaunch refuses cross-map targets, so drop it here.
+            client.Player.Target = 0;
+
             // unregister Communicator
             CommunicatorManager.Instance.PlayerExitMap(client);
             // unregister mapChannelClient

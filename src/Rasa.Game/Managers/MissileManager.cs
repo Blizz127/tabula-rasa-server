@@ -35,8 +35,26 @@ namespace Rasa.Managers
             }
         }
 
+        /// <summary>
+        /// Furthest a missile may be aimed. Cells are 25.6 units and a client is only ever told
+        /// about the 5x5 cells around it, so nothing past ~64 units is even on its screen; this
+        /// is twice that, which no weapon reaches and no honest client asks for.
+        /// </summary>
+        private const float MaxTargetDistance = 128f;
+
         private MissileManager()
         {
+        }
+
+        /// <summary>
+        /// Entity ids are global, but cells are per map: CellCallMethod indexes this map's cell
+        /// table with the target's cell seeds, and a target on another map throws
+        /// KeyNotFoundException on the main loop. A client keeps its Target across a waypoint
+        /// or summon, so this is reachable by pressing fire before re-targeting.
+        /// </summary>
+        private static bool IsOnMap(MapChannel mapChannel, Actor actor)
+        {
+            return actor != null && actor.MapContextId == mapChannel.MapInfo.MapContextId;
         }
 
         private void DoDamageToCreature(MapChannel mapChannel, Missile missile)
@@ -212,10 +230,23 @@ namespace Rasa.Managers
                         return;
                 };
 
-                if (targetActor.State == CharacterState.Dead)
+                if (targetActor == null || targetActor.State == CharacterState.Dead)
                     return; // actor is dead, cannot be shot at
 
+                if (!IsOnMap(mapChannel, targetActor))
+                {
+                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId}, which is on map {targetActor.MapContextId}, not {mapChannel.MapInfo.MapContextId}");
+                    return;
+                }
+
                 var distance = Vector3.Distance(targetActor.Position, action.Actor.Position);
+
+                if (distance > MaxTargetDistance)
+                {
+                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId} from {distance:F0} units away");
+                    return;
+                }
+
                 triggerTime = (int)(distance * 0.5f);
             }
             else
@@ -263,6 +294,11 @@ namespace Rasa.Managers
 
             missile.Args.HitEntities.Add(missile.TargetEntityId);
             missile.Args.HitData.Add(hitData);     // ToDo: add suport for multiple targets
+
+            // Checked again here: the missile was queued a tick ago, and the target can have
+            // left the map (or the world) since.
+            if (missile.TargetEntityId != 0 && !IsOnMap(mapChannel, missile.TargetActor))
+                targetType = 0;
 
             switch (targetType)
             {
