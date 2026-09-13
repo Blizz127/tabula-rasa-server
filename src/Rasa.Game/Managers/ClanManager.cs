@@ -205,35 +205,60 @@ namespace Rasa.Managers
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-            if(CanCreateClan(client, packet, client.Player.Id))
-            {                          
-                ClanEntry clan = unitOfWork.Clans.CreateClan(packet.ClanName, packet.IsPvP);
-
-                if (clan != null)
-                {
-                    // Wrap the database data to what the client expects
-                    var clanData = new ClanData(clan);
-
-                    // Signals the client to set the default rank titles for a clan
-                    client.CallMethod(SysEntity.ClientClanManagerId, new ClanCreatedPacket(clanData.Id));
-
-                    // Create the member data the client expects 
-                    // This player created the clan and is the leader
-                    ClanMemberData clanMemberData = CreateClanMemberData(clanData, client, _clankRankLeader);
-                    
-                    // AddOrUpdate the database with the clan creator as a member of this clan
-                    AddMemberToClan(clanMemberData);
-                   
-                    // Send the data packets to the client
-                    SetClanData(client, clanData);
-                    SetClanMemberData(client, clanData);
-
-                    client.Player.ClanId = clan.Id;
-
-                    // Cache the newly created clan
-                    RegisterClan(clan);
-                }
+            // A character is in one clan at most - clan_member.character_id is unique - and
+            // nothing checked here. A member sending CreateClan got as far as the membership
+            // insert, which threw on the key: by then the clan row existed and the creation fee
+            // had been taken, so the player was 10,000 credits poorer, disconnected, and a clan
+            // with no members held the name from the next restart on.
+            if (client.Player.ClanId != 0 || unitOfWork.Clans.GetClanByCharacterId(client.Player.Id) != null)
+            {
+                client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanYouAreAlreadyInAClan, new Dictionary<string, string>()));
+                return;
             }
+
+            if (!CanCreateClan(client, packet, client.Player.Id))
+                return;
+
+            ClanEntry clan = unitOfWork.Clans.CreateClan(packet.ClanName, packet.IsPvP);
+
+            if (clan == null)
+                return;
+
+            // Wrap the database data to what the client expects
+            var clanData = new ClanData(clan);
+
+            // Create the member data the client expects 
+            // This player created the clan and is the leader
+            ClanMemberData clanMemberData = CreateClanMemberData(clanData, client, _clankRankLeader);
+
+            // AddOrUpdate the database with the clan creator as a member of this clan. If this
+            // fails the clan row goes with it, so a failed creation leaves nothing behind.
+            try
+            {
+                AddMemberToClan(clanMemberData);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"CreateClan: could not add character {client.Player.Id} as leader of new clan {clan.Id} ({packet.ClanName}); removing the clan: {e}");
+                unitOfWork.Clans.DeleteClan(clan.Id);
+                return;
+            }
+
+            // Pay for the clan creation - only now that there is a clan to pay for. Checked
+            // before the row was written, charged after.
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Credits, -_requiredCreditsForClanCreation);
+
+            // Signals the client to set the default rank titles for a clan
+            client.CallMethod(SysEntity.ClientClanManagerId, new ClanCreatedPacket(clanData.Id));
+
+            // Send the data packets to the client
+            SetClanData(client, clanData);
+            SetClanMemberData(client, clanData);
+
+            client.Player.ClanId = clan.Id;
+
+            // Cache the newly created clan
+            RegisterClan(clan);
         }
 
         internal void KickPlayerFromClan(Client client, KickPlayerFromClanPacket packet)
@@ -749,9 +774,7 @@ namespace Rasa.Managers
                 }
             }
 
-            // Pay for the clan creation
-            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Credits, -_requiredCreditsForClanCreation);
-
+            // The fee is taken by CreateClan once the clan and its leader both exist.
             return true;
         }        
 
