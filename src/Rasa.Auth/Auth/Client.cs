@@ -321,7 +321,7 @@ namespace Rasa.Auth
         {
             State = ClientState.ServerList;
 
-            SendPacket(new SendServerListExtPacket(Server.ServerList, AccountEntry.LastServerId));
+            SendPacket(new SendServerListExtPacket(Server.GetServerListSnapshot(), AccountEntry.LastServerId));
         }
 #pragma warning restore IDE0060 // Remove unused parameter
 

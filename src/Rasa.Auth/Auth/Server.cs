@@ -247,36 +247,45 @@ namespace Rasa.Auth
 
         public bool AuthenticateGameServer(LoginRequestPacket packet, CommunicatorClient client)
         {
+            // Lock order everywhere in this class is Clients -> ServerList -> GameServers, so
+            // nothing that holds GameServers may go on to regenerate the server list.
+            // DisconnectCommunicator does exactly that, which is why the rejections are decided
+            // under the lock and carried out after it.
+            string rejection;
+            LogType rejectionLogType;
+
             lock (GameServers)
             {
                 if (GameServers.ContainsKey(packet.ServerId))
                 {
-                    DisconnectCommunicator(client);
-                    Logger.WriteLog(LogType.Debug, $"A server tried to connect to an already in use server slot! Remote Address: {client.Socket.RemoteAddress}");
-                    return false;
+                    rejection = "A server tried to connect to an already in use server slot!";
+                    rejectionLogType = LogType.Debug;
                 }
-
-                if (!Config.Servers.ContainsKey(packet.ServerId.ToString()))
+                else if (!Config.Servers.ContainsKey(packet.ServerId.ToString()))
                 {
-                    DisconnectCommunicator(client);
-                    Logger.WriteLog(LogType.Debug, $"A server tried to connect to a non-defined server slot! Remote Address: {client.Socket.RemoteAddress}");
-                    return false;
+                    rejection = "A server tried to connect to a non-defined server slot!";
+                    rejectionLogType = LogType.Debug;
                 }
-
-                if (Config.Servers[packet.ServerId.ToString()] != packet.Password)
+                else if (Config.Servers[packet.ServerId.ToString()] != packet.Password)
                 {
-                    DisconnectCommunicator(client);
-                    Logger.WriteLog(LogType.Error, $"A server tried to log in with an invalid password! Remote Address: {client.Socket.RemoteAddress}");
-                    return false;
+                    rejection = "A server tried to log in with an invalid password!";
+                    rejectionLogType = LogType.Error;
                 }
+                else
+                {
+                    GameServerQueue.Remove(client);
+                    GameServers.Add(packet.ServerId, client);
 
-                GameServerQueue.Remove(client);
-                GameServers.Add(packet.ServerId, client);
+                    Logger.WriteLog(LogType.Network, $"The Game server (Id: {packet.ServerId}, Address: {client.Socket.RemoteAddress}, Public Address: {packet.PublicAddress}) has authenticated! Requesting info...");
 
-                Logger.WriteLog(LogType.Network, $"The Game server (Id: {packet.ServerId}, Address: {client.Socket.RemoteAddress}, Public Address: {packet.PublicAddress}) has authenticated! Requesting info...");
-
-                return true;
+                    return true;
+                }
             }
+
+            DisconnectCommunicator(client);
+            Logger.WriteLog(rejectionLogType, $"{rejection} Remote Address: {client.Socket.RemoteAddress}");
+
+            return false;
         }
 
         public void UpdateServerInfo(CommunicatorClient client, ServerInfoResponsePacket packet)
@@ -319,9 +328,13 @@ namespace Rasa.Auth
 
                 if (client.ServerId != 0)
                     GameServers.Remove(client.ServerId);
-
-                GenerateServerList();
             }
+
+            // Outside the GameServers lock: GenerateServerList takes ServerList and then
+            // GameServers, and calling it from inside GameServers inverted that order against
+            // UpdateServerInfo, so one game server dropping while another reported its info
+            // could deadlock both communicator threads for good.
+            GenerateServerList();
 
             Timer.Add($"Disconnect-comm-{DateTime.Now.Ticks}", 1000, false, () =>
             {
@@ -420,10 +433,23 @@ namespace Rasa.Auth
 
         public void BroadcastServerList()
         {
+            var servers = GetServerListSnapshot();
+
             lock (Clients)
                 foreach (var c in Clients)
                     if (c.State == ClientState.ServerList)
-                        c.SendPacket(new SendServerListExtPacket(ServerList, c.AccountEntry.LastServerId));
+                        c.SendPacket(new SendServerListExtPacket(servers, c.AccountEntry.LastServerId));
+        }
+
+        /// <summary>
+        /// A copy of the server list to serialize from. Send writes the packet on the calling
+        /// thread, and the list is rebuilt on the communicator threads, so handing the live
+        /// list to a packet let the main loop enumerate it while GenerateServerList changed it.
+        /// </summary>
+        public List<ServerInfo> GetServerListSnapshot()
+        {
+            lock (ServerList)
+                return ServerList.Select(s => s.Copy()).ToList();
         }
 
         #region Commands
