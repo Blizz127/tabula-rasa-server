@@ -303,6 +303,7 @@ namespace Rasa.Game
             ClanManager.Instance.ClansInit();
             DynamicObjectManager.Instance.InitDynamicObjects();
             MapTriggerManager.Instance.MapTriggerInit();
+            MapLinkManager.Instance.MapLinkInit();
 
             return true;
         }

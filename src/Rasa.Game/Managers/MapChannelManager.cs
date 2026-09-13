@@ -213,7 +213,12 @@ namespace Rasa.Managers
 
                     // check for mapTriggers
                     if (Timer.IsTriggered("CheckForMapTriggers"))
+                    {
                         MapTriggerManager.Instance.TriggersProximityWorker(mapChannel);
+
+                        // zone borders and instance doors: anyone standing in one leaves the map
+                        MapLinkManager.Instance.Worker(mapChannel);
+                    }
 
                     // check for effects (buffs)
                     if (Timer.IsTriggered("ClientEffectUpdate"))
@@ -274,6 +279,7 @@ namespace Rasa.Managers
                 ManifestationManager.Instance.UpdateStatsValues(client, false);
 
                 CellManager.Instance.AddToWorld(dropship.Client); // will introduce the player to all clients, including the current owner
+                MapLinkManager.Instance.PlayerEnteredMap(client);
                 CellManager.Instance.CellCallMethod(dropship.Client.Player.MapChannel, dropship.Client.Player, new TeleportArrivalPacket());
                 client.CallMethod(SysEntity.ClientMethodId, new RequestMovementBlockPacket());
                 ManifestationManager.Instance.AssignPlayer(client);
@@ -305,6 +311,10 @@ namespace Rasa.Managers
                 MapErrorManager.Instance.SendTo(client);
 
             CellManager.Instance.AddToWorld(client); // will introduce the player to all clients, including the current owner
+
+            // Before the first link check: a player who arrives through a pass is standing in
+            // the gate on this side, and must walk out of it before it can send them back.
+            MapLinkManager.Instance.PlayerEnteredMap(client);
             ManifestationManager.Instance.AssignPlayer(client);
 
             ClanManager.Instance.InitializePlayerClanData(client);
@@ -431,6 +441,7 @@ namespace Rasa.Managers
             ActorActionManager.Instance.RemoveActor(client.Player);
 
             CellManager.Instance.RemoveFromWorld(client);
+            MapLinkManager.Instance.RemovePlayer(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
             LookingForGroupManager.Instance.RemovePlayer(client);

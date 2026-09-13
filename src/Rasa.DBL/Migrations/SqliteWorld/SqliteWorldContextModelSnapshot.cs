@@ -695,6 +695,71 @@ namespace Rasa.Migrations.SqliteWorld
                     b.ToTable("map_info");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.MapLinkEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("DestMapContextId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("dest_map_context_id");
+
+                    b.Property<double>("DestPosX")
+                        .HasColumnType("REAL")
+                        .HasColumnName("dest_pos_x");
+
+                    b.Property<double>("DestPosY")
+                        .HasColumnType("REAL")
+                        .HasColumnName("dest_pos_y");
+
+                    b.Property<double>("DestPosZ")
+                        .HasColumnType("REAL")
+                        .HasColumnName("dest_pos_z");
+
+                    b.Property<double>("DestRotation")
+                        .HasColumnType("REAL")
+                        .HasColumnName("dest_rotation");
+
+                    b.Property<byte>("Enabled")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("enabled");
+
+                    b.Property<byte>("Kind")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("kind");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("REAL")
+                        .HasColumnName("radius");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("map_link");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionEntry", b =>
                 {
                     b.Property<uint>("Id")

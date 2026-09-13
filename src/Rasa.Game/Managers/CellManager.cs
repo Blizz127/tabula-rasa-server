@@ -90,6 +90,33 @@ namespace Rasa.Managers
             mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].MapTriggers.Add(trigger);
         }
 
+        //mapLink
+        public void AddToWorld(MapChannel mapChannel, MapLink link)
+        {
+            if (link == null)
+                return;
+
+            var cellPosX = (uint)(link.Position.X / CellSize + CellBias);
+            var cellPosZ = (uint)(link.Position.Z / CellSize + CellBias);
+
+            // The matrix is built so the link's neighbours exist for the players who will look
+            // at it from up to two cells away.
+            var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
+
+            mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].MapLinks.Add(link);
+        }
+
+        public void RemoveFromWorld(MapChannel mapChannel, MapLink link)
+        {
+            if (link == null)
+                return;
+
+            var cellSeed = GetCellSeed(link.Position);
+
+            if (mapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                cell.MapLinks.Remove(link);
+        }
+
         // Object
         public void AddToWorld(MapChannel mapChannel, DynamicObject dynamicObject)
         {

@@ -24,6 +24,7 @@ namespace Rasa.Repositories.UnitOfWork
         public ILogosRepository Logoses => _parent.Logoses;
 
         public IMapInfoRepository MapInfos => _parent.MapInfos;
+        public IMapLinkRepository MapLinks => _parent.MapLinks;
 
         public INpcMissionRepository NpcMissions => _parent.NpcMissions;
 

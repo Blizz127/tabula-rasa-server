@@ -90,6 +90,13 @@ namespace Rasa.Structures
         /// <summary>Environment.TickCount64 when the pending logout was requested.</summary>
         public long LogoutRequestedTick { get; set; }
         public bool RemoveFromMap { get; set; }
+
+        /// <summary>
+        /// Ids of the map links whose trigger radius the player is standing in. A link fires
+        /// when its id joins this set, so a player who arrives inside the reciprocal gate is not
+        /// bounced straight back: MapLinkManager seeds it on arrival and clears it on leaving.
+        /// </summary>
+        internal HashSet<uint> InsideMapLinks = new();
         // chat
         public int JoinedChannels { get; set; }
         public int[] ChannelHashes = new int[14];

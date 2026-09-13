@@ -119,6 +119,7 @@ namespace Rasa.Managers
             RegisterCommand(".maperrors", GmLevel.Observer, MapErrorsCommand);
             RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
             RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
+            RegisterCommand(".links", GmLevel.Observer, LinksCommand);
             RegisterCommand(".near", GmLevel.Observer, NearCommand);
             RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
             RegisterCommand(".rqs", GmLevel.Observer, RqsWindowCommand);
@@ -138,6 +139,8 @@ namespace Rasa.Managers
             RegisterCommand(".error", GmLevel.GameMaster, ErrorCommand);
             RegisterCommand(".forcestate", GmLevel.GameMaster, ForceStateCommand);
             RegisterCommand(".heal", GmLevel.GameMaster, HealCommand);
+            RegisterCommand(".link", GmLevel.GameMaster, LinkCommand);
+            RegisterCommand(".linkhere", GmLevel.GameMaster, LinkHereCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
@@ -1180,6 +1183,211 @@ namespace Rasa.Managers
             }
             return;*/
         }
+
+        #region Map links
+
+        /// <summary>
+        /// The links on this map, nearest first: what would fire where you stand, and how far
+        /// the next pass is. Distances are on the ground, the way the trigger measures them.
+        /// </summary>
+        private void LinksCommand(string[] parts)
+        {
+            var client = _client;
+            var links = MapLinkManager.Instance.OnMap(client.Player.MapContextId, client.Player.Position);
+
+            if (links.Count == 0)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"No map links on map {client.Player.MapContextId}.");
+                return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, $"{links.Count} map link(s) on map {client.Player.MapContextId}, nearest first:");
+
+            foreach (var link in links.Take(10))
+            {
+                var dx = link.Position.X - client.Player.Position.X;
+                var dz = link.Position.Z - client.Player.Position.Z;
+                var distance = Math.Sqrt(dx * dx + dz * dz);
+                var standing = MapLinkManager.Contains(link, client.Player.Position) ? " <- you are in it" : "";
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{distance,6:0.#} m  {link}{standing}");
+            }
+
+            if (links.Count > 10)
+                CommunicatorManager.Instance.SystemMessage(client, $"... and {links.Count - 10} more.");
+        }
+
+        /// <summary>
+        /// Drops a new link at your feet: the trigger is where you stand, on this map; the
+        /// arrival is the position given, on the destination map. Fine-tune it with .link.
+        /// </summary>
+        private void LinkHereCommand(string[] parts)
+        {
+            if (parts.Length < 5 || parts.Length > 7)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .linkhere destMapId destX destY destZ [radius] [border|instance]");
+                CommunicatorManager.Instance.SystemMessage(_client, "Creates a link at your position. Stand at the arrival on the other map and use .link <id> arrival to set where it lands.");
+                return;
+            }
+
+            if (!uint.TryParse(parts[1], out var destMap) || !float.TryParse(parts[2], out var destX)
+                || !float.TryParse(parts[3], out var destY) || !float.TryParse(parts[4], out var destZ))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "destMapId must be a map context id and destX destY destZ numbers.");
+                return;
+            }
+
+            var radius = 8.0f;
+
+            if (parts.Length >= 6 && !float.TryParse(parts[5], out radius))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "radius must be a number of metres.");
+                return;
+            }
+
+            var kind = MapLinkKind.Border;
+
+            if (parts.Length == 7 && !Enum.TryParse(parts[6], true, out kind))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "kind must be border or instance.");
+                return;
+            }
+
+            if (!MapChannelManager.Instance.MapChannelArray.ContainsKey(destMap))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, $"Map {destMap} is not loaded.");
+                return;
+            }
+
+            var link = new MapLink
+            {
+                MapContextId = _client.Player.MapContextId,
+                Position = _client.Player.Position,
+                Radius = radius,
+                DestMapContextId = destMap,
+                DestPosition = new Vector3(destX, destY, destZ),
+                DestRotation = 0,
+                Kind = kind,
+                Enabled = true,
+                Comment = $"{_client.Player.MapContextId} -> {destMap} (.linkhere by {_client.Player.FamilyName})"
+            };
+
+            var created = MapLinkManager.Instance.Add(link);
+
+            if (created == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "The link could not be saved; see the server log.");
+                return;
+            }
+
+            // The GM is standing in the new gate. Treat it like an arrival so it does not fire
+            // on them until they step out of it.
+            MapLinkManager.Instance.PlayerEnteredMap(_client);
+            CommunicatorManager.Instance.SystemMessage(_client, $"Created map link {created}");
+        }
+
+        /// <summary>
+        /// Adjusts one link in place and in the database. 'trigger' and 'arrival' take your
+        /// current map, position and facing, so a pass is tuned by walking to where it should
+        /// fire, then to where it should land, and running the two subcommands.
+        /// </summary>
+        private void LinkCommand(string[] parts)
+        {
+            if (parts.Length < 2 || !uint.TryParse(parts[1], out var id))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id [trigger | arrival | radius r | enable | disable | delete | goto | gotoarrival | comment text]");
+                return;
+            }
+
+            if (!MapLinkManager.Instance.TryGet(id, out var link))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, $"No map link with id {id}. .links lists the ones on this map.");
+                return;
+            }
+
+            if (parts.Length == 2)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, link.ToString());
+                CommunicatorManager.Instance.SystemMessage(_client, $"arrival yaw {link.DestRotation:0.###}, {(link.Enabled ? "enabled" : "disabled")}");
+                return;
+            }
+
+            var previousPosition = link.Position;
+            var previousMap = link.MapContextId;
+            var player = _client.Player;
+
+            switch (parts[2].ToLowerInvariant())
+            {
+                case "trigger":
+                    link.MapContextId = player.MapContextId;
+                    link.Position = player.Position;
+                    break;
+
+                case "arrival":
+                    link.DestMapContextId = player.MapContextId;
+                    link.DestPosition = player.Position;
+                    link.DestRotation = (float)player.Rotation;
+                    break;
+
+                case "radius":
+                    if (parts.Length < 4 || !float.TryParse(parts[3], out var radius) || radius <= 0 || radius > 200)
+                    {
+                        CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id radius metres  (0 < metres <= 200)");
+                        return;
+                    }
+
+                    link.Radius = radius;
+                    break;
+
+                case "enable":
+                    link.Enabled = true;
+                    break;
+
+                case "disable":
+                    link.Enabled = false;
+                    break;
+
+                case "comment":
+                    link.Comment = string.Join(' ', parts.Skip(3));
+
+                    if (link.Comment.Length > 64)
+                        link.Comment = link.Comment.Substring(0, 64);
+                    break;
+
+                case "delete":
+                    if (MapLinkManager.Instance.Delete(link))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Deleted map link {id}.");
+                    else
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map link {id} could not be deleted; see the server log.");
+                    return;
+
+                case "goto":
+                    // Landing exactly on the trigger would fire it on the next tick; land beside it.
+                    if (!MapChannelManager.Instance.ChangeMap(_client, link.MapContextId, link.Position + new Vector3(0, 0, link.Radius + 2.0f), (float)player.Rotation))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map {link.MapContextId} is not loaded, or you cannot teleport right now.");
+                    return;
+
+                case "gotoarrival":
+                    if (!MapChannelManager.Instance.ChangeMap(_client, link.DestMapContextId, link.DestPosition, link.DestRotation))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map {link.DestMapContextId} is not loaded, or you cannot teleport right now.");
+                    return;
+
+                default:
+                    CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id [trigger | arrival | radius r | enable | disable | delete | goto | gotoarrival | comment text]");
+                    return;
+            }
+
+            if (MapLinkManager.Instance.Update(link, previousPosition, previousMap))
+            {
+                // If the GM moved the trigger onto themselves, do not fire it on them.
+                MapLinkManager.Instance.PlayerEnteredMap(_client);
+                CommunicatorManager.Instance.SystemMessage(_client, $"Updated map link {link}");
+            }
+            else
+                CommunicatorManager.Instance.SystemMessage(_client, $"Map link {id} could not be saved; see the server log.");
+        }
+
+        #endregion
 
         private void SetRegionCommand(string[] parts)
         {

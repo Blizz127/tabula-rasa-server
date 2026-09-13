@@ -124,6 +124,7 @@ namespace Rasa
             services.AddScoped<IFootlockerRepository, FootlockerRepository>();
             services.AddScoped<ILogosRepository, LogosRepository>();
             services.AddScoped<IMapInfoRepository, MapInfoRepository>();
+            services.AddScoped<IMapLinkRepository, MapLinkRepository>();
             services.AddScoped<INpcMissionRepository, NpcMissionRepository>();
             services.AddScoped<INpcMissionRewardRepository, NpcMissionRewardRepository>();
             services.AddScoped<INpcPackageRepository, NpcPackageRepository>();
