@@ -17,6 +17,7 @@ namespace Rasa.Game
     using Networking;
     using Packets;
     using Packets.Communicator;
+    using Packets.Game.Server;
     using Queue;
     using Repositories.UnitOfWork;
     using Structures;
@@ -105,6 +106,7 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("gm", ProcessGmCommand);
             CommandProcessor.RegisterCommand("petition", ProcessPetitionCommand);
             CommandProcessor.RegisterCommand("flag", ProcessFlagCommand);
+            CommandProcessor.RegisterCommand("perf", ProcessPerfCommand);
         }
 
         ~Server()
@@ -232,6 +234,13 @@ namespace Rasa.Game
             {
                 QueueManager.Update(Config.ServerInfoConfig.MaxPlayers - CurrentPlayers);
             });
+
+            // The client has a readout for how the world loop is doing, next to its network RTT
+            // and variance ones. It only ever shows them in the diagnostics overlay, so they go
+            // to the accounts that can open it rather than to everyone: a player has nowhere to
+            // see this, and how hard the server is breathing is not their business.
+            if (Config.GameConfig.PerformanceMetricsInterval > 0)
+                Timer.Add("PerformanceMetrics", Config.GameConfig.PerformanceMetricsInterval, true, SendPerformanceMetrics);
 
             // Load items from db
             EntityClassManager.Instance.LoadEntityClasses();
@@ -588,6 +597,51 @@ namespace Rasa.Game
         /// but only for as long as the server runs: the set that survives a restart is the one in
         /// GameDataConfig.ServerFlags.
         /// </summary>
+        /// <summary>
+        /// Hands the loop metrics for the window just finished to every GM in the world, and
+        /// starts the next window. Runs on the loop thread, from the Timer.
+        /// </summary>
+        private void SendPerformanceMetrics()
+        {
+            var metrics = Loop.TakeMetrics();
+
+            List<Client> watching;
+
+            lock (Clients)
+                watching = Clients.Where(c => c != null && c.State == ClientState.Ingame
+                                              && c.AccountEntry != null
+                                              && c.AccountEntry.Level >= (byte)GmLevel.Observer).ToList();
+
+            if (watching.Count == 0)
+                return;
+
+            var packet = new ServerPerformanceMetricsPacket(metrics.LoopsPerSecond, metrics.PeakMs);
+
+            foreach (var client in watching)
+                client.CallMethod(SysEntity.ClientMethodId, packet);
+        }
+
+        /// <summary>
+        /// perf - what the loop has done since the last time the metrics went out.
+        /// </summary>
+        private void ProcessPerfCommand(string[] parts)
+        {
+            var metrics = Loop.PeekMetrics();
+
+            Logger.WriteLog(LogType.Command,
+                $"Main loop: {metrics.LoopsPerSecond:0.0} loops/s ({metrics.Loops} in {metrics.WindowMs:0} ms), "
+                + $"slowest pass {metrics.PeakMs:0.00} ms, target {MainLoopTime} ms.");
+
+            int players;
+
+            lock (Clients)
+                players = Clients.Count(c => c != null && c.State == ClientState.Ingame);
+
+            Logger.WriteLog(LogType.Command,
+                $"{players} player(s) in the world, {Clients.Count} connection(s), "
+                + $"metrics going to GMs every {Config.GameConfig.PerformanceMetricsInterval} ms.");
+        }
+
         private void ProcessFlagCommand(string[] parts)
         {
             var flags = ServerFlagManager.Instance;
