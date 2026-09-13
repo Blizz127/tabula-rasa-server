@@ -266,8 +266,12 @@ namespace Rasa.Managers
                 CommunicatorManager.Instance.LoginOk(dropship.Client);
                 ServerFlagManager.Instance.SendFlags(client);
 
-                InventoryManager.Instance.InitForClient(client);
-                ManifestationManager.Instance.UpdateStatsValues(client, true);
+                // The manifestation, its items and its entity registrations survive the map
+                // change; the client's picture of them does not. Show it what the server
+                // already has rather than loading and registering it all a second time, and
+                // recompute the stats without the full reset that healed the player.
+                InventoryManager.Instance.ResendToClient(client);
+                ManifestationManager.Instance.UpdateStatsValues(client, false);
 
                 CellManager.Instance.AddToWorld(dropship.Client); // will introduce the player to all clients, including the current owner
                 CellManager.Instance.CellCallMethod(dropship.Client.Player.MapChannel, dropship.Client.Player, new TeleportArrivalPacket());

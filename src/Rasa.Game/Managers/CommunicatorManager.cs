@@ -437,6 +437,20 @@ namespace Rasa.Managers
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position, null);
             // save player time
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Login, null);
+
+            LeaveMapChannels(client);
+
+            SocialManager.Instance.FriendLoggedOut(client);
+        }
+
+        /// <summary>
+        /// Takes the player out of every chat channel it joined. The default channels are per
+        /// map, so this runs when the player leaves a map for any reason; a dropship arrival
+        /// used to join the new map's channel without leaving the old one, and after fourteen
+        /// trips JoinDefaultLocalChannel refused.
+        /// </summary>
+        public void LeaveMapChannels(Client client)
+        {
             // remove client from all channels
             for (var i = 0; i < client.Player.JoinedChannels; i++)
             {
@@ -471,8 +485,6 @@ namespace Rasa.Managers
             }
 
             client.Player.JoinedChannels = 0;
-
-            SocialManager.Instance.FriendLoggedOut(client);
         }
 
         public void RadialChat(Client client, string textMsg)

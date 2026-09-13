@@ -1159,6 +1159,47 @@ namespace Rasa.Managers
 
             // init LockboxTabPermissions
             client.CallMethod(SysEntity.ClientInventoryManagerId, new LockboxTabPermissionsPacket(client.Player.LockboxTabs));
+        }
+
+        /// <summary>
+        /// Shows the client the inventory the server already holds for it, after a map change
+        /// that made the client forget its entities. Nothing is loaded or registered: the
+        /// items and their entity ids are the ones in hand. The dropship arrival used to call
+        /// InitForClient here, which loaded the inventory from the database a second time and
+        /// registered a second Item entity for every row without destroying the first.
+        /// </summary>
+        public void ResendToClient(Client client)
+        {
+            var inventory = client.Player.Inventory;
+
+            ResendList(client, InventoryType.Personal, inventory.PersonalInventory, -1);
+            ResendList(client, InventoryType.HomeInventory, inventory.HomeInventory, -1);
+            // Slot 13 is the weapon in hand, a mirror of a drawer slot, and is not shown as an
+            // equipped item; the login path does not send it either.
+            ResendList(client, InventoryType.EquipedInventory, inventory.EquippedInventory, 13);
+            ResendList(client, InventoryType.WeaponDrawerInventory, inventory.WeaponDrawer, -1);
+
+            client.CallMethod(SysEntity.ClientInventoryManagerId, new LockboxTabPermissionsPacket(client.Player.LockboxTabs));
+        }
+
+        private static void ResendList(Client client, InventoryType inventoryType, List<ulong> slots, int skipSlot)
+        {
+            for (var slot = 0; slot < slots.Count; slot++)
+            {
+                if (slot == skipSlot || slots[slot] == 0)
+                    continue;
+
+                var item = EntityManager.Instance.GetItem(slots[slot]);
+
+                if (item == null)
+                {
+                    slots[slot] = 0;
+                    continue;
+                }
+
+                ItemManager.Instance.SendItemDataToClient(client, item, false);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryAddItemPacket(inventoryType, item.EntityId, (uint)slot));
+            }
 
             // it seems  that InventoryCreatePacket dont need to be called, ToDo; investigate more
             //client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryCreatePacket(InventoryType.Personal, client.MapClient.Inventory.PersonalInventory, 250));
@@ -1255,7 +1296,14 @@ namespace Rasa.Managers
             // and belongs to nobody, so it would never load again.
             var accountCharacterIds = new HashSet<uint>((client.AccountEntry.Characters ?? new List<CharacterEntry>()).Select(c => c.Id));
 
-            // init for server inventory
+            // init for server inventory. Cleared first: this runs again on the manifestation
+            // after a summon or .teleport, and used to append another block of slots each
+            // time, so the lists grew by 757 entries per zone change.
+            client.Player.Inventory.EquippedInventory.Clear();
+            client.Player.Inventory.HomeInventory.Clear();
+            client.Player.Inventory.PersonalInventory.Clear();
+            client.Player.Inventory.WeaponDrawer.Clear();
+
             for (uint i = 0; i < 22; i++)
                 client.Player.Inventory.EquippedInventory.Add(0);
 

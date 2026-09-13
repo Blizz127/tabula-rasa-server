@@ -412,6 +412,7 @@ namespace Rasa.Managers
                                 case ClientState.Ingame:
                                     CellManager.Instance.RemoveFromWorld(dropship.Client);
                                     dropship.Client.Player.MapChannel.ClientList.Remove(dropship.Client);
+                                    CommunicatorManager.Instance.LeaveMapChannels(dropship.Client);
                                     dropship.Client.CallMethod(SysEntity.ClientMethodId, new UnrequestMovementBlockPacket());
                                     dropship.Client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
                                     dropship.Client.CallMethod(SysEntity.CurrentInputStateId, new WonkavatePacket(dropship.DestinationMapId, 1, MapChannelManager.Instance.MapChannelArray[dropship.DestinationMapId].MapInfo.MapVersion, dropship.Destination, 0));

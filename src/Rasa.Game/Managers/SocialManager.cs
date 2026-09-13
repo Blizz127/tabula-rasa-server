@@ -197,6 +197,9 @@ namespace Rasa.Managers
             var frinedList = new List<Friend>();
             var ignoreList = new List<IgnoredPlayer>();
 
+            // Rebuilt, not appended: this runs again on every map change.
+            client.Player.Friends.Clear();
+            client.Player.IgnoredPlayers.Clear();
 
             foreach (var id in friendIds)
             {

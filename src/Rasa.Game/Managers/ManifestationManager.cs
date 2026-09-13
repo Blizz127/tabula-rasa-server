@@ -416,7 +416,10 @@ namespace Rasa.Managers
         {
             var player = client.Player;
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            // get charaterOptions
+            // get charaterOptions. Cleared first: this runs again on every map change, and the
+            // list used to gain another copy of every option each time.
+            player.CharacterOptions.Clear();
+
             var optionsList = unitOfWork.CharacterOptions.Get(player.Id);
 
             foreach (var characterOption in optionsList)
