@@ -68,8 +68,22 @@ the final-live rule.
   [verified footage](bootcamp-client-evidence.md#2026-09-13-verified-footage-what-three-original-recordings-establish).
 - The server has the data layer for labelled reconstruction (S0 of the boot-camp build plan): content
   rows are validated and withheld unless every mechanic they need exists, and a new-character entry
-  switch defaults to the Wilderness start. No boot-camp content is seeded; the owner decisions for the
-  first slice (entry rollout, tutorial tip, Power Logos grant, stand-in NPC classes) are open.
+  switch defaults to the Wilderness start. No boot-camp content is seeded yet; the owner decisions for the
+  first slice are recorded below.
+
+## Boot-camp owner decisions
+
+The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
+deployment. They are recorded as approved decisions in
+`docs/evidence/bootcamp-d11-reconstruction-manifest.json`, and every value that depends on them keeps
+its evidence tier.
+
+| Decision | Choice |
+| --- | --- |
+| OD-4 Power Logos (Lightning) | Silent `LogosStoneTabula` grant of Logos 23 when Initiation objective 1 completes, with greeting 1634 (inferred: no Logos chat line in the footage; the client binds its Lightning tutorial to greeting 1634) |
+| OD-1 Entry rollout | All new characters enter the boot camp once Initiation (S1) is ready, even before the later missions and the exit exist |
+| OD-3 Radial Menu tip 10000018 | Included on Initiation acceptance (observed id, inferred binding) |
+| OD-11 NPC classes | Labelled final-live analogue classes where the class id is unrecoverable; names, levels and positions stay evidence-based |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),
