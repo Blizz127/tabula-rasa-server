@@ -449,7 +449,17 @@ namespace Rasa.Networking
                 data.Offset = LengthSize;
                 data.Length = (int) length;
 
-                OnDecrypt?.Invoke(data);
+                // A decrypt that says no is a frame that did not come from the other side of
+                // this cipher: the auth checksum failed, or the body is not a whole number of
+                // cipher blocks. Its bytes are not a packet, and the stream behind it cannot be
+                // trusted to frame any better. The result used to be discarded and the frame
+                // handed on regardless.
+                if (OnDecrypt != null && !OnDecrypt(data))
+                {
+                    Drop($"a {length} byte frame failed decryption or its integrity check");
+                    return InputResult.Broken;
+                }
+
                 OnReceive?.Invoke(data);
 
                 if (data.ByteCount == length)
