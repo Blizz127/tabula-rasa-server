@@ -729,9 +729,14 @@ namespace Rasa.Managers
                     break;
 
                 case CharacterUpdate.Login:
-                    var totalTimePlayed = (DateTime.Now - client.Player.LoginTime).Minutes + client.Player.TotalTimePlayed;
+                    // TotalMinutes, not Minutes: Minutes is the minute hand (0..59), so a
+                    // session of an hour and ten minutes used to count as ten. TotalTimePlayed
+                    // on the manifestation is the value loaded at login and LoginTime is set
+                    // once, so the sum is right however many times this runs in one session.
+                    var sessionMinutes = (long)(DateTime.Now - client.Player.LoginTime).TotalMinutes;
+                    var totalTimePlayed = (uint)Math.Max(0, sessionMinutes) + client.Player.TotalTimePlayed;
 
-                    unitOfWork.Characters.UpdateCharacterLogin(client.Player.Id, (uint)totalTimePlayed, client.Player.NumLogins);
+                    unitOfWork.Characters.UpdateCharacterLogin(client.Player.Id, totalTimePlayed, client.Player.NumLogins);
                     break;
 
                 case CharacterUpdate.Logos:
