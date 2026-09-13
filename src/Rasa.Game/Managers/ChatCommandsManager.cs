@@ -1420,8 +1420,11 @@ namespace Rasa.Managers
                     return;
 
                 case "goto":
-                    // Landing exactly on the trigger would fire it on the next tick; land beside it.
-                    if (!MapChannelManager.Instance.ChangeMap(_client, link.MapContextId, link.Position + new Vector3(0, 0, link.Radius + 2.0f), (float)player.Rotation))
+                    // Land on the trigger itself. PlayerEnteredMap seeds the link into InsideMapLinks, so
+                    // it does not fire until the player steps out and back in. Landing beside it is not
+                    // safe: most passes are tunnel meshes bored under the heightmap, and a point a few
+                    // metres off the marker can be inside the rock, with nothing to stand on.
+                    if (!MapChannelManager.Instance.ChangeMap(_client, link.MapContextId, link.Position, (float)player.Rotation))
                         CommunicatorManager.Instance.SystemMessage(_client, $"Map {link.MapContextId} is not loaded, or you cannot teleport right now.");
                     return;
 
