@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Rasa.Repositories.Char.CharacterInventory
 {
@@ -6,6 +6,8 @@ namespace Rasa.Repositories.Char.CharacterInventory
     public interface ICharacterInventoryRepository
     {
         void AddInvItem(uint accountId, uint characteId, uint inventoryType, uint slotId, uint itemId);
+        // Staged: committed by the unit of work; failures propagate.
+        void StageInvItem(uint accountId, uint characterId, uint inventoryType, uint slotId, uint itemId);
         void DeleteInvItem(uint accountId, uint characteId, uint inventoryType, uint slotIndex);
         List<CharacterInventoryEntry> GetItems(uint accountId, uint characterId);
         void MoveInvItem(uint accountId, uint characteId, uint inventoryType, uint slotId, uint itemId);

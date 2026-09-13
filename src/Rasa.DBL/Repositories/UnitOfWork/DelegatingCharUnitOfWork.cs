@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Rasa.Repositories.UnitOfWork
 {
@@ -15,6 +15,7 @@ namespace Rasa.Repositories.UnitOfWork
     using Char.CharacterLockbox;
     using Char.CharacterLogos;
     using Char.CharacterMission;
+    using Char.CharacterContentFact;
     using Char.CharacterOption;
     using Char.CharacterSkills;
     using Char.CharacterTeleporter;
@@ -52,6 +53,8 @@ namespace Rasa.Repositories.UnitOfWork
         public ICharacterLogosRepository CharacterLogoses => _parent.CharacterLogoses;
 
         public ICharacterMissionRepository CharacterMissions => _parent.CharacterMissions;
+
+        public ICharacterContentFactRepository CharacterContentFacts => _parent.CharacterContentFacts;
 
         public ICharacterOptionRepository CharacterOptions => _parent.CharacterOptions;
 

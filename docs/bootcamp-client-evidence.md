@@ -489,3 +489,129 @@ position. Rewards, the promotion's grant (level 2 by 1994 and level 3 by
 paid experience, credits and loot, values unknown), the persistent Bane
 assault and instancing remain open after that. The server-side mission-log mechanism these need is recorded in
 [mission research](mission-research.md#mission-log-protocol-and-persistence--2026-09-13).
+
+## 2026-09-13 verified footage: what three original recordings establish
+
+Three original recordings supplied by the project owner were transcribed frame by frame
+and each key event was independently re-checked. Of 615 events, 246 key events were verified:
+134 confirmed, 112 corrected, none refuted. The other 369 are unverified support. Positions
+come from matching the in-video radar against the client's radar textures (X,Z only, ±1.5–2.5 m;
+Y is never measured). Research files, outside Git, are under
+`/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/`:
+`synthesis/footage-synthesis.md` (SHA-256 `b8da86b1…c84090`),
+`synthesis/footage-synthesis.json` (`d47f5ddc…1023210`) and `spatial/positions.json`
+(`b3ff3ff0…a663d`). Video hashes are in `docs/evidence/bootcamp-d11-reconstruction-manifest.json`.
+
+Tags: **observed** = seen on screen; **measured** = derived from frames with an uncertainty;
+**inferred** = reasoning from observations. Times are decoded video seconds.
+
+### Which game the recordings show
+
+- `7Lrst9SG3pk` and `8VXeKzGUv0c` are one continuous session: the last frame of the first and
+  the first frame of the second give the identical radar match.
+- **Inferred: final live.** General chat in that session dates it to the last week before the
+  Saturday 2009-02-28 shutdown, so after D16.5 (2009-02-17):
+  - 8V 15.0: "yeah....28th is saturday"
+  - 8V 113.0: "whens this all ending??" / "2 days"
+
+  The date comes from player chat, not server data.
+- `Ycxm8Pa1-v4` (another player) was uploaded 2009-01-18, so it predates D16.5; its exact
+  deployment is unknown. It agrees with the final-live run on the 1995 objective-2 marker
+  (within 0.45 m), on kill payouts and on the absence of a countdown during that objective.
+
+### First login and Initiation (1990)
+
+- **Observed:** Enter Battle on the first character of an empty roster shows no skip prompt,
+  then the 1985 loading screen (Intel 4294).
+- **Measured:** the player enters the world at X,Z (387.2, −79.1) ±1.5 m, identical across
+  224.8–237.5 s. The camera looks roughly north (≈345°, low confidence); body rotation and Y are
+  unmeasured.
+- **Observed:** at arrival Lightning is already in ability slot 1, the "Pistol" shows 20/1000,
+  Recruit boots, legs and vest are equipped, and the backpack is 0/50.
+- **Observed:** 0.73 s after the first world frame, with no input, a server-pushed
+  "Headquarters / Mission Available" window offers Initiation (text 21134, reward 100). The
+  acceptance falls in an edit cut.
+- **Observed:** tutorial 10000018 (Radial Menu) appears at 239.2.
+- **Objective 1:**
+  - **Observed:** it completes at 252.73 in the same frame as the forced "An Ancient Eloh"
+    conversation (greeting 1634) and a highlight on ability slot 1. No chat, Logos message or
+    Logos tip appears.
+  - **Measured:** the player is at (388.95, −26.3); the objective marker is at (387.2, −28.3).
+  - **Inferred:** an area trigger with a radius under about 8 m. The player stood 8.2 m away
+    for 3 s without completing it.
+- **Objective 2:**
+  - **Measured:** marker at (387.8, 6.7). The player waited 9 m south of it for 12 s without
+    completing it.
+  - **Inferred:** an area trigger with a radius under about 9 m. Completion is inside a cut;
+    afterwards the conversation shows greeting 1635.
+- **Observed:** tutorial 7 (Map Window) at 258.9 and tutorial 10000011 (Mission Indicator) at
+  279.5.
+- **Turn-in:**
+  - **Measured:** Major McAllister (L10) stands at (387.2, 53.3) ±2.
+  - **Observed:** his Mission Completion window shows text 21135 and reward 100; chat then shows
+    "You gained 1250 experience points." before "Mission Completed: Initiation".
+  - **Inferred:** the reward is 100 credits, since the first backpack view shows Credit 100 and
+    starting credits were never seen.
+  - **Observed:** his offer for Gearing Up for Battle (1992) opens in the same frame.
+
+### Gearing Up for Battle (1992) through the exit
+
+**Gearing Up for Battle (1992)**
+- **Observed:** Supply Crate "Loot All" gives one each of Astra Motor Assist Armor Boots,
+  Teleract Motor Assist Armor Gloves, Teleract Motor Assist Armor Legs, Hellstrom Motor Assist
+  Armor Vest and a Shinobi Rifle. The objective completes 0.33 s after the loot lines.
+- **Measured:** crate at (397.3, 173.7), Captain Delessio (L10) at (398.9, 173.3).
+- **Observed:** equipping the first item (boots) completes the equip objective while the gloves
+  slot is still empty. The practice dummy despawns on the killing hit and respawns about 1 s
+  later; its objective completes 0.2 s after the first despawn.
+- **Observed:** chat shows 1250 XP on completion. **Inferred:** the 200-credit reward fits the
+  later credit arithmetic.
+
+**Capture the Flag (1994)**
+- **Observed:** chat shows "Mission Accepted: Capture the Flag", then 500 XP and level 2 (3
+  attribute and 2 skill points). **Inferred:** this is the promotion objective.
+- **Observed:** the boss objective shows the counter "Boss Eliminated: 0/1", with map marker
+  "Base Center" at (95.1, 150.8).
+- **Inferred:** the boss kill pays 143 XP and 50 credits.
+- **Observed:** turn-in gives 5000 XP.
+- **Measured:** the probable Captain Youngblood waits at (93.2, 137.5).
+
+**Calling for Reinforcements (1995)**
+- **Observed (both players):** objective 2 shows no countdown. **Measured:** its marker is at
+  (−104.6, 70.5).
+- **Observed:** at the crashed dropship, a use of about 1 s on an orange object starts a tracker
+  countdown at 00:02:06. About 4.9 s after the use, the wreck explodes and the objective
+  completes with 00:02:00 left.
+- **Observed:** reinforcements then beam onto the pad, and "Check in with Corporal Van
+  Valkenberg" follows.
+- **Inferred:** the timer started earlier, since it showed more than 126 s at planting. Its
+  start value, start event, failure and retry (2005) are unseen.
+
+**Death, exit and Alia Das**
+- **Observed:** the death hospital list offers only "Refugee Base Medic" with a 5-minute
+  countdown. **Measured:** respawn in a tent at (358.9, 157.0).
+- The exit is hidden by a cut.
+- **Observed at Alia Das:** the character is level 4 with PM 663, "You just gained Alia Das
+  Hospital.", the Wilderness channel joins, 1995 shown as "(complete)" (not yet turned in) and a
+  Training Day Headquarters offer.
+- **Measured:** the first frame is at (884.1, 347.8), heading 318. **Inferred:** this is not
+  proven to be the spawn point.
+
+### What stays open
+
+- **Hidden or unseen:**
+  - every NPC, crate, dummy, bomb and wreck class or id;
+  - all conversations after 1990;
+  - the 1992 Lightning objective and turn-in;
+  - the 1994 cave-in trigger and Tizzik Gi;
+  - Conrad, the bomb pickup, the timer start, failure and retry;
+  - the exit trigger and transport;
+  - the 1995 turn-in;
+  - Getting It In Gear;
+  - enemy spawn and loot tables, the skip path, instancing, and audio.
+- **Power Logos:** Lightning is on the ability bar from arrival, and the 1634 moment only
+  highlights it. No recording shows how or when the Power Logos is granted, and nothing in them
+  supports a chat-visible `LogosStoneAdded` at the Eloh moment. Lightning is therefore still not
+  granted without that evidence (open owner decision).
+- Footage values enter the reconstruction only through `docs/evidence` with their tier, citation
+  and uncertainty; see the evidence-bounded reconstruction policy in `AGENTS.md`.

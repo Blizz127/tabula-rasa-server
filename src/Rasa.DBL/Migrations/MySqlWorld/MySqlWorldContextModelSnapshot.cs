@@ -41,6 +41,422 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("armorclass");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.ContentAreaEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<double>("HalfHeight")
+                        .HasColumnType("double")
+                        .HasColumnName("half_height");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("double")
+                        .HasColumnName("radius");
+
+                    b.Property<byte>("Shape")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("shape");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("content_area");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentConditionEntry", b =>
+                {
+                    b.Property<uint>("ConditionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("condition_id");
+
+                    b.Property<byte>("OrGroup")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("or_group");
+
+                    b.Property<byte>("TermIndex")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("term_index");
+
+                    b.Property<string>("FactKey")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("fact_key");
+
+                    b.Property<byte>("Kind")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("kind");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<bool>("Negate")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("negate");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("State")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("state");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int")
+                        .HasColumnName("value");
+
+                    b.HasKey("ConditionId", "OrGroup", "TermIndex");
+
+                    b.ToTable("content_condition");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentItemSetEntry", b =>
+                {
+                    b.Property<uint>("ItemSetId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_set_id");
+
+                    b.Property<uint>("ItemTemplateId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_template_id");
+
+                    b.Property<uint>("Quantity")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("ItemSetId", "ItemTemplateId");
+
+                    b.ToTable("content_item_set");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentLocationEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<byte>("Purpose")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("purpose");
+
+                    b.Property<double>("Rotation")
+                        .HasColumnType("double")
+                        .HasColumnName("rotation");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("content_location");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentMapSettingEntry", b =>
+                {
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<byte>("Instancing")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("instancing");
+
+                    b.HasKey("MapContextId");
+
+                    b.ToTable("content_map_setting");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentPlacementEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("AlternateState")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("alternate_state");
+
+                    b.Property<uint>("AlternateStateConditionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("alternate_state_condition_id");
+
+                    b.Property<byte>("Behavior")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("behavior");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("CreatureId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("creature_id");
+
+                    b.Property<uint>("EntityClassId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("entity_class_id");
+
+                    b.Property<uint>("FuseMs")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("fuse_ms");
+
+                    b.Property<uint>("HitPoints")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("hit_points");
+
+                    b.Property<uint>("InitialState")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("initial_state");
+
+                    b.Property<byte>("Kind")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("kind");
+
+                    b.Property<uint>("LootItemSetId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("loot_item_set_id");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<uint>("NameOverrideId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("name_override_id");
+
+                    b.Property<uint>("NpcPackageId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("npc_package_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<uint>("PresentConditionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("present_condition_id");
+
+                    b.Property<uint>("RespawnMs")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("respawn_ms");
+
+                    b.Property<uint>("RestoreMs")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("restore_ms");
+
+                    b.Property<double>("Rotation")
+                        .HasColumnType("double")
+                        .HasColumnName("rotation");
+
+                    b.Property<uint>("UsableConditionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("usable_condition_id");
+
+                    b.Property<byte>("UsableKind")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("usable_kind");
+
+                    b.Property<uint>("WindupMs")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("windup_ms");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("content_placement");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentRuleActionEntry", b =>
+                {
+                    b.Property<uint>("RuleId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("rule_id");
+
+                    b.Property<byte>("Sequence")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("sequence");
+
+                    b.Property<byte>("Action")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("action");
+
+                    b.Property<uint>("AudioSetId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("audio_set_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<int>("Credits")
+                        .HasColumnType("int")
+                        .HasColumnName("credits");
+
+                    b.Property<uint>("Experience")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("experience");
+
+                    b.Property<string>("FactKey")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("fact_key");
+
+                    b.Property<int>("FactValue")
+                        .HasColumnType("int")
+                        .HasColumnName("fact_value");
+
+                    b.Property<bool>("Forced")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("forced");
+
+                    b.Property<uint>("GreetingId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("greeting_id");
+
+                    b.Property<uint>("ItemSetId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_set_id");
+
+                    b.Property<uint>("LocationId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("location_id");
+
+                    b.Property<uint>("LogosId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("logos_id");
+
+                    b.Property<byte>("LogosProtocol")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("logos_protocol");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("NpcNameId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("npc_name_id");
+
+                    b.Property<uint>("PlacementId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("placement_id");
+
+                    b.Property<uint>("StateId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("state_id");
+
+                    b.Property<uint>("TutorialId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("tutorial_id");
+
+                    b.HasKey("RuleId", "Sequence");
+
+                    b.ToTable("content_rule_action");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.ContentRuleEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("AreaId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("area_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("ConditionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("condition_id");
+
+                    b.Property<byte>("Event")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("event");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("PlacementId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("placement_id");
+
+                    b.Property<uint>("StateId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("state_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("content_rule");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.CreatureActionEntry", b =>
                 {
                     b.Property<uint>("Id")
@@ -741,6 +1157,74 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("npc_mission");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveBindingEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<byte>("BindingId")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("binding_id");
+
+                    b.Property<uint>("ActionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("action_id");
+
+                    b.Property<uint>("AreaId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("area_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<byte>("CounterId")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("counter_id");
+
+                    b.Property<uint>("CreatureId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("creature_id");
+
+                    b.Property<bool>("DestroyingHitOnly")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("destroying_hit_only");
+
+                    b.Property<byte>("EquipMatch")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("equip_match");
+
+                    b.Property<uint>("ItemSetId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_set_id");
+
+                    b.Property<uint>("ItemTemplateId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_template_id");
+
+                    b.Property<byte>("Kind")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("kind");
+
+                    b.Property<uint>("PlacementId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("placement_id");
+
+                    b.Property<uint>("TargetState")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("target_state");
+
+                    b.HasKey("MissionId", "ObjectiveId", "BindingId");
+
+                    b.ToTable("npc_mission_objective_binding");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveConversationEntry", b =>
                 {
                     b.Property<uint>("MissionId")
@@ -762,6 +1246,33 @@ namespace Rasa.Migrations.MySqlWorld
                     b.HasKey("MissionId", "ObjectiveId", "NpcPackageId", "PlayerFlagId");
 
                     b.ToTable("npc_mission_objective_conversation");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveCounterEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<byte>("CounterId")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("counter_id");
+
+                    b.Property<int>("InitialValue")
+                        .HasColumnType("int")
+                        .HasColumnName("initial_value");
+
+                    b.Property<int>("TargetValue")
+                        .HasColumnType("int")
+                        .HasColumnName("target_value");
+
+                    b.HasKey("MissionId", "ObjectiveId", "CounterId");
+
+                    b.ToTable("npc_mission_objective_counter");
                 });
 
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveEntry", b =>
@@ -796,6 +1307,72 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("npc_mission_objective");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveIndicatorEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<byte>("IndicatorIndex")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("indicator_index");
+
+                    b.Property<uint>("IndicatorId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("indicator_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("double")
+                        .HasColumnName("radius");
+
+                    b.Property<bool>("Show3d")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("show_3d");
+
+                    b.HasKey("MissionId", "ObjectiveId", "IndicatorIndex");
+
+                    b.ToTable("npc_mission_objective_indicator");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveTimerEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("LimitSeconds")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("limit_seconds");
+
+                    b.Property<byte>("OnExpire")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("on_expire");
+
+                    b.HasKey("MissionId", "ObjectiveId");
+
+                    b.ToTable("npc_mission_objective_timer");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveTransitionEntry", b =>
                 {
                     b.Property<uint>("MissionId")
@@ -813,6 +1390,34 @@ namespace Rasa.Migrations.MySqlWorld
                     b.HasKey("MissionId", "CompletedObjectiveId", "RevealedObjectiveId");
 
                     b.ToTable("npc_mission_objective_transition");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionPrerequisiteEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<byte>("OrGroup")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("or_group");
+
+                    b.Property<uint>("RequiredMissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("required_mission_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<byte>("RequiredState")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("required_state");
+
+                    b.HasKey("MissionId", "OrGroup", "RequiredMissionId");
+
+                    b.ToTable("npc_mission_prerequisite");
                 });
 
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionRewardEntry", b =>

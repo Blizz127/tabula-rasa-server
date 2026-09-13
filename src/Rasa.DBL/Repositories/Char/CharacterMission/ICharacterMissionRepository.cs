@@ -13,5 +13,8 @@ namespace Rasa.Repositories.Char.CharacterMission
         void UpdateState(uint characterId, uint missionId, uint missionState, uint changeTime);
         void UpdateObjectiveStatus(uint characterId, uint missionId, uint objectiveId, uint status);
         void Delete(uint characterId, uint missionId);
+        List<CharacterMissionObjectiveCounterEntry> GetCounters(uint characterId);
+        void UpsertCounter(uint characterId, uint missionId, uint objectiveId, byte counterId, int value);
+        void SetObjectiveTimer(uint characterId, uint missionId, uint objectiveId, long? remainingMs, long? anchorMs, bool disarmed);
     }
 }

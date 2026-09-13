@@ -200,6 +200,11 @@ namespace Rasa.Managers
             return DynamicObjects[entityId];
         }
 
+        internal bool TryGetObject(ulong entityId, out DynamicObject dynamicObject)
+        {
+            return DynamicObjects.TryGetValue(entityId, out dynamicObject);
+        }
+
         public void RegisterDynamicObject(DynamicObject dynamicObject)
         {
             DynamicObjects.Add(dynamicObject.EntityId, dynamicObject);

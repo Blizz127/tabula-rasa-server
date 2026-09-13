@@ -35,6 +35,8 @@ namespace Rasa.Context.Char
         public DbSet<CharacterLogosEntry> CharacterLogosEntries { get; set; }
         public DbSet<CharacterMissionEntry> CharacterMissionEntries { get; set; }
         public DbSet<CharacterMissionObjectiveEntry> CharacterMissionObjectiveEntries { get; set; }
+        public DbSet<CharacterMissionObjectiveCounterEntry> CharacterMissionObjectiveCounterEntries { get; set; }
+        public DbSet<CharacterContentFactEntry> CharacterContentFactEntries { get; set; }
         public DbSet<CharacterOptionEntry> CharacterOptionEntries { get; set; }
         public DbSet<CharacterSkillsEntry> CharacterSkillsEntries { get; set; }
         public DbSet<CharacterTeleporterEntry> CharacterTeleporterEntries { get; set; }
@@ -251,6 +253,10 @@ namespace Rasa.Context.Char
                 .HasKey(e => new { e.CharacterId, e.MissionId });
             modelBuilder.Entity<CharacterMissionObjectiveEntry>()
                 .HasKey(e => new { e.CharacterId, e.MissionId, e.ObjectiveId });
+            modelBuilder.Entity<CharacterMissionObjectiveCounterEntry>()
+                .HasKey(e => new { e.CharacterId, e.MissionId, e.ObjectiveId, e.CounterId });
+            modelBuilder.Entity<CharacterContentFactEntry>()
+                .HasKey(e => new { e.CharacterId, e.MapContextId, e.FactKey });
         }
 
         private void SetupCharacterSkillTable(ModelBuilder modelBuilder)

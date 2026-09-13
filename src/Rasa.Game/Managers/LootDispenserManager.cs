@@ -120,7 +120,9 @@ namespace Rasa.Managers
 
         internal void RequestLootAllFromCorpse(Client client, RequestLootAllFromCorpsePacket packet)
         {
-            var loot = client.Player.MapChannel.LootDispensers[packet.EntityId];
+            // The corpse can be gone (despawned or already emptied) by the time the request arrives.
+            if (!client.Player.MapChannel.LootDispensers.TryGetValue(packet.EntityId, out var loot))
+                return;
 
             if (loot.Owner != client.Player.EntityId)
                 return;

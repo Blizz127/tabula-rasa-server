@@ -21,6 +21,7 @@ namespace Rasa
     using Repositories.Char.Character;
     using Repositories.Char.CharacterAbilityDrawer;
     using Repositories.Char.CharacterAppearance;
+    using Repositories.Char.CharacterContentFact;
     using Repositories.Char.CharacterInventory;
     using Repositories.Char.CharacterLockbox;
     using Repositories.Char.CharacterLogos;
@@ -39,6 +40,7 @@ namespace Rasa
     using Repositories.Char.UserOption;
     using Repositories.UnitOfWork;
     using Repositories.World;
+    using Repositories.World.MissionContent;
 
     public class GameProgram
     {
@@ -102,6 +104,7 @@ namespace Rasa
             services.AddScoped<ICharacterLockboxRepository, CharacterLockboxRepository>();
             services.AddScoped<ICharacterLogosRepository, CharacterLogosRepository>();
             services.AddScoped<ICharacterMissionRepository, CharacterMissionRepository>();
+            services.AddScoped<ICharacterContentFactRepository, CharacterContentFactRepository>();
             services.AddScoped<ICharacterOptionRepository, CharacterOptionRepository>();
             services.AddScoped<ICharacterSkillsRepository, CharacterSkillsRepository>();
             services.AddScoped<ICharacterTeleporterRepository, CharacterTeleporterRepository>();
@@ -122,6 +125,7 @@ namespace Rasa
             services.AddScoped<IFootlockerRepository, FootlockerRepository>();
             services.AddScoped<ILogosRepository, LogosRepository>();
             services.AddScoped<IMapInfoRepository, MapInfoRepository>();
+            services.AddScoped<IMissionContentRepository, MissionContentRepository>();
             services.AddScoped<INpcMissionRepository, NpcMissionRepository>();
             services.AddScoped<INpcMissionObjectiveRepository, NpcMissionObjectiveRepository>();
             services.AddScoped<INpcMissionRewardRepository, NpcMissionRewardRepository>();

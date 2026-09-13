@@ -259,7 +259,7 @@ namespace Rasa.Test.Reconstruction
         {
             CollectionAssert.AreEquivalent(new[]
             {
-                "map_info", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
+                "map_info", "content_map_setting", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
                 "content_item_set", "content_location"
@@ -286,12 +286,26 @@ namespace Rasa.Test.Reconstruction
                 .Select(p => p.GetCustomAttribute<ColumnAttribute>()?.Name)
                 .Where(n => n != null);
 
-            foreach (var (table, entity) in new[] { ("creature", typeof(CreatureEntry)), ("map_info", typeof(MapInfoEntry)) })
+            var entities = new[]
             {
+                typeof(CreatureEntry), typeof(MapInfoEntry), typeof(ContentMapSettingEntry), typeof(NpcMissionPrerequisiteEntry),
+                typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
+                typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
+                typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry)
+            };
+
+            foreach (var entity in entities)
+            {
+                var table = entity.GetCustomAttribute<TableAttribute>().Name;
                 Assert.IsTrue(ProvenanceRegistry.Default.TryGet(table, out var provenance), table);
-                foreach (var column in Columns(entity))
+                var columns = Columns(entity).ToList();
+                foreach (var column in columns)
                     Assert.AreNotEqual(ColumnRole.Unknown, provenance.RoleOf(column), $"{table}.{column} is not classified in ProvenanceRegistry");
+                foreach (var column in provenance.AllColumns)
+                    CollectionAssert.Contains(columns, column, $"{table}.{column} is registered but has no column");
             }
+
+            Assert.AreEqual(entities.Length, ProvenanceRegistry.Default.Tables.Count, "a registered table has no entity");
         }
     }
 }

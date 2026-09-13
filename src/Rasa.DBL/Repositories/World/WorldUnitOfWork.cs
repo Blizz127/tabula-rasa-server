@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Rasa.Repositories.World
 {
     using Context.World;
+    using MissionContent;
     using UnitOfWork;
 
     public class WorldUnitOfWork : UnitOfWork, IWorldUnitOfWork
@@ -15,6 +16,7 @@ namespace Rasa.Repositories.World
             IFootlockerRepository footlockerRepository,
             ILogosRepository logosRepository,
             IMapInfoRepository mapInfoRepository,
+            IMissionContentRepository missionContentRepository,
             INpcMissionRepository npcMissionRepository,
             INpcMissionObjectiveRepository npcMissionObjectiveRepository,
             INpcMissionRewardRepository npcMissionRewardRepository,
@@ -30,6 +32,7 @@ namespace Rasa.Repositories.World
             Footlockers = footlockerRepository;
             Logoses = logosRepository;
             MapInfos = mapInfoRepository;
+            MissionContent = missionContentRepository;
             NpcMissions = npcMissionRepository;
             NpcMissionObjectives = npcMissionObjectiveRepository;
             NpcMissionRewards = npcMissionRewardRepository;
@@ -45,6 +48,7 @@ namespace Rasa.Repositories.World
         public IFootlockerRepository Footlockers { get; }
         public ILogosRepository Logoses { get; }
         public IMapInfoRepository MapInfos { get; }
+        public IMissionContentRepository MissionContent { get; }
         public INpcMissionRepository NpcMissions { get; }
         public INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         public INpcMissionRewardRepository NpcMissionRewards { get; }

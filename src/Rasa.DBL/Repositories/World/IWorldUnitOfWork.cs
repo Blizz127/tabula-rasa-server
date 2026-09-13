@@ -1,5 +1,6 @@
 namespace Rasa.Repositories.World
 {
+    using MissionContent;
     using UnitOfWork;
 
     public interface IWorldUnitOfWork : IUnitOfWork
@@ -10,6 +11,7 @@ namespace Rasa.Repositories.World
         IFootlockerRepository Footlockers { get; }
         ILogosRepository Logoses { get; }
         IMapInfoRepository MapInfos { get; }
+        IMissionContentRepository MissionContent { get; }
         INpcMissionRepository NpcMissions { get; }
         INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         INpcMissionRewardRepository NpcMissionRewards { get; }

@@ -39,5 +39,24 @@ namespace Rasa.Structures.Char
         [Column("status")]
         [Required]
         public uint Status { get; set; }
+
+        /// <summary>
+        /// Milliseconds left on a running objective timer when it was last folded; null when untimed.
+        /// </summary>
+        [Column("timer_remaining_ms")]
+        public long? TimerRemainingMs { get; set; }
+
+        /// <summary>
+        /// Unix milliseconds when the running timer was anchored; null while paused or untimed.
+        /// </summary>
+        [Column("timer_anchor_ms")]
+        public long? TimerAnchorMs { get; set; }
+
+        /// <summary>
+        /// Set when the timer can no longer expire (for example a bomb has been planted).
+        /// </summary>
+        [Column("timer_disarmed")]
+        [Required]
+        public bool TimerDisarmed { get; set; }
     }
 }

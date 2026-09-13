@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +22,11 @@ namespace Rasa.Repositories.Char.CharacterLogos
             var entries = query.Where(e => e.CharacterId == characterId).Select(e => e.LogosId).ToList();
 
             return entries;
+        }
+
+        public void Stage(uint characterId, uint logosId)
+        {
+            _charContext.CharacterLogosEntries.Add(new CharacterLogosEntry(characterId, logosId));
         }
 
         public void SetLogos(uint characterId, uint logosId)

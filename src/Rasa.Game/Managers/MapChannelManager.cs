@@ -61,6 +61,11 @@ namespace Rasa.Managers
             return MapChannelArray[contextId];
         }
 
+        public bool TryFindByContextId(uint contextId, out MapChannel mapChannel)
+        {
+            return MapChannelArray.TryGetValue(contextId, out mapChannel);
+        }
+
         public Dictionary<int, AbilityDrawerData> GetPlayerAbilities(uint characterId)
         {
             var abilities = new Dictionary<int, AbilityDrawerData>();

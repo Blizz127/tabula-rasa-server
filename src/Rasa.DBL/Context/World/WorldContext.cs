@@ -24,6 +24,14 @@ namespace Rasa.Context.World
             _dbContextPropertyModifier = dbContextPropertyModifier;
         }
         public DbSet<ArmorClassEntry> ArmorClassEntries { get; set; }
+        public DbSet<ContentAreaEntry> ContentAreaEntries { get; set; }
+        public DbSet<ContentConditionEntry> ContentConditionEntries { get; set; }
+        public DbSet<ContentItemSetEntry> ContentItemSetEntries { get; set; }
+        public DbSet<ContentLocationEntry> ContentLocationEntries { get; set; }
+        public DbSet<ContentMapSettingEntry> ContentMapSettingEntries { get; set; }
+        public DbSet<ContentPlacementEntry> ContentPlacementEntries { get; set; }
+        public DbSet<ContentRuleEntry> ContentRuleEntries { get; set; }
+        public DbSet<ContentRuleActionEntry> ContentRuleActionEntries { get; set; }
         public DbSet<CreatureEntry> CreatureEntries { get; set; }
         public DbSet<CreatureActionEntry> CreatureActionEntries { get; set; }
         public DbSet<CreatureAppearanceEntry> CreatureAppearanceEntries { get; set; }
@@ -45,6 +53,11 @@ namespace Rasa.Context.World
         public DbSet<MapInfoEntry> MapInfoEntries { get; set; }
         public DbSet<NpcMissionEntry> NpcMissionEntries { get; set; }
         public DbSet<NpcMissionObjectiveEntry> NpcMissionObjectiveEntries { get; set; }
+        public DbSet<NpcMissionObjectiveBindingEntry> NpcMissionObjectiveBindingEntries { get; set; }
+        public DbSet<NpcMissionObjectiveCounterEntry> NpcMissionObjectiveCounterEntries { get; set; }
+        public DbSet<NpcMissionObjectiveIndicatorEntry> NpcMissionObjectiveIndicatorEntries { get; set; }
+        public DbSet<NpcMissionObjectiveTimerEntry> NpcMissionObjectiveTimerEntries { get; set; }
+        public DbSet<NpcMissionPrerequisiteEntry> NpcMissionPrerequisiteEntries { get; set; }
         public DbSet<NpcMissionObjectiveConversationEntry> NpcMissionObjectiveConversationEntries { get; set; }
         public DbSet<NpcMissionObjectiveTransitionEntry> NpcMissionObjectiveTransitionEntries { get; set; }
         public DbSet<NpcMissionRewardEntry> NpcMissionRewardEntries { get; set; }
@@ -67,6 +80,27 @@ namespace Rasa.Context.World
             SetupRandomName(modelBuilder);
             SetupItemTemplateItemClass(modelBuilder);
             SetupNpcMissionObjectives(modelBuilder);
+            SetupMissionContent(modelBuilder);
+        }
+
+        private void SetupMissionContent(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<NpcMissionPrerequisiteEntry>()
+                .HasKey(e => new { e.MissionId, e.OrGroup, e.RequiredMissionId });
+            modelBuilder.Entity<NpcMissionObjectiveBindingEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.BindingId });
+            modelBuilder.Entity<NpcMissionObjectiveCounterEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.CounterId });
+            modelBuilder.Entity<NpcMissionObjectiveTimerEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId });
+            modelBuilder.Entity<NpcMissionObjectiveIndicatorEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.IndicatorIndex });
+            modelBuilder.Entity<ContentConditionEntry>()
+                .HasKey(e => new { e.ConditionId, e.OrGroup, e.TermIndex });
+            modelBuilder.Entity<ContentRuleActionEntry>()
+                .HasKey(e => new { e.RuleId, e.Sequence });
+            modelBuilder.Entity<ContentItemSetEntry>()
+                .HasKey(e => new { e.ItemSetId, e.ItemTemplateId });
         }
 
         private void SetupNpcMissionObjectives(ModelBuilder modelBuilder)

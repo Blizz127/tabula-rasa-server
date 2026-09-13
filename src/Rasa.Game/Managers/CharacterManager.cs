@@ -279,7 +279,8 @@ namespace Rasa.Managers
                 packet.CharacterName,
                 (byte)packet.RaceId,
                 packet.Scale,
-                packet.Gender);
+                packet.Gender,
+                MissionContentManager.Instance.NewCharacterStart(client.AccountEntry.Id));
             if (characterEntry == null)
             {
                 SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);

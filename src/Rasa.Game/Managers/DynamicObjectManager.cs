@@ -64,7 +64,12 @@ namespace Rasa.Managers
 
         internal void RequestUseObjectPacket(Client client, RequestUseObjectPacket packet)
         {
-            var obj = EntityManager.Instance.GetObject(packet.EntityId);
+            // The client can name an entity that was removed after it was introduced.
+            if (!EntityManager.Instance.TryGetObject(packet.EntityId, out var obj))
+            {
+                Logger.WriteLog(LogType.Debug, $"RequestUseObjectPacket: unknown entity {packet.EntityId}");
+                return;
+            }
 
             switch (obj.DynamicObjectType)
             {

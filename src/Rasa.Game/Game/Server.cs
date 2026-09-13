@@ -186,6 +186,7 @@ namespace Rasa.Game
             MapChannelManager.Instance.MapChannelInit();
             ClanManager.Instance.ClansInit();
             DynamicObjectManager.Instance.InitDynamicObjects();
+            MissionContentManager.Instance.Load(() => Config?.GameDataConfig?.Bootcamp);
             MapTriggerManager.Instance.MapTriggerInit();
 
             return true;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,11 @@ namespace Rasa.Repositories.Char.CharacterInventory
         public CharacterInventoryRepository(CharContext charContext)
         {
             _charContext = charContext;
+        }
+
+        public void StageInvItem(uint accountId, uint characterId, uint inventoryType, uint slotId, uint itemId)
+        {
+            _charContext.CharacterInventoryEntries.Add(new CharacterInventoryEntry(accountId, characterId, inventoryType, slotId, itemId));
         }
 
         public void AddInvItem(uint accountId, uint characterId, uint inventoryType, uint slotId, uint itemId)

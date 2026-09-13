@@ -64,7 +64,7 @@ namespace Rasa.Test
                 var context = Context(_connection);
                 return new CharUnitOfWork(context, null, null, new CharacterRepository(context),
                     null, null, null, null, null, null, null, null, null, null, null, null,
-                    null, null, null, null, null);
+                    null, null, null, null, null, null);
             }
             public IWorldUnitOfWork CreateWorld() => throw new InvalidOperationException();
         }

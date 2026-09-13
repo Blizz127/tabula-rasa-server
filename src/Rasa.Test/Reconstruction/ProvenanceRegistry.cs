@@ -61,8 +61,8 @@ namespace Rasa.Test.Reconstruction
 
     /// <summary>
     /// Per-table column classification for the reconstruction tables of build plan
-    /// section 1.3 (the eleven new content tables, <c>map_info.instancing</c> and the
-    /// reserved <c>creature</c> rows). The manifest validator uses it for the analogue
+    /// section 1.3 (the new content tables, including <c>content_map_setting</c>, which replaced the plan's
+    /// <c>map_info.instancing</c> column, and the reserved <c>creature</c> rows). The manifest validator uses it for the analogue
     /// rule: an analogue is allowed only in a registered required column. Later
     /// segments extend this registry together with their migrations.
     /// </summary>
@@ -86,12 +86,19 @@ namespace Rasa.Test.Reconstruction
 
         public static readonly ProvenanceRegistry Default = new ProvenanceRegistry(new[]
         {
-            // Existing table; build plan section 1.3 adds instancing (0 shared, 1 per_character).
+            // Existing table.
             new TableProvenance("map_info",
                 keys: Cols("map_context_id"),
-                required: Cols("map_name", "map_version", "base_region", "instancing"),
+                required: Cols("map_name", "map_version", "base_region"),
                 optional: Cols(),
                 storage: Cols()),
+
+            // Replaces the plan's map_info.instancing: the world seed migration reflects map_info's columns.
+            new TableProvenance("content_map_setting",
+                keys: Cols("map_context_id"),
+                required: Cols("instancing"),
+                optional: Cols(),
+                storage: Cols("comment")),
 
             // Existing table; reserved boot-camp ids 198500-198599. action1..8: 0 = no action.
             new TableProvenance("creature",
@@ -156,11 +163,11 @@ namespace Rasa.Test.Reconstruction
                 optional: Cols(),
                 storage: Cols()),
 
-            // Filters mission_id, objective_id, area_id, placement_id: 0 = any; condition_id: 0 = always.
+            // Filters mission_id, objective_id, area_id, placement_id, state_id: 0 = any; condition_id: 0 = always.
             new TableProvenance("content_rule",
                 keys: Cols("id"),
                 required: Cols("event"),
-                optional: Cols("mission_id", "objective_id", "area_id", "placement_id", "condition_id"),
+                optional: Cols("mission_id", "objective_id", "area_id", "placement_id", "state_id", "condition_id"),
                 storage: Cols("map_context_id", "comment")),
 
             // Typed action columns; the loader enforces required and forbidden columns per action.
@@ -183,7 +190,7 @@ namespace Rasa.Test.Reconstruction
                 keys: Cols("id"),
                 required: Cols("purpose", "map_context_id", "pos_x", "pos_y", "pos_z", "rotation"),
                 optional: Cols(),
-                storage: Cols())
+                storage: Cols("comment"))
         });
     }
 }

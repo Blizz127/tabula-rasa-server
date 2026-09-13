@@ -30,6 +30,8 @@ namespace Rasa.Structures
         // Same order as RewardInfo.SelectableReward, which the client's selectionIdx indexes.
         public List<NpcMissionRewardEntry> OfferedSelectableRewards { get; } = new();
         public List<string> RewardGaps { get; } = new();
+        // Withheld reconstructed-content rows of this mission (MissionContentManager.Load).
+        public List<string> ContentGaps { get; } = new();
 
         public Mission(NpcMissionEntry mission)
         {
@@ -108,6 +110,7 @@ namespace Rasa.Structures
                 gaps.Add("mission sharing is not implemented");
 
             gaps.AddRange(RewardGaps);
+            gaps.AddRange(ContentGaps);
 
             return gaps;
         }

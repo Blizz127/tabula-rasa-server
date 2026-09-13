@@ -3,10 +3,12 @@ using System.Collections.Generic;
 namespace Rasa.Repositories.Char.Character
 {
     using Structures.Char;
+    using Structures.World;
 
     public interface ICharacterRepository
     {
-        CharacterEntry Create(GameAccountEntry account, byte slot, string characterName, byte race, double scale, byte gender);
+        // start: where the character first enters the world; null keeps the default Wilderness start.
+        CharacterEntry Create(GameAccountEntry account, byte slot, string characterName, byte race, double scale, byte gender, ContentLocationEntry start = null);
         CharacterEntry Get(uint id);
         IDictionary<byte, CharacterEntry> GetByAccountId(uint accountEntryId);
         CharacterEntry GetByAccountId(uint accountEntryId, byte slot);
@@ -20,6 +22,8 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterExpirience(uint id, uint experience);
         void UpdateCharacterRewards(uint id, int credits, int prestige, uint experience);
         void UpdateCharacterLevel(uint id, byte level);
+        // Staged: committed by the unit of work.
+        void StageLevel(uint id, byte level);
         void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins);
         void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId);
         void UpdateCharacterActiveWeapon(uint id, byte activeWeapon);

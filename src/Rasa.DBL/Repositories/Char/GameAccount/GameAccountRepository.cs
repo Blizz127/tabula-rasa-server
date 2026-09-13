@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 
@@ -78,6 +78,12 @@ namespace Rasa.Repositories.Char.GameAccount
         {
             var entry = _charContext.GetWritableEnsuring(_charContext.GameAccountEntries, id);
             entry.SelectedSlot = selectedSlot;
+        }
+
+        public void StageCanSkipBootcamp(uint id, bool canSkip)
+        {
+            var entry = _charContext.GetWritableEnsuring(_charContext.GameAccountEntries, id);
+            entry.CanSkipBootcamp = canSkip;
         }
 
         public void UpdateAccountLevel(uint id, byte level)

@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 
 namespace Rasa.Repositories.Char.GameAccount
 {
@@ -21,5 +21,8 @@ namespace Rasa.Repositories.Char.GameAccount
         void UpdateSelectedSlot(uint id, byte selectedSlot);
 
         void UpdateAccountLevel(uint id, byte level);
+
+        // Staged: committed by the unit of work.
+        void StageCanSkipBootcamp(uint id, bool canSkip);
     }
 }

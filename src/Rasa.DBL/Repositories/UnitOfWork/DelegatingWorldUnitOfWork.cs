@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Rasa.Repositories.UnitOfWork
 {
     using World;
+    using World.MissionContent;
 
     public class DelegatingWorldUnitOfWork : DelegatingUnitOfWorkBase, IWorldUnitOfWork
     {
@@ -24,6 +25,8 @@ namespace Rasa.Repositories.UnitOfWork
         public ILogosRepository Logoses => _parent.Logoses;
 
         public IMapInfoRepository MapInfos => _parent.MapInfos;
+
+        public IMissionContentRepository MissionContent => _parent.MissionContent;
 
         public INpcMissionRepository NpcMissions => _parent.NpcMissions;
 

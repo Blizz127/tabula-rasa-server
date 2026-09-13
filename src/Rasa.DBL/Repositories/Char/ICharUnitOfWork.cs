@@ -1,7 +1,8 @@
-﻿namespace Rasa.Repositories.Char
+namespace Rasa.Repositories.Char
 {
     using Character;
     using CharacterAppearance;
+    using CharacterContentFact;
     using CharacterSkills;
     using Clan;
     using ClanInventory;
@@ -30,6 +31,7 @@
         ICharacterRepository Characters { get; }
         ICharacterAbilityDrawerRepository CharacterAbilityDrawers { get; }
         ICharacterAppearanceRepository CharacterAppearances { get; }
+        ICharacterContentFactRepository CharacterContentFacts { get; }
         ICharacterInventoryRepository CharacterInventories { get; }
         ICharacterLockboxRepository CharacterLockboxes { get; }
         ICharacterLogosRepository CharacterLogoses { get; }

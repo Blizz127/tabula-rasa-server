@@ -80,6 +80,33 @@ namespace Rasa.Migrations.SqliteChar
                     b.ToTable("character_appearance");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.Char.CharacterContentFactEntry", b =>
+                {
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("character_id");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<string>("FactKey")
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("fact_key");
+
+                    b.Property<uint>("ChangeTime")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("change_time");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("value");
+
+                    b.HasKey("CharacterId", "MapContextId", "FactKey");
+
+                    b.ToTable("character_content_fact");
+                });
+
             modelBuilder.Entity("Rasa.Structures.Char.CharacterEntry", b =>
                 {
                     b.Property<uint>("Id")
@@ -312,6 +339,33 @@ namespace Rasa.Migrations.SqliteChar
                     b.ToTable("character_mission");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.Char.CharacterMissionObjectiveCounterEntry", b =>
+                {
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("character_id");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("objective_id");
+
+                    b.Property<byte>("CounterId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("counter_id");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("value");
+
+                    b.HasKey("CharacterId", "MissionId", "ObjectiveId", "CounterId");
+
+                    b.ToTable("character_mission_objective_counter");
+                });
+
             modelBuilder.Entity("Rasa.Structures.Char.CharacterMissionObjectiveEntry", b =>
                 {
                     b.Property<uint>("CharacterId")
@@ -329,6 +383,18 @@ namespace Rasa.Migrations.SqliteChar
                     b.Property<uint>("Status")
                         .HasColumnType("INTEGER")
                         .HasColumnName("status");
+
+                    b.Property<long?>("TimerAnchorMs")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("timer_anchor_ms");
+
+                    b.Property<bool>("TimerDisarmed")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("timer_disarmed");
+
+                    b.Property<long?>("TimerRemainingMs")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("timer_remaining_ms");
 
                     b.HasKey("CharacterId", "MissionId", "ObjectiveId");
 

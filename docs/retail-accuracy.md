@@ -1101,3 +1101,94 @@ Rollback: retag `rasa_net:before-retail-missionlog-20260913` as
 `rasa_net:latest` and recreate game alone with `--no-deps --no-build`. The
 previous image ignores the added column and tables; a database restore is
 needed only to remove them.
+
+## 2026-09-13 UTC — Boot-camp reconstruction foundations (S0) and verified footage
+
+This deployment adds the data layer for reconstructing lost boot-camp server content under the
+user's evidence-bounded reconstruction decision (`AGENTS.md`). It changes nothing visible: every
+new table is empty, and nothing that could use it is implemented yet.
+
+**What was added**
+- **World tables** for mission prerequisites, objective bindings, counters, timers and
+  indicators, plus content areas, placements, conditions, rules (with filters, including a
+  placement-state filter), rule actions, item sets, locations and per-context map settings.
+- **Character storage** for objective timers and counters and per-character content facts.
+- **Staged character writes**, committed only through the unit of work.
+- **A content validator that fails closed:**
+  - It withholds any row with a bad reference, an invented column, an unimplemented mechanic,
+    a usable kind with no recovered client state machine, a client-posted tutorial id, a rule
+    cycle, or an offer of a mission that cannot be offered.
+  - A withheld row withholds everything that references it.
+  - A mission with a withheld row is not offered.
+  - Startup logs every gap. This build implements none of the mechanics, so any seeded row
+    would be withheld.
+- **Boot-camp entry switch** (`GameDataConfig.Bootcamp`, default `Disabled`). Character creation
+  consults it, but until the boot camp can run end to end it always gives the existing Wilderness
+  start.
+- **Lookup fixes:** use and loot requests that name an object which no longer exists are now
+  ignored instead of throwing.
+
+The plan's `map_info.instancing` column became a separate `content_map_setting` table, because
+the world seed migration reflects `map_info`'s columns.
+
+The machine-readable evidence contract is in commit `7ac7639`:
+- manifest schema;
+- boot-camp manifest with sources, reserved key ranges, gap register and open owner decisions;
+- empty positions and footage-event files;
+- validator, provenance registry and a SQLite/MySQL seed-parity harness, with one rejecting
+  fixture per rule.
+
+**Footage**
+- Three original recordings supplied by the owner were transcribed frame by frame, with every key
+  event independently re-verified (246 checked, 0 refuted), and matched against the client radar
+  maps.
+- Player chat dates the main session to about 2009-02-26, so it shows the final live boot camp.
+- Findings, tags and remaining gaps are in [boot-camp evidence](bootcamp-client-evidence.md#2026-09-13-verified-footage-what-three-original-recordings-establish).
+- Nothing from the footage is seeded yet.
+
+**Review**
+- An independent review found no startup or gameplay change with empty tables. It confirmed
+  defects in staged writes after a delete, several fail-open validator paths, cycle detection
+  that could miss members, and tests that could not catch propagation or entry-gate regressions.
+- All were fixed. A focused re-review confirmed the fixes, and its three low-severity findings
+  (orphan counters after a delete, untested propagation lines, a stale provenance registry)
+  were fixed and tested before deployment.
+
+**Schema and migrations**
+- Generated with dotnet-ef 5.0.1:
+  - SQLite and MySQL `MissionContentLayer` (world, `20260913180618`/`20260913180640`);
+  - `MissionContentRuntimeState` (character, `20260913180522`/`20260913180550`).
+- On a disposable MySQL 8.4.11 server:
+  - legacy mission rows (including state 4294967295) and the seeded world rows survived upgrade,
+    rollback and reapply;
+  - no content key auto-increments, and an explicit id 0 is kept;
+  - rollback drops the new tables and their rows, as designed.
+- The SQLite scripts were dry-run on copies of the live databases: integrity ok, and every
+  existing table was byte-identical.
+- Records: `/home/blizz/backups/rasa-net/research/20260913-bootcamp/content-migrations/`.
+
+**Image and tests**
+- The .NET 5 image built from a clean context with zero errors and the same five existing
+  warnings.
+- **All 753 tests passed** in the image (634 existing, 91 evidence contract, 28 new), with no
+  failures or skips and no network.
+- The image's `src` and `docs/evidence` matched the reviewed tree.
+
+**Deployment**
+- Image `sha256:5ac800497000a21d739c1ab4dd263be5efb653f2d7e63e89ec9778ebabdeec56` started game at
+  **18:43:36 UTC**, authenticated with auth at 18:43:46 and was ready at **18:43:48 UTC**.
+- The log shows "Loaded 0 content rules (0 content rows, 0 gaps)" and "Boot camp entry:
+  Disabled".
+- Mission 321/429 gap lines are unchanged.
+- Verification at **18:43:54 UTC** found zero restarts, no error/unhandled/fatal/OOM lines, both
+  migrations applied, and auth's image and start time unchanged.
+- After startup the live character and world databases differed from the fresh backups only in
+  migration history and the new empty tables. Auth was unchanged, and all three passed integrity
+  checks.
+
+Backups, configuration, reviewed source and docs, logs and the table comparison are in
+`/home/blizz/backups/rasa-net/20260913T184328Z-retail-content-s0/`.
+
+**Rollback:** retag `rasa_net:before-retail-content-s0-20260913` as `rasa_net:latest` and recreate
+game alone with `--no-deps --no-build`. The previous image ignores the added columns and tables.
+A database restore is needed only to remove them.

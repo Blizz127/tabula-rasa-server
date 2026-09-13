@@ -7,6 +7,7 @@ namespace Rasa.Repositories.Char.Character
 {
     using Context.Char;
     using Structures.Char;
+    using Structures.World;
 
     public class CharacterRepository : ICharacterRepository
     {
@@ -23,7 +24,7 @@ namespace Rasa.Repositories.Char.Character
             _charContext = charContext;
         }
 
-        public CharacterEntry Create(GameAccountEntry account, byte slot, string characterName, byte race, double scale, byte gender)
+        public CharacterEntry Create(GameAccountEntry account, byte slot, string characterName, byte race, double scale, byte gender, ContentLocationEntry start = null)
         {
             var entry = new CharacterEntry
             {
@@ -34,12 +35,12 @@ namespace Rasa.Repositories.Char.Character
                 Scale = scale,
                 Gender = gender,
                 Class = 1,
-                MapContextId = DefaultMapContextId,
+                MapContextId = start?.MapContextId ?? DefaultMapContextId,
                 RunState = DefaultRunState,
-                CoordX = DefaultCoordX,
-                CoordY = DefaultCoordY,
-                CoordZ = DefaultCoordZ,
-                Rotation = 0
+                CoordX = start?.PosX ?? DefaultCoordX,
+                CoordY = start?.PosY ?? DefaultCoordY,
+                CoordZ = start?.PosZ ?? DefaultCoordZ,
+                Rotation = start?.Rotation ?? 0
             };
 
             try
@@ -186,6 +187,16 @@ namespace Rasa.Repositories.Char.Character
             entry.Credit = credits;
             entry.Prestige = prestige;
             entry.Experience = experience;
+        }
+
+        public void StageLevel(uint id, byte level)
+        {
+            var entry = _charContext.CharacterEntries.Find(id);
+
+            if (entry == null)
+                throw new KeyNotFoundException($"character {id} does not exist");
+
+            entry.Level = level;
         }
 
         public void UpdateCharacterLevel(uint id, byte level)

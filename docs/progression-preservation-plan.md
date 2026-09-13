@@ -61,6 +61,16 @@ the final-live rule.
   incomplete definitions are withheld. See
   [mission research](mission-research.md#mission-log-protocol-and-persistence--2026-09-13).
 
+- Three original recordings, the main one dated by player chat to the final week before shutdown,
+  were transcribed, independently verified and matched against the client radar maps. They give
+  measured positions for the arrival point, the Initiation trigger areas and the first NPCs and
+  objects, and the observed rewards of the first missions. See
+  [verified footage](bootcamp-client-evidence.md#2026-09-13-verified-footage-what-three-original-recordings-establish).
+- The server has the data layer for labelled reconstruction (S0 of the boot-camp build plan): content
+  rows are validated and withheld unless every mechanic they need exists, and a new-character entry
+  switch defaults to the Wilderness start. No boot-camp content is seeded; the owner decisions for the
+  first slice (entry rollout, tutorial tip, Power Logos grant, stand-in NPC classes) are open.
+
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),
 [character progression](character-progression-client-evidence.md), and

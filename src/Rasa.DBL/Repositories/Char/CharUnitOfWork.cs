@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -6,6 +6,7 @@ namespace Rasa.Repositories.Char
 {
     using Character;
     using CharacterAppearance;
+    using CharacterContentFact;
     using Clan;
     using ClanInventory;
     using ClanMember;
@@ -42,6 +43,7 @@ namespace Rasa.Repositories.Char
             ICharacterLockboxRepository characterLockboxes,
             ICharacterLogosRepository characterLogoses,
             ICharacterMissionRepository characterMissions,
+            ICharacterContentFactRepository characterContentFacts,
             ICharacterOptionRepository characterOptions,
             ICharacterSkillsRepository characterSkills,
             ICharacterTeleporterRepository characterTeleporters,
@@ -65,6 +67,7 @@ namespace Rasa.Repositories.Char
             CharacterLockboxes = characterLockboxes;
             CharacterLogoses = characterLogoses;
             CharacterMissions = characterMissions;
+            CharacterContentFacts = characterContentFacts;
             CharacterOptions = characterOptions;
             CharacterSkills = characterSkills;
             CharacterTeleporters = characterTeleporters;
@@ -89,6 +92,7 @@ namespace Rasa.Repositories.Char
         public ICharacterLockboxRepository CharacterLockboxes { get; }
         public ICharacterLogosRepository CharacterLogoses { get; }
         public ICharacterMissionRepository CharacterMissions { get; }
+        public ICharacterContentFactRepository CharacterContentFacts { get; }
         public ICharacterOptionRepository CharacterOptions { get; }
         public ICharacterSkillsRepository CharacterSkills { get; }
         public ICharacterTeleporterRepository CharacterTeleporters { get; }
