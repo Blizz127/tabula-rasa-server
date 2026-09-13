@@ -65,8 +65,26 @@ namespace Rasa.Repositories.Char.Character
         public IDictionary<byte, CharacterEntry> GetByAccountId(uint accountEntryId)
         {
             var query = CreateCharacterQuery();
-            var characters = query.Where(e => e.AccountId == accountEntryId);
-            return characters.ToDictionary(c => c.Slot, c => c);
+            var characters = query.Where(e => e.AccountId == accountEntryId).OrderBy(e => e.Id);
+
+            // Not ToDictionary: that throws on a duplicate slot, and this runs inside the login
+            // handler, so one bad row used to disconnect the account at every login. Rows written
+            // before the slot check and the unique index can still be duplicated; the oldest
+            // character keeps the pod and the rest are reported so they can be moved by hand.
+            var bySlot = new Dictionary<byte, CharacterEntry>();
+
+            foreach (var character in characters)
+            {
+                if (bySlot.TryAdd(character.Slot, character))
+                    continue;
+
+                Logger.WriteLog(LogType.Error,
+                    $"Account {accountEntryId} has more than one character in slot {character.Slot}; "
+                    + $"character {character.Id} ({character.Name}) is hidden behind {bySlot[character.Slot].Id}. "
+                    + "Move it to a free slot: UPDATE `character` SET slot = <n> WHERE id = " + character.Id + ";");
+            }
+
+            return bySlot;
         }
 
         public CharacterEntry GetByAccountId(uint accountEntryId, byte slot)

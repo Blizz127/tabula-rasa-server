@@ -187,10 +187,47 @@ namespace Rasa.Managers
 
         public void RequestCreateCharacterInSlot(Client client, RequestCreateCharacterInSlotPacket packet)
         {
+            // The selection screen is the only place the client sends this from. Nothing else here
+            // is safe against a create that arrives while a character is loaded: the new row is
+            // written, the account entry is reloaded under a live manifestation, and the caller
+            // has no reason to be anywhere but the pod screen.
+            if (client.State != ClientState.CharacterSelection)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to create a character while in state {client.State}.");
+
+                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
+                return;
+            }
+
             var result = packet.Validate();
             if (result != CreateCharacterResult.Success)
             {
                 SendCharacterCreateFailed(client, result);
+                return;
+            }
+
+            // The pods are 1..MaxSelectionPods. The packet used to take any byte, and the row was
+            // inserted with whatever it said: slot 0 or 17+ made a character no pod ever shows and
+            // no switch can reach, which still counted for the family-name lock and "has
+            // characters"; a second character in an occupied slot was worse, because character
+            // selection keys the account's characters by slot and threw on the duplicate at every
+            // login from then on, locking the account out until someone edited the table.
+            if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to create a character in slot {packet.SlotNum}.");
+
+                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
+                return;
+            }
+
+            // AccountEntry.Characters is reloaded after every create and delete, and an account
+            // can only be logged in once, so this is current. The unique index on
+            // (account_id, slot) is the backstop if it ever is not.
+            if (client.AccountEntry.GetCharacterBySlot(packet.SlotNum) != null)
+            {
+                SendCharacterCreateFailed(client, CreateCharacterResult.CharacterSlotInUse);
                 return;
             }
 

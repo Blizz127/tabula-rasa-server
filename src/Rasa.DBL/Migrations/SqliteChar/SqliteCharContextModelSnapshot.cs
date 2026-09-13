@@ -223,6 +223,9 @@ namespace Rasa.Migrations.SqliteChar
 
                     b.HasIndex(new[] { "AccountId" }, "character_index_account");
 
+                    b.HasIndex(new[] { "AccountId", "Slot" }, "character_index_account_slot")
+                        .IsUnique();
+
                     b.ToTable("character");
                 });
 
