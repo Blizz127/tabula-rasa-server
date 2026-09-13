@@ -530,7 +530,7 @@
         [PacketHandler(GameOpcode.GotoMob)]
         private void GotoMob(GotoMobPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: GotoMobPacket");
+            CommunicatorManager.Instance.GotoMob(Client, packet);
         }
 
         [PacketHandler(GameOpcode.GuildChat)]

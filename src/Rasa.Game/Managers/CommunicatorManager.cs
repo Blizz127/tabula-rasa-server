@@ -12,6 +12,7 @@ namespace Rasa.Managers
     using Packets.Protocol;
     using Packets.Communicator.Server;
     using Packets.MapChannel.Server;
+    using Rasa.Models;
     using Structures;
 
     public class CommunicatorManager
@@ -636,6 +637,95 @@ namespace Rasa.Managers
                 // The socket is already going; the disconnect it was explaining still happens.
                 Logger.WriteLog(LogType.Network, $"Could not deliver a fatal error to a closing connection: {e.Message}");
             }
+        }
+
+        /// <summary>
+        /// /gotomob &lt;name&gt; - put the caller next to the nearest creature of that name on this map.
+        ///
+        /// The client does the naming half: communicator.GotoMob walks its own creature name
+        /// table, sends the name id that matches what was typed exactly, and a list of the ones
+        /// that contain it as a whole word. So the server never sees the text as a name, only
+        /// ids to look for among the creatures actually standing on the map.
+        /// </summary>
+        public void GotoMob(Client client, GotoMobPacket packet)
+        {
+            // The client only offers the command to a GM, but the client does not get to decide
+            // that: this is a teleport, and the packet can be sent by anything.
+            if (client?.AccountEntry == null || client.AccountEntry.Level < (byte)GmLevel.GameMaster)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client?.AccountEntry?.Id} (level {client?.AccountEntry?.Level}) sent GotoMob, which needs {(byte)GmLevel.GameMaster}");
+
+                SystemMessage(client, "Unknown command.");
+                return;
+            }
+
+            var mapChannel = client.Player?.MapChannel;
+
+            if (mapChannel == null)
+                return;
+
+            var from = client.Player.Position;
+
+            // An exact name beats every partial one outright, however far away it is: someone
+            // who typed the whole name meant that creature. Only if none is on the map do the
+            // partial matches get a turn, and then it is whichever is nearest.
+            var found = packet.ExactMobNameId.HasValue
+                ? NearestCreature(mapChannel, from, id => id == packet.ExactMobNameId.Value)
+                : null;
+
+            found ??= packet.PartialMobNameIds.Count > 0
+                ? NearestCreature(mapChannel, from, id => packet.PartialMobNameIds.Contains(id))
+                : null;
+
+            if (found == null)
+            {
+                SystemMessage(client, $"Nothing called \"{packet.ArgString}\" is on this map right now.");
+                return;
+            }
+
+            // Beside it rather than inside it. Two metres back along the line the caller came
+            // from, or just to one side when they are already standing on top of it.
+            var offset = from - found.Position;
+
+            offset = offset.Length() > 0.1f
+                ? Vector3.Normalize(offset) * 2f
+                : new Vector3(2f, 0f, 0f);
+
+            var destination = found.Position + offset;
+
+            client.MoveObject(client.Player.EntityId, new Movement(destination, client.Movement?.ViewDirection ?? new Vector2(0f, 0f)));
+
+            SystemMessage(client,
+                $"{found.Name} ({found.EntityId}), {Vector3.Distance(from, found.Position):0} m away.");
+        }
+
+        private static Creature NearestCreature(MapChannel mapChannel, Vector3 from, Func<uint, bool> wanted)
+        {
+            Creature nearest = null;
+            var nearestDistance = float.MaxValue;
+
+            foreach (var cell in mapChannel.MapCellInfo.Cells.Values)
+                foreach (var creature in cell.CreatureList)
+                {
+                    if (creature == null || !wanted(creature.NameId))
+                        continue;
+
+                    // A corpse is not somewhere to be sent; it is about to stop existing.
+                    if (creature.State == CharacterState.Dead
+                        || (creature.Attributes.TryGetValue(Attributes.Health, out var health) && health.Current <= 0))
+                        continue;
+
+                    var distance = Vector3.Distance(from, creature.Position);
+
+                    if (distance >= nearestDistance)
+                        continue;
+
+                    nearest = creature;
+                    nearestDistance = distance;
+                }
+
+            return nearest;
         }
 
         #endregion
