@@ -11,12 +11,42 @@ namespace Rasa.Data
     public static class MissionContentRules
     {
         /// <summary>
-        /// What this server build implements. Empty in S0: every reconstructed row is withheld.
+        /// What this server build implements. S1 (boot-camp Initiation) adds the mechanics its mission 1990
+        /// rows need: area-entered objective bindings, the entered_map / mission_accepted / objective_completed
+        /// / mission_turned_in events, the radio offer, forced greeting, tutorial and Logos actions, the
+        /// mission/objective state conditions, and stationary creature placements. Every other kind stays
+        /// withheld (fail closed).
         /// </summary>
-        public static readonly ContentCapabilities Implemented = new ContentCapabilities();
+        public static readonly ContentCapabilities Implemented = new ContentCapabilities
+        {
+            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered },
+            Events = new HashSet<ContentRuleEvent>
+            {
+                ContentRuleEvent.EnteredMap,
+                ContentRuleEvent.MissionAccepted,
+                ContentRuleEvent.ObjectiveCompleted,
+                ContentRuleEvent.MissionTurnedIn
+            },
+            Actions = new HashSet<ContentRuleAction>
+            {
+                ContentRuleAction.DispenseRadioMission,
+                ContentRuleAction.ForceConverseGreeting,
+                ContentRuleAction.TutorialNotification,
+                ContentRuleAction.GrantLogos
+            },
+            ConditionKinds = new HashSet<ContentConditionKind>
+            {
+                ContentConditionKind.MissionAbsent,
+                ContentConditionKind.MissionStateIs,
+                ContentConditionKind.ObjectiveStateIs
+            },
+            PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature },
+            PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary }
+        };
 
-        // New characters enter the boot camp only once its entry path (S1) and exit transfer (S6) exist.
-        public static readonly bool BootcampEntryImplemented = false;
+        // The entry path (S1) exists; new characters may enter the boot camp once a live start location is
+        // seeded and the operational switch is moved off Disabled.
+        public static readonly bool BootcampEntryImplemented = true;
 
         // Server-side cascades (a rule action raising another rule's event) stop at this depth.
         public const int MaxRuleCascadeDepth = 8;

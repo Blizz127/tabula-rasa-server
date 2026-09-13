@@ -47,6 +47,10 @@ namespace Rasa.Structures
         public List<uint> PlayerFlags { get; set; } = new();
         public DateTime LoginTime { get; set; }
         public List<uint> Logos = new();
+        // Radio missions offered in this session and not yet accepted (MissionManager.DispenseRadioMission).
+        public HashSet<uint> PendingRadioOffers { get; } = new();
+        // Last position tested against content areas, per context (MissionContentManager.DoWork).
+        public (uint MapContextId, System.Numerics.Vector3 Position)? LastContentSample { get; set; }
         public ulong TrackingTargetEntityId { get; set; }
         public byte ActiveWeapon { get; set; }
         public List<CharacterTeleporterEntry> GainedWaypoints = new();

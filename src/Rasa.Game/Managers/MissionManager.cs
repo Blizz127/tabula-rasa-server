@@ -13,6 +13,7 @@ namespace Rasa.Managers
     using Repositories.UnitOfWork;
     using Structures;
     using Structures.Char;
+    using Structures.Content;
     using Structures.World;
 
     /// <summary>
@@ -52,6 +53,15 @@ namespace Rasa.Managers
 
         // Installed by NpcManager so NPC overhead markers follow a player's mission state.
         public Action<Client, Creature> ConversationStatusRefresher { get; set; }
+
+        private MissionContentManager _content;
+
+        // Reconstructed-content rules that react to mission events (the server's singleton by default).
+        public MissionContentManager Content
+        {
+            get => _content ?? MissionContentManager.Instance;
+            set => _content = value;
+        }
 
         public static MissionManager Instance
         {
@@ -376,23 +386,70 @@ namespace Rasa.Managers
             if (!definition.IsDispensable || definition.MissionGiver != creature.DbId || !IsInConversationRange(player, creature))
                 return;
 
-            // Active, or already completed: the log keeps completed missions so they are not re-offered.
+            AcceptMission(client, definition);
+        }
+
+        /// <summary>
+        /// Offers a mission over the radio ("Headquarters"); the offer stays pending for this session until accepted.
+        /// </summary>
+        public void DispenseRadioMission(Client client, uint missionId, bool forced)
+        {
+            if (!IsInWorld(client) || !LoadedMissions.TryGetValue(missionId, out var definition) || !definition.IsDispensable)
+                return;
+
+            var player = client.Player;
+
             if (player.Missions.ContainsKey(missionId))
                 return;
+
+            player.PendingRadioOffers.Add(missionId);
+            client.CallMethod(player.EntityId, new DispenseRadioMissionPacket(missionId, definition, forced));
+        }
+
+        public void AssignRadioMission(Client client, uint missionId)
+        {
+            if (!IsInWorld(client))
+                return;
+
+            var player = client.Player;
+
+            // Only a mission this session was offered over the radio can be accepted that way.
+            if (!player.PendingRadioOffers.Contains(missionId) || !LoadedMissions.TryGetValue(missionId, out var definition) || !definition.IsDispensable)
+                return;
+
+            if (AcceptMission(client, definition))
+                player.PendingRadioOffers.Remove(missionId);
+        }
+
+        private bool AcceptMission(Client client, Mission definition)
+        {
+            var player = client.Player;
+            var missionId = definition.MissionId;
+
+            // Active, or already completed: the log keeps completed missions so they are not re-offered.
+            if (player.Missions.ContainsKey(missionId))
+                return false;
 
             // The client counts the entries it was sent, i.e. missions with definitions.
             // It shows its own ID_MISSION_MAX_COUNT_REACHED warning; the server
             // refuses silently because the original reply is unrecovered.
             if (player.Missions.Values.Count(mission => mission.IsInLog && LoadedMissions.ContainsKey(mission.MissionId)) >= MissionRules.MaxMissionCount)
             {
-                Logger.WriteLog(LogType.Debug, $"AssignNpcMission: mission log of character {player.Id} is full");
-                return;
+                Logger.WriteLog(LogType.Debug, $"AcceptMission: mission log of character {player.Id} is full");
+                return false;
             }
 
             var newMission = new PlayerMission { MissionId = missionId, State = MissionState.Active, ChangeTime = _now() };
 
             foreach (var objective in definition.Objectives.Values.Where(objective => objective.RevealedOnAccept))
                 newMission.Objectives[objective.ObjectiveId] = MissionObjectiveState.Incomplete;
+
+            var state = new ContentState(player);
+            state.PlanMission(missionId, MissionState.Active);
+            foreach (var objective in newMission.Objectives)
+                state.PlanObjective(missionId, objective.Key, objective.Value);
+
+            var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.MissionAccepted, player.MapContextId, missionId), state);
 
             try
             {
@@ -401,18 +458,22 @@ namespace Rasa.Managers
                 unitOfWork.CharacterMissions.Add(
                     new CharacterMissionEntry(player.Id, missionId, (uint)newMission.State, newMission.ChangeTime),
                     newMission.Objectives.Select(objective => new CharacterMissionObjectiveEntry(player.Id, missionId, objective.Key, (uint)objective.Value)));
+                Content.Stage(reaction, unitOfWork, player, state);
                 unitOfWork.Complete();
             }
             catch (Exception e)
             {
-                Logger.WriteLog(LogType.Error, $"AssignNpcMission: could not save mission {missionId} for character {player.Id}");
+                Logger.WriteLog(LogType.Error, $"AcceptMission: could not save mission {missionId} for character {player.Id}");
                 Logger.WriteLog(LogType.Error, e);
-                return;
+                return false;
             }
 
             player.Missions[missionId] = newMission;
             client.CallMethod(player.EntityId, new MissionGainedPacket(missionId, newMission.ToMissionInfo(definition)));
+            Content.Apply(client, reaction);
+            Content.Present(client, reaction);
             RefreshRelatedNpcStatus(client, definition);
+            return true;
         }
 
         public void CompleteNpcObjective(Client client, ulong npcEntityId, uint missionId, uint objectiveId, uint playerFlagId)
@@ -437,6 +498,37 @@ namespace Rasa.Managers
             if (!IsInConversationRange(player, creature))
                 return;
 
+            CommitObjectiveProgress(client, definition, mission, objectiveId);
+        }
+
+        /// <summary>
+        /// Completes an objective through one of its content bindings (area, use, kill...), once.
+        /// </summary>
+        public void CompleteBoundObjective(Client client, uint missionId, uint objectiveId, ObjectiveBindingKind kind)
+        {
+            if (!IsInWorld(client) || !LoadedMissions.TryGetValue(missionId, out var definition))
+                return;
+
+            if (!client.Player.Missions.TryGetValue(missionId, out var mission) || mission.State != MissionState.Active)
+                return;
+
+            if (!mission.Objectives.TryGetValue(objectiveId, out var status) || status != MissionObjectiveState.Incomplete)
+                return;
+
+            if (!definition.Bindings.Any(binding => binding.ObjectiveId == objectiveId && binding.Kind == (byte)kind))
+                return;
+
+            CommitObjectiveProgress(client, definition, mission, objectiveId);
+        }
+
+        /// <summary>
+        /// Completes a validated incomplete objective: its reveals and the content reactions commit together,
+        /// then memory and the client follow in the client's expected order.
+        /// </summary>
+        private void CommitObjectiveProgress(Client client, Mission definition, PlayerMission mission, uint objectiveId)
+        {
+            var player = client.Player;
+            var missionId = definition.MissionId;
             var revealed = new List<uint>();
 
             if (definition.Transitions.TryGetValue(objectiveId, out var next))
@@ -447,6 +539,13 @@ namespace Rasa.Managers
             var changeTime = _now();
             var wasCompleteable = mission.IsCompleteable(definition);
 
+            var state = new ContentState(player);
+            state.PlanObjective(missionId, objectiveId, MissionObjectiveState.Completed);
+            foreach (var revealedId in revealed)
+                state.PlanObjective(missionId, revealedId, MissionObjectiveState.Incomplete);
+
+            var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.ObjectiveCompleted, player.MapContextId, missionId, objectiveId), state);
+
             try
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
@@ -455,11 +554,12 @@ namespace Rasa.Managers
                 foreach (var revealedId in revealed)
                     unitOfWork.CharacterMissions.AddObjective(new CharacterMissionObjectiveEntry(player.Id, missionId, revealedId, (uint)MissionObjectiveState.Incomplete));
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)mission.State, changeTime);
+                Content.Stage(reaction, unitOfWork, player, state);
                 unitOfWork.Complete();
             }
             catch (Exception e)
             {
-                Logger.WriteLog(LogType.Error, $"CompleteNpcObjective: could not save objective {missionId}/{objectiveId} for character {player.Id}");
+                Logger.WriteLog(LogType.Error, $"CommitObjectiveProgress: could not save objective {missionId}/{objectiveId} for character {player.Id}");
                 Logger.WriteLog(LogType.Error, e);
                 return;
             }
@@ -479,6 +579,8 @@ namespace Rasa.Managers
             foreach (var revealedId in revealed)
                 client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition)));
 
+            Content.Apply(client, reaction);
+            Content.Present(client, reaction);
             RefreshRelatedNpcStatus(client, definition);
         }
 
@@ -531,6 +633,10 @@ namespace Rasa.Managers
 
             var changeTime = _now();
 
+            var state = new ContentState(player);
+            state.PlanMission(missionId, MissionState.Completed);
+            var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.MissionTurnedIn, player.MapContextId, missionId), state);
+
             try
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
@@ -540,6 +646,7 @@ namespace Rasa.Managers
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)MissionState.Completed, changeTime);
                 if (credits != 0 || prestige != 0 || experience != 0)
                     unitOfWork.Characters.UpdateCharacterRewards(player.Id, (int)newCredits, (int)newPrestige, (uint)newExperience);
+                Content.Stage(reaction, unitOfWork, player, state);
                 unitOfWork.Complete();
             }
             catch (Exception e)
@@ -573,6 +680,8 @@ namespace Rasa.Managers
             client.CallMethod(player.EntityId, new MissionCompletedPacket(missionId));
             client.CallMethod(player.EntityId, new MissionRewardedPacket(missionId));
 
+            Content.Apply(client, reaction);
+            Content.Present(client, reaction);
             RefreshRelatedNpcStatus(client, definition);
         }
 
@@ -590,11 +699,16 @@ namespace Rasa.Managers
             if (MissionRules.NonAbandonableMissions.Contains(missionId))
                 return;
 
+            var state = new ContentState(player);
+            state.PlanMission(missionId, null);
+            var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.MissionAbandoned, player.MapContextId, missionId), state);
+
             try
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
                 unitOfWork.CharacterMissions.Delete(player.Id, missionId);
+                Content.Stage(reaction, unitOfWork, player, state);
                 unitOfWork.Complete();
             }
             catch (Exception e)
@@ -606,6 +720,8 @@ namespace Rasa.Managers
 
             player.Missions.Remove(missionId);
             client.CallMethod(player.EntityId, new MissionDiscardedPacket(missionId));
+            Content.Apply(client, reaction);
+            Content.Present(client, reaction);
 
             if (LoadedMissions.TryGetValue(missionId, out var definition))
                 RefreshRelatedNpcStatus(client, definition);

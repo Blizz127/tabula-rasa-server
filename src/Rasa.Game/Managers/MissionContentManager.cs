@@ -15,7 +15,7 @@ namespace Rasa.Managers
     /// mission rows that bind objectives to them). Content with a gap is withheld; a context or
     /// mission without content rows keeps today's behaviour.
     /// </summary>
-    public class MissionContentManager
+    public partial class MissionContentManager
     {
         private static MissionContentManager _instance;
         private static readonly object InstanceLock = new object();
@@ -70,6 +70,13 @@ namespace Rasa.Managers
                 mission.ContentGaps.Clear();
 
             Content = catalog.Validate(references, capabilities);
+            BuildRuntime(missions);
+
+            // A shared context holds its placements for the life of the server; per-character channels
+            // materialize their own when they are created (a later slice).
+            foreach (var mapChannel in MapChannelManager.Instance.MapChannelArray.Values)
+                if (Content.Catalog.InstancingFor(mapChannel.MapInfo?.MapContextId ?? 0) == MapInstancing.Shared)
+                    ContentMaterializer.Materialize(mapChannel, Content);
 
             foreach (var gap in Content.Gaps)
                 Logger.WriteLog(LogType.Initialize, $"Content withheld: {gap}");

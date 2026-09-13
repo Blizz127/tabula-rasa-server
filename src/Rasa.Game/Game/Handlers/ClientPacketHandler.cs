@@ -44,11 +44,14 @@ namespace Rasa.Game.Handlers
             NpcManager.Instance.AssignNPCMission(Client, packet);
         }
 
-        // Radio and shared missions are not implemented; definitions using them are
-        // never offered. The requests are decoded so they cannot disconnect a client.
         [PacketHandler(GameOpcode.AssignRadioMission)]
-        private void AssignRadioMission(AssignRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+        private void AssignRadioMission(AssignRadioMissionPacket packet)
+        {
+            MissionManager.Instance.AssignRadioMission(Client, packet.MissionId);
+        }
 
+        // Shared missions and radio completion are not implemented; definitions using them are
+        // never offered. The requests are decoded so they cannot disconnect a client.
         [PacketHandler(GameOpcode.AssignSharedMission)]
         private void AssignSharedMission(AssignSharedMissionPacket packet) => IgnoreMissionRequest(packet);
 

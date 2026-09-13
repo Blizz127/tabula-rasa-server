@@ -12,6 +12,7 @@ namespace Rasa.Managers
     using Packets.MapChannel.Server;
     using Repositories.UnitOfWork;
     using Structures;
+    using Structures.World;
 
 
     public class CreatureManager
@@ -149,6 +150,53 @@ namespace Rasa.Managers
 
         public Creature CreateCreature(uint dbId, SpawnPool spawnPool)
         {
+            var creature = CreateFromTemplate(dbId);
+
+            if (creature == null)
+                return null;
+
+            creature.SpawnPool = spawnPool;
+
+            creature.Controller.CurrentAction = BehaviorManager.BehaviorActionWander;
+            creature.Controller.ActionWander.State = BehaviorManager.WanderIdle; //wanderstate: calc new position
+
+            if (spawnPool != null)
+                SpawnPoolManager.Instance.IncreaseAliveCreatureCount(spawnPool);
+
+            return creature;
+        }
+
+        /// <summary>
+        /// A stationary creature from reconstructed content: the template's stats, no spawn pool, no
+        /// wander action, standing at the placement's exact position. The caller adds it to the channel
+        /// with <see cref="CellManager.AddToWorld(MapChannel, Creature)"/>.
+        /// </summary>
+        public Creature CreatePlacedCreature(ContentPlacementEntry placement, MapChannel mapChannel)
+        {
+            if (mapChannel?.MapInfo == null || mapChannel.MapInfo.MapContextId != placement.MapContextId)
+            {
+                Logger.WriteLog(LogType.Error, $"Content placement {placement.Id} belongs to context {placement.MapContextId}, not the channel it was materialized into");
+                return null;
+            }
+
+            var creature = CreateFromTemplate(placement.CreatureId);
+
+            if (creature == null)
+            {
+                Logger.WriteLog(LogType.Error, $"Content placement {placement.Id}: creature {placement.CreatureId} could not be created");
+                return null;
+            }
+
+            // CurrentAction stays 0: BehaviorManager moves only wander/path/fight actions, so the
+            // placement stands where the content puts it.
+            SetLocation(creature, new Vector3((float)placement.PosX, (float)placement.PosY, (float)placement.PosZ),
+                placement.Rotation, placement.MapContextId);
+
+            return creature;
+        }
+
+        private Creature CreateFromTemplate(uint dbId)
+        {
             // check is creature in database
             if (!LoadedCreatures.ContainsKey(dbId))
             {
@@ -174,8 +222,6 @@ namespace Rasa.Managers
             // create creature
             var creatureEntry = LoadedCreatures[dbId];
             var creature = (Creature)creatureEntry.Clone();
-
-            creature.SpawnPool = spawnPool;
 
             creature.State = CharacterState.Idle;
             creature.Name = EntityClassManager.Instance.LoadedEntityClasses[creature.EntityClass].ClassName;
@@ -210,12 +256,6 @@ namespace Rasa.Managers
                 creature.Attributes.Add(Attributes.Speed, new ActorAttributes(Attributes.Speed, 1, 1, 1, 0, 0));
                 creature.Attributes.Add(Attributes.Regen, new ActorAttributes(Attributes.Regen, 0, 0, 0, 0, 0));
             }
-
-            creature.Controller.CurrentAction = BehaviorManager.BehaviorActionWander;
-            creature.Controller.ActionWander.State = BehaviorManager.WanderIdle; //wanderstate: calc new position
-
-            if (spawnPool != null)
-                SpawnPoolManager.Instance.IncreaseAliveCreatureCount(spawnPool);
 
             return creature;
         }

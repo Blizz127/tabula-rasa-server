@@ -18,6 +18,8 @@ namespace Rasa.Structures
         public uint MissionReciver { get; set; }
         public Dictionary<uint, MissionObjectiveDefinition> Objectives { get; } = new();
         public List<MissionObjectiveConversation> ObjectiveConversations { get; } = new();
+        // Live content bindings (MissionContentManager.Load): objective completion by area, use, kill and so on.
+        public List<NpcMissionObjectiveBindingEntry> Bindings { get; } = new();
         public Dictionary<uint, List<uint>> Transitions { get; } = new();
         public List<NpcMissionRewardEntry> Rewards { get; } = new();
 
@@ -85,7 +87,8 @@ namespace Rasa.Structures
                 gaps.Add("no required objective");
 
             foreach (var objective in ObjectivesInOrder)
-                if (!ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objective.ObjectiveId))
+                if (!ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objective.ObjectiveId) &&
+                    !Bindings.Any(binding => binding.ObjectiveId == objective.ObjectiveId))
                     gaps.Add($"objective {objective.ObjectiveId} has no completion binding");
 
             var reachable = new HashSet<uint>(Objectives.Values.Where(objective => objective.RevealedOnAccept).Select(objective => objective.ObjectiveId));

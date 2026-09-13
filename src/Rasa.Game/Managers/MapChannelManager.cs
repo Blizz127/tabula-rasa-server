@@ -176,6 +176,9 @@ namespace Rasa.Managers
                     // every 500 ms made effect durations and drain run too slowly.
                     GameEffectManager.Instance.DoWork(mapChannel, delta);
 
+                    // Area-bound mission objectives (no work in contexts without live content areas).
+                    MissionContentManager.Instance.DoWork(mapChannel);
+
                     // chack for player LogOut
                     foreach (var client in mapChannel.ClientList)
                         if (client != null)
@@ -215,6 +218,7 @@ namespace Rasa.Managers
                 client.CallMethod(SysEntity.ClientMethodId, new RequestMovementBlockPacket());
                 ManifestationManager.Instance.AssignPlayer(client);
                 MissionManager.Instance.SendMissionStatusInfo(client);
+                MissionContentManager.Instance.OnPlayerEnteredMap(client);
                 CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position);
                 CommunicatorManager.Instance.PlayerEnterMap(dropship.Client);
 
@@ -234,6 +238,7 @@ namespace Rasa.Managers
             CellManager.Instance.AddToWorld(client); // will introduce the player to all clients, including the current owner
             ManifestationManager.Instance.AssignPlayer(client);
             MissionManager.Instance.SendMissionStatusInfo(client);
+            MissionContentManager.Instance.OnPlayerEnteredMap(client);
 
             ClanManager.Instance.InitializePlayerClanData(client);
             InventoryManager.Instance.InitClanInventory(client);

@@ -61,12 +61,6 @@ namespace Rasa.Packets.MapChannel.Client
         }
     }
 
-    // (missionId,)
-    public class AssignRadioMissionPacket : UnsupportedMissionRequestPacket
-    {
-        public override GameOpcode Opcode { get; } = GameOpcode.AssignRadioMission;
-    }
-
     // (playerId, missionId)
     public class AssignSharedMissionPacket : UnsupportedMissionRequestPacket
     {

@@ -18,8 +18,9 @@ using Rasa.Structures.World;
 namespace Rasa.Test
 {
     /// <summary>
-    /// The boot-camp entry switch is an operational lever. Until the boot camp can run end to end,
-    /// every new character starts at the Wilderness start whatever the switch says.
+    /// The boot-camp entry switch is an operational lever. The entry path (S1) is implemented, so the
+    /// switch decides: Disabled and unlisted accounts still start in the Wilderness, everyone else at the
+    /// lowest live new-character start location.
     /// </summary>
     [TestClass]
     public class BootcampEntryGateTests
@@ -75,18 +76,17 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void NoModeSendsANewCharacterToTheBootcampBeforeItIsImplemented()
+        public void TheEntrySwitchIsHonouredOnceTheEntryPathIsImplemented()
         {
             var content = WithLocations();
+            var allowListed = new BootcampConfig { EntryMode = BootcampEntryMode.AllowListedAccounts, AccountIds = new uint[] { 10 } };
 
-            foreach (var config in new[]
-                     {
-                         new BootcampConfig(),
-                         new BootcampConfig { EntryMode = BootcampEntryMode.AllowListedAccounts, AccountIds = new uint[] { 10 } },
-                         new BootcampConfig { EntryMode = BootcampEntryMode.AllNewCharacters }
-                     })
-                Assert.IsNull(BootcampEntryGate.StartLocation(config, 10, content));
+            Assert.IsNull(BootcampEntryGate.StartLocation(new BootcampConfig(), 10, content));                       // Disabled
+            Assert.IsNull(BootcampEntryGate.StartLocation(allowListed, 20, content));                                // account not listed
+            Assert.AreEqual(900001u, BootcampEntryGate.StartLocation(allowListed, 10, content).Id);                  // listed
+            Assert.AreEqual(900001u, BootcampEntryGate.StartLocation(new BootcampConfig { EntryMode = BootcampEntryMode.AllNewCharacters }, 10, content).Id);
 
+            // The server's default switch is Disabled, so creating a character still starts in the Wilderness.
             Assert.IsNull(new MissionContentManager(null).NewCharacterStart(10));
         }
 

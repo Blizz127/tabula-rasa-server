@@ -196,9 +196,8 @@ namespace Rasa.Test
                     context.NpcMissionEntries.Add(new NpcMissionEntry { Id = 900100, GiverId = 7001, ReciverId = 7001, Level = 1, GroupType = 1, CategoryId = 1, Comment = "fixture" });
                     context.NpcMissionObjectiveEntries.Add(new NpcMissionObjectiveEntry { MissionId = 900100, ObjectiveId = 1, Ordinal = 1, IsRequired = true, RevealedOnAccept = true, Comment = "" });
                     context.NpcMissionObjectiveConversationEntries.Add(new NpcMissionObjectiveConversationEntry { MissionId = 900100, ObjectiveId = 1, NpcPackageId = 2584, PlayerFlagId = 1 });
-                    context.ContentAreaEntries.Add(new ContentAreaEntry { Id = 900600, MapContextId = 1985, Shape = (byte)ContentAreaShape.Sphere, Radius = 4 });
                     context.NpcMissionObjectiveBindingEntries.Add(new NpcMissionObjectiveBindingEntry
-                        { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.AreaEntered, AreaId = 900600, CounterId = 255 });
+                        { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Kill, CreatureId = 7002, CounterId = 255 });
                     context.SaveChanges();
                 }
 
@@ -212,12 +211,12 @@ namespace Rasa.Test
                 var content = new MissionContentManager(new Factory(connection));
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
 
-                Assert.AreEqual(2, content.Content.Catalog.RowCount);              // the area and the binding
-                CollectionAssert.AreEqual(new[] { "900100/1/0: binding kind AreaEntered is not implemented" },
+                Assert.AreEqual(1, content.Content.Catalog.RowCount);              // the binding
+                CollectionAssert.AreEqual(new[] { "900100/1/0: binding kind Kill is not implemented" },
                     Messages(content.Content, NpcMissionObjectiveBindingEntry.TableName));
                 Assert.IsFalse(missions.LoadedMissions[900100].IsDispensable);
                 CollectionAssert.Contains(missions.LoadedMissions[900100].DefinitionGaps(),
-                    "npc_mission_objective_binding 900100/1/0: binding kind AreaEntered is not implemented");
+                    "npc_mission_objective_binding 900100/1/0: binding kind Kill is not implemented");
                 Assert.AreEqual(0, content.Content.LiveBindings.Count());
 
                 // Reloading clears gaps from the previous load rather than accumulating them.
@@ -227,20 +226,38 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void NothingIsImplementedInFoundationsSoEveryKindFailsClosed()
+        public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            Assert.AreEqual(0, implemented.BindingKinds.Count);
-            Assert.AreEqual(0, implemented.Events.Count);
-            Assert.AreEqual(0, implemented.Actions.Count);
-            Assert.AreEqual(0, implemented.PlacementKinds.Count);
-            Assert.AreEqual(0, implemented.PlacementBehaviors.Count);
+            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[]
+            {
+                ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
+                ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn
+            }, implemented.Events.ToArray());
+            CollectionAssert.AreEquivalent(new[]
+            {
+                ContentRuleAction.DispenseRadioMission, ContentRuleAction.GrantLogos,
+                ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification
+            }, implemented.Actions.ToArray());
+            CollectionAssert.AreEquivalent(new[]
+            {
+                ContentConditionKind.MissionAbsent, ContentConditionKind.MissionStateIs, ContentConditionKind.ObjectiveStateIs
+            }, implemented.ConditionKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature }, implemented.PlacementKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());
             Assert.AreEqual(0, implemented.UsableKinds.Count);
-            Assert.AreEqual(0, implemented.ConditionKinds.Count);
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared }, implemented.Instancing.ToArray());
             Assert.IsFalse(implemented.Prerequisites || implemented.Counters || implemented.Timers || implemented.Indicators ||
                            implemented.PlacementRespawn || implemented.NpcPackageOverride);
-            Assert.IsFalse(MissionContentRules.BootcampEntryImplemented);
+            Assert.IsTrue(MissionContentRules.BootcampEntryImplemented);
+        }
+
+        [TestMethod]
+        public void EveryKindFailsClosedWhenItIsNotImplemented()
+        {
+            // An empty capability set: every mechanic is withheld, whatever the server implements.
+            var implemented = new ContentCapabilities();
 
             var rows = new Rows();
             rows.MapSettings.Add(new ContentMapSettingEntry { MapContextId = 1985, Instancing = (byte)MapInstancing.PerCharacter });
@@ -257,7 +274,7 @@ namespace Rasa.Test
             rows.Rules.Add(new ContentRuleEntry { Id = 9001, MapContextId = 1985, Event = (byte)ContentRuleEvent.EnteredMap });
             rows.Actions.Add(new ContentRuleActionEntry { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.SetAccountSkipBootcamp });
 
-            var validation = rows.Validate(MissionContentRules.Implemented);
+            var validation = rows.Validate(implemented);
 
             CollectionAssert.AreEquivalent(new[]
             {
@@ -692,6 +709,49 @@ namespace Rasa.Test
             AssertGap(validation, ContentRuleActionEntry.TableName, "9042/0", "unknown item set");
             Assert.AreEqual(0, validation.Catalog.ItemSets.Count);
             Assert.AreEqual(0, validation.Catalog.Conditions.Count);
+        }
+
+        [TestMethod]
+        public void S1InitiationRowsGoLiveWhileUnimplementedKindsStayWithheld()
+        {
+            var rows = new Rows();
+            // A mission-1990-shaped definition: an area-bound objective offered by the entered_map rule.
+            rows.Areas.Add(new ContentAreaEntry { Id = 900600, MapContextId = 1985, Shape = (byte)ContentAreaShape.Sphere, Radius = 4 });
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+                { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.AreaEntered, AreaId = 900600, CounterId = 255 });
+            rows.Conditions.Add(new ContentConditionEntry { ConditionId = 900900, Kind = (byte)ContentConditionKind.MissionAbsent, MissionId = 900100 });
+            rows.Rules.Add(new ContentRuleEntry { Id = 9001, MapContextId = 1985, Event = (byte)ContentRuleEvent.EnteredMap, ConditionId = 900900 });
+            rows.Actions.Add(new ContentRuleActionEntry { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.DispenseRadioMission, MissionId = 900100, Forced = true });
+            // A binding of a kind S1 does not implement must still be withheld.
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Kill, CreatureId = 7001, CounterId = 255 });
+
+            var validation = rows.Validate(MissionContentRules.Implemented);
+
+            CollectionAssert.AreEqual(new[] { "npc_mission_objective_binding 900200/1/0: binding kind Kill is not implemented" },
+                validation.MissionGaps[900200].ToArray());
+            Assert.AreEqual(0, validation.Gaps.Count(gap => gap.OwnerId == 900100), string.Join(" | ", validation.Gaps));
+            CollectionAssert.AreEqual(new uint[] { 9001 }, validation.LiveRules.Select(rule => rule.Id).ToArray());
+            Assert.AreEqual(1, validation.LiveBindings.Count());
+        }
+
+        [TestMethod]
+        public void MaterializerSelectsLiveCreaturePlacementsOfItsContextOnly()
+        {
+            var rows = new Rows();
+            rows.Placements.Add(new ContentPlacementEntry
+                { Id = 900650, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Creature, CreatureId = 7001, Behavior = (byte)ContentPlacementBehavior.Stationary });
+            rows.Placements.Add(new ContentPlacementEntry
+                { Id = 900651, MapContextId = 1220, Kind = (byte)ContentPlacementKind.Creature, CreatureId = 7001, Behavior = (byte)ContentPlacementBehavior.Stationary });
+            // Unknown creature: withheld even though its kind and behavior are implemented.
+            rows.Placements.Add(new ContentPlacementEntry
+                { Id = 900652, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Creature, CreatureId = 999999, Behavior = (byte)ContentPlacementBehavior.Stationary });
+
+            var validation = rows.Validate(MissionContentRules.Implemented);
+
+            CollectionAssert.AreEqual(new uint[] { 900650 },
+                ContentMaterializer.PlacementsToSpawn(validation, 1985).Select(placement => placement.Id).ToArray());
+            Assert.IsTrue(validation.WithheldPlacements.Any(id => id == 900652));
         }
     }
 }
