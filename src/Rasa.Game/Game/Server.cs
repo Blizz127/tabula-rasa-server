@@ -162,17 +162,24 @@ namespace Rasa.Game
             if (Clients.Count == 0)
                 return;
 
-            try
-            {
-                MapChannelManager.Instance.MapChannelWorker(delta);
-            }
-            catch (Exception e)
-            {
-                Logger.WriteLog(LogType.Error, $"Error in the map channel worker: {e}");
-            }
-
+            // The whole tick runs under the Clients lock, the map workers included. OnLogin
+            // adds to Clients from a socket thread under this lock, and the workers read the
+            // list without it - PartyManager.ExpireHeldMembers every tick, and every
+            // Server.Clients.Find reached from a queued action or a manager - so a login
+            // landing mid-tick could hand a Find a half-added slot or an enumerator a
+            // "collection was modified". Logins wait for the end of the tick instead, which
+            // is at most the loop interval.
             lock (Clients)
             {
+                try
+                {
+                    MapChannelManager.Instance.MapChannelWorker(delta);
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteLog(LogType.Error, $"Error in the map channel worker: {e}");
+                }
+
                 foreach (var client in Clients)
                 {
                     // Client.Update guards its own handlers and disconnects the client that
