@@ -319,10 +319,14 @@ namespace Rasa.Managers
             switch (missile.ActionId)
             {
                 case ActionId.WeaponAttack:
+                // Melee (174) is resolved exactly like a ranged attack: the original server's
+                // missile_ActionRecoveryHandler_WeaponMelee forwarded to the WeaponAttack
+                // handler "until there is better handling for melee weapons", and the recovery
+                // packet is the same shape. It fell through to the default here, which did the
+                // right thing but logged every swing as an unsupported action.
+                case ActionId.WeaponMelee:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;
-                //else if (missile->actionId == 174)
-                //    missile_ActionRecoveryHandler_WeaponMelee(mapChannel, missile);
                 case ActionId.AaRecruitLightning:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new LightningRecovery(missile));
                     break;
