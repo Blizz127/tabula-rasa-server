@@ -160,11 +160,21 @@ namespace Rasa.Test
                     context.Database.EnsureCreated();
                     // Stored rows of the two seeded missions (NpcMissionPreloader, live rasaworld.db).
                     context.Database.ExecuteSqlRaw("INSERT INTO npc_mission (id, giver_id, reciver_id, level, group_type, category_id, shareable, radio_completeable, comment) VALUES " +
-                        "(321, 101, 100, 5, 1, 1, 0, 0, 'Assemble With Lieutenant Perkins'), (429, 101, 100, 3, 2, 2, 1, 1, 'River Recon')");
+                        "(321, 0, 0, 5, 1, 1, 0, 0, 'Assemble With Lieutenant Perkins'), (429, 100, 101, 3, 2, 2, 1, 1, 'River Recon')");
                 }
 
                 var missions = new MissionManager(new Factory(connection));
                 missions.LoadMissions();
+
+                // 429's LOGTEXT (missionconversation (429,2)=742) makes Rogers the giver and
+                // Witherspoon the receiver; the seed once had them transposed.
+                Assert.AreEqual(100u, missions.LoadedMissions[429].MissionGiver);
+                Assert.AreEqual(101u, missions.LoadedMissions[429].MissionReciver);
+
+                // 321's real NPCs (Cmd. Sgt. Price, Field Lt. Perkins) have no creature rows, so the
+                // seed carries the unknown sentinel rather than 429's borrowed pair.
+                Assert.AreEqual(0u, missions.LoadedMissions[321].MissionGiver);
+                Assert.AreEqual(0u, missions.LoadedMissions[321].MissionReciver);
 
                 CollectionAssert.AreEqual(new[] { "no objectives" }, missions.LoadedMissions[321].DefinitionGaps());
                 CollectionAssert.AreEqual(new[] { "no objectives", "radio completion is not implemented", "mission sharing is not implemented" },

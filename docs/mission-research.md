@@ -21,12 +21,15 @@ objective or mission-script tables. Both definitions match the checked-in
 
 | Mission ID | Comment | Giver | Receiver | Level | Group | Category | Share/radio |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 321 | Assemble With Lieutenant Perkins | 101 | 100 | 5 | 1 | 1 | false/false |
-| 429 | River Recon | 101 | 100 | 3 | 2 | 2 | true/true |
+| 321 | Assemble With Lieutenant Perkins | 0 (unknown) | 0 (unknown) | 5 | 1 | 1 | false/false |
+| 429 | River Recon | 100 | 101 | 3 | 2 | 2 | true/true |
 
 Creature 100 is Outpost Commander Rogers; 101 is Field Sgt. Witherspoon. Both
 `npc_package` comments are literally `test`. These are unsuitable as validated
-retail quest definitions.
+retail quest definitions. The giver/receiver values above were corrected on
+2026-09-13 against the retail client's own mission text — both previously read
+`101 | 100`. See
+[Mission 321 and 429 corrected from client mission text](#mission-321-and-429-corrected-from-client-mission-text--2026-09-13).
 
 Current implementation gaps, established by reading the corresponding files:
 
@@ -386,3 +389,129 @@ reward-only conversations; mission-offer voice-overs (`offerVOAudioSetId`;
 sets 2773–2776 are a naming inference); item rewards delivered atomically
 with completion; and every content row. The boot-camp gaps that block
 content are ranked in [boot-camp evidence](bootcamp-client-evidence.md#gap-ranking-after-the-sweep).
+
+## Mission 321 and 429 corrected from client mission text — 2026-09-13
+
+The retail 1.16.5.0 client's generated tables were decoded and read to establish
+what the two seeded missions actually say. Source: `data/game.zip` members
+`generated/client/missionconversation.pyo`, `missionobjective.pyo` and
+`objectiveconversation.pyo`, interpreted through `python/client/clientlanguagemanager.py`
+in `trpython.zip`. Full analysis, extraction recipes and row counts:
+`/home/blizz/backups/rasa-net/research/20260913-source-sweep/mission-tables/findings.md`.
+
+### Table semantics established (all three are text-id indirection only)
+
+- `missionobjective` — key `(missionId, objectiveId)`, value a one-element list of a
+  5-tuple whose entries are `missiontextlanguage` ids: `[0]` objective name, `[1]` body
+  (nullable), `[2][3][4]` generic counter labels for `counterId` 0/1/2. 3,454 rows;
+  all 7,508 non-null values resolve as `missiontextlanguage` ids with zero exceptions.
+- `missionconversation` — key `(missionId, textTypeId)` where `textTypeId` is
+  NAMETEXT 1, LOGTEXT 2, OPENINGTEXT 3, FINISHINGTEXT 4, REWARDTEXT 5, REMINDERTEXT 6.
+  It is **not** an ordinal or a state. 5,821 rows; **type 5 never occurs**; 1,168
+  distinct missions carry types 1–4 and 1,149 also carry 6.
+- `objectiveconversation` — key `(missionId, objectiveId, npcPackageId, playerFlagId,
+  convoType)`, `convoType` COMPLETION 1, REMINDER 2, CHOICEBODY 3, CHOICE1/2/3 4/5/6.
+  1,727 rows. REMINDER serves the *ambient* conversation
+  (`HandleShowObjectiveAmbient`).
+
+### 429 "River Recon" — giver and receiver were transposed (corrected)
+
+LOGTEXT, `missionconversation (429,2)=742`, verbatim: *"Outpost Commander Rogers wants
+you to search for signs of a lost patrol of Forean Rangers near the top of Pinhole Falls,
+then report your findings to Field Sgt. Witherspoon at Lower Eloh Creek, south of Pinhole
+Falls."* So the giver is Rogers and the receiver Witherspoon. The seed had `giver_id=101,
+reciver_id=100`, i.e. the reverse.
+
+Corroborated independently from `objectiveconversation`: package **116** says *"Get this
+new info to Witherspoon"* (sender is Rogers) and package **208** says *"Rogers told me
+you'd be reporting in"* (receiver is Witherspoon). Live `npc_package` maps creature
+100 → package 116 and 101 → 208, so creature and package agree.
+
+Tier: **`original`** for the LOGTEXT; the package → NPC identity step is **`inferred`**
+(high confidence — two independent client strings plus the mission log agree).
+Corrected to `giver_id=100, reciver_id=101`.
+
+Objectives 4 and 5 are also present at `original` tier (`(429,4)=(1971,6727,…)` "Report to
+Witherspoon."; `(429,5)=(3885,6726,…)` "Recon Pinhole Falls."). Note the ids are **4 and 5,
+not 1 and 2**, which independently refutes any "objective id equals ordinal" inference.
+They are **not** seeded yet — see the blocking gap below.
+
+`category_id=2` resolves to "Instance (Arieki Communications Tower)", which is semantically
+implausible for an open-world Pinhole Falls recon mission. No evidence exists for the
+correct value, so it is recorded as **suspect/unknown and deliberately not changed**.
+`level=3`, `group_type=2` (DUO), `shareable=1` and `radio_completeable=1` are likewise
+not checkable against the client and are unchanged.
+
+### 321 "Assemble With Lieutenant Perkins" — NPCs were borrowed from 429 (set to unknown)
+
+LOGTEXT, `missionconversation (321,2)=14`, verbatim: *"Command Sergeant Price wants you to
+help the AFS push back as many Bane Machina as possible near the battlefield entrance. Once
+done, reassemble with the Lieutenant at the North West fortification."* The mission name
+itself is "Assemble With Lieutenant Perkins".
+
+The seed carried `giver_id=101, reciver_id=100` — Witherspoon and Rogers, who are the
+Pinhole Falls NPCs of mission **429**. Tier: **refuted at `original` tier**.
+
+The correct NPCs do exist as client names: `creaturenamelanguage` `name_id` **205** =
+"Cmd. Sgt. Price" and **204** = "Field Lt. Perkins". But **neither has a `creature` row**,
+and a `creature` row needs `class_id`, `faction`, `level`, `max_hp`, `run_speed`,
+`walk_speed` and eight action columns — none of which any source supplies. Inventing them
+would violate the no-guessing rule, so both fields are set to **0**, the established
+unknown sentinel (`NoContentReferences.MissionGiver` already returns 0, and boot-camp
+mission 1990 seeds `giver_id=0`). `MissionGiver`/`MissionReciver` are compared against
+`creature.DbId`, so 0 simply matches nothing and the mission stays unoffered — fail-closed
+rather than offered by the wrong NPCs in the wrong zone.
+
+Objective **310** is present at `original` tier: `(321,310)=(115, 6522, 1711, None, None)`
+— name "Help the AFS defeat the Machina at the Frontlines Entrance", empty body, one
+generic counter `counterId 0` labelled "Machina Killed", plus dialogue at `npcPackageId
+105` / `playerFlagId 1` / convoTypes 1 and 2. This is what would retire the startup gap
+`Mission 321 is not offered, definition incomplete: no objectives`. It is **not** seeded
+yet — see below.
+
+### Blocking gap: three objective columns are server-authoritative and NOT NULL
+
+`ordinal`, `is_required` and `revealed_on_accept` cannot be recovered from the client. They
+arrive in the server's mission-log payload — `python/client/missionlog.py` unpacks
+`(objectiveId, objectiveStatus, ordinal, timeRemaining, counterDict, itemCounters,
+isRequired, indicatorList)`, and the dispense payload sends objectives as
+`(ordinal, objectiveId)` pairs. Our `npc_mission_objective` declares all three **NOT NULL**,
+so the 3,454-row objective skeleton cannot be loaded until either the columns are made
+nullable or values are evidenced per mission. Per the reconstruction policy these stay
+**explicit gaps** rather than defaults.
+
+Also blocking end-to-end loading of `objectiveconversation`:
+`npc_mission_objective_conversation` has **no `convo_type` column**, and its 4-column key
+would collide — 202 groups / 789 of the 1,727 rows carry multiple convoTypes, so a naive
+import would silently drop **34%**.
+
+### Separately confirmed by the same pass
+
+- **Mission 1990 is corroborated, not refuted.** The client holds exactly two objectives,
+  ids **1** and **2**, both named "Approach the Eloh Hologram" with empty bodies, no
+  counters and no objective conversations. Its `category_id=10000032` resolves to
+  **"Instance (Bootcamp)"**, which upgrades that value to `original`. Ordinals, required
+  flags, reveal flags and the transition remain at their footage tier.
+- **All seven of the Ellatha boot-camp missions are absent from the final client.** This is
+  table-level `original`-tier proof that the boot camp was rebuilt, and it validates the
+  rule that pre-rebuild content must never stand in for rebuilt content. Ellatha remains
+  usable for the rest of the game.
+- **The client defines 1,168 distinct mission ids** (1,120 distinct names; ~1,128 real after
+  31 test/placeholder and 9 "No title"). Three-way comparison: client 1,168 ⊃ TaRapedia 734
+  name matches ⊃ Ellatha 83 of 98 exact matches.
+- **Everything in `npc_mission` except `id` and `comment` is server-authoritative.**
+  `python/client/gameuiutil.py` unpacks the server's `constantData` as `(missionLevel,
+  groupType, missionCategoryId, bShareable, bRadioCompleteable, rewardInfo)` — an exact match
+  for our columns. The client holds only the vocabularies (93 categories, 4 group types), so
+  `giver_id`, `reciver_id`, `level`, `group_type`, `category_id`, `shareable`,
+  `radio_completeable` and all rewards cannot be recovered from it.
+- The three seeded `comment` values (321, 429, 1990) match the client's NAMETEXT strings
+  exactly — upgraded to `original`.
+
+### Decompiler caveat affecting all of the above
+
+`uncompyle6` output for this corpus has at least one confirmed defect: `g_kGenderModules`
+decompiles as `[4,5,6,7,8,9]` while the bytecode at offsets 373–394 loads six *strings*.
+Every conclusion above was therefore re-verified against bytecode. **Literal constants in
+the 47 decompiled `.py` files are unreliable; names and control flow are sound.**
+
