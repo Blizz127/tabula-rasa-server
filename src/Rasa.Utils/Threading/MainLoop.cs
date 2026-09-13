@@ -102,6 +102,39 @@ namespace Rasa.Threading
                 };
         }
 
+        private int _consecutiveFaults;
+        private long _faultsSinceLog;
+        private long _nextFaultLogMs;
+
+        /// <summary>How long to stay quiet after logging a fault, while faults keep coming.</summary>
+        private const long FaultLogQuietMs = 5000;
+
+        /// <summary>
+        /// A tick that throws once wants a log line. A tick that throws every time - a manager
+        /// left in a state it cannot recover from - would write ten a second for as long as the
+        /// server runs, bury whatever came before it, and fill the disk. So: the first one in
+        /// full, then at most one every FaultLogQuietMs saying how many went by in between.
+        /// </summary>
+        private void ReportFault(Exception e)
+        {
+            _consecutiveFaults++;
+            _faultsSinceLog++;
+
+            var now = CurrentMs();
+
+            if (_consecutiveFaults > 1 && now < _nextFaultLogMs)
+                return;
+
+            var repeat = _faultsSinceLog > 1 ? $" ({_faultsSinceLog} faults since the last of these)" : "";
+
+            Logger.WriteLog(LogType.Error,
+                $"Unhandled exception in the main loop of {Object.GetType().FullName}{repeat}. " +
+                $"The tick was abandoned and the loop is still running: {e}");
+
+            _faultsSinceLog = 0;
+            _nextFaultLogMs = now + FaultLogQuietMs;
+        }
+
         private void Loop()
         {
             var prevTime = CurrentMs();
@@ -115,7 +148,22 @@ namespace Rasa.Threading
 
                 var workFrom = Stopwatch.GetTimestamp();
 
-                Object.MainLoop(delta);
+                // The last line of defence for both servers. This runs on a dedicated thread, so
+                // an exception escaping a tick does not merely stop the world - it goes unhandled
+                // and .NET ends the process. Everything below this point is guarded in its own
+                // right; this is what makes a gap that gets missed cost one tick rather than the
+                // server, and it is the difference between a log line to act on and a game server
+                // that is simply gone with nothing to say why.
+                try
+                {
+                    Object.MainLoop(delta);
+
+                    _consecutiveFaults = 0;
+                }
+                catch (Exception e)
+                {
+                    ReportFault(e);
+                }
 
                 // The pass itself, not the pass plus the sleep that follows it: a loop that does
                 // 10 ms of work and sleeps 90 is a healthy 100 ms iteration, and reporting 100

@@ -408,7 +408,16 @@ namespace Rasa.Auth
 
         public void MainLoop(long delta)
         {
-            Timer.Update(delta);
+            // Same rule as the game server: this is the only thread, and a fault in one
+            // connection must not cost the tick for the connections after it in the list.
+            try
+            {
+                Timer.Update(delta);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error updating the auth server timers: {e}");
+            }
 
             if (Clients.Count == 0)
                 return;
@@ -416,7 +425,25 @@ namespace Rasa.Auth
             lock (Clients)
             {
                 foreach (var c in Clients)
-                    c.Update(delta);
+                {
+                    try
+                    {
+                        c.Update(delta);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.WriteLog(LogType.Error, $"Error updating auth client {c.Socket?.RemoteAddress}, disconnecting it: {e}");
+
+                        try
+                        {
+                            c.Close();
+                        }
+                        catch (Exception inner)
+                        {
+                            Logger.WriteLog(LogType.Error, $"And closing it threw as well: {inner}");
+                        }
+                    }
+                }
 
                 if (_clientsToRemove.Count > 0)
                 {

@@ -147,17 +147,56 @@ namespace Rasa.Game
 
         public void MainLoop(long delta)
         {
-            Timer.Update(delta);
+            // One thread runs the timers, the world and every client in turn. Anything that
+            // escapes here costs the rest of the tick - the clients after the one that threw
+            // are not serviced at all - so each part is held to its own failure.
+            try
+            {
+                Timer.Update(delta);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error updating the server timers: {e}");
+            }
 
             if (Clients.Count == 0)
                 return;
 
-            MapChannelManager.Instance.MapChannelWorker(delta);
+            try
+            {
+                MapChannelManager.Instance.MapChannelWorker(delta);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error in the map channel worker: {e}");
+            }
 
             lock (Clients)
             {
                 foreach (var client in Clients)
-                    client.Update(delta);
+                {
+                    // Client.Update guards its own handlers and disconnects the client that
+                    // threw. This is for the rest of it - Close(), the socket, the packet
+                    // queue - so a fault in one connection cannot leave every client after it
+                    // in the list frozen for the tick.
+                    try
+                    {
+                        client.Update(delta);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.WriteLog(LogType.Error, $"Error updating client {client.Socket?.RemoteAddress}, disconnecting it: {e}");
+
+                        try
+                        {
+                            client.Close(false);
+                        }
+                        catch (Exception inner)
+                        {
+                            Logger.WriteLog(LogType.Error, $"And closing it threw as well: {inner}");
+                        }
+                    }
+                }
 
                 if (_clientsToRemove.Count > 0)
                 {
@@ -401,21 +440,38 @@ namespace Rasa.Game
             AuthCommunicator.ReceiveAsync();
         }
 
+        /// <summary>
+        /// Socket completion thread, carrying messages from the auth server - including the ban
+        /// notifications, which do real work on this side. Losing the auth link over one bad
+        /// message is not worth it, and letting the exception reach the socket layer's catch-all
+        /// is exactly what did that, under a log line that names the socket rather than the
+        /// message.
+        /// </summary>
         private void OnCommunicatorReceive(BufferData data)
         {
-            var opcode = (CommOpcode) data.Buffer[data.BaseOffset + data.Offset++];
+            CommOpcode? opcode = null;
 
-            var packetType = _router.GetPacketType(opcode);
-            if (packetType == null)
-                return;
+            try
+            {
+                opcode = (CommOpcode) data.Buffer[data.BaseOffset + data.Offset++];
 
-            var packet = Activator.CreateInstance(packetType) as IOpcodedPacket<CommOpcode>;
-            if (packet == null)
-                return;
+                var packetType = _router.GetPacketType(opcode.Value);
+                if (packetType == null)
+                    return;
 
-            packet.Read(data.GetReader());
+                var packet = Activator.CreateInstance(packetType) as IOpcodedPacket<CommOpcode>;
+                if (packet == null)
+                    return;
 
-            _router.RoutePacket(this, packet);
+                packet.Read(data.GetReader());
+
+                _router.RoutePacket(this, packet);
+            }
+            catch (Exception e)
+            {
+                var what = opcode.HasValue ? $"a {opcode.Value} message" : "a message whose opcode could not be read";
+                Logger.WriteLog(LogType.Error, $"Error handling {what} from the auth server: {e}");
+            }
         }
 
         // ReSharper disable once UnusedMember.Local

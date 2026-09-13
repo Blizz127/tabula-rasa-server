@@ -76,7 +76,17 @@ namespace Rasa.Auth
 
         public void Update(long delta)
         {
-            Timer.Update(delta);
+            // The timeout timer's callback closes the connection, and Close() does real work.
+            try
+            {
+                Timer.Update(delta);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error updating timers for {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+                return;
+            }
 
             if (State == ClientState.Disconnected)
                 return;
@@ -99,8 +109,19 @@ namespace Rasa.Auth
                 }
             }
 
-            while ((packet = _packetQueue.PopOutgoing()) != null)
-                SendPacket(packet);
+            // Writing a packet can throw - serialization, or a socket that has gone since the
+            // packet was queued - and the game server has guarded this half for a while. Auth
+            // had not: an exception here reached the main loop with nothing above it.
+            try
+            {
+                while ((packet = _packetQueue.PopOutgoing()) != null)
+                    SendPacket(packet);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+            }
         }
         
         public void Close()
@@ -238,18 +259,39 @@ namespace Rasa.Auth
             return AuthCryptManager.Decrypt(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
         }
 
+        /// <summary>
+        /// Socket completion thread. Nothing may escape: an opcode this server has no packet for
+        /// throws out of CreatePacket, and a malformed body throws out of Read - and the caller
+        /// is a socket callback, where an exception used to end the process. It costs this one
+        /// connection instead, and says which opcode did it.
+        /// </summary>
         private void OnReceive(BufferData data)
         {
-            // Reset the timeout after every action
-            Timer.ResetTimer("timeout");
+            // Nullable, not a default: Login is 0x00, so a default would name it as the culprit
+            // when the failure was reading the opcode byte itself.
+            ClientOpcode? opcode = null;
 
-            using var br = data.GetReader();
+            try
+            {
+                // Reset the timeout after every action
+                Timer.ResetTimer("timeout");
 
-            var packet = CreatePacket((ClientOpcode)br.ReadByte());
+                using var br = data.GetReader();
 
-            packet.Read(br);
+                opcode = (ClientOpcode)br.ReadByte();
 
-            _packetQueue.EnqueueIncoming(packet);
+                var packet = CreatePacket(opcode.Value);
+
+                packet.Read(br);
+
+                _packetQueue.EnqueueIncoming(packet);
+            }
+            catch (Exception e)
+            {
+                var what = opcode.HasValue ? $"a {opcode.Value} packet" : "a packet whose opcode could not be read";
+                Logger.WriteLog(LogType.Error, $"Error reading {what} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+            }
         }
 
         private IBasePacket CreatePacket(ClientOpcode opcode)
