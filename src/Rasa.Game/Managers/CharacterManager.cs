@@ -415,12 +415,19 @@ namespace Rasa.Managers
         /// Name changes are a GM tool here: the slash commands are open to every player, and a
         /// free rename at any moment is a way to be mistaken for someone else.
         /// </summary>
+        /// <summary>
+        /// Who may use /changefirstname and /changelastname.
+        ///
+        /// GameMaster, matching the .rename command. It was "any GM level at all", which let an
+        /// Observer - the level that exists to read the world without changing it, and the level
+        /// every pre-existing account was left on - rename itself and its whole account family.
+        /// </summary>
         private static bool IsNameChanger(Client client)
         {
             if (client?.AccountEntry == null || client.Player == null)
                 return false;
 
-            if (client.AccountEntry.Level > 0)
+            if (client.AccountEntry.Level >= (byte)GmLevel.GameMaster)
                 return true;
 
             Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} tried to change a name without being a GM");

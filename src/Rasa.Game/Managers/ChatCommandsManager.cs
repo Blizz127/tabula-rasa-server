@@ -144,6 +144,7 @@ namespace Rasa.Managers
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
+            RegisterCommand(".rename", GmLevel.GameMaster, RenameCommand);
             RegisterCommand(".setkillstreak", GmLevel.GameMaster, SetKillStreakCommand);
             RegisterCommand(".setregion", GmLevel.GameMaster, SetRegionCommand);
             RegisterCommand(".speed", GmLevel.GameMaster, SpeedCommand);
@@ -156,11 +157,11 @@ namespace Rasa.Managers
             RegisterCommand(".addtitle", GmLevel.Admin, AddTitleCommand);
             RegisterCommand(".chg_class", GmLevel.Admin, ChangeClassCommand);
             RegisterCommand(".flag", GmLevel.Admin, FlagCommand);
+            RegisterCommand(".givecredits", GmLevel.Admin, GiveCreditsCommand);
             RegisterCommand(".giveitem", GmLevel.Admin, GiveItemCommand);
             RegisterCommand(".givelogos", GmLevel.Admin, GiveLogosCommand);
             RegisterCommand(".givexp", GmLevel.Admin, GiveXpCommand);
             RegisterCommand(".reloadcreatures", GmLevel.Admin, ReloadCreaturesCommand);
-            RegisterCommand(".rename", GmLevel.Admin, RenameCommand);
         }
 
         #region RegularUser
@@ -285,6 +286,63 @@ namespace Rasa.Managers
         /// entity is passed, so the client announces the change itself rather than waiting for
         /// an ability that is never coming.
         /// </summary>
+        /// <summary>
+        /// .givecredits &lt;amount&gt; [familyName] - credits on or off a character.
+        ///
+        /// Admin, alongside .giveitem and .givexp: this makes money out of nothing, which is the
+        /// one thing the rest of the economy work has been about stopping. A negative amount
+        /// takes credits away, clamped at zero rather than allowed to run a character negative -
+        /// nothing in the game reads a balance as signed.
+        /// </summary>
+        private void GiveCreditsCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var target = _client;
+
+            if (parts.Length > 2)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null
+                                                  && string.Equals(c.Player.FamilyName, parts[2], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    communicator.SystemMessage(_client, $"{parts[2]} is not in the world.");
+                    return;
+                }
+            }
+
+            if (parts.Length < 2 || !int.TryParse(parts[1], out var amount) || amount == 0)
+            {
+                communicator.SystemMessage(_client, "usage: .givecredits <amount> [familyName]");
+                communicator.SystemMessage(_client, "A negative amount takes credits away.");
+                return;
+            }
+
+            var before = target.Player.Credits[CurencyType.Credits];
+
+            // Clamped, so taking more than they have empties the purse rather than owing.
+            if (amount < 0)
+                amount = -Math.Min(before, Math.Abs(amount));
+
+            if (amount == 0)
+            {
+                communicator.SystemMessage(_client, $"{target.Player.FamilyName} has no credits to take.");
+                return;
+            }
+
+            ManifestationManager.Instance.GainCredits(target, amount);
+
+            var after = target.Player.Credits[CurencyType.Credits];
+            var who = target == _client ? "You" : target.Player.FamilyName;
+
+            communicator.SystemMessage(_client,
+                $"{who}: {before} -> {after} credits ({(amount > 0 ? "+" : "")}{amount}).");
+
+            if (target != _client)
+                communicator.SystemMessage(target,
+                    $"A GM has {(amount > 0 ? "given you" : "taken")} {Math.Abs(amount)} credits. You now have {after}.");
+        }
+
         private void HealCommand(string[] parts)
         {
             var communicator = CommunicatorManager.Instance;
