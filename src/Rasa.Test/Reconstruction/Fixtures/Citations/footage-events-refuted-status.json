@@ -1,0 +1,46 @@
+{
+  "schema": "rasa-reconstruction-footage-events/1",
+  "note": "Synthetic citation fixture events.",
+  "transcripts": [
+    {
+      "segment": "CT1",
+      "video_id": "citeVid01",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verification_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "events": [
+    {
+      "segment": "CT1",
+      "event_id": "CT1-001",
+      "t": 100.0,
+      "category": "nameplate",
+      "text": "Synthetic Crate",
+      "description": "Synthetic confirmed nameplate.",
+      "status": "confirmed",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "segment": "CT1",
+      "event_id": "CT1-002",
+      "t": 200.467,
+      "category": "chat",
+      "text": "Synthetic Accepted: Beginning",
+      "corrected_text": "Synthetic Accepted: Beginning",
+      "description": "Synthetic corrected chat line.",
+      "status": "corrected",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "segment": "CT1",
+      "event_id": "CT1-003",
+      "t": 300.0,
+      "category": "chat",
+      "text": "Synthetic refuted line",
+      "description": "Synthetic event whose verdict was refuted.",
+      "status": "refuted",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "dropped": []
+}

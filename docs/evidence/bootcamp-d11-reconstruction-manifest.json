@@ -1,0 +1,343 @@
+{
+  "schema": "rasa-reconstruction-manifest/1",
+  "policy": "AGENTS.md#evidence-bounded-reconstruction-user-decision-2026-09-13",
+  "segment": {
+    "id": "bootcamp-d11",
+    "description": "Deployment-11 rebuilt boot camp, context 1985 adv_bootcamp. S0 evidence contract: no content rows are seeded yet.",
+    "map_context_ids": [1985],
+    "map_version": 783,
+    "missions": [1990, 1992, 1994, 1995, 2005],
+    "client_version": "1.16.5.0",
+    "build_plan": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/design/bootcamp-build-plan.md",
+    "companion_files": {
+      "positions": "docs/evidence/bootcamp-d11-positions.json",
+      "footage_events": "docs/evidence/bootcamp-d11-footage-events.json",
+      "client_catalog": "docs/evidence/bootcamp-client-catalog.json",
+      "audio_catalog": "docs/evidence/bootcamp-audio-catalog.json"
+    }
+  },
+  "sources": {
+    "video:7Lrst9SG3pk": {
+      "kind": "video",
+      "era": "d11_to_shutdown",
+      "video_id": "7Lrst9SG3pk",
+      "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+      "bytes": 34860979,
+      "timebase": "t is decoded video seconds: the presentation time of the decoded frame in this exact file (ffmpeg -copyts showinfo pts_time), not YouTube player time and not the labels of pre-extracted 1 fps frames.",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+      "acquisition": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/acquisition.json",
+      "note": "YouTube delivery file, video-only H.264. Supplied by the project owner; SHA-256 matched on both machines after transfer."
+    },
+    "video:8VXeKzGUv0c": {
+      "kind": "video",
+      "era": "d11_to_shutdown",
+      "video_id": "8VXeKzGUv0c",
+      "sha256": "43187d064abf0282f150513a83f5abd07023a3b9db5baab01a6431f1536f63e0",
+      "bytes": 52123932,
+      "timebase": "t is decoded video seconds: the presentation time of the decoded frame in this exact file (ffmpeg -copyts showinfo pts_time), not YouTube player time and not the labels of pre-extracted 1 fps frames.",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/8VXeKzGUv0c/Tabula Rasa Advancing 2of8.mp4",
+      "acquisition": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/acquisition.json",
+      "note": "YouTube delivery file, video-only H.264. Supplied by the project owner; SHA-256 matched on both machines after transfer."
+    },
+    "video:Ycxm8Pa1-v4": {
+      "kind": "video",
+      "era": "d11_to_shutdown",
+      "video_id": "Ycxm8Pa1-v4",
+      "sha256": "0176e9184c5b8bc71533712ca7da0e08044381e10bb90a35948f80b24cc0b62d",
+      "bytes": 42990966,
+      "timebase": "t is decoded video seconds: the presentation time of the decoded frame in this exact file (ffmpeg -copyts showinfo pts_time), not YouTube player time and not the labels of pre-extracted 1 fps frames.",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/Ycxm8Pa1-v4/Tabula Rasa Tutorial gameplay.mp4",
+      "acquisition": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/acquisition.json",
+      "note": "YouTube delivery file, video-only H.264. Supplied by the project owner; SHA-256 matched on both machines after transfer."
+    },
+    "client_map:adv_bootcamp": {
+      "kind": "client_map",
+      "era": "final_live",
+      "member": "Tabula Rasa 1.16.5.0/data/maps/adv_bootcamp/adv_bootcamp.map",
+      "sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3",
+      "bytes": 127212,
+      "map_version": 783,
+      "container": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
+      "provenance": "docs/bootcamp-client-evidence.md, 'Original map and appearance data'; docs/client-artifacts.md for the 1.16.5.0 package caveat",
+      "locator_format": "map entity index + file offset"
+    },
+    "client_table:game.zip": {
+      "kind": "client_table",
+      "era": "final_live",
+      "member": "Tabula Rasa 1.16.5.0/data/game.zip",
+      "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+      "bytes": 37860642,
+      "container": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
+      "provenance": "docs/client-artifacts.md; member hashes and store offsets in docs/evidence/bootcamp-client-catalog.json",
+      "locator_format": "table member path + store offset"
+    }
+  },
+  "scope": [
+    {
+      "table": "creature",
+      "key_ranges": { "id": { "min": 198500, "max": 198599 } }
+    },
+    {
+      "table": "content_area",
+      "key_ranges": { "id": { "min": 198600, "max": 198649 } }
+    },
+    {
+      "table": "content_placement",
+      "key_ranges": { "id": { "min": 198650, "max": 198899 } }
+    },
+    {
+      "table": "content_condition",
+      "key_ranges": { "condition_id": { "min": 198900, "max": 198999 } }
+    },
+    {
+      "table": "content_rule",
+      "key_ranges": { "id": { "min": 1985000, "max": 1985999 } }
+    },
+    {
+      "table": "content_rule_action",
+      "key_ranges": { "rule_id": { "min": 1985000, "max": 1985999 } },
+      "note": "Not listed separately in plan section 1.3: action rows are children of the reserved content_rule ids, so they share that range."
+    },
+    {
+      "table": "content_item_set",
+      "key_ranges": { "item_set_id": { "min": 19851, "max": 19859 } }
+    },
+    {
+      "table": "content_location",
+      "key_ranges": { "id": { "min": 19851, "max": 19859 } }
+    }
+  ],
+  "rows": [],
+  "omitted": [],
+  "accepted_definition_gaps": [],
+  "accepted_content_gaps": [],
+  "gaps": [
+    {
+      "id": "GAP-DEATH",
+      "summary": "Players never die, so boss and bomb deaths, the hospital sequence and the \"Not yourself!\" message are absent.",
+      "evidence": [
+        "src/Rasa.Game/Managers/MissileManager.cs:120-125 (players never die)",
+        "footage A4-35..A4-39 (death and hospital inside the boot camp)",
+        "docs/death-research.md"
+      ],
+      "closes_with": "track D (death and hospital)",
+      "surfaced_by": ["manifest", "docs/retail-accuracy.md"],
+      "slices": ["S1", "S4", "S5", "S8"]
+    },
+    {
+      "id": "GAP-KILL-REWARDS",
+      "summary": "Kill experience and loot use the emulator formula instead of the observed payouts and their modifiers.",
+      "evidence": [
+        "src/Rasa.Game/Managers/CreatureManager.cs:137-147 (emulator kill reward formula)",
+        "footage kill payouts in A4, C1 and C2 (observed 71 XP / 10 credits)"
+      ],
+      "closes_with": "global kill-reward track",
+      "surfaced_by": ["manifest"],
+      "slices": ["S4"]
+    },
+    {
+      "id": "GAP-INSTANCE",
+      "summary": "Context 1985 runs as one shared world: Youngblood, the boss and the reinforcements are shared and their arrival events are not reproduced.",
+      "condition": "Open only before S3 lands, or after a fallback to a shared 1985 channel (build plan section 2.5).",
+      "evidence": [
+        "build plan section 2.2 (per-recruit evidence items 1-8)",
+        "build plan section 2.5 (fallback and falsifiers)"
+      ],
+      "closes_with": "S3 (private per-character instances)",
+      "surfaced_by": ["manifest", "startup warning when a second client enters a context flagged for instancing but running shared"],
+      "slices": ["S1", "S2"]
+    },
+    {
+      "id": "GAP-ESCORT",
+      "summary": "McAllister does not walk off with the recruit, and Youngblood does not walk into the camp on arrival.",
+      "evidence": [
+        "footage A3-011 (McAllister walks away with the recruit, 297.133)",
+        "footage A5-33 (Youngblood walks up, 558.867)",
+        "no NPC path movement mechanism exists (build plan section 1.3)"
+      ],
+      "closes_with": "evidence for a path movement mechanism",
+      "surfaced_by": ["manifest omitted"],
+      "slices": ["S1", "S4", "S8"]
+    },
+    {
+      "id": "GAP-LOADOUT",
+      "summary": "Character creation items do not match the observed empty 0/50 backpack and pistol 122875; creation armour duplicates the crate gear.",
+      "evidence": [
+        "src/Rasa.Game/Managers/CharacterManager.cs:331-349 (creation items)",
+        "footage A3-019 (backpack 0/50)",
+        "boot-camp pistol template 122875 (docs/bootcamp-client-evidence.md)"
+      ],
+      "closes_with": "creation track C (owner decision OD-14)",
+      "surfaced_by": ["manifest", "OD-14"],
+      "slices": ["S1", "S2"]
+    },
+    {
+      "id": "GAP-TIPS",
+      "summary": "Tutorial tips 10000011, 7 and 6/10000010 have no server binding.",
+      "evidence": [
+        "footage A2-042 (tip 10000011: proximity or completeable binding unresolved)",
+        "footage A2-029 (tip 7: client-triggered id)",
+        "footage A4-45 (tip 6 or 10000010: id ambiguous)"
+      ],
+      "closes_with": "S8 owner decisions",
+      "surfaced_by": ["manifest omitted"],
+      "slices": ["S1", "S8"]
+    },
+    {
+      "id": "GAP-EARLY-EXIT",
+      "summary": "Emulator teleporter row 60 stays usable in the shared 1985 world.",
+      "evidence": [
+        "emulator teleporter rows 60, 99 and 598 in context 1985 (read-only rasaworld.db)"
+      ],
+      "closes_with": "S3 (teleporter rows are not materialized in instances)",
+      "surfaced_by": ["manifest"],
+      "slices": ["S1", "S2"]
+    },
+    {
+      "id": "GAP-CAVE-IN",
+      "summary": "The cave-in blocker and its indicator 439 are unknown.",
+      "evidence": [
+        "objective indicator 439 \"Cave-in Location\" (docs/evidence/bootcamp-client-catalog.json, store offset 3908); no blocker or position is identified (build plan S4 stubs)"
+      ],
+      "closes_with": "footage",
+      "surfaced_by": ["manifest omitted"],
+      "slices": ["S4"]
+    },
+    {
+      "id": "GAP-ITEM-REWARDS",
+      "summary": "Mission item rewards are not delivered, including the hinted 1994 AccuMax Shotgun.",
+      "evidence": [
+        "src/Rasa.Game/Managers/MissionManager.cs:196-203 (\"item reward delivery is not implemented\")",
+        "footage B1-010 (AccuMax Shotgun hint)"
+      ],
+      "closes_with": "item grant planner wired into turn-in, plus evidence for the reward items",
+      "surfaced_by": ["DefinitionGaps string (existing)"],
+      "slices": ["S4"]
+    },
+    {
+      "id": "GAP-BOMB-ITEM",
+      "summary": "No bomb inventory item exists; planting is gated by objective state instead.",
+      "evidence": [
+        "no bomb item template identified in the client item tables yet (build plan section 4.1 step E4)"
+      ],
+      "closes_with": "E4 identification",
+      "surfaced_by": ["manifest"],
+      "slices": ["S5"]
+    },
+    {
+      "id": "GAP-D13.4",
+      "summary": "The stuck state after abandoning the final mission once the dropship pad is cleared is kept as an original quirk.",
+      "evidence": [
+        "D13.4 known issue, wiki/verify/web/d134-20090203215404.txt: abandoning after clearing the dropship pad strands the recruit; failing the mission normally respawns the ship"
+      ],
+      "closes_with": "never fixed without evidence",
+      "surfaced_by": ["manifest", "D134QuirkTests"],
+      "slices": ["S5"]
+    },
+    {
+      "id": "GAP-ROGERS",
+      "summary": "The 1995 turn-in NPC Rogers is absent in context 1220; he is level 5 where footage shows 20.",
+      "evidence": [
+        "spawnpool 100 has counts 0/0 (read-only rasaworld.db)",
+        "footage B3-020 (Rogers level 20)"
+      ],
+      "closes_with": "segment 3",
+      "surfaced_by": ["manifest", "DefinitionGaps unaffected (the receiver exists as a row)"],
+      "slices": ["S6"]
+    },
+    {
+      "id": "GAP-NEXT-SEGMENT",
+      "summary": "The Training Day forced radio offer on arrival in Alia Das and missions 2010/2011 are not provided.",
+      "evidence": [
+        "footage B2-023 (Training Day forced offer on arrival)"
+      ],
+      "closes_with": "segment 3",
+      "surfaced_by": ["manifest"],
+      "slices": ["S6"]
+    },
+    {
+      "id": "GAP-SKIP-GRANTS",
+      "summary": "Skipping the boot camp grants nothing; the pre-D11 bypass rewards are obsolete and are not used.",
+      "evidence": [
+        "no final-live evidence of skip rewards (build plan S7)"
+      ],
+      "closes_with": "evidence",
+      "surfaced_by": ["manifest"],
+      "slices": ["S7"]
+    },
+    {
+      "id": "GAP-NPC-BODY",
+      "summary": "NPC classes and appearance are analogues, and NPC hues are random.",
+      "evidence": [
+        "src/Rasa.Game/Managers/CreatureManager.cs:259-261 (random hues)",
+        "footage A2-040, A3-028, A5-33, B2-012 (NPC appearance)"
+      ],
+      "closes_with": "E5 class shortlist and S8",
+      "surfaced_by": ["manifest analogue fields"],
+      "slices": ["S1", "S2", "S4", "S5", "S8"]
+    },
+    {
+      "id": "GAP-GM",
+      "summary": "Every account is GM level 1 and can use .tele or .givelogos to bypass content.",
+      "evidence": [
+        "src/Rasa.Game/Client.cs:278-280 (all accounts GM level 1)"
+      ],
+      "closes_with": "separate security fix (F10)",
+      "surfaced_by": ["manifest", "docs/retail-accuracy.md"]
+    },
+    {
+      "id": "GAP-HOSPITAL-GAIN",
+      "summary": "The \"You just gained Alia Das Hospital.\" message on arrival is not produced.",
+      "evidence": [
+        "depends on the hospital system of track D (build plan S6 stubs)"
+      ],
+      "closes_with": "track D",
+      "surfaced_by": ["manifest"],
+      "slices": ["S6"]
+    },
+    {
+      "id": "GAP-RADIO-TIMING",
+      "summary": "A delay before the first radio offer is added only if the S1 owner check shows the offer dropped right after MapLoaded.",
+      "condition": "Conditional: opened only by the S1 owner check.",
+      "evidence": [
+        "footage A2-007 -> A2-013 (offer window 0.73 s after the first world frame)"
+      ],
+      "closes_with": "S1 owner client check",
+      "surfaced_by": ["manifest changes"],
+      "slices": ["S1"]
+    }
+  ],
+  "non_content_settings": [
+    {
+      "key": "Bootcamp.EntryMode",
+      "note": "Operational rollout and rollback gate for the rebuilt boot camp. It is not gameplay and not a reconstructed original value: it only decides which new characters start in context 1985 (build plan section 1.2 entry gate, invariant I8, OD-1). When it does not admit a character, creation keeps the existing context 1220 start.",
+      "values": ["Disabled", "AllowListedAccounts", "AllNewCharacters"],
+      "default": "Disabled",
+      "companion_keys": ["Bootcamp.AccountIds"],
+      "config": "src/Rasa.Game/Config/GameDataConfig.cs (GameDataConfig.Bootcamp)",
+      "set_in": "appsettings.env.json (mounted by docker-compose.yml)",
+      "decision": "OD-1"
+    }
+  ],
+  "changes": [],
+  "owner_decisions": [
+    { "id": "OD-1", "decision": "Rollout gate", "default": "AllowListedAccounts for S1-S5; AllNewCharacters after S3 and S6 are verified", "status": "open" },
+    { "id": "OD-2", "decision": "Instancing", "default": "Per-character instances (S3), fallback in build plan section 2.5", "status": "open" },
+    { "id": "OD-3", "decision": "Tip 10000018 in S1", "default": "Include (observed id, inferred binding)", "status": "open" },
+    { "id": "OD-4", "decision": "Logos 23 via a silent Tabula on 1990/1 versus a creation grant", "default": "Tabula on 1990/1 (the Lightning icon at 224.8 is a tray entry, not proof of the Logos)", "status": "open" },
+    { "id": "OD-5", "decision": "Timer while offline", "default": "Wall-clock (anchor kept); pause supported by the schema", "status": "open" },
+    { "id": "OD-6", "decision": "1995 limit: 600 s analogue versus untimed", "default": "600 s analogue (untimed would contradict B1-044)", "status": "open" },
+    { "id": "OD-7", "decision": "2005 giver", "default": "Youngblood (1995 giver; \"I'll give you another shot\")", "status": "open" },
+    { "id": "OD-8", "decision": "Exit pad anchor", "default": "Damaged pad entity (-225.35, 99.60, -70.52); alternative DROPSHIP_TELEPORTER marker (-233.74, 101.04, -80.08)", "status": "open" },
+    { "id": "OD-9", "decision": "Event that sets can_skip_bootcamp", "default": "The exit transfer", "status": "open" },
+    { "id": "OD-10", "decision": "Party members", "default": "Separate instances", "status": "open" },
+    { "id": "OD-11", "decision": "NPC classes and unseen levels (McAllister, Delessio, Hartmann, DeSimone, Youngblood, Van Valkenberg, allies)", "default": "Labelled analogues from E5, final-live classes only", "status": "open" },
+    { "id": "OD-12", "decision": "Crate class", "default": "TreasureDispenser candidate matched by E4/E5", "status": "open" },
+    { "id": "OD-13", "decision": "Target Dummy", "default": "Second 29365 placement", "status": "open" },
+    { "id": "OD-14", "decision": "Creation loadout correction before S2", "default": "Yes (track C)", "status": "open" },
+    { "id": "OD-15", "decision": "Instance id scheme", "default": "Monotonic uint, never 0 or 1", "status": "open" },
+    { "id": "OD-16", "decision": "Kill credit in instances", "default": "Owner credited for any kill of the bound placement", "status": "open" },
+    { "id": "OD-17", "decision": "Tizzik Gi, wreck, bomb, corpse and wounded-soldier identities", "default": "Labelled analogues, or hold the slice", "status": "open" },
+    { "id": "OD-18", "decision": "Mission NPCs versus enemy AI", "default": "Accept deaths; rebuild on relog restores them (no invented protection)", "status": "open" }
+  ]
+}

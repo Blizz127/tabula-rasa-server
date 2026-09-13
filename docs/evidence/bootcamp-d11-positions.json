@@ -1,0 +1,5 @@
+{
+  "schema": "rasa-reconstruction-positions/1",
+  "note": "Curated position records keyed by position_key (build plan sections 4.1 and 4.3). Record shape: {position_key, map_context_id?, x, y, z, rotation?, tier: measured|inferred|original, uncertainty {horizontal_m, vertical_m} when measured, reasoning when inferred, method, frames [{video, t, event}], anchors, client, session_date}. Never taken from DB teleporter rows 60/99/598, the F11 hard-coded vector, uimapmarker label coordinates or the pre-D11 map.",
+  "positions": []
+}

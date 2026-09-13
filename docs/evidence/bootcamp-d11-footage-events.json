@@ -1,0 +1,7 @@
+{
+  "schema": "rasa-reconstruction-footage-events/1",
+  "note": "Only transcript events cited by the manifest, written by the E1 extract script in the research tree (build plan section 4.1). verification.json corrections are applied: text and description carry the corrected values, corrected_text is kept when the verifier supplied one, and refuted events are listed in dropped instead of events. Transcript entry: {segment, video_id, transcript_sha256, verification_sha256}. Event: {segment, event_id, t, category, text, description, status: confirmed|corrected, corrected_text?, transcript_sha256}. Dropped entry: {segment, event_id, status: refuted, transcript_sha256}. t is decoded video seconds of the transcript's video.",
+  "transcripts": [],
+  "events": [],
+  "dropped": []
+}

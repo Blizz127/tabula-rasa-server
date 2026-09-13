@@ -1,0 +1,31 @@
+{
+  "schema": "rasa-positions/0",
+  "note": "Synthetic fixture positions.",
+  "positions": [
+    {
+      "position_key": "fixture.npc",
+      "x": 10.5,
+      "y": 120.25,
+      "z": -30.0,
+      "rotation": 1.5,
+      "tier": "measured",
+      "uncertainty": {
+        "horizontal_m": 1.5,
+        "vertical_m": 0.5
+      },
+      "method": "in_client_landmark_match",
+      "frames": [
+        {
+          "video": "fixtureVid01",
+          "t": 10.0,
+          "event": "FX1-001"
+        }
+      ],
+      "anchors": [
+        "synthetic map entity 1, file offset 100"
+      ],
+      "client": "1.16.5.0",
+      "session_date": "2026-09-14"
+    }
+  ]
+}

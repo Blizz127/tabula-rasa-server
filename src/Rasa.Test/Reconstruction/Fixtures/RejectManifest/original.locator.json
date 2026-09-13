@@ -1,0 +1,305 @@
+{
+  "schema": "rasa-reconstruction-manifest/1",
+  "policy": "AGENTS.md#evidence-bounded-reconstruction-user-decision-2026-09-13",
+  "segment": {
+    "id": "fixture",
+    "map_context_ids": [
+      9999
+    ],
+    "map_version": 1,
+    "missions": [
+      9001
+    ],
+    "client_version": "1.16.5.0"
+  },
+  "sources": {
+    "video:fixtureVid01": {
+      "kind": "video",
+      "era": "d11_to_shutdown",
+      "video_id": "fixtureVid01",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "timebase": "t is decoded video seconds"
+    },
+    "screenshot:fixture": {
+      "kind": "screenshot",
+      "era": "d11_to_shutdown"
+    },
+    "client_table:fixture": {
+      "kind": "client_table",
+      "era": "final_live",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    "client_map:fixture": {
+      "kind": "client_map",
+      "era": "final_live",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "calibration:fixture": {
+      "kind": "in_client_calibration",
+      "era": "final_live"
+    },
+    "measurement:fixture": {
+      "kind": "measurement",
+      "era": "unknown",
+      "path": "synthetic/measurement.json"
+    },
+    "notes:pre-d11": {
+      "kind": "official_notes",
+      "era": "pre_d11"
+    }
+  },
+  "scope": [
+    {
+      "table": "content_area",
+      "key_ranges": {
+        "id": {
+          "min": 99600,
+          "max": 99649
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key_ranges": {
+        "rule_id": {
+          "min": 999000,
+          "max": 999999
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "table": "content_area",
+      "key": {
+        "id": 99600
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Fixture",
+      "fields": {
+        "shape": {
+          "value": 1,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_map:fixture"
+            }
+          ]
+        },
+        "pos_x": {
+          "value": 10.5,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "calibration:fixture",
+              "position_key": "fixture.npc"
+            }
+          ],
+          "uncertainty": {
+            "horizontal_m": 1.5,
+            "vertical_m": 0.5,
+            "unit": "m",
+            "method": "in_client_landmark_match"
+          }
+        },
+        "pos_y": {
+          "value": 120.25,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "video:fixtureVid01",
+              "t": 10.0
+            }
+          ],
+          "uncertainty": {
+            "plus_minus": 0.5,
+            "unit": "m"
+          }
+        },
+        "pos_z": {
+          "value": -30.0,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:fixture",
+              "locator": "record 1"
+            }
+          ],
+          "uncertainty": {
+            "min": -31.0,
+            "max": -29.0,
+            "unit": "m"
+          }
+        },
+        "radius": {
+          "value": 3.0,
+          "tier": "inferred",
+          "reasoning": "Synthetic reasoning: at least twice the horizontal uncertainty.",
+          "citations": [
+            {
+              "source": "notes:pre-d11",
+              "locator": "synthetic section"
+            }
+          ]
+        }
+      },
+      "storage_fields": {
+        "id": {
+          "value": 99600,
+          "role": "surrogate_key"
+        },
+        "map_context_id": {
+          "value": 9999,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "fixture area",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 999000,
+        "sequence": 1
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Fixture",
+      "fields": {
+        "tutorial_id": {
+          "value": 10000001,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:fixtureVid01",
+              "event": "FX1-001",
+              "t": 10.03
+            }
+          ]
+        },
+        "chat_line": {
+          "value": "Synthetic corrected line",
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:fixtureVid01",
+              "event": "FX1-002",
+              "t": 20.5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective_timer",
+      "key": {
+        "mission_id": 9001,
+        "objective_id": 1
+      },
+      "slice": "S5",
+      "migration": "BootcampS5Fixture",
+      "fields": {
+        "limit_seconds": {
+          "value": 600,
+          "tier": "analogue",
+          "counterpart": "synthetic counterpart timer",
+          "required_because": "a running countdown needs a limit",
+          "decision": "OD-6",
+          "citations": [
+            {
+              "source": "video:fixtureVid01",
+              "event": "FX1-002",
+              "t": 20.45
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "omitted": [
+    {
+      "table": "npc_mission_objective_indicator",
+      "what": "synthetic indicator",
+      "reason": "not measured",
+      "gap": "GAP-FIXTURE"
+    }
+  ],
+  "accepted_definition_gaps": [
+    {
+      "mission_id": 9001,
+      "gaps": [
+        "synthetic gap string"
+      ],
+      "reason": "synthetic",
+      "slice": "S5"
+    }
+  ],
+  "accepted_content_gaps": [
+    {
+      "table": "content_rule",
+      "key": {
+        "id": 999000
+      },
+      "gaps": [
+        "synthetic content gap"
+      ],
+      "reason": "synthetic"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GAP-FIXTURE",
+      "summary": "Synthetic gap.",
+      "evidence": [
+        "synthetic evidence"
+      ],
+      "closes_with": "nothing",
+      "surfaced_by": [
+        "manifest"
+      ]
+    }
+  ],
+  "non_content_settings": [
+    {
+      "key": "Fixture.Setting",
+      "note": "Synthetic operational setting."
+    }
+  ],
+  "changes": [
+    {
+      "date": "2026-09-14",
+      "migration": "BootcampFix_20260914_fixture",
+      "table": "content_area",
+      "key": {
+        "id": 99600
+      },
+      "field": "pos_x",
+      "old": 10.0,
+      "new": 10.5,
+      "reason": "synthetic recalibration",
+      "citations": [
+        {
+          "source": "calibration:fixture",
+          "position_key": "fixture.npc"
+        }
+      ]
+    }
+  ],
+  "owner_decisions": [
+    {
+      "id": "OD-6",
+      "decision": "Synthetic decision",
+      "default": "600",
+      "status": "approved",
+      "choice": "600",
+      "approved_on": "2026-09-14",
+      "record": "synthetic approval record"
+    },
+    {
+      "id": "OD-7",
+      "decision": "Synthetic open decision",
+      "status": "open"
+    }
+  ]
+}

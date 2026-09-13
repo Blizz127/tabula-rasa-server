@@ -1,0 +1,53 @@
+{
+  "schema": "rasa-reconstruction-manifest/1",
+  "policy": "AGENTS.md#evidence-bounded-reconstruction-user-decision-2026-09-13",
+  "segment": {
+    "id": "citation-fixture",
+    "map_context_ids": [
+      9999
+    ],
+    "map_version": 1,
+    "missions": [
+      9001
+    ],
+    "client_version": "1.16.5.0"
+  },
+  "sources": {
+    "video:citeVid01": {
+      "kind": "video",
+      "era": "d11_to_shutdown",
+      "video_id": "citeVid01",
+      "timebase": "t is decoded video seconds"
+    }
+  },
+  "scope": [],
+  "rows": [
+    {
+      "table": "content_placement",
+      "key": {
+        "id": 99650
+      },
+      "slice": "S2",
+      "migration": "BootcampS2CitationFixture",
+      "fields": {
+        "name_label": {
+          "value": "Synthetic Crate",
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:citeVid01",
+              "event": "CT1-001",
+              "t": 100.08
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "omitted": [],
+  "accepted_definition_gaps": [],
+  "accepted_content_gaps": [],
+  "gaps": [],
+  "non_content_settings": [],
+  "changes": []
+}

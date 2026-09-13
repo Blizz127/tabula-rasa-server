@@ -1,0 +1,43 @@
+{
+  "schema": "rasa-reconstruction-footage-events/1",
+  "note": "Synthetic fixture events; not transcribed from any real video.",
+  "transcripts": [
+    {
+      "segment": "FX1",
+      "video_id": "fixtureVid01",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verification_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "events": [
+    {
+      "segment": "FX1",
+      "event_id": "FX1-001",
+      "t": 10.0,
+      "category": "tutorial",
+      "text": "Synthetic tip",
+      "description": "Synthetic confirmed event.",
+      "status": "refuted",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "segment": "FX1",
+      "event_id": "FX1-002",
+      "t": 20.5,
+      "category": "chat",
+      "text": "Synthetic corrected line",
+      "corrected_text": "Synthetic corrected line",
+      "description": "Synthetic corrected event.",
+      "status": "corrected",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "dropped": [
+    {
+      "segment": "FX1",
+      "event_id": "FX1-003",
+      "status": "refuted",
+      "transcript_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}
