@@ -36,6 +36,9 @@ the final-live rule.
 - The starter pistol now receives durability from its own template.
 - The first-family six-field creation message now has a handler, with the
   original `None` family state and persisted admission/replay checks.
+- Fixed Recruit outfit colors match the original creation preview. Selection
+  now checks the original two-field message, rejects overflowing slot values,
+  and preserves session selection when ownership lookup or saving fails.
 - The full initial inventory/placement, race and appearance eligibility,
   starting point, and first-login/skip state remain under reconstruction.
 - Deployment 11 rebuilt boot camp. The archived Bootcamp page marks its own

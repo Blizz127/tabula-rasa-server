@@ -286,6 +286,61 @@ namespace Rasa.Test
             Assert.AreEqual(0, reloaded.CharacterLockboxEntries.Count());
         }
 
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(2)]
+        [DataRow(17)]
+        public void SelectingAnUnavailableSlotPreservesSavedAndSessionState(int slot)
+        {
+            _manager.RequestCreateCharacterInSlot(_client, Request());
+            Drain();
+            Dictionary<uint, DateTime?> lastLogins;
+            using (var context = Context())
+            {
+                context.GameAccountEntries.Add(new GameAccountEntry
+                    { Id = 20, Name = "Other", FamilyName = "Other", Email = "other@example.invalid" });
+                context.CharacterEntries.Add(new CharacterEntry { AccountId = 20, Slot = 2, Name = "Other" });
+                context.SaveChanges();
+                lastLogins = context.CharacterEntries.ToDictionary(c => c.Id, c => c.LastLogin);
+            }
+            var selected = _client.AccountEntry.SelectedSlot;
+            var player = _client.Player;
+            _manager.RequestSwitchToCharacterInSlot(_client, new RequestSwitchToCharacterInSlotPacket
+                { SlotNum = (byte)slot, SkipBootcamp = true });
+            using var reloaded = Context();
+            Assert.AreEqual(selected, _client.AccountEntry.SelectedSlot);
+            Assert.AreEqual(selected, reloaded.GameAccountEntries.Single(a => a.Id == 10).SelectedSlot);
+            foreach (var character in reloaded.CharacterEntries)
+                Assert.AreEqual(lastLogins[character.Id], character.LastLogin);
+            Assert.AreSame(player, _client.Player);
+            Assert.AreEqual(ClientState.CharacterSelection, _client.State);
+            Assert.AreEqual(0, Drain().Count);
+        }
+
+        [TestMethod]
+        public void FailedSelectionSaveDoesNotPublishTheSelectedSlotOrLogin()
+        {
+            _manager.RequestCreateCharacterInSlot(_client, Request());
+            Drain();
+            DateTime? lastLogin;
+            using (var context = Context())
+            {
+                lastLogin = context.CharacterEntries.Single().LastLogin;
+                context.Database.ExecuteSqlRaw("CREATE TRIGGER reject_login BEFORE UPDATE ON character BEGIN SELECT RAISE(ABORT, 'login test failure'); END;");
+            }
+            var selected = _client.AccountEntry.SelectedSlot;
+            var player = _client.Player;
+            Assert.ThrowsException<DbUpdateException>(() => _manager.RequestSwitchToCharacterInSlot(_client,
+                new RequestSwitchToCharacterInSlotPacket { SlotNum = 1 }));
+            using var reloaded = Context();
+            Assert.AreEqual(selected, _client.AccountEntry.SelectedSlot);
+            Assert.AreEqual(selected, reloaded.GameAccountEntries.Single().SelectedSlot);
+            Assert.AreEqual(lastLogin, reloaded.CharacterEntries.Single().LastLogin);
+            Assert.AreSame(player, _client.Player);
+            Assert.AreEqual(ClientState.CharacterSelection, _client.State);
+            Assert.AreEqual(0, Drain().Count);
+        }
+
         private SqliteCharContext Context() => WeaponReloadPersistenceTests.Context(_connection);
         private static RequestCreateCharacterInSlotPacket Request(byte slot = 1, string name = "First")
             => new() { SlotNum = slot, CharacterName = name, FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };

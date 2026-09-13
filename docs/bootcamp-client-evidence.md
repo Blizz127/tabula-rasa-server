@@ -19,6 +19,23 @@ The dated sources, archive hashes and revision-cutoff policy are in
 [September 1, 2008 interview with lead QA](https://www.mmorpg.com/interviews/pax-a-look-at-tr-2000115981)
 independently confirms the deployed front-end/tutorial rewrite.
 
+The still-accessible [fansite walkthrough](https://www.playtabularasaonline.com/index.php?pg=starters-guide_bootcamp1)
+starts with Commander Elvers; its [bypass guide](https://www.playtabularasaonline.com/index.php?pg=starters-guide_bootcamp_skip)
+uses Captain Burba inside that instance. These identify the older tutorial,
+despite the site's home page carrying a March 2009 shutdown update. Page-level
+content, rather than the home-page date, determines applicability. The three
+entry/walkthrough/bypass pages and acquisition hashes are preserved privately
+in `playtabularasaonline-acquisition.json`; their rewards and bypass path are
+not adopted for the rewritten tutorial.
+
+An [August 28, 2008 report](https://www.tentonhammer.com/articles/screenshot-of-the-week)
+describes the rebuilt cave and an Eloh hologram encountered after training,
+whereas mission 1990's later client text presents an introductory vision.
+This does not establish whether these are separate encounters or a subsequent
+sequence change. Its linked official screenshot could not be retrieved, and
+the archive-index request timed out. No screenshot placement or mission-order
+claim is inferred from unseen footage; exact transitions remain unresolved.
+
 ## Exact mission and objective identities
 
 The [machine-readable catalog](evidence/bootcamp-client-catalog.json) preserves
@@ -107,10 +124,21 @@ The same versioned package's `data/maps/adv_bootcamp/audioemitters.xml` was
 range-extracted with ZIP size/CRC verification: 8,399 bytes, CRC `512198e5`,
 SHA-256 `d8c8d097d7319ae90a4464a943b71e9d6ac6cb66874cd3f2c264b86dea333bcf`.
 It contains eight audio emitters referencing sound sets 30, 487, 1160 and 1162.
-These are audio placements; they do not establish NPC or player spawns.
+The recovered `audiosetdata.pyo` identifies these as alien bird chirps, cave
+water drips, burning heavy machinery and generic fire. These are audio
+placements; they do not establish NPC or player spawns.
 Acquisition metadata and decoded positions are retained as
 `bootcamp-audio-extraction.json` and `bootcamp-audio-emitters.json` in the
 research directory below.
+
+The [audio reference catalog](evidence/bootcamp-audio-catalog.json) also preserves
+voice sets 2773–2776, named for missions 1990/1992/1994/1995, and set 2777 named
+for Major McAllister. Their sound records reference `boot_camp_Eloh_initiation_1.ogg`,
+`boot_camp_gearing_up.ogg`, `boot_camp_capture_the_flag.ogg`,
+`boot_camp_long_way_home.ogg` and `boot_camp_major_mcallister_bark.ogg`.
+These are original table names and bindings, not a reconstruction of which
+server event plays each file. The catalog records exact store offsets and the
+source member hash. Audio playback was not acquired or heard during this audit.
 
 The archived Google Code emulator
 [ltsochev-dev/tabula-rasa-server-emulator](https://github.com/ltsochev-dev/tabula-rasa-server-emulator)
@@ -133,6 +161,17 @@ forward `True` and `False` respectively. `client/clientmethod.pyo`,
 `Recv_BeginCharacterSelection` line 803, offsets 77–95, forwards the server's
 fifth argument to `SetCanSkipBootcamp`. Static disassembly and original member
 hashes are retained in `bootcamp-skip-code-manifest.json` and `*.skip.dis`.
+
+`client/inputstate/characterselection.pyo`, `OnSelectCharacter` source line 80,
+offsets 113–131 (source line 99), sends `RequestSwitchToCharacterInSlot` with
+exactly `(slotNum, bSkipBootcamp)`. The server decoder now checks that tuple
+length and rejects slot integers that cannot fit a byte, preventing values
+such as 257 from wrapping to slot 1. The handler resolves the slot against
+persisted account ownership before changing state, and publishes the session's
+selected slot only after the selected-slot/login save succeeds. Empty or
+unowned slots leave the session and saved login state intact. These are emulator
+entry-failure fixes, not recovered original error-response behavior; they do
+not implement the remaining tutorial skip flow.
 
 The server already sends its persisted account flag, whose schema default is
 false. However, `CharacterInfoPacket` publishes the assigned Wilderness context

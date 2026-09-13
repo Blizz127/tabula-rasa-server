@@ -1,0 +1,94 @@
+{
+  "source_member": "generated/client/audiosetdata.pyo",
+  "source_sha256": "9c9be13f62b8c9ee860c9c5339b08b45f18c5c1f7a9ef06e95786476ff7363f6",
+  "scope": "Static audio references only; no server trigger, placement or playback is established. Mission associations are names in the original audio table.",
+  "ambient_sets": [
+    {
+      "audio_set_id": 30,
+      "name": "World Foreas Ambient Alien Bird Chirp",
+      "store_offset": 88046
+    },
+    {
+      "audio_set_id": 487,
+      "name": "World Water Drips Cave Front Water",
+      "store_offset": 102764
+    },
+    {
+      "audio_set_id": 1160,
+      "name": "World Generic Fire Heavy Machinery Burning",
+      "store_offset": 124973
+    },
+    {
+      "audio_set_id": 1162,
+      "name": "World Generic Fire Generic Burning",
+      "store_offset": 125039
+    }
+  ],
+  "named_voice_sets": [
+    {
+      "audio_set_id": 2773,
+      "name": "Voice Mission Bootcamp 1990",
+      "store_offset": 178103,
+      "sounds": [
+        {
+          "sound_id": 49810,
+          "filename": "boot_camp_Eloh_initiation_1.ogg",
+          "member_store_offset": 307262,
+          "sound_store_offset": 84602
+        }
+      ]
+    },
+    {
+      "audio_set_id": 2774,
+      "name": "Voice Mission Bootcamp 1992",
+      "store_offset": 178136,
+      "sounds": [
+        {
+          "sound_id": 49813,
+          "filename": "boot_camp_gearing_up.ogg",
+          "member_store_offset": 307289,
+          "sound_store_offset": 84656
+        }
+      ]
+    },
+    {
+      "audio_set_id": 2775,
+      "name": "Voice Mission Bootcamp 1994",
+      "store_offset": 178169,
+      "sounds": [
+        {
+          "sound_id": 49809,
+          "filename": "boot_camp_capture_the_flag.ogg",
+          "member_store_offset": 307316,
+          "sound_store_offset": 84584
+        }
+      ]
+    },
+    {
+      "audio_set_id": 2776,
+      "name": "Voice Mission Bootcamp 1995",
+      "store_offset": 178202,
+      "sounds": [
+        {
+          "sound_id": 49814,
+          "filename": "boot_camp_long_way_home.ogg",
+          "member_store_offset": 307343,
+          "sound_store_offset": 84674
+        }
+      ]
+    },
+    {
+      "audio_set_id": 2777,
+      "name": "Bark English Male Bootcamp McAllister",
+      "store_offset": 178235,
+      "sounds": [
+        {
+          "sound_id": 49815,
+          "filename": "boot_camp_major_mcallister_bark.ogg",
+          "member_store_offset": 307370,
+          "sound_store_offset": 84692
+        }
+      ]
+    }
+  ]
+}

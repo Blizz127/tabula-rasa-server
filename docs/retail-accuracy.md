@@ -991,3 +991,44 @@ configuration, test/build logs and service records are preserved at
 Rollback image: `rasa_net:before-retail-outfit-20260912`; retag as `rasa_net:latest`
 and recreate only game with `--no-deps --no-build`. No schema migration or saved
 character rewrite occurred; code rollback needs no database restoration.
+
+
+## 2026-09-13 UTC — Character selection failure handling and boot-camp audio evidence
+
+Selecting an empty or unowned slot now leaves saved and session state intact.
+Previously the session selected-slot field changed before ownership lookup or
+saving succeeded. It now updates after the selected-slot/login save completes.
+The original two-field selection message is checked explicitly, and oversized
+or negative slot integers cannot wrap into a valid pod. This corrects emulator
+entry failures; original error-response behavior and the complete first-login
+and boot-camp skip path remain unverified.
+
+Ten new cases cover original skip/no-skip packet decoding, malformed messages,
+slot overflow, empty/unowned slots and a real SQLite login-save failure. The
+23 focused creation/selection cases pass; the final image passes **all 608
+tests**, with zero failures or skips and no production DB mounts or networking.
+The .NET 5 build has zero errors and the same five existing warnings. Reviewed
+source matches the image excluding `bin`/`obj`.
+
+[Boot-camp evidence](bootcamp-client-evidence.md) now records the original
+selection sender, the obsolete Elvers/Burba fansite guide and an unresolved
+August 2008 description of the rebuilt tutorial's order. A new
+[audio catalog](evidence/bootcamp-audio-catalog.json) preserves four ambient sets
+and five named voice sets with original table hashes and bytecode offsets.
+The voice filenames identify the four later tutorial missions and McAllister's
+bark, but do not establish playback triggers, NPC placements or rewards.
+Original audio playback was not acquired or heard. Full boot camp and subsequent
+progression are still incomplete.
+
+Image `sha256:7c81e87e6b6b8582c6a6d8b1089c72d152ddcca01ffee2cabee26e031d064f5f`
+started game at **00:02:35 UTC**, ready at **00:02:44 UTC**. Verification at
+**00:03:10 UTC** found the expected image running with zero restarts and no
+error/unhandled/fatal/OOM lines. Auth's image and start time are unchanged.
+All three fresh SQLite backups passed integrity checks; no schema migration or
+saved-character rewrite was performed.
+
+Source/docs, configuration, logs and service records:
+`/home/blizz/backups/rasa-net/20260913T000223Z-retail-selection/`.
+Rollback: retag `rasa_net:before-retail-selection-20260913` as `rasa_net:latest`
+and recreate game alone using `--no-deps --no-build`. Code rollback requires no
+database restoration. Original-client playthrough comparison remains pending.

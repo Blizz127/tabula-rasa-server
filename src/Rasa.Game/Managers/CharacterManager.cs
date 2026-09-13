@@ -384,12 +384,14 @@ namespace Rasa.Managers
                 return;
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            client.AccountEntry.SelectedSlot = packet.SlotNum;
-            unitOfWork.GameAccounts.UpdateSelectedSlot(client.AccountEntry.Id, packet.SlotNum);
+            // Resolve persisted ownership before changing either saved or session state.
+            if (!unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id).TryGetValue(packet.SlotNum, out var character))
+                return;
 
-            var character = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id, packet.SlotNum);
+            unitOfWork.GameAccounts.UpdateSelectedSlot(client.AccountEntry.Id, packet.SlotNum);
             unitOfWork.Characters.UpdateLoginData(character.Id);
             unitOfWork.Complete();
+            client.AccountEntry.SelectedSlot = packet.SlotNum;
 
             client.Player = CreateCharacterManifestation(client, character);
             client.Player.MapChannel = MapChannelManager.Instance.FindByContextId(client.Player.MapContextId);
