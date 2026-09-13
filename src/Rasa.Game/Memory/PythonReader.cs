@@ -187,10 +187,6 @@ namespace Rasa.Memory
                 case 0x40:
                     return null;
 
-                case 0x41:
-                case 0x42:
-                    throw new NotImplementedException();
-
                 case 0x4D:
                     length = Reader.ReadByte();
                     break;
@@ -204,7 +200,10 @@ namespace Rasa.Memory
                     break;
 
                 default:
-                    throw new Exception($"WTF? String type: {type:X2}");
+                    // Low nibbles 0x1-0xC carry the length inline, exactly as ReadInt,
+                    // ReadUInt, ReadDictionary and ReadList already do for their own types.
+                    length = type & 0x0F;
+                    break;
             }
 
             return Reader.ReadUtf8StringOn(length);
@@ -223,9 +222,6 @@ namespace Rasa.Memory
                 case 0x50:
                     return null;
 
-                case 0x52:
-                    throw new NotImplementedException();
-
                 case 0x5D:
                     length = Reader.ReadByte();
                     break;
@@ -239,7 +235,10 @@ namespace Rasa.Memory
                     break;
 
                 default:
-                    throw new Exception($"WTF? String type: {type:X2}");
+                    // Low nibbles 0x1-0xC carry the length inline, exactly as ReadInt,
+                    // ReadUInt, ReadDictionary and ReadList already do for their own types.
+                    length = type & 0x0F;
+                    break;
             }
 
             return Reader.ReadUtf8StringOn(length);
