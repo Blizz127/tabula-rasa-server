@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,6 +172,20 @@ namespace Rasa.Repositories.Char.Character
 
             _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
+        }
+
+        // Stages currency and experience on the tracked entity so the caller can
+        // commit them together with other rows in one Complete().
+        public void UpdateCharacterRewards(uint id, int credits, int prestige, uint experience)
+        {
+            var entry = _charContext.CharacterEntries.Find(id);
+
+            if (entry == null)
+                throw new KeyNotFoundException($"character {id} does not exist");
+
+            entry.Credit = credits;
+            entry.Prestige = prestige;
+            entry.Experience = experience;
         }
 
         public void UpdateCharacterLevel(uint id, byte level)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Rasa.Repositories.Char.Character
 {
@@ -18,6 +18,7 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterCloneCredits(uint id, uint cloneCredits);
         void UpdateCharacterCredits(uint id, int credits);
         void UpdateCharacterExpirience(uint id, uint experience);
+        void UpdateCharacterRewards(uint id, int credits, int prestige, uint experience);
         void UpdateCharacterLevel(uint id, byte level);
         void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins);
         void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId);

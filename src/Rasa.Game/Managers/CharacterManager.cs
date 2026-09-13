@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -436,8 +436,7 @@ namespace Rasa.Managers
             var characterAppearances = unitOfWork.CharacterAppearances.GetByCharacterId(character.Id);
             var appearanceData = new Dictionary<EquipmentData, AppearanceData>();
             var lockboxInfo = unitOfWork.CharacterLockboxes.Get(client.AccountEntry.Id);
-            var missions = unitOfWork.CharacterMissions.Get(client.AccountEntry.Id, client.AccountEntry.SelectedSlot);
-            var missionData = new Dictionary<int, MissionLog>();
+            var missionData = MissionManager.Instance.LoadPlayerMissions(unitOfWork.CharacterMissions, client.AccountEntry.Id, client.AccountEntry.SelectedSlot, character.Id);
             var clan = unitOfWork.Clans.GetClanByCharacterId(character.Id);
             var logos = unitOfWork.CharacterLogoses.GetLogos(character.Id);
 

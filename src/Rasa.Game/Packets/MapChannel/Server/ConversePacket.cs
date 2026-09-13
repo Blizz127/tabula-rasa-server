@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Rasa.Packets.MapChannel.Server
 {
@@ -51,7 +51,10 @@ namespace Rasa.Packets.MapChannel.Server
                             pw.WriteTuple(6);
                             pw.WriteUInt(mission.Value.MissionConstantData.Level);
                             pw.WriteStruct(mission.Value.MissionConstantData.RewardInfo);
-                            pw.WriteNoneStruct();                                       // offerVOAudioSetId (NoneStruct for no-audio)  // ToDo
+                            if (mission.Value.AudioSetId > 0)
+                                pw.WriteInt(mission.Value.AudioSetId);                  // offerVOAudioSetId, played when the offer comes from an NPC
+                            else
+                                pw.WriteNoneStruct();
                             pw.WriteList(mission.Value.ItemRequired.Count);       // itemsRequired
                             foreach (var item in mission.Value.ItemRequired)
                                 pw.WriteInt(item);                                      // itemClassId
@@ -59,7 +62,7 @@ namespace Rasa.Packets.MapChannel.Server
                             foreach (var objective in mission.Value.ObjectivesList)
                             {
                                 pw.WriteTuple(2);
-                                pw.WriteNoneStruct();                   // ordinal      (not used by client)
+                                pw.WriteUInt(objective.Ordinal);         // ordinal, the client sorts the offer list by it
                                 pw.WriteUInt(objective.ObjectiveId);     // objectiveId
                             }
                             pw.WriteUInt(mission.Value.MissionConstantData.GroupType);         // groupType
@@ -129,11 +132,21 @@ namespace Rasa.Packets.MapChannel.Server
                         break;
 
                     case ConversationType.ObjectiveChoice:
-                        Logger.WriteLog(LogType.Debug, $"ConversationType resived = {entry.Key}");
+                        var choiceObjectives = (List<CompleteableObjectives>)entry.Value;
+
+                        pw.WriteList(choiceObjectives.Count);
+                        foreach (var objective in choiceObjectives)
+                        {
+                            pw.WriteTuple(3);
+                            pw.WriteInt(objective.MissionId);
+                            pw.WriteInt(objective.ObjectiveId);
+                            pw.WriteInt(objective.PlayerFlagId);
+                        }
+
                         break;
 
                     case ConversationType.EndConversation:
-                        Logger.WriteLog(LogType.Debug, $"ConversationType resived = {entry.Key}");
+                        pw.WriteNoneStruct();   // the client only tests for the key
                         break;
 
                     case ConversationType.Training:
@@ -154,7 +167,7 @@ namespace Rasa.Packets.MapChannel.Server
                         break;
 
                     case ConversationType.ImportantGreering:
-                        Logger.WriteLog(LogType.Debug, $"ConversationType resived = {entry.Key}");
+                        pw.WriteInt((int)entry.Value);  // greetingId
                         break;
 
                     case ConversationType.Clan:
@@ -168,7 +181,7 @@ namespace Rasa.Packets.MapChannel.Server
                         break;
 
                     case ConversationType.ForcedByScript:
-                        Logger.WriteLog(LogType.Debug, $"ConversationType resived = {entry.Key}");
+                        pw.WriteBool((bool)entry.Value);    // keeps the window open outside conversation range
                         break;
 
                     default:

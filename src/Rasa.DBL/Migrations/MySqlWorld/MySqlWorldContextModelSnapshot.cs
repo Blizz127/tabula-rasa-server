@@ -741,6 +741,80 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("npc_mission");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveConversationEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("NpcPackageId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("npc_package_id");
+
+                    b.Property<uint>("PlayerFlagId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("player_flag_id");
+
+                    b.HasKey("MissionId", "ObjectiveId", "NpcPackageId", "PlayerFlagId");
+
+                    b.ToTable("npc_mission_objective_conversation");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_required");
+
+                    b.Property<uint>("Ordinal")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("ordinal");
+
+                    b.Property<bool>("RevealedOnAccept")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("revealed_on_accept");
+
+                    b.HasKey("MissionId", "ObjectiveId");
+
+                    b.ToTable("npc_mission_objective");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveTransitionEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("CompletedObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("completed_objective_id");
+
+                    b.Property<uint>("RevealedObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("revealed_objective_id");
+
+                    b.HasKey("MissionId", "CompletedObjectiveId", "RevealedObjectiveId");
+
+                    b.ToTable("npc_mission_objective_transition");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionRewardEntry", b =>
                 {
                     b.Property<int>("Credits")

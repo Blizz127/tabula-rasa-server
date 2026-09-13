@@ -740,6 +740,80 @@ namespace Rasa.Migrations.SqliteWorld
                     b.ToTable("npc_mission");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveConversationEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("NpcPackageId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("npc_package_id");
+
+                    b.Property<uint>("PlayerFlagId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("player_flag_id");
+
+                    b.HasKey("MissionId", "ObjectiveId", "NpcPackageId", "PlayerFlagId");
+
+                    b.ToTable("npc_mission_objective_conversation");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("objective_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("comment");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_required");
+
+                    b.Property<uint>("Ordinal")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ordinal");
+
+                    b.Property<bool>("RevealedOnAccept")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("revealed_on_accept");
+
+                    b.HasKey("MissionId", "ObjectiveId");
+
+                    b.ToTable("npc_mission_objective");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.NpcMissionObjectiveTransitionEntry", b =>
+                {
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("CompletedObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("completed_objective_id");
+
+                    b.Property<uint>("RevealedObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("revealed_objective_id");
+
+                    b.HasKey("MissionId", "CompletedObjectiveId", "RevealedObjectiveId");
+
+                    b.ToTable("npc_mission_objective_transition");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionRewardEntry", b =>
                 {
                     b.Property<int>("Credits")

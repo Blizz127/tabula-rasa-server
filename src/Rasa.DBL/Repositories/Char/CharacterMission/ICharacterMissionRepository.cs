@@ -1,14 +1,17 @@
-﻿using Rasa.Structures.Char;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rasa.Repositories.Char.CharacterMission
 {
+    using Structures.Char;
+
     public interface ICharacterMissionRepository
     {
         List<CharacterMissionEntry> Get(uint accountId, uint characterSlot);
+        List<CharacterMissionObjectiveEntry> GetObjectives(uint characterId);
+        void Add(CharacterMissionEntry mission, IEnumerable<CharacterMissionObjectiveEntry> objectives);
+        void AddObjective(CharacterMissionObjectiveEntry objective);
+        void UpdateState(uint characterId, uint missionId, uint missionState, uint changeTime);
+        void UpdateObjectiveStatus(uint characterId, uint missionId, uint objectiveId, uint status);
+        void Delete(uint characterId, uint missionId);
     }
 }

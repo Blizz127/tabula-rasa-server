@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Rasa.Repositories.UnitOfWork
 {
@@ -26,6 +26,8 @@ namespace Rasa.Repositories.UnitOfWork
         public IMapInfoRepository MapInfos => _parent.MapInfos;
 
         public INpcMissionRepository NpcMissions => _parent.NpcMissions;
+
+        public INpcMissionObjectiveRepository NpcMissionObjectives => _parent.NpcMissionObjectives;
 
         public INpcMissionRewardRepository NpcMissionRewards => _parent.NpcMissionRewards;
 

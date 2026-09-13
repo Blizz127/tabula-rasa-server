@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -123,6 +123,7 @@ namespace Rasa
             services.AddScoped<ILogosRepository, LogosRepository>();
             services.AddScoped<IMapInfoRepository, MapInfoRepository>();
             services.AddScoped<INpcMissionRepository, NpcMissionRepository>();
+            services.AddScoped<INpcMissionObjectiveRepository, NpcMissionObjectiveRepository>();
             services.AddScoped<INpcMissionRewardRepository, NpcMissionRewardRepository>();
             services.AddScoped<INpcPackageRepository, NpcPackageRepository>();
             services.AddScoped<IPlayerRandomNameRepository, PlayerRandomNameRepository>();

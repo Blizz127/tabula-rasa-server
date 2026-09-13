@@ -1,4 +1,4 @@
-﻿namespace Rasa.Game.Handlers
+namespace Rasa.Game.Handlers
 {
     using Data;
     using Managers;
@@ -32,10 +32,41 @@
             ManifestationManager.Instance.AllocateAttributePoints(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.AbandonMission)]
+        private void AbandonMission(AbandonMissionPacket packet)
+        {
+            NpcManager.Instance.AbandonMission(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.AssignNPCMission)]
         private void AssignNPCMission(AssignNPCMissionPacket packet)
         {
             NpcManager.Instance.AssignNPCMission(Client, packet);
+        }
+
+        // Radio and shared missions are not implemented; definitions using them are
+        // never offered. The requests are decoded so they cannot disconnect a client.
+        [PacketHandler(GameOpcode.AssignRadioMission)]
+        private void AssignRadioMission(AssignRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        [PacketHandler(GameOpcode.AssignSharedMission)]
+        private void AssignSharedMission(AssignSharedMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        [PacketHandler(GameOpcode.CompleteRadioMission)]
+        private void CompleteRadioMission(CompleteRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        [PacketHandler(GameOpcode.DeclineSharedMission)]
+        private void DeclineSharedMission(DeclineSharedMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        [PacketHandler(GameOpcode.RewardRadioMission)]
+        private void RewardRadioMission(RewardRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        [PacketHandler(GameOpcode.ShareMission)]
+        private void ShareMission(ShareMissionPacket packet) => IgnoreMissionRequest(packet);
+
+        private static void IgnoreMissionRequest(UnsupportedMissionRequestPacket packet)
+        {
+            Logger.WriteLog(LogType.Debug, $"Ignored unsupported mission request {packet.Opcode}");
         }
 
         [PacketHandler(GameOpcode.AutoFireKeepAlive)]
@@ -84,6 +115,24 @@
         private void CompleteNPCMission(CompleteNPCMissionPacket packet)
         {
             NpcManager.Instance.CompleteNPCMission(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.CompleteNPCObjective)]
+        private void CompleteNPCObjective(CompleteNPCObjectivePacket packet)
+        {
+            NpcManager.Instance.CompleteNPCObjective(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.PerformNPCChoice)]
+        private void PerformNPCChoice(PerformNPCChoicePacket packet)
+        {
+            NpcManager.Instance.PerformNPCChoice(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RewardNPCMission)]
+        private void RewardNPCMission(RewardNPCMissionPacket packet)
+        {
+            NpcManager.Instance.RewardNPCMission(Client, packet);
         }
 
         [PacketHandler(GameOpcode.CreateClan)]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -42,7 +42,9 @@ namespace Rasa.Structures
         public List<uint> Titles { get; set; } = new List<uint>();
         public uint CurrentTitle { get; set; }
         public int CurrentAbilityDrawer { get; set; }
-        public Dictionary<int, MissionLog> Missions { get; set; } = new();
+        public Dictionary<uint, PlayerMission> Missions { get; set; } = new();
+        // Player flag ids; the client tests membership with 'in', so this is always sent as a list.
+        public List<uint> PlayerFlags { get; set; } = new();
         public DateTime LoginTime { get; set; }
         public List<uint> Logos = new();
         public ulong TrackingTargetEntityId { get; set; }

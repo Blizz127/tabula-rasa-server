@@ -8,7 +8,11 @@ The acquired executable identifies itself as 1.16.5.0 and supplies original
 client mission structures; see [client artifacts](client-artifacts.md) for
 provenance and final-distribution authentication limits.
 
-## Current server behavior
+## Server behavior as inspected on 2026-09-12
+
+The acceptance, conversation, completion and persistence gaps listed here were
+addressed by the [2026-09-13 mission-log pass](#mission-log-protocol-and-persistence--2026-09-13);
+the content findings remain current.
 
 `MissionManager.LoadMissions` loads only `npc_mission` definitions. The live
 SQLite world contains two definitions, zero `npc_mission_reward` rows, and no
@@ -280,3 +284,105 @@ wrong NPC/map/distance, a full log, reward-selection/inventory conditions,
 correct on-screen objective text and markers, and exactly-once reward after
 restart. Passing packet/unit tests alone will not prove that the client renders
 or plays the retail quest correctly.
+
+## Mission-log protocol and persistence — 2026-09-13
+
+This pass implements the server side of the mission log and NPC objective
+conversations that the rebuilt boot camp (and every later quest) depends on.
+It adds **no mission content**: no mission, objective, conversation binding,
+transition or reward row was inserted, and the two unvalidated seeds 321/429
+are now withheld rather than offered. Evidence for the client contract is in
+[boot-camp evidence](bootcamp-client-evidence.md#entry-skip-and-protocol-facts-used-by-the-implementation);
+research artifacts are under
+`/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/`.
+
+### Recovered client contract now honoured (proven original behavior)
+
+| Client fact (1.16.5.0) | Server behavior now |
+| --- | --- |
+| `npc.pyo` `Recv_NPCInfo(npcPackageId)` is the only setter of `npc.npcPackageId`; `conversationwindow.HandleShowObjectiveCompletion` builds dialogue from it | `NPCInfo` (490) is included in every NPC's entity data when a package is known. Previously it was never sent, so no objective dialogue could render. |
+| `Recv_Converse` reads key 6 `OBJECTIVECOMPLETE` as `(missionId, objectiveId, playerFlagId)` triples | Objective topics are listed under key 6 for objectives the player actually has incomplete, instead of an always-empty `ObjectiveChoice` entry. Keys 8, 9, 12 and 15 now serialize a value instead of a bare key. |
+| Continue sends `CompleteNPCObjective` (431) `(npcId, missionId, objectiveId, playerFlagId)`; the client changes no state locally | New handler. The objective completes only when the mission is active, the objective is revealed and incomplete, the NPC's package and player flag match a binding, and the player is within conversation range. |
+| `CompleteNPCMission` (430) and `RewardNPCMission` (540) send `selectionIdx`/`rating` as `None` or an integer | Read as optional integers; the earlier boolean reader rejected index 2 and collapsed 0/1. `RewardNPCMission` and `PerformNPCChoice` (497) are decoded and logged; their conversation types have no server data yet. |
+| `MissionStatusInfo` (487) replaces the whole log; `ObjectiveRevealed` (494) replaces a mission entry; `ObjectiveCompleted` (492), `MissionCompleteable` (481), `MissionCompleted` (482), `MissionRewarded` (486), `MissionDiscarded` (483) carry the tuples in `missionlog.pyo` | Packets added with those exact arities and sent to the player's own entity, where the client copies `MissionLog` handlers. The log is sent on world entry and after dropship transfer. |
+| `NPCConversationStatus` 0 removes the Converse action; the client stores the status data as mission ids | Status now reflects the individual player's log: completeable mission (4), then an incomplete bound objective (3), then an offerable mission (2). The distinct `MissionComplete` value replaces the earlier `ObjectivComplete` for turn-ins. Visible related NPCs are refreshed after each change. The priority among simultaneous states is an emulator choice. |
+| `HandleShowMissionAvailable` sorts offered objectives by `(ordinal, objectiveId)` and plays `offerVOAudioSetId` for NPC offers | The dispense tuple carries each objective's ordinal instead of `None`. `offerVOAudioSetId` is still always `None`: no table stores an offer audio set and the loader never sets one. |
+| `Recv_PlayerFlags` stores the value and `HasPlayerFlag` evaluates `id in flags` | `PlayerFlags` (710) sends a list (currently empty) instead of the integer `0xFFFFFFF`, which made every flag test raise. |
+| `lootdispenser.pyo` `Recv_CanLootItems(isLootable, canLootPerItem)` later calls `.get()` on the second value | An empty dictionary is sent when nothing is lootable instead of `None`. |
+| `shared/gameconstants.pyo`: `MAX_MISSION_COUNT = 30`, `NON_ABANDONABLE_MISSIONS = [1990, 2010, 2011]`, `MAX_CONVERSATION_RANGE = 5`; the offer window shows `ID_MISSION_MAX_COUNT_REACHED` and disables Accept at the cap | The server mirrors these client limits: it silently refuses an `AssignNPCMission` beyond 30 missions the client can see, refuses `AbandonMission` (392, now handled) for the three fixed ids, and refuses `AssignNPCMission`, `CompleteNPCObjective` and `CompleteNPCMission` from another map or beyond 5 m plus a 2 m emulator allowance for movement latency. `RequestNPCConverse` itself is not range-checked. The original server's replies to such requests are unrecovered; these refusals are emulator validation. |
+
+### Emulator storage and rules (not original evidence)
+
+- `character_mission` gains `change_time` (Unix seconds sent as the client's
+  `changeTime`; existing rows default to 0). New `character_mission_objective`
+  stores each revealed objective's original `missionobjectivestate` value.
+  Acceptance writes the mission and its revealed objectives together; each
+  objective completion and its reveals commit before any packet is sent.
+- New world tables `npc_mission_objective` (id, ordinal, required, revealed on
+  acceptance), `npc_mission_objective_conversation` (the client's
+  `(mission, objective, npcPackage, playerFlag)` completion key) and
+  `npc_mission_objective_transition` (objective completion reveals another).
+  They are empty. The original server's script format is unrecovered; this
+  layout only represents what the client protocol exposes.
+- A definition is offered only if it has objectives, at least one required
+  and at least one revealed on acceptance, a completion binding for every
+  objective and every required objective reachable through transitions. The server logs the reasons at
+  startup. Without the gate, the 321/429 seeds could be accepted and would
+  persist as completed with no objectives or rewards. Their giver/receiver
+  markers therefore disappear; this removes invalid content, it does not
+  restore the original River Recon.
+- `npc_mission_reward.type` had no rows or consumer; it is now read as 1
+  credits, 2 prestige, 3 experience (amount in `credits`), 4 fixed item,
+  5 selectable item. Completion commits the mission state, credits, prestige
+  and experience in one save before notifying the client; level-ups then use
+  the existing path. Item rewards are not granted: creating and placing items
+  cannot yet share that save, so a full or unsuitable inventory could consume
+  a mission without its item. Any item reward row therefore withholds the
+  definition. Item rows are still validated (known template, an inventory
+  category, quantity within the stack size, the template's quality) so the
+  reward display is truthful once delivery exists. Rewards remain an evidence
+  gap for every mission.
+- The offer window lists the objectives revealed on acceptance, in
+  `(ordinal, objectiveId)` order. The client renders whatever list it
+  receives; which objectives the original offers listed is unverified, and
+  this schema cannot express an offer list different from the initial set.
+- Reward rows are normalized once at load and the same values build the
+  client's reward display and the turn-in payout. A definition is withheld if
+  a reward row has an unknown type, a non-positive amount or repeats a
+  currency type. Payouts that would overflow a balance are refused before
+  anything is written. Turn-in is also refused, and logged, when a mission
+  already in a log has a definition that would no longer be offered; a
+  definition with nothing required never becomes completeable.
+- Definitions flagged radio-completeable or shareable are withheld: the client
+  would show Radio/Share buttons whose requests have no server implementation.
+  `AssignRadioMission` (408), `AssignSharedMission` (409),
+  `CompleteRadioMission` (432), `DeclineSharedMission` (440),
+  `RewardRadioMission` (541) and `ShareMission` (547) are decoded and ignored,
+  because an undecodable request disconnects the client.
+- On world entry, saved active missions are reconciled with the current
+  definitions: objectives revealed on acceptance and transitions from
+  completed objectives that the saved rows lack are added and saved, so a
+  definition change cannot strand a mission; nearby NPC markers are refreshed
+  afterwards. Saved missions whose definition no longer exists stay in
+  storage, are not sent and do not count toward the 30-mission cap.
+- Requests are accepted from players in game, or arriving by dropship once
+  the destination map holds them. The pre-existing GM `.teleport` command
+  still leaves the player's map fields stale, so mission requests after it
+  can be refused by the map and range checks until the next login.
+- Completed missions stay in storage with state 4 and are not offered again.
+  Abandon deletes the mission and objective rows so the mission can be taken
+  again; the D13.4 known issue's workaround ("get the mission again") shows
+  re-acquisition after abandoning on live. The final client's text also
+  describes some missions as repeatable and others as non-repeatable. This
+  emulator has no repeatable flag yet, so withholding every completed mission
+  is correct only for non-repeatable missions.
+
+### Still missing for quests
+
+Kill, use-object, item, timer and area objectives; objective counters and
+indicators with recovered positions; failure and retry (for example mission
+2005); radio and shared missions; repeatable missions; choice and
+reward-only conversations; mission-offer voice-overs (`offerVOAudioSetId`;
+sets 2773–2776 are a naming inference); item rewards delivered atomically
+with completion; and every content row. The boot-camp gaps that block
+content are ranked in [boot-camp evidence](bootcamp-client-evidence.md#gap-ranking-after-the-sweep).

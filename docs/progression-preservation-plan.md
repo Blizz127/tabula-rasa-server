@@ -43,10 +43,18 @@ the final-live rule.
   starting point, and first-login/skip state remain under reconstruction.
 - Deployment 11 rebuilt boot camp. The archived Bootcamp page marks its own
   mission list obsolete; recover the later sequence before importing missions.
-- The recovered later client identifies missions 1990, 1992, 1994 and 1995,
-  19 objectives and nine NPC dialogue bindings. The current boot-camp map has
-  no spawn-pool rows or mission definitions; start/reward/skip scripts remain
-  unrecovered. See [the boot-camp audit](bootcamp-client-evidence.md).
+- The recovered later client identifies missions 1990, 1992, 1994, 1995 and
+  the retry 2005, 21 objectives and ten NPC dialogue bindings. The current
+  boot-camp map has no spawn-pool rows or mission definitions; start/reward/skip
+  scripts remain unrecovered. See [the boot-camp audit](bootcamp-client-evidence.md).
+- A verified 2026-09-13 sweep established that the original static map holds
+  no gameplay actors at all, so first-login position, NPC placements and
+  objects must come from captures or observation, not client data.
+- The server now speaks the recovered mission-log and NPC objective
+  conversation protocol with persistent per-character progress, which the
+  tutorial's conversation objectives require. No tutorial content is loaded;
+  incomplete definitions are withheld. See
+  [mission research](mission-research.md#mission-log-protocol-and-persistence--2026-09-13).
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
@@ -513,8 +513,8 @@ namespace Rasa.Managers
                         var logosId = 0u;
                         foreach (var entry in mapChannel.DynamicObjects)
                         {
-                            var logos = entry as Logos;
-                            if (action.SourceId == logos.EntityId)
+                            // Other usable objects share this list; only a logos stone matches.
+                            if (entry is Logos logos && action.SourceId == logos.EntityId)
                             {
                                 logosId = logos.Id;
                                 break;

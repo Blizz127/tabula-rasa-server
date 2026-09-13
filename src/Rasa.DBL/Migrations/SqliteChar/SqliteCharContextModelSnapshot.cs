@@ -299,6 +299,10 @@ namespace Rasa.Migrations.SqliteChar
                         .HasColumnType("INTEGER")
                         .HasColumnName("mission_id");
 
+                    b.Property<uint>("ChangeTime")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("change_time");
+
                     b.Property<uint>("MissionState")
                         .HasColumnType("INTEGER")
                         .HasColumnName("mission_state");
@@ -306,6 +310,29 @@ namespace Rasa.Migrations.SqliteChar
                     b.HasKey("CharacterId", "MissionId");
 
                     b.ToTable("character_mission");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.Char.CharacterMissionObjectiveEntry", b =>
+                {
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("character_id");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("Status")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("status");
+
+                    b.HasKey("CharacterId", "MissionId", "ObjectiveId");
+
+                    b.ToTable("character_mission_objective");
                 });
 
             modelBuilder.Entity("Rasa.Structures.Char.CharacterOptionEntry", b =>

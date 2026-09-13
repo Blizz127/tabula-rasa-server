@@ -300,6 +300,10 @@ namespace Rasa.Migrations.MySqlChar
                         .HasColumnType("int unsigned")
                         .HasColumnName("mission_id");
 
+                    b.Property<uint>("ChangeTime")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("change_time");
+
                     b.Property<uint>("MissionState")
                         .HasColumnType("int unsigned")
                         .HasColumnName("mission_state");
@@ -307,6 +311,29 @@ namespace Rasa.Migrations.MySqlChar
                     b.HasKey("CharacterId", "MissionId");
 
                     b.ToTable("character_mission");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.Char.CharacterMissionObjectiveEntry", b =>
+                {
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("character_id");
+
+                    b.Property<uint>("MissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("mission_id");
+
+                    b.Property<uint>("ObjectiveId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("objective_id");
+
+                    b.Property<uint>("Status")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("status");
+
+                    b.HasKey("CharacterId", "MissionId", "ObjectiveId");
+
+                    b.ToTable("character_mission_objective");
                 });
 
             modelBuilder.Entity("Rasa.Structures.Char.CharacterOptionEntry", b =>

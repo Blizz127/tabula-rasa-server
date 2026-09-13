@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -277,6 +277,11 @@ namespace Rasa.Managers
                 new UpdateAttributesPacket(creature.Attributes, 0),
                 new IsRunningPacket(false)
             };
+
+            // NPC augmentation: the client resolves objective-completion dialogue
+            // through npc.npcPackageId, which only Recv_NPCInfo sets.
+            if (creature.Npc != null && creature.Npc.NpcPackageId != 0)
+                entityData.Add(new NPCInfoPacket(creature.Npc.NpcPackageId));
 
             client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(creature.EntityId, creature.EntityClass, entityData));
 

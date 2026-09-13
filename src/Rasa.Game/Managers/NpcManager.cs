@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Rasa.Managers
@@ -26,6 +26,7 @@ namespace Rasa.Managers
         private static NpcManager _instance;
         private static readonly object InstanceLock = new object();
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
+        private readonly MissionManager _missions;
 
         public static NpcManager Instance
         {
@@ -45,9 +46,11 @@ namespace Rasa.Managers
             }
         }
 
-        private NpcManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory)
+        public NpcManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory, MissionManager missions = null)
         {
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
+            _missions = missions ?? MissionManager.Instance;
+            _missions.ConversationStatusRefresher = UpdateConversationStatus;
         }
 
         #region NPC
@@ -59,64 +62,51 @@ namespace Rasa.Managers
 
         public void AssignNPCMission(Client client, AssignNPCMissionPacket packet)
         {
-            var mission = MissionManager.Instance.LoadedMissions[packet.MissionId];
-
-            if (client.Player.Missions.Count > 30)
-            {
-                CommunicatorManager.Instance.SystemMessage(client, "Mission log is full.");
-                return;
-            }
-
-            client.CallMethod(client.Player.EntityId, new MissionGainedPacket(packet.MissionId, mission));
+            _missions.AssignNpcMission(client, packet.NpcEntityId, packet.MissionId);
         }
 
         public void CompleteNPCMission(Client client, CompleteNPCMissionPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, $"ToDo: CompleteNPCMission");
+            _missions.CompleteNpcMission(client, packet.EntityId, packet.MissionId, packet.SelectionIdx);
+        }
+
+        public void CompleteNPCObjective(Client client, CompleteNPCObjectivePacket packet)
+        {
+            _missions.CompleteNpcObjective(client, packet.EntityId, packet.MissionId, packet.ObjectiveId, packet.PlayerFlagId);
+        }
+
+        public void AbandonMission(Client client, AbandonMissionPacket packet)
+        {
+            _missions.AbandonMission(client, packet.MissionId);
+        }
+
+        public void RewardNPCMission(Client client, RewardNPCMissionPacket packet)
+        {
+            // CONVO_TYPE_MISSIONREWARD (objective-less reward conversations) has no server data yet.
+            Logger.WriteLog(LogType.Debug, $"RewardNPCMission: mission {packet.MissionId} at NPC {packet.EntityId} not implemented");
+        }
+
+        public void PerformNPCChoice(Client client, PerformNPCChoicePacket packet)
+        {
+            // CONVO_TYPE_OBJECTIVECHOICE conversations have no server data yet.
+            Logger.WriteLog(LogType.Debug, $"PerformNPCChoice: mission {packet.MissionId}/{packet.ObjectiveId} choice {packet.ChoiceIdx} not implemented");
         }
 
         public void RequestNpcConverse(Client client, RequestNPCConversePacket packet)
         {
-            var creature = EntityManager.Instance.GetCreature(packet.EntityId);
-
-            if (creature == null)
+            if (!MissionManager.IsInWorld(client))
                 return;
 
-            // ToDo create DB structures, and replace constant data with dinamic
+            if (!EntityManager.Instance.Creatures.TryGetValue(packet.EntityId, out var creature) || creature.Npc == null)
+                return;
 
             var convoDataDict = new Dictionary<ConversationType, object>();
 
             if (creature.Npc.Vendor != null)
                 convoDataDict.Add(ConversationType.Vending, new List<uint> { creature.Npc.Vendor.VendorPackageId });
 
-            if (creature.Npc.NpcMissionIds != null)
-                if (creature.Npc.NpcMissionIds.Count > 0)
-                {
-                    var dispensableMissions = new Dictionary<uint, MissionInfo>();
-                    var completeableMissions = new Dictionary<uint, RewardInfo>();
-                    var completeableObjectives = new List<CompleteableObjectives>();
-
-                    foreach (var missionId in creature.Npc.NpcMissionIds)
-                    {
-                        var mission = MissionManager.Instance.LoadedMissions[missionId];
-
-                        if (mission.MissionGiver == creature.DbId)
-                            dispensableMissions.Add(mission.MissionId, mission);
-
-                        if (mission.MissionReciver == creature.DbId)
-                            completeableMissions.Add(mission.MissionId, mission.MissionConstantData.RewardInfo);
-                    }
-
-                    // insert data into convoDataDict
-                    if (dispensableMissions.Count > 0)
-                        convoDataDict.Add(ConversationType.MissionDispense, dispensableMissions);
-
-                    if (completeableMissions.Count > 0)
-                        convoDataDict.Add(ConversationType.MissionComplete, completeableMissions);
-
-                    if (completeableObjectives.Count > 0)
-                        convoDataDict.Add(ConversationType.ObjectiveChoice, completeableObjectives);
-                }
+            // Topics depend on this player's mission log, not on the NPC alone.
+            _missions.AddMissionConversation(client, creature, convoDataDict);
 
             // Auctioner = 14
             if (creature.Npc.NpcIsAuctioneer)
@@ -232,37 +222,14 @@ namespace Rasa.Managers
 
         public void UpdateConversationStatus(Client client, Creature creature)
         {
-            var npc = creature.Npc;
             var vendor = creature.Npc.Vendor;
             var statusSet = false;
 
-            /* ToDo
-             * implement Player=>MissionStatus
-             * npc missions shold be checked with player mission status
-             */
-
-            if (npc.NpcMissionIds != null)
+            // Mission markers reflect this player's log: completeable mission,
+            // then completeable objective, then an acceptable mission.
+            if (client.Player != null && _missions.TryGetConversationStatus(client, creature, out var missionStatus, out var missionIds))
             {
-                var availableMissions = new List<uint>();
-                var completeMission = new List<uint>();
-
-                foreach (var missionId in npc.NpcMissionIds)
-                {
-                    var mission = MissionManager.Instance.LoadedMissions[missionId];
-
-                    if (mission.MissionReciver == creature.DbId)
-                        completeMission.Add(missionId);
-
-                    if (mission.MissionGiver == creature.DbId)
-                        availableMissions.Add(missionId);
-                }
-
-                // if we have completable mission send it, else send available missions
-                if (completeMission.Count > 0)
-                    client.CallMethod(creature.EntityId, new NPCConversationStatusPacket(ConversationStatus.ObjectivComplete, completeMission));  // complete mission
-                else
-                    client.CallMethod(creature.EntityId, new NPCConversationStatusPacket(ConversationStatus.Available, availableMissions));       // available missions
-
+                client.CallMethod(creature.EntityId, new NPCConversationStatusPacket(missionStatus, missionIds));
                 statusSet = true;
             }
 

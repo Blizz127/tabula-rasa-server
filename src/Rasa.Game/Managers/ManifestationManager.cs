@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Rasa.Managers
@@ -515,7 +515,7 @@ namespace Rasa.Managers
                 new ActorNamePacket(player.FamilyName),
                 new IsRunningPacket(player.IsRunning),
                 new TargetCategoryPacket(Factions.AFS),
-                new PlayerFlagsPacket(),
+                new PlayerFlagsPacket(player.PlayerFlags),
                 new EquipmentInfoPacket(client.Player.Inventory.EquippedInventory)
             };
 
@@ -531,6 +531,15 @@ namespace Rasa.Managers
 
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Expirience, client.Player.Experience);
 
+            NotifyExperienceGained(client, experience);
+        }
+
+        /// <summary>
+        /// Sends the experience change and applies level-ups for experience that
+        /// is already persisted (mission rewards commit it with the mission state).
+        /// </summary>
+        internal void NotifyExperienceGained(Client client, uint experience)
+        {
             var xpInfo = new XPInfo(client.Player.Experience, experience, experience);
 
             client.CallMethod(client.Player.EntityId, new ExperienceChangedPacket(xpInfo));

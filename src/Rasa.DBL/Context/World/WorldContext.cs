@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
 
@@ -44,6 +44,9 @@ namespace Rasa.Context.World
         public DbSet<LogosEntry> LogosEntries { get; set; }
         public DbSet<MapInfoEntry> MapInfoEntries { get; set; }
         public DbSet<NpcMissionEntry> NpcMissionEntries { get; set; }
+        public DbSet<NpcMissionObjectiveEntry> NpcMissionObjectiveEntries { get; set; }
+        public DbSet<NpcMissionObjectiveConversationEntry> NpcMissionObjectiveConversationEntries { get; set; }
+        public DbSet<NpcMissionObjectiveTransitionEntry> NpcMissionObjectiveTransitionEntries { get; set; }
         public DbSet<NpcMissionRewardEntry> NpcMissionRewardEntries { get; set; }
         public DbSet<NpcPackageEntry> NpcPackageEntries { get; set; }
         public DbSet<RandomNameEntry> RandomNameEntries { get; set; }
@@ -63,6 +66,17 @@ namespace Rasa.Context.World
             SetupExperienceForLevel(modelBuilder);
             SetupRandomName(modelBuilder);
             SetupItemTemplateItemClass(modelBuilder);
+            SetupNpcMissionObjectives(modelBuilder);
+        }
+
+        private void SetupNpcMissionObjectives(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<NpcMissionObjectiveEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId });
+            modelBuilder.Entity<NpcMissionObjectiveConversationEntry>()
+                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.NpcPackageId, e.PlayerFlagId });
+            modelBuilder.Entity<NpcMissionObjectiveTransitionEntry>()
+                .HasKey(e => new { e.MissionId, e.CompletedObjectiveId, e.RevealedObjectiveId });
         }
 
         private void SetupExperienceForLevel(ModelBuilder modelBuilder)

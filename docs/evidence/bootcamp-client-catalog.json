@@ -6,7 +6,16 @@
     "generated/client/missionconversation.pyo": "085df01e239a86fec0f6c9d1017d2af60edf54e47f6a235e4204ee8e84c3713b",
     "generated/client/missionobjective.pyo": "330f29153493c512a5a90074f4c0ae4ab45cb3f0d4dfc4b56764a0d95d232d5f",
     "generated/client/objectiveconversation.pyo": "55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12",
-    "generated/client/language/english/missiontextlanguage.pyo": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d"
+    "generated/client/language/english/missiontextlanguage.pyo": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d",
+    "generated/client/language/english/missionobjectiveindicatorlanguage.pyo": "d37d8f35fcef6b7b93ac1b2a8ae9b222b023608ca43133d49fbac785f08a00fd",
+    "generated/client/language/english/creaturenamelanguage.pyo": "1fa1ec6c098f3ae2cda4aa37a13ef268f6657bb4fd32cc4e3f5af21ae5126e6c",
+    "generated/client/language/english/npcgreetinglanguage.pyo": "a1ff2c6eb3d0f5e90a12ebd3f4edfe103e2cf79a7771380212779d3e4b55b1f8",
+    "generated/client/language/english/barklanguage.pyo": "a84147a2c716977ff860095edb1b699189b543d47d509724d453c54bc5e321b9",
+    "shared/gameconstants.pyo (trpython.zip)": "e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40",
+    "generated/client/audiosetdata.pyo": "9c9be13f62b8c9ee860c9c5339b08b45f18c5c1f7a9ef06e95786476ff7363f6",
+    "generated/client/actiondata.pyo": "9520744380868987a093be20bdbca7de26cd7899e07c50c23f00ae3d764c1ecb",
+    "generated/client/itemclass.pyo": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+    "generated/client/entityclass.pyo": "b4e99d0ca61b915487201b4bc75b09b8bed32a0f33127e855ea051883751a8ef"
   },
   "missions": [
     {
@@ -472,6 +481,310 @@
         "markers",
         "state_transitions"
       ]
+    },
+    {
+      "mission_id": 2005,
+      "name": "Calling for Reinforcements",
+      "note": "Second definition with the same name: objectives 1 and 4 only, opening text offers another bomb after a failed attempt. How it is offered is not established.",
+      "mission_text_bindings": [
+        {
+          "text_type": 1,
+          "text_id": 21564,
+          "store_offset": 102548
+        },
+        {
+          "text_type": 2,
+          "text_id": 21565,
+          "store_offset": 102566
+        },
+        {
+          "text_type": 3,
+          "text_id": 21566,
+          "store_offset": 102584
+        },
+        {
+          "text_type": 4,
+          "text_id": 21567,
+          "store_offset": 102602
+        },
+        {
+          "text_type": 6,
+          "text_id": 21568,
+          "store_offset": 102620
+        }
+      ],
+      "objectives": [
+        {
+          "objective_id": 1,
+          "name_text_id": 21569,
+          "body_text_id": 21570,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 108737
+        },
+        {
+          "objective_id": 4,
+          "name_text_id": 21571,
+          "body_text_id": 21572,
+          "counter_text_ids": [
+            null,
+            null,
+            null
+          ],
+          "store_offset": 108770
+        }
+      ],
+      "objective_dialogues": [
+        {
+          "objective_id": 4,
+          "npc_package_id": 2564,
+          "player_flag_id": 1,
+          "conversation_type": 1,
+          "text_id": 21861,
+          "store_offset": 43391
+        }
+      ],
+      "server_definition_complete": false,
+      "unverified_server_fields": [
+        "prerequisites",
+        "start_and_finish_npcs",
+        "rewards",
+        "objective_ordinals",
+        "objective_triggers",
+        "timers",
+        "markers",
+        "state_transitions"
+      ]
     }
-  ]
+  ],
+  "client_constants": {
+    "source": "shared/gameconstants.pyo, module lines 336-340 and 463",
+    "MAX_MISSION_COUNT": {
+      "value": 30,
+      "store_offsets": [
+        1382,
+        1385
+      ]
+    },
+    "NON_ABANDONABLE_MISSIONS": {
+      "value": [
+        1990,
+        2010,
+        2011
+      ],
+      "store_offsets": [
+        1388,
+        1400
+      ]
+    },
+    "MAX_CONVERSATION_RANGE": {
+      "value": 5,
+      "store_offsets": [
+        1938,
+        1941
+      ]
+    }
+  },
+  "objective_indicator_names": {
+    "source": "generated/client/language/english/missionobjectiveindicatorlanguage.pyo",
+    "note": "Ten consecutive ids whose names match this segment. The client holds names only; the server supplies each objective's (position, radius, indicatorId, bShow3DEffect). No binding of an id to a mission or position is recovered.",
+    "entries": [
+      {
+        "indicator_id": 430,
+        "text": "Eloh Approach",
+        "store_offset": 3827
+      },
+      {
+        "indicator_id": 431,
+        "text": "Eloh Approach",
+        "store_offset": 3836
+      },
+      {
+        "indicator_id": 432,
+        "text": "Dropship Debris",
+        "store_offset": 3845
+      },
+      {
+        "indicator_id": 433,
+        "text": "Equipment Crate",
+        "store_offset": 3854
+      },
+      {
+        "indicator_id": 434,
+        "text": "Firing Range",
+        "store_offset": 3863
+      },
+      {
+        "indicator_id": 435,
+        "text": "Last known location of scout party",
+        "store_offset": 3872
+      },
+      {
+        "indicator_id": 436,
+        "text": "Conrad's corpse",
+        "store_offset": 3881
+      },
+      {
+        "indicator_id": 437,
+        "text": "Base Center",
+        "store_offset": 3890
+      },
+      {
+        "indicator_id": 438,
+        "text": "Dropship Pad to Exit",
+        "store_offset": 3899
+      },
+      {
+        "indicator_id": 439,
+        "text": "Cave-in Location",
+        "store_offset": 3908
+      }
+    ]
+  },
+  "creature_names": {
+    "source": "generated/client/language/english/creaturenamelanguage.pyo",
+    "note": "Name ids only. No client table or world DB row binds these names to creature classes, dialogue packages or positions; package-to-NPC identities are inferred from conversation text.",
+    "entries": [
+      {
+        "creature_name_id": 10574,
+        "text": "Corporal Van Valkenberg",
+        "store_offset": 34868,
+        "basis": "mission 1995/2005 text"
+      },
+      {
+        "creature_name_id": 10575,
+        "text": "Captain Youngblood",
+        "store_offset": 34877,
+        "basis": "mission 1994 text"
+      },
+      {
+        "creature_name_id": 10576,
+        "text": "Captain Delessio",
+        "store_offset": 34886,
+        "basis": "mission 1992 text"
+      },
+      {
+        "creature_name_id": 10577,
+        "text": "Medic Schramm",
+        "store_offset": 34895,
+        "basis": "adjacent id block only; unbound"
+      },
+      {
+        "creature_name_id": 10578,
+        "text": "Corporal Hartmann",
+        "store_offset": 34904,
+        "basis": "mission 1992 text"
+      },
+      {
+        "creature_name_id": 10579,
+        "text": "Corporal DeSimone",
+        "store_offset": 34913,
+        "basis": "mission 1994 text"
+      },
+      {
+        "creature_name_id": 10566,
+        "text": "Major McAllister",
+        "store_offset": 34796,
+        "basis": "bark 852 and audio set 2777"
+      },
+      {
+        "creature_name_id": 10598,
+        "text": "An Ancient Eloh",
+        "store_offset": 35084,
+        "basis": "D11.6 live notes (first listed in D11.4 public-test notes) name its dialog; identity with the mission 1990 hologram and the dialog trigger are not established"
+      },
+      {
+        "creature_name_id": 10599,
+        "text": "Private Twain",
+        "store_offset": 35093,
+        "basis": "adjacent id only; unbound"
+      },
+      {
+        "creature_name_id": 6730,
+        "text": "Tizzik Gi",
+        "store_offset": 7580,
+        "basis": "mission 1994 objective text spells 'Tizzik G'"
+      }
+    ]
+  },
+  "npc_speech": {
+    "greetings": {
+      "source": "generated/client/language/english/npcgreetinglanguage.pyo",
+      "entries": [
+        {
+          "greeting_id": 1634,
+          "store_offset_gender1": 58196,
+          "summary": "Eloh grants the first Logos symbol and the power of Lightning; conversationwindow.HandleShowGreeting posts UI effect tutlightning_left/right only for this id"
+        },
+        {
+          "greeting_id": 1635,
+          "store_offset_gender1": 58232,
+          "summary": "Eloh on the Bane"
+        },
+        {
+          "greeting_id": 1636,
+          "store_offset_gender1": 58268,
+          "summary": "Eloh sends the recruit back to their own people"
+        }
+      ],
+      "note": "No source records which NPC or event sent these greetings."
+    },
+    "barks": {
+      "source": "generated/client/language/english/barklanguage.pyo and generated/client/bark.pyo",
+      "entries": [
+        {
+          "bark_id": 852,
+          "text_store_offset_gender1": 20246,
+          "bark_table_store_offset": 7598,
+          "audio_string_id": 49815,
+          "audio_file": "boot_camp_major_mcallister_bark.ogg",
+          "duration_msec": 10000
+        }
+      ]
+    }
+  },
+  "related_class_and_template_bindings": {
+    "note": "Identifiers only. No client table binds these to context 1985, a mission, a package or a position; use in the rebuilt boot camp is not established except where stated.",
+    "entries": [
+      {
+        "id": 24883,
+        "kind": "entity class",
+        "binding": "actiondata CREATURE_BIRTH_NPC_ELOH_HOLOGRAM_LARGE = 24883; NPC_Eloh_Holgram_Large with Creature and NPC augmentations and the same mesh as placed prop 23936",
+        "source": "generated/client/actiondata.pyo STORE_NAME @13239; entityclass.pyo lookup[24883]",
+        "present_in_2007_11_client": true
+      },
+      {
+        "id": 23936,
+        "kind": "entity class",
+        "binding": "physicalEntityClassAudioSet[23936] = [2764] 'World Eloh Hologram'; the only hologram class placed in adv_bootcamp.map (389, 128.43, 65)",
+        "source": "generated/client/audiosetdata.pyo STORE_SUBSCR @396131",
+        "present_in_2007_11_client": true,
+        "note": "audio binding and set 2764 are absent from the 2007-11 client; whether the static prop triggers the client's entity audio path is unverified"
+      },
+      {
+        "id": 122875,
+        "kind": "item template",
+        "binding": "itemTemplateItemClass[122875] = 29803 'standard issue in Bootcamp' pistol; itemTemplateSkillRequirement (1, 1) Firearms 1",
+        "source": "generated/client/itemclass.pyo @631802, @911105",
+        "present_in_2007_11_client": false
+      },
+      {
+        "id": 123278,
+        "kind": "item template",
+        "binding": "itemTemplateItemClass[123278] = 29884 Bane boot-camp pistol",
+        "source": "generated/client/itemclass.pyo @635429",
+        "present_in_2007_11_client": false
+      },
+      {
+        "id": 123279,
+        "kind": "item template",
+        "binding": "itemTemplateItemClass[123279] = 29885 Bane boot-camp rifle",
+        "source": "generated/client/itemclass.pyo @635438",
+        "present_in_2007_11_client": false
+      }
+    ]
+  }
 }

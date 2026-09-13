@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
 
@@ -34,6 +34,7 @@ namespace Rasa.Context.Char
         public DbSet<CharacterLockboxEntry> CharacterLockboxEntries { get; set; }
         public DbSet<CharacterLogosEntry> CharacterLogosEntries { get; set; }
         public DbSet<CharacterMissionEntry> CharacterMissionEntries { get; set; }
+        public DbSet<CharacterMissionObjectiveEntry> CharacterMissionObjectiveEntries { get; set; }
         public DbSet<CharacterOptionEntry> CharacterOptionEntries { get; set; }
         public DbSet<CharacterSkillsEntry> CharacterSkillsEntries { get; set; }
         public DbSet<CharacterTeleporterEntry> CharacterTeleporterEntries { get; set; }
@@ -248,6 +249,8 @@ namespace Rasa.Context.Char
         {
             modelBuilder.Entity<CharacterMissionEntry>()
                 .HasKey(e => new { e.CharacterId, e.MissionId });
+            modelBuilder.Entity<CharacterMissionObjectiveEntry>()
+                .HasKey(e => new { e.CharacterId, e.MissionId, e.ObjectiveId });
         }
 
         private void SetupCharacterSkillTable(ModelBuilder modelBuilder)

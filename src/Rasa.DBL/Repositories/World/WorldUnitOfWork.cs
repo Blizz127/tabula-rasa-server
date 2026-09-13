@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Rasa.Repositories.World
 {
@@ -16,6 +16,7 @@ namespace Rasa.Repositories.World
             ILogosRepository logosRepository,
             IMapInfoRepository mapInfoRepository,
             INpcMissionRepository npcMissionRepository,
+            INpcMissionObjectiveRepository npcMissionObjectiveRepository,
             INpcMissionRewardRepository npcMissionRewardRepository,
             INpcPackageRepository npcPackageRepository,
             IPlayerRandomNameRepository randomNameRepository,
@@ -30,6 +31,7 @@ namespace Rasa.Repositories.World
             Logoses = logosRepository;
             MapInfos = mapInfoRepository;
             NpcMissions = npcMissionRepository;
+            NpcMissionObjectives = npcMissionObjectiveRepository;
             NpcMissionRewards = npcMissionRewardRepository;
             NpcPackages = npcPackageRepository;
             RandomNames = randomNameRepository;
@@ -44,6 +46,7 @@ namespace Rasa.Repositories.World
         public ILogosRepository Logoses { get; }
         public IMapInfoRepository MapInfos { get; }
         public INpcMissionRepository NpcMissions { get; }
+        public INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         public INpcMissionRewardRepository NpcMissionRewards { get; }
         public INpcPackageRepository NpcPackages { get; }
         public IPlayerRandomNameRepository RandomNames { get; }

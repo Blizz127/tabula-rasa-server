@@ -1032,3 +1032,72 @@ Source/docs, configuration, logs and service records:
 Rollback: retag `rasa_net:before-retail-selection-20260913` as `rasa_net:latest`
 and recreate game alone using `--no-deps --no-build`. Code rollback requires no
 database restoration. Original-client playthrough comparison remains pending.
+
+
+## 2026-09-13 UTC — Mission-log protocol, NPC objective conversations and boot-camp evidence sweep
+
+A verified six-track sweep (dated wiki history, original client tables and
+code, contemporary captures, the map file and a server audit, each with an
+independent verification pass) established that the original boot-camp map
+contains no gameplay actors: first-login position, NPCs, crates and the exit
+are server data that no recovered source supplies. Mission 2005 (the
+"Calling for Reinforcements" retry), the client's mission-log limits,
+objective indicator names, NPC name ids and Eloh speech are now catalogued.
+Details and corrected citations: [boot-camp evidence](bootcamp-client-evidence.md#2026-09-13-verified-sweep-what-the-client-and-the-map-do-and-do-not-establish).
+No tutorial content, spawn, reward or skip behavior was added.
+
+The server now implements the recovered client contract that every
+conversation-driven mission, including the boot camp's, depends on: `NPCInfo`
+package ids, per-player conversation status and topics, objective completion
+through `CompleteNPCObjective`, turn-in and abandon, persistent objective
+progress restored through `MissionStatusInfo`, list-shaped `PlayerFlags`,
+optional-integer reward selection and a dictionary-shaped `CanLootItems`.
+Mission definitions are offered only when complete; the unvalidated seeds
+321/429 are withheld, so their NPC markers no longer advertise them. Item
+rewards, radio and shared missions stay explicit gaps; their requests are
+decoded and ignored instead of disconnecting the client. Proven client facts
+and emulator storage choices are separated in
+[mission research](mission-research.md#mission-log-protocol-and-persistence--2026-09-13).
+
+Two adversarial review rounds (four lenses, then a focused re-review of the
+fixes, each finding independently verified) confirmed 31 reports, several of
+them duplicates and none critical or high. Every code finding was fixed and
+tested before deployment: reward display/payout mismatches, completeability
+ordering, saved progress after definition changes, undeliverable item
+rewards, radio/share requests and an invented chat message. The documentation
+findings were corrected in these records, including the D11.4 source
+(public-test notes, repeated in the D11.6 live notes), a reversed D13.4
+paraphrase and overstated protocol claims.
+
+Schema: `character_mission.change_time` (default 0) and new
+`character_mission_objective`; world tables `npc_mission_objective`,
+`npc_mission_objective_conversation` and `npc_mission_objective_transition`,
+all empty. Migrations were generated with dotnet-ef 5.0.1 for SQLite and a
+disposable MySQL 8.4.11 server; the MySQL chain preserved legacy mission rows
+including state 4294967295. The SQLite scripts were dry-run against copies of
+the live databases before deployment. Records are in
+`/home/blizz/backups/rasa-net/research/20260913-bootcamp/mission-log-migrations/`.
+
+The .NET 5 image built from a clean context with zero errors and the same
+five existing warnings. **All 634 tests passed** in the image, with no
+failures or skips and no production database mounts or networking. Reviewed
+source matched the image excluding `bin`/`obj`. Passing tests verify the
+implementation; the conversation flow has not yet been exercised with the
+original client.
+
+Image `sha256:d7a8e1163c686d78d8b98a6d9fcecbb876a742e3aa4f3f10285a60241598e511`
+started game at **04:18:33 UTC**, ready at **04:18:49 UTC**, and authenticated
+with auth. Verification at **04:19:13 UTC** found zero restarts, no
+error/unhandled/fatal/OOM lines, both migrations applied, and auth's image and
+start time unchanged. After startup the live character and world databases
+differed from the fresh backups only in migration history and the new empty
+tables; auth was unchanged; all passed integrity checks. The auth container
+had independently logged a .NET "Out of memory." and restarted at 02:14 UTC,
+before this deployment; this deployment did not touch it.
+
+Backups, configuration, reviewed source/docs, logs, scripts and table
+comparison: `/home/blizz/backups/rasa-net/20260913T041812Z-retail-missionlog/`.
+Rollback: retag `rasa_net:before-retail-missionlog-20260913` as
+`rasa_net:latest` and recreate game alone with `--no-deps --no-build`. The
+previous image ignores the added column and tables; a database restore is
+needed only to remove them.

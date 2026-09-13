@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Rasa.Structures.Char
@@ -19,6 +19,12 @@ namespace Rasa.Structures.Char
             MissionState = mission_state;
         }
 
+        public CharacterMissionEntry(uint characterId, uint missionId, uint missionState, uint changeTime)
+            : this(characterId, missionId, missionState)
+        {
+            ChangeTime = changeTime;
+        }
+
         [Column("character_id")]
         [Required]
         public uint CharacterId { get; set; }
@@ -27,8 +33,18 @@ namespace Rasa.Structures.Char
         [Required]
         public uint MissionId { get; set; }
 
+        /// <summary>
+        /// Original client missionstate value (0 active, 1 success, 2 failed, 4 completed).
+        /// </summary>
         [Column("mission_state")]
         [Required]
         public uint MissionState { get; set; }
+
+        /// <summary>
+        /// Unix seconds of the last state change, sent to the client as changeTime.
+        /// </summary>
+        [Column("change_time")]
+        [Required]
+        public uint ChangeTime { get; set; }
     }
 }

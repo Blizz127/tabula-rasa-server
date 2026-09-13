@@ -1,4 +1,4 @@
-﻿namespace Rasa.Repositories.World
+namespace Rasa.Repositories.World
 {
     using UnitOfWork;
 
@@ -11,6 +11,7 @@
         ILogosRepository Logoses { get; }
         IMapInfoRepository MapInfos { get; }
         INpcMissionRepository NpcMissions { get; }
+        INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         INpcMissionRewardRepository NpcMissionRewards { get; }
         INpcPackageRepository NpcPackages { get; }
         IPlayerRandomNameRepository RandomNames { get; }

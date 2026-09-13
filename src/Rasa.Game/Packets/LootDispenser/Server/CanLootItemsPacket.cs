@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Rasa.Packets.LootDispenser.Server
 {
@@ -33,7 +33,7 @@ namespace Rasa.Packets.LootDispenser.Server
                 }
             }
             else
-                pw.WriteNoneStruct();
+                pw.WriteDictionary(0);  // the client indexes this dict even when nothing is lootable
         }
     }
 }
