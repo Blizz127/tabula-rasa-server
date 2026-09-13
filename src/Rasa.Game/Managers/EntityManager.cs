@@ -227,9 +227,16 @@ namespace Rasa.Managers
         }
 
         // Creatures
+        /// <summary>
+        /// The creature with this entity id, or null. Entity ids reach this from client packets,
+        /// so an id that is not a creature - another map's, a stale one, an item's - was a
+        /// KeyNotFoundException in whichever handler asked, which closes the connection.
+        /// ChatCommandsManager already wrote GetCreature(entityId)?.Position, expecting the null
+        /// this now returns.
+        /// </summary>
         public Creature GetCreature(ulong entityId)
         {
-            return Creatures[entityId];
+            return Creatures.TryGetValue(entityId, out var creature) ? creature : null;
         }
 
         public void RegisterCreature(Creature creature)

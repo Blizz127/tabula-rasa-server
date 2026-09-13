@@ -379,33 +379,65 @@ namespace Rasa.Managers
         #endregion
 
         #region Vendor
+        /// <summary>
+        /// Opens a vendor's stock for one player.
+        ///
+        /// The stock itself is made once and shared by everyone: the items are registered
+        /// globally against the vendor's entity id and stay there for the life of the process.
+        /// What is *not* shared is the client's knowledge of them. A client can only draw an
+        /// item it has been sent - vendorwindow does GetEntity(itemId) per row and falls back to
+        /// the literal string "Unknown entity" - and the Vend packet carries only ids and prices,
+        /// not the items.
+        ///
+        /// So the item data has to go to whoever opens the vendor, every time. It used to be
+        /// sent from inside CreateVendorItem, which runs only when the stock is first made:
+        /// the first player to open that vendor after a restart saw it correctly and every other
+        /// player saw a list of "Unknown entity" rows. The same happened to that first player
+        /// once they relogged, since a client drops its entities when it leaves the world.
+        /// </summary>
         public void RequestNPCVending(Client client, RequestNPCVendingPacket packet)
         {
-            var itemList = new List<Item>();
-            var entityList = new List<ulong>();
+            // Any entity id can arrive here, and Creatures was indexed directly:
+            // KeyNotFoundException in the handler, which closes the connection.
+            var creature = EntityManager.Instance.GetCreature(packet.EntityId);
 
-            if (EntityManager.Instance.VendorItems.ContainsKey(packet.EntityId))
-            {
-                // store was opened before
-                entityList = EntityManager.Instance.VendorItems[packet.EntityId];
+            if (creature?.Npc?.Vendor?.VendorItems == null)
+                return;
 
-                foreach (var entityId in entityList)
-                    itemList.Add(EntityManager.Instance.GetItem(entityId));
-            }
-            else
+            if (!EntityManager.Instance.VendorItems.TryGetValue(packet.EntityId, out var entityList))
             {
-                // opening store first Time, create item
-                var creature = EntityManager.Instance.GetCreature(packet.EntityId);
+                entityList = new List<ulong>();
 
                 foreach (var itemTemplateId in creature.Npc.Vendor.VendorItems)
                 {
-                    var item = ItemManager.Instance.CreateVendorItem(client, itemTemplateId);
+                    var created = ItemManager.Instance.CreateVendorItem(itemTemplateId);
 
-                    itemList.Add(item);
-                    entityList.Add(item.EntityId);
+                    if (created == null)
+                    {
+                        Logger.WriteLog(LogType.Error,
+                            $"Vendor {packet.EntityId} stocks item template {itemTemplateId}, which does not exist.");
+                        continue;
+                    }
+
+                    entityList.Add(created.EntityId);
                 }
 
                 EntityManager.Instance.RegisterVendorItem(packet.EntityId, entityList);
+            }
+
+            var itemList = new List<Item>();
+
+            foreach (var entityId in entityList)
+            {
+                var item = EntityManager.Instance.GetItem(entityId);
+
+                // Registered once but freed since. Skip it: a null in the list is a
+                // NullReferenceException inside VendPacket.Write, on the main loop.
+                if (item == null)
+                    continue;
+
+                ItemManager.Instance.SendItemDataToClient(client, item, false);
+                itemList.Add(item);
             }
 
             client.CallMethod(packet.EntityId, new VendPacket(itemList));
