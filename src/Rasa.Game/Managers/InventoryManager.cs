@@ -213,7 +213,8 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (packet.DestSlot < 0 || packet.DestSlot > 22)
+            // The list has 22 entries; the old check let 22 through.
+            if (packet.DestSlot >= client.Player.Inventory.EquippedInventory.Count)
             {
                 Logger.WriteLog(LogType.Debug, $"DestSlot out of range => {packet.DestSlot}");
                 return;
@@ -222,15 +223,39 @@ namespace Rasa.Managers
             var entityIdEquippedItem = client.Player.Inventory.EquippedInventory[(int)packet.DestSlot]; // the old equipped item (can be none)
             var entityIdInventoryItem = client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot]; // the new equipped item (can be none)
 
+            // Nothing coming in and nothing going out: the dequip path below would have looked
+            // up the class of an item that is not there.
+            if (entityIdInventoryItem == 0 && entityIdEquippedItem == 0)
+                return;
+
             // can we equip the item
             var itemToEquip = EntityManager.Instance.GetItem(entityIdInventoryItem);
-            var canEquip = ValidateItemEquip(client, itemToEquip);
 
-            if (itemToEquip == null && canEquip == false)
+            if (entityIdInventoryItem != 0 && itemToEquip == null)
+            {
+                Logger.WriteLog(LogType.Error, $"RequestEquipArmor: slot {packet.SrcSlot} holds entity {entityIdInventoryItem} but no item is registered for it.");
                 return;
+            }
 
-            if (canEquip == false)
-                return;
+            if (itemToEquip != null)
+            {
+                // The item goes in the slot its class says it is for, and nowhere else. The slot
+                // index in the equipped list is the equipment slot id. Nothing checked this, so
+                // any category-0 item could be put in any of the 22 slots - the same chest piece
+                // in all of them - and UpdateStatsValues sums ArmorValue over every slot.
+                var equipable = EntityClassManager.Instance.LoadedEntityClasses[itemToEquip.ItemTemplate.Class].EquipableClassInfo;
+
+                if (equipable == null || (uint) equipable.EquipmentSlotId != packet.DestSlot)
+                {
+                    Logger.WriteLog(LogType.Security,
+                        $"AccountId = {client.AccountEntry.Id} tried to equip {itemToEquip.ItemTemplate.Class} in slot {packet.DestSlot}"
+                        + (equipable == null ? ", which is not equipment." : $", which is for {equipable.EquipmentSlotId}."));
+                    return;
+                }
+
+                if (!ValidateItemEquip(client, itemToEquip))
+                    return;
+            }
 
             // swap items on the client and server
             if (client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot] != 0)
