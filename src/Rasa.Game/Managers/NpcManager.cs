@@ -10,6 +10,7 @@ namespace Rasa.Managers
     using Packets.MapChannel.Client;
     using Packets.MapChannel.Server;
     using Packets.Mission.Server;
+    using Repositories.Char;
     using Repositories.UnitOfWork;
     using Structures;
 
@@ -417,14 +418,64 @@ namespace Rasa.Managers
 
         public void RequestVendorBuyback(Client client, RequestVendorBuybackPacket packet)
         {
-            client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+            // Only what this player sold this session can come back. The id used to be taken
+            // as given: any registered item - one already in the inventory, one shown to this
+            // account by another character, another player's - was added to the inventory at
+            // its sell price. Adding an item that was already there merged it with itself and
+            // wrote the doubled stack to the row, then inserted a second inventory row for the
+            // same item id; on the next login the player had two of it, both doubled.
+            var buyback = client.Player.Inventory.BuybackItems;
 
-            var buyBackItem = EntityManager.Instance.GetItem((uint)packet.ItemEntityId);
-            var buyedItem = InventoryManager.Instance.AddItemToInventory(client, buyBackItem);
-            var buyPrice = (int)buyedItem.StackSize * buyedItem.ItemTemplate.SellPrice;
+            if (!buyback.Contains(packet.ItemEntityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy back item {packet.ItemEntityId}, which they did not sell.");
+                return;
+            }
+
+            var item = EntityManager.Instance.GetItem(packet.ItemEntityId);
+
+            if (item == null)
+            {
+                buyback.Remove(packet.ItemEntityId);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+                return;
+            }
+
+            var unitPrice = Math.Max(item.ItemTemplate.SellPrice, 0);
+            var price = (long) unitPrice * item.StackSize;
+
+            if (client.Player.Credits[CurencyType.Credits] < price)
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            var quantity = item.StackSize;
+            var placedItem = InventoryManager.Instance.AddItemToInventory(client, item);
+
+            if (placedItem == null)
+            {
+                // Some or none of it fitted. What did not fit stays on the buyback list as the
+                // remainder; the player pays for what they got.
+                var placed = quantity - item.StackSize;
+
+                if (placed == 0)
+                {
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                    return;
+                }
+
+                price = (long) unitPrice * placed;
+            }
+            else
+            {
+                buyback.Remove(packet.ItemEntityId);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+            }
 
             // remove credits
-            ManifestationManager.Instance.LossCredits(client, -buyPrice);
+            ManifestationManager.Instance.LossCredits(client, -(int) price);
         }
 
         public void RequestVendorPurchase(Client client, RequestVendorPurchasePacket packet)
@@ -549,9 +600,10 @@ namespace Rasa.Managers
 
         public void RequestVendorSale(Client client, RequestVendorSalePacket packet)
         {
-            var vendorEntityId = packet.VendorEntityId;
             var itemEntityId = packet.ItemEntityId;
-            var itemQuantity = (uint)packet.Quantity;
+
+            if (packet.Quantity <= 0)
+                return;
 
             // note: Players can only sell items directly from their personal inventory
             //       so we only have to scan there for the item entityId
@@ -581,19 +633,88 @@ namespace Rasa.Managers
                 return;
             }
 
-            // get sell price
-            var realItemQuantity = Math.Min(itemQuantity, soldItem.StackSize);
-            var sellPrice = soldItem.ItemTemplate.SellPrice * (int)realItemQuantity;
+            var quantity = (uint) Math.Min(packet.Quantity, soldItem.StackSize);
+            var sellPrice = Math.Min((long) Math.Max(soldItem.ItemTemplate.SellPrice, 0) * quantity, int.MaxValue);
+
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            // remove item
-            // todo: Handle stacksizes correctly and only decrease item by quantity parameter
-            InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, slotIndex);
-            unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, slotIndex);
+
+            if (quantity < soldItem.StackSize)
+            {
+                // Selling part of a stack. The whole stack used to go, for the price of the part:
+                // split off the part as an item of its own, and that is what was sold.
+                soldItem.StackSize -= quantity;
+                unitOfWork.Items.UpdateItemStackSize(soldItem);
+                client.CallMethod(soldItem.EntityId, new SetStackCountPacket(soldItem.StackSize));
+
+                soldItem = ItemManager.Instance.CreateFromTemplateId(soldItem.ItemTemplate.ItemTemplateId, quantity, soldItem.Crafter);
+
+                if (soldItem == null)
+                {
+                    Logger.WriteLog(LogType.Error, $"RequestVendorSale: could not split {quantity} off item {itemEntityId}.");
+                    return;
+                }
+
+                ItemManager.Instance.SendItemDataToClient(client, soldItem, false);
+            }
+            else
+            {
+                // remove item
+                InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, slotIndex);
+                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, slotIndex);
+            }
+
             // add credits to player
-            ManifestationManager.Instance.GainCredits(client, sellPrice);
-            // add item to buyback list
-            client.CallMethod(SysEntity.ClientInventoryManagerId, new AddBuybackItemPacket(packet.ItemEntityId, (int)sellPrice, 1));
+            ManifestationManager.Instance.GainCredits(client, (int) sellPrice);
+
+            // add item to buyback list, retiring the oldest if it is full
+            var buyback = client.Player.Inventory.BuybackItems;
+
+            while (buyback.Count >= Inventory.MaxBuybackItems)
+            {
+                var retired = buyback[0];
+                buyback.RemoveAt(0);
+                DiscardSoldItem(client, retired, unitOfWork);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(retired));
+            }
+
+            buyback.Add(soldItem.EntityId);
+            client.CallMethod(SysEntity.ClientInventoryManagerId, new AddBuybackItemPacket(soldItem.EntityId, (int) sellPrice, buyback.Count));
         }
+
+        /// <summary>
+        /// A sold item nobody can buy back any more: off the client, out of the entity tables,
+        /// and its row out of the items table.
+        /// </summary>
+        private static void DiscardSoldItem(Client client, ulong entityId, ICharUnitOfWork unitOfWork)
+        {
+            var item = EntityManager.Instance.GetItem(entityId);
+
+            EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+
+            if (item != null && item.Id != 0)
+                unitOfWork.Items.DeleteItem(item.Id);
+        }
+
+        /// <summary>
+        /// Called when the character leaves the world. Whatever was still on the buyback list
+        /// is gone for good, so its entities and rows go with it; they used to be left
+        /// registered for the life of the process.
+        /// </summary>
+        public void DiscardBuybackItems(Client client)
+        {
+            var buyback = client.Player.Inventory.BuybackItems;
+
+            if (buyback.Count == 0)
+                return;
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            foreach (var entityId in buyback)
+                DiscardSoldItem(client, entityId, unitOfWork);
+
+            buyback.Clear();
+        }
+
         #endregion
     }
 }

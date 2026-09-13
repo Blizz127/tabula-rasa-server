@@ -362,6 +362,8 @@ namespace Rasa.Managers
                 if (entityId != 0)
                     EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
 
+            NpcManager.Instance.DiscardBuybackItems(client);
+
             CellManager.Instance.RemoveFromWorld(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
