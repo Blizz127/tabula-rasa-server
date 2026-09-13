@@ -418,9 +418,17 @@ namespace Rasa.Managers
             // If DestSlot is not empty, move current item to SrcSlot (item swap)
             bool wasSwap = client.Player.Inventory.ClanInventory[(int)packet.DestSlot] != 0;
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+            var depositedItem = EntityManager.Instance.GetItem(entityId);
+
+            if (depositedItem == null)
+                return;
+
+            // Rows are found by item id throughout: the character id they were written with
+            // is not always this character's, and a delete by slot that misses leaves a row
+            // pointing at an item that has moved on.
             if (wasSwap)
             {
-                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, packet.SrcSlot);
+                unitOfWork.CharacterInventories.DeleteInvItemByItemId(depositedItem.Id);
                 AddItemBySlot(client, InventoryType.Personal, client.Player.Inventory.ClanInventory[(int)packet.DestSlot], packet.SrcSlot, true, true);
 
                 RemoveItemBySlotForClan(client.Player.ClanId, packet.DestSlot, 0);
@@ -430,9 +438,9 @@ namespace Rasa.Managers
             AddItemBySlot(client, InventoryType.ClanInventory, entityId, packet.DestSlot, true, true);
 
             if (!wasSwap)
-                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, packet.SrcSlot);
+                unitOfWork.CharacterInventories.DeleteInvItemByItemId(depositedItem.Id);
 
-            EntityManager.Instance.GetItem(entityId).OwnerSlotId = packet.DestSlot;
+            depositedItem.OwnerSlotId = packet.DestSlot;
             RefreshClanLockbox(client.Player.ClanId, entityId, client.Player.Id, packet.DestSlot, ref client.Player.Inventory.ClanInventory, true);
         }
 
@@ -563,8 +571,12 @@ namespace Rasa.Managers
                     var newEntityId = client.Player.Inventory.ClanInventory[(int)packet.SrcSlot];
                     RefreshClanLockbox(client.Player.ClanId, newEntityId, client.Player.Id, packet.SrcSlot, ref client.Player.Inventory.ClanInventory, true);
 
+                    var swappedOut = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[(int)packet.DestSlot]);
+
                     RemoveItemBySlot(client, InventoryType.Personal, packet.DestSlot);
-                    unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, packet.DestSlot);
+
+                    if (swappedOut != null)
+                        unitOfWork.CharacterInventories.DeleteInvItemByItemId(swappedOut.Id);
                 }
                 AddItemBySlot(client, InventoryType.Personal, entityId, packet.DestSlot, true, true);
             }
@@ -870,9 +882,15 @@ namespace Rasa.Managers
             if (item.Id == 0)
                 return;
 
+            // One transaction: either all three rows go or none does, so a failure between
+            // them cannot leave the item row gone and an inventory row pointing at it.
+            using var transaction = unitOfWork.BeginTransaction();
+
             unitOfWork.CharacterInventories.DeleteInvItemByItemId(item.Id);
             unitOfWork.ClanInventories.DeleteInvItemByItemId(item.Id);
             unitOfWork.Items.DeleteItem(item.Id);
+
+            transaction.Commit();
         }
 
         public Item AddItemToInventory(Client client, Item item)

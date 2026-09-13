@@ -696,9 +696,10 @@ namespace Rasa.Managers
             }
             else
             {
-                // remove item
+                // remove item; the row by item id, since the character id it carries is
+                // not written consistently and a miss leaves a row behind
                 InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, slotIndex);
-                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, slotIndex);
+                unitOfWork.CharacterInventories.DeleteInvItemByItemId(soldItem.Id);
             }
 
             // add credits to player
