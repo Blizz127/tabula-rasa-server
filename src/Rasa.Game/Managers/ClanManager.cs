@@ -381,6 +381,14 @@ namespace Rasa.Managers
 
             CharacterEntry inviteeCharacter = unitOfWork.Characters.GetByAccountId(inviteeAccount.Id, inviteeAccount.SelectedSlot);
 
+            // An account whose selected slot holds no character: every character deleted, or a
+            // fresh account whose family name happens to match.
+            if (inviteeCharacter == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"{packet.FamilyName} has no character to invite");
+                return;
+            }
+
             var messageArgs = CreatePlayerMessageArgs("playername", $"{inviteeCharacter.Name} {inviteeAccount.FamilyName}");
 
             if (members.Count >= _maxClanMembers)

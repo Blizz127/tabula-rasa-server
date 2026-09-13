@@ -589,14 +589,34 @@ namespace Rasa.Managers
 
         public void RequestSwitchToCharacterInSlot(Client client, RequestSwitchToCharacterInSlotPacket packet)
         {
-            if (packet.SlotNum < 1 || packet.SlotNum > 16)
+            // Only from the pod screen. From the world this replaced the manifestation while
+            // the old one was still in its map's cells and every manager's tables - never
+            // removed, a frozen copy for everyone else, and the client in two maps at once.
+            if (client.State != ClientState.CharacterSelection)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to switch to the character in slot {packet.SlotNum} while in state {client.State}.");
+                return;
+            }
+
+            if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods)
                 return;
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            // Look before the selected slot is changed: it used to be written first, so a
+            // switch to an empty pod left the account pointing at nothing.
+            var character = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id, packet.SlotNum);
+
+            if (character == null)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to switch to slot {packet.SlotNum}, which is empty.");
+                return;
+            }
+
             client.AccountEntry.SelectedSlot = packet.SlotNum;
             unitOfWork.GameAccounts.UpdateSelectedSlot(client.AccountEntry.Id, packet.SlotNum);
-
-            var character = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id, packet.SlotNum);
             unitOfWork.Characters.UpdateLoginData(character.Id);
             unitOfWork.Complete();
 
@@ -725,9 +745,9 @@ namespace Rasa.Managers
 
                     if (data != null)
                     {
-                        var character = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id, client.AccountEntry.SelectedSlot);
-
-                        unitOfWork.Characters.UpdateCharacterPosition(character.Id, data.Position.X, data.Position.Y, data.Position.Z, data.Orientation, data.MapContextId);
+                        // The character being moved is the one in the world; no need to go by
+                        // the selected slot, which can name an empty pod.
+                        unitOfWork.Characters.UpdateCharacterPosition(client.Player.Id, data.Position.X, data.Position.Y, data.Position.Z, data.Orientation, data.MapContextId);
                     }
                     else
                         unitOfWork.Characters.UpdateCharacterPosition(

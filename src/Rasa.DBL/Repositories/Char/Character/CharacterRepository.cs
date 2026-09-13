@@ -87,15 +87,18 @@ namespace Rasa.Repositories.Char.Character
             return bySlot;
         }
 
+        /// <summary>
+        /// The character in one of an account's pods, or null when the pod is empty. An empty
+        /// pod is an ordinary answer - an account with no character in its selected slot, a
+        /// switch to a slot nothing was created in - so this does not throw; it used to, and
+        /// every caller checked for null instead, so the check never ran and the throw took
+        /// the connection down.
+        /// </summary>
         public CharacterEntry GetByAccountId(uint accountEntryId, byte slot)
         {
             var query = CreateCharacterQuery();
-            var character = query.FirstOrDefault(e => e.AccountId == accountEntryId && e.Slot == slot);
-            if (character == null)
-            {
-                throw new EntityNotFoundException(nameof(CharacterEntry), $"{nameof(CharacterEntry.AccountId)}.{nameof(CharacterEntry.Slot)}", $"{accountEntryId}-{slot}");
-            }
-            return character;
+
+            return query.FirstOrDefault(e => e.AccountId == accountEntryId && e.Slot == slot);
         }
 
         private IQueryable<CharacterEntry> CreateCharacterQuery()
