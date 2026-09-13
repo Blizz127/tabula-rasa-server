@@ -184,6 +184,20 @@ namespace Rasa.Repositories.Char.Character
             _charContext.SaveChanges();
         }
 
+        public void UpdateCharacterPrestige(uint id, int prestige)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
+            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+
+            if (entry == null)
+                return;
+
+            entry.Prestige = prestige;
+
+            _charContext.CharacterEntries.Update(entry);
+            _charContext.SaveChanges();
+        }
+
         public void UpdateCharacterExpirience(uint id, uint experience)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);

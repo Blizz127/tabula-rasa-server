@@ -670,49 +670,74 @@ namespace Rasa.Managers
 
         public void ClanCreditTransfer(Client client, long amount, uint creditType)
         {
-            if (client.Player.ClanId == 0)
+            // amount > 0 deposits into the lockbox, amount < 0 withdraws from it.
+            // creditType 1 is credits, 2 is prestige.
+            if (client.Player == null || client.Player.ClanId == 0)
                 return;
 
-            //-amount means withdraw from lockbox +amount means deposit to lockbox
+            if (creditType != 1 && creditType != 2)
+                return;
+
+            if (amount > -500 && amount < 500)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, "Minimum transfer value is 500 credits");
+                return;
+            }
+
+            // The character side is an int; anything past that cannot be a real request.
+            if (amount < int.MinValue || amount > int.MaxValue)
+                return;
+
+            var currency = creditType == 1 ? CurencyType.Credits : CurencyType.Prestige;
+            var characterUpdate = creditType == 1 ? CharacterUpdate.Credits : CharacterUpdate.Prestige;
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
             var clanInfo = unitOfWork.Clans.GetClanById(client.Player.ClanId);
 
-            long remainderOfCredits = (creditType == 1 ? clanInfo.Credits : clanInfo.Prestige) + amount;
+            if (clanInfo == null)
+                return;
 
-            if (amount >= 500 || amount <= -500)
+            long lockboxBalance = creditType == 1 ? clanInfo.Credits : clanInfo.Prestige;
+            long lockboxAfter = lockboxBalance + amount;
+            long playerAfter = client.Player.Credits[currency] - amount;
+
+            if (playerAfter < 0)
             {
-                if ((creditType == 1 && client.Player.Credits[CurencyType.Credits] < amount) ||
-                    (creditType == 2 && client.Player.Credits[CurencyType.Prestige] < amount))
-                {
-                    if (amount > 0)
-                        client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientDepositFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
-                    return;
-                }
-
-                if (remainderOfCredits >= 0)
-                {
-                    if (creditType == 1)
-                        unitOfWork.Clans.UpdateCredits(client.Player.ClanId, (uint)remainderOfCredits);
-                    else
-                        unitOfWork.Clans.UpdatePrestige(client.Player.ClanId, (uint)remainderOfCredits);
-
-                    CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Credits, amount * -1);
-                    var augmentationsList = EntityClassManager.Instance.LoadedEntityClasses[EntityClasses.UsableClanLockboxV01].Augmentations;
-
-                    foreach (var dynamicObj in EntityManager.Instance.DynamicObjects)
-                    {
-                        DynamicObject dynamicObject = dynamicObj.Value;
-
-                        if (dynamicObject.EntityClassId == EntityClasses.UsableClanLockboxV01)
-                            ClanManager.Instance.CallMethodForOnlineMembers(client.Player.ClanId, dynamicObject.EntityId, new UpdateClanLockboxCreditsPacket(creditType == 1 ? (uint)remainderOfCredits : clanInfo.Credits, creditType == 2 ? (uint)remainderOfCredits : clanInfo.Prestige));
-                    }
-                }
-                else
-                    CommunicatorManager.Instance.SystemMessage(client, "Not enough credit's");
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientDepositFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
             }
+
+            if (lockboxAfter < 0)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, "Not enough credit's");
+                return;
+            }
+
+            if (lockboxAfter > uint.MaxValue || playerAfter > int.MaxValue)
+                return;
+
+            // The character is charged first and the lockbox credited second. This used to be
+            // the other way round, and the character step threw before it ran: the long
+            // amount was boxed and unboxed as an int, an InvalidCastException, so the clan
+            // kept every deposit, the depositor kept the money, and the client was
+            // disconnected. If the second step fails now the player is short, not the clan.
+            CharacterManager.Instance.UpdateCharacter(client, characterUpdate, (int)(-amount));
+
+            if (creditType == 1)
+                unitOfWork.Clans.UpdateCredits(client.Player.ClanId, (uint)lockboxAfter);
             else
-                CommunicatorManager.Instance.SystemMessage(client, "Minimum transfer value is 500 credits");
+                unitOfWork.Clans.UpdatePrestige(client.Player.ClanId, (uint)lockboxAfter);
+
+            var lockboxCredits = creditType == 1 ? (uint)lockboxAfter : clanInfo.Credits;
+            var lockboxPrestige = creditType == 2 ? (uint)lockboxAfter : clanInfo.Prestige;
+
+            foreach (var dynamicObj in EntityManager.Instance.DynamicObjects)
+            {
+                var dynamicObject = dynamicObj.Value;
+
+                if (dynamicObject.EntityClassId == EntityClasses.UsableClanLockboxV01)
+                    ClanManager.Instance.CallMethodForOnlineMembers(client.Player.ClanId, dynamicObject.EntityId, new UpdateClanLockboxCreditsPacket(lockboxCredits, lockboxPrestige));
+            }
         }
 
         public void WeaponDrawerInventory_MoveItem(Client client, WeaponDrawerInventory_MoveItemPacket packet)

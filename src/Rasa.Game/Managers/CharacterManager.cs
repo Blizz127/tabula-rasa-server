@@ -762,6 +762,14 @@ namespace Rasa.Managers
                     break;
 
                 case CharacterUpdate.Prestige:
+                    // Same shape as Credits: value is the signed change. Prestige was loaded
+                    // into Player.Credits at login but never written back.
+                    var prestigeChange = (int)value;
+
+                    client.Player.Credits[CurencyType.Prestige] += prestigeChange;
+
+                    client.CallMethod(client.Player.EntityId, new UpdateCreditsPacket(CurencyType.Prestige, client.Player.Credits[CurencyType.Prestige], 0));
+                    unitOfWork.Characters.UpdateCharacterPrestige(client.Player.Id, client.Player.Credits[CurencyType.Prestige]);
                     break;
 
                 case CharacterUpdate.Stats:
