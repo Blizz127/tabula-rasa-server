@@ -50,30 +50,33 @@ namespace Rasa.Managers
         public void DestroyPhysicalEntity(Client client, ulong entityId, EntityType entityType)
         {
             client.CallMethod(SysEntity.ClientMethodId, new DestroyPhysicalEntityPacket(entityId));
-            //free entity
+
+            // Unregister before freeing: FreeEntity refuses an id that is still registered, so
+            // the old order leaked every id destroyed this way - a player's whole inventory on
+            // each map change and logout - and logged a line per item.
             switch (entityType)
             {
                 case EntityType.Character:
-                    FreeEntity(entityId);
                     UnregisterEntity(entityId);
                     UnregisterPlayer(entityId);
+                    FreeEntity(entityId);
                     break;
                 case EntityType.Npc:
                     break;
                 case EntityType.Creature:
-                    FreeEntity(entityId);
                     UnregisterEntity(entityId);
                     UnregisterCreature(entityId);
+                    FreeEntity(entityId);
                     break;
                 case EntityType.Item:
-                    FreeEntity(entityId);
                     UnregisterEntity(entityId);
                     UnregisterItem(entityId);
+                    FreeEntity(entityId);
                     break;
                 case EntityType.Object:
-                    FreeEntity(entityId);
                     UnregisterEntity(entityId);
                     UnregisterDynamicObject(entityId);
+                    FreeEntity(entityId);
                     break;
                 case EntityType.VendorItem:
                     break;

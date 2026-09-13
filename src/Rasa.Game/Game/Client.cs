@@ -228,7 +228,8 @@ namespace Rasa.Game
            var clientList = new List<Client>();
 
             foreach (var cellSeed in client.Player.Cells)
-                clientList.AddRange(client.Player.MapChannel.MapCellInfo.Cells[cellSeed].ClientList);
+                if (client.Player.MapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                    clientList.AddRange(cell.ClientList);
 
             foreach (var tempClient in clientList)
                 tempClient.CallMethod(entityId, packet);
@@ -240,7 +241,8 @@ namespace Rasa.Game
             var clientList = new List<Client>();
 
             foreach (var cellSeed in client.Player.Cells)
-                clientList.AddRange(client.Player.MapChannel.MapCellInfo.Cells[cellSeed].ClientList);
+                if (client.Player.MapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                    clientList.AddRange(cell.ClientList);
 
             foreach (var tempClient in clientList)
             {
@@ -256,8 +258,11 @@ namespace Rasa.Game
         {
             var clientList = new List<Client>();
 
+            // A cell the player's matrix names but the map does not have is a stale matrix, not
+            // a reason to drop the connection; whoever is in the other cells still gets the move.
             foreach (var cellSeed in client.Player.Cells)
-                clientList.AddRange(client.Player.MapChannel.MapCellInfo.Cells[cellSeed].ClientList);
+                if (client.Player.MapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                    clientList.AddRange(cell.ClientList);
 
             foreach (var tempClient in clientList)
             {
@@ -389,6 +394,16 @@ namespace Rasa.Game
                     {
                         return;
                     }
+
+                    // Only a player who is in the world moves in it. Between a map change and the
+                    // client's MapLoaded the character already points at the new map and its
+                    // arrival position, while the client's last few Move packets - sent before it
+                    // saw PreWonkavate - are still arriving with old-map coordinates. Applying one
+                    // overwrote the arrival position, and relaying it indexed the new map's cell
+                    // table with the old map's cells, which threw and cost the player the
+                    // connection every time they walked through a pass.
+                    if (State != ClientState.Ingame)
+                        return;
 
                     Player.Position = moveMessage.Movement.Position;
                     Player.Rotation = moveMessage.Movement.ViewDirection.X;
