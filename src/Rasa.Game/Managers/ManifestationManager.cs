@@ -990,12 +990,42 @@ namespace Rasa.Managers
             WeaponReady(client, true);
         }
 
+        /// <summary>
+        /// Ends a reload the server is not going to finish.
+        ///
+        /// The client plays the reload animation as a windup and waits to be told how it ended:
+        /// the recovery resolves it, or an interrupt cancels it. Returning without either leaves
+        /// the animation running until some other action happens to interrupt it, which is what
+        /// an out-of-ammo reload did - it failed correctly and then span forever.
+        ///
+        /// Recv_ActionInterrupt matches the action and its arg against the actor's current
+        /// action, so the arg has to be the one the windup was started with. It goes to everyone
+        /// in range, not just the player: onlookers were shown the windup too.
+        /// </summary>
+        private void CancelReload(Client client, uint reloadActionId, PlayerMessage reason)
+        {
+            client.CellCallMethod(client, client.Player.EntityId,
+                new ActionInterruptPacket(client.Player.EntityId, ActionId.WeaponReload, reloadActionId));
+
+            client.CallMethod(SysEntity.CommunicatorId,
+                new DisplayClientMessagePacket(reason, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+        }
+
         public void RequestWeaponReload(Client client, bool isRequested)
         {
             // here we only check, can we reload weapon
             // actual weapon reload happen if reaload action isn't interupted
             var weapon = InventoryManager.Instance.CurrentWeapon(client);
+
+            if (weapon?.ItemTemplate?.WeaponInfo == null)
+                return;
+
             var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
+
+            if (weaponClassInfo == null)
+                return;
+
+            var reloadActionId = (uint)weaponClassInfo.ReloadActionId;
             var foundAmmo = 0u;
 
             for (var i = 0; i < 50; i++)
@@ -1005,9 +1035,11 @@ namespace Rasa.Managers
 
                 var weaponAmmo = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i]);
 
-                // check is empty slot
+                // A slot naming an item that is not registered. Skip that slot rather than
+                // abandoning the reload: one stale row used to stop the scan, so ammo sitting in
+                // a later slot was never found and the reload silently did nothing.
                 if (weaponAmmo == null)
-                    return;
+                    continue;
 
                 if (weaponAmmo.ItemTemplate.Class == weaponClassInfo.AmmoClassId)
                 {
@@ -1021,7 +1053,23 @@ namespace Rasa.Managers
             }
 
             if (foundAmmo == 0)
-                return; // no ammo found -> ToDo: Tell the client?
+            {
+                // Nothing to reload with.
+                //
+                // isRequested is false when the *player* asked: their own client has already
+                // started the animation locally, which is why the windup below is sent to
+                // everyone except them. So that is exactly the case where the client is sitting
+                // in a windup nothing will ever end, and it has to be told.
+                //
+                // isRequested is true only for the reload the fire path starts when the clip is
+                // empty. No windup has been sent yet, so there is nothing to cancel - and firing
+                // a dry weapon comes back here on every trigger pull, so saying anything would
+                // be a message per tick.
+                if (!isRequested)
+                    CancelReload(client, reloadActionId, PlayerMessage.PmInventoryOutOfAmmo);
+
+                return;
+            }
 
             if (isRequested)
                 client.CellCallMethod(client, client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, ActionId.WeaponReload, (uint)weaponClassInfo.ReloadActionId));
