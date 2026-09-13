@@ -634,20 +634,51 @@ namespace Rasa.Managers
 
         internal void SelectWaypoint(Client client, SelectWaypointPacket packet)
         {
-            if (packet.MapInstanceId != client.Player.MapContextId)
+            // Both ids come from the client and used to be indexed straight into the map and
+            // teleporter dictionaries, so an unknown map or waypoint id threw KeyNotFoundException
+            // in the handler and the player was disconnected. Now the request is checked the way
+            // the waypoint window itself is built: the player has to be standing at a waypoint,
+            // the destination has to exist, and it has to be one this character has gained
+            // (dropships are offered to everyone, see CreateListOfDropships).
+            if (client.Player == null || client.State != ClientState.Ingame)
+                return;
+
+            // The client sends None for the map when it means the one it is on.
+            var mapContextId = packet.MapInstanceId != 0 ? packet.MapInstanceId : client.Player.MapContextId;
+
+            if (!MapChannelManager.Instance.MapChannelArray.TryGetValue(mapContextId, out var targetMap)
+                || !targetMap.Teleporters.TryGetValue(packet.WaypointId, out var teleporter)
+                || !(teleporter.ObjectData is WaypointInfo objData))
             {
-                var dropship = new Dropship(Factions.AFS, DropshipType.Teleporter, client, MapChannelManager.Instance.MapChannelArray[packet.MapInstanceId].Teleporters[packet.WaypointId].Position, packet.MapInstanceId);
+                Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} asked for unknown waypoint {packet.WaypointId} on map {mapContextId}");
+                return;
+            }
+
+            if (!IsAtWaypoint(client))
+            {
+                Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} is not standing at a waypoint");
+                return;
+            }
+
+            if (objData.WaypointType != WaypointType.Dropship
+                && !client.Player.GainedWaypoints.Any(w => w.WaypointId == objData.WaypointId))
+            {
+                Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} has not gained waypoint {objData.WaypointId}");
+                return;
+            }
+
+            if (mapContextId != client.Player.MapContextId)
+            {
+                var dropship = new Dropship(Factions.AFS, DropshipType.Teleporter, client, teleporter.Position, mapContextId);
 
                 CellManager.Instance.AddToWorld(client.Player.MapChannel, dropship);
                 Dropships.Add(dropship.EntityId, dropship);
                 client.CallMethod(SysEntity.ClientMethodId, new RequestMovementBlockPacket());
 
-                client.LoadingMap = packet.MapInstanceId;
+                client.LoadingMap = mapContextId;
                 return;
             }
 
-            var teleporter = client.Player.MapChannel.Teleporters[packet.WaypointId];
-            var objData = teleporter.ObjectData as WaypointInfo;
             var movementData = new Models.Movement
                 (
                 new Vector3(
@@ -665,6 +696,30 @@ namespace Rasa.Managers
             client.CellMoveObject(client, new MoveObjectMessage(client.Player.EntityId, movementData), false);
 
             teleporter.TriggeredByPlayers.Remove(client);    // ToDO: maybe safely remove client
+        }
+
+        /// <summary>
+        /// Whether the player currently has a waypoint window open on the server's side: the
+        /// proximity workers add a client to a teleporter's TriggeredByPlayers or a dropship
+        /// pad's TriggeredBy while it is within range, and take it out again when it leaves.
+        /// </summary>
+        private static bool IsAtWaypoint(Client client)
+        {
+            var mapChannel = client.Player.MapChannel;
+
+            if (mapChannel == null)
+                return false;
+
+            foreach (var teleporter in mapChannel.Teleporters.Values)
+                if (teleporter.TriggeredByPlayers.Contains(client))
+                    return true;
+
+            if (mapChannel.MapCellInfo.Cells.TryGetValue(client.Player.Cells[2, 2], out var cell))
+                foreach (var trigger in cell.MapTriggers)
+                    if (trigger.TriggeredBy.Contains(client))
+                        return true;
+
+            return false;
         }
 
         internal void TeleportAcknowledge(Client client)
