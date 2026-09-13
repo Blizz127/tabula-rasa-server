@@ -135,6 +135,18 @@ namespace Rasa.Repositories.Char.Clan
             _charContext.SaveChanges();
         }
 
+        /// <summary>Starts the PvP-clan cooldown for one character: the one who left or was kicked.</summary>
+        public void UpdateLastPvPClanTime(uint characterId, DateTime lastPvPClanTimestamp)
+        {
+            var character = _charContext.GetWritable(_charContext.CharacterEntries, characterId);
+
+            if (character == null)
+                return;
+
+            character.LastPvPClan = lastPvPClanTimestamp;
+            _charContext.SaveChanges();
+        }
+
         public void UpdatePrestige(uint clanId, uint prestige)
         {
             var entry = GetWritable(clanId);

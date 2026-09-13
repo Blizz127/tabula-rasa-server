@@ -198,15 +198,27 @@ namespace Rasa.Managers
             uint pvpTimeoutSeconds = 0;
 
             CharacterEntry character = unitOfWork.Characters.Get(client.Player.Id);
-            var now = DateTime.UtcNow;
-            var maxCooldownTime = now.AddDays(-7);
 
-            if (character.LastPvPClan > maxCooldownTime)
-            {
-                pvpTimeoutSeconds = (uint)(now - character.LastPvPClan).TotalSeconds;
-            }
+            if (character != null)
+                pvpTimeoutSeconds = PvPCooldownRemainingSeconds(character);
 
             client.CallMethod(SysEntity.ClientClanManagerId, new GetPvPClanStatusPacket(clanName, pvpTimeoutSeconds));
+        }
+
+        /// <summary>How long a character has to wait before joining or founding a PvP clan.</summary>
+        private static readonly TimeSpan PvPClanCooldown = TimeSpan.FromDays(7);
+
+        /// <summary>
+        /// Seconds of PvP-clan cooldown left, zero when it has run out. The remaining time is
+        /// when the cooldown ends minus now; this used to be computed as now minus the
+        /// timestamp (the elapsed time, not the remaining), and in CanCreateClan as a negative
+        /// TimeSpan cast to uint, which wrapped to about four billion.
+        /// </summary>
+        private static uint PvPCooldownRemainingSeconds(CharacterEntry character)
+        {
+            var remaining = character.LastPvPClan + PvPClanCooldown - DateTime.UtcNow;
+
+            return remaining > TimeSpan.Zero ? (uint)Math.Ceiling(remaining.TotalSeconds) : 0;
         }
 
         internal void CreateClan(Client client, CreateClanPacket packet)
@@ -295,8 +307,9 @@ namespace Rasa.Managers
 
                 if (clan.IsPvP)
                 {
-                    // Save the time they were last in a PvP clan to start the 7 day cooldown.
-                    unitOfWork.Clans.UpdateLastPvPClanTimeForMembers(clan.Id, DateTime.UtcNow);
+                    // Start the 7 day cooldown for the one being kicked. This used to stamp
+                    // every member of the clan, so a kick put the whole clan on cooldown.
+                    unitOfWork.Clans.UpdateLastPvPClanTime(memberToBeKicked.CharacterId, DateTime.UtcNow);
                 }
 
                 if (unitOfWork.ClanMembers.DeleteClanMember(memberToBeKicked))
@@ -338,7 +351,25 @@ namespace Rasa.Managers
             // We don't do anything right now when the invitation is declined
             if (!packet.Accepted) return;
 
-            var clanData = new ClanData(GetClan(packet.ClanId));
+            var clan = GetClan(packet.ClanId);
+
+            if (clan == null)
+                return;
+
+            // The cooldown applies to joining a PvP clan as well as founding one.
+            if (clan.IsPvP)
+            {
+                using var cooldownUnitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                var character = cooldownUnitOfWork.Characters.Get(client.Player.Id);
+
+                if (character != null && PvPCooldownRemainingSeconds(character) > 0)
+                {
+                    client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanAcceptInPvpTimeout, new Dictionary<string, string>()));
+                    return;
+                }
+            }
+
+            var clanData = new ClanData(clan);
             ClanMemberData memberData = CreateClanMemberData(clanData, invitee);
 
             // The player accepted so they must be online
@@ -521,8 +552,8 @@ namespace Rasa.Managers
 
             if (clan.IsPvP)
             {
-                // Save the time they were last in a PvP clan to start the 7 day cooldown.
-                unitOfWork.Clans.UpdateLastPvPClanTimeForMembers(clan.Id, DateTime.UtcNow);
+                // Start the 7 day cooldown for the one leaving, not for the clan they leave.
+                unitOfWork.Clans.UpdateLastPvPClanTime(member.CharacterId, DateTime.UtcNow);
             }
 
             if (unitOfWork.ClanMembers.DeleteClanMember(member))
@@ -782,17 +813,11 @@ namespace Rasa.Managers
             {
                 CharacterEntry character = unitOfWork.Characters.Get(characterId);
 
-                var now = DateTime.UtcNow.AddDays(-7);
-
                 // Verify the creator is not on PvP timeout: PmClanCannotCreateUserInPvpTimeout
-                if (character.LastPvPClan > now)
+                if (character != null && PvPCooldownRemainingSeconds(character) > 0)
                 {
-                    var pvpTimeoutSeconds = (uint)(now - character.LastPvPClan).TotalSeconds;
-                    if(pvpTimeoutSeconds > 0)
-                    {
-                        client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanCannotCreateUserInPvpTimeout, new Dictionary<string, string>()));
-                        return false;
-                    }
+                    client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanCannotCreateUserInPvpTimeout, new Dictionary<string, string>()));
+                    return false;
                 }
             }
 
