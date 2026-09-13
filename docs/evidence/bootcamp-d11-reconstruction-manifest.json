@@ -70,6 +70,12 @@
       "container": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
       "provenance": "docs/client-artifacts.md; member hashes and store offsets in docs/evidence/bootcamp-client-catalog.json",
       "locator_format": "table member path + store offset"
+    },
+    "measurement:bootcamp-positions": {
+      "kind": "measurement",
+      "era": "final_live",
+      "member": "docs/evidence/bootcamp-d11-positions.json",
+      "note": "Curated S1 positions: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). Each position record states its method, uncertainty and frames."
     }
   },
   "scope": [
@@ -107,7 +113,2574 @@
       "key_ranges": { "id": { "min": 19851, "max": 19859 } }
     }
   ],
-  "rows": [],
+  "rows": [
+    {
+      "table": "content_location",
+      "key": {
+        "id": 19851
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "purpose": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "spawn.first_login"
+            }
+          ],
+          "reasoning": "purpose 1 is this schema's new-character start; the record is the boot camp's first-login point"
+        },
+        "map_context_id": {
+          "value": 1985,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_map:adv_bootcamp",
+              "locator": "data/maps/adv_bootcamp/adv_bootcamp.map; map template 1985 = adv_bootcamp, version 783"
+            }
+          ]
+        },
+        "pos_x": {
+          "value": 387.2,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "spawn.first_login"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_y": {
+          "value": 136.75,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "spawn.first_login"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_z": {
+          "value": -79.09,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "spawn.first_login"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "rotation": {
+          "value": 6.02139,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "spawn.first_login"
+            }
+          ],
+          "uncertainty": {
+            "unit": "deg",
+            "plus_minus": 15
+          }
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "bootcamp first login",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "creature",
+      "key": {
+        "id": 198500
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "class_id": {
+          "value": 3846,
+          "tier": "analogue",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/entityclass.pyo; entity class 3846 NPC_Human_Swapset_Male, Creature+NPC+Vendor+Harvestable augmentations"
+            }
+          ],
+          "counterpart": "the final-live generic human male NPC entity class NPC_Human_Swapset_Male (3846), the class the shipped world data uses for AFS human commanders (Outpost Commander Rogers, Field Sgt. Witherspoon)",
+          "required_because": "McAllister cannot be placed or talked to without an entity class carrying the NPC augmentation, and no client table or capture records the boot-camp NPC's own class",
+          "decision": "OD-11"
+        },
+        "faction": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-040",
+              "t": 274.467
+            }
+          ],
+          "reasoning": "McAllister is an AFS officer; AFS NPCs use faction 1 in the shipped world data"
+        },
+        "level": {
+          "value": 10,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-043",
+              "t": 279.533
+            }
+          ]
+        },
+        "max_hp": {
+          "value": 1000,
+          "tier": "analogue",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/entityclass.pyo; entity class 3846, as used by the shipped world data"
+            }
+          ],
+          "counterpart": "a level-10 AFS human NPC in the shipped world data (AFS officers and commanders use 1000 hp at level 10)",
+          "required_because": "a placed creature needs a health value and no client table records NPC health",
+          "decision": "OD-11"
+        },
+        "name_id": {
+          "value": 10566,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/language/english/creaturenamelanguage.pyo @34796: 'Major McAllister'"
+            }
+          ]
+        },
+        "run_speed": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-040",
+              "t": 274.467
+            }
+          ],
+          "reasoning": "McAllister stands still in the footage, so he is a stationary placement with no run rate"
+        },
+        "walk_speed": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-040",
+              "t": 274.467
+            }
+          ],
+          "reasoning": "as run_speed; the NPC does not walk in the footage"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Major McAllister",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "npc_mission",
+      "key": {
+        "id": 1990
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "giver_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the offer arrives over the radio with no NPC in range, so the mission has no giver"
+        },
+        "reciver_id": {
+          "value": 198500,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-044",
+              "t": 285.333
+            }
+          ]
+        },
+        "level": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-011",
+              "t": 224.8
+            }
+          ],
+          "reasoning": "the first mission of a level-1 recruit"
+        },
+        "group_type": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "a solo mission; 1 matches the other seeded missions"
+        },
+        "category_id": {
+          "value": 10000032,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the client mission catalog lists 1990 under the 'Instance (Bootcamp)' category"
+        },
+        "shareable": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the Initiation offer shows no Share control and no client table gives the flag"
+        },
+        "radio_completeable": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the offer shows no Radio Complete control and no client table gives the flag"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Initiation",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective",
+      "key": {
+        "mission_id": 1990,
+        "objective_id": 1
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "ordinal": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-017",
+              "t": 238.2
+            }
+          ],
+          "reasoning": "objective 1 is the first objective the tracker shows"
+        },
+        "is_required": {
+          "value": true,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-017",
+              "t": 238.2
+            }
+          ],
+          "reasoning": "the mission cannot complete without it"
+        },
+        "revealed_on_accept": {
+          "value": true,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-017",
+              "t": 238.2
+            }
+          ]
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Approach the Eloh Hologram",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective",
+      "key": {
+        "mission_id": 1990,
+        "objective_id": 2
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "ordinal": {
+          "value": 2,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-028",
+              "t": 255.933
+            }
+          ],
+          "reasoning": "objective 2 replaces objective 1 in the tracker after the first completes"
+        },
+        "is_required": {
+          "value": true,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-028",
+              "t": 255.933
+            }
+          ],
+          "reasoning": "the mission cannot complete without it"
+        },
+        "revealed_on_accept": {
+          "value": false,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-028",
+              "t": 255.933
+            }
+          ]
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Approach the Eloh Hologram",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective_transition",
+      "key": {
+        "mission_id": 1990,
+        "completed_objective_id": 1,
+        "revealed_objective_id": 2
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {}
+    },
+    {
+      "table": "npc_mission_reward",
+      "key": {
+        "id": 1990,
+        "type": 1
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "credits": {
+          "value": 100,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-044",
+              "t": 285.333
+            }
+          ]
+        },
+        "item_template_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-044",
+              "t": 285.333
+            }
+          ],
+          "reasoning": "a currency reward carries no item template"
+        },
+        "quantity": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-044",
+              "t": 285.333
+            }
+          ],
+          "reasoning": "a currency reward carries no item quantity"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_reward",
+      "key": {
+        "id": 1990,
+        "type": 3
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "credits": {
+          "value": 1250,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-047",
+              "t": 289.533
+            }
+          ]
+        },
+        "item_template_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-047",
+              "t": 289.533
+            }
+          ],
+          "reasoning": "an experience reward carries no item template"
+        },
+        "quantity": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-047",
+              "t": 289.533
+            }
+          ],
+          "reasoning": "an experience reward carries no item quantity"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective_binding",
+      "key": {
+        "mission_id": 1990,
+        "objective_id": 1,
+        "binding_id": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "kind": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "the objective completes while the player runs through the spot with no NPC or use, which an area trigger fits"
+        },
+        "area_id": {
+          "value": 198600,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "the binding names the area seeded for this objective"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding names no placement"
+        },
+        "creature_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding names no creature"
+        },
+        "action_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding resolves no ability"
+        },
+        "destroying_hit_only": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding is not a hit"
+        },
+        "equip_match": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding equips nothing"
+        },
+        "item_template_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding names no item template"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding names no item set"
+        },
+        "target_state": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "an area binding sets no placement state"
+        },
+        "counter_id": {
+          "value": 255,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "255 means no counter; the objective completes once"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "1990/1 causeway",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "npc_mission_objective_binding",
+      "key": {
+        "mission_id": 1990,
+        "objective_id": 2,
+        "binding_id": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "kind": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "the objective completes while the player runs through the spot with no NPC or use, which an area trigger fits"
+        },
+        "area_id": {
+          "value": 198601,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "the binding names the area seeded for this objective"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding names no placement"
+        },
+        "creature_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding names no creature"
+        },
+        "action_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding resolves no ability"
+        },
+        "destroying_hit_only": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding is not a hit"
+        },
+        "equip_match": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding equips nothing"
+        },
+        "item_template_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding names no item template"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding names no item set"
+        },
+        "target_state": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "an area binding sets no placement state"
+        },
+        "counter_id": {
+          "value": 255,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "255 means no counter; the objective completes once"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "1990/2 terrace",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_area",
+      "key": {
+        "id": 198600
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "shape": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "a spherical trigger around the measured objective marker"
+        },
+        "pos_x": {
+          "value": 387.22,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_y": {
+          "value": 118.75,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_z": {
+          "value": -28.3,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "radius": {
+          "value": 4.0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "the player stood 8.2 m from the icon for 3 s without completing it, so the radius is above 2x the horizontal uncertainty (3 m) and below about 8 m; 4 m is taken"
+        },
+        "half_height": {
+          "value": 0.0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.1"
+            }
+          ],
+          "reasoning": "a sphere carries no half height"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 obj1 causeway",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_area",
+      "key": {
+        "id": 198601
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "shape": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "a spherical trigger around the measured objective marker"
+        },
+        "pos_x": {
+          "value": 387.83,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_y": {
+          "value": 112.75,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "pos_z": {
+          "value": 6.71,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 1.5,
+            "vertical_m": 1.5
+          }
+        },
+        "radius": {
+          "value": 4.0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "the player waited 9 m from the icon for 12 s without completing it, so the radius is above 3 m and below about 9 m; 4 m is taken"
+        },
+        "half_height": {
+          "value": 0.0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "area.1990.2"
+            }
+          ],
+          "reasoning": "a sphere carries no half height"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 obj2 terrace",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_condition",
+      "key": {
+        "condition_id": 198900,
+        "or_group": 0,
+        "term_index": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "kind": {
+          "value": 3,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the offer fires when 1990 is absent, before it is accepted"
+        },
+        "mission_id": {
+          "value": 1990,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the condition is about mission 1990"
+        },
+        "objective_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "a mission condition names no objective"
+        },
+        "state": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "state is unused by a mission-absent term"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "a mission condition uses no fact"
+        },
+        "value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "a mission condition uses no value"
+        },
+        "negate": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the term is not negated"
+        }
+      }
+    },
+    {
+      "table": "content_rule",
+      "key": {
+        "id": 1985000
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "event": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-007",
+              "t": 224.8
+            }
+          ],
+          "reasoning": "the offer opens by itself 0.73 s after the first world frame with no input, so it is raised on map entry"
+        },
+        "condition_id": {
+          "value": 198900,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-007",
+              "t": 224.8
+            }
+          ],
+          "reasoning": "the rule's only condition"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 radio offer",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule",
+      "key": {
+        "id": 1985001
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "event": {
+          "value": 2,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the tip follows the acceptance of 1990"
+        },
+        "condition_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "no condition"
+        },
+        "mission_id": {
+          "value": 1990,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the rule filters mission 1990"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 accepted tip",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule",
+      "key": {
+        "id": 1985002
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "event": {
+          "value": 3,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "objective 1 completing raises the Eloh greeting and the Logos"
+        },
+        "condition_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "no condition"
+        },
+        "mission_id": {
+          "value": 1990,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "the rule filters mission 1990"
+        },
+        "objective_id": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "the rule filters one objective"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 obj1 hologram",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule",
+      "key": {
+        "id": 1985003
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "event": {
+          "value": 3,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "objective 2 completing raises the second Eloh greeting"
+        },
+        "condition_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "no condition"
+        },
+        "mission_id": {
+          "value": 1990,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "the rule filters mission 1990"
+        },
+        "objective_id": {
+          "value": 2,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "the rule filters one objective"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "1990 obj2 hologram",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 1985000,
+        "sequence": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "action": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the client's only server-pushed offer that opens by itself is DispenseRadioMission"
+        },
+        "mission_id": {
+          "value": 1990,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ]
+        },
+        "forced": {
+          "value": true,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "the window opens with no click, which only a forced radio offer does"
+        },
+        "greeting_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "npc_name_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "tutorial_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_protocol": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "experience": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "credits": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "state_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "location_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "audio_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-013",
+              "t": 225.533
+            }
+          ],
+          "reasoning": "unused by this action"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "1990 radio offer",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 1985001,
+        "sequence": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "action": {
+          "value": 4,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "the Radial Menu tip is shown by the server's tutorial notification"
+        },
+        "mission_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "forced": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "greeting_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "npc_name_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "tutorial_id": {
+          "value": 10000018,
+          "tier": "observed",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ]
+        },
+        "logos_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_protocol": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "experience": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "credits": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "state_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "location_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "audio_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-018",
+              "t": 239.2
+            }
+          ],
+          "reasoning": "unused by this action"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Radial Menu tip",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 1985002,
+        "sequence": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "action": {
+          "value": 5,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "Lightning is on the ability bar and the moment only highlights it"
+        },
+        "mission_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "forced": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "greeting_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "npc_name_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "tutorial_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_id": {
+          "value": 23,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/logosdata.pyo; Logos 23 = the Power Logos (Lightning)"
+            }
+          ]
+        },
+        "logos_protocol": {
+          "value": 2,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "no Logos chat line appears at the moment, which a silent LogosStoneTabula produces"
+        },
+        "experience": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "credits": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "state_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "location_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "audio_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Lightning Logos",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 1985002,
+        "sequence": 1
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "action": {
+          "value": 3,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "the forced 'An Ancient Eloh' window opens with the completion"
+        },
+        "mission_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "forced": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "greeting_id": {
+          "value": 1634,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/language/english/npcgreetinglanguage.pyo @58196; greeting 1634 grants the first Logos and posts the Lightning tutorial effect"
+            }
+          ]
+        },
+        "npc_name_id": {
+          "value": 10598,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/language/english/creaturenamelanguage.pyo; 'An Ancient Eloh'"
+            }
+          ]
+        },
+        "tutorial_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_protocol": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "experience": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "credits": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "state_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "location_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "audio_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-024",
+              "t": 252.733
+            }
+          ],
+          "reasoning": "unused by this action"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "An Ancient Eloh",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_rule_action",
+      "key": {
+        "rule_id": 1985003,
+        "sequence": 0
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "action": {
+          "value": 3,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "the second Eloh window opens with objective 2"
+        },
+        "mission_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "forced": {
+          "value": false,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "greeting_id": {
+          "value": 1635,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/language/english/npcgreetinglanguage.pyo @58232; greeting 1635 is the Eloh on the Bane"
+            }
+          ]
+        },
+        "npc_name_id": {
+          "value": 10598,
+          "tier": "original",
+          "citations": [
+            {
+              "source": "client_table:game.zip",
+              "locator": "generated/client/language/english/creaturenamelanguage.pyo; 'An Ancient Eloh'"
+            }
+          ]
+        },
+        "tutorial_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "logos_protocol": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "experience": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "credits": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "placement_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "state_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_key": {
+          "value": "",
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "fact_value": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "location_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        },
+        "audio_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "video:7Lrst9SG3pk",
+              "event": "A2-035",
+              "t": 271.6
+            }
+          ],
+          "reasoning": "unused by this action"
+        }
+      },
+      "storage_fields": {
+        "comment": {
+          "value": "Eloh 1635",
+          "role": "comment"
+        }
+      }
+    },
+    {
+      "table": "content_placement",
+      "key": {
+        "id": 198650
+      },
+      "slice": "S1",
+      "migration": "BootcampS1Initiation",
+      "fields": {
+        "kind": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "McAllister is a placed creature"
+        },
+        "creature_id": {
+          "value": 198500,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "the placement instantiates the seeded McAllister creature row"
+        },
+        "entity_class_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "a creature placement takes its class from the creature row"
+        },
+        "usable_kind": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "a creature placement is not usable"
+        },
+        "pos_x": {
+          "value": 387.2,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 2.0,
+            "vertical_m": 0.5
+          }
+        },
+        "pos_y": {
+          "value": 125.57,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 2.0,
+            "vertical_m": 0.5
+          }
+        },
+        "pos_z": {
+          "value": 53.3,
+          "tier": "measured",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "uncertainty": {
+            "unit": "m",
+            "horizontal_m": 2.0,
+            "vertical_m": 0.5
+          }
+        },
+        "rotation": {
+          "value": 0.0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "the footage does not establish his facing; a stationary placement faces world +Z"
+        },
+        "behavior": {
+          "value": 1,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "he stands in one spot for the whole turn-in"
+        },
+        "initial_state": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "a stationary creature placement has no usable state"
+        },
+        "hit_points": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "the placement is not damageable"
+        },
+        "loot_item_set_id": {
+          "value": 0,
+          "tier": "inferred",
+          "citations": [
+            {
+              "source": "measurement:bootcamp-positions",
+              "position_key": "npc.mcallister"
+            }
+          ],
+          "reasoning": "the placement loots nothing"
+        }
+      },
+      "storage_fields": {
+        "map_context_id": {
+          "value": 1985,
+          "role": "scope"
+        },
+        "comment": {
+          "value": "McAllister",
+          "role": "comment"
+        }
+      }
+    }
+  ],
   "omitted": [],
   "accepted_definition_gaps": [],
   "accepted_content_gaps": [],

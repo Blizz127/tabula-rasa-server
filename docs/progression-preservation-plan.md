@@ -86,12 +86,18 @@ the final-live rule.
   method and frames. `area.1990.2` uses the measured objective-2 marker because the build plan's
   `ArchElohHologramPlatformLarge` anchor sits by the far Eloh hologram; the discrepancy is recorded
   in the record.
-- The twenty footage events the S1 rows cite are extracted (with verifier corrections applied) into
+- The twenty-one footage events the S1 rows cite are extracted (with verifier corrections applied) into
   `docs/evidence/bootcamp-d11-footage-events.json` from the A1/A2/A3 transcripts and verifications.
-- Remaining S1 content: the manifest `rows` and the `BootcampS1Initiation` migration. The mission,
-  objectives, transition, rewards, rules/actions, areas, bindings, placement, start location and
-  `name_id` 10566 are evidence-backed; `creature.class_id` and `creature.max_hp` for McAllister are
-  unrecoverable and need the OD-11 analogue research (the killed task) before the row can be seeded.
+- The S1 content is seeded by the `BootcampS1Initiation` data migration (SQLite and MySQL, generated with
+  `dotnet-ef 5.0.1`, parity-checked) from `src/Rasa.DBL/Migrations/BootcampData/BootcampS1InitiationRows.cs`:
+  the start location, McAllister, mission 1990 with its objectives, transition and rewards, the two
+  objective areas and bindings, the four rules and five actions, and the placement. The 23 manifest rows
+  record every value's tier and citation. OD-11 resolved McAllister's unrecoverable `class_id` and
+  `max_hp` as labelled analogues (entity class 3846 `NPC_Human_Swapset_Male`, the class the world data
+  uses for AFS human commanders; 1000 hp at level 10). The full suite (777 tests) passes.
+- Remaining S1 verification: deploy the candidate, set `Bootcamp.EntryMode`, and run the owner client
+  check against the footage; the planned `ReconstructionSeedTests`, `PositionFileTests`,
+  `ReconstructionDefinitionTests` and `SliceReadinessReport` are not written yet.
 
 ## Boot-camp owner decisions
 

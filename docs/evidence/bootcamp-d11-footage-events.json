@@ -45,6 +45,16 @@
     },
     {
       "segment": "A2",
+      "event_id": "A2-007",
+      "t": 224.8,
+      "category": "location",
+      "text": null,
+      "description": "First in-world frame: a hard switch from the loading screen (224.733) with no fade, tunnel or white-out frame between. The camera looks up at a huge octagonal ring/halo overhead, rimmed with evenly spaced blue-white lights. Behind and below the ring is a bright white glowing haze (a column of light or brilliant fog). Dark rock is at left and dark obelisk/pylon silhouettes stand at lower right. No player model is visible until 226.4. Scene-change frame s00017 matches.",
+      "status": "confirmed",
+      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+    },
+    {
+      "segment": "A2",
       "event_id": "A2-011",
       "t": 224.8,
       "category": "player_state",

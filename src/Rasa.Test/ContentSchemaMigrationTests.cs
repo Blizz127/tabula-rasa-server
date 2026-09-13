@@ -24,6 +24,7 @@ namespace Rasa.Test
         private const string PreviousWorldMigration = "20260913030423_MissionObjectiveDefinitions";
         private const string PreviousCharMigration = "20260913025737_MissionObjectiveProgress";
         private const string ContentLayerMigration = "20260913180618_MissionContentLayer";
+        private const string BootcampS1Migration = "20260913201420_BootcampS1Initiation";
 
         public static readonly string[] WorldTables =
         {
@@ -71,7 +72,7 @@ namespace Rasa.Test
                 "CREATE TABLE \"__EFMigrationsHistory\" (\"MigrationId\" TEXT NOT NULL CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY, \"ProductVersion\" TEXT NOT NULL)");
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
-            Assert.AreEqual(ContentLayerMigration, context.Database.GetPendingMigrations().Single());
+            CollectionAssert.AreEqual(new[] { ContentLayerMigration, BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
 
@@ -91,8 +92,8 @@ namespace Rasa.Test
             context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
             var before = WorldRows(connection);
 
-            context.Database.Migrate();
-            Assert.AreEqual(0, context.Database.GetPendingMigrations().Count());
+            context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
+            CollectionAssert.AreEqual(new[] { BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
                 Assert.IsTrue(TableExists(connection, table), table);
@@ -110,6 +111,42 @@ namespace Rasa.Test
             context.GetService<IMigrator>().Migrate(PreviousWorldMigration);
             Assert.IsFalse(WorldTables.Any(table => TableExists(connection, table)));
             Assert.AreEqual(before, WorldRows(connection));
+        }
+
+        [TestMethod]
+        public void BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables()
+        {
+            using var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+            using var context = World(connection);
+            CreatePreviousWorld(context, connection);
+            context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4)");
+            context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
+
+            context.Database.Migrate();
+            Assert.AreEqual(0, context.Database.GetPendingMigrations().Count());
+
+            // The initiation content: the start location, the NPC, the mission and its content rows.
+            Assert.AreEqual(19851L, Scalar(connection, "SELECT id FROM content_location"));
+            Assert.AreEqual(10566L, Scalar(connection, "SELECT name_id FROM creature WHERE id = 198500"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1990"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1990"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1990 AND completed_objective_id = 1 AND revealed_objective_id = 2"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1990"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 1990 AND kind = 1"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601)"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198900"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id BETWEEN 1985000 AND 1985003"));
+            Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action"));
+            Assert.AreEqual(198650L, Scalar(connection, "SELECT id FROM content_placement"));
+
+            // Rolling back the pair removes every seeded row and leaves the content tables empty again.
+            context.GetService<IMigrator>().Migrate(ContentLayerMigration);
+            CollectionAssert.AreEqual(new[] { BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
+            foreach (var table in WorldTables)
+                Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1990"));
         }
 
         [TestMethod]
