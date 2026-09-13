@@ -101,6 +101,10 @@ namespace Rasa.Managers
 
             var tempItem = EntityManager.Instance.GetItem(packet.EntityId);
 
+            // An id that is not an item used to be passed on and dereferenced.
+            if (tempItem == null)
+                return;
+
             ReduceStackCount(client, InventoryType.HomeInventory, tempItem, packet.Quantity);
 
             // ToDo delete item from db? or we sill keep all items
@@ -138,6 +142,10 @@ namespace Rasa.Managers
 
             var tempItem = EntityManager.Instance.GetItem(packet.EntityId);
 
+            // An id that is not an item used to be passed on and dereferenced.
+            if (tempItem == null)
+                return;
+
             ReduceStackCount(client, InventoryType.Personal, tempItem, packet.Quantity);
 
             // ToDo delete item from db? or we sill keep all items
@@ -149,13 +157,15 @@ namespace Rasa.Managers
             if (packet.SrcSlot == packet.DestSlot)
                 return;
 
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 250)
+            // Every slot check in this file is against the list's size, exclusive: several
+            // used to be inclusive, so the index one past the end passed and the list threw.
+            if (packet.SrcSlot < 0 || packet.SrcSlot >= 250)
             {
                 Logger.WriteLog(LogType.Debug, $"SrcSlot out of range => {packet.SrcSlot}");
                 return;
             }
 
-            if (packet.DestSlot < 0 || packet.DestSlot > 250)
+            if (packet.DestSlot < 0 || packet.DestSlot >= 250)
             {
                 Logger.WriteLog(LogType.Debug, $"DestSlot out of range => {packet.DestSlot}");
                 return;
@@ -301,10 +311,10 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (srcSlot < 0 || srcSlot > 50)
+            if (srcSlot < 0 || srcSlot >= 50)
                 return;
 
-            if (destSlot < 0 || destSlot > 5)
+            if (destSlot < 0 || destSlot >= 5)
                 return;
 
             // equip item
@@ -430,10 +440,10 @@ namespace Rasa.Managers
             if (client.Player.ClanId == 0)
                 return;
 
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 250)
+            if (packet.SrcSlot < 0 || packet.SrcSlot >= 250)
                 return;
 
-            if (packet.DestSlot < 0 || packet.DestSlot > 500)
+            if (packet.DestSlot < 0 || packet.DestSlot >= 500)
                 return;
 
             var entityId = client.Player.Inventory.PersonalInventory[(int)packet.SrcSlot];
@@ -510,10 +520,10 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 500)
+            if (packet.SrcSlot < 0 || packet.SrcSlot >= 500)
                 return;
 
-            if (packet.DestSlot < 0 || packet.DestSlot > 250)
+            if (packet.DestSlot < 0 || packet.DestSlot >= 250)
                 return;
 
             var entityId = client.Player.Inventory.ClanInventory[(int)packet.SrcSlot];
@@ -589,10 +599,10 @@ namespace Rasa.Managers
         public void RequestTakeItemFromHomeInventory(Client client, RequestTakeItemFromHomeInventoryPacket packet)
         {
             // remove item
-            if (packet.SrcSlot < 0 || packet.SrcSlot > 480)
+            if (packet.SrcSlot < 0 || packet.SrcSlot >= 480)
                 return;
 
-            if (packet.DestSlot < 0 || packet.DestSlot > 250)
+            if (packet.DestSlot < 0 || packet.DestSlot >= 250)
                 return;
 
             var entityId = client.Player.Inventory.HomeInventory[(int)packet.SrcSlot];
@@ -707,7 +717,15 @@ namespace Rasa.Managers
 
         public void WeaponDrawerInventory_MoveItem(Client client, WeaponDrawerInventory_MoveItemPacket packet)
         {
+            // Nothing checked either slot; the drawer has five.
+            if (packet.SrcSlot >= 5 || packet.DestSlot >= 5 || packet.SrcSlot == packet.DestSlot)
+                return;
+
             var srcEntityId = client.Player.Inventory.WeaponDrawer[(int)packet.SrcSlot];
+
+            if (srcEntityId == 0)
+                return;
+
             var destEntityId = client.Player.Inventory.WeaponDrawer[(int)packet.DestSlot];
             // swap items on the client and server
             if (destEntityId != 0)
