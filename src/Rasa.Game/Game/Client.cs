@@ -49,7 +49,7 @@ namespace Rasa.Game
         private readonly PacketQueue _packetQueue = new();
 
         // Inbound byte stream. Owned exclusively by the MainLoop thread: it is only ever
-        // touched from Update()/DecodeNextPacket() and (after disconnect) Close().
+        // touched from Update()/TryDecodeNextPacket() and (after disconnect) Close().
         private readonly NonContiguousMemoryStream _incomingDataQueue = new();
 
         // Hand-off from socket completion threads to the MainLoop. OnReceive() runs on an
@@ -542,19 +542,27 @@ namespace Rasa.Game
 
         private IEnumerable<ProtocolPacket> DecodeIncomingPackets()
         {
-            ProtocolPacket packet;
-
-            while ((packet = DecodeNextPacket()) != null)
-                yield return packet;
-
-            yield break;
+            // A skipped packet (out of order, or the untyped send-timeout check) used to come
+            // back as null too, which read as "no more data" and ended the loop for the tick;
+            // everything queued behind it waited for the next one, 100 ms later, and a stream
+            // with a skipped packet in every tick fell further behind on each. Skips now
+            // continue and only an incomplete frame stops.
+            while (TryDecodeNextPacket(out var packet))
+                if (packet != null)
+                    yield return packet;
         }
 
-        private ProtocolPacket DecodeNextPacket()
+        /// <returns>
+        /// false when the queue holds no complete frame; true otherwise, with the packet, or
+        /// null for a frame that was consumed and dropped.
+        /// </returns>
+        private bool TryDecodeNextPacket(out ProtocolPacket packet)
         {
+            packet = null;
+
             // If there is not enough data to read the packet size at all, then stop processing
             if (_incomingDataQueue.Length < 2)
-                return null;
+                return false;
 
             using var br = new BinaryReader(_incomingDataQueue, Encoding.UTF8, true);
 
@@ -569,7 +577,7 @@ namespace Rasa.Game
 
             // If the packet is fragmented and not all the fragments has arrived yet, then stop processing
             if (packetSize > _incomingDataQueue.Length)
-                return null;
+                return false;
 
             // Construct and the packet
             var rawPacket = new ProtocolPacket();
@@ -594,7 +602,7 @@ namespace Rasa.Game
                     // a headless server is not.
                     Logger.WriteLog(LogType.Debug, $"Dropped out-of-order packet on channel {rawPacket.Channel} (seq {rawPacket.SequenceNumber} < {ReceiveSequence[rawPacket.Channel]}) from {Socket.RemoteAddress}.");
 
-                    return null;
+                    return true;
                 }
 
                 // AddOrUpdate the receive sequence for the channel
@@ -607,10 +615,12 @@ namespace Rasa.Game
                 if (rawPacket.Size != 4)
                     Logger.WriteLog(LogType.Debug, $"Skipped an untyped packet of size {rawPacket.Size} (expected the 4-byte send-timeout check) from {Socket.RemoteAddress}.");
 
-                return null;
+                return true;
             }
-            
-            return rawPacket;
+
+            packet = rawPacket;
+
+            return true;
         }
         #endregion
 
