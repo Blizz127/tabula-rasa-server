@@ -236,16 +236,29 @@ namespace Rasa.Managers
 
         public void RequestArmWeapon(Client client, uint requestedWeaponDrawerSlot)
         {
+            // The drawer has five slots; the index came straight from the client.
+            if (client.Player == null || requestedWeaponDrawerSlot >= client.Player.Inventory.WeaponDrawer.Count)
+                return;
+
             client.Player.ActiveWeapon = (byte)requestedWeaponDrawerSlot;
 
             client.CallMethod(client.Player.EntityId, new WeaponDrawerSlotPacket(requestedWeaponDrawerSlot, true));
 
             var weapon = EntityManager.Instance.GetItem(client.Player.Inventory.WeaponDrawer[client.Player.ActiveWeapon]);
 
-            if (weapon == null)
-                return;
+            // The weapon in hand follows the active slot, empty included: arming an empty slot
+            // used to leave the previous weapon in EquippedInventory[13], so the player kept
+            // firing a weapon they had put away.
+            client.Player.Inventory.EquippedInventory[13] = weapon?.EntityId ?? 0;
 
-            client.Player.Inventory.EquippedInventory[13] = weapon.EntityId;
+            if (weapon == null)
+            {
+                if (client.Player.WeaponReady)
+                    WeaponReady(client, false);
+
+                CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.ActiveWeapon, (byte)requestedWeaponDrawerSlot);
+                return;
+            }
 
             NotifyEquipmentUpdate(client);
             SetAppearanceItem(client, weapon);

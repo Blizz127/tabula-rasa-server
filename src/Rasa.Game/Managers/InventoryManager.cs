@@ -797,8 +797,16 @@ namespace Rasa.Managers
                     client.Player.Inventory.EquippedInventory[(int)slotId] = tempItem.EntityId; // update slot
                     break;
                 case InventoryType.WeaponDrawerInventory:
-                    client.Player.Inventory.EquippedInventory[13] = tempItem.EntityId; // update slot
                     client.Player.Inventory.WeaponDrawer[(int)slotId] = tempItem.EntityId; // update slot
+
+                    // EquippedInventory[13] is the weapon in hand, which is the drawer slot
+                    // ActiveWeapon names - not whichever drawer slot was written last. This
+                    // used to set it unconditionally, so equipping into a non-active slot,
+                    // swapping drawer slots, or just loading the drawer in row order made
+                    // CurrentWeapon() answer a weapon the player was not holding, and fire,
+                    // reload and ammo all acted on that one.
+                    if (slotId == client.Player.ActiveWeapon)
+                        client.Player.Inventory.EquippedInventory[13] = tempItem.EntityId;
                     break;
                 case InventoryType.ClanInventory:
                     client.Player.Inventory.ClanInventory[(int)slotId] = tempItem.EntityId; // update slot
@@ -1034,6 +1042,9 @@ namespace Rasa.Managers
                     break;
                 case InventoryType.WeaponDrawerInventory:
                     player.Inventory.WeaponDrawer[(int)slotIndex] = 0;    // update slot
+
+                    if (slotIndex == player.ActiveWeapon)
+                        player.Inventory.EquippedInventory[13] = 0;       // nothing in hand
                     break;
                 default:
                     Console.WriteLine("RemoveItemBySlot: Invalid inventoryType{0}/slotIndex{1}\n", inventoryType, slotIndex);
@@ -1166,10 +1177,9 @@ namespace Rasa.Managers
 
                     else if ((InventoryType)item.InventoryType == InventoryType.WeaponDrawerInventory)
                     {
+                        // AddItemBySlot sets EquippedInventory[13] itself when this is the
+                        // active drawer slot.
                         AddItemBySlot(client, InventoryType.WeaponDrawerInventory, newItem.EntityId, newItem.OwnerSlotId, false);
-
-                        if (newItem.OwnerSlotId == client.Player.ActiveWeapon)
-                            client.Player.Inventory.EquippedInventory[13] = newItem.EntityId;
                     }
                 }
                 else if (item.CharacterId == 0)
@@ -1262,6 +1272,9 @@ namespace Rasa.Managers
                 case InventoryType.WeaponDrawerInventory:
                     entityId = client.Player.Inventory.WeaponDrawer[(int)slotIndex];
                     client.Player.Inventory.WeaponDrawer[(int)slotIndex] = 0;
+
+                    if (slotIndex == client.Player.ActiveWeapon)
+                        client.Player.Inventory.EquippedInventory[13] = 0;
                     break;
                 case InventoryType.ClanInventory:
                     entityId = client.Player.Inventory.ClanInventory[(int)slotIndex];
