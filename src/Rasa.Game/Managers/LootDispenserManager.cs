@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Rasa.Managers
 {
     using Data;
     using Game;
     using Packets.LootDispenser.Server;
+    using Packets.MapChannel.Server;
     using Rasa.Packets.ClientMethod.Server;
     using Rasa.Packets.Game.Server;
     using Rasa.Packets.LootDispenser.Client;
@@ -118,9 +120,41 @@ namespace Rasa.Managers
             CanLootItems(client, loot);
         }
 
+        /// <summary>
+        /// Drops every dispenser attached to a creature that is leaving the world: out of the
+        /// map's table, off the owner's screen if they are still here, and its entity id freed.
+        /// </summary>
+        internal void RemoveForCreature(MapChannel mapChannel, Creature creature)
+        {
+            List<ulong> attached = null;
+
+            foreach (var entry in mapChannel.LootDispensers)
+                if (entry.Value.AttachedTo == creature.EntityId)
+                    (attached ??= new List<ulong>()).Add(entry.Key);
+
+            if (attached == null)
+                return;
+
+            foreach (var lootEntityId in attached)
+            {
+                var loot = mapChannel.LootDispensers[lootEntityId];
+
+                mapChannel.LootDispensers.Remove(lootEntityId);
+
+                var owner = mapChannel.ClientList.Find(c => c.Player != null && c.Player.EntityId == loot.Owner);
+
+                owner?.CallMethod(SysEntity.ClientMethodId, new DestroyPhysicalEntityPacket(lootEntityId));
+
+                EntityManager.Instance.FreeEntity(lootEntityId);
+            }
+        }
+
         internal void RequestLootAllFromCorpse(Client client, RequestLootAllFromCorpsePacket packet)
         {
-            var loot = client.Player.MapChannel.LootDispensers[packet.EntityId];
+            // An id that is not a dispenser on this map used to throw KeyNotFoundException in
+            // the handler.
+            if (client.Player == null || !client.Player.MapChannel.LootDispensers.TryGetValue(packet.EntityId, out var loot))
+                return;
 
             if (loot.Owner != client.Player.EntityId)
                 return;
