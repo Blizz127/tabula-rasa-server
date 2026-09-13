@@ -347,6 +347,12 @@ namespace Rasa.Managers
                 target.Player.Name = name;
             }
 
+            // UpdateCharacterName saves as it goes; UpdateFamilyName only changes the tracked
+            // row, and the unit of work discards that on dispose unless it is completed. The
+            // family name change was lost here, and ReloadGameAccountEntry then read the old
+            // name straight back.
+            unitOfWork.Complete();
+
             target.ReloadGameAccountEntry();
 
             // CharacterName and ActorName are part of the entity data every client gets when it

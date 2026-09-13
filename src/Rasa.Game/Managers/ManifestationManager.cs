@@ -1000,6 +1000,10 @@ namespace Rasa.Managers
 
             foreach (var option in client.Player.CharacterOptions)
                 unitOfWork.CharacterOptions.AddOrUpdate(client.Player.Id, (uint)option.OptionId, option.Value);
+
+            // AddOrUpdate only stages the rows; without this they were thrown away on dispose,
+            // and every option the client saved was back to its default at the next login.
+            unitOfWork.Complete();
         }
 
         // maybe move this to other manager becose it's account related
