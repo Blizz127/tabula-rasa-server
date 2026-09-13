@@ -1187,36 +1187,56 @@ namespace Rasa.Managers
 
         public void ReduceStackCount(Client client, InventoryType inventoryType, Item tempItem, uint stackDecreaseCount)
         {
-            if (tempItem.OwnerId != client.AccountEntry.SelectedSlot)
-                return; // item is not on this client's inventory
+            if (client.Player == null || tempItem == null || stackDecreaseCount == 0)
+                return;
 
-            var newStackCount = tempItem.StackSize - stackDecreaseCount;
-            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            if (newStackCount <= 0)
+            // Ownership is decided by where the entity actually sits: it has to be in this
+            // client's list for the inventory named. It used to compare Item.OwnerId (a
+            // character id, or 0 for the home lockbox) with AccountEntry.SelectedSlot (1..16),
+            // which almost never matched, so destroying an item did nothing - and WeaponReload,
+            // which consumes ammo through here, reloaded for free.
+            List<ulong> slots;
+
+            switch (inventoryType)
             {
+                case InventoryType.Personal:
+                    slots = client.Player.Inventory.PersonalInventory;
+                    break;
+                case InventoryType.HomeInventory:
+                    slots = client.Player.Inventory.HomeInventory;
+                    break;
+                default:
+                    return;
+            }
 
-                // destroy item
+            var slotId = slots.IndexOf(tempItem.EntityId);
+
+            if (slotId < 0)
+            {
+                Logger.WriteLog(LogType.Security, $"{client.Player.Name} tried to reduce item {tempItem.EntityId}, which is not in their {inventoryType}");
+                return;
+            }
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            // uint - uint: a count larger than the stack wrapped to ~4 billion instead of
+            // emptying it.
+            if (stackDecreaseCount >= tempItem.StackSize)
+            {
                 EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
-                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryRemoveItemPacket(InventoryType.Personal, tempItem.EntityId));
-                // free slot
-                FreeSlotIndex(client.Player, inventoryType, tempItem.OwnerSlotId);
-                // AddOrUpdate db
-                var characterSlot = client.AccountEntry.SelectedSlot;
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryRemoveItemPacket(inventoryType, tempItem.EntityId));
+                FreeSlotIndex(client.Player, inventoryType, (uint)slotId);
 
-                if (inventoryType == InventoryType.HomeInventory)
-                    characterSlot = 0;
-
-                unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, tempItem.OwnerSlotId);
+                // By item id: the row's character id has been written as the character id, the
+                // account's selected slot or 0 depending on which path stored it.
+                unitOfWork.CharacterInventories.DeleteInvItemByItemId(tempItem.Id);
                 // ToDo will we delete items from db, or we will let tham stay, so thay can be retrived
                 //ItemsTable.DeleteItem(tempItem.ItemId);
             }
             else
             {
-                // update stack count
-                tempItem.StackSize = newStackCount;
-                // set stackcount
-                client.CallMethod(tempItem.EntityId, new SetStackCountPacket(newStackCount));
-                // update stack count in database
+                tempItem.StackSize -= stackDecreaseCount;
+                client.CallMethod(tempItem.EntityId, new SetStackCountPacket(tempItem.StackSize));
                 unitOfWork.Items.UpdateItemStackSize(tempItem);
             }
         }

@@ -1323,35 +1323,37 @@ namespace Rasa.Managers
             if (weapon == null)
                 return;
 
-            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon); ;
-            var ammoClassId = weaponClassInfo.AmmoClassId;
-            var foundAmmo = 0U;
+            var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
 
-            for (var i = 0; i < 50; i++)
+            if (weaponClassInfo == null)
+                return;
+
+            // What is in the clip now, topped up stack by stack until it is full. The old
+            // arithmetic subtracted CurrentAmmo again on every stack after the first, and in
+            // uint that wrapped, so the second stack was taken whole. It never showed because
+            // ReduceStackCount did not actually consume anything until now.
+            var loaded = Math.Min(weapon.CurrentAmmo, weaponClassInfo.ClipSize);
+
+            for (var i = 0; i < 50 && loaded < weaponClassInfo.ClipSize; i++)
             {
-                if (client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i] == 0)
+                var entityId = client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i];
+
+                if (entityId == 0)
                     continue;
 
-                var weaponAmmo = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[(int)InventoryOffset.CategoryConsumable + i]);
+                var weaponAmmo = EntityManager.Instance.GetItem(entityId);
 
-                // check is empty slot
-                if (weaponAmmo == null)
-                    return;
+                if (weaponAmmo == null || weaponAmmo.ItemTemplate.Class != weaponClassInfo.AmmoClassId || weaponAmmo.StackSize == 0)
+                    continue;
 
-                if (weaponAmmo.ItemTemplate.Class == weaponClassInfo.AmmoClassId)
-                {
-                    // consume ammo
-                    var ammoToGrab = Math.Min(weaponClassInfo.ClipSize - foundAmmo - weapon.CurrentAmmo, weaponAmmo.StackSize);
-                    foundAmmo = ammoToGrab + weapon.CurrentAmmo;
-                    InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, weaponAmmo, ammoToGrab);
-                }
+                var ammoToGrab = Math.Min(weaponClassInfo.ClipSize - loaded, weaponAmmo.StackSize);
 
-                if (foundAmmo == weaponClassInfo.ClipSize)
-                    break;
+                loaded += ammoToGrab;
+                InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, weaponAmmo, ammoToGrab);
             }
 
             // update the ammo count
-            weapon.CurrentAmmo = foundAmmo;
+            weapon.CurrentAmmo = loaded;
 
             // update db
             ItemManager.Instance.UpdateItemCurrentAmmo(weapon);
@@ -1360,7 +1362,7 @@ namespace Rasa.Managers
             client.Player.CurrentAction = 0;
 
             // send data to client
-            client.CellCallMethod(client, client.Player.EntityId, new PerformRecoveryPacket(PerformType.ThreeArgs, action.ActionId, action.ActionArgId, foundAmmo));
+            client.CellCallMethod(client, client.Player.EntityId, new PerformRecoveryPacket(PerformType.ThreeArgs, action.ActionId, action.ActionArgId, loaded));
         }
 
         #endregion
