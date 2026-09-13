@@ -10,6 +10,7 @@ namespace Rasa.Managers
     using Packets.Inventory.Server;
     using Packets.MapChannel.Client;
     using Packets.MapChannel.Server;
+    using Repositories.Char;
     using Repositories.UnitOfWork;
     using Structures;
     using Structures.Char;
@@ -455,17 +456,21 @@ namespace Rasa.Managers
 
             RemoveItemBySlot(client, InventoryType.Personal, (uint)packet.SrcSlot);
 
+            // AddItemToClanInventory saves the stack sizes it changes, and deletes every row
+            // of an item it merges away; updating tempItem here afterwards was redundant, and
+            // after a full merge it was an update of a deleted row.
             Item item = AddItemToClanInventory(client, tempItem);
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-            unitOfWork.Items.UpdateItemStackSize(tempItem);
             if (item == null)
             {
                 client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
                 return;
             }
 
-            unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, (uint)packet.SrcSlot);
+            // The personal row is found by item id: the character id it was written with is
+            // not always this character's.
+            unitOfWork.CharacterInventories.DeleteInvItemByItemId(tempItem.Id);
 
             if (EntityManager.Instance.GetItem(entityId) == null)
                 return;
@@ -539,7 +544,7 @@ namespace Rasa.Managers
             {
                 wasSwap = false;
                 Item item = AddItemToInventory(client, tempItem);
-                unitOfWork.Items.UpdateItemStackSize(tempItem);
+
                 if (item == null)
                 {
                     RefreshClanLockbox(client.Player.ClanId, entityId, client.Player.Id, 0, ref client.Player.Inventory.ClanInventory, false);
@@ -850,6 +855,26 @@ namespace Rasa.Managers
             }
         }
 
+        /// <summary>
+        /// Removes a merged-away item from the database: its inventory row first, then the item
+        /// row. The item row alone used to be deleted here, and the caller was expected to
+        /// delete the inventory row afterwards - by slot, with a character id that is not
+        /// written consistently, and after a call that threw. Nothing in the schema stops a
+        /// character_inventory or clan_inventory row from pointing at an item that no longer
+        /// exists, and a row like that made the next login (or, for a clan, the next server
+        /// start) dereference null. An item has one row in one of the two tables; both
+        /// deletes are no-ops when there is nothing to delete.
+        /// </summary>
+        private static void DeleteItemRows(ICharUnitOfWork unitOfWork, Item item)
+        {
+            if (item.Id == 0)
+                return;
+
+            unitOfWork.CharacterInventories.DeleteInvItemByItemId(item.Id);
+            unitOfWork.ClanInventories.DeleteInvItemByItemId(item.Id);
+            unitOfWork.Items.DeleteItem(item.Id);
+        }
+
         public Item AddItemToInventory(Client client, Item item)
         {
             if (item == null)
@@ -901,8 +926,7 @@ namespace Rasa.Managers
                     {
                         // destroy the item
                         EntityManager.Instance.DestroyPhysicalEntity(client, item.EntityId, EntityType.Item);
-                        // remove from DB
-                        unitOfWork.Items.DeleteItem(item.Id);
+                        DeleteItemRows(unitOfWork, item);
                         // return the 'new' item instead
                         return slotItem;
                     }
@@ -982,8 +1006,7 @@ namespace Rasa.Managers
                     {
                         // destroy the item
                         EntityManager.Instance.DestroyPhysicalEntity(client, item.EntityId, EntityType.Item);
-                        // remove from DB
-                        unitOfWork.Items.DeleteItem(item.Id);
+                        DeleteItemRows(unitOfWork, item);
                         // return the 'new' item instead
                         return slotItem;
                     }
@@ -1080,10 +1103,24 @@ namespace Rasa.Managers
             foreach (var item in getClanInventoryData)
             {
                 var itemData = unitOfWork.Items.GetItem(item.ItemId);
+
+                if (itemData == null)
+                {
+                    // A lockbox row whose item is gone. It used to be dereferenced here, which
+                    // disconnected every member of the clan at MapLoaded; the row is garbage, so
+                    // it is removed and the rest of the lockbox still loads.
+                    Logger.WriteLog(LogType.Error, $"Clan {client.Player.ClanId} lockbox slot {item.SlotId} refers to item {item.ItemId}, which does not exist; row removed.");
+                    unitOfWork.ClanInventories.DeleteInvItemByItemId(item.ItemId);
+                    continue;
+                }
+
                 var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
                 if (itemTemplate == null)
-                    return;
+                {
+                    Logger.WriteLog(LogType.Error, $"Item {item.ItemId} has unknown template {itemData.ItemTemplateId}; skipped.");
+                    continue;
+                }
 
                 Item tempItem = null;
 
@@ -1139,10 +1176,24 @@ namespace Rasa.Managers
             foreach (var item in getInventoryData)
             {
                 var itemData = unitOfWork.Items.GetItem(item.ItemId);
+
+                if (itemData == null)
+                {
+                    // An inventory row whose item is gone (a stack merged away before the
+                    // row was deleted, in older builds). Dereferencing it here disconnected the
+                    // character at every login; the row is removed and the rest still loads.
+                    Logger.WriteLog(LogType.Error, $"Account {client.AccountEntry.Id} inventory {item.InventoryType} slot {item.SlotId} refers to item {item.ItemId}, which does not exist; row removed.");
+                    unitOfWork.CharacterInventories.DeleteInvItemByItemId(item.ItemId);
+                    continue;
+                }
+
                 var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
                 if (itemTemplate == null)
-                    return;
+                {
+                    Logger.WriteLog(LogType.Error, $"Item {item.ItemId} has unknown template {itemData.ItemTemplateId}; skipped.");
+                    continue;
+                }
 
                 var newItem = new Item
                 {

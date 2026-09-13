@@ -43,6 +43,19 @@ namespace Rasa.Repositories.Char.ClanInventory
             _charContext.SaveChanges();
         }
 
+        /// <summary>Deletes the lockbox row for one item, whichever clan and slot it is in.</summary>
+        public void DeleteInvItemByItemId(uint itemId)
+        {
+            var query = _charContext.CreateNoTrackingQuery(_charContext.ClanInventoryEntries);
+            var entry = query.FirstOrDefault(e => e.ItemId == itemId);
+
+            if (entry == null)
+                return;
+
+            _charContext.Remove(entry);
+            _charContext.SaveChanges();
+        }
+
         public List<ClanInventoryEntry> GetItems(uint clanId)
         {
             var query = _charContext.CreateNoTrackingQuery(_charContext.ClanInventoryEntries);

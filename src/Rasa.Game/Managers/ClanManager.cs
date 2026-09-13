@@ -145,10 +145,24 @@ namespace Rasa.Managers
                 foreach (var item in getClanInventoryData)
                 {
                     var itemData = unitOfWork.Items.GetItem(item.ItemId);
+
+                    if (itemData == null)
+                    {
+                        // A lockbox row whose item is gone used to be dereferenced here, at
+                        // server start; the row is garbage and is removed.
+                        Logger.WriteLog(LogType.Error, $"Clan {clan.Id} lockbox slot {item.SlotId} refers to item {item.ItemId}, which does not exist; row removed.");
+                        unitOfWork.ClanInventories.DeleteInvItemByItemId(item.ItemId);
+                        continue;
+                    }
+
                     var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
+                    // continue, not return: one bad template used to skip every later clan's lockbox.
                     if (itemTemplate == null)
-                        return;
+                    {
+                        Logger.WriteLog(LogType.Error, $"Item {item.ItemId} has unknown template {itemData.ItemTemplateId}; skipped.");
+                        continue;
+                    }
 
                     Item newItem = new Item
                     {
