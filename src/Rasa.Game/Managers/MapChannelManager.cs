@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Rasa.Managers
 {
@@ -335,6 +336,53 @@ namespace Rasa.Managers
             client.State = ClientState.Loading;
             client.State = ClientState.Loading;
             client.Player.MapChannel.QueuedClients.Enqueue(client);
+        }
+
+        /// <summary>
+        /// Moves an ingame player to a position on any loaded map by way of the loading screen:
+        /// out of the current map channel, then Wonkavate into the new one. Summon and .teleport
+        /// each had a copy of this that forgot to point the player at the new map, so when the
+        /// client answered with MapLoaded it was added to the OLD map's cells at its OLD position.
+        /// Everyone there saw a frozen ghost, its broadcasts went to the wrong map, and the first
+        /// cell crossing on the new map indexed the old map's cell table with new-map seeds and
+        /// threw KeyNotFoundException on the main loop.
+        /// </summary>
+        /// <returns>false when the map is not loaded or the player is not in a state to move.</returns>
+        public bool ChangeMap(Client client, uint mapContextId, Vector3 position, float orientation)
+        {
+            if (client.Player == null || client.State != ClientState.Ingame)
+                return false;
+
+            if (!MapChannelArray.TryGetValue(mapContextId, out var mapChannel))
+                return false;
+
+            client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
+            client.State = ClientState.Loading;
+
+            // Out of the old map while the player still points at it: entities, cells, the
+            // managers that track it, and the old ClientList.
+            RemovePlayer(client, false);
+
+            // What MapLoaded reads back when the client is ready: the map channel it adds the
+            // player to, and the position the cell matrix is built from.
+            client.Player.MapChannel = mapChannel;
+            client.Player.MapContextId = mapContextId;
+            client.Player.Position = position;
+            client.Player.Rotation = orientation;
+            client.LoadingMap = mapContextId;
+
+            var packet = new WonkavatePacket(
+                mapChannel.MapInfo.MapContextId,
+                0,                  // ToDo MapInstanceId
+                mapChannel.MapInfo.MapVersion,
+                position,
+                orientation);
+
+            client.CallMethod(SysEntity.CurrentInputStateId, packet);
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position, packet);
+            mapChannel.ClientList.Add(client);
+
+            return true;
         }
 
         public void Ping(Client client, double ping)

@@ -1077,27 +1077,8 @@ namespace Rasa.Managers
                         if (float.TryParse(parts[3], out float posZ))
                             if (uint.TryParse(parts[4], out uint mapId))
                             {
-                                // init loading screen
-                                _client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
-                                _client.State = ClientState.Loading;
-                                // Remove player
-                                MapChannelManager.Instance.RemovePlayer(_client, false);
-                                // send Wonkavate
-                                var mapChannel = MapChannelManager.Instance.MapChannelArray[mapId];
-                                _client.LoadingMap = mapId;
-
-                                var packet = new WonkavatePacket(
-                                    mapChannel.MapInfo.MapContextId,
-                                    0,                  // ToDo MapInstanceId
-                                    mapChannel.MapInfo.MapVersion,
-                                    new Vector3(posX, posY, posZ),
-                                    _client.Movement.ViewDirection.X
-                                    );
-
-                                _client.CallMethod(SysEntity.CurrentInputStateId, packet);
-                                // AddOrUpdate Db, this position will be loaded in MapLoadedPacket
-                                CharacterManager.Instance.UpdateCharacter(_client, CharacterUpdate.Position, packet);
-                                mapChannel.ClientList.Add(_client);
+                                if (!MapChannelManager.Instance.ChangeMap(_client, mapId, new Vector3(posX, posY, posZ), _client.Movement.ViewDirection.X))
+                                    CommunicatorManager.Instance.SystemMessage(_client, $"Map {mapId} is not loaded, or you cannot teleport right now.");
                             }
 
             }

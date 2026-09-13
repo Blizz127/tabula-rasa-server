@@ -375,37 +375,17 @@ namespace Rasa.Managers
 
         /// <summary>
         /// Moves <paramref name="traveller"/> to where <paramref name="destination"/> is standing,
-        /// by the same route as the .teleport command: the loading screen, out of the old map
-        /// channel, then Wonkavate into the new one. The position is read now rather than when the
-        /// summon was raised, so the destination player having walked on does not matter.
+        /// by the same route as the .teleport command (MapChannelManager.ChangeMap). The position
+        /// is read now rather than when the summon was raised, so the destination player having
+        /// walked on does not matter.
         /// </summary>
         private static void MoveTo(Client traveller, Client destination)
         {
-            var mapContextId = destination.Player.MapContextId;
-
-            if (!MapChannelManager.Instance.MapChannelArray.TryGetValue(mapContextId, out var mapChannel))
-                return;
-
-            var position = destination.Player.Position;
-
-            traveller.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
-            traveller.State = ClientState.Loading;
-
-            MapChannelManager.Instance.RemovePlayer(traveller, false);
-
-            traveller.LoadingMap = mapContextId;
-
-            var packet = new WonkavatePacket(
-                mapChannel.MapInfo.MapContextId,
-                0,                  // ToDo MapInstanceId
-                mapChannel.MapInfo.MapVersion,
-                position,
+            MapChannelManager.Instance.ChangeMap(
+                traveller,
+                destination.Player.MapContextId,
+                destination.Player.Position,
                 destination.Movement.ViewDirection.X);
-
-            traveller.CallMethod(SysEntity.CurrentInputStateId, packet);
-            // The position MapLoaded will read back.
-            CharacterManager.Instance.UpdateCharacter(traveller, CharacterUpdate.Position, packet);
-            mapChannel.ClientList.Add(traveller);
         }
 
         private void Cancel(uint accountId)
