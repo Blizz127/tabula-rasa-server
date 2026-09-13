@@ -12,6 +12,8 @@ namespace Rasa.Packets.Protocol
 
     public class ProtocolPacket : IBasePacket
     {
+        private const int MaxUncompressedSize = 4 * ushort.MaxValue;
+
         public ClientMessageOpcode Type { get; private set; } = ClientMessageOpcode.None;
 
         public ushort Size { get; private set; }
@@ -95,10 +97,31 @@ namespace Rasa.Packets.Protocol
 
                     var uncompressedSize = br.ReadInt32();
 
+                    // The size is the client's claim; a frame is at most 64 KB, and nothing in
+                    // the protocol inflates past a few times that.
+                    if (uncompressedSize < 0 || uncompressedSize > MaxUncompressedSize)
+                        throw new InvalidDataException($"Compressed body claims {uncompressedSize} bytes uncompressed.");
+
                     uncompressedBuffer = ArrayPool<byte>.Shared.Rent(uncompressedSize);
 
                     using (var deflateStream = new DeflateStream(br.BaseStream, CompressionMode.Decompress, true)) // TODO: test if the br.BaseStream is cool as the Stream input for the DeflateStream
-                        deflateStream.Read(uncompressedBuffer, 0, uncompressedSize);
+                    {
+                        // Read returns what it has, not what was asked for; loop until the
+                        // buffer is full or the stream ends.
+                        var total = 0;
+
+                        while (total < uncompressedSize)
+                        {
+                            var read = deflateStream.Read(uncompressedBuffer, total, uncompressedSize - total);
+
+                            if (read == 0)
+                                break;
+
+                            total += read;
+                        }
+
+                        uncompressedSize = total;
+                    }
 
                     readBr = new BinaryReader(new MemoryStream(uncompressedBuffer, 0, uncompressedSize, false), Encoding.UTF8, false);
                 }
