@@ -137,6 +137,7 @@ namespace Rasa.Managers
             RegisterCommand(".deleteobj", GmLevel.GameMaster, DeleteObjectCommand);
             RegisterCommand(".error", GmLevel.GameMaster, ErrorCommand);
             RegisterCommand(".forcestate", GmLevel.GameMaster, ForceStateCommand);
+            RegisterCommand(".heal", GmLevel.GameMaster, HealCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
@@ -273,6 +274,60 @@ namespace Rasa.Managers
         /// The same dialog a GM gets on entering a broken map, on demand. Observer level: it
         /// reads the world and changes nothing in it.
         /// </summary>
+        /// <summary>
+        /// .heal [full|&lt;amount&gt;] [familyName] - put health back, on yourself or on someone else.
+        ///
+        /// Exercises ActorManager.Heal, which is the one path health goes up by. No source
+        /// entity is passed, so the client announces the change itself rather than waiting for
+        /// an ability that is never coming.
+        /// </summary>
+        private void HealCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var target = _client;
+
+            if (parts.Length > 2)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null
+                                                  && string.Equals(c.Player.FamilyName, parts[2], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    communicator.SystemMessage(_client, $"{parts[2]} is not in the world.");
+                    return;
+                }
+            }
+
+            var toFull = parts.Length < 2 || parts[1].ToLowerInvariant() == "full";
+            var requested = 0;
+
+            if (!toFull && (!int.TryParse(parts[1], out requested) || requested <= 0))
+            {
+                communicator.SystemMessage(_client, "usage: .heal [full|<amount>] [familyName]");
+                return;
+            }
+
+            var applied = toFull
+                ? ActorManager.Instance.HealToFull(target.Player)
+                : ActorManager.Instance.Heal(target.Player, requested);
+
+            var health = target.Player.Attributes.TryGetValue(Attributes.Health, out var h) ? h : null;
+            var who = target == _client ? "You are" : $"{target.Player.FamilyName} is";
+
+            if (applied == 0)
+            {
+                communicator.SystemMessage(_client,
+                    health == null ? "That actor has no health to put back."
+                    : health.Current <= 0 || target.Player.State == CharacterState.Dead
+                        ? $"{who} dead - healing will not bring them back."
+                        : $"{who} already at full health.");
+                return;
+            }
+
+            communicator.SystemMessage(_client,
+                $"{who} healed for {applied} ({health?.Current} of {health?.CurrentMax}).");
+        }
+
         private void MapErrorsCommand(string[] parts)
         {
             if (MapErrorManager.Instance.SendTo(_client))

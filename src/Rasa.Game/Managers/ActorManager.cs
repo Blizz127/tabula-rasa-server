@@ -1,8 +1,12 @@
-﻿namespace Rasa.Managers
+﻿using System;
+
+namespace Rasa.Managers
 {
     using Data;
     using Game;
     using Packets.MapChannel.Client;
+    using Packets.MapChannel.Server;
+    using Structures;
 
     public class ActorManager
     {
@@ -114,6 +118,69 @@
         public void SetDesiredCrouchState(Client client, CharacterState state)
         {
             client.CellIgnoreSelfCallMethod(client, new SetDesiredCrouchStatePacket(state));
+        }
+
+        #endregion
+
+        #region Health
+
+        /// <summary>
+        /// Raises an actor's health and tells everyone who can see them. Returns how much was
+        /// actually put back, which is not what was asked for when the actor was nearly full.
+        ///
+        /// This is the one place health goes up. Everything that heals - an ability, armour or
+        /// health regeneration, a medkit, a console command - goes through here, so the clamp,
+        /// the refusal to heal the dead and the update to every onlooker are decided once.
+        /// </summary>
+        /// <param name="sourceEntityId">
+        /// Whose doing it was, and it decides whether the client announces the change itself.
+        /// Actor.UpdateAttribute in the client starts with
+        /// "announce = not entitymanager.HasEntity(whoId)": if the client knows the entity it
+        /// stays quiet, because whatever that entity did is expected to announce the healing
+        /// with the source attached - HealAbility.DoAbility walks its own hit list and calls
+        /// target.AnnounceHealing(sourceId, amount) client-side. If the client does not know the
+        /// entity, and 0 is never a real one, it announces the change itself. So pass the
+        /// healer's entity id when a visible actor's ability did it, and leave it 0 for
+        /// regeneration, a command, or anything else with no actor behind it.
+        /// </param>
+        public int Heal(Actor target, int amount, ulong sourceEntityId = 0)
+        {
+            if (target == null || amount <= 0)
+                return 0;
+
+            if (!target.Attributes.TryGetValue(Attributes.Health, out var health))
+                return 0;
+
+            // Healing the dead is not healing. Health above zero would not bring them back -
+            // nothing about their state would have changed - and it would leave a corpse
+            // standing there with a full bar. Coming back is Revived, which is not wired yet.
+            if (target.State == CharacterState.Dead || health.Current <= 0)
+                return 0;
+
+            var applied = Math.Min(amount, health.CurrentMax - health.Current);
+
+            if (applied <= 0)
+                return 0;
+
+            health.Current += applied;
+
+            var mapChannel = MapChannelManager.Instance.FindByContextId(target.MapContextId);
+
+            // No map means nobody can see them, which is not a reason to refuse the heal - the
+            // health is still theirs. It is a reason not to try to broadcast it.
+            if (mapChannel != null)
+                CellManager.Instance.CellCallMethod(mapChannel, target, new UpdateHealthPacket(health, sourceEntityId));
+
+            return applied;
+        }
+
+        /// <summary>Puts an actor back to its maximum, and says how much that took.</summary>
+        public int HealToFull(Actor target, ulong sourceEntityId = 0)
+        {
+            if (target == null || !target.Attributes.TryGetValue(Attributes.Health, out var health))
+                return 0;
+
+            return Heal(target, health.CurrentMax, sourceEntityId);
         }
 
         #endregion
