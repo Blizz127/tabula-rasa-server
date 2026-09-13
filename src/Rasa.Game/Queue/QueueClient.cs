@@ -20,6 +20,9 @@ namespace Rasa.Queue
         public DateTime EnqueueTime { get; private set; }
         public DateTime DequeueTime { get; set; }
 
+        /// <summary>When the handoff was sent; the slot it holds is given up if nobody arrives.</summary>
+        public DateTime RedirectTime { get; private set; }
+
         public QueueClient(QueueManager manager, LengthedSocket socket)
         {
             Manager = manager;
@@ -118,9 +121,23 @@ namespace Rasa.Queue
             Manager.Disconnect(this);
         }
 
+        /// <summary>
+        /// The account this connection was handed off for has logged in at the world port. From
+        /// here it is a world client and counted as one; whether the client closes this socket
+        /// now or keeps it open until it exits, it no longer holds a slot of its own. Before this
+        /// a client that kept the queue socket open counted twice, and the server read as full
+        /// at half its cap.
+        /// </summary>
+        internal void MarkArrived()
+        {
+            if (State == QueueState.Redirecting)
+                State = QueueState.Arrived;
+        }
+
         public void Redirect(IPAddress ip, int port)
         {
             State = QueueState.Redirecting;
+            RedirectTime = DateTime.Now;
 
             Socket.Send(new HandoffToGamePacket
             {

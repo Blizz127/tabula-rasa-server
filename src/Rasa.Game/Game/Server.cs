@@ -284,19 +284,24 @@ namespace Rasa.Game
 
         public LoginAccountEntry AuthenticateClient(Client client, uint accountId, uint oneTimeKey)
         {
+            LoginAccountEntry entry;
+
             lock (IncomingClients)
             {
-                if (!IncomingClients.ContainsKey(accountId))
+                if (!IncomingClients.TryGetValue(accountId, out entry))
                     return null;
 
-                var entry = IncomingClients[accountId];
                 if (entry == null || entry.OneTimeKey != oneTimeKey)
                     return null;
 
                 IncomingClients.Remove(accountId);
-
-                return entry;
             }
+
+            // The handoff has been taken up: the queue connection it came through, if the
+            // client still has it open, no longer holds a slot of its own.
+            QueueManager?.Arrived(accountId);
+
+            return entry;
         }
 
         public bool IsBanned(uint accountId)
