@@ -33,7 +33,31 @@ namespace Rasa.Networking
         public int LengthSize => (int) SizeHeaderLength;
         public Socket Socket { get; }
         public bool Connected => Socket.Connected;
-        public IPAddress RemoteAddress => ((IPEndPoint)Socket.RemoteEndPoint).Address;
+        private IPAddress _remoteAddress;
+
+        /// <summary>
+        /// The other side's address, kept from the first time it is asked for so it can still
+        /// be logged once the socket has been closed - which is when most of the asking happens.
+        /// </summary>
+        public IPAddress RemoteAddress
+        {
+            get
+            {
+                if (_remoteAddress != null)
+                    return _remoteAddress;
+
+                try
+                {
+                    _remoteAddress = ((IPEndPoint) Socket.RemoteEndPoint)?.Address;
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Closed before anyone asked; there is nothing left to read it from.
+                }
+
+                return _remoteAddress ?? IPAddress.None;
+            }
+        }
 
         public bool AutoReceive { get; set; } = true;
 
@@ -821,11 +845,28 @@ namespace Rasa.Networking
         {
             DiscardQueuedSends();
 
+            // Read it while it can still be read: the owner logs the address after this.
+            _ = RemoteAddress;
+
             try
             {
                 OnDisconnect?.Invoke();
 
                 Socket.Shutdown(SocketShutdown.Both);
+            }
+            catch (Exception)
+            {
+                // Already shut, never connected, or a listener: nothing to shut down.
+            }
+
+            // Shutdown ends the conversation; only Close returns the handle. Without it every
+            // connection that ever ended kept its socket until the finalizer got round to it,
+            // and a receive that was still armed on it stayed armed. Closing completes that
+            // receive with OperationAborted, which the completion path treats as any other
+            // error - the owner's OnError, then the args back to the pool.
+            try
+            {
+                Socket.Close();
             }
             catch (Exception)
             {
