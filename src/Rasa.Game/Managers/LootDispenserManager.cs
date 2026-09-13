@@ -7,6 +7,7 @@ namespace Rasa.Managers
     using Game;
     using Packets.Communicator.Server;
     using Packets.LootDispenser.Server;
+    using Packets.MapChannel.Client;
     using Packets.MapChannel.Server;
     using Rasa.Packets.ClientMethod.Server;
     using Rasa.Packets.Game.Server;
@@ -82,6 +83,40 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.ClientMethodId, new GotLootPacket(loot));
         }
 
+        /// <summary>How long a corpse with nothing left on it stays in the world.</summary>
+        public const long EmptyCorpseMs = 20000;
+
+        /// <summary>How long a corpse that still has something on it stays.</summary>
+        public const long LootableCorpseMs = 120000;
+
+        /// <summary>How long a corpse someone has the window open on stays, whatever else is true.</summary>
+        public const long BeingLootedCorpseMs = 300000;
+
+        /// <summary>
+        /// Whether a dead creature can leave the world yet.
+        ///
+        /// The rule was twenty seconds from the moment its health hit zero, full stop - no regard
+        /// for loot still on it or for a player standing over it with the window open. Twenty
+        /// seconds is about one more fight, so a corpse routinely vanished between the kill and
+        /// the looting, and the window went with it.
+        /// </summary>
+        internal bool MayDespawn(MapChannel mapChannel, Creature creature, long deadTime)
+        {
+            if (mapChannel == null || creature.CorpseLootEntityId == 0
+                || !mapChannel.LootDispensers.TryGetValue(creature.CorpseLootEntityId, out var loot))
+                return deadTime >= EmptyCorpseMs;
+
+            // Someone has it open. Their window closing clears this, and the cap is there so a
+            // player who walks away with it open cannot hold a corpse for ever.
+            if (loot.CurrentLooter != 0)
+                return deadTime >= BeingLootedCorpseMs;
+
+            if (loot.HasLoot)
+                return deadTime >= LootableCorpseMs;
+
+            return deadTime >= EmptyCorpseMs;
+        }
+
         internal LootDispenser Create(Client killer, Creature creature)
         {
             var mapChannel = killer.Player.MapChannel;
@@ -93,6 +128,10 @@ namespace Rasa.Managers
             CreateLoot(killer, loot);
 
             mapChannel.LootDispensers.Add(loot.EntityId, loot);
+
+            // So the despawn check can find it without walking every dispenser on the map on
+            // every creature on every tick.
+            creature.CorpseLootEntityId = loot.EntityId;
 
             return loot;
         }
@@ -277,6 +316,22 @@ namespace Rasa.Managers
             Settle(client, loot);
         }
 
+        /// <summary>
+        /// The client sends this two ways and they are not the same request.
+        ///
+        /// The Loot All button sends autoLootOnly false: take everything.
+        ///
+        /// Walking near a corpse sends it with autoLootOnly **true**, from lootdispenser's
+        /// _UpdateTick, which runs every frame while a dispenser is attached and fires the
+        /// moment the player is inside the corpse's auto-loot radius. Nobody clicked anything.
+        /// That one means "take what I said I would pick up automatically", which is items at or
+        /// below the player's auto-loot threshold - Junk by default, since that is what the
+        /// client's own option defaults to.
+        ///
+        /// Treating them alike is why looting felt random: walking over a body silently emptied
+        /// it, so the window either never opened or opened onto a corpse that had already been
+        /// cleared out from under it.
+        /// </summary>
         internal void RequestLootAllFromCorpse(Client client, RequestLootAllFromCorpsePacket packet)
         {
             var loot = FindLootable(client, packet.EntityId);
@@ -284,14 +339,56 @@ namespace Rasa.Managers
             if (loot == null || loot.FullyLooted)
                 return;
 
+            var threshold = client.Player?.AutoLootThreshold ?? LootQuality.Junk;
+
             // Through the same path as taking one at a time, so both keep the same books. It
             // used to build a second item from each template and add that, leaving the rolled
             // items behind and nothing marked as taken - and since FullyLooted was never set
             // either, the same corpse paid out again on every request.
             foreach (var lootItem in loot.Remaining())
-                TakeItem(client, loot, lootItem, null);
+            {
+                if (packet.AutoLootOnly && !WithinThreshold(lootItem, threshold))
+                    continue;
 
+                TakeItem(client, loot, lootItem, null);
+            }
+
+            // Credits come along either way: they have no quality to weigh against a threshold,
+            // and leaving a handful behind would keep an otherwise empty corpse standing.
             Settle(client, loot);
+        }
+
+        /// <summary>Whether walking past a corpse should pick this item up unasked.</summary>
+        private static bool WithinThreshold(LootItem lootItem, LootQuality threshold)
+        {
+            var quality = (LootQuality)(lootItem.Item?.ItemTemplate?.QualityId ?? 0);
+
+            // Rank, not the raw id: the ids are the client's and Junk is the largest of them.
+            return quality.Rank() <= threshold.Rank();
+        }
+
+        /// <summary>
+        /// The best quality this player's client will pick up by walking over a corpse. Sent at
+        /// login and whenever the option changes; it was a logged ToDo, so every player was
+        /// treated as if they had asked for everything.
+        /// </summary>
+        internal void SetAutoLootThreshold(Client client, SetAutoLootThresholdPacket packet)
+        {
+            if (client.Player == null)
+                return;
+
+            var threshold = (LootQuality)packet.LootLevel;
+
+            // The client only ever sends one of its five option values, but the packet is the
+            // client's word: an unknown one would rank as int.MaxValue and auto-loot everything.
+            if (!Enum.IsDefined(typeof(LootQuality), threshold) || threshold == LootQuality.Mission)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry?.Id} sent auto-loot threshold {packet.LootLevel}, which is not a quality.");
+                return;
+            }
+
+            client.Player.AutoLootThreshold = threshold;
         }
 
         /// <summary>

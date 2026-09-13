@@ -47,6 +47,14 @@ namespace Rasa.Structures
         public bool IsAFK { get; set; }
 
         /// <summary>
+        /// The best quality the client will pick up by walking over a corpse. Set by
+        /// SetAutoLootThreshold, which the client sends at login and whenever the option changes.
+        /// Junk is the client's own default (gameui: GetOptionString(..., 'Junk')), so an account
+        /// that has never touched the option auto-loots junk and nothing else.
+        /// </summary>
+        public LootQuality AutoLootThreshold { get; set; } = LootQuality.Junk;
+
+        /// <summary>
         /// Environment.TickCount64 at the player's last movement or action. Monotonic, so a
         /// wall-clock change on the server cannot make everyone idle at once.
         /// </summary>

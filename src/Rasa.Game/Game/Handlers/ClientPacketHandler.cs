@@ -357,7 +357,7 @@
         [PacketHandler(GameOpcode.SetAutoLootThreshold)]
         private void SetAutoLootThreshold(SetAutoLootThresholdPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: SetAutoLootThreshold");
+            LootDispenserManager.Instance.SetAutoLootThreshold(Client, packet);
         }
 
         [PacketHandler(GameOpcode.SetDesiredCrouchState)]
