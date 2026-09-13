@@ -109,8 +109,24 @@ namespace Rasa.Managers
 
         internal void ClanChat(Client client, ClanChatPacket packet)
         {
-            var clanMembers = Server.Clients.FindAll(c => c.Player.ClanId == packet.ClanId);
-            
+            // The clan id in the packet is the client's word; the sender's clan is the server's.
+            // The broadcast used to go to whatever id the packet named, so a modified client could
+            // post into any clan's chat, and with id 0 - no clan - reach every connection that is
+            // not in one, including those still at character selection.
+            var clanId = client.Player.ClanId;
+
+            if (clanId == 0 || packet.ClanId != clanId)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} sent clan chat for clan {packet.ClanId} while in clan {clanId}.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(packet.Message))
+                return;
+
+            var clanMembers = Server.Clients.FindAll(c => c.State == ClientState.Ingame && c.Player.ClanId == clanId);
+
             foreach(var member in clanMembers)
                 member.CallMethod(SysEntity.CommunicatorId, new ClanChatPacket(client.Player.FamilyName, packet.Message));
         }
