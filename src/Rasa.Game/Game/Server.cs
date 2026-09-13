@@ -107,6 +107,7 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("petition", ProcessPetitionCommand);
             CommandProcessor.RegisterCommand("flag", ProcessFlagCommand);
             CommandProcessor.RegisterCommand("perf", ProcessPerfCommand);
+            CommandProcessor.RegisterCommand("maperrors", ProcessMapErrorsCommand);
         }
 
         ~Server()
@@ -624,6 +625,40 @@ namespace Rasa.Game
         /// <summary>
         /// perf - what the loop has done since the last time the metrics went out.
         /// </summary>
+        /// <summary>
+        /// maperrors [clear] - what the world load and the spawn path found wrong with the data.
+        /// </summary>
+        private void ProcessMapErrorsCommand(string[] parts)
+        {
+            var errors = MapErrorManager.Instance;
+
+            if (parts.Length > 1 && parts[1].ToLowerInvariant() == "clear")
+            {
+                errors.Clear();
+                Logger.WriteLog(LogType.Command, "Map errors cleared. They come back as the data is used again.");
+                return;
+            }
+
+            var summary = errors.Summary();
+
+            if (summary.Count == 0)
+            {
+                Logger.WriteLog(LogType.Command, "Nothing wrong with the world data so far.");
+                return;
+            }
+
+            foreach (var (mapContextId, count) in summary)
+            {
+                Logger.WriteLog(LogType.Command,
+                    mapContextId == MapErrorManager.ServerWide
+                        ? $"Server-wide: {count} error(s)"
+                        : $"Map {mapContextId}: {count} error(s)");
+
+                foreach (var error in errors.ErrorsFor(mapContextId))
+                    Logger.WriteLog(LogType.Command, $"   {error}");
+            }
+        }
+
         private void ProcessPerfCommand(string[] parts)
         {
             var metrics = Loop.PeekMetrics();

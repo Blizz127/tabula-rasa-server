@@ -566,6 +566,10 @@ namespace Rasa.Managers
                         break;
                     default:
                         Logger.WriteLog(LogType.Error, $"InitTeleporters: unsuported teleporter type {teleporter.Type}");
+
+                        MapErrorManager.Instance.Record(teleporter.MapContextId,
+                            $"Teleporter {teleporter.Id} ({teleporter.Description}) is type {teleporter.Type}, which nothing handles.");
+
                         break;
                 }
 

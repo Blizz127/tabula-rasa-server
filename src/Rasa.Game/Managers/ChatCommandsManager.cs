@@ -116,6 +116,7 @@ namespace Rasa.Managers
         {
             // Observer: reads the world, changes nothing in it.
             RegisterCommand(".getdistance", GmLevel.Observer, GetDistanceCommand);
+            RegisterCommand(".maperrors", GmLevel.Observer, MapErrorsCommand);
             RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
             RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
             RegisterCommand(".near", GmLevel.Observer, NearCommand);
@@ -266,6 +267,21 @@ namespace Rasa.Managers
         /// Admin rather than GameMaster: this is the whole server, not one player. It lasts until
         /// the server restarts, when GameDataConfig.ServerFlags takes over again.
         /// </summary>
+        /// <summary>
+        /// .maperrors - what is wrong with the data for the map the caller is standing in.
+        ///
+        /// The same dialog a GM gets on entering a broken map, on demand. Observer level: it
+        /// reads the world and changes nothing in it.
+        /// </summary>
+        private void MapErrorsCommand(string[] parts)
+        {
+            if (MapErrorManager.Instance.SendTo(_client))
+                return;
+
+            CommunicatorManager.Instance.SystemMessage(_client,
+                $"Nothing recorded against map {_client.Player?.MapContextId.ToString() ?? "?"}.");
+        }
+
         private void FlagCommand(string[] parts)
         {
             var communicator = CommunicatorManager.Instance;

@@ -290,6 +290,12 @@ namespace Rasa.Managers
             // offer a feature, and an empty set means the feature is simply missing.
             ServerFlagManager.Instance.SendFlags(client);
 
+            // Whatever is broken about the map they have just walked into, if they are someone
+            // who can do anything about it. The dialog is modal and always visible, so a player
+            // would be stuck reading about server data they cannot fix.
+            if (client.AccountEntry != null && client.AccountEntry.Level >= (byte)GmLevel.Observer)
+                MapErrorManager.Instance.SendTo(client);
+
             CellManager.Instance.AddToWorld(client); // will introduce the player to all clients, including the current owner
             ManifestationManager.Instance.AssignPlayer(client);
 

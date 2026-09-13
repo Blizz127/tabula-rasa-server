@@ -155,6 +155,10 @@ namespace Rasa.Managers
             if (!LoadedCreatures.ContainsKey(dbId))
             {
                 Logger.WriteLog(LogType.Error, $"Creature with dbId={dbId}, isn't in database");
+
+                MapErrorManager.Instance.Record(spawnPool?.MapContextId ?? MapErrorManager.ServerWide,
+                    $"Spawn pool {spawnPool?.DbId.ToString() ?? "?"} wants creature {dbId}, which is not in the database.");
+
                 return null;
             }
 
@@ -170,6 +174,10 @@ namespace Rasa.Managers
             if (!isCreature)
             {
                 Logger.WriteLog(LogType.Error, $"Creature with dbId = {dbId}, don't have creature Augmentation");
+
+                MapErrorManager.Instance.Record(spawnPool?.MapContextId ?? MapErrorManager.ServerWide,
+                    $"Creature {dbId} (class {LoadedCreatures[dbId].EntityClass}) has no Creature augmentation, so it cannot be spawned.");
+
                 return null;
             }
 
@@ -426,7 +434,12 @@ namespace Rasa.Managers
                     }
                 }
                 else
+                {
                     Logger.WriteLog(LogType.Error, $"LoadNPCPackages: unknown creatureDbId = {package.Id}");
+
+                    MapErrorManager.Instance.Record(
+                        $"NPC package {package.PackageId} names creature {package.Id}, which is not in the database.");
+                }
             }
         }
 
