@@ -737,6 +737,18 @@
         {
             LootDispenserManager.Instance.RequestLootAllFromCorpse(Client, packet);
         }
+
+        [PacketHandler(GameOpcode.RequestLootItemFromCorpse)]
+        private void RequestLootItemFromCorpse(RequestLootItemFromCorpsePacket packet)
+        {
+            LootDispenserManager.Instance.RequestLootItemFromCorpse(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.CancelCorpseLooting)]
+        private void CancelCorpseLooting(CancelCorpseLootingPacket packet)
+        {
+            LootDispenserManager.Instance.CancelCorpseLooting(Client, packet);
+        }
         #endregion
 
         #region LookingForGroup

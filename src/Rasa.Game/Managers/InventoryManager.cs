@@ -911,6 +911,45 @@ namespace Rasa.Managers
             transaction.Commit();
         }
 
+        /// <summary>
+        /// Puts an item in the slot the player asked for, falling back to the ordinary
+        /// first-that-fits placement when that slot is not usable.
+        ///
+        /// The slot is a personal-inventory index the client worked out itself (inventory.py adds
+        /// the category's start to the slot within it), so it is checked here rather than trusted:
+        /// out of range, occupied, or in another category's block all fall back instead of being
+        /// refused, because the player asked to take the item and where it lands is the lesser
+        /// question.
+        /// </summary>
+        public Item AddItemToInventory(Client client, Item item, uint destSlot)
+        {
+            if (item == null)
+                return null;
+
+            var inventory = client.Player.Inventory.PersonalInventory;
+            var categoryOffset = ((int)item.ItemTemplate.InventoryCategory - 1) * 50;
+
+            var usable = categoryOffset >= 0
+                         && destSlot < inventory.Count
+                         && destSlot >= categoryOffset
+                         && destSlot < categoryOffset + 50
+                         && inventory[(int)destSlot] == 0;
+
+            if (!usable)
+                return AddItemToInventory(client, item);
+
+            var itemClassInfo = EntityClassManager.Instance.GetItemClassInfo(item);
+
+            item.OwnerId = client.Player.Id;
+            item.OwnerSlotId = destSlot;
+            item.CurrentHitPoints = itemClassInfo.MaxHitPoints;
+
+            ItemManager.Instance.SendItemDataToClient(client, item, false);
+            AddItemBySlot(client, InventoryType.Personal, item.EntityId, destSlot, true, true);
+
+            return item;
+        }
+
         public Item AddItemToInventory(Client client, Item item)
         {
             if (item == null)
