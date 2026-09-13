@@ -144,6 +144,16 @@ namespace Rasa.Managers
 
         public void FreeEntity(ulong id)
         {
+            // An id can only go back to the pool once nothing is registered under it. Handing
+            // out an id that is still in RegisteredEntities gives two entities the same id,
+            // and the second registration throws on the main loop. A caller that forgot to
+            // unregister now leaks the id and logs, instead.
+            if (RegisteredEntities.ContainsKey(id))
+            {
+                Logger.WriteLog(LogType.Error, $"Entity {id} ({RegisteredEntities[id]}) was freed while still registered; the id is not reused.");
+                return;
+            }
+
             lock (_entityIdLock)
                 if(!_freeEntityIds.Contains(id))
                     _freeEntityIds.Add(id);
@@ -151,7 +161,14 @@ namespace Rasa.Managers
 
         public void RegisterEntity(ulong entityId, EntityType type)
         {
-            RegisteredEntities.Add(entityId, type);
+            // Not Add: a duplicate used to throw out of whichever map worker was registering,
+            // losing the tick. Registering the same entity twice (a creature re-added to the
+            // world) is harmless; a different type under the same id means an id was reused
+            // while registered, which FreeEntity now refuses, and is worth a line either way.
+            if (RegisteredEntities.TryGetValue(entityId, out var existing) && existing != type)
+                Logger.WriteLog(LogType.Error, $"Entity {entityId} registered as {type} while already registered as {existing}; the new registration wins.");
+
+            RegisteredEntities[entityId] = type;
         }
 
         public void UnregisterEntity(ulong entityId)

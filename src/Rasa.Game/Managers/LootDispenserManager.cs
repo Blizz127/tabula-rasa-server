@@ -217,7 +217,13 @@ namespace Rasa.Managers
 
                     owner?.CallMethod(SysEntity.ClientMethodId, new DestroyPhysicalEntityPacket(lootItem.EntityId));
 
-                    EntityManager.Instance.Items.Remove(lootItem.EntityId);
+                    // The row's id is the item's, and CreateItem registered it in
+                    // RegisteredEntities as well as Items. Freeing it while it was still
+                    // registered handed the id to the next entity created, and registering
+                    // that one threw "An item with the same key has already been added" out
+                    // of the map worker - from the next loot roll, or the next spawn.
+                    EntityManager.Instance.UnregisterEntity(lootItem.EntityId);
+                    EntityManager.Instance.UnregisterItem(lootItem.EntityId);
                     EntityManager.Instance.FreeEntity(lootItem.EntityId);
                 }
 
