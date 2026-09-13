@@ -83,8 +83,21 @@ namespace Rasa.Auth
 
             IBasePacket packet;
 
+            // This is the auth server's main loop thread, and nothing above it catches: an
+            // exception out of a handler used to end the process. Now it ends the connection.
             while ((packet = _packetQueue.PopIncoming()) != null)
-                HandlePacket(packet);
+            {
+                try
+                {
+                    HandlePacket(packet);
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteLog(LogType.Error, $"Error handling {packet.GetType().Name} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                    Close();
+                    return;
+                }
+            }
 
             while ((packet = _packetQueue.PopOutgoing()) != null)
                 SendPacket(packet);
@@ -116,6 +129,17 @@ namespace Rasa.Auth
             if (packet is not IOpcodedPacket<ClientOpcode> authPacket)
                 return;
 
+            // Each message belongs to a point in the conversation, and the handlers assume it:
+            // everything after Login reads AccountEntry, which Login sets. A ServerListExt or
+            // AboutToPlay sent first dereferenced null on the main loop thread. Login is the
+            // only thing a fresh connection may say; once it has said it, it may not again.
+            if (!IsExpected(authPacket.Opcode))
+            {
+                Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} sent {authPacket.Opcode} in state {State}; disconnecting.");
+                Close();
+                return;
+            }
+
             switch (authPacket.Opcode)
             {
                 case ClientOpcode.Login:
@@ -133,6 +157,23 @@ namespace Rasa.Auth
                 case ClientOpcode.ServerListExt:
                     MsgServerListExt(authPacket as ServerListExtPacket);
                     break;
+            }
+        }
+
+        private bool IsExpected(ClientOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ClientOpcode.Login:
+                    return State == ClientState.Connected;
+
+                case ClientOpcode.ServerListExt:
+                case ClientOpcode.AboutToPlay:
+                    return AccountEntry != null && (State == ClientState.LoggedIn || State == ClientState.ServerList);
+
+                default:
+                    // Logout and SCCheck carry nothing the state has to be ready for.
+                    return true;
             }
         }
 

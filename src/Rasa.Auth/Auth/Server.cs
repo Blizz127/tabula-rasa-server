@@ -289,7 +289,9 @@ namespace Rasa.Auth
         {
             Client authClient;
             lock (Clients)
-                authClient = Clients.FirstOrDefault(c => c.AccountEntry.Id == packet.AccountId);
+                // AccountEntry is null on every connection still at the login screen, and this
+                // runs on the communicator thread whenever a game server answers a redirect.
+                authClient = Clients.FirstOrDefault(c => c.AccountEntry != null && c.AccountEntry.Id == packet.AccountId);
 
             ServerInfo info;
             lock (ServerList)
