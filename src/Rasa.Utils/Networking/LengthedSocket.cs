@@ -191,12 +191,67 @@ namespace Rasa.Networking
                 _socketAsyncEventArgsPool.Push(args);
         }
 
+        private enum Completion
+        {
+            /// <summary>The args has been re-armed and is in flight again; leave it be.</summary>
+            Pending,
+
+            /// <summary>The args is finished with and goes back to the pool.</summary>
+            Released,
+
+            /// <summary>As Released, and a whole send went out, so the next queued send may start.</summary>
+            SendFinished
+        }
+
+        /// <summary>
+        /// Runs on a socket completion thread. Nothing may get out of it: an exception that
+        /// escapes here belongs to no connection, and the runtime ends the process. Everything
+        /// the handlers do - decrypting, decoding, the key exchange, the queue and auth packets,
+        /// the communicator - runs inside this, so until now a fault in any of them for one
+        /// client's bytes took every other client down with it. Now it costs that client its
+        /// connection: the fault is logged, the owner is told through OnError, and the args and
+        /// buffer go back to their pools.
+        /// </summary>
         private void OperationCompleted(object o, SocketAsyncEventArgs args)
         {
-            // Set when this args finished a send outright, so the next queued one starts only
-            // after this one's buffer has gone back to the pool.
-            var sendFinished = false;
+            Completion outcome;
 
+            try
+            {
+                outcome = OperationCompletedCore(args);
+            }
+            catch (Exception e)
+            {
+                SafeLog($"Unhandled exception completing a socket {args.LastOperation} for {SafeRemoteAddress()}, closing the connection: {e}");
+
+                // Whatever was in flight, nothing more is going out on this socket.
+                DiscardQueuedSends();
+
+                try
+                {
+                    OnError?.Invoke(args);
+                }
+                catch (Exception inner)
+                {
+                    SafeLog($"OnError handler threw for {SafeRemoteAddress()}: {inner}");
+                }
+
+                // The core only lets an exception out of a handler or a synchronous re-arm that
+                // did not start, so the args is not in flight and has not been torn down.
+                outcome = Completion.Released;
+            }
+
+            if (outcome == Completion.Pending)
+                return;
+
+            TeardownEventArgs(args);
+
+            if (outcome == Completion.SendFinished)
+                SendNext();
+        }
+
+        private Completion OperationCompletedCore(SocketAsyncEventArgs args)
+        {
             if (args.SocketError != SocketError.Success || (args.LastOperation == SocketAsyncOperation.Receive && args.BytesTransferred == 0))
             {
                 // A failed send leaves the socket marked busy for ever and nothing would go out
@@ -205,69 +260,105 @@ namespace Rasa.Networking
                     DiscardQueuedSends();
 
                 OnError?.Invoke(args);
+                return Completion.Released;
             }
-            else
+
+            var data = args.GetUserToken<BufferData>();
+
+            switch (args.LastOperation)
             {
-                var data = args.GetUserToken<BufferData>();
+                case SocketAsyncOperation.Send:
+                    data.ByteCount += args.BytesTransferred;
 
-                switch (args.LastOperation)
-                {
-                    case SocketAsyncOperation.Send:
-                        data.ByteCount += args.BytesTransferred;
+                    // We've transferred less bytes than we should have
+                    if (data.Length > data.ByteCount)
+                    {
+                        args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
 
-                        // We've transferred less bytes than we should have
-                        if (data.Length > data.ByteCount)
-                        {
-                            args.SetBuffer(data.BaseOffset + data.ByteCount, data.Length - data.ByteCount);
+                        // Sending the rest is safe now: the queue holds everything else back
+                        // until this args reports the whole buffer gone.
+                        SendAsync(args);
+                        return Completion.Pending;
+                    }
 
-                            // Sending the rest is safe now: the queue holds everything else back
-                            // until this args reports the whole buffer gone.
-                            SendAsync(args);
-                            return;
-                        }
+                    OnSend?.Invoke(args);
+                    return Completion.SendFinished;
 
-                        sendFinished = true;
-                        OnSend?.Invoke(args);
-                        break;
+                case SocketAsyncOperation.Receive:
+                    // This value may change in the middle of processing, causing odd behavior
+                    var receiveAfter = AutoReceive;
+                    var result = ProcessInputBuffer(data, args);
 
-                    case SocketAsyncOperation.Receive:
-                        // This value may change in the middle of processing, causing odd behavior
-                        var receiveAfter = AutoReceive;
-                        var result = ProcessInputBuffer(data, args);
+                    if (result == InputResult.Reading)
+                        return Completion.Pending;
 
-                        if (result == InputResult.Reading)
-                            return;
+                    // A broken stream gets its buffer back but no new receive: there is
+                    // nothing left to read that could be made sense of.
+                    if (result == InputResult.Consumed && receiveAfter)
+                        ReceiveAsync();
 
-                        // A broken stream gets its buffer back but no new receive: there is
-                        // nothing left to read that could be made sense of.
-                        if (result == InputResult.Consumed && receiveAfter)
-                            ReceiveAsync();
+                    return Completion.Released;
 
-                        break;
+                case SocketAsyncOperation.Connect:
+                    OnConnect?.Invoke(args);
+                    return Completion.Released;
 
-                    case SocketAsyncOperation.Connect:
-                        OnConnect?.Invoke(args);
-                        break;
+                case SocketAsyncOperation.Accept:
+                    var accepted = args.AcceptSocket;
 
-                    case SocketAsyncOperation.Accept:
-                        var accepted = args.AcceptSocket;
+                    // Done with the args before the handler runs, because the handler's first
+                    // move is to re-arm the accept - on this same args, on this same thread.
+                    args.AcceptSocket = null;
 
-                        // Done with the args before the handler runs, because the handler's first
-                        // move is to re-arm the accept - on this same args, on this same thread.
-                        args.AcceptSocket = null;
+                    var client = new LengthedSocket(accepted, SizeHeaderLength, CountSize);
 
-                        OnAccept?.Invoke(new LengthedSocket(accepted, SizeHeaderLength, CountSize));
-                        return;
-                }
+                    // The accept args is never torn down and is re-armed by the handler itself,
+                    // so a fault here is dealt with on the spot: the connection that could not
+                    // be set up is shut, and the listener carries on as if it had been refused.
+                    try
+                    {
+                        OnAccept?.Invoke(client);
+                    }
+                    catch (Exception e)
+                    {
+                        SafeLog($"Unhandled exception accepting {client.SafeRemoteAddress()}, refusing the connection: {e}");
+                        client.Close();
+                    }
+
+                    return Completion.Pending;
             }
 
-            TeardownEventArgs(args);
-
-            if (sendFinished)
-                SendNext();
+            return Completion.Released;
         }
 
-        private int ReadSize(BufferData data)
+        /// <summary>The last resort must not itself be able to throw, whatever state the logger is in.</summary>
+        private static void SafeLog(string message)
+        {
+            try
+            {
+                Logger.WriteLog(LogType.Error, message);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    Console.Error.WriteLine(message);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+
+        /// <summary>
+        /// The frame length the header at the start of <paramref name="data"/> announces,
+        /// header included. Read unsigned: the header is a byte count, and reading it signed
+        /// turned a Word of 0x8000 or a Dword of 0x80000000 and up into a negative length. The
+        /// range check after this catches those either way; this just says what the other side
+        /// wrote when it is logged.
+        /// </summary>
+        private long ReadSize(BufferData data)
         {
             var headerSize = !CountSize ? LengthSize : 0;
 
@@ -277,10 +368,10 @@ namespace Rasa.Networking
                     return headerSize + data[0];
 
                 case SizeType.Word:
-                    return headerSize + BitConverter.ToInt16(data.Buffer, data.BaseOffset);
+                    return headerSize + BitConverter.ToUInt16(data.Buffer, data.BaseOffset);
 
                 case SizeType.Dword:
-                    return headerSize + BitConverter.ToInt32(data.Buffer, data.BaseOffset);
+                    return headerSize + BitConverter.ToUInt32(data.Buffer, data.BaseOffset);
 
                 default:
                     throw new NotImplementedException($"Only 1, 2 and 4 byte headers are supported! {SizeHeaderLength} is not!");
@@ -310,17 +401,17 @@ namespace Rasa.Networking
                 // -5 produces a length of -1 and used to be read as "the header has not arrived
                 // yet" - which sent the receive off with the previous frame's length still set.
                 var haveLength = data.ByteCount >= LengthSize;
-                var length = haveLength ? ReadSize(data) : 0;
+                var length = haveLength ? ReadSize(data) : 0L;
 
                 if (haveLength)
                 {
-                    // A length that no buffer could ever hold, or one too small to contain its own
+                    // A length that no buffer could ever hold, or one with nothing after its own
                     // header, is not a packet we are behind on - it is a length field read out of
                     // step with the stream, or something speaking a different protocol at us.
                     // There is no way to resynchronise a length-prefixed stream once that happens,
                     // so the connection goes. This used to throw OutOfMemoryException on the socket
                     // thread, where nothing caught it.
-                    if (length < LengthSize || length > BufferManager.BlockSize)
+                    if (length <= LengthSize || length > BufferManager.BlockSize)
                     {
                         Drop($"framing lost - a frame of {length} bytes, against a {BufferManager.BlockSize} byte buffer");
                         return InputResult.Broken;
@@ -332,7 +423,7 @@ namespace Rasa.Networking
                     if (length > data.MaxLength)
                         Compact(data);
 
-                    data.Length = length;
+                    data.Length = (int) length;
                 }
 
                 if (!haveLength)
@@ -356,7 +447,7 @@ namespace Rasa.Networking
                 }
 
                 data.Offset = LengthSize;
-                data.Length = length;
+                data.Length = (int) length;
 
                 OnDecrypt?.Invoke(data);
                 OnReceive?.Invoke(data);
@@ -364,8 +455,8 @@ namespace Rasa.Networking
                 if (data.ByteCount == length)
                     break;
 
-                data.ByteCount -= length;
-                data.BaseOffset += length;
+                data.ByteCount -= (int) length;
+                data.BaseOffset += (int) length;
                 data.Offset = 0;
                 data.Length = data.MaxLength;
             }
