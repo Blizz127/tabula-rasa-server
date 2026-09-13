@@ -72,15 +72,18 @@ namespace Rasa.Repositories.Char.CharacterInventory
 
         public void MoveInvItem(uint accountId, uint characterId, uint inventoryType, uint slotId, uint itemId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterInventoryEntries);
-            var invItem = query.FirstOrDefault(e => e.ItemId == itemId);
+            var invItem = _charContext.CreateTrackingQuery(_charContext.CharacterInventoryEntries).FirstOrDefault(e => e.ItemId == itemId);
+
+            if (invItem == null)
+            {
+                Logger.WriteLog(LogType.Error, $"Item {itemId} has no inventory row; move skipped.");
+                return;
+            }
 
             invItem.AccountId = accountId;
             invItem.CharacterId = characterId;
             invItem.SlotId = slotId;
             invItem.InventoryType = inventoryType;
-
-            _charContext.CharacterInventoryEntries.Update(invItem);
             _charContext.SaveChanges();
         }
     }

@@ -36,6 +36,9 @@ namespace Rasa.Repositories.Char.ClanInventory
             var query = _charContext.CreateNoTrackingQuery(_charContext.ClanInventoryEntries);
             var entry = query.Where(e => e.ClanId == clanId && e.SlotId == slotId).FirstOrDefault();
 
+            if (entry == null)
+                return;
+
             _charContext.Remove(entry);
             _charContext.SaveChanges();
         }
@@ -50,12 +53,15 @@ namespace Rasa.Repositories.Char.ClanInventory
 
         public void MoveInvItem(uint clanId, uint slotId, uint itemId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.ClanInventoryEntries);
-            var entry = query.FirstOrDefault(e => e.ClanId == clanId && e.ItemId == itemId);
+            var entry = _charContext.CreateTrackingQuery(_charContext.ClanInventoryEntries).FirstOrDefault(e => e.ClanId == clanId && e.ItemId == itemId);
+
+            if (entry == null)
+            {
+                Logger.WriteLog(LogType.Error, $"Clan {clanId} has no inventory row for item {itemId}; move skipped.");
+                return;
+            }
 
             entry.SlotId = slotId;
-
-            _charContext.ClanInventoryEntries.Update(entry);
             _charContext.SaveChanges();
         }
     }

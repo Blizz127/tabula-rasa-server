@@ -138,105 +138,130 @@ namespace Rasa.Repositories.Char.Character
             entry.MapContextId= characterChange.MapContextId;
         }
 
+        /// <summary>
+        /// The tracked row for one character, or null. The update methods below used to load a
+        /// no-tracking snapshot, change a field and hand the whole object to Update(), which
+        /// marks every column modified: a row that had been changed by another thread in the
+        /// meantime (SaveCharacter from a socket close, the console gm command) was overwritten
+        /// with the stale snapshot, and a missing row was a NullReferenceException in whichever
+        /// packet handler asked. A tracked row writes only the columns that changed.
+        /// </summary>
+        private CharacterEntry GetWritable(uint id)
+        {
+            var entry = _charContext.GetWritable(_charContext.CharacterEntries, id);
+
+            if (entry == null)
+                Logger.WriteLog(LogType.Error, $"Character {id} does not exist; update skipped.");
+
+            return entry;
+        }
+
         public void UpdateCharacterAttributes(uint id, int spentBody, int spentMind, int spentSpirit)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Body = spentBody;
             entry.Mind = spentMind;
             entry.Spirit = spentSpirit;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterClass(uint id, uint classId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Class = classId;
- 
-            _charContext.CharacterEntries.Update(entry);
+
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterCloneCredits(uint id, uint cloneCredits)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.CloneCredits = cloneCredits;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterCredits(uint id, int credits)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Credit = credits;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterPrestige(uint id, int prestige)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
 
             if (entry == null)
                 return;
 
             entry.Prestige = prestige;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterExpirience(uint id, uint experience)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Experience = experience;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterLevel(uint id, byte level)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Level = level;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.LastLogin = DateTime.UtcNow;
             entry.TotalTimePlayed = totalTimePlayed;
             entry.NumLogins = numLogins;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.CoordX = x;
             entry.CoordY = y;
@@ -244,32 +269,30 @@ namespace Rasa.Repositories.Char.Character
             entry.Rotation = rotation;
             entry.MapContextId = mapContextId;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterActiveWeapon(uint id, byte activeWeapon)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.ActiveWeapon = activeWeapon;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterName(uint id, string name)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
 
             if (entry == null)
                 return;
 
             entry.Name = name;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
