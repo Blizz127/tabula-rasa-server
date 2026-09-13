@@ -7,6 +7,7 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Memory;
     using Packets;
     using Packets.Petition.Client;
     using Packets.Petition.Server;
@@ -196,8 +197,16 @@ namespace Rasa.Managers
                 return;
             }
 
+            // The body can be 16,000 characters (three bytes each in UTF-8) and the reply has
+            // to fit one send buffer; what does not fit is cut, with a marker, rather than the
+            // send throwing and the client being disconnected for asking.
+            var info = new PetitionInfo(petition);
+            var overhead = PythonSize.Of(pw => new RetrievePetitionAckPacket(true, packet.PetitionId, new PetitionInfo(petition) { Body = "" }).Write(pw));
+
+            info.Body = ClampBytes(info.Body, PythonSize.PayloadBudget - overhead);
+
             client.CallMethod(SysEntity.ClientPetitionManagerId,
-                new RetrievePetitionAckPacket(true, packet.PetitionId, new PetitionInfo(petition)));
+                new RetrievePetitionAckPacket(true, packet.PetitionId, info));
         }
 
         /// <summary>
@@ -273,10 +282,22 @@ namespace Rasa.Managers
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-            var results = unitOfWork.Petitions
-                .ListPetitionsForAccount(client.AccountEntry.Id, SearchResultLimit)
-                .Select(p => new PetitionInfo(p))
-                .ToList();
+            var results = new List<PetitionInfo>();
+            var size = PythonSize.Of(pw => new SearchPetitionsAckPacket(true, results).Write(pw));
+
+            // Rows are added while the reply still fits a send buffer; a summary and a
+            // resolution can each be 255 characters, so twenty rows do not always.
+            foreach (var petition in unitOfWork.Petitions.ListPetitionsForAccount(client.AccountEntry.Id, SearchResultLimit))
+            {
+                var row = new PetitionInfo(petition);
+                var rowSize = PythonSize.Of(pw => row.Write(pw, false));
+
+                if (size + rowSize + PythonSize.ListHeaderSlack > PythonSize.PayloadBudget)
+                    break;
+
+                size += rowSize;
+                results.Add(row);
+            }
 
             Ack(client, new SearchPetitionsAckPacket(true, results));
         }
@@ -449,6 +470,35 @@ namespace Rasa.Managers
         /// A null arrives when the client marshals an empty edit box as None rather than as a
         /// zero-length string, and both columns are NOT NULL.
         /// </summary>
+        /// <summary>
+        /// The longest prefix of <paramref name="value"/> that fits <paramref name="maxBytes"/>
+        /// of UTF-8, with a marker when anything was cut; never splits a character.
+        /// </summary>
+        private static string ClampBytes(string value, int maxBytes)
+        {
+            const string marker = "\n[... cut to fit ...]";
+
+            if (string.IsNullOrEmpty(value) || System.Text.Encoding.UTF8.GetByteCount(value) <= maxBytes)
+                return value ?? string.Empty;
+
+            var limit = Math.Max(0, maxBytes - System.Text.Encoding.UTF8.GetByteCount(marker));
+            var bytes = 0;
+            var length = 0;
+
+            foreach (var rune in value.EnumerateRunes())
+            {
+                var runeBytes = rune.Utf8SequenceLength;
+
+                if (bytes + runeBytes > limit)
+                    break;
+
+                bytes += runeBytes;
+                length += rune.Utf16SequenceLength;
+            }
+
+            return value.Substring(0, length) + marker;
+        }
+
         private static string Clamp(string value, int maxLength)
         {
             if (string.IsNullOrWhiteSpace(value))

@@ -6,6 +6,7 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Memory;
     using Packets.LookingForGroup.Client;
     using Packets.LookingForGroup.Server;
     using Structures;
@@ -35,7 +36,10 @@ namespace Rasa.Managers
 
         /// <summary>
         /// The results pane builds one widget per row with no paging, so an unbounded
-        /// result set would be a client-side stall rather than a useful list.
+        /// result set would be a client-side stall rather than a useful list. The reply is
+        /// also sized as it is built: rows carry a live roster and four id lists, and the
+        /// whole answer has to fit one send buffer (PythonSize.PayloadBudget) - it used to
+        /// overflow the buffer and disconnect the searcher at around 15 ads.
         /// </summary>
         private const int SearchResultLimit = 50;
 
@@ -147,6 +151,9 @@ namespace Rasa.Managers
             var filter = packet.Filter;
             var results = new List<LookingForGroupAdInfo>();
 
+            // The envelope: tuple + list header. Rows are added while they still fit.
+            var size = PythonSize.Of(pw => new LookingForGroupSearchResultsPacket(results).Write(pw));
+
             foreach (var ad in _ads.Values)
             {
                 if (ad.AccountId == client.AccountEntry.Id)
@@ -163,7 +170,14 @@ namespace Rasa.Managers
                 if (!Matches(ad, filter))
                     continue;
 
-                results.Add(ToAdInfo(ad, leader));
+                var row = ToAdInfo(ad, leader);
+                var rowSize = PythonSize.Of(row);
+
+                if (size + rowSize + PythonSize.ListHeaderSlack > PythonSize.PayloadBudget)
+                    break;
+
+                size += rowSize;
+                results.Add(row);
 
                 if (results.Count >= SearchResultLimit)
                     break;

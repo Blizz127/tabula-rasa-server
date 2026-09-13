@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Rasa.Structures
 {
@@ -22,6 +22,13 @@ namespace Rasa.Structures
     /// </summary>
     public class LookingForGroupAdInfo : IPythonDataStruct
     {
+        /// <summary>
+        /// Most entries kept from any of the four id lists. The window offers a handful of
+        /// activities, roles, maps and continents; a list longer than this is not something it
+        /// sends, and every entry comes back in every search result that shows the ad.
+        /// </summary>
+        public const int MaxListEntries = 16;
+
         public ulong UserId { get; set; }
         public string UserName { get; set; }
 
@@ -142,8 +149,14 @@ namespace Rasa.Structures
 
             var count = pr.ReadList();
 
+            // Read them all so the stream stays in step; keep the first MaxListEntries.
             for (var i = 0; i < count; i++)
-                target.Add(pr.ReadInt());
+            {
+                var value = pr.ReadInt();
+
+                if (target.Count < MaxListEntries)
+                    target.Add(value);
+            }
         }
 
         private static void ReadUIntList(PythonReader pr, List<uint> target)
@@ -159,7 +172,12 @@ namespace Rasa.Structures
             var count = pr.ReadList();
 
             for (var i = 0; i < count; i++)
-                target.Add(pr.ReadUInt());
+            {
+                var value = pr.ReadUInt();
+
+                if (target.Count < MaxListEntries)
+                    target.Add(value);
+            }
         }
 
         private static void WriteIntList(PythonWriter pw, List<int> values)
