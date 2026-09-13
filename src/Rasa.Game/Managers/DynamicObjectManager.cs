@@ -336,8 +336,10 @@ namespace Rasa.Managers
         #endregion
 
         #region Dropship
-        public void DropshipsWorker(MapChannel mapChannel, long timePassed)
+        public void DropshipsWorker(long timePassed)
         {
+            // Dropships is server-wide; each one is removed from its own map, not from
+            // whichever map the caller happened to be iterating.
             foreach (var entry in Dropships)
             {
                 var dropship = entry.Value;
@@ -431,7 +433,8 @@ namespace Rasa.Managers
                             SpawnPoolManager.Instance.DecreaseQueueCount(dropship.SpawnPool);
 
                         // remove object
-                        CellManager.Instance.RemoveFromWorld(mapChannel, dropship);
+                        if (MapChannelManager.Instance.MapChannelArray.TryGetValue(dropship.MapContextId, out var dropshipMap))
+                            CellManager.Instance.RemoveFromWorld(dropshipMap, dropship);
 
                         Dropships.Remove(dropship.EntityId);
                         break;

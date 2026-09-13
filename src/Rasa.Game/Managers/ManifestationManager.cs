@@ -164,9 +164,14 @@ namespace Rasa.Managers
         #region Handlers
         public void AutoFireKeepAlive(Client client, int keepAliveDelay)
         {
+            // Four times the client's own interval, within reason: the value is the client's,
+            // and zero or negative would stop the fire on the next tick, huge would keep it
+            // going for a crashed client.
+            var aliveTime = Math.Clamp((long)keepAliveDelay * 4, 1000, 30000);
+
             foreach (var timer in AutoFire)
                 if (timer.Client == client)
-                    timer.MaxAliveTime = keepAliveDelay*4; // 10 sec should be enof for all weapons
+                    timer.MaxAliveTime = aliveTime;
         }
 
         public void ChangeShowHelmet(Client client, ChangeShowHelmetPacket packet)
@@ -192,6 +197,11 @@ namespace Rasa.Managers
 
         public bool PlayerTryFireWeapon(Client client)
         {
+            // Reached from the auto-fire list on the main loop as well as from the handler; a
+            // client that has left the world since must not be fired for.
+            if (client.Player == null || client.State != ClientState.Ingame)
+                return false;
+
             // ToDo: isOverheated, isJammed, and some other checks
             if (!client.Player.WeaponReady)
             {
@@ -200,7 +210,14 @@ namespace Rasa.Managers
             }
 
             var weapon = InventoryManager.Instance.CurrentWeapon(client);
+
+            if (weapon == null)
+                return false;
+
             var weaponClassInfo = EntityClassManager.Instance.GetWeaponClassInfo(weapon);
+
+            if (weaponClassInfo == null)
+                return false;
 
             // do we need to reload?
             if (weapon.CurrentAmmo < weapon.ItemTemplate.WeaponInfo.AmmoPerShot)
@@ -355,17 +372,7 @@ namespace Rasa.Managers
         {
             ActorManager.Instance.RequestVisualCombatMode(client, false);
 
-            // go backwards through list
-            for (var i = AutoFire.Count - 1; i >= 0; i--)
-            {
-                var timer = AutoFire[i];
-
-                if (timer.Client == client)
-                {
-                    AutoFire.RemoveAt(i);
-                    break;
-                }
-            }
+            RemoveAutoFire(client);
         }
 
         #endregion
@@ -469,7 +476,7 @@ namespace Rasa.Managers
                 // we dont want to server keep fireing if client crash 
                 timer.MaxAliveTime -= delta;
 
-                if (timer.MaxAliveTime <= 0)
+                if (timer.MaxAliveTime <= 0 || timer.Client.Player == null || timer.Client.State != ClientState.Ingame)
                 {
                     AutoFire.RemoveAt(i);
                     continue;
@@ -789,19 +796,31 @@ namespace Rasa.Managers
 
         public void RegisterAutoFire(Client client)
         {
-            // create timer
             var weapon = InventoryManager.Instance.CurrentWeapon(client);
-            var timer = new AutoFireTimer(client, weapon.ItemTemplate.WeaponInfo.Refire, weapon.ItemTemplate.WeaponInfo.Refire);
 
-            AutoFire.Add(timer);
+            if (weapon?.ItemTemplate?.WeaponInfo == null)
+                return;
 
-            // launch missile
-            //MissileManager.Instance.PlayerTryFireWeapon(timer.Client);
+            // One timer per client: a second StartAutoFire used to add a second timer and
+            // double the rate of fire.
+            RemoveAutoFire(client);
+
+            AutoFire.Add(new AutoFireTimer(client, weapon.ItemTemplate.WeaponInfo.Refire, weapon.ItemTemplate.WeaponInfo.Refire));
+        }
+
+        private static void RemoveAutoFire(Client client)
+        {
+            for (var i = AutoFire.Count - 1; i >= 0; i--)
+                if (AutoFire[i].Client == client)
+                    AutoFire.RemoveAt(i);
         }
 
         public void RemovePlayerCharacter(Client client)
         {
-            // ToDo do we need remove something, or it's done already 
+            // Called from MapChannelManager.RemovePlayer. A client that dropped while holding
+            // fire stayed in the auto-fire list; once its items were destroyed CurrentWeapon
+            // was null, and the next tick dereferenced it on the main loop.
+            RemoveAutoFire(client);
         }
 
         public void RemoveAppearanceItem(Client client, EquipmentData equipmentSlotId)

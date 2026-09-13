@@ -169,6 +169,14 @@ namespace Rasa.Managers
 
             PartyManager.Instance.ExpireHeldMembers();
 
+            // Server-wide lists, ticked once. These used to run inside the per-map loop below,
+            // guarded by that map having players, so with N populated maps every auto-fire
+            // timer and every dropship advanced N times per tick.
+            DynamicObjectManager.Instance.DropshipsWorker(delta);
+
+            if (Timer.IsTriggered("AutoFire"))
+                ManifestationManager.Instance.AutoFireTimerDoWork(delta);
+
             foreach (var t in MapChannelArray)
             {
                 var mapChannel = t.Value;
@@ -190,11 +198,6 @@ namespace Rasa.Managers
                     ActorActionManager.Instance.DoWork(mapChannel, delta);
                     MissileManager.Instance.DoWork(mapChannel, delta);
                     BehaviorManager.Instance.MapChannelThink(mapChannel, delta);
-                    DynamicObjectManager.Instance.DropshipsWorker(mapChannel, delta);
-
-                    // check forAutoFIre
-                    if (Timer.IsTriggered("AutoFire"))
-                        ManifestationManager.Instance.AutoFireTimerDoWork(delta);
 
                     // CellManager worker
                     if (Timer.IsTriggered("CellUpdateVisibility"))
