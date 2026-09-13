@@ -443,21 +443,24 @@ namespace Rasa.Game
         #region Socketing
         private void OnEncrypt(BufferData data, ref int length)
         {
+            // The frame body is one byte of padding count, that many bytes of padding (the
+            // count byte itself is the first of them), then the packet - so the packet moves
+            // right by the count and the cipher runs over the lot. This used to be done through
+            // a second pool buffer per send, which doubled what every send took from a pool the
+            // whole server shares, and dereferenced the null it gets when that pool is empty.
             var paddingCount = (byte) (8 - length % 8);
+            var start = data.BaseOffset + data.Offset;
 
-            var tempArray = BufferManager.RequestBuffer();
+            if (data.Offset + length + paddingCount > data.MaxLength)
+                throw new InvalidOperationException($"A {length} byte packet leaves no room for its {paddingCount} bytes of padding.");
 
-            tempArray[0] = paddingCount;
-
-            BufferData.Copy(data, data.Offset, tempArray, paddingCount, length);
+            Array.Copy(data.Buffer, start, data.Buffer, start + paddingCount, length);
+            Array.Clear(data.Buffer, start, paddingCount);
+            data.Buffer[start] = paddingCount;
 
             length += paddingCount;
 
-            GameCryptManager.Encrypt(tempArray.Buffer, tempArray.BaseOffset, ref length, length, Data);
-
-            BufferData.Copy(tempArray, 0, data, data.Offset, length);
-
-            BufferManager.FreeBuffer(tempArray);
+            GameCryptManager.Encrypt(data.Buffer, start, ref length, length, Data);
         }
 
         private bool OnDecrypt(BufferData data)

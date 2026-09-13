@@ -558,7 +558,20 @@ namespace Rasa.Networking
 
         private void ReceiveAsync(SocketAsyncEventArgs args)
         {
-            if (!Socket.ReceiveAsync(args))
+            bool pending;
+
+            try
+            {
+                pending = Socket.ReceiveAsync(args);
+            }
+            catch (Exception e)
+            {
+                TeardownEventArgs(args);
+                Drop($"receive failed to start: {e.Message}");
+                return;
+            }
+
+            if (!pending)
                 OperationCompleted(Socket, args);
         }
 
@@ -594,37 +607,14 @@ namespace Rasa.Networking
                 {
                     discard = true;
                 }
+                else if (!TryWriteFrame(packet, args))
+                {
+                    // Logged by TryWriteFrame. The packet is skipped; nothing of it reached the
+                    // socket, and every frame stands on its own, so the stream is intact.
+                    discard = true;
+                }
                 else
                 {
-                    var data = args.GetUserToken<BufferData>();
-
-                    int length;
-
-                    // Keep space for the length header
-                    data.Offset = LengthSize;
-
-                    // Write the packet data to the buffer
-                    using (var sw = data.CreateWriter())
-                    {
-                        packet.Write(sw);
-
-                        length = (int) sw.BaseStream.Position;
-                    }
-
-                    OnEncrypt?.Invoke(data, ref length);
-
-                    // Reset the offset to send everything (including the size header)
-                    data.Offset = 0;
-                    data.Length = length + LengthSize;
-
-                    var sizeLen = CountSize ? length + LengthSize : length;
-
-                    // Copy the size header into the buffer
-                    for (var i = 0; i < LengthSize; ++i)
-                        data[i] = (byte) ((sizeLen >> (i * 8)) & 0xFF);
-
-                    args.SetBuffer(data.BaseOffset, data.Length);
-
                     if (!_sending)
                     {
                         _sending = true;
@@ -665,6 +655,57 @@ namespace Rasa.Networking
             DiscardQueuedSends();
 
             Drop($"send queue full at {MaxQueuedSends} packets");
+        }
+
+        /// <summary>
+        /// Serialises and encrypts the packet into the args' buffer and sets the frame up to
+        /// send, or returns false having logged why it could not. A throw out of the packet's
+        /// Write - a body larger than the pool block, a null string, a writer bug - or out of
+        /// OnEncrypt used to leave Send by way of the exception, with the args and its buffer
+        /// never returned to their pools; every such packet cost the whole process one of each
+        /// for good, and once they ran out nothing could be sent or received.
+        /// </summary>
+        private bool TryWriteFrame(IBasePacket packet, SocketAsyncEventArgs args)
+        {
+            var data = args.GetUserToken<BufferData>();
+
+            try
+            {
+                int length;
+
+                // Keep space for the length header
+                data.Offset = LengthSize;
+
+                // Write the packet data to the buffer
+                using (var sw = data.CreateWriter())
+                {
+                    packet.Write(sw);
+
+                    length = (int) sw.BaseStream.Position;
+                }
+
+                OnEncrypt?.Invoke(data, ref length);
+
+                // Reset the offset to send everything (including the size header)
+                data.Offset = 0;
+                data.Length = length + LengthSize;
+
+                var sizeLen = CountSize ? length + LengthSize : length;
+
+                // Copy the size header into the buffer
+                for (var i = 0; i < LengthSize; ++i)
+                    data[i] = (byte) ((sizeLen >> (i * 8)) & 0xFF);
+
+                args.SetBuffer(data.BaseOffset, data.Length);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                SafeLog($"Could not send a {packet.GetType().Name} to {SafeRemoteAddress()}, skipping it: {e}");
+
+                return false;
+            }
         }
 
         /// <summary>
@@ -755,7 +796,24 @@ namespace Rasa.Networking
 
         private void SendAsync(SocketAsyncEventArgs args)
         {
-            if (!Socket.SendAsync(args))
+            bool pending;
+
+            try
+            {
+                pending = Socket.SendAsync(args);
+            }
+            catch (Exception e)
+            {
+                // The operation never started, so the args is ours to return; the socket is
+                // finished, so the queue behind it goes too. Without this the args leaked and
+                // _sending stayed set, which silenced the connection for good.
+                TeardownEventArgs(args);
+                DiscardQueuedSends();
+                Drop($"send failed to start: {e.Message}");
+                return;
+            }
+
+            if (!pending)
                 OperationCompleted(Socket, args);
         }
 
