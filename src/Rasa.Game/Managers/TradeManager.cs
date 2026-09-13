@@ -313,7 +313,20 @@ namespace Rasa.Managers
             if (client.Player.Inventory.PersonalInventory.Contains(entityId))
                 return;
 
-            EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+            DestroyCopyOnClient(client, entityId);
+        }
+
+        /// <summary>
+        /// Takes an item entity off one client's screen and nothing else. This used to go through
+        /// EntityManager.DestroyPhysicalEntity, which is not "this client's copy": it unregisters
+        /// the item from the server's tables and frees its entity id. The item still sat in its
+        /// owner's inventory, so the next thing to touch that slot found no item behind the id,
+        /// and the freed id could be handed to the next entity created while the slot still
+        /// pointed at it. Every cancel, every removed offer and every completed hand-over did it.
+        /// </summary>
+        private static void DestroyCopyOnClient(Client client, ulong entityId)
+        {
+            client.CallMethod(SysEntity.ClientMethodId, new DestroyPhysicalEntityPacket(entityId));
         }
 
         #endregion
@@ -519,8 +532,9 @@ namespace Rasa.Managers
                 new InventoryAddItemPacket(InventoryType.Personal, move.Item.EntityId, move.Slot));
 
             // The giver keeps an entity for something they no longer own; the receiver already
-            // has a copy from when it was offered, so only the giver's has to go.
-            EntityManager.Instance.DestroyPhysicalEntity(move.From, move.Item.EntityId, EntityType.Item);
+            // has a copy from when it was offered, so only the giver's has to go - and only on
+            // the giver's screen, since the item itself is now the receiver's.
+            DestroyCopyOnClient(move.From, move.Item.EntityId);
         }
 
         /// <summary>Applies a new credit total in memory and tells the player.</summary>
