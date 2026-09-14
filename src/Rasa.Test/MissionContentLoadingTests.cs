@@ -264,7 +264,7 @@ namespace Rasa.Test
                 ContentConditionKind.FactEquals, ContentConditionKind.HasLogos
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi }, implemented.PlacementBehaviors.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);

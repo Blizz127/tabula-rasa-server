@@ -38,6 +38,8 @@ namespace Rasa.Structures
         //sint32 movestate;
         //float wx,wy,wz; // target destination (can be far away)
         public BaseBehaviorBaseNode HomePos = new BaseBehaviorBaseNode();  //--- spawn location (used for wander)
+        // A guarding content placement: fights from and returns to HomePos, never wanders (CreatureManager.ApplyPlacementBehavior).
+        public bool HoldsPosition { get; set; }
         public BaseBehaviorBaseNode Pathnodes { get; set; } //--entity patrol nodes
         //sint32** aggrotable; //stores enemydamage
         //sint32 aggrocount;

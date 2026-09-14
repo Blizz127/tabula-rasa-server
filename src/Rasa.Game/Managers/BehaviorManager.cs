@@ -19,6 +19,8 @@ namespace Rasa.Managers
         /// database's 5 m/s "walk" had whole camps sprinting about.
         /// </summary>
         public const byte WanderDistance = 20;
+        // How far a position-holding creature may stand from its post before it walks back.
+        public const float HoldPositionSlack = 1.5f;
 
         /// <summary>
         /// Wander pace, metres per second. creature.walk_speed is 5 for every row in the database -
@@ -263,7 +265,17 @@ namespace Rasa.Managers
                         return;
                     }
 
-                if (creature.Controller.ActionWander.State == WanderIdle)
+                if (creature.Controller.ActionWander.State == WanderIdle && creature.HoldsPosition)
+                {
+                    // A guard only walks back to its post, at once and without resting first.
+                    if (GetDistanceSqr(creature.Position, creature.HomePos.Position) <= HoldPositionSlack * HoldPositionSlack ||
+                        creature.WalkSpeed < 0.01f || creature.RunSpeed < 0.01f)
+                        return;
+
+                    creature.Controller.ActionWander.WanderDestination = creature.HomePos.Position;
+                    creature.Controller.ActionWander.State = WanderMoving;
+                }
+                else if (creature.Controller.ActionWander.State == WanderIdle)
                 {
                     if (creature.Controller.ActionWander.RestDuration <= 0)
                         creature.Controller.ActionWander.RestDuration = RestTimeMin + new Random().Next((int)RestTimeSpread);

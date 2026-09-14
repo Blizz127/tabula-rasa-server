@@ -211,12 +211,28 @@ namespace Rasa.Managers
                 creature.Npc.NpcPackageId = placement.NpcPackageId;
             }
 
-            // CurrentAction stays 0: BehaviorManager moves only wander/path/fight actions, so the
-            // placement stands where the content puts it.
             SetLocation(creature, new Vector3((float)placement.PosX, (float)placement.PosY, (float)placement.PosZ),
                 placement.Rotation, placement.MapContextId);
+            ApplyPlacementBehavior(creature, placement);
 
             return creature;
+        }
+
+        /// <summary>
+        /// Stationary placements keep CurrentAction 0: BehaviorManager moves only wander/path/fight actions,
+        /// so they stand where the content puts them and never look for enemies (the boot-camp officers).
+        /// Creature-AI placements guard their spot: they scan for enemies like spawned creatures, fight, and
+        /// walk back to the placement afterwards, but never stroll (the Thrax Initiates were only ever seen
+        /// where they fought, build plan S4; strolling is unobserved).
+        /// </summary>
+        public static void ApplyPlacementBehavior(Creature creature, ContentPlacementEntry placement)
+        {
+            if ((ContentPlacementBehavior)placement.Behavior != ContentPlacementBehavior.CreatureAi)
+                return;
+
+            creature.HoldsPosition = true;
+            creature.Controller.CurrentAction = BehaviorManager.BehaviorActionWander;
+            creature.Controller.ActionWander.State = BehaviorManager.WanderIdle;
         }
 
         private Creature CreateFromTemplate(uint dbId)
