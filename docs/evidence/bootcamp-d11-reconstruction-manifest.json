@@ -4527,7 +4527,10 @@
    "id": "OD-2",
    "decision": "Instancing",
    "default": "Per-character instances (S3), fallback in build plan section 2.5",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Per-character instances (S3), fallback in build plan section 2.5",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-3",
@@ -4551,37 +4554,55 @@
    "id": "OD-5",
    "decision": "Timer while offline",
    "default": "Wall-clock (anchor kept); pause supported by the schema",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Wall-clock (anchor kept); pause supported by the schema",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-6",
    "decision": "1995 limit: 600 s analogue versus untimed",
    "default": "600 s analogue (untimed would contradict B1-044)",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: 600 s analogue (untimed would contradict B1-044)",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-7",
    "decision": "2005 giver",
    "default": "Youngblood (1995 giver; \"I'll give you another shot\")",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Youngblood (1995 giver; \"I'll give you another shot\")",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-8",
    "decision": "Exit pad anchor",
    "default": "Damaged pad entity (-225.35, 99.60, -70.52); alternative DROPSHIP_TELEPORTER marker (-233.74, 101.04, -80.08)",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Damaged pad entity (-225.35, 99.60, -70.52); alternative DROPSHIP_TELEPORTER marker (-233.74, 101.04, -80.08)",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-9",
    "decision": "Event that sets can_skip_bootcamp",
    "default": "The exit transfer",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: The exit transfer",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-10",
    "decision": "Party members",
    "default": "Separate instances",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Separate instances",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-11",
@@ -4596,13 +4617,19 @@
    "id": "OD-12",
    "decision": "Crate class",
    "default": "TreasureDispenser candidate matched by E4/E5",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: TreasureDispenser candidate matched by E4/E5",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-13",
    "decision": "Target Dummy",
    "default": "Second 29365 placement",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Second 29365 placement",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-14",
@@ -4614,25 +4641,37 @@
    "id": "OD-15",
    "decision": "Instance id scheme",
    "default": "Monotonic uint, never 0 or 1",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Monotonic uint, never 0 or 1",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-16",
    "decision": "Kill credit in instances",
    "default": "Owner credited for any kill of the bound placement",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Owner credited for any kill of the bound placement",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-17",
    "decision": "Tizzik Gi, wreck, bomb, corpse and wounded-soldier identities",
    "default": "Labelled analogues, or hold the slice",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Labelled analogues, or hold the slice",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-18",
    "decision": "Mission NPCs versus enemy AI",
    "default": "Accept deaths; rebuild on relog restores them (no invented protection)",
-   "status": "open"
+   "status": "approved",
+   "choice": "The owner approved the build plan's recommended default: Accept deaths; rebuild on relog restores them (no invented protection)",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   },
   {
    "id": "OD-19",
