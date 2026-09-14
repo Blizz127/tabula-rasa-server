@@ -18,6 +18,8 @@ namespace Rasa.Structures
         public Dictionary<uint, MissionObjectiveState> Objectives { get; } = new();
         // (objectiveId, counterId) -> current value; loaded with the mission log.
         public Dictionary<(uint ObjectiveId, byte CounterId), int> Counters { get; } = new();
+        // objectiveId -> running objective timer; loaded with the mission log.
+        public Dictionary<uint, ObjectiveTimer> Timers { get; } = new();
 
         public bool IsInLog => State == MissionState.Active || State == MissionState.Success;
 
@@ -39,7 +41,10 @@ namespace Rasa.Structures
             return true;
         }
 
-        public MissionInfo ToMissionInfo(Mission definition)
+        public MissionInfo ToMissionInfo(Mission definition) => ToMissionInfo(definition, System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+
+        /// <param name="nowMs">Unix time in milliseconds, for the remaining time of running objective timers.</param>
+        public MissionInfo ToMissionInfo(Mission definition, long nowMs)
         {
             var info = new MissionInfo
             {
@@ -65,7 +70,11 @@ namespace Rasa.Structures
                     // fallback below; such definitions are unoffered, so a saved
                     // mission only reaches this through a definition change.
                     Ordinal = objective.Ordinal ?? uint.MaxValue,
-                    IsRequired = objective.IsRequired == true
+                    IsRequired = objective.IsRequired == true,
+                    TimeRemaining = status == MissionObjectiveState.Incomplete && definition.Timers.ContainsKey(objective.ObjectiveId) &&
+                                    Timers.TryGetValue(objective.ObjectiveId, out var timer)
+                        ? timer.SecondsRemaining(nowMs)
+                        : null
                 });
             }
 
@@ -81,6 +90,34 @@ namespace Rasa.Structures
                 });
 
             return info;
+        }
+    }
+
+    /// <summary>
+    /// A running objective timer in wall-clock mode (owner decision OD-5): the deadline is
+    /// <see cref="AnchorMs"/> + <see cref="RemainingMs"/> in Unix milliseconds and does not stop
+    /// while the character is offline. A disarmed timer keeps counting on the client but never
+    /// fails the objective (the planted bomb, build plan S5).
+    /// </summary>
+    public sealed class ObjectiveTimer
+    {
+        public long RemainingMs { get; set; }
+        public long AnchorMs { get; set; }
+        public bool Disarmed { get; set; }
+
+        public long DeadlineMs => AnchorMs + RemainingMs;
+
+        public bool HasExpired(long nowMs) => !Disarmed && nowMs >= DeadlineMs;
+
+        /// <summary>
+        /// The objective's timeRemaining in whole seconds: missionlog.pyo adds it to gameclient.Time(),
+        /// which gameuiutil.FormatTextForTime formats as seconds. Never 0 while the objective is
+        /// still incomplete, because the client would show it as already expired.
+        /// </summary>
+        public uint SecondsRemaining(long nowMs)
+        {
+            var remainingMs = DeadlineMs - nowMs;
+            return remainingMs <= 1000 ? 1u : (uint)System.Math.Min(uint.MaxValue, (remainingMs + 999) / 1000);
         }
     }
 }

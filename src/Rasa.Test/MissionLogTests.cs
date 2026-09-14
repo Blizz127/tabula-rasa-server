@@ -51,7 +51,7 @@ namespace Rasa.Test
     /// </summary>
     [TestClass]
     [DoNotParallelize]
-    public class MissionLogTests
+    public partial class MissionLogTests
     {
         private const uint AccountId = 10;
         private const uint CharacterId = 101;

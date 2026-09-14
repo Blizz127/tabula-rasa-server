@@ -84,9 +84,19 @@ namespace Rasa.Managers
 
             // Prerequisites gate each player's offer at dispense time (per-player state),
             // but the loader must know them; attach the live ones to their definitions.
+            foreach (var mission in missions.Values)
+            {
+                mission.Prerequisites.Clear();
+                mission.Timers.Clear();
+            }
+
             foreach (var prerequisite in Content.LivePrerequisites)
                 if (missions.TryGetValue(prerequisite.MissionId, out var mission))
                     mission.Prerequisites.Add(prerequisite);
+
+            foreach (var timer in Content.LiveTimers)
+                if (missions.TryGetValue(timer.MissionId, out var mission))
+                    mission.Timers[timer.ObjectiveId] = timer;
 
             // A shared context holds its placements for the life of the server; per-character channels
             // materialize their own when they are created (a later slice).

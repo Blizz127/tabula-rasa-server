@@ -56,6 +56,9 @@ namespace Rasa.Managers
 
         public readonly Dictionary<uint, Mission> LoadedMissions = new Dictionary<uint, Mission>();
 
+        // Unix time in milliseconds for objective timers (wall clock, OD-5); replaceable by tests.
+        public Func<long> NowMs { get; set; } = () => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
         // Installed by NpcManager so NPC overhead markers follow a player's mission state.
         public Action<Client, Creature> ConversationStatusRefresher { get; set; }
 
@@ -303,7 +306,12 @@ namespace Rasa.Managers
             foreach (var objective in repository.GetObjectives(characterId))
             {
                 if (missions.TryGetValue(objective.MissionId, out var mission))
+                {
                     mission.Objectives[objective.ObjectiveId] = (MissionObjectiveState)objective.Status;
+
+                    if (objective.TimerRemainingMs is { } remainingMs && objective.TimerAnchorMs is { } anchorMs)
+                        mission.Timers[objective.ObjectiveId] = new ObjectiveTimer { RemainingMs = remainingMs, AnchorMs = anchorMs, Disarmed = objective.TimerDisarmed };
+                }
                 else
                     Logger.WriteLog(LogType.Error, $"Character {characterId}: objective row {objective.MissionId}/{objective.ObjectiveId} has no mission row");
             }
@@ -352,12 +360,15 @@ namespace Rasa.Managers
                 if (added.Count == 0)
                     continue;
 
+                var nowMs = NowMs();
+                var timers = StartTimers(definition, added, nowMs);
+
                 try
                 {
                     using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
                     foreach (var objectiveId in added)
-                        unitOfWork.CharacterMissions.AddObjective(new CharacterMissionObjectiveEntry(player.Id, mission.MissionId, objectiveId, (uint)MissionObjectiveState.Incomplete));
+                        unitOfWork.CharacterMissions.AddObjective(ObjectiveRow(player.Id, mission.MissionId, objectiveId, timers));
                     unitOfWork.Complete();
                 }
                 catch (Exception e)
@@ -369,6 +380,8 @@ namespace Rasa.Managers
 
                 foreach (var objectiveId in added)
                     mission.Objectives[objectiveId] = MissionObjectiveState.Incomplete;
+                foreach (var (objectiveId, timer) in timers)
+                    mission.Timers[objectiveId] = timer;
 
                 // Nearby NPCs were introduced with the pre-reconciliation log.
                 RefreshRelatedNpcStatus(client, definition);
@@ -381,16 +394,27 @@ namespace Rasa.Managers
         {
             ReconcilePlayerMissions(client);
 
+            // Wall-clock timers keep running while the character is offline (OD-5); one that ran
+            // out meanwhile fails before the log is sent, so the client never receives an already
+            // expired running timer. The client has no log to update yet, so nothing is announced.
+            ExpireObjectiveTimers(client, false);
+
             // A player can log in already wearing what an equip-bound objective
             // needs; the level-triggered check covers that without any new equip.
             Content.OnEquipCommitted(client);
 
             var missionStatus = new Dictionary<uint, MissionInfo>();
+            var nowMs = NowMs();
 
             foreach (var mission in client.Player.Missions.Values)
             {
+                // Recv_MissionFailed pops a failed mission from the client's log, so a later log
+                // does not bring it back; the stored row only gates retries.
+                if (mission.State == MissionState.Failded)
+                    continue;
+
                 if (LoadedMissions.TryGetValue(mission.MissionId, out var definition))
-                    missionStatus[mission.MissionId] = mission.ToMissionInfo(definition);
+                    missionStatus[mission.MissionId] = mission.ToMissionInfo(definition, nowMs);
                 else
                     Logger.WriteLog(LogType.Error, $"Character {client.Player.Id}: saved mission {mission.MissionId} has no definition and is not sent");
             }
@@ -463,14 +487,32 @@ namespace Rasa.Managers
             if (definition.Prerequisites.Count == 0)
                 return true;
 
-            foreach (var group in definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup))
-                if (group.All(prerequisite =>
-                        player.Missions.TryGetValue(prerequisite.RequiredMissionId, out var progress) &&
-                        (uint)progress.State == prerequisite.RequiredState))
-                    return true;
-
-            return false;
+            return definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup).Any(group => group.All(prerequisite => Holds(player, prerequisite)));
         }
+
+        // NotAssigned means the character has no row for the required mission at all.
+        private static bool Holds(Manifestation player, NpcMissionPrerequisiteEntry prerequisite) =>
+            player.Missions.TryGetValue(prerequisite.RequiredMissionId, out var progress)
+                ? (uint)progress.State == prerequisite.RequiredState
+                : prerequisite.RequiredState == (uint)MissionState.NotAssigned;
+
+        /// <summary>
+        /// A failed mission may be taken again only when a satisfied prerequisite group names the mission
+        /// itself as failed ("I'll give you another shot", the 2005 retry of build plan S5); the new
+        /// acceptance replaces the failed row.
+        /// </summary>
+        public bool RetryAllowed(Manifestation player, Mission definition) =>
+            player.Missions.TryGetValue(definition.MissionId, out var progress) && progress.State == MissionState.Failded &&
+            definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup).Any(group =>
+                group.Any(prerequisite => prerequisite.RequiredMissionId == definition.MissionId && prerequisite.RequiredState == (uint)MissionState.Failded) &&
+                group.All(prerequisite => Holds(player, prerequisite)));
+
+        /// <summary>
+        /// True while the character's row for the mission keeps it from being offered or accepted:
+        /// active, completed, or failed without an allowed retry.
+        /// </summary>
+        public bool HasBlockingProgress(Manifestation player, Mission definition) =>
+            player.Missions.ContainsKey(definition.MissionId) && !RetryAllowed(player, definition);
 
         /// <summary>
         /// Offers a mission over the radio ("Headquarters"); the offer stays pending for this session until accepted.
@@ -482,7 +524,7 @@ namespace Rasa.Managers
 
             var player = client.Player;
 
-            if (player.Missions.ContainsKey(missionId))
+            if (HasBlockingProgress(player, definition))
                 return;
 
             player.PendingRadioOffers.Add(missionId);
@@ -510,8 +552,11 @@ namespace Rasa.Managers
             var missionId = definition.MissionId;
 
             // Active, or already completed: the log keeps completed missions so they are not re-offered.
-            if (player.Missions.ContainsKey(missionId))
+            // A failed mission is replaced only when its prerequisites allow the retry.
+            if (HasBlockingProgress(player, definition))
                 return false;
+
+            var replacesFailed = player.Missions.ContainsKey(missionId);
 
             // The client counts the entries it was sent, i.e. missions with definitions.
             // It shows its own ID_MISSION_MAX_COUNT_REACHED warning; the server
@@ -527,6 +572,9 @@ namespace Rasa.Managers
             foreach (var objective in definition.Objectives.Values.Where(objective => objective.RevealedOnAccept == true))
                 newMission.Objectives[objective.ObjectiveId] = MissionObjectiveState.Incomplete;
 
+            var nowMs = NowMs();
+            var timers = StartTimers(definition, newMission.Objectives.Keys, nowMs);
+
             var state = new ContentState(player);
             state.PlanMission(missionId, MissionState.Active);
             foreach (var objective in newMission.Objectives)
@@ -538,9 +586,12 @@ namespace Rasa.Managers
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
+                if (replacesFailed)
+                    unitOfWork.CharacterMissions.Delete(player.Id, missionId);
+
                 unitOfWork.CharacterMissions.Add(
                     new CharacterMissionEntry(player.Id, missionId, (uint)newMission.State, newMission.ChangeTime),
-                    newMission.Objectives.Select(objective => new CharacterMissionObjectiveEntry(player.Id, missionId, objective.Key, (uint)objective.Value)));
+                    newMission.Objectives.Keys.Select(objectiveId => ObjectiveRow(player.Id, missionId, objectiveId, timers)));
                 Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
@@ -551,8 +602,11 @@ namespace Rasa.Managers
                 return false;
             }
 
+            foreach (var (objectiveId, timer) in timers)
+                newMission.Timers[objectiveId] = timer;
+
             player.Missions[missionId] = newMission;
-            client.CallMethod(player.EntityId, new MissionGainedPacket(missionId, newMission.ToMissionInfo(definition)));
+            client.CallMethod(player.EntityId, new MissionGainedPacket(missionId, newMission.ToMissionInfo(definition, nowMs)));
             Content.Apply(client, reaction);
             Content.Present(client, reaction);
             RefreshRelatedNpcStatus(client, definition);
@@ -621,6 +675,11 @@ namespace Rasa.Managers
             var player = client.Player;
             var missionId = definition.MissionId;
             var revealed = new List<uint>();
+            var nowMs = NowMs();
+
+            // Out of time: the expiry step of this tick fails the objective instead.
+            if (mission.Timers.TryGetValue(objectiveId, out var runningTimer) && runningTimer.HasExpired(nowMs))
+                return;
 
             if (definition.Transitions.TryGetValue(objectiveId, out var next))
                 foreach (var revealedId in next)
@@ -629,6 +688,7 @@ namespace Rasa.Managers
 
             var changeTime = _now();
             var wasCompleteable = mission.IsCompleteable(definition);
+            var timers = StartTimers(definition, revealed, nowMs);
 
             var state = new ContentState(player);
             state.PlanObjective(missionId, objectiveId, MissionObjectiveState.Completed);
@@ -642,8 +702,10 @@ namespace Rasa.Managers
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
                 unitOfWork.CharacterMissions.UpdateObjectiveStatus(player.Id, missionId, objectiveId, (uint)MissionObjectiveState.Completed);
+                if (runningTimer != null)
+                    unitOfWork.CharacterMissions.SetObjectiveTimer(player.Id, missionId, objectiveId, null, null, false);
                 foreach (var revealedId in revealed)
-                    unitOfWork.CharacterMissions.AddObjective(new CharacterMissionObjectiveEntry(player.Id, missionId, revealedId, (uint)MissionObjectiveState.Incomplete));
+                    unitOfWork.CharacterMissions.AddObjective(ObjectiveRow(player.Id, missionId, revealedId, timers));
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)mission.State, changeTime);
                 Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
@@ -656,8 +718,11 @@ namespace Rasa.Managers
             }
 
             mission.Objectives[objectiveId] = MissionObjectiveState.Completed;
+            mission.Timers.Remove(objectiveId);
             foreach (var revealedId in revealed)
                 mission.Objectives[revealedId] = MissionObjectiveState.Incomplete;
+            foreach (var (revealedId, timer) in timers)
+                mission.Timers[revealedId] = timer;
             mission.ChangeTime = changeTime;
 
             client.CallMethod(player.EntityId, new ObjectiveCompletedPacket(missionId, objectiveId));
@@ -668,7 +733,7 @@ namespace Rasa.Managers
                 client.CallMethod(player.EntityId, new MissionCompleteablePacket((int)missionId, true));
 
             foreach (var revealedId in revealed)
-                client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition)));
+                client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition, nowMs)));
 
             // A just-revealed equip objective can already be satisfied by what the
             // player wears; the check is level-triggered and idempotent.
@@ -824,6 +889,147 @@ namespace Rasa.Managers
 
         #endregion
 
+        #region Objective timers
+
+        /// <summary>The running timers of newly revealed objectives that have a timer row, anchored now.</summary>
+        private static Dictionary<uint, ObjectiveTimer> StartTimers(Mission definition, IEnumerable<uint> objectiveIds, long nowMs)
+        {
+            var timers = new Dictionary<uint, ObjectiveTimer>();
+
+            foreach (var objectiveId in objectiveIds)
+                if (definition.Timers.TryGetValue(objectiveId, out var row))
+                    timers[objectiveId] = new ObjectiveTimer { RemainingMs = row.LimitSeconds * 1000L, AnchorMs = nowMs };
+
+            return timers;
+        }
+
+        private static CharacterMissionObjectiveEntry ObjectiveRow(uint characterId, uint missionId, uint objectiveId, IReadOnlyDictionary<uint, ObjectiveTimer> timers)
+        {
+            var row = new CharacterMissionObjectiveEntry(characterId, missionId, objectiveId, (uint)MissionObjectiveState.Incomplete);
+
+            if (timers.TryGetValue(objectiveId, out var timer))
+            {
+                row.TimerRemainingMs = timer.RemainingMs;
+                row.TimerAnchorMs = timer.AnchorMs;
+                row.TimerDisarmed = timer.Disarmed;
+            }
+
+            return row;
+        }
+
+        /// <summary>
+        /// The expiry step of the map tick: fails the timed objectives of this channel's players whose
+        /// deadline has passed. It runs after the tick's use recoveries, so an action that completes or
+        /// disarms by the deadline tick wins.
+        /// </summary>
+        public void ExpireObjectiveTimers(MapChannel mapChannel)
+        {
+            foreach (var client in mapChannel.ClientList.ToList())
+                if (client?.Player != null && IsInWorld(client))
+                    ExpireObjectiveTimers(client, true);
+        }
+
+        /// <summary>
+        /// Fails every expired, armed timer of an active mission, earliest deadline first. A timer whose
+        /// definition row is gone is left alone rather than failing an objective content no longer times.
+        /// </summary>
+        public void ExpireObjectiveTimers(Client client, bool announce)
+        {
+            var player = client.Player;
+            var nowMs = NowMs();
+
+            foreach (var mission in player.Missions.Values.Where(mission => mission.Timers.Count > 0).ToList())
+            {
+                if (!LoadedMissions.TryGetValue(mission.MissionId, out var definition))
+                    continue;
+
+                foreach (var (objectiveId, timer) in mission.Timers.OrderBy(entry => entry.Value.DeadlineMs).ThenBy(entry => entry.Key).ToList())
+                {
+                    if (mission.State != MissionState.Active)
+                        break;
+
+                    if (!timer.HasExpired(nowMs) || !definition.Timers.TryGetValue(objectiveId, out var row) ||
+                        !mission.Objectives.TryGetValue(objectiveId, out var status) || status != MissionObjectiveState.Incomplete)
+                        continue;
+
+                    FailTimedObjective(client, definition, mission, objectiveId, (ObjectiveTimerExpiry)row.OnExpire, announce);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Timer expiry (build plan 1.6): the objective fails, and with on_expire 2 the mission too; the
+        /// timer is cleared and the objective_failed then mission_failed rules commit in the same unit of
+        /// work. The client hears ObjectiveFailed before MissionFailed, which drops the mission from its log.
+        /// </summary>
+        private void FailTimedObjective(Client client, Mission definition, PlayerMission mission, uint objectiveId, ObjectiveTimerExpiry expiry, bool announce)
+        {
+            var player = client.Player;
+            var missionId = definition.MissionId;
+            var failsMission = expiry == ObjectiveTimerExpiry.FailObjectiveAndMission;
+            var newState = failsMission ? MissionState.Failded : mission.State;
+            var changeTime = _now();
+
+            var state = new ContentState(player);
+            state.PlanObjective(missionId, objectiveId, MissionObjectiveState.Failed);
+            if (failsMission)
+                state.PlanMission(missionId, MissionState.Failded);
+
+            var objectiveReaction = Content.Plan(new ContentEvent(ContentRuleEvent.ObjectiveFailed, player.MapContextId, missionId, objectiveId), state);
+            ContentReaction missionReaction = null;
+
+            try
+            {
+                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+                unitOfWork.CharacterMissions.UpdateObjectiveStatus(player.Id, missionId, objectiveId, (uint)MissionObjectiveState.Failed);
+                unitOfWork.CharacterMissions.SetObjectiveTimer(player.Id, missionId, objectiveId, null, null, false);
+                unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)newState, changeTime);
+                Content.Stage(objectiveReaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
+
+                if (failsMission)
+                {
+                    // Planned after the objective's reactions are staged, so its conditions see their fact changes.
+                    missionReaction = Content.Plan(new ContentEvent(ContentRuleEvent.MissionFailed, player.MapContextId, missionId), state);
+                    Content.Stage(missionReaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
+                }
+
+                unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"FailTimedObjective: could not save the expiry of {missionId}/{objectiveId} for character {player.Id}");
+                Logger.WriteLog(LogType.Error, e);
+                return;
+            }
+
+            mission.Objectives[objectiveId] = MissionObjectiveState.Failed;
+            mission.Timers.Remove(objectiveId);
+            mission.State = newState;
+            mission.ChangeTime = changeTime;
+
+            if (announce)
+            {
+                client.CallMethod(player.EntityId, new ObjectiveFailedPacket(missionId, objectiveId));
+
+                if (failsMission)
+                    client.CallMethod(player.EntityId, new MissionFailedPacket(missionId));
+            }
+
+            Content.Apply(client, objectiveReaction);
+            Content.Present(client, objectiveReaction);
+
+            if (missionReaction != null)
+            {
+                Content.Apply(client, missionReaction);
+                Content.Present(client, missionReaction);
+            }
+
+            RefreshRelatedNpcStatus(client, definition);
+        }
+
+        #endregion
+
         #region Conversation
 
         /// <summary>
@@ -839,10 +1045,10 @@ namespace Rasa.Managers
             {
                 client.Player.Missions.TryGetValue(definition.MissionId, out var progress);
 
-                if (progress == null)
+                if (progress == null || progress.State == MissionState.Failded)
                 {
                     if (definition.MissionGiver == creature.DbId && definition.IsDispensable &&
-                        PrerequisitesSatisfied(client.Player, definition))
+                        !HasBlockingProgress(client.Player, definition) && PrerequisitesSatisfied(client.Player, definition))
                         dispensable.Add(definition.MissionId, definition);
 
                     continue;
@@ -884,10 +1090,10 @@ namespace Rasa.Managers
             {
                 client.Player.Missions.TryGetValue(definition.MissionId, out var progress);
 
-                if (progress == null)
+                if (progress == null || progress.State == MissionState.Failded)
                 {
                     if (definition.MissionGiver == creature.DbId && definition.IsDispensable &&
-                        PrerequisitesSatisfied(client.Player, definition))
+                        !HasBlockingProgress(client.Player, definition) && PrerequisitesSatisfied(client.Player, definition))
                         available.Add(definition.MissionId);
 
                     continue;
@@ -942,13 +1148,18 @@ namespace Rasa.Managers
 
             var visited = new HashSet<Creature>();
 
+            // Missions whose prerequisites name this one can become offerable (or stop being so) too.
+            var related = LoadedMissions.Values
+                .Where(candidate => candidate == definition || candidate.Prerequisites.Any(prerequisite => prerequisite.RequiredMissionId == definition.MissionId))
+                .ToList();
+
             foreach (var cellSeed in client.Player.Cells)
             {
                 if (!mapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
                     continue;
 
                 foreach (var creature in cell.CreatureList.ToList())
-                    if (creature.Npc != null && visited.Add(creature) && definition.IsRelatedTo(creature))
+                    if (creature.Npc != null && visited.Add(creature) && related.Any(candidate => candidate.IsRelatedTo(creature)))
                         refresher(client, creature);
             }
         }

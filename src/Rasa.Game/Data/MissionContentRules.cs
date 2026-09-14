@@ -60,6 +60,9 @@ namespace Rasa.Data
             Prerequisites = true,
             // S4: kill bindings advance objective counters (MissionContentRuntime.OnKillBinding).
             Counters = true,
+            // S5: wall-clock objective timers fail their objective (and mission) on expiry
+            // (MissionManager.ExpireObjectiveTimers).
+            Timers = true,
             // S3: a per-character context gives each character its own MapChannel
             // (MapChannelManager.ChannelForEntry), populated from the context's placements.
             Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter }

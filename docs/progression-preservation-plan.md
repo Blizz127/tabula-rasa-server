@@ -114,6 +114,29 @@ the final-live rule.
   leaves, replacement on re-entry and the instance id sent at login. Full suite 815/815. Owner client
   check (two recruits at once, relog) is still to do.
 
+## S5 part 1–2 (facts, objective timers, failure and retry) status
+
+- Mechanisms only; no 1995/2005 rows are seeded yet. Content facts and the `fact_equals` / `has_logos` conditions
+  persist per character and context.
+- Objective timers run in wall-clock mode (OD-5). A timer starts when its objective is revealed (acceptance,
+  transition or reconciliation) and is stored as remaining ms plus a Unix-ms anchor. The client receives
+  `timeRemaining` in whole seconds, never 0 while the objective is open (original client:
+  `missionlog.pyo` adds it to `gameclient.Time()`, `gameuiutil.FormatTextForTime` formats seconds). Completion
+  clears the timer; a disarmed timer keeps counting on the client but never fails (B1-044: the countdown ran on
+  through the plant until the objective completed).
+- Expiry runs in the map tick after use recoveries, and at login before `MissionStatusInfo` (silently, because the
+  client has no log yet). It fails the objective (`ObjectiveFailed`) and, with `on_expire` 2, the mission
+  (`MissionFailed`, state 2 persisted), in one transaction with the `objective_failed` then `mission_failed` rules.
+  Completion after the deadline but before the tick is refused. Failed missions are left out of later
+  `MissionStatusInfo` because `Recv_MissionFailed` removed them from the client's log.
+- Prerequisite state `NotAssigned` means "no row". A failed mission is offered and accepted again only when a
+  satisfied prerequisite group names the mission itself as failed; acceptance replaces the failed row. NPC markers
+  of missions whose prerequisites name a changed mission are refreshed too.
+- The validator withholds a timer that can fail its mission when no prerequisite names that mission as failed, and a
+  timer on a non-abandonable mission. `MissionLogTests.Timers` covers start, whole-second rounding, completion,
+  failure order and persistence, once-only expiry, the retry and self-retry, offline expiry, and disarmed timers.
+  Full suite 835/835 under the .NET 5 SDK image.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0

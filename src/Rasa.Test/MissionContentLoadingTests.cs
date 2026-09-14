@@ -268,7 +268,8 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
-            Assert.IsFalse(implemented.Timers || implemented.Indicators || implemented.PlacementRespawn);
+            Assert.IsTrue(implemented.Timers);
+            Assert.IsFalse(implemented.Indicators || implemented.PlacementRespawn);
             Assert.IsTrue(MissionContentRules.BootcampEntryImplemented);
         }
 
@@ -317,6 +318,31 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new uint[] { 900650 }, validation.WithheldPlacements.ToArray());
             CollectionAssert.AreEquivalent(new uint[] { 9001 }, validation.WithheldRules.ToArray());
             Assert.AreEqual(4, validation.MissionGaps[900100].Count);
+        }
+
+        [TestMethod]
+        public void TimersThatCouldStrandTheCharacterAreWithheld()
+        {
+            var references = new References();
+            references.Missions[1990] = (7001, new uint[] { 1 });
+
+            var rows = new Rows();
+            // Fails the mission, and no mission is offered after this one failed.
+            rows.Timers.Add(new NpcMissionObjectiveTimerEntry { MissionId = 900300, ObjectiveId = 1, LimitSeconds = 600, OnExpire = (byte)ObjectiveTimerExpiry.FailObjectiveAndMission });
+            // Failing only the objective needs no retry, but the client forbids abandoning 1990.
+            rows.Timers.Add(new NpcMissionObjectiveTimerEntry { MissionId = 1990, ObjectiveId = 1, LimitSeconds = 60, OnExpire = (byte)ObjectiveTimerExpiry.FailObjective });
+            // A retry offered after 900100 fails makes its mission-failing timer valid.
+            rows.Prerequisites.Add(new NpcMissionPrerequisiteEntry { MissionId = 900200, OrGroup = 1, RequiredMissionId = 900100, RequiredState = (byte)MissionState.Failded });
+            rows.Timers.Add(new NpcMissionObjectiveTimerEntry { MissionId = 900100, ObjectiveId = 2, LimitSeconds = 600, OnExpire = (byte)ObjectiveTimerExpiry.FailObjectiveAndMission });
+
+            var validation = rows.Validate(ContentCapabilities.All, references);
+
+            CollectionAssert.AreEquivalent(new[]
+            {
+                "npc_mission_objective_timer 900300/1: timed objective 900300/1 can fail the mission but no retry is offered",
+                "npc_mission_objective_timer 1990/1: a non-abandonable mission cannot have a timer"
+            }, validation.Gaps.Select(gap => gap.ToString()).ToArray());
+            CollectionAssert.AreEquivalent(new[] { (900100u, 2u) }, validation.LiveTimers.Select(timer => (timer.MissionId, timer.ObjectiveId)).ToArray());
         }
 
         [TestMethod]

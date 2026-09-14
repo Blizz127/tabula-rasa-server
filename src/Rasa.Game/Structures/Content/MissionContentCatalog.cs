@@ -294,6 +294,16 @@ namespace Rasa.Structures.Content
 
                     if (!Defined<ObjectiveTimerExpiry>(timer.OnExpire))
                         gap($"unknown expiry {timer.OnExpire}");
+
+                    // A failure must not strand the character: some mission has to be offerable
+                    // after this one failed (build plan 1.5, the retry readiness rule).
+                    if ((ObjectiveTimerExpiry)timer.OnExpire == ObjectiveTimerExpiry.FailObjectiveAndMission &&
+                        !_c.Prerequisites.Any(prerequisite => prerequisite.RequiredMissionId == timer.MissionId &&
+                                                              (MissionState)prerequisite.RequiredState == MissionState.Failded))
+                        gap($"timed objective {timer.MissionId}/{timer.ObjectiveId} can fail the mission but no retry is offered");
+
+                    if (MissionRules.NonAbandonableMissions.Contains(timer.MissionId))
+                        gap("a non-abandonable mission cannot have a timer");
                 }
 
                 foreach (var indicator in _c.Indicators)
@@ -1079,5 +1089,6 @@ namespace Rasa.Structures.Content
 
         public IEnumerable<NpcMissionObjectiveBindingEntry> LiveBindings => Catalog.Bindings.Where(binding => !MissionGaps.ContainsKey(binding.MissionId));
         public IEnumerable<NpcMissionPrerequisiteEntry> LivePrerequisites => Catalog.Prerequisites.Where(prerequisite => !MissionGaps.ContainsKey(prerequisite.MissionId));
+        public IEnumerable<NpcMissionObjectiveTimerEntry> LiveTimers => Catalog.Timers.Where(timer => !MissionGaps.ContainsKey(timer.MissionId));
     }
 }

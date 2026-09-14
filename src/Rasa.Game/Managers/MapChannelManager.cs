@@ -370,6 +370,9 @@ namespace Rasa.Managers
                     // Area-bound mission objectives (no work in contexts without live content areas).
                     MissionContentManager.Instance.DoWork(mapChannel);
 
+                    // Objective timers run out after this tick's use recoveries (ActorActionManager above).
+                    MissionManager.Instance.ExpireObjectiveTimers(mapChannel);
+
                     // warn idle players and flag long-idle ones for removal below
                     ManifestationManager.Instance.CheckInactivity(mapChannel);
 

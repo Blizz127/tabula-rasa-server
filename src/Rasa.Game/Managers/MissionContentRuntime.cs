@@ -290,7 +290,7 @@ namespace Rasa.Managers
 
             if (!Missions.LoadedMissions.TryGetValue(action.MissionId, out var definition) ||
                 !definition.IsDispensable ||
-                player.Missions.ContainsKey(action.MissionId) ||
+                Missions.HasBlockingProgress(player, definition) ||
                 player.PendingRadioOffers.Contains(action.MissionId))
                 return;
 
