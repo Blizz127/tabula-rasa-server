@@ -12,11 +12,17 @@ using Rasa.Configuration.ContextSetup;
 using Rasa.Context.World;
 using Rasa.Data;
 using Rasa.Managers;
+using Rasa.Game;
+using Rasa.Game.Handlers;
+using Rasa.Memory;
+using Rasa.Packets;
+using Rasa.Packets.Protocol;
 using Rasa.Repositories.Char;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
 using Rasa.Repositories.World.MissionContent;
 using Rasa.Services.DbContext;
+using Rasa.Structures;
 using Rasa.Structures.Content;
 using Rasa.Structures.World;
 
@@ -218,7 +224,7 @@ namespace Rasa.Test
                 var references = new References();
                 references.Missions[900100] = (7001, new uint[] { 1 });
                 references.NotOfferable.Clear();
-                var content = new MissionContentManager(new Factory(connection));
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
 
                 Assert.AreEqual(1, content.Content.Catalog.RowCount);              // the binding
@@ -247,7 +253,7 @@ namespace Rasa.Test
             }, implemented.Events.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
-                ContentRuleAction.DispenseRadioMission, ContentRuleAction.GrantLogos,
+                ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
@@ -762,6 +768,126 @@ namespace Rasa.Test
             CollectionAssert.AreEqual(new uint[] { 900650 },
                 ContentMaterializer.PlacementsToSpawn(validation, 1985).Select(placement => placement.Id).ToArray());
             Assert.IsTrue(validation.WithheldPlacements.Any(id => id == 900652));
+        }
+
+        [TestMethod]
+        public void OfferMissionAtNpcOpensTheGiversOfferWindowWhenInRange()
+        {
+            WithLogger(() =>
+            {
+                using var connection = new SqliteConnection("Data Source=:memory:");
+                connection.Open();
+                using (var context = Context(connection))
+                {
+                    context.Database.EnsureCreated();
+                    context.NpcMissionEntries.Add(new NpcMissionEntry { Id = 900100, GiverId = 7001, ReciverId = 7001, Level = 1, GroupType = 1, CategoryId = 1, Comment = "fixture" });
+                    context.NpcMissionObjectiveEntries.Add(new NpcMissionObjectiveEntry { MissionId = 900100, ObjectiveId = 1, Ordinal = 1, IsRequired = true, RevealedOnAccept = true, Comment = "" });
+                    context.NpcMissionObjectiveConversationEntries.Add(new NpcMissionObjectiveConversationEntry { MissionId = 900100, ObjectiveId = 1, NpcPackageId = 2584, PlayerFlagId = 1 });
+                    context.ContentPlacementEntries.Add(new ContentPlacementEntry
+                        { Id = 900650, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Creature, CreatureId = 7001, Behavior = (byte)ContentPlacementBehavior.Stationary });
+                    context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9001, MapContextId = 1985, Event = (byte)ContentRuleEvent.MissionTurnedIn, MissionId = 900100 });
+                    context.ContentRuleActionEntries.Add(new ContentRuleActionEntry
+                        { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.OfferMissionAtNpc, MissionId = 900100, PlacementId = 900650 });
+                    context.SaveChanges();
+                }
+
+                var missions = new MissionManager(new Factory(connection));
+                missions.LoadMissions();
+                Assert.IsTrue(missions.LoadedMissions[900100].IsDispensable);
+
+                var references = new References();
+                references.NotOfferable.Clear();
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
+                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
+                Assert.AreEqual(0, content.Content.Gaps.Count, string.Join(" | ", content.Content.Gaps));
+
+                // The giver creature stands in the player's map, within conversation range.
+                var creature = new Creature { DbId = 7001, MapContextId = 1985, Position = new System.Numerics.Vector3(10, 0, 10), Npc = new Npc() };
+                EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
+                EntityManager.Instance.RegisterCreature(creature);
+                try
+                {
+                    var player = new Manifestation { MapContextId = 1985, Position = new System.Numerics.Vector3(12, 0, 10) };
+                    var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame, Player = player };
+
+                    var action = content.Content.Catalog.RuleActions[9001].Single();
+                    var reaction = new ContentReaction();
+                    reaction.Add(new[] { action });
+                    content.Present(client, reaction);
+
+                    var messages = DrainCallMethods(client);
+                    var converse = messages.Single(message => message.MethodId == GameOpcode.Converse);
+                    Assert.AreEqual(creature.EntityId, converse.EntityId);
+                }
+                finally
+                {
+                    EntityManager.Instance.UnregisterCreature(creature.EntityId);
+                    EntityManager.Instance.UnregisterEntity(creature.EntityId);
+                    EntityManager.Instance.UnregisterActor(creature.EntityId);
+                }
+            });
+        }
+
+        [TestMethod]
+        public void OfferMissionAtNpcIsSkippedWhenThePlayerIsOutOfConversationRange()
+        {
+            WithLogger(() =>
+            {
+                using var connection = new SqliteConnection("Data Source=:memory:");
+                connection.Open();
+                using (var context = Context(connection))
+                {
+                    context.Database.EnsureCreated();
+                    context.NpcMissionEntries.Add(new NpcMissionEntry { Id = 900100, GiverId = 7001, ReciverId = 7001, Level = 1, GroupType = 1, CategoryId = 1, Comment = "fixture" });
+                    context.NpcMissionObjectiveEntries.Add(new NpcMissionObjectiveEntry { MissionId = 900100, ObjectiveId = 1, Ordinal = 1, IsRequired = true, RevealedOnAccept = true, Comment = "" });
+                    context.NpcMissionObjectiveConversationEntries.Add(new NpcMissionObjectiveConversationEntry { MissionId = 900100, ObjectiveId = 1, NpcPackageId = 2584, PlayerFlagId = 1 });
+                    context.ContentPlacementEntries.Add(new ContentPlacementEntry
+                        { Id = 900650, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Creature, CreatureId = 7001, Behavior = (byte)ContentPlacementBehavior.Stationary });
+                    context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9001, MapContextId = 1985, Event = (byte)ContentRuleEvent.MissionTurnedIn, MissionId = 900100 });
+                    context.ContentRuleActionEntries.Add(new ContentRuleActionEntry
+                        { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.OfferMissionAtNpc, MissionId = 900100, PlacementId = 900650 });
+                    context.SaveChanges();
+                }
+
+                var missions = new MissionManager(new Factory(connection));
+                missions.LoadMissions();
+
+                var references = new References();
+                references.NotOfferable.Clear();
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
+                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
+
+                var creature = new Creature { DbId = 7001, MapContextId = 1985, Position = new System.Numerics.Vector3(10, 0, 10), Npc = new Npc() };
+                EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
+                EntityManager.Instance.RegisterCreature(creature);
+                try
+                {
+                    var player = new Manifestation { MapContextId = 1985, Position = new System.Numerics.Vector3(100, 0, 100) };
+                    var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame, Player = player };
+
+                    var action = content.Content.Catalog.RuleActions[9001].Single();
+                    var reaction = new ContentReaction();
+                    reaction.Add(new[] { action });
+                    content.Present(client, reaction);
+
+                    Assert.AreEqual(0, DrainCallMethods(client).Count);
+                }
+                finally
+                {
+                    EntityManager.Instance.UnregisterCreature(creature.EntityId);
+                    EntityManager.Instance.UnregisterEntity(creature.EntityId);
+                    EntityManager.Instance.UnregisterActor(creature.EntityId);
+                }
+            });
+        }
+
+        private static List<CallMethodMessage> DrainCallMethods(Client client)
+        {
+            var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(client);
+            var messages = new List<CallMethodMessage>();
+            while (queue.PopOutgoing() is ProtocolPacket protocol)
+                messages.Add((CallMethodMessage)protocol.Message);
+            return messages;
         }
     }
 }

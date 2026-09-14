@@ -155,6 +155,10 @@ namespace Rasa.Managers
                         Missions.DispenseRadioMission(client, action.MissionId, action.Forced);
                         break;
 
+                    case ContentRuleAction.OfferMissionAtNpc:
+                        OfferMissionAtNpc(client, action);
+                        break;
+
                     case ContentRuleAction.ForceConverseGreeting:
                         client.CallMethod(player.EntityId, new ForceConversePacket(action.GreetingId, action.NpcNameId));
                         break;
@@ -167,6 +171,42 @@ namespace Rasa.Managers
                         throw new InvalidOperationException($"content action {(ContentRuleAction)action.Action} has no handler");
                 }
             }
+        }
+
+        /// <summary>
+        /// Opens the mission-offer window of the action's NPC placement, as if the
+        /// player had initiated the conversation: Converse carries the MissionDispense
+        /// topic and forces it open. The catalog already validated that the placement
+        /// is the mission's giver creature; here the creature must exist in the
+        /// player's map and the player must be within conversation range, otherwise
+        /// the offer is skipped (the NPC's own dispense topic still offers it).
+        /// </summary>
+        private void OfferMissionAtNpc(Client client, ContentRuleActionEntry action)
+        {
+            var player = client.Player;
+
+            if (!MissionManager.IsInWorld(client) || !Content.Catalog.Placements.TryGetValue(action.PlacementId, out var placement))
+                return;
+
+            var creature = EntityManager.Instance.Creatures.Values.FirstOrDefault(c =>
+                c.DbId == placement.CreatureId && c.MapContextId == player.MapContextId);
+
+            if (creature?.Npc == null || !MissionManager.IsInConversationRange(player, creature))
+                return;
+
+            if (!Missions.LoadedMissions.TryGetValue(action.MissionId, out var definition) ||
+                !definition.IsDispensable ||
+                player.Missions.ContainsKey(action.MissionId) ||
+                player.PendingRadioOffers.Contains(action.MissionId))
+                return;
+
+            var convoData = new Dictionary<ConversationType, object>
+            {
+                { ConversationType.MissionDispense, new Dictionary<uint, MissionInfo> { { definition.MissionId, definition } } },
+                { ConversationType.ForceTopic, new ForceTopic(ConversationType.MissionDispense, (int)definition.MissionId) }
+            };
+
+            client.CallMethod(creature.EntityId, new ConversePacket(convoData));
         }
 
         /// <summary>

@@ -30,6 +30,7 @@ namespace Rasa.Data
             Actions = new HashSet<ContentRuleAction>
             {
                 ContentRuleAction.DispenseRadioMission,
+                ContentRuleAction.OfferMissionAtNpc,
                 ContentRuleAction.ForceConverseGreeting,
                 ContentRuleAction.TutorialNotification,
                 ContentRuleAction.GrantLogos
