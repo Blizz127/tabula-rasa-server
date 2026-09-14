@@ -213,7 +213,7 @@ namespace Rasa.Test
                     context.NpcMissionObjectiveEntries.Add(new NpcMissionObjectiveEntry { MissionId = 900100, ObjectiveId = 1, Ordinal = 1, IsRequired = true, RevealedOnAccept = true, Comment = "" });
                     context.NpcMissionObjectiveConversationEntries.Add(new NpcMissionObjectiveConversationEntry { MissionId = 900100, ObjectiveId = 1, NpcPackageId = 2584, PlayerFlagId = 1 });
                     context.NpcMissionObjectiveBindingEntries.Add(new NpcMissionObjectiveBindingEntry
-                        { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Kill, CreatureId = 7002, CounterId = 255 });
+                        { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.UseCompleted, CounterId = 255 });
                     context.SaveChanges();
                 }
 
@@ -228,16 +228,16 @@ namespace Rasa.Test
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
 
                 Assert.AreEqual(1, content.Content.Catalog.RowCount);              // the binding
-                CollectionAssert.AreEqual(new[] { "900100/1/0: binding kind Kill is not implemented" },
+                CollectionAssert.AreEqual(new[] { "900100/1/0: binding kind UseCompleted is not implemented", "900100/1/0: needs a usable placement" },
                     Messages(content.Content, NpcMissionObjectiveBindingEntry.TableName));
                 Assert.IsFalse(missions.LoadedMissions[900100].IsDispensable);
                 CollectionAssert.Contains(missions.LoadedMissions[900100].DefinitionGaps(),
-                    "npc_mission_objective_binding 900100/1/0: binding kind Kill is not implemented");
+                    "npc_mission_objective_binding 900100/1/0: binding kind UseCompleted is not implemented");
                 Assert.AreEqual(0, content.Content.LiveBindings.Count());
 
                 // Reloading clears gaps from the previous load rather than accumulating them.
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
-                Assert.AreEqual(1, missions.LoadedMissions[900100].ContentGaps.Count);
+                Assert.AreEqual(2, missions.LoadedMissions[900100].ContentGaps.Count);
             });
         }
 
@@ -245,7 +245,7 @@ namespace Rasa.Test
         public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill }, implemented.BindingKinds.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
@@ -254,7 +254,7 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
-                ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification
+                ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -264,8 +264,8 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
-            Assert.IsFalse(implemented.Counters || implemented.Timers || implemented.Indicators ||
-                           implemented.PlacementRespawn);
+            Assert.IsTrue(implemented.Counters);
+            Assert.IsFalse(implemented.Timers || implemented.Indicators || implemented.PlacementRespawn);
             Assert.IsTrue(MissionContentRules.BootcampEntryImplemented);
         }
 
@@ -740,15 +740,67 @@ namespace Rasa.Test
             rows.Actions.Add(new ContentRuleActionEntry { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.DispenseRadioMission, MissionId = 900100, Forced = true });
             // A binding of a kind S1 does not implement must still be withheld.
             rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
-                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Kill, CreatureId = 7001, CounterId = 255 });
+                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.UseCompleted, CounterId = 255 });
 
             var validation = rows.Validate(MissionContentRules.Implemented);
 
-            CollectionAssert.AreEqual(new[] { "npc_mission_objective_binding 900200/1/0: binding kind Kill is not implemented" },
+            CollectionAssert.AreEqual(new[]
+                {
+                    "npc_mission_objective_binding 900200/1/0: binding kind UseCompleted is not implemented",
+                    "npc_mission_objective_binding 900200/1/0: needs a usable placement"
+                },
                 validation.MissionGaps[900200].ToArray());
             Assert.AreEqual(0, validation.Gaps.Count(gap => gap.OwnerId == 900100), string.Join(" | ", validation.Gaps));
             CollectionAssert.AreEqual(new uint[] { 9001 }, validation.LiveRules.Select(rule => rule.Id).ToArray());
             Assert.AreEqual(1, validation.LiveBindings.Count());
+        }
+
+        [TestMethod]
+        public void OwnerConditionedPlacementsFollowTheOwnersCommittedStateInTheirInstanceOnly()
+        {
+            var rows = new Rows();
+            rows.MapSettings.Add(new ContentMapSettingEntry { MapContextId = 1985, Instancing = (byte)MapInstancing.PerCharacter });
+            rows.Conditions.Add(new ContentConditionEntry
+                { ConditionId = 900901, Kind = (byte)ContentConditionKind.ObjectiveStateIs, MissionId = 900100, ObjectiveId = 1, State = (uint)MissionObjectiveState.Completed });
+            rows.Placements.Add(new ContentPlacementEntry
+            {
+                Id = 900760, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Usable, EntityClassId = 7870, UsableKind = (byte)ContentUsableKind.Destroyable,
+                Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 2, HitPoints = 10, PresentConditionId = 900901
+            });
+            var validation = rows.Validate(MissionContentRules.Implemented);
+            Assert.AreEqual(0, validation.Gaps.Count, string.Join(" | ", validation.Gaps));
+
+            var instance = new MapChannel { MapInfo = new MapInfo(1985, "adv_bootcamp", 783, 4), OwnerCharacterId = 101, InstanceId = 2, ClientList = new List<Client>() };
+            var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+            client.Player.Id = 101;
+            client.Player.MapChannel = instance;
+            var mission = new PlayerMission { MissionId = 900100, State = MissionState.Active };
+            mission.Objectives[1] = MissionObjectiveState.Incomplete;
+            client.Player.Missions[900100] = mission;
+
+            ContentMaterializer.Materialize(instance, validation);
+            Assert.AreEqual(0, instance.ContentUsables.Count, "a conditioned placement waits for its owner");
+            ContentMaterializer.RefreshPresence(client, validation);
+            Assert.AreEqual(0, instance.ContentUsables.Count);
+
+            mission.Objectives[1] = MissionObjectiveState.Completed;
+            ContentMaterializer.RefreshPresence(client, validation);
+            ContentMaterializer.RefreshPresence(client, validation);
+            var spawned = instance.DynamicObjects.Single();
+            Assert.AreEqual(900760u, instance.ContentUsables[spawned.EntityId]);
+
+            // Another character standing in someone else's instance never drives its presence.
+            var visitor = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+            visitor.Player.Id = 102;
+            visitor.Player.MapChannel = instance;
+            ContentMaterializer.RefreshPresence(visitor, validation);
+            Assert.AreEqual(1, instance.ContentUsables.Count);
+
+            mission.Objectives[1] = MissionObjectiveState.Incomplete;
+            ContentMaterializer.RefreshPresence(client, validation);
+            Assert.AreEqual(0, instance.ContentUsables.Count);
+            Assert.AreEqual(0, instance.DynamicObjects.Count);
+            Assert.IsFalse(EntityManager.Instance.DynamicObjects.ContainsKey(spawned.EntityId));
         }
 
         [TestMethod]

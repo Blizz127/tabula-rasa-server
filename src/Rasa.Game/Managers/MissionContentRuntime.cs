@@ -113,6 +113,15 @@ namespace Rasa.Managers
                         reaction.GrantedLogos.Add((action.LogosId, (LogosGrantProtocol)action.LogosProtocol));
                         break;
 
+                    case ContentRuleAction.GrantRewards:
+                    {
+                        var experience = player.Level >= ManifestationManager.MaxPlayerLevel ? 0u : action.Experience;
+                        unitOfWork.Characters.StageRewardGrant(player.Id, action.Credits, experience);
+                        reaction.GrantedExperience += experience;
+                        reaction.GrantedCredits += action.Credits;
+                        break;
+                    }
+
                     default:
                         // The validator withholds rules with unimplemented actions.
                         throw new InvalidOperationException($"content action {(ContentRuleAction)action.Action} has no handler");
@@ -142,6 +151,22 @@ namespace Rasa.Managers
             // LogosStoneTabula replaces the client's whole list and shows nothing in chat.
             if (tabula)
                 client.CallMethod(player.EntityId, new LogosStoneTabulaPacket(player.Logos.ToList()));
+
+            if (reaction.GrantedCredits != 0)
+            {
+                player.Credits[CurencyType.Credits] += reaction.GrantedCredits;
+                client.CallMethod(player.EntityId, new UpdateCreditsPacket(CurencyType.Credits, player.Credits[CurencyType.Credits], 0));
+            }
+
+            // "You gained 500 experience points." then the level-up lines (A3-066).
+            if (reaction.GrantedExperience != 0)
+            {
+                player.Experience += reaction.GrantedExperience;
+                ManifestationManager.Instance.NotifyExperienceGained(client, reaction.GrantedExperience);
+            }
+
+            // Every committed change can move a placement's presence condition.
+            ContentMaterializer.RefreshPresence(client, Content);
         }
 
         /// <summary>
@@ -656,6 +681,7 @@ namespace Rasa.Managers
                 return;
 
             client.Player.LastContentSample = null;
+            ContentMaterializer.RefreshPresence(client, Content);
             React(client, new ContentEvent(ContentRuleEvent.EnteredMap, client.Player.MapContextId));
         }
 

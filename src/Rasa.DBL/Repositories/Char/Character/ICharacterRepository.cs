@@ -25,6 +25,8 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterLevel(uint id, byte level);
         // Staged: committed by the unit of work.
         void StageLevel(uint id, byte level);
+        /// <summary>Adds a content reward to the tracked row, on top of anything already staged in this unit of work.</summary>
+        void StageRewardGrant(uint id, int credits, uint experience);
         void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins);
         void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId);
         void UpdateCharacterActiveWeapon(uint id, byte activeWeapon);

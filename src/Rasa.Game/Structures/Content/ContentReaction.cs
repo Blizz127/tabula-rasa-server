@@ -89,6 +89,10 @@ namespace Rasa.Structures.Content
         // Filled by staging: the Logos actually granted (a character that already owns one is not granted it again).
         public List<(uint LogosId, LogosGrantProtocol Protocol)> GrantedLogos { get; } = new();
 
+        // Filled by staging: the experience and credits of grant_rewards actions.
+        public uint GrantedExperience { get; set; }
+        public int GrantedCredits { get; set; }
+
         public bool IsEmpty => Persistent.Count == 0 && Presentation.Count == 0;
 
         public static bool IsPersistent(ContentRuleAction action) => action is ContentRuleAction.GrantLogos or ContentRuleAction.GrantRewards

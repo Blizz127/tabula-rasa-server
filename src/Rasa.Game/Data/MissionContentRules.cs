@@ -19,7 +19,7 @@ namespace Rasa.Data
         /// </summary>
         public static readonly ContentCapabilities Implemented = new ContentCapabilities
         {
-            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit },
+            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill },
             Events = new HashSet<ContentRuleEvent>
             {
                 ContentRuleEvent.EnteredMap,
@@ -33,7 +33,8 @@ namespace Rasa.Data
                 ContentRuleAction.OfferMissionAtNpc,
                 ContentRuleAction.ForceConverseGreeting,
                 ContentRuleAction.TutorialNotification,
-                ContentRuleAction.GrantLogos
+                ContentRuleAction.GrantLogos,
+                ContentRuleAction.GrantRewards
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {
@@ -48,6 +49,8 @@ namespace Rasa.Data
             // Prerequisites gate each player's offer at dispense time
             // (MissionManager.PrerequisitesSatisfied), enforced per character.
             Prerequisites = true,
+            // S4: kill bindings advance objective counters (MissionContentRuntime.OnKillBinding).
+            Counters = true,
             // S3: a per-character context gives each character its own MapChannel
             // (MapChannelManager.ChannelForEntry), populated from the context's placements.
             Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter }

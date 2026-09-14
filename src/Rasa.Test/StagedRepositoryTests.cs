@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Sqlite;
@@ -124,6 +125,31 @@ namespace Rasa.Test
             Assert.AreEqual(555u, reloaded.CharacterInventoryEntries.Single().ItemId);
             Assert.AreEqual(2, reloaded.CharacterEntries.Single().Level);
             Assert.IsTrue(reloaded.GameAccountEntries.Single().CanSkipBootcamp);
+        }
+
+        [TestMethod]
+        public void RewardGrantsAddToRewardsAlreadyStagedInTheSameUnitAndRefuseOverflow()
+        {
+            using var connection = Database();
+            using var context = Context(connection);
+            var unit = Unit(context);
+
+            // A mission turn-in stages its absolute balances; a content grant in the same unit adds on top.
+            unit.Characters.UpdateCharacterRewards(101, 200, 0, 1250);
+            unit.Characters.StageRewardGrant(101, 50, 500);
+            unit.Characters.StageRewardGrant(101, 0, 500);
+            unit.Complete();
+
+            using (var reloaded = Context(connection))
+            {
+                var character = reloaded.CharacterEntries.Single();
+                Assert.AreEqual((250, 2250u), (character.Credit, character.Experience));
+            }
+
+            using var second = Context(connection);
+            var overflow = Unit(second);
+            Assert.ThrowsException<InvalidOperationException>(() => overflow.Characters.StageRewardGrant(101, int.MaxValue, 0));
+            Assert.ThrowsException<KeyNotFoundException>(() => overflow.Characters.StageRewardGrant(999, 1, 1));
         }
 
         [TestMethod]

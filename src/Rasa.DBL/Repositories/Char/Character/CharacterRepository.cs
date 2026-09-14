@@ -245,6 +245,22 @@ namespace Rasa.Repositories.Char.Character
             entry.Experience = experience;
         }
 
+        public void StageRewardGrant(uint id, int credits, uint experience)
+        {
+            var entry = _charContext.CharacterEntries.Find(id);
+
+            if (entry == null)
+                throw new KeyNotFoundException($"character {id} does not exist");
+
+            var newCredits = (long)entry.Credit + credits;
+            var newExperience = (long)entry.Experience + experience;
+            if (newCredits < 0 || newCredits > int.MaxValue || newExperience > uint.MaxValue)
+                throw new InvalidOperationException($"a reward grant would overflow character {id}'s balances");
+
+            entry.Credit = (int)newCredits;
+            entry.Experience = (uint)newExperience;
+        }
+
         public void StageLevel(uint id, byte level)
         {
             var entry = _charContext.CharacterEntries.Find(id);

@@ -21,16 +21,74 @@ namespace Rasa.Managers
         {
             var contextId = mapChannel.MapInfo?.MapContextId ?? 0;
 
+            // Placements with a presence condition wait for their owner (RefreshPresence).
             foreach (var placement in PlacementsToSpawn(content, contextId))
-            {
-                var creature = CreatureManager.Instance.CreatePlacedCreature(placement, mapChannel);
-
-                if (creature != null)
-                    CellManager.Instance.AddToWorld(mapChannel, creature);
-            }
+                if (placement.PresentConditionId == 0)
+                    SpawnCreature(mapChannel, placement);
 
             foreach (var placement in UsablesToSpawn(content, contextId))
-                SpawnUsable(mapChannel, placement);
+                if (placement.PresentConditionId == 0)
+                    SpawnUsable(mapChannel, placement);
+        }
+
+        private static void SpawnCreature(MapChannel mapChannel, ContentPlacementEntry placement)
+        {
+            var creature = CreatureManager.Instance.CreatePlacedCreature(placement, mapChannel);
+
+            if (creature == null)
+                return;
+
+            creature.ContentPlacementId = placement.Id;
+            CellManager.Instance.AddToWorld(mapChannel, creature);
+        }
+
+        /// <summary>
+        /// Spawns or removes the owner-conditioned placements of a private instance so that exactly those
+        /// whose present_condition_id holds in the owner's committed state exist (build plan S3 step 6:
+        /// the boss while its objective is incomplete, Youngblood once it is done). A dead creature
+        /// whose condition still holds is left for the corpse lifecycle; rebuilding restores it on the
+        /// next entry. Shared contexts have no owner and are never refreshed.
+        /// </summary>
+        public static void RefreshPresence(Client client, ContentValidation content)
+        {
+            var player = client?.Player;
+            var channel = player?.MapChannel;
+            if (channel?.MapInfo == null || !channel.IsPrivateInstance || channel.OwnerCharacterId != player.Id)
+                return;
+
+            var contextId = channel.MapInfo.MapContextId;
+            var state = new ContentState(player);
+
+            bool Present(ContentPlacementEntry placement) =>
+                content.Catalog.Conditions.TryGetValue(placement.PresentConditionId, out var condition) && state.Evaluate(condition);
+
+            var creatures = channel.MapCellInfo.Cells.Values.SelectMany(cell => cell.CreatureList).ToList();
+            foreach (var placement in PlacementsToSpawn(content, contextId).Where(placement => placement.PresentConditionId != 0))
+            {
+                var existing = creatures.FirstOrDefault(creature => creature.ContentPlacementId == placement.Id);
+                var present = Present(placement);
+
+                if (present && existing == null)
+                    SpawnCreature(channel, placement);
+                else if (!present && existing != null && existing.State != CharacterState.Dead)
+                    CellManager.Instance.RemoveCreatureFromWorld(channel, existing);
+            }
+
+            foreach (var placement in UsablesToSpawn(content, contextId).Where(placement => placement.PresentConditionId != 0))
+            {
+                var existing = channel.DynamicObjects.FirstOrDefault(obj =>
+                    channel.ContentUsables.TryGetValue(obj.EntityId, out var id) && id == placement.Id);
+                var present = Present(placement);
+
+                if (present && existing == null)
+                    SpawnUsable(channel, placement);
+                else if (!present && existing != null)
+                {
+                    channel.ContentUsables.Remove(existing.EntityId);
+                    channel.DynamicObjects.Remove(existing);
+                    CellManager.Instance.RemoveFromWorld(channel, existing);
+                }
+            }
         }
 
         /// <summary>

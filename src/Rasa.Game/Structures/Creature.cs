@@ -11,6 +11,8 @@ namespace Rasa.Structures
         public uint DbId { get; set; }
         /// <summary>The channel the creature was added to; two instances of a context hold different creatures.</summary>
         public MapChannel MapChannel { get; set; }
+        /// <summary>The content placement this creature was materialized from; 0 for spawn-pool and world creatures.</summary>
+        public uint ContentPlacementId { get; set; }
         // npc data (only if creature is a NPC)
         public Npc Npc { get; set; }
         // loot data (only if creature is harvestable)
