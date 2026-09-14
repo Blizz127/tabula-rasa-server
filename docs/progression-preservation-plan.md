@@ -238,6 +238,17 @@ the final-live rule.
   image. Owner client checks (build plan S5 steps 1–8, S6 steps 1–5) are still to do.
 - OD-25..OD-34 were decided by the agent on the owner's behalf because the owner asked the work to continue without
   pausing; they are marked `review_status: approved-by-agent-pending-owner-review` in the manifest.
+- Rogers at Alia Das (`GAP-ROGERS` closed, 2026-09-14, OD-35): `BootcampFixRogersTurnIn` (SQLite and MySQL, frozen
+  rows in `BootcampData/BootcampFixRogersTurnInRows.cs`; 2 manifest rows and 2 `changes` entries) seeds the reserved
+  creature 198514 Outpost Commander Rogers (name 2973; level 20 observed in B3-020; class 3846 and 1000 hp analogues
+  under OD-11), places him in shared context 1220 at the measured command-tent position (855.84, 294.14, 387.40)
+  ±1.5 m from the radar handset icon, rotation 250 deg ±30 inferred, stationary, package 116 original, always present
+  (placement 198684, position `npc.outpost_commander_rogers`), and changes the 1995/2005 receiver from emulator
+  creature 100 to 198514. Creature 100 (pre-D11 values, outside the reserved keys) and its spawnpool (counts 0/0) are
+  untouched. The scenario tests now turn 1995 and 2005 in at the placed Rogers (refused out of range, MissionComplete
+  marker, completion persisted). No appearance rows are seeded (`GAP-NPC-BODY`) and the turn-in pays nothing
+  (`GAP-S5-MISSION-REWARDS`). The segment-3 arrival draft still names creature 100 and placement 122150 and must be
+  rebased on 198514/198684. Full suite 846/846 under the .NET 5 SDK image.
 
 ## Boot-camp owner decisions
 
@@ -267,7 +278,8 @@ its evidence tier.
 | OD-31 2005 level (2026-09-14, agent, pending owner review) | Level 3 inferred; the hidden level-up experience is not modelled (`GAP-S5-HIDDEN-XP`) |
 | OD-32 Exit trigger (2026-09-14, agent, pending owner review) | Radius 12 m inferred; (1995,4) or (2005,4) Completed; transfer to 19852, then the skip flag |
 | OD-33 Level-1 outpost Thrax (2026-09-14, agent, pending owner review) | Seeded, guarding its spot, `creature_action` 33 and class 29769 analogues as the S4 Initiate |
-| OD-34 1995/2005 receiver (2026-09-14, agent, pending owner review) | Rogers (creature 100) as drafted; not rejected by the validator or `DefinitionGaps` |
+| OD-34 1995/2005 receiver (2026-09-14, agent, pending owner review) | Rogers (creature 100) as drafted; not rejected by the validator or `DefinitionGaps`; the receiver id is superseded by OD-35 |
+| OD-35 Rogers at Alia Das (2026-09-14, agent, pending owner review) | A reserved creature 198514 placed in context 1220 and recorded in the boot-camp manifest, with the 1995/2005 receiver changed from 100 by `BootcampFixRogersTurnIn`, instead of updating emulator row 100 from a new Wilderness manifest; no appearance rows |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

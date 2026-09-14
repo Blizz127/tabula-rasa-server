@@ -36,11 +36,12 @@ namespace Rasa.Test
 {
     /// <summary>
     /// Plays the seeded S5/S6 boot-camp content end to end against a world database migrated through
-    /// BootcampS5Reinforcements and BootcampS6ExitToAliaDas: Youngblood's 1995, the wounded soldier, Conrad's corpse,
-    /// the bomb and its detonation, Van Valkenberg and the exit pad (transfer to location 19852 and the account
-    /// skip flag), and the failure path with the 2005 retry and the preserved D13.4 quirk. The NPC placements cannot
-    /// be spawned without the creature seed, so the three conversation NPCs are registered by hand at their seeded
-    /// placement positions with the seeded packages; usables are materialized from the migrated rows.
+    /// BootcampS5Reinforcements, BootcampS6ExitToAliaDas and BootcampFixRogersTurnIn: Youngblood's 1995, the wounded
+    /// soldier, Conrad's corpse, the bomb and its detonation, Van Valkenberg and the exit pad (transfer to location 19852
+    /// and the account skip flag), the turn-in at Rogers in Alia Das, and the failure path with the 2005 retry and the
+    /// preserved D13.4 quirk. The NPC placements cannot be spawned without the creature seed, so the conversation NPCs
+    /// are registered by hand at their seeded placement positions with the seeded packages; usables are materialized
+    /// from the migrated rows.
     /// </summary>
     [TestClass]
     [DoNotParallelize]
@@ -52,6 +53,8 @@ namespace Rasa.Test
         private const uint CorpsePlacement = 198676;
         private const uint BombPlacement = 198677;
         private const uint WreckPlacement = 198678;
+        private const uint AliaDas = 1220;
+        private const uint RogersPlacement = 198684;
 
         private sealed class TestConfiguration : IDbContextConfigurationService
         {
@@ -210,6 +213,8 @@ namespace Rasa.Test
             typeof(Client).GetProperty(nameof(Client.AccountEntry)).SetValue(_client, new GameAccountEntry { Id = AccountId });
             _client.Player = new Manifestation { Id = CharacterId, Level = 2, MapContextId = Context, MapChannel = _instance, Position = Placement(198658) };
             _client.Player.Missions[1994] = new PlayerMission { MissionId = 1994, State = MissionState.Completed };
+            _client.Player.Credits[CurencyType.Credits] = 0;
+            _client.Player.Credits[CurencyType.Prestige] = 0;
             _instance.ClientList.Add(_client);
 
             _youngblood = Npc(198505, 198658, 2561);
@@ -244,18 +249,59 @@ namespace Rasa.Test
             return new Vector3((float)placement.PosX, (float)placement.PosY, (float)placement.PosZ);
         }
 
-        private Creature Npc(uint creatureId, uint placementId, uint package)
+        private Creature Npc(uint creatureId, uint placementId, uint package, MapChannel channel = null)
         {
-            Assert.AreEqual(creatureId, _content.Content.Catalog.Placements[placementId].CreatureId, $"placement {placementId}");
+            var seeded = _content.Content.Catalog.Placements[placementId];
+            Assert.AreEqual((creatureId, package), (seeded.CreatureId, seeded.NpcPackageId), $"placement {placementId}");
+            channel ??= _instance;
+            Assert.AreEqual(channel.MapInfo.MapContextId, seeded.MapContextId, $"placement {placementId}");
             var creature = new Creature
             {
-                DbId = creatureId, MapContextId = Context, MapChannel = _instance, Position = Placement(placementId),
+                DbId = creatureId, MapContextId = seeded.MapContextId, MapChannel = channel, Position = Placement(placementId),
                 Level = 10, State = CharacterState.Idle, Npc = new Npc { NpcPackageId = package }
             };
             EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
             EntityManager.Instance.RegisterCreature(creature);
             _npcs.Add(creature);
             return creature;
+        }
+
+        /// <summary>
+        /// Carries the recruit to the Alia Das arrival (the transfer itself is recorded, not performed, by the test hook) and
+        /// stands Rogers up from his seeded shared-context placement (BootcampFixRogersTurnIn, GAP-ROGERS).
+        /// </summary>
+        private Creature ArriveAtAliaDas()
+        {
+            var live = ContentMaterializer.PlacementsToSpawn(_content.Content, AliaDas).Single();
+            Assert.AreEqual((RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u), (live.Id, live.Behavior, live.PresentConditionId));
+
+            var wilderness = new MapChannel { MapInfo = new MapInfo(AliaDas, "adv_foreas_concordia_wilderness", 1556, 0), ClientList = new List<Client>() };
+            var arrival = _content.Content.Catalog.Locations[19852];
+            _instance.ClientList.Remove(_client);
+            wilderness.ClientList.Add(_client);
+            _client.Player.MapContextId = AliaDas;
+            _client.Player.MapChannel = wilderness;
+            _client.Player.Position = new Vector3((float)arrival.PosX, (float)arrival.PosY, (float)arrival.PosZ);
+            return Npc(198514, RogersPlacement, 116, wilderness);
+        }
+
+        // The recruit reports in to Rogers: refused from the arrival point, then the completion marker and the turn-in in range.
+        private void TurnInAtRogers(Creature rogers, uint missionId)
+        {
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[missionId].State);
+            _missions.CompleteNpcMission(_client, rogers.EntityId, missionId, null);
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[missionId].State, "out of conversation range at the arrival point");
+
+            _client.Player.Position = rogers.Position + new Vector3(1f, 0f, 0f);
+            Assert.IsTrue(_missions.TryGetConversationStatus(_client, rogers, out var status, out var ids));
+            Assert.AreEqual(ConversationStatus.MissionComplete, status);
+            CollectionAssert.AreEqual(new[] { missionId }, ids);
+
+            _missions.CompleteNpcMission(_client, rogers.EntityId, missionId, null);
+            Assert.AreEqual(MissionState.Completed, _client.Player.Missions[missionId].State, $"mission {missionId} was not turned in at Rogers");
+            Assert.IsFalse(_missions.TryGetConversationStatus(_client, rogers, out _, out _));
+            using var context = CharContext(_charConnection);
+            Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.CharacterId == CharacterId && m.MissionId == missionId).MissionState);
         }
 
         private DynamicObject Usable(uint placementId) =>
@@ -378,6 +424,11 @@ namespace Rasa.Test
             Assert.IsTrue(context.GameAccountEntries.Single(a => a.Id == AccountId).CanSkipBootcamp);
             var saved = context.CharacterEntries.Single(c => c.Id == CharacterId);
             Assert.AreEqual((1220u, 884.11, 305.8, 347.81), (saved.MapContextId, Math.Round(saved.CoordX, 2), Math.Round(saved.CoordY, 2), Math.Round(saved.CoordZ, 2)));
+
+            // Van Valkenberg is not the receiver; Rogers at Alia Das takes the turn-in (GAP-ROGERS closed).
+            _missions.CompleteNpcMission(_client, _vanValkenberg.EntityId, 1995, null);
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[1995].State);
+            TurnInAtRogers(ArriveAtAliaDas(), 1995);
         }
 
         [TestMethod]
@@ -426,6 +477,7 @@ namespace Rasa.Test
             TalkTo(_vanValkenberg, 2005, 4);
             Assert.AreEqual(MissionObjectiveState.Completed, Objective(2005, 4));
             Assert.IsTrue(Holds(198909), "the exit pad is armed by the retry's check-in");
+            TurnInAtRogers(ArriveAtAliaDas(), 2005);
         }
     }
 }

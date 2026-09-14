@@ -1361,6 +1361,53 @@
    ],
    "client": "1.16.5.0",
    "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.outpost_commander_rogers",
+   "map_context_id": 1220,
+   "x": 855.84,
+   "y": 294.14,
+   "z": 387.4,
+   "rotation": 4.3633,
+   "rotation_tier": "inferred",
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 0.3,
+    "rotation_deg": 30
+   },
+   "method": "X,Z: the yellow handset radar icon of Outpost Commander Rogers in the Alia Das command tent, located by template NCC on native frames with per-frame Wilderness radar matching (research/20260914-segment3-arrival/tools/npc_icons.py on work/rogers-radar.jsonl, check SEG3-01): n=19 from 19 player positions 3-20 m away (238.0-242.0), mean [855.84, 387.4], sd [0.39, 0.24]; +/-1.5 m for the radar match and icon centring. Identity: the player stands 1.8 m from this icon when the \"Outpost Commander Rogers\" nameplate, talk prompt and Mission Available window appear (B3-020/B3-021, SEG3-01), and moves to the second icon 13.8 m east when Langerman is targeted (B3-024). Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_foreas_concordia_wilderness.nav (sha256 a417669c715c2a32ba4e407479f5731fa9ec81622b63c8b9727da1ea8cc1abba) via research/20260914-bootcamp-s4/tools/navprobe (work/navprobe-input.txt -> work/navprobe-output.tsv): floor 294.32 at the point; local navmesh bias +0.10..+0.31 (tent #4385 base 294.14 vs 294.32; Waypoint and Footlocker markers) -> 294.14 +/-0.3. Rotation: he faces the camera at 243.533/246.467/247.467 with camera yaw 54/72/82 deg (SEG3-02), and stands at the entrance of the communication tent (#4385, yaw +90, extending east), so he faces west-south-west, out of the tent: 250 deg = 4.3633 rad (content_location convention), +/-30 deg; he may turn toward a talking player, which the footage cannot separate.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 240.0
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 243.5,
+     "event": "B3-020"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 244.2,
+     "event": "B3-021"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 246.467
+    }
+   ],
+   "anchors": [
+    "ArchHumTentCommunicationV01 map entity #4385, offset 385941, at (857.11,294.14,388.05) yaw +90, 1.43 m (research/20260913-bootcamp/map/decoded/adv_foreas_concordia_wilderness-entities.csv (sha256 a7b576df46410e461bcdf3d8ec961900177158b9535f377a345ebf81c83b05db))",
+    "ArchHumBaseHolosignHQ #4910 (856.10,294.02,379.73), 7.67 m",
+    "ArchHumGenObjWorkstation2m2mV01 #4861 (861.50,294.21,387.00), 5.67 m"
+   ],
+   "conflicts": [
+    "emulator spawnpool 100 (creature 100) at (870.0,294.21,385.5), counts 0/0: 14.29 m east, deep inside the tent where Langerman stands; the same value as the pre-D11 TaRapedia /loc (research/20260914-wilderness-missions chains.md row b) - not final-live",
+    "research/20260913-bootcamp spatial supplementary_commander_rogers (854.1,386.9) +/-5 m is the player fix, not the NPC; this record replaces it"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02 (about 2009-02-26)"
   }
  ]
 }

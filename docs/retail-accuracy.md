@@ -1309,5 +1309,6 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   the owner and await owner review.
 - Not reproduced: the 1995/2005 rewards, the hidden level-3-to-4 experience before Alia Das, a bomb inventory item,
   detonation damage, the reinforcement dropship, beam-in and walk-off, the unnamed reinforcements and other outpost
-  creatures, NPC appearance, and Rogers at Alia Das (1995 cannot be turned in yet). The D13.4 abandon quirk is kept.
-  Full suite 846/846.
+  creatures and NPC appearance. The D13.4 abandon quirk is kept. Rogers now stands in the Alia Das command tent
+  (`BootcampFixRogersTurnIn`: level observed, position measured, rotation inferred, class and health analogues) and
+  takes the 1995/2005 turn-in, which still pays nothing. Full suite 846/846.

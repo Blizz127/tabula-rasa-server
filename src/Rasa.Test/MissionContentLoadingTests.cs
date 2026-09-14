@@ -904,7 +904,7 @@ namespace Rasa.Test
                     reinforcements.Indicators.SelectMany(pair => pair.Value.Select(indicator => (pair.Key, indicator.IndicatorId, indicator.Show3d))).ToArray());
                 Assert.AreEqual((1994u, (byte)MissionState.Completed), (reinforcements.Prerequisites.Single().RequiredMissionId, reinforcements.Prerequisites.Single().RequiredState));
                 Assert.IsTrue(reinforcements.HasObjectiveConversation(2, 2584, 1) && reinforcements.HasObjectiveConversation(4, 2564, 1));
-                Assert.AreEqual((198505u, 100u), (reinforcements.MissionGiver, reinforcements.MissionReciver));
+                Assert.AreEqual((198505u, 198514u), (reinforcements.MissionGiver, reinforcements.MissionReciver));
 
                 // The retry: 1 -> 4 with the same bomb binding and timer; offered after a failed 1995 and again after its own failure.
                 var retry = missions.LoadedMissions[2005];
@@ -914,6 +914,7 @@ namespace Rasa.Test
                 CollectionAssert.AreEquivalent(new[] { ((byte)0, 1995u, (byte)MissionState.Failded), ((byte)0, 2005u, (byte)MissionState.NotAssigned), ((byte)1, 1995u, (byte)MissionState.Failded), ((byte)1, 2005u, (byte)MissionState.Failded) },
                     retry.Prerequisites.Select(prerequisite => (prerequisite.OrGroup, prerequisite.RequiredMissionId, prerequisite.RequiredState)).ToArray());
                 Assert.IsTrue(retry.HasObjectiveConversation(4, 2564, 1));
+                Assert.AreEqual(198514u, retry.MissionReciver);
                 Assert.AreEqual(0, retry.Indicators.Count);
 
                 // The usables and their conditions: the corpse while (1995,3) is open, the bomb while the dropship stands and one
@@ -928,6 +929,14 @@ namespace Rasa.Test
                     Assert.AreEqual((198907u, (byte)ContentPlacementBehavior.Stationary), (placements[id].PresentConditionId, placements[id].Behavior), $"placement {id}");
                 Assert.AreEqual(((byte)ContentPlacementBehavior.CreatureAi, 0u), (placements[198683].Behavior, placements[198683].PresentConditionId));
                 Assert.AreEqual((2584u, 2564u), (placements[198675].NpcPackageId, placements[198679].NpcPackageId));
+
+                // Rogers (BootcampFixRogersTurnIn, GAP-ROGERS): the 1995/2005 receiver stands live in shared Alia Das, always present.
+                Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1220));
+                Assert.IsFalse(validation.WithheldContexts.Contains(1220u));
+                var rogers = ContentMaterializer.PlacementsToSpawn(validation, 1220).Single();
+                Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
+                    (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));
+                Assert.AreEqual((855.84, 294.14, 387.4, 4.3633), (rogers.PosX, rogers.PosY, rogers.PosZ, rogers.Rotation));
 
                 var conditions = validation.Catalog.Conditions;
                 string Terms(uint conditionId) => string.Join(" | ", conditions[conditionId].Select(term =>

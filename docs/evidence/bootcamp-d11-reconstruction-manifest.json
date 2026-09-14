@@ -83,7 +83,7 @@
    "kind": "measurement",
    "era": "final_live",
    "member": "docs/evidence/bootcamp-d11-positions.json",
-   "note": "Curated boot-camp positions. S1/S2: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). S4 adds enemy standing positions from the client nameplate range readout (client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(distance)) plus radar player position and heading, the client map cursor readout for indicator 437, and Y from the heightmap or the derived adv_bootcamp navmesh (bias-calibrated against six references). Each position record states its method, uncertainty and frames. S5/S6 add radar objective-indicator icons told apart from creature pips by the client radar code (client/ui/radarwindow.pyo HandleUpdateObjectiveIndicators, _GetEntityRadarType), third-person camera-ray triangulation for the bomb, the nameplate range readout for the outpost Thrax, inferred reinforcement bearings on the pad, the original damaged-pad map anchor for the exit, and the Alia Das arrival from the wilderness radar texture with Y from the derived adv_foreas_concordia_wilderness navmesh."
+   "note": "Curated boot-camp positions. S1/S2: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). S4 adds enemy standing positions from the client nameplate range readout (client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(distance)) plus radar player position and heading, the client map cursor readout for indicator 437, and Y from the heightmap or the derived adv_bootcamp navmesh (bias-calibrated against six references). Each position record states its method, uncertainty and frames. S5/S6 add radar objective-indicator icons told apart from creature pips by the client radar code (client/ui/radarwindow.pyo HandleUpdateObjectiveIndicators, _GetEntityRadarType), third-person camera-ray triangulation for the bomb, the nameplate range readout for the outpost Thrax, inferred reinforcement bearings on the pad, the original damaged-pad map anchor for the exit, and the Alia Das arrival from the wilderness radar texture with Y from the derived adv_foreas_concordia_wilderness navmesh. The Rogers turn-in (GAP-ROGERS) adds his command-tent position in context 1220 from the yellow handset radar icon (template NCC with per-frame wilderness radar matching) with Y from the derived wilderness navmesh."
   },
   "official_notes:d13.4": {
    "kind": "official_notes",
@@ -127,7 +127,8 @@
      "min": 198500,
      "max": 198599
     }
-   }
+   },
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS)."
   },
   {
    "table": "content_area",
@@ -145,7 +146,8 @@
      "min": 198650,
      "max": 198899
     }
-   }
+   },
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition."
   },
   {
    "table": "content_condition",
@@ -9342,7 +9344,7 @@
      "reasoning": "\"Mission Completed: Capture the Flag\" (turned in to Youngblood, S4) and \"Mission Accepted: Calling for Reinforcements\" are contiguous chat lines after the 4.267 cut, and the opening text is spoken by the commander of the reclaimed outpost; the offer window itself is hidden"
     },
     "reciver_id": {
-     "value": 100,
+     "value": 198514,
      "tier": "inferred",
      "citations": [
       {
@@ -9362,9 +9364,13 @@
        "source": "video:8VXeKzGUv0c",
        "event": "B3-020",
        "t": 243.5
+      },
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
       }
      ],
-     "reasoning": "the finishing text speaks of Denzil's Caldera from outside and Van Valkenberg sends the recruit to Commander Rogers at Alia Das; the tracker still shows \"Calling for Reinforcements (complete)\" on arrival (not turned in); Outpost Commander Rogers is seen in the Alia Das command tent later. Creature 100 is the emulator-authored Rogers row (class 3846, level 5 vs observed 20, spawnpool 100 counts 0/0): GAP-ROGERS. Creature 100 exists in the world seed (Add_data_to_world creature preload, package corrected by CorrectRogersNpcPackage); neither the content validator nor Mission.DefinitionGaps checks the receiver, and the turn-in happens in context 1220 (owner decision OD-34)"
+     "reasoning": "the finishing text speaks of Denzil's Caldera from outside and Van Valkenberg sends the recruit to Commander Rogers at Alia Das; the tracker still shows \"Calling for Reinforcements (complete)\" on arrival (not turned in); Outpost Commander Rogers is seen in the Alia Das command tent later. The receiver was creature 100 as seeded by BootcampS5Reinforcements (OD-34); BootcampFixRogersTurnIn changed it to the reserved Rogers row 198514 (see changes): Creature 100 is the emulator-authored Rogers row (level 5, spawnpool 100 at (870, 385.5) with counts 0/0, where Langerman stands; pre-D11 TaRapedia values) and lies outside the reserved boot-camp keys, so it can neither be corrected in place by a boot-camp seed nor serve as evidence. The receiver is the reserved Rogers row 198514 (level 20 observed, B3-020), placed at his measured command-tent position in context 1220 (placement 198684), which closes GAP-ROGERS."
     },
     "level": {
      "value": 2,
@@ -10459,7 +10465,7 @@
      "reasoning": "OD-7 (approved 2026-09-14): the 1995 giver re-issues the task; never observed (no failure in any recording)"
     },
     "reciver_id": {
-     "value": 100,
+     "value": 198514,
      "tier": "inferred",
      "citations": [
       {
@@ -10471,7 +10477,7 @@
        "locator": "generated/client/language/english/missiontextlanguage.pyo @573932 21861 (2005 obj 4 conversation @2564) \"...Report in to Commander Rogers when you get there...\""
       }
      ],
-     "reasoning": "as 1995; GAP-ROGERS"
+     "reasoning": "as 1995: the reserved Rogers row 198514, changed from creature 100 by BootcampFixRogersTurnIn (see changes)"
     },
     "level": {
      "value": 3,
@@ -19135,6 +19141,318 @@
      "reasoning": "a world-fixed 3D handset marker floats over the pad while objective 4 is open"
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198514
+   },
+   "slice": "S6",
+   "migration": "BootcampFixRogersTurnIn",
+   "fields": {
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846 NPC_Human_Swapset_Male, augmentations [1,12,52,59]"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "counterpart": "NPC_Human_Swapset_Male (3846), the class of the boot-camp officer rows (McAllister, Delessio, Youngblood, Van Valkenberg) under OD-11",
+     "required_because": "Rogers must carry the NPC augmentation to be talked to and to receive 1995/2005; no client table or capture records his class (tan/khaki uniform, dark hair: B3-020)",
+     "decision": "OD-11"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "reasoning": "the AFS outpost commander at an AFS base; AFS NPCs use faction 1 in the world data"
+    },
+    "level": {
+     "value": 20,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ]
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846"
+      }
+     ],
+     "counterpart": "the boot-camp officer rows (1000), OD-11",
+     "required_because": "a placed creature needs health and no client table records NPC health",
+     "decision": "OD-11"
+    },
+    "name_id": {
+     "value": 2973,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @3764 2973 \"Outpost Commander Rogers\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "reasoning": "a stationary NPC: he stands at the command tent mouth throughout 238-248 s (SEG3-01/02)"
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "as run_speed"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-021",
+       "t": 244.2
+      }
+     ],
+     "reasoning": "a non-combat mission NPC who offers missions (B3-021); 0 (no action) is the evidenced value for non-combat NPCs (OD-23)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Outpost Commander Rogers",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198684
+   },
+   "slice": "S6",
+   "migration": "BootcampFixRogersTurnIn",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 198514,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded Rogers row, the 1995/2005 receiver"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 855.84,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.3
+     }
+    },
+    "pos_y": {
+     "value": 294.14,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.3
+     }
+    },
+    "pos_z": {
+     "value": 387.4,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.3
+     }
+    },
+    "rotation": {
+     "value": 4.3633,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "reasoning": "he faces the camera at camera yaws 54-82 deg (243.533-247.467, check SEG3-02) and stands in the west-facing entrance of the communication tent (map #4385): 250 deg +/-30 in the content_location convention; an NPC turning toward the talking player cannot be excluded"
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B3-020",
+       "t": 243.5
+      }
+     ],
+     "reasoning": "a stationary NPC at the tent mouth (SEG3-01/02)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "health comes from the creature row"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.outpost_commander_rogers"
+      }
+     ],
+     "reasoning": "no content item set"
+    },
+    "npc_package_id": {
+     "value": 116,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @5753 (429,4,116,1,1) -> 2263 and @6455 (508,8,116,1,1) -> 2244"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @28298 (1392,1,116,1,1) -> 12009 and @28325 (1393,1,116,1,1) -> 12017; objective bodies 12008/12016 place Rogers in the Alia Das command tent (docs/river-recon-client-evidence.md)"
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1220,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Outpost Commander Rogers (command tent)",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -19304,6 +19622,13 @@
    "what": "a separate skip-path destination",
    "reason": "S7 reuses this transfer destination; no skip destination evidence",
    "gap": "GAP-SKIP-GRANTS",
+   "slice": "S6"
+  },
+  {
+   "table": "creature_appearance",
+   "what": "appearance rows for Outpost Commander Rogers (198514)",
+   "reason": "no appearance source is identified; the officer set of emulator creature 100 is emulator-authored and not matched to his tan/khaki uniform (B3-020)",
+   "gap": "GAP-NPC-BODY",
    "slice": "S6"
   }
  ],
@@ -19496,12 +19821,14 @@
   },
   {
    "id": "GAP-ROGERS",
-   "summary": "The 1995 turn-in NPC Rogers is absent in context 1220; he is level 5 where footage shows 20. S5 names creature 100 as the 1995/2005 receiver (inferred, OD-34): the emulator row is class 3846, level 5 (observed 20, B3-020), spawnpool 100 counts 0/0, so 1995 stays \"(complete)\" and cannot be turned in yet.",
+   "summary": "Closed by BootcampFixRogersTurnIn (2026-09-14): the reserved creature 198514 (Outpost Commander Rogers, level 20 observed in B3-020; class 3846 and 1000 hp analogues under OD-11) is placed at his measured command-tent position in context 1220 (placement 198684, +/-1.5 m; rotation inferred, 250 deg +/-30; package 116 original) and is the 1995/2005 receiver (changed from emulator creature 100, see changes; OD-35). Emulator creature 100 and spawnpool 100 (counts 0/0) are unchanged and unused by the boot camp. Open: his appearance (GAP-NPC-BODY), the turn-in rewards (GAP-S5-MISSION-REWARDS), and the Wilderness arrival slice, whose draft names creature 100 and placement 122150.",
    "evidence": [
     "spawnpool 100 has counts 0/0 (read-only rasaworld.db)",
-    "footage B3-020 (Rogers level 20)"
+    "footage B3-020 (Rogers level 20)",
+    "docs/evidence/bootcamp-d11-positions.json npc.outpost_commander_rogers",
+    "src/Rasa.Test/BootcampReinforcementsScenarioTests.cs (1995/2005 turned in at the placed Rogers)"
    ],
-   "closes_with": "segment 3",
+   "closes_with": "closed by BootcampFixRogersTurnIn",
    "surfaced_by": [
     "manifest",
     "DefinitionGaps unaffected (the receiver exists as a row)"
@@ -19540,7 +19867,7 @@
   },
   {
    "id": "GAP-NPC-BODY",
-   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows.",
+   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows. S6: Outpost Commander Rogers (198514, tan/khaki uniform in B3-020) has no creature_appearance rows; the officer set of emulator creature 100 is emulator-authored and unmatched to the footage, so none is seeded.",
    "evidence": [
     "src/Rasa.Game/Managers/CreatureManager.cs:259-261 (random hues)",
     "footage A2-040, A3-028, A5-33, B2-012 (NPC appearance)"
@@ -19554,6 +19881,7 @@
     "S2",
     "S4",
     "S5",
+    "S6",
     "S8"
    ]
   },
@@ -19995,7 +20323,64 @@
    "decision": "OD-1"
   }
  ],
- "changes": [],
+ "changes": [
+  {
+   "date": "2026-09-14",
+   "migration": "BootcampFixRogersTurnIn",
+   "table": "npc_mission",
+   "key": {
+    "id": 1995
+   },
+   "field": "reciver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100 is the emulator-authored Rogers row (level 5, spawnpool 100 at (870, 385.5) with counts 0/0, where Langerman stands; pre-D11 TaRapedia values) and lies outside the reserved boot-camp keys, so it can neither be corrected in place by a boot-camp seed nor serve as evidence. The receiver is the reserved Rogers row 198514 (level 20 observed, B3-020), placed at his measured command-tent position in context 1220 (placement 198684), which closes GAP-ROGERS.",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "event": "B3-020",
+     "t": 243.5
+    },
+    {
+     "source": "video:8VXeKzGUv0c",
+     "event": "B3-021",
+     "t": 244.2
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-14",
+   "migration": "BootcampFixRogersTurnIn",
+   "table": "npc_mission",
+   "key": {
+    "id": 2005
+   },
+   "field": "reciver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100 is the emulator-authored Rogers row (level 5, spawnpool 100 at (870, 385.5) with counts 0/0, where Langerman stands; pre-D11 TaRapedia values) and lies outside the reserved boot-camp keys, so it can neither be corrected in place by a boot-camp seed nor serve as evidence. The receiver is the reserved Rogers row 198514 (level 20 observed, B3-020), placed at his measured command-tent position in context 1220 (placement 198684), which closes GAP-ROGERS.",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "event": "B3-020",
+     "t": 243.5
+    },
+    {
+     "source": "video:8VXeKzGUv0c",
+     "event": "B3-021",
+     "t": 244.2
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  }
+ ],
  "owner_decisions": [
   {
    "id": "OD-1",
@@ -20306,9 +20691,19 @@
    "default": "Rogers (creature 100) per build plan S5",
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
-   "choice": "Creature 100 (Outpost Commander Rogers, Wilderness) as drafted. It exists in the world seed; the validator and DefinitionGaps do not reject it. His level and spawn stay GAP-ROGERS.",
+   "choice": "Creature 100 (Outpost Commander Rogers, Wilderness) as drafted. It exists in the world seed; the validator and DefinitionGaps do not reject it. His level and spawn stay GAP-ROGERS. Superseded for the receiver id by OD-35 (creature 198514, 2026-09-14).",
    "approved_on": "2026-09-14",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S5/S6 seed, 2026-09-14): decided by the agent on the owner's behalf because the owner asked the work to continue without pausing; pending owner review"
+  },
+  {
+   "id": "OD-35",
+   "decision": "Rogers at Alia Das (GAP-ROGERS)",
+   "default": "Update emulator creature 100 in place and place it from a new Wilderness manifest (segment-3 arrival draft)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "A reserved boot-camp creature 198514 (level 20 observed; class 3846 and 1000 hp analogues under OD-11) placed at the measured command-tent position in context 1220 (placement 198684, stationary, package 116, always present), recorded in the boot-camp manifest as the closing step of GAP-ROGERS; BootcampFixRogersTurnIn inserts both and changes the 1995/2005 receiver from 100 to 198514. Creature 100 is outside the reserved keys and is left untouched; no appearance rows are seeded.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Rogers turn-in, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
   }
  ]
 }
