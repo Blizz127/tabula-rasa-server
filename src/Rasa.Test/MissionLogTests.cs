@@ -6,7 +6,14 @@ using System.Numerics;
 using System.Reflection;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Rasa.Config;
 using Rasa.Context.Char;
+using Rasa.Context.World;
+using Rasa.Configuration;
+using Rasa.Configuration.ContextSetup;
 using Rasa.Data;
 using Rasa.Game;
 using Rasa.Game.Handlers;
@@ -23,8 +30,11 @@ using Rasa.Repositories.Char.Character;
 using Rasa.Repositories.Char.CharacterMission;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
+using Rasa.Repositories.World.MissionContent;
+using Rasa.Services.DbContext;
 using Rasa.Structures;
 using Rasa.Structures.Char;
+using Rasa.Structures.Content;
 using Rasa.Structures.World;
 
 namespace Rasa.Test
@@ -68,11 +78,30 @@ namespace Rasa.Test
             }
         }
 
+        public class WorldUnitProxy : DispatchProxy
+        {
+            public SqliteWorldContext Context;
+            protected override object Invoke(MethodInfo method, object[] args)
+            {
+                switch (method.Name)
+                {
+                    case "get_MissionContent": return new MissionContentRepository(Context);
+                    case "Dispose": Context.Dispose(); return null;
+                    default: throw new NotSupportedException(method.Name);
+                }
+            }
+        }
+
         private sealed class Factory : IGameUnitOfWorkFactory
         {
             private readonly SqliteConnection _connection;
+            private readonly SqliteConnection _worldConnection;
             public bool FailNextComplete;
-            public Factory(SqliteConnection connection) => _connection = connection;
+            public Factory(SqliteConnection connection, SqliteConnection worldConnection)
+            {
+                _connection = connection;
+                _worldConnection = worldConnection;
+            }
             public ICharUnitOfWork CreateChar()
             {
                 var unit = DispatchProxy.Create<ICharUnitOfWork, UnitProxy>();
@@ -86,10 +115,28 @@ namespace Rasa.Test
                 };
                 return unit;
             }
-            public IWorldUnitOfWork CreateWorld() => throw new NotSupportedException();
+            public IWorldUnitOfWork CreateWorld()
+            {
+                var unit = DispatchProxy.Create<IWorldUnitOfWork, WorldUnitProxy>();
+                ((WorldUnitProxy)(object)unit).Context = WorldContext(_worldConnection);
+                return unit;
+            }
         }
 
+        private sealed class WorldTestConfiguration : IDbContextConfigurationService
+        {
+            private readonly SqliteConnection _connection;
+            public WorldTestConfiguration(SqliteConnection connection) => _connection = connection;
+            public void Configure(DbContextOptionsBuilder builder, DatabaseConnectionConfiguration configuration)
+                => builder.UseSqlite(_connection);
+        }
+
+        private static SqliteWorldContext WorldContext(SqliteConnection connection)
+            => new SqliteWorldContext(Options.Create(new DatabaseConfiguration()),
+                new WorldTestConfiguration(connection), new SqliteDbContextPropertyModifier());
+
         private SqliteConnection _connection;
+    private SqliteConnection _worldConnection;
         private Factory _factory;
         private MissionManager _missions;
         private NpcManager _npcs;
@@ -109,7 +156,9 @@ namespace Rasa.Test
             if (_oldLogger == null) Logger.UpdateConfig(new Logger.LoggerConfig { LogToFile = false });
             _connection = new SqliteConnection("Data Source=:memory:");
             _connection.Open();
-            _factory = new Factory(_connection);
+            _worldConnection = new SqliteConnection("Data Source=:memory:");
+            _worldConnection.Open();
+            _factory = new Factory(_connection, _worldConnection);
             _now = 1_700_000_000;
             _missions = new MissionManager(_factory, () => _now);
             _npcs = new NpcManager(_factory, _missions);
@@ -148,8 +197,11 @@ namespace Rasa.Test
                 EntityManager.Instance.UnregisterCreature(creature.EntityId);
                 EntityManager.Instance.UnregisterEntity(creature.EntityId);
             }
+            if (_equippedItem != null)
+                EntityManager.Instance.UnregisterItem(_equippedItem.EntityId);
             if (_oldLogger == null) typeof(Logger).GetProperty(nameof(Logger.Config)).SetValue(null, null);
             _connection.Dispose();
+            _worldConnection.Dispose();
         }
 
         // Giver 100 offers the mission; objective 5 completes at any NPC of package 2584
@@ -860,5 +912,110 @@ namespace Rasa.Test
             Assert.IsNull(packet.Rating);
             Assert.AreEqual(stream.Length, stream.Position);
         }
+
+        private sealed class ContentReferences : IContentReferences
+        {
+            public bool MapContextExists(uint mapContextId) => true;
+            public bool MissionExists(uint missionId) => true;
+            public bool ObjectiveExists(uint missionId, uint objectiveId) => true;
+            public uint MissionGiver(uint missionId) => GiverDbId;
+            public bool MissionOfferable(uint missionId) => true;
+            public bool CreatureExists(uint creatureId) => true;
+            public bool EntityClassExists(uint entityClassId) => true;
+            public bool ItemTemplateExists(uint itemTemplateId) => true;
+            public bool LogosExists(uint logosId) => true;
+            public bool HasLegacyWorldObjects(uint mapContextId) => false;
+        }
+
+        private const uint EquipMissionId = 7002;
+        private const uint EquipTemplateId = 123001;
+        private Item _equippedItem;
+
+        // Objective 2 of mission 7002 completes through an Equip content binding
+        // matching any equipped item; no conversation is bound.
+        private static Mission EquipDefinition()
+        {
+            var mission = new Mission(new NpcMissionEntry
+            {
+                Id = EquipMissionId, GiverId = GiverDbId, ReciverId = ReceiverDbId, Level = 1, GroupType = 1, CategoryId = 10000032, Comment = "equip fixture"
+            });
+            mission.Objectives[2] = new MissionObjectiveDefinition { ObjectiveId = 2, Ordinal = 1, IsRequired = true, RevealedOnAccept = true };
+            mission.RefreshDispenseObjectives();
+            return mission;
+        }
+
+        private MissionContentManager LoadEquipContent()
+        {
+            using (var context = WorldContext(_worldConnection))
+            {
+                context.Database.EnsureCreated();
+                context.NpcMissionObjectiveBindingEntries.Add(new NpcMissionObjectiveBindingEntry
+                    { MissionId = EquipMissionId, ObjectiveId = 2, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Equip, EquipMatch = 0, CounterId = 255 });
+                context.SaveChanges();
+            }
+
+            var content = new MissionContentManager(_factory) { Missions = _missions };
+            content.Load(() => new BootcampConfig(), new ContentReferences(), _missions.LoadedMissions);
+            _missions.Content = content;
+            return content;
+        }
+
+        [TestMethod]
+        public void EquipBindingCompletesAnObjectiveForTheCurrentlyEquippedItem()
+        {
+            _missions.LoadedMissions[EquipMissionId] = EquipDefinition();
+            var content = LoadEquipContent();
+
+            Accept(missionId: EquipMissionId);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[EquipMissionId].Objectives[2]);
+
+            // Nothing equipped yet: the level-triggered check is a no-op.
+            content.OnEquipCommitted(_client);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[EquipMissionId].Objectives[2]);
+
+            _client.Player.Inventory.EquippedInventory.AddRange(new ulong[22]);
+            _equippedItem = new Item { ItemTemplateId = EquipTemplateId };
+            EntityManager.Instance.RegisterItem(_equippedItem.EntityId, _equippedItem);
+            _client.Player.Inventory.EquippedInventory[1] = _equippedItem.EntityId;
+
+            content.OnEquipCommitted(_client);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[EquipMissionId].Objectives[2]);
+            var packets = Drain();
+            Assert.IsTrue(packets.Any(packet => packet is ObjectiveCompletedPacket completed && completed.MissionId == EquipMissionId && completed.ObjectiveId == 2),
+                "the objective completion was not announced");
+
+            // Idempotent: a second check after the drain sends no duplicate completion.
+            content.OnEquipCommitted(_client);
+            Assert.AreEqual(0, Drain().Count(packet => packet is ObjectiveCompletedPacket));
+
+            using var context = WeaponReloadPersistenceTests.Context(_connection);
+            var row = context.CharacterMissionObjectiveEntries.Single(entry =>
+                entry.CharacterId == CharacterId && entry.MissionId == EquipMissionId && entry.ObjectiveId == 2);
+            Assert.AreEqual((uint)MissionObjectiveState.Completed, row.Status);
+        }
+
+        [TestMethod]
+        public void EquipBindingSurvivesReconnectThroughReconciliation()
+        {
+            _missions.LoadedMissions[EquipMissionId] = EquipDefinition();
+            var content = LoadEquipContent();
+
+            Accept(missionId: EquipMissionId);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[EquipMissionId].Objectives[2]);
+
+            // The item was equipped in a previous session: on the next world entry
+            // SendMissionStatusInfo reconciles the saved log and the level-triggered
+            // check completes the objective from what is worn, with no new equip.
+            _client.Player.Inventory.EquippedInventory.AddRange(new ulong[22]);
+            _equippedItem = new Item { ItemTemplateId = EquipTemplateId };
+            EntityManager.Instance.RegisterItem(_equippedItem.EntityId, _equippedItem);
+            _client.Player.Inventory.EquippedInventory[1] = _equippedItem.EntityId;
+
+            _missions.SendMissionStatusInfo(_client);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[EquipMissionId].Objectives[2]);
+        }
+
     }
 }

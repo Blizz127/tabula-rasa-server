@@ -19,7 +19,7 @@ namespace Rasa.Data
         /// </summary>
         public static readonly ContentCapabilities Implemented = new ContentCapabilities
         {
-            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered },
+            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip },
             Events = new HashSet<ContentRuleEvent>
             {
                 ContentRuleEvent.EnteredMap,

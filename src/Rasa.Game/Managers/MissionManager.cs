@@ -368,6 +368,10 @@ namespace Rasa.Managers
         {
             ReconcilePlayerMissions(client);
 
+            // A player can log in already wearing what an equip-bound objective
+            // needs; the level-triggered check covers that without any new equip.
+            Content.OnEquipCommitted(client);
+
             var missionStatus = new Dictionary<uint, MissionInfo>();
 
             foreach (var mission in client.Player.Missions.Values)
@@ -593,6 +597,10 @@ namespace Rasa.Managers
 
             foreach (var revealedId in revealed)
                 client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition)));
+
+            // A just-revealed equip objective can already be satisfied by what the
+            // player wears; the check is level-triggered and idempotent.
+            Content.OnEquipCommitted(client);
 
             Content.Apply(client, reaction);
             Content.Present(client, reaction);

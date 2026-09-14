@@ -258,6 +258,8 @@ namespace Rasa.Managers
             ManifestationManager.Instance.UpdateStatsValues(client, false);
             ManifestationManager.Instance.NotifyEquipmentUpdate(client);
             client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
+
+            MissionContentManager.Instance.OnEquipCommitted(client);
         }
 
         public void RequestEquipWeapon(Client client, RequestEquipWeaponPacket packet)
@@ -279,6 +281,8 @@ namespace Rasa.Managers
                 return;
             if (packet.DestSlot == client.Player.ActiveWeapon)
                 ManifestationManager.Instance.RefreshArmedWeapon(client, previousWeaponEntityId);
+
+            MissionContentManager.Instance.OnEquipCommitted(client);
         }
 
         private static List<ulong> EquipmentSourceSlots(Client client, InventoryType type)

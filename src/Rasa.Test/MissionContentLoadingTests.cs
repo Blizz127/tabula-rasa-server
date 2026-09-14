@@ -245,7 +245,7 @@ namespace Rasa.Test
         public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip }, implemented.BindingKinds.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,

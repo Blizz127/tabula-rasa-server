@@ -210,6 +210,78 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Completes equip-bound objectives the player's currently equipped items satisfy.
+        /// Level-triggered: called after a successful equip commit, after objective reveals
+        /// and on reconnect reconciliation, so a matching item equipped before the objective
+        /// was revealed still counts and the check is idempotent.
+        /// </summary>
+        public void OnEquipCommitted(Client client)
+        {
+            var player = client.Player;
+
+            if (player == null || !MissionManager.IsInWorld(client))
+                return;
+
+            var equipped = EquippedTemplateIds(player);
+            if (equipped.Count == 0)
+                return;
+
+            foreach (var mission in player.Missions.Values)
+            {
+                if (mission.State != MissionState.Active || !Missions.LoadedMissions.TryGetValue(mission.MissionId, out var definition))
+                    continue;
+
+                foreach (var binding in definition.Bindings)
+                {
+                    if ((ObjectiveBindingKind)binding.Kind != ObjectiveBindingKind.Equip ||
+                        !mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) ||
+                        status != MissionObjectiveState.Incomplete)
+                        continue;
+
+                    if (EquipBindingMatches(binding, equipped))
+                        Missions.CompleteBoundObjective(client, mission.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Equip);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The item-template ids of everything the player counts as equipped: the
+        /// equipment slots and the weapon drawer.
+        /// </summary>
+        private static HashSet<uint> EquippedTemplateIds(Manifestation player)
+        {
+            var result = new HashSet<uint>();
+
+            foreach (var entityId in player.Inventory.EquippedInventory.Concat(player.Inventory.WeaponDrawer))
+            {
+                var item = EntityManager.Instance.GetItem(entityId);
+                if (item != null)
+                    result.Add(item.ItemTemplateId);
+            }
+
+            return result;
+        }
+
+        private bool EquipBindingMatches(NpcMissionObjectiveBindingEntry binding, HashSet<uint> equipped)
+        {
+            switch (binding.EquipMatch)
+            {
+                case 0:     // any equip
+                    return equipped.Count > 0;
+
+                case 1:     // a specific item template
+                    return equipped.Contains(binding.ItemTemplateId);
+
+                case 2:     // any template of an item set
+                    return Content.Catalog.ItemSets.TryGetValue(binding.ItemSetId, out var entries) &&
+                           entries.Any(set => equipped.Contains(set.ItemTemplateId));
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Reacts to an event that has no transaction of its own, such as entering a map.
         /// </summary>
         public void React(Client client, ContentEvent contentEvent)
