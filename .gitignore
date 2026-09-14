@@ -239,3 +239,6 @@ src/Rasa.DBL/databasesettings.env.json
 
 # Local publish output (dotnet publish -o out\auth / out\game)
 out/
+
+# Navmeshes are derived from the client map and mesh assets and stay outside Git (GameDataConfig.NavMeshPath).
+/navmesh/

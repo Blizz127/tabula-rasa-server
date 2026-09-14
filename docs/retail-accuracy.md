@@ -1268,3 +1268,18 @@ doubles experience; a streak ends 15 s after the last kill (bounded to 12.5–16
 final-week cave-fight timeline (A3-081 to A4-28) is reproduced exactly by `KillRewardTests`.
 Level-difference, squad, partial-credit and crit-kill modifiers and original loot tables remain
 gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
+
+## 2026-09-14 UTC — Private boot-camp instances, S4 mechanisms, fork navmesh work
+
+- **S3:** context 1985 is a per-character instance; see
+  [progression-preservation-plan.md](progression-preservation-plan.md#s3-private-instances-status).
+- **S4 mechanisms:** kill bindings with objective counters, staged `grant_rewards`, and owner-conditioned
+  placement presence in instances are implemented. No mission 1994 content is seeded yet.
+- **Fork work merged (code only):** EllimistArcade's commits after `369a663` bring per-map Detour
+  navmeshes built from the client's own terrain heightmaps and collision volumes (creatures path on the
+  mesh instead of floating through rock), crafting stations placed at the client's `CRAFTING_STATION`
+  markers (recipes still decline), and item repair `ItemStatus`. The wander pacing of `c5634b9` (20 m,
+  1.6 m/s strolls, 12–40 s idle) is emulator tuning with no retail source. The 328 MB of built `.nav`
+  files are derived client assets and stay outside Git (a copy is at
+  `/home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh`; `GameDataConfig.NavMeshPath`, default `navmesh`).
+  Without the files, creatures keep straight-line movement. Full suite 825/825.
