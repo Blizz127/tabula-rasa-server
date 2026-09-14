@@ -28,6 +28,11 @@ namespace Rasa.Structures.Content
 
         public void PlanLogos(uint logosId) => _logos.Add(logosId);
 
+        private readonly Dictionary<(uint Mission, uint Objective, byte Counter), int> _counters = new();
+
+        public void PlanCounter(uint missionId, uint objectiveId, byte counterId, int value)
+            => _counters[(missionId, objectiveId, counterId)] = value;
+
         public MissionState? MissionState(uint missionId)
         {
             if (_missions.TryGetValue(missionId, out var planned))

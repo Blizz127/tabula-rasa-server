@@ -11,6 +11,7 @@ namespace Rasa.Managers
     using Packets.Game.Server;
     using Packets.LootDispenser.Server;
     using Packets.MapChannel.Client;
+    using Packets.Mission.Server;
     using Packets.MapChannel.Server;
     using Repositories.Char;
     using Structures;
@@ -540,6 +541,60 @@ namespace Rasa.Managers
 
                 Missions.CompleteBoundObjective(sourceClient, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Hit);
             }
+        }
+
+        /// <summary>
+        /// Advances a kill-bound objective's counter by one and completes the objective
+        /// when the counter reaches its target. Counter rows come from
+        /// npc_mission_objective_counter (initial/target); the client sees the same values
+        /// through UpdateObjectiveCounter and the mission-log CounterDict.
+        /// </summary>
+        public void OnKillBinding(Client sourceClient, uint missionId, uint objectiveId, ObjectiveBindingKind kind)
+        {
+            var player = sourceClient.Player;
+
+            if (!Missions.LoadedMissions.TryGetValue(missionId, out var definition))
+                return;
+
+            var counter = Content.Catalog.Counters.FirstOrDefault(entry =>
+                entry.MissionId == missionId && entry.ObjectiveId == objectiveId);
+
+            if (counter == null)
+            {
+                // No counter rows: a single kill completes the objective.
+                Missions.CompleteBoundObjective(sourceClient, missionId, objectiveId, kind);
+                return;
+            }
+
+            var value = player.Missions.TryGetValue(missionId, out var mission) &&
+                        mission.Counters.TryGetValue((objectiveId, counter.CounterId), out var current)
+                ? current + 1
+                : counter.InitialValue + 1;
+
+            var state = new ContentState(player);
+            state.PlanCounter(missionId, objectiveId, counter.CounterId, value);
+
+            try
+            {
+                using var unitOfWork = Missions.GameUnitOfWorkFactoryForContent.CreateChar();
+                unitOfWork.CharacterMissions.UpsertCounter(player.Id, missionId, objectiveId, counter.CounterId, value);
+                unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"OnKillBinding: could not save counter {missionId}/{objectiveId}/{counter.CounterId} for character {player.Id}");
+                Logger.WriteLog(LogType.Error, e);
+                return;
+            }
+
+            if (mission != null)
+                mission.Counters[(objectiveId, counter.CounterId)] = value;
+
+            sourceClient.CallMethod(player.EntityId, new UpdateObjectiveCounterPacket(
+                missionId, objectiveId, counter.CounterId, value, counter.InitialValue, counter.TargetValue));
+
+            if (value >= counter.TargetValue)
+                Missions.CompleteBoundObjective(sourceClient, missionId, objectiveId, kind);
         }
 
         /// <summary>

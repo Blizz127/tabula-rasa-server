@@ -16,6 +16,8 @@ namespace Rasa.Structures
         public MissionState State { get; set; }
         public uint ChangeTime { get; set; }
         public Dictionary<uint, MissionObjectiveState> Objectives { get; } = new();
+        // (objectiveId, counterId) -> current value; loaded with the mission log.
+        public Dictionary<(uint ObjectiveId, byte CounterId), int> Counters { get; } = new();
 
         public bool IsInLog => State == MissionState.Active || State == MissionState.Success;
 
