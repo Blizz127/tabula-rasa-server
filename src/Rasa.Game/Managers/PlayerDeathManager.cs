@@ -24,10 +24,14 @@ namespace Rasa.Managers
         public ulong SourceId { get; }
         public IReadOnlyList<HospitalData> Hospitals { get; }
 
-        public PlayerDeathOffer(ulong sourceId, IReadOnlyList<HospitalData> hospitals)
+        /// <summary>Whether revival brings Resuscitation Trauma (level and cause of this death).</summary>
+        public bool PenaltyApplies { get; }
+
+        public PlayerDeathOffer(ulong sourceId, IReadOnlyList<HospitalData> hospitals, bool penaltyApplies = false)
         {
             SourceId = sourceId;
             Hospitals = hospitals;
+            PenaltyApplies = penaltyApplies;
         }
     }
 
@@ -44,10 +48,16 @@ namespace Rasa.Managers
         public static PlayerDeathManager Instance => Singleton.Value;
 
         private readonly Action<Client, CharacterUpdate, object> _persist;
+        private readonly Action<Client> _refreshAttributes;
 
-        public PlayerDeathManager(Action<Client, CharacterUpdate, object> persist)
+        public PlayerDeathManager(Action<Client, CharacterUpdate, object> persist, Action<Client> refreshAttributes = null)
         {
             _persist = persist ?? throw new ArgumentNullException(nameof(persist));
+            _refreshAttributes = refreshAttributes ?? (client =>
+            {
+                ManifestationManager.Instance.UpdateStatsValues(client, false);
+                client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
+            });
         }
 
         /// <summary>
@@ -83,7 +93,11 @@ namespace Rasa.Managers
                 return;
 
             var hospitals = OfferedHospitals(player);
-            player.DeathOffer = new PlayerDeathOffer(source?.EntityId ?? 0, hospitals);
+            // Help text 5687: trauma follows a death to a non-player character or to a player of a
+            // clan at war, never a duel. Player kills are not implemented, so only NPC deaths count;
+            // gameconstants DEATH_PENALTY_MIN_LEVEL keeps it from characters below level 5.
+            var penalty = player.Level >= DeathPenaltyRules.MinLevel && !(source is Manifestation);
+            player.DeathOffer = new PlayerDeathOffer(source?.EntityId ?? 0, hospitals, penalty);
 
             // Owner only. A non-empty list opens Hospital Selection (A4-36, B3-043); canRevive
             // stays 0 because no ally revival exists here.
@@ -134,12 +148,15 @@ namespace Rasa.Managers
                 Logger.WriteLog(LogType.Error, $"{player.Name} died on map {player.MapChannel.MapInfo?.MapContextId} with no hospital to offer; reviving in place.");
 
             // "The medical techs will revive and restore you to full health" (tutorial 1582).
-            // Armor is restored with it (inferred); power and adrenaline are left as they were.
+            // Armor is restored with it (inferred). "Upon resuscitation after death, the entire
+            // adrenaline bar is drained" (TaRapedia Adrenaline, 2007-11-07, fan-observed).
             player.State = CharacterState.Normal;
             if (player.Attributes.TryGetValue(Attributes.Health, out var health))
                 health.Current = health.CurrentMax;
             if (player.Attributes.TryGetValue(Attributes.Armor, out var armor))
                 armor.Current = armor.CurrentMax;
+            if (player.Attributes.TryGetValue(Attributes.Chi, out var adrenaline))
+                adrenaline.Current = 0;
 
             var mapChannel = player.MapChannel;
             CellManager.Instance.CellCallMethod(mapChannel, player, new RevivedPacket(0));
@@ -147,9 +164,84 @@ namespace Rasa.Managers
                 CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateHealthPacket(health, 0));
             if (armor != null)
                 CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateArmorPacket(armor, 0));
+            if (adrenaline != null)
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateChiPacket(adrenaline, player.EntityId));
+
+            if (offer.PenaltyApplies)
+                ApplyTrauma(client);
 
             if (hospital != null)
                 _persist(client, CharacterUpdate.Position, null);
+        }
+
+        /// <summary>
+        /// Resuscitation Trauma after a revival: 20% of the attributes for two minutes, and each
+        /// further resuscitation while traumatized adds 20% and two minutes, up to 60% and six minutes
+        /// (tooltip 506, help 5687, D10.6 live notes). The no-heal effect runs 30 s from each one.
+        /// </summary>
+        private void ApplyTrauma(Client client)
+        {
+            var player = client.Player;
+            var mapChannel = player.MapChannel;
+
+            var existing = player.ActiveEffects.Values.FirstOrDefault(effect => effect.TypeId == DeathPenaltyRules.RezSicknessEffectType);
+            var stacks = existing == null ? 1 : Math.Min(DeathPenaltyRules.MaxStacks, player.TraumaStacks + 1);
+            var duration = existing == null
+                ? DeathPenaltyRules.DurationPerStackMs
+                : DeathPenaltyRules.NextDurationMs(existing.Duration - existing.EffectTime);
+
+            // Replace rather than detach: detaching would end the trauma and restore the attributes.
+            ReplaceEffect(mapChannel, player, existing);
+            ReplaceEffect(mapChannel, player, player.ActiveEffects.Values.FirstOrDefault(effect => effect.TypeId == DeathPenaltyRules.RezSicknessNoHealEffectType));
+
+            player.TraumaStacks = stacks;
+            GameEffectManager.Instance.AttachTimedDebuff(mapChannel, player, DeathPenaltyRules.RezSicknessEffectType, (uint)stacks, duration);
+            GameEffectManager.Instance.AttachTimedDebuff(mapChannel, player, DeathPenaltyRules.RezSicknessNoHealEffectType, 1, DeathPenaltyRules.NoHealDurationMs);
+            _refreshAttributes(client);
+        }
+
+        private static void ReplaceEffect(MapChannel mapChannel, Manifestation player, GameEffect effect)
+        {
+            if (effect == null || !player.ActiveEffects.Remove(effect.EffectId))
+                return;
+            CellManager.Instance.CellCallMethod(mapChannel, player, new GameEffectDetachedPacket { EffectId = effect.EffectId });
+        }
+
+        /// <summary>The RezSickness effect ran out: the attributes come back.</summary>
+        public void OnTraumaEnded(MapChannel mapChannel, Manifestation player)
+        {
+            player.TraumaStacks = 0;
+            var client = mapChannel?.ClientList?.FirstOrDefault(candidate => candidate?.Player == player);
+            if (client != null)
+                _refreshAttributes(client);
+        }
+
+        /// <summary>
+        /// "Upon first entering a zone, a character is given the nearest hospital point" (TaRapedia
+        /// Hospital, December 2007, fan-observed); consistent with "You just gained Alia Das Hospital."
+        /// on arrival from the boot camp (B2-019). Only when the character has none of this map's yet.
+        /// </summary>
+        public void OnPlayerEnteredMap(Client client)
+        {
+            var player = client?.Player;
+            if (player?.MapChannel?.MapInfo == null)
+                return;
+
+            var hospitals = HospitalCatalog.ForMap(player.MapChannel.MapInfo.MapContextId)
+                .Where(hospital => !hospital.KnownWithoutDiscovery).ToList();
+            if (hospitals.Count == 0 || hospitals.Any(hospital => HasGained(player, hospital)))
+                return;
+
+            Gain(client, hospitals.OrderBy(hospital => Vector3.DistanceSquared(hospital.Position, player.Position)).First());
+        }
+
+        private void Gain(Client client, HospitalData hospital)
+        {
+            var player = client.Player;
+            var entry = new CharacterTeleporterEntry(player.Id, hospital.WaypointId, (byte)WaypointType.Hospital);
+            player.GainedWaypoints.Add(entry);
+            client.CallMethod(player.EntityId, new GraveyardGainedPacket(hospital.WaypointId));
+            _persist(client, CharacterUpdate.Teleporter, entry);
         }
 
         /// <summary>BuryMe is the Revive button, which canRevive = 0 keeps disabled.</summary>
@@ -204,10 +296,7 @@ namespace Rasa.Managers
                     if (dx * dx + dz * dz > HospitalCatalog.DiscoveryRadius * HospitalCatalog.DiscoveryRadius)
                         continue;
 
-                    var entry = new CharacterTeleporterEntry(player.Id, hospital.WaypointId, (byte)WaypointType.Hospital);
-                    player.GainedWaypoints.Add(entry);
-                    client.CallMethod(player.EntityId, new GraveyardGainedPacket(hospital.WaypointId));
-                    _persist(client, CharacterUpdate.Teleporter, entry);
+                    Gain(client, hospital);
                 }
             }
         }

@@ -112,6 +112,34 @@ namespace Rasa.Managers
                 actor.MovementSpeed = gameEffect.MovementBeforeAttach;
                 UpdateMovementMod(mapChannel, actor);
             }
+            if (gameEffect.TypeId == DeathPenaltyRules.RezSicknessEffectType && actor is Manifestation player)
+                PlayerDeathManager.Instance.OnTraumaEnded(mapChannel, player);
+        }
+
+        /// <summary>A debuff with a fixed duration and no arguments (Resuscitation Trauma and its no-heal part).</summary>
+        public GameEffect AttachTimedDebuff(MapChannel mapChannel, Actor actor, int typeId, uint level, int durationMs)
+        {
+            var gameEffect = new GameEffect
+            {
+                TypeId = typeId,
+                EffectId = ++mapChannel.CurrentEffectId,
+                EffectLevel = level,
+                Duration = durationMs
+            };
+            AddToList(actor, gameEffect);
+            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
+            {
+                EffectTypeId = typeId,
+                EffectId = gameEffect.EffectId,
+                EffectLevel = level,
+                SourceId = actor.EntityId,
+                Announced = false,
+                Duration = durationMs / 1000.0,
+                IsActive = true,
+                IsDebuff = true,
+                IsNegativeEffect = true
+            });
+            return gameEffect;
         }
 
         public void DoWork(MapChannel mapChannel, long passedTime)

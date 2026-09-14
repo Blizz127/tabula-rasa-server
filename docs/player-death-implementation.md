@@ -44,10 +44,29 @@ choosing one revives the player there. Every data value and rule is labelled in
    waypoint type 5 (Hospital), so no schema change was needed.
 7. `BuryMe` (the Revive button) is refused: `canRevive` is always 0.
 
+## Trauma, adrenaline and zone-entry hospitals (second pass, 2026-09-14)
+
+A research pass over the final client's text and archived official and fan pages
+(`research/20260914-death-hospital/`) added:
+
+- **Resuscitation Trauma.** A hospital revival after a death to a non-player
+  character at level 5 or above attaches `RezSickness` (effect 196) and
+  `RezSicknessNoHeal` (effect 195). Each stack lowers Body, Mind and Spirit by 20%
+  for two minutes; another revival while traumatized adds 20% and two minutes, up
+  to 60% and six minutes. No healing lands for the first 30 s. Expiry restores the
+  attributes. Sources: tooltip 506, help 5687 (which also limits trauma to NPC and
+  clan-war deaths, never duels), `gameconstants` `DEATH_PENALTY_MIN_LEVEL` and
+  `REZ_SICKNESS_*`, and the official D10.6 live notes.
+- **Adrenaline** is drained on revival (TaRapedia "Adrenaline", 2007-11-07, a fan
+  observation with no newer contradiction). Power is unchanged.
+- **Zone entry** gains the nearest hospital when the character has none of that
+  map's (TaRapedia "Hospital", December 2007), which also explains the Alia Das gain
+  line on arrival from the boot camp. Coming within 100 m still gains the others.
+
 ## Remaining gaps
 
-Recorded in the evidence file's `gaps` list: trauma/rez sickness (constants and
-D10.6 values are known, application rules are not), equipment wear per death,
+Recorded in the evidence file's `gaps` list: trauma details (rounding, derived
+pools, trauma kits, clan-war PvP), equipment wear per death,
 revival by other players, death persistence across logout, control-point
 ownership (control-point hospitals are always offered once gained), maps without
 a catalogued hospital (revive in place; only contexts 1985 and 1220 are

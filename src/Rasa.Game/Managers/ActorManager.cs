@@ -165,6 +165,11 @@ namespace Rasa.Managers
             if (target.State == CharacterState.Dead || health.Current <= 0)
                 return 0;
 
+            // RezSicknessNoHeal: the first 30 s after a traumatizing resuscitation take no healing.
+            foreach (var effect in target.ActiveEffects.Values)
+                if (effect.TypeId == DeathPenaltyRules.RezSicknessNoHealEffectType)
+                    return 0;
+
             var applied = Math.Min(amount, health.CurrentMax - health.Current);
 
             if (applied <= 0)

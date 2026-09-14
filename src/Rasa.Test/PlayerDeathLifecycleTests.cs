@@ -253,6 +253,110 @@ namespace Rasa.Test
             }
         }
 
+        [TestMethod]
+        public void TraumaFollowsAnNpcDeathFromLevelFiveAndStacksToSixtyPercentAndSixMinutes()
+        {
+            Arrange(1985);
+            _owner.Player.Level = 5;
+            _owner.Player.Attributes[Attributes.Chi] = new ActorAttributes(Attributes.Chi, 1000, 1000, 800, 0, 0);
+            var refreshed = 0;
+            _deaths = new PlayerDeathManager((client, update, value) => _persisted.Add((update, value)), _ => refreshed++);
+
+            var expected = new[] { (1, 120000), (2, 240000), (3, 360000), (3, 360000) };
+            foreach (var (stacks, duration) in expected)
+            {
+                Kill();
+                _deaths.ReviveMe(_owner, Revive(null));
+                var trauma = _owner.Player.ActiveEffects.Values.Single(effect => effect.TypeId == DeathPenaltyRules.RezSicknessEffectType);
+                var noHeal = _owner.Player.ActiveEffects.Values.Single(effect => effect.TypeId == DeathPenaltyRules.RezSicknessNoHealEffectType);
+                Assert.AreEqual(stacks, _owner.Player.TraumaStacks);
+                Assert.AreEqual((uint)stacks, trauma.EffectLevel);
+                Assert.AreEqual(duration, trauma.Duration);
+                Assert.AreEqual(DeathPenaltyRules.NoHealDurationMs, noHeal.Duration);
+                Assert.AreEqual(0, _owner.Player.Attributes[Attributes.Chi].Current);
+            }
+            Assert.AreEqual(4, refreshed);
+
+            Assert.AreEqual(0, ActorManager.Instance.Heal(_owner.Player, 5));
+            var detached = Drain(_owner).Count(message => message.MethodId == GameOpcode.GameEffectDetached);
+            Assert.AreEqual(2, detached); // the last revival replaced the trauma and no-heal effects (Kill drains earlier ones)
+
+            _deaths.OnTraumaEnded(_map, _owner.Player);
+            Assert.AreEqual(0, _owner.Player.TraumaStacks);
+            Assert.AreEqual(5, refreshed);
+        }
+
+        [TestMethod]
+        public void NoTraumaBelowLevelFiveOrAfterAPlayerKill()
+        {
+            Arrange(1985);
+            _owner.Player.Level = 4;
+            Kill();
+            _deaths.ReviveMe(_owner, Revive(null));
+            Assert.AreEqual(0, _owner.Player.TraumaStacks);
+
+            _owner.Player.Level = 10;
+            _source = new Manifestation { Cells = new uint[,] { { 0, 1 } } };
+            Kill();
+            Assert.IsFalse(_owner.Player.DeathOffer.PenaltyApplies);
+            _deaths.ReviveMe(_owner, Revive(null));
+            Assert.AreEqual(0, _owner.Player.TraumaStacks);
+            Assert.IsFalse(_owner.Player.ActiveEffects.Any());
+        }
+
+        [TestMethod]
+        public void TraumaLowersTheThreeAttributesAndExpiryRestoresThem()
+        {
+            Arrange(1985);
+            var player = _owner.Player;
+            player.Level = 10;
+            player.Race = Race.Human;
+            foreach (Attributes attribute in Enum.GetValues(typeof(Attributes)))
+                if (!player.Attributes.ContainsKey(attribute))
+                    player.Attributes[attribute] = new ActorAttributes(attribute, 0, 0, 0, 0, 0);
+            player.Inventory.EquippedInventory.AddRange(new ulong[22]);
+            ManifestationManager.Instance.UpdateStatsValues(_owner, true);
+            var body = player.Attributes[Attributes.Body].CurrentMax;
+            var mind = player.Attributes[Attributes.Mind].CurrentMax;
+
+            player.TraumaStacks = 2;
+            ManifestationManager.Instance.UpdateStatsValues(_owner, false);
+            Assert.AreEqual(body - DeathPenaltyRules.AttributePenalty(body, 2), player.Attributes[Attributes.Body].CurrentMax);
+            Assert.AreEqual(mind - DeathPenaltyRules.AttributePenalty(mind, 2), player.Attributes[Attributes.Mind].CurrentMax);
+
+            // Expiry through the effect lifecycle ends the trauma on the server singleton.
+            GameEffectManager.Instance.AttachTimedDebuff(_map, player, DeathPenaltyRules.RezSicknessEffectType, 2, 1000);
+            _map.ClientList.Remove(_observer);
+            GameEffectManager.Instance.DoWork(_map, 1000);
+            Assert.AreEqual(0, player.TraumaStacks);
+            Assert.AreEqual(body, player.Attributes[Attributes.Body].CurrentMax);
+        }
+
+        [DataTestMethod]
+        [DataRow(50, 1, 10)]
+        [DataRow(49, 1, 9)]
+        [DataRow(50, 3, 30)]
+        [DataRow(50, 4, 30)]
+        public void TraumaPenaltyIsTwentyPercentAStackUpToThree(int total, int stacks, int penalty)
+            => Assert.AreEqual(penalty, DeathPenaltyRules.AttributePenalty(total, stacks));
+
+        [TestMethod]
+        public void EnteringTheWildernessGainsTheNearestHospitalOnce()
+        {
+            Arrange(1220);
+            _owner.Player.Position = new Vector3(884.11f, 294f, 347.81f); // footage arrival at Alia Das (B2-015)
+            _deaths.OnPlayerEnteredMap(_owner);
+            _deaths.OnPlayerEnteredMap(_owner);
+            var gained = _persisted.Select(entry => entry.Value).OfType<CharacterTeleporterEntry>().Single();
+            Assert.AreEqual(103u, gained.WaypointId);
+
+            Arrange(1220);
+            _owner.Player.GainedWaypoints.Add(new CharacterTeleporterEntry(101, 106, (byte)WaypointType.Hospital));
+            _owner.Player.Position = new Vector3(884.11f, 294f, 347.81f);
+            _deaths.OnPlayerEnteredMap(_owner);
+            Assert.AreEqual(0, _persisted.Count);
+        }
+
         private Missile Shot(int damage) => new Missile
         {
             Source = _source, ActionId = ActionId.WeaponAttack, ActionArgId = 1,

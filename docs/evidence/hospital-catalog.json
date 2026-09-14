@@ -16,108 +16,598 @@
   "calibration": {
     "id": "V2",
     "summary": "The respawn after choosing Refugee Base Medic was measured by radar texture matching at (358.94, 156.95) +/- 1.5 m, 1.1 m from that hospital's client map marker (357.90, 156.52). The respawn point is therefore taken to be the hospital marker position.",
-    "citations": ["footage A4-38/A4-39 (7Lrst9SG3pk 469.8-472.5 s)", "spatial:player_respawn_refugee_base_medic", "uimapmarker factionedmarkers[1985] marker 134419591469927"]
+    "citations": [
+      "footage A4-38/A4-39 (7Lrst9SG3pk 469.8-472.5 s)",
+      "spatial:player_respawn_refugee_base_medic",
+      "uimapmarker factionedmarkers[1985] marker 134419591469927"
+    ]
   },
   "discovery_radius_m": {
     "value": 100,
     "tier": "inferred",
-    "citations": ["footage B2-019 'You just gained Alia Das Hospital.' present in the first frame at Alia Das (8VXeKzGUv0c 98.4 s)", "spatial:player_alia_das_arrival (884.11, 347.81) +/- 1.5 m, 98.9 m from the Alia Das hospital marker"],
+    "citations": [
+      "footage B2-019 'You just gained Alia Das Hospital.' present in the first frame at Alia Das (8VXeKzGUv0c 98.4 s)",
+      "spatial:player_alia_das_arrival (884.11, 347.81) +/- 1.5 m, 98.9 m from the Alia Das hospital marker"
+    ],
     "reasoning": "Lower bound: the gain line was already in chat where the player stood 98.9 m from the marker. The cut before that frame hides the arrival, so the true trigger (radius, region entry, or the transfer itself) is unrecovered."
   },
   "hospitals": [
     {
       "name": "Refugee Base Medic",
-      "graveyard_id": { "value": 20000001, "tier": "original", "citations": ["graveyardlanguage lookup[20000001] = 'Refugee Base Medic' (offset 1730)", "footage A4-36 Hospital Selection 'Bootcamp > Refugee Base Medic'"] },
-      "waypoint_id": { "value": 500, "tier": "original", "citations": ["waypointlanguage lookup[500] = 'Refugee Base Medic' (offset 3953)"], "reasoning": "unique name match" },
-      "map_context_id": { "value": 1985, "tier": "original", "citations": ["gamecontext lookup[1985] = adv_bootcamp, template 1985"] },
-      "marker_entity_id": { "value": 134419591469927, "tier": "original", "citations": ["uimapmarker factionedmarkers[1985] (134419591469927, 3 HOSPITAL, 1363, 1363, ...)", "uimapmarkertextlanguage 1363 = 'Refugee Base Medic'"] },
-      "position": { "value": [357.9005432128906, 120.32544708251953, 156.51882934570312], "tier": "inferred", "citations": ["uimapmarker marker 134419591469927 coordinates (original values)", "calibration V2"], "reasoning": "original marker coordinates; their use as the respawn point is confirmed to 1.1 m by the measured respawn", "uncertainty": { "unit": "m", "horizontal_m": 1.5 } },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL, not 19 SAFE_ZONE"], "reasoning": "isSafe only selects the client's icon; the icon in A4-36 is not legible" },
-      "is_control_point": { "value": false, "tier": "inferred", "citations": ["graveyard name has no '(Control Point)'"] },
-      "known_without_discovery": { "value": true, "tier": "inferred", "citations": ["footage A2-A4 chat: no 'You just gained' line while the player worked 30-45 m from the hospital (A3) and before the A4-36 death that offered it"] }
+      "graveyard_id": {
+        "value": 20000001,
+        "tier": "original",
+        "citations": [
+          "graveyardlanguage lookup[20000001] = 'Refugee Base Medic' (offset 1730)",
+          "footage A4-36 Hospital Selection 'Bootcamp > Refugee Base Medic'"
+        ]
+      },
+      "waypoint_id": {
+        "value": 500,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[500] = 'Refugee Base Medic' (offset 3953)"
+        ],
+        "reasoning": "unique name match"
+      },
+      "map_context_id": {
+        "value": 1985,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1985] = adv_bootcamp, template 1985"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591469927,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1985] (134419591469927, 3 HOSPITAL, 1363, 1363, ...)",
+          "uimapmarkertextlanguage 1363 = 'Refugee Base Medic'"
+        ]
+      },
+      "position": {
+        "value": [
+          357.9005432128906,
+          120.32544708251953,
+          156.51882934570312
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 134419591469927 coordinates (original values)",
+          "calibration V2"
+        ],
+        "reasoning": "original marker coordinates; their use as the respawn point is confirmed to 1.1 m by the measured respawn",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL, not 19 SAFE_ZONE"
+        ],
+        "reasoning": "isSafe only selects the client's icon; the icon in A4-36 is not legible"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyard name has no '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "footage A2-A4 chat: no 'You just gained' line while the player worked 30-45 m from the hospital (A3) and before the A4-36 death that offered it"
+        ]
+      }
     },
     {
       "name": "Alia Das Hospital",
-      "graveyard_id": { "value": 3, "tier": "original", "citations": ["graveyardlanguage lookup[3] = 'Alia Das Hospital' (offset 29)", "footage B3-043/B3-058/B4-001 list entry 'Alia Das Hospital'"] },
-      "waypoint_id": { "value": 103, "tier": "original", "citations": ["waypointlanguage lookup[103] = 'Alia Das Hospital' (offset 506)", "footage B2-019 'You just gained Alia Das Hospital.'"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220] = Adv_Foreas_Concordia_Wilderness, template 1378"] },
-      "marker_entity_id": { "value": 133079561961146, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561961146, 3 HOSPITAL, 230, 230, ...)", "uimapmarkertextlanguage 230 = 'Alia Das Hospital'"] },
-      "position": { "value": [787.0088500976562, 294.3324279785156, 366.5991516113281], "tier": "inferred", "citations": ["uimapmarker marker 133079561961146 coordinates (original values)", "calibration V2"], "reasoning": "local teleporter row 103 (750.07, 294.21, 382.29) is 40 m away beside a map-link marker and has unknown provenance; not used" },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL"] },
-      "is_control_point": { "value": false, "tier": "inferred", "citations": ["graveyard name has no '(Control Point)'"] },
-      "known_without_discovery": { "value": false, "tier": "observed", "citations": ["footage B2-019 gain line on arrival"] }
+      "graveyard_id": {
+        "value": 3,
+        "tier": "original",
+        "citations": [
+          "graveyardlanguage lookup[3] = 'Alia Das Hospital' (offset 29)",
+          "footage B3-043/B3-058/B4-001 list entry 'Alia Das Hospital'"
+        ]
+      },
+      "waypoint_id": {
+        "value": 103,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[103] = 'Alia Das Hospital' (offset 506)",
+          "footage B2-019 'You just gained Alia Das Hospital.'"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220] = Adv_Foreas_Concordia_Wilderness, template 1378"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561961146,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561961146, 3 HOSPITAL, 230, 230, ...)",
+          "uimapmarkertextlanguage 230 = 'Alia Das Hospital'"
+        ]
+      },
+      "position": {
+        "value": [
+          787.0088500976562,
+          294.3324279785156,
+          366.5991516113281
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561961146 coordinates (original values)",
+          "calibration V2"
+        ],
+        "reasoning": "local teleporter row 103 (750.07, 294.21, 382.29) is 40 m away beside a map-link marker and has unknown provenance; not used"
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ]
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyard name has no '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "observed",
+        "citations": [
+          "footage B2-019 gain line on arrival"
+        ]
+      }
     },
     {
       "name": "Ranja Gorge Hospital",
-      "graveyard_id": { "value": 5, "tier": "original", "citations": ["graveyardlanguage lookup[5] = 'Ranja Gorge Hospital' (offset 38)", "footage B3-058 list entry"] },
-      "waypoint_id": { "value": 106, "tier": "original", "citations": ["waypointlanguage lookup[106] = 'Ranja Gorge Hospital' (offset 533)"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220]"] },
-      "marker_entity_id": { "value": 133079561961147, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561961147, 3, 231, 231, ...)"] },
-      "position": { "value": [-693.8690185546875, 170.1329803466797, -342.3608093261719], "tier": "inferred", "citations": ["uimapmarker marker 133079561961147", "calibration V2"] },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL"] },
-      "is_control_point": { "value": false, "tier": "inferred", "citations": ["graveyard name"] },
-      "known_without_discovery": { "value": false, "tier": "observed", "citations": ["footage B3-043 (first Wilderness death) omits it; B3-058 (after travel south-west) lists it"] }
+      "graveyard_id": {
+        "value": 5,
+        "tier": "original",
+        "citations": [
+          "graveyardlanguage lookup[5] = 'Ranja Gorge Hospital' (offset 38)",
+          "footage B3-058 list entry"
+        ]
+      },
+      "waypoint_id": {
+        "value": 106,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[106] = 'Ranja Gorge Hospital' (offset 533)"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220]"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561961147,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561961147, 3, 231, 231, ...)"
+        ]
+      },
+      "position": {
+        "value": [
+          -693.8690185546875,
+          170.1329803466797,
+          -342.3608093261719
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561961147",
+          "calibration V2"
+        ]
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ]
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyard name"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "observed",
+        "citations": [
+          "footage B3-043 (first Wilderness death) omits it; B3-058 (after travel south-west) lists it"
+        ]
+      }
     },
     {
       "name": "Twin Pillars Hospital",
-      "graveyard_id": { "value": 6, "tier": "original", "citations": ["graveyardlanguage lookup[6] = 'Twin Pillars Hospital' (offset 47)", "footage B3-043/B3-058 list entry"] },
-      "waypoint_id": { "value": 105, "tier": "original", "citations": ["waypointlanguage lookup[105] = 'Twin Pillars Hospital' (offset 524)"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220]"] },
-      "marker_entity_id": { "value": 133079561961145, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561961145, 19 SAFE_ZONE, 229, 229, ...)"] },
-      "position": { "value": [-125.88742065429688, 220.74998474121094, -468.61846923828125], "tier": "inferred", "citations": ["uimapmarker marker 133079561961145", "calibration V2"] },
-      "is_safe": { "value": true, "tier": "inferred", "citations": ["marker type 19 SAFE_ZONE", "uielementlanguage 5194 'PvP Safe Region' is the safe tooltip"] },
-      "is_control_point": { "value": false, "tier": "inferred", "citations": ["graveyard name"] },
-      "known_without_discovery": { "value": false, "tier": "inferred", "citations": ["same discovery rule as the other Wilderness hospitals"] }
+      "graveyard_id": {
+        "value": 6,
+        "tier": "original",
+        "citations": [
+          "graveyardlanguage lookup[6] = 'Twin Pillars Hospital' (offset 47)",
+          "footage B3-043/B3-058 list entry"
+        ]
+      },
+      "waypoint_id": {
+        "value": 105,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[105] = 'Twin Pillars Hospital' (offset 524)"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220]"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561961145,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561961145, 19 SAFE_ZONE, 229, 229, ...)"
+        ]
+      },
+      "position": {
+        "value": [
+          -125.88742065429688,
+          220.74998474121094,
+          -468.61846923828125
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561961145",
+          "calibration V2"
+        ]
+      },
+      "is_safe": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "marker type 19 SAFE_ZONE",
+          "uielementlanguage 5194 'PvP Safe Region' is the safe tooltip"
+        ]
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyard name"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "same discovery rule as the other Wilderness hospitals"
+        ]
+      }
     },
     {
       "name": "Daghda's Urn Hospital",
-      "graveyard_id": { "value": 20, "tier": "original", "citations": ["graveyardlanguage lookup[20] = \"Daghda's Urn Hospital\" (offset 56)"] },
-      "waypoint_id": { "value": 108, "tier": "original", "citations": ["waypointlanguage lookup[108] = \"Daghda's Urn Hospital\" (offset 551)"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220]"] },
-      "marker_entity_id": { "value": 133079561961149, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561961149, 3, 232, 232, ...)"] },
-      "position": { "value": [-654.5541381835938, 283.6459655761719, 882.8185424804688], "tier": "inferred", "citations": ["uimapmarker marker 133079561961149", "calibration V2"] },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL"] },
-      "is_control_point": { "value": false, "tier": "inferred", "citations": ["graveyard name"] },
-      "known_without_discovery": { "value": false, "tier": "inferred", "citations": ["not in either observed Wilderness list (B3-043, B3-058)"] }
+      "graveyard_id": {
+        "value": 20,
+        "tier": "original",
+        "citations": [
+          "graveyardlanguage lookup[20] = \"Daghda's Urn Hospital\" (offset 56)"
+        ]
+      },
+      "waypoint_id": {
+        "value": 108,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[108] = \"Daghda's Urn Hospital\" (offset 551)"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220]"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561961149,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561961149, 3, 232, 232, ...)"
+        ]
+      },
+      "position": {
+        "value": [
+          -654.5541381835938,
+          283.6459655761719,
+          882.8185424804688
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561961149",
+          "calibration V2"
+        ]
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ]
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyard name"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "not in either observed Wilderness list (B3-043, B3-058)"
+        ]
+      }
     },
     {
       "name": "Hospital: Imperial Valley (Control Point)",
-      "graveyard_id": { "value": 122, "tier": "observed", "citations": ["footage B3-058/B4-001 shows 'Hospital: Imperial Valley (Control Point)', which is graveyardlanguage lookup[122] (offset 533); lookup[110] reads 'Imperial Valley Hospital (Control Point)' and would render differently"] },
-      "waypoint_id": { "value": 218, "tier": "original", "citations": ["waypointlanguage lookup[218] = 'Hospital: Imperial Valley (Control Point)' (offset 1496)"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220]"] },
-      "marker_entity_id": { "value": 133079561961338, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561961338, 3, 306, None, ...)"] },
-      "position": { "value": [-330.0, 172.7716827392578, -532.0], "tier": "inferred", "citations": ["uimapmarker marker 133079561961338", "calibration V2"] },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL"] },
-      "is_control_point": { "value": true, "tier": "original", "citations": ["graveyard and marker names '(Control Point)'", "playermessagelanguage 1428/1429 control-point hospital online/offline"] },
-      "known_without_discovery": { "value": false, "tier": "inferred", "citations": ["absent from B3-043, present in B3-058 after travel"] }
+      "graveyard_id": {
+        "value": 122,
+        "tier": "observed",
+        "citations": [
+          "footage B3-058/B4-001 shows 'Hospital: Imperial Valley (Control Point)', which is graveyardlanguage lookup[122] (offset 533); lookup[110] reads 'Imperial Valley Hospital (Control Point)' and would render differently"
+        ]
+      },
+      "waypoint_id": {
+        "value": 218,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[218] = 'Hospital: Imperial Valley (Control Point)' (offset 1496)"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220]"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561961338,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561961338, 3, 306, None, ...)"
+        ]
+      },
+      "position": {
+        "value": [
+          -330.0,
+          172.7716827392578,
+          -532.0
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561961338",
+          "calibration V2"
+        ]
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ]
+      },
+      "is_control_point": {
+        "value": true,
+        "tier": "original",
+        "citations": [
+          "graveyard and marker names '(Control Point)'",
+          "playermessagelanguage 1428/1429 control-point hospital online/offline"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "absent from B3-043, present in B3-058 after travel"
+        ]
+      }
     },
     {
       "name": "Hospital: Landing Zone (Control Point)",
-      "graveyard_id": { "value": 136, "tier": "inferred", "citations": ["footage B3-043 list entry 'Hospital: Landing Zone (Control Point)'", "graveyardlanguage lookup[136] (offset 650) and lookup[183] (offset 974) both read exactly 'Hospital: Landing Zone (Control Point)'"], "reasoning": "the two ids render identically in the client; 136 (the lower) is chosen, and the choice cannot change what the player sees" },
-      "waypoint_id": { "value": 216, "tier": "original", "citations": ["waypointlanguage lookup[216] = 'Hospital: Landing Zone (Control Point)' (offset 1478)"] },
-      "map_context_id": { "value": 1220, "tier": "original", "citations": ["gamecontext lookup[1220]"] },
-      "marker_entity_id": { "value": 133079561962699, "tier": "original", "citations": ["uimapmarker factionedmarkers[1378] (133079561962699, 3, 303, None, ...)"] },
-      "position": { "value": [156.02780151367188, 163.0747833251953, -86.59078979492188], "tier": "inferred", "citations": ["uimapmarker marker 133079561962699", "calibration V2"] },
-      "is_safe": { "value": false, "tier": "inferred", "citations": ["marker type 3 HOSPITAL"] },
-      "is_control_point": { "value": true, "tier": "original", "citations": ["graveyard and marker names '(Control Point)'"] },
-      "known_without_discovery": { "value": false, "tier": "inferred", "citations": ["same discovery rule as the other Wilderness hospitals"] }
+      "graveyard_id": {
+        "value": 136,
+        "tier": "inferred",
+        "citations": [
+          "footage B3-043 list entry 'Hospital: Landing Zone (Control Point)'",
+          "graveyardlanguage lookup[136] (offset 650) and lookup[183] (offset 974) both read exactly 'Hospital: Landing Zone (Control Point)'"
+        ],
+        "reasoning": "the two ids render identically in the client; 136 (the lower) is chosen, and the choice cannot change what the player sees"
+      },
+      "waypoint_id": {
+        "value": 216,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[216] = 'Hospital: Landing Zone (Control Point)' (offset 1478)"
+        ]
+      },
+      "map_context_id": {
+        "value": 1220,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1220]"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133079561962699,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1378] (133079561962699, 3, 303, None, ...)"
+        ]
+      },
+      "position": {
+        "value": [
+          156.02780151367188,
+          163.0747833251953,
+          -86.59078979492188
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker marker 133079561962699",
+          "calibration V2"
+        ]
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ]
+      },
+      "is_control_point": {
+        "value": true,
+        "tier": "original",
+        "citations": [
+          "graveyard and marker names '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "same discovery rule as the other Wilderness hospitals"
+        ]
+      }
     }
   ],
   "rules": [
-    { "id": "death.state", "value": "Health 0 sets control state Dead at the hit; the killing recovery carries deathBlow; ActorKilled goes to the victim's observers after it; PlayerDead(sourceId, offered hospitals, canRevive 0) goes to the owner last.", "tier": "inferred", "citations": ["docs/player-death-client-evidence.md 'Death state and notification order'", "footage A4-35/A4-36, B3-042/B3-043"] },
-    { "id": "death.offer", "value": "Offered hospitals = hospitals of the current map that are known (gained, or known without discovery) and, for control points, AFS-held.", "tier": "inferred", "citations": ["footage B3-043 and B3-058 lists differ as the player travels", "official control-point guide (eu.playtr.com 2009-02-01 capture): hospital unavailable when the base is not under AFS control"] },
-    { "id": "revive.selection", "value": "ReviveMe(id) must name an offered hospital; ReviveMe(None) takes the nearest offered hospital by squared X/Y/Z distance.", "tier": "inferred", "citations": ["waypointwindow._RespawnPlayer nearest-hospital rule on client timeout", "Actor.OnRequestRevive sends None from the death dialog and window close"] },
-    { "id": "revive.resources", "value": "Health restored to maximum; armor restored to maximum; power and adrenaline unchanged.", "tier": "inferred", "citations": ["tutorial text 1582 'restore you to full health' (original, health only)", "footage A4-39 and B3-045 full health after respawn"], "reasoning": "health is original text; armor is not mentioned and is restored with it" },
-    { "id": "revive.relocation", "value": "PreTeleport(DEFAULT) to observers, BeginTeleport, Teleport(hospital position, current yaw, DEFAULT, delay 0), then Revived(0), UpdateHealth, UpdateArmor; position persisted.", "tier": "inferred", "citations": ["Actor.BeginTeleport docstring (acknowledge after the teleport message)", "teleportertype.teleporterFX[DEFAULT] = (8555, 8551, 8550): arrival FX consistent with the blue shimmer at A4-39", "A4-38 red/white flash before the view change"] },
-    { "id": "revive.source", "value": "Revived sourceId 0 for a hospital revival.", "tier": "inferred", "citations": ["Actor.Recv_Revived/AnnounceRevive do not use sourceId beyond clearing the death source"] }
+    {
+      "id": "death.state",
+      "value": "Health 0 sets control state Dead at the hit; the killing recovery carries deathBlow; ActorKilled goes to the victim's observers after it; PlayerDead(sourceId, offered hospitals, canRevive 0) goes to the owner last.",
+      "tier": "inferred",
+      "citations": [
+        "docs/player-death-client-evidence.md 'Death state and notification order'",
+        "footage A4-35/A4-36, B3-042/B3-043"
+      ]
+    },
+    {
+      "id": "death.offer",
+      "value": "Offered hospitals = hospitals of the current map that are known (gained, or known without discovery) and, for control points, AFS-held.",
+      "tier": "inferred",
+      "citations": [
+        "footage B3-043 and B3-058 lists differ as the player travels",
+        "official control-point guide (eu.playtr.com 2009-02-01 capture): hospital unavailable when the base is not under AFS control"
+      ]
+    },
+    {
+      "id": "revive.selection",
+      "value": "ReviveMe(id) must name an offered hospital; ReviveMe(None) takes the nearest offered hospital by squared X/Y/Z distance.",
+      "tier": "inferred",
+      "citations": [
+        "waypointwindow._RespawnPlayer nearest-hospital rule on client timeout",
+        "Actor.OnRequestRevive sends None from the death dialog and window close"
+      ]
+    },
+    {
+      "id": "revive.resources",
+      "value": "Health restored to maximum; armor restored to maximum; adrenaline drained to zero; power unchanged.",
+      "tier": "inferred",
+      "citations": [
+        "tutorial text 1582 'restore you to full health' (original, health only)",
+        "footage A4-39 and B3-045 full health after respawn",
+        "TaRapedia 'Adrenaline' revision 2007-11-07: 'Upon resuscitation after death, the entire adrenaline bar is drained.' (fan-observed, pre-D11 era; research/20260914-death-hospital)"
+      ],
+      "reasoning": "health is original text; the adrenaline drain is a fan observation with no newer contradiction; armor is not mentioned and is restored with health"
+    },
+    {
+      "id": "revive.relocation",
+      "value": "PreTeleport(DEFAULT) to observers, BeginTeleport, Teleport(hospital position, current yaw, DEFAULT, delay 0), then Revived(0), UpdateHealth, UpdateArmor; position persisted.",
+      "tier": "inferred",
+      "citations": [
+        "Actor.BeginTeleport docstring (acknowledge after the teleport message)",
+        "teleportertype.teleporterFX[DEFAULT] = (8555, 8551, 8550): arrival FX consistent with the blue shimmer at A4-39",
+        "A4-38 red/white flash before the view change"
+      ]
+    },
+    {
+      "id": "revive.source",
+      "value": "Revived sourceId 0 for a hospital revival.",
+      "tier": "inferred",
+      "citations": [
+        "Actor.Recv_Revived/AnnounceRevive do not use sourceId beyond clearing the death source"
+      ]
+    },
+    {
+      "id": "hospital.zone_entry",
+      "value": "Entering a map whose catalogued hospitals the character has none of gains the nearest one to the arrival point.",
+      "tier": "inferred",
+      "citations": [
+        "TaRapedia 'Hospital' (December 2007): 'Upon first entering a zone, a character is given the nearest hospital point' and 'gained by going near them' (fan-observed)",
+        "footage B2-019: 'You just gained Alia Das Hospital.' on arrival, 98.9 m from the nearest hospital marker"
+      ]
+    },
+    {
+      "id": "trauma",
+      "value": "After a hospital revival from a death to a non-player character at level >= 5: RezSickness (effect 196) at stack 1..3 lowering Body, Mind and Spirit by 20% a stack (truncated), lasting 120 s, each further revival while traumatized adding 120 s up to 360 s; RezSicknessNoHeal (effect 195) for 30 s blocks healing; expiry restores the attributes.",
+      "tier": "inferred",
+      "citations": [
+        "tooltiplanguage 506: 'Reduces attributes by 20% for a duration of 2 minutes. Subsequent deaths while traumatized cause additional penalty and duration to be added up to maximum of 60% and 6 minutes.'",
+        "uielementlanguage 5687: trauma for being killed by a non-player character or a clan-war enemy, not in duels; two minutes plus two for each resuscitation up to six",
+        "gameconstants DEATH_PENALTY_MIN_LEVEL 5, REZ_SICKNESS_* constants",
+        "gameeffectdata 195/196",
+        "official D10.6 live notes (2008-07-23) 2/4/6 minutes, 20/40/60%"
+      ],
+      "reasoning": "the rules and values are original; applying them at level 5, the truncation and the choice of the three primary attributes are inferred"
+    }
   ],
   "gaps": [
-    { "id": "GAP-TRAUMA", "summary": "Rez sickness / trauma (level >= 5, 2/4/6 min, -20/-40/-60%, 30 s no-heal) is not applied.", "evidence": ["gameconstants DEATH_PENALTY_MIN_LEVEL 5, REZ_SICKNESS_*", "D10.6 live notes", "footage B4-004 two status icons after a level-10 respawn"] },
-    { "id": "GAP-DEATH-WEAR", "summary": "EQUIPMENT_DAMAGE_PER_DEATH -10 is not applied." },
-    { "id": "GAP-ALLY-REVIVE", "summary": "Revive by another player (RequestRevive/RefuseRevive/ReviveRequestInfo, BuryMe with canRevive) is not implemented; canRevive is always 0." },
-    { "id": "GAP-DEATH-PERSISTENCE", "summary": "Death is not persisted: a player who disconnects while dead logs in alive at the death position with full health." },
-    { "id": "GAP-CONTROL-POINTS", "summary": "No control-point ownership exists, so control-point hospitals are always offered once gained." },
-    { "id": "GAP-NO-HOSPITAL", "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Only contexts 1985 and 1220 are catalogued." },
-    { "id": "GAP-HOSPITAL-FACING", "summary": "Respawn facing is unrecovered (A4-39 measured heading 16 deg, medium confidence, convention not mapped); the player keeps their facing." }
+    {
+      "id": "GAP-DEATH-WEAR",
+      "summary": "EQUIPMENT_DAMAGE_PER_DEATH -10 is not applied."
+    },
+    {
+      "id": "GAP-ALLY-REVIVE",
+      "summary": "Revive by another player (RequestRevive/RefuseRevive/ReviveRequestInfo, BuryMe with canRevive) is not implemented; canRevive is always 0. Final-client data: Cure 3/5 revive at 50% health and armor with no death penalty; Tools pumps 3-5 at 10/25/50%."
+    },
+    {
+      "id": "GAP-DEATH-PERSISTENCE",
+      "summary": "Death is not persisted: a player who disconnects while dead logs in alive at the death position with full health."
+    },
+    {
+      "id": "GAP-CONTROL-POINTS",
+      "summary": "No control-point ownership exists, so control-point hospitals are always offered once gained."
+    },
+    {
+      "id": "GAP-NO-HOSPITAL",
+      "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Only contexts 1985 and 1220 are catalogued."
+    },
+    {
+      "id": "GAP-HOSPITAL-FACING",
+      "summary": "Respawn facing is unrecovered (A4-39 measured heading 16 deg, medium confidence, convention not mapped); the player keeps their facing."
+    },
+    {
+      "id": "GAP-TRAUMA-DETAILS",
+      "summary": "Trauma rounding, whether derived pools also fall, trauma kits (items 3266-3285, ATTRIBUTE_MAX_CHANGE, 60 s reuse, DEATH_PENALTY_REDUCED 300) and PvP clan-war deaths are not implemented."
+    }
   ]
 }

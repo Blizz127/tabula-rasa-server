@@ -432,6 +432,7 @@ namespace Rasa.Managers
 
                 CellManager.Instance.AddToWorld(dropship.Client); // will introduce the player to all clients, including the current owner
                 MapLinkManager.Instance.PlayerEnteredMap(client);
+                PlayerDeathManager.Instance.OnPlayerEnteredMap(client);
                 CellManager.Instance.CellCallMethod(dropship.Client.Player.MapChannel, dropship.Client.Player, new TeleportArrivalPacket());
                 client.CallMethod(SysEntity.ClientMethodId, new RequestMovementBlockPacket());
                 ManifestationManager.Instance.AssignPlayer(client);
@@ -470,6 +471,7 @@ namespace Rasa.Managers
             ManifestationManager.Instance.AssignPlayer(client);
             MissionManager.Instance.SendMissionStatusInfo(client);
             MissionContentManager.Instance.OnPlayerEnteredMap(client);
+            PlayerDeathManager.Instance.OnPlayerEnteredMap(client);
 
             ClanManager.Instance.InitializePlayerClanData(client);
             InventoryManager.Instance.InitClanInventory(client);

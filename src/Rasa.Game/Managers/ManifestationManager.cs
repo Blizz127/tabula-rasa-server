@@ -1148,10 +1148,10 @@ namespace Rasa.Managers
             float baseRegen = (2 * level + 100) / attributeDivisor;
             int totalRegen = (int)(baseRegen * (totalMind + 2 * totalSpirit));
           
-            // Bonuses
-            var bodyBonus = 0;
-            var mindBonus = 0;
-            var spiritBonus = 0;
+            // Bonuses. Resuscitation Trauma lowers the three attributes by 20% a stack.
+            var bodyBonus = -DeathPenaltyRules.AttributePenalty(totalBody, player.TraumaStacks);
+            var mindBonus = -DeathPenaltyRules.AttributePenalty(totalMind, player.TraumaStacks);
+            var spiritBonus = -DeathPenaltyRules.AttributePenalty(totalSpirit, player.TraumaStacks);
 
             var healthBonus = 0;
             var chiBonus    = 0;
