@@ -1234,3 +1234,21 @@ changed by this work.
 Verification: full test suite 777/777 green; both provider migrations applied forward and the
 SQLite pair also reverted (Down preserves the 1990 footage-tier rows); container rebuilt and the
 game server starts clean with the new schema.
+
+## 2026-09-14 UTC — Merge regressions resolved; player death and hospital recovery
+
+The EllimistArcade merge (`e06035a`) is resolved in `0678c85`: 128 failures under the .NET 5 CI
+runtime were regressions where the merge took the other branch over this branch's tested and
+evidence-backed code (disconnect contract, bounded protocol-frame parsing, weapon draw/reload/stow
+through `WeaponActionManager` — the merged handlers queued reloads that never resolved — skill and
+attribute validation, level-up point deltas). The local SDK 8 runtime hid them behind EF Core 5
+startup failures; verification now runs in the `mcr.microsoft.com/dotnet/sdk:5.0` image.
+
+Player death is now playable end to end: lethal hits kill, Hospital Selection offers the hospitals
+the character knows, and the chosen hospital revives the player at its client map marker with full
+health. The boot camp offers Refugee Base Medic (graveyard 20000001) as in the final-week footage
+(A4-36), and the respawn position matches the measured respawn to 1.1 m. Wilderness hospitals are
+gained within 100 m with the original "You just gained" message. Details, sources and remaining
+gaps (trauma, equipment wear, ally revival, death persistence, control points):
+[player-death-implementation.md](player-death-implementation.md) and
+`docs/evidence/hospital-catalog.json`. Full suite 801/801.

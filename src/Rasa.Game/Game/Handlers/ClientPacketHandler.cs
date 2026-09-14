@@ -371,6 +371,18 @@ namespace Rasa.Game.Handlers
             MissileManager.Instance.RequestWeaponAttack(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.ReviveMe)]
+        private void ReviveMe(ReviveMePacket packet)
+        {
+            PlayerDeathManager.Instance.ReviveMe(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.BuryMe)]
+        private void BuryMe(BuryMePacket packet)
+        {
+            PlayerDeathManager.Instance.BuryMe(Client);
+        }
+
         [PacketHandler(GameOpcode.RequestWeaponDraw)]
         private void RequestWeaponDraw(RequestWeaponDrawPacket packet)
         {

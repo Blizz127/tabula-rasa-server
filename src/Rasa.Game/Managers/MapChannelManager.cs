@@ -224,6 +224,9 @@ namespace Rasa.Managers
 
                         // zone borders and instance doors: anyone standing in one leaves the map
                         MapLinkManager.Instance.Worker(mapChannel);
+
+                        // hospitals gained by coming near them
+                        PlayerDeathManager.Instance.DiscoverHospitals(mapChannel);
                     }
 
                     // check for effects (buffs)

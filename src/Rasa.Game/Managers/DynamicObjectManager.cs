@@ -731,9 +731,12 @@ namespace Rasa.Managers
                 new Vector2((float)teleporter.Rotation, 0f)
             );
 
+            // Actor.BeginTeleport ("Notified by the server that we are about to teleport ... send an
+            // acknowledgement after the teleport message is received") has to come before Teleport,
+            // or Recv_Teleport finds no pending acknowledgement to send.
             client.CellCallMethod(client, client.Player.EntityId, new PreTeleportPacket(TeleportType.Default));
-            client.CallMethod(client.Player.EntityId, new TeleportPacket(teleporter.Position, teleporter.Rotation, TeleportType.Default, 5));
             client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
+            client.CallMethod(client.Player.EntityId, new TeleportPacket(teleporter.Position, teleporter.Rotation, TeleportType.Default, 5));
             client.CellMoveObject(client, new MoveObjectMessage(client.Player.EntityId, movementData), false);
 
             teleporter.TriggeredByPlayers.Remove(client);    // ToDO: maybe safely remove client

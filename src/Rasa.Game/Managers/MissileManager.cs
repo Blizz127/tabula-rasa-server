@@ -137,16 +137,13 @@ namespace Rasa.Managers
             actor.Attributes[Attributes.Health].Current -= healthDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateHealthPacket(actor.Attributes[Attributes.Health], 0));
 
-            if(actor.Attributes[Attributes.Health].Current == 0)
+            // Zero health is death: control state Dead at once, so later hits, actions and
+            // autofire skip the player. The announcement follows the killing recovery
+            // (PlayerDeathManager.AnnounceDeath, called from MissileTrigger).
+            if (actor.Attributes[Attributes.Health].Current == 0)
             {
-                // we won't die yet :D
-                actor.Attributes[Attributes.Health].Current = actor.Attributes[Attributes.Health].CurrentMax;
-                //actor.State = CharacterState.Dying;
-            }
-
-            if (actor.State == CharacterState.Dying)
-            {
-
+                actor.State = CharacterState.Dead;
+                hit.DeathBlow = 1;
             }
         }
 
@@ -265,6 +262,7 @@ namespace Rasa.Managers
             // ToDo: Some weapons can hit multiple targets
             var targetActor = GetTargetActor(missile.TargetEntityId);
             Creature killedCreature = null;
+            Manifestation killedPlayer = null;
             // Resolve again at impact: the target may have left, died, or its ID may
             // have been reused since windup. A shot without a target has no hits.
             if (targetActor != null && ReferenceEquals(targetActor, missile.TargetActor)
@@ -290,7 +288,11 @@ namespace Rasa.Managers
                     }
                 }
                 else
+                {
                     DoDamageToPlayer(mapChannel, missile, targetActor, hit);
+                    if (targetActor.State == CharacterState.Dead && targetActor is Manifestation player)
+                        killedPlayer = player;
+                }
             }
             else if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId))
             {
@@ -331,6 +333,8 @@ namespace Rasa.Managers
             // its original client handler ignores an actor already announced dead.
             if (killedCreature != null)
                 CellManager.Instance.CellCallMethod(mapChannel, killedCreature, new ActorKilledPacket());
+            if (killedPlayer != null)
+                PlayerDeathManager.Instance.AnnounceDeath(mapChannel, killedPlayer, missile.Source);
         }
     }
 }

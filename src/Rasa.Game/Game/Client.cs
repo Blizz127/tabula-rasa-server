@@ -407,6 +407,12 @@ namespace Rasa.Game
                     if (State != ClientState.Ingame)
                         return;
 
+                    // The dead control state blocks movement in the client (control/dead.pyo
+                    // OnEnterState); a dead character does not move on the server either, so the
+                    // hospital teleport is the only way its position changes.
+                    if (Player.State == CharacterState.Dead)
+                        return;
+
                     Player.Position = moveMessage.Movement.Position;
                     Player.Rotation = moveMessage.Movement.ViewDirection.X;
                     Movement = moveMessage.Movement;

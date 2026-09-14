@@ -1,0 +1,215 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+
+namespace Rasa.Managers
+{
+    using Data;
+    using Game;
+    using Models;
+    using Packets.ClientMethod.Server;
+    using Packets.MapChannel.Client;
+    using Packets.MapChannel.Server;
+    using Packets.Protocol;
+    using Structures;
+    using Structures.Char;
+
+    /// <summary>
+    /// What a dead player was offered: the hospitals advertised in PlayerDead, which ReviveMe
+    /// must choose from.
+    /// </summary>
+    public sealed class PlayerDeathOffer
+    {
+        public ulong SourceId { get; }
+        public IReadOnlyList<HospitalData> Hospitals { get; }
+
+        public PlayerDeathOffer(ulong sourceId, IReadOnlyList<HospitalData> hospitals)
+        {
+            SourceId = sourceId;
+            Hospitals = hospitals;
+        }
+    }
+
+    /// <summary>
+    /// Player death, hospital choice and hospital revival, from the 1.16.5.0 client contract
+    /// (docs/player-death-client-evidence.md) and the final-live footage (A4-35..39, B3-042..059,
+    /// B2-019). Trauma, equipment wear, ally revival and death persistence are separate gaps
+    /// (docs/player-death-implementation.md).
+    /// </summary>
+    public sealed class PlayerDeathManager
+    {
+        private static readonly Lazy<PlayerDeathManager> Singleton = new(() =>
+            new PlayerDeathManager((client, update, value) => CharacterManager.Instance.UpdateCharacter(client, update, value)));
+        public static PlayerDeathManager Instance => Singleton.Value;
+
+        private readonly Action<Client, CharacterUpdate, object> _persist;
+
+        public PlayerDeathManager(Action<Client, CharacterUpdate, object> persist)
+        {
+            _persist = persist ?? throw new ArgumentNullException(nameof(persist));
+        }
+
+        /// <summary>
+        /// The hospitals a player on this map may respawn at: known (gained, or known without
+        /// discovery) and, for control-point hospitals, AFS-held. No control-point state exists
+        /// on this server, so control points are treated as held (GAP-CONTROL-POINTS).
+        /// </summary>
+        public static List<HospitalData> OfferedHospitals(Manifestation player)
+        {
+            if (player?.MapChannel?.MapInfo == null)
+                return new List<HospitalData>();
+
+            return HospitalCatalog.ForMap(player.MapChannel.MapInfo.MapContextId)
+                .Where(hospital => hospital.KnownWithoutDiscovery || HasGained(player, hospital))
+                .ToList();
+        }
+
+        private static bool HasGained(Manifestation player, HospitalData hospital)
+            => player.GainedWaypoints.Any(waypoint => waypoint.WaypointId == hospital.WaypointId &&
+                waypoint.WaypointType == (byte)WaypointType.Hospital);
+
+        /// <summary>
+        /// Called after the killing hit's recovery (deathBlow set) has gone to the source's
+        /// observers. The player is already Dead, so later hits and actions skip it.
+        /// </summary>
+        public void AnnounceDeath(MapChannel mapChannel, Manifestation player, Actor source)
+        {
+            // Observers who could not see the source get the victim-side fallback.
+            CellManager.Instance.CellCallMethod(mapChannel, player, new ActorKilledPacket());
+
+            var client = mapChannel.ClientList?.FirstOrDefault(candidate => candidate?.Player == player);
+            if (client == null)
+                return;
+
+            var hospitals = OfferedHospitals(player);
+            player.DeathOffer = new PlayerDeathOffer(source?.EntityId ?? 0, hospitals);
+
+            // Owner only. A non-empty list opens Hospital Selection (A4-36, B3-043); canRevive
+            // stays 0 because no ally revival exists here.
+            client.CallMethod(player.EntityId, new PlayerDeadPacket(player.DeathOffer.SourceId,
+                hospitals.Select(hospital => new GraveyardInfo(hospital.GraveyardId, hospital.Position, hospital.IsSafe))));
+        }
+
+        /// <summary>
+        /// ReviveMe(graveyardId): the Respawn button sends the selected id; closing the window or
+        /// the death dialog's "Go To Hospital" sends None.
+        /// </summary>
+        public void ReviveMe(Client client, ReviveMePacket packet)
+        {
+            var player = client?.Player;
+            if (client == null || client.State != ClientState.Ingame || player?.MapChannel == null ||
+                player.State != CharacterState.Dead || player.DeathOffer == null)
+                return;
+
+            var offer = player.DeathOffer;
+            HospitalData hospital;
+
+            if (packet.GraveyardId is int requested)
+            {
+                hospital = offer.Hospitals.FirstOrDefault(candidate => candidate.GraveyardId == requested);
+                if (hospital == null)
+                {
+                    // Not what this death offered: the player stays dead and can choose again.
+                    Logger.WriteLog(LogType.Security, $"{player.Name} asked to respawn at hospital {requested}, which was not offered.");
+                    return;
+                }
+            }
+            else
+            {
+                // None: the nearest offered hospital by squared X/Y/Z distance, the rule the client's
+                // own waypointwindow._RespawnPlayer uses when its timer runs out (inferred for the server).
+                hospital = offer.Hospitals
+                    .OrderBy(candidate => Vector3.DistanceSquared(candidate.Position, player.Position))
+                    .FirstOrDefault();
+            }
+
+            player.DeathOffer = null;
+
+            if (hospital != null)
+                MoveToHospital(client, hospital);
+            else
+                // No hospital on this map (none of the starting areas): revive in place rather than
+                // leave the character dead with no way out (emulator fallback, GAP-NO-HOSPITAL).
+                Logger.WriteLog(LogType.Error, $"{player.Name} died on map {player.MapChannel.MapInfo?.MapContextId} with no hospital to offer; reviving in place.");
+
+            // "The medical techs will revive and restore you to full health" (tutorial 1582).
+            // Armor is restored with it (inferred); power and adrenaline are left as they were.
+            player.State = CharacterState.Normal;
+            if (player.Attributes.TryGetValue(Attributes.Health, out var health))
+                health.Current = health.CurrentMax;
+            if (player.Attributes.TryGetValue(Attributes.Armor, out var armor))
+                armor.Current = armor.CurrentMax;
+
+            var mapChannel = player.MapChannel;
+            CellManager.Instance.CellCallMethod(mapChannel, player, new RevivedPacket(0));
+            if (health != null)
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateHealthPacket(health, 0));
+            if (armor != null)
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateArmorPacket(armor, 0));
+
+            if (hospital != null)
+                _persist(client, CharacterUpdate.Position, null);
+        }
+
+        /// <summary>BuryMe is the Revive button, which canRevive = 0 keeps disabled.</summary>
+        public void BuryMe(Client client)
+        {
+            if (client?.Player?.State == CharacterState.Dead)
+                Logger.WriteLog(LogType.Security, $"{client.Player.Name} asked to revive in place, which was not offered.");
+        }
+
+        private static void MoveToHospital(Client client, HospitalData hospital)
+        {
+            var player = client.Player;
+            player.Position = hospital.Position;
+
+            // Actor.BeginTeleport queues the acknowledgement that Recv_Teleport then sends, so it
+            // goes first. The hospital's facing is unrecovered: the player keeps their own.
+            client.CellCallMethod(client, player.EntityId, new PreTeleportPacket(TeleportType.Default));
+            client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
+            client.CallMethod(player.EntityId, new TeleportPacket(hospital.Position, player.Rotation, TeleportType.Default, 0));
+            client.CellMoveObject(client, new MoveObjectMessage(player.EntityId,
+                new Movement(hospital.Position, 0f, 0, new Vector2((float)player.Rotation, 0f))), true);
+        }
+
+        /// <summary>
+        /// Gains the hospitals a living player has come within DiscoveryRadius of (horizontal).
+        /// Run once per second from the map worker.
+        /// </summary>
+        public void DiscoverHospitals(MapChannel mapChannel)
+        {
+            if (mapChannel?.MapInfo == null || mapChannel.ClientList == null)
+                return;
+
+            var hospitals = HospitalCatalog.ForMap(mapChannel.MapInfo.MapContextId)
+                .Where(hospital => !hospital.KnownWithoutDiscovery).ToList();
+            if (hospitals.Count == 0)
+                return;
+
+            foreach (var client in mapChannel.ClientList)
+            {
+                var player = client?.Player;
+                if (player == null || client.State != ClientState.Ingame || player.Disconected ||
+                    player.RemoveFromMap || player.State == CharacterState.Dead)
+                    continue;
+
+                foreach (var hospital in hospitals)
+                {
+                    if (HasGained(player, hospital))
+                        continue;
+
+                    var dx = player.Position.X - hospital.Position.X;
+                    var dz = player.Position.Z - hospital.Position.Z;
+                    if (dx * dx + dz * dz > HospitalCatalog.DiscoveryRadius * HospitalCatalog.DiscoveryRadius)
+                        continue;
+
+                    var entry = new CharacterTeleporterEntry(player.Id, hospital.WaypointId, (byte)WaypointType.Hospital);
+                    player.GainedWaypoints.Add(entry);
+                    client.CallMethod(player.EntityId, new GraveyardGainedPacket(hospital.WaypointId));
+                    _persist(client, CharacterUpdate.Teleporter, entry);
+                }
+            }
+        }
+    }
+}

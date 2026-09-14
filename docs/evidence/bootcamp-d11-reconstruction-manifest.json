@@ -4210,13 +4210,14 @@
  "gaps": [
   {
    "id": "GAP-DEATH",
-   "summary": "Players never die, so boss and bomb deaths, the hospital sequence and the \"Not yourself!\" message are absent.",
+   "summary": "Track D landed (2026-09-14): players die, Hospital Selection offers Refugee Base Medic (graveyard 20000001) and the respawn uses its marker position, calibrated to 1.1 m against A4-39. Still absent: trauma above level 5, equipment wear, ally revival, death persistence across logout, and the \"Not yourself!\" message.",
    "evidence": [
-    "src/Rasa.Game/Managers/MissileManager.cs:120-125 (players never die)",
+    "docs/player-death-implementation.md",
+    "docs/evidence/hospital-catalog.json",
     "footage A4-35..A4-39 (death and hospital inside the boot camp)",
     "docs/death-research.md"
    ],
-   "closes_with": "track D (death and hospital)",
+   "closes_with": "trauma, wear, ally revival and persistence evidence (hospital-catalog.json gaps)",
    "surfaced_by": [
     "manifest",
     "docs/retail-accuracy.md"
@@ -4464,11 +4465,12 @@
   },
   {
    "id": "GAP-HOSPITAL-GAIN",
-   "summary": "The \"You just gained Alia Das Hospital.\" message on arrival is not produced.",
+   "summary": "Hospitals are gained within 100 m (inferred lower bound from this very arrival, B2-019), so the Alia Das gain line follows the S6 arrival on the first discovery tick; the original trigger remains unrecovered.",
    "evidence": [
-    "depends on the hospital system of track D (build plan S6 stubs)"
+    "docs/evidence/hospital-catalog.json discovery_radius_m",
+    "footage B2-019"
    ],
-   "closes_with": "track D",
+   "closes_with": "evidence of the original acquisition trigger",
    "surfaced_by": [
     "manifest"
    ],
