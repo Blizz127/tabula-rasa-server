@@ -153,7 +153,7 @@ namespace Rasa.Test
             Assert.IsFalse(effects.TryDetachRequestedEffect(second.Player.MapChannel, second.Player, id));
             first.Player.ActiveEffects[999] = new GameEffect { EffectId = 999, TypeId = 123, Duration = 1000 };
             Assert.IsFalse(effects.TryDetachRequestedEffect(first.Player.MapChannel, first.Player, 999));
-            Manager().RequestDetachGameEffect(first, new RequestDetachGameEffectPacket { EffectId = id });
+            GestureManager.Instance.RequestDetachGameEffect(first, new RequestDetachGameEffectPacket { EffectId = id });
             Assert.IsFalse(first.Player.ActiveEffects.ContainsKey(id));
             Assert.IsTrue(first.Player.ActiveEffects.ContainsKey(999));
             Assert.AreEqual(1.0, first.Player.MovementSpeed);

@@ -36,8 +36,25 @@ namespace Rasa.Managers
             }
         }
 
+        /// <summary>
+        /// Furthest a missile may be aimed. Cells are 25.6 units and a client is only ever told
+        /// about the 5x5 cells around it, so nothing past ~64 units is even on its screen; this
+        /// is twice that, which no weapon reaches and no honest client asks for.
+        /// </summary>
+        private const float MaxTargetDistance = 128f;
+
         private MissileManager()
         {
+        }
+
+        /// <summary>
+        /// Entity ids are global, but cells are per map: CellCallMethod indexes this map's cell
+        /// table with the target's cell seeds, and a target on another map throws
+        /// KeyNotFoundException on the main loop.
+        /// </summary>
+        private static bool IsOnMap(MapChannel mapChannel, Actor actor)
+        {
+            return actor != null && actor.MapContextId == mapChannel.MapInfo.MapContextId;
         }
 
         private static Actor GetTargetActor(ulong entityId)
@@ -189,10 +206,23 @@ namespace Rasa.Managers
                 }
                 missile.TargetEntityId = action.TargetId;
 
-                if (targetActor.State == CharacterState.Dead)
+                if (targetActor == null || targetActor.State == CharacterState.Dead)
                     return; // actor is dead, cannot be shot at
 
+                if (!IsOnMap(mapChannel, targetActor))
+                {
+                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId}, which is on map {targetActor.MapContextId}, not {mapChannel.MapInfo.MapContextId}");
+                    return;
+                }
+
                 var distance = Vector3.Distance(targetActor.Position, action.Actor.Position);
+
+                if (distance > MaxTargetDistance)
+                {
+                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId} from {distance:F0} units away");
+                    return;
+                }
+
                 triggerTime = (int)(distance * 0.5f);
             }
             else
@@ -272,8 +302,11 @@ namespace Rasa.Managers
             switch (missile.ActionId)
             {
                 case ActionId.WeaponAttack:
-                // Original action 174 inherits BaseWeaponAttack's recovery receiver.
-                // Native melee range/impact mechanics remain a separate evidence gap.
+                // Melee (174) is resolved exactly like a ranged attack: the original server's
+                // missile_ActionRecoveryHandler_WeaponMelee forwarded to the WeaponAttack
+                // handler "until there is better handling for melee weapons", and the recovery
+                // packet is the same shape. It fell through to the default here, which did the
+                // right thing but logged every swing as an unsupported action.
                 case ActionId.WeaponMelee:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;

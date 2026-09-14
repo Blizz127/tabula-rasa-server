@@ -19,6 +19,7 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterClass(uint id, uint classId);
         void UpdateCharacterCloneCredits(uint id, uint cloneCredits);
         void UpdateCharacterCredits(uint id, int credits);
+        void UpdateCharacterPrestige(uint id, int prestige);
         void UpdateCharacterExpirience(uint id, uint experience);
         void UpdateCharacterRewards(uint id, int credits, int prestige, uint experience);
         void UpdateCharacterLevel(uint id, byte level);
@@ -27,5 +28,9 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins);
         void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId);
         void UpdateCharacterActiveWeapon(uint id, byte activeWeapon);
+        void UpdateCharacterName(uint id, string name);
+
+        /// <summary>Whether another character already has this name, matched case-insensitively.</summary>
+        bool IsCharacterNameTaken(string name, uint exceptCharacterId);
     }
 }

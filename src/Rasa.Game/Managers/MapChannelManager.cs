@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Rasa.Managers
 {
@@ -22,7 +23,6 @@ namespace Rasa.Managers
         public readonly Timer Timer = new();
 
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
-        private readonly Func<long> _getMonotonicMilliseconds;
         public static MapChannelManager Instance
         {
             get
@@ -40,11 +40,27 @@ namespace Rasa.Managers
                 return _instance;
             }
         }
+        private readonly Func<long> _getMonotonicMilliseconds;
+
         public MapChannelManager(IGameUnitOfWorkFactory gameUnitOfWorkFactory, Func<long> getMonotonicMilliseconds = null)
         {
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
             _getMonotonicMilliseconds = getMonotonicMilliseconds ?? (() => Environment.TickCount64);
         }
+
+        /// <summary>
+        /// Wait between RequestLogout and an honoured CharacterLogout. Sent to the client as
+        /// LogoutTimeRemaining, which keeps the logout window's Logout button disabled until it
+        /// has elapsed.
+        /// </summary>
+        public const int LogoutDelayMs = 5000;
+
+        /// <summary>
+        /// Allowance for clock-rate drift on the early-logout check. A normal client cannot be
+        /// early: it starts its countdown when LogoutTimeRemaining arrives, which is after the
+        /// server recorded the request.
+        /// </summary>
+        private const int LogoutDelayToleranceMs = 250;
 
         public void CharacterLogout(Client client)
         {
@@ -54,6 +70,32 @@ namespace Rasa.Managers
 
             client.Player.RemoveFromMap = true;
             client.State = ClientState.LoggedIn;
+        }
+
+        /// <summary>
+        /// The logout window's Cancel button (client/ui/logoutwindow.py:108). Withdraws a pending
+        /// logout, so a CharacterLogout that follows is ignored until the player requests again.
+        /// </summary>
+        public void CancelLogoutRequest(Client client)
+        {
+            if (client.State != ClientState.Disconnected)
+                client.Player.LogoutCountdown.Cancel();
+        }
+
+        public static bool HasWorldPresence(Client client)
+            => client.Player?.MapChannel != null && !client.Player.Disconected;
+
+        public bool TryRemoveDisconnectedClient(Client client)
+        {
+            if (client.State != ClientState.Disconnected)
+                return false;
+
+            if (HasWorldPresence(client) && client.Player.LogoutCountdown.IsWaiting(_getMonotonicMilliseconds()))
+                return false;
+
+            // No verified retail grace period exists for loss without RequestLogout.
+            RemovePlayer(client, false);
+            return true;
         }
 
         public MapChannel FindByContextId(uint contextId)
@@ -121,8 +163,10 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.Initialize, "");
             Logger.WriteLog(LogType.Initialize, "Server ready!");
 
+            Timer.Add("AutoFire", 100, true, null);
             Timer.Add("CheckForLogingClients", 1000, true, null);
             Timer.Add("CheckForObjects", 1000, true, null);
+            Timer.Add("ClientEffectUpdate", 500, true, null);
             Timer.Add("CellUpdateVisibility", 1000, true, null);
             Timer.Add("CheckForCreatures", 1000, true, null);
             Timer.Add("CheckForMapTriggers", 1000, true, null);
@@ -131,6 +175,16 @@ namespace Rasa.Managers
         public void MapChannelWorker(long delta)
         {
             Timer.Update(delta);
+
+            PartyManager.Instance.ExpireHeldMembers();
+
+            // Server-wide lists, ticked once. These used to run inside the per-map loop below,
+            // guarded by that map having players, so with N populated maps every auto-fire
+            // timer and every dropship advanced N times per tick.
+            DynamicObjectManager.Instance.DropshipsWorker(delta);
+
+            if (Timer.IsTriggered("AutoFire"))
+                ManifestationManager.Instance.AutoFireTimerDoWork(delta);
 
             foreach (var t in MapChannelArray)
             {
@@ -145,8 +199,7 @@ namespace Rasa.Managers
                         var dequedClient = mapChannel.QueuedClients.Dequeue();
 
                         // add it to list
-                        if (dequedClient.State != ClientState.Disconnected && !dequedClient.Player.Disconected)
-                            mapChannel.ClientList.Add(dequedClient);
+                        mapChannel.ClientList.Add(dequedClient);
                     }
 
                 if (mapChannel.ClientList.Count > 0)
@@ -154,7 +207,6 @@ namespace Rasa.Managers
                     ActorActionManager.Instance.DoWork(mapChannel, delta);
                     MissileManager.Instance.DoWork(mapChannel, delta);
                     BehaviorManager.Instance.MapChannelThink(mapChannel, delta);
-                    DynamicObjectManager.Instance.DropshipsWorker(mapChannel, delta);
 
                     // CellManager worker
                     if (Timer.IsTriggered("CellUpdateVisibility"))
@@ -170,28 +222,45 @@ namespace Rasa.Managers
 
                     // check for mapTriggers
                     if (Timer.IsTriggered("CheckForMapTriggers"))
+                    {
                         MapTriggerManager.Instance.TriggersProximityWorker(mapChannel);
 
-                    // Account for every elapsed interval; sampling only one delta
-                    // every 500 ms made effect durations and drain run too slowly.
-                    GameEffectManager.Instance.DoWork(mapChannel, delta);
+                        // zone borders and instance doors: anyone standing in one leaves the map
+                        MapLinkManager.Instance.Worker(mapChannel);
+                    }
 
-                    // Area-bound mission objectives (no work in contexts without live content areas).
-                    MissionContentManager.Instance.DoWork(mapChannel);
+                    // check for effects (buffs)
+                    if (Timer.IsTriggered("ClientEffectUpdate"))
+                        GameEffectManager.Instance.DoWork(mapChannel, delta);
 
-                    // chack for player LogOut
+                    // warn idle players and flag long-idle ones for removal below
+                    ManifestationManager.Instance.CheckInactivity(mapChannel);
+
+                    // check for players leaving the map: /logout, inactivity, and dropped
+                    // connections flagged by Client.Close()
                     foreach (var client in mapChannel.ClientList)
-                        if (client != null)
-                            if (client.Player.RemoveFromMap == true)
+                        if (client != null && client.Player.RemoveFromMap)
+                        {
+                            // The MainLoop thread has no handler of its own, so an exception
+                            // escaping here stops the whole server ticking. Clear the flag
+                            // first and drop the entry on failure so a bad removal is logged
+                            // once instead of retried - and thrown - on every tick.
+                            client.Player.RemoveFromMap = false;
+
+                            try
                             {
                                 RemovePlayer(client, true);
-                                break;
                             }
+                            catch (Exception e)
+                            {
+                                Logger.WriteLog(LogType.Error, $"Failed to remove {client.Player.FamilyName} from map {mapChannel.MapInfo.MapContextId}: {e}");
+                                mapChannel.ClientList.Remove(client);
+                            }
+
+                            break;
+                        }
                 }
             }
-            // The autofire list is global: advance it once per elapsed interval,
-            // independent of how many maps currently contain players.
-            ManifestationManager.Instance.AutoFireTimerDoWork(delta);
         }
 
         public void MapLoaded(Client client)
@@ -209,16 +278,20 @@ namespace Rasa.Managers
                 CellManager.Instance.AddToWorld(client.Player.MapChannel, dropship);
                 DynamicObjectManager.Instance.Dropships.Add(dropship.EntityId, dropship);
                 CommunicatorManager.Instance.LoginOk(dropship.Client);
+                ServerFlagManager.Instance.SendFlags(client);
 
-                InventoryManager.Instance.InitForClient(client);
-                ManifestationManager.Instance.UpdateStatsValues(client, true);
+                // The manifestation, its items and its entity registrations survive the map
+                // change; the client's picture of them does not. Show it what the server
+                // already has rather than loading and registering it all a second time, and
+                // recompute the stats without the full reset that healed the player.
+                InventoryManager.Instance.ResendToClient(client);
+                ManifestationManager.Instance.UpdateStatsValues(client, false);
 
                 CellManager.Instance.AddToWorld(dropship.Client); // will introduce the player to all clients, including the current owner
+                MapLinkManager.Instance.PlayerEnteredMap(client);
                 CellManager.Instance.CellCallMethod(dropship.Client.Player.MapChannel, dropship.Client.Player, new TeleportArrivalPacket());
                 client.CallMethod(SysEntity.ClientMethodId, new RequestMovementBlockPacket());
                 ManifestationManager.Instance.AssignPlayer(client);
-                MissionManager.Instance.SendMissionStatusInfo(client);
-                MissionContentManager.Instance.OnPlayerEnteredMap(client);
                 CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position);
                 CommunicatorManager.Instance.PlayerEnterMap(dropship.Client);
 
@@ -226,6 +299,7 @@ namespace Rasa.Managers
             }
 
             client.State = ClientState.Ingame;
+            ManifestationManager.Instance.ResetInactivity(client);
             InventoryManager.Instance.InitForClient(client);
             ManifestationManager.Instance.UpdateStatsValues(client, true);
 
@@ -235,14 +309,27 @@ namespace Rasa.Managers
             EntityManager.Instance.RegisterActor(client.Player.EntityId, client.Player);
             CommunicatorManager.Instance.LoginOk(client);
 
+            // Before anything the player can act on: the client asks its own flag set whether to
+            // offer a feature, and an empty set means the feature is simply missing.
+            ServerFlagManager.Instance.SendFlags(client);
+
+            // Whatever is broken about the map they have just walked into, if they are someone
+            // who can do anything about it. The dialog is modal and always visible, so a player
+            // would be stuck reading about server data they cannot fix.
+            if (client.AccountEntry != null && client.AccountEntry.Level >= (byte)GmLevel.Observer)
+                MapErrorManager.Instance.SendTo(client);
+
             CellManager.Instance.AddToWorld(client); // will introduce the player to all clients, including the current owner
+
+            // Before the first link check: a player who arrives through a pass is standing in
+            // the gate on this side, and must walk out of it before it can send them back.
+            MapLinkManager.Instance.PlayerEnteredMap(client);
             ManifestationManager.Instance.AssignPlayer(client);
-            MissionManager.Instance.SendMissionStatusInfo(client);
-            MissionContentManager.Instance.OnPlayerEnteredMap(client);
 
             ClanManager.Instance.InitializePlayerClanData(client);
             InventoryManager.Instance.InitClanInventory(client);
             CommunicatorManager.Instance.PlayerEnterMap(client);
+            PartyManager.Instance.PlayerEnteredWorld(client);
         }
 
         public void PassClientToCharacterSelection(Client client)
@@ -277,6 +364,53 @@ namespace Rasa.Managers
             client.Player.MapChannel.QueuedClients.Enqueue(client);
         }
 
+        /// <summary>
+        /// Moves an ingame player to a position on any loaded map by way of the loading screen:
+        /// out of the current map channel, then Wonkavate into the new one. Summon and .teleport
+        /// each had a copy of this that forgot to point the player at the new map, so when the
+        /// client answered with MapLoaded it was added to the OLD map's cells at its OLD position.
+        /// Everyone there saw a frozen ghost, its broadcasts went to the wrong map, and the first
+        /// cell crossing on the new map indexed the old map's cell table with new-map seeds and
+        /// threw KeyNotFoundException on the main loop.
+        /// </summary>
+        /// <returns>false when the map is not loaded or the player is not in a state to move.</returns>
+        public bool ChangeMap(Client client, uint mapContextId, Vector3 position, float orientation)
+        {
+            if (client.Player == null || client.State != ClientState.Ingame)
+                return false;
+
+            if (!MapChannelArray.TryGetValue(mapContextId, out var mapChannel))
+                return false;
+
+            client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
+            client.State = ClientState.Loading;
+
+            // Out of the old map while the player still points at it: entities, cells, the
+            // managers that track it, and the old ClientList.
+            RemovePlayer(client, false);
+
+            // What MapLoaded reads back when the client is ready: the map channel it adds the
+            // player to, and the position the cell matrix is built from.
+            client.Player.MapChannel = mapChannel;
+            client.Player.MapContextId = mapContextId;
+            client.Player.Position = position;
+            client.Player.Rotation = orientation;
+            client.LoadingMap = mapContextId;
+
+            var packet = new WonkavatePacket(
+                mapChannel.MapInfo.MapContextId,
+                0,                  // ToDo MapInstanceId
+                mapChannel.MapInfo.MapVersion,
+                position,
+                orientation);
+
+            client.CallMethod(SysEntity.CurrentInputStateId, packet);
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position, packet);
+            mapChannel.ClientList.Add(client);
+
+            return true;
+        }
+
         public void Ping(Client client, double ping)
         {
             client.CallMethod(SysEntity.ClientMethodId, new AckPingPacket(ping));
@@ -284,73 +418,65 @@ namespace Rasa.Managers
 
         public void RemovePlayer(Client client, bool logout)
         {
-            var player = client.Player;
-            if (player == null || player.Disconected)
-                return;
-
-            client.SaveCharacter();
+            // A target is an entity on this map; the client does not always re-target after a
+            // map change, and MissileLaunch refuses cross-map targets, so drop it here.
+            client.Player.Target = 0;
 
             // unregister Communicator
-            if (EntityManager.Instance.Players.TryGetValue(player.EntityId, out var registered) && registered == player)
-                CommunicatorManager.Instance.PlayerExitMap(client);
+            CommunicatorManager.Instance.PlayerExitMap(client);
             // unregister mapChannelClient
             EntityManager.Instance.UnregisterEntity(client.Player.EntityId);
             EntityManager.Instance.UnregisterPlayer(client.Player.EntityId);
             EntityManager.Instance.UnregisterActor(client.Player.EntityId);
 
             // unregister character Inventory
-            var inventoryIds = new HashSet<ulong>(player.Inventory.EquippedInventory);
-            inventoryIds.UnionWith(player.Inventory.HomeInventory);
-            inventoryIds.UnionWith(player.Inventory.PersonalInventory);
-            inventoryIds.UnionWith(player.Inventory.WeaponDrawer);
-            foreach (var entityId in inventoryIds)
+            foreach (var entityId in client.Player.Inventory.EquippedInventory)
                 if (entityId != 0)
                     EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
 
-            if (registered == player)
-                ManifestationManager.Instance.StopAutoFire(client);
+            foreach (var entityId in client.Player.Inventory.HomeInventory)
+                if (entityId != 0)
+                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+
+            foreach (var entityId in client.Player.Inventory.PersonalInventory)
+                if (entityId != 0)
+                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+
+            foreach (var entityId in client.Player.Inventory.WeaponDrawer)
+                if (entityId != 0)
+                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+
+            NpcManager.Instance.DiscardBuybackItems(client);
+            ActorActionManager.Instance.RemoveActor(client.Player);
+
             CellManager.Instance.RemoveFromWorld(client);
+            MapLinkManager.Instance.RemovePlayer(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
+            LookingForGroupManager.Instance.RemovePlayer(client);
+            SummonManager.Instance.RemovePlayer(client);
+            TradeManager.Instance.RemovePlayer(client);
+            PartyManager.Instance.RemovePlayer(client);
+            PetitionManager.Instance.RemovePlayer(client);
 
-            player.Disconected = true;
-            player.RemoveFromMap = true;
-            player.LogoutCountdown.Cancel();
-            player.CurrentAbility = null;
-            player.CurrentWeaponAction = null;
-            player.CurrentWeaponAttack = null;
-            var map = player.MapChannel;
-            if (map != null)
-            {
-                map.ClientList.RemoveAll(candidate => candidate == client);
-                map.PerformRecovery.RemoveAll(action => action.Actor == player);
-                // A socket may close before the loading queue has admitted its character.
-                for (var remaining = map.QueuedClients.Count; remaining > 0; remaining--)
+            if (logout)
+                if (client.Player.Disconected == false)
                 {
-                    var queued = map.QueuedClients.Dequeue();
-                    if (queued != client)
-                        map.QueuedClients.Enqueue(queued);
+                    PassClientToCharacterSelection(client);
+                    client.Player.Disconected = true;
+                }
+
+            // remove from list
+            for (var i = 0; i < client.Player.MapChannel.ClientList.Count; i++)
+            {
+                if (client == client.Player.MapChannel.ClientList[i])
+                {
+                    client.Player.MapChannel.ClientList.RemoveAt(i);
+                    //mapClient.MapChannel.PlayerCount--;
+                    break;
                 }
             }
 
-            if (logout && client.State != ClientState.Disconnected)
-                PassClientToCharacterSelection(client);
-        }
-
-        public static bool HasWorldPresence(Client client)
-            => client.Player?.MapChannel != null && !client.Player.Disconected;
-
-        public bool TryRemoveDisconnectedClient(Client client)
-        {
-            if (client.State != ClientState.Disconnected)
-                return false;
-
-            if (HasWorldPresence(client) && client.Player.LogoutCountdown.IsWaiting(_getMonotonicMilliseconds()))
-                return false;
-
-            // No verified retail grace period exists for loss without RequestLogout.
-            RemovePlayer(client, false);
-            return true;
         }
 
         public void RequestLogout(Client client)
@@ -360,12 +486,6 @@ namespace Rasa.Managers
 
             var remaining = client.Player.LogoutCountdown.Begin(_getMonotonicMilliseconds());
             client.CallMethod(SysEntity.ClientMethodId, new LogoutTimeRemainingPacket(remaining));
-        }
-
-        public void CancelLogoutRequest(Client client)
-        {
-            if (client.State != ClientState.Disconnected)
-                client.Player.LogoutCountdown.Cancel();
         }
 
         public MapInstance GetMapInstance(uint mapContextId)

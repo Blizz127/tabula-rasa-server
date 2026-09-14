@@ -21,6 +21,7 @@ namespace Rasa.Repositories.Char
     using Friend;
     using Ignored;
     using Items;
+    using Petition;
     using UserOption;
 
     public interface ICharUnitOfWork : IUnitOfWork
@@ -47,6 +48,7 @@ namespace Rasa.Repositories.Char
         IGameAccountRepository GameAccounts { get; }
         IIgnoredRepository Ignoreds { get; }
         IItemRepository Items { get; }
+        IPetitionRepository Petitions { get; }
         IUserOptionRepository UserOptions { get; }
     }
 }

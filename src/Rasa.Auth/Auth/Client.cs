@@ -47,6 +47,7 @@ namespace Rasa.Auth
             Timer = new Timer();
 
             Socket.OnError += OnError;
+            Socket.OnDrop += OnDrop;
             Socket.OnReceive += OnReceive;
             Socket.OnDecrypt += OnDecrypt;
 
@@ -75,18 +76,52 @@ namespace Rasa.Auth
 
         public void Update(long delta)
         {
-            Timer.Update(delta);
+            // The timeout timer's callback closes the connection, and Close() does real work.
+            try
+            {
+                Timer.Update(delta);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error updating timers for {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+                return;
+            }
 
             if (State == ClientState.Disconnected)
                 return;
 
             IBasePacket packet;
 
+            // This is the auth server's main loop thread, and nothing above it catches: an
+            // exception out of a handler used to end the process. Now it ends the connection.
             while ((packet = _packetQueue.PopIncoming()) != null)
-                HandlePacket(packet);
+            {
+                try
+                {
+                    HandlePacket(packet);
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteLog(LogType.Error, $"Error handling {packet.GetType().Name} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                    Close();
+                    return;
+                }
+            }
 
-            while ((packet = _packetQueue.PopOutgoing()) != null)
-                SendPacket(packet);
+            // Writing a packet can throw - serialization, or a socket that has gone since the
+            // packet was queued - and the game server has guarded this half for a while. Auth
+            // had not: an exception here reached the main loop with nothing above it.
+            try
+            {
+                while ((packet = _packetQueue.PopOutgoing()) != null)
+                    SendPacket(packet);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+            }
         }
         
         public void Close()
@@ -115,6 +150,17 @@ namespace Rasa.Auth
             if (packet is not IOpcodedPacket<ClientOpcode> authPacket)
                 return;
 
+            // Each message belongs to a point in the conversation, and the handlers assume it:
+            // everything after Login reads AccountEntry, which Login sets. A ServerListExt or
+            // AboutToPlay sent first dereferenced null on the main loop thread. Login is the
+            // only thing a fresh connection may say; once it has said it, it may not again.
+            if (!IsExpected(authPacket.Opcode))
+            {
+                Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} sent {authPacket.Opcode} in state {State}; disconnecting.");
+                Close();
+                return;
+            }
+
             switch (authPacket.Opcode)
             {
                 case ClientOpcode.Login:
@@ -132,6 +178,23 @@ namespace Rasa.Auth
                 case ClientOpcode.ServerListExt:
                     MsgServerListExt(authPacket as ServerListExtPacket);
                     break;
+            }
+        }
+
+        private bool IsExpected(ClientOpcode opcode)
+        {
+            switch (opcode)
+            {
+                case ClientOpcode.Login:
+                    return State == ClientState.Connected;
+
+                case ClientOpcode.ServerListExt:
+                case ClientOpcode.AboutToPlay:
+                    return AccountEntry != null && (State == ClientState.LoggedIn || State == ClientState.ServerList);
+
+                default:
+                    // Logout and SCCheck carry nothing the state has to be ready for.
+                    return true;
             }
         }
 
@@ -177,6 +240,15 @@ namespace Rasa.Auth
             Close();
         }
 
+        /// <summary>
+        /// The socket has given up on this connection - a full send queue, a stream that stopped
+        /// framing, or no buffers left to serve it. Nothing more can pass either way, so let it go.
+        /// </summary>
+        private void OnDrop(string reason)
+        {
+            Close();
+        }
+
         private static void OnEncrypt(BufferData data, ref int length)
         {
             AuthCryptManager.Encrypt(data.Buffer, data.BaseOffset + data.Offset, ref length, data.RemainingLength);
@@ -187,18 +259,39 @@ namespace Rasa.Auth
             return AuthCryptManager.Decrypt(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength);
         }
 
+        /// <summary>
+        /// Socket completion thread. Nothing may escape: an opcode this server has no packet for
+        /// throws out of CreatePacket, and a malformed body throws out of Read - and the caller
+        /// is a socket callback, where an exception used to end the process. It costs this one
+        /// connection instead, and says which opcode did it.
+        /// </summary>
         private void OnReceive(BufferData data)
         {
-            // Reset the timeout after every action
-            Timer.ResetTimer("timeout");
+            // Nullable, not a default: Login is 0x00, so a default would name it as the culprit
+            // when the failure was reading the opcode byte itself.
+            ClientOpcode? opcode = null;
 
-            using var br = data.GetReader();
+            try
+            {
+                // Reset the timeout after every action
+                Timer.ResetTimer("timeout");
 
-            var packet = CreatePacket((ClientOpcode)br.ReadByte());
+                using var br = data.GetReader();
 
-            packet.Read(br);
+                opcode = (ClientOpcode)br.ReadByte();
 
-            _packetQueue.EnqueueIncoming(packet);
+                var packet = CreatePacket(opcode.Value);
+
+                packet.Read(br);
+
+                _packetQueue.EnqueueIncoming(packet);
+            }
+            catch (Exception e)
+            {
+                var what = opcode.HasValue ? $"a {opcode.Value} packet" : "a packet whose opcode could not be read";
+                Logger.WriteLog(LogType.Error, $"Error reading {what} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                Close();
+            }
         }
 
         private IBasePacket CreatePacket(ClientOpcode opcode)
@@ -270,7 +363,7 @@ namespace Rasa.Auth
         {
             State = ClientState.ServerList;
 
-            SendPacket(new SendServerListExtPacket(Server.ServerList, AccountEntry.LastServerId));
+            SendPacket(new SendServerListExtPacket(Server.GetServerListSnapshot(), AccountEntry.LastServerId));
         }
 #pragma warning restore IDE0060 // Remove unused parameter
 

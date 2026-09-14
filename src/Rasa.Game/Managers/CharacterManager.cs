@@ -11,7 +11,11 @@ namespace Rasa.Managers
     using Packets.Game.Client;
     using Packets.Game.Server;
     using Packets.MapChannel.Server;
+    using Misc;
     using Packets.ClientMethod.Server;
+    using Packets.Communicator.Client;
+    using Packets.Communicator.Server;
+    using Packets;
     using Repositories.Char;
     using Repositories.UnitOfWork;
     using Repositories.World;
@@ -183,13 +187,47 @@ namespace Rasa.Managers
 
         public void RequestCreateCharacterInSlot(Client client, RequestCreateCharacterInSlotPacket packet)
         {
+            // The selection screen is the only place the client sends this from. Nothing else here
+            // is safe against a create that arrives while a character is loaded: the new row is
+            // written, the account entry is reloaded under a live manifestation, and the caller
+            // has no reason to be anywhere but the pod screen.
             if (client.State != ClientState.CharacterSelection)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to create a character while in state {client.State}.");
+
+                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
                 return;
+            }
 
             var result = packet.Validate();
             if (result != CreateCharacterResult.Success)
             {
                 SendCharacterCreateFailed(client, result);
+                return;
+            }
+
+            // The pods are 1..MaxSelectionPods. The packet used to take any byte, and the row was
+            // inserted with whatever it said: slot 0 or 17+ made a character no pod ever shows and
+            // no switch can reach, which still counted for the family-name lock and "has
+            // characters"; a second character in an occupied slot was worse, because character
+            // selection keys the account's characters by slot and threw on the duplicate at every
+            // login from then on, locking the account out until someone edited the table.
+            if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to create a character in slot {packet.SlotNum}.");
+
+                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
+                return;
+            }
+
+            // AccountEntry.Characters is reloaded after every create and delete, and an account
+            // can only be logged in once, so this is current. The unique index on
+            // (account_id, slot) is the backstop if it ever is not.
+            if (client.AccountEntry.GetCharacterBySlot(packet.SlotNum) != null)
+            {
+                SendCharacterCreateFailed(client, CreateCharacterResult.CharacterSlotInUse);
                 return;
             }
 
@@ -249,6 +287,185 @@ namespace Rasa.Managers
             var character = unitOfWork.Characters.Get(characterId);
             SendCharacterInfo(client, packet.SlotNum, character);
         }
+
+        #region Name changes
+
+        /// <summary>
+        /// Names the client will accept, from PM_NAME_TOO_SHORT, PM_NAME_TOO_LONG and
+        /// PM_NAME_FORMAT_INVALID: "Your name must start with a capital letter, contain only
+        /// letters, and must not contain letters repeated more than twice in a row", 3 to 20
+        /// characters.
+        /// </summary>
+        public const int MinNameLength = 3;
+        public const int MaxNameLength = 20;
+
+        /// <summary>/changefirstname: renames the character the player is on.</summary>
+        internal void ChangeFirstName(Client client, ChangeFirstNamePacket packet)
+        {
+            if (!IsNameChanger(client))
+                return;
+
+            Rename(client, client, packet.Name, false);
+        }
+
+        /// <summary>/changelastname: renames the account's family, so every character on it.</summary>
+        internal void ChangeLastName(Client client, ChangeLastNamePacket packet)
+        {
+            if (!IsNameChanger(client))
+                return;
+
+            Rename(client, client, packet.Name, true);
+        }
+
+        /// <summary>
+        /// Renames a character or an account family, telling the player who asked what went
+        /// wrong. The target can be another player, for the GM command.
+        /// </summary>
+        public bool Rename(Client requester, Client target, string newName, bool familyName)
+        {
+            if (target?.Player == null || target.AccountEntry == null)
+                return false;
+
+            var name = newName?.Trim() ?? string.Empty;
+            var oldName = familyName ? target.Player.FamilyName : target.Player.Name;
+
+            if (string.Equals(oldName, name, StringComparison.Ordinal))
+                return false;
+
+            if (!IsValidName(name, out var formatError))
+            {
+                NameMessage(requester, formatError);
+                return false;
+            }
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            if (new Censor(unitOfWork.CensoredWords.GetCensoredWords()).ContainsProfanity(name))
+            {
+                NameMessage(requester, PlayerMessage.PmNameUnacceptable);
+                return false;
+            }
+
+            if (familyName)
+            {
+                if (!unitOfWork.GameAccounts.CanChangeFamilyName(target.AccountEntry.Id, name))
+                {
+                    NameMessage(requester, PlayerMessage.PmFamilyNameReserved);
+                    return false;
+                }
+
+                unitOfWork.GameAccounts.UpdateFamilyName(target.AccountEntry.Id, name);
+                target.Player.FamilyName = name;
+            }
+            else
+            {
+                // Character creation never checked this, so duplicates can exist already; a
+                // rename at least does not add more.
+                if (unitOfWork.Characters.IsCharacterNameTaken(name, target.Player.Id))
+                {
+                    NameMessage(requester, PlayerMessage.PmNameInUse);
+                    return false;
+                }
+
+                unitOfWork.Characters.UpdateCharacterName(target.Player.Id, name);
+                target.Player.Name = name;
+            }
+
+            // UpdateCharacterName saves as it goes; UpdateFamilyName only changes the tracked
+            // row, and the unit of work discards that on dispose unless it is completed. The
+            // family name change was lost here, and ReloadGameAccountEntry then read the old
+            // name straight back.
+            unitOfWork.Complete();
+
+            target.ReloadGameAccountEntry();
+
+            // CharacterName and ActorName are part of the entity data every client gets when it
+            // first sees the player (CreatePlayerEntityData); resending them updates the name on
+            // screen for everyone nearby without a relog. Characters of this account that are not
+            // in the world pick the family name up the next time they log in.
+            var mapChannel = target.Player.MapChannel;
+
+            if (mapChannel != null)
+                CellManager.Instance.CellCallMethod(mapChannel, target.Player,
+                    familyName ? new ActorNamePacket(target.Player.FamilyName) : (PythonPacket)new CharacterNamePacket(target.Player.Name));
+
+            var args = new Dictionary<string, string> { ["oldname"] = oldName ?? string.Empty, ["newname"] = name };
+            var changed = familyName ? PlayerMessage.PmLastNameChanged : PlayerMessage.PmFirstNameChanged;
+
+            target.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(changed, args, MsgFilterId.GeneralSystemMessages));
+
+            if (requester != target)
+                requester.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(changed, args, MsgFilterId.GeneralSystemMessages));
+
+            Logger.WriteLog(LogType.Command, $"{requester.AccountEntry.FamilyName} changed {(familyName ? "the family name" : "the character name")} of account {target.AccountEntry.Id} from {oldName} to {name}");
+
+            return true;
+        }
+
+        public static bool IsValidName(string name, out PlayerMessage error)
+        {
+            error = PlayerMessage.PmNameFormatInvalid;
+
+            if (string.IsNullOrEmpty(name) || name.Length < MinNameLength)
+            {
+                error = PlayerMessage.PmNameTooShort;
+                return false;
+            }
+
+            if (name.Length > MaxNameLength)
+            {
+                error = PlayerMessage.PmNameTooLong;
+                return false;
+            }
+
+            if (!char.IsUpper(name[0]))
+                return false;
+
+            for (var i = 0; i < name.Length; i++)
+            {
+                if (!char.IsLetter(name[i]))
+                    return false;
+
+                // No letter three times in a row.
+                if (i >= 2 && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 1])
+                           && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 2]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Name changes are a GM tool here: the slash commands are open to every player, and a
+        /// free rename at any moment is a way to be mistaken for someone else.
+        /// </summary>
+        /// <summary>
+        /// Who may use /changefirstname and /changelastname.
+        ///
+        /// GameMaster, matching the .rename command. It was "any GM level at all", which let an
+        /// Observer - the level that exists to read the world without changing it, and the level
+        /// every pre-existing account was left on - rename itself and its whole account family.
+        /// </summary>
+        private static bool IsNameChanger(Client client)
+        {
+            if (client?.AccountEntry == null || client.Player == null)
+                return false;
+
+            if (client.AccountEntry.Level >= (byte)GmLevel.GameMaster)
+                return true;
+
+            Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} tried to change a name without being a GM");
+            CommunicatorManager.Instance.SystemMessage(client, "Name changes are done by a GM.");
+
+            return false;
+        }
+
+        private static void NameMessage(Client client, PlayerMessage message)
+        {
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(message, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+        }
+
+        #endregion
 
         private uint? InternalCreate(Client client, RequestCreateCharacterInSlotPacket packet, ICharUnitOfWork unitOfWork)
         {
@@ -349,8 +566,35 @@ namespace Rasa.Managers
             }
         }
 
+        /// <summary>
+        /// Deleting is something the character selection screen asks for, and the shipped client
+        /// only offers it there. Nothing refused the packet from a client that was in the world,
+        /// though, so a modified one could delete the character its own player was standing in -
+        /// leaving the session running against a row that no longer exists.
+        ///
+        /// The test is the connection's state rather than Player.MapChannel: RemovePlayer takes
+        /// the client out of the map's client list but leaves the channel reference on the
+        /// Manifestation, so a player who reached selection through /logout still has one, and
+        /// gating on it would refuse a delete that is perfectly legitimate.
+        ///
+        /// Any delete from in the world is refused, not just of the character being played. A
+        /// real client cannot ask for either, and deleting one of your other characters
+        /// mid-session is no more a thing the selection screen can do.
+        /// </summary>
         public void RequestDeleteCharacterInSlot(Client client, RequestDeleteCharacterInSlotPacket packet)
         {
+            if (client.State == ClientState.Ingame
+                || client.State == ClientState.Loading
+                || client.State == ClientState.Teleporting)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to delete the character in slot {packet.Slot} "
+                    + $"while in the world (state {client.State}).");
+
+                client.CallMethod(SysEntity.ClientMethodId, new DeleteCharacterFailedPacket());
+                return;
+            }
+
             try
             {
                 var charactersBySlot = client.AccountEntry.GetCharacterBySlot(packet.Slot);
@@ -367,6 +611,17 @@ namespace Rasa.Managers
                     unitOfWork.Complete();
                 }
 
+                // Client.Player still points at the character that was just deleted - it is left
+                // loaded when the player returns to character selection. Client.SaveCharacter
+                // skips a player whose Id is 0 and otherwise looks the row up with
+                // GetWritableEnsuring, so dropping the connection from here (Alt+F4 at the
+                // selection screen) would go looking for a row that no longer exists and throw.
+                // Close() catches that, so it only ever cost a misleading "Failed to save
+                // character on disconnect" in the log - but there is genuinely nothing left to
+                // save, and the log should not say otherwise.
+                if (client.Player != null && client.Player.Id == charactersBySlot.Id)
+                    client.Player.Id = 0;
+
                 client.ReloadGameAccountEntry();
 
                 client.CallMethod(SysEntity.ClientMethodId, new CharacterDeleteSuccessPacket(client.AccountEntry.Characters.Any()));
@@ -381,14 +636,27 @@ namespace Rasa.Managers
 
         public void RequestSwitchToCharacterInSlot(Client client, RequestSwitchToCharacterInSlotPacket packet)
         {
-            if (client.State != ClientState.CharacterSelection || packet.SlotNum < 1 || packet.SlotNum > 16)
+            // Only from the pod screen. From the world this replaced the manifestation while
+            // the old one was still in its map's cells and every manager's tables - never
+            // removed, a frozen copy for everyone else, and the client in two maps at once.
+            if (client.State != ClientState.CharacterSelection)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to switch to the character in slot {packet.SlotNum} while in state {client.State}.");
+                return;
+            }
+
+            if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods)
                 return;
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
             // Resolve persisted ownership before changing either saved or session state.
             if (!unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id).TryGetValue(packet.SlotNum, out var character))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to switch to slot {packet.SlotNum}, which is empty.");
                 return;
-
+            }
             unitOfWork.GameAccounts.UpdateSelectedSlot(client.AccountEntry.Id, packet.SlotNum);
             unitOfWork.Characters.UpdateLoginData(character.Id);
             unitOfWork.Complete();
@@ -502,9 +770,14 @@ namespace Rasa.Managers
                     break;
 
                 case CharacterUpdate.Login:
-                    var totalTimePlayed = (DateTime.Now - client.Player.LoginTime).Minutes + client.Player.TotalTimePlayed;
+                    // TotalMinutes, not Minutes: Minutes is the minute hand (0..59), so a
+                    // session of an hour and ten minutes used to count as ten. TotalTimePlayed
+                    // on the manifestation is the value loaded at login and LoginTime is set
+                    // once, so the sum is right however many times this runs in one session.
+                    var sessionMinutes = (long)(DateTime.Now - client.Player.LoginTime).TotalMinutes;
+                    var totalTimePlayed = (uint)Math.Max(0, sessionMinutes) + client.Player.TotalTimePlayed;
 
-                    unitOfWork.Characters.UpdateCharacterLogin(client.Player.Id, (uint)totalTimePlayed, client.Player.NumLogins);
+                    unitOfWork.Characters.UpdateCharacterLogin(client.Player.Id, totalTimePlayed, client.Player.NumLogins);
                     break;
 
                 case CharacterUpdate.Logos:
@@ -518,9 +791,9 @@ namespace Rasa.Managers
 
                     if (data != null)
                     {
-                        var character = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id, client.AccountEntry.SelectedSlot);
-
-                        unitOfWork.Characters.UpdateCharacterPosition(character.Id, data.Position.X, data.Position.Y, data.Position.Z, data.Orientation, data.MapContextId);
+                        // The character being moved is the one in the world; no need to go by
+                        // the selected slot, which can name an empty pod.
+                        unitOfWork.Characters.UpdateCharacterPosition(client.Player.Id, data.Position.X, data.Position.Y, data.Position.Z, data.Orientation, data.MapContextId);
                     }
                     else
                         unitOfWork.Characters.UpdateCharacterPosition(
@@ -535,6 +808,14 @@ namespace Rasa.Managers
                     break;
 
                 case CharacterUpdate.Prestige:
+                    // Same shape as Credits: value is the signed change. Prestige was loaded
+                    // into Player.Credits at login but never written back.
+                    var prestigeChange = (int)value;
+
+                    client.Player.Credits[CurencyType.Prestige] += prestigeChange;
+
+                    client.CallMethod(client.Player.EntityId, new UpdateCreditsPacket(CurencyType.Prestige, client.Player.Credits[CurencyType.Prestige], 0));
+                    unitOfWork.Characters.UpdateCharacterPrestige(client.Player.Id, client.Player.Credits[CurencyType.Prestige]);
                     break;
 
                 case CharacterUpdate.Stats:

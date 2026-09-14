@@ -7,6 +7,7 @@ namespace Rasa.Managers
     using Game;
     using Models;
     using Packets;
+    using Packets.MapChannel.Server;
     using Repositories.UnitOfWork;
     using Structures;
 
@@ -89,6 +90,33 @@ namespace Rasa.Managers
             mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].MapTriggers.Add(trigger);
         }
 
+        //mapLink
+        public void AddToWorld(MapChannel mapChannel, MapLink link)
+        {
+            if (link == null)
+                return;
+
+            var cellPosX = (uint)(link.Position.X / CellSize + CellBias);
+            var cellPosZ = (uint)(link.Position.Z / CellSize + CellBias);
+
+            // The matrix is built so the link's neighbours exist for the players who will look
+            // at it from up to two cells away.
+            var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
+
+            mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].MapLinks.Add(link);
+        }
+
+        public void RemoveFromWorld(MapChannel mapChannel, MapLink link)
+        {
+            if (link == null)
+                return;
+
+            var cellSeed = GetCellSeed(link.Position);
+
+            if (mapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                cell.MapLinks.Remove(link);
+        }
+
         // Object
         public void AddToWorld(MapChannel mapChannel, DynamicObject dynamicObject)
         {
@@ -168,13 +196,27 @@ namespace Rasa.Managers
             if (creature == null)
                 return;
 
-            // destroy crature and notify players
+            // Tell the players who can see it. This used to go through DestroyPhysicalEntity
+            // per player, which also unregisters the entity - so a corpse nobody was near when
+            // it timed out was never unregistered at all, and stayed in the entity tables
+            // (with its id never freed) for the life of the process.
             foreach (var cellSeed in creature.Cells)
-                foreach (var player in mapChannel.MapCellInfo.Cells[cellSeed].ClientList)
-                    EntityManager.Instance.DestroyPhysicalEntity(player, creature.EntityId, EntityType.Creature);
+                if (mapChannel.MapCellInfo.Cells.TryGetValue(cellSeed, out var cell))
+                    foreach (var player in cell.ClientList)
+                        player.CallMethod(SysEntity.ClientMethodId, new DestroyPhysicalEntityPacket(creature.EntityId));
+
+            // Its loot with it: a dispenser is a separate entity attached to the corpse, and
+            // it was left in the map's table forever, with its id.
+            LootDispenserManager.Instance.RemoveForCreature(mapChannel, creature);
+
+            // Unregister once, whoever was or was not watching.
+            EntityManager.Instance.UnregisterEntity(creature.EntityId);
+            EntityManager.Instance.UnregisterCreature(creature.EntityId);
+            EntityManager.Instance.FreeEntity(creature.EntityId);
 
             // remove creature from cell
-            mapChannel.MapCellInfo.Cells[creature.Cells[2, 2]].CreatureList.Remove(creature);
+            if (mapChannel.MapCellInfo.Cells.TryGetValue(creature.Cells[2, 2], out var homeCell))
+                homeCell.CreatureList.Remove(creature);
         }
 
         public void DoWork(MapChannel mapChannel)

@@ -41,8 +41,25 @@ namespace Rasa.Repositories.Char.Items
             var query = _charContext.CreateNoTrackingQuery(_charContext.ItemEntries);
             var entry = query.Where(e => e.ItemId == itemId).FirstOrDefault();
 
+            if (entry == null)
+                return;
+
             _charContext.Remove(entry);
             _charContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// The tracked row for one item, or null: only changed columns are written, and a
+        /// missing row is logged rather than dereferenced.
+        /// </summary>
+        private ItemEntry GetWritable(uint itemId)
+        {
+            var entry = _charContext.CreateTrackingQuery(_charContext.ItemEntries).FirstOrDefault(e => e.ItemId == itemId);
+
+            if (entry == null)
+                Logger.WriteLog(LogType.Error, $"Item {itemId} does not exist; update skipped.");
+
+            return entry;
         }
 
         public ItemEntry GetItem(uint itemId)
@@ -56,23 +73,23 @@ namespace Rasa.Repositories.Char.Items
 
         public void UpdateAmmo(IItemChange item)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.ItemEntries);
-            var entry = query.Where(e => e.ItemId == item.Id).FirstOrDefault();
+            var entry = GetWritable(item.Id);
+
+            if (entry == null)
+                return;
 
             entry.AmmoCount = item.CurrentAmmo;
-
-            _charContext.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCurrentHitPoints(IItemChange item)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.ItemEntries);
-            var entry = query.Where(e => e.ItemId == item.Id).FirstOrDefault();
+            var entry = GetWritable(item.Id);
+
+            if (entry == null)
+                return;
 
             entry.CurrentHitPoints = item.CurrentHitPoints;
-
-            _charContext.Update(entry);
             _charContext.SaveChanges();
         }
 
@@ -91,12 +108,12 @@ namespace Rasa.Repositories.Char.Items
 
         public void UpdateItemStackSize(IItemChange item)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.ItemEntries);
-            var entry = query.Where(e => e.ItemId == item.Id).FirstOrDefault();
+            var entry = GetWritable(item.Id);
+
+            if (entry == null)
+                return;
 
             entry.StackSize = item.StackSize;
-
-            _charContext.Update(entry);
             _charContext.SaveChanges();
         }
 

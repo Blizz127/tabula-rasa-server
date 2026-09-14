@@ -168,7 +168,7 @@ namespace Rasa.Managers
                         break;
 
                     case ContentRuleAction.TutorialNotification:
-                        client.CallMethod(SysEntity.ClientMethodId, new DisplayPlayerTutorialNotificationPacket(action.TutorialId));
+                        client.CallMethod(SysEntity.ClientMethodId, new DisplayPlayerTutorialNotificationPacket((TutorialId)action.TutorialId));
                         break;
 
                     default:

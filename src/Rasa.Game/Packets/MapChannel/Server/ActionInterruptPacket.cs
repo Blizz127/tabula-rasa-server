@@ -1,8 +1,12 @@
-namespace Rasa.Packets.MapChannel.Server
+﻿namespace Rasa.Packets.MapChannel.Server
 {
     using Data;
     using Memory;
 
+    /// <summary>
+    /// client/augmentations/actor.py Recv_ActionInterrupt(sourceId, actionId, actionArgId).
+    /// Called on the acting entity; cancels its current action when the action and arg match.
+    /// </summary>
     public class ActionInterruptPacket : ServerPythonPacket
     {
         public override GameOpcode Opcode { get; } = GameOpcode.ActionInterrupt;

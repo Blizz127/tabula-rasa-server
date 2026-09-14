@@ -251,6 +251,9 @@ namespace Rasa.Migrations.MySqlChar
 
                     b.HasIndex(new[] { "AccountId" }, "character_index_account");
 
+                    b.HasIndex(new[] { "AccountId", "Slot" }, "character_index_account_slot")
+                        .IsUnique();
+
                     b.ToTable("character");
                 });
 
@@ -591,7 +594,6 @@ namespace Rasa.Migrations.MySqlChar
             modelBuilder.Entity("Rasa.Structures.Char.FriendEntry", b =>
                 {
                     b.Property<uint>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int unsigned")
                         .HasColumnName("account_id");
 
@@ -599,7 +601,7 @@ namespace Rasa.Migrations.MySqlChar
                         .HasColumnType("int unsigned")
                         .HasColumnName("friend_account_id");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("AccountId", "FriendAccountId");
 
                     b.ToTable("friend");
                 });
@@ -674,7 +676,6 @@ namespace Rasa.Migrations.MySqlChar
             modelBuilder.Entity("Rasa.Structures.Char.IgnoredEntry", b =>
                 {
                     b.Property<uint>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int unsigned")
                         .HasColumnName("account_id");
 
@@ -682,7 +683,7 @@ namespace Rasa.Migrations.MySqlChar
                         .HasColumnType("int unsigned")
                         .HasColumnName("ignored_account_id");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("AccountId", "IgnoredAccountId");
 
                     b.ToTable("ignored");
                 });
@@ -726,6 +727,75 @@ namespace Rasa.Migrations.MySqlChar
                     b.HasKey("ItemId");
 
                     b.ToTable("items");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.Char.PetitionEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("AccountId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("body");
+
+                    b.Property<uint>("CharacterId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("character_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int(11) unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<string>("Resolution")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)")
+                        .HasDefaultValue("")
+                        .HasColumnName("resolution");
+
+                    b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(3) unsigned")
+                        .HasDefaultValue((byte)0)
+                        .HasColumnName("status");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("summary");
+
+                    b.Property<byte>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(3) unsigned")
+                        .HasDefaultValue((byte)0)
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("petition");
                 });
 
             modelBuilder.Entity("Rasa.Structures.Char.UserOptionEntry", b =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -17,7 +18,20 @@ namespace Rasa.Managers
     {
         private static ChatCommandsManager _instance;
         private static readonly object InstanceLock = new object();
-        private static readonly Dictionary<string, Action<string[]>> Commands = new Dictionary<string, Action<string[]>>();
+        private static readonly Dictionary<string, ChatCommand> Commands = new Dictionary<string, ChatCommand>();
+
+        /// <summary>A registered dot command and the account level it takes to run it.</summary>
+        private class ChatCommand
+        {
+            public ChatCommand(GmLevel level, Action<string[]> handler)
+            {
+                Level = level;
+                Handler = handler;
+            }
+
+            public GmLevel Level { get; }
+            public Action<string[]> Handler { get; }
+        }
         private static Client _client { get; set; }
         public static ChatCommandsManager Instance
         {
@@ -41,26 +55,55 @@ namespace Rasa.Managers
         {
         }
 
+        /// <summary>
+        /// Every dot command comes through here, and this is the only place access is decided.
+        /// RadialChat used to check for GM before it would even call this, which meant one level
+        /// for all 33 commands; now it hands over anything starting with a dot and the level is
+        /// per command.
+        /// </summary>
         public void ProcessCommand(Client client, string command)
         {
             _client = client;
+
             if (string.IsNullOrWhiteSpace(command))
                 return;
 
             var parts = command.Split(' ');
 
-            if (Commands.ContainsKey(parts[0]))
+            if (!Commands.TryGetValue(parts[0], out var registered))
             {
-                Commands[parts[0]](parts);
+                Logger.WriteLog(LogType.Command, $"Invalid command: {command}");
+                CommunicatorManager.Instance.SystemMessage(client, $"Unknown command: {parts[0]}");
                 return;
             }
 
-            Logger.WriteLog(LogType.Command, $"Invalid command: {command}");
+            if (!HasLevel(client, registered.Level))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} (level {client.AccountEntry.Level}) tried to use "
+                    + $"{parts[0]}, which needs {(byte)registered.Level}");
+
+                // A player is told the same thing they would hear for a command that does not
+                // exist: the answer should not be a way to find out what a server can do. Someone
+                // who is already a GM gets the real reason, because they are meant to know.
+                CommunicatorManager.Instance.SystemMessage(client,
+                    client.AccountEntry.Level > 0
+                        ? $"{parts[0]} needs account level {(byte)registered.Level}; yours is {client.AccountEntry.Level}."
+                        : $"Unknown command: {parts[0]}");
+                return;
+            }
+
+            registered.Handler(parts);
         }
 
-        public void RegisterCommand(string name, Action<string[]> handler)
+        private static bool HasLevel(Client client, GmLevel required)
         {
-            Commands.Add(name, handler);
+            return client?.AccountEntry != null && client.AccountEntry.Level >= (byte)required;
+        }
+
+        public void RegisterCommand(string name, GmLevel level, Action<string[]> handler)
+        {
+            Commands.Add(name, new ChatCommand(level, handler));
         }
 
         public void RemoveCommand(string name)
@@ -71,36 +114,54 @@ namespace Rasa.Managers
 
         public void RegisterChatCommands()
         {
-            RegisterCommand(".addtitle", AddTitleCommand);
-            RegisterCommand(".actorstate", ActorStateCommand);
-            RegisterCommand(".bark", BarkCommand);
-            RegisterCommand(".comehere", ComeHereCommand);
-            RegisterCommand(".createobj", CreateObjectCommand);
-            RegisterCommand(".createobjonloc", CreateObjectOnLocationCommand);
-            RegisterCommand(".creature", CreateCreatureCommand);
-            RegisterCommand(".creatureappearance", SetCreatureAppearanceCommand);
-            RegisterCommand(".creatureloc", SetCreatureLocation);
-            RegisterCommand(".deleteobj", DeleteObjectCommand);
-            RegisterCommand(".getdistance", GetDistanceCommand);
-            RegisterCommand(".giveitem", GiveItemCommand);
-            RegisterCommand(".givelogos", GiveLogosCommand);
-            RegisterCommand(".givexp", GiveXpCommand);
-            RegisterCommand(".chg_class", ChangeClassCommand);
-            RegisterCommand(".gm", EnterGmModCommand);
-            RegisterCommand(".forcestate", ForceStateCommand);
-            RegisterCommand(".help", HelpGmCommand);
-            RegisterCommand(".near", NearCommand);
-            RegisterCommand(".npcinfo", NpcInfoCommand);
-            RegisterCommand(".reloadcreatures", ReloadCreaturesCommand);
-            RegisterCommand(".removeobj", RemoveObjectCommand);
-            RegisterCommand(".rqs", RqsWindowCommand);
-            RegisterCommand(".tele", TeleCommand);
-            RegisterCommand(".teleport", TeleportCommand);
-            RegisterCommand(".teleup", TeleUpCommand);
-            RegisterCommand(".setkillstreak", SetKillStreakCommand);
-            RegisterCommand(".setregion", SetRegionCommand);
-            RegisterCommand(".speed", SpeedCommand);
-            RegisterCommand(".where", WhereCommand);
+            // Observer: reads the world, changes nothing in it.
+            RegisterCommand(".getdistance", GmLevel.Observer, GetDistanceCommand);
+            RegisterCommand(".maperrors", GmLevel.Observer, MapErrorsCommand);
+            RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
+            RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
+            RegisterCommand(".links", GmLevel.Observer, LinksCommand);
+            RegisterCommand(".near", GmLevel.Observer, NearCommand);
+            RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
+            RegisterCommand(".rqs", GmLevel.Observer, RqsWindowCommand);
+            RegisterCommand(".where", GmLevel.Observer, WhereCommand);
+
+            // GameMaster: moves you, spawns and drives scenery and creatures, drives
+            // your own client. A restart undoes all of it.
+            RegisterCommand(".actorstate", GmLevel.GameMaster, ActorStateCommand);
+            RegisterCommand(".bark", GmLevel.GameMaster, BarkCommand);
+            RegisterCommand(".comehere", GmLevel.GameMaster, ComeHereCommand);
+            RegisterCommand(".createobj", GmLevel.GameMaster, CreateObjectCommand);
+            RegisterCommand(".createobjonloc", GmLevel.GameMaster, CreateObjectOnLocationCommand);
+            RegisterCommand(".creature", GmLevel.GameMaster, CreateCreatureCommand);
+            RegisterCommand(".creatureappearance", GmLevel.GameMaster, SetCreatureAppearanceCommand);
+            RegisterCommand(".creatureloc", GmLevel.GameMaster, SetCreatureLocation);
+            RegisterCommand(".deleteobj", GmLevel.GameMaster, DeleteObjectCommand);
+            RegisterCommand(".error", GmLevel.GameMaster, ErrorCommand);
+            RegisterCommand(".forcestate", GmLevel.GameMaster, ForceStateCommand);
+            RegisterCommand(".heal", GmLevel.GameMaster, HealCommand);
+            RegisterCommand(".link", GmLevel.GameMaster, LinkCommand);
+            RegisterCommand(".linkhere", GmLevel.GameMaster, LinkHereCommand);
+            RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
+            RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
+            RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
+            RegisterCommand(".rename", GmLevel.GameMaster, RenameCommand);
+            RegisterCommand(".setkillstreak", GmLevel.GameMaster, SetKillStreakCommand);
+            RegisterCommand(".setregion", GmLevel.GameMaster, SetRegionCommand);
+            RegisterCommand(".speed", GmLevel.GameMaster, SpeedCommand);
+            RegisterCommand(".tele", GmLevel.GameMaster, TeleCommand);
+            RegisterCommand(".teleport", GmLevel.GameMaster, TeleportCommand);
+            RegisterCommand(".teleup", GmLevel.GameMaster, TeleUpCommand);
+
+            // Admin: hands out progression, changes who a player is, reloads server data.
+            // A restart does not undo these.
+            RegisterCommand(".addtitle", GmLevel.Admin, AddTitleCommand);
+            RegisterCommand(".chg_class", GmLevel.Admin, ChangeClassCommand);
+            RegisterCommand(".flag", GmLevel.Admin, FlagCommand);
+            RegisterCommand(".givecredits", GmLevel.Admin, GiveCreditsCommand);
+            RegisterCommand(".giveitem", GmLevel.Admin, GiveItemCommand);
+            RegisterCommand(".givelogos", GmLevel.Admin, GiveLogosCommand);
+            RegisterCommand(".givexp", GmLevel.Admin, GiveXpCommand);
+            RegisterCommand(".reloadcreatures", GmLevel.Admin, ReloadCreaturesCommand);
         }
 
         #region RegularUser
@@ -158,6 +219,461 @@ namespace Rasa.Managers
                 if (ulong.TryParse(parts[1], out var creatureEntityId))
                     if (uint.TryParse(parts[2], out var barkId))
                         _client.CallMethod(creatureEntityId, new BarkPackage(barkId));
+        }
+
+        /// <summary>
+        /// Fires a Notification at yourself, or at everyone who can see an entity for the ones
+        /// that are about a place. The ids come from the client's own tables: timer types from
+        /// generated/client/timertype.py, animation ids from animationdata.py
+        /// objectAnimationSpecification, audio ids from audiodata.py audioSpecification.
+        /// </summary>
+        /// <summary>
+        /// .error fatal|nonfatal &lt;playerMessageId&gt; [key value ...]
+        ///
+        /// Both put a modal dialog on screen built from that player message id. fatal is the one
+        /// whose OK button quits the client, so it disconnects whoever it is aimed at - it is sent
+        /// to the caller only, deliberately: there is no form of this command that can boot another
+        /// player, because the id is unvalidated and a typo should not cost someone their session.
+        /// </summary>
+        private void ErrorCommand(string[] parts)
+        {
+            var kind = parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty;
+
+            if (parts.Length < 3 || kind != "fatal" && kind != "nonfatal" || !uint.TryParse(parts[2], out var msgId))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .error fatal|nonfatal <playerMessageId> [key value ...]");
+                CommunicatorManager.Instance.SystemMessage(_client, "fatal closes your own client when you press OK. 15 is PM_TECHNICAL_DIFFICULTY.");
+                return;
+            }
+
+            var args = new Dictionary<string, string>();
+
+            for (var i = 3; i + 1 < parts.Length; i += 2)
+                args[parts[i]] = parts[i + 1];
+
+            if (kind == "fatal")
+                CommunicatorManager.Instance.FatalError(_client, (PlayerMessage)msgId, args);
+            else
+                CommunicatorManager.Instance.NonFatalError(_client, (PlayerMessage)msgId, args);
+        }
+
+        /// <summary>
+        /// .msg system|big|info|alert|destination|location &lt;playerMessageId&gt; [key value ...]
+        /// .msg tutorial &lt;tutorialId|name&gt;
+        /// .msg audio &lt;audioSetId&gt; | .msg audio stop
+        /// .msg cells &lt;type&gt; &lt;playerMessageId&gt; [key value ...]
+        ///
+        /// Drives the three player-message methods so the plumbing can be seen working; nothing
+        /// in the game sends them yet. Targets the caller, except `cells`, which is how a region
+        /// announcement would reach everyone nearby.
+        /// </summary>
+        /// <summary>
+        /// .flag list | .flag set &lt;name|id&gt; | .flag clear &lt;name|id&gt;
+        ///
+        /// Admin rather than GameMaster: this is the whole server, not one player. It lasts until
+        /// the server restarts, when GameDataConfig.ServerFlags takes over again.
+        /// </summary>
+        /// <summary>
+        /// .maperrors - what is wrong with the data for the map the caller is standing in.
+        ///
+        /// The same dialog a GM gets on entering a broken map, on demand. Observer level: it
+        /// reads the world and changes nothing in it.
+        /// </summary>
+        /// <summary>
+        /// .heal [full|&lt;amount&gt;] [familyName] - put health back, on yourself or on someone else.
+        ///
+        /// Exercises ActorManager.Heal, which is the one path health goes up by. No source
+        /// entity is passed, so the client announces the change itself rather than waiting for
+        /// an ability that is never coming.
+        /// </summary>
+        /// <summary>
+        /// .givecredits &lt;amount&gt; [familyName] - credits on or off a character.
+        ///
+        /// Admin, alongside .giveitem and .givexp: this makes money out of nothing, which is the
+        /// one thing the rest of the economy work has been about stopping. A negative amount
+        /// takes credits away, clamped at zero rather than allowed to run a character negative -
+        /// nothing in the game reads a balance as signed.
+        /// </summary>
+        private void GiveCreditsCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var target = _client;
+
+            if (parts.Length > 2)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null
+                                                  && string.Equals(c.Player.FamilyName, parts[2], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    communicator.SystemMessage(_client, $"{parts[2]} is not in the world.");
+                    return;
+                }
+            }
+
+            if (parts.Length < 2 || !int.TryParse(parts[1], out var amount) || amount == 0)
+            {
+                communicator.SystemMessage(_client, "usage: .givecredits <amount> [familyName]");
+                communicator.SystemMessage(_client, "A negative amount takes credits away.");
+                return;
+            }
+
+            var before = target.Player.Credits[CurencyType.Credits];
+
+            // Clamped, so taking more than they have empties the purse rather than owing.
+            if (amount < 0)
+                amount = -Math.Min(before, Math.Abs(amount));
+
+            if (amount == 0)
+            {
+                communicator.SystemMessage(_client, $"{target.Player.FamilyName} has no credits to take.");
+                return;
+            }
+
+            ManifestationManager.Instance.GainCredits(target, amount);
+
+            var after = target.Player.Credits[CurencyType.Credits];
+            var who = target == _client ? "You" : target.Player.FamilyName;
+
+            communicator.SystemMessage(_client,
+                $"{who}: {before} -> {after} credits ({(amount > 0 ? "+" : "")}{amount}).");
+
+            if (target != _client)
+                communicator.SystemMessage(target,
+                    $"A GM has {(amount > 0 ? "given you" : "taken")} {Math.Abs(amount)} credits. You now have {after}.");
+        }
+
+        private void HealCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var target = _client;
+
+            if (parts.Length > 2)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null
+                                                  && string.Equals(c.Player.FamilyName, parts[2], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    communicator.SystemMessage(_client, $"{parts[2]} is not in the world.");
+                    return;
+                }
+            }
+
+            var toFull = parts.Length < 2 || parts[1].ToLowerInvariant() == "full";
+            var requested = 0;
+
+            if (!toFull && (!int.TryParse(parts[1], out requested) || requested <= 0))
+            {
+                communicator.SystemMessage(_client, "usage: .heal [full|<amount>] [familyName]");
+                return;
+            }
+
+            var applied = toFull
+                ? ActorManager.Instance.HealToFull(target.Player)
+                : ActorManager.Instance.Heal(target.Player, requested);
+
+            var health = target.Player.Attributes.TryGetValue(Attributes.Health, out var h) ? h : null;
+            var who = target == _client ? "You are" : $"{target.Player.FamilyName} is";
+
+            if (applied == 0)
+            {
+                communicator.SystemMessage(_client,
+                    health == null ? "That actor has no health to put back."
+                    : health.Current <= 0 || target.Player.State == CharacterState.Dead
+                        ? $"{who} dead - healing will not bring them back."
+                        : $"{who} already at full health.");
+                return;
+            }
+
+            communicator.SystemMessage(_client,
+                $"{who} healed for {applied} ({health?.Current} of {health?.CurrentMax}).");
+        }
+
+        private void MapErrorsCommand(string[] parts)
+        {
+            if (MapErrorManager.Instance.SendTo(_client))
+                return;
+
+            CommunicatorManager.Instance.SystemMessage(_client,
+                $"Nothing recorded against map {_client.Player?.MapContextId.ToString() ?? "?"}.");
+        }
+
+        private void FlagCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var flags = ServerFlagManager.Instance;
+            var action = parts.Length > 1 ? parts[1].ToLowerInvariant() : "list";
+
+            if (action == "list")
+            {
+                var set = flags.Flags;
+
+                communicator.SystemMessage(_client,
+                    set.Count == 0
+                        ? "No server flags are set."
+                        : "Set: " + string.Join(", ", set.Select(f => $"{f} ({(uint)f})")));
+
+                communicator.SystemMessage(_client, "Known: " + ServerFlagManager.KnownFlags());
+                return;
+            }
+
+            if (action != "set" && action != "clear")
+            {
+                communicator.SystemMessage(_client, "usage: .flag list | .flag set <name|id> | .flag clear <name|id>");
+                return;
+            }
+
+            if (parts.Length < 3 || !ServerFlagManager.TryParse(parts[2], out var flag))
+            {
+                communicator.SystemMessage(_client, "usage: .flag list | .flag set <name|id> | .flag clear <name|id>");
+                communicator.SystemMessage(_client, "known flags: " + ServerFlagManager.KnownFlags());
+                return;
+            }
+
+            if (action == "set")
+            {
+                communicator.SystemMessage(_client,
+                    flags.Set(flag) ? $"{flag} is now set for everyone." : $"{flag} was already set.");
+                return;
+            }
+
+            communicator.SystemMessage(_client,
+                flags.Clear(flag) ? $"{flag} is now clear for everyone." : $"{flag} was already clear.");
+        }
+
+        private void MessageCommand(string[] parts)
+        {
+            var communicator = CommunicatorManager.Instance;
+            var kind = parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty;
+
+            if (kind == "tutorial")
+            {
+                if (parts.Length < 3 || !TryParseTutorial(parts[2], out var tutorial))
+                {
+                    communicator.SystemMessage(_client, "usage: .msg tutorial <tutorialId|name>");
+                    communicator.SystemMessage(_client, "e.g. .msg tutorial Levelup, or .msg tutorial 10000002");
+                    return;
+                }
+
+                communicator.DisplayPlayerTutorial(_client, tutorial);
+                return;
+            }
+
+            if (kind == "audio")
+            {
+                if (parts.Length > 2 && parts[2].ToLowerInvariant() == "stop")
+                {
+                    communicator.StopTutorialAudio(_client);
+                    communicator.SystemMessage(_client, "Stopped the tutorial voice-over.");
+                    return;
+                }
+
+                if (parts.Length < 3 || !uint.TryParse(parts[2], out var audioSetId))
+                {
+                    communicator.SystemMessage(_client, "usage: .msg audio <audioSetId> | .msg audio stop");
+                    communicator.SystemMessage(_client, "Audio set ids are the client's own, from generated.client.audiosetdata.");
+                    return;
+                }
+
+                communicator.PlayTutorialAudio(_client, audioSetId);
+
+                // No answer comes back and an id the client does not know is simply silence, so
+                // say what was sent rather than leaving a silent result looking like a failure.
+                communicator.SystemMessage(_client, $"Sent audio set {audioSetId}. Silence means the client has no such set.");
+                return;
+            }
+
+            var toCells = kind == "cells";
+            var typeFrom = toCells ? 2 : 1;
+            var idFrom = toCells ? 3 : 2;
+
+            if (parts.Length <= idFrom || !uint.TryParse(parts[idFrom], out var msgId))
+            {
+                communicator.SystemMessage(_client, "usage: .msg system|big|info|alert|destination|location <playerMessageId> [key value ...]");
+                communicator.SystemMessage(_client, "       .msg tutorial <tutorialId|name>");
+                communicator.SystemMessage(_client, "       .msg audio <audioSetId> | .msg audio stop");
+                communicator.SystemMessage(_client, "       .msg cells <type> <playerMessageId> [key value ...]");
+                return;
+            }
+
+            var args = new Dictionary<string, string>();
+
+            for (var i = idFrom + 1; i + 1 < parts.Length; i += 2)
+                args[parts[i]] = parts[i + 1];
+
+            var typeName = parts[typeFrom].ToLowerInvariant();
+
+            // "system" is the one that is not a notification type: it goes through
+            // DisplaySystemMessage, where the client decides for itself what the message is for.
+            if (!toCells && typeName == "system")
+            {
+                communicator.DisplaySystemMessage(_client, (PlayerMessage)msgId, args);
+                return;
+            }
+
+            if (!TryParseNotificationType(typeName, out var type))
+            {
+                communicator.SystemMessage(_client,
+                    "type must be system, or one of: " + string.Join(", ", Enum.GetNames(typeof(PlayerNotificationType))).ToLowerInvariant());
+                return;
+            }
+
+            if (toCells)
+                communicator.NotifyCells(_client, type, (PlayerMessage)msgId, args);
+            else
+                communicator.DisplayPlayerNotification(_client, type, (PlayerMessage)msgId, args);
+        }
+
+        /// <summary>Accepts the client's own tutorial name or its raw id.</summary>
+        private static bool TryParseTutorial(string value, out TutorialId tutorial)
+        {
+            if (Enum.TryParse(value, true, out tutorial) && Enum.IsDefined(typeof(TutorialId), tutorial))
+                return true;
+
+            if (uint.TryParse(value, out var raw))
+            {
+                tutorial = (TutorialId)raw;
+                return Enum.IsDefined(typeof(TutorialId), tutorial);
+            }
+
+            return false;
+        }
+
+        private static bool TryParseNotificationType(string value, out PlayerNotificationType type)
+        {
+            // "location" is shorter to type than CurrentLocation and means the same thing.
+            if (value == "location")
+            {
+                type = PlayerNotificationType.CurrentLocation;
+                return true;
+            }
+
+            return Enum.TryParse(value, true, out type) && Enum.IsDefined(typeof(PlayerNotificationType), type);
+        }
+
+        private void NotifyCommand(string[] parts)
+        {
+            var manager = NotificationManager.Instance;
+            var mapChannel = _client.Player.MapChannel;
+
+            switch (parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty)
+            {
+                case "timer" when parts.Length >= 4 && uint.TryParse(parts[2], out var timerType) && int.TryParse(parts[3], out var seconds):
+                    manager.DisplayTimer(_client, (TimerType)timerType, seconds, parts.Length <= 4 || parts[4] != "0");
+                    return;
+
+                case "stoptimer":
+                    manager.StopTimer(_client);
+                    return;
+
+                case "anim" when parts.Length >= 4 && uint.TryParse(parts[3], out var animationSpecId):
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.PlayObjectAnimation(mapChannel, NotifyPosition(target), target, animationSpecId);
+
+                        return;
+                    }
+
+                case "stopanim" when parts.Length >= 3:
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.StopObjectAnimation(mapChannel, NotifyPosition(target), target);
+
+                        return;
+                    }
+
+                case "bgaudio" when parts.Length >= 3 && uint.TryParse(parts[2], out var audioSpecId):
+                    manager.PlayBackgroundAudio(_client, audioSpecId);
+                    return;
+
+                case "locaudio" when parts.Length >= 4 && uint.TryParse(parts[3], out var locationAudioSpecId):
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.PlayLocationAudio(mapChannel, NotifyPosition(target), target, locationAudioSpecId);
+
+                        return;
+                    }
+
+                case "stoplocaudio" when parts.Length >= 3:
+                    {
+                        var target = NotifyTarget(parts[2]);
+
+                        if (target != 0)
+                            manager.StopLocationAudio(mapChannel, NotifyPosition(target), target);
+
+                        return;
+                    }
+
+                case "raw" when parts.Length >= 3 && uint.TryParse(parts[2], out var notificationId):
+                    {
+                        var args = new List<long>();
+
+                        for (var i = 3; i < parts.Length; i++)
+                            if (long.TryParse(parts[i], out var arg))
+                                args.Add(arg);
+
+                        manager.Send(_client, NotificationPacket.Raw((NotificationId)notificationId, args.ToArray()));
+                        return;
+                    }
+            }
+
+            CommunicatorManager.Instance.SystemMessage(_client, "usage: .notify timer <type 1-7> <seconds> [countdown 0|1]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify stoptimer");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify anim|stopanim <me|target|entityId> [animationSpecId]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify bgaudio <audioSpecId>");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify locaudio|stoplocaudio <me|target|entityId> [audioSpecId]");
+            CommunicatorManager.Instance.SystemMessage(_client, "       .notify raw <notificationId> [int args...]");
+        }
+
+        /// <summary>me, target, or an entity id.</summary>
+        private ulong NotifyTarget(string value)
+        {
+            switch (value.ToLowerInvariant())
+            {
+                case "me":
+                    return _client.Player.EntityId;
+
+                case "target":
+                    if (_client.Player.Target == 0)
+                        CommunicatorManager.Instance.SystemMessage(_client, "no target selected");
+
+                    return _client.Player.Target;
+
+                default:
+                    if (ulong.TryParse(value, out var entityId))
+                        return entityId;
+
+                    CommunicatorManager.Instance.SystemMessage(_client, $"not an entity id: {value}");
+                    return 0;
+            }
+        }
+
+        /// <summary>Where to broadcast from: the entity's own position when the server knows it.</summary>
+        private Vector3 NotifyPosition(ulong entityId)
+        {
+            var entityType = EntityManager.Instance.GetEntityType(entityId);
+
+            switch (entityType)
+            {
+                case EntityType.Creature:
+                    return EntityManager.Instance.GetCreature(entityId)?.Position ?? _client.Player.Position;
+
+                case EntityType.Character:
+                    return EntityManager.Instance.GetPlayer(entityId)?.Position ?? _client.Player.Position;
+
+                case EntityType.Object:
+                    return EntityManager.Instance.GetObject(entityId)?.Position ?? _client.Player.Position;
+
+                default:
+                    return _client.Player.Position;
+            }
         }
 
         private void ComeHereCommand(string[] parts)
@@ -454,13 +970,21 @@ namespace Rasa.Managers
             return;
         }
 
+        /// <summary>
+        /// Lists what this account can actually run. Printing the whole table to an Observer
+        /// would just be a list of things that answer "you do not have access to that".
+        /// </summary>
         private void HelpGmCommand(string[] parts)
         {
-            CommunicatorManager.Instance.SystemMessage(_client, "GM Commands List:");
-            foreach (var command in Commands)
-                CommunicatorManager.Instance.SystemMessage(_client, $"{command.Key}");
+            var client = _client;
 
-            return;
+            CommunicatorManager.Instance.SystemMessage(client,
+                $"Commands available at account level {client.AccountEntry.Level}:");
+
+            foreach (var command in Commands.Where(c => HasLevel(client, c.Value.Level))
+                                            .OrderBy(c => c.Value.Level)
+                                            .ThenBy(c => c.Key))
+                CommunicatorManager.Instance.SystemMessage(client, $"{command.Key} ({command.Value.Level})");
         }
 
         private void NearCommand(string[] parts)
@@ -558,6 +1082,37 @@ namespace Rasa.Managers
             return;
         }
 
+        /// <summary>
+        /// .rename first|last &lt;NewName&gt; [familyName] - renames yourself, or the player with
+        /// that family name. /changefirstname and /changelastname do the same for yourself.
+        /// </summary>
+        private void RenameCommand(string[] parts)
+        {
+            var familyName = parts.Length > 1 && parts[1].ToLowerInvariant() == "last";
+
+            if (parts.Length < 3 || (parts[1].ToLowerInvariant() != "first" && !familyName))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .rename first|last <NewName> [familyName of the player]");
+                return;
+            }
+
+            var target = _client;
+
+            if (parts.Length > 3)
+            {
+                target = Server.Clients.Find(c => c.State == ClientState.Ingame && c.Player != null && c.AccountEntry != null
+                                                  && string.Equals(c.Player.FamilyName, parts[3], StringComparison.OrdinalIgnoreCase));
+
+                if (target == null)
+                {
+                    CommunicatorManager.Instance.SystemMessage(_client, $"{parts[3]} is not in the world");
+                    return;
+                }
+            }
+
+            CharacterManager.Instance.Rename(_client, target, parts[2], familyName);
+        }
+
         private void RqsWindowCommand(string[] parts)
         {
             if (parts.Length == 1)
@@ -609,27 +1164,8 @@ namespace Rasa.Managers
                         if (float.TryParse(parts[3], out float posZ))
                             if (uint.TryParse(parts[4], out uint mapId))
                             {
-                                // init loading screen
-                                _client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
-                                _client.State = ClientState.Loading;
-                                // Remove player
-                                MapChannelManager.Instance.RemovePlayer(_client, false);
-                                // send Wonkavate
-                                var mapChannel = MapChannelManager.Instance.MapChannelArray[mapId];
-                                _client.LoadingMap = mapId;
-
-                                var packet = new WonkavatePacket(
-                                    mapChannel.MapInfo.MapContextId,
-                                    0,                  // ToDo MapInstanceId
-                                    mapChannel.MapInfo.MapVersion,
-                                    new Vector3(posX, posY, posZ),
-                                    _client.Movement.ViewDirection.X
-                                    );
-
-                                _client.CallMethod(SysEntity.CurrentInputStateId, packet);
-                                // AddOrUpdate Db, this position will be loaded in MapLoadedPacket
-                                CharacterManager.Instance.UpdateCharacter(_client, CharacterUpdate.Position, packet);
-                                mapChannel.ClientList.Add(_client);
+                                if (!MapChannelManager.Instance.ChangeMap(_client, mapId, new Vector3(posX, posY, posZ), _client.Movement.ViewDirection.X))
+                                    CommunicatorManager.Instance.SystemMessage(_client, $"Map {mapId} is not loaded, or you cannot teleport right now.");
                             }
 
             }
@@ -705,6 +1241,214 @@ namespace Rasa.Managers
             }
             return;*/
         }
+
+        #region Map links
+
+        /// <summary>
+        /// The links on this map, nearest first: what would fire where you stand, and how far
+        /// the next pass is. Distances are on the ground, the way the trigger measures them.
+        /// </summary>
+        private void LinksCommand(string[] parts)
+        {
+            var client = _client;
+            var links = MapLinkManager.Instance.OnMap(client.Player.MapContextId, client.Player.Position);
+
+            if (links.Count == 0)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"No map links on map {client.Player.MapContextId}.");
+                return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, $"{links.Count} map link(s) on map {client.Player.MapContextId}, nearest first:");
+
+            foreach (var link in links.Take(10))
+            {
+                var dx = link.Position.X - client.Player.Position.X;
+                var dz = link.Position.Z - client.Player.Position.Z;
+                var distance = Math.Sqrt(dx * dx + dz * dz);
+                var standing = MapLinkManager.Contains(link, client.Player.Position) ? " <- you are in it" : "";
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{distance,6:0.#} m  {link}{standing}");
+            }
+
+            if (links.Count > 10)
+                CommunicatorManager.Instance.SystemMessage(client, $"... and {links.Count - 10} more.");
+        }
+
+        /// <summary>
+        /// Drops a new link at your feet: the trigger is where you stand, on this map; the
+        /// arrival is the position given, on the destination map. Fine-tune it with .link.
+        /// </summary>
+        private void LinkHereCommand(string[] parts)
+        {
+            if (parts.Length < 5 || parts.Length > 7)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .linkhere destMapId destX destY destZ [radius] [border|instance]");
+                CommunicatorManager.Instance.SystemMessage(_client, "Creates a link at your position. Stand at the arrival on the other map and use .link <id> arrival to set where it lands.");
+                return;
+            }
+
+            if (!uint.TryParse(parts[1], out var destMap) || !float.TryParse(parts[2], out var destX)
+                || !float.TryParse(parts[3], out var destY) || !float.TryParse(parts[4], out var destZ))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "destMapId must be a map context id and destX destY destZ numbers.");
+                return;
+            }
+
+            var radius = 8.0f;
+
+            if (parts.Length >= 6 && !float.TryParse(parts[5], out radius))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "radius must be a number of metres.");
+                return;
+            }
+
+            var kind = MapLinkKind.Border;
+
+            if (parts.Length == 7 && !Enum.TryParse(parts[6], true, out kind))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "kind must be border or instance.");
+                return;
+            }
+
+            if (!MapChannelManager.Instance.MapChannelArray.ContainsKey(destMap))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, $"Map {destMap} is not loaded.");
+                return;
+            }
+
+            var link = new MapLink
+            {
+                MapContextId = _client.Player.MapContextId,
+                Position = _client.Player.Position,
+                Radius = radius,
+                DestMapContextId = destMap,
+                DestPosition = new Vector3(destX, destY, destZ),
+                DestRotation = 0,
+                Kind = kind,
+                Enabled = true,
+                Comment = $"{_client.Player.MapContextId} -> {destMap} (.linkhere by {_client.Player.FamilyName})"
+            };
+
+            var created = MapLinkManager.Instance.Add(link);
+
+            if (created == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "The link could not be saved; see the server log.");
+                return;
+            }
+
+            // The GM is standing in the new gate. Treat it like an arrival so it does not fire
+            // on them until they step out of it.
+            MapLinkManager.Instance.PlayerEnteredMap(_client);
+            CommunicatorManager.Instance.SystemMessage(_client, $"Created map link {created}");
+        }
+
+        /// <summary>
+        /// Adjusts one link in place and in the database. 'trigger' and 'arrival' take your
+        /// current map, position and facing, so a pass is tuned by walking to where it should
+        /// fire, then to where it should land, and running the two subcommands.
+        /// </summary>
+        private void LinkCommand(string[] parts)
+        {
+            if (parts.Length < 2 || !uint.TryParse(parts[1], out var id))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id [trigger | arrival | radius r | enable | disable | delete | goto | gotoarrival | comment text]");
+                return;
+            }
+
+            if (!MapLinkManager.Instance.TryGet(id, out var link))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, $"No map link with id {id}. .links lists the ones on this map.");
+                return;
+            }
+
+            if (parts.Length == 2)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, link.ToString());
+                CommunicatorManager.Instance.SystemMessage(_client, $"arrival yaw {link.DestRotation:0.###}, {(link.Enabled ? "enabled" : "disabled")}");
+                return;
+            }
+
+            var previousPosition = link.Position;
+            var previousMap = link.MapContextId;
+            var player = _client.Player;
+
+            switch (parts[2].ToLowerInvariant())
+            {
+                case "trigger":
+                    link.MapContextId = player.MapContextId;
+                    link.Position = player.Position;
+                    break;
+
+                case "arrival":
+                    link.DestMapContextId = player.MapContextId;
+                    link.DestPosition = player.Position;
+                    link.DestRotation = (float)player.Rotation;
+                    break;
+
+                case "radius":
+                    if (parts.Length < 4 || !float.TryParse(parts[3], out var radius) || radius <= 0 || radius > 200)
+                    {
+                        CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id radius metres  (0 < metres <= 200)");
+                        return;
+                    }
+
+                    link.Radius = radius;
+                    break;
+
+                case "enable":
+                    link.Enabled = true;
+                    break;
+
+                case "disable":
+                    link.Enabled = false;
+                    break;
+
+                case "comment":
+                    link.Comment = string.Join(' ', parts.Skip(3));
+
+                    if (link.Comment.Length > 64)
+                        link.Comment = link.Comment.Substring(0, 64);
+                    break;
+
+                case "delete":
+                    if (MapLinkManager.Instance.Delete(link))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Deleted map link {id}.");
+                    else
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map link {id} could not be deleted; see the server log.");
+                    return;
+
+                case "goto":
+                    // Land on the trigger itself. PlayerEnteredMap seeds the link into InsideMapLinks, so
+                    // it does not fire until the player steps out and back in. Landing beside it is not
+                    // safe: most passes are tunnel meshes bored under the heightmap, and a point a few
+                    // metres off the marker can be inside the rock, with nothing to stand on.
+                    if (!MapChannelManager.Instance.ChangeMap(_client, link.MapContextId, link.Position, (float)player.Rotation))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map {link.MapContextId} is not loaded, or you cannot teleport right now.");
+                    return;
+
+                case "gotoarrival":
+                    if (!MapChannelManager.Instance.ChangeMap(_client, link.DestMapContextId, link.DestPosition, link.DestRotation))
+                        CommunicatorManager.Instance.SystemMessage(_client, $"Map {link.DestMapContextId} is not loaded, or you cannot teleport right now.");
+                    return;
+
+                default:
+                    CommunicatorManager.Instance.SystemMessage(_client, "usage: .link id [trigger | arrival | radius r | enable | disable | delete | goto | gotoarrival | comment text]");
+                    return;
+            }
+
+            if (MapLinkManager.Instance.Update(link, previousPosition, previousMap))
+            {
+                // If the GM moved the trigger onto themselves, do not fire it on them.
+                MapLinkManager.Instance.PlayerEnteredMap(_client);
+                CommunicatorManager.Instance.SystemMessage(_client, $"Updated map link {link}");
+            }
+            else
+                CommunicatorManager.Instance.SystemMessage(_client, $"Map link {id} could not be saved; see the server log.");
+        }
+
+        #endregion
 
         private void SetRegionCommand(string[] parts)
         {

@@ -145,10 +145,24 @@ namespace Rasa.Managers
                 foreach (var item in getClanInventoryData)
                 {
                     var itemData = unitOfWork.Items.GetItem(item.ItemId);
+
+                    if (itemData == null)
+                    {
+                        // A lockbox row whose item is gone used to be dereferenced here, at
+                        // server start; the row is garbage and is removed.
+                        Logger.WriteLog(LogType.Error, $"Clan {clan.Id} lockbox slot {item.SlotId} refers to item {item.ItemId}, which does not exist; row removed.");
+                        unitOfWork.ClanInventories.DeleteInvItemByItemId(item.ItemId);
+                        continue;
+                    }
+
                     var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
+                    // continue, not return: one bad template used to skip every later clan's lockbox.
                     if (itemTemplate == null)
-                        return;
+                    {
+                        Logger.WriteLog(LogType.Error, $"Item {item.ItemId} has unknown template {itemData.ItemTemplateId}; skipped.");
+                        continue;
+                    }
 
                     Item newItem = new Item
                     {
@@ -184,15 +198,27 @@ namespace Rasa.Managers
             uint pvpTimeoutSeconds = 0;
 
             CharacterEntry character = unitOfWork.Characters.Get(client.Player.Id);
-            var now = DateTime.UtcNow;
-            var maxCooldownTime = now.AddDays(-7);
 
-            if (character.LastPvPClan > maxCooldownTime)
-            {
-                pvpTimeoutSeconds = (uint)(now - character.LastPvPClan).TotalSeconds;
-            }
+            if (character != null)
+                pvpTimeoutSeconds = PvPCooldownRemainingSeconds(character);
 
             client.CallMethod(SysEntity.ClientClanManagerId, new GetPvPClanStatusPacket(clanName, pvpTimeoutSeconds));
+        }
+
+        /// <summary>How long a character has to wait before joining or founding a PvP clan.</summary>
+        private static readonly TimeSpan PvPClanCooldown = TimeSpan.FromDays(7);
+
+        /// <summary>
+        /// Seconds of PvP-clan cooldown left, zero when it has run out. The remaining time is
+        /// when the cooldown ends minus now; this used to be computed as now minus the
+        /// timestamp (the elapsed time, not the remaining), and in CanCreateClan as a negative
+        /// TimeSpan cast to uint, which wrapped to about four billion.
+        /// </summary>
+        private static uint PvPCooldownRemainingSeconds(CharacterEntry character)
+        {
+            var remaining = character.LastPvPClan + PvPClanCooldown - DateTime.UtcNow;
+
+            return remaining > TimeSpan.Zero ? (uint)Math.Ceiling(remaining.TotalSeconds) : 0;
         }
 
         internal void CreateClan(Client client, CreateClanPacket packet)
@@ -205,35 +231,60 @@ namespace Rasa.Managers
 
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-            if(CanCreateClan(client, packet, client.Player.Id))
-            {                          
-                ClanEntry clan = unitOfWork.Clans.CreateClan(packet.ClanName, packet.IsPvP);
-
-                if (clan != null)
-                {
-                    // Wrap the database data to what the client expects
-                    var clanData = new ClanData(clan);
-
-                    // Signals the client to set the default rank titles for a clan
-                    client.CallMethod(SysEntity.ClientClanManagerId, new ClanCreatedPacket(clanData.Id));
-
-                    // Create the member data the client expects 
-                    // This player created the clan and is the leader
-                    ClanMemberData clanMemberData = CreateClanMemberData(clanData, client, _clankRankLeader);
-                    
-                    // AddOrUpdate the database with the clan creator as a member of this clan
-                    AddMemberToClan(clanMemberData);
-                   
-                    // Send the data packets to the client
-                    SetClanData(client, clanData);
-                    SetClanMemberData(client, clanData);
-
-                    client.Player.ClanId = clan.Id;
-
-                    // Cache the newly created clan
-                    RegisterClan(clan);
-                }
+            // A character is in one clan at most - clan_member.character_id is unique - and
+            // nothing checked here. A member sending CreateClan got as far as the membership
+            // insert, which threw on the key: by then the clan row existed and the creation fee
+            // had been taken, so the player was 10,000 credits poorer, disconnected, and a clan
+            // with no members held the name from the next restart on.
+            if (client.Player.ClanId != 0 || unitOfWork.Clans.GetClanByCharacterId(client.Player.Id) != null)
+            {
+                client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanYouAreAlreadyInAClan, new Dictionary<string, string>()));
+                return;
             }
+
+            if (!CanCreateClan(client, packet, client.Player.Id))
+                return;
+
+            ClanEntry clan = unitOfWork.Clans.CreateClan(packet.ClanName, packet.IsPvP);
+
+            if (clan == null)
+                return;
+
+            // Wrap the database data to what the client expects
+            var clanData = new ClanData(clan);
+
+            // Create the member data the client expects 
+            // This player created the clan and is the leader
+            ClanMemberData clanMemberData = CreateClanMemberData(clanData, client, _clankRankLeader);
+
+            // AddOrUpdate the database with the clan creator as a member of this clan. If this
+            // fails the clan row goes with it, so a failed creation leaves nothing behind.
+            try
+            {
+                AddMemberToClan(clanMemberData);
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"CreateClan: could not add character {client.Player.Id} as leader of new clan {clan.Id} ({packet.ClanName}); removing the clan: {e}");
+                unitOfWork.Clans.DeleteClan(clan.Id);
+                return;
+            }
+
+            // Pay for the clan creation - only now that there is a clan to pay for. Checked
+            // before the row was written, charged after.
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Credits, -_requiredCreditsForClanCreation);
+
+            // Signals the client to set the default rank titles for a clan
+            client.CallMethod(SysEntity.ClientClanManagerId, new ClanCreatedPacket(clanData.Id));
+
+            // Send the data packets to the client
+            SetClanData(client, clanData);
+            SetClanMemberData(client, clanData);
+
+            client.Player.ClanId = clan.Id;
+
+            // Cache the newly created clan
+            RegisterClan(clan);
         }
 
         internal void KickPlayerFromClan(Client client, KickPlayerFromClanPacket packet)
@@ -256,8 +307,9 @@ namespace Rasa.Managers
 
                 if (clan.IsPvP)
                 {
-                    // Save the time they were last in a PvP clan to start the 7 day cooldown.
-                    unitOfWork.Clans.UpdateLastPvPClanTimeForMembers(clan.Id, DateTime.UtcNow);
+                    // Start the 7 day cooldown for the one being kicked. This used to stamp
+                    // every member of the clan, so a kick put the whole clan on cooldown.
+                    unitOfWork.Clans.UpdateLastPvPClanTime(memberToBeKicked.CharacterId, DateTime.UtcNow);
                 }
 
                 if (unitOfWork.ClanMembers.DeleteClanMember(memberToBeKicked))
@@ -299,7 +351,25 @@ namespace Rasa.Managers
             // We don't do anything right now when the invitation is declined
             if (!packet.Accepted) return;
 
-            var clanData = new ClanData(GetClan(packet.ClanId));
+            var clan = GetClan(packet.ClanId);
+
+            if (clan == null)
+                return;
+
+            // The cooldown applies to joining a PvP clan as well as founding one.
+            if (clan.IsPvP)
+            {
+                using var cooldownUnitOfWork = _gameUnitOfWorkFactory.CreateChar();
+                var character = cooldownUnitOfWork.Characters.Get(client.Player.Id);
+
+                if (character != null && PvPCooldownRemainingSeconds(character) > 0)
+                {
+                    client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanAcceptInPvpTimeout, new Dictionary<string, string>()));
+                    return;
+                }
+            }
+
+            var clanData = new ClanData(clan);
             ClanMemberData memberData = CreateClanMemberData(clanData, invitee);
 
             // The player accepted so they must be online
@@ -355,6 +425,14 @@ namespace Rasa.Managers
             }
 
             CharacterEntry inviteeCharacter = unitOfWork.Characters.GetByAccountId(inviteeAccount.Id, inviteeAccount.SelectedSlot);
+
+            // An account whose selected slot holds no character: every character deleted, or a
+            // fresh account whose family name happens to match.
+            if (inviteeCharacter == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"{packet.FamilyName} has no character to invite");
+                return;
+            }
 
             var messageArgs = CreatePlayerMessageArgs("playername", $"{inviteeCharacter.Name} {inviteeAccount.FamilyName}");
 
@@ -474,8 +552,8 @@ namespace Rasa.Managers
 
             if (clan.IsPvP)
             {
-                // Save the time they were last in a PvP clan to start the 7 day cooldown.
-                unitOfWork.Clans.UpdateLastPvPClanTimeForMembers(clan.Id, DateTime.UtcNow);
+                // Start the 7 day cooldown for the one leaving, not for the clan they leave.
+                unitOfWork.Clans.UpdateLastPvPClanTime(member.CharacterId, DateTime.UtcNow);
             }
 
             if (unitOfWork.ClanMembers.DeleteClanMember(member))
@@ -735,23 +813,15 @@ namespace Rasa.Managers
             {
                 CharacterEntry character = unitOfWork.Characters.Get(characterId);
 
-                var now = DateTime.UtcNow.AddDays(-7);
-
                 // Verify the creator is not on PvP timeout: PmClanCannotCreateUserInPvpTimeout
-                if (character.LastPvPClan > now)
+                if (character != null && PvPCooldownRemainingSeconds(character) > 0)
                 {
-                    var pvpTimeoutSeconds = (uint)(now - character.LastPvPClan).TotalSeconds;
-                    if(pvpTimeoutSeconds > 0)
-                    {
-                        client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanCannotCreateUserInPvpTimeout, new Dictionary<string, string>()));
-                        return false;
-                    }
+                    client.CallMethod(SysEntity.ClientClanManagerId, new DisplayClanMessagePacket((int)PlayerMessage.PmClanCannotCreateUserInPvpTimeout, new Dictionary<string, string>()));
+                    return false;
                 }
             }
 
-            // Pay for the clan creation
-            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Credits, -_requiredCreditsForClanCreation);
-
+            // The fee is taken by CreateClan once the clan and its leader both exist.
             return true;
         }        
 

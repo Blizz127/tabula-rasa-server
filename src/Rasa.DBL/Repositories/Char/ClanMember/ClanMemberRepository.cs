@@ -20,6 +20,9 @@ namespace Rasa.Repositories.Char.ClanMember
             var query = _charContext.CreateNoTrackingQuery(_charContext.ClanMemberEntries);
             var entry = query.Where(e => e.CharacterId == member.CharacterId).FirstOrDefault();
 
+            if (entry == null)
+                return false;
+
             _charContext.Remove(entry);
             _charContext.SaveChanges();
 
@@ -71,12 +74,15 @@ namespace Rasa.Repositories.Char.ClanMember
 
         public void UpdateRankByCharacterId(byte rank, uint characterId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.ClanMemberEntries);
-            var entry = query.Where(e => e.CharacterId == characterId).FirstOrDefault();
+            var entry = _charContext.CreateTrackingQuery(_charContext.ClanMemberEntries).FirstOrDefault(e => e.CharacterId == characterId);
+
+            if (entry == null)
+            {
+                Logger.WriteLog(LogType.Error, $"Character {characterId} is not a clan member; rank update skipped.");
+                return;
+            }
 
             entry.Rank = rank;
-
-            _charContext.ClanMemberEntries.Update(entry);
             _charContext.SaveChanges();
         }
     }

@@ -37,6 +37,7 @@ namespace Rasa
     using Repositories.Char.GameAccount;
     using Repositories.Char.Ignored;
     using Repositories.Char.Items;
+    using Repositories.Char.Petition;
     using Repositories.Char.UserOption;
     using Repositories.UnitOfWork;
     using Repositories.World;
@@ -115,6 +116,7 @@ namespace Rasa
             services.AddScoped<IFriendRepository, FriendRepository>();
             services.AddScoped<IIgnoredRepository, IgnoredRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IPetitionRepository, PetitionRepository>();
             services.AddScoped<IUserOptionRepository, UserOptionRepository>();
 
             // World
@@ -126,6 +128,7 @@ namespace Rasa
             services.AddScoped<ILogosRepository, LogosRepository>();
             services.AddScoped<IMapInfoRepository, MapInfoRepository>();
             services.AddScoped<IMissionContentRepository, MissionContentRepository>();
+            services.AddScoped<IMapLinkRepository, MapLinkRepository>();
             services.AddScoped<INpcMissionRepository, NpcMissionRepository>();
             services.AddScoped<INpcMissionObjectiveRepository, NpcMissionObjectiveRepository>();
             services.AddScoped<INpcMissionRewardRepository, NpcMissionRewardRepository>();

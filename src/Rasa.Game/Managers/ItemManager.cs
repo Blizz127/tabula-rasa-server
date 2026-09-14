@@ -97,10 +97,23 @@ namespace Rasa.Managers
             return item;
         }
 
-        public Item CreateVendorItem(Client client, uint itemTemplateId)
+        /// <summary>
+        /// One item of a vendor's stock. Registered for the whole server and not sent anywhere:
+        /// the stock is made once, but each client that opens the vendor has to be sent the
+        /// items separately, so that is the caller's job rather than this one's. Sending from
+        /// here meant only the player who happened to open the vendor first ever saw it.
+        /// </summary>
+        public Item CreateVendorItem(uint itemTemplateId)
         {
             var itemTemplate = GetItemTemplateById(itemTemplateId);
+
+            if (itemTemplate == null)
+                return null;
+
             var classInfo = EntityClassManager.Instance.GetClassInfo(itemTemplate.Class);
+
+            if (classInfo?.ItemClassInfo == null)
+                return null;
 
             var item = new Item
             {
@@ -111,8 +124,6 @@ namespace Rasa.Managers
             // register item
             EntityManager.Instance.RegisterEntity(item.EntityId, EntityType.Item);
             EntityManager.Instance.RegisterItem(item.EntityId, item);
-
-            SendItemDataToClient(client, item, false);
 
             return item;
         }

@@ -1113,6 +1113,71 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("map_info");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.MapLinkEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("DestMapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("dest_map_context_id");
+
+                    b.Property<double>("DestPosX")
+                        .HasColumnType("double")
+                        .HasColumnName("dest_pos_x");
+
+                    b.Property<double>("DestPosY")
+                        .HasColumnType("double")
+                        .HasColumnName("dest_pos_y");
+
+                    b.Property<double>("DestPosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("dest_pos_z");
+
+                    b.Property<double>("DestRotation")
+                        .HasColumnType("double")
+                        .HasColumnName("dest_rotation");
+
+                    b.Property<byte>("Enabled")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("enabled");
+
+                    b.Property<byte>("Kind")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("kind");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("double")
+                        .HasColumnName("radius");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("map_link");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionEntry", b =>
                 {
                     b.Property<uint>("Id")

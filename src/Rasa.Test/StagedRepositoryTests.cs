@@ -61,6 +61,7 @@ namespace Rasa.Test
                 friends: null,
                 ignoreds: null,
                 items: null,
+                petitions: null,
                 userOptions: null);
 
         private static SqliteConnection Database()

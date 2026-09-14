@@ -12,6 +12,8 @@ namespace Rasa.Packets.Protocol
 
     public class ProtocolPacket : IBasePacket
     {
+        private const int MaxUncompressedSize = 4 * ushort.MaxValue;
+
         public ClientMessageOpcode Type { get; private set; } = ClientMessageOpcode.None;
 
         public ushort Size { get; private set; }

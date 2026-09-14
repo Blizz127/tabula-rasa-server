@@ -162,6 +162,14 @@ namespace Rasa.Managers
 
         public Creature CreateCreature(uint dbId, SpawnPool spawnPool)
         {
+            if (!LoadedCreatures.ContainsKey(dbId))
+            {
+                Logger.WriteLog(LogType.Error, $"Creature with dbId={dbId}, isn't in database");
+                MapErrorManager.Instance.Record(spawnPool?.MapContextId ?? MapErrorManager.ServerWide,
+                    $"Spawn pool {spawnPool?.DbId.ToString() ?? "?"} wants creature {dbId}, which is not in the database.");
+                return null;
+            }
+
             var creature = CreateFromTemplate(dbId);
 
             if (creature == null)
@@ -490,7 +498,12 @@ namespace Rasa.Managers
                     }
                 }
                 else
+                {
                     Logger.WriteLog(LogType.Error, $"LoadNPCPackages: unknown creatureDbId = {package.Id}");
+
+                    MapErrorManager.Instance.Record(
+                        $"NPC package {package.PackageId} names creature {package.Id}, which is not in the database.");
+                }
             }
         }
 

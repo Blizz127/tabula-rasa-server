@@ -197,6 +197,20 @@ namespace Rasa.Managers
                 actor is Manifestation { CurrentWeaponAttack: not null };
         }
 
+        /// <summary>
+        /// Forgets every queued action of an actor that is leaving the world. An action fires
+        /// after its wait time on the world loop, and looks its actor's client up when it does;
+        /// a player who disconnected in the meantime is no longer in the client list, and a
+        /// reload that found nobody used to take the whole server down with it. Every map is
+        /// swept rather than the actor's own, since which map the actor thinks it is on is not
+        /// always the one its actions were queued on.
+        /// </summary>
+        public void RemoveActor(Actor actor)
+        {
+            foreach (var mapChannel in MapChannelManager.Instance.MapChannelArray.Values)
+                mapChannel.PerformRecovery.RemoveAll(action => action.Actor == actor);
+        }
+
         public void DoWork(MapChannel mapChannel, long delta)
         {
             var now = _getMonotonicMilliseconds();
@@ -254,6 +268,9 @@ namespace Rasa.Managers
         {
             switch (action.ActionId)
             {
+                case ActionId.Gesture:
+                    GestureManager.Instance.PerformRecovery(mapChannel, action);
+                    break;
                 case ActionId.AaRecruitLightning:
                     if (action.Actor is Manifestation player && player.Level >= 1 &&
                         action.ActionArgId >= 1 && action.ActionArgId <= 5)

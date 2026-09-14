@@ -44,6 +44,13 @@ namespace Rasa.Structures
         public BehaviorState Controller = new BehaviorState();
         // loot dispenser
         public ulong LootDispenserObjectEntityId { get; internal set; }
+
+        /// <summary>
+        /// The corpse loot dispenser made when this creature died, or 0. Distinct from
+        /// LootDispenserObjectEntityId, which is the dynamic object that marks a lootable corpse
+        /// in the world; this is the dispenser holding what is actually on it.
+        /// </summary>
+        public ulong CorpseLootEntityId { get; internal set; }
         // creature actions
         public List<CreatureAction> Actions = new List<CreatureAction>();
 

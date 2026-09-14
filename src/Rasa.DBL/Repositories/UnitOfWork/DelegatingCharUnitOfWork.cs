@@ -23,6 +23,7 @@ namespace Rasa.Repositories.UnitOfWork
     using Char.Friend;
     using Char.Ignored;
     using Char.Items;
+    using Char.Petition;
     using Char.UserOption;
 
     public class DelegatingCharUnitOfWork : DelegatingUnitOfWorkBase, ICharUnitOfWork
@@ -77,6 +78,8 @@ namespace Rasa.Repositories.UnitOfWork
         public IIgnoredRepository Ignoreds => _parent.Ignoreds;
 
         public IItemRepository Items => _parent.Items;
+
+        public IPetitionRepository Petitions => _parent.Petitions;
 
         public IUserOptionRepository UserOptions => _parent.UserOptions;
     }

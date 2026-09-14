@@ -10,6 +10,7 @@ namespace Rasa.Managers
     using Packets.MapChannel.Client;
     using Packets.MapChannel.Server;
     using Packets.Mission.Server;
+    using Repositories.Char;
     using Repositories.UnitOfWork;
     using Structures;
 
@@ -345,33 +346,65 @@ namespace Rasa.Managers
         #endregion
 
         #region Vendor
+        /// <summary>
+        /// Opens a vendor's stock for one player.
+        ///
+        /// The stock itself is made once and shared by everyone: the items are registered
+        /// globally against the vendor's entity id and stay there for the life of the process.
+        /// What is *not* shared is the client's knowledge of them. A client can only draw an
+        /// item it has been sent - vendorwindow does GetEntity(itemId) per row and falls back to
+        /// the literal string "Unknown entity" - and the Vend packet carries only ids and prices,
+        /// not the items.
+        ///
+        /// So the item data has to go to whoever opens the vendor, every time. It used to be
+        /// sent from inside CreateVendorItem, which runs only when the stock is first made:
+        /// the first player to open that vendor after a restart saw it correctly and every other
+        /// player saw a list of "Unknown entity" rows. The same happened to that first player
+        /// once they relogged, since a client drops its entities when it leaves the world.
+        /// </summary>
         public void RequestNPCVending(Client client, RequestNPCVendingPacket packet)
         {
-            var itemList = new List<Item>();
-            var entityList = new List<ulong>();
+            // Any entity id can arrive here, and Creatures was indexed directly:
+            // KeyNotFoundException in the handler, which closes the connection.
+            var creature = EntityManager.Instance.GetCreature(packet.EntityId);
 
-            if (EntityManager.Instance.VendorItems.ContainsKey(packet.EntityId))
-            {
-                // store was opened before
-                entityList = EntityManager.Instance.VendorItems[packet.EntityId];
+            if (creature?.Npc?.Vendor?.VendorItems == null)
+                return;
 
-                foreach (var entityId in entityList)
-                    itemList.Add(EntityManager.Instance.GetItem(entityId));
-            }
-            else
+            if (!EntityManager.Instance.VendorItems.TryGetValue(packet.EntityId, out var entityList))
             {
-                // opening store first Time, create item
-                var creature = EntityManager.Instance.GetCreature(packet.EntityId);
+                entityList = new List<ulong>();
 
                 foreach (var itemTemplateId in creature.Npc.Vendor.VendorItems)
                 {
-                    var item = ItemManager.Instance.CreateVendorItem(client, itemTemplateId);
+                    var created = ItemManager.Instance.CreateVendorItem(itemTemplateId);
 
-                    itemList.Add(item);
-                    entityList.Add(item.EntityId);
+                    if (created == null)
+                    {
+                        Logger.WriteLog(LogType.Error,
+                            $"Vendor {packet.EntityId} stocks item template {itemTemplateId}, which does not exist.");
+                        continue;
+                    }
+
+                    entityList.Add(created.EntityId);
                 }
 
                 EntityManager.Instance.RegisterVendorItem(packet.EntityId, entityList);
+            }
+
+            var itemList = new List<Item>();
+
+            foreach (var entityId in entityList)
+            {
+                var item = EntityManager.Instance.GetItem(entityId);
+
+                // Registered once but freed since. Skip it: a null in the list is a
+                // NullReferenceException inside VendPacket.Write, on the main loop.
+                if (item == null)
+                    continue;
+
+                ItemManager.Instance.SendItemDataToClient(client, item, false);
+                itemList.Add(item);
             }
 
             client.CallMethod(packet.EntityId, new VendPacket(itemList));
@@ -384,89 +417,219 @@ namespace Rasa.Managers
 
         public void RequestVendorBuyback(Client client, RequestVendorBuybackPacket packet)
         {
-            client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+            // Only what this player sold this session can come back. The id used to be taken
+            // as given: any registered item - one already in the inventory, one shown to this
+            // account by another character, another player's - was added to the inventory at
+            // its sell price. Adding an item that was already there merged it with itself and
+            // wrote the doubled stack to the row, then inserted a second inventory row for the
+            // same item id; on the next login the player had two of it, both doubled.
+            var buyback = client.Player.Inventory.BuybackItems;
 
-            var buyBackItem = EntityManager.Instance.GetItem((uint)packet.ItemEntityId);
-            var buyedItem = InventoryManager.Instance.AddItemToInventory(client, buyBackItem);
-            var buyPrice = (int)buyedItem.StackSize * buyedItem.ItemTemplate.SellPrice;
+            if (!buyback.Contains(packet.ItemEntityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy back item {packet.ItemEntityId}, which they did not sell.");
+                return;
+            }
+
+            var item = EntityManager.Instance.GetItem(packet.ItemEntityId);
+
+            if (item == null)
+            {
+                buyback.Remove(packet.ItemEntityId);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+                return;
+            }
+
+            var unitPrice = Math.Max(item.ItemTemplate.SellPrice, 0);
+            var price = (long) unitPrice * item.StackSize;
+
+            if (client.Player.Credits[CurencyType.Credits] < price)
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            var quantity = item.StackSize;
+            var placedItem = InventoryManager.Instance.AddItemToInventory(client, item);
+
+            if (placedItem == null)
+            {
+                // Some or none of it fitted. What did not fit stays on the buyback list as the
+                // remainder; the player pays for what they got.
+                var placed = quantity - item.StackSize;
+
+                if (placed == 0)
+                {
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                    return;
+                }
+
+                price = (long) unitPrice * placed;
+            }
+            else
+            {
+                buyback.Remove(packet.ItemEntityId);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(packet.ItemEntityId));
+            }
 
             // remove credits
-            ManifestationManager.Instance.LossCredits(client, -buyPrice);
+            ManifestationManager.Instance.LossCredits(client, -(int) price);
         }
 
         public void RequestVendorPurchase(Client client, RequestVendorPurchasePacket packet)
         {
-            var itemQuantity = packet.Quantity;
-            if (itemQuantity <= 0)
+            // Everything in the packet is the client's word. The vendor has to be one whose stock
+            // this server has laid out (RequestNPCVending registers it), and the item one of that
+            // stock: without that, any item entity id the client had ever been shown - another
+            // player's rifle, a corpse's loot - could be "bought" here at its template's BuyPrice,
+            // which is 0 for anything no vendor sells.
+            if (!EntityManager.Instance.VendorItems.TryGetValue(packet.VendorEntityId, out var stock)
+                || !stock.Contains(packet.ItemEntityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy item {packet.ItemEntityId} from {packet.VendorEntityId}, which does not sell it.");
                 return;
+            }
 
-            // get the instance of the bought item
-            var selectedVendorItem = EntityManager.Instance.GetItem(packet.ItemEntityId);
+            var vendorItem = EntityManager.Instance.GetItem(packet.ItemEntityId);
 
-            if (selectedVendorItem == null)
+            if (vendorItem == null)
             {
                 Logger.WriteLog(LogType.Error, "RequestVendorPurchase: The item instance does not exist");
                 return;
             }
-            // has the player enough credits?
-            var buyPrice = selectedVendorItem.ItemTemplate.BuyPrice * (int)itemQuantity;
 
-            if (client.Player.Credits[CurencyType.Credits] < buyPrice)
-                return; // not enough credits
+            // Quantity is unsigned on the wire. It used to be cast to int and multiplied by the
+            // price, so a value of 2^31 or more made the total negative: it passed the credit
+            // check, CreateItem clamped the stack to the class maximum, and the debit added the
+            // amount instead. A stack is the most one purchase can hand over, so that is the cap.
+            var maxStack = EntityClassManager.Instance.GetItemClassInfo(vendorItem).StackSize;
 
-            // duplicate item
+            if (packet.Quantity == 0 || packet.Quantity > maxStack)
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to buy {packet.Quantity} of item {packet.ItemEntityId} (stack size {maxStack}).");
+                return;
+            }
+
+            var unitPrice = vendorItem.ItemTemplate.BuyPrice;
+
+            if (unitPrice < 0)
+            {
+                Logger.WriteLog(LogType.Error, $"RequestVendorPurchase: item template {vendorItem.ItemTemplate.ItemTemplateId} has a negative BuyPrice.");
+                return;
+            }
+
+            // Priced in long so nothing here can wrap; the debit below takes an int, and a
+            // purchase the player cannot afford never reaches it.
+            var total = (long) unitPrice * packet.Quantity;
+
+            if (client.Player.Credits[CurencyType.Credits] < total)
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            // A fresh item with its own row in the items table, holding the whole quantity.
             var boughtItem = ItemManager.Instance.DuplicateItem(client, packet);
 
             if (boughtItem == null)
-                return; // could not duplicate item
+                return;
 
-            var tempItem = boughtItem;
-            var desiredStacksize = tempItem.StackSize;
+            var quantity = boughtItem.StackSize;
 
-            boughtItem = InventoryManager.Instance.AddItemToInventory(client, boughtItem);
+            // Merges what it can into existing stacks, then takes a free slot for the rest. On a
+            // full merge it deletes boughtItem's row itself and returns the stack it merged into;
+            // if it runs out of room it returns null with the unplaced remainder still in
+            // boughtItem.StackSize.
+            var placedItem = InventoryManager.Instance.AddItemToInventory(client, boughtItem);
 
-            if (boughtItem == null)
+            if (placedItem == null)
             {
-                // item could not be added to inventory
-                var appliedRestStackSize = tempItem.StackSize;
-                if (appliedRestStackSize == desiredStacksize)
+                var placed = quantity - boughtItem.StackSize;
+
+                // The remainder was never placed: take its entity back from the client and its
+                // row out of the table. The row used to be left behind on both paths, and on the
+                // partial one the message below then read the null placedItem, which threw, so
+                // the player kept the merged part and was never charged for it.
+                EntityManager.Instance.DestroyPhysicalEntity(client, boughtItem.EntityId, EntityType.Item);
+
+                if (boughtItem.Id != 0)
+                    using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
+                        unitOfWork.Items.DeleteItem(boughtItem.Id);
+
+                if (placed == 0)
                 {
-                    // not even 1x item could be added to the inventory
-                    EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
                     return;
                 }
-                // we were able to at least get a part of the stack into the inventory
-                // destroy the rest and update the stacksize for the price
-                EntityManager.Instance.DestroyPhysicalEntity(client, tempItem.EntityId, EntityType.Item);
-                itemQuantity = (desiredStacksize - appliedRestStackSize);
+
+                quantity = placed;
+                total = (long) unitPrice * quantity;
             }
 
             // send player message
-            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmGotLootFromUnknown, new Dictionary<string, string> { { "quantity", itemQuantity.ToString() }, { "loot", boughtItem.ItemTemplate.Class.ToString() } }, MsgFilterId.LootObtained));
-
-            // get correct buy price
-            buyPrice = boughtItem.ItemTemplate.BuyPrice * (int)itemQuantity;
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmGotLootFromUnknown, new Dictionary<string, string> { { "quantity", quantity.ToString() }, { "loot", vendorItem.ItemTemplate.Class.ToString() } }, MsgFilterId.LootObtained));
 
             // remove credits
-            ManifestationManager.Instance.LossCredits(client, -buyPrice);
+            ManifestationManager.Instance.LossCredits(client, -(int) total);
         }
 
         public void RequestVendorRepair(Client client, RequestVendorRepairPacket packet)
         {
+            if (client.Player == null)
+                return;
+
+            // The same test RequestVendorPurchase applies: the entity has to be a vendor.
+            if (!EntityManager.Instance.VendorItems.ContainsKey(packet.VendorEntityId))
+            {
+                Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked {packet.VendorEntityId} for repairs, and it is not a vendor.");
+                return;
+            }
+
+            var inventory = client.Player.Inventory;
+
             foreach (var itemEntityId in packet.ItemEntitesId)
             {
                 var item = EntityManager.Instance.GetItem(itemEntityId);
+
+                // Any entity id used to be accepted, including an item another player is
+                // carrying (repaired at this player's expense) and ids that are no item at all
+                // (a NullReferenceException in the handler).
+                if (item == null
+                    || !(inventory.PersonalInventory.Contains(itemEntityId)
+                         || inventory.EquippedInventory.Contains(itemEntityId)
+                         || inventory.WeaponDrawer.Contains(itemEntityId)))
+                {
+                    Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked to repair {itemEntityId}, which is not in their inventory.");
+                    continue;
+                }
+
                 var classInfo = EntityClassManager.Instance.GetClassInfo(item.ItemTemplate.Class);
 
-                // calculate cost
-                var cost = (double)((classInfo.ItemClassInfo.MaxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice) / 100;
-                // set itemHit points to full
-                item.CurrentHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
-                // remove player credits
-                ManifestationManager.Instance.LossCredits(client, -(int)Math.Round(cost, 0));
-                // updateItem on client
+                if (classInfo?.ItemClassInfo == null)
+                    continue;
+
+                var maxHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
+
+                // Nothing to repair - and with CurrentHitPoints above the maximum the old
+                // arithmetic produced a negative cost, which LossCredits paid to the player.
+                if (item.CurrentHitPoints >= maxHitPoints)
+                    continue;
+
+                var cost = (int)Math.Round((double)(maxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice / 100);
+
+                if (cost > client.Player.Credits[CurencyType.Credits])
+                {
+                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                    break;
+                }
+
+                item.CurrentHitPoints = maxHitPoints;
+                ManifestationManager.Instance.LossCredits(client, -cost);
                 ItemManager.Instance.SendItemDataToClient(client, item, true);
-                // updare item in db
+
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
                 unitOfWork.Items.UpdateCurrentHitPoints(item);
             }
@@ -474,9 +637,10 @@ namespace Rasa.Managers
 
         public void RequestVendorSale(Client client, RequestVendorSalePacket packet)
         {
-            var vendorEntityId = packet.VendorEntityId;
             var itemEntityId = packet.ItemEntityId;
-            var itemQuantity = (uint)packet.Quantity;
+
+            if (packet.Quantity <= 0)
+                return;
 
             // note: Players can only sell items directly from their personal inventory
             //       so we only have to scan there for the item entityId
@@ -506,19 +670,89 @@ namespace Rasa.Managers
                 return;
             }
 
-            // get sell price
-            var realItemQuantity = Math.Min(itemQuantity, soldItem.StackSize);
-            var sellPrice = soldItem.ItemTemplate.SellPrice * (int)realItemQuantity;
+            var quantity = (uint) Math.Min(packet.Quantity, soldItem.StackSize);
+            var sellPrice = Math.Min((long) Math.Max(soldItem.ItemTemplate.SellPrice, 0) * quantity, int.MaxValue);
+
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-            // remove item
-            // todo: Handle stacksizes correctly and only decrease item by quantity parameter
-            InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, slotIndex);
-            unitOfWork.CharacterInventories.DeleteInvItem(client.AccountEntry.Id, client.Player.Id, (uint)InventoryType.Personal, slotIndex);
+
+            if (quantity < soldItem.StackSize)
+            {
+                // Selling part of a stack. The whole stack used to go, for the price of the part:
+                // split off the part as an item of its own, and that is what was sold.
+                soldItem.StackSize -= quantity;
+                unitOfWork.Items.UpdateItemStackSize(soldItem);
+                client.CallMethod(soldItem.EntityId, new SetStackCountPacket(soldItem.StackSize));
+
+                soldItem = ItemManager.Instance.CreateFromTemplateId(soldItem.ItemTemplate.ItemTemplateId, quantity, soldItem.Crafter);
+
+                if (soldItem == null)
+                {
+                    Logger.WriteLog(LogType.Error, $"RequestVendorSale: could not split {quantity} off item {itemEntityId}.");
+                    return;
+                }
+
+                ItemManager.Instance.SendItemDataToClient(client, soldItem, false);
+            }
+            else
+            {
+                // remove item; the row by item id, since the character id it carries is
+                // not written consistently and a miss leaves a row behind
+                InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, slotIndex);
+                unitOfWork.CharacterInventories.DeleteInvItemByItemId(soldItem.Id);
+            }
+
             // add credits to player
-            ManifestationManager.Instance.GainCredits(client, sellPrice);
-            // add item to buyback list
-            client.CallMethod(SysEntity.ClientInventoryManagerId, new AddBuybackItemPacket(packet.ItemEntityId, (int)sellPrice, 1));
+            ManifestationManager.Instance.GainCredits(client, (int) sellPrice);
+
+            // add item to buyback list, retiring the oldest if it is full
+            var buyback = client.Player.Inventory.BuybackItems;
+
+            while (buyback.Count >= Inventory.MaxBuybackItems)
+            {
+                var retired = buyback[0];
+                buyback.RemoveAt(0);
+                DiscardSoldItem(client, retired, unitOfWork);
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new RemoveBuybackItemPacket(retired));
+            }
+
+            buyback.Add(soldItem.EntityId);
+            client.CallMethod(SysEntity.ClientInventoryManagerId, new AddBuybackItemPacket(soldItem.EntityId, (int) sellPrice, buyback.Count));
         }
+
+        /// <summary>
+        /// A sold item nobody can buy back any more: off the client, out of the entity tables,
+        /// and its row out of the items table.
+        /// </summary>
+        private static void DiscardSoldItem(Client client, ulong entityId, ICharUnitOfWork unitOfWork)
+        {
+            var item = EntityManager.Instance.GetItem(entityId);
+
+            EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
+
+            if (item != null && item.Id != 0)
+                unitOfWork.Items.DeleteItem(item.Id);
+        }
+
+        /// <summary>
+        /// Called when the character leaves the world. Whatever was still on the buyback list
+        /// is gone for good, so its entities and rows go with it; they used to be left
+        /// registered for the life of the process.
+        /// </summary>
+        public void DiscardBuybackItems(Client client)
+        {
+            var buyback = client.Player.Inventory.BuybackItems;
+
+            if (buyback.Count == 0)
+                return;
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+            foreach (var entityId in buyback)
+                DiscardSoldItem(client, entityId, unitOfWork);
+
+            buyback.Clear();
+        }
+
         #endregion
     }
 }

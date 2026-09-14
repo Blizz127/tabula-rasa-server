@@ -17,5 +17,15 @@ namespace Rasa.Structures
         // 272 weapondrawer1, 273 weapondrawer2, 274 weapondrawer3, 275 weapondrawer4, 276 weapondrawer5
         // 277 weapondrawer1ammo, 278 weapondrawer2ammo, 279 weapondrawer3ammo, 280 weapondrawer4ammo, 281 weapondrawer5ammo
         public List<ulong> WeaponDrawer = new List<ulong>();
+
+        /// <summary>
+        /// Items sold to a vendor this session, oldest first, still registered with the
+        /// EntityManager and still rows in the items table so they can be bought back as they
+        /// were. This is the only list a buyback is honoured from. Capped at MaxBuybackItems:
+        /// the oldest is destroyed to make room.
+        /// </summary>
+        public List<ulong> BuybackItems = new List<ulong>();
+
+        public const int MaxBuybackItems = 10;
     }
 }

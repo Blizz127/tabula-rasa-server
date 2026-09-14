@@ -56,12 +56,38 @@ namespace Rasa.Structures
         public List<CharacterTeleporterEntry> GainedWaypoints = new();
         public bool IsAFK { get; set; }
 
+        /// <summary>
+        /// The best quality the client will pick up by walking over a corpse. Set by
+        /// SetAutoLootThreshold, which the client sends at login and whenever the option changes.
+        /// Junk is the client's own default (gameui: GetOptionString(..., 'Junk')), so an account
+        /// that has never touched the option auto-loots junk and nothing else.
+        /// </summary>
+        public LootQuality AutoLootThreshold { get; set; } = LootQuality.Junk;
+
+        /// <summary>
+        /// Environment.TickCount64 at the player's last movement or action. Monotonic, so a
+        /// wall-clock change on the server cannot make everyone idle at once.
+        /// </summary>
+        public long LastActivityTick { get; set; } = Environment.TickCount64;
+
+        /// <summary>Whether PlayerInactiveWarning has gone out for the current idle stretch.</summary>
+        public bool InactiveWarningSent { get; set; }
+
+        /// <summary>
+        /// Always false: this server has no trial accounts. The single source for every packet
+        /// that reports the flag (IsTrialAccount, WhoAck), so the client never shows the trial
+        /// tag and no trial-only restriction - whisper, party or clan invites, trial chat
+        /// channels - ever applies.
+        /// </summary>
+        public bool IsTrialAccount => false;
+
         // Inventory
         public Inventory Inventory { get; set; } = new Inventory();
 
         // Party
         internal uint PartyId { get; set; }
-        internal ulong PartyInviterId { get; set; }
+        /// <summary>AcceptPartyInvitesChanged; invitations to a player who turned them off are refused.</summary>
+        internal bool AcceptPartyInvites { get; set; } = true;
 
         // Social
         internal List<uint> Friends = new();
@@ -70,6 +96,13 @@ namespace Rasa.Structures
         public bool Disconected { get; set; }
         public LogoutCountdown LogoutCountdown { get; } = new();
         public bool RemoveFromMap { get; set; }
+
+        /// <summary>
+        /// Ids of the map links whose trigger radius the player is standing in. A link fires
+        /// when its id joins this set, so a player who arrives inside the reciprocal gate is not
+        /// bounced straight back: MapLinkManager seeds it on arrival and clears it on leaving.
+        /// </summary>
+        internal HashSet<uint> InsideMapLinks = new();
         // chat
         public int JoinedChannels { get; set; }
         public int[] ChannelHashes = new int[14];

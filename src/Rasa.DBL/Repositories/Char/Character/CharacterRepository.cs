@@ -66,19 +66,40 @@ namespace Rasa.Repositories.Char.Character
         public IDictionary<byte, CharacterEntry> GetByAccountId(uint accountEntryId)
         {
             var query = CreateCharacterQuery();
-            var characters = query.Where(e => e.AccountId == accountEntryId);
-            return characters.ToDictionary(c => c.Slot, c => c);
+            var characters = query.Where(e => e.AccountId == accountEntryId).OrderBy(e => e.Id);
+
+            // Not ToDictionary: that throws on a duplicate slot, and this runs inside the login
+            // handler, so one bad row used to disconnect the account at every login. Rows written
+            // before the slot check and the unique index can still be duplicated; the oldest
+            // character keeps the pod and the rest are reported so they can be moved by hand.
+            var bySlot = new Dictionary<byte, CharacterEntry>();
+
+            foreach (var character in characters)
+            {
+                if (bySlot.TryAdd(character.Slot, character))
+                    continue;
+
+                Logger.WriteLog(LogType.Error,
+                    $"Account {accountEntryId} has more than one character in slot {character.Slot}; "
+                    + $"character {character.Id} ({character.Name}) is hidden behind {bySlot[character.Slot].Id}. "
+                    + "Move it to a free slot: UPDATE `character` SET slot = <n> WHERE id = " + character.Id + ";");
+            }
+
+            return bySlot;
         }
 
+        /// <summary>
+        /// The character in one of an account's pods, or null when the pod is empty. An empty
+        /// pod is an ordinary answer - an account with no character in its selected slot, a
+        /// switch to a slot nothing was created in - so this does not throw; it used to, and
+        /// every caller checked for null instead, so the check never ran and the throw took
+        /// the connection down.
+        /// </summary>
         public CharacterEntry GetByAccountId(uint accountEntryId, byte slot)
         {
             var query = CreateCharacterQuery();
-            var character = query.FirstOrDefault(e => e.AccountId == accountEntryId && e.Slot == slot);
-            if (character == null)
-            {
-                throw new EntityNotFoundException(nameof(CharacterEntry), $"{nameof(CharacterEntry.AccountId)}.{nameof(CharacterEntry.Slot)}", $"{accountEntryId}-{slot}");
-            }
-            return character;
+
+            return query.FirstOrDefault(e => e.AccountId == accountEntryId && e.Slot == slot);
         }
 
         private IQueryable<CharacterEntry> CreateCharacterQuery()
@@ -118,60 +139,95 @@ namespace Rasa.Repositories.Char.Character
             entry.MapContextId= characterChange.MapContextId;
         }
 
+        /// <summary>
+        /// The tracked row for one character, or null. The update methods below used to load a
+        /// no-tracking snapshot, change a field and hand the whole object to Update(), which
+        /// marks every column modified: a row that had been changed by another thread in the
+        /// meantime (SaveCharacter from a socket close, the console gm command) was overwritten
+        /// with the stale snapshot, and a missing row was a NullReferenceException in whichever
+        /// packet handler asked. A tracked row writes only the columns that changed.
+        /// </summary>
+        private CharacterEntry GetWritable(uint id)
+        {
+            var entry = _charContext.GetWritable(_charContext.CharacterEntries, id);
+
+            if (entry == null)
+                Logger.WriteLog(LogType.Error, $"Character {id} does not exist; update skipped.");
+
+            return entry;
+        }
+
         public void UpdateCharacterAttributes(uint id, int spentBody, int spentMind, int spentSpirit)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Body = spentBody;
             entry.Mind = spentMind;
             entry.Spirit = spentSpirit;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterClass(uint id, uint classId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Class = classId;
- 
-            _charContext.CharacterEntries.Update(entry);
+
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterCloneCredits(uint id, uint cloneCredits)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.CloneCredits = cloneCredits;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterCredits(uint id, int credits)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Credit = credits;
 
-            _charContext.CharacterEntries.Update(entry);
+            _charContext.SaveChanges();
+        }
+
+        public void UpdateCharacterPrestige(uint id, int prestige)
+        {
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
+
+            entry.Prestige = prestige;
+
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterExpirience(uint id, uint experience)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Experience = experience;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
@@ -201,32 +257,36 @@ namespace Rasa.Repositories.Char.Character
 
         public void UpdateCharacterLevel(uint id, byte level)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.Level = level;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.LastLogin = DateTime.UtcNow;
             entry.TotalTimePlayed = totalTimePlayed;
             entry.NumLogins = numLogins;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.CoordX = x;
             entry.CoordY = y;
@@ -234,19 +294,40 @@ namespace Rasa.Repositories.Char.Character
             entry.Rotation = rotation;
             entry.MapContextId = mapContextId;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
         }
 
         public void UpdateCharacterActiveWeapon(uint id, byte activeWeapon)
         {
-            var query = _charContext.CreateNoTrackingQuery(_charContext.CharacterEntries);
-            var entry = query.Where(e => e.Id == id).FirstOrDefault();
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
 
             entry.ActiveWeapon = activeWeapon;
 
-            _charContext.CharacterEntries.Update(entry);
             _charContext.SaveChanges();
+        }
+
+        public void UpdateCharacterName(uint id, string name)
+        {
+            var entry = GetWritable(id);
+
+            if (entry == null)
+                return;
+
+            entry.Name = name;
+
+            _charContext.SaveChanges();
+        }
+
+        public bool IsCharacterNameTaken(string name, uint exceptCharacterId)
+        {
+            // ToLower on both sides: SQLite compares strings with BINARY collation, so = is
+            // case-sensitive there while MySQL's default collation is not.
+            var lowered = name.ToLower();
+
+            return _charContext.CharacterEntries.Any(e => e.Id != exceptCharacterId && e.Name.ToLower() == lowered);
         }
     }
 }

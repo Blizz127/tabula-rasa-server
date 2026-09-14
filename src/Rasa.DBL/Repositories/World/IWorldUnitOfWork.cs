@@ -12,6 +12,7 @@ namespace Rasa.Repositories.World
         ILogosRepository Logoses { get; }
         IMapInfoRepository MapInfos { get; }
         IMissionContentRepository MissionContent { get; }
+        IMapLinkRepository MapLinks { get; }
         INpcMissionRepository NpcMissions { get; }
         INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         INpcMissionRewardRepository NpcMissionRewards { get; }

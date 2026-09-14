@@ -269,7 +269,8 @@ namespace Rasa.Test
             if (changed == "forged_instance") item = new Item { Id = 1, OwnerId = 101, OwnerSlotId = 50, StackSize = 10 };
             var quantity = changed == "zero" ? 0u : changed == "excess" ? uint.MaxValue : 3u;
             var before = Snapshot();
-            Assert.IsFalse(_inventory.ReduceStackCount(_client, InventoryType.Personal, item, quantity));
+            // ReduceStackCount is void: the refusal shows as no state change and no traffic.
+            _inventory.ReduceStackCount(_client, InventoryType.Personal, item, quantity);
             Assert.AreEqual(10u, item.StackSize);
             Assert.AreEqual(0, Drain().Count);
             Assert.AreEqual(0, _factory.Calls);
