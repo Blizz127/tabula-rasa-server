@@ -14,6 +14,7 @@ namespace Rasa.Managers
     using Packets.MapChannel.Server;
     using Repositories.UnitOfWork;
     using Structures;
+    using Structures.Content;
     using Structures.Char;
     public class ManifestationManager
     {
@@ -666,6 +667,9 @@ namespace Rasa.Managers
 
             // Class (and usually level) are fields of the party member tuple.
             PartyManager.Instance.MemberInfoChanged(client);
+
+            // Content reacting to the choice (the Soldier/Specialist gear missions).
+            MissionManager.Instance.Content.React(client, new ContentEvent(ContentRuleEvent.ClassSelected, player.MapContextId));
         }
 
         private static bool IsNearClassTrainer(Manifestation player) =>

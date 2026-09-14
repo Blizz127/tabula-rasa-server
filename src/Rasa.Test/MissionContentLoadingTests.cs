@@ -252,7 +252,8 @@ namespace Rasa.Test
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
                 ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn, ContentRuleEvent.AreaEntered,
-                ContentRuleEvent.PlacementStateEntered, ContentRuleEvent.ObjectiveFailed, ContentRuleEvent.MissionFailed
+                ContentRuleEvent.PlacementStateEntered, ContentRuleEvent.ObjectiveFailed, ContentRuleEvent.MissionFailed,
+                ContentRuleEvent.ClassSelected
             }, implemented.Events.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -264,7 +265,7 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentConditionKind.MissionAbsent, ContentConditionKind.MissionStateIs, ContentConditionKind.ObjectiveStateIs,
-                ContentConditionKind.FactEquals, ContentConditionKind.HasLogos
+                ContentConditionKind.FactEquals, ContentConditionKind.HasLogos, ContentConditionKind.CharacterClassIs
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi }, implemented.PlacementBehaviors.ToArray());
@@ -1123,6 +1124,44 @@ namespace Rasa.Test
             Assert.AreEqual(101u, armed.ArmedByCharacterId);
             EntityManager.Instance.UnregisterDynamicObject(armed.EntityId);
             EntityManager.Instance.UnregisterEntity(armed.EntityId);
+        }
+
+        [TestMethod]
+        public void ClassSelectedRulesReactToTheChosenClassOnly()
+        {
+            WithLogger(() =>
+            {
+                using var connection = new SqliteConnection("Data Source=:memory:");
+                connection.Open();
+                using (var context = Context(connection))
+                {
+                    context.Database.EnsureCreated();
+                    context.ContentConditionEntries.Add(new ContentConditionEntry { ConditionId = 900930, Kind = (byte)ContentConditionKind.CharacterClassIs, Value = 2 });
+                    context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9040, MapContextId = 1220, Event = (byte)ContentRuleEvent.ClassSelected, ConditionId = 900930 });
+                    context.ContentRuleActionEntries.Add(new ContentRuleActionEntry { RuleId = 9040, Sequence = 0, Action = (byte)ContentRuleAction.TutorialNotification, TutorialId = 10000019 });
+                    // A class outside 1..15 is withheld.
+                    context.ContentConditionEntries.Add(new ContentConditionEntry { ConditionId = 900931, Kind = (byte)ContentConditionKind.CharacterClassIs, Value = 16 });
+                    context.SaveChanges();
+                }
+
+                var missions = new MissionManager(new Factory(connection));
+                missions.LoadMissions();
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
+                content.Load(() => new BootcampConfig(), new References(), missions.LoadedMissions);
+                CollectionAssert.AreEqual(new[] { "content_condition 900931/0/0: unknown character class 16" }, content.Content.Gaps.Select(gap => gap.ToString()).ToArray());
+
+                var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                client.Player.MapContextId = 1220;
+
+                int Fired(uint classId)
+                {
+                    client.Player.Class = classId;
+                    return content.React(client, new ContentEvent(ContentRuleEvent.ClassSelected, 1220)).Count;
+                }
+
+                Assert.AreEqual(1, Fired(2));
+                Assert.AreEqual(0, Fired(3));
+            });
         }
 
         [TestMethod]

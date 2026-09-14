@@ -36,7 +36,9 @@ namespace Rasa.Data
                 // S5: the bomb armed and detonated; the timed objective and its mission failing.
                 ContentRuleEvent.PlacementStateEntered,
                 ContentRuleEvent.ObjectiveFailed,
-                ContentRuleEvent.MissionFailed
+                ContentRuleEvent.MissionFailed,
+                // W1: the class gear missions follow the choice at the class trainer.
+                ContentRuleEvent.ClassSelected
             },
             Actions = new HashSet<ContentRuleAction>
             {
@@ -60,7 +62,8 @@ namespace Rasa.Data
                 ContentConditionKind.ObjectiveStateIs,
                 // S5: the dropship wreck and bomb state.
                 ContentConditionKind.FactEquals,
-                ContentConditionKind.HasLogos
+                ContentConditionKind.HasLogos,
+                ContentConditionKind.CharacterClassIs
             },
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             // S4: creature-AI placements guard their spot (CreatureManager.ApplyPlacementBehavior).

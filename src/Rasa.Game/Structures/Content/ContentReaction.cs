@@ -87,6 +87,8 @@ namespace Rasa.Structures.Content
                     return FactValue(term.FactKey) == term.Value;
                 case ContentConditionKind.HasLogos:
                     return term.Value > 0 && HasLogos((uint)term.Value);
+                case ContentConditionKind.CharacterClassIs:
+                    return _player.Class == (uint)term.Value;
                 default:
                     // Unimplemented kinds are withheld at load and never reach evaluation.
                     return false;

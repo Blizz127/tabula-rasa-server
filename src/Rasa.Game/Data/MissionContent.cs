@@ -55,7 +55,9 @@ namespace Rasa.Data
         ObjectiveStateIs = 2,
         MissionAbsent = 3,
         FactEquals = 4,
-        HasLogos = 5
+        HasLogos = 5,
+        // value = character class id (1 Recruit .. 15 Exobiologist)
+        CharacterClassIs = 6
     }
 
     public enum ContentRuleEvent : byte
@@ -71,7 +73,9 @@ namespace Rasa.Data
         MissionAbandoned = 9,
         AreaEntered = 10,
         PlacementStateEntered = 11,
-        PlacementDestroyed = 12
+        PlacementDestroyed = 12,
+        // A character trained into a new class at a class trainer (SelectNewCharacterClass).
+        ClassSelected = 13
     }
 
     public enum ContentRuleAction : byte

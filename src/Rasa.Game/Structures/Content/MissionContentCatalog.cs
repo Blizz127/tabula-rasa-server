@@ -652,6 +652,11 @@ namespace Rasa.Structures.Content
                             if (term.Value <= 0 || !_references.LogosExists((uint)term.Value))
                                 gap("unknown logos in value");
                             break;
+                        case ContentConditionKind.CharacterClassIs:
+                            used.Add("value");
+                            if (term.Value < 1 || term.Value > 15)
+                                gap($"unknown character class {term.Value}");
+                            break;
                     }
 
                     CheckUnused(gap, used,
