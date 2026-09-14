@@ -33,6 +33,9 @@ namespace Rasa.Managers
 
         private MissionManager _missions;
 
+        // Monotonic milliseconds for restores and fuses; replaceable by tests.
+        public Func<long> TickNow { get; set; } = () => Environment.TickCount64;
+
         // The mission manager that owns offers and objective progress (the server's singleton by default).
         public MissionManager Missions
         {
@@ -217,8 +220,9 @@ namespace Rasa.Managers
             if (reaction.SkipBootcampGranted && client.AccountEntry != null)
                 client.AccountEntry.CanSkipBootcamp = true;
 
-            // Every committed change can move a placement's presence condition.
-            ContentMaterializer.RefreshPresence(client, Content);
+            // Every committed change can move a placement's presence condition or a usable's enabled state.
+            ContentMaterializer.RefreshPresence(client, Content, TickNow());
+            ContentMaterializer.RefreshFor(client, Content);
 
             // Last: the position is already committed, so the loading screen only follows it.
             if (reaction.Transfer is { } destination)
@@ -407,6 +411,10 @@ namespace Rasa.Managers
             if (!enabled)
                 return;
 
+            // An armed or detonated bomb cannot be planted again (disarming, 114 -> 113, is not implemented).
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Bomb && (uint)obj.StateId != BombDisarmed)
+                return;
+
             obj.ActivateMission = missionActivated;
             obj.WindupTime = placement.WindupMs;
 
@@ -455,7 +463,117 @@ namespace Rasa.Managers
                 return;
             }
 
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Bomb && !PlantBomb(owner, mapChannel, placement, obj))
+                return;
+
             CompleteUseBoundObjectives(owner, placement);
+        }
+
+        private const uint BombDisarmed = 113;
+        private const uint BombArmed = 114;
+        private const uint BombDetonated = 115;
+
+        /// <summary>
+        /// The plant (build plan 1.6): the bomb enters state 114 and its fuse starts. In one transaction the
+        /// timers of the objectives its detonation completes are disarmed and the placement_state_entered 114
+        /// rules commit (the planted-bomb fact). The countdown keeps running on the client (B1-044: 00:02:06 to
+        /// 00:02:00 through the plant), but it can no longer fail the objective.
+        /// </summary>
+        private bool PlantBomb(Client client, MapChannel mapChannel, ContentPlacementEntry placement, DynamicObject obj)
+        {
+            var player = client.Player;
+
+            if ((uint)obj.StateId != BombDisarmed)
+                return false;
+
+            var disarmed = new List<ObjectiveTimer>();
+            foreach (var (mission, binding) in PlacementStateBindings(player, placement.Id, BombDetonated))
+                if (mission.Timers.TryGetValue(binding.ObjectiveId, out var timer) && !timer.Disarmed && !disarmed.Contains(timer))
+                    disarmed.Add(timer);
+
+            var state = new ContentState(player);
+            var reaction = Plan(new ContentEvent(ContentRuleEvent.PlacementStateEntered, player.MapContextId, placementId: placement.Id, stateId: BombArmed), state);
+
+            try
+            {
+                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+                foreach (var (mission, binding) in PlacementStateBindings(player, placement.Id, BombDetonated))
+                    if (mission.Timers.TryGetValue(binding.ObjectiveId, out var timer) && disarmed.Contains(timer))
+                        unitOfWork.CharacterMissions.SetObjectiveTimer(player.Id, mission.MissionId, binding.ObjectiveId, timer.RemainingMs, timer.AnchorMs, true);
+
+                Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
+                unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteLog(LogType.Error, $"PlantBomb: could not save the plant of placement {placement.Id} for character {player.Id}");
+                Logger.WriteLog(LogType.Error, e);
+                return false;
+            }
+
+            foreach (var timer in disarmed)
+                timer.Disarmed = true;
+
+            ArmBomb(mapChannel, placement, obj, player.Id);
+            Apply(client, reaction);
+            Present(client, reaction);
+            return true;
+        }
+
+        private void ArmBomb(MapChannel mapChannel, ContentPlacementEntry placement, DynamicObject obj, uint armedBy)
+        {
+            obj.StateId = (UseObjectState)BombArmed;
+            obj.FuseAt = TickNow() + placement.FuseMs;
+            obj.ArmedByCharacterId = armedBy;
+            CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)BombArmed, 0));
+        }
+
+        /// <summary>The player's active missions' incomplete objectives bound to this placement reaching the state.</summary>
+        private IEnumerable<(PlayerMission Mission, NpcMissionObjectiveBindingEntry Binding)> PlacementStateBindings(Manifestation player, uint placementId, uint stateId)
+        {
+            foreach (var mission in player.Missions.Values.ToList())
+            {
+                if (mission.State != MissionState.Active || !Missions.LoadedMissions.TryGetValue(mission.MissionId, out var definition))
+                    continue;
+
+                foreach (var binding in definition.Bindings)
+                    if ((ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.PlacementState && binding.PlacementId == placementId &&
+                        binding.TargetState == stateId &&
+                        mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) && status == MissionObjectiveState.Incomplete)
+                        yield return (mission, binding);
+            }
+        }
+
+        /// <summary>
+        /// The fuse step of the map tick: armed bombs whose fuse burned down detonate (state 115, whose client
+        /// effects play the explosion). The instance owner is credited in a private instance, the arming
+        /// character in a shared world; without that character in the channel only the state changes.
+        /// </summary>
+        public void DetonateFuses(MapChannel mapChannel, long now = -1)
+        {
+            if (now < 0)
+                now = TickNow();
+
+            foreach (var obj in mapChannel.DynamicObjects.ToList())
+            {
+                if (obj.DynamicObjectType != DynamicObjectType.ContentUsable || obj.FuseAt == 0 || now < obj.FuseAt)
+                    continue;
+
+                obj.FuseAt = 0;
+
+                if (!mapChannel.ContentUsables.TryGetValue(obj.EntityId, out var placementId))
+                    continue;
+
+                obj.StateId = (UseObjectState)BombDetonated;
+                CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)BombDetonated, 0));
+
+                var creditedId = mapChannel.IsPrivateInstance ? mapChannel.OwnerCharacterId : obj.ArmedByCharacterId;
+                var client = mapChannel.ClientList.FirstOrDefault(candidate => candidate?.Player != null && candidate.Player.Id == creditedId);
+
+                if (client != null && MissionManager.IsInWorld(client))
+                    Missions.CommitPlacementState(client, placementId, BombDetonated);
+            }
         }
 
         /// <summary>
@@ -579,7 +697,7 @@ namespace Rasa.Managers
             obj.StateId = UseObjectState.StateDestroyed;
             CellManager.Instance.CellCallMethod(obj, new ForceStatePacket(UseObjectState.StateDestroyed, 0));
             if (placement.RestoreMs > 0)
-                obj.RestoreAt = Environment.TickCount64 + placement.RestoreMs;
+                obj.RestoreAt = TickNow() + placement.RestoreMs;
 
             if (sourceClient != null)
                 OnContentUsableHit(sourceClient, placementId, 0, true);
@@ -594,7 +712,7 @@ namespace Rasa.Managers
         public void RestoreDestroyedUsables(MapChannel mapChannel, long now = -1)
         {
             if (now < 0)
-                now = Environment.TickCount64;
+                now = TickNow();
             foreach (var obj in mapChannel.DynamicObjects)
             {
                 if (obj.DynamicObjectType != DynamicObjectType.ContentUsable || obj.RestoreAt == 0 || now < obj.RestoreAt)
@@ -746,7 +864,8 @@ namespace Rasa.Managers
 
             client.Player.LastContentSample = null;
             client.Player.InsideContentAreas.Clear();
-            ContentMaterializer.RefreshPresence(client, Content);
+            ContentMaterializer.RefreshPresence(client, Content, TickNow());
+            ContentMaterializer.RefreshFor(client, Content);
             React(client, new ContentEvent(ContentRuleEvent.EnteredMap, client.Player.MapContextId));
         }
 

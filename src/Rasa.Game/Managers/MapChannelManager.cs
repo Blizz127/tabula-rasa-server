@@ -370,7 +370,11 @@ namespace Rasa.Managers
                     // Area-bound mission objectives (no work in contexts without live content areas).
                     MissionContentManager.Instance.DoWork(mapChannel);
 
-                    // Objective timers run out after this tick's use recoveries (ActorActionManager above).
+                    // Then destroyed placements restore and armed bombs detonate (build plan 1.6 tick order).
+                    MissionContentManager.Instance.RestoreDestroyedUsables(mapChannel);
+                    MissionContentManager.Instance.DetonateFuses(mapChannel);
+
+                    // Objective timers run out after this tick's use recoveries (ActorActionManager above) and detonations.
                     MissionManager.Instance.ExpireObjectiveTimers(mapChannel);
 
                     // warn idle players and flag long-idle ones for removal below

@@ -19,7 +19,12 @@ namespace Rasa.Data
         /// </summary>
         public static readonly ContentCapabilities Implemented = new ContentCapabilities
         {
-            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill },
+            BindingKinds = new HashSet<ObjectiveBindingKind>
+            {
+                ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill,
+                // S5: Conrad's corpse and the bomb detonating.
+                ObjectiveBindingKind.UseCompleted, ObjectiveBindingKind.PlacementState
+            },
             Events = new HashSet<ContentRuleEvent>
             {
                 ContentRuleEvent.EnteredMap,
@@ -27,7 +32,11 @@ namespace Rasa.Data
                 ContentRuleEvent.ObjectiveCompleted,
                 ContentRuleEvent.MissionTurnedIn,
                 // S6: the exit pad.
-                ContentRuleEvent.AreaEntered
+                ContentRuleEvent.AreaEntered,
+                // S5: the bomb armed and detonated; the timed objective and its mission failing.
+                ContentRuleEvent.PlacementStateEntered,
+                ContentRuleEvent.ObjectiveFailed,
+                ContentRuleEvent.MissionFailed
             },
             Actions = new HashSet<ContentRuleAction>
             {
@@ -54,7 +63,7 @@ namespace Rasa.Data
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             // S4: creature-AI placements guard their spot (CreatureManager.ApplyPlacementBehavior).
             PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi },
-            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable },
+            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse },
             NpcPackageOverride = true,
             // Prerequisites gate each player's offer at dispense time
             // (MissionManager.PrerequisitesSatisfied), enforced per character.
@@ -101,6 +110,8 @@ namespace Rasa.Data
             {
                 // augmentation 41 InertDestroyable
                 { ContentUsableKind.Destroyable, new HashSet<(uint, uint)> { (2, 110), (110, 185), (185, 110), (185, 186), (186, 2), (186, 185) } },
+                // augmentation 8 StatelessSwitch: USE_SS_STATE_0 (44) only ever returns to itself.
+                { ContentUsableKind.GenericUse, new HashSet<(uint, uint)> { (44, 44) } },
                 // augmentation 42 Bomb
                 { ContentUsableKind.Bomb, new HashSet<(uint, uint)> { (113, 114), (114, 113), (114, 115), (115, 113) } },
                 // augmentation 64 TreasureDispenser (usabledata.pyo usableaugmentationstatetransition["64"]):

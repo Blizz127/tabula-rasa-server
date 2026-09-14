@@ -224,8 +224,10 @@ namespace Rasa.Test
                 var references = new References();
                 references.Missions[900100] = (7001, new uint[] { 1 });
                 references.NotOfferable.Clear();
+                // Every binding kind is implemented now; a capability set without them stands in for an older build.
+                var withoutBindings = new ContentCapabilities();
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
-                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
+                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, withoutBindings);
 
                 Assert.AreEqual(1, content.Content.Catalog.RowCount);              // the binding
                 CollectionAssert.AreEqual(new[] { "900100/1/0: binding kind UseCompleted is not implemented", "900100/1/0: needs a usable placement" },
@@ -236,7 +238,7 @@ namespace Rasa.Test
                 Assert.AreEqual(0, content.Content.LiveBindings.Count());
 
                 // Reloading clears gaps from the previous load rather than accumulating them.
-                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions);
+                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, withoutBindings);
                 Assert.AreEqual(2, missions.LoadedMissions[900100].ContentGaps.Count);
             });
         }
@@ -245,11 +247,12 @@ namespace Rasa.Test
         public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent((ObjectiveBindingKind[])System.Enum.GetValues(typeof(ObjectiveBindingKind)), implemented.BindingKinds.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
-                ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn, ContentRuleEvent.AreaEntered
+                ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn, ContentRuleEvent.AreaEntered,
+                ContentRuleEvent.PlacementStateEntered, ContentRuleEvent.ObjectiveFailed, ContentRuleEvent.MissionFailed
             }, implemented.Events.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -265,7 +268,7 @@ namespace Rasa.Test
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi }, implemented.PlacementBehaviors.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
             Assert.IsTrue(implemented.Timers && implemented.Indicators);
@@ -767,16 +770,15 @@ namespace Rasa.Test
             rows.Conditions.Add(new ContentConditionEntry { ConditionId = 900900, Kind = (byte)ContentConditionKind.MissionAbsent, MissionId = 900100 });
             rows.Rules.Add(new ContentRuleEntry { Id = 9001, MapContextId = 1985, Event = (byte)ContentRuleEvent.EnteredMap, ConditionId = 900900 });
             rows.Actions.Add(new ContentRuleActionEntry { RuleId = 9001, Sequence = 0, Action = (byte)ContentRuleAction.DispenseRadioMission, MissionId = 900100, Forced = true });
-            // A binding of a kind S1 does not implement must still be withheld.
+            // A binding the server cannot resolve must still be withheld: a hit by an action without a server implementation.
             rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
-                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.UseCompleted, CounterId = 255 });
+                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Hit, CreatureId = 7001, ActionId = 999, CounterId = 255 });
 
             var validation = rows.Validate(MissionContentRules.Implemented);
 
             CollectionAssert.AreEqual(new[]
                 {
-                    "npc_mission_objective_binding 900200/1/0: binding kind UseCompleted is not implemented",
-                    "npc_mission_objective_binding 900200/1/0: needs a usable placement"
+                    "npc_mission_objective_binding 900200/1/0: hit by action 999 has no server implementation"
                 },
                 validation.MissionGaps[900200].ToArray());
             Assert.AreEqual(0, validation.Gaps.Count(gap => gap.OwnerId == 900100), string.Join(" | ", validation.Gaps));
@@ -934,6 +936,53 @@ namespace Rasa.Test
             Assert.AreEqual(0, instance.ContentUsables.Count);
             Assert.AreEqual(0, instance.DynamicObjects.Count);
             Assert.IsFalse(EntityManager.Instance.DynamicObjects.ContainsKey(spawned.EntityId));
+        }
+
+        [TestMethod]
+        public void ABombPlantedBeforeTheInstanceWasRebuiltComesBackArmedWithAFreshFuse()
+        {
+            var rows = new Rows();
+            rows.MapSettings.Add(new ContentMapSettingEntry { MapContextId = 1985, Instancing = (byte)MapInstancing.PerCharacter });
+            rows.Conditions.Add(new ContentConditionEntry { ConditionId = 900902, Kind = (byte)ContentConditionKind.FactEquals, FactKey = "bootcamp.bomb_planted", Value = 1 });
+            rows.Conditions.Add(new ContentConditionEntry { ConditionId = 900903, Kind = (byte)ContentConditionKind.FactEquals, FactKey = "bootcamp.dropship_destroyed", Value = 1, Negate = true });
+            rows.Placements.Add(new ContentPlacementEntry
+            {
+                Id = 900761, MapContextId = 1985, Kind = (byte)ContentPlacementKind.Usable, EntityClassId = 7870, UsableKind = (byte)ContentUsableKind.Bomb,
+                Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 113, AlternateState = 114, AlternateStateConditionId = 900902,
+                FuseMs = 5300, PresentConditionId = 900903
+            });
+            var validation = rows.Validate(MissionContentRules.Implemented);
+            Assert.AreEqual(0, validation.Gaps.Count, string.Join(" | ", validation.Gaps));
+
+            (MapChannel Instance, Client Owner) Enter(int? plantedFact)
+            {
+                var instance = new MapChannel { MapInfo = new MapInfo(1985, "adv_bootcamp", 783, 4), OwnerCharacterId = 101, InstanceId = 3, ClientList = new List<Client>() };
+                var owner = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                owner.Player.Id = 101;
+                owner.Player.MapContextId = 1985;
+                owner.Player.MapChannel = instance;
+                if (plantedFact is { } value)
+                    owner.Player.ContentFacts[(1985, "bootcamp.bomb_planted")] = value;
+                ContentMaterializer.Materialize(instance, validation);
+                Assert.AreEqual(0, instance.ContentUsables.Count, "an owner-dependent usable waits for its owner");
+                ContentMaterializer.RefreshPresence(owner, validation, 10_000);
+                return (instance, owner);
+            }
+
+            var (fresh, _) = Enter(null);
+            var bomb = fresh.DynamicObjects.Single();
+            Assert.AreEqual((UseObjectState)113, bomb.StateId);
+            Assert.AreEqual(0L, bomb.FuseAt);
+            EntityManager.Instance.UnregisterDynamicObject(bomb.EntityId);
+            EntityManager.Instance.UnregisterEntity(bomb.EntityId);
+
+            var (rebuilt, _) = Enter(1);
+            var armed = rebuilt.DynamicObjects.Single();
+            Assert.AreEqual((UseObjectState)114, armed.StateId);
+            Assert.AreEqual(15_300L, armed.FuseAt);
+            Assert.AreEqual(101u, armed.ArmedByCharacterId);
+            EntityManager.Instance.UnregisterDynamicObject(armed.EntityId);
+            EntityManager.Instance.UnregisterEntity(armed.EntityId);
         }
 
         [TestMethod]

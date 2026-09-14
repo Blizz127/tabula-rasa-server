@@ -26,9 +26,10 @@ namespace Rasa.Managers
                 if (placement.PresentConditionId == 0)
                     SpawnCreature(mapChannel, placement);
 
+            // So do usables whose state at materialization depends on the owner (alternate_state_condition_id).
             foreach (var placement in UsablesToSpawn(content, contextId))
-                if (placement.PresentConditionId == 0)
-                    SpawnUsable(mapChannel, placement);
+                if (placement.PresentConditionId == 0 && placement.AlternateStateConditionId == 0)
+                    SpawnUsable(mapChannel, placement, content, null, 0);
         }
 
         private static void SpawnCreature(MapChannel mapChannel, ContentPlacementEntry placement)
@@ -49,7 +50,7 @@ namespace Rasa.Managers
         /// whose condition still holds is left for the corpse lifecycle; rebuilding restores it on the
         /// next entry. Shared contexts have no owner and are never refreshed.
         /// </summary>
-        public static void RefreshPresence(Client client, ContentValidation content)
+        public static void RefreshPresence(Client client, ContentValidation content, long now = -1)
         {
             var player = client?.Player;
             var channel = player?.MapChannel;
@@ -74,14 +75,14 @@ namespace Rasa.Managers
                     CellManager.Instance.RemoveCreatureFromWorld(channel, existing);
             }
 
-            foreach (var placement in UsablesToSpawn(content, contextId).Where(placement => placement.PresentConditionId != 0))
+            foreach (var placement in UsablesToSpawn(content, contextId).Where(placement => placement.PresentConditionId != 0 || placement.AlternateStateConditionId != 0))
             {
                 var existing = channel.DynamicObjects.FirstOrDefault(obj =>
                     channel.ContentUsables.TryGetValue(obj.EntityId, out var id) && id == placement.Id);
-                var present = Present(placement);
+                var present = placement.PresentConditionId == 0 || Present(placement);
 
                 if (present && existing == null)
-                    SpawnUsable(channel, placement);
+                    SpawnUsable(channel, placement, content, state, now < 0 ? System.Environment.TickCount64 : now);
                 else if (!present && existing != null)
                 {
                     channel.ContentUsables.Remove(existing.EntityId);
@@ -115,8 +116,19 @@ namespace Rasa.Managers
                 .ToList();
         }
 
-        private static void SpawnUsable(MapChannel mapChannel, ContentPlacementEntry placement)
+        /// <summary>
+        /// Spawns a usable in its initial state, or in its alternate state when the owner's committed state satisfies
+        /// alternate_state_condition_id. A bomb rebuilt armed (the planted-bomb fact of a character who left while the
+        /// fuse burned) gets a fresh fuse, so the detonation still completes exactly once (build plan S5).
+        /// </summary>
+        private static void SpawnUsable(MapChannel mapChannel, ContentPlacementEntry placement, ContentValidation content, ContentState ownerState, long now)
         {
+            var initialState = placement.InitialState;
+
+            if (placement.AlternateStateConditionId != 0 && ownerState != null &&
+                content.Catalog.Conditions.TryGetValue(placement.AlternateStateConditionId, out var alternate) && ownerState.Evaluate(alternate))
+                initialState = placement.AlternateState;
+
             var usable = new DynamicObject
             {
                 EntityClassId = (EntityClasses)placement.EntityClassId,
@@ -124,7 +136,7 @@ namespace Rasa.Managers
                 Rotation = placement.Rotation,
                 MapContextId = placement.MapContextId,
                 DynamicObjectType = DynamicObjectType.ContentUsable,
-                StateId = (UseObjectState)placement.InitialState,
+                StateId = (UseObjectState)initialState,
                 WindupTime = placement.WindupMs,
                 Comment = $"content:{placement.Id}"
             };
@@ -136,6 +148,12 @@ namespace Rasa.Managers
             {
                 usable.HitPoints = placement.HitPoints;
                 usable.MaxHitPoints = placement.HitPoints;
+            }
+
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Bomb && initialState == 114 && placement.FuseMs > 0)
+            {
+                usable.FuseAt = now + placement.FuseMs;
+                usable.ArmedByCharacterId = mapChannel.OwnerCharacterId ?? 0;
             }
 
             // Register as an object entity so combat targeting resolves it. IsInWorld

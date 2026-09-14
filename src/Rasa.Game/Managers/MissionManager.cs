@@ -667,10 +667,46 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// A content placement entered a state (the bomb detonating): the first objective bound to that state
+        /// completes in the same transaction as the placement_state_entered rules, so the objective and the facts
+        /// the rules set (the destroyed dropship) can never commit apart. Without a bound objective only the rules run.
+        /// </summary>
+        public void CommitPlacementState(Client client, uint placementId, uint stateId)
+        {
+            var player = client.Player;
+            var trigger = new ContentEvent(ContentRuleEvent.PlacementStateEntered, player.MapContextId, placementId: placementId, stateId: stateId);
+            var bound = new List<(Mission Definition, PlayerMission Mission, uint ObjectiveId)>();
+
+            foreach (var mission in player.Missions.Values)
+            {
+                if (mission.State != MissionState.Active || !LoadedMissions.TryGetValue(mission.MissionId, out var definition))
+                    continue;
+
+                foreach (var binding in definition.Bindings)
+                    if ((ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.PlacementState && binding.PlacementId == placementId &&
+                        binding.TargetState == stateId &&
+                        mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) && status == MissionObjectiveState.Incomplete)
+                        bound.Add((definition, mission, binding.ObjectiveId));
+            }
+
+            if (bound.Count == 0 || !IsInWorld(client))
+            {
+                Content.React(client, trigger);
+                return;
+            }
+
+            var (firstDefinition, firstMission, firstObjective) = bound[0];
+            CommitObjectiveProgress(client, firstDefinition, firstMission, firstObjective, trigger);
+
+            foreach (var (definition, mission, objectiveId) in bound.Skip(1))
+                CompleteBoundObjective(client, definition.MissionId, objectiveId, ObjectiveBindingKind.PlacementState);
+        }
+
+        /// <summary>
         /// Completes a validated incomplete objective: its reveals and the content reactions commit together,
         /// then memory and the client follow in the client's expected order.
         /// </summary>
-        private void CommitObjectiveProgress(Client client, Mission definition, PlayerMission mission, uint objectiveId)
+        private void CommitObjectiveProgress(Client client, Mission definition, PlayerMission mission, uint objectiveId, ContentEvent? trigger = null)
         {
             var player = client.Player;
             var missionId = definition.MissionId;
@@ -695,11 +731,19 @@ namespace Rasa.Managers
             foreach (var revealedId in revealed)
                 state.PlanObjective(missionId, revealedId, MissionObjectiveState.Incomplete);
 
-            var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.ObjectiveCompleted, player.MapContextId, missionId, objectiveId), state);
+            // The triggering event's rules (placement_state_entered) come first and see the objective completing.
+            var triggerReaction = trigger is { } triggerEvent ? Content.Plan(triggerEvent, state) : null;
+            ContentReaction reaction;
 
             try
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+
+                if (triggerReaction != null)
+                    Content.Stage(triggerReaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
+
+                // Planned after the trigger's actions are staged, so its conditions see their fact changes.
+                reaction = Content.Plan(new ContentEvent(ContentRuleEvent.ObjectiveCompleted, player.MapContextId, missionId, objectiveId), state);
 
                 unitOfWork.CharacterMissions.UpdateObjectiveStatus(player.Id, missionId, objectiveId, (uint)MissionObjectiveState.Completed);
                 if (runningTimer != null)
@@ -738,6 +782,12 @@ namespace Rasa.Managers
             // A just-revealed equip objective can already be satisfied by what the
             // player wears; the check is level-triggered and idempotent.
             Content.OnEquipCommitted(client);
+
+            if (triggerReaction != null)
+            {
+                Content.Apply(client, triggerReaction);
+                Content.Present(client, triggerReaction);
+            }
 
             Content.Apply(client, reaction);
             Content.Present(client, reaction);

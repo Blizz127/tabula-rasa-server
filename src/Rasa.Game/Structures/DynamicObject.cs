@@ -39,5 +39,8 @@ namespace Rasa.Structures
         public uint HitPoints;
         public uint MaxHitPoints;
         public long RestoreAt;
+        // An armed content bomb: when its fuse burns down (MissionContentManager.DetonateFuses), and who armed it.
+        public long FuseAt;
+        public uint ArmedByCharacterId;
     }
 }
