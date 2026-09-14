@@ -264,7 +264,7 @@ namespace Rasa.Managers
                             return; // creature doesn't wander
 
                         // set destination
-                        creature.Controller.ActionWander.WanderDestination = GetDestiantion(creature);
+                        creature.Controller.ActionWander.WanderDestination = GetDestination(mapChannel, creature);
 
                         // next step approaching
                         creature.Controller.ActionWander.State = WanderMoving;
@@ -276,50 +276,12 @@ namespace Rasa.Managers
                 {
                     // following path (short path)
                     if (creature.Controller.Path.Count == 0)
+                        BuildPath(mapChannel, creature, creature.Controller.ActionWander.WanderDestination);
+
+                    if (FollowPath(mapChannel, creature, creature.WalkSpeed, delta))
                     {
-                        // no path, generate new one
-                        var destination = creature.Controller.ActionWander.WanderDestination;
-                        creature.Controller.PathIndex = 0;
-
-                        // later we can implement "navmesh" so creature move more acurate on terrain
-                        //creature.Controller.PathLength = navmesh_getPath(mapChannel, startPos, destination, creature.Controller.path, false);
-                        creature.Controller.Path.Add(destination);
-
-                        if (creature.Controller.Path.Count == 0)
-                        {
-                            // path could not be generated or too short
-                            // leave state and go idle mode
-                            creature.Controller.ActionWander.State = WanderIdle;
-                            creature.LastRestTime = 0;
-                            return;
-                        }
-                    }
-                    // get distance
-                    var nextPathNodePos = creature.Controller.Path[0];
-                    var difX = nextPathNodePos.X - creature.Position.X;
-                    var difY = nextPathNodePos.Y - creature.Position.Y;
-                    var difZ = nextPathNodePos.Z - creature.Position.Z;
-                    var dist = GetDistanceSqr(nextPathNodePos, creature.Position);
-
-                    // wander target location reached
-                    if (dist > 0.01f) // to avoid division by zero
-                    {
-                        var distanceMoved = UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true, delta);
-                        creature.Controller.Path.RemoveAt(0);
-                        // the step is clamped to the distance left, so reaching the node shows up as equal
-                        if (distanceMoved >= dist) // distance moved covers the distance left?
-                            dist = 0.0f; // mark pathnode reached
-                    }
-
-                    if (dist < 0.8f)
-                    {
-                        creature.Controller.PathIndex++; // goto next node
-
-                        if (creature.Controller.PathIndex >= creature.Controller.Path.Count)
-                        {
-                            creature.Controller.ActionWander.State = WanderIdle;
-                            return;
-                        }
+                        creature.Controller.ActionWander.State = WanderIdle;
+                        return;
                     }
                 }
             }
@@ -348,17 +310,13 @@ namespace Rasa.Managers
                 currentTargetNodePos[2] = creature.Controller.AiPathFollowing.GeneralPath.PathNodeList[realCurrentNodeIndex].Pos[2];
                 currentTargetNodePos[0] += creature.Controller.AiPathFollowing.RandomPathNodeBiasXZ[0];
                 currentTargetNodePos[2] += creature.Controller.AiPathFollowing.RandomPathNodeBiasXZ[1];
-                // get distance
-                var difX = currentTargetNodePos[0] - creature.Position.X;
-                var difY = currentTargetNodePos[1] - creature.Position.Y;
-                var difZ = currentTargetNodePos[2] - creature.Position.Z;
-                var dist = difX * difX + difZ * difZ;
 
-                // wander target location reached
-                if (dist > 0.01f) // to avoid division by zero
-                    UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.WalkSpeed, true, delta);
+                // The route to the node is walked corner by corner; a map with no navmesh gets
+                // the straight line it always had.
+                if (creature.Controller.Path.Count == 0)
+                    BuildPath(mapChannel, creature, new Vector3(currentTargetNodePos[0], currentTargetNodePos[1], currentTargetNodePos[2]));
 
-                if (dist < 0.8f)
+                if (FollowPath(mapChannel, creature, creature.WalkSpeed, delta))
                 {
                     creature.Controller.AiPathFollowing.GeneralPathCurrentNodeIndex++; // goto next node
 
@@ -539,67 +497,32 @@ namespace Rasa.Managers
                         pathTarget.Z = targetPosition.Z + vecV2A[1] * distance;
                     }
 
-                    creature.Controller.Path.Clear();
-                    creature.Controller.PathIndex = 0;
-                    creature.Controller.Path.Add(pathTarget);
+                    BuildPath(mapChannel, creature, pathTarget);
 
                     // where the target was when this path was built
                     creature.Controller.ActionFighting.LockedTargetPosition = targetPosition;
                 }
 
-                // follow path
-                if (creature.Controller.PathIndex < creature.Controller.Path.Count)
-                {
-                    // get distance
-                    var nextPathNodePos = creature.Controller.Path[creature.Controller.PathIndex];
-                    var difX = nextPathNodePos.X - creature.Position.X;
-                    var difY = nextPathNodePos.Y - creature.Position.Y;
-                    var difZ = nextPathNodePos.Z - creature.Position.Z;
-                    var dist = difX * difX + difZ * difZ;
-                    var skipDetected = false;
-
-                    if (dist > 0.01f) // to avoid division by zero
-                    {
-                        UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, creature.RunSpeed, true, delta);
-                        // on high movement speeds the movement steps can be large, check if creature didn't run too far
-                        difX = nextPathNodePos.X - creature.Position.X;
-                        difY = nextPathNodePos.Y - creature.Position.Y;
-                        difZ = nextPathNodePos.Z - creature.Position.Z;
-
-                        var dist2 = difX * difX + difZ * difZ;
-
-                        if (dist2 >= dist)
-                            skipDetected = true;
-                    }
-
-                    if (dist < 0.9f || skipDetected)
-                    {
-                        creature.Controller.PathIndex++; // goto next node
-
-                        if (creature.Controller.PathIndex >= creature.Controller.Path.Count)
-                        {
-                            // Path walked. Dropping it lets the next think build one for wherever
-                            // the target is now, instead of holding this node for good.
-                            creature.Controller.Path.Clear();
-                            creature.Controller.PathIndex = 0;
-                        }
-                    }
-                }
+                // follow path; a walked path is dropped so the next think builds one for
+                // wherever the target is now, instead of holding this node for good
+                FollowPath(mapChannel, creature, creature.RunSpeed, delta);
             }//---fighting
         }
 
         /// <summary>
         /// A wander destination around the creature's home, far enough from where it stands to be
-        /// worth walking to. Every candidate sits within WanderDistance of home, so a creature
-        /// that ended a chase further from home than that can never draw one - the loop used to
-        /// run forever, on the MainLoop thread. It gives up after a fixed number of tries and
-        /// walks home instead.
+        /// worth walking to. On a map with a navmesh the point is drawn from the walkable surface
+        /// around home, so it is never inside a rock or off a cliff. Every candidate sits within
+        /// WanderDistance of home, so a creature that ended a chase further from home than that can
+        /// never draw one - the loop used to run forever, on the MainLoop thread. It gives up after
+        /// a fixed number of tries and walks home instead.
         /// </summary>
-        private Vector3 GetDestiantion(Creature creature)
+        private Vector3 GetDestination(MapChannel mapChannel, Creature creature)
         {
             for (var attempt = 0; attempt < 20; attempt++)
             {
-                var dest = creature.HomePos.Position + GetRandomVector();
+                var dest = NavMeshManager.RandomPointAround(mapChannel, creature.HomePos.Position, WanderDistance)
+                           ?? creature.HomePos.Position + GetRandomVector();
                 var distance = GetDistanceSqr(creature.Position, dest);
 
                 if (distance > WanderDistance / 3 && distance < WanderDistance)
@@ -607,6 +530,69 @@ namespace Rasa.Managers
             }
 
             return creature.HomePos.Position;
+        }
+
+        /// <summary>
+        /// Sets the creature's path to <paramref name="destination"/>: the navmesh corners when the
+        /// map has one and both ends are on it, otherwise the destination alone (a straight line).
+        /// </summary>
+        private static void BuildPath(MapChannel mapChannel, Creature creature, Vector3 destination)
+        {
+            var path = NavMeshManager.FindPath(mapChannel, creature.Position, destination);
+
+            creature.Controller.Path.Clear();
+            creature.Controller.PathIndex = 0;
+
+            if (path != null && path.Count > 0)
+                creature.Controller.Path.AddRange(path);
+            else
+                creature.Controller.Path.Add(destination);
+        }
+
+        /// <summary>
+        /// Walks the creature one tick along its path at <paramref name="speed"/>, advancing to the
+        /// next corner when the current one is reached. Returns true once the whole path has been
+        /// walked; the path is cleared then, so the next think builds a fresh one.
+        /// </summary>
+        private bool FollowPath(MapChannel mapChannel, Creature creature, float speed, long delta)
+        {
+            var controller = creature.Controller;
+
+            if (controller.PathIndex >= controller.Path.Count)
+            {
+                controller.Path.Clear();
+                controller.PathIndex = 0;
+                return true;
+            }
+
+            var node = controller.Path[controller.PathIndex];
+            var difX = node.X - creature.Position.X;
+            var difY = node.Y - creature.Position.Y;
+            var difZ = node.Z - creature.Position.Z;
+            var distSqr = difX * difX + difZ * difZ;
+
+            if (distSqr > 0.01f) // to avoid division by zero
+            {
+                var moved = UpdateEntityMovement(difX, difY, difZ, creature, mapChannel, speed, true, delta);
+
+                // the step is clamped to the distance left, so covering it means the corner is reached
+                if (moved * moved >= distSqr)
+                    distSqr = 0.0f;
+            }
+
+            if (distSqr < 0.8f * 0.8f)
+            {
+                controller.PathIndex++;
+
+                if (controller.PathIndex >= controller.Path.Count)
+                {
+                    controller.Path.Clear();
+                    controller.PathIndex = 0;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private double GetDistanceSqr(Vector3 p1, Vector3 p2)
@@ -741,6 +727,8 @@ namespace Rasa.Managers
         private void SetActionPathFollowing(Creature creature)
         {
             creature.Controller.CurrentAction = BehaviorActionFollowingPath;
+            creature.Controller.Path.Clear();
+            creature.Controller.PathIndex = 0;
             // random position bias added to every node (to make groups look like they do not run on the same path)
             creature.Controller.AiPathFollowing.RandomPathNodeBiasXZ[0] =  ((new Random().Next() % 1001) - 500) / 500.0f * creature.Controller.AiPathFollowing.GeneralPath.NodeOffsetRandomization;
             creature.Controller.AiPathFollowing.RandomPathNodeBiasXZ[1] = ((new Random().Next() % 1001) - 500) / 500.0f * creature.Controller.AiPathFollowing.GeneralPath.NodeOffsetRandomization;
@@ -792,7 +780,13 @@ namespace Rasa.Managers
             var step = (float)Math.Min(velocity * elapsedMs / 1000.0d, remaining);
 
             if (isMoved)
+            {
                 creature.Position += new Vector3((float)(difX * step), (float)(difY * step), (float)(difZ * step));
+
+                // Path corners carry the navmesh height; between them the ground is not a
+                // straight line, so keep the feet on it.
+                creature.Position = NavMeshManager.SnapToGround(mapChannel, creature.Position);
+            }
 
             // send movement update
             var movement = new Movement(new Vector3(creature.Position.X, creature.Position.Y, creature.Position.Z), velocity, 0x08, new Vector2(vX, 0f));

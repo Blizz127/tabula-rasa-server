@@ -25,6 +25,9 @@ namespace Rasa.Structures
         public readonly List<ActionData> PerformRecovery = new List<ActionData>();
         // cell
         public MapCellInfo MapCellInfo = new MapCellInfo();
+
+        /// <summary>The map's navmesh, or null when no navmesh/&lt;map&gt;.nav was built for it. See NavMeshManager.</summary>
+        public Navigation.NavMeshQuery NavMesh { get; set; }
         // effect
         public int CurrentEffectId { get; set; } // increases with every spawned game effect
 

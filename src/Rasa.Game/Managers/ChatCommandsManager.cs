@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace Rasa.Managers
 {
+    using Navigation;
     using Data;
     using Game;
     using Models;
@@ -120,6 +121,7 @@ namespace Rasa.Managers
             RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
             RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
             RegisterCommand(".links", GmLevel.Observer, LinksCommand);
+            RegisterCommand(".navmesh", GmLevel.Observer, NavMeshCommand);
             RegisterCommand(".near", GmLevel.Observer, NearCommand);
             RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
             RegisterCommand(".rqs", GmLevel.Observer, RqsWindowCommand);
@@ -1248,6 +1250,58 @@ namespace Rasa.Managers
         /// The links on this map, nearest first: what would fire where you stand, and how far
         /// the next pass is. Distances are on the ground, the way the trigger measures them.
         /// </summary>
+        /// <summary>
+        /// .navmesh              - is there a navmesh here, and where is its ground under you
+        /// .navmesh path x y z   - the route the AI would take from you to (x, y, z)
+        /// </summary>
+        private void NavMeshCommand(string[] parts)
+        {
+            var client = _client;
+            var mapChannel = client.Player.MapChannel;
+            var position = client.Player.Position;
+
+            if (mapChannel?.NavMesh == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"Map {client.Player.MapContextId} has no navmesh loaded (folder {NavMeshManager.Instance.Directory}, {NavMeshManager.Instance.LoadedMaps} maps loaded).");
+                return;
+            }
+
+            if (parts.Length == 5 && parts[1] == "path"
+                && float.TryParse(parts[2], out var x) && float.TryParse(parts[3], out var y) && float.TryParse(parts[4], out var z))
+            {
+                var path = mapChannel.NavMesh.FindPath(position, new Vector3(x, y, z), out var complete);
+
+                if (path == null)
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, "No path: you or the target are off the navmesh.");
+                    return;
+                }
+
+                var length = 0f;
+                var previous = position;
+
+                foreach (var corner in path)
+                {
+                    length += Vector3.Distance(previous, corner);
+                    previous = corner;
+                }
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{(complete ? "Complete" : "Partial")} path, {path.Count} corners, {length:0.#} m; ends at ({previous.X:0.#}, {previous.Y:0.#}, {previous.Z:0.#}).");
+
+                foreach (var corner in path.Take(8))
+                    CommunicatorManager.Instance.SystemMessage(client, $"  ({corner.X:0.#}, {corner.Y:0.#}, {corner.Z:0.#})");
+
+                return;
+            }
+
+            var ground = mapChannel.NavMesh.GroundHeight(position);
+            var nearest = mapChannel.NavMesh.Nearest(position);
+
+            CommunicatorManager.Instance.SystemMessage(client, ground == null
+                ? $"No walkable surface within {NavMeshQuery.SearchExtents.X:0.#} m of you."
+                : $"Navmesh ground at y = {ground.Value:0.##}, you are at {position.Y:0.##} ({position.Y - ground.Value:+0.##;-0.##} m); nearest walkable point ({nearest.Value.X:0.#}, {nearest.Value.Y:0.#}, {nearest.Value.Z:0.#}).");
+        }
+
         private void LinksCommand(string[] parts)
         {
             var client = _client;

@@ -300,6 +300,7 @@ namespace Rasa.Game
             SpawnPoolManager.Instance.SpawnPoolInit();
             ChatCommandsManager.Instance.RegisterChatCommands();
             MapChannelManager.Instance.MapChannelInit();
+            NavMeshManager.Instance.NavMeshInit(Config.GameDataConfig?.NavMeshPath);
             ClanManager.Instance.ClansInit();
             DynamicObjectManager.Instance.InitDynamicObjects();
             MapTriggerManager.Instance.MapTriggerInit();
