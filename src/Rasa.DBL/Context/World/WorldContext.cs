@@ -108,7 +108,7 @@ namespace Rasa.Context.World
             modelBuilder.Entity<NpcMissionObjectiveEntry>()
                 .HasKey(e => new { e.MissionId, e.ObjectiveId });
             modelBuilder.Entity<NpcMissionObjectiveConversationEntry>()
-                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.NpcPackageId, e.PlayerFlagId });
+                .HasKey(e => new { e.MissionId, e.ObjectiveId, e.NpcPackageId, e.PlayerFlagId, e.ConvoType });
             modelBuilder.Entity<NpcMissionObjectiveTransitionEntry>()
                 .HasKey(e => new { e.MissionId, e.CompletedObjectiveId, e.RevealedObjectiveId });
         }

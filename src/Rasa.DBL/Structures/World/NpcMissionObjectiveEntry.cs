@@ -8,6 +8,11 @@ namespace Rasa.Structures.World
     /// server's mission script format is unrecovered; this table only stores the
     /// fields the recovered client protocol requires (objective id, ordinal,
     /// required flag) plus whether the objective is revealed on acceptance.
+    /// Ordinal, IsRequired and RevealedOnAccept are server-authoritative with no
+    /// surviving source, so they are nullable: an objective seeded from the
+    /// client's missionobjective table (original tier) carries NULL there, and a
+    /// definition with unknown values stays unoffered (Mission.DefinitionGaps)
+    /// instead of asserting guessed gameplay.
     /// </summary>
     [Table(TableName)]
     public class NpcMissionObjectiveEntry
@@ -23,18 +28,15 @@ namespace Rasa.Structures.World
         public uint ObjectiveId { get; set; }
 
         [Column("ordinal")]
-        [Required]
-        public uint Ordinal { get; set; }
+        public uint? Ordinal { get; set; }
 
         [Column("is_required")]
-        [Required]
-        public bool IsRequired { get; set; }
+        public bool? IsRequired { get; set; }
 
         [Column("revealed_on_accept")]
-        [Required]
-        public bool RevealedOnAccept { get; set; }
+        public bool? RevealedOnAccept { get; set; }
 
-        [Column("comment", TypeName = "varchar(50)")]
+        [Column("comment", TypeName = "varchar(100)")]
         [Required]
         public string Comment { get; set; }
     }

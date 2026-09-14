@@ -49,7 +49,6 @@ namespace Rasa.Structures
 
         public IEnumerable<MissionObjectiveDefinition> ObjectivesInOrder =>
             Objectives.Values.OrderBy(objective => objective.Ordinal).ThenBy(objective => objective.ObjectiveId);
-
         public bool HasObjectiveConversation(uint objectiveId, uint npcPackageId, uint playerFlagId)
         {
             return ObjectiveConversations.Any(conversation =>
@@ -80,10 +79,24 @@ namespace Rasa.Structures
             if (Objectives.Count == 0)
                 gaps.Add("no objectives");
 
-            if (Objectives.Count > 0 && !Objectives.Values.Any(objective => objective.RevealedOnAccept))
+            // ordinal, is_required and revealed_on_accept are server-authoritative
+            // with no surviving source; the client's missionobjective table seeds
+            // objectives with all three NULL. Unknown values must keep the mission
+            // unoffered instead of asserting guessed gameplay.
+            foreach (var objective in ObjectivesInOrder)
+            {
+                if (objective.Ordinal is null)
+                    gaps.Add($"objective {objective.ObjectiveId} has unknown ordinal");
+                if (objective.IsRequired is null)
+                    gaps.Add($"objective {objective.ObjectiveId} has unknown required flag");
+                if (objective.RevealedOnAccept is null)
+                    gaps.Add($"objective {objective.ObjectiveId} has unknown revealed flag");
+            }
+
+            if (Objectives.Count > 0 && !Objectives.Values.Any(objective => objective.RevealedOnAccept == true))
                 gaps.Add("no objective is revealed on acceptance");
 
-            if (Objectives.Count > 0 && !Objectives.Values.Any(objective => objective.IsRequired))
+            if (Objectives.Count > 0 && !Objectives.Values.Any(objective => objective.IsRequired == true))
                 gaps.Add("no required objective");
 
             foreach (var objective in ObjectivesInOrder)
@@ -91,7 +104,7 @@ namespace Rasa.Structures
                     !Bindings.Any(binding => binding.ObjectiveId == objective.ObjectiveId))
                     gaps.Add($"objective {objective.ObjectiveId} has no completion binding");
 
-            var reachable = new HashSet<uint>(Objectives.Values.Where(objective => objective.RevealedOnAccept).Select(objective => objective.ObjectiveId));
+            var reachable = new HashSet<uint>(Objectives.Values.Where(objective => objective.RevealedOnAccept == true).Select(objective => objective.ObjectiveId));
             var pending = new Queue<uint>(reachable);
 
             while (pending.Count > 0)
@@ -101,7 +114,7 @@ namespace Rasa.Structures
                             pending.Enqueue(next);
 
             foreach (var objective in ObjectivesInOrder)
-                if (objective.IsRequired && !reachable.Contains(objective.ObjectiveId))
+                if (objective.IsRequired == true && !reachable.Contains(objective.ObjectiveId))
                     gaps.Add($"required objective {objective.ObjectiveId} is never revealed");
 
             // The client shows Radio/Share buttons for these flags; their server
@@ -127,13 +140,15 @@ namespace Rasa.Structures
         public void RefreshDispenseObjectives()
         {
             ObjectivesList.Clear();
-            foreach (var objective in ObjectivesInOrder.Where(objective => objective.RevealedOnAccept))
+            foreach (var objective in ObjectivesInOrder.Where(objective => objective.RevealedOnAccept == true))
                 ObjectivesList.Add(new MissionObjective
                 {
                     ObjectiveId = objective.ObjectiveId,
                     ObjectiveStatus = (uint)MissionObjectiveState.Incomplete,
-                    Ordinal = objective.Ordinal,
-                    IsRequired = objective.IsRequired
+                    // An unknown ordinal cannot be sent; such definitions are
+                    // unoffered (DefinitionGaps), so this value is never written.
+                    Ordinal = objective.Ordinal ?? uint.MaxValue,
+                    IsRequired = objective.IsRequired == true
                 });
         }
     }
@@ -141,9 +156,9 @@ namespace Rasa.Structures
     public class MissionObjectiveDefinition
     {
         public uint ObjectiveId { get; set; }
-        public uint Ordinal { get; set; }
-        public bool IsRequired { get; set; }
-        public bool RevealedOnAccept { get; set; }
+        public uint? Ordinal { get; set; }
+        public bool? IsRequired { get; set; }
+        public bool? RevealedOnAccept { get; set; }
 
         public MissionObjectiveDefinition()
         {
@@ -163,5 +178,9 @@ namespace Rasa.Structures
         public uint ObjectiveId { get; set; }
         public uint NpcPackageId { get; set; }
         public uint PlayerFlagId { get; set; }
+        // COMPLETION 1, REMINDER 2, CHOICEBODY 3, CHOICE1/2/3 4/5/6 (client's
+        // objectiveconversation key[4]). The same (objective, package, flag)
+        // group can carry several types.
+        public uint ConvoType { get; set; }
     }
 }

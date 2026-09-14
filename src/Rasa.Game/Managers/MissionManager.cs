@@ -98,26 +98,43 @@ namespace Rasa.Managers
             foreach (var mission in unitOfWork.NpcMissions.Get())
                 LoadedMissions.Add(mission.Id, new Mission(mission));
 
+            // The client's missionobjective/objectiveconversation tables are seeded
+            // in full at original tier, but npc_mission rows exist only where
+            // server-authoritative columns are evidenced. Rows without a parent
+            // definition are inert; one summary line keeps that expected state
+            // visible without one log line per row.
+            var orphanObjectives = 0;
             foreach (var objective in unitOfWork.NpcMissionObjectives.Get())
             {
                 if (LoadedMissions.TryGetValue(objective.MissionId, out var mission))
                     mission.Objectives[objective.ObjectiveId] = new MissionObjectiveDefinition(objective);
                 else
-                    Logger.WriteLog(LogType.Error, $"LoadMissions: objective {objective.MissionId}/{objective.ObjectiveId} has no npc_mission row");
+                    orphanObjectives++;
             }
 
+            var orphanConversations = 0;
+            var objectivelessConversations = 0;
             foreach (var conversation in unitOfWork.NpcMissionObjectives.GetConversations())
             {
-                if (LoadedMissions.TryGetValue(conversation.MissionId, out var mission) && mission.Objectives.ContainsKey(conversation.ObjectiveId))
+                if (!LoadedMissions.TryGetValue(conversation.MissionId, out var mission))
+                    orphanConversations++;
+                else if (!mission.Objectives.ContainsKey(conversation.ObjectiveId))
+                    objectivelessConversations++;
+                else
                     mission.ObjectiveConversations.Add(new MissionObjectiveConversation
                     {
                         ObjectiveId = conversation.ObjectiveId,
                         NpcPackageId = conversation.NpcPackageId,
-                        PlayerFlagId = conversation.PlayerFlagId
+                        PlayerFlagId = conversation.PlayerFlagId,
+                        ConvoType = conversation.ConvoType
                     });
-                else
-                    Logger.WriteLog(LogType.Error, $"LoadMissions: objective conversation {conversation.MissionId}/{conversation.ObjectiveId} has no objective definition");
             }
+
+            if (orphanObjectives > 0)
+                Logger.WriteLog(LogType.Initialize, $"LoadMissions: {orphanObjectives} objective rows have no npc_mission row (client skeleton, definition pending)");
+
+            if (orphanConversations > 0 || objectivelessConversations > 0)
+                Logger.WriteLog(LogType.Initialize, $"LoadMissions: {orphanConversations} objective conversation rows have no npc_mission row and {objectivelessConversations} reference unknown objectives (client skeleton, definition pending)");
 
             foreach (var transition in unitOfWork.NpcMissionObjectives.GetTransitions())
             {
@@ -310,7 +327,7 @@ namespace Rasa.Managers
                 var added = new List<uint>();
 
                 foreach (var objective in definition.ObjectivesInOrder)
-                    if (objective.RevealedOnAccept && known.Add(objective.ObjectiveId))
+                    if (objective.RevealedOnAccept == true && known.Add(objective.ObjectiveId))
                         added.Add(objective.ObjectiveId);
 
                 var completed = new Queue<uint>(mission.Objectives.Where(entry => entry.Value == MissionObjectiveState.Completed).Select(entry => entry.Key));
@@ -441,7 +458,7 @@ namespace Rasa.Managers
 
             var newMission = new PlayerMission { MissionId = missionId, State = MissionState.Active, ChangeTime = _now() };
 
-            foreach (var objective in definition.Objectives.Values.Where(objective => objective.RevealedOnAccept))
+            foreach (var objective in definition.Objectives.Values.Where(objective => objective.RevealedOnAccept == true))
                 newMission.Objectives[objective.ObjectiveId] = MissionObjectiveState.Incomplete;
 
             var state = new ContentState(player);

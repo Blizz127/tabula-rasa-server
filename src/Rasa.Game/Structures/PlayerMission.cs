@@ -22,12 +22,12 @@ namespace Rasa.Structures
         public bool IsCompleteable(Mission definition)
         {
             // Fail closed: a definition with nothing required never completes by itself.
-            if (State != MissionState.Active || !definition.Objectives.Values.Any(objective => objective.IsRequired))
+            if (State != MissionState.Active || !definition.Objectives.Values.Any(objective => objective.IsRequired == true))
                 return false;
 
             foreach (var objective in definition.Objectives.Values)
             {
-                if (!objective.IsRequired)
+                if (objective.IsRequired != true)
                     continue;
 
                 if (!Objectives.TryGetValue(objective.ObjectiveId, out var status) || status != MissionObjectiveState.Completed)
@@ -59,8 +59,11 @@ namespace Rasa.Structures
                 {
                     ObjectiveId = objective.ObjectiveId,
                     ObjectiveStatus = (uint)status,
-                    Ordinal = objective.Ordinal,
-                    IsRequired = objective.IsRequired
+                    // Unknown ordinal/required flag mirror the unknown-objective
+                    // fallback below; such definitions are unoffered, so a saved
+                    // mission only reaches this through a definition change.
+                    Ordinal = objective.Ordinal ?? uint.MaxValue,
+                    IsRequired = objective.IsRequired == true
                 });
             }
 

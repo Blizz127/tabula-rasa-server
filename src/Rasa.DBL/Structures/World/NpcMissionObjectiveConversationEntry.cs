@@ -6,9 +6,11 @@ namespace Rasa.Structures.World
     /// <summary>
     /// An objective that is completed by talking to an NPC. The key mirrors the
     /// original client's objectiveconversation table
-    /// (missionId, objectiveId, npcPackageId, playerFlagId) for completion
-    /// conversations, so the server completes exactly the bindings the client
-    /// can render.
+    /// (missionId, objectiveId, npcPackageId, playerFlagId, convoType), so the
+    /// server completes exactly the bindings the client can render. convoType is
+    /// COMPLETION 1, REMINDER 2, CHOICEBODY 3, CHOICE1/2/3 4/5/6; 202 of the
+    /// client's 1140 key groups carry more than one convoType, so the column is
+    /// part of the primary key.
     /// </summary>
     [Table(TableName)]
     public class NpcMissionObjectiveConversationEntry
@@ -30,5 +32,9 @@ namespace Rasa.Structures.World
         [Column("player_flag_id")]
         [Required]
         public uint PlayerFlagId { get; set; }
+
+        [Column("convo_type")]
+        [Required]
+        public uint ConvoType { get; set; }
     }
 }

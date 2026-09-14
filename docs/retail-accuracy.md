@@ -1192,3 +1192,45 @@ Backups, configuration, reviewed source and docs, logs and the table comparison 
 **Rollback:** retag `rasa_net:before-retail-content-s0-20260913` as `rasa_net:latest` and recreate
 game alone with `--no-deps --no-build`. The previous image ignores the added columns and tables.
 A database restore is needed only to remove them.
+## 2026-09-13 UTC — Client objective tables seeded at original tier (schema approved by owner)
+
+The owner approved the two schema changes that [mission research](mission-research.md) had
+identified as the blockers for seeding the client's objective tables, and both are now deployed
+(migrations `20260913234728_MissionObjectiveClientColumns` and `20260913235900_MissionClientObjectiveSkeleton`,
+applied to the live SQLite world database and verified against a disposable MariaDB for the MySQL path):
+
+- `npc_mission_objective_conversation` gained `convo_type` as a fifth primary-key column, making the
+  table a lossless 1:1 image of the client's `objectiveconversation` (1,727 rows; 202 of the 1,140
+  key groups carry more than one convoType, so the previous 4-column key could not represent 34% of
+  the data). The runtime `MissionObjectiveConversation` now carries `ConvoType` for the
+  completion/reminder/choice distinction the schema preserves.
+- `npc_mission_objective`'s `ordinal`, `is_required` and `revealed_on_accept` are now nullable, and
+  `comment` was widened to varchar(100) (223 of the 3,454 client objective names exceed 50 chars,
+  max 90). The three flags are server-authoritative with no surviving source, so they stay NULL
+  instead of receiving guessed defaults: `Mission.DefinitionGaps` now reports
+  "objective N has unknown ordinal/required/revealed flag" per objective, which keeps every such
+  mission unoffered (fail-closed) rather than asserting gameplay. The two mission-1990 rows seeded
+  by `BootcampS1Initiation` keep their footage-tier values and are excluded from the skeleton.
+
+Seeded at **`original`** tier, verbatim from the retail 1.16.5.0 client's `data/game.zip` members
+`generated/client/missionobjective.pyo` (3,454 rows) and `generated/client/objectiveconversation.pyo`
+(1,727 rows), decoded through `python/client/clientlanguagemanager.py` in `trpython.zip`:
+**3,454** `npc_mission_objective` rows (mission_id, objective_id, name as comment) and **1,727**
+`npc_mission_objective_conversation` rows (all five key columns). Every value resolves through the
+client's own text-id indirection with zero exceptions (see the 2026-09-13 sweep section and
+`mission-research.md` for the full table semantics and extraction recipes). Provenance is recorded
+in the seed rows class header (`MissionClientObjectiveSkeletonRows.cs`); no manifest is used because
+no field is estimated — the seed is a verbatim import, like the Logos and MapInfo seeds.
+
+Deployment consequence: missions 321 and 429 now load their client objectives (310; 4 and 5) and
+report precise per-objective unknown-flag gaps instead of "no objectives"; both remain unoffered,
+as before. 3,449 objective rows and 1,721 conversation rows reference missions whose
+server-authoritative `npc_mission` columns are unrecovered; `LoadMissions` logs this expected state
+as one summary line each instead of one error per row. The previously observed withholding of the
+mission-1990 offer rule ("objective has no completion binding" at catalog-build time, because
+content bindings attach after the catalog computes gaps) is pre-existing fail-closed behavior, not
+changed by this work.
+
+Verification: full test suite 777/777 green; both provider migrations applied forward and the
+SQLite pair also reverted (Down preserves the 1990 footage-tier rows); container rebuilt and the
+game server starts clean with the new schema.

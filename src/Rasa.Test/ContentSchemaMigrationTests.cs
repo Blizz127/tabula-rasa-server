@@ -25,6 +25,8 @@ namespace Rasa.Test
         private const string PreviousCharMigration = "20260913025737_MissionObjectiveProgress";
         private const string ContentLayerMigration = "20260913180618_MissionContentLayer";
         private const string BootcampS1Migration = "20260913201420_BootcampS1Initiation";
+        private const string ObjectiveColumnsMigration = "20260913234728_MissionObjectiveClientColumns";
+        private const string ObjectiveSkeletonMigration = "20260913235900_MissionClientObjectiveSkeleton";
 
         public static readonly string[] WorldTables =
         {
@@ -61,18 +63,32 @@ namespace Rasa.Test
         /// The world schema as it stood before MissionContentLayer, with rows standing in for the seed.
         /// Replaying the full seed-data migration is too slow for a unit test, so the schema is created
         /// from the model without the content tables (the model snapshot diff adds only those tables)
-        /// and every earlier migration is recorded as applied.
+        /// and every earlier migration is recorded as applied. The model already carries the
+        /// MissionObjectiveClientColumns schema, so the two objective tables are recreated in their
+        /// pre-20260913234728 shape for the migration to apply onto.
         /// </summary>
         public static void CreatePreviousWorld(SqliteWorldContext context, SqliteConnection connection)
         {
             context.Database.EnsureCreated();
             foreach (var table in WorldTables)
                 context.Database.ExecuteSqlRaw($"DROP TABLE \"{table}\"");
+            context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective\"");
+            context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective_conversation\"");
+            context.Database.ExecuteSqlRaw(
+                "CREATE TABLE \"npc_mission_objective\" (\"mission_id\" INTEGER NOT NULL, \"objective_id\" INTEGER NOT NULL, " +
+                "\"ordinal\" INTEGER NOT NULL, \"is_required\" INTEGER NOT NULL, \"revealed_on_accept\" INTEGER NOT NULL, \"comment\" TEXT NOT NULL, " +
+                "CONSTRAINT \"PK_npc_mission_objective\" PRIMARY KEY (\"mission_id\", \"objective_id\"))");
+            context.Database.ExecuteSqlRaw(
+                "CREATE TABLE \"npc_mission_objective_conversation\" (\"mission_id\" INTEGER NOT NULL, \"objective_id\" INTEGER NOT NULL, " +
+                "\"npc_package_id\" INTEGER NOT NULL, \"player_flag_id\" INTEGER NOT NULL, " +
+                "CONSTRAINT \"PK_npc_mission_objective_conversation\" PRIMARY KEY (\"mission_id\", \"objective_id\", \"npc_package_id\", \"player_flag_id\"))");
             context.Database.ExecuteSqlRaw(
                 "CREATE TABLE \"__EFMigrationsHistory\" (\"MigrationId\" TEXT NOT NULL CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY, \"ProductVersion\" TEXT NOT NULL)");
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
-            CollectionAssert.AreEqual(new[] { ContentLayerMigration, BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
+            CollectionAssert.AreEqual(
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
 
@@ -93,7 +109,9 @@ namespace Rasa.Test
             var before = WorldRows(connection);
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
-            CollectionAssert.AreEqual(new[] { BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
+            CollectionAssert.AreEqual(
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
                 Assert.IsTrue(TableExists(connection, table), table);
@@ -142,7 +160,9 @@ namespace Rasa.Test
 
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
-            CollectionAssert.AreEqual(new[] { BootcampS1Migration }, context.Database.GetPendingMigrations().ToArray());
+            CollectionAssert.AreEqual(
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500"));

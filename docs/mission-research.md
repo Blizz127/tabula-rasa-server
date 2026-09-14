@@ -469,19 +469,27 @@ generic counter `counterId 0` labelled "Machina Killed", plus dialogue at `npcPa
 `Mission 321 is not offered, definition incomplete: no objectives`. It is **not** seeded
 yet — see below.
 
-### Blocking gap: three objective columns are server-authoritative and NOT NULL
+### Blocking gap: three objective columns are server-authoritative and NOT NULL — RESOLVED 2026-09-13
 
 `ordinal`, `is_required` and `revealed_on_accept` cannot be recovered from the client. They
 arrive in the server's mission-log payload — `python/client/missionlog.py` unpacks
 `(objectiveId, objectiveStatus, ordinal, timeRemaining, counterDict, itemCounters,
 isRequired, indicatorList)`, and the dispense payload sends objectives as
-`(ordinal, objectiveId)` pairs. Our `npc_mission_objective` declares all three **NOT NULL**,
-so the 3,454-row objective skeleton cannot be loaded until either the columns are made
-nullable or values are evidenced per mission. Per the reconstruction policy these stay
+`(ordinal, objectiveId)` pairs. Our `npc_mission_objective` declared all three **NOT NULL**,
+so the 3,454-row objective skeleton could not be loaded until either the columns were made
+nullable or values were evidenced per mission. Per the reconstruction policy these stayed
 **explicit gaps** rather than defaults.
 
-Also blocking end-to-end loading of `objectiveconversation`:
-`npc_mission_objective_conversation` has **no `convo_type` column**, and its 4-column key
+**Resolution (owner-approved 2026-09-13, option (a)):** the three columns are now nullable and
+`convo_type` was added to `npc_mission_objective_conversation` as a fifth primary-key column.
+The skeleton is seeded at `original` tier (3,454 objectives with NULL flags, 1,727 conversations
+lossless); `Mission.DefinitionGaps` reports "objective N has unknown ordinal/required/revealed
+flag" so any mission whose objectives carry unknown values stays unoffered. Details and
+deployment record: [retail accuracy](retail-accuracy.md#2026-09-13-utc--client-objective-tables-seeded-at-original-tier-schema-approved-by-owner).
+
+Also blocking end-to-end loading of `objectiveconversation` — **RESOLVED 2026-09-13** by adding
+`convo_type` to the table and its primary key:
+`npc_mission_objective_conversation` had **no `convo_type` column**, and its 4-column key
 would collide — 202 groups / 789 of the 1,727 rows carry multiple convoTypes, so a naive
 import would silently drop **34%**.
 
