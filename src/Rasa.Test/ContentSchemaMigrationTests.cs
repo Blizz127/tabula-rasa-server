@@ -76,6 +76,8 @@ namespace Rasa.Test
             context.Database.EnsureCreated();
             foreach (var table in WorldTables)
                 context.Database.ExecuteSqlRaw($"DROP TABLE \"{table}\"");
+            // Add_kraftwerks (20260914120000) comes after the content layer too.
+            context.Database.ExecuteSqlRaw("DROP TABLE \"kraftwerks\"");
             context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective\"");
             context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective_conversation\"");
             context.Database.ExecuteSqlRaw(
