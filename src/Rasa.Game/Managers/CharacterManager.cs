@@ -724,6 +724,7 @@ namespace Rasa.Managers
             var missionData = MissionManager.Instance.LoadPlayerMissions(unitOfWork.CharacterMissions, client.AccountEntry.Id, client.AccountEntry.SelectedSlot, character.Id);
             var clan = unitOfWork.Clans.GetClanByCharacterId(character.Id);
             var logos = unitOfWork.CharacterLogoses.GetLogos(character.Id);
+            var facts = unitOfWork.CharacterContentFacts.Get(character.Id);
 
             foreach (var appearance in characterAppearances)
                 appearanceData.Add((EquipmentData)appearance.Slot, new AppearanceData(appearance));
@@ -742,6 +743,9 @@ namespace Rasa.Managers
                 LoginTime = DateTime.Now,
                 Logos = logos
             };
+
+            foreach (var fact in facts)
+                newCharacter.ContentFacts[(fact.MapContextId, fact.FactKey)] = fact.Value;
 
             return newCharacter;
         }

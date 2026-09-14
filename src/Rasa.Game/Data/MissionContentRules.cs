@@ -38,13 +38,18 @@ namespace Rasa.Data
                 ContentRuleAction.GrantLogos,
                 ContentRuleAction.GrantRewards,
                 ContentRuleAction.TransferToLocation,
-                ContentRuleAction.SetAccountSkipBootcamp
+                ContentRuleAction.SetAccountSkipBootcamp,
+                ContentRuleAction.SetFact,
+                ContentRuleAction.ClearFact
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {
                 ContentConditionKind.MissionAbsent,
                 ContentConditionKind.MissionStateIs,
-                ContentConditionKind.ObjectiveStateIs
+                ContentConditionKind.ObjectiveStateIs,
+                // S5: the dropship wreck and bomb state.
+                ContentConditionKind.FactEquals,
+                ContentConditionKind.HasLogos
             },
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary },

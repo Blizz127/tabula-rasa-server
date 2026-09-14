@@ -156,6 +156,48 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void ContentFactsStageWithTheTriggerOverlayTheStateAndApplyAfterTheCommit()
+        {
+            using var connection = Database();
+            using var context = Context(connection);
+            var unit = Unit(context);
+            var client = new Rasa.Game.Client(null, new Rasa.Game.Handlers.ClientPacketHandler()) { State = Rasa.Data.ClientState.Ingame };
+            client.Player.Id = 101;
+            client.Player.MapContextId = 1985;
+            client.Player.ContentFacts[(1985, "bootcamp.bomb_planted")] = 1;
+
+            var destroyed = new Rasa.Structures.World.ContentConditionEntry
+                { ConditionId = 1, Kind = (byte)Rasa.Data.ContentConditionKind.FactEquals, FactKey = "bootcamp.dropship_destroyed", Value = 1 };
+            var notDestroyed = new Rasa.Structures.World.ContentConditionEntry
+                { ConditionId = 2, Kind = (byte)Rasa.Data.ContentConditionKind.FactEquals, FactKey = "bootcamp.dropship_destroyed", Value = 1, Negate = true };
+
+            var state = new Rasa.Structures.Content.ContentState(client.Player);
+            Assert.IsTrue(state.Evaluate(new[] { notDestroyed }));
+
+            var reaction = new Rasa.Structures.Content.ContentReaction();
+            reaction.Add(new[]
+            {
+                new Rasa.Structures.World.ContentRuleActionEntry { Action = (byte)Rasa.Data.ContentRuleAction.SetFact, FactKey = "bootcamp.dropship_destroyed", FactValue = 1 },
+                new Rasa.Structures.World.ContentRuleActionEntry { Action = (byte)Rasa.Data.ContentRuleAction.ClearFact, FactKey = "bootcamp.bomb_planted" }
+            });
+            var content = new Rasa.Managers.MissionContentManager(null) { Transfer = (_, _) => Assert.Fail("no transfer") };
+            content.Stage(reaction, unit, client.Player, state);
+
+            // The planned state already reads the staged facts; memory does not until Apply.
+            Assert.IsTrue(state.Evaluate(new[] { destroyed }));
+            Assert.IsFalse(client.Player.ContentFacts.ContainsKey((1985, "bootcamp.dropship_destroyed")));
+            unit.Complete();
+
+            content.Apply(client, reaction);
+            Assert.AreEqual(1, client.Player.ContentFacts[(1985, "bootcamp.dropship_destroyed")]);
+            Assert.IsFalse(client.Player.ContentFacts.ContainsKey((1985, "bootcamp.bomb_planted")));
+
+            using var reloaded = Context(connection);
+            var fact = reloaded.CharacterContentFactEntries.Single();
+            Assert.AreEqual(("bootcamp.dropship_destroyed", 1, 1985u), (fact.FactKey, fact.Value, fact.MapContextId));
+        }
+
+        [TestMethod]
         public void RepeatedStagingUpdatesOneRowAndAbandonKeepsFacts()
         {
             using var connection = Database();

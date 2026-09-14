@@ -255,11 +255,13 @@ namespace Rasa.Test
             {
                 ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
-                ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp
+                ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp,
+                ContentRuleAction.SetFact, ContentRuleAction.ClearFact
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
-                ContentConditionKind.MissionAbsent, ContentConditionKind.MissionStateIs, ContentConditionKind.ObjectiveStateIs
+                ContentConditionKind.MissionAbsent, ContentConditionKind.MissionStateIs, ContentConditionKind.ObjectiveStateIs,
+                ContentConditionKind.FactEquals, ContentConditionKind.HasLogos
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());

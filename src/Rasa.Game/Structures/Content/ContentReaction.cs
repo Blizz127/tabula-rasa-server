@@ -28,6 +28,19 @@ namespace Rasa.Structures.Content
 
         public void PlanLogos(uint logosId) => _logos.Add(logosId);
 
+        private readonly Dictionary<(uint MapContextId, string Key), int?> _facts = new();
+
+        public void PlanFact(uint mapContextId, string key, int? value) => _facts[(mapContextId, key)] = value;
+
+        /// <summary>A fact of the player's current context; an absent fact reads as 0.</summary>
+        public int FactValue(string key)
+        {
+            var slot = (_player.MapContextId, key);
+            if (_facts.TryGetValue(slot, out var planned))
+                return planned ?? 0;
+            return _player.ContentFacts.TryGetValue(slot, out var value) ? value : 0;
+        }
+
         private readonly Dictionary<(uint Mission, uint Objective, byte Counter), int> _counters = new();
 
         public void PlanCounter(uint missionId, uint objectiveId, byte counterId, int value)
@@ -70,6 +83,10 @@ namespace Rasa.Structures.Content
                     return MissionState(term.MissionId) is { } missionState && (uint)missionState == term.State;
                 case ContentConditionKind.ObjectiveStateIs:
                     return ObjectiveState(term.MissionId, term.ObjectiveId) is { } objectiveState && (uint)objectiveState == term.State;
+                case ContentConditionKind.FactEquals:
+                    return FactValue(term.FactKey) == term.Value;
+                case ContentConditionKind.HasLogos:
+                    return term.Value > 0 && HasLogos((uint)term.Value);
                 default:
                     // Unimplemented kinds are withheld at load and never reach evaluation.
                     return false;
@@ -96,6 +113,9 @@ namespace Rasa.Structures.Content
         // Filled by staging: a committed transfer destination and the account's skip-boot-camp flag.
         public ContentLocationEntry Transfer { get; set; }
         public bool SkipBootcampGranted { get; set; }
+
+        // Filled by staging: fact changes in action order (null value = cleared).
+        public List<(uint MapContextId, string Key, int? Value)> FactChanges { get; } = new();
 
         public bool IsEmpty => Persistent.Count == 0 && Presentation.Count == 0;
 

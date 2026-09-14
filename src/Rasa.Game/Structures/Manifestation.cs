@@ -53,6 +53,8 @@ namespace Rasa.Structures
         public (uint MapContextId, System.Numerics.Vector3 Position)? LastContentSample { get; set; }
         /// <summary>Content areas with area_entered rules the player stood in at the last sample (entry fires once).</summary>
         public HashSet<uint> InsideContentAreas { get; } = new();
+        /// <summary>Committed content facts by (map context, key), loaded with the character.</summary>
+        public Dictionary<(uint MapContextId, string Key), int> ContentFacts { get; } = new();
         public ulong TrackingTargetEntityId { get; set; }
         public byte ActiveWeapon { get; set; }
         public List<CharacterTeleporterEntry> GainedWaypoints = new();

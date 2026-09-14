@@ -134,6 +134,19 @@ namespace Rasa.Managers
                         break;
                     }
 
+                    case ContentRuleAction.SetFact:
+                        unitOfWork.CharacterContentFacts.Set(player.Id, player.MapContextId, action.FactKey, action.FactValue,
+                            (uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                        state.PlanFact(player.MapContextId, action.FactKey, action.FactValue);
+                        reaction.FactChanges.Add((player.MapContextId, action.FactKey, action.FactValue));
+                        break;
+
+                    case ContentRuleAction.ClearFact:
+                        unitOfWork.CharacterContentFacts.Clear(player.Id, player.MapContextId, action.FactKey);
+                        state.PlanFact(player.MapContextId, action.FactKey, null);
+                        reaction.FactChanges.Add((player.MapContextId, action.FactKey, null));
+                        break;
+
                     case ContentRuleAction.SetAccountSkipBootcamp:
                         if (accountId == 0)
                             throw new InvalidOperationException("set_account_skip_bootcamp needs the account of the triggering character");
@@ -191,6 +204,14 @@ namespace Rasa.Managers
             {
                 player.Experience += reaction.GrantedExperience;
                 ManifestationManager.Instance.NotifyExperienceGained(client, reaction.GrantedExperience);
+            }
+
+            foreach (var (mapContextId, key, value) in reaction.FactChanges)
+            {
+                if (value is int set)
+                    player.ContentFacts[(mapContextId, key)] = set;
+                else
+                    player.ContentFacts.Remove((mapContextId, key));
             }
 
             if (reaction.SkipBootcampGranted && client.AccountEntry != null)
