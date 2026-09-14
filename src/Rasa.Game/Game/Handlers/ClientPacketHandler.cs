@@ -345,6 +345,12 @@
             NpcManager.Instance.RequestVendorPurchase(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.RequestRepair)]
+        private void RequestRepair(RequestRepairPacket packet)
+        {
+            NpcManager.Instance.RequestRepair(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RequestVendorRepair)]
         private void RequestVendorRepair(RequestVendorRepairPacket packet)
         {

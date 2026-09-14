@@ -290,6 +290,20 @@ namespace Rasa.Managers
             client.CallMethod(item.EntityId, new SetStackCountPacket(item.StackSize));
         }
 
+        /// <summary>
+        /// Tell a client an item's condition changed. Separate from SendItemDataToClient
+        /// because the client acts on this one: Recv_ItemStatus is what posts
+        /// UI_UPDATE_ITEM_REPAIRED, and UI_UPDATE_WEAPON_DRAWER_BROKEN_STATUS when the item
+        /// crosses zero hit points in either direction. Recv_ItemInfo only stores the number.
+        /// </summary>
+        public void SendItemStatus(Client client, Item item, int maxHitPoints)
+        {
+            if (client == null || item == null)
+                return;
+
+            client.CallMethod(item.EntityId, new ItemStatusPacket(item.CurrentHitPoints, maxHitPoints));
+        }
+
         internal void UpdateItemCurrentAmmo(IItemChange item)
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
