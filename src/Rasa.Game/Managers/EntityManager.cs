@@ -220,6 +220,12 @@ namespace Rasa.Managers
             return DynamicObjects[entityId];
         }
 
+        /// <summary>GetObject without the KeyNotFoundException: for ids that come off the wire.</summary>
+        internal bool TryGetObject(ulong entityId, out DynamicObject dynamicObject)
+        {
+            return DynamicObjects.TryGetValue(entityId, out dynamicObject);
+        }
+
         public void RegisterDynamicObject(DynamicObject dynamicObject)
         {
             DynamicObjects.Add(dynamicObject.EntityId, dynamicObject);

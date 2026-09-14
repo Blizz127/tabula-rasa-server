@@ -43,6 +43,9 @@ namespace Rasa.Structures
         // Dictionary<uniqueTeleporterId, dataAboutdynamicObject> Teleporters
         public Dictionary<uint,DynamicObject> Teleporters = new Dictionary<uint, DynamicObject>();
 
+        /// <summary>Crafting stations by kraftwerks row id; see KraftwerksManager.</summary>
+        public Dictionary<uint, DynamicObject> Kraftwerks = new Dictionary<uint, DynamicObject>();
+
         // Dictionary<uniqueLootDispenserId, dataAboutLootDispenser> LootDispensers
         public Dictionary<ulong, LootDispenser> LootDispensers = new Dictionary<ulong, LootDispenser>();
 

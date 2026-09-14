@@ -55,6 +55,7 @@ namespace Rasa.Managers
             InitFootlockers();
             InitTeleporters();
             LogosManager.Instance.LogosInit();
+            KraftwerksManager.Instance.KraftwerksInit();
         }
 
         internal void ForceState(DynamicObject obj, UseObjectState state, int delta)
@@ -98,6 +99,9 @@ namespace Rasa.Managers
                         obj.TriggeredByPlayers.Add(client);
                         break;
                     }
+                case DynamicObjectType.Kraftwerks:
+                    KraftwerksManager.Instance.Use(client, obj, packet.ActionId, packet.ActionArgId);
+                    break;
                 default:
                     Logger.WriteLog(LogType.Debug, $"ToDo: RequestUseObjectPacket: unsuported object type {obj.DynamicObjectType}");
                     break;
@@ -150,6 +154,9 @@ namespace Rasa.Managers
                     }
                 }
             }
+
+            // crafting stations
+            KraftwerksManager.Instance.Worker(mapChannel);
 
             // teleporters
             foreach (var entry in mapChannel.Teleporters)

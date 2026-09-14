@@ -16,6 +16,7 @@ namespace Rasa.Repositories.World
             ILogosRepository logosRepository,
             IMapInfoRepository mapInfoRepository,
             IMapLinkRepository mapLinkRepository,
+            IKraftwerksRepository kraftwerksRepository,
             INpcMissionRepository npcMissionRepository,
             INpcMissionRewardRepository npcMissionRewardRepository,
             INpcPackageRepository npcPackageRepository,
@@ -31,6 +32,7 @@ namespace Rasa.Repositories.World
             Logoses = logosRepository;
             MapInfos = mapInfoRepository;
             MapLinks = mapLinkRepository;
+            Kraftwerks = kraftwerksRepository;
             NpcMissions = npcMissionRepository;
             NpcMissionRewards = npcMissionRewardRepository;
             NpcPackages = npcPackageRepository;
@@ -46,6 +48,7 @@ namespace Rasa.Repositories.World
         public ILogosRepository Logoses { get; }
         public IMapInfoRepository MapInfos { get; }
         public IMapLinkRepository MapLinks { get; }
+        public IKraftwerksRepository Kraftwerks { get; }
         public INpcMissionRepository NpcMissions { get; }
         public INpcMissionRewardRepository NpcMissionRewards { get; }
         public INpcPackageRepository NpcPackages { get; }

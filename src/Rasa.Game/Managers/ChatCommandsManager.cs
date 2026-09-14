@@ -143,6 +143,7 @@ namespace Rasa.Managers
             RegisterCommand(".heal", GmLevel.GameMaster, HealCommand);
             RegisterCommand(".link", GmLevel.GameMaster, LinkCommand);
             RegisterCommand(".linkhere", GmLevel.GameMaster, LinkHereCommand);
+            RegisterCommand(".kraftwerks", GmLevel.GameMaster, KraftwerksCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
@@ -1300,6 +1301,91 @@ namespace Rasa.Managers
             CommunicatorManager.Instance.SystemMessage(client, ground == null
                 ? $"No walkable surface within {NavMeshQuery.SearchExtents.X:0.#} m of you."
                 : $"Navmesh ground at y = {ground.Value:0.##}, you are at {position.Y:0.##} ({position.Y - ground.Value:+0.##;-0.##} m); nearest walkable point ({nearest.Value.X:0.#}, {nearest.Value.Y:0.#}, {nearest.Value.Z:0.#}).");
+        }
+
+        /// <summary>
+        /// .kraftwerks                       - the crafting stations on this map, nearest first
+        /// .kraftwerks here [comment]        - a new station where you stand, facing as you face
+        /// .kraftwerks id here               - move station id to where you stand, facing as you face
+        /// .kraftwerks id rotate yaw         - turn station id (radians, the client's ViewDirection.X)
+        /// .kraftwerks id comment text       - relabel it
+        /// .kraftwerks id delete
+        /// The stations were seeded from the client's map markers, which have no facing; this is
+        /// how they get one.
+        /// </summary>
+        private void KraftwerksCommand(string[] parts)
+        {
+            var client = _client;
+            var player = client.Player;
+
+            if (parts.Length == 1)
+            {
+                var stations = KraftwerksManager.Instance.OnMap(player.MapContextId, player.Position);
+
+                if (stations.Count == 0)
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, $"No crafting stations on map {player.MapContextId}.");
+                    return;
+                }
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{stations.Count} crafting station(s) on map {player.MapContextId}, nearest first:");
+
+                foreach (var station in stations.Take(10))
+                {
+                    var e = station.Entry;
+                    CommunicatorManager.Instance.SystemMessage(client, $"{Vector3.Distance(e.Position, player.Position),6:0.#} m  #{e.Id} ({e.PosX:0.#}, {e.PosY:0.#}, {e.PosZ:0.#}) yaw {e.Rotation:0.##}  {e.Comment}");
+                }
+
+                return;
+            }
+
+            if (parts[1] == "here")
+            {
+                var comment = string.Join(' ', parts.Skip(2));
+                var station = KraftwerksManager.Instance.Add(player.MapContextId, player.Position, player.Rotation, comment.Length > 64 ? comment.Substring(0, 64) : comment);
+
+                CommunicatorManager.Instance.SystemMessage(client, station == null
+                    ? "The station could not be created; see the server log."
+                    : $"Created crafting station #{station.Entry.Id} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}).");
+                return;
+            }
+
+            if (!uint.TryParse(parts[1], out var id) || !KraftwerksManager.Instance.TryGet(id, out var target))
+            {
+                CommunicatorManager.Instance.SystemMessage(client, "usage: .kraftwerks [here [comment] | id here | id rotate yaw | id comment text | id delete]");
+                return;
+            }
+
+            var ok = false;
+            var what = parts.Length > 2 ? parts[2] : "";
+
+            switch (what)
+            {
+                case "here":
+                    ok = KraftwerksManager.Instance.Move(target, player.Position, player.Rotation);
+                    break;
+
+                case "rotate" when parts.Length > 3 && double.TryParse(parts[3], out var yaw):
+                    ok = KraftwerksManager.Instance.Move(target, target.Entry.Position, yaw);
+                    break;
+
+                case "comment":
+                    var comment = string.Join(' ', parts.Skip(3));
+                    ok = KraftwerksManager.Instance.SetComment(target, comment.Length > 64 ? comment.Substring(0, 64) : comment);
+                    break;
+
+                case "delete":
+                    ok = KraftwerksManager.Instance.Delete(target);
+                    break;
+
+                default:
+                    CommunicatorManager.Instance.SystemMessage(client, "usage: .kraftwerks [here [comment] | id here | id rotate yaw | id comment text | id delete]");
+                    return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, ok
+                ? $"Crafting station #{id}: {what} done."
+                : $"Crafting station #{id}: {what} failed; see the server log.");
         }
 
         private void LinksCommand(string[] parts)

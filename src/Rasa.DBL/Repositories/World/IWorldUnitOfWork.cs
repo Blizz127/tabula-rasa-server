@@ -11,6 +11,7 @@
         ILogosRepository Logoses { get; }
         IMapInfoRepository MapInfos { get; }
         IMapLinkRepository MapLinks { get; }
+        IKraftwerksRepository Kraftwerks { get; }
         INpcMissionRepository NpcMissions { get; }
         INpcMissionRewardRepository NpcMissionRewards { get; }
         INpcPackageRepository NpcPackages { get; }
