@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -103,6 +104,138 @@ namespace Rasa.Managers
             return MapChannelArray[contextId];
         }
 
+        #region Private instances
+
+        /// <summary>Private per-character instances by instance id (never 0 or 1).</summary>
+        public readonly Dictionary<uint, MapChannel> InstanceChannels = new();
+
+        private readonly Dictionary<uint, MapChannel> _characterInstances = new();
+        private readonly List<MapChannel> _instancesToDestroy = new();
+        private uint _lastInstanceId = 1;
+
+        /// <summary>Whether a context gives each character its own instance (content_map_setting).</summary>
+        public Func<uint, bool> IsPerCharacterContext { get; set; } = contextId =>
+            MissionContentManager.Instance.Content.Catalog.InstancingFor(contextId) == MapInstancing.PerCharacter;
+
+        /// <summary>Fills a new instance with its context's content placements.</summary>
+        public Action<MapChannel> PopulateInstance { get; set; } = channel =>
+            ContentMaterializer.Materialize(channel, MissionContentManager.Instance.Content);
+
+        /// <summary>Every live channel, shared contexts first; a snapshot, safe to change the registry while iterating.</summary>
+        public List<MapChannel> Channels() => MapChannelArray.Values.Concat(InstanceChannels.Values).ToList();
+
+        /// <summary>The channel a creature is in, falling back to its context for creatures never added to a channel.</summary>
+        public static MapChannel ChannelOf(Creature creature)
+            => creature.MapChannel ?? Instance.FindByContextId(creature.MapContextId);
+
+        public static MapChannel ChannelOf(DynamicObject dynamicObject)
+            => dynamicObject.MapChannel ?? Instance.FindByContextId(dynamicObject.MapContextId);
+
+        /// <summary>
+        /// Whether a creature is in this channel. Two instances of one context share its id, so the
+        /// channel itself is compared; a creature never added to a channel falls back to its context.
+        /// </summary>
+        public static bool IsOnChannel(Creature creature, MapChannel channel)
+            => creature != null && channel != null && (creature.MapChannel != null
+                ? ReferenceEquals(creature.MapChannel, channel)
+                : creature.MapContextId == channel.MapInfo?.MapContextId);
+
+        public static bool IsOnChannel(DynamicObject dynamicObject, MapChannel channel)
+            => dynamicObject != null && channel != null && (dynamicObject.MapChannel != null
+                ? ReferenceEquals(dynamicObject.MapChannel, channel)
+                : dynamicObject.MapContextId == channel.MapInfo?.MapContextId);
+
+        /// <summary>
+        /// The channel a character enters for a context: the shared channel, or for a per-character
+        /// context a new private instance (build plan S3, OD-2). A previous instance of the same
+        /// character is released, so one character never holds two. Null for an unknown context.
+        /// </summary>
+        public MapChannel ChannelForEntry(uint characterId, uint contextId)
+        {
+            if (!MapChannelArray.TryGetValue(contextId, out var shared))
+                return null;
+
+            if (!IsPerCharacterContext(contextId))
+                return shared;
+
+            if (_characterInstances.TryGetValue(characterId, out var previous))
+            {
+                _characterInstances.Remove(characterId);
+                ReleaseInstanceIfEmpty(previous);
+            }
+
+            var channel = new MapChannel
+            {
+                MapInfo = shared.MapInfo,
+                InstanceId = ++_lastInstanceId,
+                OwnerCharacterId = characterId,
+                PlayerLimit = 1,
+                ClientList = new List<Client>()
+            };
+
+            InstanceChannels.Add(channel.InstanceId, channel);
+            _characterInstances[characterId] = channel;
+            PopulateInstance(channel);
+
+            Logger.WriteLog(LogType.Debug, $"Created instance {channel.InstanceId} of context {contextId} for character {characterId}");
+            return channel;
+        }
+
+        /// <summary>Queues a private instance with nobody in or entering it for destruction after the tick.</summary>
+        public void ReleaseInstanceIfEmpty(MapChannel channel)
+        {
+            if (channel?.IsPrivateInstance == true && channel.ClientList.Count == 0 && channel.QueuedClients.Count == 0 &&
+                !_instancesToDestroy.Contains(channel))
+                _instancesToDestroy.Add(channel);
+        }
+
+        /// <summary>
+        /// Destroys the queued instances that are still empty: their creatures (with their corpses'
+        /// loot) and objects leave the entity tables and free their ids, and the channel is dropped.
+        /// Runs after the map worker, never while it iterates.
+        /// </summary>
+        public void DestroyQueuedInstances()
+        {
+            if (_instancesToDestroy.Count == 0)
+                return;
+
+            foreach (var channel in _instancesToDestroy.ToList())
+            {
+                if (channel.ClientList.Count > 0 || channel.QueuedClients.Count > 0)
+                    continue;
+
+                foreach (var cell in channel.MapCellInfo.Cells.Values)
+                    foreach (var creature in cell.CreatureList.ToList())
+                        CellManager.Instance.RemoveCreatureFromWorld(channel, creature);
+
+                foreach (var dynamicObject in channel.DynamicObjects.ToList())
+                {
+                    EntityManager.Instance.UnregisterEntity(dynamicObject.EntityId);
+                    EntityManager.Instance.UnregisterDynamicObject(dynamicObject.EntityId);
+                    EntityManager.Instance.FreeEntity(dynamicObject.EntityId);
+                }
+
+                foreach (var loot in channel.LootDispensers.Keys.ToList())
+                    EntityManager.Instance.FreeEntity(loot);
+
+                channel.DynamicObjects.Clear();
+                channel.ContentUsables.Clear();
+                channel.LootDispensers.Clear();
+                channel.MapCellInfo.Cells.Clear();
+
+                InstanceChannels.Remove(channel.InstanceId);
+                if (channel.OwnerCharacterId is uint owner &&
+                    _characterInstances.TryGetValue(owner, out var current) && ReferenceEquals(current, channel))
+                    _characterInstances.Remove(owner);
+
+                Logger.WriteLog(LogType.Debug, $"Destroyed instance {channel.InstanceId} of context {channel.MapInfo?.MapContextId}");
+            }
+
+            _instancesToDestroy.Clear();
+        }
+
+        #endregion
+
         public bool TryFindByContextId(uint contextId, out MapChannel mapChannel)
         {
             return MapChannelArray.TryGetValue(contextId, out mapChannel);
@@ -182,10 +315,8 @@ namespace Rasa.Managers
             // dropship advanced N times per tick.
             DynamicObjectManager.Instance.DropshipsWorker(delta);
 
-            foreach (var t in MapChannelArray)
+            foreach (var mapChannel in Channels())
             {
-                var mapChannel = t.Value;
-
                 mapChannel.MapChannelElapsed += delta;
 
                 if (Timer.IsTriggered("CheckForLogingClients"))
@@ -270,6 +401,9 @@ namespace Rasa.Managers
             // The autofire list is global: advance it once per elapsed interval,
             // independent of how many maps currently contain players.
             ManifestationManager.Instance.AutoFireTimerDoWork(delta);
+
+            // Instances their owners left during the tick go now, outside the channel loop.
+            DestroyQueuedInstances();
         }
 
         public void MapLoaded(Client client)
@@ -277,7 +411,7 @@ namespace Rasa.Managers
             if (client.State == ClientState.Teleporting)
             {
                 var dropship = new Dropship(Factions.AFS, DropshipType.Teleporter, client);
-                var mapChannel = MapChannelArray[client.LoadingMap];
+                var mapChannel = ChannelForEntry(client.Player.Id, client.LoadingMap);
 
                 client.Player.MapChannel = mapChannel;
                 client.Player.MapContextId = dropship.Client.LoadingMap;
@@ -364,7 +498,7 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.CurrentInputStateId, new WonkavatePacket
                (
                    mapInstance.MapInfo.MapContextId,
-                   1,           // InstanceId
+                   mapInstance.InstanceId,
                    mapInstance.MapInfo.MapVersion,
                     client.Player.Position,
                    (float)client.Player.Rotation
@@ -390,7 +524,7 @@ namespace Rasa.Managers
             if (client.Player == null || client.State != ClientState.Ingame)
                 return false;
 
-            if (!MapChannelArray.TryGetValue(mapContextId, out var mapChannel))
+            if (!MapChannelArray.ContainsKey(mapContextId))
                 return false;
 
             client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
@@ -399,6 +533,9 @@ namespace Rasa.Managers
             // Out of the old map while the player still points at it: entities, cells, the
             // managers that track it, and the old ClientList.
             DetachFromMap(client);
+
+            // The shared channel, or a fresh private instance for a per-character context.
+            var mapChannel = ChannelForEntry(client.Player.Id, mapContextId);
 
             // What MapLoaded reads back when the client is ready: the map channel it adds the
             // player to, and the position the cell matrix is built from.
@@ -410,7 +547,7 @@ namespace Rasa.Managers
 
             var packet = new WonkavatePacket(
                 mapChannel.MapInfo.MapContextId,
-                0,                  // ToDo MapInstanceId
+                mapChannel.InstanceId,
                 mapChannel.MapInfo.MapVersion,
                 position,
                 orientation);
@@ -514,6 +651,9 @@ namespace Rasa.Managers
                     if (queued != client)
                         map.QueuedClients.Enqueue(queued);
                 }
+
+                // A private instance lives only while its owner is in it.
+                ReleaseInstanceIfEmpty(map);
             }
         }
 

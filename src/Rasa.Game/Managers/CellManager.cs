@@ -59,6 +59,7 @@ namespace Rasa.Managers
             var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
 
             // add creature to the cell
+            creature.MapChannel = mapChannel;
             mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].CreatureList.Add(creature);
             // add cellMatrix to creature
             creature.Cells = cellMatrix;
@@ -135,6 +136,7 @@ namespace Rasa.Managers
             var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
 
             // add Object to the cell
+            dynamicObject.MapChannel = mapChannel;
             mapChannel.MapCellInfo.Cells[cellMatrix[2, 2]].DynamicObjectList.Add(dynamicObject);
 
             // notify client's about new object
@@ -469,7 +471,7 @@ namespace Rasa.Managers
             // calculate initial cell(x, z)
             var cellPosX = (uint)(creature.Position.X / CellSize + CellBias);
             var cellPosZ = (uint)(creature.Position.Z / CellSize + CellBias);
-            var mapChannel = MapChannelManager.Instance.FindByContextId(creature.MapContextId);
+            var mapChannel = MapChannelManager.ChannelOf(creature);
 
             // create matrix
             var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
@@ -484,7 +486,7 @@ namespace Rasa.Managers
             // calculate initial cell(x, z)
             var cellPosX = (uint)(obj.Position.X / CellSize + CellBias);
             var cellPosZ = (uint)(obj.Position.Z / CellSize + CellBias);
-            var mapChannel = MapChannelManager.Instance.FindByContextId(obj.MapContextId);
+            var mapChannel = MapChannelManager.ChannelOf(obj);
 
             // create matrix
             var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);
@@ -499,7 +501,7 @@ namespace Rasa.Managers
             // calculate initial cell(x, z)
             var cellPosX = (uint)(creature.Position.X / CellSize + CellBias);
             var cellPosZ = (uint)(creature.Position.Z / CellSize + CellBias);
-            var mapChannel = MapChannelManager.Instance.FindByContextId(creature.MapContextId);
+            var mapChannel = MapChannelManager.ChannelOf(creature);
 
             // create matrix
             var cellMatrix = CreateCellMatrix(mapChannel, cellPosX, cellPosZ);

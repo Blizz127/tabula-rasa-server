@@ -958,6 +958,7 @@ namespace Rasa.Managers
         public static bool IsInConversationRange(Manifestation player, Creature creature)
         {
             return creature.MapContextId == player.MapContextId &&
+                   (player.MapChannel == null || MapChannelManager.IsOnChannel(creature, player.MapChannel)) &&
                    Vector3.Distance(player.Position, creature.Position) <= MissionRules.ConversationRange + MissionRules.ConversationRangeTolerance;
         }
 
@@ -992,7 +993,8 @@ namespace Rasa.Managers
             if (!IsInWorld(client))
                 return false;
 
-            return EntityManager.Instance.Creatures.TryGetValue(npcEntityId, out creature) && creature.Npc != null;
+            return EntityManager.Instance.Creatures.TryGetValue(npcEntityId, out creature) && creature.Npc != null &&
+                   (client.Player.MapChannel == null || MapChannelManager.IsOnChannel(creature, client.Player.MapChannel));
         }
     }
 }

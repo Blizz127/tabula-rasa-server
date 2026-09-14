@@ -9,6 +9,8 @@ namespace Rasa.Structures
     public class Creature : Actor, ICloneable
     {
         public uint DbId { get; set; }
+        /// <summary>The channel the creature was added to; two instances of a context hold different creatures.</summary>
+        public MapChannel MapChannel { get; set; }
         // npc data (only if creature is a NPC)
         public Npc Npc { get; set; }
         // loot data (only if creature is harvestable)

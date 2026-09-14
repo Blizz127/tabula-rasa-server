@@ -113,6 +113,7 @@ namespace Rasa.Managers
             if (map?.MapInfo == null || player.MapContextId != map.MapInfo.MapContextId ||
                 !entities.RegisteredEntities.TryGetValue(id, out var type) || type != EntityType.Creature ||
                 !entities.Creatures.TryGetValue(id, out var target) || target.MapContextId != player.MapContextId ||
+                !MapChannelManager.IsOnChannel(target, map) ||
                 target.State == CharacterState.Dead || target.Faction == Factions.AFS)
                 return null;
             // Invalid targets become blind shots in the original base attack.
@@ -132,7 +133,8 @@ namespace Rasa.Managers
             if (map?.MapInfo == null || player.MapContextId != map.MapInfo.MapContextId ||
                 !entities.RegisteredEntities.TryGetValue(id, out var type) || type != EntityType.Object ||
                 !entities.DynamicObjects.TryGetValue(id, out var target) ||
-                target.DynamicObjectType != DynamicObjectType.ContentUsable)
+                target.DynamicObjectType != DynamicObjectType.ContentUsable ||
+                !MapChannelManager.IsOnChannel(target, map))
                 return null;
 
             return target.HitPoints > 0 ? target : null;

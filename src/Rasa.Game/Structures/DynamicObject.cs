@@ -15,6 +15,9 @@ namespace Rasa.Structures
             EntityId = EntityManager.Instance.GetEntityId;
         }
 
+        /// <summary>The channel the object was added to; two instances of a context hold different objects.</summary>
+        public MapChannel MapChannel { get; set; }
+
         public ulong EntityId { get; set; }
         public EntityClasses EntityClassId { get; set; }
         public object ObjectData { get; set; }

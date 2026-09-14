@@ -101,7 +101,8 @@ namespace Rasa.Managers
             if (map.MapInfo == null || player.MapContextId != map.MapInfo.MapContextId ||
                 !entities.RegisteredEntities.TryGetValue(targetId, out var type) || type != EntityType.Creature ||
                 !entities.Creatures.TryGetValue(targetId, out var target) ||
-                target.MapContextId != map.MapInfo.MapContextId || target.State == CharacterState.Dead ||
+                target.MapContextId != map.MapInfo.MapContextId || !MapChannelManager.IsOnChannel(target, map) ||
+                target.State == CharacterState.Dead ||
                 target.Faction == Factions.AFS)
                 return null;
             // Current TargetCategory packets advertise AFS as friendly and other

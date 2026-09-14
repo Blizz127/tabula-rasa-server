@@ -8,6 +8,14 @@ namespace Rasa.Structures
     {
         // ToDo
         public MapInfo MapInfo { get; set; }
+
+        /// <summary>1 for a shared context; a server-lifetime id above 1 for a private instance.</summary>
+        public uint InstanceId { get; set; } = 1;
+
+        /// <summary>The character a private instance belongs to; null for a shared context.</summary>
+        public uint? OwnerCharacterId { get; set; }
+
+        public bool IsPrivateInstance => OwnerCharacterId.HasValue;
         // timers
         //public int TimerClientEffectUpdate { get; set; }
         //public int TimerMissileUpdate { get; set; }

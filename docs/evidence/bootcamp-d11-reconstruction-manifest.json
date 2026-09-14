@@ -84,6 +84,20 @@
    "era": "final_live",
    "member": "docs/evidence/bootcamp-d11-positions.json",
    "note": "Curated S1 positions: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). Each position record states its method, uncertainty and frames."
+  },
+  "official_notes:d13.4": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "url": "https://web.archive.org/web/20090203215404/http://www.playtr.com/news/patch_notes/",
+   "locator": "research/20260913-bootcamp/wiki/verify/web/d134-20090203215404.txt (Deployment 13.4 known issues)",
+   "note": "Official live patch notes, known-issues section, captured 2009-02-03."
+  },
+  "client_code:trpython.zip": {
+   "kind": "client_code",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/trpython.zip",
+   "provenance": "docs/client-artifacts.md; disassembly at research/20260913-bootcamp/client-code/verify/dis",
+   "locator_format": "module path + function + bytecode offset"
   }
  },
  "scope": [
@@ -157,6 +171,15 @@
     "id": {
      "min": 19851,
      "max": 19859
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key_ranges": {
+    "map_context_id": {
+     "min": 1985,
+     "max": 1985
     }
    }
   }
@@ -4202,6 +4225,42 @@
      "reasoning": "chat shows 'You received 1 ...' five times"
     }
    }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1985
+   },
+   "slice": "S3",
+   "migration": "BootcampS3PerCharacterInstancing",
+   "fields": {
+    "instancing": {
+     "value": 1,
+     "tier": "inferred",
+     "decision": "OD-2",
+     "citations": [
+      {
+       "source": "official_notes:d13.4",
+       "locator": "'It is possible to become stuck in Bootcamp by abandoning the final mission after clearing the dropship pad ... fail it normally (let the bomb blow up), this will cause the ship to respawn.'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo store offset 3854: 1985 = ('adv_bootcamp', 5 MISSIONCONTEXT, 'Planet Foreas - Bootcamp', 1985, 1, 4)"
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/inputstate/wonkavator.pyo OnExitState: MISSIONCONTEXT and not 1985 posts INSTANCE_ENTERED; Wonkavate(gameContextId, instanceId, ...)"
+      }
+     ],
+     "reasoning": "The dropship destroyed by one recruit survived abandonment and only that recruit's failure restored it; the context is an instanceable mission context; Youngblood's arrival and the reinforcements react to one recruit; no other player appears in about 700 s of boot-camp footage (build plan section 2.2)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "adv_bootcamp: private per-character instance",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [],
@@ -4246,13 +4305,13 @@
   },
   {
    "id": "GAP-INSTANCE",
-   "summary": "Context 1985 runs as one shared world: Youngblood, the boss and the reinforcements are shared and their arrival events are not reproduced.",
+   "summary": "Closed by S3 (2026-09-14): context 1985 is a private per-character instance (content_map_setting row, OD-2); each character's channel is populated from the placements and destroyed when the owner leaves.",
    "condition": "Open only before S3 lands, or after a fallback to a shared 1985 channel (build plan section 2.5).",
    "evidence": [
     "build plan section 2.2 (per-recruit evidence items 1-8)",
     "build plan section 2.5 (fallback and falsifiers)"
    ],
-   "closes_with": "S3 (private per-character instances)",
+   "closes_with": "closed by S3 (BootcampS3PerCharacterInstancing)",
    "surfaced_by": [
     "manifest",
     "startup warning when a second client enters a context flagged for instancing but running shared"
@@ -4317,11 +4376,11 @@
   },
   {
    "id": "GAP-EARLY-EXIT",
-   "summary": "Emulator teleporter row 60 stays usable in the shared 1985 world.",
+   "summary": "Instances are populated only from content placements, so the emulator teleporter rows of the shared 1985 channel are not reachable from the boot camp; the dropship list and waypoint selection also refuse per-character contexts.",
    "evidence": [
     "emulator teleporter rows 60, 99 and 598 in context 1985 (read-only rasaworld.db)"
    ],
-   "closes_with": "S3 (teleporter rows are not materialized in instances)",
+   "closes_with": "closed by S3",
    "surfaced_by": [
     "manifest"
    ],

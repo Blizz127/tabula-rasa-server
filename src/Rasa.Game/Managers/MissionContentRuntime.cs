@@ -193,7 +193,8 @@ namespace Rasa.Managers
                 return;
 
             var creature = EntityManager.Instance.Creatures.Values.FirstOrDefault(c =>
-                c.DbId == placement.CreatureId && c.MapContextId == player.MapContextId);
+                c.DbId == placement.CreatureId && c.MapContextId == player.MapContextId &&
+                (player.MapChannel == null || MapChannelManager.IsOnChannel(c, player.MapChannel)));
 
             if (creature?.Npc == null || !MissionManager.IsInConversationRange(player, creature))
                 return;

@@ -56,7 +56,17 @@ namespace Rasa.Managers
         {
             // A channel without MapInfo (tests, uninitialized channels) cannot be checked
             // against; treat it as matching rather than rejecting every shot.
-            return actor != null && (mapChannel?.MapInfo == null || actor.MapContextId == mapChannel.MapInfo.MapContextId);
+            if (actor == null)
+                return false;
+            if (mapChannel?.MapInfo == null)
+                return true;
+            // Two instances of a context share its id; the channel itself decides.
+            return actor switch
+            {
+                Creature creature => MapChannelManager.IsOnChannel(creature, mapChannel),
+                Manifestation player when player.MapChannel != null => ReferenceEquals(player.MapChannel, mapChannel),
+                _ => actor.MapContextId == mapChannel.MapInfo.MapContextId
+            };
         }
 
         private static Actor GetTargetActor(ulong entityId)

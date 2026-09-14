@@ -71,6 +71,14 @@ namespace Rasa.Managers
                 return;
             }
 
+            // Entity ids are global; an object in another channel (another instance of the same
+            // context, or another map) is not the player's to use.
+            if (client.Player?.MapChannel != null && !MapChannelManager.IsOnChannel(obj, client.Player.MapChannel))
+            {
+                Logger.WriteLog(LogType.Security, $"RequestUseObjectPacket: {client.Player.Name} named object {packet.EntityId} outside their channel");
+                return;
+            }
+
             switch (obj.DynamicObjectType)
             {
                 case DynamicObjectType.ControlPoint:
@@ -687,7 +695,10 @@ namespace Rasa.Managers
             // The client sends None for the map when it means the one it is on.
             var mapContextId = packet.MapInstanceId != 0 ? packet.MapInstanceId : client.Player.MapContextId;
 
-            if (!MapChannelManager.Instance.MapChannelArray.TryGetValue(mapContextId, out var targetMap)
+            // A private per-character context is entered through its own content (the boot camp's
+            // exit and entry), never by dropship.
+            if (MapChannelManager.Instance.IsPerCharacterContext(mapContextId)
+                || !MapChannelManager.Instance.MapChannelArray.TryGetValue(mapContextId, out var targetMap)
                 || !targetMap.Teleporters.TryGetValue(packet.WaypointId, out var teleporter)
                 || !(teleporter.ObjectData is WaypointInfo objData))
             {
@@ -830,6 +841,9 @@ namespace Rasa.Managers
             {
                 var teleporter = entry.Value;
                 var teleporterInfo = teleporter.ObjectData as WaypointInfo;
+
+                if (MapChannelManager.Instance.IsPerCharacterContext(teleporter.MapContextId))
+                    continue;
 
                 if (teleporterInfo.WaypointType == WaypointType.Dropship)
                 {

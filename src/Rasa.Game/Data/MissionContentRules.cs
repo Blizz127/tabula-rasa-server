@@ -47,7 +47,10 @@ namespace Rasa.Data
             NpcPackageOverride = true,
             // Prerequisites gate each player's offer at dispense time
             // (MissionManager.PrerequisitesSatisfied), enforced per character.
-            Prerequisites = true
+            Prerequisites = true,
+            // S3: a per-character context gives each character its own MapChannel
+            // (MapChannelManager.ChannelForEntry), populated from the context's placements.
+            Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter }
         };
 
         // The entry path (S1) exists; new characters may enter the boot camp once a live start location is

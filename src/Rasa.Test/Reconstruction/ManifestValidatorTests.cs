@@ -197,7 +197,8 @@ namespace Rasa.Test.Reconstruction
                 ["content_rule"] = "id:1985000-1985999",
                 ["content_rule_action"] = "rule_id:1985000-1985999",
                 ["content_item_set"] = "item_set_id:19851-19859",
-                ["content_location"] = "id:19851-19859"
+                ["content_location"] = "id:19851-19859",
+                ["content_map_setting"] = "map_context_id:1985-1985"
             }.ToList(), scope.ToList());
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

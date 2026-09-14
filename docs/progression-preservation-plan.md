@@ -99,6 +99,21 @@ the final-live rule.
   check against the footage; the planned `ReconstructionSeedTests`, `PositionFileTests`,
   `ReconstructionDefinitionTests` and `SliceReadinessReport` are not written yet.
 
+## S3 (private instances) status
+
+- Context 1985 is a private per-character instance (migration `BootcampS3PerCharacterInstancing`, manifest
+  row `content_map_setting` 1985, OD-2). `MapChannelManager.ChannelForEntry` gives a character entering a
+  per-character context its own `MapChannel` (instance ids from 2, never 0 or 1), populated from the
+  context's content placements; the previous instance of that character is released, and an instance is
+  destroyed after the tick in which it empties (creatures, objects and loot leave the entity tables).
+- Login, `ChangeMap` and the dropship arrival resolve the channel, and `Wonkavate` carries its instance
+  id. Creatures and objects remember their channel, so cell broadcasts, NPC conversation, mission NPC
+  resolution, vending, object use, weapon and Lightning targeting and missile hits only act within the
+  requester's own channel. The dropship list and waypoint selection refuse per-character contexts.
+- `PrivateInstanceTests` cover creation, isolation at identical coordinates, destruction after the owner
+  leaves, replacement on re-entry and the instance id sent at login. Full suite 815/815. Owner client
+  check (two recruits at once, relog) is still to do.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0

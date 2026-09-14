@@ -98,7 +98,9 @@ namespace Rasa.Managers
             if (!MissionManager.IsInWorld(client))
                 return;
 
-            if (!EntityManager.Instance.Creatures.TryGetValue(packet.EntityId, out var creature) || creature.Npc == null)
+            // Entity ids are global; two instances of a context hold different NPCs.
+            if (!EntityManager.Instance.Creatures.TryGetValue(packet.EntityId, out var creature) || creature.Npc == null ||
+                !MapChannelManager.IsOnChannel(creature, client.Player.MapChannel))
                 return;
 
             var convoDataDict = new Dictionary<ConversationType, object>();
@@ -368,7 +370,7 @@ namespace Rasa.Managers
             // KeyNotFoundException in the handler, which closes the connection.
             var creature = EntityManager.Instance.GetCreature(packet.EntityId);
 
-            if (creature?.Npc?.Vendor?.VendorItems == null)
+            if (creature?.Npc?.Vendor?.VendorItems == null || !MapChannelManager.IsOnChannel(creature, client.Player?.MapChannel))
                 return;
 
             if (!EntityManager.Instance.VendorItems.TryGetValue(packet.EntityId, out var entityList))

@@ -644,7 +644,9 @@ namespace Rasa.Managers
             client.AccountEntry.SelectedSlot = packet.SlotNum;
 
             client.Player = CreateCharacterManifestation(client, character);
-            client.Player.MapChannel = MapChannelManager.Instance.FindByContextId(client.Player.MapContextId);
+            // The shared channel, or this character's own instance of a per-character context.
+            client.Player.MapChannel = MapChannelManager.Instance.ChannelForEntry(character.Id, client.Player.MapContextId)
+                ?? MapChannelManager.Instance.FindByContextId(client.Player.MapContextId);
             client.LoadingMap = client.Player.MapContextId;
             MapChannelManager.Instance.PassClientToMapInstance(client);
         }
