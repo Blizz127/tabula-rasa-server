@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rasa.DBL\Rasa.DBL.csproj" />
+    <ProjectReference Include="..\Rasa.Navigation\Rasa.Navigation.csproj" />
     <ProjectReference Include="..\Rasa.Shared\Rasa.Shared.csproj" />
     <ProjectReference Include="..\Rasa.Utils\Rasa.Utils.csproj" />
   </ItemGroup>

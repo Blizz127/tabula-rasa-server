@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace Rasa.Managers
 {
+    using Navigation;
     using Data;
     using Game;
     using Models;
@@ -120,6 +121,7 @@ namespace Rasa.Managers
             RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
             RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
             RegisterCommand(".links", GmLevel.Observer, LinksCommand);
+            RegisterCommand(".navmesh", GmLevel.Observer, NavMeshCommand);
             RegisterCommand(".near", GmLevel.Observer, NearCommand);
             RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
             RegisterCommand(".rqs", GmLevel.Observer, RqsWindowCommand);
@@ -141,6 +143,7 @@ namespace Rasa.Managers
             RegisterCommand(".heal", GmLevel.GameMaster, HealCommand);
             RegisterCommand(".link", GmLevel.GameMaster, LinkCommand);
             RegisterCommand(".linkhere", GmLevel.GameMaster, LinkHereCommand);
+            RegisterCommand(".kraftwerks", GmLevel.GameMaster, KraftwerksCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
@@ -1248,6 +1251,143 @@ namespace Rasa.Managers
         /// The links on this map, nearest first: what would fire where you stand, and how far
         /// the next pass is. Distances are on the ground, the way the trigger measures them.
         /// </summary>
+        /// <summary>
+        /// .navmesh              - is there a navmesh here, and where is its ground under you
+        /// .navmesh path x y z   - the route the AI would take from you to (x, y, z)
+        /// </summary>
+        private void NavMeshCommand(string[] parts)
+        {
+            var client = _client;
+            var mapChannel = client.Player.MapChannel;
+            var position = client.Player.Position;
+
+            if (mapChannel?.NavMesh == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"Map {client.Player.MapContextId} has no navmesh loaded (folder {NavMeshManager.Instance.Directory}, {NavMeshManager.Instance.LoadedMaps} maps loaded).");
+                return;
+            }
+
+            if (parts.Length == 5 && parts[1] == "path"
+                && float.TryParse(parts[2], out var x) && float.TryParse(parts[3], out var y) && float.TryParse(parts[4], out var z))
+            {
+                var path = mapChannel.NavMesh.FindPath(position, new Vector3(x, y, z), out var complete);
+
+                if (path == null)
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, "No path: you or the target are off the navmesh.");
+                    return;
+                }
+
+                var length = 0f;
+                var previous = position;
+
+                foreach (var corner in path)
+                {
+                    length += Vector3.Distance(previous, corner);
+                    previous = corner;
+                }
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{(complete ? "Complete" : "Partial")} path, {path.Count} corners, {length:0.#} m; ends at ({previous.X:0.#}, {previous.Y:0.#}, {previous.Z:0.#}).");
+
+                foreach (var corner in path.Take(8))
+                    CommunicatorManager.Instance.SystemMessage(client, $"  ({corner.X:0.#}, {corner.Y:0.#}, {corner.Z:0.#})");
+
+                return;
+            }
+
+            var ground = mapChannel.NavMesh.GroundHeight(position);
+            var nearest = mapChannel.NavMesh.Nearest(position);
+
+            CommunicatorManager.Instance.SystemMessage(client, ground == null
+                ? $"No walkable surface within {NavMeshQuery.SearchExtents.X:0.#} m of you."
+                : $"Navmesh ground at y = {ground.Value:0.##}, you are at {position.Y:0.##} ({position.Y - ground.Value:+0.##;-0.##} m); nearest walkable point ({nearest.Value.X:0.#}, {nearest.Value.Y:0.#}, {nearest.Value.Z:0.#}).");
+        }
+
+        /// <summary>
+        /// .kraftwerks                       - the crafting stations on this map, nearest first
+        /// .kraftwerks here [comment]        - a new station where you stand, facing as you face
+        /// .kraftwerks id here               - move station id to where you stand, facing as you face
+        /// .kraftwerks id rotate yaw         - turn station id (radians, the client's ViewDirection.X)
+        /// .kraftwerks id comment text       - relabel it
+        /// .kraftwerks id delete
+        /// The stations were seeded from the client's map markers, which have no facing; this is
+        /// how they get one.
+        /// </summary>
+        private void KraftwerksCommand(string[] parts)
+        {
+            var client = _client;
+            var player = client.Player;
+
+            if (parts.Length == 1)
+            {
+                var stations = KraftwerksManager.Instance.OnMap(player.MapContextId, player.Position);
+
+                if (stations.Count == 0)
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, $"No crafting stations on map {player.MapContextId}.");
+                    return;
+                }
+
+                CommunicatorManager.Instance.SystemMessage(client, $"{stations.Count} crafting station(s) on map {player.MapContextId}, nearest first:");
+
+                foreach (var station in stations.Take(10))
+                {
+                    var e = station.Entry;
+                    CommunicatorManager.Instance.SystemMessage(client, $"{Vector3.Distance(e.Position, player.Position),6:0.#} m  #{e.Id} ({e.PosX:0.#}, {e.PosY:0.#}, {e.PosZ:0.#}) yaw {e.Rotation:0.##}  {e.Comment}");
+                }
+
+                return;
+            }
+
+            if (parts[1] == "here")
+            {
+                var comment = string.Join(' ', parts.Skip(2));
+                var station = KraftwerksManager.Instance.Add(player.MapContextId, player.Position, player.Rotation, comment.Length > 64 ? comment.Substring(0, 64) : comment);
+
+                CommunicatorManager.Instance.SystemMessage(client, station == null
+                    ? "The station could not be created; see the server log."
+                    : $"Created crafting station #{station.Entry.Id} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}).");
+                return;
+            }
+
+            if (!uint.TryParse(parts[1], out var id) || !KraftwerksManager.Instance.TryGet(id, out var target))
+            {
+                CommunicatorManager.Instance.SystemMessage(client, "usage: .kraftwerks [here [comment] | id here | id rotate yaw | id comment text | id delete]");
+                return;
+            }
+
+            var ok = false;
+            var what = parts.Length > 2 ? parts[2] : "";
+
+            switch (what)
+            {
+                case "here":
+                    ok = KraftwerksManager.Instance.Move(target, player.Position, player.Rotation);
+                    break;
+
+                case "rotate" when parts.Length > 3 && double.TryParse(parts[3], out var yaw):
+                    ok = KraftwerksManager.Instance.Move(target, target.Entry.Position, yaw);
+                    break;
+
+                case "comment":
+                    var comment = string.Join(' ', parts.Skip(3));
+                    ok = KraftwerksManager.Instance.SetComment(target, comment.Length > 64 ? comment.Substring(0, 64) : comment);
+                    break;
+
+                case "delete":
+                    ok = KraftwerksManager.Instance.Delete(target);
+                    break;
+
+                default:
+                    CommunicatorManager.Instance.SystemMessage(client, "usage: .kraftwerks [here [comment] | id here | id rotate yaw | id comment text | id delete]");
+                    return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, ok
+                ? $"Crafting station #{id}: {what} done."
+                : $"Crafting station #{id}: {what} failed; see the server log.");
+        }
+
         private void LinksCommand(string[] parts)
         {
             var client = _client;

@@ -13,6 +13,7 @@ namespace Rasa.Repositories.World
         IMapInfoRepository MapInfos { get; }
         IMissionContentRepository MissionContent { get; }
         IMapLinkRepository MapLinks { get; }
+        IKraftwerksRepository Kraftwerks { get; }
         INpcMissionRepository NpcMissions { get; }
         INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         INpcMissionRewardRepository NpcMissionRewards { get; }

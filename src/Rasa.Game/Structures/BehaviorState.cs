@@ -32,6 +32,9 @@ namespace Rasa.Structures
     {
         public byte State { get; set; }
         public Vector3 WanderDestination = new Vector3();
+
+        /// <summary>How long this idle spell lasts before the next stroll; drawn anew each time the creature stops.</summary>
+        public long RestDuration { get; set; }
     }
     
     public class AiPathFollowing

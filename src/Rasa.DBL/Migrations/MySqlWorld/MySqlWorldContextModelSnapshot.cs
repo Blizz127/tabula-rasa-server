@@ -1051,6 +1051,47 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("itemtemplate_weapon");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.KraftwerksEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("ClassId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("class_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("comment");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Rotation")
+                        .HasColumnType("double")
+                        .HasColumnName("rotation");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("kraftwerks");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.LogosEntry", b =>
                 {
                     b.Property<uint>("Id")

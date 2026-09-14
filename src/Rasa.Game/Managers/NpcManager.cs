@@ -578,63 +578,125 @@ namespace Rasa.Managers
             ManifestationManager.Instance.LossCredits(client, -(int) total);
         }
 
+        /// <summary>
+        /// Repair one item at one vendor, RequestRepair(itemId, vendorId). The client builds
+        /// this through a RepairAction and nothing calls the function that builds one, so it is
+        /// unreachable in practice - but an opcode with no packet class closes the connection,
+        /// and the work is RepairOne either way.
+        /// </summary>
+        public void RequestRepair(Client client, RequestRepairPacket packet)
+        {
+            if (!IsVendor(client, packet.VendorEntityId))
+                return;
+
+            RepairOne(client, packet.ItemEntityId);
+        }
+
+        private enum RepairResult
+        {
+            /// <summary>Repaired and paid for.</summary>
+            Repaired,
+
+            /// <summary>Not this player's item, not an item, or already at full hit points.</summary>
+            Skipped,
+
+            /// <summary>Repairable, but they cannot pay for it.</summary>
+            Unaffordable
+        }
+
         public void RequestVendorRepair(Client client, RequestVendorRepairPacket packet)
         {
-            if (client.Player == null)
+            if (!IsVendor(client, packet.VendorEntityId))
                 return;
-
-            // The same test RequestVendorPurchase applies: the entity has to be a vendor.
-            if (!EntityManager.Instance.VendorItems.ContainsKey(packet.VendorEntityId))
-            {
-                Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked {packet.VendorEntityId} for repairs, and it is not a vendor.");
-                return;
-            }
-
-            var inventory = client.Player.Inventory;
 
             foreach (var itemEntityId in packet.ItemEntitesId)
             {
-                var item = EntityManager.Instance.GetItem(itemEntityId);
-
-                // Any entity id used to be accepted, including an item another player is
-                // carrying (repaired at this player's expense) and ids that are no item at all
-                // (a NullReferenceException in the handler).
-                if (item == null
-                    || !(inventory.PersonalInventory.Contains(itemEntityId)
-                         || inventory.EquippedInventory.Contains(itemEntityId)
-                         || inventory.WeaponDrawer.Contains(itemEntityId)))
-                {
-                    Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked to repair {itemEntityId}, which is not in their inventory.");
-                    continue;
-                }
-
-                var classInfo = EntityClassManager.Instance.GetClassInfo(item.ItemTemplate.Class);
-
-                if (classInfo?.ItemClassInfo == null)
-                    continue;
-
-                var maxHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
-
-                // Nothing to repair - and with CurrentHitPoints above the maximum the old
-                // arithmetic produced a negative cost, which LossCredits paid to the player.
-                if (item.CurrentHitPoints >= maxHitPoints)
-                    continue;
-
-                var cost = (int)Math.Round((double)(maxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice / 100);
-
-                if (cost > client.Player.Credits[CurencyType.Credits])
-                {
-                    client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                // Stop at the first item they cannot afford rather than skipping it and
+                // repairing the cheaper ones behind it.
+                if (RepairOne(client, itemEntityId) == RepairResult.Unaffordable)
                     break;
-                }
-
-                item.CurrentHitPoints = maxHitPoints;
-                ManifestationManager.Instance.LossCredits(client, -cost);
-                ItemManager.Instance.SendItemDataToClient(client, item, true);
-
-                using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-                unitOfWork.Items.UpdateCurrentHitPoints(item);
             }
+        }
+
+        /// <summary>The same test RequestVendorPurchase applies: the entity has to be a vendor.</summary>
+        private static bool IsVendor(Client client, ulong vendorEntityId)
+        {
+            if (client?.Player == null)
+                return false;
+
+            if (EntityManager.Instance.VendorItems.ContainsKey(vendorEntityId))
+                return true;
+
+            Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked {vendorEntityId} for repairs, and it is not a vendor.");
+
+            return false;
+        }
+
+        /// <summary>
+        /// The item, if this player may repair it and it needs repairing, with what that costs.
+        /// Any entity id used to be accepted, including an item another player is carrying
+        /// (repaired at this player's expense) and ids that are no item at all (a
+        /// NullReferenceException in the handler).
+        /// </summary>
+        private static bool Repairable(Client client, ulong itemEntityId, out Item item, out int maxHitPoints, out int cost)
+        {
+            item = EntityManager.Instance.GetItem(itemEntityId);
+            maxHitPoints = 0;
+            cost = 0;
+
+            var inventory = client.Player.Inventory;
+
+            if (item == null
+                || !(inventory.PersonalInventory.Contains(itemEntityId)
+                     || inventory.EquippedInventory.Contains(itemEntityId)
+                     || inventory.WeaponDrawer.Contains(itemEntityId)))
+            {
+                Logger.WriteLog(LogType.Security, $"AccountId = {client.AccountEntry.Id} asked to repair {itemEntityId}, which is not in their inventory.");
+                return false;
+            }
+
+            var classInfo = EntityClassManager.Instance.GetClassInfo(item.ItemTemplate.Class);
+
+            if (classInfo?.ItemClassInfo == null)
+                return false;
+
+            maxHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
+
+            // Nothing to repair - and with CurrentHitPoints above the maximum the old
+            // arithmetic produced a negative cost, which LossCredits paid to the player.
+            if (item.CurrentHitPoints >= maxHitPoints)
+                return false;
+
+            cost = (int)Math.Round((double)(maxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice / 100);
+
+            return true;
+        }
+
+        /// <summary>Repairs one item to full and pays for it.</summary>
+        private RepairResult RepairOne(Client client, ulong itemEntityId)
+        {
+            if (!Repairable(client, itemEntityId, out var item, out var maxHitPoints, out var cost))
+                return RepairResult.Skipped;
+
+            if (cost > client.Player.Credits[CurencyType.Credits])
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInsufficientFunds, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return RepairResult.Unaffordable;
+            }
+
+            item.CurrentHitPoints = maxHitPoints;
+            ManifestationManager.Instance.LossCredits(client, -cost);
+            ItemManager.Instance.SendItemDataToClient(client, item, true);
+
+            // The condition change itself. SendItemDataToClient carries the new hit points in
+            // ItemInfo, but only ItemStatus makes the client act on them: it is what refreshes
+            // the vendor's repair list and clears a weapon's broken icon in the drawer.
+            ItemManager.Instance.SendItemStatus(client, item, maxHitPoints);
+
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+            unitOfWork.Items.UpdateCurrentHitPoints(item);
+
+            return RepairResult.Repaired;
         }
 
         public void RequestVendorSale(Client client, RequestVendorSalePacket packet)

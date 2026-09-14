@@ -303,6 +303,9 @@ namespace Rasa.Managers
                         case 1:
                             DynamicObjectManager.Instance.FootlockerRecovery(mapChannel, action);
                             break;
+                        case KraftwerksManager.UseObjectArgId:
+                            KraftwerksManager.Instance.UseRecovery(mapChannel, action);
+                            break;
                         case 6:
                             DynamicObjectManager.Instance.LogosRecovery(mapChannel, action);
                             break;

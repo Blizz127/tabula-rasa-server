@@ -26,6 +26,7 @@ namespace Rasa.Repositories.UnitOfWork
 
         public IMapInfoRepository MapInfos => _parent.MapInfos;
         public IMapLinkRepository MapLinks => _parent.MapLinks;
+        public IKraftwerksRepository Kraftwerks => _parent.Kraftwerks;
 
         public IMissionContentRepository MissionContent => _parent.MissionContent;
 

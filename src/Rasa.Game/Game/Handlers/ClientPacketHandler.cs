@@ -5,6 +5,7 @@ namespace Rasa.Game.Handlers
     using Packets;
     using Packets.MapChannel.Client;
     using Packets.Clan.Client;
+    using Packets.Crafting.Client;
     using Packets.Communicator.Both;
     using Packets.Communicator.Client;
     using Packets.Inventory.Client;
@@ -335,6 +336,56 @@ namespace Rasa.Game.Handlers
             DynamicObjectManager.Instance.RequestUseObjectPacket(Client, packet);
         }
 
+        // Crafting, all made at a Kraftwerks station; see KraftwerksManager.
+
+        [PacketHandler(GameOpcode.RequestCraftItemNew)]
+        private void RequestCraftItemNew(RequestCraftItemNewPacket packet)
+        {
+            KraftwerksManager.Instance.RequestCraftItemNew(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestCraftItem)]
+        private void RequestCraftItem(RequestCraftItemPacket packet)
+        {
+            KraftwerksManager.Instance.RequestCraftItem(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestSalvageItem)]
+        private void RequestSalvageItem(RequestSalvageItemPacket packet)
+        {
+            KraftwerksManager.Instance.RequestSalvageItem(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestExtractModule)]
+        private void RequestExtractModule(RequestExtractModulePacket packet)
+        {
+            KraftwerksManager.Instance.RequestExtractModule(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestIntegrateItem)]
+        private void RequestIntegrateItem(RequestIntegrateItemPacket packet)
+        {
+            KraftwerksManager.Instance.RequestIntegrateItem(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestUpgradeItem)]
+        private void RequestUpgradeItem(RequestUpgradeItemPacket packet)
+        {
+            KraftwerksManager.Instance.RequestUpgradeItem(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestRetrieveFinishedCraftItem)]
+        private void RequestRetrieveFinishedCraftItem(RequestRetrieveFinishedCraftItemPacket packet)
+        {
+            KraftwerksManager.Instance.RequestRetrieveFinishedCraftItem(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestRetrieveAllFinishedItems)]
+        private void RequestRetrieveAllFinishedItems(RequestRetrieveAllFinishedItemsPacket packet)
+        {
+            KraftwerksManager.Instance.RequestRetrieveAllFinishedItems(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.RequestVendorBuyback)]
         private void RequestVendorBuyback(RequestVendorBuybackPacket packet)
         {
@@ -345,6 +396,12 @@ namespace Rasa.Game.Handlers
         private void RequestVendorPurchase(RequestVendorPurchasePacket packet)
         {
             NpcManager.Instance.RequestVendorPurchase(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.RequestRepair)]
+        private void RequestRepair(RequestRepairPacket packet)
+        {
+            NpcManager.Instance.RequestRepair(Client, packet);
         }
 
         [PacketHandler(GameOpcode.RequestVendorRepair)]

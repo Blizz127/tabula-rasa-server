@@ -33,6 +33,9 @@ namespace Rasa.Structures
         public readonly List<ActionData> PerformRecovery = new List<ActionData>();
         // cell
         public MapCellInfo MapCellInfo = new MapCellInfo();
+
+        /// <summary>The map's navmesh, or null when no navmesh/&lt;map&gt;.nav was built for it. See NavMeshManager.</summary>
+        public Navigation.NavMeshQuery NavMesh { get; set; }
         // effect
         public int CurrentEffectId { get; set; } // increases with every spawned game effect
 
@@ -50,6 +53,9 @@ namespace Rasa.Structures
 
         // Dictionary<dynamicObjectEntityId, content placement id> for reconstructed-content usables.
         public Dictionary<ulong, uint> ContentUsables = new Dictionary<ulong, uint>();
+
+        /// <summary>Crafting stations by kraftwerks row id; see KraftwerksManager.</summary>
+        public Dictionary<uint, DynamicObject> Kraftwerks = new Dictionary<uint, DynamicObject>();
 
         // Dictionary<uniqueLootDispenserId, dataAboutLootDispenser> LootDispensers
         public Dictionary<ulong, LootDispenser> LootDispensers = new Dictionary<ulong, LootDispenser>();
