@@ -47,6 +47,11 @@ namespace Rasa.Managers
         private static MissionManager _instance;
         private static readonly object InstanceLock = new object();
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
+
+        // The content runtime stages counter writes through the mission manager's factory
+        // so tests can substitute it (the factory is also the transaction owner for the
+        // mission-log writes it accompanies).
+        public IGameUnitOfWorkFactory GameUnitOfWorkFactoryForContent => _gameUnitOfWorkFactory;
         private readonly Func<uint> _now;
 
         public readonly Dictionary<uint, Mission> LoadedMissions = new Dictionary<uint, Mission>();
@@ -303,6 +308,14 @@ namespace Rasa.Managers
                     Logger.WriteLog(LogType.Error, $"Character {characterId}: objective row {objective.MissionId}/{objective.ObjectiveId} has no mission row");
             }
 
+            foreach (var counter in repository.GetCounters(characterId))
+            {
+                if (missions.TryGetValue(counter.MissionId, out var mission))
+                    mission.Counters[(counter.ObjectiveId, counter.CounterId)] = counter.Value;
+                else
+                    Logger.WriteLog(LogType.Error, $"Character {characterId}: counter row {counter.MissionId}/{counter.ObjectiveId}/{counter.CounterId} has no mission row");
+            }
+
             return missions;
         }
 
@@ -410,6 +423,34 @@ namespace Rasa.Managers
             }
 
             AcceptMission(client, definition);
+        }
+
+        /// <summary>
+        /// A creature died. Completes the kill-bound objectives whose creature_id matches
+        /// (killer-only credit in shared contexts; the content runtime handles per-character
+        /// placement credit and counters).
+        /// </summary>
+        public void OnCreatureKilled(Client killer, Creature creature)
+        {
+            if (!IsInWorld(killer))
+                return;
+
+            foreach (var definition in LoadedMissions.Values)
+            {
+                foreach (var binding in definition.Bindings)
+                {
+                    if ((ObjectiveBindingKind)binding.Kind != ObjectiveBindingKind.Kill || binding.CreatureId != creature.DbId)
+                        continue;
+
+                    if (!killer.Player.Missions.TryGetValue(definition.MissionId, out var mission) ||
+                        mission.State != MissionState.Active ||
+                        !mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) ||
+                        status != MissionObjectiveState.Incomplete)
+                        continue;
+
+                    Content.OnKillBinding(killer, definition.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Kill);
+                }
+            }
         }
 
         /// <summary>
@@ -800,7 +841,8 @@ namespace Rasa.Managers
 
                 if (progress == null)
                 {
-                    if (definition.MissionGiver == creature.DbId && definition.IsDispensable)
+                    if (definition.MissionGiver == creature.DbId && definition.IsDispensable &&
+                        PrerequisitesSatisfied(client.Player, definition))
                         dispensable.Add(definition.MissionId, definition);
 
                     continue;
@@ -844,7 +886,8 @@ namespace Rasa.Managers
 
                 if (progress == null)
                 {
-                    if (definition.MissionGiver == creature.DbId && definition.IsDispensable)
+                    if (definition.MissionGiver == creature.DbId && definition.IsDispensable &&
+                        PrerequisitesSatisfied(client.Player, definition))
                         available.Add(definition.MissionId);
 
                     continue;
