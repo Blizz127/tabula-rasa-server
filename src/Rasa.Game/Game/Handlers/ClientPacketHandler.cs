@@ -4,6 +4,7 @@ namespace Rasa.Game.Handlers
     using Managers;
     using Packets;
     using Packets.MapChannel.Client;
+    using Packets.Manifestation.Client;
     using Packets.Clan.Client;
     using Packets.Crafting.Client;
     using Packets.Communicator.Both;
@@ -161,6 +162,12 @@ namespace Rasa.Game.Handlers
             ClanManager.Instance.GetPvPClanMembershipStatus(Client);    // packet have 0 argumenst, no need to pass it
         }
         
+        [PacketHandler(GameOpcode.SelectNewCharacterClass)]
+        private void SelectNewCharacterClass(SelectNewCharacterClassPacket packet)
+        {
+            ManifestationManager.Instance.SelectNewCharacterClass(Client, packet.ClassId);
+        }
+
         [PacketHandler(GameOpcode.LevelSkills)]
         private void LevelSkills(LevelSkillsPacket packet)
         {

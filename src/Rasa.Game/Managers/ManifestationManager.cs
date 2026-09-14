@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -370,6 +371,8 @@ namespace Rasa.Managers
                 GetSkillPointsAvailable(player)
             ));
 
+            SendAdvancementState(client);
+
             client.CallMethod(player.EntityId, new SkillsPacket(player.Skills));
 
             client.CallMethod(player.EntityId, new AbilitiesPacket(player.Skills));
@@ -541,13 +544,35 @@ namespace Rasa.Managers
 
             client.CallMethod(client.Player.EntityId, new ExperienceChangedPacket(xpInfo));
 
-            // check for level up
+            ApplyLevelUps(client, experience);
+
+            // Once, after the loop: enough experience for two levels at once is one change as
+            // far as the squad window is concerned.
+            if (client.Player.Level != levelBefore)
+                PartyManager.Instance.MemberInfoChanged(client);
+        }
+
+        /// <summary>
+        /// Levels the player up while the experience allows. A class stops at its tier gate (Recruit at 4): the
+        /// experience is still credited, and the first time it reaches the tier level's threshold the player hears
+        /// PM 663, the tier selection becomes pending and a clone credit is granted (class-trainer-spec R1.2-R1.5,
+        /// R3.6). <paramref name="gained"/> tells a new arrival at the gate from experience gained while waiting.
+        /// </summary>
+        private void ApplyLevelUps(Client client, uint gained)
+        {
             while (client.Player.Level < MaxPlayerLevel)
             {
                 var xpForLevelUp = GetLevelNeededExperience(client.Player.Level);
 
                 if (xpForLevelUp == -1)
                     break;
+
+                if (client.Player.Experience >= xpForLevelUp && ClassAdvancement.IsGatedLevel(client.Player.Class, client.Player.Level + 1))
+                {
+                    if (client.Player.Experience - gained < xpForLevelUp)
+                        ReachTierGate(client);
+                    break;
+                }
 
                 if (client.Player.Experience >= xpForLevelUp)
                 {
@@ -584,12 +609,71 @@ namespace Rasa.Managers
                 else
                     break;
             }
-
-            // Once, after the loop: enough experience for two levels at once is one change as
-            // far as the squad window is concerned.
-            if (client.Player.Level != levelBefore)
-                PartyManager.Instance.MemberInfoChanged(client);
         }
+
+        private void ReachTierGate(Client client)
+        {
+            var player = client.Player;
+
+            // "You will not advance in level until you visit a trainer..." directly after the level-up line (B2).
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmCharacterClassesAvailable, new Dictionary<string, string>(), MsgFilterId.LeveledUp));
+            client.CallMethod(player.EntityId, new AvailableCharacterClassesPacket(ClassAdvancement.ChildrenOf(player.Class)));
+
+            // The trainer window already showed one credit on the Recruit before training (B2).
+            player.CloneCredits++;
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.CloneCredits);
+            client.CallMethod(player.EntityId, new CloneCreditsPacket(player.CloneCredits));
+        }
+
+        /// <summary>The tier state and clone credits a client needs after login (the first clone credit value is silent).</summary>
+        public void SendAdvancementState(Client client)
+        {
+            var player = client.Player;
+            var pending = ClassAdvancement.IsAtGate(player.Class, player.Level, player.Experience)
+                ? ClassAdvancement.ChildrenOf(player.Class)
+                : new List<uint>();
+
+            client.CallMethod(player.EntityId, new CloneCreditsPacket(player.CloneCredits));
+            client.CallMethod(player.EntityId, new AvailableCharacterClassesPacket(pending, silent: true));
+        }
+
+        /// <summary>
+        /// SelectNewCharacterClass(classId) from the Tier Advancement window. The request names no trainer, so the
+        /// server checks the living player is at the gate, within the window's range of a class trainer, and picks
+        /// an immediate child of the current class. The class changes and the withheld level-ups apply (R3.1-R3.3).
+        /// Skill ranks are not granted; the tier-4 signature grant is not implemented (its accounting is open).
+        /// </summary>
+        public void SelectNewCharacterClass(Client client, uint classId)
+        {
+            var player = client.Player;
+
+            if (!MissionManager.IsInWorld(client) || player.State == CharacterState.Dead || player.Attributes[Attributes.Health].Current <= 0)
+                return;
+
+            if (ClassAdvancement.ParentOf(classId) != player.Class || classId == 0 ||
+                !ClassAdvancement.IsAtGate(player.Class, player.Level, player.Experience) || !IsNearClassTrainer(player))
+            {
+                Logger.WriteLog(LogType.Debug, $"SelectNewCharacterClass: class {classId} refused for character {player.Id} (class {player.Class}, level {player.Level})");
+                return;
+            }
+
+            player.Class = classId;
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Class, player.Class);
+            client.CallMethod(player.EntityId, new CharacterClassPacket(player.Class));
+            client.CallMethod(player.EntityId, new AvailableCharacterClassesPacket(new List<uint>()));
+
+            ApplyLevelUps(client, 0);
+
+            // Class (and usually level) are fields of the party member tuple.
+            PartyManager.Instance.MemberInfoChanged(client);
+        }
+
+        private static bool IsNearClassTrainer(Manifestation player) =>
+            EntityManager.Instance.Creatures.Values.Any(creature =>
+                creature.Npc != null && ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId) &&
+                creature.State != CharacterState.Dead && creature.MapContextId == player.MapContextId &&
+                (player.MapChannel == null || MapChannelManager.IsOnChannel(creature, player.MapChannel)) &&
+                System.Numerics.Vector3.Distance(creature.Position, player.Position) <= ClassAdvancement.TrainerRange);
 
         public void DebugChgPlayerClass(Client client, uint newClassId)
         {

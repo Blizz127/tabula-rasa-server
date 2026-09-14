@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -117,6 +118,14 @@ namespace Rasa.Managers
 
             if (creature.Npc.NpcIsClanMaster)
                 convoDataDict.Add(ConversationType.Clan, true);
+
+            // Class trainers: the class list is always viewable, Train only at the tier gate (npc.Recv_Converse).
+            if (ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId))
+            {
+                var player = client.Player;
+                var canTrain = ClassAdvancement.IsAtGate(player.Class, player.Level, player.Experience) && ClassAdvancement.ChildrenOf(player.Class).Count > 0;
+                convoDataDict.Add(ConversationType.Training, new TrainingConverse(canTrain, ClassAdvancement.DialogFor(player.Class, player.Level, player.Experience)));
+            }
 
             /*
             // Greeting = 0
@@ -306,6 +315,13 @@ namespace Rasa.Managers
                     }
                 }
             }*/
+
+            // A class trainer shows the trainer overhead effect (overheadwindow CONVO_STATUS_TRAIN).
+            if (ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId) && statusSet == false)
+            {
+                client.CallMethod(creature.EntityId, new NPCConversationStatusPacket(ConversationStatus.Train, new List<uint>()));
+                statusSet = true;
+            }
 
             // is NPC vendor?
             if (vendor != null && statusSet == false)

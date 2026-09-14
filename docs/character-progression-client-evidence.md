@@ -237,3 +237,31 @@ exact final grant amounts, signature accounting, complete clone copying, and
 the retained message-664 restriction. Original final server scripts, a captured
 advancement/clone transaction, or independent contemporary direct evidence is
 still needed for those rules.
+
+## Implementation, 2026-09-14
+
+The class trainer path is implemented from the dated specification in
+`research/20260914-class-trainer/` (`class-trainer-spec.json`, `protocol-shapes.json`, 119 sources).
+Final-week footage (8VXeKzGUv0c B2) settled the gate: the Recruit levels to 4, message 663 follows at
+once, and the experience bar stays full, so a class is held at the level before its tier level with its
+experience still credited.
+
+- `ClassAdvancement` holds the recovered class tree (gameuiutil `g_ClassTree`), the tier gates 5/15/30
+  (text 5695), the trainer range 20 (tierselect `IsInMissionShareRange`), and the generic trainer dialogs
+  337/339/340 (npctrainerdialoglanguage).
+- `ManifestationManager.ApplyLevelUps` stops at the gate. The first time the experience reaches the tier
+  threshold it sends PM 663 right after the level-up line, then `AvailableCharacterClasses` (the pending
+  "Tier Selection Available" indicator), and grants one clone credit (`CloneCredits`; the trainer window
+  showed one credit before training). Login sends `CloneCredits` and the silent `TierAdvancementInfo`.
+- Class trainers (npc package 2588, Training Officer Kincaid; single trainers since D12, live 2008-09-18)
+  show `CONVO_STATUS_TRAIN` and add `CONVO_TYPE_TRAINING (bCanTrain, dialogId)` to Converse. `bCanTrain` is
+  true only at the gate.
+- `SelectNewCharacterClass(classId)` requires a living player at the gate, within 20 m of a trainer in the
+  same channel, choosing an immediate child of the current class. It sends `CharacterClass`, an empty
+  `AvailableCharacterClasses`, and then the withheld level-ups (LevelUp, PM 45 with the existing point
+  formula, which already adds the tier skill points).
+- Not implemented (open in the spec): the free tier-4 signature grant and its point accounting, cloning
+  itself, the 2010/2011 gear missions sent after training, trainers at other hubs, repeat behaviour of PM 663,
+  and whether banked experience past the gate can release more than one level.
+- Tests: `ClassTrainerTests` (gate and one-time announcement, trainer conversation and status, training
+  validation and level release). Full suite 849/849 under the .NET 5 SDK image.
