@@ -402,13 +402,33 @@ namespace Rasa.Managers
 
             var player = client.Player;
 
-            if (!definition.IsDispensable || definition.MissionGiver != creature.DbId || !IsInConversationRange(player, creature))
+            if (!definition.IsDispensable || definition.MissionGiver != creature.DbId || !IsInConversationRange(player, creature) ||
+                !PrerequisitesSatisfied(player, definition))
             {
-                Logger.WriteLog(LogType.Debug, $"AssignNpcMission: mission {missionId} refused: dispensable={definition.IsDispensable} giverMatch={definition.MissionGiver == creature.DbId} inRange={IsInConversationRange(player, creature)}");
+                Logger.WriteLog(LogType.Debug, $"AssignNpcMission: mission {missionId} refused: dispensable={definition.IsDispensable} giverMatch={definition.MissionGiver == creature.DbId} inRange={IsInConversationRange(player, creature)} prerequisites={PrerequisitesSatisfied(player, definition)}");
                 return;
             }
 
             AcceptMission(client, definition);
+        }
+
+        /// <summary>
+        /// True when this character's mission log satisfies the definition's prerequisite
+        /// or-groups: at least one group whose required missions are all in the required state.
+        /// A definition without prerequisites is always satisfied.
+        /// </summary>
+        public bool PrerequisitesSatisfied(Manifestation player, Mission definition)
+        {
+            if (definition.Prerequisites.Count == 0)
+                return true;
+
+            foreach (var group in definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup))
+                if (group.All(prerequisite =>
+                        player.Missions.TryGetValue(prerequisite.RequiredMissionId, out var progress) &&
+                        (uint)progress.State == prerequisite.RequiredState))
+                    return true;
+
+            return false;
         }
 
         /// <summary>

@@ -1,238 +1,388 @@
 {
-  "schema": "rasa-reconstruction-footage-events/1",
-  "note": "Only transcript events cited by the manifest, written by the E1 extract script in the research tree (build plan section 4.1). verification.json corrections are applied: text and description carry the corrected values, corrected_text is kept when the verifier supplied one, and refuted events are listed in dropped instead of events. Transcript entry: {segment, video_id, transcript_sha256, verification_sha256}. Event: {segment, event_id, t, category, text, description, status: confirmed|corrected, corrected_text?, transcript_sha256}. Dropped entry: {segment, event_id, status: refuted, transcript_sha256}. t is decoded video seconds of the transcript's video.",
-  "transcripts": [
-    {
-      "segment": "A1",
-      "video_id": "7Lrst9SG3pk",
-      "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a",
-      "verification_sha256": "e9276e9c816b3d15727a95687b878a26ae08e5093560aa18b5b8a32faa70f22d"
-    },
-    {
-      "segment": "A2",
-      "video_id": "7Lrst9SG3pk",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed",
-      "verification_sha256": "5e2224c14ead67ca2714eade6a01d9233e4ec21f0035e66445334da426a3141a"
-    },
-    {
-      "segment": "A3",
-      "video_id": "7Lrst9SG3pk",
-      "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7",
-      "verification_sha256": "6ddbb0ff89f88a7f9ce343476b3255151a07333e319c0e6b78b4bc9d6fb31767"
-    }
-  ],
-  "events": [
-    {
-      "segment": "A1",
-      "event_id": "A1-E036",
-      "t": 172.267,
-      "category": "conversation_window",
-      "text": "All new characters you create from this point forward will share the same last name. / Please verify that this is the last name you wish to use for all characters. | Ok | Cancel",
-      "description": "Last-name confirmation modal appears over the creation panel at 172.267 (right after Create is lit at 172.2): two lines of text, buttons 'Ok' and 'Cancel'. The editor zooms in ~1.5x from 173.667. Shown until 180.933; Ok is highlighted at 180.867 and the next status dialog appears at 181.0.",
-      "status": "corrected",
-      "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a",
-      "corrected_text": "All new characters you create from this point forward will share the same last name. / Please verify that this is the last name you wish to use for all characters. | Ok | Cancel"
-    },
-    {
-      "segment": "A1",
-      "event_id": "A1-E041",
-      "t": 188.767,
-      "category": "system_message",
-      "text": "Sending character selection request.",
-      "description": "After Enter Battle: character-select UI and model disappear and a status dialog appears over the empty base scene. No skip-bootcamp prompt (or any other prompt) is shown between the character-select screen at 188.7 and this dialog, and no cut is visible there (15 fps burst checked).",
-      "status": "confirmed",
-      "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-007",
-      "t": 224.8,
-      "category": "location",
-      "text": null,
-      "description": "First in-world frame: a hard switch from the loading screen (224.733) with no fade, tunnel or white-out frame between. The camera looks up at a huge octagonal ring/halo overhead, rimmed with evenly spaced blue-white lights. Behind and below the ring is a bright white glowing haze (a column of light or brilliant fog). Dark rock is at left and dark obelisk/pylon silhouettes stand at lower right. No player model is visible until 226.4. Scene-change frame s00017 matches.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-011",
-      "t": 224.8,
-      "category": "player_state",
-      "text": "1 | Master Assault | ability page 1 | Pistol | 20/1000",
-      "description": "Initial HUD. Player panel: level box \"1\" and character name \"Master Assault\", red health bar, blue power bar. Ability tray page \"1\": slot 1 has a white lightning-bolt/figure icon, slot 2 a dark red icon, slots 3-5 empty. Weapon tray: slot 1 holds a pistol icon labelled \"Pistol\" with ammo \"20/1000\"; slots 2-5 empty. The slot 1 icon looks the same before and after the Eloh grant (see A2-029).",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-013",
-      "t": 225.533,
-      "category": "mission_window",
-      "text": "Headquarters / Mission Available / Briefing / Initiation / Destiny. Evolution. Fate. You are a new breed - the future of the Human race. They call you 'receptive', but across the galaxies, we call you and other species our brothers. We Eloh speak with one voice, and you are one of the chosen few that can hear us. Our research, our history, our generations of struggles have granted you power beyond imagination, and in return, we need your help to save the universe. // Walk the path, brother, and learn. / Objectives / . Approach the Eloh Hologram / Rewards / You will receive: / [trident/psi-like icon] 100 / [Accept Mission] [Decline] | UI MODE",
-      "description": "Mission offer for 1990 opens by itself 0.73 s after the first world frame, with no player input visible and no chat line accompanying it. \"UI MODE\" appears at top centre at the same time. Header: silhouette portrait (no face) plus a small radio/handset icon, title \"Headquarters\", subtitle \"Mission Available\". The window stays open, not accepted, through 238.133; the acceptance is lost in the cut (see cuts). Scene-change frame s00018 matches.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-014",
-      "t": 226.4,
-      "category": "player_state",
-      "text": null,
-      "description": "The player materialises under the ring: a faint blue glow at the spawn spot at 226.267, a translucent glowing blue figure from 226.400, still blue at 227.667, solid by 228.200. Recruit in white/light-grey short-sleeved shirt and trousers with black boots and a belt, back to camera, with a pistol holstered on the right hip (not drawn). Stands idle from about 229 to 238.133 while blue electrical arcs play in the ring.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-016",
-      "t": 238.2,
-      "category": "chat_line",
-      "text": "...wanna keep playing it, but its going down apparently =/ / [1. General] Cebals: well his computer got stolen and he says his mom did it but she says otherwise / [1. General] Leanders: yeah i wont ruin my life to get to lvl 1million on meh mage or warrior and get a uber noober sword / Mission Accepted: Initiation / [1. General] Silverfangs: found BECAUSE logo / [1. General] Cebals: lol / [1. General] Cebals: logos hunting is pretty fun really / [1. General] Cebals: idk y",
-      "description": "Mission acceptance chat line first visible after the 238.2 cut (at 238.133 chat held only arrival lines). Visible above it: the truncated tail of one message (its start scrolled off) and two complete general-chat messages; more new lines may be scrolled out of view. Below it: 4 more general lines. No banner, tutorial or objective line accompanies it.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-017",
-      "t": 238.2,
-      "category": "tracker",
-      "text": "Initiation [yellow square] / Approach the Eloh Hologram .",
-      "description": "Tracker now lists mission 1990 with a yellow square marker and one objective line with a small square.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-018",
-      "t": 239.2,
-      "category": "tutorial_window",
-      "text": "? TUTORIAL / Radial Menu / You can access all of the in-game menus using the Radial Menu by pressing and holding the [Ctrl] key, which also frees up the mouse cursor for UI interaction such as closing windows. / [ ] Turn Off Tutorials / [Read More] [Close]",
-      "description": "Tutorial pop-up at top centre while the player runs along the causeway; no chat line accompanies it. It stays open until closed at 251.067. Neither the Updates nor the Pending panel shows an entry when it opens.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-024",
-      "t": 252.733,
-      "category": "conversation_window",
-      "text": "An Ancient Eloh / Your kind are receptive to the power of Logos. Seek out the symbols, found on all the planets we have visited. Use these symbols to gain their power and add them to your personal library. Some symbols will unlock great skills you may master. // We grant you the first of these, and with it the power of Lightning. // Continue the path, friend. / [Goodbye]",
-      "description": "Conversation window opens on the left while the player is still running along the causeway, well before reaching the hologram (seen in the distance about 260.6). \"UI MODE\" is on. Header: black silhouette portrait plus a speech-bubble icon, title \"An Ancient Eloh\"; single button \"Goodbye\". It opens in the same frame as the white flash of the objective-completed banner (A2-025) and the ability slot-1 highlight (A2-026). No chat line appears for it and there is no nameplate/target on the hologram. It stays open (not closed by the player) until its text is replaced (seen after the 271.6 cut). Scene-change frame s00022 matches.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-025",
-      "t": 252.867,
-      "category": "system_message",
-      "text": "Objective Completed / Initiation / Approach the Eloh Hologram",
-      "description": "Centre-top banner on a yellow-green bar (white flash 252.733-252.800), legible from 252.867. The \"Objective Completed\" header line fades at about 255.47; the bar with mission and objective names is last visible at 255.667 and gone at 255.733. Tracker still shows Initiation / Approach the Eloh Hologram. No matching chat line.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-026",
-      "t": 252.733,
-      "category": "player_state",
-      "text": null,
-      "description": "Ability tray slot 1 (the lightning icon) flashes white at 252.733, then shows a bright blue highlight frame and fill until about 262.4. It returns to normal by 262.933 with the icon unchanged. Slot 2 is dimmed during the highlight. This coincides with the Eloh text \"We grant you ... the power of Lightning\". No Logos/Lightning chat message, Logos pop-up or ability window appears.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-028",
-      "t": 255.933,
-      "category": "system_message",
-      "text": "New Objective / Initiation / Approach the Eloh Hologram",
-      "description": "Banner replaces the previous one (flash at 255.867): \"New Objective / Initiation / Approach the Eloh Hologram\" legible from 255.933. The \"New Objective\" header fades at about 258.6; the bar with mission and objective names stays readable to about 260.3 and is gone at 260.667. Tracker text unchanged. No chat line.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-035",
-      "t": 271.6,
-      "category": "system_message",
-      "text": "Objective Completed / Initiation / Approach the Eloh Hologram",
-      "description": "Banner visible in the first frame after the 271.6 cut (true start unknown): \"Objective Completed / Initiation / Approach the Eloh Hologram\". Header line fades at about 274.2; mission/objective bar stays until about 275.33, gone at 275.400.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-036",
-      "t": 271.6,
-      "category": "conversation_window",
-      "text": "An Ancient Eloh / The Bane were once our siblings, but now are our enemy - and yours. They are the ones who destroyed your world as they have destroyed countless others. They seek the genocide of your entire race. They are the threat you must annihilate. // The extermination of the Bane is your only goal now, friend. / [Goodbye]",
-      "description": "Same \"An Ancient Eloh\" window (silhouette portrait, Goodbye button), now showing the second greeting text in the first frame after the cut; the moment of change is inside the cut. It stays open until McAllister's window replaces it at 285.333.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-040",
-      "t": 274.467,
-      "category": "npc",
-      "text": null,
-      "description": "A mission NPC is visible on the grass in front of the platform base from 274.467, under a yellow outlined overhead icon shaped like a walkie-talkie/handset with an antenna. Other dark-clad figures stand around the platform edge. Close-ups: dark olive/brown fatigues, short dark hair, no hat, no armour plates visible; dialog portrait shows a man with short dark hair and a stern face. The nameplate naming him Major McAllister appears from 279.333.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-043",
-      "t": 279.533,
-      "category": "npc",
-      "text": "10 Major McAllister | Press [Mouse Button 2] to talk",
-      "description": "Floating nameplate beside the NPC from 279.333 (0.2 s before the Mission Indicator tutorial): level \"10\", name, swirl faction disc, red health bar with a small counter row beneath. From 282.400 the use prompt appears below the NPC. No bark or speech bubble from him in the segment.",
-      "status": "corrected",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-044",
-      "t": 285.333,
-      "category": "mission_window",
-      "text": "Major McAllister / Mission Completion / Initiation / It's about time! You receptives always get bogged down with your Eloh visions and crap, but we've got a war to fight here, soldier! Follow me over to the temporary camp and I'll brief you on all the details of our situation here. // Let's move! / Rewards / You will receive: / [trident/psi-like icon] 100 / [Complete Mission] [Cancel]",
-      "description": "Player talks to McAllister (use prompt showing). His Mission Completion window replaces the Eloh window in the same left slot. Header: portrait of a man with short dark hair, a small handset icon, title \"Major McAllister\", subtitle \"Mission Completion\". Mission name in yellow-green.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-047",
-      "t": 289.533,
-      "category": "chat_line",
-      "text": "You gained 1250 experience points. | +1250xp",
-      "description": "Yellow system chat line, with a floating \"+1250xp\" text over the NPC area in the same frame. The player level box still reads 1 afterwards (checked to 300.87).",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A2",
-      "event_id": "A2-048",
-      "t": 289.8,
-      "category": "chat_line",
-      "text": "Mission Completed: Initiation",
-      "description": "Yellow system chat line directly after the XP line.",
-      "status": "confirmed",
-      "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
-    },
-    {
-      "segment": "A3",
-      "event_id": "A3-019",
-      "t": 304.733,
-      "category": "inventory_or_character_window",
-      "text": "BACKPACK | 0/50 | Equipment | Credit | 100",
-      "description": "BACKPACK window: counter '0/50', 'Equipment' tab, empty grid, and 'Credit' with '100'. The credit glyph is a blue trident/psi-shaped symbol, not a round icon. It is the same glyph as the 1990 reward '100' (288.467) and the 1992 offer '200' (295.0).",
-      "status": "corrected",
-      "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
-    }
-  ],
-  "dropped": []
+ "schema": "rasa-reconstruction-footage-events/1",
+ "note": "Only transcript events cited by the manifest, written by the E1 extract script in the research tree (build plan section 4.1). verification.json corrections are applied: text and description carry the corrected values, corrected_text is kept when the verifier supplied one, and refuted events are listed in dropped instead of events. Transcript entry: {segment, video_id, transcript_sha256, verification_sha256}. Event: {segment, event_id, t, category, text, description, status: confirmed|corrected, corrected_text?, transcript_sha256}. Dropped entry: {segment, event_id, status: refuted, transcript_sha256}. t is decoded video seconds of the transcript's video.",
+ "transcripts": [
+  {
+   "segment": "A1",
+   "video_id": "7Lrst9SG3pk",
+   "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a",
+   "verification_sha256": "e9276e9c816b3d15727a95687b878a26ae08e5093560aa18b5b8a32faa70f22d"
+  },
+  {
+   "segment": "A2",
+   "video_id": "7Lrst9SG3pk",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed",
+   "verification_sha256": "5e2224c14ead67ca2714eade6a01d9233e4ec21f0035e66445334da426a3141a"
+  },
+  {
+   "segment": "A3",
+   "video_id": "7Lrst9SG3pk",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7",
+   "verification_sha256": "6ddbb0ff89f88a7f9ce343476b3255151a07333e319c0e6b78b4bc9d6fb31767"
+  }
+ ],
+ "events": [
+  {
+   "segment": "A1",
+   "event_id": "A1-E036",
+   "t": 172.267,
+   "category": "conversation_window",
+   "text": "All new characters you create from this point forward will share the same last name. / Please verify that this is the last name you wish to use for all characters. | Ok | Cancel",
+   "description": "Last-name confirmation modal appears over the creation panel at 172.267 (right after Create is lit at 172.2): two lines of text, buttons 'Ok' and 'Cancel'. The editor zooms in ~1.5x from 173.667. Shown until 180.933; Ok is highlighted at 180.867 and the next status dialog appears at 181.0.",
+   "status": "corrected",
+   "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a",
+   "corrected_text": "All new characters you create from this point forward will share the same last name. / Please verify that this is the last name you wish to use for all characters. | Ok | Cancel"
+  },
+  {
+   "segment": "A1",
+   "event_id": "A1-E041",
+   "t": 188.767,
+   "category": "system_message",
+   "text": "Sending character selection request.",
+   "description": "After Enter Battle: character-select UI and model disappear and a status dialog appears over the empty base scene. No skip-bootcamp prompt (or any other prompt) is shown between the character-select screen at 188.7 and this dialog, and no cut is visible there (15 fps burst checked).",
+   "status": "confirmed",
+   "transcript_sha256": "14a6da36615e979bad9997a4f990b92667b602a243783a176f441dfa5f1a5d2a"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-007",
+   "t": 224.8,
+   "category": "location",
+   "text": null,
+   "description": "First in-world frame: a hard switch from the loading screen (224.733) with no fade, tunnel or white-out frame between. The camera looks up at a huge octagonal ring/halo overhead, rimmed with evenly spaced blue-white lights. Behind and below the ring is a bright white glowing haze (a column of light or brilliant fog). Dark rock is at left and dark obelisk/pylon silhouettes stand at lower right. No player model is visible until 226.4. Scene-change frame s00017 matches.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-011",
+   "t": 224.8,
+   "category": "player_state",
+   "text": "1 | Master Assault | ability page 1 | Pistol | 20/1000",
+   "description": "Initial HUD. Player panel: level box \"1\" and character name \"Master Assault\", red health bar, blue power bar. Ability tray page \"1\": slot 1 has a white lightning-bolt/figure icon, slot 2 a dark red icon, slots 3-5 empty. Weapon tray: slot 1 holds a pistol icon labelled \"Pistol\" with ammo \"20/1000\"; slots 2-5 empty. The slot 1 icon looks the same before and after the Eloh grant (see A2-029).",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-013",
+   "t": 225.533,
+   "category": "mission_window",
+   "text": "Headquarters / Mission Available / Briefing / Initiation / Destiny. Evolution. Fate. You are a new breed - the future of the Human race. They call you 'receptive', but across the galaxies, we call you and other species our brothers. We Eloh speak with one voice, and you are one of the chosen few that can hear us. Our research, our history, our generations of struggles have granted you power beyond imagination, and in return, we need your help to save the universe. // Walk the path, brother, and learn. / Objectives / . Approach the Eloh Hologram / Rewards / You will receive: / [trident/psi-like icon] 100 / [Accept Mission] [Decline] | UI MODE",
+   "description": "Mission offer for 1990 opens by itself 0.73 s after the first world frame, with no player input visible and no chat line accompanying it. \"UI MODE\" appears at top centre at the same time. Header: silhouette portrait (no face) plus a small radio/handset icon, title \"Headquarters\", subtitle \"Mission Available\". The window stays open, not accepted, through 238.133; the acceptance is lost in the cut (see cuts). Scene-change frame s00018 matches.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-014",
+   "t": 226.4,
+   "category": "player_state",
+   "text": null,
+   "description": "The player materialises under the ring: a faint blue glow at the spawn spot at 226.267, a translucent glowing blue figure from 226.400, still blue at 227.667, solid by 228.200. Recruit in white/light-grey short-sleeved shirt and trousers with black boots and a belt, back to camera, with a pistol holstered on the right hip (not drawn). Stands idle from about 229 to 238.133 while blue electrical arcs play in the ring.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-016",
+   "t": 238.2,
+   "category": "chat_line",
+   "text": "...wanna keep playing it, but its going down apparently =/ / [1. General] Cebals: well his computer got stolen and he says his mom did it but she says otherwise / [1. General] Leanders: yeah i wont ruin my life to get to lvl 1million on meh mage or warrior and get a uber noober sword / Mission Accepted: Initiation / [1. General] Silverfangs: found BECAUSE logo / [1. General] Cebals: lol / [1. General] Cebals: logos hunting is pretty fun really / [1. General] Cebals: idk y",
+   "description": "Mission acceptance chat line first visible after the 238.2 cut (at 238.133 chat held only arrival lines). Visible above it: the truncated tail of one message (its start scrolled off) and two complete general-chat messages; more new lines may be scrolled out of view. Below it: 4 more general lines. No banner, tutorial or objective line accompanies it.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-017",
+   "t": 238.2,
+   "category": "tracker",
+   "text": "Initiation [yellow square] / Approach the Eloh Hologram .",
+   "description": "Tracker now lists mission 1990 with a yellow square marker and one objective line with a small square.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-018",
+   "t": 239.2,
+   "category": "tutorial_window",
+   "text": "? TUTORIAL / Radial Menu / You can access all of the in-game menus using the Radial Menu by pressing and holding the [Ctrl] key, which also frees up the mouse cursor for UI interaction such as closing windows. / [ ] Turn Off Tutorials / [Read More] [Close]",
+   "description": "Tutorial pop-up at top centre while the player runs along the causeway; no chat line accompanies it. It stays open until closed at 251.067. Neither the Updates nor the Pending panel shows an entry when it opens.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-024",
+   "t": 252.733,
+   "category": "conversation_window",
+   "text": "An Ancient Eloh / Your kind are receptive to the power of Logos. Seek out the symbols, found on all the planets we have visited. Use these symbols to gain their power and add them to your personal library. Some symbols will unlock great skills you may master. // We grant you the first of these, and with it the power of Lightning. // Continue the path, friend. / [Goodbye]",
+   "description": "Conversation window opens on the left while the player is still running along the causeway, well before reaching the hologram (seen in the distance about 260.6). \"UI MODE\" is on. Header: black silhouette portrait plus a speech-bubble icon, title \"An Ancient Eloh\"; single button \"Goodbye\". It opens in the same frame as the white flash of the objective-completed banner (A2-025) and the ability slot-1 highlight (A2-026). No chat line appears for it and there is no nameplate/target on the hologram. It stays open (not closed by the player) until its text is replaced (seen after the 271.6 cut). Scene-change frame s00022 matches.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-026",
+   "t": 252.733,
+   "category": "player_state",
+   "text": null,
+   "description": "Ability tray slot 1 (the lightning icon) flashes white at 252.733, then shows a bright blue highlight frame and fill until about 262.4. It returns to normal by 262.933 with the icon unchanged. Slot 2 is dimmed during the highlight. This coincides with the Eloh text \"We grant you ... the power of Lightning\". No Logos/Lightning chat message, Logos pop-up or ability window appears.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-025",
+   "t": 252.867,
+   "category": "system_message",
+   "text": "Objective Completed / Initiation / Approach the Eloh Hologram",
+   "description": "Centre-top banner on a yellow-green bar (white flash 252.733-252.800), legible from 252.867. The \"Objective Completed\" header line fades at about 255.47; the bar with mission and objective names is last visible at 255.667 and gone at 255.733. Tracker still shows Initiation / Approach the Eloh Hologram. No matching chat line.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-028",
+   "t": 255.933,
+   "category": "system_message",
+   "text": "New Objective / Initiation / Approach the Eloh Hologram",
+   "description": "Banner replaces the previous one (flash at 255.867): \"New Objective / Initiation / Approach the Eloh Hologram\" legible from 255.933. The \"New Objective\" header fades at about 258.6; the bar with mission and objective names stays readable to about 260.3 and is gone at 260.667. Tracker text unchanged. No chat line.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-035",
+   "t": 271.6,
+   "category": "system_message",
+   "text": "Objective Completed / Initiation / Approach the Eloh Hologram",
+   "description": "Banner visible in the first frame after the 271.6 cut (true start unknown): \"Objective Completed / Initiation / Approach the Eloh Hologram\". Header line fades at about 274.2; mission/objective bar stays until about 275.33, gone at 275.400.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-036",
+   "t": 271.6,
+   "category": "conversation_window",
+   "text": "An Ancient Eloh / The Bane were once our siblings, but now are our enemy - and yours. They are the ones who destroyed your world as they have destroyed countless others. They seek the genocide of your entire race. They are the threat you must annihilate. // The extermination of the Bane is your only goal now, friend. / [Goodbye]",
+   "description": "Same \"An Ancient Eloh\" window (silhouette portrait, Goodbye button), now showing the second greeting text in the first frame after the cut; the moment of change is inside the cut. It stays open until McAllister's window replaces it at 285.333.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-040",
+   "t": 274.467,
+   "category": "npc",
+   "text": null,
+   "description": "A mission NPC is visible on the grass in front of the platform base from 274.467, under a yellow outlined overhead icon shaped like a walkie-talkie/handset with an antenna. Other dark-clad figures stand around the platform edge. Close-ups: dark olive/brown fatigues, short dark hair, no hat, no armour plates visible; dialog portrait shows a man with short dark hair and a stern face. The nameplate naming him Major McAllister appears from 279.333.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-043",
+   "t": 279.533,
+   "category": "npc",
+   "text": "10 Major McAllister | Press [Mouse Button 2] to talk",
+   "description": "Floating nameplate beside the NPC from 279.333 (0.2 s before the Mission Indicator tutorial): level \"10\", name, swirl faction disc, red health bar with a small counter row beneath. From 282.400 the use prompt appears below the NPC. No bark or speech bubble from him in the segment.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-044",
+   "t": 285.333,
+   "category": "mission_window",
+   "text": "Major McAllister / Mission Completion / Initiation / It's about time! You receptives always get bogged down with your Eloh visions and crap, but we've got a war to fight here, soldier! Follow me over to the temporary camp and I'll brief you on all the details of our situation here. // Let's move! / Rewards / You will receive: / [trident/psi-like icon] 100 / [Complete Mission] [Cancel]",
+   "description": "Player talks to McAllister (use prompt showing). His Mission Completion window replaces the Eloh window in the same left slot. Header: portrait of a man with short dark hair, a small handset icon, title \"Major McAllister\", subtitle \"Mission Completion\". Mission name in yellow-green.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-047",
+   "t": 289.533,
+   "category": "chat_line",
+   "text": "You gained 1250 experience points. | +1250xp",
+   "description": "Yellow system chat line, with a floating \"+1250xp\" text over the NPC area in the same frame. The player level box still reads 1 afterwards (checked to 300.87).",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-048",
+   "t": 289.8,
+   "category": "chat_line",
+   "text": "Mission Completed: Initiation",
+   "description": "Yellow system chat line directly after the XP line.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-050",
+   "t": 289.8,
+   "category": "mission_window",
+   "text": "Major McAllister / Mission Available / Briefing / Gearing Up for Battle / This cave keeps us safe from the Bane, but only for the moment, so let's get you geared up and ready to fight. // After the Bane ambushed us and took over the base, we set up a camp here in the cave and blasted the entrance in behind us. For the moment, we're safe -- but no one knows how long that avalanche is going to hold up. But for now, let's get your training started. You'll want to check in first with Captain Delessio. He'll help you with your gear. / Objectives / . Speak to Captain Delessio / Rewards / You will receive: / [icon] 200 / [Accept Mission] [Decline]",
+   "description": "The next mission offer opens automatically in the same frame as the completion chat line and banner (289.800, scene s00024). Header: McAllister portrait plus handset icon, \"Major McAllister\", \"Mission Available\". Listed objective \"Speak to Captain Delessio\" (1992 objective 4/5 wording), not the crate objective. Reward row: psi-like glyph on a filled blue backing, value 200, sitting at the bottom edge of a scrollable pane; the pane shows a scrollbar (thumb at top) that is never scrolled, so additional content below the 200 row cannot be ruled out.",
+   "status": "corrected",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-010",
+   "t": 296.6,
+   "category": "tracker",
+   "text": "Gearing Up for Battle / Speak to Captain Delessio",
+   "description": "Mission Tracker gains mission 'Gearing Up for Battle' with objective 'Speak to Captain Delessio'.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-019",
+   "t": 304.733,
+   "category": "inventory_or_character_window",
+   "text": "BACKPACK | 0/50 | Equipment | Credit | 100",
+   "description": "BACKPACK window: counter '0/50', 'Equipment' tab, empty grid, and 'Credit' with '100'. The credit glyph is a blue trident/psi-shaped symbol, not a round icon. It is the same glyph as the 1990 reward '100' (288.467) and the 1992 offer '200' (295.0).",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-017",
+   "t": 304.733,
+   "category": "loot_or_container_window",
+   "text": "Supply Crate | Loot | Tel[?]ract Motor Assist Armor Gloves | Tel[?]ract Motor Assist Armor Legs | H[?]llstrom Motor Assist Armor Vest | Shinobi Rifle | Loot All | Press [Mouse Button 2] to use",
+   "description": "Supply Crate object: open box highlighted yellow-green with a vertical green light beam above it; nameplate 'Supply Crate' with a use icon; prompt 'Press [Mouse Button 2] to use'. Loot window titled 'Supply Crate' / 'Loot' with a scrollable list (first view): Tel[?]ract Motor Assist Armor Gloves; Tel[?]ract Motor Assist Armor Legs; H[?]llstrom Motor Assist Armor Vest; Shinobi Rifle; button 'Loot All'. No quantities shown per row (chat later says 1 of each).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-022",
+   "t": 306.467,
+   "category": "loot_or_container_window",
+   "text": "Astra Motor Assist Armor Boots | Tel[?]ract Motor Assist Armor Gloves | Tel[?]ract Motor Assist Armor Legs | H[?]llstrom Motor Assist Armor Vest",
+   "description": "The loot list scrolls up at 306.6, not 306.467. 'Astra Motor Assist Armor Boots' is then the top entry, followed by Tel[?]ract Motor Assist Armor Gloves, Tel[?]ract Motor Assist Armor Legs and H[?]llstrom Motor Assist Armor Vest. The crate therefore holds five items in total (with the Shinobi Rifle).",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-023",
+   "t": 308.067,
+   "category": "chat_line",
+   "text": "You received 1 Motor Assist Armor Boots. / You received 1 Motor Assist Armor Gloves. / You received 1 Motor Assist Armor Legs. / You received 1 Motor Assist Armor Vest. / You received 1 Rifle.",
+   "description": "The five yellow loot lines do appear together at 308.067, but the windows are NOT yet closed then. At 308.067 and 308.133 the Loot window still lists the items, the crate is still highlighted and the backpack already shows new item icons (counter partly legible). The Loot and Backpack windows close, UI MODE ends and the crate highlight disappears at 308.2; the green light above the crate remains. The Updates panel item entries are visible from 308.2.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-024",
+   "t": 308.4,
+   "category": "system_message",
+   "text": "Objective Completed / Gearing Up for Battle / Get your gear from the nearby crate",
+   "description": "Banner: 'Objective Completed' / 'Gearing Up for Battle' / green bar 'Get your gear from the nearby crate'.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-027",
+   "t": 308.533,
+   "category": "tracker",
+   "text": "Gearing Up for Battle / Equip the gear by right-clicking it in your backpack [B]",
+   "description": "Tracker objective changes to the equip objective.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-034",
+   "t": 319.6,
+   "category": "inventory_or_character_window",
+   "text": "BACKPACK | 5/50 | Equipment || Telaract Motor Assist Armor Gloves | Gloves | Body Armor: 28 | Regen Rate: 1 per sec | Condition: 100% | [0] Regen Armor +28 HP/sec (grey, partial) | Requirements: | Motor Assist Armor 1: Novice | Min Level: 1 | <Right Click to Equip> | Credit 100",
+   "description": "BACKPACK window opened (UI mode): counter '5/50', Equipment tab; first row holds boots, gloves, legs, vest, rifle icons; Credit 100. Tooltip for the gloves (320.467).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-036",
+   "t": 321.667,
+   "category": "player_action",
+   "description": "Backpack slot 1 (Astra boots) empties at 321.667. From 321.667 to 321.8 the counter reads '4/50'. At 321.867 the Recruit Boots icon fills slot 1 and the counter returns to '5/50'. So the counter does not stay at 5/50 throughout. Whether the player's boots visibly change cannot be confirmed: they are dark before and after at this resolution.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7",
+   "text": null
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-037",
+   "t": 322.267,
+   "category": "system_message",
+   "text": "Objective Completed / Gearing Up for Battle / Equip the gear by right-clicking it in your backpack [B] || EQUIPPED / Equipment Slot Empty",
+   "description": "The banner onset at 322.267 is confirmed, while Recruit Boots, gloves, legs, vest and rifle are all still in the backpack and the gloves tooltip is showing. The 'Equipment Slot Empty' text is not at 322.267. It fades in from 322.4 and is clear from 322.533 as the left comparison panel of the gloves tooltip, headed 'EQUIPPED' (uielementlanguage 3121) over 'Equipment Slot Empty' (3238). It shows that no gloves were equipped.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-038",
+   "t": 322.4,
+   "category": "tracker",
+   "text": "Gearing Up for Battle / Speak to Captain Delessio",
+   "description": "Tracker objective changes back to 'Speak to Captain Delessio'.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-056",
+   "t": 343.467,
+   "category": "npc",
+   "text": "Practice Dummy | [ 15 ]",
+   "description": "Target: 'Practice Dummy' nameplate on a round target-dummy object down range, red bar, yellow sub-bar and a bracketed number '15' (likely range; no level visible). Player fires the Shinobi Rifle (tracers).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-057",
+   "t": 343.467,
+   "category": "chat_line",
+   "text": "[1 General] Amontillado: grats / [1 General] Mortikz: im a ranger so i should max out stealth not reflective / [1 General] Cebals: gratz / [1 General] Mortikz: ?? / [1 General] Cebals: that depends / [1 General] Clyde: max out all of them / [1 General] Amontillado: i went spy max motor assist and stealth / [1 General] Cebals: ur using red armor? ; then Scarpain: me no (~343.8), Mortikz: yea (344.2)",
+   "description": "Chat history after the cut (General lines).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-060",
+   "t": 347.333,
+   "category": "tracker",
+   "text": "Gearing Up for Battle / Speak to Corporal Hartmann",
+   "description": "At 347.333 and 347.4 the tracker shows only 'Gearing Up for Battle'. The objective 'Speak to Corporal Hartmann' (not the 'by the Firing Range' variant) appears at 347.467, not 347.333. Its text is identical for 21492 and 21663.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-066",
+   "t": 362.133,
+   "category": "chat_line",
+   "text": "You gained 1250 experience points. / Mission Completed: Gearing Up for Battle / Mission Accepted: Capture the Flag / You gained 500 experience points. / You gained a level! You are now level 2. You gained 3 attribute points and 2 skill points.",
+   "description": "System lines visible in chat after the cut, in order (earlier General lines above them: '... and mod new armor' / 'Cebals: full cormen with officer hat is best while u get new armor' / 'Cebals: change as fast as possible').",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  }
+ ],
+ "dropped": []
 }

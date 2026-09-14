@@ -1,88 +1,234 @@
 {
-  "schema": "rasa-reconstruction-positions/1",
-  "note": "Curated position records keyed by position_key (build plan sections 4.1 and 4.3). Record shape: {position_key, map_context_id?, x, y, z, rotation?, tier: measured|inferred|original, uncertainty {horizontal_m, vertical_m} when measured, reasoning when inferred, method, frames [{video, t, event}], anchors, client, session_date}. Never taken from DB teleporter rows 60/99/598, the F11 hard-coded vector, uimapmarker label coordinates or the pre-D11 map.",
-  "positions": [
+ "schema": "rasa-reconstruction-positions/1",
+ "note": "Curated position records keyed by position_key (build plan sections 4.1 and 4.3). Record shape: {position_key, map_context_id?, x, y, z, rotation?, tier: measured|inferred|original, uncertainty {horizontal_m, vertical_m} when measured, reasoning when inferred, method, frames [{video, t, event}], anchors, client, session_date}. Never taken from DB teleporter rows 60/99/598, the F11 hard-coded vector, uimapmarker label coordinates or the pre-D11 map.",
+ "positions": [
+  {
+   "position_key": "spawn.first_login",
+   "map_context_id": 1985,
+   "x": 387.2,
+   "y": 136.75,
+   "z": -79.09,
+   "rotation": 6.02139,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 1.5
+   },
+   "method": "X,Z: radar texture matching on 7Lrst9SG3pk 224.8-237.467 (adv_bootcamp radar, gamecontextuiradarinfo (1985,0)=(790,408,103,-58)), identical across the whole arrival hold; +/-1.5 m. Y: the decoded bootcamp map heightmap (Tabula Rasa 1.16.5.0 data/maps/adv_bootcamp/t000007c1_terrain.glm, a stitched 1152x1152 tile grid; 0x7c1 = context 1985; .thd header origin (-512,0,-512), 1 m spacing) sampled at (X,Z). The same decode reproduces a static prop base to 0.03 m (ArchForeanTorchV01 at (398.5,2.5), base 118.34 vs decoded 118.31), so the vertical uncertainty is the 0.25 m height quantum plus slack, +/-1.5 m. rotation: camera heading 345 deg clockwise from +Z toward +X at 238.133 (empirical arrow template score 0.94), low confidence; the server sends the character yaw as radians, so this value is the measured heading, not a verified server convention.",
+   "frames": [
     {
-      "position_key": "spawn.first_login",
-      "map_context_id": 1985,
-      "x": 387.2,
-      "y": 136.75,
-      "z": -79.09,
-      "rotation": 6.02139,
-      "tier": "measured",
-      "uncertainty": { "horizontal_m": 1.5, "vertical_m": 1.5 },
-      "method": "X,Z: radar texture matching on 7Lrst9SG3pk 224.8-237.467 (adv_bootcamp radar, gamecontextuiradarinfo (1985,0)=(790,408,103,-58)), identical across the whole arrival hold; +/-1.5 m. Y: the decoded bootcamp map heightmap (Tabula Rasa 1.16.5.0 data/maps/adv_bootcamp/t000007c1_terrain.glm, a stitched 1152x1152 tile grid; 0x7c1 = context 1985; .thd header origin (-512,0,-512), 1 m spacing) sampled at (X,Z). The same decode reproduces a static prop base to 0.03 m (ArchForeanTorchV01 at (398.5,2.5), base 118.34 vs decoded 118.31), so the vertical uncertainty is the 0.25 m height quantum plus slack, +/-1.5 m. rotation: camera heading 345 deg clockwise from +Z toward +X at 238.133 (empirical arrow template score 0.94), low confidence; the server sends the character yaw as radians, so this value is the measured heading, not a verified server convention.",
-      "frames": [
-        { "video": "7Lrst9SG3pk", "t": 224.8, "event": "A2-007" },
-        { "video": "7Lrst9SG3pk", "t": 238.133, "event": "A2-014" }
-      ],
-      "anchors": [
-        "Eloh statue (389,-102.5), 23 m south",
-        "Eloh column pairs at (371,-66.5) and (407,-66.5)",
-        "obelisk pairs at x 382/396 along the causeway"
-      ],
-      "client": "1.16.5.0",
-      "session_date": "2009-02"
+     "video": "7Lrst9SG3pk",
+     "t": 224.8,
+     "event": "A2-007"
     },
     {
-      "position_key": "area.1990.1",
-      "map_context_id": 1985,
-      "x": 387.22,
-      "y": 118.75,
-      "z": -28.3,
-      "tier": "measured",
-      "uncertainty": { "horizontal_m": 1.5, "vertical_m": 1.5 },
-      "method": "X,Z: the yellow objective icon (probable indicator 430) while 1990 objective 1 'Approach the Eloh Hologram' was active, radar texture matching on 7Lrst9SG3pk, +/-1.5 m; the player crossed it at 252.733 at (388.95,-26.28) and the forced greeting 1634 opened in the same frame. Y: the decoded bootcamp heightmap at (X,Z), as for spawn.first_login.",
-      "frames": [
-        { "video": "7Lrst9SG3pk", "t": 245.0, "event": "A2-017" },
-        { "video": "7Lrst9SG3pk", "t": 252.733, "event": "A2-024" }
-      ],
-      "anchors": [
-        "mid-causeway, north of the arrival ring",
-        "ArchForeanBridgeCeremonialV04 spans Z -40.7..56.3 at X 380.6..397.4"
-      ],
-      "client": "1.16.5.0",
-      "session_date": "2009-02"
-    },
-    {
-      "position_key": "area.1990.2",
-      "map_context_id": 1985,
-      "x": 387.83,
-      "y": 112.75,
-      "z": 6.71,
-      "tier": "measured",
-      "uncertainty": { "horizontal_m": 2.0, "vertical_m": 1.5 },
-      "method": "X,Z: the yellow objective icon (probable indicator 431) while 1990 objective 2 'Approach the Eloh Hologram' was active, radar texture matching on 7Lrst9SG3pk, +/-2.0 m; the player waited 9 m south at (386.41,-1.99) for 12 s without completing it and had completed it by (388.19,14.98). Y: the decoded bootcamp heightmap at (X,Z). The build plan's row for area.1990.2 names the ArchElohHologramPlatformLarge anchor (entity 839 at (389,124.85,65)); that platform is by the Eloh hologram far north and does not match the objective-2 marker the footage shows, so the measured marker is used here and the discrepancy is recorded for review.",
-      "frames": [
-        { "video": "7Lrst9SG3pk", "t": 259.467, "event": "A2-029" },
-        { "video": "7Lrst9SG3pk", "t": 271.6, "event": "A2-035" }
-      ],
-      "anchors": [
-        "the glowing pedestal on the causeway terrace",
-        "ArchForeanElohObeliskV04 at (379.67,152.09,2.28)"
-      ],
-      "client": "1.16.5.0",
-      "session_date": "2009-02"
-    },
-    {
-      "position_key": "npc.mcallister",
-      "map_context_id": 1985,
-      "x": 387.2,
-      "y": 125.57,
-      "z": 53.3,
-      "tier": "measured",
-      "uncertainty": { "horizontal_m": 2.0, "vertical_m": 0.5 },
-      "method": "X,Z: Major McAllister's radar mission icon (1990 turn-in, 1992 giver), radar texture matching on 7Lrst9SG3pk, +/-2.0 m; the player stood 2.2 m from it at (387.75,51.09) for the turn-in. Y: bracketed by the ArchElohHologramPlatformLarge deck (map entity 839 at (389,124.85,65), AABB Y 124.84-132.59) and the decoded heightmap at (X,Z) (125.57); the player talked to him on the grass just south of the platform, +/-0.5 m.",
-      "frames": [
-        { "video": "7Lrst9SG3pk", "t": 285.333, "event": "A2-043" },
-        { "video": "7Lrst9SG3pk", "t": 288.0, "event": "A2-044" }
-      ],
-      "anchors": [
-        "ArchElohHologramPlatformLarge map entity 839, file offset 73872, at (389,124.85,65)",
-        "ArchElohHologramLarge map entity 1084 at (389,128.43,65)"
-      ],
-      "client": "1.16.5.0",
-      "session_date": "2009-02"
+     "video": "7Lrst9SG3pk",
+     "t": 238.133,
+     "event": "A2-014"
     }
-  ]
+   ],
+   "anchors": [
+    "Eloh statue (389,-102.5), 23 m south",
+    "Eloh column pairs at (371,-66.5) and (407,-66.5)",
+    "obelisk pairs at x 382/396 along the causeway"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "area.1990.1",
+   "map_context_id": 1985,
+   "x": 387.22,
+   "y": 118.75,
+   "z": -28.3,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 1.5
+   },
+   "method": "X,Z: the yellow objective icon (probable indicator 430) while 1990 objective 1 'Approach the Eloh Hologram' was active, radar texture matching on 7Lrst9SG3pk, +/-1.5 m; the player crossed it at 252.733 at (388.95,-26.28) and the forced greeting 1634 opened in the same frame. Y: the decoded bootcamp heightmap at (X,Z), as for spawn.first_login.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 245.0,
+     "event": "A2-017"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 252.733,
+     "event": "A2-024"
+    }
+   ],
+   "anchors": [
+    "mid-causeway, north of the arrival ring",
+    "ArchForeanBridgeCeremonialV04 spans Z -40.7..56.3 at X 380.6..397.4"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "area.1990.2",
+   "map_context_id": 1985,
+   "x": 387.83,
+   "y": 112.75,
+   "z": 6.71,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 1.5
+   },
+   "method": "X,Z: the yellow objective icon (probable indicator 431) while 1990 objective 2 'Approach the Eloh Hologram' was active, radar texture matching on 7Lrst9SG3pk, +/-2.0 m; the player waited 9 m south at (386.41,-1.99) for 12 s without completing it and had completed it by (388.19,14.98). Y: the decoded bootcamp heightmap at (X,Z). The build plan's row for area.1990.2 names the ArchElohHologramPlatformLarge anchor (entity 839 at (389,124.85,65)); that platform is by the Eloh hologram far north and does not match the objective-2 marker the footage shows, so the measured marker is used here and the discrepancy is recorded for review.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 259.467,
+     "event": "A2-029"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 271.6,
+     "event": "A2-035"
+    }
+   ],
+   "anchors": [
+    "the glowing pedestal on the causeway terrace",
+    "ArchForeanElohObeliskV04 at (379.67,152.09,2.28)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.mcallister",
+   "map_context_id": 1985,
+   "x": 387.2,
+   "y": 125.57,
+   "z": 53.3,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: Major McAllister's radar mission icon (1990 turn-in, 1992 giver), radar texture matching on 7Lrst9SG3pk, +/-2.0 m; the player stood 2.2 m from it at (387.75,51.09) for the turn-in. Y: bracketed by the ArchElohHologramPlatformLarge deck (map entity 839 at (389,124.85,65), AABB Y 124.84-132.59) and the decoded heightmap at (X,Z) (125.57); the player talked to him on the grass just south of the platform, +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 285.333,
+     "event": "A2-043"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 288.0,
+     "event": "A2-044"
+    }
+   ],
+   "anchors": [
+    "ArchElohHologramPlatformLarge map entity 839, file offset 73872, at (389,124.85,65)",
+    "ArchElohHologramLarge map entity 1084 at (389,128.43,65)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "object.supply_crate",
+   "map_context_id": 1985,
+   "x": 397.3,
+   "y": 114.0,
+   "z": 173.7,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: the Supply Crate's yellow objective icon, radar texture matching on 7Lrst9SG3pk (icon bbox centre 396.6,173.8 at 305.467), +/-2.0 m; no static crate prop at this spot, so the crate was server-spawned. Y: the deck of the static platform ArchHumBaseGatesystemPlatform16Mx24M (map entity at (405,114,166), AABB Y 113.99-...) the crate stands on; the loot happened on that deck, +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 305.467,
+     "event": "A3-017"
+    }
+   ],
+   "anchors": [
+    "ArchHumBaseGatesystemPlatform16Mx24M map entity at (405,114,166)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.delessio",
+   "map_context_id": 1985,
+   "x": 398.9,
+   "y": 114.0,
+   "z": 173.3,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: Captain Delessio's radar mission icon while 'Speak to Captain Delessio' was active, radar pip offset + visual bbox + 3D view on 7Lrst9SG3pk, +/-2.5 m. Y: the same platform deck as the crate (he stands by it on the platform), +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 330.467,
+     "event": "A3-034"
+    }
+   ],
+   "anchors": [
+    "ArchHumBaseGatesystemPlatform16Mx24M map entity at (405,114,166)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "object.practice_dummy",
+   "map_context_id": 1985,
+   "x": 384.7,
+   "y": 119.4,
+   "z": 186.8,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: the firing-range target's yellow objective icon, radar pip offset (yellow centroid and masked template NCC agree to 1 m) on 7Lrst9SG3pk, +/-1.5 m; 13-14 m north of the shooting player matching the nameplate distance '15'. Y: the firing-range ground bracketed by the sandbag statics ArchHumGenObjSandbags01V07/V08 (Y 119.2-119.7) at that spot, +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 345.467,
+     "event": "A3-056"
+    }
+   ],
+   "anchors": [
+    "ArchHumGenObjSandbags01V08 map entity at (384.4,119.7,188.6)",
+    "ArchHumGenObjSandbags01V07 map entity at (383.6,119.2,185.1)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.hartmann",
+   "map_context_id": 1985,
+   "x": 385.7,
+   "y": 119.4,
+   "z": 166.7,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: Corporal Hartmann's radar mission icon while 'Speak to Corporal Hartmann' was active (never seen on screen; identity inferred from the active objective), radar pip offset on 7Lrst9SG3pk, +/-2.0 m; 7 m south of the shooting position behind the firing line. Y: the firing-range ground bracketed by the glowstick crate and sandbag statics, +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 353.467,
+     "event": "A3-060"
+    }
+   ],
+   "anchors": [
+    "ArchHumGenObjGlowstickCrate map entity at (384.6,119.6,170.7)",
+    "ArchHumGenObjSandbags01V13 map entity at (383.2,119.3,170.3)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  }
+ ]
 }

@@ -21,6 +21,7 @@ namespace Rasa.Structures
         // Live content bindings (MissionContentManager.Load): objective completion by area, use, kill and so on.
         public List<NpcMissionObjectiveBindingEntry> Bindings { get; } = new();
         public Dictionary<uint, List<uint>> Transitions { get; } = new();
+        public List<NpcMissionPrerequisiteEntry> Prerequisites { get; } = new();
         public List<NpcMissionRewardEntry> Rewards { get; } = new();
 
         // Normalized once by MissionManager.BuildRewardInfo; the client's reward
@@ -117,6 +118,9 @@ namespace Rasa.Structures
                 if (objective.IsRequired == true && !reachable.Contains(objective.ObjectiveId))
                     gaps.Add($"required objective {objective.ObjectiveId} is never revealed");
 
+            // Prerequisites are per-player state (the required mission's state in THIS
+            // character's log), so they cannot make the definition unofferable in general;
+            // they gate each player's offer at dispense time (MissionManager).
             // The client shows Radio/Share buttons for these flags; their server
             // requests are not implemented, so such definitions stay unoffered.
             if (MissionConstantData.RadioCompletable)

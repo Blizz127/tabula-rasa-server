@@ -1078,5 +1078,6 @@ namespace Rasa.Structures.Content
         public IEnumerable<ContentAreaEntry> LiveAreas => Catalog.Areas.Values.Where(area => !WithheldAreas.Contains(area.Id));
 
         public IEnumerable<NpcMissionObjectiveBindingEntry> LiveBindings => Catalog.Bindings.Where(binding => !MissionGaps.ContainsKey(binding.MissionId));
+        public IEnumerable<NpcMissionPrerequisiteEntry> LivePrerequisites => Catalog.Prerequisites.Where(prerequisite => !MissionGaps.ContainsKey(prerequisite.MissionId));
     }
 }

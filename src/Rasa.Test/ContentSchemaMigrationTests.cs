@@ -27,6 +27,7 @@ namespace Rasa.Test
         private const string BootcampS1Migration = "20260913201420_BootcampS1Initiation";
         private const string ObjectiveColumnsMigration = "20260913234728_MissionObjectiveClientColumns";
         private const string ObjectiveSkeletonMigration = "20260913235900_MissionClientObjectiveSkeleton";
+        private const string BootcampS2Migration = "20260914003000_BootcampS2GearingUp";
 
         public static readonly string[] WorldTables =
         {
@@ -87,7 +88,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -110,7 +111,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -155,13 +156,18 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601)"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198900"));
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id BETWEEN 1985000 AND 1985003"));
-            Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action"));
             Assert.AreEqual(198650L, Scalar(connection, "SELECT id FROM content_placement"));
+
+            // S2 completes the chain: 1992 becomes offerable through the 1990 turn-in rule.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1992"));
+            Assert.AreEqual(9L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1992 AND ordinal IS NOT NULL"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985004"));
 
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);

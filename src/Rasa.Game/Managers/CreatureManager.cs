@@ -187,6 +187,15 @@ namespace Rasa.Managers
                 return null;
             }
 
+            // The placement's npc_package_id overrides the creature's npc_package row
+            // binding (the boot-camp NPCs share entity classes but answer for their own
+            // objective-conversation packages).
+            if (placement.NpcPackageId != 0)
+            {
+                creature.Npc ??= new Npc();
+                creature.Npc.NpcPackageId = placement.NpcPackageId;
+            }
+
             // CurrentAction stays 0: BehaviorManager moves only wander/path/fight actions, so the
             // placement stands where the content puts it.
             SetLocation(creature, new Vector3((float)placement.PosX, (float)placement.PosY, (float)placement.PosZ),

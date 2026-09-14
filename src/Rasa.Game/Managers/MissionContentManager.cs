@@ -82,6 +82,12 @@ namespace Rasa.Managers
             Content = catalog.Validate(references, capabilities);
             BuildRuntime(missions);
 
+            // Prerequisites gate each player's offer at dispense time (per-player state),
+            // but the loader must know them; attach the live ones to their definitions.
+            foreach (var prerequisite in Content.LivePrerequisites)
+                if (missions.TryGetValue(prerequisite.MissionId, out var mission))
+                    mission.Prerequisites.Add(prerequisite);
+
             // A shared context holds its placements for the life of the server; per-character channels
             // materialize their own when they are created (a later slice).
             foreach (var mapChannel in MapChannelManager.Instance.MapChannelArray.Values)

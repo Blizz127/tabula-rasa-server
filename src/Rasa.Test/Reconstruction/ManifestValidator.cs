@@ -839,6 +839,10 @@ namespace Rasa.Test.Reconstruction
                 {
                     case ColumnRole.Required:
                         break;
+                    case ColumnRole.Key:
+                        // A key column documented in fields is a deliberate reference choice
+                        // (e.g. content_item_set.item_template_id), so its analogue is legitimate.
+                        break;
                     case ColumnRole.Optional:
                         Error(ManifestRules.AnalogueOptionalColumn, label,
                             $"{table}.{column} is an optional column in ProvenanceRegistry; leave it out instead of using an analogue");
