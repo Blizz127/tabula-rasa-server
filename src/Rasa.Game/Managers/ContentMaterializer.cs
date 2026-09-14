@@ -80,8 +80,11 @@ namespace Rasa.Managers
                 usable.MaxHitPoints = placement.HitPoints;
             }
 
-            // Register as an object entity so combat targeting resolves it.
+            // Register as an object entity so combat targeting resolves it. IsInWorld
+            // keeps the legacy DynamicObjectWorker from re-adding it every tick
+            // (content usables materialize once and stay).
             CellManager.Instance.AddToWorld(mapChannel, usable);
+            usable.IsInWorld = true;
         }
 
         /// <summary>

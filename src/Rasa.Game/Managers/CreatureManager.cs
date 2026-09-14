@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -141,6 +142,17 @@ namespace Rasa.Managers
 
                 // todo: Depending on level difference reduce experience
                 ManifestationManager.Instance.GainExperience(client, experience);
+
+                MissionManager.Instance.OnCreatureKilled(client, creature);
+            }
+            else
+            {
+                // Per-character instancing (OD-16): the channel owner is credited for any
+                // kill of a kill-bound placement, whoever landed the blow — allies fight
+                // nearby in the original boot camp. Shared contexts keep killer-only credit.
+                var owner = mapChannel.ClientList?.FirstOrDefault(candidate => candidate?.Player != null);
+                if (owner != null && MissionManager.Instance.Content.Content.Catalog.InstancingFor(mapChannel.MapInfo?.MapContextId ?? 0) == MapInstancing.PerCharacter)
+                    MissionManager.Instance.OnCreatureKilled(owner, creature);
             }
 
             // spawn loot
