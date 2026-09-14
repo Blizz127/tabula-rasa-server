@@ -249,18 +249,91 @@ namespace Rasa.Managers
             
             Logger.WriteLog(LogType.Initialize, $"Loaded {itemTemplatesData.Count} ItemTemplates.");
 
+            // Most templates (schematics, components, mission items, clothing, ...) have no item_template
+            // row, so their inventory category would stay 0 and AddItemToInventory would refuse them.
+            // Give those a category from the class instead.
+            var defaultedCategories = 0;
 
             // After all data is colected from db move it to EntityClass
             foreach (var entry in LoadedItemTemplates)
             {
                 var itemTemplate = entry.Value;
-                EntityClassManager.Instance.LoadedEntityClasses[itemTemplate.Class].ItemTemplates.Add(itemTemplate.ItemTemplateId, itemTemplate);
+                var entityClass = EntityClassManager.Instance.LoadedEntityClasses[itemTemplate.Class];
+
+                if (itemTemplate.InventoryCategory == 0)
+                {
+                    itemTemplate.InventoryCategory = DefaultInventoryCategory(entityClass);
+                    defaultedCategories++;
+                }
+
+                entityClass.ItemTemplates.Add(itemTemplate.ItemTemplateId, itemTemplate);
             }
+
+            Logger.WriteLog(LogType.Initialize, $"Inventory category taken from the class for {defaultedCategories} ItemTemplates without item_template data.");
 
             Logger.WriteLog(LogType.Initialize, $"Loaded {weaponTemplates.Count} WeaponTemplates.");
             Logger.WriteLog(LogType.Initialize, $"ItemReqs = {itemReqs.Count}, loaded = {loaded}, skipped = {skipped}");
         }
         
+        /// <summary>
+        /// The inventory tab an item belongs in when its template has no item_template row. The
+        /// class augmentations decide equipment and crafting; the class name pattern decides the
+        /// rest (Consumable_*, Ammo_* -> consumable; Mis*, *_Mission_* and the zone-prefixed
+        /// mission items -> mission; anything else -> misc). An item_template row overrides this.
+        /// </summary>
+        public static InventoryCategory DefaultInventoryCategory(EntityClass entityClass)
+        {
+            var augmentations = entityClass.Augmentations;
+
+            if (augmentations.Contains(AugmentationType.Recipe) || augmentations.Contains(AugmentationType.ModuleItem))
+                return InventoryCategory.Crafting;
+
+            if (augmentations.Contains(AugmentationType.Weapon) || augmentations.Contains(AugmentationType.Armor) || augmentations.Contains(AugmentationType.Equipable))
+                return InventoryCategory.Equipment;
+
+            var name = entityClass.ClassName ?? string.Empty;
+
+            if (name.StartsWith("Component_") || name.StartsWith("Ingredient") || name.StartsWith("Resource_") || name.StartsWith("Crafting_") || IsRawMaterialClass(name))
+                return InventoryCategory.Crafting;
+
+            if (name.StartsWith("Consumable_") || name.StartsWith("Ammo_") || augmentations.Contains(AugmentationType.Customization))
+                return InventoryCategory.Consumable;
+
+            if (name.StartsWith("Mis", System.StringComparison.OrdinalIgnoreCase) || name.StartsWith("TESTMis") || name.StartsWith("MixXeno") || name.Contains("_Mission_") || IsZoneMissionItem(name))
+                return InventoryCategory.Mission;
+
+            return InventoryCategory.Misc;
+        }
+
+        // Metal1, Liquid1, Hide1, Superconductor1, Combustible1, Adhesive1, Gas1, Glass1, HardMineral1,
+        // Microbes1, SoftFiber1, Solvent1, Synthetic1, Dye1: one word and a grade digit.
+        private static bool IsRawMaterialClass(string name)
+        {
+            if (name.Length < 3 || !char.IsDigit(name[name.Length - 1]))
+                return false;
+
+            for (var i = 0; i < name.Length - 1; i++)
+                if (!char.IsLetter(name[i]))
+                    return false;
+
+            return true;
+        }
+
+        private static readonly string[] ZoneMissionPrefixes =
+        {
+            "Burrow_", "CavesDonn_", "Cuthah_", "Dybukkar_", "Flashpoint_", "Fluxite_", "Hollow_", "Incurables_",
+            "Kardash_", "Magma_", "Plains_", "Raksha_", "Rivasa_", "Runi_", "ArchBaneGenObj", "BanePlans", "ItemKey", "ItemBane"
+        };
+
+        private static bool IsZoneMissionItem(string name)
+        {
+            foreach (var prefix in ZoneMissionPrefixes)
+                if (name.StartsWith(prefix))
+                    return true;
+
+            return false;
+        }
+
         public void SendItemDataToClient(Client client, Item item, bool updateOnly)
         {
             // CreatePhysicalEntity
