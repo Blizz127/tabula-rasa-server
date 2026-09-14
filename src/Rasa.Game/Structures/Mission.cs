@@ -24,6 +24,9 @@ namespace Rasa.Structures
         public List<NpcMissionPrerequisiteEntry> Prerequisites { get; } = new();
         // Live objective timers (MissionContentManager.Load), per objective id.
         public Dictionary<uint, NpcMissionObjectiveTimerEntry> Timers { get; } = new();
+        // Live objective counters and map indicators (MissionContentManager.Load), per objective id, in key order.
+        public Dictionary<uint, List<NpcMissionObjectiveCounterEntry>> Counters { get; } = new();
+        public Dictionary<uint, List<NpcMissionObjectiveIndicatorEntry>> Indicators { get; } = new();
         public List<NpcMissionRewardEntry> Rewards { get; } = new();
 
         // Normalized once by MissionManager.BuildRewardInfo; the client's reward

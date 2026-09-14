@@ -268,8 +268,8 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
-            Assert.IsTrue(implemented.Timers);
-            Assert.IsFalse(implemented.Indicators || implemented.PlacementRespawn);
+            Assert.IsTrue(implemented.Timers && implemented.Indicators);
+            Assert.IsFalse(implemented.PlacementRespawn);
             Assert.IsTrue(MissionContentRules.BootcampEntryImplemented);
         }
 

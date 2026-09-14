@@ -74,7 +74,9 @@ namespace Rasa.Structures
                     TimeRemaining = status == MissionObjectiveState.Incomplete && definition.Timers.ContainsKey(objective.ObjectiveId) &&
                                     Timers.TryGetValue(objective.ObjectiveId, out var timer)
                         ? timer.SecondsRemaining(nowMs)
-                        : null
+                        : null,
+                    CounterDict = CounterDict(definition, objective.ObjectiveId),
+                    IndicatorList = IndicatorList(definition, objective.ObjectiveId)
                 });
             }
 
@@ -91,6 +93,36 @@ namespace Rasa.Structures
 
             return info;
         }
+
+        // counterId -> (count, initial, target): the saved value, or the initial value before the first change, so
+        // the tracker shows "Boss Eliminated: 0 / 1" as soon as the objective is revealed (A4-21).
+        private Dictionary<uint, MissionObjectiveGenericCounter> CounterDict(Mission definition, uint objectiveId)
+        {
+            var counters = new Dictionary<uint, MissionObjectiveGenericCounter>();
+
+            if (definition.Counters.TryGetValue(objectiveId, out var rows))
+                foreach (var row in rows)
+                    counters[row.CounterId] = new MissionObjectiveGenericCounter
+                    {
+                        Count = Counters.TryGetValue((objectiveId, row.CounterId), out var value) ? value : row.InitialValue,
+                        InitialCount = row.InitialValue,
+                        TargetCount = row.TargetValue
+                    };
+
+            return counters;
+        }
+
+        // Sent for every listed objective; missionlog.pyo _UpdateIndicators itself clears those of completed and failed ones.
+        private static List<MissionIndicator> IndicatorList(Mission definition, uint objectiveId) =>
+            definition.Indicators.TryGetValue(objectiveId, out var rows)
+                ? rows.Select(row => new MissionIndicator
+                {
+                    Position = new System.Numerics.Vector3((float)row.PosX, (float)row.PosY, (float)row.PosZ),
+                    Radius = row.Radius,
+                    IndicatorId = row.IndicatorId,
+                    Show3DEffect = row.Show3d
+                }).ToList()
+                : new List<MissionIndicator>();
     }
 
     /// <summary>

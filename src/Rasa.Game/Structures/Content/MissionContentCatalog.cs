@@ -1090,5 +1090,7 @@ namespace Rasa.Structures.Content
         public IEnumerable<NpcMissionObjectiveBindingEntry> LiveBindings => Catalog.Bindings.Where(binding => !MissionGaps.ContainsKey(binding.MissionId));
         public IEnumerable<NpcMissionPrerequisiteEntry> LivePrerequisites => Catalog.Prerequisites.Where(prerequisite => !MissionGaps.ContainsKey(prerequisite.MissionId));
         public IEnumerable<NpcMissionObjectiveTimerEntry> LiveTimers => Catalog.Timers.Where(timer => !MissionGaps.ContainsKey(timer.MissionId));
+        public IEnumerable<NpcMissionObjectiveCounterEntry> LiveCounters => Catalog.Counters.Where(counter => !MissionGaps.ContainsKey(counter.MissionId));
+        public IEnumerable<NpcMissionObjectiveIndicatorEntry> LiveIndicators => Catalog.Indicators.Where(indicator => !MissionGaps.ContainsKey(indicator.MissionId));
     }
 }

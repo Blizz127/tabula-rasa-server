@@ -64,6 +64,8 @@ namespace Rasa.Data
             // S5: wall-clock objective timers fail their objective (and mission) on expiry
             // (MissionManager.ExpireObjectiveTimers).
             Timers = true,
+            // S4: objective counters and map indicators travel in the mission info (PlayerMission.ToMissionInfo).
+            Indicators = true,
             // S3: a per-character context gives each character its own MapChannel
             // (MapChannelManager.ChannelForEntry), populated from the context's placements.
             Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter }

@@ -88,6 +88,8 @@ namespace Rasa.Managers
             {
                 mission.Prerequisites.Clear();
                 mission.Timers.Clear();
+                mission.Counters.Clear();
+                mission.Indicators.Clear();
             }
 
             foreach (var prerequisite in Content.LivePrerequisites)
@@ -97,6 +99,22 @@ namespace Rasa.Managers
             foreach (var timer in Content.LiveTimers)
                 if (missions.TryGetValue(timer.MissionId, out var mission))
                     mission.Timers[timer.ObjectiveId] = timer;
+
+            foreach (var counter in Content.LiveCounters.OrderBy(counter => counter.CounterId))
+                if (missions.TryGetValue(counter.MissionId, out var mission))
+                {
+                    if (!mission.Counters.TryGetValue(counter.ObjectiveId, out var counters))
+                        mission.Counters[counter.ObjectiveId] = counters = new List<Rasa.Structures.World.NpcMissionObjectiveCounterEntry>();
+                    counters.Add(counter);
+                }
+
+            foreach (var indicator in Content.LiveIndicators)
+                if (missions.TryGetValue(indicator.MissionId, out var mission))
+                {
+                    if (!mission.Indicators.TryGetValue(indicator.ObjectiveId, out var indicators))
+                        mission.Indicators[indicator.ObjectiveId] = indicators = new List<Rasa.Structures.World.NpcMissionObjectiveIndicatorEntry>();
+                    indicators.Add(indicator);
+                }
 
             // A shared context holds its placements for the life of the server; per-character channels
             // materialize their own when they are created (a later slice).
