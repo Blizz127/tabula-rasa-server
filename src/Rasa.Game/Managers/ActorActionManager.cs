@@ -265,6 +265,13 @@ namespace Rasa.Managers
                     break;
                 case ActionId.UseObject:
                     CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformRecoveryPacket(PerformType.TwoArgs, action.ActionId, action.ActionArgId));
+                    // Content usables dispatch by the server-side placement kind, before
+                    // the legacy argId branches: a content container's use never reaches them.
+                    if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, action.SourceId))
+                    {
+                        MissionManager.Instance.Content.ContentUsableRecovery(mapChannel, action);
+                        break;
+                    }
                     switch (action.ActionArgId)
                     {
                         case 1:

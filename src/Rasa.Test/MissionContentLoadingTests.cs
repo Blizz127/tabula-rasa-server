@@ -245,7 +245,7 @@ namespace Rasa.Test
         public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll }, implemented.BindingKinds.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
@@ -260,9 +260,9 @@ namespace Rasa.Test
             {
                 ContentConditionKind.MissionAbsent, ContentConditionKind.MissionStateIs, ContentConditionKind.ObjectiveStateIs
             }, implemented.ConditionKinds.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature }, implemented.PlacementKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());
-            Assert.AreEqual(0, implemented.UsableKinds.Count);
+            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared }, implemented.Instancing.ToArray());
             Assert.IsFalse(implemented.Prerequisites || implemented.Counters || implemented.Timers || implemented.Indicators ||
                            implemented.PlacementRespawn || implemented.NpcPackageOverride);
@@ -322,7 +322,7 @@ namespace Rasa.Test
             Assert.AreEqual(23, MissionContentRules.ClientPostedTutorialIds.Count);
             CollectionAssert.AreEquivalent(new uint[] { 2, 110, 185, 186 }, MissionContentRules.UsableStates(ContentUsableKind.Destroyable).ToArray());
             CollectionAssert.AreEquivalent(new uint[] { 113, 114, 115 }, MissionContentRules.UsableStates(ContentUsableKind.Bomb).ToArray());
-            Assert.AreEqual(0, MissionContentRules.UsableStates(ContentUsableKind.Container).Count);
+            CollectionAssert.AreEquivalent(new uint[] { 200, 201, 202 }, MissionContentRules.UsableStates(ContentUsableKind.Container).ToArray());
         }
 
         [TestMethod]
@@ -594,7 +594,7 @@ namespace Rasa.Test
                 "900690: a destroyable placement needs hit points",
                 "900691: usable placements must be stationary",
                 "900691: unexpected hit_points",
-                "900692: usable kind Container has no recovered state machine"
+                "900692: initial state 424242 is not a state of Container"
             }, Messages(validation, ContentPlacementEntry.TableName));
             CollectionAssert.AreEqual(new[]
             {

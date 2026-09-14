@@ -39,6 +39,9 @@ namespace Rasa.Structures
         // Dictionary<uniqueTeleporterId, dataAboutdynamicObject> Teleporters
         public Dictionary<uint,DynamicObject> Teleporters = new Dictionary<uint, DynamicObject>();
 
+        // Dictionary<dynamicObjectEntityId, content placement id> for reconstructed-content usables.
+        public Dictionary<ulong, uint> ContentUsables = new Dictionary<ulong, uint>();
+
         // Dictionary<uniqueLootDispenserId, dataAboutLootDispenser> LootDispensers
         public Dictionary<ulong, LootDispenser> LootDispensers = new Dictionary<ulong, LootDispenser>();
 

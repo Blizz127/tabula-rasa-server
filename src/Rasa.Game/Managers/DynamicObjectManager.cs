@@ -103,10 +103,24 @@ namespace Rasa.Managers
                         obj.TriggeredByPlayers.Add(client);
                         break;
                     }
+                case DynamicObjectType.ContentUsable:
+                    // Through the installed content manager (tests substitute their own).
+                    MissionManager.Instance.Content.RequestUseContentUsable(client, packet, obj);
+                    break;
                 default:
                     Logger.WriteLog(LogType.Debug, $"ToDo: RequestUseObjectPacket: unsuported object type {obj.DynamicObjectType}");
                     break;
             }
+        }
+
+        /// <summary>
+        /// SetUsable (203): toggles the client-side usable state. With missionActivated set,
+        /// enabling attaches and disabling detaches the MISSION_USABLE_INDICATOR glow
+        /// (client/augmentations/usable.pyo Recv_SetUsable / _SetEnabled).
+        /// </summary>
+        internal void SetUsable(Client client, ulong entityId, bool enabled, DynamicObject obj)
+        {
+            client.CallMethod(entityId, new SetUsablePacket(enabled));
         }
 
         internal static void CancelPendingUse(MapChannel mapChannel, ActionData action)

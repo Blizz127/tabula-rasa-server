@@ -8,6 +8,9 @@ namespace Rasa.Managers
     using Data;
     using Game;
     using Packets.ClientMethod.Server;
+    using Packets.Game.Server;
+    using Packets.LootDispenser.Server;
+    using Packets.MapChannel.Client;
     using Packets.MapChannel.Server;
     using Repositories.Char;
     using Structures;
@@ -279,6 +282,192 @@ namespace Rasa.Managers
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        /// A content usable a player is currently looting or has used, per player entity id.
+        /// </summary>
+        private sealed class PendingUse
+        {
+            public ulong ObjectId;
+            public uint PlacementId;
+            public uint WindupMs;
+        }
+
+        private readonly Dictionary<ulong, PendingUse> _pendingUses = new();
+
+        /// <summary>
+        /// A use request on a content usable. The client has already range-checked
+        /// (MAX_CONVERSATION_RANGE does not apply; the client checks interact range itself),
+        /// so the server verifies the object is enabled for this client, sends the windup,
+        /// and queues the recovery that completes the use.
+        /// </summary>
+        public void RequestUseContentUsable(Client client, RequestUseObjectPacket packet, DynamicObject obj)
+        {
+            var player = client.Player;
+            var mapChannel = player.MapChannel;
+
+            if (mapChannel == null || !mapChannel.ContentUsables.TryGetValue(packet.EntityId, out var placementId) ||
+                !Content.Catalog.Placements.TryGetValue(placementId, out var placement))
+                return;
+
+            var state = new ContentState(player);
+            var (enabled, missionActivated) = ContentMaterializer.UsableStateFor(Content, state, placement);
+            if (!enabled)
+                return;
+
+            obj.ActivateMission = missionActivated;
+            obj.WindupTime = placement.WindupMs;
+
+            client.CallMethod(player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, packet.ActionId, packet.ActionArgId));
+            client.CallMethod(packet.EntityId, new UsePacket(player.EntityId, obj.StateId, (int)placement.WindupMs));
+
+            var actionData = new ActionData(player, packet.ActionId, packet.ActionArgId, placement.WindupMs) { SourceId = obj.EntityId };
+            mapChannel.PerformRecovery.Add(actionData);
+            obj.TriggeredByPlayers.Add(client);
+
+            _pendingUses[player.EntityId] = new PendingUse { ObjectId = obj.EntityId, PlacementId = placementId, WindupMs = placement.WindupMs };
+        }
+
+        /// <summary>
+        /// The windup on a content usable finished: complete loot_all/use_completed
+        /// bindings bound to this placement.
+        /// </summary>
+        public void ContentUsableRecovery(MapChannel mapChannel, ActionData action)
+        {
+            if (!_pendingUses.TryGetValue(action.Actor.EntityId, out var pending) || pending.ObjectId != action.SourceId)
+                return;
+
+            _pendingUses.Remove(action.Actor.EntityId);
+
+            var obj = mapChannel.DynamicObjects.FirstOrDefault(candidate => candidate.EntityId == pending.ObjectId);
+            if (obj == null)
+                return;
+
+            foreach (var client in obj.TriggeredByPlayers.Where(client => client?.Player == action.Actor).ToList())
+                obj.TriggeredByPlayers.Remove(client);
+
+            var player = action.Actor as Manifestation;
+            if (player == null)
+                return;
+
+            var owner = mapChannel.ClientList.FirstOrDefault(candidate => candidate?.Player == player);
+            if (owner == null)
+                return;
+
+            var placement = Content.Catalog.Placements[pending.PlacementId];
+
+            // A container's use opens its loot window; the objective completes on Loot All.
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Container)
+            {
+                OpenContentContainer(owner, placement, obj);
+                return;
+            }
+
+            CompleteUseBoundObjectives(owner, placement);
+        }
+
+        /// <summary>
+        /// Opens a content container's per-owner loot window with its item set as the
+        /// lootable items. The objective completes when the player loots all of it.
+        /// </summary>
+        private void OpenContentContainer(Client client, ContentPlacementEntry placement, DynamicObject obj)
+        {
+            if (!_openContainers.TryGetValue(obj.EntityId, out var open) || open.OwnerEntityId != client.Player.EntityId)
+            {
+                open = new ContentContainerLoot
+                {
+                    OwnerEntityId = client.Player.EntityId,
+                    Items = Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var entries)
+                        ? entries.Select(entry => (entry.ItemTemplateId, entry.Quantity)).ToList()
+                        : new List<(uint, uint)>()
+                };
+                _openContainers[obj.EntityId] = open;
+            }
+
+            open.Sent = true;
+            client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(obj.EntityId, obj.EntityClassId));
+            client.CallMethod(obj.EntityId, new LootInfoPacket(open.Items.Select(item => new LootItem(item.ItemTemplateId, 0, item.Quantity, client.Player.EntityId, 0)).ToList()));
+            client.CallMethod(obj.EntityId, new CanLootItemsPacket(true, open.Items.Select(item => new LootItem(item.ItemTemplateId, 0, item.Quantity, client.Player.EntityId, 0)).ToList()));
+        }
+
+        private sealed class ContentContainerLoot
+        {
+            public ulong OwnerEntityId;
+            public List<(uint ItemTemplateId, uint Quantity)> Items = new();
+            public bool Sent;
+            public bool Granted;
+        }
+
+        private readonly Dictionary<ulong, ContentContainerLoot> _openContainers = new();
+
+        /// <summary>
+        /// Loot All on a content container: grants every item of the open container's
+        /// item set in one all-or-nothing transaction, then completes the bound objective.
+        /// </summary>
+        public void RequestLootAllFromContentContainer(Client client, ulong entityId)
+        {
+            var player = client.Player;
+            var mapChannel = player.MapChannel;
+
+            if (mapChannel == null || !_openContainers.TryGetValue(entityId, out var open) || open.OwnerEntityId != player.EntityId)
+                return;
+
+            if (open.Items.Count == 0 || open.Granted)
+                return;
+
+            // All-or-nothing: nothing is granted unless every item fits.
+            var planned = new List<Item>();
+            foreach (var (templateId, quantity) in open.Items)
+            {
+                var item = ItemManager.Instance.CreateFromTemplateId(templateId, quantity);
+                if (item == null)
+                {
+                    foreach (var created in planned)
+                        EntityManager.Instance.UnregisterItem(created.EntityId);
+                    return;
+                }
+                planned.Add(item);
+            }
+
+            foreach (var item in planned)
+                if (InventoryManager.Instance.AddItemToInventory(client, item) == null)
+                {
+                    // The inventory could not take it: roll back what was added.
+                    foreach (var created in planned)
+                        if (created != item)
+                            InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, created.OwnerSlotId);
+                    return;
+                }
+
+            open.Granted = true;
+            open.Items.Clear();
+            client.CallMethod(entityId, new TakenInfoPacket(player.EntityId, new List<LootItem>()));
+            client.CallMethod(entityId, new CanLootItemsPacket(false, new List<LootItem>()));
+
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LootAll).Where(binding => binding.PlacementId == ContentUsablesPlacementId(mapChannel, entityId)))
+                Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.LootAll);
+        }
+
+        private uint ContentUsablesPlacementId(MapChannel mapChannel, ulong entityId) =>
+            mapChannel.ContentUsables.TryGetValue(entityId, out var id) ? id : 0;
+
+        /// <summary>
+        /// True when the action's source is a reconstructed-content usable of this channel.
+        /// </summary>
+        public bool IsContentUsableSource(MapChannel mapChannel, ulong sourceId) =>
+            mapChannel != null && mapChannel.ContentUsables.ContainsKey(sourceId);
+
+        private IEnumerable<NpcMissionObjectiveBindingEntry> BindingsOfKind(ObjectiveBindingKind kind) =>
+            Content.LiveBindings.Where(binding => (ObjectiveBindingKind)binding.Kind == kind);
+
+        /// <summary>
+        /// Completes the use_completed bindings bound to this placement.
+        /// </summary>
+        private void CompleteUseBoundObjectives(Client client, ContentPlacementEntry placement)
+        {
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.UseCompleted).Where(binding => binding.PlacementId == placement.Id))
+                Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.UseCompleted);
         }
 
         /// <summary>

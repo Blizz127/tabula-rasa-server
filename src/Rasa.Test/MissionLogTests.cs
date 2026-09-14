@@ -21,12 +21,16 @@ using Rasa.Managers;
 using Rasa.Memory;
 using Rasa.Packets;
 using Rasa.Packets.MapChannel.Client;
+using Rasa.Packets.LootDispenser.Client;
+using Rasa.Packets.LootDispenser.Server;
 using Rasa.Packets.Manifestation.Server;
 using Rasa.Packets.MapChannel.Server;
 using Rasa.Packets.Mission.Server;
 using Rasa.Packets.Protocol;
 using Rasa.Repositories.Char;
 using Rasa.Repositories.Char.Character;
+using Rasa.Repositories.Char.Items;
+using Rasa.Repositories.Char.CharacterInventory;
 using Rasa.Repositories.Char.CharacterMission;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
@@ -68,6 +72,8 @@ namespace Rasa.Test
                 {
                     case "get_Characters": return new CharacterRepository(Context);
                     case "get_CharacterMissions": return new CharacterMissionRepository(Context);
+                    case "get_Items": return new ItemRepository(Context);
+                    case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
                     case "Complete":
                         if (FailComplete != null && FailComplete()) throw new InvalidOperationException("injected save failure");
                         Context.SaveChanges();
@@ -161,6 +167,10 @@ namespace Rasa.Test
             _factory = new Factory(_connection, _worldConnection);
             _now = 1_700_000_000;
             _missions = new MissionManager(_factory, () => _now);
+            // The singleton chain (DynamicObjectManager → MissionManager.Instance.Content)
+            // must reach this test's mission manager and content manager.
+            typeof(MissionManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)
+                ?.SetValue(null, _missions);
             _npcs = new NpcManager(_factory, _missions);
             using (var context = WeaponReloadPersistenceTests.Context(_connection))
             {
@@ -175,6 +185,7 @@ namespace Rasa.Test
             }
             _client = new Client(_factory, new ClientPacketHandler()) { State = ClientState.Ingame };
             _map = new MapChannel { MapInfo = new MapInfo(MapId, "test", 1, 1), ClientList = new List<Client>() };
+            _map.ClientList.Add(_client);
             _client.Player = new Manifestation
             {
                 Id = CharacterId, Level = 1, Experience = 5, MapContextId = MapId, MapChannel = _map,
@@ -192,6 +203,8 @@ namespace Rasa.Test
         [TestCleanup]
         public void Cleanup()
         {
+            typeof(MissionManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)
+                ?.SetValue(null, null);
             foreach (var creature in _registered)
             {
                 EntityManager.Instance.UnregisterCreature(creature.EntityId);
@@ -199,6 +212,22 @@ namespace Rasa.Test
             }
             if (_equippedItem != null)
                 EntityManager.Instance.UnregisterItem(_equippedItem.EntityId);
+            if (_crateObject != null)
+            {
+                EntityManager.Instance.UnregisterDynamicObject(_crateObject.EntityId);
+                _crateObject = null;
+            }
+            if (_realItemManager != null)
+            {
+                typeof(ItemManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, _realItemManager);
+                _realItemManager = null;
+            }
+            if (_realInventoryManager != null)
+            {
+                typeof(InventoryManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, _realInventoryManager);
+                _realInventoryManager = null;
+            }
+            RestoreTemplates();
             if (_oldLogger == null) typeof(Logger).GetProperty(nameof(Logger.Config)).SetValue(null, null);
             _connection.Dispose();
             _worldConnection.Dispose();
@@ -1017,5 +1046,176 @@ namespace Rasa.Test
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[EquipMissionId].Objectives[2]);
         }
 
+        private const uint CrateMissionId = 7003;
+        private const uint CratePlacementId = 900650;
+        private const uint CrateTemplateA = 123101;
+        private const uint CrateTemplateB = 123102;
+        private const ulong CrateObjectId = 0x5100;
+        private DynamicObject _crateObject;
+
+        // Objective 1 of mission 7003 completes through a loot_all binding on a
+        // container placement holding two item-set rows.
+        private static Mission CrateDefinition()
+        {
+            var mission = new Mission(new NpcMissionEntry
+            {
+                Id = CrateMissionId, GiverId = GiverDbId, ReciverId = ReceiverDbId, Level = 1, GroupType = 1, CategoryId = 10000032, Comment = "crate fixture"
+            });
+            mission.Objectives[1] = new MissionObjectiveDefinition { ObjectiveId = 1, Ordinal = 1, IsRequired = true, RevealedOnAccept = true };
+            mission.RefreshDispenseObjectives();
+            return mission;
+        }
+
+        private ItemManager _realItemManager;
+        private object _realInventoryManager;
+
+        private MissionContentManager LoadCrateContent()
+        {
+            // Item creation must write to this test's char database; the swap must
+            // happen before RegisterTemplate so the templates land in the swapped manager.
+            _realItemManager = typeof(ItemManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as ItemManager;
+            var itemManager = typeof(ItemManager).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new[] { typeof(IGameUnitOfWorkFactory) }, null).Invoke(new object[] { _factory });
+            typeof(ItemManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, itemManager);
+            var realInventoryManager = typeof(InventoryManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null);
+            var inventoryManager = typeof(InventoryManager).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new[] { typeof(IGameUnitOfWorkFactory) }, null).Invoke(new object[] { _factory });
+            typeof(InventoryManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, inventoryManager);
+            _realInventoryManager = realInventoryManager;
+            _client.Player.Inventory.PersonalInventory.AddRange(new ulong[250]);
+            typeof(Client).GetProperty("AccountEntry").SetValue(_client,
+                new GameAccountEntry { Id = AccountId, Name = "Fixture", FamilyName = "Fixture", Email = "fixture@example.invalid" });
+            RegisterTemplate(CrateTemplateA, (EntityClasses)900701);
+            RegisterTemplate(CrateTemplateB, (EntityClasses)900702);
+            using (var context = WorldContext(_worldConnection))
+            {
+                context.Database.EnsureCreated();
+                context.NpcMissionObjectiveBindingEntries.Add(new NpcMissionObjectiveBindingEntry
+                    { MissionId = CrateMissionId, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.LootAll, PlacementId = CratePlacementId, CounterId = 255 });
+                context.ContentPlacementEntries.Add(new ContentPlacementEntry
+                {
+                    Id = CratePlacementId, MapContextId = MapId, Kind = (byte)ContentPlacementKind.Usable,
+                    EntityClassId = 26714, UsableKind = (byte)ContentUsableKind.Container,
+                    Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 200, LootItemSetId = 900500
+                });
+                context.ContentItemSetEntries.Add(new ContentItemSetEntry { ItemSetId = 900500, ItemTemplateId = CrateTemplateA, Quantity = 1 });
+                context.ContentItemSetEntries.Add(new ContentItemSetEntry { ItemSetId = 900500, ItemTemplateId = CrateTemplateB, Quantity = 1 });
+                context.SaveChanges();
+            }
+
+            var content = new MissionContentManager(_factory) { Missions = _missions };
+            content.Load(() => new BootcampConfig(), new ContentReferences(), _missions.LoadedMissions);
+            _missions.Content = content;
+            return content;
+        }
+
+        private DynamicObject CrateObject(MissionContentManager content)
+        {
+            var validation = content.Content;
+            var placement = validation.Catalog.Placements[CratePlacementId];
+            var mapChannel = _client.Player.MapChannel ??= _map;
+            var usable = new DynamicObject
+            {
+                EntityId = CrateObjectId,
+                EntityClassId = (EntityClasses)placement.EntityClassId,
+                Position = new Vector3(100f, 10f, 100f),
+                MapContextId = MapId,
+                DynamicObjectType = DynamicObjectType.ContentUsable,
+                StateId = (UseObjectState)placement.InitialState
+            };
+            mapChannel.DynamicObjects.Add(usable);
+            mapChannel.ContentUsables[usable.EntityId] = CratePlacementId;
+            EntityManager.Instance.RegisterDynamicObject(usable);
+            _crateObject = usable;
+            return usable;
+        }
+
+        private void UseCrate(MissionContentManager content, DynamicObject usable)
+        {
+            var packet = new RequestUseObjectPacket { ActionId = ActionId.UseObject, ActionArgId = 1, EntityId = usable.EntityId };
+            _client.Player.CurrentAction = (int)ActionId.UseObject;
+            DynamicObjectManager.Instance.RequestUseObjectPacket(_client, packet);
+            // The windup elapses: run the recovery for the queued action.
+            var action = _client.Player.MapChannel.PerformRecovery.Single(entry => entry.Actor == _client.Player);
+            action.PassedTime = action.WaitTime;
+            ActorActionManager.Instance.PerformRecovery(_client.Player.MapChannel, action);
+            _client.Player.MapChannel.PerformRecovery.Remove(action);
+            _client.Player.CurrentAction = 0;
+        }
+
+        private List<LootItem> CrateLootItems()
+        {
+            var packets = DrainAddressed();
+            var lootInfo = packets.Select(entry => entry.Packet).OfType<LootInfoPacket>().Single();
+            return lootInfo.LootItems;
+        }
+
+        [TestMethod]
+        public void LootAllFromContentContainerGrantsItemsAndCompletesTheObjective()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+
+            Accept(missionId: CrateMissionId);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+
+            UseCrate(content, usable);
+            var lootItems = CrateLootItems();
+            Assert.AreEqual(2, lootItems.Count);
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+            var packets = Drain();
+            Assert.IsTrue(packets.Any(packet => packet is ObjectiveCompletedPacket completed && completed.MissionId == CrateMissionId && completed.ObjectiveId == 1));
+
+            using var context = WeaponReloadPersistenceTests.Context(_connection);
+            var row = context.CharacterMissionObjectiveEntries.Single(entry =>
+                entry.CharacterId == CharacterId && entry.MissionId == CrateMissionId && entry.ObjectiveId == 1);
+            Assert.AreEqual((uint)MissionObjectiveState.Completed, row.Status);
+        }
+
+        [TestMethod]
+        public void LootAllIsRefusedWhenTheInventoryCannotTakeEverything()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+
+            // Fill the Misc category (the crate templates' category): nothing can be granted.
+            var fillerTemplate = RegisterTemplate(130000, (EntityClasses)900801);
+            var filler = new Item { ItemTemplateId = 130000, ItemTemplate = fillerTemplate };
+            EntityManager.Instance.RegisterItem(filler.EntityId, filler);
+            for (var i = 200; i < 250; i++)
+                _client.Player.Inventory.PersonalInventory[i] = filler.EntityId;
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            Assert.AreEqual(0, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0 && slot != filler.EntityId));
+        }
+
+        [TestMethod]
+        public void SecondLootAllIsRefused()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            var afterFirst = _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0);
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(afterFirst, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+        }
     }
 }

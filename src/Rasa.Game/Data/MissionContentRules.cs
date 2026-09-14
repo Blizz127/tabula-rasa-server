@@ -19,7 +19,7 @@ namespace Rasa.Data
         /// </summary>
         public static readonly ContentCapabilities Implemented = new ContentCapabilities
         {
-            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip },
+            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll },
             Events = new HashSet<ContentRuleEvent>
             {
                 ContentRuleEvent.EnteredMap,
@@ -41,8 +41,9 @@ namespace Rasa.Data
                 ContentConditionKind.MissionStateIs,
                 ContentConditionKind.ObjectiveStateIs
             },
-            PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature },
-            PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary }
+            PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
+            PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary },
+            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container }
         };
 
         // The entry path (S1) exists; new characters may enter the boot camp once a live start location is
@@ -76,7 +77,10 @@ namespace Rasa.Data
                 // augmentation 41 InertDestroyable
                 { ContentUsableKind.Destroyable, new HashSet<(uint, uint)> { (2, 110), (110, 185), (185, 110), (185, 186), (186, 2), (186, 185) } },
                 // augmentation 42 Bomb
-                { ContentUsableKind.Bomb, new HashSet<(uint, uint)> { (113, 114), (114, 113), (114, 115), (115, 113) } }
+                { ContentUsableKind.Bomb, new HashSet<(uint, uint)> { (113, 114), (114, 113), (114, 115), (115, 113) } },
+                // augmentation 64 TreasureDispenser (usabledata.pyo usableaugmentationstatetransition["64"]):
+                // CLOSED 200 → OPENED 201 (use) / REMOVED 202 (cipher-removal), OPENED 201 → CLOSED/REMOVED.
+                { ContentUsableKind.Container, new HashSet<(uint, uint)> { (200, 201), (200, 202), (201, 200), (201, 202) } }
             };
 
         public static IReadOnlyCollection<uint> UsableStates(ContentUsableKind kind)

@@ -784,6 +784,14 @@ namespace Rasa.Game.Handlers
         [PacketHandler(GameOpcode.RequestLootAllFromCorpse)]
         private void RequestLootAllFromCorpse(RequestLootAllFromCorpsePacket packet)
         {
+            // A reconstructed-content container routes to the content layer; the
+            // corpse path stays untouched.
+            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
+            {
+                MissionManager.Instance.Content.RequestLootAllFromContentContainer(Client, packet.EntityId);
+                return;
+            }
+
             LootDispenserManager.Instance.RequestLootAllFromCorpse(Client, packet);
         }
         #endregion
