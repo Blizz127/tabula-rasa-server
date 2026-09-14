@@ -149,7 +149,9 @@ namespace Rasa.Managers
             lock (Roll)
             {
                 giveLoot = Roll.Next(0, 2);
-                loot.Credits = Roll.Next(1, 10);
+                // Kill credits are paid when the creature dies (KillRewardManager); the corpse
+                // window in the footage offers items only (C2-37).
+                loot.Credits = 0;
                 loot.LootQuality = (LootQuality)Roll.Next(1, 7);
             }
 

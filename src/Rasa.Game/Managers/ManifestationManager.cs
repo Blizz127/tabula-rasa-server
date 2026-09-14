@@ -517,7 +517,7 @@ namespace Rasa.Managers
             return entityData;
         }
 
-        internal void GainExperience(Client client, uint experience)
+        internal void GainExperience(Client client, uint experience, uint? baseGained = null, int streakMod = 1)
         {
             if (client.Player.Level >= MaxPlayerLevel)
                 return; // cannot gain xp over level 50
@@ -526,17 +526,18 @@ namespace Rasa.Managers
 
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Expirience, client.Player.Experience);
 
-            NotifyExperienceGained(client, experience);
+            NotifyExperienceGained(client, experience, baseGained, streakMod);
         }
 
         /// <summary>
         /// Sends the experience change and applies level-ups for experience that
         /// is already persisted (mission rewards commit it with the mission state).
         /// </summary>
-        internal void NotifyExperienceGained(Client client, uint experience)
+        internal void NotifyExperienceGained(Client client, uint experience, uint? baseGained = null, int streakMod = 1)
         {
             var levelBefore = client.Player.Level;
-            var xpInfo = new XPInfo(client.Player.Experience, experience, experience);
+            // streakMod above 1 makes the client append "[base Base XP] [+N% Kill Streak Bonus]".
+            var xpInfo = new XPInfo(client.Player.Experience, experience, baseGained ?? experience) { StreakMod = streakMod };
 
             client.CallMethod(client.Player.EntityId, new ExperienceChangedPacket(xpInfo));
 

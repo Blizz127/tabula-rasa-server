@@ -98,6 +98,7 @@ namespace Rasa.Structures
         public bool RemoveFromMap { get; set; }
         /// <summary>The hospitals offered by the pending PlayerDead; null while alive.</summary>
         public Managers.PlayerDeathOffer DeathOffer { get; set; }
+        public Managers.KillStreakState KillStreak { get; } = new();
 
         /// <summary>
         /// Ids of the map links whose trigger radius the player is standing in. A link fires

@@ -1,0 +1,43 @@
+{
+  "schema": "rasa-kill-rewards/1",
+  "purpose": "Provenance of src/Rasa.Game/Data/KillRewardRules.cs and KillRewardManager. KillRewardTests reproduces every clean observation below from the rules.",
+  "sources": {
+    "gameconstants": "trpython.zip:shared/gameconstants.pyo (1.16.5.0): BASE_KILL_XP 62.5, STREAK_BASE_PER_PARTY_MEMBER 3, STREAK_LEVEL_BASIS 10, STREAK_MAX_VALUE 5, MAX_KILLING_STREAK_PRESTIGE_POINT_BONUS 1, XP_MOD_PER_PARTY_MEMBER 0.08, XP_MOD_FOR_GROUP 1.0, DANGER_PENALTY_LEVELDIFF_MIN 5, DANGER_PENALTY_LEVELDIFF_MAX 9, KILL_CREDIT_PRESTIGE_LEVEL_MAX_ABOVE 4, KILL_CREDIT_PRESTIGE_LEVEL_MAX_BELOW 8, MIN_DISTANCE_FOR_KILL_CREDIT 100, BASE_CRITICAL_CHANCE 5",
+    "xpinfo": "trpython.zip:shared/xpinfo.pyo: tuple (total, gained, baseGained, groupMod, streakMod, boosterMod, wasCritKill, wasTeamCritKill); ApplyModifier sets gained = int(gained * mod)",
+    "manifestation": "trpython.zip:client/augmentations/manifestation.pyo Recv_ExperienceChanged composes 'You gained %(xp)s experience points.' plus ' [%(base)s Base XP]' and ' (+%(streakMod)s%% Kill Streak Bonus)' when streakMod > 1",
+    "clientmethod": "trpython.zip:client/clientmethod.pyo Recv_SetKillStreak(count); Recv_GotLoot(creatureEntityId, items, moneyAmount) prints PM 262 'You received %(amount)s credits.'",
+    "footage": "research/20260913-bootcamp/footage/analysis transcripts (7Lrst9SG3pk A, 8VXeKzGUv0c B: final week; Ycxm8Pa1-v4 C: pre-D16.5, used only as corroboration)"
+  },
+  "rules": [
+    { "id": "xp.base", "value": "base10 = 625 + 42*L + 2*L^2 (i.e. 62.5 + 4.2*L + 0.2*L^2), L = creature level; gained = floor(base10 * streakMod / 10); baseGained = floor(base10 / 10)", "tier": "measured", "citations": ["observations below", "gameconstants BASE_KILL_XP 62.5 (the intercept)", "xpinfo.ApplyModifier int(gained * mod)"], "reasoning": "Two coefficients fit ten integer constraints across levels 1-9, including four streak-doubled values that only fit if the modifier is applied before truncation. Valid range observed: creature levels 1-9 with player levels 2-10; higher levels are an extrapolation." },
+    { "id": "credits", "value": "5 * L credits at the kill, announced by GotLoot with no items", "tier": "measured", "citations": ["observations below", "A3-081 and B1-018: the credit line arrives with the experience line, not at corpse looting"] },
+    { "id": "streak.activation", "value": "the streak rises one step per 3 kills (solo), streakMod = 1 + step", "tier": "inferred", "citations": ["gameconstants STREAK_BASE_PER_PARTY_MEMBER 3", "A4: kills at 391.5 and 396.1 plain, 401.5 max streak (+100%)", "B1: 65.8 and 67.2 plain, 73.1 max streak", "C1: 5.4 (two kills) plain, 14.7 max streak"] },
+    { "id": "streak.max", "value": "max step = clamp(ceil(player level / 10), 1, 5)", "tier": "inferred", "citations": ["gameconstants STREAK_LEVEL_BASIS 10, STREAK_MAX_VALUE 5", "HUD strings ID_HUD_KILLSTREAK_X2..X6", "levels 2, 3, 5 and 8 reach 'max kill streak' at +100% (A4-10, B1-041, B3-028, B3-035); level 10 shows +100% (B3-060)"] },
+    { "id": "streak.prestige", "value": "1 prestige point, PM 10000134, once per streak when the max step is reached, before the experience line", "tier": "observed", "citations": ["A4-10", "B1-041", "B3-028", "gameconstants MAX_KILLING_STREAK_PRESTIGE_POINT_BONUS 1"] },
+    { "id": "streak.window", "value": "15000 ms after the last kill", "tier": "inferred", "citations": ["A4-18 streak kill 12.5 s after A4-16", "A4-28 plain kill 16.1 s after A4-18"], "reasoning": "bounded to (12.5, 16.1] s by final-week footage; 15 s chosen inside the bound" }
+  ],
+  "observations": [
+    { "event": "C1-012", "creature_level": 1, "streak_mod": 1, "xp": 66, "credits": 5, "note": "pre-D16.5 corroboration; B1-037 final week also 66 / 5" },
+    { "event": "C2-31", "creature_level": 1, "streak_mod": 2, "xp": 133, "base": 66, "credits": 5, "note": "pre-D16.5; C1-026 identical" },
+    { "event": "A3-081", "creature_level": 2, "streak_mod": 1, "xp": 71, "credits": 10 },
+    { "event": "A4-10", "creature_level": 2, "streak_mod": 2, "xp": 143, "base": 71, "credits": 10 },
+    { "event": "B2-065", "creature_level": 4, "streak_mod": 1, "xp": 82, "credits": 20, "note": "Thrax Infantry Trainee; level read partially (4?) and consistent with the credits" },
+    { "event": "B3-010", "creature_level": 6, "streak_mod": 1, "xp": 94, "credits": 30, "note": "level from credits" },
+    { "event": "B3-028", "creature_level": 6, "streak_mod": 2, "xp": 189, "base": 94, "credits": 30 },
+    { "event": "B3-047", "creature_level": 7, "streak_mod": 1, "xp": 101, "credits": 35, "note": "Forean Machina Mk II, level 7 partially read" },
+    { "event": "B3-035", "creature_level": 9, "streak_mod": 2, "xp": 233, "base": 116, "credits": 45, "note": "level from credits" }
+  ],
+  "unexplained": [
+    { "event": "B3-060/B4-006", "summary": "Player level 10: [101 Base XP] with 40 credits. 40 credits means level 8 (base 108), so a level-difference modifier (player 2 levels above) or a different credit source is involved. Not modelled." },
+    { "event": "B1-025, B1-032, B1-033, C1-021, C1-038, C2-05", "summary": "Plain 17, 33 and 35 experience with no credits: exactly one half or one quarter of the level 1/2 base. Probably shared-damage or ally kill credit. Not modelled." },
+    { "event": "B1-028, C1-015", "summary": "Crit kills add a separate 'by Crit Killing' line equal to the base. Kill-shot criticals are not modelled." },
+    { "event": "C1-030", "summary": "Pre-D16.5: a streak-annotated line whose gain equals its base. Not reproduced." }
+  ],
+  "gaps": [
+    { "id": "GAP-XP-LEVELDIFF", "summary": "No level-difference or danger modifiers (DANGER_PENALTY_LEVELDIFF 5-9)." },
+    { "id": "GAP-XP-GROUP", "summary": "No squad experience modifiers or sharing (XP_MOD_PER_PARTY_MEMBER 0.08, MIN_DISTANCE_FOR_KILL_CREDIT 100)." },
+    { "id": "GAP-XP-PARTIAL", "summary": "No partial kill credit for kills shared with allies." },
+    { "id": "GAP-CRIT-KILL", "summary": "No crit-kill experience." },
+    { "id": "GAP-LOOT-TABLES", "summary": "Corpse items remain the emulator placeholder roll." }
+  ]
+}

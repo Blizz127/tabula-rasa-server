@@ -4231,12 +4231,12 @@
   },
   {
    "id": "GAP-KILL-REWARDS",
-   "summary": "Kill experience and loot use the emulator formula instead of the observed payouts and their modifiers.",
+   "summary": "Kill experience, credits and the solo kill streak now follow the client constants and a fit to every clean final-week kill (71 XP / 10 credits for a level-2 Initiate, +100% streak with 1 prestige on the third kill). Still absent: level-difference, squad, partial-credit and crit-kill modifiers, and original loot tables.",
    "evidence": [
-    "src/Rasa.Game/Managers/CreatureManager.cs:137-147 (emulator kill reward formula)",
-    "footage kill payouts in A4, C1 and C2 (observed 71 XP / 10 credits)"
+    "docs/evidence/kill-rewards.json",
+    "footage A3-081, A4-10..A4-28, B1-018..B1-041"
    ],
-   "closes_with": "global kill-reward track",
+   "closes_with": "evidence for the remaining modifiers (kill-rewards.json gaps)",
    "surfaced_by": [
     "manifest"
    ],

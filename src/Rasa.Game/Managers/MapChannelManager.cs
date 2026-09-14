@@ -227,6 +227,9 @@ namespace Rasa.Managers
 
                         // hospitals gained by coming near them
                         PlayerDeathManager.Instance.DiscoverHospitals(mapChannel);
+
+                        // kill streaks whose window has passed
+                        KillRewardManager.Instance.ExpireStreaks(mapChannel);
                     }
 
                     // check for effects (buffs)

@@ -1252,3 +1252,19 @@ gained within 100 m with the original "You just gained" message. Details, source
 gaps (trauma, equipment wear, ally revival, death persistence, control points):
 [player-death-implementation.md](player-death-implementation.md) and
 `docs/evidence/hospital-catalog.json`. Full suite 801/801.
+
+## 2026-09-14 UTC — Creature kill experience, credits and kill streak
+
+The emulator paid `creature level × 100 ± 10%` experience and 1–10 random corpse credits. Kills now
+pay from the 1.16.5.0 client's `shared/gameconstants.py` values (`BASE_KILL_XP 62.5`,
+`STREAK_BASE_PER_PARTY_MEMBER 3`, `STREAK_LEVEL_BASIS 10`, `STREAK_MAX_VALUE 5`,
+`MAX_KILLING_STREAK_PRESTIGE_POINT_BONUS 1`) and a fit to every clean kill line in the final-week
+footage: base experience `62.5 + 4.2·L + 0.2·L²` (L = creature level), truncated only after the
+streak multiplier as `shared/xpinfo.py ApplyModifier` does, and `5·L` credits paid at the kill
+through `GotLoot`. The fit reproduces all nine recorded observations for levels 1–9, including the
+four streak-doubled values (133, 143, 189, 233) that would be one lower if the base were rounded
+first. The third kill in a streak sends `SetKillStreak(1)`, one prestige point with PM 10000134, and
+doubles experience; a streak ends 15 s after the last kill (bounded to 12.5–16.1 s by A4). The
+final-week cave-fight timeline (A3-081 to A4-28) is reproduced exactly by `KillRewardTests`.
+Level-difference, squad, partial-credit and crit-kill modifiers and original loot tables remain
+gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.

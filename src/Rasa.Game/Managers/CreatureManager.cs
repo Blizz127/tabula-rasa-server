@@ -135,13 +135,8 @@ namespace Rasa.Managers
 
             if (client != null)
             {
-                // give experience
-                var experience = creature.Level * 100; // base experience
-                var experienceRange = creature.Level * 10;
-                experience += (uint)(new Random().Next() % (experienceRange * 2 + 1)) - experienceRange;
-
-                // todo: Depending on level difference reduce experience
-                ManifestationManager.Instance.GainExperience(client, experience);
+                // experience, credits and kill streak (docs/evidence/kill-rewards.json)
+                KillRewardManager.Instance.AwardKill(client, creature);
 
                 MissionManager.Instance.OnCreatureKilled(client, creature);
             }
