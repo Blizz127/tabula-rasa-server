@@ -26,6 +26,7 @@ using Rasa.Packets.LootDispenser.Server;
 using Rasa.Packets.Manifestation.Server;
 using Rasa.Packets.MapChannel.Server;
 using Rasa.Packets.Mission.Server;
+using Rasa.Packets.Inventory.Server;
 using Rasa.Packets.Protocol;
 using Rasa.Repositories.Char;
 using Rasa.Repositories.Char.Character;
@@ -74,6 +75,7 @@ namespace Rasa.Test
                     case "get_CharacterMissions": return new CharacterMissionRepository(Context);
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
+                    case "BeginTransaction": return Context.Database.BeginTransaction();
                     case "Complete":
                         if (FailComplete != null && FailComplete()) throw new InvalidOperationException("injected save failure");
                         Context.SaveChanges();
@@ -574,13 +576,18 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void ItemRewardsAreValidatedForDisplayButWithheldUntilDeliveryIsAtomic()
+        public void ItemRewardsAreDeliveredWithTheCompletionOrNotAtAll()
         {
             RegisterTemplate(900501, (EntityClasses)900601, quality: 4);
             RegisterTemplate(900502, (EntityClasses)900602);
+            RegisterTemplate(900504, (EntityClasses)900604);
             RegisterTemplate(900503, (EntityClasses)900603, category: 0);
             try
             {
+                for (var slot = 0; slot < 250; slot++)
+                    _client.Player.Inventory.PersonalInventory.Add(0);
+                _client.Player.Inventory.PersonalInventory[200] = 0xFEED;    // the first misc slot is taken
+
                 Accept();
                 CompleteObjective(_scout, 5);
                 CompleteObjective(_giver, 4);
@@ -589,19 +596,62 @@ namespace Rasa.Test
                 var definition = _missions.LoadedMissions[MissionId];
                 definition.Rewards.Add(new NpcMissionRewardEntry { Id = MissionId, Type = (byte)NpcMissionRewardType.FixedItem, ItemTemplateId = 900501, Quantity = 1 });
                 definition.Rewards.Add(new NpcMissionRewardEntry { Id = MissionId, Type = (byte)NpcMissionRewardType.SelectableItem, ItemTemplateId = 900502, Quantity = 10 });
+                definition.Rewards.Add(new NpcMissionRewardEntry { Id = MissionId, Type = (byte)NpcMissionRewardType.SelectableItem, ItemTemplateId = 900504, Quantity = 2 });
                 MissionManager.BuildRewardInfo(definition);
-                CollectionAssert.AreEqual(new[] { "item reward delivery is not implemented" }, definition.DefinitionGaps());
+                Assert.AreEqual(0, definition.DefinitionGaps().Count, string.Join("; ", definition.DefinitionGaps()));
                 var fixedItem = definition.MissionConstantData.RewardInfo.FixedReward.FixedItems.Single();
                 Assert.AreEqual((900501u, (EntityClasses)900601, 1u, 4), (fixedItem.ItemTemplateId, fixedItem.Class, fixedItem.Quantity, fixedItem.QualityId));
-                CollectionAssert.AreEqual(new uint[] { 900502 }, definition.MissionConstantData.RewardInfo.SelectableReward.Select(r => r.ItemTemplateId).ToArray());
-                CollectionAssert.AreEqual(new uint[] { 900502 }, definition.OfferedSelectableRewards.Select(r => r.ItemTemplateId).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 900502, 900504 }, definition.MissionConstantData.RewardInfo.SelectableReward.Select(r => r.ItemTemplateId).ToArray());
 
-                // A mission already in the log does not pay out once its definition is incomplete.
-                CompleteMission(selection: 0);
+                // A choice is required and must name one of the offered rewards.
                 CompleteMission();
+                CompleteMission(selection: 2);
+                CompleteMission(selection: -1);
+                Assert.IsFalse(Drain().OfType<MissionCompletedPacket>().Any());
+
+                // No room in the category: nothing commits, the mission stays completeable.
+                for (var slot = 201; slot < 250; slot++)
+                    _client.Player.Inventory.PersonalInventory[slot] = 0xFEED;
+                CompleteMission(selection: 1);
                 Assert.IsFalse(Drain().OfType<MissionCompletedPacket>().Any());
                 Assert.AreEqual((uint)MissionState.Active, Saved().Mission.MissionState);
-                Assert.AreEqual(40, Saved().Character.Credit);
+                for (var slot = 201; slot < 250; slot++)
+                    _client.Player.Inventory.PersonalInventory[slot] = 0;
+
+                // A failed commit rolls back the item rows created inside the transaction.
+                _factory.FailNextComplete = true;
+                CompleteMission(selection: 1);
+                Assert.IsFalse(Drain().OfType<MissionCompletedPacket>().Any());
+                using (var context = WeaponReloadPersistenceTests.Context(_connection))
+                    Assert.AreEqual(0, context.ItemEntries.Count() + context.CharacterInventoryEntries.Count());
+                Assert.AreEqual(0ul, _client.Player.Inventory.PersonalInventory[201]);
+
+                CompleteMission(selection: 1);
+                var packets = Drain();
+                Assert.AreEqual(1, packets.OfType<MissionCompletedPacket>().Count());
+                var added = packets.OfType<InventoryAddItemPacket>().ToList();
+                CollectionAssert.AreEqual(new uint[] { 201, 202 }, added.Select(p => p.SlotId).ToArray());
+                Assert.IsTrue(packets.FindIndex(p => p is InventoryAddItemPacket) < packets.FindIndex(p => p is MissionCompletedPacket));
+
+                var rewarded = new[] { 201, 202 }.Select(slot => EntityManager.Instance.GetItem(_client.Player.Inventory.PersonalInventory[slot])).ToList();
+                CollectionAssert.AreEqual(new uint[] { 900501, 900504 }, rewarded.Select(item => item.ItemTemplateId).ToArray());
+                Assert.AreEqual(2u, rewarded[1].StackSize);
+
+                using (var context = WeaponReloadPersistenceTests.Context(_connection))
+                {
+                    Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.MissionId == MissionId).MissionState);
+                    var rows = context.CharacterInventoryEntries.Where(row => row.CharacterId == CharacterId).OrderBy(row => row.SlotId).ToList();
+                    CollectionAssert.AreEqual(new uint[] { 201, 202 }, rows.Select(row => row.SlotId).ToArray());
+                    CollectionAssert.AreEqual(rewarded.Select(item => item.Id).ToArray(), rows.Select(row => row.ItemId).ToArray());
+                    CollectionAssert.AreEqual(new uint[] { 900501, 900504 },
+                        rows.Select(row => context.ItemEntries.Single(entry => entry.ItemId == row.ItemId).ItemTemplateId).ToArray());
+                }
+
+                foreach (var item in rewarded)
+                {
+                    EntityManager.Instance.UnregisterItem(item.EntityId);
+                    EntityManager.Instance.UnregisterEntity(item.EntityId);
+                }
 
                 definition.Rewards.Add(new NpcMissionRewardEntry { Id = MissionId, Type = (byte)NpcMissionRewardType.SelectableItem, ItemTemplateId = 900599, Quantity = 1 });
                 definition.Rewards.Add(new NpcMissionRewardEntry { Id = MissionId, Type = (byte)NpcMissionRewardType.FixedItem, ItemTemplateId = 900503, Quantity = 1 });
@@ -609,7 +659,6 @@ namespace Rasa.Test
                 MissionManager.BuildRewardInfo(definition);
                 CollectionAssert.AreEqual(new[]
                 {
-                    "item reward delivery is not implemented",
                     "reward item template 900599 is unknown",
                     "reward item template 900503 has no inventory placement",
                     "reward item template 900501 quantity 11 is outside 1..10"

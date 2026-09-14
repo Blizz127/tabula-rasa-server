@@ -7,6 +7,7 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Packets.Inventory.Server;
     using Packets.MapChannel.Server;
     using Packets.Mission.Server;
     using Repositories.Char.CharacterMission;
@@ -181,7 +182,6 @@ namespace Rasa.Managers
         {
             var rewardInfo = new RewardInfo();
             var currencies = new HashSet<NpcMissionRewardType>();
-            var itemRewards = false;
 
             mission.RewardCredits = mission.RewardPrestige = mission.RewardExperience = 0;
             mission.OfferedFixedItems.Clear();
@@ -226,15 +226,7 @@ namespace Rasa.Managers
 
                     case NpcMissionRewardType.FixedItem:
                     case NpcMissionRewardType.SelectableItem:
-                        // Item rewards would be created and placed after the completion
-                        // commit, so a full or unsuitable inventory could consume the
-                        // mission without the item. Until that is atomic they are withheld.
-                        if (!itemRewards)
-                        {
-                            mission.RewardGaps.Add("item reward delivery is not implemented");
-                            itemRewards = true;
-                        }
-
+                        // Delivered at turn-in in the completion transaction (CompleteNpcMission).
                         var itemTemplate = ItemManager.Instance.GetItemTemplateById(reward.ItemTemplateId);
 
                         if (itemTemplate == null)
@@ -820,10 +812,26 @@ namespace Rasa.Managers
                 return;
             }
 
-            // Complete definitions have no selectable rewards, so the client offers no
-            // choice and sends None; anything else is not a request it could make.
-            if (selectionIdx != null)
+            // The client sends the index of the chosen selectable reward, and None when the
+            // mission offers no choice; anything else is not a request it could make.
+            var selectable = definition.OfferedSelectableRewards;
+
+            if (selectable.Count == 0 ? selectionIdx != null : selectionIdx is not { } chosen || chosen < 0 || chosen >= selectable.Count)
                 return;
+
+            var itemRewards = definition.OfferedFixedItems.ToList();
+            if (selectable.Count > 0)
+                itemRewards.Add(selectable[selectionIdx.Value]);
+
+            // Every item needs its own free slot in its inventory category before anything commits:
+            // a full category refuses the turn-in rather than consuming the mission without the item.
+            var placements = PlanRewardSlots(player, itemRewards);
+
+            if (placements == null)
+            {
+                Logger.WriteLog(LogType.Debug, $"CompleteNpcMission: no room for the item rewards of mission {missionId}; turn-in refused for character {player.Id}");
+                return;
+            }
 
             if (definition.Rewards.Count == 0)
                 Logger.WriteLog(LogType.Debug, $"Mission {missionId} has no npc_mission_reward rows; completed without rewards");
@@ -853,11 +861,23 @@ namespace Rasa.Managers
 
                 // Mission state and currency/experience commit together so a crash
                 // can neither pay twice nor consume the mission unpaid.
+                using var transaction = placements.Count > 0 ? unitOfWork.BeginTransaction() : null;
+
+                // Item rows get their ids inside the transaction; nothing is visible unless all of it commits.
+                foreach (var placement in placements)
+                {
+                    placement.Item.Id = unitOfWork.Items.CreateItem(placement.Item);
+                    if (placement.Item.Id == 0)
+                        throw new InvalidOperationException($"reward item {placement.Item.ItemTemplateId} could not be saved");
+                    unitOfWork.CharacterInventories.StageInvItem(client.AccountEntry?.Id ?? 0, player.Id, (uint)InventoryType.Personal, placement.Slot, placement.Item.Id);
+                }
+
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)MissionState.Completed, changeTime);
                 if (credits != 0 || prestige != 0 || experience != 0)
                     unitOfWork.Characters.UpdateCharacterRewards(player.Id, (int)newCredits, (int)newPrestige, (uint)newExperience);
                 Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
+                transaction?.Commit();
             }
             catch (Exception e)
             {
@@ -885,6 +905,18 @@ namespace Rasa.Managers
             {
                 player.Experience = (uint)newExperience;
                 ManifestationManager.Instance.NotifyExperienceGained(client, (uint)experience);
+            }
+
+            foreach (var placement in placements)
+            {
+                var item = placement.Item;
+                EntityManager.Instance.RegisterEntity(item.EntityId, EntityType.Item);
+                EntityManager.Instance.RegisterItem(item.EntityId, item);
+                item.OwnerId = player.Id;
+                item.OwnerSlotId = placement.Slot;
+                ItemManager.Instance.SendItemDataToClient(client, item, false);
+                player.Inventory.PersonalInventory[(int)placement.Slot] = item.EntityId;
+                client.CallMethod(SysEntity.ClientInventoryManagerId, new InventoryAddItemPacket(InventoryType.Personal, item.EntityId, placement.Slot));
             }
 
             client.CallMethod(player.EntityId, new MissionCompletedPacket(missionId));
@@ -935,6 +967,65 @@ namespace Rasa.Managers
 
             if (LoadedMissions.TryGetValue(missionId, out var definition))
                 RefreshRelatedNpcStatus(client, definition);
+        }
+
+        #endregion
+
+        #region Item rewards
+
+        private sealed class RewardPlacement
+        {
+            public Item Item;
+            public uint Slot;
+        }
+
+        /// <summary>
+        /// A free personal-inventory slot in each reward's category (0-49 equipment ... 200-249 misc), lowest first,
+        /// with the item built but not yet saved; null when any reward does not fit.
+        /// </summary>
+        private static List<RewardPlacement> PlanRewardSlots(Manifestation player, IReadOnlyList<NpcMissionRewardEntry> rewards)
+        {
+            var placements = new List<RewardPlacement>();
+            var taken = new HashSet<uint>();
+            var inventory = player.Inventory.PersonalInventory;
+
+            foreach (var reward in rewards)
+            {
+                var template = ItemManager.Instance.GetItemTemplateById(reward.ItemTemplateId);
+                var classInfo = template == null ? null : EntityClassManager.Instance.GetClassInfo(template.Class)?.ItemClassInfo;
+
+                if (classInfo == null)
+                    return null;
+
+                var offset = ((uint)template.InventoryCategory - 1) * 50;
+                uint? slot = null;
+
+                for (var candidate = offset; candidate < offset + 50 && candidate < inventory.Count; candidate++)
+                    if (inventory[(int)candidate] == 0 && taken.Add(candidate))
+                    {
+                        slot = candidate;
+                        break;
+                    }
+
+                if (slot == null)
+                    return null;
+
+                placements.Add(new RewardPlacement
+                {
+                    Slot = slot.Value,
+                    Item = new Item
+                    {
+                        ItemTemplate = template,
+                        ItemTemplateId = template.ItemTemplateId,
+                        StackSize = reward.Quantity,
+                        CurrentHitPoints = classInfo.MaxHitPoints,
+                        Crafter = "",
+                        Color = 2139062144
+                    }
+                });
+            }
+
+            return placements;
         }
 
         #endregion
