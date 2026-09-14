@@ -15,7 +15,7 @@ choosing one revives the player there. Every data value and rule is labelled in
 | Does the list come from the server and depend on the character? | Yes. Two final-week Wilderness deaths offered different lists as the player travelled (B3-043: Alia Das, Landing Zone CP, Twin Pillars; B3-058: Alia Das, Imperial Valley CP, Ranja Gorge, Twin Pillars). The boot-camp death offered only "Bootcamp > Refugee Base Medic" (A4-36). | observed |
 | Which ids does `PlayerDead` carry? | graveyardlanguage keys: Refugee Base Medic 20000001, Alia Das 3, Ranja Gorge 5, Twin Pillars 6, Daghda's Urn 20, Imperial Valley CP 122 (the label the footage shows; 110 reads differently), Landing Zone CP 136 (136 and 183 render identically). | original / observed / inferred |
 | Where does the player respawn? | At the hospital's client map marker. The boot-camp respawn was radar-measured at (358.94, 156.95) ±1.5 m, 1.1 m from the Refugee Base Medic marker (357.90, 156.52). Wilderness hospitals use their markers from `uimapmarker.factionedmarkers[1378]`. | original coordinates, inferred binding, calibrated |
-| What is restored? | Full health: tutorial text 1582, "the medical techs will revive and restore you to full health"; A4-39 and B3-045 show a full health bar. Armor is restored with it (inferred); power and adrenaline are unchanged. | original (health) / inferred (armor) |
+| What is restored? | Full health: tutorial text 1582, "the medical techs will revive and restore you to full health"; A4-39 and B3-045 show a full health bar. Armor is restored with it (inferred); adrenaline is drained (second pass below). | original (health) / inferred (armor) |
 | How is a hospital gained? | `GraveyardGained(waypointId)` posts "You just gained %(graveyard)s." (manifestation.pyo). The Alia Das line was already in chat 98.9 m from the marker (B2-019), so the server gains hospitals within 100 m. No gain line appears for the boot camp's hospital in the transcribed A2–A4 chat, so it is known from the start. | original message / inferred radius |
 | Teleport handshake | `Actor.BeginTeleport` queues the acknowledgement that `Recv_Teleport` sends, so `BeginTeleport` precedes `Teleport` (also corrected in `SelectWaypoint`). The default teleport type's arrival FX 8550 fits the blue shimmer after the A4 respawn. | original client code / inferred |
 
@@ -74,10 +74,11 @@ catalogued), and respawn facing.
 
 ## Verification
 
-`PlayerDeathLifecycleTests` (8 cases) covers the kill and notification order with
+`PlayerDeathLifecycleTests` (16 cases) covers the kill and notification order with
 source-side and victim-side observers, the per-character Wilderness offer,
 respawn position/resources/packet order and replay refusal, unoffered and `None`
 requests, state preconditions, discovery radius and dead-player exclusion, the
-boot camp's known hospital, and catalog/evidence equality. Full suite 801/801
-under the .NET 5 SDK image. An original-client check of the death window,
+boot camp's known hospital, catalog/evidence equality, trauma stacking, level and
+PvP exclusions, attribute penalty and expiry, the no-heal block, and the
+zone-entry hospital. Full suite 823/823 under the .NET 5 SDK image. An original-client check of the death window,
 respawn and "You just gained" line is still required.
