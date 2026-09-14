@@ -97,6 +97,15 @@ namespace Rasa.Structures
         /// bounced straight back: MapLinkManager seeds it on arrival and clears it on leaving.
         /// </summary>
         internal HashSet<uint> InsideMapLinks = new();
+
+        /// <summary>
+        /// The region ids the client was last told the player is in (UpdateRegions), sorted, so
+        /// RegionManager only sends again when the set changes. Null until the first send on a map.
+        /// </summary>
+        internal List<uint> RegionIds;
+
+        /// <summary>Set by .setregion: the list above was forced and the worker leaves it alone until released or the map changes.</summary>
+        internal bool RegionsHeld;
         // chat
         public int JoinedChannels { get; set; }
         public int[] ChannelHashes = new int[14];

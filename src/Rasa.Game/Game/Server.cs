@@ -305,6 +305,7 @@ namespace Rasa.Game
             DynamicObjectManager.Instance.InitDynamicObjects();
             MapTriggerManager.Instance.MapTriggerInit();
             MapLinkManager.Instance.MapLinkInit();
+            RegionManager.Instance.RegionInit();
 
             return true;
         }

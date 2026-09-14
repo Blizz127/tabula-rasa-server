@@ -50,6 +50,21 @@ namespace Rasa.Navigation
             return FindPoly(position, out _) != 0;
         }
 
+        /// <summary>
+        /// Whether the walkable surface nearest the point was built under the terrain heightmap
+        /// (<see cref="NavMeshFlags.Underground"/>): inside a cave or tunnel rather than on the
+        /// surface above it. False off the mesh, and everywhere on a mesh built without the flag.
+        /// </summary>
+        public bool IsUnderground(Vector3 position)
+        {
+            var poly = FindPoly(position, out _);
+
+            if (poly == 0)
+                return false;
+
+            return _navMesh.GetTileAndPolyByRef(poly, out _, out var p).Succeeded() && (p.flags & NavMeshFlags.Underground) != 0;
+        }
+
         /// <summary>The height of the walkable surface under (x, z) nearest to the point's y, or null.</summary>
         public float? GroundHeight(Vector3 position)
         {

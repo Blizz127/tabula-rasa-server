@@ -50,6 +50,17 @@ the cliff face continues straight through the tunnel mesh behind it. Rasterized,
 wall the tunnel off a few metres in. Nobody can stand on a 60 degree face, so leaving it out
 loses nothing; the walkable ground on either side still ends at a ledge.
 
+## Polygons under the terrain
+
+Every polygon carries flag 0x01 (walkable). A polygon most of whose vertices are more than 2 m
+below the terrain heightmap - the floor of a cave, tunnel or cellar the surface runs over - also
+carries 0x02 (`NavMeshFlags.Underground`). The build log says how many; Wilderness has about
+4,200 of 60,000. The server reads the flag under a player's feet to decide whether a region
+volume marked underground-only or surface-only applies to them (see `regions.md`). Maps with no
+terrain archive never get the flag. A `.nav` built before the flag existed still loads and paths
+exactly as before; every player on it just counts as being on the surface, so rebuild to get the
+cavern regions.
+
 ## Format notes
 
 `.glm` archives: chunks (zlib or raw), a name table, then a `CHNKBLXX` directory whose offset is

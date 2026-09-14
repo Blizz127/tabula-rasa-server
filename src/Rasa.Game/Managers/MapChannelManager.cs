@@ -218,6 +218,9 @@ namespace Rasa.Managers
 
                         // zone borders and instance doors: anyone standing in one leaves the map
                         MapLinkManager.Instance.Worker(mapChannel);
+
+                        // ambient/music/sky/minimap regions: tell whoever changed region
+                        RegionManager.Instance.Worker(mapChannel);
                     }
 
                     // check for effects (buffs)
@@ -442,6 +445,7 @@ namespace Rasa.Managers
 
             CellManager.Instance.RemoveFromWorld(client);
             MapLinkManager.Instance.RemovePlayer(client);
+            RegionManager.Instance.RemovePlayer(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
             LookingForGroupManager.Instance.RemovePlayer(client);

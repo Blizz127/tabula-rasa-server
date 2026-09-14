@@ -802,6 +802,75 @@ namespace Rasa.Migrations.MySqlWorld
                     b.ToTable("map_link");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.MapRegionEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(96)")
+                        .HasColumnName("comment");
+
+                    b.Property<byte>("Enabled")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("enabled");
+
+                    b.Property<double>("HalfX")
+                        .HasColumnType("double")
+                        .HasColumnName("half_x");
+
+                    b.Property<double>("HalfZ")
+                        .HasColumnType("double")
+                        .HasColumnName("half_z");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("MaxY")
+                        .HasColumnType("double")
+                        .HasColumnName("max_y");
+
+                    b.Property<double>("MinY")
+                        .HasColumnType("double")
+                        .HasColumnName("min_y");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("double")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("double")
+                        .HasColumnName("radius");
+
+                    b.Property<uint>("RegionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("region_id");
+
+                    b.Property<byte>("Shape")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("shape");
+
+                    b.Property<byte>("Underground")
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("underground");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("map_region");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionEntry", b =>
                 {
                     b.Property<uint>("Id")

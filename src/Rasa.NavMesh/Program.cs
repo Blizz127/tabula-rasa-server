@@ -164,8 +164,8 @@ namespace Rasa.NavMesh
             var end = new Vector3(v[3], v[4], v[5]);
 
             var query = new NavMeshQuery(NavMeshFile.Read(navPath));
-            Console.WriteLine($"start on mesh: {query.Nearest(start)}   ground: {query.GroundHeight(start)}");
-            Console.WriteLine($"end on mesh:   {query.Nearest(end)}   ground: {query.GroundHeight(end)}");
+            Console.WriteLine($"start on mesh: {query.Nearest(start)}   ground: {query.GroundHeight(start)}   underground: {query.IsUnderground(start)}");
+            Console.WriteLine($"end on mesh:   {query.Nearest(end)}   ground: {query.GroundHeight(end)}   underground: {query.IsUnderground(end)}");
 
             var path = query.FindPath(start, end, out var complete);
 
