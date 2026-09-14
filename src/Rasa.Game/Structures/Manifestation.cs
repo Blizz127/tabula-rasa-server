@@ -52,7 +52,8 @@ namespace Rasa.Structures
         // Last position tested against content areas, per context (MissionContentManager.DoWork).
         public (uint MapContextId, System.Numerics.Vector3 Position)? LastContentSample { get; set; }
         /// <summary>Content areas with area_entered rules the player stood in at the last sample (entry fires once).</summary>
-        public HashSet<uint> InsideContentAreas { get; } = new();
+        // area_entered rules that already fired during the current stay in their area (MissionContentManager.DoWork).
+        public HashSet<uint> FiredAreaRules { get; } = new();
         /// <summary>Committed content facts by (map context, key), loaded with the character.</summary>
         public Dictionary<(uint MapContextId, string Key), int> ContentFacts { get; } = new();
         public ulong TrackingTargetEntityId { get; set; }

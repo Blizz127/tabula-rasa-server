@@ -259,7 +259,7 @@ namespace Rasa.Test
                 ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
                 ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp,
-                ContentRuleAction.SetFact, ContentRuleAction.ClearFact
+                ContentRuleAction.SetFact, ContentRuleAction.ClearFact, ContentRuleAction.SetPlacementState
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -268,7 +268,7 @@ namespace Rasa.Test
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi }, implemented.PlacementBehaviors.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse }, implemented.UsableKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
             Assert.IsTrue(implemented.Timers && implemented.Indicators);
@@ -998,6 +998,11 @@ namespace Rasa.Test
                     context.ContentAreaEntries.Add(new ContentAreaEntry { Id = 900610, MapContextId = 1985, Shape = (byte)ContentAreaShape.Sphere, PosX = 10, PosY = 0, PosZ = 10, Radius = 3 });
                     context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9030, MapContextId = 1985, Event = (byte)ContentRuleEvent.AreaEntered, AreaId = 900610 });
                     context.ContentRuleActionEntries.Add(new ContentRuleActionEntry { RuleId = 9030, Sequence = 0, Action = (byte)ContentRuleAction.TutorialNotification, TutorialId = 10000018 });
+                    // An exit-pad-shaped rule: its condition becomes true while the player already stands in the area.
+                    context.ContentAreaEntries.Add(new ContentAreaEntry { Id = 900611, MapContextId = 1985, Shape = (byte)ContentAreaShape.Sphere, PosX = 50, PosY = 0, PosZ = 50, Radius = 12 });
+                    context.ContentConditionEntries.Add(new ContentConditionEntry { ConditionId = 900920, Kind = (byte)ContentConditionKind.FactEquals, FactKey = "test.cleared", Value = 1 });
+                    context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9031, MapContextId = 1985, Event = (byte)ContentRuleEvent.AreaEntered, AreaId = 900611, ConditionId = 900920 });
+                    context.ContentRuleActionEntries.Add(new ContentRuleActionEntry { RuleId = 9031, Sequence = 0, Action = (byte)ContentRuleAction.TutorialNotification, TutorialId = 10000019 });
                     context.SaveChanges();
                 }
 
@@ -1033,6 +1038,18 @@ namespace Rasa.Test
                 }
                 // Enters at the third sample, stays inside, leaves, and a fast crossing back in fires again.
                 CollectionAssert.AreEqual(new[] { 0, 0, 1, 0, 0, 0, 1 }, fired);
+
+                // Standing on the pad before the condition holds fires nothing; the first sample after it holds fires once.
+                fired.Clear();
+                foreach (var (x, z, cleared) in new[] { (50f, 44f, false), (50f, 50f, false), (51f, 50f, true), (50f, 51f, true), (80f, 80f, true), (50f, 50f, true) })
+                {
+                    if (cleared)
+                        client.Player.ContentFacts[(1985, "test.cleared")] = 1;
+                    client.Player.Position = new System.Numerics.Vector3(x, 0, z);
+                    content.DoWork(map);
+                    fired.Add(Tutorials());
+                }
+                CollectionAssert.AreEqual(new[] { 0, 0, 1, 0, 0, 1 }, fired);
 
                 // A committed transfer and skip flag reach memory and the loading screen only at Apply.
                 ContentLocationEntry transferred = null;

@@ -103,6 +103,9 @@ namespace Rasa.Structures.Content
         public List<ContentRuleActionEntry> Persistent { get; } = new();
         public List<ContentRuleActionEntry> Presentation { get; } = new();
 
+        // The rules that matched, in rule id order.
+        public List<uint> MatchedRuleIds { get; } = new();
+
         // Filled by staging: the Logos actually granted (a character that already owns one is not granted it again).
         public List<(uint LogosId, LogosGrantProtocol Protocol)> GrantedLogos { get; } = new();
 

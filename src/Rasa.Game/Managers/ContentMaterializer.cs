@@ -171,6 +171,9 @@ namespace Rasa.Managers
         public static (bool Enabled, uint MissionActivated) UsableStateFor(
             ContentValidation content, ContentState state, ContentPlacementEntry placement)
         {
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Structure)
+                return (false, 0);
+
             if (placement.UsableConditionId == 0)
                 return (true, 0);
 

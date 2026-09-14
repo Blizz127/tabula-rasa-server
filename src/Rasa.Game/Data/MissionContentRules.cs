@@ -49,7 +49,9 @@ namespace Rasa.Data
                 ContentRuleAction.TransferToLocation,
                 ContentRuleAction.SetAccountSkipBootcamp,
                 ContentRuleAction.SetFact,
-                ContentRuleAction.ClearFact
+                ContentRuleAction.ClearFact,
+                // S5: the wreck bursts open when the bomb detonates.
+                ContentRuleAction.SetPlacementState
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {
@@ -63,7 +65,7 @@ namespace Rasa.Data
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             // S4: creature-AI placements guard their spot (CreatureManager.ApplyPlacementBehavior).
             PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi },
-            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse },
+            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure },
             NpcPackageOverride = true,
             // Prerequisites gate each player's offer at dispense time
             // (MissionManager.PrerequisitesSatisfied), enforced per character.
@@ -112,6 +114,9 @@ namespace Rasa.Data
                 { ContentUsableKind.Destroyable, new HashSet<(uint, uint)> { (2, 110), (110, 185), (185, 110), (185, 186), (186, 2), (186, 185) } },
                 // augmentation 8 StatelessSwitch: USE_SS_STATE_0 (44) only ever returns to itself.
                 { ContentUsableKind.GenericUse, new HashSet<(uint, uint)> { (44, 44) } },
+                // augmentation 10 Door: CLOSED 31 <-> OPEN 91. The final client reworked the crashed-dropship wreck
+                // (class 24586) into a Door whose closed state burns and whose opening plays the dropship explosion.
+                { ContentUsableKind.Structure, new HashSet<(uint, uint)> { (31, 91), (91, 31) } },
                 // augmentation 42 Bomb
                 { ContentUsableKind.Bomb, new HashSet<(uint, uint)> { (113, 114), (114, 113), (114, 115), (115, 113) } },
                 // augmentation 64 TreasureDispenser (usabledata.pyo usableaugmentationstatetransition["64"]):

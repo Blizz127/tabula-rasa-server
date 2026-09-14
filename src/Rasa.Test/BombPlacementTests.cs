@@ -49,6 +49,7 @@ namespace Rasa.Test
         private const uint MissionId = 7005;
         private const uint BombPlacementId = 900670;
         private const uint CorpsePlacementId = 900671;
+        private const uint WreckPlacementId = 900672;
         private const uint ContextId = 1220;
         private const uint FuseMs = 5300;
         private const uint LimitSeconds = 126;
@@ -195,6 +196,11 @@ namespace Rasa.Test
                     {
                         Id = CorpsePlacementId, MapContextId = ContextId, Kind = (byte)ContentPlacementKind.Usable, EntityClassId = 7871, UsableKind = (byte)ContentUsableKind.GenericUse,
                         Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 44, WindupMs = 1000
+                    },
+                    new ContentPlacementEntry
+                    {
+                        Id = WreckPlacementId, MapContextId = ContextId, Kind = (byte)ContentPlacementKind.Usable, EntityClassId = 24586, UsableKind = (byte)ContentUsableKind.Structure,
+                        Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 31
                     });
                 context.ContentRuleEntries.AddRange(
                     new ContentRuleEntry { Id = 9101, MapContextId = ContextId, Event = (byte)ContentRuleEvent.PlacementStateEntered, PlacementId = BombPlacementId, StateId = 114 },
@@ -202,7 +208,8 @@ namespace Rasa.Test
                 context.ContentRuleActionEntries.AddRange(
                     new ContentRuleActionEntry { RuleId = 9101, Sequence = 0, Action = (byte)ContentRuleAction.SetFact, FactKey = "bootcamp.bomb_planted", FactValue = 1 },
                     new ContentRuleActionEntry { RuleId = 9102, Sequence = 0, Action = (byte)ContentRuleAction.SetFact, FactKey = "bootcamp.dropship_destroyed", FactValue = 1 },
-                    new ContentRuleActionEntry { RuleId = 9102, Sequence = 1, Action = (byte)ContentRuleAction.ClearFact, FactKey = "bootcamp.bomb_planted" });
+                    new ContentRuleActionEntry { RuleId = 9102, Sequence = 1, Action = (byte)ContentRuleAction.ClearFact, FactKey = "bootcamp.bomb_planted" },
+                    new ContentRuleActionEntry { RuleId = 9102, Sequence = 2, Action = (byte)ContentRuleAction.SetPlacementState, PlacementId = WreckPlacementId, StateId = 91 });
                 context.SaveChanges();
             }
 
@@ -310,6 +317,11 @@ namespace Rasa.Test
             Assert.AreEqual(MissionObjectiveState.Incomplete, Progress.Objectives[1]);
             Assert.AreEqual(126_000L, SavedObjective(1).TimerRemainingMs);
 
+            // The wreck is scenery: using it does nothing.
+            var wreck = Usable(WreckPlacementId);
+            Use(wreck);
+            Assert.AreEqual((UseObjectState)31, wreck.StateId);
+
             _bomb.StateId = (UseObjectState)115;
             Use(_bomb);
             Assert.AreEqual((UseObjectState)115, _bomb.StateId);
@@ -345,6 +357,7 @@ namespace Rasa.Test
             Tick();
             Assert.AreEqual((UseObjectState)115, _bomb.StateId);
             Assert.AreEqual(MissionObjectiveState.Completed, Progress.Objectives[1]);
+            Assert.AreEqual((UseObjectState)91, Usable(WreckPlacementId).StateId, "the wreck bursts open");
             Assert.AreEqual((uint)MissionObjectiveState.Completed, SavedObjective(1).Status);
             Assert.IsNull(SavedObjective(1).TimerAnchorMs);
             CollectionAssert.AreEquivalent(new Dictionary<string, int> { { "bootcamp.dropship_destroyed", 1 } }, SavedFacts());

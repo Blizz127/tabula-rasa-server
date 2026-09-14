@@ -88,7 +88,7 @@ namespace Rasa.Managers
         /// The actions of every live rule that matches the event and whose condition holds in the given state,
         /// in rule id order.
         /// </summary>
-        public ContentReaction Plan(ContentEvent contentEvent, ContentState state)
+        public ContentReaction Plan(ContentEvent contentEvent, ContentState state, Func<ContentRuleEntry, bool> include = null)
         {
             var reaction = new ContentReaction();
 
@@ -97,13 +97,14 @@ namespace Rasa.Managers
 
             foreach (var rule in rules)
             {
-                if (!contentEvent.Matches(rule))
+                if (!contentEvent.Matches(rule) || (include != null && !include(rule)))
                     continue;
 
                 if (rule.ConditionId != 0 && !state.Evaluate(Content.Catalog.Conditions[rule.ConditionId]))
                     continue;
 
                 reaction.Add(Content.Catalog.RuleActions[rule.Id]);
+                reaction.MatchedRuleIds.Add(rule.Id);
             }
 
             return reaction;
@@ -264,10 +265,39 @@ namespace Rasa.Managers
                         client.CallMethod(SysEntity.ClientMethodId, new DisplayPlayerTutorialNotificationPacket((TutorialId)action.TutorialId));
                         break;
 
+                    case ContentRuleAction.SetPlacementState:
+                        SetPlacementState(client, action);
+                        break;
+
                     default:
                         throw new InvalidOperationException($"content action {(ContentRuleAction)action.Action} has no handler");
                 }
             }
+        }
+
+        /// <summary>
+        /// Moves a usable of the player's own channel to the action's state along its client state machine
+        /// (the wreck opening, which plays the dropship explosion). A later rebuild derives the same state from the
+        /// placement's alternate-state condition, so nothing is stored; a missing object or an illegal transition
+        /// is skipped.
+        /// </summary>
+        private void SetPlacementState(Client client, ContentRuleActionEntry action)
+        {
+            var mapChannel = client.Player?.MapChannel;
+
+            if (mapChannel == null || !Content.Catalog.Placements.TryGetValue(action.PlacementId, out var placement))
+                return;
+
+            var obj = mapChannel.DynamicObjects.FirstOrDefault(candidate =>
+                mapChannel.ContentUsables.TryGetValue(candidate.EntityId, out var id) && id == placement.Id);
+
+            if (obj == null || (uint)obj.StateId == action.StateId ||
+                !MissionContentRules.UsableStateTransitions.TryGetValue((ContentUsableKind)placement.UsableKind, out var transitions) ||
+                !transitions.Contains(((uint)obj.StateId, action.StateId)))
+                return;
+
+            obj.StateId = (UseObjectState)action.StateId;
+            CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)action.StateId, 0));
         }
 
         /// <summary>
@@ -409,6 +439,10 @@ namespace Rasa.Managers
             var state = new ContentState(player);
             var (enabled, missionActivated) = ContentMaterializer.UsableStateFor(Content, state, placement);
             if (!enabled)
+                return;
+
+            // Structures (the wreck) are scenery with states, never used by players.
+            if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Structure)
                 return;
 
             // An armed or detonated bomb cannot be planted again (disarming, 114 -> 113, is not implemented).
@@ -826,14 +860,15 @@ namespace Rasa.Managers
         /// <summary>
         /// Reacts to an event that has no transaction of its own, such as entering a map.
         /// </summary>
-        public void React(Client client, ContentEvent contentEvent)
+        /// <returns>The rules that fired and committed; none when the commit failed.</returns>
+        public IReadOnlyList<uint> React(Client client, ContentEvent contentEvent, Func<ContentRuleEntry, bool> include = null)
         {
             var player = client.Player;
             var state = new ContentState(player);
-            var reaction = Plan(contentEvent, state);
+            var reaction = Plan(contentEvent, state, include);
 
             if (reaction.IsEmpty)
-                return;
+                return reaction.MatchedRuleIds;
 
             if (reaction.Persistent.Count > 0)
             {
@@ -848,13 +883,14 @@ namespace Rasa.Managers
                 {
                     Logger.WriteLog(LogType.Error, $"Content {contentEvent.Kind} in context {contentEvent.MapContextId}: could not save the reaction for character {player.Id}");
                     Logger.WriteLog(LogType.Error, e);
-                    return;
+                    return Array.Empty<uint>();
                 }
 
                 Apply(client, reaction);
             }
 
             Present(client, reaction);
+            return reaction.MatchedRuleIds;
         }
 
         public void OnPlayerEnteredMap(Client client)
@@ -863,7 +899,7 @@ namespace Rasa.Managers
                 return;
 
             client.Player.LastContentSample = null;
-            client.Player.InsideContentAreas.Clear();
+            client.Player.FiredAreaRules.Clear();
             ContentMaterializer.RefreshPresence(client, Content, TickNow());
             ContentMaterializer.RefreshFor(client, Content);
             React(client, new ContentEvent(ContentRuleEvent.EnteredMap, client.Player.MapContextId));
@@ -895,21 +931,22 @@ namespace Rasa.Managers
 
                 player.LastContentSample = (contextId, current);
 
-                // area_entered rules fire on the crossing into the area, not on every sample inside it.
+                // An area_entered rule fires once per stay in its area: on the crossing, or on the first sample inside
+                // the area at which its condition holds (a recruit who talks to Van Valkenberg on the exit pad is
+                // already standing in it). Leaving the area re-arms its rules.
                 if (_ruleAreasByContext.TryGetValue(contextId, out var ruleAreas))
                     foreach (var area in ruleAreas)
                     {
                         var touched = SegmentEntersArea(previous, current, area);
                         var inside = SegmentEntersArea(current, current, area);
-                        var wasInside = player.InsideContentAreas.Contains(area.Id);
 
-                        if (inside)
-                            player.InsideContentAreas.Add(area.Id);
-                        else
-                            player.InsideContentAreas.Remove(area.Id);
+                        if (touched)
+                            foreach (var ruleId in React(client, new ContentEvent(ContentRuleEvent.AreaEntered, contextId, areaId: area.Id),
+                                         rule => !player.FiredAreaRules.Contains(rule.Id)))
+                                player.FiredAreaRules.Add(ruleId);
 
-                        if (touched && !wasInside)
-                            React(client, new ContentEvent(ContentRuleEvent.AreaEntered, contextId, areaId: area.Id));
+                        if (!inside)
+                            player.FiredAreaRules.RemoveWhere(ruleId => Content.Catalog.Rules.TryGetValue(ruleId, out var rule) && rule.AreaId == area.Id);
                     }
 
                 foreach (var (missionId, objectiveId) in IncompleteAreaObjectives(player))
