@@ -1283,3 +1283,15 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   files are derived client assets and stay outside Git (a copy is at
   `/home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh`; `GameDataConfig.NavMeshPath`, default `navmesh`).
   Without the files, creatures keep straight-line movement. Full suite 825/825.
+
+## 2026-09-14 UTC — Capture the Flag (S4) content seed
+
+- Mission 1994 and its boot-camp content are seeded (`BootcampS4CaptureTheFlag`); details, labels and
+  decisions in [progression-preservation-plan.md](progression-preservation-plan.md#s4-capture-the-flag-status)
+  and the boot-camp manifest. Values are evidence-bounded reconstructions, not recovered server data: the
+  giver, receiver, transitions 4→2 and 1→3, the cave-in trigger radius, the boss position and presence, and
+  Tizzik Gi's level are inferred; creature classes, health, speeds and the Thrax attack (emulator
+  `creature_action` 33, whose attack pair matches the client's boot-camp Bane pistol) are labelled analogues.
+- Not reproduced: the boss fight itself (never recorded), escorts and allies, 1994 credits and item reward,
+  Thrax respawn, Youngblood's appearance and walk-in, and the original attack damage and timing.
+  Full suite 839/839.

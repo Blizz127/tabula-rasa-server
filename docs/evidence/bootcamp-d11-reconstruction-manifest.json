@@ -83,7 +83,7 @@
    "kind": "measurement",
    "era": "final_live",
    "member": "docs/evidence/bootcamp-d11-positions.json",
-   "note": "Curated S1 positions: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). Each position record states its method, uncertainty and frames."
+   "note": "Curated boot-camp positions. S1/S2: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). S4 adds enemy standing positions from the client nameplate range readout (client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(distance)) plus radar player position and heading, the client map cursor readout for indicator 437, and Y from the heightmap or the derived adv_bootcamp navmesh (bias-calibrated against six references). Each position record states its method, uncertainty and frames."
   },
   "official_notes:d13.4": {
    "kind": "official_notes",
@@ -98,6 +98,12 @@
    "member": "Tabula Rasa 1.16.5.0/trpython.zip",
    "provenance": "docs/client-artifacts.md; disassembly at research/20260913-bootcamp/client-code/verify/dis",
    "locator_format": "module path + function + bytecode offset"
+  },
+  "measurement:kill-rewards": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/kill-rewards.json",
+   "note": "Kill experience and credit rules fitted to every clean final-week kill and the 1.16.5.0 client constants; each rule states its tier and citations."
   }
  },
  "scope": [
@@ -135,7 +141,8 @@
      "min": 198900,
      "max": 198999
     }
-   }
+   },
+   "note": "BootcampS2GearingUp seeded usable condition 198800, which lies outside this range (inside the content_placement range 198650-198899). The S2 condition has no manifest row, so the scope check does not see it; recorded 2026-09-14 for the planned ReconstructionSeedTests scope check. S4 conditions 198901-198902 are inside the range."
   },
   {
    "table": "content_rule",
@@ -4261,9 +4268,5115 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1994
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "giver_id": {
+     "value": 198504,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @562952 text 21494 (1992 obj 7 conversation): \"report in to Corporal DeSimone for your next mission!\""
+      }
+     ],
+     "reasoning": "the 1992 turn-in (receiver DeSimone, S2) and \"Mission Accepted: Capture the Flag\" are contiguous chat lines after the 362.133 cut, and DeSimone's own 1992 text sends the recruit to him for the next mission; the offer itself is hidden. DeSimone's S2 placement (198657) is still an unobserved inferred position. CONFLICT: the mission summary text 21236 says \"Check in with Corporal Delessio to earn your first promotion\", but objective 4 text 21670 says \"Speak to Corporal Desimone\" and its conversation is package 2562 (DeSimone in S2); Delessio is a Captain (A3-028). The objective text and the conversation binding are used"
+    },
+    "reciver_id": {
+     "value": 198505,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @556256 text 21236 \"...then report to Captain Youngblood in the reclaimed base to complete your mission.\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41744 (1994,3,2561,1,1) -> 21617"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @556328 text 21238 finishing text \"I've got troops coming out from the cave camp...\""
+      }
+     ],
+     "reasoning": "the mission summary names Youngblood as the completer; the brown-jacket NPC waited beside the player until the 8V 4.267 cut, across which \"You gained 5000 experience points.\" / \"Mission Completed: Capture the Flag\" appear; the creature row is a reserved key"
+    },
+    "level": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "\"Mission Accepted: Capture the Flag\" precedes the promotion level-up line, so the mission was accepted at level 1 (S2 precedent: mission level = acceptance level); gamecontext 1985 range is 1-4 (A5-25)"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontexttypelanguage.pyo; solo=1 precedent 1990/1992"
+      }
+     ],
+     "reasoning": "an instanced tutorial mission; 1990/1992 precedent"
+    },
+    "category_id": {
+     "value": 10000032,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missioncategorylanguage.pyo; 10000032 \"Instance (Bootcamp)\""
+      }
+     ],
+     "reasoning": "1990/1992 precedent for boot-camp missions"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "an instanced tutorial mission (1990/1992 precedent)"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "turned in at Youngblood in person (1990/1992 precedent)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Capture the Flag",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1994,
+    "type": 3
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "credits": {
+     "value": 5000,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "chat shows \"You gained 5000 experience points.\" immediately before \"Mission Completed: Capture the Flag\"; the XP bar moves ~25% -> ~90% of level 2 (7500 XP span) without levelling (B1-010)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "key": {
+    "mission_id": 1994,
+    "or_group": 0,
+    "required_mission_id": 1992
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "required_state": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "\"Mission Completed: Gearing Up for Battle\" precedes \"Mission Accepted: Capture the Flag\"; state 4 = Completed; or_group 0 follows the seeded S2 row (the plan text says group 1)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1994 requires 1992 completed",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 1
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-24",
+       "t": 432.667
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107252 (1994,1) -> (21313,21314,21315)"
+      }
+     ],
+     "reasoning": "display order from the footage: obj 4 (hidden promotion) -> 2 -> 1 -> 3; shown third: New Objective banner at 432.667 after obj 2, replaced by obj 3 at 551.467"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-24",
+       "t": 432.667
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107252 (1994,1) -> (21313,21314,21315)"
+      }
+     ],
+     "reasoning": "every objective is part of the single chain the footage follows to the turn-in"
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-24",
+       "t": 432.667
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107252 (1994,1) -> (21313,21314,21315)"
+      }
+     ],
+     "reasoning": "revealed later by a transition; shown third: New Objective banner at 432.667 after obj 2, replaced by obj 3 at 551.467"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Eliminate the Tizzik G, the Bane Boss, in the AFS Base Camp",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 2
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-067",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107285 (1994,2) -> (21336,21337)"
+      }
+     ],
+     "reasoning": "display order from the footage: obj 4 (hidden promotion) -> 2 -> 1 -> 3; the first objective the tracker shows after acceptance (362.133)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-067",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107285 (1994,2) -> (21336,21337)"
+      }
+     ],
+     "reasoning": "every objective is part of the single chain the footage follows to the turn-in"
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-067",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107285 (1994,2) -> (21336,21337)"
+      }
+     ],
+     "reasoning": "revealed later by a transition; the first objective the tracker shows after acceptance (362.133)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Find a way out of the cave",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 3
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "ordinal": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-001",
+       "t": 0.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107318 (1994,3) -> (21615,21616)"
+      }
+     ],
+     "reasoning": "display order from the footage: obj 4 (hidden promotion) -> 2 -> 1 -> 3; the last tracked objective before the turn-in"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-001",
+       "t": 0.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107318 (1994,3) -> (21615,21616)"
+      }
+     ],
+     "reasoning": "every objective is part of the single chain the footage follows to the turn-in"
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-001",
+       "t": 0.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107318 (1994,3) -> (21615,21616)"
+      }
+     ],
+     "reasoning": "revealed later by a transition; the last tracked objective before the turn-in"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Report in to Captain Youngblood when he arrives in the camp.",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 4
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107351 (1994,4) -> (21670,21671)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41771 (1994,4,2562,1,1) -> 21694 \"I'm going to go ahead and give you your first promotion, soldier.\""
+      }
+     ],
+     "reasoning": "display order from the footage: obj 4 (hidden promotion) -> 2 -> 1 -> 3; never displayed; the promotion XP and level-up follow \"Mission Accepted\" directly and the tracker already shows obj 2 at 362.133, so obj 4 is the accept-time objective"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107351 (1994,4) -> (21670,21671)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41771 (1994,4,2562,1,1) -> 21694 \"I'm going to go ahead and give you your first promotion, soldier.\""
+      }
+     ],
+     "reasoning": "every objective is part of the single chain the footage follows to the turn-in"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107351 (1994,4) -> (21670,21671)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41771 (1994,4,2562,1,1) -> 21694 \"I'm going to go ahead and give you your first promotion, soldier.\""
+      }
+     ],
+     "reasoning": "only the promotion objective is available on accept; never displayed; the promotion XP and level-up follow \"Mission Accepted\" directly and the tracker already shows obj 2 at 362.133, so obj 4 is the accept-time objective. CONFLICT: summary text 21236 names \"Corporal Delessio\" for the promotion, while objective text 21670 and conversation package 2562 name DeSimone; the objective text and conversation binding are used"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Speak to Corporal Desimone to earn a promotion",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1994,
+    "completed_objective_id": 4,
+    "revealed_objective_id": 2
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "revealed_objective_id": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-067",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "inside the 362.133 cut: the promotion lines are followed by the tracker on obj 2 (the build plan lists this as observed; the completion and reveal themselves are hidden). CONFLICT: build plan S4 lists this transition as observed; it happens inside an edit cut, so it is labelled inferred"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1994,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 1
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "revealed_objective_id": {
+     "value": 1,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-24",
+       "t": 432.667
+      }
+     ],
+     "reasoning": "\"Objective Completed ... Find a way out of the cave\" banner at 430.533 changes to \"New Objective ... Eliminate the Tizzik G\" at 432.667; the tracker already shows obj 1 with its counter (A4-21)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1994,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 3
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "revealed_objective_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-03",
+       "t": 485.47
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-28",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "the tracker shows obj 1 until 551.4 and obj 3 from 551.467 with the counter gone; the kill and reveal are hidden in the cut (build plan lists this as observed). CONFLICT: build plan S4 lists this transition as observed; it happens inside an edit cut, so it is labelled inferred"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 1,
+    "counter_id": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "initial_value": {
+     "value": 0,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "tracker \"Boss Eliminated: 0 / 1\" (counter text 21315, missionobjective @107252 slot 0)"
+    },
+    "target_value": {
+     "value": 1,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "tracker \"Boss Eliminated: 0 / 1\""
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 1,
+    "binding_id": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @557876/@557948 texts 21313 \"Eliminate the Tizzik G...\" and 21315 \"Boss Eliminated:\""
+      }
+     ],
+     "reasoning": "the objective text and counter name a kill; the completion is hidden in the 551.467 cut"
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "the binding names the boss placement 198659, which instantiates creature 198506 (Tizzik Gi); a kill binding with a placement names no creature (the content validator withholds a binding that sets both). DEVIATION from the draft, which set 198506 here"
+    },
+    "placement_id": {
+     "value": 198659,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "the boss placement; owner credited for any kill of it in the instance (OD-16)"
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @107252 (1994,1) counter text slot 0 = 21315"
+      }
+     ],
+     "reasoning": "counter slot 0 carries \"Boss Eliminated:\""
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding names no area"
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding resolves no ability"
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding is not a hit"
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding equips nothing"
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding names no item template"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding names no item set"
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a kill binding sets no placement state"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1994/1 kill Tizzik Gi",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-19",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      },
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "the completion falls inside the 430.533 cut while the player moves west past the objective icon with no use or kill tied to it; an area trigger at the cave-in location is the only kind consistent with \"Find a way out of the cave\""
+    },
+    "area_id": {
+     "value": 198602,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "the cave-in content area"
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding names no placement"
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding names no creature"
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding resolves no ability"
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding is not a hit"
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding equips nothing"
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding names no item template"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding names no item set"
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "an area binding sets no placement state"
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "255 means no counter; the objective completes once"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1994/2 cave-in area",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_area",
+   "key": {
+    "id": 198602
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "shape": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "a spherical trigger around the measured objective icon (S1 practice)"
+    },
+    "pos_x": {
+     "value": 279.05,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 66.07,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "radius": {
+     "value": 5.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-03",
+       "t": 395.0
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-20",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "the player fought 45 s at x 298-311 (>= 19 m from the icon) without completing it, so the radius is below ~19 m; >= 2x the 2 m horizontal uncertainty; the navmesh route passes 1.2-1.7 m from the centre; 5 m is taken. Open: banner timing puts the completion ~4-8 m west of the icon, which a larger radius would not explain either (see findings). CONFLICT (centre): build plan S4 names the first post-cut frame (A4-22) as the centre with a large uncertainty; the measured objective icon is used instead, following the S1 practice (area centre = objective icon)"
+    },
+    "half_height": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "area.1994.2"
+      }
+     ],
+     "reasoning": "a sphere carries no half height"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1994 obj2 cave-in",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 1,
+    "indicator_index": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "indicator_id": {
+     "value": 437,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-26",
+       "t": 547.6
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missionobjectiveindicatorlanguage.pyo @3890 437 \"Base Center\""
+      }
+     ],
+     "reasoning": "the map tooltip over the obj-1 marker reads \"Capture the Flag / Base Center\"; seeded per owner decision OD-21"
+    },
+    "pos_x": {
+     "value": 95.1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.1.437"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 109.25,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.1.437"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 150.8,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.1.437"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 1.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "key": {
+    "mission_id": 1994,
+    "objective_id": 2,
+    "indicator_index": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "indicator_id": {
+     "value": 439,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missionobjectiveindicatorlanguage.pyo @3908 439 \"Cave-in Location\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @556256 text 21236 \"Find a way beyond the cave-in\""
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-03",
+       "t": 395.0
+      }
+     ],
+     "reasoning": "the only boot-camp indicator name that fits objective 2; the name was never displayed; the inferred id is accepted by owner decision OD-21"
+    },
+    "pos_x": {
+     "value": 279.05,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.2.439"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.2.439"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 66.07,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1994.2.439"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    }
+   }
+  },
+  {
+   "table": "content_rule",
+   "key": {
+    "id": 1985005
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "event": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      }
+     ],
+     "reasoning": "the promotion experience is granted when the promotion objective (1994/4, DeSimone conversation 21694 \"first promotion\") completes"
+    },
+    "mission_id": {
+     "value": 1994,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "the rule filters mission 1994"
+    },
+    "objective_id": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41771 (1994,4,2562,1,1) -> 21694"
+      }
+     ],
+     "reasoning": "the promotion objective"
+    },
+    "condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "no condition"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1994 obj4 promotion",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_rule_action",
+   "key": {
+    "rule_id": 1985005,
+    "sequence": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "action": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      }
+     ],
+     "reasoning": "\"You gained 500 experience points.\" follows \"Mission Accepted: Capture the Flag\" with no mission-complete line, so it is an objective-level grant (grant_rewards)"
+    },
+    "experience": {
+     "value": 500,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-01",
+       "t": 395.0
+      }
+     ],
+     "reasoning": "chat \"You gained 500 experience points.\" then \"You gained a level! You are now level 2. You gained 3 attribute points and 2 skill points.\"; 1250 + 1250 + 500 = 3000 = level-2 threshold (world table player_exp_for_level)"
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "no credit line accompanies the promotion"
+    },
+    "mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "greeting_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "npc_name_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "tutorial_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "logos_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "logos_protocol": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "state_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "fact_value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "location_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "audio_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "forced": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-066",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "unused by this action"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "promotion 500 XP",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198901,
+    "or_group": 0,
+    "term_index": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "the boss exists while its kill objective is incomplete (build plan S4; boss absent after completion survives instance rebuild); before 1994 is accepted, and until objective 2 reveals objective 1, the objective is not Incomplete, so the boss is absent"
+    },
+    "mission_id": {
+     "value": 1994,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "the kill objective's mission"
+    },
+    "objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "the kill objective"
+    },
+    "state": {
+     "value": 1,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjectivestate.pyo INCOMPLETE = 1 (store offset 9)"
+      }
+     ],
+     "reasoning": "objective state Incomplete"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198902,
+    "or_group": 0,
+    "term_index": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      }
+     ],
+     "reasoning": "Youngblood \"arrives in the camp\" after the boss objective completes: the talk NPC runs up 7.5 s after the first post-kill frame"
+    },
+    "mission_id": {
+     "value": 1994,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "mission 1994"
+    },
+    "objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "the kill objective"
+    },
+    "state": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjectivestate.pyo COMPLETED = 2 (store offset 15)"
+      }
+     ],
+     "reasoning": "objective state Completed"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198902,
+    "or_group": 1,
+    "term_index": 0
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "Youngblood stays after the 1994 turn-in: he gives 1995 in the same exchange (B1-008) and the approved OD-7 makes him the 2005 retry giver, which a condition ending at 1994 completion would remove. Owner decision OD-20 (2026-09-14) chose (1994,1) Completed OR 1994 Completed. CONFLICT: build plan S4 wrote \"(1994,1) Completed AND 1994 not Completed\", which would remove the approved 2005 retry giver"
+    },
+    "mission_id": {
+     "value": 1994,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "mission 1994"
+    },
+    "objective_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "a mission term names no objective"
+    },
+    "state": {
+     "value": 4,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionstate.pyo MISSION_COMPLETED = 4 (store offset 27)"
+      }
+     ],
+     "reasoning": "mission state Completed"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198505
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846 NPC_Human_Swapset_Male, augmentations [1,12,52,59]"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      }
+     ],
+     "counterpart": "NPC_Human_Swapset_Male (3846), the class S1/S2 use for the other boot-camp officers (McAllister, Delessio, Hartmann, DeSimone)",
+     "required_because": "Youngblood cannot be placed or talked to without an entity class carrying the NPC augmentation; no client table or capture records his class",
+     "decision": "OD-11"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      }
+     ],
+     "reasoning": "an AFS captain who receives the mission; AFS NPCs use faction 1 in the world data"
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-001",
+       "t": 0.0
+      }
+     ],
+     "counterpart": "Captain Delessio's observed level 10 (A3-028), the same rank in the same camp; McAllister is also observed at 10 (A2-043)",
+     "required_because": "a creature row needs a level and Youngblood's nameplate never appears in the footage",
+     "decision": "OD-11"
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846"
+      }
+     ],
+     "counterpart": "the S1/S2 boot-camp officer rows (1000 at level 10), themselves following the emulator world data's AFS officer rows",
+     "required_because": "a placed creature needs a health value and no client table records NPC health",
+     "decision": "OD-11"
+    },
+    "name_id": {
+     "value": 10575,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @34877 10575 \"Captain Youngblood\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-001",
+       "t": 0.0
+      }
+     ],
+     "reasoning": "a stationary placement: he waits at one spot for the turn-in; his run-up and run-off (558.867-565.2) need a path mechanism that does not exist (GAP-ESCORT)"
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      }
+     ],
+     "reasoning": "as run_speed"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-008",
+       "t": 4.267
+      }
+     ],
+     "reasoning": "Youngblood is a mission NPC seen only walking up and taking the turn-in; no attack by him is observed, and 0 (no action) is the correct value for a non-combat NPC"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Captain Youngblood",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198506
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "class_id": {
+     "value": 10503,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @104282 10503 Bane_Thrax_Soldier_Pistol_Boss (mesh 30407, augmentations [1,59])"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      }
+     ],
+     "counterpart": "Bane_Thrax_Soldier_Pistol_Boss (10503): the boss variant of the Thrax soldier pistol family that the ambient Thrax Infantry Initiates are drafted from; alternatives Bane_Thrax_Soldier_Pistol_V2_CP_Boss (29059, final-era control-point boss) and Bane_Thrax_Soldier_Rifle_Boss (10504)",
+     "required_because": "the kill objective needs a killable boss creature and the boss is never seen: no class, model or nameplate survives. The name Tizzik Gi already existed in the 2007-11 client, so a pre-rebuild Tizzik Gi existed; its obsolete class or spawn was not consulted",
+     "decision": "OD-17"
+    },
+    "faction": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-24",
+       "t": 432.667
+      }
+     ],
+     "reasoning": "\"the Bane Boss\"; Bane creatures use faction 0 in the world data"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-28",
+       "t": 551.467
+      },
+      {
+       "source": "measurement:kill-rewards",
+       "locator": "docs/evidence/kill-rewards.json rule credits = 5 x creature level"
+      }
+     ],
+     "reasoning": "the kill-cut chat shows \"You gained 143 experience points.\" / \"You received 50 credits.\" (A5-28); if those lines are the boss kill (synthesis inference) the measured credit rule (5 x creature level) gives level 10. Seeded per owner decision OD-24. CONFLICT: 143 XP is neither the level-10 base (124) nor its streak value (249), and the line carries no streak annotation; level-difference modifiers are unmodelled (GAP-S4-BOSS, GAP-KILL-REWARDS)"
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @104282 10503 Bane_Thrax_Soldier_Pistol_Boss (mesh 30407, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "the emulator world data's level-10 Thrax overseer boss (creature row 90 \"Bane Thrax Overseer Graal\", class 10504 Bane_Thrax_Soldier_Rifle_Boss, level 10, 1000 hp). CAVEAT: the creature table is emulator-authored seed data, not a retail capture",
+     "required_because": "a killable boss needs health; no client table or footage records it",
+     "decision": "OD-17"
+    },
+    "name_id": {
+     "value": 6730,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @7580 6730 \"Tizzik Gi\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 9,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @104282 10503 Bane_Thrax_Soldier_Pistol_Boss (mesh 30407, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "the emulator world data's Thrax overseer boss rows (creature rows 82-84, class 10504, run 9, walk 0), emulator-authored",
+     "required_because": "a boss that fights must be able to close on and return from its target; its movement is unobserved",
+     "decision": "OD-17"
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @104282 10503 Bane_Thrax_Soldier_Pistol_Boss (mesh 30407, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "as run_speed (creature rows 82-84 walk 0)",
+     "required_because": "as run_speed",
+     "decision": "OD-17"
+    },
+    "action1": {
+     "value": 33,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo @234119 29884 Weapon_Creature_Bane_Pistol_Bootcamp, tuple (50, 1, 1, ..., 1, 1, 6, ...): attack (action 1, arg 1), damage type 6 Laser; its client min/max damage 1/1 are not creature damage"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @104282 10503 Bane_Thrax_Soldier_Pistol_Boss (mesh 30407, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "existing emulator creature_action row 33 (action 1, arg 1, range 0.5-30 m, cooldown 800 ms, damage 10-15), whose (action_id, action_arg_id) = (1, 1) equals the attack pair of the final client's boot-camp creature weapon weaponclass 29884 Weapon_Creature_Bane_Pistol_Bootcamp (damage type 6 Laser; its client min/max damage 1/1 are not creature damage). Range, cooldown and damage remain emulator-authored",
+     "required_because": "without an attack the placed boss cannot fight; creature.action1 is a required column (owner decision OD-23)",
+     "decision": "OD-17"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Tizzik Gi (boss)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198507
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "class_id": {
+     "value": 29769,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo @234119 29884 Weapon_Creature_Bane_Pistol_Bootcamp: attack (1,1), damage type 6 = Laser"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-016",
+       "t": 14.067
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-07",
+       "t": 491.47
+      }
+     ],
+     "counterpart": "Bane_Thrax_Soldier_Grunt_Pistol (29769): a final-client Thrax soldier class absent from the 2007-11 client, allocated in the class-id block 29769-29812 together with boot-camp damaged buildings and the boot-camp recruit pistol 29803 and followed by the boot-camp creature weapons 29884/29885; the boot-camp Bane pistol deals Laser damage, matching the red laser fire of the Initiates (B1-016). Alternatives: Bane_Thrax_Soldier_Grunt_Rifle 29773 (boot-camp Bane rifle is Physical); the generic Bane_Thrax_Soldier_Pistol 3762 / Rifle 4047 (present since 2007)",
+     "required_because": "ambient enemies cannot exist without an entity class; no source binds name 7674 to a class (7674-7689 are the Thrax Infantry rank names, 7674 = levels 1-3). OD-11 (\"labelled final-live analogue classes where the class id is unrecoverable\") is taken to cover ambient enemies (owner decision OD-23, 2026-09-14)",
+     "decision": "OD-11"
+    },
+    "faction": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-079",
+       "t": 386.6
+      }
+     ],
+     "reasoning": "Bane enemies use faction 0 in the world data"
+    },
+    "level": {
+     "value": 2,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-079",
+       "t": 386.6
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-05",
+       "t": 395.0
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-26",
+       "t": 436.0
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-07",
+       "t": 491.47
+      }
+     ],
+     "reasoning": "every Initiate targeted during 1994 shows level 2; level 1 appears only later in the 1995 outpost fight (B1-016 corrected), which is S5 scope. CONFLICT: build plan S4 wrote ambient levels \"1-2\"; only level 2 is observed during 1994, so only level 2 is seeded (owner decision OD-20)"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "the emulator world data's default mobile-creature health (555, e.g. level-2 boargar row 35, Bane Thrax Technician row 47, Grenadier row 57). CAVEAT: emulator-authored; could be replaced by a measurement (damage numbers summed against the nameplate health bar, e.g. the stationary target 397.5-401.533)",
+     "required_because": "a killable creature needs health; no client table records it",
+     "decision": "OD-11"
+    },
+    "name_id": {
+     "value": 7674,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @10721 7674 \"Thrax Infantry Initiate\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 9,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "the emulator world data's Thrax rows (creature rows 3/47/57, run 9, walk 5), emulator-authored",
+     "required_because": "Initiates move and leap in the footage (A5-07); rates are not recoverable",
+     "decision": "OD-11"
+    },
+    "walk_speed": {
+     "value": 5,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
+      }
+     ],
+     "counterpart": "as run_speed (creature rows 3/47/57 walk 5)",
+     "required_because": "as run_speed",
+     "decision": "OD-11"
+    },
+    "action1": {
+     "value": 33,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo @234119 29884 Weapon_Creature_Bane_Pistol_Bootcamp, tuple (50, 1, 1, ..., 1, 1, 6, ...): attack (action 1, arg 1), damage type 6 Laser; its client min/max damage 1/1 are not creature damage"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B1-016",
+       "t": 14.067
+      }
+     ],
+     "counterpart": "existing emulator creature_action row 33 (action 1, arg 1, range 0.5-30 m, cooldown 800 ms, damage 10-15), whose (action_id, action_arg_id) = (1, 1) equals the attack pair of the final client's boot-camp creature weapon weaponclass 29884 Weapon_Creature_Bane_Pistol_Bootcamp (damage type 6 Laser, matching the Initiates' red laser fire, B1-016; its client min/max damage 1/1 are not creature damage). Range, cooldown and damage remain emulator-authored",
+     "required_because": "without an attack the placed Thrax cannot fight; creature.action1 is a required column (owner decision OD-23)",
+     "decision": "OD-11"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Thrax Infantry Initiate L2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198658
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "Youngblood is a placed creature"
+    },
+    "creature_id": {
+     "value": 198505,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 93.2,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 109.0,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 137.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "he waits at one spot for the turn-in (8V 0-4.2); stationary per owner decision OD-22"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.youngblood"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    },
+    "npc_package_id": {
+     "value": 2561,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41744 (1994,3,2561,1,1) -> 21617"
+      }
+     ]
+    },
+    "present_condition_id": {
+     "value": 198902,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-33",
+       "t": 559.0
+      }
+     ],
+     "reasoning": "absent until the boss objective completes (\"when he arrives in the camp\"); see condition 198902"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Youngblood",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198659
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "the boss is a placed creature"
+    },
+    "creature_id": {
+     "value": 198506,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 95.1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "Tizzik Gi is never on screen: the kill objective (1994/1, text 21313) completes inside the 551.4/551.467 cut. The only located evidence is the kill objective indicator 437 \"Base Center\" (indicator.1994.1.437), so the boss is placed at that indicator; the fight may have happened anywhere in the reclaimed compound (informational spread 30 m, not a measurement)"
+    },
+    "pos_y": {
+     "value": 109.25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "Tizzik Gi is never on screen: the kill objective (1994/1, text 21313) completes inside the 551.4/551.467 cut. The only located evidence is the kill objective indicator 437 \"Base Center\" (indicator.1994.1.437), so the boss is placed at that indicator; the fight may have happened anywhere in the reclaimed compound (informational spread 30 m, not a measurement)"
+    },
+    "pos_z": {
+     "value": 150.8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "Tizzik Gi is never on screen: the kill objective (1994/1, text 21313) completes inside the 551.4/551.467 cut. The only located evidence is the kill objective indicator 437 \"Base Center\" (indicator.1994.1.437), so the boss is placed at that indicator; the fight may have happened anywhere in the reclaimed compound (informational spread 30 m, not a measurement)"
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a boss fights; unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.tizzik_gi"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    },
+    "present_condition_id": {
+     "value": 198901,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A4-21",
+       "t": 430.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A5-27",
+       "t": 551.467
+      }
+     ],
+     "reasoning": "present only while the kill objective is incomplete"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Tizzik Gi",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198660
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 286.23,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.6,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.6,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 65.35,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.6,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.1",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198661
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 289.35,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.1,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.1,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 61.02,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.1,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.2"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198662
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 291.26,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.8,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.8,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 61.71,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.8,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.3"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.3",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198663
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 287.8,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 67.11,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.4"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.4",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198664
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 286.48,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.2,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.2,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 62.48,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.2,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.5"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.5",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198665
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 291.77,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 120.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 63.77,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.courtyard.6"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate courtyard.6",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198666
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 247.71,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 116.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 76.06,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.3,
+      "vertical_m": 1.0
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate passage.1",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198667
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 250.01,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 117.8,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 74.07,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.9,
+      "vertical_m": 1.0
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.2"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate passage.2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198668
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 257.68,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.4,
+      "vertical_m": 1.5
+     }
+    },
+    "pos_y": {
+     "value": 124.6,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.4,
+      "vertical_m": 1.5
+     }
+    },
+    "pos_z": {
+     "value": 68.99,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.4,
+      "vertical_m": 1.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.passage.3"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate passage.3",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198669
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 202.24,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.8,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 107.2,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.8,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 88.44,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.8,
+      "vertical_m": 1.0
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate caldera_trench.1",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198670
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 209.39,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.3,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 105.0,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.3,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 94.09,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.3,
+      "vertical_m": 1.0
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.caldera_trench.2"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate caldera_trench.2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198671
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 150.05,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.8,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 112.4,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.8,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 159.06,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.8,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_perimeter.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate base_perimeter.1",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198672
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 116.26,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.7,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 109.0,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.7,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 125.54,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.7,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate base_interior.1",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198673
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 128.49,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 109.2,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 132.34,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.0,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_interior.2"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate base_interior.2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198674
+   },
+   "slice": "S4",
+   "migration": "BootcampS4CaptureTheFlag",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "an ambient enemy is a placed creature"
+    },
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded creature row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "a creature placement is not usable"
+    },
+    "pos_x": {
+     "value": 59.2,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 8.8,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 109.5,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 8.8,
+      "vertical_m": 1.0
+     }
+    },
+    "pos_z": {
+     "value": 139.33,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 8.8,
+      "vertical_m": 1.0
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "facing is not established by the footage; world +Z"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "the Initiates attacked the player where they stood (measured standing positions); strolling is unobserved; owner decision OD-22: creature AI (behavior 2), which the server implements as guarding the spot (scan for enemies, fight, return to the placement, never stroll; CreatureManager.ApplyPlacementBehavior, commit d0242e5)"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "creature health comes from the creature row; the placement itself is not a destroyable usable"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "spawn.cave_assault.base_gate.1"
+      }
+     ],
+     "reasoning": "no content item set; corpse loot is outside this row (GAP-LOOT-TABLES)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Thrax Initiate base_gate.1",
+     "role": "comment"
+    }
+   }
   }
  ],
- "omitted": [],
+ "omitted": [
+  {
+   "table": "npc_mission_reward",
+   "what": "1994 credits reward",
+   "reason": "no credit amount is observed at the turn-in (B1-008 shows only the 5000 XP line)",
+   "gap": "GAP-S4-MISSION-CREDITS",
+   "slice": "S4"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "1994 item reward (AccuMax Shotgun hint)",
+   "reason": "the weapon changes to an AccuMax Shotgun with two \"You cannot equip that item.\" lines across the 8V 4.267 cut (B1-008/B1-010); the source is not shown",
+   "gap": "GAP-ITEM-REWARDS",
+   "slice": "S4"
+  },
+  {
+   "table": "content_rule",
+   "what": "mission_turned_in 1992 -> offer_mission_at_npc(1994, DeSimone placement)",
+   "reason": "the 1994 offer is hidden in the 362.133 cut; no offer window is seen (unlike A2-050 for 1992). The NPC offer works without the rule",
+   "gap": "GAP-S4-OFFER-RULE",
+   "slice": "S4"
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "what": "radius and show_3d of indicators 437/439 (stored as the neutral defaults 0/false); an indicator for objective 3",
+   "reason": "unobserved; the yellow 3D marker over Youngblood (A5-33) is the NPC mission marker, not an objective indicator",
+   "gap": "GAP-S4-INDICATOR-PRESENTATION",
+   "slice": "S4"
+  },
+  {
+   "table": "content_placement",
+   "what": "present_condition_id of the fifteen ambient Thrax placements (left at 0 = always present)",
+   "reason": "whether they exist before 1994 is accepted is unobserved; the optional default is kept (owner decision OD-20)",
+   "gap": "GAP-S4-AMBIENT-PRESENCE",
+   "slice": "S4"
+  },
+  {
+   "table": "content_placement",
+   "what": "respawn_ms of the ambient Thrax (left at 0 = only on instance rebuild)",
+   "reason": "respawn is not observable (no cleared area is revisited)",
+   "gap": "GAP-S4-RESPAWN",
+   "slice": "S4"
+  },
+  {
+   "table": "content_placement",
+   "what": "allied Forean Gunner/Archer/Shaman Initiates (L3; names 7938/7986/7890), Forean Warrior (L2), AFS Shotgunner L2/L3 (8718), Rifleman L2 (8717), Infantryman L3 (8716), Field Gunner L3 (8720) and the teleport-in soldier",
+   "reason": "optional allies seeded only with owner approval; one measured camp position (ally.forean_initiates.camp); the escorts follow the player, which has no mechanism",
+   "gap": "GAP-S4-ALLY-ESCORT",
+   "slice": "S4"
+  },
+  {
+   "table": "content_placement",
+   "what": "placements for kills observed only as chat lines: 1 in the tunnel cut (A4-43), >=2 between the trench and the base perimeter (A5-18), 1 in the boss cut (A5-28)",
+   "reason": "no position is recoverable; counts recorded only",
+   "gap": "GAP-S4-UNMEASURED-KILLS",
+   "slice": "S4"
+  },
+  {
+   "table": "creature",
+   "what": "Thrax Infantry Initiate level 1",
+   "reason": "level 1 is observed only in the 1995 outpost fight (B1-016 corrected, 32.267-33.067)",
+   "gap": "GAP-S4-AMBIENT-LEVELS",
+   "slice": "S4"
+  },
+  {
+   "table": "creature_appearance",
+   "what": "appearance rows for Captain Youngblood and the Thrax weapon appearance",
+   "reason": "no appearance source is identified; the Rogers officer set used by BootcampFixNpcAppearance does not match Youngblood's observed leather jacket (A5-33)",
+   "gap": "GAP-NPC-BODY",
+   "slice": "S4"
+  }
+ ],
  "accepted_definition_gaps": [],
  "accepted_content_gaps": [],
  "gaps": [
@@ -4391,9 +9504,11 @@
   },
   {
    "id": "GAP-CAVE-IN",
-   "summary": "The cave-in blocker and its indicator 439 are unknown.",
+   "summary": "The cave-in blocker is unknown: no blocker entity is identified and the derived navmesh has an open route through the cave-in location. S4 seeds indicator 439 \"Cave-in Location\" (inferred id, OD-21) and the objective area at the measured objective icon.",
    "evidence": [
-    "objective indicator 439 \"Cave-in Location\" (docs/evidence/bootcamp-client-catalog.json, store offset 3908); no blocker or position is identified (build plan S4 stubs)"
+    "objective indicator 439 \"Cave-in Location\" (docs/evidence/bootcamp-client-catalog.json, store offset 3908)",
+    "research/20260914-bootcamp-s4/work/navpath-output.tsv: courtyard -> (264.62,123.26,64.88) open route",
+    "positions area.1994.2 and indicator.1994.2.439"
    ],
    "closes_with": "footage",
    "surfaced_by": [
@@ -4405,7 +9520,7 @@
   },
   {
    "id": "GAP-ITEM-REWARDS",
-   "summary": "Mission item rewards are not delivered, including the hinted 1994 AccuMax Shotgun.",
+   "summary": "Mission item rewards are not delivered, including the hinted 1994 AccuMax Shotgun. The 1994 item reward is not seeded (the source of the AccuMax Shotgun is not shown).",
    "evidence": [
     "src/Rasa.Game/Managers/MissionManager.cs:196-203 (\"item reward delivery is not implemented\")",
     "footage B1-010 (AccuMax Shotgun hint)"
@@ -4493,7 +9608,7 @@
   },
   {
    "id": "GAP-NPC-BODY",
-   "summary": "NPC classes and appearance are analogues, and NPC hues are random.",
+   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded.",
    "evidence": [
     "src/Rasa.Game/Managers/CreatureManager.cs:259-261 (random hues)",
     "footage A2-040, A3-028, A5-33, B2-012 (NPC appearance)"
@@ -4550,6 +9665,170 @@
    ],
    "slices": [
     "S1"
+   ]
+  },
+  {
+   "id": "GAP-S4-CREATURE-ACTIONS",
+   "summary": "Resolved for seeding by owner decision OD-23 (2026-09-14): creature.action1 is a required column and the Thrax Infantry Initiate and Tizzik Gi use emulator creature_action 33 as a labelled analogue (attack pair (1, 1) of the final client's Weapon_Creature_Bane_Pistol_Bootcamp). Still open: the attack range, cooldown and damage are emulator-authored, and no further boss abilities are known.",
+   "evidence": [
+    "src/Rasa.Test/Reconstruction/ProvenanceRegistry.cs creature row",
+    "src/Rasa.Game/Managers/CreatureManager.cs builds creature attacks only from action1..8",
+    "generated/client/weaponclass.pyo @234119 weaponclass 29884"
+   ],
+   "closes_with": "evidence of the boot-camp Thrax attack timing and damage (damage numbers against the player health bar)",
+   "surfaced_by": [
+    "manifest analogue fields"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-PLACED-AI",
+   "summary": "Closed by d0242e5 (2026-09-14): creature-AI content placements guard their spot (scan for enemies, fight, return to the placement, never stroll). Strolling or patrols of the original Thrax are unobserved.",
+   "evidence": [
+    "src/Rasa.Game/Managers/CreatureManager.cs ApplyPlacementBehavior",
+    "src/Rasa.Test/PlacedCreatureBehaviorTests.cs"
+   ],
+   "closes_with": "closed by d0242e5",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-AMBIENT-PRESENCE",
+   "summary": "Whether the courtyard, passage and base Thrax exist before 1994 is accepted is unobserved; their placements use the optional default present_condition_id 0 (always present), owner decision OD-20.",
+   "evidence": [
+    "footage A3-065..A3-070 (calm camp at 362.133)",
+    "footage A3-076/A3-079 (fight first seen at 385.0, after acceptance)"
+   ],
+   "closes_with": "footage of the courtyard before 1994 is accepted",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-UNMEASURED-KILLS",
+   "summary": "Kills seen only as chat lines have no recoverable position and are not placed: one in the tunnel cut (A4-43), at least two between the trench and the base perimeter (A5-18), one in the boss cut (A5-28), and unverified transcript lines at A5-35, A5-38 and B1-004.",
+   "evidence": [
+    "footage A4-43, A5-18, A5-28"
+   ],
+   "closes_with": "more footage of the same route",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-BOSS",
+   "summary": "Tizzik Gi's class, health, movement, abilities and spawn are unobserved (analogues per OD-17; position inferred at indicator 437). Its level 10 is inferred from the 50-credit line, which conflicts with the 143 experience line of the same cut.",
+   "evidence": [
+    "footage A5-26..A5-28",
+    "docs/evidence/kill-rewards.json credits rule"
+   ],
+   "closes_with": "any capture of the boss fight",
+   "surfaced_by": [
+    "manifest analogue fields"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-ALLY-ESCORT",
+   "summary": "The allied Forean Initiates (Gunner/Archer/Shaman L3, Warrior L2), the AFS Shotgunner/Rifleman/Infantryman/Field Gunner defenders and the teleport-in soldier are not seeded; the escorts follow the recruit (\"I'm sending some of our top soldiers along with you\", text 21237), which no mechanism supports.",
+   "evidence": [
+    "footage A3-070, A5-10, A5-17, A5-31, A5-34",
+    "research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl (orange radar icons trailing the player 385-594)",
+    "position ally.forean_initiates.camp"
+   ],
+   "closes_with": "a follow mechanism and owner approval of ally classes",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-MISSION-CREDITS",
+   "summary": "No credit reward for 1994 is seeded: the turn-in shows only the 5000 experience line.",
+   "evidence": [
+    "footage B1-008"
+   ],
+   "closes_with": "footage of the 1994 offer or reward window",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-OFFER-RULE",
+   "summary": "No rule offers 1994 at DeSimone on the 1992 turn-in: the offer is hidden in the 362.133 cut. The mission is offered through DeSimone's ordinary NPC offer.",
+   "evidence": [
+    "footage A3-065/A3-066"
+   ],
+   "closes_with": "footage of the 1992 turn-in at DeSimone",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-INDICATOR-PRESENTATION",
+   "summary": "Indicator radius and 3D effect for 437 and 439 are unobserved and stored as the neutral defaults (radius 0, show_3d false); no indicator is seeded for objective 3 (the yellow 3D marker over Youngblood in A5-33 is the NPC mission marker).",
+   "evidence": [
+    "footage A5-25, A5-26, A5-33"
+   ],
+   "closes_with": "footage showing the indicator ring or 3D effect",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4",
+    "S8"
+   ]
+  },
+  {
+   "id": "GAP-S4-RESPAWN",
+   "summary": "Ambient Thrax respawn is not observable (no cleared area is revisited); placements respawn only when the instance is rebuilt.",
+   "evidence": [
+    "footage A3-076..A5-34 (route never revisits a cleared area)"
+   ],
+   "closes_with": "footage revisiting a cleared area",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4"
+   ]
+  },
+  {
+   "id": "GAP-S4-AMBIENT-LEVELS",
+   "summary": "Level-1 Thrax Infantry Initiates appear only in the 1995 outpost fight (B1-016); the S4 placements are level 2 only (OD-20) and the level-1 template belongs to S5.",
+   "evidence": [
+    "footage A3-079, A4-05, A4-26, A5-07 (level 2)",
+    "footage B1-016 (level 1 at 32.267-33.067)"
+   ],
+   "closes_with": "S5",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "S4",
+    "S5"
    ]
   }
  ],
@@ -4740,6 +10019,51 @@
    "choice": "Seed the crate with the level-1 generic Motor Assist variants (13066/13096/13156/13186) and the level-1 rifle (13713) as analogues; the observed maker variants (Astra/Teleract/Hellstrom/Shinobi) have no template binding in any original source.",
    "approved_on": "2026-09-13",
    "record": "session record: owner approved option (a) after the E4 tooltip-stat match failed to resolve unique template ids"
+  },
+  {
+   "id": "OD-20",
+   "decision": "S4 seed scope, presence and ambient levels",
+   "default": "Build plan S4 (Youngblood while (1994,1) Completed and 1994 not Completed; ambient levels 1-2)",
+   "status": "approved",
+   "choice": "Seed the S4 draft rows; Youngblood present while (1994,1) Completed OR 1994 Completed, because OD-7 makes him the 2005 retry giver; ambient Thrax always present (optional default, GAP-S4-AMBIENT-PRESENCE); ambient Initiates level 2 only; the draft's omitted items stay omitted.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S4 seed review, 2026-09-14)"
+  },
+  {
+   "id": "OD-21",
+   "decision": "S4 objective indicators",
+   "default": "Indicator 437 omitted until measured; 439 not seeded",
+   "status": "approved",
+   "choice": "Seed 437 for (1994,1) (observed id, measured position) and 439 for (1994,2) (inferred id, measured position); radius and show_3d use the neutral defaults and are recorded as omitted.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S4 seed review, 2026-09-14)"
+  },
+  {
+   "id": "OD-22",
+   "decision": "S4 placement behavior",
+   "default": "Creature AI for enemies, stationary for NPCs",
+   "status": "approved",
+   "choice": "Thrax Infantry Initiates and Tizzik Gi use behavior 2 (creature AI), implemented as guarding the spot (scan, fight, return, never stroll; d0242e5), labelled inferred; Youngblood is stationary.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S4 seed review, 2026-09-14)"
+  },
+  {
+   "id": "OD-23",
+   "decision": "Creature attacks (GAP-S4-CREATURE-ACTIONS)",
+   "default": "Leave action1..8 optional and seed no attacks",
+   "status": "approved",
+   "choice": "creature.action1 becomes a required column (0 stays correct for non-combat NPCs; action2..8 stay optional); the Thrax Infantry Initiate (analogue under OD-11, which is taken to cover ambient enemies) and Tizzik Gi (analogue under OD-17) use emulator creature_action 33, whose attack pair (1, 1) equals the final client's Weapon_Creature_Bane_Pistol_Bootcamp; range, cooldown and damage remain emulator-authored.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S4 seed review, 2026-09-14)"
+  },
+  {
+   "id": "OD-24",
+   "decision": "Tizzik Gi level and health",
+   "default": "Analogue level (e.g. 4, the top of Bootcamp[1 - 4])",
+   "status": "approved",
+   "choice": "Level 10 inferred from the measured 50-credit kill rule, with the 143 XP conflict recorded; 1000 hp as an analogue per OD-17.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (S4 seed review, 2026-09-14)"
   }
  ]
 }

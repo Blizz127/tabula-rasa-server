@@ -1,6 +1,6 @@
 {
  "schema": "rasa-reconstruction-footage-events/1",
- "note": "Only transcript events cited by the manifest, written by the E1 extract script in the research tree (build plan section 4.1). verification.json corrections are applied: text and description carry the corrected values, corrected_text is kept when the verifier supplied one, and refuted events are listed in dropped instead of events. Transcript entry: {segment, video_id, transcript_sha256, verification_sha256}. Event: {segment, event_id, t, category, text, description, status: confirmed|corrected, corrected_text?, transcript_sha256}. Dropped entry: {segment, event_id, status: refuted, transcript_sha256}. t is decoded video seconds of the transcript's video.",
+ "note": "Only transcript events cited by the manifest or by the frames of the positions file, written by the E1 extract script in the research tree (build plan section 4.1). verification.json corrections are applied: text and description carry the corrected values, corrected_text is kept when the verifier supplied one, and refuted events are listed in dropped instead of events. Transcript entry: {segment, video_id, transcript_sha256, verification_sha256}. Event: {segment, event_id, t, category, text, description, status: confirmed|corrected, corrected_text?, transcript_sha256}. Dropped entry: {segment, event_id, status: refuted, transcript_sha256}. t is decoded video seconds of the transcript's video.",
  "transcripts": [
   {
    "segment": "A1",
@@ -19,6 +19,24 @@
    "video_id": "7Lrst9SG3pk",
    "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7",
    "verification_sha256": "6ddbb0ff89f88a7f9ce343476b3255151a07333e319c0e6b78b4bc9d6fb31767"
+  },
+  {
+   "segment": "A4",
+   "video_id": "7Lrst9SG3pk",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "verification_sha256": "88a7968e02a121db24a2b15d7e83df73f8a211d88b8c923733f26b2262cda98b"
+  },
+  {
+   "segment": "A5",
+   "video_id": "7Lrst9SG3pk",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+   "verification_sha256": "9a7f1313a358023b3f5271907eac74689bfdb6a5ba8c001ee1e0f5437d4dba4b"
+  },
+  {
+   "segment": "B1",
+   "video_id": "8VXeKzGUv0c",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "verification_sha256": "515788acda3c8c927afd2972dbaba0f0200fa20b8ed96f329dd7406d24b56293"
   }
  ],
  "events": [
@@ -382,6 +400,559 @@
    "description": "System lines visible in chat after the cut, in order (earlier General lines above them: '... and mod new armor' / 'Cebals: full cormen with officer hat is best while u get new armor' / 'Cebals: change as fast as possible').",
    "status": "confirmed",
    "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-065",
+   "t": 362.133,
+   "category": "other",
+   "text": null,
+   "description": "CUT (edit): 362.067 = firing range, level 1, tracker 'Speak to Corporal Hartmann'; 362.133 = different part of the camp, level 2, tracker on mission 1994, chat showing the 1992 completion. Hartmann's objective(s), the Lightning/Target Dummy objective, the 1992 turn-in (log text names Corporal DeSimone) and the 1994 offer are not shown.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-067",
+   "t": 362.133,
+   "category": "tracker",
+   "text": "Capture the Flag / Find a way out of the cave",
+   "description": "Tracker: 'Capture the Flag' / 'Find a way out of the cave'.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-068",
+   "t": 362.133,
+   "category": "player_state",
+   "text": "2 Master Assault | Shinobi Rifle 9/989",
+   "description": "Player frame 'Master Assault' now level 2; tray slot 2 now a blue running-figure (Sprint) icon; Pending column: blue '?' diamond, green figure icon, blue figure icon, blue '?' diamond; ammo 9/989 Shinobi Rifle.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-070",
+   "t": 362.133,
+   "category": "enemy",
+   "text": "3 Forean Gunner Initiate | 3 Forean Archer Initiate | 3 Forean Shaman Initiate",
+   "description": "Target order: 'Forean Gunner Initiate' (3) at 362.133-362.2, 'Forean Archer Initiate' (3) from 362.267 (not 362.4), Gunner again 362.733-363.2, 'Forean Shaman Initiate' (3) from 363.267 (not 363.467), Gunner again from about 363.667 to 368.533, then Archer from 368.6 through 384.933. The group of three to four Foreans (dark skin, staves, one purple-crystal staff) stands idle by the pylon with red-bar nameplates. The orange 'orbs' at head height are orange circular emblems with dark internal shapes, apparently the same icon type as the two-silhouette icons over allies at 386+; the design is partly legible. No combat.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-076",
+   "t": 385.0,
+   "category": "other",
+   "text": null,
+   "description": "CUT (edit): 384.933 = ATTR window open in the camp with Forean Initiates; 385.0 = window closed, different area, chat has new lines. (The two-frame orange icon/lightning image at 387.067-387.2 and the white-pink flash at 395.4-395.6 are in-game effects, not cuts: chat, radar and tracker persist.)",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-077",
+   "t": 385.0,
+   "category": "location",
+   "text": "Luna Cavern | Capture the Flag / Find a way out of the cave",
+   "description": "Paved stone courtyard with tall dark pillars bearing blue glyph strips and blue lights, lamp posts with yellow lights, low sandbag walls and soldiers ahead. Radar 'Luna Cavern': player arrow pointing west, a yellow/gold icon at the west edge, and an orange-red round icon immediately east of the arrow beside a dark horizontal band. A similar orange-red icon already sits next to the player arrow in the camp at 384.933, so calling it a hostile pip is not established. Tracker 'Capture the Flag / Find a way out of the cave'; level 2; Shinobi Rifle 7/989.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-079",
+   "t": 386.6,
+   "category": "enemy",
+   "text": "2 Thrax Infantry Initiate",
+   "description": "Combat with 'Thrax Infantry Initiate' level 2 (target frame with portrait; nameplate '2 Thrax Infantry Initiate', bracketed number 24, later 11/13). Allied soldiers fight alongside; several allies (and a robed figure with a purple glowing staff) have orange circular overhead icons showing two human silhouettes. Player health bar drops (red tint).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-081",
+   "t": 391.533,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. / You received 10 credits. | +71xp | Updates: You received 10 credits.",
+   "description": "Both yellow chat lines appear at 391.533, with a floating '+71xp' by the Thrax Infantry Initiate nameplate. The Updates entry 'You received 10 credits.' with the credit glyph is already present at 391.533 (absent at 391.467), not first at 392.2; it only finishes fading in by 392.2.",
+   "status": "corrected",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7",
+   "corrected_text": "You gained 71 experience points. / You received 10 credits. | +71xp | Updates: You received 10 credits."
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-084",
+   "t": 396.133,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. / You received 10 credits.",
+   "description": "Second kill reward pair; second Updates entry 'You received 10 credits.'; floating '+71xp'.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-01",
+   "t": 395.0,
+   "category": "chat_line",
+   "text": "You gained 500 experience points. | You gained a level! You are now level 2[?] You gained 3 attribute points and 2 skill points. | Assault says: sssss",
+   "description": "Level-up/XP lines from before the segment are at the top of chat at 393.0 (burst start) and 395.0. 'You gained 500 experience points.' scrolls out at 395.067; the blue level-up line scrolls out at 396.133. Note: evidence f00395.png is t=394.0 per index.json, not 395.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You gained 500 experience points. | You gained a level! You are now level 2[?] You gained 3 attribute points and 2 skill points. | Assault says: sssss"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-03",
+   "t": 395.0,
+   "category": "tracker",
+   "text": "Mission Tracker | Capture the Flag | Find a way out of the cave",
+   "description": "Mission Tracker shows mission 1994 with objective 2 active (yellow square next to mission name). Unchanged until the cut at 430.533.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-04",
+   "t": 395.0,
+   "category": "location",
+   "text": "Luna Cavern | Filter",
+   "description": "Underground AFS camp in a cave: minimap region label \"Luna Cavern\"; stone-tiled floor, sandbag walls and crate stacks, two tall blue-glowing brazier/light pillars, rock walls and stalactite columns. Many AFS soldiers (dark blue fatigues) and Forean allies (orange circular icons with two human silhouettes or an emblem glyph above them) are fighting attacking Thrax; red and purple tracer beams from allies. Minimap: light-grey camp layout, cluster of yellow icons at left, white player arrow with red/orange blob at centre.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-05",
+   "t": 395.0,
+   "category": "enemy",
+   "text": "2 | Thrax Infantry Initiate",
+   "description": "Target frame: level '2', portrait, 'Thrax Infantry Initiate'. Floating plate with same name over armored Thrax with red lights. The plate row shows a small yellow-green glyph, '>' and a bracketed number that varies (observed 11-14 in 395-430, 18 or 16 at 420.8-421.0, 15 at 437.4, 12 at 447, 8 at 458-459); it is not the level and its meaning is unknown. No other enemy name in 395-430 (ally plate 'Forean Warrior' seen 401.8-402.067).",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-08",
+   "t": 396.133,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits. | +71xp | Updates: You received 10 credits.",
+   "description": "Kill reward for an Initiate: new XP and credits pair; floating \"+71xp\" over the target and \"Updates\" panel popups \"You received 10 credits.\" at right. Ammo 0/989 at 396, \"Reloading\" at ~397, 20/969 at ~398.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-10",
+   "t": 401.533,
+   "category": "chat_line",
+   "text": "You received 1 prestige points for reaching max kill streak[?] | You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs look square at 640x480, identical to the '[1. General]' prefix; client string has parentheses) | You received 10 credits.",
+   "description": "Max kill streak reached: prestige line plus streak-doubled XP line and credits. Right end of the first two lines was hidden by the tutorial window until 413.467, when the full text is readable.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You received 1 prestige points for reaching max kill streak[?] | You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs look square at 640x480, identical to the '[1. General]' prefix; client string has parentheses) | You received 10 credits."
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-14",
+   "t": 406.2,
+   "category": "chat_line",
+   "text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (right part '...+100% Kill' hidden at 406.2, readable after 413.467; bracket glyphs render square) | You received 10 credits.",
+   "description": "Second streak kill: XP and credits; floating \"+143xp\" at 406.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (right part '...+100% Kill' hidden at 406.2, readable after 413.467; bracket glyphs render square) | You received 10 credits."
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-16",
+   "t": 415.2,
+   "category": "chat_line",
+   "text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs render square) | You received 10 credits.",
+   "description": "Third streak kill: XP and credits; floating \"+143xp\" at 415.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs render square) | You received 10 credits."
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-18",
+   "t": 427.733,
+   "category": "chat_line",
+   "text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs render square) | You received 10 credits.",
+   "description": "Fourth streak kill at 427.733: XP and credits lines; floating '+143xp' from 427.867. Ammo 20/949 after the reload (427.0-427.4), 19/949 at the kill (427.6-428.0).",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] (bracket glyphs render square) | You received 10 credits."
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-19",
+   "t": 430.533,
+   "category": "other",
+   "text": null,
+   "description": "EDIT CUT between 430.467 and 430.533: cave camp battle -> grey rock cave passage. Discontinuities: location, chat history (all XP lines replaced by other General lines), ammo 18/949 -> 12/949, x2 XP indicator and Pending icons gone, tracker objective changed. The actual completion of \"Find a way out of the cave\" (and any cave-in passage) is not shown.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-20",
+   "t": 430.533,
+   "category": "system_message",
+   "text": "Objective Completed | Capture the Flag | Find a way out of the cave",
+   "description": "Centre-screen objective banner (green-yellow bar) already displayed in the first post-cut frame; it changes to the New Objective banner at 432.6-433.0.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-21",
+   "t": 430.533,
+   "category": "tracker",
+   "text": "Mission Tracker | Capture the Flag | Eliminate the Tizzik G, the Bane Boss, in the AFS Base Camp | Boss Eliminated: 0 / 1",
+   "description": "Mission Tracker in first post-cut frame already lists the next objective with a counter \"Boss Eliminated:\" 0 over 1. Unchanged through the end of the segment (491), including after death/respawn and on reaching Denzil's Caldera.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-22",
+   "t": 430.533,
+   "category": "location",
+   "text": "Luna Cavern",
+   "description": "Post-cut: steep grey rocky cave passage; a large dead armored Thrax biped lies on the slope beside the player. Minimap still \"Luna Cavern\" but shows a different narrow tunnel shape, red/orange blob right of the player arrow and an orange triangle on the left edge of the radar ring (off-radar pointer). At 433-434 the player runs uphill through the passage past stalactite columns; a yellow-green light stick lies on the ground.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-24",
+   "t": 432.667,
+   "category": "system_message",
+   "text": "New Objective | Capture the Flag | Eliminate the Tizzik G, the Bane Boss, in the AFS Base Camp",
+   "description": "The centre banner changes to the new objective at 432.667 (flash; header 'New Objective' readable from 432.867). It stays until about 437.0, fades at 437.333 and is gone by 437.667.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-26",
+   "t": 436.0,
+   "category": "enemy",
+   "text": "Miss! | 2 | Thrax Infantry Initiate",
+   "description": "Combat in the cave passage. 'Miss!' floats from about 436.8 to 437.4. The target frame (level 2, 'Thrax Infantry Initiate') appears at 437.267. Damage numbers 2-55. Ammo falls from 12/949 (434-438) to 4/949 at 445 and 3/949 at 446.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-28",
+   "t": 443.867,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits.",
+   "description": "Kill reward (no streak bonus now): XP and credits; floating \"+71xp\", Updates popup \"You received 10 credits.\". Preceded by a blue-white energy flash at 443.667.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-33",
+   "t": 453.6,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits.",
+   "description": "Second kill of the cave-passage fight at 453.6: XP and credits lines, floating '+71xp' from 453.6, followed by a white/red explosion 454.0-454.8.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-34",
+   "t": 456.0,
+   "category": "enemy",
+   "text": "Thrax Infantry Initiate",
+   "description": "Third Thrax Infantry Initiate (large armored biped with red lights; target frame still \"Thrax Infantry Initiate\") engages at close range; player health falls steadily (458-462); ammo 15/929 -> 10/929.",
+   "status": "confirmed",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-35",
+   "t": 462.0,
+   "category": "player_state",
+   "text": "You cannot perform this action when you are dead (client: playermessagelanguage (165,1) 'You cannot perform this action when you are dead.')",
+   "description": "Player dies: health bar empty, one buff icon removed; chat line appears.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "You cannot perform this action when you are dead (client: playermessagelanguage (165,1) 'You cannot perform this action when you are dead.')"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-42",
+   "t": 480.567,
+   "category": "other",
+   "text": null,
+   "description": "EDIT CUT between 480.533 and 480.600: underground base camp -> dark cave tunnel with green-lit opening. Ammo 10/929 -> 14/919 (off-screen reload and shots); new chat lines report a kill and loot not shown.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-43",
+   "t": 480.567,
+   "category": "loot_or_container_window",
+   "text": "[1. General] Kappow: ok send a tell if u want vortex (pre-cut) | [1. General] Skyke: im rdy now | You have no target upon which to perform an action. (x3) | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull (x3, final period not visible) -- client: playermessagelanguage (88,1) 'You have no target upon which to perform an action.'; (48,1); (262,1); (67,1) or (261,1) 'You received %(quantity)s %(loot)s.' + physicalentityclassnamelanguage 20307/25553 'Thrax Skull'",
+   "description": "At 480.600 (first post-cut frame) chat holds lines from the omitted interval: a General line (Skyke: im rdy now), three failed-action lines, one kill reward, and three single 'Thrax Skull' loot lines. No loot window.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+   "corrected_text": "[1. General] Kappow: ok send a tell if u want vortex (pre-cut) | [1. General] Skyke: im rdy now | You have no target upon which to perform an action. (x3) | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull (x3, final period not visible) -- client: playermessagelanguage (88,1) 'You have no target upon which to perform an action.'; (48,1); (262,1); (67,1) or (261,1) 'You received %(quantity)s %(loot)s.' + physicalentityclassnamelanguage 20307/25553 'Thrax Skull'"
+  },
+  {
+   "segment": "A4",
+   "event_id": "A4-46",
+   "t": 484.067,
+   "category": "location",
+   "text": "Denzil's Caldera",
+   "description": "Leaving the cave: view brightens at 484.067; region banner with globe icon 'Denzil's Caldera' and minimap label change both at 484.2; radar map unchanged. Carved stone pillars at the cave mouth, tan paving, sandbags, railed walkway, lamp post. Banner still visible at 488.0, faint at 488.4, gone by 488.8.",
+   "status": "corrected",
+   "transcript_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-02",
+   "t": 484.2,
+   "category": "location",
+   "text": "Denzil's Caldera (banner and minimap label); previous minimap label: Luna Cavern",
+   "description": "Minimap label changes from 'Luna Cavern' (last seen 484.133) to \"Denzil's Caldera\" at 484.200. A centre banner \"Denzil's Caldera\" (globe icon over a grey bar) appears at 484.200, stays fully opaque to 487.933, fades 488.067-488.467 and is gone at 488.533. The player walks out of the cave mouth between two huge rock pillars toward sandbags and a metal walkway.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-03",
+   "t": 485.47,
+   "category": "tracker",
+   "text": "Mission Tracker | Capture the Flag | Eliminate the Tizzik 6[G], the Bane Boss, in the AFS Base Camp | Boss Eliminated: 0 / 1",
+   "description": "State at segment start (already shown at 482.0): Mission Tracker lists one mission, 'Capture the Flag' (yellow square), objective 1 with a 0/1 counter. Unchanged until the 551.467 cut.",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-07",
+   "t": 491.47,
+   "category": "enemy",
+   "text": "2 Thrax Infantry Initiate",
+   "description": "The first Thrax is visible from about 490.533, leaping along the sandstone ledge/block beside a bush above the sandbags (top right). Its nameplate and health bar are visible from 493.933. At 495.000 it becomes the target: level 2 'Thrax Infantry Initiate' with an armoured Thrax portrait. It is bulky, with reddish flesh, white/grey plate armour and spikes. It is the only enemy type targeted in the segment.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+   "corrected_text": "2 Thrax Infantry Initiate"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-10",
+   "t": 497.47,
+   "category": "npc",
+   "text": "3 Forean Archer Initiate | 3 Forean Shaman Initiate",
+   "description": "Forean allies fight the Thrax beside the player at the sandbag trench (the player never attacks them). Appearance: green-skinned reptilian Foreans; one with a large recurve bow (Archer); one in brown/red robes with a staff topped by a purple crystal (Shaman). Target frames: level 3 'Forean Archer Initiate' at ~501.5-502.5, level 3 'Forean Shaman Initiate' at ~503.5. Purple lightning arcs/beam effects hit the Thrax (497, 503); source (player ability or shaman) not determinable.",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-11",
+   "t": 506.4,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits. | +71xp",
+   "description": "Kill 1 (Thrax Infantry Initiate on the sandbag wall, damage numbers -12/-45 at 505): chat adds XP and credit lines; '+71xp' floats over the corpse; Updates panel toast 'You received 10 credits.'",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-12",
+   "t": 508.733,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits.",
+   "description": "Kill 2 (second Thrax Infantry Initiate): identical XP/credit pair; Updates panel shows two 'You received 10 credits.' toasts (~509.5).",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-17",
+   "t": 522.133,
+   "category": "location",
+   "text": null,
+   "description": "After the edit cut at 522.133 the player is on an orange-brown deck beside a tall riveted dark-metal perimeter wall topped with wire-strung posts (AFS base), with an orange cone light and two Forean allies (gunner and shaman). Burning wreckage and the gate come into view after a camera swing at 526.933; crates appear later (536-537). Ammo after the cut reads [1/5]7/880 (first digit ambiguous; '57' fits the later 55/880); before the cut it read 3/919.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-18",
+   "t": 522.133,
+   "category": "chat_line",
+   "text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "description": "Chat content first visible after the 522.133 cut (lines generated during omitted footage). Top to bottom:",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-22",
+   "t": 535.667,
+   "category": "chat_line",
+   "text": "You gained 71 experience points. | You received 10 credits. | +71xp",
+   "description": "Kill: XP/credit pair; '+71xp' float over corpse (536); Updates toast 'You received 10 credits.'",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-25",
+   "t": 541.4,
+   "category": "map_or_waypoint_window",
+   "text": "Map: Bootcamp | Local | PLANET ANALYSIS | TREE VIEW | Arieki | Earth | Foreas | Concordia | Bootcamp[1 - 4] (highlighted) | Caves of Donn[9 - 11] | Crater Lake Research Facility[7 - 10] | Devil's Den[19 - 20] | Divide[11 - 16] | Eloh Temples[18 - 22] | Eloh Vale[20 - 22] | Epic Caves of Donn[50 - 50] | Guardian Prominence[36 - 38] | Minos Caverns[11 - 13] | Palisades[16 - 20] | Pr[a/e]vus Research[8 - 10] | LEGEND Filter | Control Point | Waypoint | Hospital | Crafting Station | Point of Interest | Instance Entrance | Battlefield Entrance | Local Teleporter | Mouse X, Y Location: 95.1, 150.8 | Denzil's Caldera | Luna Cavern",
+   "description": "Player opens the full-screen world map. Right column: header 'Map: Bootcamp' with 'Local' toggle; PLANET ANALYSIS globe; TREE VIEW; LEGEND with Filter dots; 'Mouse X, Y Location:' readout (95.1, 150.8 at 548.5 = cursor position, not the player). Map image: 'Denzil's Caldera' label over the western basin and 'Luna Cavern' label over the eastern cave complex joined by a narrow passage; a walled compound with dark building footprints in the north-central Caldera holds a yellow objective icon with the white player arrow just east of it (cyan pulse ring seen around the arrow in some frames); green Hospital cross beside a white building icon at the north end of Luna Cavern; white Point-of-Interest triangles in the west Caldera; a white aircraft (dropship) icon at the SW corner; blue lakes south of the compound and in the SW. No hospital cross is drawn near the compound. Window stays open until the 551.467 cut.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+   "corrected_text": "Map: Bootcamp | Local | PLANET ANALYSIS | TREE VIEW | Arieki | Earth | Foreas | Concordia | Bootcamp[1 - 4] (highlighted) | Caves of Donn[9 - 11] | Crater Lake Research Facility[7 - 10] | Devil's Den[19 - 20] | Divide[11 - 16] | Eloh Temples[18 - 22] | Eloh Vale[20 - 22] | Epic Caves of Donn[50 - 50] | Guardian Prominence[36 - 38] | Minos Caverns[11 - 13] | Palisades[16 - 20] | Pr[a/e]vus Research[8 - 10] | LEGEND Filter | Control Point | Waypoint | Hospital | Crafting Station | Point of Interest | Instance Entrance | Battlefield Entrance | Local Teleporter | Mouse X, Y Location: 95.1, 150.8 | Denzil's Caldera | Luna Cavern"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-26",
+   "t": 547.6,
+   "category": "map_or_waypoint_window",
+   "text": "Capture the Flag | Base Center",
+   "description": "Mouse hover tooltip over the yellow objective icon inside the walled compound on the map.",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-27",
+   "t": 551.467,
+   "category": "tracker",
+   "text": "Capture the Flag | Report in to Captain Youngblood when he arrives in the camp.",
+   "description": "First frame after the map/edit cut: tracker objective has changed to objective 3 (Boss Eliminated counter gone). The completion of objective 1 (Tizzik Gi kill) and any intermediate state are not shown. Remains on this objective to the end of the segment (594.9).",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-28",
+   "t": 551.467,
+   "category": "chat_line",
+   "text": "You gained 143 experience points. | You received 50 credits. | You gained 71 experience points. | You received 10 credits.",
+   "description": "Four new lines first visible after the cut (produced during omitted footage), following the 539 Thrax Skull line. No objective/mission-status line is visible in the chat. The 143 is fully legible at 558.",
+   "status": "confirmed",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-31",
+   "t": 553.47,
+   "category": "npc",
+   "text": "3 Shotgunner | 2 Rifleman | 3 Infantryman | 2 Shotgunner",
+   "description": "Friendly AFS soldiers defend the base. Target frames: 'Shotgunner' level 3 (553.400-554.600 and 565.333-569.400) and level 2 (564.133-565.267 and 591.333-594.933), so at least two Shotgunners of different levels; 'Rifleman' level 2 (554.667-~557.6); 'Infantryman' level 3 (560.467-561.200). They wear dark grey/black body armour with blue shoulder and forearm accents, full helmets and backpacks, carry rifles or shotguns, and fire at Thrax attacking over the sandbags and through the gate.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+   "corrected_text": "3 Shotgunner | 2 Rifleman | 3 Infantryman | 2 Shotgunner"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-33",
+   "t": 559.0,
+   "category": "npc",
+   "text": "Press [Mouse Button 2] to talk",
+   "description": "A human NPC in a tan/brown leather jacket with a shearling collar, dark slicked-back hair, no hat and a pistol in his right hand enters beside the player at 558.867. From 559.000 the prompt 'Press [Mouse Button 2] to talk' shows and a translucent yellow rectangular marker hangs above his head (drawn high on screen); the marker stays up through at least 564.200. He remains on screen continuously; at 564.600 he stands beside an AFS soldier. From 565.2 to 567.0 he runs off to the left/distance with the yellow marker still above him. At 573.467 he stands with an AFS soldier facing the player, with a faint marker above. He is never targeted or named and the player does not talk to him; the footage does not show who he is.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+   "corrected_text": "Press [Mouse Button 2] to talk"
+  },
+  {
+   "segment": "A5",
+   "event_id": "A5-34",
+   "t": 562.0,
+   "category": "npc",
+   "text": null,
+   "description": "An AFS soldier materialises next to another soldier: a translucent pale-blue ghost from 562.067, solid glowing blue 562.333-563.733, normal dark armour from 563.800 (spawn/teleport-in effect). Another blue-glowing figure runs at left-centre at 570.400-570.467, and a small blue figure is seen in the distance at the gate arch at about 593.3-593.7.",
+   "status": "corrected",
+   "transcript_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-001",
+   "t": 0.0,
+   "category": "tracker",
+   "text": "Mission Tracker / Capture the Flag / Report in to Captain Youngblood when he arrives in the camp.",
+   "description": "Mission Tracker shows mission 1994 on objective 3 (report to Youngblood). Single mission, single objective line.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-002",
+   "t": 0.0,
+   "category": "location",
+   "text": "Denzil's Caldera",
+   "description": "Inside the AFS base, Denzil's Caldera: metal-plated courtyard facing a large open archway gate in a tall dark metal wall (sky and fires visible through it), stair ramps on both sides, sandbag wall right of gate, a corpse lying on the ground right. Radar label \"Denzil's Caldera\"; radar shows player arrow pointing right, a red/orange round icon just behind (left of) the arrow and a yellow mission icon just ahead; by 4.2 s a green plus icon at radar right edge.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-008",
+   "t": 4.267,
+   "category": "chat_line",
+   "text": "You gained 5000 experience points. / Mission Completed: Capture the Flag / Mission Accepted: Calling for Reinforcements / You cannot equip that item. / You cannot equip that item. / You gained 35 experience points. / You gained 35 experience points.",
+   "description": "First frame after the cut. Chat continues from the pre-cut lines (top three lines = last three before cut) and adds seven new lines: a 5000 XP award immediately followed by completion of 1994 and acceptance of 1995, two white equip-failure lines, and two 35 XP lines. No reward window or conversation window visible.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-009",
+   "t": 4.267,
+   "category": "tracker",
+   "text": "Calling for Reinforcements / Locate the missing AFS soldiers",
+   "description": "Tracker now on mission 1995 objective 2.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-010",
+   "t": 4.267,
+   "category": "player_state",
+   "text": "2 Master Assault / AccuMax Shotgun / 24/960",
+   "description": "Still level 2 but XP bar now about 90% full (was ~25% before cut, consistent with the 5000 XP line). Weapon changed to \"AccuMax Shotgun\" (ammo 24/960, partial). Pending panel still only the \"?\" diamond.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-013",
+   "t": 14.067,
+   "category": "player_state",
+   "text": "3 Master Assault / Pending",
+   "description": "Level 3 on first frame after cut (level 2 on last pre-cut frame 14.000); XP bar nearly empty; Pending panel gains green and blue humanoid icons above the \"?\" diamond. The level-up itself is not shown.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-016",
+   "t": 14.067,
+   "category": "enemy",
+   "text": "2 Thrax Infantry Initiate ; 1 Thrax Infantry Initiate (32.267-33.067)",
+   "description": "Multiple Thrax Infantry Initiates (bulky red/brown bodies with pale armour plates) firing red lasers from behind sandbags and on the barricades. No target frame 14.067-16.467; target frames from 16.667 show 'Thrax Infantry Initiate' mostly level 2, but a level 1 Thrax Infantry Initiate is targeted 32.267-33.067 s; Forean Warrior target from 45.6 s (see B1-027).",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "2 Thrax Infantry Initiate ; 1 Thrax Infantry Initiate (32.267-33.067)"
   }
  ],
  "dropped": []

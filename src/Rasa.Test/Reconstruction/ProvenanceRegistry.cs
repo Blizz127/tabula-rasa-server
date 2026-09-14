@@ -101,10 +101,13 @@ namespace Rasa.Test.Reconstruction
                 storage: Cols("comment")),
 
             // Existing table; reserved boot-camp ids 198500-198599. action1..8: 0 = no action.
+            // action1 is required (owner decision OD-23, 2026-09-14): a creature that exists to fight cannot
+            // function without an attack, so its first action may carry a labelled analogue. 0 stays the
+            // correct, evidenced value for non-combat NPCs. action2..8 remain optional extra attacks.
             new TableProvenance("creature",
                 keys: Cols("id"),
-                required: Cols("class_id", "faction", "level", "max_hp", "name_id", "run_speed", "walk_speed"),
-                optional: Cols("action1", "action2", "action3", "action4", "action5", "action6", "action7", "action8"),
+                required: Cols("class_id", "faction", "level", "max_hp", "name_id", "run_speed", "walk_speed", "action1"),
+                optional: Cols("action2", "action3", "action4", "action5", "action6", "action7", "action8"),
                 storage: Cols("comment")),
 
             new TableProvenance("npc_mission_prerequisite",

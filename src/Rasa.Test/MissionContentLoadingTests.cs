@@ -784,6 +784,110 @@ namespace Rasa.Test
             Assert.AreEqual(1, validation.LiveBindings.Count());
         }
 
+        /// <summary>
+        /// References resolved against a migrated world database: map contexts, creatures, logos and legacy
+        /// objects come from its tables, missions from the loaded definitions (as the server's own
+        /// LoadedContentReferences does). The entity-class and item-template seed is not replayed in unit tests,
+        /// so those two lookups take the client ids the boot-camp rows name.
+        /// </summary>
+        private sealed class MigratedWorldReferences : IContentReferences
+        {
+            private readonly HashSet<uint> _contexts;
+            private readonly HashSet<uint> _creatures;
+            private readonly HashSet<uint> _logos;
+            private readonly HashSet<uint> _legacyContexts;
+            private readonly IReadOnlyDictionary<uint, Mission> _missions;
+            public HashSet<uint> Classes = new();
+            public HashSet<uint> Items = new();
+
+            public MigratedWorldReferences(SqliteConnection connection, IReadOnlyDictionary<uint, Mission> missions)
+            {
+                _missions = missions;
+                _contexts = Ids(connection, "SELECT map_context_id FROM map_info");
+                _creatures = Ids(connection, "SELECT id FROM creature");
+                _logos = Ids(connection, "SELECT id FROM logos");
+                _legacyContexts = Ids(connection, "SELECT map_context_id FROM spawnpool UNION SELECT map_context_id FROM footlocker UNION SELECT map_context_id FROM logos");
+            }
+
+            private static HashSet<uint> Ids(SqliteConnection connection, string sql)
+            {
+                using var command = connection.CreateCommand();
+                command.CommandText = sql;
+                using var reader = command.ExecuteReader();
+                var ids = new HashSet<uint>();
+                while (reader.Read())
+                    ids.Add((uint)reader.GetInt64(0));
+                return ids;
+            }
+
+            public bool MapContextExists(uint mapContextId) => _contexts.Contains(mapContextId);
+            public bool MissionExists(uint missionId) => _missions.ContainsKey(missionId);
+            public bool ObjectiveExists(uint missionId, uint objectiveId) => _missions.TryGetValue(missionId, out var m) && m.Objectives.ContainsKey(objectiveId);
+            public uint MissionGiver(uint missionId) => _missions.TryGetValue(missionId, out var m) ? m.MissionGiver : 0;
+            public bool MissionOfferable(uint missionId) => _missions.TryGetValue(missionId, out var m) && m.IsDispensable;
+            public bool CreatureExists(uint creatureId) => _creatures.Contains(creatureId);
+            public bool EntityClassExists(uint entityClassId) => Classes.Contains(entityClassId);
+            public bool ItemTemplateExists(uint itemTemplateId) => Items.Contains(itemTemplateId);
+            public bool LogosExists(uint logosId) => _logos.Contains(logosId);
+            public bool HasLegacyWorldObjects(uint mapContextId) => _legacyContexts.Contains(mapContextId);
+        }
+
+        [TestMethod]
+        public void SeededBootcampContentGoesLiveWithTheImplementedMechanics()
+        {
+            WithLogger(() =>
+            {
+                using var connection = new SqliteConnection("Data Source=:memory:");
+                connection.Open();
+                using (var context = Context(connection))
+                {
+                    ContentSchemaMigrationTests.CreatePreviousWorld(context, connection);
+                    // Seed-data rows the boot-camp content references outside its own migrations (the full world
+                    // seed is not replayed): the boot-camp map and the Power Logos granted by S1.
+                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4)");
+                    context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
+                    context.Database.Migrate();
+                }
+
+                var missions = new MissionManager(new Factory(connection));
+                missions.LoadMissions();
+
+                var references = new MigratedWorldReferences(connection, missions.LoadedMissions);
+                // S2 usable placements: crate 26714 UsableTreasureDispHumCrateV04, dummies 29365 UsableStatelessHumPracticeDummyV01.
+                references.Classes.UnionWith(new uint[] { 26714, 29365 });
+                // S2 crate item set 19858.
+                references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
+
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
+                content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);
+                var validation = content.Content;
+
+                Assert.AreEqual(0, validation.Gaps.Count, string.Join(" | ", validation.Gaps));
+                Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
+                Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
+
+                foreach (var missionId in new uint[] { 1990, 1992, 1994 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                }
+
+                // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
+                var captureTheFlag = missions.LoadedMissions[1994];
+                CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.Kill), (2u, ObjectiveBindingKind.AreaEntered) },
+                    captureTheFlag.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind)).ToArray());
+                Assert.AreEqual(1, captureTheFlag.Counters[1].Single().TargetValue);
+                CollectionAssert.AreEquivalent(new uint[] { 437, 439 }, captureTheFlag.Indicators.Values.SelectMany(list => list).Select(indicator => indicator.IndicatorId).ToArray());
+                Assert.AreEqual(1992u, captureTheFlag.Prerequisites.Single().RequiredMissionId);
+
+                var livePlacements = validation.LivePlacements.Select(placement => placement.Id).ToList();
+                for (uint id = 198658; id <= 198674; id++)
+                    CollectionAssert.Contains(livePlacements, id);
+                Assert.IsTrue(validation.LiveRules.Any(rule => rule.Id == 1985005));
+            });
+        }
+
         [TestMethod]
         public void OwnerConditionedPlacementsFollowTheOwnersCommittedStateInTheirInstanceOnly()
         {

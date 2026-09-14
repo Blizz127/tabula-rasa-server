@@ -229,6 +229,652 @@
    ],
    "client": "1.16.5.0",
    "session_date": "2009-02"
+  },
+  {
+   "position_key": "area.1994.2",
+   "map_context_id": 1985,
+   "x": 279.05,
+   "y": 120.5,
+   "z": 66.07,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: the yellow radar objective icon while 1994 objective 2 \"Find a way out of the cave\" was active (386.467-430.467), radar pip offset clustered over 53 detections from 16 player positions 18-32 m away, sd (1.45, 0.68) m, +/-2.0 m (footage/analysis/spatial/positions.json icon_cave_objective). The completion itself is inside the 430.467/430.533 cut: last pre-cut position (301.3,63.0), first post-cut position (264.62,64.88) with \"Objective Completed\" already displayed; the icon lies between them and 1.2-1.7 m off the navmesh route between the two points ((297.60,120.71,64.40) -> (264.62,123.26,64.88)). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) gives floors 120.71 (cave level; 116.11 is a flat under-plane present at every cave sample and 172.11 the cliff surface above) -> 120.29; the corpse prop PropHumMCorpseV04 base 120.53 3.2 m away; +/-0.5 m. Build plan S4 names the first post-cut frame (A4-22) as the centre with large uncertainty; the measured objective icon is used instead, following the S1 practice (area centre = objective icon). Conflict recorded in findings: banner timing (Objective Completed -> New Objective 3.2 s in A2-025/028; New Objective here at 432.667) places the completion about 1.1 s before the first post-cut frame, i.e. roughly 4-8 m west of this icon.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-03"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 430.533,
+     "event": "A4-20"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 430.533,
+     "event": "A4-22"
+    }
+   ],
+   "anchors": [
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64); AABB X 254.7-282.2, Z 41.8-87.8 contains the point",
+    "TerraForeasGenRock01V09 map entity #1106, file offset 97368, at (280.02,119.67,67.73), 1.9 m",
+    "PropHumMCorpseV04 map entity #1423, file offset 125264, at (278.81,120.53,62.85)",
+    "PropHumCorridorDebrisV05 map entity #1086, file offset 95608, at (287.50,120.53,61.00)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "indicator.1994.2.439",
+   "map_context_id": 1985,
+   "x": 279.05,
+   "y": 120.5,
+   "z": 66.07,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "Optional. Same measured radar objective icon as area.1994.2 (X,Z +/-2.0 m, Y as there). The indicator id is NOT measured: 439 \"Cave-in Location\" (missionobjectiveindicatorlanguage @3908) is inferred from the name matching objective 2 and mission text 21236 \"Find a way beyond the cave-in\"; the client never displayed the indicator name in the footage.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-03"
+    }
+   ],
+   "anchors": [
+    "see area.1994.2"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "indicator.1994.1.437",
+   "map_context_id": 1985,
+   "x": 95.1,
+   "y": 109.25,
+   "z": 150.8,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: client-computed map readout: hovering the objective marker whose tooltip reads \"Capture the Flag / Base Center\" (indicator 437, missionobjectiveindicatorlanguage @3890) makes mapwindow._ShowCrosshair print the marker widget world X,Z under \"Mouse X, Y Location:\" = 95.1, 150.8 (A5-25 verified at 548.533); the disc centre in the registered map image gives (94.2,151.9), 1.4 m away; one game-map pixel is about 1.1 m; +/-1.5 m. Y: not displayed by the client (the server supplies it); decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 109.25; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 109.58 -> 109.16; +/-1.0 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 541.4,
+     "event": "A5-25"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 547.6,
+     "event": "A5-26"
+    }
+   ],
+   "anchors": [
+    "ArchHumGenDestroyedV02 map entity at (95.6,160.0), 9 m north (footage/analysis/spatial/positions.json icon_base_center)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.tizzik_gi",
+   "map_context_id": 1985,
+   "x": 95.1,
+   "y": 109.25,
+   "z": 150.8,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 30.0,
+    "vertical_m": 1.0
+   },
+   "reasoning": "Tizzik Gi is never on screen: the kill objective (1994/1, text 21313 \"Eliminate the Tizzik G, the Bane Boss, in the AFS Base Camp\") completes inside the 551.4/551.467 cut. The only located evidence is the kill objective indicator 437 \"Base Center\" (indicator.1994.1.437), so the boss is placed at that indicator. The player was at (150.4,144.3) before the map window and at (144.83,138.86) after the cut, 50 m east of the indicator; the fight may have happened anywhere in the reclaimed compound. The 30 m figure is informational, not a measurement. Y as indicator.1994.1.437.",
+   "method": "inference from the objective indicator; see reasoning",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 547.6,
+     "event": "A5-26"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 551.467,
+     "event": "A5-27"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 551.467,
+     "event": "A5-28"
+    }
+   ],
+   "anchors": [
+    "indicator.1994.1.437"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.youngblood",
+   "map_context_id": 1985,
+   "x": 93.2,
+   "y": 109.0,
+   "z": 137.5,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: radar pip offset of the yellow NPC mission icon over the brown-leather-jacket NPC with \"Press [Mouse Button 2] to talk\" while 1994/3 \"Report in to Captain Youngblood when he arrives in the camp.\" was active: 8V 0.467-3.467 (93.17,137.53) sd (0.05,0.38); cross-checked 7L 576.467-586.467 (91.6,137.3) from 3 player positions; this sweep (research/20260914-bootcamp-s4/work/pips_8V_0_14.jsonl) gives (93.08,136.98) and (93.20,137.78); +/-2.0 m. The waiting player stood 5.5 m west at (88.01,136.06) facing heading 84 until the 8V 4.267 cut, across which \"You gained 5000 experience points.\" / \"Mission Completed: Capture the Flag\" appear. Identity (Captain Youngblood, name 10575, package 2561) is inferred: the NPC is never named. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 109.00; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 109.65 -> 109.23; +/-0.5 m (open flat ground). Rotation not measured (omitted).",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 559.0,
+     "event": "A5-33"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 0.0,
+     "event": "B1-001"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 4.267,
+     "event": "B1-008"
+    }
+   ],
+   "anchors": [
+    "ArchHumOutpostFenceGateV02 map entity #5, file offset 480, at (60,109,144), 34 m west",
+    "ArchHumGenObjWorklightsV02 map entity #826, file offset 72728, at (73.68,109.07,129.01), 21 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.1",
+   "map_context_id": 1985,
+   "x": 286.23,
+   "y": 120.5,
+   "z": 65.35,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 4.6,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=386.6 player (307.72,66.1) heading 268 deg, range readout 22 (medium legibility); first courtyard target, killed 391.533 (A3-081); 22 also at 388.0, 10 at 391.4. Same target at 391.4: range 10 from (303.98,66.09) heading 254 -> (294.85,63.47), advancing east. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 386.6,
+     "event": "A3-079"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 391.533,
+     "event": "A3-081"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.2",
+   "map_context_id": 1985,
+   "x": 289.35,
+   "y": 120.5,
+   "z": 61.02,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.1,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=395.8 player (300.18,67.27) heading 240 deg, range readout 13 (high legibility); verifier read 13 at 395.8; kill 396.133 (A3-084/A4-08). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-05"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 396.133,
+     "event": "A3-084"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 396.133,
+     "event": "A4-08"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.3",
+   "map_context_id": 1985,
+   "x": 291.26,
+   "y": 120.5,
+   "z": 61.71,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.8,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=399.5 player (300.16,67.27) heading 238 deg, range readout 11 (high legibility); stationary target read 11 at 397.5, 398.5, 399.5, 400.5 and 401.2 (verifier range 11-14); kill 401.533 with max kill streak (A4-10). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 401.533,
+     "event": "A4-10"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.4",
+   "map_context_id": 1985,
+   "x": 287.8,
+   "y": 120.5,
+   "z": 67.11,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.3,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=405.0 player (298.96,69.89) heading 256 deg, range readout 12 (medium legibility); kill 406.2 (A4-14). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 406.2,
+     "event": "A4-14"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.5",
+   "map_context_id": 1985,
+   "x": 286.48,
+   "y": 120.5,
+   "z": 62.48,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.2,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=410.0 player (298.17,69.23) heading 240 deg, range readout 14 (high legibility); verifier read 14 at 410/411/413; kill 415.2 (A4-16). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-05"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 415.2,
+     "event": "A4-16"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.courtyard.6",
+   "map_context_id": 1985,
+   "x": 291.77,
+   "y": 120.5,
+   "z": 63.77,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.9,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=419.0 player (303.16,65.37) heading 262 deg, range readout 12 (high legibility); verifier read 12 at 418-421.4 (18 or 16 at 420.8-421.0); kill 427.733 (A4-18). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 120.50 (the paved courtyard is on the terrain; flat); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 120.67-121.08 over the courtyard -> 120.3-120.7; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-05"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 427.733,
+     "event": "A4-18"
+    }
+   ],
+   "anchors": [
+    "ArchForeanTorchV01 map entity #703, file offset 61904, at (300.00,120.00,58.00)",
+    "ArchForeanTorchV01 map entity #702, file offset 61816, at (300.50,120.50,72.00)",
+    "TerraForeasCavernEntrance24mv01 map entity #41, file offset 3648, at (288,128,64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.passage.1",
+   "map_context_id": 1985,
+   "x": 247.71,
+   "y": 116.5,
+   "z": 76.06,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.3,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=437.4 player (254.07,63.03) heading 334 deg, range readout 15 (high legibility); verifier read 15 at 437.4; kill 443.867 (A4-28). Y: the passage is a tunnel under the cliff (heightmap 161.51 = cliff surface, not used); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35): floors 116.89 / 138.71 / 162.06; 116.89 lies on the navmesh route from the death spot (254.69,124.21,63.58) down the ramp to the tunnel (246.17,113.84,90.54) through (250.00,118.71,73.20) -> 116.47; glowstick/flashlight props at 115.4-115.8; +/-1.0 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 436.0,
+     "event": "A4-26"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 443.867,
+     "event": "A4-28"
+    }
+   ],
+   "anchors": [
+    "TerraTunnelTurn21Ramp7L map entity #32, file offset 2856, at (248.00,120.00,80.00)",
+    "ArchHumGenObjGlowstickGreenPole map entity #783, file offset 68944, at (245.90,115.84,75.77)",
+    "ArchHumGenObjFlashlight map entity #776, file offset 68328, at (247.14,115.39,78.40)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.passage.2",
+   "map_context_id": 1985,
+   "x": 250.01,
+   "y": 117.8,
+   "z": 74.07,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.9,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=447.0 player (254.69,63.56) heading 336 deg, range readout 12 (high legibility); verifier read 12 at 447; 13 at 452.0; kill 453.6 (A4-33). Y: tunnel under the cliff; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35): no polygon exactly under (250.01,74.07) except the cliff top 164.67; nearest walkable on the ramp (249.89,118.17,74.06) -> 117.75; +/-1.0 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-05"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 453.6,
+     "event": "A4-33"
+    }
+   ],
+   "anchors": [
+    "TerraTunnelTurn21Ramp7L map entity #32, file offset 2856, at (248.00,120.00,80.00)",
+    "ArchHumGenObjGlowstickGreenPole map entity #783, file offset 68944, at (245.90,115.84,75.77)",
+    "ArchHumGenObjFlashlight map entity #776, file offset 68328, at (247.14,115.39,78.40)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.passage.3",
+   "map_context_id": 1985,
+   "x": 257.68,
+   "y": 124.6,
+   "z": 68.99,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.4,
+    "vertical_m": 1.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=458.0 player (254.7,63.56) heading 22 deg, range readout 8 (high legibility; verifier read 8 at 458-459); raw estimate (257.51,70.51) is off the navmesh, so the nearest walkable point (257.68,125.04,68.99), 1.5 m away and inside the 2.4 m uncertainty, is recorded. This Initiate engaged at close range and killed the player at 462.0 (A4-34/A4-35). Y: tunnel under the cliff; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35): nearest walkable 125.04 -> 124.62; the player died on the same floor at (254.69,124.21-0.42); +/-1.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 395.0,
+     "event": "A4-05"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 456.0,
+     "event": "A4-34"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 462.0,
+     "event": "A4-35"
+    }
+   ],
+   "anchors": [
+    "ArchHumGenObjGlowstickGreenPole map entity #784, file offset 69032, at (254.71,124.42,61.52)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.caldera_trench.1",
+   "map_context_id": 1985,
+   "x": 202.24,
+   "y": 107.2,
+   "z": 88.44,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.8,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=497.5 player (213.76,98.81) heading 228 deg, range readout 16 (medium legibility); Thrax on the stone block above the sandbags; 22 (low) at 494.0 and 21 (low) at 505.0 put the same target at (195.2,88.0)/(200.7,88.7); kill 506.4 (A5-11). Two low-legibility readings of the same target agree: 22 at 494.0 from (213.79,98.74) h240 -> (195.2,88.0); 21 at 505.0 from (219.75,96.39) h248 -> (200.7,88.7). Y: the Thrax stands on a stone block above the sandbags beside a bush (A5-07); decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 106.72; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35): no polygon under the point, nearest walkable (202.24,107.59,87.20) -> 107.17; the bush FloraForeasGenBush02V02 base 106.5-107.4 2.3 m away; +/-1.0 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 491.47,
+     "event": "A5-07"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 506.4,
+     "event": "A5-11"
+    }
+   ],
+   "anchors": [
+    "FloraForeasGenBush02V02 map entity #1221, file offset 107488, at (199.97,107.37,86.23)",
+    "ArchForeanBridgeCeremonialBrokenV01 map entity #1273, file offset 112064, at (207.00,104.50,96.00)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.caldera_trench.2",
+   "map_context_id": 1985,
+   "x": 209.39,
+   "y": 105.0,
+   "z": 94.09,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 5.3,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=508.0 player (230.25,99.29) heading 256 deg, range readout 22 (low legibility); second trench target, kill 508.733 (A5-12); reading 22 low confidence. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 105.00; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 105.28 -> 104.86 (a lower 102.43 floor under the broken bridge is not the trench level the player fought on, 105.0-105.3); +/-1.0 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 508.733,
+     "event": "A5-12"
+    }
+   ],
+   "anchors": [
+    "ArchForeanElohCavernEntranceV01 map entity #1209, file offset 106432, at (208.00,112.00,96.00)",
+    "ArchForeanCrystalTorchV01 map entity #1205, file offset 106080, at (217.00,105.19,91.65)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.base_perimeter.1",
+   "map_context_id": 1985,
+   "x": 150.05,
+   "y": 112.4,
+   "z": 159.06,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 4.8,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=528.5 player (159.84,173.57) heading 214 deg, range readout 18 (low legibility); Thrax at the base wall beside burning wreckage (A5-21 unverified); 15 (low) at 535.0 from (156.73,168.83) h210 gives (149.5,156.3); kill 535.667 (A5-22). A second low-legibility reading 15 at 535.0 from (156.73,168.83) h210 gives (149.5,156.3). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 112.28; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 112.84 -> 112.42; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 522.133,
+     "event": "A5-17"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 535.667,
+     "event": "A5-22"
+    }
+   ],
+   "anchors": [
+    "ArchBaneObjLandingpadv02 map entity #1288, file offset 113384, at (157.00,111.21,175.00), the deck the player fought from"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.base_interior.1",
+   "map_context_id": 1985,
+   "x": 116.26,
+   "y": 109.0,
+   "z": 125.54,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 4.7,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=558.0 player (136.13,136.1) heading 242 deg, range readout 23 (medium legibility); Thrax Infantry Initiate targeted 557.7-560.4 (A5-31 verifier); 23 again at 559.5. A5-31 (verifier) records a Thrax Infantry Initiate targeted 557.7-560.4 and 561.267-564.067 after the boss cut. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 109.00; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 109.40 -> 108.98; manhole cover prop at 109.03; +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 553.47,
+     "event": "A5-31"
+    }
+   ],
+   "anchors": [
+    "ArchHumBaseManholecover map entity #115, file offset 10160, at (118.97,109.03,124.07)",
+    "ArchHumGenObjSandbags01V04 map entity #819, file offset 72112, at (121.28,108.04,124.64)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.base_interior.2",
+   "map_context_id": 1985,
+   "x": 128.49,
+   "y": 109.2,
+   "z": 132.34,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 4.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=562.0 player (136.13,136.07) heading 244 deg, range readout 9 (low legibility); Thrax targeted 561.267-564.067 (A5-31 verifier); +71xp at 562.067 (A5-35, unverified). Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 109.00; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 109.77 -> 109.35 (debris); +/-0.5 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 553.47,
+     "event": "A5-31"
+    }
+   ],
+   "anchors": [
+    "ArchHumOutpostFenceGateV02 map entity #1416, file offset 124648, at (132.00,109.00,128.00)",
+    "ArchHumGenDestroyedV04 map entity #788, file offset 69384, at (127.93,109.03,128.63)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.cave_assault.base_gate.1",
+   "map_context_id": 1985,
+   "x": 59.2,
+   "y": 109.5,
+   "z": 139.33,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 8.8,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: enemy standing position = player X,Z (radar texture matching, +/-2 m) + d * (sin h, cos h), with h the radar arrow heading (rotated arrow template, 2 deg steps; heading clockwise from +Z toward +X) and d = n - 0.5 from the target nameplate range readout n. The readout is original client behaviour: client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(manifestation.body.GetDistance(entity.body)), so the true distance lies in (n-1, n]. The target sits at the crosshair near screen centre; +/-10 deg bearing tolerance covers the screen offset and arrow error. Horizontal uncertainty = sqrt(2^2 + (d tan 10deg)^2 + reading^2), reading 0.5/1.5/3.0 m for high/medium/low legibility. This is where an assaulting Thrax Infantry Initiate stood while engaged; no spawn or arrival was observed (the radar shows no hostile pips: the orange radar icons follow allied escort NPCs, see findings), so using it as a placement position assumes the enemy was placed near where it fought. Sample: t=579.0 player (106.7,139.33) heading 270 deg, range readout 48 (medium legibility); Thrax at the steel arch gate; +71xp 579.667 (A5-38, unverified); lands 4.7 m from map entity #5 ArchHumOutpostFenceGateV02 (60,109,144). Frame only: the matching kill line (A5-38 579.667) and gate description (A5-37) are unverified transcript events and are not cited. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 109.47; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 110.51 -> 110.09; gate prop base 109.00; +/-1.0 m",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 579.0,
+     "event": null
+    }
+   ],
+   "anchors": [
+    "ArchHumOutpostFenceGateV02 map entity #5, file offset 480, at (60.00,109.00,144.00), 4.7 m (independent check of the range method: the transcript has Thrax coming through the steel arch gate)",
+    "ArchHumOutpostFenceStraight8V01DestroyedV01 map entity #1114, file offset 98072, at (60.00,109.00,144.00)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "ally.forean_initiates.camp",
+   "map_context_id": 1985,
+   "x": 385.2,
+   "y": 119.5,
+   "z": 152.3,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.5,
+    "vertical_m": 0.5
+   },
+   "method": "Optional (allies are seeded only with owner approval). X,Z: orange radar icons beside the player at the camp pylon 362.467-384.467 (research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl): (384.4-386.2, 155.2-155.6) while the player stood at (388.9-389.7,154.4-156.3), then (385.0-385.5, 151.0-152.2) while he stood at (383.94,153.83); mean (385.2,152.3), +/-2.5 m. These icons are the idle Forean Gunner/Archer/Shaman Initiates (A3-070 targets, 3-6 m ahead; orange circular emblems over them): the same orange icon type trails the player through every later fight, where the Forean escorts accompany him (A5-10, A5-17), and the A3-077 verifier notes the icon is already beside the arrow in the calm camp. Identity per icon is inferred. Y: decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 119.50; navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52), every walkable floor in Y 40-200 at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (Rasa.Navigation NavMeshQuery + DtNavMeshQuery.QueryPolygons/GetPolyHeight), minus the calibrated navmesh bias 0.42 m (navmesh floor minus reference Y at six anchors: spawn.first_login +0.43, area.1990.1 +0.56, area.1990.2 +0.41, npc.mcallister +0.43, npc.hartmann +0.34, client HOSPITAL marker Refugee Base Medic +0.35) 119.86 -> 119.44; +/-0.5 m.",
+   "frames": [
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 362.133,
+     "event": "A3-070"
+    },
+    {
+     "video": "7Lrst9SG3pk",
+     "t": 385.0,
+     "event": "A3-077"
+    }
+   ],
+   "anchors": [
+    "camp pylon area; PropHumBaseFlagV01 map entity #1434, file offset 126232, at (380.50,118.88,159.50)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
   }
  ]
 }

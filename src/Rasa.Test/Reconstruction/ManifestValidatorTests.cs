@@ -277,6 +277,9 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("content_placement", "respawn_ms"));
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("npc_mission_objective_timer", "limit_seconds"));
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature", "class_id"));
+            // OD-23: a fighting creature needs its first attack; further attacks stay optional.
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature", "action1"));
+            Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("creature", "action2"));
             Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
         }
 

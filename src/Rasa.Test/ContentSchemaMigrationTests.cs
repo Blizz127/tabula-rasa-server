@@ -31,6 +31,7 @@ namespace Rasa.Test
         private const string BootcampFixNpcAppearanceMigration = "20260914050000_BootcampFixNpcAppearance";
         private const string KraftwerksMigration = "20260914120000_Add_kraftwerks";
         private const string BootcampS3Migration = "20260914130000_BootcampS3PerCharacterInstancing";
+        private const string BootcampS4Migration = "20260914140000_BootcampS4CaptureTheFlag";
 
         public static readonly string[] WorldTables =
         {
@@ -93,7 +94,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -116,7 +117,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -161,7 +162,7 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601)"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198900"));
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id BETWEEN 1985000 AND 1985003"));
-            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action"));
+            Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id BETWEEN 1985000 AND 1985003"));
             Assert.AreEqual(198650L, Scalar(connection, "SELECT id FROM content_placement"));
 
             // S2 completes the chain: 1992 becomes offerable through the 1990 turn-in rule.
@@ -169,15 +170,23 @@ namespace Rasa.Test
             Assert.AreEqual(9L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1992 AND ordinal IS NOT NULL"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985004"));
 
+            // S4 seeds Capture the Flag: the mission, its promotion rule, boss, receiver and ambient assault.
+            Assert.AreEqual(198504L, Scalar(connection, "SELECT giver_id FROM npc_mission WHERE id = 1994"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1994 AND ordinal IS NOT NULL"));
+            Assert.AreEqual(17L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id BETWEEN 198658 AND 198674"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id IN (198506, 198507) AND action1 = 33"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985005"));
+
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1990"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 198505 AND 198507"));
         }
 
         [TestMethod]
