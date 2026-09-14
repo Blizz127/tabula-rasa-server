@@ -156,11 +156,9 @@ namespace Rasa.Managers
                 mission.Rewards.AddRange(unitOfWork.NpcMissionRewards.Get(mission.MissionId));
                 BuildRewardInfo(mission);
                 mission.RefreshDispenseObjectives();
-
-                var gaps = mission.DefinitionGaps();
-                if (gaps.Count > 0)
-                    Logger.WriteLog(LogType.Initialize, $"Mission {mission.MissionId} is not offered, definition incomplete: {string.Join("; ", gaps)}");
             }
+            // Offerability is logged after the content layer attaches completion bindings;
+            // a definition complete except for its bindings would be misreported here.
         }
 
         /// <summary>

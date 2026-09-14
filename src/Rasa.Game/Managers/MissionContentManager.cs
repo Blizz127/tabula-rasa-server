@@ -69,6 +69,16 @@ namespace Rasa.Managers
             foreach (var mission in missions.Values)
                 mission.ContentGaps.Clear();
 
+            // The catalog judges a mission offerable through DefinitionGaps, which counts
+            // completion bindings; attach the loaded bindings before validating, so a
+            // definition complete except for its content bindings is not falsely withheld.
+            // BuildRuntime re-attaches the live subset after validation.
+            foreach (var mission in missions.Values)
+                mission.Bindings.Clear();
+            foreach (var binding in catalog.Bindings)
+                if (missions.TryGetValue(binding.MissionId, out var mission))
+                    mission.Bindings.Add(binding);
+
             Content = catalog.Validate(references, capabilities);
             BuildRuntime(missions);
 
@@ -88,6 +98,16 @@ namespace Rasa.Managers
 
                 mission.ContentGaps.AddRange(gaps);
                 Logger.WriteLog(LogType.Initialize, $"Mission {missionId} is not offered, content withheld: {string.Join("; ", gaps)}");
+            }
+
+            // Final offerability report: DefinitionGaps minus the content gaps already
+            // logged above. Bindings are attached by now, so this is the mission's
+            // actual state for the rest of the server's life.
+            foreach (var mission in missions.Values)
+            {
+                var definitionGaps = mission.DefinitionGaps().Where(gap => !mission.ContentGaps.Contains(gap)).ToList();
+                if (definitionGaps.Count > 0)
+                    Logger.WriteLog(LogType.Initialize, $"Mission {mission.MissionId} is not offered, definition incomplete: {string.Join("; ", definitionGaps)}");
             }
 
             Logger.WriteLog(LogType.Initialize, $"Loaded {Content.LiveRules.Count()} content rules ({catalog.RowCount} content rows, {Content.Gaps.Count} gaps)");
