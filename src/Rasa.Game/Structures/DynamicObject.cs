@@ -32,5 +32,9 @@ namespace Rasa.Structures
         public bool IsEnabled = true;
         public uint WindupTime { get; internal set; }
         public uint ActivateMission { get; internal set; }
+        // Destroyable content placements: 0 = not damageable.
+        public uint HitPoints;
+        public uint MaxHitPoints;
+        public long RestoreAt;
     }
 }

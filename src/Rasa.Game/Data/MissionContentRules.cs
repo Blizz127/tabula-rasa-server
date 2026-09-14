@@ -19,7 +19,7 @@ namespace Rasa.Data
         /// </summary>
         public static readonly ContentCapabilities Implemented = new ContentCapabilities
         {
-            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll },
+            BindingKinds = new HashSet<ObjectiveBindingKind> { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit },
             Events = new HashSet<ContentRuleEvent>
             {
                 ContentRuleEvent.EnteredMap,
@@ -43,7 +43,7 @@ namespace Rasa.Data
             },
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary },
-            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container }
+            UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable }
         };
 
         // The entry path (S1) exists; new characters may enter the boot camp once a live start location is

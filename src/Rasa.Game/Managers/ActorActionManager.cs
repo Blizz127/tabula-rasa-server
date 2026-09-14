@@ -71,23 +71,27 @@ namespace Rasa.Managers
                 return false;
 
             var target = GetLightningTarget(map, player, packet.Target ?? 0);
+            // The content-usable branch beside the creature check: a destroyable
+            // placement is a valid Lightning target even though it is not a Creature.
+            var contentTarget = target == null ? WeaponAttackManager.GetEligibleContentTarget(player, packet.Target ?? 0) : null;
             var rank = (uint)packet.ActionArgId;
-            if (target == null || !player.Attributes.TryGetValue(Attributes.Power, out var power) ||
+            if (target == null && contentTarget == null || !player.Attributes.TryGetValue(Attributes.Power, out var power) ||
                 power.Current < LightningAbilityData.GetPowerCost(rank))
                 return false;
 
             WeaponActionManager.Instance.InterruptForAbility(client);
-            var action = new ActionData(player, packet.ActionId, rank, target.EntityId,
+            var targetEntityId = target?.EntityId ?? contentTarget.EntityId;
+            var action = new ActionData(player, packet.ActionId, rank, targetEntityId,
                 LightningAbilityData.WindupMilliseconds)
             {
                 TargetLocation = packet.TargetLocation, ItemId = packet.ItemId, ClientYaw = packet.ClientYaw
             };
             var windupEndsAt = now + LightningAbilityData.WindupMilliseconds;
             var recoveryEndsAt = windupEndsAt + LightningAbilityData.RecoveryMilliseconds;
-            player.CurrentAbility = new AbilityExecution(action, map, target, windupEndsAt,
+            player.CurrentAbility = new AbilityExecution(action, map, target, contentTarget, windupEndsAt,
                 recoveryEndsAt, recoveryEndsAt + LightningAbilityData.ReuseMilliseconds);
             CellManager.Instance.CellCallMethod(map, player,
-                new PerformWindupPacket(PerformType.ThreeArgs, action.ActionId, rank, target.EntityId));
+                new PerformWindupPacket(PerformType.ThreeArgs, action.ActionId, rank, targetEntityId));
             return true;
         }
 
@@ -157,8 +161,12 @@ namespace Rasa.Managers
             if (!execution.Resolved && now >= execution.WindupEndsAt)
             {
                 var action = execution.Action;
+                var contentTargetValid = execution.OriginalContentTarget != null &&
+                    ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
                 if (!AbilityRequirements.CanUseSkillAbility(player, action.ActionId, (int)action.ActionArgId) ||
-                    !ReferenceEquals(GetLightningTarget(map, player, action.TargetId), execution.OriginalTarget) ||
+                    (execution.OriginalContentTarget == null &&
+                        !ReferenceEquals(GetLightningTarget(map, player, action.TargetId), execution.OriginalTarget)) ||
+                    (execution.OriginalContentTarget != null && !contentTargetValid) ||
                     !player.Attributes.TryGetValue(Attributes.Power, out var power) ||
                     power.Current < LightningAbilityData.GetPowerCost(action.ActionArgId))
                 {

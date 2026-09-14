@@ -403,7 +403,10 @@ namespace Rasa.Managers
             var player = client.Player;
 
             if (!definition.IsDispensable || definition.MissionGiver != creature.DbId || !IsInConversationRange(player, creature))
+            {
+                Logger.WriteLog(LogType.Debug, $"AssignNpcMission: mission {missionId} refused: dispensable={definition.IsDispensable} giverMatch={definition.MissionGiver == creature.DbId} inRange={IsInConversationRange(player, creature)}");
                 return;
+            }
 
             AcceptMission(client, definition);
         }
@@ -526,16 +529,24 @@ namespace Rasa.Managers
         public void CompleteBoundObjective(Client client, uint missionId, uint objectiveId, ObjectiveBindingKind kind)
         {
             if (!IsInWorld(client) || !LoadedMissions.TryGetValue(missionId, out var definition))
+            {
                 return;
+            }
 
             if (!client.Player.Missions.TryGetValue(missionId, out var mission) || mission.State != MissionState.Active)
+            {
                 return;
+            }
 
             if (!mission.Objectives.TryGetValue(objectiveId, out var status) || status != MissionObjectiveState.Incomplete)
+            {
                 return;
+            }
 
             if (!definition.Bindings.Any(binding => binding.ObjectiveId == objectiveId && binding.Kind == (byte)kind))
+            {
                 return;
+            }
 
             CommitObjectiveProgress(client, definition, mission, objectiveId);
         }

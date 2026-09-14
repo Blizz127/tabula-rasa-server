@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -161,6 +162,28 @@ namespace Rasa.Managers
                 targetActor = GetTargetActor(action.TargetId);
                 if (targetActor == null)
                 {
+                    // A destroyable content placement is a valid missile target even
+                    // though it is not an Actor.
+                    if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, action.TargetId) &&
+                        mapChannel.DynamicObjects.FirstOrDefault(candidate => candidate.EntityId == action.TargetId) is { } contentTarget)
+                    {
+                        missile.TargetEntityId = action.TargetId;
+                        missile.TargetActor = null;
+                        missile.TriggerTime = 0;
+                        missile.ActionId = action.ActionId;
+                        missile.ActionArgId = action.ActionArgId;
+                        missile.IsAbility = action.ActionId == ActionId.AaRecruitLightning;
+
+                        if (missile.IsAbility == false)
+                        {
+                            CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformWindupPacket(PerformType.ThreeArgs, missile.ActionId, missile.ActionArgId, missile.TargetEntityId));
+                            mapChannel.QueuedMissiles.Add(missile);
+                        }
+                        else
+                            MissileTrigger(mapChannel, missile);
+                        return;
+                    }
+
                     Logger.WriteLog(LogType.Error, $"The missile target is missing or not an actor: {action.TargetId}");
                     return;
                 }
@@ -236,6 +259,14 @@ namespace Rasa.Managers
                 }
                 else
                     DoDamageToPlayer(mapChannel, missile, targetActor, hit);
+            }
+            else if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId))
+            {
+                // A destroyable content placement takes the damage; no HitData goes
+                // into the recovery, the client learns the result from UpdateHitPoints.
+                var attacker = mapChannel.ClientList.FirstOrDefault(client => client?.Player == missile.Source);
+                var destroyed = MissionManager.Instance.Content.DamageContentUsable(mapChannel, missile.TargetEntityId, missile.DamageA, attacker);
+                missile.Args.HitEntities.Add(missile.TargetEntityId);
             }
 
             switch (missile.ActionId)

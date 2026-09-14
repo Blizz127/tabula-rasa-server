@@ -245,7 +245,7 @@ namespace Rasa.Test
         public void S1ImplementsExactlyTheBootcampInitiationMechanics()
         {
             var implemented = MissionContentRules.Implemented;
-            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll }, implemented.BindingKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit }, implemented.BindingKinds.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
@@ -262,7 +262,7 @@ namespace Rasa.Test
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary }, implemented.PlacementBehaviors.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container }, implemented.UsableKinds.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared }, implemented.Instancing.ToArray());
             Assert.IsFalse(implemented.Prerequisites || implemented.Counters || implemented.Timers || implemented.Indicators ||
                            implemented.PlacementRespawn || implemented.NpcPackageOverride);

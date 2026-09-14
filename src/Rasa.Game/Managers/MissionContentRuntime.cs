@@ -453,6 +453,96 @@ namespace Rasa.Managers
             mapChannel.ContentUsables.TryGetValue(entityId, out var id) ? id : 0;
 
         /// <summary>
+        /// Applies weapon/ability damage to a destroyable content placement: UpdateHitPoints,
+        /// ForceState at the InertDestroyable thresholds (185 50%, 186 25%, 2 destroyed),
+        /// and after restore_ms back to 110 (intact) with hit points restored. No XP, no loot.
+        /// Returns the placement when this hit destroyed it, for the hit bindings.
+        /// </summary>
+        public uint? DamageContentUsable(MapChannel mapChannel, ulong entityId, int damage, Client sourceClient = null)
+        {
+            if (!mapChannel.ContentUsables.TryGetValue(entityId, out var placementId) ||
+                !Content.Catalog.Placements.TryGetValue(placementId, out var placement) ||
+                placement.HitPoints == 0)
+                return null;
+
+            var obj = mapChannel.DynamicObjects.FirstOrDefault(candidate => candidate.EntityId == entityId);
+            if (obj == null || obj.HitPoints == 0)
+                return null;
+
+            obj.HitPoints = (uint)Math.Max(0, (int)obj.HitPoints - damage);
+            CellManager.Instance.CellCallMethod(obj, new UpdateHitPointsPacket(obj.HitPoints));
+
+            if (obj.HitPoints > 0)
+            {
+                var fraction = (double)obj.HitPoints / obj.MaxHitPoints;
+                var threshold = fraction <= 0.25 ? 186u : fraction <= 0.5 ? 185u : 0;
+                if (threshold != 0 && (uint)obj.StateId != threshold)
+                {
+                    obj.StateId = (UseObjectState)threshold;
+                    CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)threshold, 0));
+                }
+                return null;
+            }
+
+            // Destroyed: state 2, restore after restore_ms (0 = never).
+            obj.StateId = UseObjectState.StateDestroyed;
+            CellManager.Instance.CellCallMethod(obj, new ForceStatePacket(UseObjectState.StateDestroyed, 0));
+            if (placement.RestoreMs > 0)
+                obj.RestoreAt = Environment.TickCount64 + placement.RestoreMs;
+
+            if (sourceClient != null)
+                OnContentUsableHit(sourceClient, placementId, 0, true);
+
+            return placementId;
+        }
+
+        /// <summary>
+        /// Restores destroyed placements whose restore_ms has elapsed: back to 110 (intact)
+        /// with hit points restored.
+        /// </summary>
+        public void RestoreDestroyedUsables(MapChannel mapChannel, long now = -1)
+        {
+            if (now < 0)
+                now = Environment.TickCount64;
+            foreach (var obj in mapChannel.DynamicObjects)
+            {
+                if (obj.DynamicObjectType != DynamicObjectType.ContentUsable || obj.RestoreAt == 0 || now < obj.RestoreAt)
+                    continue;
+
+                if (!mapChannel.ContentUsables.TryGetValue(obj.EntityId, out var placementId) ||
+                    !Content.Catalog.Placements.TryGetValue(placementId, out var placement) || placement.HitPoints == 0)
+                {
+                    obj.RestoreAt = 0;
+                    continue;
+                }
+
+                obj.RestoreAt = 0;
+                obj.HitPoints = placement.HitPoints;
+                obj.StateId = (UseObjectState)110;
+                CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)110, 0));
+                CellManager.Instance.CellCallMethod(obj, new UpdateHitPointsPacket(obj.HitPoints));
+            }
+        }
+
+        /// <summary>
+        /// Completes the hit bindings bound to a placement, on the destroying hit when the
+        /// binding says so (or on any hit otherwise).
+        /// </summary>
+        public void OnContentUsableHit(Client sourceClient, uint placementId, uint actionId, bool destroyed)
+        {
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.Hit).Where(binding => binding.PlacementId == placementId))
+            {
+                if (binding.ActionId != 0 && binding.ActionId != actionId)
+                    continue;
+
+                if (binding.DestroyingHitOnly && !destroyed)
+                    continue;
+
+                Missions.CompleteBoundObjective(sourceClient, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Hit);
+            }
+        }
+
+        /// <summary>
         /// True when the action's source is a reconstructed-content usable of this channel.
         /// </summary>
         public bool IsContentUsableSource(MapChannel mapChannel, ulong sourceId) =>

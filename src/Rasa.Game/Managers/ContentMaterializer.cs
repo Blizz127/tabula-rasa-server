@@ -73,6 +73,15 @@ namespace Rasa.Managers
 
             mapChannel.DynamicObjects.Add(usable);
             mapChannel.ContentUsables[usable.EntityId] = placement.Id;
+
+            if (placement.HitPoints > 0)
+            {
+                usable.HitPoints = placement.HitPoints;
+                usable.MaxHitPoints = placement.HitPoints;
+            }
+
+            // Register as an object entity so combat targeting resolves it.
+            CellManager.Instance.AddToWorld(mapChannel, usable);
         }
 
         /// <summary>

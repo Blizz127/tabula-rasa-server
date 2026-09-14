@@ -89,9 +89,12 @@ namespace Rasa.Managers
             }
 
             var target = GetEligibleTarget(player, request.TargetId ?? 0);
+            // The content-usable branch beside the creature check: a destroyable
+            // placement is a valid weapon target even though it is not a Creature.
+            var contentTarget = target == null ? GetEligibleContentTarget(player, request.TargetId ?? 0) : null;
             WeaponActionManager.Instance.InterruptForAbility(client);
             var execution = new WeaponAttackExecution(request.ActionId, (uint)request.ActionArgId,
-                weapon, player.MapChannel, target, ammoCost, now, timing, clientRequested);
+                weapon, player.MapChannel, target, ammoCost, now, timing, clientRequested, contentTarget);
             player.CurrentWeaponAttack = execution;
             var packet = new PerformWindupPacket(PerformType.ThreeArgs, execution.ActionId,
                 execution.ArgumentId, target?.EntityId ?? 0);
@@ -115,6 +118,24 @@ namespace Rasa.Managers
             // Invalid targets become blind shots in the original base attack.
             // Native geometry, neutral/object categories and wargames still need reconstruction.
             return target;
+        }
+
+        /// <summary>
+        /// The content-usable eligibility branch, beside the creature-only check: a
+        /// DynamicObject of this channel that is a damageable destroyable placement
+        /// can be a weapon target. The creature code path is unchanged.
+        /// </summary>
+        public static DynamicObject GetEligibleContentTarget(Manifestation player, ulong id)
+        {
+            var map = player.MapChannel;
+            var entities = EntityManager.Instance;
+            if (map?.MapInfo == null || player.MapContextId != map.MapInfo.MapContextId ||
+                !entities.RegisteredEntities.TryGetValue(id, out var type) || type != EntityType.Object ||
+                !entities.DynamicObjects.TryGetValue(id, out var target) ||
+                target.DynamicObjectType != DynamicObjectType.ContentUsable)
+                return null;
+
+            return target.HitPoints > 0 ? target : null;
         }
 
         public void Update(Client client, long now)
@@ -150,12 +171,26 @@ namespace Rasa.Managers
                 // The existing damage amount model is retained; original modifier,
                 // hit-chance and impact/flight timing remain separate reconstruction.
                 var damage = info.MinDamage + _random.Next(0, info.MaxDamage - info.MinDamage + 1);
-                MissileManager.Instance.MissileTrigger(current.Map, new Missile
+                if (current.ContentTarget != null)
                 {
-                    Source = player, ActionId = current.ActionId, ActionArgId = current.ArgumentId,
-                    TargetActor = target, TargetEntityId = current.Target?.EntityId ?? 0,
-                    DamageA = damage, DamageType = (DamageType)info.DamageType
-                });
+                    // The content placement is re-checked at impact: it may have been
+                    // destroyed or removed since windup.
+                    var contentTarget = ReferenceEquals(GetEligibleContentTarget(player, current.ContentTarget.EntityId), current.ContentTarget)
+                        ? current.ContentTarget : null;
+                    MissileManager.Instance.MissileTrigger(current.Map, new Missile
+                    {
+                        Source = player, ActionId = current.ActionId, ActionArgId = current.ArgumentId,
+                        TargetEntityId = contentTarget?.EntityId ?? 0,
+                        DamageA = damage, DamageType = (DamageType)info.DamageType
+                    });
+                }
+                else
+                    MissileManager.Instance.MissileTrigger(current.Map, new Missile
+                    {
+                        Source = player, ActionId = current.ActionId, ActionArgId = current.ArgumentId,
+                        TargetActor = target, TargetEntityId = current.Target?.EntityId ?? 0,
+                        DamageA = damage, DamageType = (DamageType)info.DamageType
+                    });
                 SendReuse(client, current.ActionId, now);
             }
             if (current.Resolved && now >= current.RecoveryEndsAt)
