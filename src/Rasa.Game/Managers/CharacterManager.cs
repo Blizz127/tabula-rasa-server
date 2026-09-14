@@ -193,10 +193,9 @@ namespace Rasa.Managers
             // has no reason to be anywhere but the pod screen.
             if (client.State != ClientState.CharacterSelection)
             {
+                // Not answered: the pod screen that could show a failure is not up.
                 Logger.WriteLog(LogType.Security,
                     $"AccountId = {client.AccountEntry.Id} tried to create a character while in state {client.State}.");
-
-                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
                 return;
             }
 
@@ -207,29 +206,11 @@ namespace Rasa.Managers
                 return;
             }
 
-            // The pods are 1..MaxSelectionPods. The packet used to take any byte, and the row was
-            // inserted with whatever it said: slot 0 or 17+ made a character no pod ever shows and
-            // no switch can reach, which still counted for the family-name lock and "has
-            // characters"; a second character in an occupied slot was worse, because character
-            // selection keys the account's characters by slot and threw on the duplicate at every
-            // login from then on, locking the account out until someone edited the table.
+            // The pods are 1..MaxSelectionPods. Out-of-range and occupied slots are refused inside
+            // the creation transaction below with CharacterSlotInUse; this only records the forgery.
             if (packet.SlotNum < 1 || packet.SlotNum > MaxSelectionPods)
-            {
                 Logger.WriteLog(LogType.Security,
                     $"AccountId = {client.AccountEntry.Id} tried to create a character in slot {packet.SlotNum}.");
-
-                SendCharacterCreateFailed(client, CreateCharacterResult.TechnicalDifficulty);
-                return;
-            }
-
-            // AccountEntry.Characters is reloaded after every create and delete, and an account
-            // can only be logged in once, so this is current. The unique index on
-            // (account_id, slot) is the backstop if it ever is not.
-            if (client.AccountEntry.GetCharacterBySlot(packet.SlotNum) != null)
-            {
-                SendCharacterCreateFailed(client, CreateCharacterResult.CharacterSlotInUse);
-                return;
-            }
 
             uint characterId;
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();

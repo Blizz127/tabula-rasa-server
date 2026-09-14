@@ -36,7 +36,12 @@ namespace Rasa.Test
             {
                 Array.Copy(BitConverter.GetBytes(declaredLength), 0, frame.Buffer, frame.BaseOffset, 4);
                 frame.ByteCount = 4;
-                Assert.ThrowsException<InvalidDataException>(() => Process(socket, frame));
+                // An oversized or overflowing header drops the connection (logged as
+                // "framing lost") instead of throwing: the frame never reaches the handler.
+                var reached = false;
+                socket.OnReceive = data => reached = true;
+                Process(socket, frame);
+                Assert.IsFalse(reached);
             }
             finally { BufferManager.FreeBuffer(frame); }
         }
@@ -54,8 +59,12 @@ namespace Rasa.Test
                 frame[0] = (byte)declaredLength;
                 frame[1] = 0;
                 frame.ByteCount = 2;
-                socket.OnReceive = data => throw new InvalidOperationException("Invalid frame reached the handler");
-                Assert.ThrowsException<InvalidDataException>(() => Process(socket, frame));
+                var reached = false;
+                socket.OnReceive = data => reached = true;
+                // A short counted frame drops the connection instead of throwing; the
+                // frame never reaches the handler.
+                Process(socket, frame);
+                Assert.IsFalse(reached);
             }
             finally { BufferManager.FreeBuffer(frame); }
         }
@@ -72,8 +81,10 @@ namespace Rasa.Test
                 frame[1] = 128;
                 frame.ByteCount = 32768;
                 var calls = 0;
+                // A declared 0x8000 word is a 32768-byte frame; 32768 bytes arrived, so the
+                // frame is complete and delivered (RemainingLength excludes the 2-byte header).
                 socket.OnReceive = data => { calls++; Assert.AreEqual(32766, data.RemainingLength); };
-                Assert.IsFalse(Process(socket, frame));
+                Assert.IsTrue(Process(socket, frame));
                 Assert.AreEqual(1, calls);
             }
             finally { BufferManager.FreeBuffer(frame); }
@@ -92,20 +103,27 @@ namespace Rasa.Test
                 var calls = 0;
                 socket.OnDecrypt = data => false;
                 socket.OnReceive = data => calls++;
-                Assert.ThrowsException<InvalidDataException>(() => Process(socket, frame));
+                // A failed decrypt drops the connection instead of throwing; the frame
+                // never reaches the handler.
+                Process(socket, frame);
                 Assert.AreEqual(0, calls);
             }
             finally { BufferManager.FreeBuffer(frame); }
         }
 
+        // ProcessInputBuffer returns the private InputResult enum. "true" for the tests meant
+        // "the connection lives and the buffer was handled": Consumed (fully handed on) or
+        // Reading (re-armed for the continuation). Broken is the drop.
         private static bool Process(LengthedSocket socket, BufferData data)
         {
             using var args = new SocketAsyncEventArgs();
             args.SetBuffer(data.Buffer, data.BaseOffset, data.MaxLength);
             try
             {
-                return (bool)typeof(LengthedSocket).GetMethod("ProcessInputBuffer", BindingFlags.Instance | BindingFlags.NonPublic)
+                var result = typeof(LengthedSocket).GetMethod("ProcessInputBuffer", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(socket, new object[] { data, args });
+                var text = result?.ToString();
+                return text == "Consumed" || text == "Reading";
             }
             catch (TargetInvocationException exception)
             {
@@ -144,7 +162,9 @@ namespace Rasa.Test
                 using var accepted = listener.Accept();
                 var socket = new LengthedSocket(accepted, SizeType.Dword, false);
                 using var failed = new ManualResetEventSlim();
-                socket.OnError = args => failed.Set();
+                // A framing loss is a Drop (OnDrop), not a socket fault (OnError): the
+                // connection is closed deliberately and the owner is told why.
+                socket.OnDrop = _ => { socket.Close(); failed.Set(); };
                 socket.ReceiveAsync();
                 peer.Send(BitConverter.GetBytes(65537u));
                 Assert.IsTrue(failed.Wait(TimeSpan.FromSeconds(5)), "Invalid frame must close this connection");

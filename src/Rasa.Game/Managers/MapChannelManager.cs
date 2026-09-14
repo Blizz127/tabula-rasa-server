@@ -163,7 +163,6 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.Initialize, "");
             Logger.WriteLog(LogType.Initialize, "Server ready!");
 
-            Timer.Add("AutoFire", 100, true, null);
             Timer.Add("CheckForLogingClients", 1000, true, null);
             Timer.Add("CheckForObjects", 1000, true, null);
             Timer.Add("ClientEffectUpdate", 500, true, null);
@@ -178,13 +177,10 @@ namespace Rasa.Managers
 
             PartyManager.Instance.ExpireHeldMembers();
 
-            // Server-wide lists, ticked once. These used to run inside the per-map loop below,
-            // guarded by that map having players, so with N populated maps every auto-fire
-            // timer and every dropship advanced N times per tick.
+            // Server-wide lists, ticked once. Dropships used to run inside the per-map loop
+            // below, guarded by that map having players, so with N populated maps every
+            // dropship advanced N times per tick.
             DynamicObjectManager.Instance.DropshipsWorker(delta);
-
-            if (Timer.IsTriggered("AutoFire"))
-                ManifestationManager.Instance.AutoFireTimerDoWork(delta);
 
             foreach (var t in MapChannelArray)
             {
@@ -198,8 +194,9 @@ namespace Rasa.Managers
                         // create new mapClient
                         var dequedClient = mapChannel.QueuedClients.Dequeue();
 
-                        // add it to list
-                        mapChannel.ClientList.Add(dequedClient);
+                        // add it to list, unless its socket closed while it was queued
+                        if (dequedClient.State != ClientState.Disconnected && !dequedClient.Player.Disconected)
+                            mapChannel.ClientList.Add(dequedClient);
                     }
 
                 if (mapChannel.ClientList.Count > 0)
@@ -233,6 +230,9 @@ namespace Rasa.Managers
                     if (Timer.IsTriggered("ClientEffectUpdate"))
                         GameEffectManager.Instance.DoWork(mapChannel, delta);
 
+                    // Area-bound mission objectives (no work in contexts without live content areas).
+                    MissionContentManager.Instance.DoWork(mapChannel);
+
                     // warn idle players and flag long-idle ones for removal below
                     ManifestationManager.Instance.CheckInactivity(mapChannel);
 
@@ -253,7 +253,7 @@ namespace Rasa.Managers
                             }
                             catch (Exception e)
                             {
-                                Logger.WriteLog(LogType.Error, $"Failed to remove {client.Player.FamilyName} from map {mapChannel.MapInfo.MapContextId}: {e}");
+                                Logger.WriteLog(LogType.Error, $"Failed to remove {client?.Player?.FamilyName} from map {mapChannel?.MapInfo?.MapContextId}: {e}");
                                 mapChannel.ClientList.Remove(client);
                             }
 
@@ -261,6 +261,9 @@ namespace Rasa.Managers
                         }
                 }
             }
+            // The autofire list is global: advance it once per elapsed interval,
+            // independent of how many maps currently contain players.
+            ManifestationManager.Instance.AutoFireTimerDoWork(delta);
         }
 
         public void MapLoaded(Client client)
@@ -325,6 +328,8 @@ namespace Rasa.Managers
             // the gate on this side, and must walk out of it before it can send them back.
             MapLinkManager.Instance.PlayerEnteredMap(client);
             ManifestationManager.Instance.AssignPlayer(client);
+            MissionManager.Instance.SendMissionStatusInfo(client);
+            MissionContentManager.Instance.OnPlayerEnteredMap(client);
 
             ClanManager.Instance.InitializePlayerClanData(client);
             InventoryManager.Instance.InitClanInventory(client);
@@ -387,7 +392,7 @@ namespace Rasa.Managers
 
             // Out of the old map while the player still points at it: entities, cells, the
             // managers that track it, and the old ClientList.
-            RemovePlayer(client, false);
+            DetachFromMap(client);
 
             // What MapLoaded reads back when the client is ready: the map channel it adds the
             // player to, and the position the cell matrix is built from.
@@ -416,39 +421,71 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.ClientMethodId, new AckPingPacket(ping));
         }
 
+        /// <summary>
+        /// Takes the character out of the world for good: logout, socket loss, inactivity. Saves
+        /// once, and is a no-op for a character already removed, so a normal logout that meets a
+        /// socket loss (or a second enqueue) cannot save or unregister twice.
+        /// </summary>
         public void RemovePlayer(Client client, bool logout)
         {
+            var player = client.Player;
+            if (player == null || player.Disconected)
+                return;
+
+            client.SaveCharacter();
+
+            DetachFromMap(client);
+
+            player.Disconected = true;
+            player.RemoveFromMap = true;
+            player.LogoutCountdown.Cancel();
+            player.CurrentAbility = null;
+            player.CurrentWeaponAction = null;
+            player.CurrentWeaponAttack = null;
+
+            if (logout && client.State != ClientState.Disconnected)
+                PassClientToCharacterSelection(client);
+        }
+
+        /// <summary>
+        /// Everything the current map and the managers hold for this character, without ending
+        /// its session: shared by RemovePlayer and ChangeMap, which carries the same character on
+        /// to another map and must not leave it flagged as disconnected.
+        /// </summary>
+        private void DetachFromMap(Client client)
+        {
+            var player = client.Player;
+
             // A target is an entity on this map; the client does not always re-target after a
             // map change, and MissileLaunch refuses cross-map targets, so drop it here.
-            client.Player.Target = 0;
+            player.Target = 0;
+
+            // A socket can close before MapLoaded registered the character; nothing below that
+            // speaks for a registration may then run against whoever holds the entity id.
+            var registered = EntityManager.Instance.Players.TryGetValue(player.EntityId, out var entry) && entry == player;
 
             // unregister Communicator
-            CommunicatorManager.Instance.PlayerExitMap(client);
+            if (registered)
+                CommunicatorManager.Instance.PlayerExitMap(client);
             // unregister mapChannelClient
-            EntityManager.Instance.UnregisterEntity(client.Player.EntityId);
-            EntityManager.Instance.UnregisterPlayer(client.Player.EntityId);
-            EntityManager.Instance.UnregisterActor(client.Player.EntityId);
+            EntityManager.Instance.UnregisterEntity(player.EntityId);
+            EntityManager.Instance.UnregisterPlayer(player.EntityId);
+            EntityManager.Instance.UnregisterActor(player.EntityId);
 
-            // unregister character Inventory
-            foreach (var entityId in client.Player.Inventory.EquippedInventory)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
-            foreach (var entityId in client.Player.Inventory.HomeInventory)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
-            foreach (var entityId in client.Player.Inventory.PersonalInventory)
-                if (entityId != 0)
-                    EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
-
-            foreach (var entityId in client.Player.Inventory.WeaponDrawer)
+            // unregister character Inventory; an item in two lists is destroyed once
+            var inventoryIds = new HashSet<ulong>(player.Inventory.EquippedInventory);
+            inventoryIds.UnionWith(player.Inventory.HomeInventory);
+            inventoryIds.UnionWith(player.Inventory.PersonalInventory);
+            inventoryIds.UnionWith(player.Inventory.WeaponDrawer);
+            foreach (var entityId in inventoryIds)
                 if (entityId != 0)
                     EntityManager.Instance.DestroyPhysicalEntity(client, entityId, EntityType.Item);
 
             NpcManager.Instance.DiscardBuybackItems(client);
-            ActorActionManager.Instance.RemoveActor(client.Player);
+            ActorActionManager.Instance.RemoveActor(player);
 
+            if (registered)
+                ManifestationManager.Instance.StopAutoFire(client);
             CellManager.Instance.RemoveFromWorld(client);
             MapLinkManager.Instance.RemovePlayer(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
@@ -459,24 +496,19 @@ namespace Rasa.Managers
             PartyManager.Instance.RemovePlayer(client);
             PetitionManager.Instance.RemovePlayer(client);
 
-            if (logout)
-                if (client.Player.Disconected == false)
-                {
-                    PassClientToCharacterSelection(client);
-                    client.Player.Disconected = true;
-                }
-
-            // remove from list
-            for (var i = 0; i < client.Player.MapChannel.ClientList.Count; i++)
+            var map = player.MapChannel;
+            if (map != null)
             {
-                if (client == client.Player.MapChannel.ClientList[i])
+                map.ClientList.RemoveAll(candidate => candidate == client);
+                map.PerformRecovery.RemoveAll(action => action.Actor == player);
+                // A socket may close before the loading queue has admitted its character.
+                for (var remaining = map.QueuedClients.Count; remaining > 0; remaining--)
                 {
-                    client.Player.MapChannel.ClientList.RemoveAt(i);
-                    //mapClient.MapChannel.PlayerCount--;
-                    break;
+                    var queued = map.QueuedClients.Dequeue();
+                    if (queued != client)
+                        map.QueuedClients.Enqueue(queued);
                 }
             }
-
         }
 
         public void RequestLogout(Client client)

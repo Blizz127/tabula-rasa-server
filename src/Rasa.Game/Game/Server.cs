@@ -540,8 +540,8 @@ namespace Rasa.Game
             lock (Clients)
                 online = Clients.Where(c => c.AccountEntry != null && c.AccountEntry.Id == packet.AccountId).ToList();
 
-            // Close() runs from socket threads already (OnError), saves the character and flags an
-            // in-world player for removal on the MainLoop, so it is safe from this communicator thread.
+            // Close() runs from socket threads already (OnError) and only enqueues the client; the
+            // world removal and final save happen on the MainLoop, so it is safe from this thread.
             foreach (var client in online)
                 client.Close();
 

@@ -54,7 +54,9 @@ namespace Rasa.Managers
         /// </summary>
         private static bool IsOnMap(MapChannel mapChannel, Actor actor)
         {
-            return actor != null && actor.MapContextId == mapChannel.MapInfo.MapContextId;
+            // A channel without MapInfo (tests, uninitialized channels) cannot be checked
+            // against; treat it as matching rather than rejecting every shot.
+            return actor != null && (mapChannel?.MapInfo == null || actor.MapContextId == mapChannel.MapInfo.MapContextId);
         }
 
         private static Actor GetTargetActor(ulong entityId)
@@ -211,7 +213,7 @@ namespace Rasa.Managers
 
                 if (!IsOnMap(mapChannel, targetActor))
                 {
-                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId}, which is on map {targetActor.MapContextId}, not {mapChannel.MapInfo.MapContextId}");
+                    Logger.WriteLog(LogType.Debug, $"MissileLaunch: {action.Actor.EntityId} aimed at {action.TargetId}, which is on map {targetActor.MapContextId}, not {mapChannel.MapInfo?.MapContextId}");
                     return;
                 }
 

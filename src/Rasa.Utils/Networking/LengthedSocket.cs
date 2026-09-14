@@ -118,6 +118,11 @@ namespace Rasa.Networking
         #region SocketAsyncEventArgs
         private static Stack<SocketAsyncEventArgs> _socketAsyncEventArgsPool;
 
+        // Every args the pool owns, for TeardownEventArgs to tell its own entries from a
+        // foreign one driven through the same paths (tests drive ProcessInputBuffer with a
+        // local args; only pool entries may go back). Guarded by the pool lock.
+        private static readonly HashSet<SocketAsyncEventArgs> _pooledEventArgs = new HashSet<SocketAsyncEventArgs>();
+
         private static readonly object ArgsInitLock = new object();
 
         public static void InitializeEventArgsPool(int eventArgsPoolCount)
@@ -133,7 +138,11 @@ namespace Rasa.Networking
                 _socketAsyncEventArgsPool = new Stack<SocketAsyncEventArgs>(eventArgsPoolCount);
 
                 for (var i = 0; i < eventArgsPoolCount; ++i)
-                    _socketAsyncEventArgsPool.Push(new SocketAsyncEventArgs());
+                {
+                    var args = new SocketAsyncEventArgs();
+                    _socketAsyncEventArgsPool.Push(args);
+                    _pooledEventArgs.Add(args);
+                }
             }
         }
 
@@ -212,7 +221,13 @@ namespace Rasa.Networking
             args.Completed -= OperationCompleted;
 
             lock (_socketAsyncEventArgsPool)
-                _socketAsyncEventArgsPool.Push(args);
+            {
+                // A foreign args driven through these paths is torn down the same way, but
+                // it is not ours to hand out again: pooling it would recycle (and eventually
+                // dispose) memory someone else owns.
+                if (_pooledEventArgs.Contains(args))
+                    _socketAsyncEventArgsPool.Push(args);
+            }
         }
 
         private enum Completion

@@ -37,7 +37,17 @@ namespace Rasa.Game
         public ClientCryptData Data { get; private set; }
         public GameAccountEntry AccountEntry { get; private set; }
         public uint LoadingMap { get; set; }
-        public ClientState State { get; set; }
+        private volatile ClientState _state;
+        public ClientState State
+        {
+            get => _state;
+            set
+            {
+                lock (_clientLock)
+                    if (_state != ClientState.Disconnected)
+                        _state = value;
+            }
+        }
         public Manifestation Player = new();
         public Movement Movement { get; set; }
         public uint[] SendSequence { get; } = new uint[256];
@@ -49,7 +59,7 @@ namespace Rasa.Game
         private readonly PacketQueue _packetQueue = new();
 
         // Inbound byte stream. Owned exclusively by the MainLoop thread: it is only ever
-        // touched from Update()/TryDecodeNextPacket() and (after disconnect) Close().
+        // touched from Update()/TryDecodeNextPacket(); Update() stops once the client is closed.
         private readonly NonContiguousMemoryStream _incomingDataQueue = new();
 
         // Hand-off from socket completion threads to the MainLoop. OnReceive() runs on an
@@ -112,12 +122,18 @@ namespace Rasa.Game
             // Nothing in this method may throw: Update() is driven by the single MainLoop
             // thread that services every client and every manager. An escaping exception
             // takes the whole world down, not just this connection.
+            if (State == ClientState.Disconnected)
+                return;
+
             try
             {
                 DrainPendingChunks();
 
                 foreach (var protocolPacket in DecodeIncomingPackets())
                 {
+                    if (State == ClientState.Disconnected)
+                        break;
+
                     try
                     {
                         HandleProtocolPacket(protocolPacket);
@@ -129,7 +145,7 @@ namespace Rasa.Game
                     }
                     catch (Exception e)
                     {
-                        Logger.WriteLog(LogType.Error, $"Error handling {protocolPacket.Type} from {Socket.RemoteAddress}, disconnecting client: {e}");
+                        Logger.WriteLog(LogType.Error, $"Error handling {protocolPacket.Type} from {Socket?.RemoteAddress}, disconnecting client: {e}");
                         Close();
                         return;
                     }
@@ -139,7 +155,7 @@ namespace Rasa.Game
             {
                 // DecodeIncomingPackets() can throw while advancing the iterator (desynced
                 // or malformed stream), which the inner try above would never see.
-                Logger.WriteLog(LogType.Error, $"Error decoding packet stream from {Socket.RemoteAddress}, disconnecting client: {e}");
+                Logger.WriteLog(LogType.Error, $"Error decoding packet stream from {Socket?.RemoteAddress}, disconnecting client: {e}");
                 Close();
                 return;
             }
@@ -153,7 +169,7 @@ namespace Rasa.Game
             }
             catch (Exception e)
             {
-                Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket.RemoteAddress}, disconnecting client: {e}");
+                Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket?.RemoteAddress}, disconnecting client: {e}");
                 Close();
             }
         }
@@ -168,42 +184,20 @@ namespace Rasa.Game
                 if (State == ClientState.Disconnected)
                     return;
 
-                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket.RemoteAddress);
+                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket?.RemoteAddress);
 
                 State = ClientState.Disconnected;
 
-                Socket.Close();
+                Socket?.Close();
 
-                Server.Disconnect(this);
-
-                // A dropped connection (Alt+F4, crash, network loss) never runs the /logout
-                // flow, and that flow was the only thing that set RemoveFromMap - so the
-                // character stayed in its map cell as a frozen copy, visible to everyone
-                // including the same player on their next login. Flag it for the
-                // MapChannelWorker instead of calling RemovePlayer here: Close() is also
-                // reached from socket completion threads, and RemovePlayer walks the cell
-                // and entity tables the MainLoop owns. Disconected goes first so the
-                // worker skips handing a dead socket back to character selection, and so
-                // the visibility and trigger passes stop treating the player as present.
-                if (Player != null && Player.MapChannel != null)
-                {
-                    Player.Disconected = true;
-                    Player.RemoveFromMap = true;
-                }
-
+                while (_packetQueue.PopOutgoing() != null) { }
                 DiscardPendingChunks();
 
-                try
-                {
-                    SaveCharacter();
-                }
-                catch (Exception e)
-                {
-                    // Close() is reached from socket completion threads (OnError) as well as
-                    // from the MainLoop. A throw here used to terminate the process on every
-                    // disconnect that happened before a character was loaded.
-                    Logger.WriteLog(LogType.Error, $"Failed to save character on disconnect: {e}");
-                }
+                // World cleanup and the final save run on the map loop, through
+                // DisconnectedClientQueue, after any pending logout: Close() is also reached
+                // from socket completion threads, and neither the cell and entity tables nor
+                // the character row are theirs to touch.
+                Server?.Disconnect(this);
             }
         }
 
@@ -275,16 +269,24 @@ namespace Rasa.Game
 
         public void SendMessage(IClientMessage message, bool compress = false, byte channel = 0, bool delay = true)
         {
-            var protocolPacket = new ProtocolPacket(message, message.Type, compress, channel);
+            lock (_clientLock)
+            {
+                if (State == ClientState.Disconnected)
+                    return;
 
-            if (!delay)
-                SendPacket(protocolPacket);
-            else
-                _packetQueue.EnqueueOutgoing(protocolPacket);
+                var protocolPacket = new ProtocolPacket(message, message.Type, compress, channel);
+                if (!delay)
+                    SendPacket(protocolPacket);
+                else
+                    _packetQueue.EnqueueOutgoing(protocolPacket);
+            }
         }
 
         public void SendPacket(IBasePacket packet)
         {
+            if (State == ClientState.Disconnected)
+                return;
+
             var pPacket = packet as ProtocolPacket;
             if (pPacket == null)
             {
@@ -480,13 +482,17 @@ namespace Rasa.Game
 
         private bool OnDecrypt(BufferData data)
         {
+            // Blowfish works on whole 8-byte blocks; anything else cannot be a frame body.
+            if (data.RemainingLength < 8 || data.RemainingLength % 8 != 0)
+                return false;
+
             var result = GameCryptManager.Decrypt(data.Buffer, data.BaseOffset + data.Offset, data.RemainingLength, Data);
             if (!result)
                 return false;
 
             var blowfishPadding = data[data.Offset] & 0xF;
-            if (blowfishPadding > 8)
-                throw new Exception("More than 8 bytes of blowfish padding was added to the packet?");
+            if (blowfishPadding > 8 || blowfishPadding > data.RemainingLength)
+                return false;
 
             data.Offset += blowfishPadding;
 
@@ -586,6 +592,8 @@ namespace Rasa.Game
 
             // Read the size of the next packet
             var packetSize = br.ReadUInt16();
+            if (packetSize < 4)
+                throw new InvalidDataException("Protocol frame is shorter than its header.");
 
             // Rewind the stream to the starting position
             _incomingDataQueue.Position = startPosition;
@@ -594,14 +602,13 @@ namespace Rasa.Game
             if (packetSize > _incomingDataQueue.Length)
                 return false;
 
-            // Construct and the packet
+            // Bound parsing to this frame so a malformed message cannot consume its successor.
+            using var frame = new MemoryStream(br.ReadBytes(packetSize), false);
+            using var frameReader = new BinaryReader(frame);
             var rawPacket = new ProtocolPacket();
-
-            rawPacket.Read(br);
-
-            // Check for overreading or underreading the packet
-            if (_incomingDataQueue.Position != startPosition + packetSize)
-                throw new Exception($"ProtocolPacket over or under read! Start position: {startPosition} | Packet size: {packetSize} | End position: {_incomingDataQueue.Position}!");
+            rawPacket.Read(frameReader);
+            if (frame.Position != frame.Length)
+                throw new InvalidDataException("Protocol message did not consume its frame.");
 
             // Advance the stream by removing the already processed data
             _incomingDataQueue.RemoveBytes(packetSize);
@@ -615,7 +622,7 @@ namespace Rasa.Game
                     // Movement arrives on a sequenced channel, so this is reachable in normal
                     // play. Dropping the stale packet is correct; breaking into a debugger on
                     // a headless server is not.
-                    Logger.WriteLog(LogType.Debug, $"Dropped out-of-order packet on channel {rawPacket.Channel} (seq {rawPacket.SequenceNumber} < {ReceiveSequence[rawPacket.Channel]}) from {Socket.RemoteAddress}.");
+                    Logger.WriteLog(LogType.Debug, $"Dropped out-of-order packet on channel {rawPacket.Channel} (seq {rawPacket.SequenceNumber} < {ReceiveSequence[rawPacket.Channel]}) from {Socket?.RemoteAddress}.");
 
                     return true;
                 }
@@ -628,7 +635,7 @@ namespace Rasa.Game
             if (rawPacket.Type == ClientMessageOpcode.None)
             {
                 if (rawPacket.Size != 4)
-                    Logger.WriteLog(LogType.Debug, $"Skipped an untyped packet of size {rawPacket.Size} (expected the 4-byte send-timeout check) from {Socket.RemoteAddress}.");
+                    throw new InvalidDataException("Invalid internal timeout frame.");
 
                 return true;
             }

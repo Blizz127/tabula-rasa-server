@@ -248,6 +248,22 @@ namespace Rasa.Test
             Assert.IsFalse(Server.OccupiesAccount(client, 10));
         }
 
+        [TestMethod]
+        public void MapChangeLeavesTheOldMapWithoutEndingTheSession()
+        {
+            var destination = new MapChannel { MapInfo = new MapInfo(1148, "Destination", 1, 0), ClientList = new List<Client>() };
+            _maps.MapChannelArray.Add(1148, destination);
+            Assert.IsTrue(_maps.ChangeMap(_client, 1148, new Vector3(1, 2, 3), 0));
+            Assert.IsFalse(_map.ClientList.Contains(_client));
+            Assert.IsFalse(EntityManager.Instance.Players.ContainsKey(_client.Player.EntityId));
+            Assert.AreSame(destination, _client.Player.MapChannel);
+            Assert.IsTrue(destination.ClientList.Contains(_client));
+            // Disconected is the terminal flag the map triggers, links and weapon checks skip on.
+            Assert.IsFalse(_client.Player.Disconected);
+            Assert.IsFalse(_client.Player.RemoveFromMap);
+            Assert.AreEqual(ClientState.Loading, _client.State);
+        }
+
         private void CloseAndEnqueue()
         {
             _client.Close();

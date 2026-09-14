@@ -375,6 +375,43 @@ namespace Rasa.Test
             Assert.AreEqual(9900L, timer.MaxAliveTime);
         }
 
+        [DataTestMethod]
+        [DataRow(ActionId.WeaponDraw)]
+        [DataRow(ActionId.WeaponReload)]
+        [DataRow(ActionId.WeaponStow)]
+        public void ClientWeaponRequestsEnterTheWeaponActionLifecycle(ActionId actionId)
+        {
+            // The packet handlers call these. The legacy versions queued the action on the map's
+            // PerformRecovery list, which has no weapon case, so the action never resolved.
+            _client.Player.WeaponReady = actionId != ActionId.WeaponDraw;
+            if (actionId == ActionId.WeaponDraw)
+                ManifestationManager.Instance.RequestWeaponDraw(_client);
+            else if (actionId == ActionId.WeaponReload)
+                ManifestationManager.Instance.RequestWeaponReload(_client, false);
+            else
+                ManifestationManager.Instance.RequestWeaponStow(_client);
+            Assert.AreEqual(actionId, _client.Player.CurrentWeaponAction?.ActionId);
+            Assert.IsTrue(_client.Player.CurrentWeaponAction.ClientRequested);
+            Assert.AreEqual(0, _map.PerformRecovery.Count);
+        }
+
+        [TestMethod]
+        public void MalformedOrUnaffordableProgressionRequestsAreRefusedWithoutThrowing()
+        {
+            _client.Player.Level = 1;
+            ManifestationManager.Instance.LevelSkills(_client,
+                new Packets.MapChannel.Client.LevelSkillsPacket { ListLenght = 2, SkillIds = new[] { 1 }, SkillLevels = new[] { 1 } });
+            ManifestationManager.Instance.LevelSkills(_client,
+                new Packets.MapChannel.Client.LevelSkillsPacket { ListLenght = 1, SkillIds = new[] { 1 }, SkillLevels = new[] { 5 } });
+            Assert.AreEqual(0, _client.Player.Skills.Count);
+            ManifestationManager.Instance.AllocateAttributePoints(_client,
+                new Packets.MapChannel.Client.AllocateAttributePointsPacket { Body = 100000 });
+            Assert.AreEqual(0, _client.Player.SpentBody);
+            var packets = Drain();
+            Assert.AreEqual(2, packets.OfType<SkillsPacket>().Count());
+            Assert.AreEqual(3, packets.OfType<AvailableAllocationPointsPacket>().Count());
+        }
+
         private Item MakeItem(uint id, EntityClasses itemClass, uint stack, uint slot)
         {
             var item = new Item { Id = id, OwnerId = 101, OwnerSlotId = slot, StackSize = stack,

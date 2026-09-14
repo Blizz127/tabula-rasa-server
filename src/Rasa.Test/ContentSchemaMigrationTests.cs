@@ -21,7 +21,7 @@ namespace Rasa.Test
     [TestClass]
     public class ContentSchemaMigrationTests
     {
-        private const string PreviousWorldMigration = "20260913030423_MissionObjectiveDefinitions";
+        private const string PreviousWorldMigration = "20260913180000_Add_map_link";
         private const string PreviousCharMigration = "20260913025737_MissionObjectiveProgress";
         private const string ContentLayerMigration = "20260913180618_MissionContentLayer";
         private const string BootcampS1Migration = "20260913201420_BootcampS1Initiation";

@@ -48,29 +48,9 @@ namespace Rasa.Memory
                 WriteZeroStruct();
         }
 
-        /// <summary>
-        /// 0x10..0x1C carry the value 0..12 in the type byte itself; 0x1D, 0x1E and 0x1F escape
-        /// to a one, two or four byte value.
-        ///
-        /// A negative number took the inline path, because it is not greater than 12. There is no
-        /// room for one there: 0x10 | -1 is 0xFF after the cast, a type byte for something that is
-        /// not an int at all, and the client's unmarshaller reads the rest of the packet as
-        /// whatever that happens to mean.
-        ///
-        /// Negatives now take the four byte form. The narrow escapes are left to positive values
-        /// on purpose: this reader takes 0x1D as an unsigned byte and 0x1E as a signed short, and
-        /// nothing in the client tells us which of those the game's own unmarshaller does. The
-        /// four byte form is the one both readings agree on, and three bytes is not worth a guess
-        /// about an encoding we cannot check.
-        /// </summary>
         public void WriteInt(int value)
         {
-            if (value < 0)
-            {
-                Writer.Write((byte) 0x1F);
-                Writer.Write(value);
-            }
-            else if (value > 0x0C)
+            if (value < 0 || value > 0x0C)
             {
                 // Kept to the signed byte range, so the value is the same whether the reader on
                 // the other side treats 0x1D as signed or unsigned. 128..255 fall through to the
@@ -97,7 +77,15 @@ namespace Rasa.Memory
 
         public void WriteUInt(uint value)
         {
-            WriteInt((int) value);
+            // Values with the high bit set must keep all 32 bits. Casting to a
+            // negative int and choosing a compact signed form would truncate them.
+            if (value > int.MaxValue)
+            {
+                Writer.Write((byte)0x1F);
+                Writer.Write(value);
+            }
+            else
+                WriteInt((int)value);
         }
 
         public void WriteLong(long value)

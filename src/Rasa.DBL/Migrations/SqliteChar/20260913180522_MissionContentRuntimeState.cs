@@ -64,17 +64,25 @@ namespace Rasa.Migrations.SqliteChar
             migrationBuilder.DropTable(
                 name: "character_mission_objective_counter");
 
-            migrationBuilder.DropColumn(
-                name: "timer_anchor_ms",
-                table: "character_mission_objective");
-
-            migrationBuilder.DropColumn(
-                name: "timer_disarmed",
-                table: "character_mission_objective");
-
-            migrationBuilder.DropColumn(
-                name: "timer_remaining_ms",
-                table: "character_mission_objective");
+            // SQLite cannot drop columns through EF Core 5 (DropColumnOperation has no
+            // SQL generation), so the pre-timer table is rebuilt and the rows carried
+            // over. MySQL keeps the plain DropColumn in its own migration.
+            migrationBuilder.Sql(
+                "CREATE TABLE \"character_mission_objective_previous\" (\n" +
+                "    \"character_id\" INTEGER NOT NULL,\n" +
+                "    \"mission_id\" INTEGER NOT NULL,\n" +
+                "    \"objective_id\" INTEGER NOT NULL,\n" +
+                "    \"status\" INTEGER NOT NULL,\n" +
+                "    CONSTRAINT \"PK_character_mission_objective\"\n" +
+                "        PRIMARY KEY (\"character_id\", \"mission_id\", \"objective_id\")\n" +
+                ");");
+            migrationBuilder.Sql(
+                "INSERT INTO \"character_mission_objective_previous\"\n" +
+                "    (\"character_id\", \"mission_id\", \"objective_id\", \"status\")\n" +
+                "    SELECT \"character_id\", \"mission_id\", \"objective_id\", \"status\"\n" +
+                "    FROM \"character_mission_objective\";");
+            migrationBuilder.Sql("DROP TABLE \"character_mission_objective\";");
+            migrationBuilder.Sql("ALTER TABLE \"character_mission_objective_previous\" RENAME TO \"character_mission_objective\";");
         }
     }
 }

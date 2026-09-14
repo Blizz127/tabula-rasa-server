@@ -135,9 +135,16 @@ namespace Rasa.Test
             Assert.ThrowsException<EndOfStreamException>(() => new ClientKeyPacket().Read(reader));
         }
 
+        // TryDecodeNextPacket(out packet): false = no complete frame; true with a null packet =
+        // a frame consumed and dropped (out-of-order, send-timeout). The old DecodeNextPacket
+        // returned null for both; the tests' "IsNull" expectation maps to "no usable packet".
         private ProtocolPacket Decode()
-            => (ProtocolPacket)typeof(Client).GetMethod("DecodeNextPacket", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(_client, null);
+        {
+            var method = typeof(Client).GetMethod("TryDecodeNextPacket", BindingFlags.Instance | BindingFlags.NonPublic);
+            var args = new object[] { null };
+            var complete = (bool)method.Invoke(_client, args);
+            return complete ? (ProtocolPacket)args[0] : null;
+        }
 
         private sealed class CompressedPing : PingMessage, IClientMessage
         {

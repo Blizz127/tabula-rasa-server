@@ -133,7 +133,7 @@ namespace Rasa
 
             _logWriter?.WriteLine(text);
 
-            if (type == LogType.File || (!Config.IsDebugMode && type == LogType.Debug))
+            if (type == LogType.File || (Config?.IsDebugMode != true && type == LogType.Debug))
                 return;
 
             var color = Console.ForegroundColor;

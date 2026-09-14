@@ -106,20 +106,26 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// RequestDetachGameEffect. Only a gesture effect can be removed this way; buffs and
-        /// debuffs end on the server's terms.
+        /// RequestDetachGameEffect. Only a gesture effect, or the owner's own sprint, can be removed
+        /// this way; buffs and debuffs end on the server's terms.
         /// </summary>
         internal void RequestDetachGameEffect(Client client, RequestDetachGameEffectPacket packet)
         {
             var actor = client.Player;
             var mapChannel = actor?.MapChannel;
 
-            if (mapChannel == null || !actor.ActiveEffects.TryGetValue(packet.EffectId, out var effect))
+            if (client.State != ClientState.Ingame || mapChannel == null || actor.RemoveFromMap ||
+                !actor.ActiveEffects.TryGetValue(packet.EffectId, out var effect))
+                return;
+
+            // Sprint keeps its owner/type rules (the owner cancels it with this same
+            // request); looping gestures detach here.
+            if (GameEffectManager.Instance.TryDetachRequestedEffect(mapChannel, actor, packet.EffectId))
                 return;
 
             if (effect.TypeId != Gestures.EffectTypeId)
             {
-                Logger.WriteLog(LogType.Security, $"{actor.FamilyName} asked to detach effect {packet.EffectId} of type {effect.TypeId}; only gesture effects can be detached by request");
+                Logger.WriteLog(LogType.Security, $"{actor.FamilyName} asked to detach effect {packet.EffectId} of type {effect.TypeId}; only gesture and sprint effects can be detached by request");
                 return;
             }
 

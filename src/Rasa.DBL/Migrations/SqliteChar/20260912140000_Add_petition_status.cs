@@ -25,8 +25,32 @@ namespace Rasa.Migrations.SqliteChar
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "status", table: "petition");
-            migrationBuilder.DropColumn(name: "resolution", table: "petition");
+            // SQLite cannot drop columns through EF Core 5 (DropColumnOperation has no
+            // SQL generation), so the pre-status table is rebuilt and the rows carried
+            // over. MySQL keeps the plain DropColumn in its own migration.
+            migrationBuilder.Sql(
+                "CREATE TABLE \"petition_previous\" (\n" +
+                "    \"id\" integer NOT NULL CONSTRAINT \"PK_petition\" PRIMARY KEY AUTOINCREMENT,\n" +
+                "    \"account_id\" integer NOT NULL,\n" +
+                "    \"character_id\" integer NOT NULL,\n" +
+                "    \"type\" tinyint(3) NOT NULL DEFAULT 0,\n" +
+                "    \"summary\" varchar(255) NOT NULL,\n" +
+                "    \"body\" text NOT NULL,\n" +
+                "    \"map_context_id\" int(11) NOT NULL,\n" +
+                "    \"pos_x\" double NOT NULL,\n" +
+                "    \"pos_y\" double NOT NULL,\n" +
+                "    \"pos_z\" double NOT NULL,\n" +
+                "    \"created_at\" TEXT NOT NULL\n" +
+                ");");
+            migrationBuilder.Sql(
+                "INSERT INTO \"petition_previous\"\n" +
+                "    (\"id\", \"account_id\", \"character_id\", \"type\", \"summary\", \"body\",\n" +
+                "     \"map_context_id\", \"pos_x\", \"pos_y\", \"pos_z\", \"created_at\")\n" +
+                "    SELECT \"id\", \"account_id\", \"character_id\", \"type\", \"summary\", \"body\",\n" +
+                "     \"map_context_id\", \"pos_x\", \"pos_y\", \"pos_z\", \"created_at\"\n" +
+                "    FROM \"petition\";");
+            migrationBuilder.Sql("DROP TABLE \"petition\";");
+            migrationBuilder.Sql("ALTER TABLE \"petition_previous\" RENAME TO \"petition\";");
         }
     }
 }
