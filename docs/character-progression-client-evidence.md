@@ -265,3 +265,22 @@ experience still credited.
   and whether banked experience past the gate can release more than one level.
 - Tests: `ClassTrainerTests` (gate and one-time announcement, trainer conversation and status, training
   validation and level release). Full suite 849/849 under the .NET 5 SDK image.
+
+### Cloning, 2026-09-14
+
+`CharacterManager.RequestCloneCharacterToSlot` now clones instead of doing nothing (rule R5.1 of the class-trainer
+specification). From character selection, with the recovered request shape
+`(sourceSlot, destinationSlot, name, gender, height, appearance, race)`, one transaction:
+- requires the source pod, an empty destination pod in 1..16, a valid name, height, race and gender, and at
+  least one clone credit on the source (`NotEnoughCloneCredits` otherwise);
+- creates the clone where the source stands, with the source's class, level, experience, Logos, completed
+  missions (and their objective rows) and discovered waypoints and hospitals. Carrying completed missions
+  follows the dated 2009-01-25 Beginners Guide; an undated fan guide says missions reset;
+- resets what the official live notes of 2008-01-29 reset: attribute and skill points (Recruit skills at rank 1,
+  nothing spent), gives the starter gear and no money, and marks the clone as played before so it is never
+  offered the boot camp;
+- spends one credit on the source and refreshes both selection pods.
+
+Active missions are not copied. Content facts, clan membership and titles are not copied either; none of them
+is evidenced. `NewCharacterTests.CloningSpendsACreditAndKeepsProgressionButResetsPointsGearAndMoney` covers
+refusals, the copied and reset state, and the spent credit.

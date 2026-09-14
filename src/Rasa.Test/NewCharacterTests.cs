@@ -49,6 +49,9 @@ namespace Rasa.Test
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
                     case "get_CharacterLockboxes": return new CharacterLockboxRepository(Context);
+                    case "get_CharacterLogoses": return new Rasa.Repositories.Char.CharacterLogos.CharacterLogosRepository(Context);
+                    case "get_CharacterTeleporters": return new Rasa.Repositories.Char.CharacterTeleporter.CharacterTeleporterRepository(Context);
+                    case "get_CharacterMissions": return new Rasa.Repositories.Char.CharacterMission.CharacterMissionRepository(Context);
                     case "BeginTransaction": return Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
                     case "Complete": Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;
@@ -344,6 +347,65 @@ namespace Rasa.Test
         private SqliteCharContext Context() => WeaponReloadPersistenceTests.Context(_connection);
         private static RequestCreateCharacterInSlotPacket Request(byte slot = 1, string name = "First")
             => new() { SlotNum = slot, CharacterName = name, FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+        [TestMethod]
+        public void CloningSpendsACreditAndKeepsProgressionButResetsPointsGearAndMoney()
+        {
+            _manager.RequestCreateCharacterInSlot(_client, FirstRequest());
+            uint sourceId;
+            using (var context = Context())
+            {
+                var source = context.CharacterEntries.Single();
+                sourceId = source.Id;
+                source.Level = 4; source.Experience = 44_000; source.Class = 1; source.CloneCredits = 1; source.Credit = 500;
+                source.MapContextId = 1220; source.CoordX = 765; source.CoordY = 294; source.CoordZ = 386; source.NumLogins = 3; source.Body = 6;
+                context.CharacterSkillsEntries.Single(s => s.SkillId == 1).SkillLevel = 3;
+                context.CharacterLogosEntries.Add(new CharacterLogosEntry { CharacterId = sourceId, LogosId = 23 });
+                context.CharacterTeleporterEntries.Add(new CharacterTeleporterEntry(sourceId, 103, 5));
+                context.CharacterMissionEntries.Add(new CharacterMissionEntry(sourceId, 1995, (uint)MissionState.Completed, 7));
+                context.CharacterMissionObjectiveEntries.Add(new CharacterMissionObjectiveEntry(sourceId, 1995, 4, (uint)MissionObjectiveState.Completed));
+                context.CharacterMissionEntries.Add(new CharacterMissionEntry(sourceId, 1526, (uint)MissionState.Active, 8));
+                context.SaveChanges();
+            }
+            typeof(Client).GetProperty(nameof(Client.AccountEntry)).SetValue(_client, new GameAccountRepository(Context()).Get(10));
+            Drain();
+
+            RequestCloneCharacterToSlotPacket Clone(byte source, byte slot, string name) =>
+                new() { CloneSlotNum = source, SlotNum = slot, CharacterName = name, Scale = 1, Gender = 1, RaceId = Race.Human };
+
+            // No source, an occupied slot: refused without writing.
+            _manager.RequestCloneCharacterToSlot(_client, Clone(9, 2, "Second"));
+            _manager.RequestCloneCharacterToSlot(_client, Clone(1, 1, "Second"));
+            Assert.AreEqual(0, Drain().OfType<CharacterCreateSuccessPacket>().Count());
+
+            _manager.RequestCloneCharacterToSlot(_client, Clone(1, 2, "Second"));
+            Assert.AreEqual(1, Drain().OfType<CharacterCreateSuccessPacket>().Count());
+
+            using (var context = Context())
+            {
+                var source = context.CharacterEntries.Single(c => c.Id == sourceId);
+                var clone = context.CharacterEntries.Single(c => c.Id != sourceId);
+                Assert.AreEqual(0u, source.CloneCredits);
+                Assert.AreEqual((2, "Second", (byte)1), (clone.Slot, clone.Name, clone.Gender));
+                Assert.AreEqual((1u, (byte)4, 44_000u, 1220u), (clone.Class, clone.Level, clone.Experience, clone.MapContextId));
+                Assert.AreEqual((765.0, 294.0, 386.0), (clone.CoordX, clone.CoordY, clone.CoordZ));
+                Assert.AreEqual((0, 0, 0u), (clone.Credit, clone.Body, clone.CloneCredits));
+                Assert.IsTrue(clone.NumLogins > 0, "a clone never gets the first-login boot-camp choice");
+                Assert.AreEqual(1, (int)context.CharacterSkillsEntries.Single(s => s.CharacterId == clone.Id && s.SkillId == 1).SkillLevel);
+                CollectionAssert.AreEqual(new uint[] { 23 }, context.CharacterLogosEntries.Where(l => l.CharacterId == clone.Id).Select(l => l.LogosId).ToArray());
+                Assert.AreEqual(103u, context.CharacterTeleporterEntries.Single(t => t.CharacterId == clone.Id).WaypointId);
+                CollectionAssert.AreEqual(new uint[] { 1995 }, context.CharacterMissionEntries.Where(m => m.CharacterId == clone.Id).Select(m => m.MissionId).ToArray());
+                Assert.AreEqual(1, context.CharacterMissionObjectiveEntries.Count(o => o.CharacterId == clone.Id));
+                Assert.AreEqual(5, context.CharacterInventoryEntries.Count(i => i.CharacterId == clone.Id));
+            }
+
+            // The credit is spent.
+            typeof(Client).GetProperty(nameof(Client.AccountEntry)).SetValue(_client, new GameAccountRepository(Context()).Get(10));
+            _manager.RequestCloneCharacterToSlot(_client, Clone(1, 3, "Third"));
+            Assert.AreEqual(0, Drain().OfType<CharacterCreateSuccessPacket>().Count());
+            using (var context = Context())
+                Assert.AreEqual(2, context.CharacterEntries.Count());
+        }
+
         private static CreateCharacterPacket FirstRequest()
             => new() { CharacterName = "First", FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
         private List<ServerPythonPacket> Drain()
