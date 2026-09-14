@@ -12,7 +12,24 @@ namespace Rasa.Managers
 
     public class BehaviorManager
     {
-        public const byte WanderDistance = 40; //was original 20
+        /// <summary>
+        /// Radius around home a stroll may end in. The C++ server used 20; it was raised to 40 while
+        /// destinations were random offsets that mostly failed the distance check, so creatures
+        /// hardly moved. With navmesh destinations every draw succeeds, and 40 m strolls at the
+        /// database's 5 m/s "walk" had whole camps sprinting about.
+        /// </summary>
+        public const byte WanderDistance = 20;
+
+        /// <summary>
+        /// Wander pace, metres per second. creature.walk_speed is 5 for every row in the database -
+        /// a jog, and the client shows it as one. Strolling creatures are capped at a walk; chases
+        /// still use run_speed.
+        /// </summary>
+        public const float WanderWalkSpeed = 1.6f;
+
+        /// <summary>Idle time between strolls: RestTimeMin plus up to RestTimeSpread, drawn per stop so a camp does not move in step.</summary>
+        private const long RestTimeMin = 12000;
+        private const long RestTimeSpread = 28000;
         public const byte PathLengthLimit = 72;
 
         private const byte PathModeOneShot  = 0; // creature will walk along the path once
@@ -35,7 +52,6 @@ namespace Rasa.Managers
         /// they should while the movement packet still reported their real speed.
         /// </summary>
         private const long CreatureThinkInterval = 250;
-        private readonly long CreatureRestTime = 15000;
 
         /// <summary>
         /// How long a creature that has left combat ignores everything before looking for a new
@@ -249,8 +265,11 @@ namespace Rasa.Managers
 
                 if (creature.Controller.ActionWander.State == WanderIdle)
                 {
-                    //--- idle for int time before get new wander position
-                    if (creature.LastRestTime > CreatureRestTime)
+                    if (creature.Controller.ActionWander.RestDuration <= 0)
+                        creature.Controller.ActionWander.RestDuration = RestTimeMin + new Random().Next((int)RestTimeSpread);
+
+                    //--- idle for a while before the next stroll
+                    if (creature.LastRestTime > creature.Controller.ActionWander.RestDuration)
                     {
                         // does creature have a path?
                         if (creature.Controller.AiPathFollowing.GeneralPath != null)
@@ -278,9 +297,11 @@ namespace Rasa.Managers
                     if (creature.Controller.Path.Count == 0)
                         BuildPath(mapChannel, creature, creature.Controller.ActionWander.WanderDestination);
 
-                    if (FollowPath(mapChannel, creature, creature.WalkSpeed, delta))
+                    if (FollowPath(mapChannel, creature, Math.Min(creature.WalkSpeed, WanderWalkSpeed), delta))
                     {
                         creature.Controller.ActionWander.State = WanderIdle;
+                        creature.Controller.ActionWander.RestDuration = 0;
+                        creature.LastRestTime = 0;
                         return;
                     }
                 }
@@ -519,7 +540,7 @@ namespace Rasa.Managers
         /// </summary>
         private Vector3 GetDestination(MapChannel mapChannel, Creature creature)
         {
-            for (var attempt = 0; attempt < 20; attempt++)
+            for (var attempt = 0; attempt < 8; attempt++)
             {
                 var dest = NavMeshManager.RandomPointAround(mapChannel, creature.HomePos.Position, WanderDistance)
                            ?? creature.HomePos.Position + GetRandomVector();
