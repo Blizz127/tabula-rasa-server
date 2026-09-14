@@ -193,7 +193,31 @@ namespace Rasa.Test.Reconstruction
                 keys: Cols("id"),
                 required: Cols("purpose", "map_context_id", "pos_x", "pos_y", "pos_z", "rotation"),
                 optional: Cols(),
-                storage: Cols("comment"))
+                storage: Cols("comment")),
+
+            // Existing world-seed table, keyed by the client item template id (WildernessArrivalTrainingDay adds the Training
+            // Day reward pistols). quality_id and inventory_category decide the reward tuple and inventory placement
+            // (BuildRewardInfo). The seven flags are sent in every ItemInfo and drive trade, vendor, lockbox and binding
+            // rules: either value asserts gameplay and none is neutral, so each is required. buy_price/sell_price are read
+            // only by vendors (none stocks these templates), buy-back and repair; 0 (no price) is their neutral default,
+            // recorded with a gap where it applies (GAP-W1-ITEM-PRICES).
+            new TableProvenance("itemtemplate",
+                keys: Cols("id"),
+                required: Cols("quality_id", "has_sellable_flag", "not_tradable_flag", "has_character_unique_flag", "has_account_unique_flag",
+                    "has_boe_flag", "bound_to_character_flag", "not_placable_in_lockbox_flag", "inventory_category"),
+                optional: Cols("buy_price", "sell_price"),
+                storage: Cols()),
+
+            // Existing world-seed table, keyed by the client item template id. A template without this row has no WeaponInfo
+            // and the tooltip and WeaponInfo packets dereference it, so every column those packets send is required.
+            // reuse_override is loaded but never sent (WeaponInfoPacket writes None): 0 = no override, optional.
+            new TableProvenance("itemtemplate_weapon",
+                keys: Cols("id"),
+                required: Cols("aim_rate", "reload_time", "alt_action_id", "alt_action_arg_id", "ae_type", "ae_radius", "recoil_amount",
+                    "cool_rate", "heat_per_shot", "tool_type", "ammo_per_shot", "windup", "recovery", "refire", "range",
+                    "alt_max_damage", "alt_damage_type", "alt_range", "alt_ae_radius", "alt_ae_type", "attack_type"),
+                optional: Cols("reuse_override"),
+                storage: Cols())
         });
     }
 }

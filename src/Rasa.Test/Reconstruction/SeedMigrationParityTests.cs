@@ -23,12 +23,17 @@ namespace Rasa.Test.Reconstruction
         [TestMethod]
         public void BootcampWorldDataMigrationsHaveProviderParity()
         {
-            var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
-                SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, SeedMigrationParity.BootcampPrefix);
-            var errors = discovery.Errors.Concat(discovery.Pairs.SelectMany(SeedMigrationParity.Compare)).ToList();
+            // Boot-camp slices and the Wilderness arrival (WildernessArrivalTrainingDay) share the frozen-rows contract.
+            foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix })
+            {
+                var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
+                    SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, prefix);
+                var errors = discovery.Errors.Concat(discovery.Pairs.SelectMany(SeedMigrationParity.Compare)).ToList();
 
-            Assert.AreEqual(0, errors.Count, string.Join("\n", errors));
-            System.Console.WriteLine($"Boot-camp data migration pairs checked: {discovery.Pairs.Count}");
+                Assert.AreEqual(0, errors.Count, string.Join("\n", errors));
+                Assert.IsTrue(discovery.Pairs.Count > 0, $"no {prefix} data migration pair was found");
+                System.Console.WriteLine($"{prefix} data migration pairs checked: {discovery.Pairs.Count}");
+            }
         }
 
         [TestMethod]

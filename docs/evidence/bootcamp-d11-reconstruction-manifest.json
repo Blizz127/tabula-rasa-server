@@ -13,7 +13,8 @@
    1992,
    1994,
    1995,
-   2005
+   2005,
+   1526
   ],
   "client_version": "1.16.5.0",
   "build_plan": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/design/bootcamp-build-plan.md",
@@ -83,7 +84,7 @@
    "kind": "measurement",
    "era": "final_live",
    "member": "docs/evidence/bootcamp-d11-positions.json",
-   "note": "Curated boot-camp positions. S1/S2: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). S4 adds enemy standing positions from the client nameplate range readout (client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(distance)) plus radar player position and heading, the client map cursor readout for indicator 437, and Y from the heightmap or the derived adv_bootcamp navmesh (bias-calibrated against six references). Each position record states its method, uncertainty and frames. S5/S6 add radar objective-indicator icons told apart from creature pips by the client radar code (client/ui/radarwindow.pyo HandleUpdateObjectiveIndicators, _GetEntityRadarType), third-person camera-ray triangulation for the bomb, the nameplate range readout for the outpost Thrax, inferred reinforcement bearings on the pad, the original damaged-pad map anchor for the exit, and the Alia Das arrival from the wilderness radar texture with Y from the derived adv_foreas_concordia_wilderness navmesh. The Rogers turn-in (GAP-ROGERS) adds his command-tent position in context 1220 from the yellow handset radar icon (template NCC with per-frame wilderness radar matching) with Y from the derived wilderness navmesh."
+   "note": "Curated boot-camp positions. S1/S2: X,Z measured from the verified footage radar, Y decoded from the adv_bootcamp map heightmap (t000007c1_terrain.glm, context 1985). S4 adds enemy standing positions from the client nameplate range readout (client/ui/overheadwindow.pyo _UpdateEntityRange shows ceil(distance)) plus radar player position and heading, the client map cursor readout for indicator 437, and Y from the heightmap or the derived adv_bootcamp navmesh (bias-calibrated against six references). Each position record states its method, uncertainty and frames. S5/S6 add radar objective-indicator icons told apart from creature pips by the client radar code (client/ui/radarwindow.pyo HandleUpdateObjectiveIndicators, _GetEntityRadarType), third-person camera-ray triangulation for the bomb, the nameplate range readout for the outpost Thrax, inferred reinforcement bearings on the pad, the original damaged-pad map anchor for the exit, and the Alia Das arrival from the wilderness radar texture with Y from the derived adv_foreas_concordia_wilderness navmesh. The Rogers turn-in (GAP-ROGERS) adds his command-tent position in context 1220 from the yellow handset radar icon (template NCC with per-frame wilderness radar matching) with Y from the derived wilderness navmesh. The Wilderness arrival (W1) adds Training Officer Kincaid in context 1220 from the yellow handset radar icon beside the barracks tent (one viewpoint, check SEG3-03), corroborated by the client map marker \"Class Trainer: Alia Das\"."
   },
   "official_notes:d13.4": {
    "kind": "official_notes",
@@ -128,7 +129,7 @@
      "max": 198599
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36)."
   },
   {
    "table": "content_area",
@@ -147,7 +148,7 @@
      "max": 198899
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36)."
   },
   {
    "table": "content_condition",
@@ -157,7 +158,7 @@
      "max": 198999
     }
    },
-   "note": "BootcampS2GearingUp seeded usable condition 198800, which lies outside this range (inside the content_placement range 198650-198899). The S2 condition has no manifest row, so the scope check does not see it; recorded 2026-09-14 for the planned ReconstructionSeedTests scope check. S4 conditions 198901-198902 are inside the range. S5 conditions 198903-198908 and S6 condition 198909 are inside the range."
+   "note": "BootcampS2GearingUp seeded usable condition 198800, which lies outside this range (inside the content_placement range 198650-198899). The S2 condition has no manifest row, so the scope check does not see it; recorded 2026-09-14 for the planned ReconstructionSeedTests scope check. S4 conditions 198901-198902 are inside the range. S5 conditions 198903-198908 and S6 condition 198909 are inside the range. W1 condition 198910 (Training Day offer) is inside the range."
   },
   {
    "table": "content_rule",
@@ -166,7 +167,8 @@
      "min": 1985000,
      "max": 1985999
     }
-   }
+   },
+   "note": "W1 rule 1985011 (WildernessArrivalTrainingDay) belongs to shared context 1220: the Training Day offer is the step that follows the boot-camp exit (OD-36)."
   },
   {
    "table": "content_rule_action",
@@ -176,7 +178,7 @@
      "max": 1985999
     }
    },
-   "note": "Not listed separately in plan section 1.3: action rows are children of the reserved content_rule ids, so they share that range."
+   "note": "Not listed separately in plan section 1.3: action rows are children of the reserved content_rule ids, so they share that range. W1 action (1985011, 0) follows its rule."
   },
   {
    "table": "content_item_set",
@@ -204,6 +206,26 @@
      "max": 1985
     }
    }
+  },
+  {
+   "table": "itemtemplate",
+   "key_ranges": {
+    "id": {
+     "min": 116929,
+     "max": 116930
+    }
+   },
+   "note": "Not a reserved range: the client item template ids of the Training Day reward pistols (OD-38), whose itemtemplate_itemclass and itemtemplate_requirement_skill rows are original world-seed rows. Checked absent from itemtemplate in the deployed rasaworld.db (read-only, 2026-09-14) before WildernessArrivalTrainingDay inserts them."
+  },
+  {
+   "table": "itemtemplate_weapon",
+   "key_ranges": {
+    "id": {
+     "min": 116929,
+     "max": 116930
+    }
+   },
+   "note": "As itemtemplate: the two reward pistol template ids, checked absent from itemtemplate_weapon in the deployed rasaworld.db (read-only, 2026-09-14)."
   }
  ],
  "rows": [
@@ -19453,6 +19475,2332 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198515
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846 NPC_Human_Swapset_Male, augmentations [1,12,52,59]"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "counterpart": "NPC_Human_Swapset_Male (3846), the class of the boot-camp officer rows and of Outpost Commander Rogers (198514) under OD-11",
+     "required_because": "Kincaid must carry the NPC augmentation for conversation 21867 and the Training Day turn-in; his class is not recorded (portrait: dark beret, dark uniform collar, B2-036)",
+     "decision": "OD-11"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "an AFS training officer at an AFS base"
+    },
+    "level": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "the target-frame level glyph is only partly legible: it reads most like 8, and 6 or 3 cannot be excluded (B2-036 corrected text \"[8?]\"; check SEG3-09, research/20260914-segment3-arrival footage-events-arrival.json this_pass_checks)"
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846 NPC_Human_Swapset_Male, augmentations [1,12,52,59]"
+      }
+     ],
+     "counterpart": "the boot-camp officer rows (1000)",
+     "required_because": "a placed creature needs health",
+     "decision": "OD-11"
+    },
+    "name_id": {
+     "value": 10604,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @35138 10604 \"Training Officer Kincaid\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "a stationary trainer \"stationed in front of the barracks tent\" (text 13608)"
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "as run_speed"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-037",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "a non-combat class trainer who opens the Tier Advancement window (B2-037); 0 (no action) is the evidenced value for non-combat NPCs (OD-23)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Training Officer Kincaid",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198685
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 198515,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "the placement instantiates the seeded Kincaid row, the 1526 receiver"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "not usable"
+    },
+    "pos_x": {
+     "value": 765.4,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     },
+     "reasoning": "check SEG3-03 (research/20260914-segment3-arrival footage-events-arrival.json this_pass_checks)"
+    },
+    "pos_y": {
+     "value": 294.12,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378] @18093: type 16, text 980 \"Class Trainer: Alia Das\" at (765.967, 294.125, 386.120); a UI label position, cited for its Y only as corroboration"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     }
+    },
+    "pos_z": {
+     "value": 386.05,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     },
+     "reasoning": "check SEG3-03 (research/20260914-segment3-arrival footage-events-arrival.json this_pass_checks)"
+    },
+    "rotation": {
+     "value": 1.5708,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341696 text 13608 (1526 OPENINGTEXT): \"You're advancing quickly, recruit! ... The trainers at Alia Das is Trainer Kincaid.  He's stationed in front of the barracks tent. Go introduce yourself.\""
+      }
+     ],
+     "reasoning": "not observed (the class window hides him); facing out of the east entrance of the barracks tent he stands in front of: 90 deg +/-45"
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341696 text 13608 (1526 OPENINGTEXT): \"You're advancing quickly, recruit! ... The trainers at Alia Das is Trainer Kincaid.  He's stationed in front of the barracks tent. Go introduce yourself.\""
+      }
+     ],
+     "reasoning": "a stationary trainer"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "health comes from the creature row"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.training_officer_kincaid"
+      }
+     ],
+     "reasoning": "no content item set"
+    },
+    "npc_package_id": {
+     "value": 2588,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @30512 (1526,1,2588,1,1) -> 21867; missiontextlanguage.pyo @574148 text 21867 \"Are you ready to choose a class, soldier?\" (the only objectiveconversation row with package 2588)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341660 text 13607 (1526 LOG): \"Introduce yourself to Trainer Kincaid near the barracks tent at Alia Das. If you haven't already trained, he can train you for the Soldier Class or Specialist Class.\""
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "package 2588 carries the only completion text of Training Day objective 1 (\"Are you ready to choose a class, soldier?\"), and the mission text sends the recruit to Trainer Kincaid; no other client row names the package; the server recognises package 2588 as the Alia Das class trainer (src/Rasa.Game/Structures/ClassAdvancement.cs, c3707cf)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1220,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Training Officer Kincaid (barracks tent)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1526
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "giver_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/conversationwindow.pyo (sha256 6e3f6ce0...c9af) HandleShowMissionAvailable: self.__bCanDecline = not bForced; Hide: if not self.__bCanDecline: self.OnAcceptMissionBtn(None, None); Show(actorId None) -> header ID_MISSION_TITLE_HEADQUARTERS_RADIO"
+      }
+     ],
+     "reasoning": "offered by \"Headquarters\" (a remote window with no NPC portrait); the client titles actor-less offers ID_MISSION_TITLE_HEADQUARTERS_RADIO; S1 precedent (1990 giver 0)"
+    },
+    "reciver_id": {
+     "value": 198515,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341660 text 13607 (1526 LOG): \"Introduce yourself to Trainer Kincaid near the barracks tent at Alia Das. If you haven't already trained, he can train you for the Soldier Class or Specialist Class.\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341732 text 13609 (1526 FINISHINGTEXT): \"Once you've trained, you'll be given additional Attribute Points and Pump Points ... Are you ready to train now? I'm here to help, whenever you're ready!\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @30512 (1526,1,2588,1,1) -> 21867; missiontextlanguage.pyo @574148 text 21867 \"Are you ready to choose a class, soldier?\" (the only objectiveconversation row with package 2588)"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-033",
+       "t": 109.8
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "the log and finishing texts are Kincaid's; Training Day is tracked at 112.000 and gone from the tracker once his Tier Advancement window is open at 112.067 (verifier-added B2 event at 112.067); the turn-in itself is inside the cut"
+    },
+    "level": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-016",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "offered to a level-4 recruit on arrival; S2/S4/S5 precedent: mission level = acceptance level"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "a per-character class-training mission; 1 matches the other seeded missions"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missioncategorylanguage.pyo @245 10000001 \"Class (Recruit)\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @68741 (1526,1) -> (13617 \"Report to a Class Trainer.\", 13618 \"Report to either the Soldier or Specialist Trainer at Alia Das.\")"
+      }
+     ],
+     "reasoning": "a Recruit class-advancement mission; the mission log category was never displayed (alternative 10000044 \"Battlefield (Wilderness)\"); chosen under OD-39"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "a per-character class-training radio mission; no Share control or client table gives the flag (OD-39)"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/missiontextlanguage.pyo @341732 text 13609 (1526 FINISHINGTEXT): \"Once you've trained, you'll be given additional Attribute Points and Pump Points ... Are you ready to train now? I'm here to help, whenever you're ready!\""
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-036",
+       "t": 112.067
+      }
+     ],
+     "reasoning": "the finishing text is spoken by the trainer in person (\"I'm here to help, whenever you're ready!\"); no Radio Complete observed"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Training Day",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1526,
+    "objective_id": 1
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @68741 (1526,1) -> (13617 \"Report to a Class Trainer.\", 13618 \"Report to either the Soldier or Specialist Trainer at Alia Das.\")"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "the only objective"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjective.pyo @68741 (1526,1) -> (13617 \"Report to a Class Trainer.\", 13618 \"Report to either the Soldier or Specialist Trainer at Alia Das.\")"
+      }
+     ],
+     "reasoning": "the mission cannot complete without it"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-033",
+       "t": 109.8
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Report to a Class Trainer.",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1526,
+    "type": 1
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "credits": {
+     "value": 120,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "the amount is small and partly legible in the offer window (B2-023 \"[credits icon] 120 (partial)\")"
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "a currency reward carries no item template"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "a currency reward carries no item quantity"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1526,
+    "type": 5,
+    "item_template_id": 116929
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "item_template_id": {
+     "value": 116929,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo @592697 itemTemplateItemClass 116929 -> 27121; @857075 itemTemplateSkillRequirement 116929 (1,1); entityclass.pyo @420506 27121; physicalentityclassnamelanguage @111089 27121 \"Pistol\""
+      }
+     ],
+     "reasoning": "the Training Day reward tooltip at 102.000 reads \"Vextronics Pistol / Primary / 91 Physical Damage / Optimal Range: 20m / Standard Grade Cartridges / Firearms 1: Novice / Min Level: 5\"; the only final-client weapon class with 91 physical damage, cartridges (3147), clip 20 and level 5 is 27121 Weapon_Avatar_Pistol_Physical_UNC_05_to_09 (weaponclass.pyo @95963 (..., 3147, 20, 91, 91, 1, ...); itemTemplateRequirement level 5; itemTemplateSkillRequirement Firearms 1). Its templates are 17130, 97289, 116929 and 121053 (itemclass.pyo itemTemplateItemClass); 116929 is chosen because it and the Pulse Pistol template 116930 are adjacent (@592697/@592706), a matched pair; the module \"Vextronics\" and the [2] Reduce Resist line are server item data that no client table maps to a template, so the template id is not proven; chosen under OD-38; the post-launch template 121053 is the recorded alternative (update 1.4 replaced the rewards of 855 missions), research/20260914-trainingday-items/template-identification.json"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "the choice shows one weapon with no stack count"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1526,
+    "type": 5,
+    "item_template_id": 116930
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "item_template_id": {
+     "value": 116930,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo @592706 itemTemplateItemClass 116930 -> 27100; @857090 itemTemplateSkillRequirement 116930 (1,1); entityclass.pyo @419687 27100; physicalentityclassnamelanguage @110900 27100 \"Pulse Pistol\""
+      }
+     ],
+     "reasoning": "the tooltip at 103.200 reads \"Vextronics Pulse Pistol / 106 EMP Damage / Standard Grade Power Cells / Firearms 1 / Min Level: 5\"; the only class with 106 EMP damage, power cells (3807), level 5 is 27100 Weapon_Avatar_Pistol_EMP_UNC_05_to_09 (weaponclass.pyo @94136); templates 14556, 17019, 17020, 116930, 121086; 116930 pairs with 116929 (see the Pistol row); chosen under OD-38; the post-launch template 121086 is the recorded alternative (update 1.4 replaced the rewards of 855 missions), research/20260914-trainingday-items/template-identification.json"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "the choice shows one weapon with no stack count"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198910,
+    "or_group": 0,
+    "term_index": 0
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "the recruit arrives with 1995 \"(complete)\" (objective 4 done, not turned in) and the offer is already open"
+    },
+    "mission_id": {
+     "value": 1995,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "the recruit arrives with 1995 \"(complete)\" (objective 4 done, not turned in) and the offer is already open"
+    },
+    "objective_id": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "the recruit arrives with 1995 \"(complete)\" (objective 4 done, not turned in) and the offer is already open"
+    },
+    "state": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjectivestate.pyo COMPLETED = 2 (store offset 15)"
+      }
+     ]
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @41825 (1995,4,2564,1,1) -> 21864 \"...Go stand on the dropship pad to transport out to Alia Das. Report in to Commander Rogers when you get there...\""
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198910,
+    "or_group": 0,
+    "term_index": 1
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "kind": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "offer only to a character that has never had Training Day, so later map entries do not repeat it (characters who skipped the boot camp have neither objective 4 and are not offered it, OD-40)"
+    },
+    "mission_id": {
+     "value": 1526,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "offer only to a character that has never had Training Day, so later map entries do not repeat it (characters who skipped the boot camp have neither objective 4 and are not offered it, OD-40)"
+    },
+    "objective_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198910,
+    "or_group": 1,
+    "term_index": 0
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "the 2005 retry reaches Alia Das through the same Van Valkenberg check-in (OD-32 exit condition)"
+    },
+    "mission_id": {
+     "value": 2005,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "the 2005 retry reaches Alia Das through the same Van Valkenberg check-in (OD-32 exit condition)"
+    },
+    "objective_id": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "the 2005 retry reaches Alia Das through the same Van Valkenberg check-in (OD-32 exit condition)"
+    },
+    "state": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/missionobjectivestate.pyo COMPLETED = 2 (store offset 15)"
+      }
+     ]
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo @43391 (2005,4,2564,1,1) -> 21861 (same text)"
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_condition",
+   "key": {
+    "condition_id": 198910,
+    "or_group": 1,
+    "term_index": 1
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "kind": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "as group 0"
+    },
+    "mission_id": {
+     "value": 1526,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "as group 0"
+    },
+    "objective_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused"
+    },
+    "negate": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "not negated"
+    }
+   }
+  },
+  {
+   "table": "content_rule",
+   "key": {
+    "id": 1985011
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "event": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-015",
+       "t": 98.4
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-013",
+       "t": 225.533
+      }
+     ],
+     "reasoning": "the Headquarters window is already open in the first Wilderness frame after the transfer, with the arrival chat lines (B2-017..B2-020); S1 raises the 1990 radio offer on entered_map the same way (A2-013, 0.73 s after world entry). The exact delay is inside the cut; the condition is evaluated per entering character in the shared context"
+    },
+    "condition_id": {
+     "value": 198910,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-022",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "the rule's only condition (198910)"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1220,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Training Day radio offer on arrival",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_rule_action",
+   "key": {
+    "rule_id": 1985011,
+    "sequence": 0
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "action": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/conversationwindow.pyo (sha256 6e3f6ce0...c9af) HandleShowMissionAvailable: self.__bCanDecline = not bForced; Hide: if not self.__bCanDecline: self.OnAcceptMissionBtn(None, None); Show(actorId None) -> header ID_MISSION_TITLE_HEADQUARTERS_RADIO"
+      }
+     ],
+     "reasoning": "the offer arrives without an NPC (\"Headquarters\") and opens by itself: DispenseRadioMission"
+    },
+    "mission_id": {
+     "value": 1526,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ]
+    },
+    "forced": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/conversationwindow.pyo (sha256 6e3f6ce0...c9af) HandleShowMissionAvailable: self.__bCanDecline = not bForced; Hide: if not self.__bCanDecline: self.OnAcceptMissionBtn(None, None); Show(actorId None) -> header ID_MISSION_TITLE_HEADQUARTERS_RADIO"
+      }
+     ],
+     "reasoning": "Decline is greyed in the offer (B2-023, check SEG3-06) and the client greys Decline exactly when bForced is set (conversationwindow.HandleShowMissionAvailable: __bCanDecline = not bForced)"
+    },
+    "greeting_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "npc_name_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "tutorial_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "logos_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "logos_protocol": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "experience": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "state_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "fact_value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "location_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "audio_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-023",
+       "t": 98.4
+      }
+     ],
+     "reasoning": "unused by this action"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "dispense 1526 forced",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "itemtemplate",
+   "key": {
+    "id": 116929
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "id": {
+     "value": 116929,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 116929 -> 27121"
+      }
+     ],
+     "reasoning": "choice among 27121 templates {17130, 97289, 116929, 121053}: the consecutive physical/EMP pair with 116930, launch-era id alongside other early Wilderness reward items, mission 1526 present since launch with the same reward names; not proven (update 1.4 replaced 855 missions' rewards; 121053 is the post-launch alternative); chosen under OD-38"
+    },
+    "quality_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/quality.pyo UNCOMMON=3 @15, colordict 3 ItemQuality_Uncommon @209; entityclass.pyo 27121 name token UNC"
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/tooltipwindow.pyo _FormatIndividualItemTooltip: ColorBar.SetColorByID(GetItemLabelColorDef(None, qualityId, moduleIds)); qualityId == MISSION adds 'Mission Item'"
+      }
+     ],
+     "reasoning": "green title bar observed and no 'Mission Item' line (so not quality 1); Training Day is a shared Wilderness mission and official 1.4 notes restrict shared-mission rewards to green items; class token UNC. The colour value behind ItemQuality_Uncommon was not recovered, so green=3 is an inference"
+    },
+    "has_sellable_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> Not Sellable",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "not_tradable_flag": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> Not Tradeable",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_character_unique_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no unique text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_account_unique_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no unique text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_boe_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no Bind On Equip line",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "bound_to_character_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no Bound text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "not_placable_in_lockbox_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/augmentations/item.pyo Item.__init__ line 73 offset 184: __isPlaceableInLockbox = True (client default before server ItemInfo)"
+      }
+     ],
+     "counterpart": "the original client's own default for an item before the server's ItemInfo arrives (placeable); no final-live observation renders this flag",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "inventory_category": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/inventorydata.pyo EQUIPMENT=1 @375; equipmentdata/equipableclass 27121 slot 13"
+      }
+     ],
+     "reasoning": "a slot-13 weapon belongs to the Equipment category; BuildRewardInfo withholds any reward outside 1..5"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Vextronics Pistol (reward of mission 1526)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "itemtemplate",
+   "key": {
+    "id": 116930
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "id": {
+     "value": 116930,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 116930 -> 27100"
+      }
+     ],
+     "reasoning": "choice among 27100 templates {14556, 17019, 17020, 116930, 121086}: pairs with 116929 (see the Pistol row); 121086 is the post-launch alternative; chosen under OD-38"
+    },
+    "quality_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/quality.pyo UNCOMMON=3 @15, colordict 3 ItemQuality_Uncommon @209; entityclass.pyo 27100 name token UNC"
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/tooltipwindow.pyo _FormatIndividualItemTooltip: ColorBar.SetColorByID(GetItemLabelColorDef(None, qualityId, moduleIds)); qualityId == MISSION adds 'Mission Item'"
+      }
+     ],
+     "reasoning": "green title bar observed and no 'Mission Item' line (so not quality 1); Training Day is a shared Wilderness mission and official 1.4 notes restrict shared-mission rewards to green items; class token UNC. The colour value behind ItemQuality_Uncommon was not recovered, so green=3 is an inference"
+    },
+    "has_sellable_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> Not Sellable",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "not_tradable_flag": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> Not Tradeable",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_character_unique_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no unique text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_account_unique_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no unique text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "has_boe_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no Bind On Equip line",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "bound_to_character_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "the equipped AccuMax Shotgun compare tooltip at B2-027: the only final-live item tooltip in this footage that renders flags (Not Tradeable, Not Sellable, no Bound/BoE/Unique line); it is a UNC weapon a new character received during the rebuilt boot camp, probably the mission 1994 reward (research/20260914-bootcamp-s4, hint only) -> no Bound text",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "not_placable_in_lockbox_flag": {
+     "value": 0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/augmentations/item.pyo Item.__init__ line 73 offset 184: __isPlaceableInLockbox = True (client default before server ItemInfo)"
+      }
+     ],
+     "counterpart": "the original client's own default for an item before the server's ItemInfo arrives (placeable); no final-live observation renders this flag",
+     "required_because": "ItemInfo sends every flag and the trade, vendor, lockbox and binding rules read it; either value asserts gameplay (ProvenanceRegistry: required). The reward tooltip cannot show flags (tooltipwindow._ShowItemFlags returns for template-only tooltips) and no capture of the owned item exists",
+     "decision": "OD-38"
+    },
+    "inventory_category": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/inventorydata.pyo EQUIPMENT=1 @375; equipmentdata/equipableclass 27100 slot 13"
+      }
+     ],
+     "reasoning": "a slot-13 weapon belongs to the Equipment category; BuildRewardInfo withholds any reward outside 1..5"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Vextronics Pulse Pistol (reward of mission 1526)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "itemtemplate_weapon",
+   "key": {
+    "id": 116929
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "aim_rate": {
+     "value": 1.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "reload_time": {
+     "value": 1500,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "weaponclass.pyo 27121 reload arg 1 is an action variant, not a duration"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo; WeaponActionManager uses it for reload timing",
+     "decision": "OD-38"
+    },
+    "alt_action_id": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo; the footage shows an alt fire exists, and a 0 id drops the alt tuple and the Alt Fire lines",
+     "decision": "OD-38"
+    },
+    "alt_action_arg_id": {
+     "value": 133,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance'); note 1/133 is 27121's primary attack pair",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "ae_type": {
+     "value": 0,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/tooltipwindow.pyo _AddWeaponRange: 'Optimal Range' only when aeType is None (ItemTemplateTooltipInfoPacket writes None for 0)"
+      }
+     ]
+    },
+    "ae_radius": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance') (not rendered when aeType is None)",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "recoil_amount": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "cool_rate": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "heat_per_shot": {
+     "value": 2.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "tool_type": {
+     "value": 15,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/constant/tooltype.pyo PISTOL=8; tools are 1-6 (gameuiutil.IsTool)"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance'); the client enum names PISTOL=8, which is the alternative value",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "ammo_per_shot": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "tooltipwindow._FormatIndividualItemTooltip: _AddWeaponAmmoPerShot only when ammoPerShot > 1"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "reasoning": "no 'Ammo Per Shot' line on the reward tooltips while the equipped shotgun shows '3 Ammo Per Shot', so the value is at most 1; 0 would mean a firearm that consumes no ammunition"
+    },
+    "windup": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,133): windup 0, recovery 250, max range 20, reuse 150 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "reasoning": "the tooltip windupTime slot only distinguishes autofire (-1), and no Auto Fire line is shown; the original primary action row gives windup 0"
+    },
+    "recovery": {
+     "value": 250,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,133): windup 0, recovery 250, max range 20, reuse 150 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ],
+     "reasoning": "tooltip recoveryTime slot filled from the original primary action row; not displayed, so unconfirmed"
+    },
+    "refire": {
+     "value": 150,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,133): windup 0, recovery 250, max range 20, reuse 150 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ],
+     "reasoning": "refireTime taken as the primary action's reuse delay; the slot is not displayed and the naming correspondence is an inference"
+    },
+    "range": {
+     "value": 20,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,133): windup 0, recovery 250, max range 20, reuse 150 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ]
+    },
+    "alt_max_damage": {
+     "value": 115,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ]
+    },
+    "alt_damage_type": {
+     "value": 1,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/damagetypelanguage.pyo 1='Physical'"
+      }
+     ]
+    },
+    "alt_range": {
+     "value": 80,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance') (alt range is only rendered for tools)",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "alt_ae_radius": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "alt_ae_type": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-026",
+       "t": 102.267
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "attack_type": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/constant/attacktype.pyo ATTACK_RANGED=2; weaponclass.pyo 27121 attack action 1 (ranged weapon attack)"
+      }
+     ],
+     "reasoning": "the primary attack is the ranged action 1"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Vextronics Pistol (reward of mission 1526)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "itemtemplate_weapon",
+   "key": {
+    "id": 116930
+   },
+   "slice": "W1",
+   "migration": "WildernessArrivalTrainingDay",
+   "fields": {
+    "aim_rate": {
+     "value": 1.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "reload_time": {
+     "value": 1500,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "weaponclass.pyo 27100 reload arg 49 is an action variant, not a duration"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo; WeaponActionManager uses it for reload timing",
+     "decision": "OD-38"
+    },
+    "alt_action_id": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo; the footage shows an alt fire exists, and a 0 id drops the alt tuple and the Alt Fire lines",
+     "decision": "OD-38"
+    },
+    "alt_action_arg_id": {
+     "value": 133,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance'); note 1/133 is 27121's primary attack pair",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "ae_type": {
+     "value": 0,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "client/ui/tooltipwindow.pyo _AddWeaponRange: 'Optimal Range' only when aeType is None (ItemTemplateTooltipInfoPacket writes None for 0)"
+      }
+     ]
+    },
+    "ae_radius": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance') (not rendered when aeType is None)",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "recoil_amount": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "cool_rate": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "heat_per_shot": {
+     "value": 2.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client field"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "tool_type": {
+     "value": 15,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/constant/tooltype.pyo PISTOL=8; tools are 1-6 (gameuiutil.IsTool)"
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance'); the client enum names PISTOL=8, which is the alternative value",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "ammo_per_shot": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_code:trpython.zip",
+       "locator": "tooltipwindow._FormatIndividualItemTooltip: _AddWeaponAmmoPerShot only when ammoPerShot > 1"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-027",
+       "t": 102.267
+      }
+     ],
+     "reasoning": "no 'Ammo Per Shot' line on the reward tooltips while the equipped shotgun shows '3 Ammo Per Shot', so the value is at most 1; 0 would mean a firearm that consumes no ammunition"
+    },
+    "windup": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,135): windup 0, recovery 250, max range 20, reuse 100 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      },
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "reasoning": "the tooltip windupTime slot only distinguishes autofire (-1), and no Auto Fire line is shown; the original primary action row gives windup 0"
+    },
+    "recovery": {
+     "value": 250,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,135): windup 0, recovery 250, max range 20, reuse 100 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ],
+     "reasoning": "tooltip recoveryTime slot filled from the original primary action row; not displayed, so unconfirmed"
+    },
+    "refire": {
+     "value": 100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,135): windup 0, recovery 250, max range 20, reuse 100 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ],
+     "reasoning": "refireTime taken as the primary action's reuse delay; the slot is not displayed and the naming correspondence is an inference"
+    },
+    "range": {
+     "value": 20,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (1,135): windup 0, recovery 250, max range 20, reuse 100 (src/Rasa.Game/Data/WeaponAttackData.cs)"
+      }
+     ]
+    },
+    "alt_max_damage": {
+     "value": 122,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ]
+    },
+    "alt_damage_type": {
+     "value": 1,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/damagetypelanguage.pyo 1='Physical'"
+      }
+     ]
+    },
+    "alt_range": {
+     "value": 80,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance') (alt range is only rendered for tools)",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "alt_ae_radius": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "alt_ae_type": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:8VXeKzGUv0c",
+       "event": "B2-029",
+       "t": 103.2
+      }
+     ],
+     "counterpart": "no original counterpart was recovered; the value is the uniform emulator placeholder shared by all 2,440 itemtemplate_weapon rows, including the same-class rows 17130/14556 (ItemTemplateWeaponPreloader.cs; docs/world-equipment-client-audit.md 'No original provenance')",
+     "required_because": "itemtemplate_weapon columns are NOT NULL and WeaponInfoPacket/ItemTemplateTooltipInfoPacket dereference the row; without it the template has no WeaponInfo",
+     "decision": "OD-38"
+    },
+    "attack_type": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/constant/attacktype.pyo ATTACK_RANGED=2; weaponclass.pyo 27100 attack action 1 (ranged weapon attack)"
+      }
+     ],
+     "reasoning": "the primary attack is the ranged action 1"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Vextronics Pulse Pistol (reward of mission 1526)",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -19630,6 +21978,69 @@
    "reason": "no appearance source is identified; the officer set of emulator creature 100 is emulator-authored and not matched to his tan/khaki uniform (B3-020)",
    "gap": "GAP-NPC-BODY",
    "slice": "S6"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "1526 experience reward",
+   "reason": "experience is not part of the client rewardInfo shown in the offer window (B2-023) and the turn-in is inside the 112.000/112.067 cut",
+   "gap": "GAP-W1-1526-XP",
+   "slice": "W1"
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "what": "1526 prerequisites",
+   "reason": "the offer is gated by rule 1985011's condition 198910 ((1995,4) or (2005,4) Completed, no 1526 row); a radio dispense does not read prerequisites, a mission-state prerequisite cannot express objective 4, and \"1995 Completed\" would block the observed offer, which arrives before the 1995 turn-in (B2-022)",
+   "gap": "GAP-W1-OFFER-RULE",
+   "slice": "W1"
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "what": "(1526,1) indicator",
+   "reason": "the yellow radar icon at the barracks is the NPC's own mission marker, not a separately evidenced objective indicator",
+   "gap": "GAP-W1-KINCAID-PRESENTATION",
+   "slice": "W1"
+  },
+  {
+   "table": "creature_appearance",
+   "what": "appearance rows for Training Officer Kincaid (198515)",
+   "reason": "no appearance source is identified (portrait: dark beret, dark uniform collar, B2-036)",
+   "gap": "GAP-NPC-BODY",
+   "slice": "W1"
+  },
+  {
+   "table": "itemtemplate",
+   "what": "buy_price and sell_price of 116929/116930 (stored as 0, the optional default)",
+   "reason": "no final-live price for these or any comparable item was recovered; no vendor stocks the templates",
+   "gap": "GAP-W1-ITEM-PRICES",
+   "slice": "W1"
+  },
+  {
+   "table": "itemtemplate_weapon",
+   "what": "reuse_override of 116929/116930 (stored as 0, no override)",
+   "reason": "loaded but never sent (WeaponInfoPacket writes None); weaponclass 27121/27100 carry reuseOverride 0",
+   "gap": "GAP-W1-WEAPON-PLACEHOLDERS",
+   "slice": "W1"
+  },
+  {
+   "table": "itemtemplate",
+   "what": "reward and item module ids 900221 (Vextronics Pistol) and 900256 (Vextronics Pulse Pistol)",
+   "reason": "no world table stores per-template or per-reward modules, so the \"Vextronics\" name and the [2] Reduce Resist line cannot be sent",
+   "gap": "GAP-W1-REWARD-MODULES",
+   "slice": "W1"
+  },
+  {
+   "table": "npc_mission",
+   "what": "missions 2010/2011 Getting It In Gear (Soldier/Specialist) and their objectives",
+   "reason": "held: no class-chosen trigger, Quartermaster Caufield has no measured final position, and the gear rewards are unobserved (OD-42)",
+   "gap": "GAP-W1-GEAR-MISSIONS",
+   "slice": "W1"
+  },
+  {
+   "table": "content_placement",
+   "what": "Receptive Liaison Langerman (measured, recorded for a later slice), Quartermaster Caufield, Lt. Col. Cimoch, the barracks barrels and the \"crates with free stuff\" of the 2009-01-06 legend",
+   "reason": "later missions or unmeasured; not needed for Training Day",
+   "gap": "GAP-NEXT-SEGMENT",
+   "slice": "W1"
   }
  ],
  "accepted_definition_gaps": [],
@@ -19775,7 +22186,7 @@
   },
   {
    "id": "GAP-ITEM-REWARDS",
-   "summary": "Mission item rewards are not delivered, including the hinted 1994 AccuMax Shotgun. The 1994 item reward is not seeded (the source of the AccuMax Shotgun is not shown).",
+   "summary": "Mission item rewards are delivered at turn-in since commit 1a07134 (Training Day uses them), but the hinted 1994 AccuMax Shotgun reward is not seeded: its source is not shown in the footage.",
    "evidence": [
     "src/Rasa.Game/Managers/MissionManager.cs:196-203 (\"item reward delivery is not implemented\")",
     "footage B1-010 (AccuMax Shotgun hint)"
@@ -19821,7 +22232,7 @@
   },
   {
    "id": "GAP-ROGERS",
-   "summary": "Closed by BootcampFixRogersTurnIn (2026-09-14): the reserved creature 198514 (Outpost Commander Rogers, level 20 observed in B3-020; class 3846 and 1000 hp analogues under OD-11) is placed at his measured command-tent position in context 1220 (placement 198684, +/-1.5 m; rotation inferred, 250 deg +/-30; package 116 original) and is the 1995/2005 receiver (changed from emulator creature 100, see changes; OD-35). Emulator creature 100 and spawnpool 100 (counts 0/0) are unchanged and unused by the boot camp. Open: his appearance (GAP-NPC-BODY), the turn-in rewards (GAP-S5-MISSION-REWARDS), and the Wilderness arrival slice, whose draft names creature 100 and placement 122150.",
+   "summary": "Closed by BootcampFixRogersTurnIn (2026-09-14): the reserved creature 198514 (Outpost Commander Rogers, level 20 observed in B3-020; class 3846 and 1000 hp analogues under OD-11) is placed at his measured command-tent position in context 1220 (placement 198684, +/-1.5 m; rotation inferred, 250 deg +/-30; package 116 original) and is the 1995/2005 receiver (changed from emulator creature 100, see changes; OD-35). Emulator creature 100 and spawnpool 100 (counts 0/0) are unchanged and unused by the boot camp. Open: his appearance (GAP-NPC-BODY), the turn-in rewards (GAP-S5-MISSION-REWARDS), and his later Wilderness missions. The Wilderness arrival slice (WildernessArrivalTrainingDay) was rebased on 198514/198684 and does not seed him again.",
    "evidence": [
     "spawnpool 100 has counts 0/0 (read-only rasaworld.db)",
     "footage B3-020 (Rogers level 20)",
@@ -19839,16 +22250,18 @@
   },
   {
    "id": "GAP-NEXT-SEGMENT",
-   "summary": "The Training Day forced radio offer on arrival in Alia Das and missions 2010/2011 are not provided. The Headquarters \"Training Day\" offer window is already open at the first Alia Das frame (B2-023).",
+   "summary": "Partly closed by WildernessArrivalTrainingDay (2026-09-14): the Training Day forced radio offer on arrival (B2-023), Kincaid and the 1526 turn-in are seeded. Open: missions 2010/2011 (GAP-W1-GEAR-MISSIONS) and the rest of the Alia Das content (Langerman, Caufield, Cimoch, the legend's crates and the later Wilderness missions).",
    "evidence": [
-    "footage B2-023 (Training Day forced offer on arrival)"
+    "footage B2-023 (Training Day forced offer on arrival)",
+    "docs/evidence/bootcamp-d11-reconstruction-manifest.json rows with migration WildernessArrivalTrainingDay"
    ],
-   "closes_with": "segment 3",
+   "closes_with": "segment 3 (remaining Wilderness slices)",
    "surfaced_by": [
     "manifest"
    ],
    "slices": [
-    "S6"
+    "S6",
+    "W1"
    ]
   },
   {
@@ -19867,7 +22280,7 @@
   },
   {
    "id": "GAP-NPC-BODY",
-   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows. S6: Outpost Commander Rogers (198514, tan/khaki uniform in B3-020) has no creature_appearance rows; the officer set of emulator creature 100 is emulator-authored and unmatched to the footage, so none is seeded.",
+   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows. S6: Outpost Commander Rogers (198514, tan/khaki uniform in B3-020) has no creature_appearance rows; the officer set of emulator creature 100 is emulator-authored and unmatched to the footage, so none is seeded. W1: Training Officer Kincaid (198515, dark beret and uniform collar in B2-036) has no creature_appearance rows.",
    "evidence": [
     "src/Rasa.Game/Managers/CreatureManager.cs:259-261 (random hues)",
     "footage A2-040, A3-028, A5-33, B2-012 (NPC appearance)"
@@ -19882,7 +22295,8 @@
     "S4",
     "S5",
     "S6",
-    "S8"
+    "S8",
+    "W1"
    ]
   },
   {
@@ -20303,6 +22717,159 @@
    "slices": [
     "S6"
    ]
+  },
+  {
+   "id": "GAP-W1-1526-XP",
+   "summary": "Training Day pays no experience: the amount is not part of the offer window and the turn-in is inside the 112.000/112.067 cut.",
+   "evidence": [
+    "footage B2-023",
+    "footage B2-036"
+   ],
+   "closes_with": "footage of the 1526 turn-in",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-OFFER-RULE",
+   "summary": "The offer trigger is inferred: entered_map in context 1220 while (1995,4) or (2005,4) is Completed and the character has no 1526 row, dispensed by force. The delay between world entry and the offer is inside the 98.333/98.400 cut (see GAP-RADIO-TIMING), and no prerequisite row is seeded because the rule condition is the only offer path.",
+   "evidence": [
+    "footage B2-015",
+    "footage B2-022",
+    "footage B2-023"
+   ],
+   "closes_with": "footage of the arrival or an in-client check",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-SKIP-TRAINING-DAY",
+   "summary": "Characters who skip the boot camp (S7) never complete objective 4 of 1995/2005 and are not offered Training Day (OD-40). No evidence shows how a skipping character received it.",
+   "evidence": [
+    "no final-live evidence of the skip path (build plan S7)",
+    "condition 198910"
+   ],
+   "closes_with": "evidence of the skip path",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "W1",
+    "S7"
+   ]
+  },
+  {
+   "id": "GAP-W1-KINCAID-PRESENTATION",
+   "summary": "Kincaid's facing is unobserved (inferred 90 deg +/-45, out of the barracks tent), his position comes from one radar viewpoint (+/-2 m), and his level glyph is only partly legible (8; 6 or 3 not excluded). No (1526,1) objective indicator is seeded.",
+   "evidence": [
+    "footage B2-033",
+    "footage B2-036",
+    "position npc.training_officer_kincaid"
+   ],
+   "closes_with": "footage of Kincaid",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-REWARD-TEMPLATE-ID",
+   "summary": "The reward templates 116929/116930 are inferred (the adjacent launch-era pair of classes 27121/27100); the post-launch templates 121053/121086 are the recorded alternative. No client table or capture maps the reward to a template (OD-38).",
+   "evidence": [
+    "research/20260914-trainingday-items/template-identification.json"
+   ],
+   "closes_with": "a capture or screenshot of the offer or the owned item with its template id",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-REWARD-MODULES",
+   "summary": "The reward and item module ids 900221/900256 cannot be stored or sent, so the offer and tooltips read \"Pistol\"/\"Pulse Pistol\" without the \"Vextronics\" name and the [2] Reduce Resist line (observed -15 for 15 sec).",
+   "evidence": [
+    "footage B2-026",
+    "footage B2-029",
+    "research/20260914-trainingday-items/field-matrix.json not_expressible_in_current_tables"
+   ],
+   "closes_with": "a template or reward module column plus ModuleTooltipInfo",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-WEAPON-PLACEHOLDERS",
+   "summary": "Twelve sent itemtemplate_weapon values of 116929/116930 (aim rate, reload time, alt action pair, AE radius, recoil, cool rate, heat per shot, tool type 15 (the client enum names PISTOL 8), alt range, alt AE radius and type) have no evidence and carry the emulator placeholder shared by all 2,440 weapon rows as labelled analogues; reuse_override is stored as 0. The melee alt-fire damage 115/122 is tooltip-only.",
+   "evidence": [
+    "research/20260914-trainingday-items/field-matrix.json",
+    "docs/world-equipment-client-audit.md"
+   ],
+   "closes_with": "a final-era WeaponInfo or ItemTemplateTooltipInfo capture",
+   "surfaced_by": [
+    "manifest analogue fields"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-ITEM-PRICES",
+   "summary": "buy_price and sell_price of 116929/116930 are stored as 0 (no price): no vendor stocks them, they sell for nothing and their repair is free. The item flags (Not Tradeable, Not Sellable) are analogues from the equipped AccuMax Shotgun (B2-027); the server does not refuse a vendor sale of a not-sellable item.",
+   "evidence": [
+    "footage B2-027",
+    "src/Rasa.Game/Managers/NpcManager.cs (sell price, repair cost)"
+   ],
+   "closes_with": "final-era price or repair evidence",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-GEAR-MISSIONS",
+   "summary": "Missions 2010/2011 (Getting It In Gear, Soldier/Specialist) are held: they need a class-chosen trigger at SelectNewCharacterClass, Quartermaster Caufield's package 133 and final position, and the unobserved gear rewards (OD-42).",
+   "evidence": [
+    "client texts 21618-21633",
+    "research/20260914-class-trainer/open-questions.json OQ10"
+   ],
+   "closes_with": "footage of the tier choice and the gear missions",
+   "surfaced_by": [
+    "manifest omitted"
+   ],
+   "slices": [
+    "W1"
+   ]
+  },
+  {
+   "id": "GAP-W1-BONHAM",
+   "summary": "The emulator spawn of Major Bonham (spawnpool 200, creature 122) 1.2 m from the Alia Das arrival is kept untouched (OD-41). He ended the pre-D11 boot camp and is absent from the arrival footage (no nameplate or radar icon in 98.4-109.733), but the dated 2009-01-06 player map of Alia Das (TaRapedia File:Alia Das.jpg rev 35878) still lists \"23 - Major Bonham\"; his final presence and position are unmeasured.",
+   "evidence": [
+    "footage B2-015",
+    "research/20260913-bootcamp/wiki/verify/rerun/bootcamp-wiki-priority-diffs.json (File:Alia Das.jpg rev 35878)"
+   ],
+   "closes_with": "final-era footage of the arrival area or the command post",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "W1"
+   ]
   }
  ],
  "non_content_settings": [
@@ -20704,6 +23271,76 @@
    "choice": "A reserved boot-camp creature 198514 (level 20 observed; class 3846 and 1000 hp analogues under OD-11) placed at the measured command-tent position in context 1220 (placement 198684, stationary, package 116, always present), recorded in the boot-camp manifest as the closing step of GAP-ROGERS; BootcampFixRogersTurnIn inserts both and changes the 1995/2005 receiver from 100 to 198514. Creature 100 is outside the reserved keys and is left untouched; no appearance rows are seeded.",
    "approved_on": "2026-09-14",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Rogers turn-in, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-36",
+   "decision": "Where the Wilderness arrival (Training Day) slice is recorded",
+   "default": "A new Wilderness manifest with its own key ranges (122000-range draft)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Record it in the boot-camp manifest as slice W1, as Rogers was (OD-35), continuing the reserved keys: creature 198515, placement 198685, condition 198910, rule 1985011; the item template ids 116929/116930 get explicit non-reserved scope entries. The validator does not force a separate manifest.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-37",
+   "decision": "Training Officer Kincaid class and health",
+   "default": "Labelled analogues under OD-11",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Class 3846 (NPC_Human_Swapset_Male) and 1000 hp as OD-11 analogues like the boot-camp officers and Rogers; name original, level 8 inferred from a partly legible glyph, position measured, rotation inferred, stationary, package 2588.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-38",
+   "decision": "Training Day reward templates and item data",
+   "default": "Templates 116929/116930 with labelled analogue item fields",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Templates 116929 (Vextronics Pistol, class 27121) and 116930 (Vextronics Pulse Pistol, class 27100), inferred; 121053/121086 recorded as the alternative. Item rows: observed range 20, alt damage 115/122 physical, AE type 0; inferred quality 3, inventory category 1, ammo per shot 1, windup/recovery/refire 0/250/150 and 0/250/100, attack type 2; analogue flags Not Tradeable/Not Sellable and no Bound/BoE/Unique from the equipped AccuMax Shotgun tooltip (B2-027), lockbox placeable from the client default; the remaining sent weapon fields keep the emulator placeholder as labelled analogues; prices 0 with GAP-W1-ITEM-PRICES; module ids 900221/900256 cannot be stored (GAP-W1-REWARD-MODULES).",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-39",
+   "decision": "Training Day shareable flag and category",
+   "default": "shareable false, category 10000001 \"Class (Recruit)\"",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "shareable false and category 10000001 \"Class (Recruit)\", both inferred (alternative category 10000044 \"Battlefield (Wilderness)\").",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-40",
+   "decision": "Training Day for characters who skip the boot camp",
+   "default": "Not offered (draft condition)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The offer condition requires (1995,4) or (2005,4) Completed, so skipping characters are not offered Training Day (GAP-W1-SKIP-TRAINING-DAY).",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-41",
+   "decision": "Major Bonham at Alia Das",
+   "default": "Keep the emulator spawn untouched",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Emulator spawnpool 200 (Major Bonham beside the arrival point) is left unchanged; the 2009-01-06 player map listing him is recorded in GAP-W1-BONHAM.",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
+  },
+  {
+   "id": "OD-42",
+   "decision": "Missions 2010/2011 Getting It In Gear",
+   "default": "Hold",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Not seeded until a class-chosen trigger, Caufield's placement and the gear rewards are evidenced (GAP-W1-GEAR-MISSIONS).",
+   "approved_on": "2026-09-14",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
   }
  ]
 }

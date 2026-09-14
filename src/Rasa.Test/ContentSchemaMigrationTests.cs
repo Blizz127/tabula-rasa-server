@@ -35,6 +35,7 @@ namespace Rasa.Test
         private const string BootcampS5Migration = "20260914150000_BootcampS5Reinforcements";
         private const string BootcampS6Migration = "20260914160000_BootcampS6ExitToAliaDas";
         private const string BootcampFixRogersTurnInMigration = "20260914170000_BootcampFixRogersTurnIn";
+        private const string WildernessArrivalTrainingDayMigration = "20260914180000_WildernessArrivalTrainingDay";
 
         public static readonly string[] WorldTables =
         {
@@ -97,7 +98,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -120,7 +121,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -199,6 +200,31 @@ namespace Rasa.Test
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198684 AND map_context_id = 1220 AND creature_id = 198514 AND npc_package_id = 116 AND present_condition_id = 0"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (1995, 2005) AND reciver_id = 198514"));
 
+            // WildernessArrivalTrainingDay places Kincaid in Alia Das and seeds Training Day, its forced offer and the two reward pistols.
+            Assert.AreEqual(8L, Scalar(connection, "SELECT level FROM creature WHERE id = 198515 AND name_id = 10604 AND class_id = 3846"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198685 AND map_context_id = 1220 AND creature_id = 198515 AND npc_package_id = 2588 AND present_condition_id = 0"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1526 AND giver_id = 0 AND reciver_id = 198515 AND shareable = 0 AND category_id = 10000001"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1526 AND ordinal = 1 AND is_required = 1 AND revealed_on_accept = 1"));
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1526"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198910"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985011 AND action = 1 AND mission_id = 1526 AND forced = 1"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id IN (116929, 116930) AND quality_id = 3 AND inventory_category = 1"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id IN (116929, 116930) AND range = 20"));
+
+            // Rolling it back removes every W1 row and restores the NULL-flag (1526,1) skeleton row it replaced.
+            context.GetService<IMigrator>().Migrate(BootcampFixRogersTurnInMigration);
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1526 AND objective_id = 1 AND ordinal IS NULL AND is_required IS NULL AND revealed_on_accept IS NULL"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1526"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1526"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198515"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198685"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198910"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985011"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985011"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id IN (116929, 116930)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id IN (116929, 116930)"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198684"));
+
             // Rolling the correction back restores the S5 receiver (emulator creature 100) and removes both rows.
             context.GetService<IMigrator>().Migrate(BootcampS6Migration);
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (1995, 2005) AND reciver_id = 100"));
@@ -215,13 +241,13 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1990"));
-            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 198505 AND 198514"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 198505 AND 198515"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (1995, 2005)"));
         }
 

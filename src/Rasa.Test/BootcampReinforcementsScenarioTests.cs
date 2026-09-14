@@ -16,13 +16,19 @@ using Rasa.Data;
 using Rasa.Game;
 using Rasa.Game.Handlers;
 using Rasa.Managers;
+using Rasa.Packets;
+using Rasa.Packets.Inventory.Server;
 using Rasa.Packets.MapChannel.Client;
+using Rasa.Packets.Mission.Server;
+using Rasa.Packets.Protocol;
 using Rasa.Repositories.Char;
 using Rasa.Repositories.Char.Character;
 using Rasa.Repositories.Char.CharacterContentFact;
+using Rasa.Repositories.Char.CharacterInventory;
 using Rasa.Repositories.Char.CharacterLogos;
 using Rasa.Repositories.Char.CharacterMission;
 using Rasa.Repositories.Char.GameAccount;
+using Rasa.Repositories.Char.Items;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
 using Rasa.Repositories.World.MissionContent;
@@ -38,8 +44,9 @@ namespace Rasa.Test
     /// Plays the seeded S5/S6 boot-camp content end to end against a world database migrated through
     /// BootcampS5Reinforcements, BootcampS6ExitToAliaDas and BootcampFixRogersTurnIn: Youngblood's 1995, the wounded
     /// soldier, Conrad's corpse, the bomb and its detonation, Van Valkenberg and the exit pad (transfer to location 19852
-    /// and the account skip flag), the turn-in at Rogers in Alia Das, and the failure path with the 2005 retry and the
-    /// preserved D13.4 quirk. The NPC placements cannot be spawned without the creature seed, so the conversation NPCs
+    /// and the account skip flag), the turn-in at Rogers in Alia Das, the forced Training Day offer on entering Alia Das
+    /// and its turn-in at Kincaid with a reward pistol (WildernessArrivalTrainingDay), and the failure path with the 2005
+    /// retry and the preserved D13.4 quirk. The NPC placements cannot be spawned without the creature seed, so the conversation NPCs
     /// are registered by hand at their seeded placement positions with the seeded packages; usables are materialized
     /// from the migrated rows.
     /// </summary>
@@ -55,6 +62,8 @@ namespace Rasa.Test
         private const uint WreckPlacement = 198678;
         private const uint AliaDas = 1220;
         private const uint RogersPlacement = 198684;
+        private const uint KincaidPlacement = 198685;
+        private const uint TrainingDay = 1526;
 
         private sealed class TestConfiguration : IDbContextConfigurationService
         {
@@ -76,6 +85,9 @@ namespace Rasa.Test
                     case "get_CharacterContentFacts": return new CharacterContentFactRepository(Context);
                     case "get_CharacterLogoses": return new CharacterLogosRepository(Context);
                     case "get_GameAccounts": return new GameAccountRepository(Context);
+                    case "get_Items": return new ItemRepository(Context);
+                    case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
+                    case "BeginTransaction": return Context.Database.BeginTransaction();
                     case "Complete": Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;
                     default: throw new NotSupportedException(method.Name);
@@ -159,6 +171,7 @@ namespace Rasa.Test
             context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
             context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
             context.Database.Migrate();
+            TrainingDayRewardItems.SeedOriginalTemplateRows(_worldConnection);
         }
 
         [ClassCleanup]
@@ -176,6 +189,8 @@ namespace Rasa.Test
         private long _tick;
         private long _nowMs;
         private readonly List<ContentLocationEntry> _transfers = new();
+        private TrainingDayRewardItems _rewardItems;
+        private MapChannel _wilderness;
 
         [TestInitialize]
         public void Initialize()
@@ -198,6 +213,9 @@ namespace Rasa.Test
                 context.SaveChanges();
             }
 
+            // The Training Day reward pistols must be loaded before the missions build their reward info.
+            _rewardItems = new TrainingDayRewardItems(_worldConnection);
+
             _missions = new MissionManager(factory, () => (uint)(_nowMs / 1000)) { NowMs = () => _nowMs };
             typeof(MissionManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)?.SetValue(null, _missions);
             _missions.LoadMissions();
@@ -215,6 +233,7 @@ namespace Rasa.Test
             _client.Player.Missions[1994] = new PlayerMission { MissionId = 1994, State = MissionState.Completed };
             _client.Player.Credits[CurencyType.Credits] = 0;
             _client.Player.Credits[CurencyType.Prestige] = 0;
+            _client.Player.Inventory.PersonalInventory.AddRange(new ulong[250]);
             _instance.ClientList.Add(_client);
 
             _youngblood = Npc(198505, 198658, 2561);
@@ -240,6 +259,12 @@ namespace Rasa.Test
                 EntityManager.Instance.UnregisterCreature(npc.EntityId);
                 EntityManager.Instance.UnregisterEntity(npc.EntityId);
             }
+            foreach (var entityId in _client.Player.Inventory.PersonalInventory.Where(id => id != 0))
+            {
+                EntityManager.Instance.UnregisterItem(entityId);
+                EntityManager.Instance.UnregisterEntity(entityId);
+            }
+            _rewardItems.Dispose();
             _charConnection.Dispose();
         }
 
@@ -272,10 +297,11 @@ namespace Rasa.Test
         /// </summary>
         private Creature ArriveAtAliaDas()
         {
-            var live = ContentMaterializer.PlacementsToSpawn(_content.Content, AliaDas).Single();
-            Assert.AreEqual((RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u), (live.Id, live.Behavior, live.PresentConditionId));
+            var live = ContentMaterializer.PlacementsToSpawn(_content.Content, AliaDas).OrderBy(placement => placement.Id).ToList();
+            CollectionAssert.AreEqual(new[] { (RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u), (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary, 0u) },
+                live.Select(placement => (placement.Id, placement.Behavior, placement.PresentConditionId)).ToArray());
 
-            var wilderness = new MapChannel { MapInfo = new MapInfo(AliaDas, "adv_foreas_concordia_wilderness", 1556, 0), ClientList = new List<Client>() };
+            var wilderness = _wilderness = new MapChannel { MapInfo = new MapInfo(AliaDas, "adv_foreas_concordia_wilderness", 1556, 0), ClientList = new List<Client>() };
             var arrival = _content.Content.Catalog.Locations[19852];
             _instance.ClientList.Remove(_client);
             wilderness.ClientList.Add(_client);
@@ -302,6 +328,81 @@ namespace Rasa.Test
             Assert.IsFalse(_missions.TryGetConversationStatus(_client, rogers, out _, out _));
             using var context = CharContext(_charConnection);
             Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.CharacterId == CharacterId && m.MissionId == missionId).MissionState);
+        }
+
+        private List<PythonPacket> Drain()
+        {
+            var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_client);
+            var packets = new List<PythonPacket>();
+            while (queue.PopOutgoing() is ProtocolPacket packet)
+                packets.Add(((CallMethodMessage)packet.Message).Packet);
+            return packets;
+        }
+
+        /// <summary>
+        /// The recruit (re-)enters Alia Das: the entered_map rule 1985011 dispenses Training Day over the radio by force
+        /// (Decline greyed) exactly while objective 4 of 1995 or 2005 is completed and the character has no 1526 row.
+        /// </summary>
+        private void EnterAliaDasAndExpectTheTrainingDayOffer()
+        {
+            Drain();
+            _content.OnPlayerEnteredMap(_client);
+            var offer = Drain().OfType<DispenseRadioMissionPacket>().Single();
+            Assert.AreEqual((TrainingDay, true), (offer.MissionId, offer.Forced));
+            CollectionAssert.AreEqual(new uint[] { 116929, 116930 }, offer.MissionInfo.MissionConstantData.RewardInfo.SelectableReward.Select(item => item.ItemTemplateId).ToArray());
+            Assert.IsTrue(_client.Player.PendingRadioOffers.Contains(TrainingDay));
+        }
+
+        /// <summary>
+        /// Accepts Training Day, reports to Training Officer Kincaid in front of the barracks tent and turns it in with the
+        /// chosen pistol: 120 credits and the item land together with the completion, and the offer is never repeated.
+        /// </summary>
+        private void TrainingDayAtKincaid(int selection, uint expectedTemplate)
+        {
+            _missions.AssignRadioMission(_client, TrainingDay);
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[TrainingDay].State);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, Objective(TrainingDay, 1));
+            Assert.IsFalse(_client.Player.PendingRadioOffers.Contains(TrainingDay));
+
+            Drain();
+            _content.OnPlayerEnteredMap(_client);
+            Assert.IsFalse(Drain().OfType<DispenseRadioMissionPacket>().Any(), "Training Day is not offered again once accepted");
+
+            var kincaid = Npc(198515, KincaidPlacement, 2588, _wilderness);
+            Assert.IsTrue(ClassAdvancement.TrainerNpcPackages.Contains(kincaid.Npc.NpcPackageId), "Kincaid is the class trainer");
+            TalkTo(kincaid, TrainingDay, 1);
+            Assert.AreEqual(MissionObjectiveState.Completed, Objective(TrainingDay, 1));
+            Assert.IsTrue(_missions.TryGetConversationStatus(_client, kincaid, out var status, out var ids));
+            Assert.AreEqual(ConversationStatus.MissionComplete, status);
+            CollectionAssert.AreEqual(new[] { TrainingDay }, ids);
+
+            // A choice is required: no selection, or one outside the two offered pistols, is refused.
+            var credits = _client.Player.Credits[CurencyType.Credits];
+            _missions.CompleteNpcMission(_client, kincaid.EntityId, TrainingDay, null);
+            _missions.CompleteNpcMission(_client, kincaid.EntityId, TrainingDay, 2);
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[TrainingDay].State);
+
+            Drain();
+            _missions.CompleteNpcMission(_client, kincaid.EntityId, TrainingDay, selection);
+            Assert.AreEqual(MissionState.Completed, _client.Player.Missions[TrainingDay].State, "Training Day was not turned in at Kincaid");
+            Assert.AreEqual(credits + 120, _client.Player.Credits[CurencyType.Credits]);
+            var packets = Drain();
+            Assert.AreEqual(0u, packets.OfType<InventoryAddItemPacket>().Single().SlotId, "the pistol goes to the first equipment slot");
+            Assert.AreEqual(1, packets.OfType<MissionCompletedPacket>().Count());
+            var pistol = EntityManager.Instance.GetItem(_client.Player.Inventory.PersonalInventory[0]);
+            Assert.AreEqual((expectedTemplate, 1u), (pistol.ItemTemplateId, pistol.StackSize));
+            Assert.IsNotNull(pistol.ItemTemplate.WeaponInfo);
+
+            using (var context = CharContext(_charConnection))
+            {
+                Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.CharacterId == CharacterId && m.MissionId == TrainingDay).MissionState);
+                Assert.AreEqual(credits + 120, context.CharacterEntries.Single(c => c.Id == CharacterId).Credit);
+                var row = context.CharacterInventoryEntries.Single(entry => entry.CharacterId == CharacterId);
+                Assert.AreEqual((0u, expectedTemplate), (row.SlotId, context.ItemEntries.Single(item => item.ItemId == row.ItemId).ItemTemplateId));
+            }
+
+            _content.OnPlayerEnteredMap(_client);
+            Assert.IsFalse(Drain().OfType<DispenseRadioMissionPacket>().Any(), "a completed Training Day is not offered again");
         }
 
         private DynamicObject Usable(uint placementId) =>
@@ -429,6 +530,10 @@ namespace Rasa.Test
             _missions.CompleteNpcMission(_client, _vanValkenberg.EntityId, 1995, null);
             Assert.AreEqual(MissionState.Active, _client.Player.Missions[1995].State);
             TurnInAtRogers(ArriveAtAliaDas(), 1995);
+
+            // Entering Alia Das after the turn-in still offers Training Day (objective 4 stays completed); the recruit takes the Pistol.
+            EnterAliaDasAndExpectTheTrainingDayOffer();
+            TrainingDayAtKincaid(0, 116929);
         }
 
         [TestMethod]
@@ -477,7 +582,13 @@ namespace Rasa.Test
             TalkTo(_vanValkenberg, 2005, 4);
             Assert.AreEqual(MissionObjectiveState.Completed, Objective(2005, 4));
             Assert.IsTrue(Holds(198909), "the exit pad is armed by the retry's check-in");
-            TurnInAtRogers(ArriveAtAliaDas(), 2005);
+
+            // The observed order: the forced offer is already open on arrival, before the report to Rogers; this recruit takes
+            // the Pulse Pistol.
+            var rogers = ArriveAtAliaDas();
+            EnterAliaDasAndExpectTheTrainingDayOffer();
+            TurnInAtRogers(rogers, 2005);
+            TrainingDayAtKincaid(1, 116930);
         }
     }
 }

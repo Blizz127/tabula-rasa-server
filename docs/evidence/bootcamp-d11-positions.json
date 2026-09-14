@@ -1408,6 +1408,44 @@
    ],
    "client": "1.16.5.0",
    "session_date": "2009-02 (about 2009-02-26)"
+  },
+  {
+   "position_key": "npc.training_officer_kincaid",
+   "map_context_id": 1220,
+   "x": 765.4,
+   "y": 294.12,
+   "z": 386.05,
+   "rotation": 1.5708,
+   "rotation_tier": "inferred",
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.3,
+    "rotation_deg": 45
+   },
+   "method": "X,Z: the yellow handset radar icon beside the barracks while Training Day was tracked (B2-033), research/20260914-segment3-arrival/tools/npc_icons.py template 109.800 on work/barracks-radar.jsonl, check SEG3-03, one player position (762.78,375.07) 11.3 m away: [765.4, 386.05]; +/-2.0 m (single viewpoint). Corroborated by the client map marker \"Class Trainer: Alia Das\" (765.97,294.12,386.12) 0.57 m away (generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378] @18093, uimapmarkertextlanguage 980) and by text 13607/13608 \"Trainer Kincaid ... stationed in front of the barracks tent\"; the player was 11.3 m away at 112.000 and the Tier Advancement window is open after the 112.000/112.067 cut (B2-036/B2-037, SEG3-03). Y: the marker Y 294.12 (original); navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_foreas_concordia_wilderness.nav (sha256 a417669c715c2a32ba4e407479f5731fa9ec81622b63c8b9727da1ea8cc1abba) via research/20260914-bootcamp-s4/tools/navprobe (work/navprobe-input.txt -> work/navprobe-output.tsv) floor 294.22 (bias +0.10). Rotation: INFERRED, not observed: facing out of the east entrance of the barracks tent (#3502, yaw -90, extending west from x 763.6) = 90 deg = 1.5708 rad, +/-45 deg.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 109.8,
+     "event": "B2-033"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 112.067,
+     "event": "B2-036"
+    }
+   ],
+   "anchors": [
+    "ArchHumTentGenericV01 (barracks, cots inside) #3502 offset 308216 at (763.58,294.14,382.50) yaw -90, 3.99 m",
+    "ArchHumBaseHolosignBarracks #4906 (762.38,294.16,376.58), 9.94 m",
+    "uimapmarker \"Class Trainer: Alia Das\" (765.97,294.12,386.12)"
+   ],
+   "conflicts": [
+    "no emulator creature or spawn for Kincaid (creaturenamelanguage 10604); research/20260913-bootcamp spatial inferred_training_officer_kincaid used the marker only (+/-12 m)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02 (about 2009-02-26)"
   }
  ]
 }

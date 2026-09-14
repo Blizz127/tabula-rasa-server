@@ -40,7 +40,9 @@ namespace Rasa.Test.Reconstruction
 
         public static readonly string[] Eras = { "final_live", "d11_to_shutdown", "pre_d11", "unknown" };
 
-        public static readonly string[] Slices = { "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8" };
+        // S1-S8: boot-camp build plan slices. W1: the Wilderness arrival (segment 3), recorded in the boot-camp manifest
+        // because it closes the boot-camp exit (OD-36).
+        public static readonly string[] Slices = { "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "W1" };
 
         public static readonly string[] StorageRoles = { "surrogate_key", "storage_reference", "scope", "comment" };
 

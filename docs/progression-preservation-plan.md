@@ -250,6 +250,53 @@ the final-live rule.
   (`GAP-S5-MISSION-REWARDS`). The segment-3 arrival draft still names creature 100 and placement 122150 and must be
   rebased on 198514/198684. Full suite 846/846 under the .NET 5 SDK image.
 
+## W1 (Wilderness arrival: Training Day) status
+
+- `WildernessArrivalTrainingDay` (SQLite and MySQL, frozen rows in `WildernessData/WildernessArrivalTrainingDayRows.cs`;
+  17 manifest rows, slice W1, recorded in the boot-camp manifest under OD-36) begins segment 3 at the boot-camp exit.
+  It seeds:
+  - Training Officer Kincaid, reserved creature 198515 (name 10604 original; level 8 inferred from a partly legible
+    target-frame glyph, B2-036; class 3846 and 1000 hp analogues under OD-11/OD-37). He stands stationary in shared
+    context 1220 in front of the barracks tent at (765.40, 294.12, 386.05) ±2 m, measured from one radar viewpoint
+    (check SEG3-03) and 0.6 m from the client "Class Trainer: Alia Das" marker; rotation 90 deg ±45 inferred;
+    placement 198685, position `npc.training_officer_kincaid`. He carries package 2588, which the class-trainer code
+    (`ClassAdvancement`, `c3707cf`) recognises.
+  - Mission 1526 "Training Day": radio giver 0; receiver Kincaid; level 4 inferred; category 10000001
+    "Class (Recruit)" and shareable false inferred (OD-39). Objective 1 "Report to a Class Trainer." (ordinal 1 and
+    required inferred, revealed observed) replaces the NULL skeleton row and completes through the client conversation
+    (1526,1,2588,1,1). Rewards: 120 credits (observed, partly legible) and a choice of the Vextronics Pistol (116929) or
+    the Vextronics Pulse Pistol (116930). Both template ids are inferred (OD-38); 121053/121086 are the recorded
+    alternative.
+  - The forced Headquarters offer: rule 1985011 (entered_map in 1220) with condition 198910, (1995,4) or (2005,4)
+    Completed and no 1526 row, dispensing 1526 with `forced = true`. Decline is greyed in B2-023, and the client greys it
+    only for forced offers. No prerequisite row is seeded, because the radio rule is the only offer path.
+  - Item template rows for 116929/116930 (`itemtemplate`, `itemtemplate_weapon`); their class, skill and level
+    requirement rows are original seed rows. Observed from the re-read tooltips B2-026/B2-029: range 20, alt damage
+    115/122 physical, AE type 0. Inferred: quality 3, inventory category 1, ammo per shot 1, windup/recovery/refire
+    0/250/150 and 0/250/100, attack type 2. Labelled analogues (OD-38): Not Tradeable and Not Sellable from the equipped
+    AccuMax Shotgun tooltip (B2-027), no Bound/BoE/Unique, lockbox placeable, and the emulator's uniform weapon
+    placeholders for the remaining sent fields. Prices are stored as 0 (`GAP-W1-ITEM-PRICES`). The module ids
+    900221/900256 cannot be stored (`GAP-W1-REWARD-MODULES`).
+- `ProvenanceRegistry` now lists `itemtemplate` and `itemtemplate_weapon`. Flags, quality, category and every weapon
+  column the client is sent are required; `buy_price`, `sell_price` and the unsent `reuse_override` are optional. The
+  slice vocabulary gains `W1`. The curated footage events add B2-026/027/029 (tooltips; verification.json has no
+  verdict, so a curator re-read of the upscaled frames, 2026-09-14, is recorded in each description) and B2-036/037.
+- `MissionContentLoadingTests` loads the pistols through the real `ItemManager.LoadItemTemplates` from the migrated rows.
+  The class-map, requirement and item/weapon-class seed rows are stood in with their deployed values in
+  `TrainingDayRewardItems`. The test finds no content gaps, empty `DefinitionGaps` and reward gaps for 1526, the
+  offered pistol choice, weapon rows that write a template tooltip, Kincaid live in 1220 and the live entered_map rule.
+  `BootcampReinforcementsScenarioTests` enters Alia Das after the 1995 turn-in (and, on the 2005 path, before the
+  Rogers turn-in, the observed order). Both paths receive the forced offer, accept it, see no repeat, report to Kincaid,
+  are refused without a valid choice, and turn in for 120 credits plus the chosen pistol in the first equipment slot,
+  persisted.
+- Open: Training Day experience (`GAP-W1-1526-XP`); the offer delay (`GAP-W1-OFFER-RULE`); no offer for characters
+  who skip the boot camp (`GAP-W1-SKIP-TRAINING-DAY`, OD-40); Kincaid's facing, level and appearance
+  (`GAP-W1-KINCAID-PRESENTATION`, `GAP-NPC-BODY`); the template choice (`GAP-W1-REWARD-TEMPLATE-ID`); the weapon
+  placeholders (`GAP-W1-WEAPON-PLACEHOLDERS`); missions 2010/2011, held until a class-chosen trigger exists
+  (`GAP-W1-GEAR-MISSIONS`, OD-42); and the emulator Major Bonham spawn beside the arrival, kept although the
+  2009-01-06 player map still lists him (`GAP-W1-BONHAM`, OD-41). Owner client checks are still to do.
+  Full suite 849/849 under the .NET 5 SDK image.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
@@ -280,6 +327,13 @@ its evidence tier.
 | OD-33 Level-1 outpost Thrax (2026-09-14, agent, pending owner review) | Seeded, guarding its spot, `creature_action` 33 and class 29769 analogues as the S4 Initiate |
 | OD-34 1995/2005 receiver (2026-09-14, agent, pending owner review) | Rogers (creature 100) as drafted; not rejected by the validator or `DefinitionGaps`; the receiver id is superseded by OD-35 |
 | OD-35 Rogers at Alia Das (2026-09-14, agent, pending owner review) | A reserved creature 198514 placed in context 1220 and recorded in the boot-camp manifest, with the 1995/2005 receiver changed from 100 by `BootcampFixRogersTurnIn`, instead of updating emulator row 100 from a new Wilderness manifest; no appearance rows |
+| OD-36 W1 record (2026-09-14, agent, pending owner review) | Training Day recorded in the boot-camp manifest as slice W1, continuing the reserved keys (creature 198515, placement 198685, condition 198910, rule 1985011); item template ids 116929/116930 get explicit non-reserved scope entries |
+| OD-37 Kincaid class and health (2026-09-14, agent, pending owner review) | Class 3846 and 1000 hp as OD-11 analogues, as for the boot-camp officers and Rogers |
+| OD-38 Training Day reward items (2026-09-14, agent, pending owner review) | Templates 116929/116930 inferred (alternative 121053/121086); item fields as observed/inferred/labelled analogues from the field matrix; prices 0 with a gap; module ids unstorable (gap) |
+| OD-39 Training Day flags (2026-09-14, agent, pending owner review) | shareable false and category 10000001 "Class (Recruit)", inferred |
+| OD-40 Skip path (2026-09-14, agent, pending owner review) | Characters who skip the boot camp are not offered Training Day (draft condition), recorded as a gap |
+| OD-41 Major Bonham (2026-09-14, agent, pending owner review) | The emulator spawn stays untouched; the 2009-01-06 player map listing him is recorded as a gap |
+| OD-42 Missions 2010/2011 (2026-09-14, agent, pending owner review) | Held (not seeded) until a class-chosen trigger exists |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

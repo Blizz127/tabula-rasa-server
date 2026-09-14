@@ -153,7 +153,7 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual("bootcamp-d11", segment.GetProperty("id").GetString());
             CollectionAssert.AreEqual(new long[] { 1985 }, segment.GetProperty("map_context_ids").EnumerateArray().Select(e => e.GetInt64()).ToArray());
             Assert.AreEqual(783, segment.GetProperty("map_version").GetInt32());
-            CollectionAssert.AreEqual(new long[] { 1990, 1992, 1994, 1995, 2005 }, segment.GetProperty("missions").EnumerateArray().Select(e => e.GetInt64()).ToArray());
+            CollectionAssert.AreEqual(new long[] { 1990, 1992, 1994, 1995, 2005, 1526 }, segment.GetProperty("missions").EnumerateArray().Select(e => e.GetInt64()).ToArray());
             Assert.AreEqual("1.16.5.0", segment.GetProperty("client_version").GetString());
 
             var sources = root.GetProperty("sources");
@@ -198,7 +198,10 @@ namespace Rasa.Test.Reconstruction
                 ["content_rule_action"] = "rule_id:1985000-1985999",
                 ["content_item_set"] = "item_set_id:19851-19859",
                 ["content_location"] = "id:19851-19859",
-                ["content_map_setting"] = "map_context_id:1985-1985"
+                ["content_map_setting"] = "map_context_id:1985-1985",
+                // WildernessArrivalTrainingDay (OD-36, OD-38): the reward pistols' client template ids, not a reserved range.
+                ["itemtemplate"] = "id:116929-116930",
+                ["itemtemplate_weapon"] = "id:116929-116930"
             }.ToList(), scope.ToList());
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()
@@ -263,7 +266,7 @@ namespace Rasa.Test.Reconstruction
                 "map_info", "content_map_setting", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
-                "content_item_set", "content_location"
+                "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon"
             }, ProvenanceRegistry.Default.Tables.Select(t => t.Table).ToList());
 
             foreach (var table in ProvenanceRegistry.Default.Tables)
@@ -281,6 +284,11 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature", "action1"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("creature", "action2"));
             Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
+            // Item templates (WildernessArrivalTrainingDay): sent flags are required, prices and the unsent reuse override optional.
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("itemtemplate", "not_tradable_flag"));
+            Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate", "sell_price"));
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("itemtemplate_weapon", "range"));
+            Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate_weapon", "reuse_override"));
         }
 
         [TestMethod]
@@ -295,7 +303,8 @@ namespace Rasa.Test.Reconstruction
                 typeof(CreatureEntry), typeof(MapInfoEntry), typeof(ContentMapSettingEntry), typeof(NpcMissionPrerequisiteEntry),
                 typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
-                typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry)
+                typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),
+                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry)
             };
 
             foreach (var entity in entities)

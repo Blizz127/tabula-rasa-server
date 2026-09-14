@@ -1312,3 +1312,21 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   creatures and NPC appearance. The D13.4 abandon quirk is kept. Rogers now stands in the Alia Das command tent
   (`BootcampFixRogersTurnIn`: level observed, position measured, rotation inferred, class and health analogues) and
   takes the 1995/2005 turn-in, which still pays nothing. Full suite 846/846.
+
+## 2026-09-14 UTC — Wilderness arrival: Training Day (segment 3, W1) content seed
+
+- Mission 1526 Training Day, Training Officer Kincaid at Alia Das and the forced Headquarters offer on entering
+  Alia Das are seeded (`WildernessArrivalTrainingDay`). Details, labels and decisions are in
+  [progression-preservation-plan.md](progression-preservation-plan.md#w1-wilderness-arrival-training-day-status) and the
+  boot-camp manifest (slice W1). These are evidence-bounded reconstructions, not recovered server data:
+  - observed: the offer, its 120 credits (partly legible) and the reward names, and the tooltip range and alt damage;
+  - measured: Kincaid's position;
+  - inferred: the offer trigger, Kincaid's level (partly legible glyph), rotation and package, the mission level,
+    category and shareable flag, and the reward template ids 116929/116930;
+  - labelled analogues: Kincaid's class and health, the reward flags and the unevidenced weapon fields.
+- The Training Day reward pistols now exist as item templates (`itemtemplate`, `itemtemplate_weapon`). Their offer
+  still reads "Pistol"/"Pulse Pistol" without the Vextronics module line, and they carry no price.
+- Not reproduced: Training Day experience, the offer delay after the transfer, an offer for characters who skip the
+  boot camp, Kincaid's appearance and observed facing, and missions 2010/2011 (held for a class-chosen trigger). The
+  emulator's Major Bonham spawn beside the arrival is unchanged. OD-36..OD-42 were decided by the agent for the owner
+  and await owner review. Full suite 849/849.

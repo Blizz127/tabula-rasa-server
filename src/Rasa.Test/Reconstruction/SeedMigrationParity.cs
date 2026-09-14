@@ -22,6 +22,7 @@ namespace Rasa.Test.Reconstruction
         public const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
         public const string MySqlProvider = "Pomelo.EntityFrameworkCore.MySql";
         public const string BootcampPrefix = "Bootcamp";
+        public const string WildernessPrefix = "Wilderness";
 
         public sealed class MigrationPair
         {

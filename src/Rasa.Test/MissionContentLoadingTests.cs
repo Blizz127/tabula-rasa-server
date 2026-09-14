@@ -851,6 +851,11 @@ namespace Rasa.Test
                     context.Database.Migrate();
                 }
 
+                // The Training Day reward pistols load through the real ItemManager from their migrated itemtemplate and
+                // itemtemplate_weapon rows (WildernessArrivalTrainingDay) before the missions build their reward info.
+                TrainingDayRewardItems.SeedOriginalTemplateRows(connection);
+                using var rewardItems = new TrainingDayRewardItems(connection);
+
                 var missions = new MissionManager(new Factory(connection));
                 missions.LoadMissions();
 
@@ -869,7 +874,7 @@ namespace Rasa.Test
                 Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
                 Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
 
-                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005 })
+                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526 })
                 {
                     Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
@@ -933,10 +938,52 @@ namespace Rasa.Test
                 // Rogers (BootcampFixRogersTurnIn, GAP-ROGERS): the 1995/2005 receiver stands live in shared Alia Das, always present.
                 Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1220));
                 Assert.IsFalse(validation.WithheldContexts.Contains(1220u));
-                var rogers = ContentMaterializer.PlacementsToSpawn(validation, 1220).Single();
+                var aliaDasPlacements = ContentMaterializer.PlacementsToSpawn(validation, 1220).ToDictionary(placement => placement.Id);
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685 }, aliaDasPlacements.Keys.ToArray());
+                var rogers = aliaDasPlacements[198684];
                 Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));
                 Assert.AreEqual((855.84, 294.14, 387.4, 4.3633), (rogers.PosX, rogers.PosY, rogers.PosZ, rogers.Rotation));
+
+                // Training Officer Kincaid (WildernessArrivalTrainingDay): the 1526 receiver and class trainer stands live in shared
+                // Alia Das at the measured barracks position with the trainer package, always present.
+                var kincaid = aliaDasPlacements[198685];
+                Assert.AreEqual((198515u, 2588u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
+                    (kincaid.CreatureId, kincaid.NpcPackageId, kincaid.Behavior, kincaid.PresentConditionId, kincaid.AlternateStateConditionId));
+                Assert.AreEqual((765.4, 294.12, 386.05, 1.5708), (kincaid.PosX, kincaid.PosY, kincaid.PosZ, kincaid.Rotation));
+                Assert.IsTrue(ClassAdvancement.TrainerNpcPackages.Contains(kincaid.NpcPackageId));
+
+                // Training Day: offered over the radio (no giver), completed by the Kincaid conversation, turned in at him, paying
+                // 120 credits and a choice of the two pistols, whose templates load with their weapon rows.
+                var trainingDay = missions.LoadedMissions[1526];
+                Assert.AreEqual((0u, 198515u, 4u, 10000001u, false, false),
+                    (trainingDay.MissionGiver, trainingDay.MissionReciver, trainingDay.MissionConstantData.Level, trainingDay.MissionConstantData.CategoryId,
+                     trainingDay.MissionConstantData.Shareable, trainingDay.MissionConstantData.RadioCompletable));
+                Assert.IsTrue(trainingDay.HasObjectiveConversation(1, 2588, 1));
+                Assert.AreEqual((1u, true, true), (trainingDay.Objectives[1].Ordinal.Value, trainingDay.Objectives[1].IsRequired.Value, trainingDay.Objectives[1].RevealedOnAccept.Value));
+                Assert.AreEqual(0, trainingDay.Prerequisites.Count);
+                CollectionAssert.AreEqual(Array.Empty<string>(), trainingDay.RewardGaps);
+                Assert.AreEqual((120L, 0L, 0L), (trainingDay.RewardCredits, trainingDay.RewardPrestige, trainingDay.RewardExperience));
+                Assert.AreEqual(0, trainingDay.OfferedFixedItems.Count);
+                CollectionAssert.AreEqual(new[] { (116929u, (EntityClasses)27121, 1u, 3), (116930u, (EntityClasses)27100, 1u, 3) },
+                    trainingDay.MissionConstantData.RewardInfo.SelectableReward.Select(item => (item.ItemTemplateId, item.Class, item.Quantity, item.QualityId)).ToArray());
+                foreach (var (templateId, refire, altDamage) in new[] { (116929u, 150u, 115u), (116930u, 100u, 122u) })
+                {
+                    var template = rewardItems.Items.GetItemTemplateById(templateId);
+                    Assert.AreEqual((InventoryCategory.Equipment, 3, false, false), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
+                    Assert.AreEqual((1, 1), (template.EquipableInfo.SkillId, template.EquipableInfo.SkillLevel));
+                    Assert.AreEqual(5, template.ItemInfo.Requirements[RequirementsType.ReqXpLevel]);
+                    Assert.IsNotNull(template.WeaponInfo, $"template {templateId} has no weapon row");
+                    Assert.AreEqual((0u, 20u, 1u, 0u, 250u, refire), (template.WeaponInfo.AeType, template.WeaponInfo.Range, template.WeaponInfo.AmmoPerShot,
+                        template.WeaponInfo.Windup, template.WeaponInfo.Recovery, template.WeaponInfo.Refire));
+                    Assert.AreEqual((altDamage, 1u), (template.WeaponInfo.WeaponAltInfo.AltMaxDamage, template.WeaponInfo.WeaponAltInfo.AltDamageType));
+
+                    // A tooltip request for the offered reward writes its weapon, equipable and item tuples without a missing row.
+                    using var stream = new System.IO.MemoryStream();
+                    using var writer = new PythonWriter(new System.IO.BinaryWriter(stream));
+                    new Rasa.Packets.MapChannel.Server.ItemTemplateTooltipInfoPacket(template, EntityClassManager.Instance.GetClassInfo(template.Class)).Write(writer);
+                    Assert.IsTrue(stream.Length > 0);
+                }
 
                 var conditions = validation.Catalog.Conditions;
                 string Terms(uint conditionId) => string.Join(" | ", conditions[conditionId].Select(term =>
@@ -948,6 +995,8 @@ namespace Rasa.Test
                 Assert.AreEqual("0.0:FactEquals 0/0=0 bootcamp.dropship_destroyed=1", Terms(198907));
                 Assert.AreEqual("0.0:ObjectiveStateIs 1995/3=1 =0", Terms(198908));
                 Assert.AreEqual("0.0:ObjectiveStateIs 1995/4=2 =0 | 1.0:ObjectiveStateIs 2005/4=2 =0", Terms(198909));
+                // The forced Training Day offer on entering Alia Das: objective 4 of 1995 or 2005 completed and no 1526 row yet.
+                Assert.AreEqual("0.0:ObjectiveStateIs 1995/4=2 =0 | 0.1:MissionAbsent 1526/0=0 =0 | 1.0:ObjectiveStateIs 2005/4=2 =0 | 1.1:MissionAbsent 1526/0=0 =0", Terms(198910));
 
                 // The rules: plant and detonation facts, the wreck bursting open, failures bringing the ship back (the D13.4 quirk
                 // is kept: abandoning clears nothing), and the exit pad transferring to Alia Das before setting the skip flag.
@@ -970,6 +1019,10 @@ namespace Rasa.Test
 
                 Assert.AreEqual((ContentRuleEvent.AreaEntered, 198603u, 198909u), ((ContentRuleEvent)rules[1985010].Event, rules[1985010].AreaId, rules[1985010].ConditionId));
                 Assert.AreEqual("TransferToLocation  19852 | SetAccountSkipBootcamp", Actions(1985010));
+                Assert.IsTrue(validation.LiveRules.Any(rule => rule.Id == 1985011));
+                Assert.AreEqual((ContentRuleEvent.EnteredMap, 1220u, 198910u, 0u), ((ContentRuleEvent)rules[1985011].Event, rules[1985011].MapContextId, rules[1985011].ConditionId, rules[1985011].MissionId));
+                var offer = actions[1985011].Single();
+                Assert.AreEqual((ContentRuleAction.DispenseRadioMission, 1526u, true), ((ContentRuleAction)offer.Action, offer.MissionId, offer.Forced));
                 var pad = validation.Catalog.Areas[198603];
                 Assert.AreEqual(((byte)ContentAreaShape.Sphere, -225.35, 99.6, -70.52, 12.0), (pad.Shape, pad.PosX, pad.PosY, pad.PosZ, pad.Radius));
                 var aliaDas = validation.Catalog.Locations[19852];

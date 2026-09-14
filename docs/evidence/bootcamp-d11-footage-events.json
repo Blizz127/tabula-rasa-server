@@ -1271,6 +1271,38 @@
   },
   {
    "segment": "B2",
+   "event_id": "B2-026",
+   "t": 102.267,
+   "category": "tooltip",
+   "text": "Vextronics Pistol / Primary / 91 Physical Damage / Optimal Range: 20m / Alt Fire: / 115 Physical Melee Damage / [red, illegible ammo line] / Condition: 100% / [2] Reduce Resist: Physical by -15 for 15 sec / Requirements: / Firearms 1: Novice / [red] Min Level: 5",
+   "description": "Hover tooltip on the reward \"Vextronics Pistol\" (from 102.0; the transcript t is 102.0, the re-read frame 102.267, where the compare tooltip of the equipped weapon is added). The red ammo line is illegible. Curator confirmation 2026-09-14: verification.json has no verdict for this transcript event; the values used here were re-read on upscaled native frames (research/20260914-trainingday-items/work/tooltip_pistol_102.267_x4.png, from research/20260914-segment3-arrival/work/frames/8V_98_113/f_0060.png sha256 f5aa01c056ce3bcbe63b10a7cf70d3ebc957c6fbda969c690103862e0eef568d) and match the final-client weapon class damage exactly.",
+   "status": "corrected",
+   "corrected_text": "Vextronics Pistol / Primary / 91 Physical Damage / Optimal Range: 20m / Alt Fire: / 115 Physical Melee Damage / [red, illegible ammo line] / Condition: 100% / [2] Reduce Resist: Physical by -15 for 15 sec / Requirements: / Firearms 1: Novice / [red] Min Level: 5",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-027",
+   "t": 102.267,
+   "category": "tooltip",
+   "text": "EQUIPPED / AccuMax Shotgun / Primary / 188 Physical Damage / Cone Range 20m / Alt Fire: / 85 Physical Melee Damage / Standard Grade Cartridges 39/45 / 3 Ammo Per Shot / Condition: 97% / Not Tradeable / Not Sellable / [4] Crit Hit Chance: +4% / [2] Reduce Resist: Physical by -15 for 15 sec / Requirements: / Firearms 1: Novice / Min Level: 2",
+   "description": "Compare tooltip for the currently equipped weapon, shown beside the reward tooltip under an \"EQUIPPED\" label; its flag lines \"Not Tradeable\" and \"Not Sellable\" are legible, with no Bound, Bind On Equip or Unique line. Curator confirmation 2026-09-14: verification.json has no verdict for this transcript event; the values used here were re-read on upscaled native frames (research/20260914-trainingday-items/work/tooltip_pistol_102.267_x4.png, from research/20260914-segment3-arrival/work/frames/8V_98_113/f_0060.png sha256 f5aa01c056ce3bcbe63b10a7cf70d3ebc957c6fbda969c690103862e0eef568d) and match the final-client weapon class damage exactly.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-029",
+   "t": 103.2,
+   "category": "tooltip",
+   "text": "Vextronics Pulse Pistol / Primary / 106 EMP Damage / Optimal Range: 20m / Alt Fire: / 122 Physical Melee Damage / [red, illegible ammo line] / Condition: 100% / [2] Reduce Resist: EMP by -15 for 15 sec / Requirements: / Firearms 1: Novice / [red] Min Level: 5",
+   "description": "Hover tooltip on the reward \"Vextronics Pulse Pistol\". The red ammo line is illegible. Curator confirmation 2026-09-14: verification.json has no verdict for this transcript event; the values used here were re-read on upscaled native frames (research/20260914-trainingday-items/work/tooltip_pulse_103.200_x8.png, from research/20260914-segment3-arrival/work/frames/8V_98_113/f_0074.png sha256 b8f06d8771767330c48745be2d8c7d22f67f9f791fbed038c3029757ea53995e) and match the final-client weapon class damage exactly.",
+   "status": "corrected",
+   "corrected_text": "Vextronics Pulse Pistol / Primary / 106 EMP Damage / Optimal Range: 20m / Alt Fire: / 122 Physical Melee Damage / [red, illegible ammo line] / Condition: 100% / [2] Reduce Resist: EMP by -15 for 15 sec / Requirements: / Firearms 1: Novice / [red] Min Level: 5",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
    "event_id": "B2-033",
    "t": 109.8,
    "category": "tracker",
@@ -1278,6 +1310,28 @@
    "description": "Tracker now shows the accepted Training Day mission.",
    "status": "confirmed",
    "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-036",
+   "t": 112.067,
+   "category": "npc",
+   "text": "[8?] / Training Officer Kincaid (name clear; level digit partial)",
+   "description": "HARD CUT (112.0 -> 112.067): trainer interaction already open. The target frame at top centre shows the trainer. Behind the window: an olive-green canvas tent with a metal frame, a green-screen machine/terminal, and a small aircraft silhouette in the sky. Kincaid's portrait: man in a dark beret with a dark uniform collar. No Commander Rogers or Quartermaster Caufield appears anywhere in this segment.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "[8?] / Training Officer Kincaid (name clear; level digit partial)"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-037",
+   "t": 112.067,
+   "category": "conversation_window",
+   "text": "Training Officer Kincaid / Tier Advancement / Exobiologist / Features / Abilities/Skills (rows TIER 3, TIER 2, TIER 1) / Train | Detailed View | Compare / TIER 1 Recruit Compare [clone icon] 1 Clone / TIER 2 Soldier Compare, Specialist Compare / TIER 3 Commando, Ranger, Sapper, Biotechnician (each Compare) / TIER 4 Guardian, Grenadier, Spy, Sniper, Demolition..., Engineer, Medic, Exobiologist (each Compare)",
+   "description": "Class-selection window as described, with these corrections. (1) 'Train' is bright during the whole Soldier selection (bright at both 116.3 and 117.8), not only at 117.8. It is greyed at 113 (Exobiologist) and at 119, 122.3, 125.1, 127.6, 130, 133.7, 137.6, 140.2, 143.8, 146 and 148.9. Specialist was never selected, so its Train state is unknown. (2) The Abilities/Skills area is not a single row: for tier 2-4 classes it has an unlabelled top row plus rows labelled 'TIER 3', 'TIER 2', 'TIER 1'; for Recruit there is one row of 5 icons. (3) The 3D armour model is often missing right after a selection: blank at 116.3 (Soldier, which appears by 117.8), 119, 122.3, 125.1, 127.6, 130, 133.7, 137.6, 140.2, 143.8 and 146 (Guardian, which appears by 148.9). It loads after a short delay. Soldier and Specialist names are highlighted in blue; tier 3/4 names are greyed.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "Training Officer Kincaid / Tier Advancement / Exobiologist / Features / Abilities/Skills (rows TIER 3, TIER 2, TIER 1) / Train | Detailed View | Compare / TIER 1 Recruit Compare [clone icon] 1 Clone / TIER 2 Soldier Compare, Specialist Compare / TIER 3 Commando, Ranger, Sapper, Biotechnician (each Compare) / TIER 4 Guardian, Grenadier, Spy, Sniper, Demolition..., Engineer, Medic, Exobiologist (each Compare)"
   },
   {
    "segment": "B3",
