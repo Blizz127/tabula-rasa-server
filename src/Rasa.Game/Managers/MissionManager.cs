@@ -541,7 +541,7 @@ namespace Rasa.Managers
                 unitOfWork.CharacterMissions.Add(
                     new CharacterMissionEntry(player.Id, missionId, (uint)newMission.State, newMission.ChangeTime),
                     newMission.Objectives.Select(objective => new CharacterMissionObjectiveEntry(player.Id, missionId, objective.Key, (uint)objective.Value)));
-                Content.Stage(reaction, unitOfWork, player, state);
+                Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
             catch (Exception e)
@@ -645,7 +645,7 @@ namespace Rasa.Managers
                 foreach (var revealedId in revealed)
                     unitOfWork.CharacterMissions.AddObjective(new CharacterMissionObjectiveEntry(player.Id, missionId, revealedId, (uint)MissionObjectiveState.Incomplete));
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)mission.State, changeTime);
-                Content.Stage(reaction, unitOfWork, player, state);
+                Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
             catch (Exception e)
@@ -741,7 +741,7 @@ namespace Rasa.Managers
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)MissionState.Completed, changeTime);
                 if (credits != 0 || prestige != 0 || experience != 0)
                     unitOfWork.Characters.UpdateCharacterRewards(player.Id, (int)newCredits, (int)newPrestige, (uint)newExperience);
-                Content.Stage(reaction, unitOfWork, player, state);
+                Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
             catch (Exception e)
@@ -803,7 +803,7 @@ namespace Rasa.Managers
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
                 unitOfWork.CharacterMissions.Delete(player.Id, missionId);
-                Content.Stage(reaction, unitOfWork, player, state);
+                Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
             catch (Exception e)

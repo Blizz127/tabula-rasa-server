@@ -25,7 +25,9 @@ namespace Rasa.Data
                 ContentRuleEvent.EnteredMap,
                 ContentRuleEvent.MissionAccepted,
                 ContentRuleEvent.ObjectiveCompleted,
-                ContentRuleEvent.MissionTurnedIn
+                ContentRuleEvent.MissionTurnedIn,
+                // S6: the exit pad.
+                ContentRuleEvent.AreaEntered
             },
             Actions = new HashSet<ContentRuleAction>
             {
@@ -34,7 +36,9 @@ namespace Rasa.Data
                 ContentRuleAction.ForceConverseGreeting,
                 ContentRuleAction.TutorialNotification,
                 ContentRuleAction.GrantLogos,
-                ContentRuleAction.GrantRewards
+                ContentRuleAction.GrantRewards,
+                ContentRuleAction.TransferToLocation,
+                ContentRuleAction.SetAccountSkipBootcamp
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {

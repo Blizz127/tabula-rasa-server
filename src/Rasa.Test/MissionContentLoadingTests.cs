@@ -249,12 +249,13 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleEvent.EnteredMap, ContentRuleEvent.MissionAccepted,
-                ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn
+                ContentRuleEvent.ObjectiveCompleted, ContentRuleEvent.MissionTurnedIn, ContentRuleEvent.AreaEntered
             }, implemented.Events.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
                 ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
-                ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards
+                ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
+                ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -801,6 +802,66 @@ namespace Rasa.Test
             Assert.AreEqual(0, instance.ContentUsables.Count);
             Assert.AreEqual(0, instance.DynamicObjects.Count);
             Assert.IsFalse(EntityManager.Instance.DynamicObjects.ContainsKey(spawned.EntityId));
+        }
+
+        [TestMethod]
+        public void AreaEnteredRulesFireOnceOnEachEntryAndTransfersApplyAfterTheCommit()
+        {
+            WithLogger(() =>
+            {
+                using var connection = new SqliteConnection("Data Source=:memory:");
+                connection.Open();
+                using (var context = Context(connection))
+                {
+                    context.Database.EnsureCreated();
+                    context.ContentAreaEntries.Add(new ContentAreaEntry { Id = 900610, MapContextId = 1985, Shape = (byte)ContentAreaShape.Sphere, PosX = 10, PosY = 0, PosZ = 10, Radius = 3 });
+                    context.ContentRuleEntries.Add(new ContentRuleEntry { Id = 9030, MapContextId = 1985, Event = (byte)ContentRuleEvent.AreaEntered, AreaId = 900610 });
+                    context.ContentRuleActionEntries.Add(new ContentRuleActionEntry { RuleId = 9030, Sequence = 0, Action = (byte)ContentRuleAction.TutorialNotification, TutorialId = 10000018 });
+                    context.SaveChanges();
+                }
+
+                var missions = new MissionManager(new Factory(connection));
+                missions.LoadMissions();
+                var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
+                content.Load(() => new BootcampConfig(), new References(), missions.LoadedMissions);
+                Assert.AreEqual(0, content.Content.Gaps.Count, string.Join(" | ", content.Content.Gaps));
+
+                var map = new MapChannel { MapInfo = new MapInfo(1985, "adv_bootcamp", 783, 4), ClientList = new List<Client>() };
+                var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                client.Player.MapChannel = map;
+                client.Player.MapContextId = 1985;
+                map.ClientList.Add(client);
+
+                int Tutorials()
+                {
+                    var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(client);
+                    var count = 0;
+                    while (queue.PopOutgoing() is ProtocolPacket protocol)
+                        if (protocol.Message is CallMethodMessage { MethodId: GameOpcode.DisplayPlayerTutorialNotification })
+                            count++;
+                    return count;
+                }
+
+                var path = new[] { (30f, 30f), (20f, 20f), (10f, 11f), (10f, 10f), (11f, 10f), (30f, 30f), (10.5f, 10.5f) };
+                var fired = new List<int>();
+                foreach (var (x, z) in path)
+                {
+                    client.Player.Position = new System.Numerics.Vector3(x, 0, z);
+                    content.DoWork(map);
+                    fired.Add(Tutorials());
+                }
+                // Enters at the third sample, stays inside, leaves, and a fast crossing back in fires again.
+                CollectionAssert.AreEqual(new[] { 0, 0, 1, 0, 0, 0, 1 }, fired);
+
+                // A committed transfer and skip flag reach memory and the loading screen only at Apply.
+                ContentLocationEntry transferred = null;
+                content.Transfer = (_, location) => transferred = location;
+                typeof(Client).GetProperty(nameof(Client.AccountEntry)).SetValue(client, new Structures.Char.GameAccountEntry { Id = 10 });
+                var reaction = new ContentReaction { Transfer = new ContentLocationEntry { Id = 19852, MapContextId = 1220 }, SkipBootcampGranted = true };
+                content.Apply(client, reaction);
+                Assert.AreEqual(19852u, transferred.Id);
+                Assert.IsTrue(client.AccountEntry.CanSkipBootcamp);
+            });
         }
 
         [TestMethod]

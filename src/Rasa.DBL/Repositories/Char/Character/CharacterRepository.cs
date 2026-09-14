@@ -261,6 +261,20 @@ namespace Rasa.Repositories.Char.Character
             entry.Experience = (uint)newExperience;
         }
 
+        public void StagePosition(uint id, double x, double y, double z, double rotation, uint mapContextId)
+        {
+            var entry = _charContext.CharacterEntries.Find(id);
+
+            if (entry == null)
+                throw new KeyNotFoundException($"character {id} does not exist");
+
+            entry.CoordX = x;
+            entry.CoordY = y;
+            entry.CoordZ = z;
+            entry.Rotation = rotation;
+            entry.MapContextId = mapContextId;
+        }
+
         public void StageLevel(uint id, byte level)
         {
             var entry = _charContext.CharacterEntries.Find(id);

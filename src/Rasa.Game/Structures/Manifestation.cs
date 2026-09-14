@@ -51,6 +51,8 @@ namespace Rasa.Structures
         public HashSet<uint> PendingRadioOffers { get; } = new();
         // Last position tested against content areas, per context (MissionContentManager.DoWork).
         public (uint MapContextId, System.Numerics.Vector3 Position)? LastContentSample { get; set; }
+        /// <summary>Content areas with area_entered rules the player stood in at the last sample (entry fires once).</summary>
+        public HashSet<uint> InsideContentAreas { get; } = new();
         public ulong TrackingTargetEntityId { get; set; }
         public byte ActiveWeapon { get; set; }
         public List<CharacterTeleporterEntry> GainedWaypoints = new();

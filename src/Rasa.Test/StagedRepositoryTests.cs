@@ -107,6 +107,7 @@ namespace Rasa.Test
             unit.CharacterLogoses.Stage(101, 23);
             unit.CharacterInventories.StageInvItem(10, 101, 1, 0, 555);
             unit.Characters.StageLevel(101, 2);
+            unit.Characters.StagePosition(101, 884.1, 294.2, 347.8, 5.55, 1220);
             unit.GameAccounts.StageCanSkipBootcamp(10, true);
 
             AssertNothingStaged(connection);
@@ -124,6 +125,8 @@ namespace Rasa.Test
             Assert.AreEqual(23u, reloaded.CharacterLogosEntries.Single().LogosId);
             Assert.AreEqual(555u, reloaded.CharacterInventoryEntries.Single().ItemId);
             Assert.AreEqual(2, reloaded.CharacterEntries.Single().Level);
+            var moved = reloaded.CharacterEntries.Single();
+            Assert.AreEqual((884.1, 1220u), (moved.CoordX, moved.MapContextId));
             Assert.IsTrue(reloaded.GameAccountEntries.Single().CanSkipBootcamp);
         }
 

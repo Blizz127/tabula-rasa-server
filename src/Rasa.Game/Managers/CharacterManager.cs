@@ -638,6 +638,20 @@ namespace Rasa.Managers
                     $"AccountId = {client.AccountEntry.Id} tried to switch to slot {packet.SlotNum}, which is empty.");
                 return;
             }
+            // S7: "Would you like to skip Bootcamp and go straight to Wilderness?" answered Yes. The
+            // client asks only for an unplayed character of an account that may skip; the server
+            // checks the same and moves the character to the boot camp's exit destination in the
+            // same commit as the login. No grants (GAP-SKIP-GRANTS).
+            if (packet.SkipBootcamp && SkipBootcampDestination(client, character) is { } destination)
+            {
+                unitOfWork.Characters.StagePosition(character.Id, destination.PosX, destination.PosY, destination.PosZ, destination.Rotation, destination.MapContextId);
+                character.MapContextId = destination.MapContextId;
+                character.CoordX = destination.PosX;
+                character.CoordY = destination.PosY;
+                character.CoordZ = destination.PosZ;
+                character.Rotation = destination.Rotation;
+            }
+
             unitOfWork.GameAccounts.UpdateSelectedSlot(client.AccountEntry.Id, packet.SlotNum);
             unitOfWork.Characters.UpdateLoginData(character.Id);
             unitOfWork.Complete();
@@ -650,6 +664,25 @@ namespace Rasa.Managers
             client.LoadingMap = client.Player.MapContextId;
             MapChannelManager.Instance.PassClientToMapInstance(client);
         }
+
+        /// <summary>
+        /// Where an unplayed character in a per-character boot camp goes when its account may skip:
+        /// the destination the boot camp's exit transfers to. Null (enter the boot camp) otherwise.
+        /// </summary>
+        public Func<Client, CharacterEntry, Structures.World.ContentLocationEntry> SkipBootcampDestination { get; set; } = (client, character) =>
+        {
+            if (client.AccountEntry?.CanSkipBootcamp != true || character.NumLogins != 0 ||
+                !MapChannelManager.Instance.IsPerCharacterContext(character.MapContextId))
+                return null;
+
+            var content = MissionContentManager.Instance.Content;
+            return content.LiveRules
+                .Where(rule => rule.MapContextId == character.MapContextId)
+                .SelectMany(rule => content.Catalog.RuleActions.TryGetValue(rule.Id, out var actions) ? actions : Enumerable.Empty<Structures.World.ContentRuleActionEntry>())
+                .Where(action => (ContentRuleAction)action.Action == ContentRuleAction.TransferToLocation)
+                .Select(action => content.Catalog.Locations.TryGetValue(action.LocationId, out var location) ? location : null)
+                .FirstOrDefault(location => location != null);
+        };
 
         private void SendCharacterCreateFailed(Client client, CreateCharacterResult result)
         {

@@ -28,6 +28,9 @@ namespace Rasa.Managers
         private Dictionary<(uint MissionId, uint ObjectiveId), List<ContentAreaEntry>> _areaBindings = new();
         private HashSet<uint> _contextsWithAreas = new();
 
+        // Areas an area_entered rule of the context listens on.
+        private Dictionary<uint, List<ContentAreaEntry>> _ruleAreasByContext = new();
+
         private MissionManager _missions;
 
         // The mission manager that owns offers and objective progress (the server's singleton by default).
@@ -65,7 +68,15 @@ namespace Rasa.Managers
                 }
             }
 
-            _contextsWithAreas = new HashSet<uint>(_areaBindings.Values.SelectMany(areas => areas).Select(area => area.MapContextId));
+            _ruleAreasByContext = Content.LiveRules
+                .Where(rule => (ContentRuleEvent)rule.Event == ContentRuleEvent.AreaEntered && liveAreas.ContainsKey(rule.AreaId))
+                .Select(rule => liveAreas[rule.AreaId])
+                .Distinct()
+                .GroupBy(area => area.MapContextId)
+                .ToDictionary(group => group.Key, group => group.ToList());
+
+            _contextsWithAreas = new HashSet<uint>(_areaBindings.Values.SelectMany(areas => areas).Select(area => area.MapContextId)
+                .Concat(_ruleAreasByContext.Keys));
         }
 
         #region Rules
@@ -98,7 +109,7 @@ namespace Rasa.Managers
         /// <summary>
         /// Stages the persistent actions into the triggering unit of work. Nothing is sent or changed in memory.
         /// </summary>
-        public void Stage(ContentReaction reaction, ICharUnitOfWork unitOfWork, Manifestation player, ContentState state)
+        public void Stage(ContentReaction reaction, ICharUnitOfWork unitOfWork, Manifestation player, ContentState state, uint accountId = 0)
         {
             foreach (var action in reaction.Persistent)
             {
@@ -111,6 +122,23 @@ namespace Rasa.Managers
                         unitOfWork.CharacterLogoses.Stage(player.Id, action.LogosId);
                         state.PlanLogos(action.LogosId);
                         reaction.GrantedLogos.Add((action.LogosId, (LogosGrantProtocol)action.LogosProtocol));
+                        break;
+
+                    case ContentRuleAction.TransferToLocation:
+                    {
+                        // The destination commits with the trigger, so a crash after the commit logs in
+                        // at the destination and never back in the source (build plan S6 step 1).
+                        var location = Content.Catalog.Locations[action.LocationId];
+                        unitOfWork.Characters.StagePosition(player.Id, location.PosX, location.PosY, location.PosZ, location.Rotation, location.MapContextId);
+                        reaction.Transfer = location;
+                        break;
+                    }
+
+                    case ContentRuleAction.SetAccountSkipBootcamp:
+                        if (accountId == 0)
+                            throw new InvalidOperationException("set_account_skip_bootcamp needs the account of the triggering character");
+                        unitOfWork.GameAccounts.StageCanSkipBootcamp(accountId, true);
+                        reaction.SkipBootcampGranted = true;
                         break;
 
                     case ContentRuleAction.GrantRewards:
@@ -165,9 +193,24 @@ namespace Rasa.Managers
                 ManifestationManager.Instance.NotifyExperienceGained(client, reaction.GrantedExperience);
             }
 
+            if (reaction.SkipBootcampGranted && client.AccountEntry != null)
+                client.AccountEntry.CanSkipBootcamp = true;
+
             // Every committed change can move a placement's presence condition.
             ContentMaterializer.RefreshPresence(client, Content);
+
+            // Last: the position is already committed, so the loading screen only follows it.
+            if (reaction.Transfer is { } destination)
+                Transfer(client, destination);
         }
+
+        /// <summary>Takes the player to a committed content location through the loading screen (MapChannelManager.ChangeMap).</summary>
+        public Action<Client, ContentLocationEntry> Transfer { get; set; } = (client, location) =>
+        {
+            if (!MapChannelManager.Instance.ChangeMap(client, location.MapContextId,
+                    new Vector3((float)location.PosX, (float)location.PosY, (float)location.PosZ), (float)location.Rotation))
+                Logger.WriteLog(LogType.Error, $"Content transfer of character {client.Player?.Id} to location {location.Id} could not start; it takes effect at the next login");
+        };
 
         /// <summary>
         /// Runs the presentation actions, after the triggering change and its persistent actions were committed.
@@ -659,7 +702,7 @@ namespace Rasa.Managers
                 {
                     using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-                    Stage(reaction, unitOfWork, player, state);
+                    Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                     unitOfWork.Complete();
                 }
                 catch (Exception e)
@@ -681,6 +724,7 @@ namespace Rasa.Managers
                 return;
 
             client.Player.LastContentSample = null;
+            client.Player.InsideContentAreas.Clear();
             ContentMaterializer.RefreshPresence(client, Content);
             React(client, new ContentEvent(ContentRuleEvent.EnteredMap, client.Player.MapContextId));
         }
@@ -710,6 +754,23 @@ namespace Rasa.Managers
                 var previous = player.LastContentSample is { } sample && sample.MapContextId == contextId ? sample.Position : current;
 
                 player.LastContentSample = (contextId, current);
+
+                // area_entered rules fire on the crossing into the area, not on every sample inside it.
+                if (_ruleAreasByContext.TryGetValue(contextId, out var ruleAreas))
+                    foreach (var area in ruleAreas)
+                    {
+                        var touched = SegmentEntersArea(previous, current, area);
+                        var inside = SegmentEntersArea(current, current, area);
+                        var wasInside = player.InsideContentAreas.Contains(area.Id);
+
+                        if (inside)
+                            player.InsideContentAreas.Add(area.Id);
+                        else
+                            player.InsideContentAreas.Remove(area.Id);
+
+                        if (touched && !wasInside)
+                            React(client, new ContentEvent(ContentRuleEvent.AreaEntered, contextId, areaId: area.Id));
+                    }
 
                 foreach (var (missionId, objectiveId) in IncompleteAreaObjectives(player))
                 {

@@ -93,6 +93,10 @@ namespace Rasa.Structures.Content
         public uint GrantedExperience { get; set; }
         public int GrantedCredits { get; set; }
 
+        // Filled by staging: a committed transfer destination and the account's skip-boot-camp flag.
+        public ContentLocationEntry Transfer { get; set; }
+        public bool SkipBootcampGranted { get; set; }
+
         public bool IsEmpty => Persistent.Count == 0 && Presentation.Count == 0;
 
         public static bool IsPersistent(ContentRuleAction action) => action is ContentRuleAction.GrantLogos or ContentRuleAction.GrantRewards

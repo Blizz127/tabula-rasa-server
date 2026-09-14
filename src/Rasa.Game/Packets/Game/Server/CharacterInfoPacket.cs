@@ -44,7 +44,9 @@ namespace Rasa.Packets.Game.Server
             CharacterData = new CharacterData(entry);
             BodyData = new BodyData(entry);
             LoginData = new LoginData(entry);
-            GameContextId = entry.MapContextId;
+            // characterselectionwindow.OnPlayBtn offers "skip Bootcamp" only for a pod with no logins
+            // and no last game context, so a character that never entered the world reports None.
+            GameContextId = entry.NumLogins == 0 ? 0 : entry.MapContextId;
 
             foreach (var appearanceEntry in entry.CharacterAppearance)
             {

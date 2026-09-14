@@ -27,6 +27,8 @@ namespace Rasa.Repositories.Char.Character
         void StageLevel(uint id, byte level);
         /// <summary>Adds a content reward to the tracked row, on top of anything already staged in this unit of work.</summary>
         void StageRewardGrant(uint id, int credits, uint experience);
+        /// <summary>Moves the tracked row to a map and position without saving (a content transfer commits it with its trigger).</summary>
+        void StagePosition(uint id, double x, double y, double z, double rotation, uint mapContextId);
         void UpdateCharacterLogin(uint id, uint totalTimePlayed, uint numLogins);
         void UpdateCharacterPosition(uint id, double x, double y, double z, double rotation, uint mapContextId);
         void UpdateCharacterActiveWeapon(uint id, byte activeWeapon);
