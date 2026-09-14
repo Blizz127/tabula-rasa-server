@@ -845,8 +845,8 @@ namespace Rasa.Test
                 {
                     ContentSchemaMigrationTests.CreatePreviousWorld(context, connection);
                     // Seed-data rows the boot-camp content references outside its own migrations (the full world
-                    // seed is not replayed): the boot-camp map and the Power Logos granted by S1.
-                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4)");
+                    // seed is not replayed): the boot-camp map, the S6 destination map and the Power Logos granted by S1.
+                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
                     context.Database.Migrate();
                 }
@@ -856,7 +856,8 @@ namespace Rasa.Test
 
                 var references = new MigratedWorldReferences(connection, missions.LoadedMissions);
                 // S2 usable placements: crate 26714 UsableTreasureDispHumCrateV04, dummies 29365 UsableStatelessHumPracticeDummyV01.
-                references.Classes.UnionWith(new uint[] { 26714, 29365 });
+                // S5: Conrad's corpse 21961 UsableStatelessFlightSalvage, bomb 7870 UsableBombHumV01, wreck 24586.
+                references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
                 // S2 crate item set 19858.
                 references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
 
@@ -868,7 +869,7 @@ namespace Rasa.Test
                 Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
                 Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
 
-                foreach (var missionId in new uint[] { 1990, 1992, 1994 })
+                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005 })
                 {
                     Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
@@ -884,9 +885,86 @@ namespace Rasa.Test
                 Assert.AreEqual(1992u, captureTheFlag.Prerequisites.Single().RequiredMissionId);
 
                 var livePlacements = validation.LivePlacements.Select(placement => placement.Id).ToList();
-                for (uint id = 198658; id <= 198674; id++)
+                for (uint id = 198658; id <= 198683; id++)
                     CollectionAssert.Contains(livePlacements, id);
                 Assert.IsTrue(validation.LiveRules.Any(rule => rule.Id == 1985005));
+
+                // Calling for Reinforcements: 2 -> 3 -> 1 -> 4, the corpse use and the bomb detonation, the 600 s timer that
+                // fails the mission, indicators 435/432 (S5) and 438 (S6), and the prerequisite on 1994.
+                var reinforcements = missions.LoadedMissions[1995];
+                CollectionAssert.AreEquivalent(new[] { (3u, ObjectiveBindingKind.UseCompleted, 198676u, 0u), (1u, ObjectiveBindingKind.PlacementState, 198677u, 115u) },
+                    reinforcements.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId, binding.TargetState)).ToArray());
+                CollectionAssert.AreEquivalent(new uint[] { 2 }, reinforcements.Objectives.Values.Where(objective => objective.RevealedOnAccept == true).Select(objective => objective.ObjectiveId).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 3 }, reinforcements.Transitions[2]);
+                CollectionAssert.AreEqual(new uint[] { 1 }, reinforcements.Transitions[3]);
+                CollectionAssert.AreEqual(new uint[] { 4 }, reinforcements.Transitions[1]);
+                Assert.AreEqual((600u, (byte)ObjectiveTimerExpiry.FailObjectiveAndMission), (reinforcements.Timers[1].LimitSeconds, reinforcements.Timers[1].OnExpire));
+                Assert.AreEqual(1, reinforcements.Timers.Count);
+                CollectionAssert.AreEquivalent(new[] { (1u, 432u, false), (2u, 435u, true), (4u, 438u, true) },
+                    reinforcements.Indicators.SelectMany(pair => pair.Value.Select(indicator => (pair.Key, indicator.IndicatorId, indicator.Show3d))).ToArray());
+                Assert.AreEqual((1994u, (byte)MissionState.Completed), (reinforcements.Prerequisites.Single().RequiredMissionId, reinforcements.Prerequisites.Single().RequiredState));
+                Assert.IsTrue(reinforcements.HasObjectiveConversation(2, 2584, 1) && reinforcements.HasObjectiveConversation(4, 2564, 1));
+                Assert.AreEqual((198505u, 100u), (reinforcements.MissionGiver, reinforcements.MissionReciver));
+
+                // The retry: 1 -> 4 with the same bomb binding and timer; offered after a failed 1995 and again after its own failure.
+                var retry = missions.LoadedMissions[2005];
+                Assert.AreEqual((1u, ObjectiveBindingKind.PlacementState, 198677u, 115u),
+                    retry.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId, binding.TargetState)).Single());
+                Assert.AreEqual((600u, (byte)ObjectiveTimerExpiry.FailObjectiveAndMission), (retry.Timers[1].LimitSeconds, retry.Timers[1].OnExpire));
+                CollectionAssert.AreEquivalent(new[] { ((byte)0, 1995u, (byte)MissionState.Failded), ((byte)0, 2005u, (byte)MissionState.NotAssigned), ((byte)1, 1995u, (byte)MissionState.Failded), ((byte)1, 2005u, (byte)MissionState.Failded) },
+                    retry.Prerequisites.Select(prerequisite => (prerequisite.OrGroup, prerequisite.RequiredMissionId, prerequisite.RequiredState)).ToArray());
+                Assert.IsTrue(retry.HasObjectiveConversation(4, 2564, 1));
+                Assert.AreEqual(0, retry.Indicators.Count);
+
+                // The usables and their conditions: the corpse while (1995,3) is open, the bomb while the dropship stands and one
+                // of the bomb objectives is open (armed again after a rebuild while planted), the wreck open once destroyed.
+                var placements = validation.Catalog.Placements;
+                Assert.AreEqual(((byte)ContentUsableKind.GenericUse, 44u, 198908u), (placements[198676].UsableKind, placements[198676].InitialState, placements[198676].UsableConditionId));
+                Assert.AreEqual(((byte)ContentUsableKind.Bomb, 113u, 114u, 198904u, 1420u, 4930u, 198906u, 198903u),
+                    (placements[198677].UsableKind, placements[198677].InitialState, placements[198677].AlternateState, placements[198677].AlternateStateConditionId,
+                     placements[198677].WindupMs, placements[198677].FuseMs, placements[198677].PresentConditionId, placements[198677].UsableConditionId));
+                Assert.AreEqual(((byte)ContentUsableKind.Structure, 31u, 91u, 198905u), (placements[198678].UsableKind, placements[198678].InitialState, placements[198678].AlternateState, placements[198678].AlternateStateConditionId));
+                foreach (var id in new uint[] { 198679, 198680, 198681, 198682 })
+                    Assert.AreEqual((198907u, (byte)ContentPlacementBehavior.Stationary), (placements[id].PresentConditionId, placements[id].Behavior), $"placement {id}");
+                Assert.AreEqual(((byte)ContentPlacementBehavior.CreatureAi, 0u), (placements[198683].Behavior, placements[198683].PresentConditionId));
+                Assert.AreEqual((2584u, 2564u), (placements[198675].NpcPackageId, placements[198679].NpcPackageId));
+
+                var conditions = validation.Catalog.Conditions;
+                string Terms(uint conditionId) => string.Join(" | ", conditions[conditionId].Select(term =>
+                    $"{term.OrGroup}.{term.TermIndex}:{(ContentConditionKind)term.Kind} {term.MissionId}/{term.ObjectiveId}={term.State} {term.FactKey}={term.Value}{(term.Negate ? " not" : "")}"));
+                Assert.AreEqual("0.0:ObjectiveStateIs 1995/3=2 =0 | 0.1:ObjectiveStateIs 1995/1=1 =0 | 1.0:ObjectiveStateIs 2005/1=1 =0", Terms(198903));
+                Assert.AreEqual("0.0:FactEquals 0/0=0 bootcamp.bomb_planted=1", Terms(198904));
+                Assert.AreEqual("0.0:FactEquals 0/0=0 bootcamp.dropship_destroyed=1", Terms(198905));
+                Assert.AreEqual("0.0:FactEquals 0/0=0 bootcamp.dropship_destroyed=1 not", Terms(198906));
+                Assert.AreEqual("0.0:FactEquals 0/0=0 bootcamp.dropship_destroyed=1", Terms(198907));
+                Assert.AreEqual("0.0:ObjectiveStateIs 1995/3=1 =0", Terms(198908));
+                Assert.AreEqual("0.0:ObjectiveStateIs 1995/4=2 =0 | 1.0:ObjectiveStateIs 2005/4=2 =0", Terms(198909));
+
+                // The rules: plant and detonation facts, the wreck bursting open, failures bringing the ship back (the D13.4 quirk
+                // is kept: abandoning clears nothing), and the exit pad transferring to Alia Das before setting the skip flag.
+                var actions = validation.Catalog.RuleActions;
+                string Actions(uint ruleId) => string.Join(" | ", actions[ruleId].Select(action =>
+                    $"{(ContentRuleAction)action.Action} {action.FactKey}{(action.FactValue != 0 ? "=" + action.FactValue : "")}{(action.PlacementId != 0 ? $" {action.PlacementId}->{action.StateId}" : "")}{(action.LocationId != 0 ? $" {action.LocationId}" : "")}".TrimEnd()));
+                foreach (var id in new uint[] { 1985006, 1985007, 1985008, 1985009, 1985010 })
+                    Assert.IsTrue(validation.LiveRules.Any(rule => rule.Id == id), $"rule {id}");
+                var rules = validation.Catalog.Rules;
+                Assert.AreEqual((ContentRuleEvent.PlacementStateEntered, 198677u, 114u), ((ContentRuleEvent)rules[1985006].Event, rules[1985006].PlacementId, rules[1985006].StateId));
+                Assert.AreEqual("SetFact bootcamp.bomb_planted=1", Actions(1985006));
+                Assert.AreEqual((ContentRuleEvent.PlacementStateEntered, 198677u, 115u), ((ContentRuleEvent)rules[1985007].Event, rules[1985007].PlacementId, rules[1985007].StateId));
+                Assert.AreEqual("SetFact bootcamp.dropship_destroyed=1 | ClearFact bootcamp.bomb_planted | SetPlacementState  198678->91", Actions(1985007));
+                foreach (var (ruleId, missionId) in new[] { (1985008u, 1995u), (1985009u, 2005u) })
+                {
+                    Assert.AreEqual((ContentRuleEvent.ObjectiveFailed, missionId, 1u), ((ContentRuleEvent)rules[ruleId].Event, rules[ruleId].MissionId, rules[ruleId].ObjectiveId));
+                    Assert.AreEqual("ClearFact bootcamp.dropship_destroyed | ClearFact bootcamp.bomb_planted", Actions(ruleId));
+                }
+                Assert.IsFalse(rules.Values.Any(rule => (ContentRuleEvent)rule.Event == ContentRuleEvent.MissionAbandoned));
+
+                Assert.AreEqual((ContentRuleEvent.AreaEntered, 198603u, 198909u), ((ContentRuleEvent)rules[1985010].Event, rules[1985010].AreaId, rules[1985010].ConditionId));
+                Assert.AreEqual("TransferToLocation  19852 | SetAccountSkipBootcamp", Actions(1985010));
+                var pad = validation.Catalog.Areas[198603];
+                Assert.AreEqual(((byte)ContentAreaShape.Sphere, -225.35, 99.6, -70.52, 12.0), (pad.Shape, pad.PosX, pad.PosY, pad.PosZ, pad.Radius));
+                var aliaDas = validation.Catalog.Locations[19852];
+                Assert.AreEqual(((byte)ContentLocationPurpose.TransferDestination, 1220u, 884.11, 305.8, 347.81), (aliaDas.Purpose, aliaDas.MapContextId, aliaDas.PosX, aliaDas.PosY, aliaDas.PosZ));
             });
         }
 

@@ -37,6 +37,30 @@
    "video_id": "8VXeKzGUv0c",
    "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
    "verification_sha256": "515788acda3c8c927afd2972dbaba0f0200fa20b8ed96f329dd7406d24b56293"
+  },
+  {
+   "segment": "B2",
+   "video_id": "8VXeKzGUv0c",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "verification_sha256": "7767bb523e9e0333026caebbd75a8985603fe47076ef0d19dbe1290937286f46"
+  },
+  {
+   "segment": "B3",
+   "video_id": "8VXeKzGUv0c",
+   "transcript_sha256": "d8a60c8e01eb21633663281e88bb3f6694c79dab3b5d24896173d0ab242798c3",
+   "verification_sha256": "89f89f0d65ccb27cca4812e69967d37d036425e6ae282393779c8e8692c89dc3"
+  },
+  {
+   "segment": "C1",
+   "video_id": "Ycxm8Pa1-v4",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee",
+   "verification_sha256": "f451a0c6c02fbc1b99e95cb9faca997a210f7bc7bf7afe3e5313b2f0763f6210"
+  },
+  {
+   "segment": "C2",
+   "video_id": "Ycxm8Pa1-v4",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5",
+   "verification_sha256": "401029c9c043143ff2f1443ffb0e652b139ef929eedf4e19511526e4e93299f9"
   }
  ],
  "events": [
@@ -953,6 +977,509 @@
    "status": "corrected",
    "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
    "corrected_text": "2 Thrax Infantry Initiate ; 1 Thrax Infantry Initiate (32.267-33.067)"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-027",
+   "t": 46.467,
+   "category": "npc",
+   "text": "2 Forean Warrior",
+   "description": "Target frame 'Forean Warrior' level 2 (green-skinned Forean portrait) on a staff-wielding humanoid fighting at melee range among Thrax beside a leaning metal slab; purple beam from its staff to a Thrax at ~46.5. First shown 45.600, target flips back to a Thrax 45.800-45.933, then Forean Warrior continuously 46.000-47.133 (cut). Allegiance not shown. Client: exact name in physicalentityclassnamelanguage 6043/6138 'Forean Warrior' (no exact creaturenamelanguage row).",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "2 Forean Warrior"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-028",
+   "t": 47.2,
+   "category": "chat_line",
+   "text": "You gained 66 experience points by Crit Killing. / You gained 66 experience points. / You received 5 credits. / You received 1 Xray2ia's Laser Cannon. / You received 159 Standard Grade Power Cells. / [1. General] Cebals: they r blue / [1. General] Cebals: not orange / [1. General] Original: k thx / You gained 35 experience points. / [1. General] Cebals: red items screwed up the drop rate",
+   "description": "Chat jumped across the cut: new crit-kill XP, credits and two named loot lines, plus general chat.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-035",
+   "t": 61.2,
+   "category": "enemy",
+   "text": null,
+   "description": "A large Bane dropship (dark organic hull, red ribbed underside, trailing tendrils) passes low overhead beside tall metal structures and stairs; player fires upward (pink muzzle effects) and the camera follows it into the sky (61.6-62.7), then drops back to the ground at 62.9 (camera move, chat unchanged). Radar shows a yellow mission icon near the top.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-041",
+   "t": 73.067,
+   "category": "chat_line",
+   "text": "You received 1 prestige points for reaching max kill streak / You gained 143 experience points. [71 Base XP] [+100% Kill Streak Bonus] / You received 10 credits.",
+   "description": "Max kill streak: prestige point, doubled XP with base/bonus breakdown (wraps to two lines), credits, all appearing on the same frame. Observed brackets look square in this re-encode; client fragments use parentheses.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-044",
+   "t": 80.6,
+   "category": "tracker",
+   "text": "Mission Tracker / Calling for Reinforcements / Destroy the crashed dropship before the bomb timer expires. / 00:02:06",
+   "description": "First frame after cut: tracker on mission 1995 objective 1 with a countdown box under the objective. Countdown seen: 00:02:06 (80.6), 00:02:05 (81.0), 00:02:02 (84.0), 00:02:01 (85.0-85.7), 00:02:00 (86.0-86.733); i.e. it ticks in real time with no cut in 80.6-86.8.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-045",
+   "t": 80.6,
+   "category": "player_action",
+   "text": "Press [Mouse Button 2] to use",
+   "description": "Player at the crashed dropship hull aiming at a glowing orange-red panel/object on the hull; blue use bar under the crosshair ~54% at 80.600 (started before cut), ~90% at 81.000, full from 81.267 (bright yellow flash on the object at 81.200). At 81.667 bar disappears, object turns yellow-green and 'Press [Mouse Button 2] to use' appears beside it (last seen 85.600, gone by 86.000). Whether it is the bomb being planted is not labelled.",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "Press [Mouse Button 2] to use"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-046",
+   "t": 80.6,
+   "category": "location",
+   "text": null,
+   "description": "Crashed dropship wreck: large tan/olive armour plates and struts of a downed craft on dark ground, carved stone (Forean/Eloh-style) architecture behind; the player walks along the hull 83-86 s while the wreck burns. Radar label Denzil's Caldera, yellow objective icon at radar centre next to the player arrow. No bomb carrier item or bomb window visible.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-049",
+   "t": 86.6,
+   "category": "other",
+   "text": "-21",
+   "description": "Dropship wreck explodes: white flash 86.6, full fireball with flying debris 87.0-87.2; player is thrown back with arms raised; a floating red \"-21\" at 87.0.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-050",
+   "t": 86.8,
+   "category": "system_message",
+   "text": "Objective Completed / Calling for Reinforcements / Destroy the crashed dropship before the bomb timer expires.",
+   "description": "Centre-screen objective-completion banner: objective line visible from 86.800 (header washed out by explosion flash until 86.933); 'Objective Completed' header legible 87.000-89.533, gone from 89.600; subtitle 'Calling for Reinforcements' and objective line persist to 89.800; nothing 89.867-89.933. No corresponding chat line. Tracker switches to objective 4 and the countdown box disappears at 86.800 (last reading 00:02:00 at 86.733).",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "Objective Completed / Calling for Reinforcements / Destroy the crashed dropship before the bomb timer expires."
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-051",
+   "t": 86.8,
+   "category": "tracker",
+   "text": "Calling for Reinforcements / Check in with Corporal Van Valkenberg",
+   "description": "Tracker on mission 1995 objective 4, no timer.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-053",
+   "t": 89.0,
+   "category": "location",
+   "text": null,
+   "description": "Player at the edge of a raised ribbed metal platform facing a burning fire between two tall carved stone pillars with purple crystal lights; a large dark metal craft or structure with cyan-blue glowing lights fills the top of the view (89.0-91.6). Whether it is an arriving transport is not established. Radar yellow objective icon beside the player arrow.",
+   "status": "confirmed",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-054",
+   "t": 90.0,
+   "category": "system_message",
+   "text": "New Objective / Calling for Reinforcements / Check in with Corporal Van Valkenberg",
+   "description": "New-objective banner from 90.000 (glare-obscured at first, fully legible from 90.667); 'New Objective' header gone from 93.000; subtitle and objective line remain until ~94.4 and fade out by 95.200.",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "New Objective / Calling for Reinforcements / Check in with Corporal Van Valkenberg"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-056",
+   "t": 91.667,
+   "category": "npc",
+   "text": "3 Forean Gunner Initiate",
+   "description": "Target frame 'Forean Gunner Initiate' level 3 (green Forean portrait) from 91.667; its overhead nameplate and health bar float over an apparently empty spot on the pad in front of the fire (no visible body) 91.667-92.667; bronze/olive-armoured crested-helmet figures fade in at that spot 93.067 (translucent) to 93.467 (solid). Allegiance not shown.",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": "3 Forean Gunner Initiate"
+  },
+  {
+   "segment": "B1",
+   "event_id": "B1-057",
+   "t": 92.0,
+   "category": "other",
+   "text": "",
+   "description": "A translucent blue dome/field appears over the pad at 92.000; bronze/olive-armoured crested-helmet figures fade in on the pad 93.067-93.467 (first NPC bodies visible; nothing visible under the Forean Gunner nameplate before that); several blue translucent humanoid figures appear by ~94.0 (materialising effect). No Van Valkenberg nameplate, mission marker or conversation window through 94.4.",
+   "status": "corrected",
+   "transcript_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+   "corrected_text": ""
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-002",
+   "t": 88.0,
+   "category": "tracker",
+   "text": "Mission Tracker / Calling for Reinforcements / Check in with Corporal Van Valkenberg",
+   "description": "Mission Tracker (top right) shows mission 1995 with the new active objective; it stays unchanged until the cut at 98.333.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-003",
+   "t": 88.0,
+   "category": "location",
+   "text": null,
+   "description": "Crashed-dropship site in Denzil's Caldera after the bomb went off. A large orange fireball burns on a rock/wreck mound between two tall carved Forean stone pillars (brown stone, dark purple diamond insets, purple crystal lights on top) under a heavy wooden crossbeam. Standing stone slabs and barrel-like stones are at left. At 88.0-88.667 the upper half of the view is grey haze/smoke and the player model is not on screen. From 89.333 the player is visible at lower left, standing on the raised, ribbed/segmented rim of the round metal pad. Radar: label 'Denzil's Caldera', Filter dropdown. The white player arrow near centre points LEFT (west), toward the yellow mission icon(s), not right/east. From 88.0 to about 91.5 there is only ONE yellow radio-shaped mission icon left of the arrow. A second yellow icon plus a small green pip between the icons and the arrow appear by about 92.6 and stay to 98.333. The small red pip to the north is already present from 88.0. Light-blue ground with dark rock blobs and a darker region to the lower right. The Pending panel shows green figure, blue figure and blue diamond '?' icons.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-005",
+   "t": 89.0,
+   "category": "other",
+   "text": "",
+   "description": "An AFS dropship (dark grey armoured hull, blue glowing lights and engine pods) enters from the top edge of the screen at 88.867 (hull edge first visible) and moves down into view at 89.067-89.667. It stays across the top of the screen above the crossbeam, the pad and the burning wreck through 91.600. At 91.667 the camera pitches down and the ship leaves the frame (a camera change, not a cut; chat continues). It is not seen again. Identifying it as the reinforcement transport rather than the crashed ship is an inference.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": ""
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-006",
+   "t": 90.0,
+   "category": "system_message",
+   "text": "New Objective / Calling for Reinforcements / Check in with Corporal Van Valkenberg",
+   "description": "Old banner: the 'Objective Completed' title has already gone at 89.600. The 'Calling for Reinforcements / Destroy the crashed dropship before the bomb timer expires.' lines remain through 89.867, and the banner is blank at 89.933. The new banner appears at 90.000; its title and part of the objective are washed out by the dropship's blue glow at 90.0-90.067. 'New Objective' is clearly readable at 90.667-92.667 and has faded by 93.000. The 'Calling for Reinforcements' and 'Check in with Corporal Van Valkenberg' lines stay until about 94.4, fade over 94.467-94.933 (faint ghost at about 95.0), and are gone at 95.067.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "New Objective / Calling for Reinforcements / Check in with Corporal Van Valkenberg"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-009",
+   "t": 92.0,
+   "category": "other",
+   "text": null,
+   "description": "At 92.000 (not at 91.933) a wide translucent blue cone/dome of light covers the pad; its apex is off the top of the screen. The dropship is NOT on screen when the cone appears (it left the frame at 91.667), so 'from the hovering dropship' is inference. Blue lightning-like streaks run inside the cone at 92.667-93.333. Faint ghosted humanoid outlines are already visible at 93.000. At 91.667-92.667, BEFORE any figure is visible, a 'Forean Gunner Initiate' nameplate with a red health bar (and the matching target frame) floats over an empty spot on the far side of the pad. By 93.667-94.333 the Forean with a staff is SOLID (bronze/tan armour) under that nameplate, while 2-3 AFS figures are still bright translucent blue. A blue-tinted figure is still seen at 95.133-95.267. At 95.4 the soldiers look solid, and the cone is still faintly visible to about 95.667 (gone at 95.8).",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-012",
+   "t": 95.4,
+   "category": "npc",
+   "text": null,
+   "description": "The reinforcement group stands on the pad in front of the pillars from 95.4 to 98.333. At 96.667 I count about 2-3 AFS soldiers (dark grey armour and helmets; one has a blue backpack/tube) and 2 Foreans: a bulky one with a crested helmet and a staff, and a slim one with a staff. The yellow radio-shaped objective indicator already floats on the right pillar at 95.200-95.333, then again from 96.067 on (not first at 96.667). At 95.4-95.933 a yellow icon of the same shape sits fixed at the right screen edge, at the top of the Updates column. It vanishes at 96.067, exactly when the camera swings back and the pillar indicator reappears, and the Updates panel is empty at 95.067 and from 96.067. So it is most likely the same world-space indicator clamped to the screen edge while off-screen, not an Updates-panel entry. Neither this nor any nameplate names Van Valkenberg; the only names seen are 'Forean Gunner Initiate' and 'Infantryman'.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-015",
+   "t": 98.4,
+   "category": "location",
+   "text": "radar: Alia Das ; nameplate: C[?]r[?]s[?]... <Tr[?]al Account> (uncertain; name illegible)",
+   "description": "HARD CUT 98.333 -> 98.400 (confirmed by pts) from Denzil's Caldera to Alia Das. There is no loading screen, Van Valkenberg conversation, Commander Rogers, pad step-on or transport effect in adjacent frames. Scene: hazy orange-tan dusty sky, flat sandy ground, a yellow-leaved tree, an olive-green canvas military tent on a dark metal frame, and a low sand/rock berm. Two humanoid characters: (a) at screen centre, directly under the reticle, a figure with dark blue hair, grey short-sleeve shirt, brown shoulder harness and dark trousers, holding a gun. This matches the player's outfit at 98.333 and 109.8, so it is most likely the player, with the camera zoomed out in UI mode. (b) Larger, in the right-centre foreground with feet below the frame edge, a figure with dark blue-black hair, a black leather jacket with red straps and a backpack with red lights. This is most likely another character; the transcript describes (b) as the player and (a) as another player, which appears swapped. By the tent entrance stands a female in a brown/olive jumpsuit with short dark hair; she has moved away by about 105. A nameplate (x about 478-600, y about 300-318) reads, uncertain: a name starting roughly 'Chr...' / 'C[?]r[?]s...', then a tag with the shape of '<Trial Account>'. The name letters are illegible even when averaged over 40 frames. The plate sits at about the female's chest height, so which character it belongs to is uncertain. Radar: 'Alia Das', Filter, white player arrow at centre with a dark blob just below-right, blue region left/lower-left, dark rectangle at right, orange marker on the upper-left rim.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "radar: Alia Das ; nameplate: C[?]r[?]s[?]... <Tr[?]al Account> (uncertain; name illegible)"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-016",
+   "t": 98.4,
+   "category": "player_state",
+   "text": "4 Master Assault ; AccuMax Shotgun 39/72[?] ; UI MODE",
+   "description": "Right after the cut: level box 4 (was 3), 'Master Assault', AccuMax Shotgun 39/721 (ammo partial). 'UI MODE' shows at top centre because a window is open.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "4 Master Assault ; AccuMax Shotgun 39/72[?] ; UI MODE"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-017",
+   "t": 98.4,
+   "category": "chat_line",
+   "text": "points and 2 skill points.",
+   "description": "Top of the visible chat, already present at the first Alia Das frame (arrived during the cut): the tail of a wrapped, light-blue/violet system line. Only its end is visible.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-018",
+   "t": 98.4,
+   "category": "chat_line",
+   "text": "You will not advance in level until you visit a trainer and choose a new character class to advance in.",
+   "description": "System line (white), already present at 98.4.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-019",
+   "t": 98.4,
+   "category": "chat_line",
+   "text": "You just gained Alia Das Hospital.",
+   "description": "System line (white), already present at 98.4: hospital/respawn point bound on arrival.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-020",
+   "t": 98.4,
+   "category": "chat_line",
+   "text": "Joined Channel: [4. Wilderness - General] / Joined Channel: [5. Wilderness - Trade] / Joined Channel: [6. Wilderness - Defense]",
+   "description": "Three system lines (white), already present at 98.4: auto-joined the Wilderness regional channels.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-022",
+   "t": 98.4,
+   "category": "tracker",
+   "text": "Mission Tracker / Calling for Reinforcements (complete)",
+   "description": "Mission Tracker shows only the finished 1995 mission, marked complete (text blurred but readable).",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-023",
+   "t": 98.4,
+   "category": "mission_window",
+   "text": "Headquarters / Mission Available / Briefing / Training Day / You're advancing quickly, recruit! When you gain enough experience to train, you'll find class trainers at most AFS installations. / The trainers at Alia Das is Trainer Kincaid.  He's stationed in front of the barracks tent. Go introduce yourself. / Objectives / Report to a Class Trainer. / Rewards / You will receive: / [credits icon] 120 (partial) / You will be able to choose from one of the following: / Vextronics Pistol | Vextronics Pulse Pistol / Accept Mission | Decline (greyed)  [client_match correction: 'Headquarters' = uielementlanguage [2165] / [10000001]]",
+   "description": "Mission offer window, open at the first Alia Das frame, on the left side of the screen. Header: black silhouette portrait (no NPC face) plus a small helmet/radio badge icon. The offer comes from 'Headquarters' as a remote offer, not from an NPC. Briefing box with a scrollbar. Reward icons: grey pistol (Vextronics Pistol) and yellow/green pistol (Vextronics Pulse Pistol). 'Decline' is greyed. The window stays open to 109.733. The player hovers the reward items (tooltips 102.0-109.7). The next scene (109.8, after a cut) shows the mission accepted.",
+   "status": "corrected",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+   "corrected_text": "Headquarters / Mission Available / Briefing / Training Day / You're advancing quickly, recruit! When you gain enough experience to train, you'll find class trainers at most AFS installations. / The trainers at Alia Das is Trainer Kincaid.  He's stationed in front of the barracks tent. Go introduce yourself. / Objectives / Report to a Class Trainer. / Rewards / You will receive: / [credits icon] 120 (partial) / You will be able to choose from one of the following: / Vextronics Pistol | Vextronics Pulse Pistol / Accept Mission | Decline (greyed)  [client_match correction: 'Headquarters' = uielementlanguage [2165] / [10000001]]"
+  },
+  {
+   "segment": "B2",
+   "event_id": "B2-033",
+   "t": 109.8,
+   "category": "tracker",
+   "text": "Mission Tracker / Training Day / Report to a Class Trainer.",
+   "description": "Tracker now shows the accepted Training Day mission.",
+   "status": "confirmed",
+   "transcript_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84"
+  },
+  {
+   "segment": "B3",
+   "event_id": "B3-020",
+   "t": 243.5,
+   "category": "npc",
+   "text": "Outpost Commander Rogers / Press [Mouse Button 2] to talk / Meri Silvers 10 (partial: second letter e vs a)",
+   "description": "Inside the command tent: nameplate and target frame 'Outpost Commander Rogers' (level 20, red target frame, portrait of a dark-haired man), tan/khaki uniform, yellow walkie-talkie-shaped overhead marker, prompt 'Press [Mouse Button 2] to talk'. Adjacent NPC nameplate 'Meri Silvers' level 10 (partial; no client-table match).",
+   "status": "corrected",
+   "transcript_sha256": "d8a60c8e01eb21633663281e88bb3f6694c79dab3b5d24896173d0ab242798c3",
+   "corrected_text": "Outpost Commander Rogers / Press [Mouse Button 2] to talk / Meri Silvers 10 (partial: second letter e vs a)"
+  },
+  {
+   "segment": "B3",
+   "event_id": "B3-021",
+   "t": 244.2,
+   "category": "conversation_window",
+   "text": "Outpost Commander Rogers / Mission Available / Briefing / Miner Difficulties / I need to get these supplies to Mining Coordinator Richards at the Pinhole Falls Caverns. High Command thinks those caverns would be a great way to move troops and equipment around without attracting undue attention. [..] Trouble is, right now there's only one way in or out, so we're making some modifications. That's the mining team's job. Your job, if you're up to the challenge, is to restock their supplies. They're running low on meds and mining equipment, so you've gotta get these two crates down there a-sap. Report to Mining Coordinator Richards. And keep an eye out for enemy patrols. The area's crawling with [crusties] / Accept Mission / Decline",
+   "description": "Player talks to Rogers: mission offer window. Header portrait + \"Outpost Commander Rogers\", subtitle \"Mission Available\", tab \"Briefing\", mission title \"Miner Difficulties\" (yellow-green) and body text, buttons \"Accept Mission\" and \"Decline\". Window closes at 245.4 (accepted, see next event).",
+   "status": "confirmed",
+   "transcript_sha256": "d8a60c8e01eb21633663281e88bb3f6694c79dab3b5d24896173d0ab242798c3"
+  },
+  {
+   "segment": "B3",
+   "event_id": "B3-024",
+   "t": 248.3,
+   "category": "npc",
+   "text": "Receptive Liaison Langerman 15 / Press [Mouse Button 2] to talk",
+   "description": "Player walks deeper into the tent (computer consoles, holo map table, desk). Target frame and nameplate \"Receptive Liaison Langerman\" level 15: NPC in white uniform with white peaked cap, yellow walkie-talkie-shaped overhead marker; prompt \"Press [Mouse Button 2] to talk\" at 249.5. A large glowing white speech-bubble icon floats at right (248.3). Interaction outcome not shown (cut at 250.2).",
+   "status": "confirmed",
+   "transcript_sha256": "d8a60c8e01eb21633663281e88bb3f6694c79dab3b5d24896173d0ab242798c3"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-001",
+   "t": 0.0,
+   "category": "tracker",
+   "text": "Mission Tracker / Calling for Reinforcements / Locate the missing AFS soldiers",
+   "description": "Mission Tracker window (top right) shows mission name with yellow square marker and one objective line with small white square; identical in every 1 fps frame 0-86 s. No other mission listed, no timer/countdown anywhere in tracker.",
+   "status": "confirmed",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-003",
+   "t": 0.0,
+   "category": "location",
+   "text": "Denzil's Caldera / Filter",
+   "description": "Radar (bottom right): region label \"Denzil's Caldera\", globe icon, \"Filter\" dropdown, +/- zoom buttons. Walls stay fixed while the white player arrow turns (fits north-up); dark wall outlines, small red dots and blue/white circles. An orange off-radar arc is on the west rim from the start of the segment until 38.600 s. At 38.633 s it is replaced, in the same frame and at the same rim spot, by the yellow radio-like icon (see C1-025). At 58.567 s the icon leaves the radar and the orange arc comes back on the south-west rim, staying there to the end of the segment (86+ s).",
+   "status": "corrected",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-009",
+   "t": 4.0,
+   "category": "enemy",
+   "text": "1 Thrax Infantry Initiate (3.700-4.200 s), then 2 Thrax Infantry Initiate (from 4.233 s)",
+   "description": "The target frame (top centre) first appears at 3.700 s: a level-1 Thrax Infantry Initiate, with world nameplate bracket '[ 30 ]' then '[ 28 ]'. At 4.233 s the target changes to a level-2 Thrax Infantry Initiate (nameplate '[ 22 ]'). Floating orange 'Miss!' over the creatures at 4.0-4.3 s. Portrait: orange/red creature with white/silver face plate.",
+   "status": "corrected",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee",
+   "corrected_text": "1 Thrax Infantry Initiate (3.700-4.200 s), then 2 Thrax Infantry Initiate (from 4.233 s)"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-013",
+   "t": 6.0,
+   "category": "enemy",
+   "text": "1 Thrax Infantry Initiate",
+   "description": "Target frame changes to a level-1 Thrax Infantry Initiate (target level alternates between 1 and 2 for the rest of the segment: level 2 at t=4-5, 7-11, 13-18, 22-23, 31-33, 38, 43-50, 55-72; level 1 at t=6, 12, 19-21, 24-30, 35-37, 40-42, 51-54, 73-86).",
+   "status": "confirmed",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-024",
+   "t": 34.0,
+   "category": "npc",
+   "text": "2 Forean Shaman Initiate",
+   "description": "Target frame shows a level-2 Forean Shaman Initiate (green-skinned Forean portrait, red health bar like other targets); again at t=39. In-world a robed Forean with gold/brass chest armour and a purple-crystal-topped staff stands in the courtyard among Thrax (also seen t=45 and t=52). Allegiance not determinable from the frames.",
+   "status": "confirmed",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee"
+  },
+  {
+   "segment": "C1",
+   "event_id": "C1-025",
+   "t": 40.0,
+   "category": "map_or_waypoint_window",
+   "text": null,
+   "description": "Yellow handheld-radio-like icon with glowing brackets on the radar from 38.633 s to 58.533 s (index frames t=39-58). It first appears on the west rim, moves inside the radar west/south-west of the player arrow (index t=42-56), then lower-left near the rim (t=57-58). Its appearance and disappearance swap frame-for-frame with the orange off-radar rim arc (west rim before 38.633 s, south-west rim from 58.567 s). The arc and icon therefore seem to be the same tracked marker shown off-radar and on-radar.",
+   "status": "corrected",
+   "transcript_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-01",
+   "t": 80.5,
+   "category": "tracker",
+   "text": "Mission Tracker / Calling for Reinforcements / Locate the missing AFS soldiers",
+   "description": "Mission Tracker shows one mission and one objective for the whole segment: 'Calling for Reinforcements' (yellow square) / 'Locate the missing AFS soldiers' (small square). Checked in every 1 fps frame 80.5-165.5: no change, no completion, no countdown/timer, no second mission.",
+   "status": "confirmed",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-03",
+   "t": 80.5,
+   "category": "location",
+   "text": "Denzil's Caldera / Filter",
+   "description": "Radar region label 'Denzil's Caldera' with Filter button in every 1 fps frame 80.47-165.47; map geometry keeps a fixed orientation while the white arrow changes heading. The orange edge arc (with a small pointer) is NOT fading at ~107.5: it is present continuously 80.5-112.833 and moves from the lower-left of the ring (80.5-92.5) through the bottom (95.5-110.5) to the bottom-right (112.5-112.833); it vanishes in the exact frame (112.867) the yellow handset icon enters the radar. It reappears at the upper-right ring 127.5-133.5 and 147.5-151.5, exactly the seconds in which the handset icon is missing from the radar (it behaves like an off-radar direction indicator for that icon; no label). Small cyan/white circle pips near the arrow are visible 80.5-91.5 and again at 94.5 (not only to 89.5); red dots also at 80.5. Scene 80.5: plank/metal platform in foreground, dead stumps, yellow-leaf tree at right, a Thrax corpse, a long red beam/tracer streak across the ground at mid-right (80.5-81.5), fortified wall with a burning structure and smoke behind. 81.5-88.5: scorched ground with dead stumps, Thrax corpses, low metal wall segments, several standing soldier figures, and a green vented AFS structure (87.5-88.5). No red-striped ramp is visible in 81.5-88.5 (the red-striped ramp is first seen 161.8-163.3).",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-09",
+   "t": 88.62,
+   "category": "other",
+   "text": null,
+   "description": "The dark craft first appears at the LEFT edge of the view at 87.867 (black nose with an orange light), stays at the left edge at mid-height 87.9-88.5 while the camera turns, is at upper-left with thruster flares 88.53-88.7, and flies up-right across the rock formations 88.8-89.33; the green vented AFS structure is at upper right, so the craft does not enter 'the top of the view over the base structure'. Camera tilts up and closes in on the player 89.3-89.4 (fast but continuous, HUD unchanged). Craft design confirmed: black spiky hull with several horn-like prongs, red-lit underside/interior, small blue-purple lights, glowing thruster flares. It is above/behind the player's head (teal hair, dark shirt, red/grey backpack) 90.47-91.27, small at the top of the view at 91.40, gone at 91.53, rocks at 91.67. Dark smoke streaks cross the sky 89.9-91.3 (cannot tell whether they are trails of the craft or smoke from base fires). No HUD, chat or target change; no edit cut.",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-16",
+   "t": 102.5,
+   "category": "location",
+   "text": null,
+   "description": "Player runs toward a large burning wreck: black curved hull pieces split in two with a big fire between them, dead trees, sandbag lines and metal walls at left; 105.5-107.5 player runs along a long ribbed metal wall past fire on the right. No nameplate, marker or prompt on the wreck; tracker unchanged.",
+   "status": "confirmed",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-20",
+   "t": 112.5,
+   "category": "map_or_waypoint_window",
+   "text": null,
+   "description": "Yellow handset/walkie-talkie icon (yellow outline with glowing side lobes, on a dark building footprint on the radar map), no text label. Absent at 112.500-112.833 (orange edge arc at bottom-right instead); first frame 112.867, inside the lower-right of the ring. 113.5-121.5 it moves from lower right to the right side and upper right; 122.5-126.5 near the top. ABSENT 127.5-133.5 (orange arc at the upper-right ring instead); back near the top 134.5-146.5; ABSENT 147.5-151.5 (orange arc upper right); back near the top 152.5-153.5; approaches the arrow from above 154.5-157.5 (upper-left of the arrow at 155.5-156.5), lower-left/left of the arrow 158.5-163.5, directly left of the arrow 164.5-165.5.",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-41",
+   "t": 153.88,
+   "category": "other",
+   "text": null,
+   "description": "The dark horned craft is first visible at 153.567 just beyond the left edge of the tall plank wall (not 153.88). 154.5-158.2 it hovers low above the leaning metal slab inside the base walls with orange fire beneath, while the player runs toward it past sandbags; figures stand in the yard beneath it (purple crystal staff visible 156.5-158.2, several soldier figures; the Forean archer is in view and targeted from 155.233). In the close views 158.2-158.6 the hull looks dark grey/olive with a red-lit interior and prongs; 158.7-159.0 it rises with hanging landing legs, thruster flares and smoke; it is partially at the top edge at 159.167 and out of view at 159.200 as the camera tilts down. No nameplate, marker, prompt or chat line for the craft.",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-42",
+   "t": 155.5,
+   "category": "npc",
+   "text": "1 Forean Archer Initiate",
+   "description": "Target frame level 1 'Forean Archer Initiate' (clear; green Forean portrait with pointed head, full red bar) from 155.233 (empty at 155.167) to 158.000, and again briefly 162.333-162.400. The archer (green skin, pointed head, bow) stands in the base yard near sandbags. Cyan pips cluster around the radar arrow 154.5-165.5, but the claim 'no red dots' is wrong: a small red dot is visible in the upper part of the radar at 158.5, 160.5, 162.5, 164.5 and 165.5 (none seen at 154.5-156.5). No shot is fired while the archer is targeted (ammo 20/1674 at 157.9-158.0).",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-44",
+   "t": 158.5,
+   "category": "npc",
+   "text": "2 Forean Shaman Initiate",
+   "description": "Target frame level 2 'Forean Shaman Initiate' (clear; Forean portrait with collar) from 158.033 to 162.300 (not 158.5-161.5). The shaman carries a staff topped with a purple crystal (tan/brown robe, metal cap). The craft rises 158.6-159.167 with thruster flares, landing legs and smoke and is out of the top of the view at 159.200 while the camera tilts down (159.2-159.3). At 159.30-159.43 a scorched crater lies beside the leaning slab with the Forean archer (left, bow), the shaman (by the slab) and the player; no dark-armoured soldier is visible in these frames. While the shaman is targeted one rifle round is fired at 158.700 (20/1674 -> 19/1674); the shaman's red bar stays full; 'Reloading' 159.467 to about 160.9, then 20/1673 by 161.1.",
+   "status": "corrected",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-48",
+   "t": 162.5,
+   "category": "npc",
+   "text": "2 Field Gunner ( ? )",
+   "description": "Target frame: level 2 'Field Gunner' (grey helmeted portrait). Overhead nameplate '2 Field Gunner' with emblem, red bar and '( ? )' marker over a dark-armoured soldier with a backpack at the foot of the ramp, next to the Forean archer. Not attacked.",
+   "status": "confirmed",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-50",
+   "t": 165.5,
+   "category": "map_or_waypoint_window",
+   "text": null,
+   "description": "A floating yellow handset/walkie-talkie icon (same glyph as the radar icon) hangs above a bunker doorway at the right of the view. Player stands in the base yard with the Forean archer, the Forean shaman (purple staff, foreground at 164.5-165.5), the Field Gunner and a Thrax corpse by sandbags; the radar icon is immediately left of the arrow. No use prompt, conversation or objective text appears.",
+   "status": "confirmed",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "C2",
+   "event_id": "C2-51",
+   "t": 165.7,
+   "category": "other",
+   "text": null,
+   "description": "End of video (duration 165.70 s); last frame matches 165.5. Through the end of the video there is no objective completion, no Conrad's corpse or bomb, no bomb timer, no dropship destruction, no Corporal Van Valkenberg, no dropship pad and no exit.",
+   "status": "confirmed",
+   "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
   }
  ],
  "dropped": []

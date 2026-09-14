@@ -146,7 +146,7 @@ the final-live rule.
 
 ## S5 part 1–2 (facts, objective timers, failure and retry) status
 
-- Mechanisms only; no 1995/2005 rows are seeded yet. Content facts and the `fact_equals` / `has_logos` conditions
+- Mechanisms only (the 1995/2005 rows came later, see the S5 seed section below). Content facts and the `fact_equals` / `has_logos` conditions
   persist per character and context.
 - Objective timers run in wall-clock mode (OD-5). A timer starts when its objective is revealed (acceptance,
   transition or reconciliation) and is stored as remaining ms plus a Unix-ms anchor. The client receives
@@ -169,7 +169,7 @@ the final-live rule.
 
 ## S5 part 3 (bomb, generic use, placement state) status
 
-- Mechanisms only; the 1995/2005 rows are not seeded yet. Planting a bomb (use recovery on a state-113 bomb
+- Mechanisms only (the 1995/2005 rows came later, see the S5 seed section below). Planting a bomb (use recovery on a state-113 bomb
   placement) sets state 114 and starts `fuse_ms`. In one transaction it disarms the timers of objectives its
   detonation completes and commits the `placement_state_entered` 114 rules. The client's countdown keeps
   running (B1-044) but can no longer fail the objective.
@@ -183,6 +183,61 @@ the final-live rule.
 - `BombPlacementTests` and `ABombPlantedBeforeTheInstanceWasRebuiltComesBackArmedWithAFreshFuse` cover this.
   Full suite 844/844. Deployed 2026-09-14 19:27Z together with the S4 seed and navmeshes. Detonation damage to
   the player (B1-049 "-21") is still a gap.
+
+## S5 (Calling for Reinforcements) seed status
+
+- Missions 1995 and 2005 are seeded by `BootcampS5Reinforcements` (SQLite and MySQL, frozen rows in
+  `BootcampData/BootcampS5ReinforcementsRows.cs`, parity-checked; 59 manifest rows). Youngblood gives 1995 after 1994
+  is completed. Objective 2 (the unnamed wounded soldier, package 2584) is revealed on acceptance, then 2 → 3 (use
+  Conrad's corpse) → 1 (the bomb reaching its detonated state 115) → 4 (Van Valkenberg, package 2564); 1 → 4 is
+  observed (B1-050/051), the rest inferred. Objective 1 carries the 600 s timer (analogue, OD-6) that fails the
+  mission; the receiver is Rogers (creature 100, inferred; `GAP-ROGERS`). No reward is seeded (`GAP-S5-MISSION-REWARDS`).
+- 2005 (level 3 inferred) has objectives 1 → 4 with the same bomb binding and a 600 s timer ("You've got ten minutes.",
+  inferred); it is offered after a failed 1995 (no 2005 row) and again after its own failure.
+- Usables: the bomb (class 7870, inferred) with windup 1420 ms and fuse 4930 ms (both measured ±150 ms), usable once
+  the bomb was taken from the corpse while its objective is open, present while `bootcamp.dropship_destroyed` is not
+  set, and rebuilt armed while `bootcamp.bomb_planted` is set; Conrad's corpse (analogue 21961 generic use, position
+  inferred, windup 0); the wreck (class 24586 as a Structure, closed 31, open 91 once the dropship is destroyed).
+  Rules: planting sets `bomb_planted`; detonation sets `dropship_destroyed`, clears `bomb_planted` and opens the wreck;
+  a failed bomb objective of 1995 or 2005 clears both facts. Abandoning clears nothing, so the D13.4 stuck state is
+  preserved on purpose (`GAP-D13.4`).
+- Creatures: Van Valkenberg (name 10574; class 3846, level 10, 1000 hp analogues) at his measured radar position, the
+  unnamed wounded soldier (class 3846 analogue) at an inferred bunker position, Infantryman L2 and L3 and the Forean
+  Gunner Initiate L3 (analogue classes 21910/21900/6239; levels observed, the Infantryman levels from frame reading
+  S5P-01) at inferred pad positions. Van Valkenberg and the reinforcements are present once the dropship is destroyed
+  and stand still. One level-1 Thrax Infantry Initiate (the S4 template's analogues, `creature_action` 33) guards the
+  measured outpost engagement position. Indicators 435 (1995,2) and 432 (1995,1) use inferred ids at measured positions.
+- Conflicts with the build plan recorded in the manifest: C2-16 is a different, static wreck 250 m from the pad; the
+  pad-centre radar icon is the (1995,4) indicator, not Van Valkenberg; the wounded soldier's position is inferred,
+  not measured; the bomb lies south-west of the player (heading 230 deg), not north; the fuse is 4930 ms state to
+  state, not 5300 ms; B2-012 names no reinforcement level.
+- 14 positions, 49 footage events (segments B2, B3, C1, C2 added) and sources `official_notes:d11` and
+  `client_table:launch-2007-11` (pre-D11, comparison only) were added. New gaps: `GAP-S5-WRECK-MECHANISM` (closed by
+  `fbd1539`), `GAP-S5-HIDDEN-XP`, `GAP-S5-WOUNDED-NAME`, `GAP-S5-CORPSE`, `GAP-S5-REINFORCEMENT-MOVE`,
+  `GAP-S5-REINFORCEMENT-COUNT`, `GAP-S5-TIMER-START`, `GAP-S5-DETONATION-DAMAGE`, `GAP-S5-MISSION-REWARDS`,
+  `GAP-S5-INDICATOR-PRESENTATION`, `GAP-S5-AMBIENT` and `GAP-BEAM-IN`; `GAP-BOMB-ITEM`, `GAP-D13.4`, `GAP-NPC-BODY`,
+  `GAP-S4-AMBIENT-LEVELS`, `GAP-ROGERS` and `GAP-NEXT-SEGMENT` were updated. Not seeded: rewards, the hidden
+  level-3-to-4 experience, a bomb item, detonation damage, unnamed reinforcements and their walk-off, the other
+  outpost creatures, flyovers and the beam-in.
+
+## S6 (Exit to Alia Das) status
+
+- `BootcampS6ExitToAliaDas` (SQLite and MySQL, frozen rows in `BootcampData/BootcampS6ExitToAliaDasRows.cs`; 8 manifest
+  rows) seeds the exit pad area (the original damaged-pad map entity, OD-8, radius 12 m inferred), its `area_entered`
+  rule armed by (1995,4) or (2005,4) Completed, which transfers to location 19852 and then sets the account's
+  skip-bootcamp flag (OD-9), the Alia Das destination (context 1220 at the first observed post-cut position, measured
+  ±1.5 m, rotation ±30 deg; `GAP-S6-ARRIVAL`) and indicator 438 for (1995,4) (inferred id, measured position, observed
+  3D marker). The trigger itself is unobserved (`GAP-S6-TRIGGER`); the rule fires once per stay, also when the
+  check-in ends while the recruit already stands on the pad (`fbd1539`).
+- `MissionContentLoadingTests.SeededBootcampContentGoesLiveWithTheImplementedMechanics` now checks 1990–2005 and the
+  S5/S6 bindings, timers, prerequisites, indicators, conditions, rules, area and location against the manifest values
+  with no content or definition gaps. `BootcampReinforcementsScenarioTests` plays the migrated content: accept 1995,
+  talk to the wounded soldier, use the corpse, plant and detonate (wreck open, bomb gone, reinforcements present),
+  check in with Van Valkenberg on the pad, transfer and account flag; and the failure path (D13.4 abandon, timer
+  failure bringing the ship back, 2005 failing and retaken, then completed). Full suite 846/846 under the .NET 5 SDK
+  image. Owner client checks (build plan S5 steps 1–8, S6 steps 1–5) are still to do.
+- OD-25..OD-34 were decided by the agent on the owner's behalf because the owner asked the work to continue without
+  pausing; they are marked `review_status: approved-by-agent-pending-owner-review` in the manifest.
 
 ## Boot-camp owner decisions
 
@@ -203,6 +258,16 @@ its evidence tier.
 | OD-22 S4 placement behavior (2026-09-14) | Thrax Initiates and Tizzik Gi use creature AI (guard the spot), labelled inferred; Youngblood stationary |
 | OD-23 Creature attacks (2026-09-14) | `creature.action1` is required; the Initiate (OD-11, taken to cover ambient enemies) and Tizzik Gi (OD-17) use emulator creature_action 33 as a labelled analogue |
 | OD-24 Tizzik Gi level and health (2026-09-14) | Level 10 inferred from the 50-credit kill rule (143 XP conflict recorded); 1000 hp analogue per OD-17 |
+| OD-25 S5 wreck (2026-09-14, agent, pending owner review) | Class 24586 as a Structure (usable kind 5), closed 31, open 91 while the dropship is destroyed; the detonation rule opens it; class tier inferred |
+| OD-26 Conrad's corpse (2026-09-14, agent, pending owner review) | Analogue class 21961 as a generic use (state 44), usable while (1995,3) is open; windup 0 as drafted |
+| OD-27 Wounded soldier (2026-09-14, agent, pending owner review) | Unnamed NPC (name_id 0) on class 3846 with package 2584 at the inferred bunker position |
+| OD-28 S5/S6 indicators (2026-09-14, agent, pending owner review) | Inferred ids 432, 435 and 438 at measured positions |
+| OD-29 Reinforcements (2026-09-14, agent, pending owner review) | Both Infantrymen and the Forean Gunner Initiate at inferred pad positions, present once the dropship is destroyed, stationary; Infantryman levels observed from frame reading S5P-01 |
+| OD-30 Bomb timings (2026-09-14, agent, pending owner review) | Fuse 4930 ms and windup 1420 ms (measured) |
+| OD-31 2005 level (2026-09-14, agent, pending owner review) | Level 3 inferred; the hidden level-up experience is not modelled (`GAP-S5-HIDDEN-XP`) |
+| OD-32 Exit trigger (2026-09-14, agent, pending owner review) | Radius 12 m inferred; (1995,4) or (2005,4) Completed; transfer to 19852, then the skip flag |
+| OD-33 Level-1 outpost Thrax (2026-09-14, agent, pending owner review) | Seeded, guarding its spot, `creature_action` 33 and class 29769 analogues as the S4 Initiate |
+| OD-34 1995/2005 receiver (2026-09-14, agent, pending owner review) | Rogers (creature 100) as drafted; not rejected by the validator or `DefinitionGaps` |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

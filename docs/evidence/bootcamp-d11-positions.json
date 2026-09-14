@@ -875,6 +875,492 @@
    ],
    "client": "1.16.5.0",
    "session_date": "2009-02"
+  },
+  {
+   "position_key": "indicator.1995.2.435",
+   "map_context_id": 1985,
+   "x": -104.6,
+   "y": 86.1,
+   "z": 70.5,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 1.5
+   },
+   "method": "X,Z: the lobed yellow handset radar icon while 1995 objective 2 \"Locate the missing AFS soldiers\" was active, clustered in two independent recordings: 8VXeKzGUv0c n=28 mean [-104.49, 70.66] sd [0.26, 0.76] from 11 player positions [20.5, 33.3] m away, and Ycxm8Pa1-v4 n=61 mean [-104.79, 70.33] sd [0.41, 0.49] from 57 positions (spatial positions.json icon_missing_soldiers_target, pip-stats.json); +/-1.5 m. The same lobed widget style as the obj-1 Dropship Debris icon and the obj-4 pad icon (footage-events-s5 this_pass_checks S5P-06/S5P-07): the client draws MISSION_INDICATOR pips with template MapMarker_Mission (client/ui/radarwindow.pyo HandleUpdateObjectiveIndicators), while NPC pips are only created for Creature entities (_GetEntityRadarType). A 3D handset marker floats over the bunker doorway at this spot (C2-50, verifier 163.233), which is the bShow3DEffect indicator proxy (client/missionlog.pyo _CreateIndicator, OVERHEAD_MISSION_INDICATOR). Indicator id NOT displayed: 435 \"Last known location of scout party\" (missionobjectiveindicatorlanguage @3872) is inferred from the name and the 1995 opening text 21242 \"I'll upload the coordinates of their last transmission to your PDA\". Y: the point lies inside the ArchHumOutpostTrenchBunkerV01 footprint with no walkable floor (navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56): polys=0); the doorway threshold 2.2 m east has navmesh floor 86.51 -> 86.09 and decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 86.10; +/-1.5 m (the indicator Y is server data and was never displayed).",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 27.467
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.467
+    },
+    {
+     "video": "Ycxm8Pa1-v4",
+     "t": 40.0,
+     "event": "C1-025"
+    },
+    {
+     "video": "Ycxm8Pa1-v4",
+     "t": 112.5,
+     "event": "C2-20"
+    },
+    {
+     "video": "Ycxm8Pa1-v4",
+     "t": 165.5,
+     "event": "C2-50"
+    }
+   ],
+   "anchors": [
+    "ArchHumOutpostTrenchBunkerV01 map entity #18, file offset 1624, at (-112.00,86.00,70.00) yaw -90; AABB X -133.4..-90.6, Z 56.6..99.4 contains the point",
+    "ArchHumOutpostDitchStraight8V01 map entity #326, file offset 28728, at (-104.00,80.00,68.00), 2.6 m",
+    "PropForeanShamenCorpseV01 map entity #1208, file offset 106344, at (-99.85,85.85,71.33), 4.8 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.wounded_soldier_2584",
+   "map_context_id": 1985,
+   "x": -102.4,
+   "y": 86.09,
+   "z": 70.0,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 5.0,
+    "vertical_m": 1.0
+   },
+   "reasoning": "The wounded soldier (conversation package 2584, text 21558 \"Ambushed. Can't... Get the bomb off Conrad's body...\") is never on screen: Ycxm8Pa1-v4 ends 10.7 m from the marker without a conversation (C2-51) and the 8VXeKzGUv0c conversation is inside the 80.533/80.600 cut. The only located evidence is the obj-2 indicator (indicator.1995.2.435) whose 3D marker floats over the bunker doorway. The indicator point itself has no walkable floor, so the NPC is placed on the nearest walkable navmesh point, the doorway threshold 2.2 m east (-102.40,86.51,70.00) minus the 0.42 m bias. Negative observation (S5P-07): within 11 m of the marker the radar shows no separate NPC pip, and no body is visible under the marker; either the NPC stands under the indicator icon, is not a Creature entity (radar pips are created only for creatures), or is placed out of line of sight. The 5 m figure is informational.",
+   "method": "inference from the objective indicator; see reasoning",
+   "frames": [
+    {
+     "video": "Ycxm8Pa1-v4",
+     "t": 165.5,
+     "event": "C2-50"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.467
+    }
+   ],
+   "anchors": [
+    "indicator.1995.2.435"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "object.conrads_corpse",
+   "map_context_id": 1985,
+   "x": -102.4,
+   "y": 85.69,
+   "z": 66.8,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 30.0,
+    "vertical_m": 2.0
+   },
+   "reasoning": "Conrad's corpse (1995 objective 3 \"Remove the bomb from Conrad's corpse.\", text 21559; indicator 436 \"Conrad's corpse\" exists in missionobjectiveindicatorlanguage @3881) is never displayed: the pickup is inside the 8VXeKzGUv0c 80.533/80.600 cut, between the player on objective 2 at (-105.5,39.9) and the player planting at the pad 161 m away. Text 21242 says the team was ambushed south of the base and 21558 is spoken by a survivor of that team, so the corpse is placed with the survivor at the scout party's last known location: the walkable trench floor just outside the doorway, 3.8 m from the indicator ((-102.40,86.11,66.80) minus the 0.42 m bias; decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 85.80). No map prop marks it (no PropHum*Corpse within 24 m). The 30 m figure is informational only.",
+   "method": "inference from mission text and the objective-2 indicator; see reasoning",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.467
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.6,
+     "event": "B1-044"
+    }
+   ],
+   "anchors": [
+    "indicator.1995.2.435"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "indicator.1995.1.432",
+   "map_context_id": 1985,
+   "x": -223.26,
+   "y": 100.72,
+   "z": -65.7,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.5,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: lobed yellow radar icon while 1995 objective 1 \"Destroy the crashed dropship before the bomb timer expires.\" was active, n=5 mean [-223.26, -65.7] sd [0.14, 0.3] from 3 player positions only [5.7, 5.9] m away (pip-stats.json dropship_debris_icon); icons this close to the arrow are biased (synthesis section 11), so +/-2.5 m. Gone after the explosion (86.8). Indicator id NOT displayed: 432 \"Dropship Debris\" (missionobjectiveindicatorlanguage @3845) is inferred from the name. Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 101.14 -> 100.72 (pad surface; the pad entity AABB top is 101.60); +/-0.5 m.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.6,
+     "event": "B1-044"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 81.467
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 85.467
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180, file offset 103880, at (-225.35,99.60,-70.52), 4.8 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "object.bomb_site",
+   "map_context_id": 1985,
+   "x": -223.95,
+   "y": 102.3,
+   "z": -72.34,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 1.0
+   },
+   "method": "X,Z: least-squares intersection of 7 third-person camera rays to the orange (80.6-81.6) then yellow-green armed (81.667-86.533) object on the hull (work/rays-bomb.json, tools/triangulate.py -> work/triangulate-bomb.json): camera = radar player X,Z (tools/grab.py --radar, spatial matcher) minus D m along the radar arrow heading, bearing = heading + (screen x - 320) * k; nominal D 3.5 m, k 0.08 deg/px gives (-223.95,-72.34); over D 2.5-4.5 m and k 0.07-0.10 the solution stays within X [-224.12, -223.63] Z [-72.43, -72.15] (RMS ray residual <= 0.2 m). The shared radar position error (+/-1.5 m) dominates, so +/-2.0 m. The heading during the use is 230 deg (arrow template 0.849), not the north read visually in the spatial track (S5P-08); the object is 1.5 m from the player at the use. Y (inferred, not measured): the object sits on the hull at about the head height of the standing player model (screen rows 190-235 against the player head at ~225 in 81.0), i.e. pad surface 100.82 (navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 101.24) + ~1.5 m; +/-1.0 m.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.6,
+     "event": "B1-045"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 81.667,
+     "event": "B1-045"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 85.0,
+     "event": "B1-046"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 86.6,
+     "event": "B1-049"
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180 at (-225.35,99.60,-70.52), 2.4 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "object.crashed_dropship",
+   "map_context_id": 1985,
+   "x": -225.35,
+   "y": 100.81,
+   "z": -70.52,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 4.0,
+    "vertical_m": 0.5
+   },
+   "reasoning": "No static wreck exists in the final adv_bootcamp map (only the damaged pad #1180), so the wreck was server-spawned. It is placed at the damaged pad entity centre (original map anchor), consistent with: the armed bomb on its hull measured 2.4 m south-east of the centre (object.bomb_site); the player standing on the pad facing 230 deg with the hull filling the view (81.0); the post-explosion fire lying on the bearing from (-211.75,-69.01) through the pad centre (rays 89.4-98.333 are nearly parallel, work/triangulate-fire.json: degenerate, used only as a line check); the wreck mesh gone from the pad after the explosion (S5P-05). The Dropship Debris indicator 5.3 m north-north-east (indicator.1995.1.432) is an alternative centre. Y: pad surface, navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 101.23 -> 100.81. Rotation not measured. Build plan cites C2-16 for the wreck position: WRONG, Ycxm8Pa1-v4 is at (-91.0,157.9) at 102.5 and that burning black hull is the static map entity BaneVehicleDropshipV01Destroyed #1270 (file offset 111800) at (-105.00,87.77,146.00) with VfxFire8mx8m #1271.",
+   "method": "inference from the original pad anchor and measured bomb position; see reasoning",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 80.6,
+     "event": "B1-046"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 86.6,
+     "event": "B1-049"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 88.0,
+     "event": "B2-003"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 89.0,
+     "event": "B1-053"
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180, file offset 103880, at (-225.35,99.60,-70.52) yaw -49; AABB X -242.1..-208.6, Z -87.3..-53.8, Y 99.32..101.60"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "indicator.1995.4.438",
+   "map_context_id": 1985,
+   "x": -225.53,
+   "y": 100.8,
+   "z": -69.81,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.0,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: lobed yellow handset radar icon (spatial vanvalkenberg_icon_a) n=11 mean [-225.53, -69.81] sd [0.48, 0.25] from 3 positions [14.2, 16.3] m away; +/-2.0 m. It first appears at 86.800, the frame the tracker switches to objective 4 \"Check in with Corporal Van Valkenberg\" (S5P-06), 4.9 s before the first reinforcement exists (targetable 91.667, B1-056), and it never moves; its 3D handset marker stays world-fixed over the pad while the soldiers under it walk away (97.333 vs 98.000). So this is the (1995,4) objective indicator with bShow3DEffect, not Van Valkenberg. Indicator id NOT displayed: 438 \"Dropship Pad to Exit\" (missionobjectiveindicatorlanguage @3899) is inferred: it is the only unused boot-camp indicator name that fits a marker 0.7 m from the pad centre. Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 101.22 -> 100.80.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 86.8,
+     "event": "B1-051"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 87.467
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 95.4,
+     "event": "B2-012"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 97.467
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180 at (-225.35,99.60,-70.52), 0.7 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "npc.van_valkenberg",
+   "map_context_id": 1985,
+   "x": -219.78,
+   "y": 100.85,
+   "z": -68.2,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 2.5,
+    "vertical_m": 0.5
+   },
+   "method": "X,Z: the second, smaller handset radar icon (spatial vanvalkenberg_icon_b) n=5 mean [-219.78, -68.2] sd [0.59, 0.24], [7.7, 8.8] m from the stationary player; it appears at 92.400, 0.73 s after the first reinforcement became targetable, during the beam-in (S5P-06), and drifts to (-220.5,-68.5) by 96.467 as the group starts moving. Radar entity pips exist only for Creature entities (radarwindow._GetEntityRadarType), so this is an NPC with a mission conversation among the reinforcements. Identity (Corporal Van Valkenberg, name 10574, package 2564) is inferred: the only objective then active is \"Check in with Corporal Van Valkenberg\" and the NPC is never named on screen. Icons 7-9 m from the arrow are biased: +/-2.5 m. Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 101.27 -> 100.85 (pad surface).",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 92.0,
+     "event": "B1-057"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 92.467
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 95.4,
+     "event": "B2-012"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 97.467
+    }
+   ],
+   "anchors": [
+    "indicator.1995.4.438, 6.0 m",
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180, 6.0 m"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "pad.reinforcement.forean_gunner_initiate",
+   "map_context_id": 1985,
+   "x": -225.43,
+   "y": 100.8,
+   "z": -69.77,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 6.0,
+    "vertical_m": 0.5
+   },
+   "reasoning": "The \"3 Forean Gunner Initiate\" nameplate is first shown over an empty spot on the pad in front of the fire (B1-056, verifier B2 91.667) and the bronze crested Forean fades in there (93.067-93.467). Plate at screen x ~380 in 92.0, radar heading 262. Placed on the bearing 266.8 deg from the stationary player (-211.75,-69.01) at 13.7 m (inside the pad, whose centre is 13.7 m away); the range readouts under the friendly nameplates are not legible at 640x480 (work/sheet_plate_gunner_range.png, work/sheet_plate_infantryman_97_98.png), so distance along the bearing is not measured. Y: pad surface 100.8 (navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56)). The 6 m figure is informational; an in-client landmark calibration (build plan E2) should replace this.",
+   "method": "inference from the screen bearing and the pad extent; see reasoning",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 91.667,
+     "event": "B1-056"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 92.0,
+     "event": "B1-057"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 93.4
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180 at (-225.35,99.60,-70.52)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "pad.reinforcement.infantryman_l2",
+   "map_context_id": 1985,
+   "x": -220.74,
+   "y": 100.8,
+   "z": -69.32,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 6.0,
+    "vertical_m": 0.5
+   },
+   "reasoning": "Target frame \"2 Infantryman\" at 97.200-97.800 (this_pass_checks S5P-01; transcript B2-014 is unverified) on a soldier of the group standing on the pad west of the player; crosshair heading 268 at 97.333. Placed on the bearing 268.0 deg from the stationary player (-211.75,-69.01) at 9.0 m (inside the pad, whose centre is 13.7 m away); the range readouts under the friendly nameplates are not legible at 640x480 (work/sheet_plate_gunner_range.png, work/sheet_plate_infantryman_97_98.png), so distance along the bearing is not measured. Y: pad surface 100.8 (navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56)). The 6 m figure is informational; an in-client landmark calibration (build plan E2) should replace this.",
+   "method": "inference from the screen bearing and the pad extent; see reasoning",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 95.4,
+     "event": "B2-012"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 97.333
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180 at (-225.35,99.60,-70.52)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "pad.reinforcement.infantryman_l3",
+   "map_context_id": 1985,
+   "x": -220.67,
+   "y": 100.8,
+   "z": -67.82,
+   "tier": "inferred",
+   "uncertainty": {
+    "horizontal_m": 6.0,
+    "vertical_m": 0.5
+   },
+   "reasoning": "Target frame \"3 Infantryman\" at 98.000-98.267 (S5P-01) on a second soldier; nameplate at screen x ~390, heading 272 at 98.0; the group is already walking north-east. Placed on the bearing 277.6 deg from the stationary player (-211.75,-69.01) at 9.0 m (inside the pad, whose centre is 13.7 m away); the range readouts under the friendly nameplates are not legible at 640x480 (work/sheet_plate_gunner_range.png, work/sheet_plate_infantryman_97_98.png), so distance along the bearing is not measured. Y: pad surface 100.8 (navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56)). The 6 m figure is informational; an in-client landmark calibration (build plan E2) should replace this.",
+   "method": "inference from the screen bearing and the pad extent; see reasoning",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 98.0
+    }
+   ],
+   "anchors": [
+    "ArchHumDropshipLandingpadV01Damaged map entity #1180 at (-225.35,99.60,-70.52)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "spawn.outpost_1995.thrax_initiate_l1.1",
+   "map_context_id": 1985,
+   "x": -85.0,
+   "y": 86.33,
+   "z": 91.03,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 3.3,
+    "vertical_m": 0.5
+   },
+   "method": "Optional ambient enemy. X,Z: S4 range method (client/ui/overheadwindow.pyo _UpdateEntityRange: nameplate range = ceil(distance), d = n - 0.5): target frame level 1 \"Thrax Infantry Initiate\" (B1-016 corrected: L1 at 32.267-33.067; S5P-09), range readout 12 at 32.400-32.533, radar player (-75.74,84.21) heading 300 (work/outpost-radar.jsonl), plate 80 px right of centre -> bearing 306.4 deg (k 0.08 deg/px); +/-3.3 m (radar 2 m, 10 deg bearing, reading 1.5 m). Where the Initiate stood while engaged, not a spawn point. Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav (sha256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52) floors at (X,Z) via research/20260914-bootcamp-s4/tools/navprobe (host .NET runtime, DOTNET_ROLL_FORWARD=Major; work/navprobe-input.txt -> work/navprobe-output.tsv) minus the S4-calibrated navmesh bias 0.42 m (six anchors, +0.34..+0.56) 86.75 -> 86.33; decoded bootcamp map heightmap t000007c1_terrain.glm (positions-s1/work/terrain.py h_at) 86.50.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 32.4,
+     "event": "B1-016"
+    }
+   ],
+   "anchors": [
+    "walled west outpost (B1-014 unverified description)"
+   ],
+   "engagement_sample": {
+    "t": 32.4,
+    "player_xz": [
+     -75.74,
+     84.21
+    ],
+    "heading_deg": 300,
+    "range_readout": 12,
+    "reading_confidence": "medium"
+   },
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "area.exit_pad",
+   "map_context_id": 1985,
+   "x": -225.35,
+   "y": 99.6,
+   "z": -70.52,
+   "tier": "original",
+   "method": "Original map anchor (build plan OD-8, approved 2026-09-14): ArchHumDropshipLandingpadV01Damaged, map entity #1180, file offset 103880, class 29771 (absent from the 2007-11 client), yaw -49, scale 1; AABB X -242.1..-208.6, Z -87.3..-53.8, Y 99.32..101.60. Corroborated as the exit point by the measured (1995,4) pad indicator 0.7 m away (indicator.1995.4.438, candidate id 438 \"Dropship Pad to Exit\") and text 21864/21861 \"Go stand on the dropship pad to transport out to Alia Das\". Alternative not used: the client uimapmarker staticmarkers[1985] type 11 BOOTCAMP_DROPSHIP marker (-233.74,101.04,-80.08), 13.0 m from the centre (a label coordinate, excluded as a trigger position by build plan 4.1).",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 86.8,
+     "event": "B1-051"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 95.4,
+     "event": "B2-012"
+    }
+   ],
+   "anchors": [
+    "map entity #1180 file offset 103880"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
+  },
+  {
+   "position_key": "location.alia_das_arrival",
+   "map_context_id": 1220,
+   "x": 884.11,
+   "y": 305.8,
+   "z": 347.81,
+   "rotation": 5.5501,
+   "tier": "measured",
+   "uncertainty": {
+    "horizontal_m": 1.5,
+    "vertical_m": 0.5,
+    "rotation_deg": 30
+   },
+   "method": "X,Z: radar texture matching against adv_foreas_concordia_wilderness_radar.glm region-0 tiles (gamecontextuiradarinfo (1220,0)=(2068,2048,-10,0)), NCC 0.959 vs next-best 0.503, identical in every frame 98.367-109.733 (spatial positions.json player_alia_das_arrival); +/-1.5 m. It is the FIRST OBSERVED position after the 98.333/98.400 cut, not proven to be the spawn: the transfer, loading and any movement are inside the cut. Y: navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_foreas_concordia_wilderness.nav (sha256 a417669c715c2a32ba4e407479f5731fa9ec81622b63c8b9727da1ea8cc1abba) via the same navprobe (work/navprobe-wild-input.txt -> work/navprobe-wild-output.tsv) floors 290.72 (under-plane) and 306.13 (ground); navmesh bias here +0.19..+0.34 (parked dropship prop ArchHumGenVehicleDropship #5043 base 305.98 vs floor 306.32; Alia Das Hospital marker Y 294.33 vs floor 294.52) -> 305.8 +/-0.5 m. Rotation: camera yaw 318 deg (radar arrow, medium confidence) = 5.5501 rad in the content_location convention (S1 spawn.first_login 345 deg = 6.02139); the client is in UI MODE with the Training Day window open, so body facing may differ: +/-30 deg.",
+   "frames": [
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 98.4,
+     "event": "B2-015"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 98.4,
+     "event": "B2-022"
+    },
+    {
+     "video": "8VXeKzGUv0c",
+     "t": 98.4,
+     "event": "B2-023"
+    }
+   ],
+   "anchors": [
+    "ArchHumGenVehicleDropship map entity #5043, offset 443866, at (890.44,305.98,336.79), 12.7 m",
+    "ArchHumBaseLightconeAnim #2888 (893.29,306.09,353.30), 10.7 m",
+    "Alia Das Hospital uimapmarker 133079561961146 (787.01,294.33,366.60), 98.9 m (docs/evidence/hospital-catalog.json)"
+   ],
+   "client": "1.16.5.0",
+   "session_date": "2009-02"
   }
  ]
 }

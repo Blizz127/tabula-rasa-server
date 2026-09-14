@@ -1295,3 +1295,19 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
 - Not reproduced: the boss fight itself (never recorded), escorts and allies, 1994 credits and item reward,
   Thrax respawn, Youngblood's appearance and walk-in, and the original attack damage and timing.
   Full suite 839/839.
+
+## 2026-09-14 UTC — Calling for Reinforcements (S5) and exit to Alia Das (S6) content seed
+
+- Missions 1995 and 2005 and the boot-camp exit are seeded (`BootcampS5Reinforcements`, `BootcampS6ExitToAliaDas`);
+  details, labels, conflicts and decisions in
+  [progression-preservation-plan.md](progression-preservation-plan.md#s5-calling-for-reinforcements-seed-status)
+  and the boot-camp manifest. Values are evidence-bounded reconstructions, not recovered server data: the objective
+  order except 1 → 4, the corpse and wounded-soldier positions, the reinforcement positions, the wreck and bomb
+  classes, the 2005 level, the exit radius and the indicator ids are inferred; the bomb windup and fuse, Van
+  Valkenberg's position, the indicator positions and the Alia Das arrival are measured; the 1995 timer (600 s), NPC
+  classes, levels and health, and the corpse class are labelled analogues. OD-25..OD-34 were decided by the agent for
+  the owner and await owner review.
+- Not reproduced: the 1995/2005 rewards, the hidden level-3-to-4 experience before Alia Das, a bomb inventory item,
+  detonation damage, the reinforcement dropship, beam-in and walk-off, the unnamed reinforcements and other outpost
+  creatures, NPC appearance, and Rogers at Alia Das (1995 cannot be turned in yet). The D13.4 abandon quirk is kept.
+  Full suite 846/846.
