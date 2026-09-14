@@ -167,6 +167,23 @@ the final-live rule.
   failure order and persistence, once-only expiry, the retry and self-retry, offline expiry, and disarmed timers.
   Full suite 835/835 under the .NET 5 SDK image.
 
+## S5 part 3 (bomb, generic use, placement state) status
+
+- Mechanisms only; the 1995/2005 rows are not seeded yet. Planting a bomb (use recovery on a state-113 bomb
+  placement) sets state 114 and starts `fuse_ms`. In one transaction it disarms the timers of objectives its
+  detonation completes and commits the `placement_state_entered` 114 rules. The client's countdown keeps
+  running (B1-044) but can no longer fail the objective.
+- The map tick restores destroyed placements (not wired before), detonates burnt-down fuses (state 115), then
+  expires timers. Detonation completes the bound `placement_state` objective in the same transaction as the 115
+  rules, crediting the instance owner (the arming character in a shared world).
+- A usable with `alternate_state_condition_id` waits for its owner. A bomb rebuilt armed (planted-bomb fact)
+  gets a fresh fuse, so a logout while the fuse burns still completes the objective once.
+- Generic use is the client's StatelessSwitch augmentation 8 (state 44 only returns to itself) and completes
+  `use_completed` bindings. Usables refresh their per-client enabled state after every commit and on map entry.
+- `BombPlacementTests` and `ABombPlantedBeforeTheInstanceWasRebuiltComesBackArmedWithAFreshFuse` cover this.
+  Full suite 844/844. Deployed 2026-09-14 19:27Z together with the S4 seed and navmeshes. Detonation damage to
+  the player (B1-049 "-21") is still a gap.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
