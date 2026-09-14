@@ -99,12 +99,17 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.Initialize, $"Loaded {placed} crafting stations ({entries.Count} rows)");
         }
 
-        /// <summary>Builds the live object for a row and puts it in its map's list. Null (with a world error) when the map is not loaded.</summary>
+        /// <summary>
+        /// Builds the live object for a row and puts it in its map's list. Null when the map is not
+        /// loaded: that is logged, not raised as a map error, because it is not something a GM can
+        /// put right in game - the seven seeded stations on the two wargame maps wait for those maps
+        /// to be added to map_info.
+        /// </summary>
         private Station Place(KraftwerksEntry entry)
         {
             if (!MapChannelManager.Instance.MapChannelArray.TryGetValue(entry.MapContextId, out var mapChannel))
             {
-                MapErrorManager.Instance.Record($"kraftwerks {entry.Id} ({entry.Comment}) is on map {entry.MapContextId}, which is not loaded");
+                Logger.WriteLog(LogType.Initialize, $"  kraftwerks {entry.Id} ({entry.Comment}) is on map {entry.MapContextId}, which is not loaded; skipped");
                 return null;
             }
 
