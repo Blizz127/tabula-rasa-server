@@ -28,6 +28,11 @@ namespace Rasa.Managers
         private Dictionary<(uint MissionId, uint ObjectiveId), List<ContentAreaEntry>> _areaBindings = new();
         private HashSet<uint> _contextsWithAreas = new();
 
+        // Area probe: entity id -> the tick it was last logged, so a player standing near a trigger leaves one line
+        // a second rather than one a tick. A trigger that does not fire while the player is clearly in the place is
+        // otherwise invisible: neither the objective nor the area reports anything.
+        private readonly Dictionary<ulong, long> _lastAreaProbe = new();
+
         // Areas an area_entered rule of the context listens on.
         private Dictionary<uint, List<ContentAreaEntry>> _ruleAreasByContext = new();
 
@@ -1028,6 +1033,8 @@ namespace Rasa.Managers
 
                 player.LastContentSample = (contextId, current);
 
+                ProbeAreas(player, contextId, current);
+
                 // An area_entered rule fires once per stay in its area: on the crossing, or on the first sample inside
                 // the area at which its condition holds (a recruit who talks to Van Valkenberg on the exit pad is
                 // already standing in it). Leaving the area re-arms its rules.
@@ -1077,6 +1084,41 @@ namespace Rasa.Managers
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Logs, once a second, how far a player is from the objective areas of their map when they are near one:
+        /// horizontal distance against the radius, vertical against the half-height, and whether the area tests as
+        /// entered. This answers "the trigger did not fire although the player was standing there".
+        /// </summary>
+        private void ProbeAreas(Manifestation player, uint contextId, Vector3 position)
+        {
+            var now = Environment.TickCount64;
+            if (_lastAreaProbe.TryGetValue(player.EntityId, out var last) && now - last < 1000)
+                return;
+
+            foreach (var areas in _areaBindings.Values)
+            {
+                foreach (var area in areas)
+                {
+                    if (area.MapContextId != contextId)
+                        continue;
+
+                    var dx = position.X - (float)area.PosX;
+                    var dz = position.Z - (float)area.PosZ;
+                    var horizontal = MathF.Sqrt(dx * dx + dz * dz);
+                    if (horizontal > 60f)
+                        continue;
+
+                    _lastAreaProbe[player.EntityId] = now;
+                    var vertical = MathF.Abs(position.Y - (float)area.PosY);
+                    Logger.WriteLog(LogType.Debug,
+                        $"area probe: {player.Name} at ({position.X:0.#}, {position.Y:0.#}, {position.Z:0.#}) vs area {area.Id} " +
+                        $"(map {area.MapContextId}): horizontal {horizontal:0.#} m of {area.Radius:0.#}, vertical {vertical:0.#} m " +
+                        $"of {area.HalfHeight:0.#}, entered {SegmentEntersArea(position, position, area)}");
+                    return;
+                }
+            }
         }
 
         public static bool SegmentEntersArea(Vector3 from, Vector3 to, ContentAreaEntry area)
