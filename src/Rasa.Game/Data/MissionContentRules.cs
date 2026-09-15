@@ -57,7 +57,9 @@ namespace Rasa.Data
                 // S5: the wreck bursts open when the bomb detonates.
                 ContentRuleAction.SetPlacementState,
                 // W3: escorts and reinforcements walking to a place.
-                ContentRuleAction.MoveCreatureToLocation
+                ContentRuleAction.MoveCreatureToLocation,
+                // W3: the bomb blast hurts the recruit who armed it.
+                ContentRuleAction.DamagePlayer
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {

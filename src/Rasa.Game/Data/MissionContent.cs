@@ -106,7 +106,14 @@ namespace Rasa.Data
         /// leaving the pad, where the original moves the NPC rather than standing him still (GAP-ESCORT,
         /// GAP-S5-REINFORCEMENT-MOVE).
         /// </summary>
-        MoveCreatureToLocation = 14
+        MoveCreatureToLocation = 14,
+
+        /// <summary>
+        /// Hurts the triggering player by `damage` (armour first, then health, as every other hit does). The
+        /// boot camp's bomb blast is the recorded case: the recruit who arms it sees "-21" take off their bar
+        /// when it detonates (footage B1-049), which is why the 2005 text warns "Not yourself!" (21566).
+        /// </summary>
+        DamagePlayer = 15
     }
 
     public enum LogosGrantProtocol : byte

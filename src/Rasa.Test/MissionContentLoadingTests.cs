@@ -261,7 +261,7 @@ namespace Rasa.Test
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
                 ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp,
                 ContentRuleAction.SetFact, ContentRuleAction.ClearFact, ContentRuleAction.SetPlacementState,
-                ContentRuleAction.MoveCreatureToLocation
+                ContentRuleAction.MoveCreatureToLocation, ContentRuleAction.DamagePlayer
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -1055,7 +1055,7 @@ namespace Rasa.Test
                 Assert.AreEqual((ContentRuleEvent.PlacementStateEntered, 198677u, 114u), ((ContentRuleEvent)rules[1985006].Event, rules[1985006].PlacementId, rules[1985006].StateId));
                 Assert.AreEqual("SetFact bootcamp.bomb_planted=1", Actions(1985006));
                 Assert.AreEqual((ContentRuleEvent.PlacementStateEntered, 198677u, 115u), ((ContentRuleEvent)rules[1985007].Event, rules[1985007].PlacementId, rules[1985007].StateId));
-                Assert.AreEqual("SetFact bootcamp.dropship_destroyed=1 | ClearFact bootcamp.bomb_planted | SetPlacementState  198678->91", Actions(1985007));
+                Assert.AreEqual("SetFact bootcamp.dropship_destroyed=1 | ClearFact bootcamp.bomb_planted | SetPlacementState  198678->91 | DamagePlayer", Actions(1985007));
                 foreach (var (ruleId, missionId) in new[] { (1985008u, 1995u), (1985009u, 2005u) })
                 {
                     Assert.AreEqual((ContentRuleEvent.ObjectiveFailed, missionId, 1u), ((ContentRuleEvent)rules[ruleId].Event, rules[ruleId].MissionId, rules[ruleId].ObjectiveId));

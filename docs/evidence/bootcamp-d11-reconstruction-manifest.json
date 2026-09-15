@@ -28155,12 +28155,14 @@
   },
   {
    "id": "GAP-S5-DETONATION-DAMAGE",
-   "summary": "The explosion knocks the player back and shows \"-21\" (B1-049); the 2005 text \"Not yourself!\" (21566) implies self-damage. Detonation damage is not reproduced.",
+   "summary": "Closed by BootcampDetonationDamage (2026-09-15): content_rule_action gained a damage column and ContentRuleAction.DamagePlayer, which takes the amount off the triggering player armour-first then health, with death and announcement if it empties the bar. Rule 1985007 (the bomb detonating) now ends with a damage-21 action, so the recruit who arms the bomb takes the blast as they do on screen: \"-21\" leaves the health bar (B1-049) and the 2005 text \"Not yourself!\" (21566) warns of exactly this. The knock-back seen in the footage is not reproduced.",
    "evidence": [
-    "footage B1-049",
-    "frame reading S5P-04"
+    "footage B1-049 (\"-21\" on the health bar at the blast)",
+    "client text 21566 (\"Not yourself!\")",
+    "content_rule_action rule 1985007 sequence 3 (action 15, damage 21)",
+    "src/Rasa.Game/Managers/MissionContentRuntime.cs DamagePlayer"
    ],
-   "closes_with": "a detonation damage mechanism (track D)",
+   "closes_with": "closed by BootcampDetonationDamage 2026-09-15 (knock-back remains unreproduced)",
    "surfaced_by": [
     "manifest omitted"
    ],

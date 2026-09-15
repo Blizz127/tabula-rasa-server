@@ -151,6 +151,10 @@ namespace Rasa.Managers
                         reaction.FactChanges.Add((player.MapContextId, action.FactKey, null));
                         break;
 
+                    case ContentRuleAction.DamagePlayer:
+                        reaction.PlayerDamage += action.Damage;
+                        break;
+
                     case ContentRuleAction.MoveCreatureToLocation:
                         // A world effect, applied after the commit with the map channel in hand.
                         reaction.CreatureMoves.Add((action.PlacementId, action.LocationId));
@@ -214,6 +218,9 @@ namespace Rasa.Managers
                 player.Experience += reaction.GrantedExperience;
                 ManifestationManager.Instance.NotifyExperienceGained(client, reaction.GrantedExperience);
             }
+
+            if (reaction.PlayerDamage > 0)
+                DamagePlayer(client, reaction.PlayerDamage);
 
             foreach (var (placementId, locationId) in reaction.CreatureMoves)
                 SendCreatureToLocation(client, placementId, locationId);
@@ -863,6 +870,42 @@ namespace Rasa.Managers
         {
             foreach (var binding in BindingsOfKind(ObjectiveBindingKind.UseCompleted).Where(binding => binding.PlacementId == placement.Id))
                 Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.UseCompleted);
+        }
+
+        /// <summary>
+        /// Takes a fixed amount off the player: armour absorbs first, health takes the rest, and zero health kills
+        /// with the same announcement a missile kill gets. The content layer's detonation self-damage uses it.
+        /// </summary>
+        private void DamagePlayer(Client client, int amount)
+        {
+            var player = client.Player;
+            if (player.State == CharacterState.Dead)
+                return;
+
+            // Armour absorbs first, exactly as a missile hit does; a character without the attribute simply
+            // takes the whole amount on health.
+            var absorbed = 0;
+            if (player.Attributes.TryGetValue(Attributes.Armor, out var armor))
+            {
+                absorbed = Math.Min(amount, armor.Current);
+                armor.Current -= absorbed;
+                client.CallMethod(player.EntityId, new UpdateArmorPacket(armor, 0));
+            }
+
+            if (!player.Attributes.TryGetValue(Attributes.Health, out var health))
+                return;
+
+            health.Current -= Math.Min(amount - absorbed, health.Current);
+            client.CallMethod(player.EntityId, new UpdateHealthPacket(health, 0));
+
+            Logger.WriteLog(LogType.Debug,
+                $"{player.Name} takes {amount} from a content action ({absorbed} on armour, {health.Current} health left).");
+
+            if (health.Current == 0)
+            {
+                player.State = CharacterState.Dead;
+                PlayerDeathManager.Instance.AnnounceDeath(player.MapChannel, player, null);
+            }
         }
 
         /// <summary>

@@ -87,6 +87,14 @@ namespace Rasa.Structures.World
         [Required]
         public uint AudioSetId { get; set; }
 
+        /// <summary>
+        /// The amount a damage_player action takes (the boot camp's detonation is 21, read from the footage's
+        /// "-21" health line). Zero for every other action.
+        /// </summary>
+        [Column("damage")]
+        [Required]
+        public int Damage { get; set; }
+
         [Column("comment", TypeName = "varchar(50)")]
         [Required]
         public string Comment { get; set; } = string.Empty;

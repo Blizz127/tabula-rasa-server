@@ -119,6 +119,9 @@ namespace Rasa.Structures.Content
         public ContentLocationEntry Transfer { get; set; }
         public bool SkipBootcampGranted { get; set; }
 
+        // Filled by staging: how much a damage_player action takes off the triggering player.
+        public int PlayerDamage { get; set; }
+
         // Filled by staging: scripted creature walks in action order (the placement whose creature moves,
         // and the destination location).
         public List<(uint PlacementId, uint LocationId)> CreatureMoves { get; } = new();
@@ -131,8 +134,9 @@ namespace Rasa.Structures.Content
         public static bool IsPersistent(ContentRuleAction action) => action is ContentRuleAction.GrantLogos or ContentRuleAction.GrantRewards
             or ContentRuleAction.GrantItemSet or ContentRuleAction.SetFact or ContentRuleAction.ClearFact or ContentRuleAction.TransferToLocation
             or ContentRuleAction.SetAccountSkipBootcamp
-            // W3: a scripted creature walk is a world effect applied once the trigger has committed.
-            or ContentRuleAction.MoveCreatureToLocation;
+            // W3: a scripted creature walk and the blast's self-damage are world effects applied once the
+            // trigger has committed.
+            or ContentRuleAction.MoveCreatureToLocation or ContentRuleAction.DamagePlayer;
 
         public void Add(IEnumerable<ContentRuleActionEntry> actions)
         {

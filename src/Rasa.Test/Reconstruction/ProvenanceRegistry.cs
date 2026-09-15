@@ -179,7 +179,7 @@ namespace Rasa.Test.Reconstruction
                 required: Cols("action", "mission_id", "forced", "greeting_id", "npc_name_id", "tutorial_id", "logos_id",
                     "logos_protocol", "experience", "credits", "item_set_id", "placement_id", "state_id", "fact_key",
                     "fact_value", "location_id", "audio_set_id"),
-                optional: Cols(),
+                optional: Cols("damage"),
                 storage: Cols("comment")),
 
             new TableProvenance("content_item_set",

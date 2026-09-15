@@ -825,6 +825,12 @@ namespace Rasa.Structures.Content
                             gap("needs a fact key");
                         break;
 
+                    case ContentRuleAction.DamagePlayer:
+                        used.Add("damage");
+                        if (action.Damage <= 0)
+                            gap("damage must be positive");
+                        break;
+
                     case ContentRuleAction.MoveCreatureToLocation:
                         used.Add("placement_id");
                         used.Add("location_id");
