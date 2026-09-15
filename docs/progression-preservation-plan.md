@@ -283,7 +283,8 @@ the final-live rule.
   verdict, so a curator re-read of the upscaled frames, 2026-09-14, is recorded in each description) and B2-036/037.
 - `MissionContentLoadingTests` loads the pistols through the real `ItemManager.LoadItemTemplates` from the migrated rows.
   The class-map, requirement and item/weapon-class seed rows are stood in with their deployed values in
-  `TrainingDayRewardItems`. The test finds no content gaps, empty `DefinitionGaps` and reward gaps for 1526, the
+  `RewardItemFixtures` (renamed from `TrainingDayRewardItems` when W2 added the class gear). The test finds no content
+  gaps, empty `DefinitionGaps` and reward gaps for 1526, the
   offered pistol choice, weapon rows that write a template tooltip, Kincaid live in 1220 and the live entered_map rule.
   `BootcampReinforcementsScenarioTests` enters Alia Das after the 1995 turn-in (and, on the 2005 path, before the
   Rogers turn-in, the observed order). Both paths receive the forced offer, accept it, see no repeat, report to Kincaid,
@@ -292,10 +293,48 @@ the final-live rule.
 - Open: Training Day experience (`GAP-W1-1526-XP`); the offer delay (`GAP-W1-OFFER-RULE`); no offer for characters
   who skip the boot camp (`GAP-W1-SKIP-TRAINING-DAY`, OD-40); Kincaid's facing, level and appearance
   (`GAP-W1-KINCAID-PRESENTATION`, `GAP-NPC-BODY`); the template choice (`GAP-W1-REWARD-TEMPLATE-ID`); the weapon
-  placeholders (`GAP-W1-WEAPON-PLACEHOLDERS`); missions 2010/2011, held until a class-chosen trigger exists
-  (`GAP-W1-GEAR-MISSIONS`, OD-42); and the emulator Major Bonham spawn beside the arrival, kept although the
-  2009-01-06 player map still lists him (`GAP-W1-BONHAM`, OD-41). Owner client checks are still to do.
+  placeholders (`GAP-W1-WEAPON-PLACEHOLDERS`); and the emulator Major Bonham spawn beside the arrival, kept although the
+  2009-01-06 player map still lists him (`GAP-W1-BONHAM`, OD-41). Missions 2010/2011 were closed by W2
+  (`GAP-W1-GEAR-MISSIONS`). Owner client checks are still to do.
   Full suite 849/849 under the .NET 5 SDK image.
+
+## W2 (class gear: missions 2010/2011 "Getting It In Gear") status
+
+- `WildernessClassGear` (SQLite and MySQL, frozen rows in `WildernessData/WildernessClassGearRows.cs`; 49 manifest rows,
+  slice W2, recorded in the boot-camp manifest under OD-43) closes `GAP-W1-GEAR-MISSIONS` and answers the tier-2 class
+  choice the previous slice's `class_selected` event was added for. It seeds:
+  - Quartermaster Caufield: the emulator world seed already spawns "AFS Quartermaster Caufield" as creature 132 (level 10,
+    class 29423, name 2992) in shared Alia Das after the player arrives; the client texts place him in the Alia Das supply
+    tent and bind both missions' completion to package 133, so `npc_package(132 -> 133)` attaches the original dialogue
+    package to the existing creature instead of placing a duplicate. His final position is not measured
+    (`GAP-W2-CAUFIELD`; the pre-D11 TaRapedia `/loc` is 1.6 m from the emulator spawn).
+  - Missions 2010 "Getting It In Gear: Soldier Class" and 2011 "…: Specialist Class": radio giver 0, receiver 132,
+    level 5 inferred, category 10000002/10000003 "Class (Soldier)/(Specialist)" original, shareable and radio-completable
+    false inferred. One objective "Report to Quartermaster Caufield" (ordinal/required/revealed inferred) replaces the
+    NULL skeleton row and completes through the client conversation (2010/2011,1,133,1,1).
+  - The class-gear offer: rules 1985012/1985013 (`class_selected` in 1220) each with a two-term OR condition
+    (198911/198912): the chosen class (2 or 3) and no row of the matching mission yet, dispensing the mission with
+    `forced = true`. The trigger exists since `65cafcb`; the dispatch itself is inferred from the broadcast opening and
+    the client's non-abandonable list (`GAP-W2-GEAR-OFFER`).
+  - The D11 class load-out, as fixed-item rewards (type 4, one of each): Soldier = Reflective armor helmet/vest/gloves/
+    legs/boots (122859/122860/122862/122863/122864) plus the Rage-O-Matic machine gun (122865); Specialist = Hazmat
+    helmet/vest/gloves/legs/boots (122866/122867/122868/122869/122870) plus the Repair-O-Matic repair tool (122871). The
+    template ids, their item classes (18504/18596/18458/18550/18412/27059 and 13710/13802/13664/13756/13618/12797) and
+    the class-owned skills that carry them (21/22 for Soldier, 30/14 for Specialist, client `skilldata`) are original
+    client data; the per-mission split is inferred, and no XP or credit reward is recovered
+    (`GAP-W2-GEAR-REWARDS`).
+  - The `itemtemplate` rows for all twelve templates, the `itemtemplate_armor` armor values for the ten armor pieces
+    (the client itemclass `max_hp`, 126/189/63/158/95 and 95/142/47/118/71) and the `itemtemplate_weapon` rows for the
+    two weapons. The D11 block's quality (2, green) and trade/binding flags, the neutral 0 prices and the world seed's
+    uniform machine-gun/tool weapon family row are labelled analogues under OD-43
+    (`GAP-W2-ITEM-FLAGS`, `GAP-W2-ITEM-PRICES`, `GAP-W2-WEAPON-PLACEHOLDERS`).
+- Tests: `ContentSchemaMigrationTests` seeds and rolls W2 back (missions, package, templates, conditions and rules, and
+  the restored NULL skeleton row); `MissionContentLoadingTests` finds no content or definition gaps for 2010/2011, checks
+  the reward list, the class skill and level-5 requirements and the two weapon rows; `BootcampReinforcementsScenarioTests`
+  chooses each class at Kincaid in Alia Das, gets the forced offer for the matching mission, reports to Caufield, turns it
+  in and receives the whole six-piece load-out, and sees no repeat.
+- Owner client checks are still to do for W2 as well (the offer's presentation, Caufield and the gear tooltips).
+  Full suite 853/853 under the .NET 5 SDK image.
 
 ## Boot-camp owner decisions
 
@@ -333,7 +372,8 @@ its evidence tier.
 | OD-39 Training Day flags (2026-09-14, agent, pending owner review) | shareable false and category 10000001 "Class (Recruit)", inferred |
 | OD-40 Skip path (2026-09-14, agent, pending owner review) | Characters who skip the boot camp are not offered Training Day (draft condition), recorded as a gap |
 | OD-41 Major Bonham (2026-09-14, agent, pending owner review) | The emulator spawn stays untouched; the 2009-01-06 player map listing him is recorded as a gap |
-| OD-42 Missions 2010/2011 (2026-09-14, agent, pending owner review) | Held (not seeded) until a class-chosen trigger exists |
+| OD-42 Missions 2010/2011 (2026-09-14, agent, pending owner review) | Held (not seeded) until a class-chosen trigger exists. Superseded for the seeded parts by OD-43 |
+| OD-43 Class-gear missions 2010/2011 (2026-09-15, agent, pending owner review) | Seed 2010/2011 now that the `class_selected` trigger exists and the reward identities are evidenced from the final client (the D11 new-player item block 122859-122871 and its class-owned skills 21/22 and 30/14); keep the world seed's creature 132 as Quartermaster Caufield with dialogue package 133. Use the D11 block's uniform world-seed quality (2) and trade/binding flags, the neutral 0 prices and the world seed's machine-gun/tool `itemtemplate_weapon` family row as labelled analogues; the reward XP/credits, the item prices, the weapon fields, the offer presentation and Caufield's final position stay open (`GAP-W2-*`) |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

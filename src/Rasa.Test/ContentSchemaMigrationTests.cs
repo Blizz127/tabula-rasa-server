@@ -36,6 +36,7 @@ namespace Rasa.Test
         private const string BootcampS6Migration = "20260914160000_BootcampS6ExitToAliaDas";
         private const string BootcampFixRogersTurnInMigration = "20260914170000_BootcampFixRogersTurnIn";
         private const string WildernessArrivalTrainingDayMigration = "20260914180000_WildernessArrivalTrainingDay";
+        private const string WildernessClassGearMigration = "20260914190000_WildernessClassGear";
 
         public static readonly string[] WorldTables =
         {
@@ -98,7 +99,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -121,7 +122,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -211,6 +212,33 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id IN (116929, 116930) AND quality_id = 3 AND inventory_category = 1"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id IN (116929, 116930) AND range = 20"));
 
+            // WildernessClassGear seeds the class-gear missions 2010/2011, Caufield's missing dialogue package,
+            // the twelve D11 gear item templates and the two class_selected rules.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id = 132 AND package_id = 133"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 2010 AND reciver_id = 132 AND category_id = 10000002 AND level = 5"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 2011 AND reciver_id = 132 AND category_id = 10000003 AND level = 5"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id IN (2010, 2011) AND ordinal = 1 AND is_required = 1 AND revealed_on_accept = 1"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 2010 AND type = 4"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 2011 AND type = 4"));
+            Assert.AreEqual(12L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id BETWEEN 122859 AND 122871 AND inventory_category = 1"));
+            Assert.AreEqual(10L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_armor WHERE id IN (122859, 122860, 122862, 122863, 122864, 122866, 122867, 122868, 122869, 122870) AND armor_value > 0"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id IN (122865, 122871) AND range = 80"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id IN (198911, 198912)"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985012, 1985013) AND event = 13 AND map_context_id = 1220"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985012, 1985013) AND action = 1 AND forced = 1"));
+
+            // Rolling W2 back removes every class-gear row and restores the NULL-flag objective skeleton it replaced.
+            context.GetService<IMigrator>().Migrate(WildernessArrivalTrainingDayMigration);
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 2010 AND objective_id = 1 AND ordinal IS NULL AND is_required IS NULL AND revealed_on_accept IS NULL"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (2010, 2011)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id IN (2010, 2011)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id = 132"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id BETWEEN 122859 AND 122871"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_armor WHERE id BETWEEN 122859 AND 122871"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id BETWEEN 122859 AND 122871"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id IN (198911, 198912)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985012, 1985013)"));
+
             // Rolling it back removes every W1 row and restores the NULL-flag (1526,1) skeleton row it replaced.
             context.GetService<IMigrator>().Migrate(BootcampFixRogersTurnInMigration);
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1526 AND objective_id = 1 AND ordinal IS NULL AND is_required IS NULL AND revealed_on_accept IS NULL"));
@@ -241,7 +269,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
@@ -249,6 +277,8 @@ namespace Rasa.Test
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1990"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 198505 AND 198515"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (1995, 2005)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (2010, 2011)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id = 132"));
         }
 
         [TestMethod]

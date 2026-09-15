@@ -64,6 +64,10 @@ namespace Rasa.Test
         private const uint RogersPlacement = 198684;
         private const uint KincaidPlacement = 198685;
         private const uint TrainingDay = 1526;
+        private const uint ClassGearSoldier = 2010;
+        private const uint ClassGearSpecialist = 2011;
+        private const uint Caufield = 132;
+        private const uint CaufieldPackage = 133;
 
         private sealed class TestConfiguration : IDbContextConfigurationService
         {
@@ -171,7 +175,7 @@ namespace Rasa.Test
             context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
             context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
             context.Database.Migrate();
-            TrainingDayRewardItems.SeedOriginalTemplateRows(_worldConnection);
+            RewardItemFixtures.SeedOriginalTemplateRows(_worldConnection);
         }
 
         [ClassCleanup]
@@ -189,8 +193,9 @@ namespace Rasa.Test
         private long _tick;
         private long _nowMs;
         private readonly List<ContentLocationEntry> _transfers = new();
-        private TrainingDayRewardItems _rewardItems;
+        private RewardItemFixtures _rewardItems;
         private MapChannel _wilderness;
+        private CharacterManager _realCharacters;
 
         [TestInitialize]
         public void Initialize()
@@ -214,11 +219,16 @@ namespace Rasa.Test
             }
 
             // The Training Day reward pistols must be loaded before the missions build their reward info.
-            _rewardItems = new TrainingDayRewardItems(_worldConnection);
+            _rewardItems = new RewardItemFixtures(_worldConnection);
 
             _missions = new MissionManager(factory, () => (uint)(_nowMs / 1000)) { NowMs = () => _nowMs };
             typeof(MissionManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)?.SetValue(null, _missions);
             _missions.LoadMissions();
+
+            // SelectNewCharacterClass saves the new class through CharacterManager.Instance.
+            var characterField = typeof(CharacterManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+            _realCharacters = (CharacterManager)characterField.GetValue(null);
+            characterField.SetValue(null, Activator.CreateInstance(typeof(CharacterManager), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object[] { factory }, null));
 
             _content = new MissionContentManager(factory) { Missions = _missions, TickNow = () => _tick };
             _content.Load(() => new BootcampConfig(), new References(_missions.LoadedMissions), _missions.LoadedMissions);
@@ -249,6 +259,7 @@ namespace Rasa.Test
         public void Cleanup()
         {
             typeof(MissionManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic)?.SetValue(null, null);
+            typeof(CharacterManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, _realCharacters);
             foreach (var obj in _instance.DynamicObjects.ToList())
             {
                 EntityManager.Instance.UnregisterDynamicObject(obj.EntityId);
@@ -283,6 +294,20 @@ namespace Rasa.Test
             var creature = new Creature
             {
                 DbId = creatureId, MapContextId = seeded.MapContextId, MapChannel = channel, Position = Placement(placementId),
+                Level = 10, State = CharacterState.Idle, Npc = new Npc { NpcPackageId = package }
+            };
+            EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
+            EntityManager.Instance.RegisterCreature(creature);
+            _npcs.Add(creature);
+            return creature;
+        }
+
+        /// <summary>Registers an NPC the world seed already spawns (no content placement), such as Quartermaster Caufield.</summary>
+        private Creature NpcAt(uint creatureId, uint package, Vector3 position, MapChannel channel)
+        {
+            var creature = new Creature
+            {
+                DbId = creatureId, MapContextId = channel.MapInfo.MapContextId, MapChannel = channel, Position = position,
                 Level = 10, State = CharacterState.Idle, Npc = new Npc { NpcPackageId = package }
             };
             EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
@@ -589,6 +614,70 @@ namespace Rasa.Test
             EnterAliaDasAndExpectTheTrainingDayOffer();
             TurnInAtRogers(rogers, 2005);
             TrainingDayAtKincaid(1, 116930);
+        }
+
+        /// <summary>
+        /// The tier-2 class choice answers with the matching class-gear mission (WildernessClassGear): SelectNewCharacterClass
+        /// releases level 5, the class_selected rule dispenses 2010/2011 by force, and Caufield (emulator creature 132 with
+        /// dialogue package 133) pays the whole six-piece load-out at the turn-in. The offer is never repeated.
+        /// </summary>
+        [DataTestMethod]
+        [DataRow(2u, ClassGearSoldier, 122859u, 122865u, 21)]
+        [DataRow(3u, ClassGearSpecialist, 122866u, 122871u, 30)]
+        public void ChoosingATierOffersTheClassGearMissionAndCaufieldPaysTheLoadOut(uint classId, uint missionId, uint firstGear, uint lastGear, int armorSkill)
+        {
+            ArriveAtAliaDas();
+            var kincaid = Npc(198515, KincaidPlacement, 2588, _wilderness);
+
+            // A Recruit held at the gate: level 4 with the level-5 threshold reached, standing by the trainer.
+            _client.Player.Class = 1;
+            _client.Player.Level = 4;
+            _client.Player.Experience = 43_000;
+            foreach (Attributes attribute in Enum.GetValues(typeof(Attributes)))
+                _client.Player.Attributes[attribute] = new ActorAttributes(attribute, 100, 100, 100, 0, 0);
+            for (var slot = 0; slot < 22; slot++)
+                _client.Player.Inventory.EquippedInventory.Add(0);
+            _client.Player.Position = kincaid.Position + new Vector3(1f, 0f, 0f);
+            Drain();
+
+            ManifestationManager.Instance.SelectNewCharacterClass(_client, classId);
+            Assert.AreEqual((classId, 5), (_client.Player.Class, _client.Player.Level), "the class changes and the withheld level is released");
+
+            var offer = Drain().OfType<DispenseRadioMissionPacket>().Single();
+            Assert.AreEqual((missionId, true), (offer.MissionId, offer.Forced));
+            var offered = offer.MissionInfo.MissionConstantData.RewardInfo.FixedReward.FixedItems.Select(item => item.ItemTemplateId).ToArray();
+            Assert.AreEqual(6, offered.Length);
+            Assert.AreEqual((firstGear, lastGear), (offered.First(), offered.Last()));
+            Assert.IsTrue(_client.Player.PendingRadioOffers.Contains(missionId));
+
+            // Report to Quartermaster Caufield in the supply tent: the package-133 conversation completes the objective.
+            _missions.AssignRadioMission(_client, missionId);
+            var caufield = NpcAt(Caufield, CaufieldPackage, new Vector3(756.88f, 293.97f, 407.07f), _wilderness);
+            TalkTo(caufield, missionId, 1);
+            Assert.AreEqual(MissionObjectiveState.Completed, Objective(missionId, 1));
+            Assert.IsTrue(_missions.TryGetConversationStatus(_client, caufield, out var status, out var ids));
+            Assert.AreEqual(ConversationStatus.MissionComplete, status);
+            CollectionAssert.AreEqual(new[] { missionId }, ids);
+
+            Drain();
+            _missions.CompleteNpcMission(_client, caufield.EntityId, missionId, null);
+            Assert.AreEqual(MissionState.Completed, _client.Player.Missions[missionId].State, $"mission {missionId} was not turned in at Caufield");
+
+            var packets = Drain();
+            Assert.AreEqual(6, packets.OfType<InventoryAddItemPacket>().Count(), "the whole six-piece load-out is granted");
+            Assert.AreEqual(1, packets.OfType<MissionCompletedPacket>().Count());
+            var granted = _client.Player.Inventory.PersonalInventory.Where(id => id != 0)
+                .Select(id => EntityManager.Instance.GetItem(id)).ToList();
+            CollectionAssert.AreEqual(offered.OrderBy(id => id).ToArray(),
+                granted.Select(item => item.ItemTemplateId).OrderBy(id => id).ToArray());
+            Assert.IsTrue(granted.Any(item => item.ItemTemplate?.EquipableInfo?.SkillId == armorSkill), "the load-out carries the class skill requirement");
+
+            using (var context = CharContext(_charConnection))
+                Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.CharacterId == CharacterId && m.MissionId == missionId).MissionState);
+
+            // The class rule's MissionAbsent term keeps the offer from repeating.
+            _content.OnPlayerEnteredMap(_client);
+            Assert.IsFalse(Drain().OfType<DispenseRadioMissionPacket>().Any(), $"a completed {missionId} is not offered again");
         }
     }
 }

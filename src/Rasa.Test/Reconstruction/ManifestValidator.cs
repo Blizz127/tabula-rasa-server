@@ -1020,7 +1020,7 @@ namespace Rasa.Test.Reconstruction
                         if (!JsonAccess.TryInteger(entry, "mission_id", out _)) missing.Add("mission_id (integer)");
                         if (!IsStringArray(entry, "gaps")) missing.Add("gaps (array of strings)");
                         if (!JsonAccess.TryText(entry, "reason", out _)) missing.Add("reason");
-                        if (!JsonAccess.TryString(entry, "slice", out var slice) || !ManifestVocabulary.Slices.Contains(slice)) missing.Add("slice (S1-S8, W1)");
+                        if (!JsonAccess.TryString(entry, "slice", out var slice) || !ManifestVocabulary.Slices.Contains(slice)) missing.Add("slice (S1-S8, W1, W2)");
                         if (missing.Count > 0)
                             Error(ManifestRules.AcceptedGapRequired, $"accepted_definition_gaps[{index}]", "missing or malformed: " + string.Join(", ", missing));
                         index++;

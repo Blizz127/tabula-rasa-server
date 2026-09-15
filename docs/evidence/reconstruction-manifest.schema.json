@@ -116,7 +116,8 @@
   },
   "$defs": {
     "tier": { "enum": ["original", "observed", "measured", "inferred", "analogue"] },
-    "slice": { "enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "W1"] },
+    "slice": { "enum": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "W1",
+        "W2"] },
     "text_or_list": {
       "oneOf": [
         { "type": "string", "minLength": 1 },

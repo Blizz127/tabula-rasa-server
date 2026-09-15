@@ -854,8 +854,8 @@ namespace Rasa.Test
 
                 // The Training Day reward pistols load through the real ItemManager from their migrated itemtemplate and
                 // itemtemplate_weapon rows (WildernessArrivalTrainingDay) before the missions build their reward info.
-                TrainingDayRewardItems.SeedOriginalTemplateRows(connection);
-                using var rewardItems = new TrainingDayRewardItems(connection);
+                RewardItemFixtures.SeedOriginalTemplateRows(connection);
+                using var rewardItems = new RewardItemFixtures(connection);
 
                 var missions = new MissionManager(new Factory(connection));
                 missions.LoadMissions();
@@ -875,7 +875,7 @@ namespace Rasa.Test
                 Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
                 Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
 
-                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526 })
+                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011 })
                 {
                     Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
@@ -986,6 +986,47 @@ namespace Rasa.Test
                     Assert.IsTrue(stream.Length > 0);
                 }
 
+                // The class-gear missions (WildernessClassGear): the Soldier/Specialist load-out, offered on the class
+                // choice, turned in at Quartermaster Caufield (emulator creature 132 with the dialogue package 133).
+                foreach (var (missionId, categoryId, gear) in new[]
+                {
+                    (2010u, 10000002u, new[] { 122859u, 122860u, 122862u, 122863u, 122864u, 122865u }),
+                    (2011u, 10000003u, new[] { 122866u, 122867u, 122868u, 122869u, 122870u, 122871u })
+                })
+                {
+                    var classGear = missions.LoadedMissions[missionId];
+                    Assert.AreEqual((0u, 132u, 5u, categoryId, false, false),
+                        (classGear.MissionGiver, classGear.MissionReciver, classGear.MissionConstantData.Level, classGear.MissionConstantData.CategoryId,
+                         classGear.MissionConstantData.Shareable, classGear.MissionConstantData.RadioCompletable));
+                    Assert.IsTrue(classGear.HasObjectiveConversation(1, 133, 1), $"mission {missionId} turns in at Caufield");
+                    Assert.AreEqual((1u, true, true), (classGear.Objectives[1].Ordinal.Value, classGear.Objectives[1].IsRequired.Value, classGear.Objectives[1].RevealedOnAccept.Value));
+                    Assert.AreEqual(0, classGear.Prerequisites.Count);
+                    CollectionAssert.AreEqual(Array.Empty<string>(), classGear.RewardGaps);
+                    Assert.AreEqual((0L, 6), (classGear.RewardCredits, classGear.OfferedFixedItems.Count));
+                    CollectionAssert.AreEqual(gear,
+                        classGear.MissionConstantData.RewardInfo.FixedReward.FixedItems.Select(item => item.ItemTemplateId).ToArray());
+                }
+
+                // The gear pieces load as equipment with their class skill requirement and the level-5 requirement, and
+                // the two weapons/tools carry a weapon row; the armor pieces carry an armor value.
+                foreach (var templateId in new uint[] { 122859u, 122860u, 122862u, 122863u, 122864u, 122866u, 122867u, 122868u, 122869u, 122870u })
+                {
+                    var template = rewardItems.Items.GetItemTemplateById(templateId);
+                    Assert.AreEqual((InventoryCategory.Equipment, 2, true, true), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
+                    Assert.AreEqual(5, template.ItemInfo.Requirements[RequirementsType.ReqXpLevel]);
+                    Assert.IsTrue(template.ArmorValue > 0, $"template {templateId} has no armor value");
+                }
+                Assert.AreEqual((21, 30), (rewardItems.Items.GetItemTemplateById(122859u).EquipableInfo.SkillId, rewardItems.Items.GetItemTemplateById(122866u).EquipableInfo.SkillId));
+                Assert.AreEqual((22, 14), (rewardItems.Items.GetItemTemplateById(122865u).EquipableInfo.SkillId, rewardItems.Items.GetItemTemplateById(122871u).EquipableInfo.SkillId));
+                foreach (var templateId in new uint[] { 122865u, 122871u })
+                {
+                    var template = rewardItems.Items.GetItemTemplateById(templateId);
+                    Assert.IsNotNull(template.WeaponInfo, $"template {templateId} has no weapon row");
+                    Assert.AreEqual((1.0, 1500u, 0u, 1u, 800u, 1u, 800u, 80u), (template.WeaponInfo.AimRate, template.WeaponInfo.ReloadTime,
+                        template.WeaponInfo.AeType, template.WeaponInfo.AmmoPerShot, template.WeaponInfo.Windup, template.WeaponInfo.Recovery,
+                        template.WeaponInfo.Refire, template.WeaponInfo.Range));
+                }
+
                 var conditions = validation.Catalog.Conditions;
                 string Terms(uint conditionId) => string.Join(" | ", conditions[conditionId].Select(term =>
                     $"{term.OrGroup}.{term.TermIndex}:{(ContentConditionKind)term.Kind} {term.MissionId}/{term.ObjectiveId}={term.State} {term.FactKey}={term.Value}{(term.Negate ? " not" : "")}"));
@@ -998,6 +1039,9 @@ namespace Rasa.Test
                 Assert.AreEqual("0.0:ObjectiveStateIs 1995/4=2 =0 | 1.0:ObjectiveStateIs 2005/4=2 =0", Terms(198909));
                 // The forced Training Day offer on entering Alia Das: objective 4 of 1995 or 2005 completed and no 1526 row yet.
                 Assert.AreEqual("0.0:ObjectiveStateIs 1995/4=2 =0 | 0.1:MissionAbsent 1526/0=0 =0 | 1.0:ObjectiveStateIs 2005/4=2 =0 | 1.1:MissionAbsent 1526/0=0 =0", Terms(198910));
+                // The class-gear offers: the chosen class (2 Soldier, 3 Specialist) and no row of that mission yet.
+                Assert.AreEqual("0.0:CharacterClassIs 0/0=0 =2 | 0.1:MissionAbsent 2010/0=0 =0", Terms(198911));
+                Assert.AreEqual("0.0:CharacterClassIs 0/0=0 =3 | 0.1:MissionAbsent 2011/0=0 =0", Terms(198912));
 
                 // The rules: plant and detonation facts, the wreck bursting open, failures bringing the ship back (the D13.4 quirk
                 // is kept: abandoning clears nothing), and the exit pad transferring to Alia Das before setting the skip flag.
@@ -1024,6 +1068,15 @@ namespace Rasa.Test
                 Assert.AreEqual((ContentRuleEvent.EnteredMap, 1220u, 198910u, 0u), ((ContentRuleEvent)rules[1985011].Event, rules[1985011].MapContextId, rules[1985011].ConditionId, rules[1985011].MissionId));
                 var offer = actions[1985011].Single();
                 Assert.AreEqual((ContentRuleAction.DispenseRadioMission, 1526u, true), ((ContentRuleAction)offer.Action, offer.MissionId, offer.Forced));
+
+                // The class-gear offers: the class_selected event in Alia Das dispenses the matching load-out by force.
+                foreach (var (ruleId, missionId, conditionId) in new[] { (1985012u, 2010u, 198911u), (1985013u, 2011u, 198912u) })
+                {
+                    Assert.IsTrue(validation.LiveRules.Any(rule => rule.Id == ruleId), $"rule {ruleId}");
+                    Assert.AreEqual((ContentRuleEvent.ClassSelected, 1220u, conditionId, 0u), ((ContentRuleEvent)rules[ruleId].Event, rules[ruleId].MapContextId, rules[ruleId].ConditionId, rules[ruleId].MissionId));
+                    var gearOffer = actions[ruleId].Single();
+                    Assert.AreEqual((ContentRuleAction.DispenseRadioMission, missionId, true), ((ContentRuleAction)gearOffer.Action, gearOffer.MissionId, gearOffer.Forced));
+                }
                 var pad = validation.Catalog.Areas[198603];
                 Assert.AreEqual(((byte)ContentAreaShape.Sphere, -225.35, 99.6, -70.52, 12.0), (pad.Shape, pad.PosX, pad.PosY, pad.PosZ, pad.Radius));
                 var aliaDas = validation.Catalog.Locations[19852];

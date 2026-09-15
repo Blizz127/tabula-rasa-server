@@ -153,7 +153,7 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual("bootcamp-d11", segment.GetProperty("id").GetString());
             CollectionAssert.AreEqual(new long[] { 1985 }, segment.GetProperty("map_context_ids").EnumerateArray().Select(e => e.GetInt64()).ToArray());
             Assert.AreEqual(783, segment.GetProperty("map_version").GetInt32());
-            CollectionAssert.AreEqual(new long[] { 1990, 1992, 1994, 1995, 2005, 1526 }, segment.GetProperty("missions").EnumerateArray().Select(e => e.GetInt64()).ToArray());
+            CollectionAssert.AreEqual(new long[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011 }, segment.GetProperty("missions").EnumerateArray().Select(e => e.GetInt64()).ToArray());
             Assert.AreEqual("1.16.5.0", segment.GetProperty("client_version").GetString());
 
             var sources = root.GetProperty("sources");
@@ -182,27 +182,31 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual("final_live", tables.GetProperty("era").GetString());
             Assert.AreEqual("e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6", tables.GetProperty("sha256").GetString());
 
-            // Reserved boot-camp storage keys, build plan section 1.3.
-            var scope = root.GetProperty("scope").EnumerateArray().ToDictionary(
-                e => e.GetProperty("table").GetString(),
-                e => e.GetProperty("key_ranges").EnumerateObject()
-                    .Select(r => $"{r.Name}:{r.Value.GetProperty("min").GetInt64()}-{r.Value.GetProperty("max").GetInt64()}")
-                    .Single());
-            CollectionAssert.AreEquivalent(new Dictionary<string, string>
+            // Reserved boot-camp storage keys, build plan section 1.3 (a table may declare more than one range).
+            var scope = root.GetProperty("scope").EnumerateArray()
+                .SelectMany(e => e.GetProperty("key_ranges").EnumerateObject()
+                    .Select(r => $"{e.GetProperty("table").GetString()}:{r.Name}:{r.Value.GetProperty("min").GetInt64()}-{r.Value.GetProperty("max").GetInt64()}"))
+                .ToList();
+            CollectionAssert.AreEquivalent(new[]
             {
-                ["creature"] = "id:198500-198599",
-                ["content_area"] = "id:198600-198649",
-                ["content_placement"] = "id:198650-198899",
-                ["content_condition"] = "condition_id:198900-198999",
-                ["content_rule"] = "id:1985000-1985999",
-                ["content_rule_action"] = "rule_id:1985000-1985999",
-                ["content_item_set"] = "item_set_id:19851-19859",
-                ["content_location"] = "id:19851-19859",
-                ["content_map_setting"] = "map_context_id:1985-1985",
+                "creature:id:198500-198599",
+                "content_area:id:198600-198649",
+                "content_placement:id:198650-198899",
+                "content_condition:condition_id:198900-198999",
+                "content_rule:id:1985000-1985999",
+                "content_rule_action:rule_id:1985000-1985999",
+                "content_item_set:item_set_id:19851-19859",
+                "content_location:id:19851-19859",
+                "content_map_setting:map_context_id:1985-1985",
                 // WildernessArrivalTrainingDay (OD-36, OD-38): the reward pistols' client template ids, not a reserved range.
-                ["itemtemplate"] = "id:116929-116930",
-                ["itemtemplate_weapon"] = "id:116929-116930"
-            }.ToList(), scope.ToList());
+                "itemtemplate:id:116929-116930",
+                "itemtemplate_weapon:id:116929-116930",
+                // WildernessClassGear (W2, OD-43): the D11 class-gear templates, Caufield's world-seed creature id and the gear armor.
+                "itemtemplate:id:122859-122871",
+                "itemtemplate_weapon:id:122865-122871",
+                "itemtemplate_armor:id:122859-122870",
+                "npc_package:id:132-132"
+            }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()
                 .Single(s => s.GetProperty("key").GetString() == "Bootcamp.EntryMode");

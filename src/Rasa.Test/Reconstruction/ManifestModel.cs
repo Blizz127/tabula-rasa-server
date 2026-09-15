@@ -41,8 +41,9 @@ namespace Rasa.Test.Reconstruction
         public static readonly string[] Eras = { "final_live", "d11_to_shutdown", "pre_d11", "unknown" };
 
         // S1-S8: boot-camp build plan slices. W1: the Wilderness arrival (segment 3), recorded in the boot-camp manifest
-        // because it closes the boot-camp exit (OD-36).
-        public static readonly string[] Slices = { "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "W1" };
+        // because it closes the boot-camp exit (OD-36). W2: the class-gear missions 2010/2011, the next step of the
+        // same segment (the tier-2 class choice answered by the class_selected rule).
+        public static readonly string[] Slices = { "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "W1", "W2" };
 
         public static readonly string[] StorageRoles = { "surrogate_key", "storage_reference", "scope", "comment" };
 

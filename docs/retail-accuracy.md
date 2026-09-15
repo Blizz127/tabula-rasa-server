@@ -1330,3 +1330,26 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   boot camp, Kincaid's appearance and observed facing, and missions 2010/2011 (held for a class-chosen trigger). The
   emulator's Major Bonham spawn beside the arrival is unchanged. OD-36..OD-42 were decided by the agent for the owner
   and await owner review. Full suite 849/849.
+
+## 2026-09-15 UTC — Class gear: "Getting It In Gear" (segment 3, W2) content seed
+
+- Missions 2010 "Getting It In Gear: Soldier Class" and 2011 "…: Specialist Class" and their class load-out are seeded
+  (`WildernessClassGear`), answering the tier-2 class choice that `65cafcb` added the `class_selected` event for. This
+  closes `GAP-W1-GEAR-MISSIONS` and supersedes the OD-42 hold (OD-43). Details and labels are in
+  [progression-preservation-plan.md](progression-preservation-plan.md#w2-class-gear-missions-20102011-getting-it-in-gear-status)
+  and the boot-camp manifest (slice W2). These are evidence-bounded reconstructions, not recovered server data:
+  - original (client): the two mission ids, texts and category names 10000002/10000003, the completion package 133, the
+    twelve D11 item templates 122859-122871 and their item classes, the class-owned skills that carry them
+    (21/22 Soldier, 30/14 Specialist), and the armor values (client itemclass `max_hp`);
+  - inferred: the radio giver 0, receiver creature 132, mission level 5, the one objective, the class_selected rules and
+    their two-term conditions, the `forced` dispatch, the per-mission reward split and the neutral 0 prices;
+  - labelled analogues (OD-43): the templates' quality 2 and trade/binding flags from the D11 new-player block's uniform
+    world-seed rows, and the Rage-O-Matic/Repair-O-Matic `itemtemplate_weapon` columns from the world seed's machine-gun
+    and tool family rows.
+- Quartermaster Caufield is **not** a new placement: the emulator world seed already spawns him as creature 132 with the
+  original client name and class, in shared Alia Das near the arrival. The missions attach the original dialogue package
+  133 to that creature and complete at him. His final position is not measured (the pre-D11 TaRapedia `/loc` is 1.6 m
+  from the emulator spawn) and no appearance rows exist.
+- Not reproduced: the missions' XP and credit rewards, a real item price, the per-template weapon statistics, the offer's
+  presentation (whether the client showed it as a broadcast and greyed Decline), and any capture of the gear tooltips.
+  `GAP-W2-*` records each. OD-43 was decided by the agent for the owner and awaits owner review, as do OD-25..OD-42.
