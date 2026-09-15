@@ -119,6 +119,15 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Whether the walkable surface under the position was built under the terrain: inside a
+        /// cave or tunnel. False on a map with no navmesh, or one built before the flag existed.
+        /// </summary>
+        public static bool IsUnderground(MapChannel mapChannel, Vector3 position)
+        {
+            return mapChannel?.NavMesh?.IsUnderground(position) ?? false;
+        }
+
+        /// <summary>
         /// A place to stand within <paramref name="radius"/> of <paramref name="centre"/>, on the
         /// navmesh when there is one and the centre is near it; null when there is no navmesh or
         /// the centre is off it, so the caller can fall back to picking a point itself.

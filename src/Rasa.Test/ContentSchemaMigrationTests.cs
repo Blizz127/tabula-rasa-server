@@ -37,6 +37,8 @@ namespace Rasa.Test
         private const string BootcampFixRogersTurnInMigration = "20260914170000_BootcampFixRogersTurnIn";
         private const string WildernessArrivalTrainingDayMigration = "20260914180000_WildernessArrivalTrainingDay";
         private const string WildernessClassGearMigration = "20260914190000_WildernessClassGear";
+        /// <summary>PR #91's map-region table (merged from upstream 2026-09-15).</summary>
+        private const string AddMapRegionMigration = "20260915120000_Add_map_region";
 
         public static readonly string[] WorldTables =
         {
@@ -82,8 +84,9 @@ namespace Rasa.Test
             context.Database.EnsureCreated();
             foreach (var table in WorldTables)
                 context.Database.ExecuteSqlRaw($"DROP TABLE \"{table}\"");
-            // Add_kraftwerks (20260914120000) comes after the content layer too.
+            // Add_kraftwerks (20260914120000) and Add_map_region (20260915120000) come after the content layer too.
             context.Database.ExecuteSqlRaw("DROP TABLE \"kraftwerks\"");
+            context.Database.ExecuteSqlRaw("DROP TABLE \"map_region\"");
             context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective\"");
             context.Database.ExecuteSqlRaw("DROP TABLE \"npc_mission_objective_conversation\"");
             context.Database.ExecuteSqlRaw(
@@ -99,7 +102,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -122,7 +125,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -227,8 +230,15 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985012, 1985013) AND event = 13 AND map_context_id = 1220"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985012, 1985013) AND action = 1 AND forced = 1"));
 
+            // Add_map_region (upstream PR #91) creates the region table and preloads 373 volumes on 58 maps:
+            // the Wilderness ones (context 1220) cover Alia Das and the caverns.
+            Assert.AreEqual(373L, Scalar(connection, "SELECT COUNT(*) FROM map_region"));
+            Assert.AreEqual(21L, Scalar(connection, "SELECT COUNT(*) FROM map_region WHERE map_context_id = 1220"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM map_region WHERE map_context_id = 1220 AND region_id = 18 AND shape = 1 AND underground = 2 AND enabled = 1"));
+
             // Rolling W2 back removes every class-gear row and restores the NULL-flag objective skeleton it replaced.
             context.GetService<IMigrator>().Migrate(WildernessArrivalTrainingDayMigration);
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'map_region'"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 2010 AND objective_id = 1 AND ordinal IS NULL AND is_required IS NULL AND revealed_on_accept IS NULL"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (2010, 2011)"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id IN (2010, 2011)"));
@@ -269,7 +279,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);

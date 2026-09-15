@@ -361,6 +361,9 @@ namespace Rasa.Managers
 
                         // kill streaks whose window has passed
                         KillRewardManager.Instance.ExpireStreaks(mapChannel);
+
+                        // ambient/music/sky/minimap regions: tell whoever changed region
+                        RegionManager.Instance.Worker(mapChannel);
                     }
 
                     // check for effects (buffs)
@@ -640,6 +643,7 @@ namespace Rasa.Managers
                 ManifestationManager.Instance.StopAutoFire(client);
             CellManager.Instance.RemoveFromWorld(client);
             MapLinkManager.Instance.RemovePlayer(client);
+            RegionManager.Instance.RemovePlayer(client);
             ManifestationManager.Instance.RemovePlayerCharacter(client);
             ClanManager.Instance.RemovePlayer(client);
             LookingForGroupManager.Instance.RemovePlayer(client);

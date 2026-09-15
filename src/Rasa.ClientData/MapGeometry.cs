@@ -27,6 +27,9 @@ namespace Rasa.ClientData
 
         public int TriangleCount => Triangles.Count / 3;
 
+        /// <summary>The map's heightmap, or null for a map without a terrain archive (indoor instances).</summary>
+        public TerrainHeightmap Terrain { get; private set; }
+
         /// <summary>
         /// Loads a map's geometry from the client folder.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Rasa.ClientData
                 var before = geometry.Triangles.Count;
                 terrain.AppendTriangles(terrainStep, geometry.Vertices, geometry.Triangles, terrainMaxSlope);
                 geometry.TerrainTriangles = (geometry.Triangles.Count - before) / 3;
+                geometry.Terrain = terrain;
             }
 
             foreach (var entity in map.Entities)

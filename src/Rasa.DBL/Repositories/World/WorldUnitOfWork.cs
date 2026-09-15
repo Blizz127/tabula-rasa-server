@@ -19,6 +19,7 @@ namespace Rasa.Repositories.World
             IMissionContentRepository missionContentRepository,
             IMapLinkRepository mapLinkRepository,
             IKraftwerksRepository kraftwerksRepository,
+            IMapRegionRepository mapRegionRepository,
             INpcMissionRepository npcMissionRepository,
             INpcMissionObjectiveRepository npcMissionObjectiveRepository,
             INpcMissionRewardRepository npcMissionRewardRepository,
@@ -37,6 +38,7 @@ namespace Rasa.Repositories.World
             MissionContent = missionContentRepository;
             MapLinks = mapLinkRepository;
             Kraftwerks = kraftwerksRepository;
+            MapRegions = mapRegionRepository;
             NpcMissions = npcMissionRepository;
             NpcMissionObjectives = npcMissionObjectiveRepository;
             NpcMissionRewards = npcMissionRewardRepository;
@@ -55,6 +57,7 @@ namespace Rasa.Repositories.World
         public IMissionContentRepository MissionContent { get; }
         public IMapLinkRepository MapLinks { get; }
         public IKraftwerksRepository Kraftwerks { get; }
+        public IMapRegionRepository MapRegions { get; }
         public INpcMissionRepository NpcMissions { get; }
         public INpcMissionObjectiveRepository NpcMissionObjectives { get; }
         public INpcMissionRewardRepository NpcMissionRewards { get; }

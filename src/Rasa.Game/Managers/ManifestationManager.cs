@@ -362,7 +362,8 @@ namespace Rasa.Managers
 
             client.CallMethod(player.EntityId, new ActorInfoPacket(player));
 
-            client.CallMethod(player.EntityId, new UpdateRegionsPacket { RegionIdList = client.Player.MapChannel.MapInfo.BaseRegionId });  // ToDo this should be list of regions? or just curent region wher player is
+            // The regions the player is standing in; re-sent by RegionManager.Worker as they move.
+            RegionManager.Instance.PlayerEnteredMap(client);
 
             client.CallMethod(player.EntityId, new AdvancementStatsPacket(
                 player.Level,

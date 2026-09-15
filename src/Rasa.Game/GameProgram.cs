@@ -130,6 +130,7 @@ namespace Rasa
             services.AddScoped<IMissionContentRepository, MissionContentRepository>();
             services.AddScoped<IMapLinkRepository, MapLinkRepository>();
             services.AddScoped<IKraftwerksRepository, KraftwerksRepository>();
+            services.AddScoped<IMapRegionRepository, MapRegionRepository>();
             services.AddScoped<INpcMissionRepository, NpcMissionRepository>();
             services.AddScoped<INpcMissionObjectiveRepository, NpcMissionObjectiveRepository>();
             services.AddScoped<INpcMissionRewardRepository, NpcMissionRewardRepository>();

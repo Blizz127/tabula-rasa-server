@@ -121,6 +121,7 @@ namespace Rasa.Managers
             RegisterCommand(".gm", GmLevel.Observer, EnterGmModCommand);
             RegisterCommand(".help", GmLevel.Observer, HelpGmCommand);
             RegisterCommand(".links", GmLevel.Observer, LinksCommand);
+            RegisterCommand(".regions", GmLevel.Observer, RegionsCommand);
             RegisterCommand(".navmesh", GmLevel.Observer, NavMeshCommand);
             RegisterCommand(".near", GmLevel.Observer, NearCommand);
             RegisterCommand(".npcinfo", GmLevel.Observer, NpcInfoCommand);
@@ -144,6 +145,7 @@ namespace Rasa.Managers
             RegisterCommand(".link", GmLevel.GameMaster, LinkCommand);
             RegisterCommand(".linkhere", GmLevel.GameMaster, LinkHereCommand);
             RegisterCommand(".kraftwerks", GmLevel.GameMaster, KraftwerksCommand);
+            RegisterCommand(".region", GmLevel.GameMaster, RegionCommand);
             RegisterCommand(".notify", GmLevel.GameMaster, NotifyCommand);
             RegisterCommand(".msg", GmLevel.GameMaster, MessageCommand);
             RegisterCommand(".removeobj", GmLevel.GameMaster, RemoveObjectCommand);
@@ -1590,19 +1592,215 @@ namespace Rasa.Managers
 
         #endregion
 
+        /// <summary>
+        /// Forces a region list on your own client and holds it there, so a region's ambience,
+        /// sky and minimap can be seen without standing in a volume for it. .setregion off hands
+        /// control back to the volumes; leaving the map does too.
+        /// </summary>
         private void SetRegionCommand(string[] parts)
         {
+            var client = _client;
+
             if (parts.Length == 1)
             {
-                CommunicatorManager.Instance.SystemMessage(_client, "usage: .setregion regionId");
+                CommunicatorManager.Instance.SystemMessage(client, "usage: .setregion regionId [regionId ...] | off");
                 return;
             }
-            if (parts.Length == 2)
+
+            if (parts[1] == "off")
             {
-                if (uint.TryParse(parts[1], out uint regionId))
-                    _client.CallMethod(_client.Player.EntityId, new UpdateRegionsPacket { RegionIdList = regionId });
+                RegionManager.Instance.Release(client);
+                CommunicatorManager.Instance.SystemMessage(client, "Regions follow the volumes again.");
+                return;
             }
-            return;
+
+            var regionIds = new List<uint>();
+
+            foreach (var part in parts.Skip(1))
+            {
+                if (!uint.TryParse(part, out var regionId))
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, $"{part} is not a region id.");
+                    return;
+                }
+
+                regionIds.Add(regionId);
+            }
+
+            RegionManager.Instance.Hold(client, regionIds);
+            CommunicatorManager.Instance.SystemMessage(client, $"Holding regions [{string.Join(", ", regionIds)}] until .setregion off or a map change.");
+        }
+
+        /// <summary>The region volumes on this map, nearest first, and what you are currently sent.</summary>
+        private void RegionsCommand(string[] parts)
+        {
+            var client = _client;
+            var player = client.Player;
+            var underground = NavMeshManager.IsUnderground(player.MapChannel, player.Position);
+            var current = player.RegionIds == null ? "nothing yet" : $"[{string.Join(", ", player.RegionIds)}]";
+
+            CommunicatorManager.Instance.SystemMessage(client, $"You are {(underground ? "underground" : "on the surface")} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}); regions sent: {current}{(player.RegionsHeld ? " (held by .setregion)" : "")}.");
+
+            var volumes = RegionManager.Instance.OnMap(player.MapContextId, player.Position);
+
+            if (volumes.Count == 0)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, $"No region volumes on map {player.MapContextId}.");
+                return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, $"{volumes.Count} region volume(s) on map {player.MapContextId}, nearest first:");
+
+            foreach (var volume in volumes.Take(12))
+            {
+                var inside = volume.Enabled && volume.Contains(player.Position, underground) ? " <- you are in it" : "";
+                CommunicatorManager.Instance.SystemMessage(client, $"{volume.Distance(player.Position),6:0.#} m  {volume.Describe()}{inside}");
+            }
+
+            if (volumes.Count > 12)
+                CommunicatorManager.Instance.SystemMessage(client, $"... and {volumes.Count - 12} more.");
+        }
+
+        private const string RegionUsage = "usage: .region here regionId [radius] [comment] | box regionId halfX halfZ [comment] | id here | id radius r | id size halfX halfZ | id y min max | id underground 0|1|2 | id region regionId | id enable | id disable | id comment text | id delete";
+
+        /// <summary>Creates and edits region volumes; see RegionManager and docs/regions.md.</summary>
+        private void RegionCommand(string[] parts)
+        {
+            var client = _client;
+            var player = client.Player;
+
+            if (parts.Length < 3)
+            {
+                CommunicatorManager.Instance.SystemMessage(client, RegionUsage);
+                return;
+            }
+
+            if (parts[1] == "here" || parts[1] == "box")
+            {
+                if (!uint.TryParse(parts[2], out var newRegionId))
+                {
+                    CommunicatorManager.Instance.SystemMessage(client, RegionUsage);
+                    return;
+                }
+
+                var volume = new MapRegion
+                {
+                    MapContextId = player.MapContextId,
+                    RegionId = newRegionId,
+                    Position = player.Position,
+                    MinY = -2000,
+                    MaxY = 2000,
+                    Underground = MapRegionUnderground.Any,
+                    Enabled = true
+                };
+
+                int commentFrom;
+
+                if (parts[1] == "here")
+                {
+                    volume.Shape = MapRegionShape.Circle;
+                    volume.Radius = 50;
+                    commentFrom = 3;
+
+                    if (parts.Length > 3 && float.TryParse(parts[3], out var radius) && radius > 0)
+                    {
+                        volume.Radius = radius;
+                        commentFrom = 4;
+                    }
+                }
+                else
+                {
+                    if (parts.Length < 5 || !float.TryParse(parts[3], out var halfX) || !float.TryParse(parts[4], out var halfZ) || halfX <= 0 || halfZ <= 0)
+                    {
+                        CommunicatorManager.Instance.SystemMessage(client, RegionUsage);
+                        return;
+                    }
+
+                    volume.Shape = MapRegionShape.Box;
+                    volume.HalfX = halfX;
+                    volume.HalfZ = halfZ;
+                    commentFrom = 5;
+                }
+
+                volume.Comment = ClampComment(string.Join(' ', parts.Skip(commentFrom)));
+
+                var created = RegionManager.Instance.Add(volume);
+
+                CommunicatorManager.Instance.SystemMessage(client, created == null
+                    ? "The region volume could not be created; see the server log."
+                    : $"Created {created.Describe()}");
+                return;
+            }
+
+            if (!uint.TryParse(parts[1], out var id) || !RegionManager.Instance.TryGet(id, out var target))
+            {
+                CommunicatorManager.Instance.SystemMessage(client, RegionUsage);
+                return;
+            }
+
+            var what = parts[2];
+
+            switch (what)
+            {
+                case "here":
+                    target.Position = player.Position;
+                    break;
+
+                case "radius" when parts.Length > 3 && float.TryParse(parts[3], out var radius) && radius > 0:
+                    target.Shape = MapRegionShape.Circle;
+                    target.Radius = radius;
+                    break;
+
+                case "size" when parts.Length > 4 && float.TryParse(parts[3], out var halfX) && float.TryParse(parts[4], out var halfZ) && halfX > 0 && halfZ > 0:
+                    target.Shape = MapRegionShape.Box;
+                    target.HalfX = halfX;
+                    target.HalfZ = halfZ;
+                    break;
+
+                case "y" when parts.Length > 4 && float.TryParse(parts[3], out var minY) && float.TryParse(parts[4], out var maxY) && minY < maxY:
+                    target.MinY = minY;
+                    target.MaxY = maxY;
+                    break;
+
+                case "underground" when parts.Length > 3 && byte.TryParse(parts[3], out var mode) && mode <= 2:
+                    target.Underground = (MapRegionUnderground)mode;
+                    break;
+
+                case "region" when parts.Length > 3 && uint.TryParse(parts[3], out var regionId):
+                    target.RegionId = regionId;
+                    break;
+
+                case "enable":
+                    target.Enabled = true;
+                    break;
+
+                case "disable":
+                    target.Enabled = false;
+                    break;
+
+                case "comment":
+                    target.Comment = ClampComment(string.Join(' ', parts.Skip(3)));
+                    break;
+
+                case "delete":
+                    CommunicatorManager.Instance.SystemMessage(client, RegionManager.Instance.Delete(target)
+                        ? $"Deleted region volume #{id}."
+                        : $"Region volume #{id} could not be deleted; see the server log.");
+                    return;
+
+                default:
+                    CommunicatorManager.Instance.SystemMessage(client, RegionUsage);
+                    return;
+            }
+
+            CommunicatorManager.Instance.SystemMessage(client, RegionManager.Instance.Update(target)
+                ? $"Updated {target.Describe()}"
+                : $"Region volume #{id} could not be saved; see the server log.");
+        }
+
+        private static string ClampComment(string comment)
+        {
+            return comment.Length > 96 ? comment.Substring(0, 96) : comment;
         }
 
         private void SpeedCommand(string[] parts)

@@ -296,6 +296,7 @@ namespace Rasa.Game
             MissionContentManager.Instance.Load(() => Config?.GameDataConfig?.Bootcamp);
             MapTriggerManager.Instance.MapTriggerInit();
             MapLinkManager.Instance.MapLinkInit();
+            RegionManager.Instance.RegionInit();
 
             return true;
         }

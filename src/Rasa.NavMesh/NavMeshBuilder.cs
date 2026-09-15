@@ -6,6 +6,7 @@ using DotRecast.Detour;
 using DotRecast.Recast;
 using DotRecast.Recast.Geom;
 using Rasa.ClientData;
+using Rasa.Navigation;
 
 namespace Rasa.NavMesh
 {
@@ -16,10 +17,11 @@ namespace Rasa.NavMesh
     /// </summary>
     public static class NavMeshBuilder
     {
-        // Area and flag values written into the polygons. The server's query filter includes everything.
+        // Area values written into the polygons; the flags are NavMeshFlags. The server's query
+        // filter includes everything, so neither restricts pathing.
         public const int AreaGround = 0;
+        public const int AreaUnderground = 1;
         public const int AreaWalkableInput = 0x3f;
-        public const int FlagWalk = 0x01;
 
         public static DtNavMesh Build(MapGeometry geometry, BuildSettings s, Action<string> log)
         {
@@ -76,6 +78,7 @@ namespace Rasa.NavMesh
 
             var added = 0;
             var polys = 0;
+            var underground = 0;
 
             foreach (var result in results)
             {
@@ -86,10 +89,15 @@ namespace Rasa.NavMesh
 
                 for (var i = 0; i < pmesh.npolys; i++)
                 {
-                    if (pmesh.areas[i] == AreaWalkableInput)
-                        pmesh.areas[i] = AreaGround;
+                    pmesh.areas[i] = AreaGround;
+                    pmesh.flags[i] = NavMeshFlags.Walk;
 
-                    pmesh.flags[i] = FlagWalk;
+                    if (geometry.Terrain != null && IsUnderTerrain(pmesh, i, geometry.Terrain))
+                    {
+                        pmesh.areas[i] = AreaUnderground;
+                        pmesh.flags[i] |= NavMeshFlags.Underground;
+                        underground++;
+                    }
                 }
 
                 var option = new DtNavMeshCreateParams
@@ -143,9 +151,43 @@ namespace Rasa.NavMesh
                 }
             }
 
-            log($"  {added} tiles with walkable surface, {polys} polygons");
+            log($"  {added} tiles with walkable surface, {polys} polygons, {underground} of them under the terrain");
 
             return navMesh;
+        }
+
+        /// <summary>
+        /// Whether most of the polygon's vertices are more than <see cref="NavMeshFlags.UndergroundDepth"/>
+        /// below the heightmap: the floor of a cave or tunnel the terrain surface runs over. The
+        /// heightmap is the client's ground everywhere it exists, so walkable surface well below it
+        /// can only be inside something. Vertices are tested one by one because a polygon can be
+        /// tens of metres across and its centre averaged well below a curved hillside.
+        /// </summary>
+        private static bool IsUnderTerrain(RcPolyMesh pmesh, int poly, TerrainHeightmap terrain)
+        {
+            var p = poly * pmesh.nvp * 2;
+            var count = 0;
+            var under = 0;
+
+            for (var j = 0; j < pmesh.nvp; j++)
+            {
+                var v = pmesh.polys[p + j];
+
+                if (v == RcRecast.RC_MESH_NULL_IDX)
+                    break;
+
+                var x = pmesh.bmin.X + pmesh.verts[v * 3] * pmesh.cs;
+                var y = pmesh.bmin.Y + pmesh.verts[v * 3 + 1] * pmesh.ch;
+                var z = pmesh.bmin.Z + pmesh.verts[v * 3 + 2] * pmesh.cs;
+                var ground = terrain.Height(x, z);
+
+                count++;
+
+                if (ground != null && y < ground.Value - NavMeshFlags.UndergroundDepth)
+                    under++;
+            }
+
+            return count > 0 && under * 2 > count;
         }
     }
 }
