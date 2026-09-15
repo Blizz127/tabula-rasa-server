@@ -93,6 +93,10 @@ namespace Rasa.Managers
                 return;
 
             var hospitals = OfferedHospitals(player);
+            // Deaths are not otherwise logged, and a player whose respawn does nothing cannot be told apart
+            // from one who never asked: every death records the map and what was offered.
+            Logger.WriteLog(LogType.Debug,
+                $"{player.Name} died on map {mapChannel.MapInfo?.MapContextId} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}); offering {hospitals.Count} hospital(s).");
             // Help text 5687: trauma follows a death to a non-player character or to a player of a
             // clan at war, never a duel. Player kills are not implemented, so only NPC deaths count;
             // gameconstants DEATH_PENALTY_MIN_LEVEL keeps it from characters below level 5.
@@ -112,9 +116,19 @@ namespace Rasa.Managers
         public void ReviveMe(Client client, ReviveMePacket packet)
         {
             var player = client?.Player;
-            if (client == null || client.State != ClientState.Ingame || player?.MapChannel == null ||
-                player.State != CharacterState.Dead || player.DeathOffer == null)
+            if (client == null || client.State != ClientState.Ingame || player?.MapChannel == null)
                 return;
+
+            if (player.State != CharacterState.Dead || player.DeathOffer == null)
+            {
+                // The death dialog can be up on the client while this server has the player alive (a repeat
+                // request after a respawn, or a client-side death the server never saw). Both must be ignored,
+                // but they were indistinguishable in the logs from a request that was acted on, so the reason
+                // is recorded: GAP-DEATH-DIVERGENCE.
+                Logger.WriteLog(LogType.Error,
+                    $"{player.Name} asked to respawn at {(packet.GraveyardId is int ignoredId ? ignoredId.ToString() : "None")} while state was {player.State} with {(player.DeathOffer == null ? "no" : "a")} death offer; ignored.");
+                return;
+            }
 
             var offer = player.DeathOffer;
             HospitalData hospital;
@@ -254,6 +268,8 @@ namespace Rasa.Managers
         private static void MoveToHospital(Client client, HospitalData hospital)
         {
             var player = client.Player;
+            Logger.WriteLog(LogType.Debug,
+                $"{player.Name} respawns at hospital {hospital.GraveyardId} ({hospital.Position.X:0.#}, {hospital.Position.Y:0.#}, {hospital.Position.Z:0.#}).");
             player.Position = hospital.Position;
 
             // Actor.BeginTeleport queues the acknowledgement that Recv_Teleport then sends, so it
