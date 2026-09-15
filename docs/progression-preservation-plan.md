@@ -464,6 +464,10 @@ character picks up in Alia Das once Training Day and the class choice are behind
     over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
     (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
     walk-in and a follow-the-player mechanism remain).
+  - `e183d80` added the **detonation self-damage**: a `damage` column on `content_rule_action`, the
+    `ContentRuleAction.DamagePlayer` action (armour first then health, death announced if the bar empties) and a
+    damage-21 action on the bomb rule - the value read straight off the footage's "-21" health line, so `observed`.
+    **GAP-S5-DETONATION-DAMAGE closed** (the knock-back stays open). Deployed: 16 rules, 142 rows, 0 gaps.
   - Remaining mechanism gaps, in the order the owner's choice implies: **GAP-S5-DETONATION-DAMAGE** (the footage shows
     "-21" self-damage at the blast; needs a damage action and therefore a value column on `content_rule_action`),
     **GAP-S5-CORPSE** (a corpse object with a windup and loot), **GAP-S4-ALLY-ESCORT** (allies following the player,
