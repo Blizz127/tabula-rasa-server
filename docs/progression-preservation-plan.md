@@ -456,6 +456,20 @@ character picks up in Alia Das once Training Day and the class choice are behind
     XP 4,000 and 600 credits). Deployed; the loader reports 131 content rows with 0 gaps.
   - **GAP-W3-1069-GATE**: TaRapedia gates 1069 on 1407 "Too Close For Comfort", but 1407 has no definition and the
     loader rejects a prerequisite naming an unknown mission, so Solis offers 1069 directly until 1407's slice lands.
+  - **Gap pass (owner chose "emulator mechanisms", 2026-09-15)**: `1234cd3` closed **GAP-GM** by verification (new
+    accounts default to level 0; only the test account was raised). `30653f2` added the missing **scripted creature
+    movement** - `ContentRuleAction.MoveCreatureToLocation` (placement -> `content_location` with purpose 3), a
+    `BehaviorManager.WalkTo` that hands the creature to the existing path-following action over the navmesh, and the
+    catalog validation - then seeded two walks: McAllister to the S2 gear area at the 1990 turn-in (A2-044 "Follow me
+    over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
+    (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
+    walk-in and a follow-the-player mechanism remain).
+  - Remaining mechanism gaps, in the order the owner's choice implies: **GAP-S5-DETONATION-DAMAGE** (the footage shows
+    "-21" self-damage at the blast; needs a damage action and therefore a value column on `content_rule_action`),
+    **GAP-S5-CORPSE** (a corpse object with a windup and loot), **GAP-S4-ALLY-ESCORT** (allies following the player,
+    which the new walk action can be extended into), and **GAP-ITEM-REWARDS** (the item grant planner is wired into
+    turn-in already; the reward items need the prefix-family resolution recorded in
+    `research/20260915-aliadas-hub/work/item-name-structure.md`).
   - Ellatha's NPC list was harvested (`tools/ellatha_npc_index.py`, `work/ellatha-npc-index.json`): only **71 NPCs**
     (58 Wilderness), so it is a cross-check for the hub, not the roster expansion the 660 no-giver missions need.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
