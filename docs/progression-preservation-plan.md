@@ -445,6 +445,19 @@ character picks up in Alia Das once Training Day and the class choice are behind
   So the two mission sources are good for *structure* and not for *final values*; final values need the client's own
   tables, the D11 patch notes or footage. Still to sweep: the official patch notes near shutdown and TaRapedia mission
   revisions dated after 2008-08.
+- **Batch 1 progress (2026-09-15)**:
+  - `b82f235` added the Logos binding kind, so an objective can wait on a shrine activation.
+  - `93b6b1b` fixed the S1 objective triggers that a live playthrough exposed: both areas stand on the ceremonial
+    bridge but their Y came from the terrain under it (12.6/18.6 m below the deck), so the 4 m spheres could never be
+    entered. They are vertical cylinders now. The same commit rebuilt `Add_map_region`'s Designer, which upstream
+    PR #91 had shipped without the content tables — EF generates a migration's Down operations against the previous
+    migration's model, so that omission broke any rollback through it.
+  - `0e251a5` seeded **1069 Receptive Reception** (Solis 42 → Apirka 43, objectives 1..3, the Enhance-shrine binding,
+    XP 4,000 and 600 credits). Deployed; the loader reports 131 content rows with 0 gaps.
+  - **GAP-W3-1069-GATE**: TaRapedia gates 1069 on 1407 "Too Close For Comfort", but 1407 has no definition and the
+    loader rejects a prerequisite naming an unknown mission, so Solis offers 1069 directly until 1407's slice lands.
+  - Ellatha's NPC list was harvested (`tools/ellatha_npc_index.py`, `work/ellatha-npc-index.json`): only **71 NPCs**
+    (58 Wilderness), so it is a cross-check for the hub, not the roster expansion the 660 no-giver missions need.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
