@@ -352,6 +352,14 @@ namespace Rasa.Structures.Content
                                 gap("unknown area");
                             break;
 
+                        case ObjectiveBindingKind.LogosRecovered:
+                            // The target is a Logos shrine: a Logos dynamic object built from the world's `logos`
+                            // table, so placement_id carries that table's row id rather than a content placement id.
+                            used.Add("placement_id");
+                            if (binding.PlacementId == 0)
+                                gap("logos binding needs a shrine id");
+                            break;
+
                         case ObjectiveBindingKind.UseCompleted:
                         case ObjectiveBindingKind.LootAll:
                             used.Add("placement_id");
