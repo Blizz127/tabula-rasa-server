@@ -1362,6 +1362,15 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   4 condition rows, 2 rules, 12 item templates) and the game now reports `Loaded 14 content rules (130 content rows,
   0 gaps)` and `Successfully authenticated with the Auth server!`. The first deployment of this slice aborted startup on
   the NPC-load defect above; the rebuilt image fixes it and `CreatureNpcBindingTests` guards it.
+- Client login path, 2026-09-15: the realm's launcher (`banshee-realm-client`) expects the Tabula Rasa auth
+  server on **2116** (`TabulaRasaLaunchPlan.DefaultAuthPort`, `docs/MARVEL_HEROES_TABULA_RASA.md`), while Rasa.NET's own
+  default is **2106** (`src/Rasa.Auth/appsettings.json`). The compose file now publishes both to the same listener, and
+  the owner's client got through: the launch command is `/NoPatch /AuthServer=tabularasa.bansheerealm.com:2116`, which
+  resolves to the server's public address. `Rasa.Auth.Client.HandlePacket` now logs every received client opcode (the
+  conversation is short and a stalling client looked identical to a silent one); the observed flow is
+  `Login` → `ServerListExt` (`LoggedIn`) → `AboutToPlay` (`ServerList`) → the account is redirected to the queue of
+  server 234 → the game accepts the client and creates the character's instance. The `SCCheck`/`SCCheckReq` pair stays
+  unimplemented, but the real client does not send it on this path.
 - Deployment note: the running game container carried an **ad-hoc navmesh mount** that `docker-compose.yml` never
   declared, so recreating the container from the file dropped it and the server fell back to straight-line creature
   movement. The compose file now declares `./navmesh:/app/navmesh` (the repository copy is byte-identical to the one that

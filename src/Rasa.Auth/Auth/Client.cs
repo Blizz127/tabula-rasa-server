@@ -150,6 +150,12 @@ namespace Rasa.Auth
             if (packet is not IOpcodedPacket<ClientOpcode> authPacket)
                 return;
 
+            // The auth conversation is short and a client that stalls looks identical to one that
+            // never sent anything, so every received opcode is logged. This is what identified the
+            // 2026-09-15 "sitting at authenticating" report: the client connects, takes the
+            // protocol version and then goes quiet.
+            Logger.WriteLog(LogType.Network, $"Client {Socket.RemoteAddress} sent {authPacket.Opcode} in state {State}.");
+
             // Each message belongs to a point in the conversation, and the handlers assume it:
             // everything after Login reads AccountEntry, which Login sets. A ServerListExt or
             // AboutToPlay sent first dereferenced null on the main loop thread. Login is the

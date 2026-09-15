@@ -8,6 +8,10 @@ services:
     tty: true
     ports:
       - "2106:2106"
+      # The Banshee Realm launcher's Tabula Rasa integration expects the auth server on 2116
+      # (TabulaRasaLaunchPlan.DefaultAuthPort, docs/MARVEL_HEROES_TABULA_RASA.md); Rasa.NET's own
+      # default is 2106. Publish both so either client configuration reaches the same listener.
+      - "2116:2106"
       - "2107:2107"
     volumes:
       - ./rasaauth.db:/app/rasaauth.db
