@@ -209,7 +209,7 @@ namespace Rasa.Auth
             {
                 AuthCommunicator = new LengthedSocket(SizeType.Word);
                 AuthCommunicator.OnAccept += OnCommunicatorAccept;
-                AuthCommunicator.Bind(new IPEndPoint(IPAddress.Parse(Config.CommunicatorConfig.Address), Config.CommunicatorConfig.Port));
+                AuthCommunicator.Bind(NetworkAddress.ResolveEndPoint(Config.CommunicatorConfig.Address, Config.CommunicatorConfig.Port));
                 AuthCommunicator.Listen(Config.CommunicatorConfig.Backlog);
             }
             catch (Exception e)

@@ -341,7 +341,12 @@ the final-live rule.
   receiver whose creature class carries no NPC augmentation (a startup abort once 2010/2011 named the Redshirt-bodied
   Caufield), and it bound an `npc_package` row only when the class had that augmentation, silently dropping the row. Both
   bindings now come from the mission and package data; `CreatureNpcBindingTests` covers them.
-- Owner client checks are still to do for W2 as well (the offer's presentation, Caufield and the gear tooltips).
+- Owner client checks are still to do for W2 as well. What to capture, in order: (1) the tier window and the level-5
+  release at Kincaid; (2) whether the forced "Getting It In Gear" offer appears immediately, on the next map entry or not
+  at all, its header and whether Decline is greyed; (3) the objective text in the mission tracker; (4) whether Caufield is
+  interactable at the supply tent (name plate, interaction cursor, dialogue) - he is the Redshirt body without an NPC
+  augmentation, so this is the open question; (5) the six granted pieces: names, icons, quality colour, tooltips, whether
+  they equip at level 5 and whether any XP or credits were paid; (6) that the offer does not repeat after the turn-in.
   Full suite 853/853 under the .NET 5 SDK image.
 
 ## Boot-camp owner decisions

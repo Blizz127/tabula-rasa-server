@@ -401,7 +401,7 @@ namespace Rasa.Game
                 AuthCommunicator = new LengthedSocket(SizeType.Word);
                 AuthCommunicator.OnConnect += OnCommunicatorConnect;
                 AuthCommunicator.OnError += OnCommunicatorError;
-                AuthCommunicator.ConnectAsync(new IPEndPoint(IPAddress.Parse(Config.CommunicatorConfig.Address), Config.CommunicatorConfig.Port));
+                AuthCommunicator.ConnectAsync(NetworkAddress.ResolveEndPoint(Config.CommunicatorConfig.Address, Config.CommunicatorConfig.Port));
             }
             catch (Exception e)
             {

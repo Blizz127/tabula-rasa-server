@@ -1362,8 +1362,9 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   4 condition rows, 2 rules, 12 item templates) and the game now reports `Loaded 14 content rules (130 content rows,
   0 gaps)` and `Successfully authenticated with the Auth server!`. The first deployment of this slice aborted startup on
   the NPC-load defect above; the rebuilt image fixes it and `CreatureNpcBindingTests` guards it.
-- Deployment note: recreating the compose network re-assigns container IPs, and the game parses
-  `CommunicatorConfig.Address` as a literal IP, so `appsettings.env.json` (untracked deployment file) was repointed from
-  the auth container's old address 192.168.16.2 to its new 192.168.16.3; the previous copy is in
-  `/home/blizz/backups/rasa-net/20260915T005518Z-retail-class-gear-w2`. Teaching the game to accept the compose service
-  name (`auth`, which Docker DNS resolves) would remove that fragility.
+- Deployment note: recreating the compose network re-assigns container IPs, and both servers parsed
+  `CommunicatorConfig.Address` with `IPAddress.Parse`, so the 2026-09-15 network recreation left the game dialling the
+  auth container's old address. The configuration now carries the compose service name `auth`, and
+  `Rasa.Networking.NetworkAddress` resolves it (literal IPs still parse first, so old configs stay valid);
+  `NetworkAddressTests` covers both paths. The untracked `appsettings.env.json` was repointed from 192.168.16.2 to `auth`
+  and the previous copy is in `/home/blizz/backups/rasa-net/20260915T005518Z-retail-class-gear-w2`.
