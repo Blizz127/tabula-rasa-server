@@ -28545,6 +28545,44 @@
    "slices": [
     "S2"
    ]
+  },
+  {
+   "id": "GAP-WORLD-POSITION-AUDIT",
+   "summary": "Standing check added 2026-09-15: WorldPositionAuditTests measures every position in the world against the walkable surface the navmesh gives at its XZ - 434 rows across content placements, content locations, trigger areas, objective markers, Logos shrines and creature spawns, on every run. Two rules, because the tables mean different things: our content (placements, locations, areas, markers) must sit within 2 m of the surface, while original data (Logos shrines, creature spawns) is only required not to be buried. The first run found one real defect of ours - the inferred McAllister escort destination was 6.75 m under the ground, since it had taken the crate's own (platform-origin) Y - which BootcampEscortDestinationGround fixes, plus four explained rows listed in the test with reasons. Every content placement (35), location, trigger area and objective marker now passes.",
+   "closes_with": "standing check; the escort destination defect is fixed, the explained rows are documented",
+   "evidence": [
+    "src/Rasa.Test/WorldPositionAuditTests.cs (434 rows, navmesh surface per row)",
+    "navmesh adv_bootcamp.nav and the other 76 map navmeshes built from client map data",
+    "content_location 19853 lifted from 114.0 to the measured 120.75"
+   ],
+   "surfaced_by": [
+    "owner request 2026-09-15: \"run through the whole map and game to make sure everything is properly positioned\""
+   ],
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "W1",
+    "W2",
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOGOS-POSITION-UNSET",
+   "summary": "Found by the world position audit (2026-09-15): the original logos table carries a shrine whose position is unset - \"These\" on adv_foreas_concordia_palisades sits at exactly (0, 0, 0), so the shrine would be built at the map origin instead of its place in the world. One more cavern shrine, \"Those\" in adv_foreas_concordia_minoscaverns, has its interaction point 2.01 m under the floor the navmesh models, which may be the same kind of hole or a cave layer the navmesh does not carry. Neither is reconstructed: the client's own Logos data is the source that can settle both, and no guessed position is being introduced.",
+   "closes_with": "needs the client Logos placement data for the Palisades and Minos Caverns shrines",
+   "evidence": [
+    "logos table: \"These\" at (0, 0, 0) on adv_foreas_concordia_palisades",
+    "logos table: \"Those\" at y -34.49 on adv_foreas_concordia_minoscaverns, surface -32.48",
+    "WorldPositionAuditTests lists both as explained rows rather than tolerating them"
+   ],
+   "surfaced_by": [
+    "world position audit 2026-09-15"
+   ],
+   "slices": []
   }
  ],
  "non_content_settings": [

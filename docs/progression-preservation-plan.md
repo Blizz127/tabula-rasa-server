@@ -464,6 +464,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
     over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
     (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
     walk-in and a follow-the-player mechanism remain).
+  - **Whole-world position audit (2026-09-15, owner request)**: every position in the world is now measured against
+    the walkable surface the navmesh gives at its XZ - 434 rows over content placements, locations, trigger areas,
+    objective markers, Logos shrines and creature spawns. Our content must sit within 2 m of the surface; original
+    data (Logos shrines, creature spawns) only must not be buried. Result: **one real defect of ours** - the inferred
+    McAllister escort destination was 6.75 m under the ground (it had inherited the crate's platform-origin Y), now
+    lifted to the measured 120.75 - and four explained rows listed with reasons in the test. Two new gaps came out of
+    it: **GAP-LOGOS-POSITION-UNSET** (the original logos table has a shrine at exactly (0,0,0) on Palisades) and the
+    2 m-under cavern shrine in Minos Caverns. All 35 content placements, all locations, all areas and all markers pass.
   - **Placement heights (2026-09-15, live report "I do not see Captain Delessio")**: the camp's placements are now
     measured against the walkable surface the navmesh gives at each XZ (original-tier: the navmesh is built from the
     client's map data), and `PlacementHeightAuditTests` repeats that measurement on every run, failing on anything
