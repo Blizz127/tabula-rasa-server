@@ -341,6 +341,10 @@ the final-live rule.
   receiver whose creature class carries no NPC augmentation (a startup abort once 2010/2011 named the Redshirt-bodied
   Caufield), and it bound an `npc_package` row only when the class had that augmentation, silently dropping the row. Both
   bindings now come from the mission and package data; `CreatureNpcBindingTests` covers them.
+- For that check the live test environment was seeded on 2026-09-15: character 1 "Blizz" (account 4) was moved to
+  level 4 with 43,000 experience in Alia Das so the tier gate is open, and account 4 was raised to GM level 10 (Admin).
+  Both are test scaffolding rather than recovered data and can be reverted; `.chg_class` bypasses the class_selected
+  event, so only training at Kincaid exercises the gear offer.
 - Owner client checks are still to do for W2 as well. What to capture, in order: (1) the tier window and the level-5
   release at Kincaid; (2) whether the forced "Getting It In Gear" offer appears immediately, on the next map entry or not
   at all, its header and whether Decline is greyed; (3) the objective text in the mission tracker; (4) whether Caufield is
