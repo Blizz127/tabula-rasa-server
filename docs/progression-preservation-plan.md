@@ -303,11 +303,14 @@ the final-live rule.
 - `WildernessClassGear` (SQLite and MySQL, frozen rows in `WildernessData/WildernessClassGearRows.cs`; 49 manifest rows,
   slice W2, recorded in the boot-camp manifest under OD-43) closes `GAP-W1-GEAR-MISSIONS` and answers the tier-2 class
   choice the previous slice's `class_selected` event was added for. It seeds:
-  - Quartermaster Caufield: the emulator world seed already spawns "AFS Quartermaster Caufield" as creature 132 (level 10,
-    class 29423, name 2992) in shared Alia Das after the player arrives; the client texts place him in the Alia Das supply
-    tent and bind both missions' completion to package 133, so `npc_package(132 -> 133)` attaches the original dialogue
-    package to the existing creature instead of placing a duplicate. His final position is not measured
-    (`GAP-W2-CAUFIELD`; the pre-D11 TaRapedia `/loc` is 1.6 m from the emulator spawn).
+  - Quartermaster Caufield is the world seed's own creature: spawnpool 210 spawns 132 "AFS Quartermaster Caufield"
+    (name 2992, level 10, class 29423) in shared Alia Das at the supply tent, 1.6 m from the pre-D11 TaRapedia `/loc`,
+    and the client mission texts name him there and bind both completions to package 133. `npc_package(132 -> 133)`
+    therefore attaches the original dialogue package to the original creature, and no duplicate is placed. His class
+    29423 is a plain Redshirt body (client entityclass augmentation list [1], no NPC augmentation), so the NPC load was
+    fixed to build the NPC record from the mission/package data instead of requiring the class augmentation: before the
+    fix the first mission naming him aborted startup with a null-reference in `CreatureInit`, and the package row was
+    silently dropped (`GAP-W2-CAUFIELD`, `GAP-NPC-BODY`).
   - Missions 2010 "Getting It In Gear: Soldier Class" and 2011 "…: Specialist Class": radio giver 0, receiver 132,
     level 5 inferred, category 10000002/10000003 "Class (Soldier)/(Specialist)" original, shareable and radio-completable
     false inferred. One objective "Report to Quartermaster Caufield" (ordinal/required/revealed inferred) replaces the
@@ -332,7 +335,12 @@ the final-live rule.
   the restored NULL skeleton row); `MissionContentLoadingTests` finds no content or definition gaps for 2010/2011, checks
   the reward list, the class skill and level-5 requirements and the two weapon rows; `BootcampReinforcementsScenarioTests`
   chooses each class at Kincaid in Alia Das, gets the forced offer for the matching mission, reports to Caufield, turns it
-  in and receives the whole six-piece load-out, and sees no repeat.
+  in and receives the whole six-piece load-out, and sees no repeat. Deployed to the live world
+  database on 2026-09-15: 14 content rules, 130 content rows, 0 gaps.
+- The NPC load was an emulator defect this slice exposed: `CreatureInit` dereferenced a null `Npc` for any mission giver or
+  receiver whose creature class carries no NPC augmentation (a startup abort once 2010/2011 named the Redshirt-bodied
+  Caufield), and it bound an `npc_package` row only when the class had that augmentation, silently dropping the row. Both
+  bindings now come from the mission and package data; `CreatureNpcBindingTests` covers them.
 - Owner client checks are still to do for W2 as well (the offer's presentation, Caufield and the gear tooltips).
   Full suite 853/853 under the .NET 5 SDK image.
 

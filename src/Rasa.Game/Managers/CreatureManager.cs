@@ -235,6 +235,34 @@ namespace Rasa.Managers
             creature.Controller.ActionWander.State = BehaviorManager.WanderIdle;
         }
 
+        /// <summary>
+        /// Records a mission a creature gives or receives. The mission tables make the creature an NPC even when its
+        /// entity class carries no NPC augmentation: the world data's creature 132 "AFS Quartermaster Caufield" stands
+        /// on the plain Redshirt class 29423 (client entityclass augmentation list [1]), and the seeded missions
+        /// 2010/2011 name him as the receiver. Without the NPC record the load crashed on the first such mission
+        /// (defect fixed 2026-09-15).
+        /// </summary>
+        public static void AddNpcMissionId(Creature creature, uint missionId)
+        {
+            creature.Npc ??= new Npc();
+
+            if (creature.Npc.NpcMissionIds != null)
+                creature.Npc.NpcMissionIds.Add(missionId);
+            else
+                creature.Npc.NpcMissionIds = new List<uint> { missionId };
+        }
+
+        /// <summary>
+        /// Binds a world-data <c>npc_package</c> row to a loaded creature. That row is what makes a creature an NPC
+        /// with dialogue in the world data (the creature rows carry no NPC flag of their own), so the binding must not
+        /// depend on the entity class augmentation; gating it on the augmentation silently dropped the package.
+        /// </summary>
+        public static void BindNpcPackage(Creature creature, uint packageId)
+        {
+            creature.Npc ??= new Npc();
+            creature.Npc.NpcPackageId = packageId;
+        }
+
         private Creature CreateFromTemplate(uint dbId)
         {
             // check is creature in database
@@ -477,19 +505,7 @@ namespace Rasa.Managers
                     var mission = entry.Value;
 
                     if (mission.MissionGiver == data.Id || mission.MissionReciver == data.Id)
-                    {
-                        if (creature.Npc.NpcMissionIds != null)
-                        {
-                            creature.Npc.NpcMissionIds.Add(mission.MissionId);
-                        }
-                        else
-                        {
-                            creature.Npc.NpcMissionIds = new List<uint>
-                                {
-                                    mission.MissionId
-                                };
-                        }
-                    }
+                        AddNpcMissionId(creature, mission.MissionId);
                 }
                 LoadedCreatures.Add(creature.DbId, creature);
             }
@@ -499,14 +515,7 @@ namespace Rasa.Managers
             {
                 if (LoadedCreatures.ContainsKey(package.Id))
                 {
-                    foreach (var aug in EntityClassManager.Instance.LoadedEntityClasses[LoadedCreatures[package.Id].EntityClass].Augmentations)
-                    {
-                        if (aug == AugmentationType.NPC)
-                        {
-                            LoadedCreatures[package.Id].Npc.NpcPackageId = package.PackageId;
-                            break;
-                        }
-                    }
+                    BindNpcPackage(LoadedCreatures[package.Id], package.PackageId);
                 }
                 else
                 {

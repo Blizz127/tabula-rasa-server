@@ -21869,7 +21869,7 @@
        "locator": "rasaworld.db (read-only, deployed 2026-09-14): creature 132 \"AFS Quartermaster Caufield\" level 10 class 29423 name 2992, spawnpool 210 context 1220 (756.88, 293.97, 407.07); TaRapedia pre-D11 /loc 757.5, 294.0, 405.5 (1.6 m away)"
       }
      ],
-     "reasoning": "the client binds the 2010/2011 completion to NPC package 133 and both mission texts name Quartermaster Caufield; the emulator world data already holds \"AFS Quartermaster Caufield\" as creature 132 and spawns him in shared Alia Das, so the missing dialogue package is attached to the existing creature instead of placing a second Caufield (OD-43)"
+     "reasoning": "the client binds the 2010/2011 completion to NPC package 133 and both mission texts name Quartermaster Caufield \"in the Alia Das supply tent\"; the deployed world seed already carries exactly that creature - id 132 \"AFS Quartermaster Caufield\", name 2992, level 10, class 29423 - and its spawnpool 210 spawns him in shared Alia Das at (756.88, 293.97, 407.07), 1.6 m from the pre-D11 TaRapedia /loc, so the original row is used instead of placing a second Caufield (OD-43). The creature's class 29423 carries no NPC augmentation, so the emulator's NPC load was fixed to build the NPC record from the mission/package data (2026-09-15)"
     },
     "package_id": {
      "value": 133,
@@ -28490,13 +28490,14 @@
   },
   {
    "id": "GAP-W2-CAUFIELD",
-   "summary": "Quartermaster Caufield's final-live identity and position are not evidenced. The missions use the existing world-seed creature 132 (level 10, class 29423, name 2992) at its spawnpool position in shared Alia Das; the original text places him in the supply tent and the pre-D11 TaRapedia /loc is 1.6 m away, but neither is a final-live measurement. No appearance rows exist (GAP-NPC-BODY).",
+   "summary": "Quartermaster Caufield's final-live body and interaction are not evidenced. The world seed's creature 132 is spawned by its own spawnpool 210 at the Alia Das supply-tent position, but it stands on class 29423 \"Redshirt_Human_Soldier_Light_Male\" (client entityclass augmentation list [1], no NPC augmentation) and no appearance rows exist (GAP-NPC-BODY). The dialogue wiring now works - the NPC load builds the NPC record from the npc_package row instead of requiring the class augmentation, and a mission naming a non-NPC creature no longer aborts startup (emulator defect fixed 2026-09-15) - but whether retail attached his dialogue to this Redshirt body or to an NPC-augmented one, and whether the client renders him interactable, is unverified.",
    "evidence": [
     "client texts \"in the Alia Das supply tent\"",
-    "rasaworld.db creature 132 / spawnpool 210",
+    "rasaworld.db creature 132 (name 2992, class 29423) + spawnpool 210 (1220, 756.88/293.97/407.07)",
+    "client entityclass 29423 aug_list [1] (no NPC augmentation)",
     "TaRapedia pre-D11 /loc 757.5, 294.0, 405.5"
    ],
-   "closes_with": "a final-live radar/landmark measurement of Caufield or map placements",
+   "closes_with": "footage of the Alia Das supply tent, or original creature/entityclass data showing which body and augmentation Caufield used",
    "surfaced_by": [
     "manifest npc_package 132 inferred pairing"
    ],

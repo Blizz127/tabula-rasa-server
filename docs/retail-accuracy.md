@@ -1346,10 +1346,24 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   - labelled analogues (OD-43): the templates' quality 2 and trade/binding flags from the D11 new-player block's uniform
     world-seed rows, and the Rage-O-Matic/Repair-O-Matic `itemtemplate_weapon` columns from the world seed's machine-gun
     and tool family rows.
-- Quartermaster Caufield is **not** a new placement: the emulator world seed already spawns him as creature 132 with the
-  original client name and class, in shared Alia Das near the arrival. The missions attach the original dialogue package
-  133 to that creature and complete at him. His final position is not measured (the pre-D11 TaRapedia `/loc` is 1.6 m
-  from the emulator spawn) and no appearance rows exist.
+- Quartermaster Caufield is **not** a new placement: the world seed's own spawnpool 210 spawns creature 132 "AFS
+  Quartermaster Caufield" (name 2992, level 10, class 29423) in shared Alia Das at the supply tent, 1.6 m from the pre-D11
+  TaRapedia `/loc`. The missions attach the original dialogue package 133 to that creature and complete at him. His class
+  is a plain Redshirt body (client entityclass augmentation list [1]) and no appearance rows exist, so whether retail used
+  this body and the client renders him interactable is unverified (`GAP-W2-CAUFIELD`).
+- The NPC load was fixed: `CreatureInit` aborted startup with a null-reference on the first mission that names a creature
+  whose class has no NPC augmentation (Caufield), and it bound an `npc_package` row only when the class carried that
+  augmentation, which silently dropped Caufield's package. Both bindings now follow the mission and package data;
+  `CreatureNpcBindingTests` covers the regression.
 - Not reproduced: the missions' XP and credit rewards, a real item price, the per-template weapon statistics, the offer's
   presentation (whether the client showed it as a broadcast and greyed Decline), and any capture of the gear tooltips.
   `GAP-W2-*` records each. OD-43 was decided by the agent for the owner and awaits owner review, as do OD-25..OD-42.
+- Deployed 2026-09-15 against the live world database: `WildernessClassGear` is applied (2 missions, package 132 -> 133,
+  4 condition rows, 2 rules, 12 item templates) and the game now reports `Loaded 14 content rules (130 content rows,
+  0 gaps)` and `Successfully authenticated with the Auth server!`. The first deployment of this slice aborted startup on
+  the NPC-load defect above; the rebuilt image fixes it and `CreatureNpcBindingTests` guards it.
+- Deployment note: recreating the compose network re-assigns container IPs, and the game parses
+  `CommunicatorConfig.Address` as a literal IP, so `appsettings.env.json` (untracked deployment file) was repointed from
+  the auth container's old address 192.168.16.2 to its new 192.168.16.3; the previous copy is in
+  `/home/blizz/backups/rasa-net/20260915T005518Z-retail-class-gear-w2`. Teaching the game to accept the compose service
+  name (`auth`, which Docker DNS resolves) would remove that fragility.
