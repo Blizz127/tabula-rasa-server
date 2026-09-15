@@ -23,7 +23,9 @@ namespace Rasa.Data
             {
                 ObjectiveBindingKind.AreaEntered, ObjectiveBindingKind.Equip, ObjectiveBindingKind.LootAll, ObjectiveBindingKind.Hit, ObjectiveBindingKind.Kill,
                 // S5: Conrad's corpse and the bomb detonating.
-                ObjectiveBindingKind.UseCompleted, ObjectiveBindingKind.PlacementState
+                ObjectiveBindingKind.UseCompleted, ObjectiveBindingKind.PlacementState,
+                // W3 batch 1: the Logos shrines (mission 1069 "Locate the Logos shrine" and the Logos line).
+                ObjectiveBindingKind.LogosRecovered
             },
             Events = new HashSet<ContentRuleEvent>
             {

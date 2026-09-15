@@ -858,6 +858,21 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Completes the logos_recovered bindings for the Logos shrine the player just activated. The binding's
+        /// placement_id carries the <c>logos</c> row id, because shrines are Logos dynamic objects and not
+        /// content placements; DynamicObjectManager.LogosRecovery passes the id it already resolved.
+        /// </summary>
+        public void CompleteLogosBoundObjectives(Client client, uint logosId)
+        {
+            if (client == null || logosId == 0)
+                return;
+
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LogosRecovered)
+                         .Where(binding => binding.PlacementId == logosId).ToList())
+                Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.LogosRecovered);
+        }
+
+        /// <summary>
         /// Reacts to an event that has no transaction of its own, such as entering a map.
         /// </summary>
         /// <returns>The rules that fired and committed; none when the commit failed.</returns>

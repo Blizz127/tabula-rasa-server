@@ -18,7 +18,13 @@ namespace Rasa.Data
         Equip = 4,
         Hit = 5,
         Kill = 6,
-        PlacementState = 7
+        PlacementState = 7,
+        /// <summary>
+        /// The source is a Logos shrine. Shrines are Logos dynamic objects built from the world's <c>logos</c>
+        /// table (LogosManager.LogosInit) rather than content placements, so this binding's placement_id holds
+        /// the logos row id and DynamicObjectManager.LogosRecovery fires it with the id it resolved.
+        /// </summary>
+        LogosRecovered = 8
     }
 
     public enum ContentAreaShape : byte

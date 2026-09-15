@@ -574,6 +574,12 @@ namespace Rasa.Managers
                         if (!haveLogos)
                             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Logos, logosId);
 
+                        // Activating the shrine is what mission objectives bound to it wait for (1069's
+                        // "Locate the Logos shrine" and the Logos missions). The shrine is a Logos dynamic
+                        // object, so the objective binds to the logos row id rather than a placement.
+                        if (logosId != 0)
+                            MissionManager.Instance.Content.CompleteLogosBoundObjectives(client, logosId);
+
                         break;
                     }
             }
