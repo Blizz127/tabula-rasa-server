@@ -1381,6 +1381,23 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   load unchanged). Also note `20260915120000_Add_map_region.Designer.cs` carries upstream's snapshot, which lacks our
   content-layer tables; the standalone `*ContextModelSnapshot.cs` files auto-merged correctly and are what scaffolding
   reads, but the Designer is inconsistent with the convention the other migrations follow.
+- **Final live deployment identified (2026-09-15, official patch notes)**: the official patch-notes index
+  (`playtr.com/news/patch_notes/index.html`, last pre-shutdown capture) lists every deployment: **D11 = 2008-08-15**
+  ("brand new Tutorial" — the rebuilt boot camp our S1–S6/W1 slices reconstruct), D12 = 2008-09-18 ("new version of the
+  tier selection process" — the feature our W2 slice implements), D13 = crafting, **D14 = 2008-11-11**, D15 = 2008-12-13
+  (Empire Sector), D16/D16.4 = 2009-02-09 (mechs, new drop-package items) and **D16.5 = 2009-02-17, the last deployment
+  before shutdown**. That matches the client revision this stack targets (1.16.5.0) and fixes the shorthand: `pre_d11`
+  means before the rebuilt tutorial, and **values dated 2008-08-15 … 2009-02-17 are the final-era values** (what the bulk
+  research's tarapedia tooling flags as `post_d11`).
+- **Final-era mission facts from those notes, needed by the "every mission" goal**: D14 **added** the repeatable
+  "War Machine" in Raksha Robotics Factory and **removed "Artificial Iniquity"** (so it must not be seeded as live),
+  and added the level-50 "A Mystery Unearthed" (Archaeologist Wynne Topper, Twin Pillars); D15 added "Welcome Home
+  Soldiers!" and the repeatable "Rapture" (Captain Pauly Seminario / General Frank E. Murphy, Empire Sector, AFS
+  Shocktrooper Suit rewards). The client's own mission table is the authority on which missions exist in the final build;
+  the notes explain the history. The same notes publish a **resistance rework** (D14: diminishing returns, 10 → 16.67%
+  … 250 → 83.33%; resistance skill 30 s → 60 s; Polarity Field -10/pump; resist modules 5 → 10 per rank) that the
+  emulator does not implement yet — recorded as a combat-fidelity target. Research record:
+  `research/20260915-aliadas-hub/work/official-deployment-notes.md`.
 - Client login path, 2026-09-15: the realm's launcher (`banshee-realm-client`) expects the Tabula Rasa auth
   server on **2116** (`TabulaRasaLaunchPlan.DefaultAuthPort`, `docs/MARVEL_HEROES_TABULA_RASA.md`), while Rasa.NET's own
   default is **2106** (`src/Rasa.Auth/appsettings.json`). The compose file now publishes both to the same listener, and
