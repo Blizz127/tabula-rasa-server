@@ -290,6 +290,12 @@ the final-live rule.
   Rogers turn-in, the observed order). Both paths receive the forced offer, accept it, see no repeat, report to Kincaid,
   are refused without a valid choice, and turn in for 120 credits plus the chosen pistol in the first equipment slot,
   persisted.
+- Corroboration (2026-09-15, Wayback pass): Ellatha/DaOpa's mission DB names Training Day's reward as
+  **180 credits** plus a choice of **Vextronics Pistol** (62 physical, 20 m, Standard Grade Cartridges 0/20) or
+  **Vextronics Pulse Pistol** (72 EMP, Power Cells 0/10), with Soldier Trainer **Bukowski** and Specialist Trainer
+  **Hoffman** as the tier-1 trainers at the barracks tent - independent agreement with the two pistols this slice
+  seeds (116929/116930). The DB is early-2008 content (`work/wayback-era-findings.md`), so 180 credits is `inferred`;
+  the experience figure stays open.
 - Open: Training Day experience (`GAP-W1-1526-XP`); the offer delay (`GAP-W1-OFFER-RULE`); no offer for characters
   who skip the boot camp (`GAP-W1-SKIP-TRAINING-DAY`, OD-40); Kincaid's facing, level and appearance
   (`GAP-W1-KINCAID-PRESENTATION`, `GAP-NPC-BODY`); the template choice (`GAP-W1-REWARD-TEMPLATE-ID`); the weapon
@@ -431,9 +437,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
     Supplies On The Double's timer, and so on).
   - Next concrete step: resolve those reward **item names** to client templates (`itemtemplatelanguage` /
     `itemclass`) and record which are recovered originals versus missing, then seed 1069 and 479.
-- **Internet Archive was offline** when this pass ran (`web.archive.org` returned "Temporarily Offline"), so no
-  Wayback sweep of the D11-era pages happened; retry later for post-2007 snapshots of the same guides, which would
-  upgrade `pre_d11` structure to D11 values.
+- **Wayback pass (2026-09-15, after the archive came back)**: the **official RGTR Wilderness walkthrough is identical**
+  in its 2007-12-13, 2008-09-14 and 2008-11-15 captures (title line aside), so its mechanics were still being published
+  unchanged three months before shutdown; and the **Ellatha/DaOpa mission pages are byte-identical** in their Feb-2008
+  snapshots and the live-2026 copies (chrome aside), which dates that DB to **early-2008 content, not a later build**
+  (ids 9, 10, 20 and 21 have no 2008 snapshot). Recorded in `research/20260915-aliadas-hub/work/wayback-era-findings.md`.
+  So the two mission sources are good for *structure* and not for *final values*; final values need the client's own
+  tables, the D11 patch notes or footage. Still to sweep: the official patch notes near shutdown and TaRapedia mission
+  revisions dated after 2008-08.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
