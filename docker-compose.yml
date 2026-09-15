@@ -25,4 +25,8 @@ services:
       - ./rasachar.db:/app/rasachar.db
       - ./rasaworld.db:/app/rasaworld.db
       - ./appsettings.env.json:/app/src/Rasa.Game/appsettings.env.json
+      # The server reads its per-map navmeshes from NavMeshPath (navmesh). The running container carried
+      # this mount ad hoc, so recreating it from this file lost the navmesh and creatures fell back to
+      # straight-line movement. The repository copy is byte-identical to the mounted one.
+      - ./navmesh:/app/navmesh
 

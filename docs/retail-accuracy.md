@@ -1362,6 +1362,10 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   4 condition rows, 2 rules, 12 item templates) and the game now reports `Loaded 14 content rules (130 content rows,
   0 gaps)` and `Successfully authenticated with the Auth server!`. The first deployment of this slice aborted startup on
   the NPC-load defect above; the rebuilt image fixes it and `CreatureNpcBindingTests` guards it.
+- Deployment note: the running game container carried an **ad-hoc navmesh mount** that `docker-compose.yml` never
+  declared, so recreating the container from the file dropped it and the server fell back to straight-line creature
+  movement. The compose file now declares `./navmesh:/app/navmesh` (the repository copy is byte-identical to the one that
+  was mounted) and the log confirms `Loaded navmeshes for 76 of 78 maps`.
 - Deployment note: recreating the compose network re-assigns container IPs, and both servers parsed
   `CommunicatorConfig.Address` with `IPAddress.Parse`, so the 2026-09-15 network recreation left the game dialling the
   auth container's old address. The configuration now carries the compose service name `auth`, and
