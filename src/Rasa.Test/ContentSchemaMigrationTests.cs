@@ -48,6 +48,7 @@ namespace Rasa.Test
         private const string BootcampObjectiveAreaRadiusMigration = "20260916000000_BootcampObjectiveAreaRadius";
         private const string BootcampCaveInTriggerRadiusMigration = "20260916020000_BootcampCaveInTriggerRadius";
         private const string BootcampObjectiveAreaHeightMigration = "20260916040000_BootcampObjectiveAreaHeight";
+        private const string BootcampRemainingTriggerHeightMigration = "20260916060000_BootcampRemainingTriggerHeight";
 
         public static readonly string[] WorldTables =
         {
@@ -111,7 +112,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -134,7 +135,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -249,12 +250,15 @@ namespace Rasa.Test
             // a recruit crossing the span without touching objective 2's 4 m sphere.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601) AND radius = 10"));
 
+            // BootcampRemainingTriggerHeight puts the two sphere triggers on the player's level as cylinders.
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198602, 198603) AND shape = 2 AND half_height = 25"));
+
             // BootcampObjectiveAreaHeight raises the S1 triggers' ceiling: the bridge arches, so the recruit crossed
             // the marker above the volume (the probe showed the height climbing toward it).
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601) AND half_height = 40"));
 
             // BootcampCaveInTriggerRadius applies OD-44 to 1994 objective 2's cave-in trigger.
-            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id = 198602 AND radius = 10"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id = 198602 AND radius = 10 AND half_height = 25"));
 
             // ContentRuleActionDamage adds the column and BootcampDetonationDamage fills the blast's -21 into it.
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985007 AND sequence = 3 AND action = 15 AND damage = 21"));
@@ -345,7 +349,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);

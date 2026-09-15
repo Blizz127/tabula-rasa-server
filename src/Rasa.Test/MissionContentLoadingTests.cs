@@ -1079,7 +1079,9 @@ namespace Rasa.Test
                     Assert.AreEqual((ContentRuleAction.DispenseRadioMission, missionId, true), ((ContentRuleAction)gearOffer.Action, gearOffer.MissionId, gearOffer.Forced));
                 }
                 var pad = validation.Catalog.Areas[198603];
-                Assert.AreEqual(((byte)ContentAreaShape.Sphere, -225.35, 99.6, -70.52, 12.0), (pad.Shape, pad.PosX, pad.PosY, pad.PosZ, pad.Radius));
+                // Vertical cylinder with a 25 m half-height: the pad trigger sits on the player's level like the S1 pair
+                // (OD-44), so a height error cannot eat its reach as it could for a sphere.
+                Assert.AreEqual(((byte)ContentAreaShape.VerticalCylinder, -225.35, 99.6, -70.52, 12.0, 25.0), (pad.Shape, pad.PosX, pad.PosY, pad.PosZ, pad.Radius, pad.HalfHeight));
                 var aliaDas = validation.Catalog.Locations[19852];
                 Assert.AreEqual(((byte)ContentLocationPurpose.TransferDestination, 1220u, 884.11, 305.8, 347.81), (aliaDas.Purpose, aliaDas.MapContextId, aliaDas.PosX, aliaDas.PosY, aliaDas.PosZ));
             });
