@@ -757,6 +757,32 @@ namespace Rasa.Managers
             creature.LastAgression = 0;
         }
         
+        /// <summary>
+        /// Sends a creature to a point: a one-node route that the behaviour tick walks corner by corner, using
+        /// the navmesh where the map has one and the straight line where it does not. This is what the content
+        /// layer's scripted moves use (the boot camp's escorts and the S5 reinforcements leaving the pad).
+        /// </summary>
+        public bool WalkTo(Creature creature, Vector3 destination)
+        {
+            if (creature?.Controller == null)
+                return false;
+
+            creature.Controller.AiPathFollowing ??= new AiPathFollowing();
+            creature.Controller.AiPathFollowing.GeneralPath = new AiPath
+            {
+                PathId = 0,
+                Spawnpool = 0,
+                Mode = PathModeOneShot,
+                NodeOffsetRandomization = 0.0f,
+                NumberOfPathNodes = 1,
+                PathNodeList = new[] { new AiPathNode { Pos = new[] { destination.X, destination.Y, destination.Z } } }
+            };
+            creature.Controller.AiPathFollowing.GeneralPathCurrentNodeIndex = 0;
+
+            SetActionPathFollowing(creature);
+            return true;
+        }
+
         private void SetActionPathFollowing(Creature creature)
         {
             creature.Controller.CurrentAction = BehaviorActionFollowingPath;

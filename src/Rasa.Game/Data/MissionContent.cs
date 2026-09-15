@@ -98,7 +98,15 @@ namespace Rasa.Data
         SetPlacementState = 10,
         TransferToLocation = 11,
         SetAccountSkipBootcamp = 12,
-        PlayTutorialAudio = 13
+        PlayTutorialAudio = 13,
+
+        /// <summary>
+        /// A scripted creature walk: placement_id names the placement whose creature moves and location_id the
+        /// destination (`content_location`). Used for the boot camp's escorts and for the S5 reinforcements
+        /// leaving the pad, where the original moves the NPC rather than standing him still (GAP-ESCORT,
+        /// GAP-S5-REINFORCEMENT-MOVE).
+        /// </summary>
+        MoveCreatureToLocation = 14
     }
 
     public enum LogosGrantProtocol : byte
@@ -112,7 +120,9 @@ namespace Rasa.Data
     public enum ContentLocationPurpose : byte
     {
         NewCharacterStart = 1,
-        TransferDestination = 2
+        TransferDestination = 2,
+        // Where a scripted creature walk ends (move_creature_to_location).
+        ScriptedMoveDestination = 3
     }
 
     public enum ObjectiveTimerExpiry : byte

@@ -151,6 +151,11 @@ namespace Rasa.Managers
                         reaction.FactChanges.Add((player.MapContextId, action.FactKey, null));
                         break;
 
+                    case ContentRuleAction.MoveCreatureToLocation:
+                        // A world effect, applied after the commit with the map channel in hand.
+                        reaction.CreatureMoves.Add((action.PlacementId, action.LocationId));
+                        break;
+
                     case ContentRuleAction.SetAccountSkipBootcamp:
                         if (accountId == 0)
                             throw new InvalidOperationException("set_account_skip_bootcamp needs the account of the triggering character");
@@ -209,6 +214,9 @@ namespace Rasa.Managers
                 player.Experience += reaction.GrantedExperience;
                 ManifestationManager.Instance.NotifyExperienceGained(client, reaction.GrantedExperience);
             }
+
+            foreach (var (placementId, locationId) in reaction.CreatureMoves)
+                SendCreatureToLocation(client, placementId, locationId);
 
             foreach (var (mapContextId, key, value) in reaction.FactChanges)
             {
@@ -855,6 +863,37 @@ namespace Rasa.Managers
         {
             foreach (var binding in BindingsOfKind(ObjectiveBindingKind.UseCompleted).Where(binding => binding.PlacementId == placement.Id))
                 Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.UseCompleted);
+        }
+
+        /// <summary>
+        /// Sends the creature of a placement to a location: the content layer's scripted walk. The creature is
+        /// the one materialized for that placement in the map the player is on, so a rule that fires for a
+        /// player moves the NPCs of that player's own instance.
+        /// </summary>
+        private void SendCreatureToLocation(Client client, uint placementId, uint locationId)
+        {
+            if (!Content.Catalog.Locations.TryGetValue(locationId, out var location))
+            {
+                Logger.WriteLog(LogType.Error, $"creature move to unknown location {locationId} ignored.");
+                return;
+            }
+
+            var mapChannel = client?.Player?.MapChannel;
+            var creature = mapChannel?.MapCellInfo?.Cells.Values
+                .SelectMany(cell => cell.CreatureList)
+                .FirstOrDefault(candidate => candidate.ContentPlacementId == placementId);
+
+            if (creature == null)
+            {
+                Logger.WriteLog(LogType.Error,
+                    $"creature move: placement {placementId} has no creature in context {mapChannel?.MapInfo?.MapContextId}; ignored.");
+                return;
+            }
+
+            var destination = new Vector3((float)location.PosX, (float)location.PosY, (float)location.PosZ);
+            if (BehaviorManager.Instance.WalkTo(creature, destination))
+                Logger.WriteLog(LogType.Debug,
+                    $"{creature.Name} (placement {placementId}) walks to location {locationId} ({destination.X:0.#}, {destination.Y:0.#}, {destination.Z:0.#}).");
         }
 
         /// <summary>

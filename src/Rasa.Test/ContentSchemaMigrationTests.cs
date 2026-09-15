@@ -42,6 +42,7 @@ namespace Rasa.Test
         private const string BootcampAreaVerticalExtentMigration = "20260915140000_BootcampAreaVerticalExtent";
         private const string WildernessHubReceptiveReceptionMigration = "20260915160000_WildernessHubReceptiveReception";
         private const string BootcampObjectiveIndicatorsMigration = "20260915180000_BootcampObjectiveIndicators";
+        private const string BootcampScriptedMovesMigration = "20260915200000_BootcampScriptedMoves";
 
         public static readonly string[] WorldTables =
         {
@@ -105,7 +106,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -128,7 +129,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -239,6 +240,12 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601) AND shape = 2 AND half_height = 20"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id = 198600 AND pos_x = 387.22 AND pos_z = -28.3 AND radius = 4"));
 
+            // BootcampScriptedMoves seeds the two scripted NPC walks the content layer could not express before.
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE purpose = 3 AND map_context_id = 1985"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985014, 1985015)"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985014, 1985015) AND action = 14"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985014 AND placement_id = 198650 AND location_id = 19853"));
+
             // BootcampObjectiveIndicators gives 1990's objectives the world markers the footage shows.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_indicator WHERE mission_id = 1990 AND indicator_id IN (430, 431)"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_indicator WHERE mission_id = 1990 AND objective_id = 1 AND pos_y = 131.3"));
@@ -268,6 +275,8 @@ namespace Rasa.Test
             // The vertical extent rolls back with it, leaving the areas as the spheres the S1 migration seeded.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601) AND shape = 1 AND half_height = 0"));
             // The hub mission's rows go with their migration, restoring the client's NULL-flag skeleton.
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE purpose = 3"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985014, 1985015)"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_indicator WHERE mission_id = 1990"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1069"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1069"));
@@ -283,7 +292,7 @@ namespace Rasa.Test
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_armor WHERE id BETWEEN 122859 AND 122871"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_weapon WHERE id BETWEEN 122859 AND 122871"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id IN (198911, 198912)"));
-            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985012, 1985013)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985014, 1985015)"));
 
             // Rolling it back removes every W1 row and restores the NULL-flag (1526,1) skeleton row it replaced.
             context.GetService<IMigrator>().Migrate(BootcampFixRogersTurnInMigration);
@@ -315,7 +324,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);

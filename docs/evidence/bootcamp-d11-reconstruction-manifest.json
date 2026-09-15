@@ -27642,13 +27642,13 @@
   },
   {
    "id": "GAP-ESCORT",
-   "summary": "McAllister does not walk off with the recruit, and Youngblood does not walk into the camp on arrival.",
+   "summary": "Partly closed by BootcampScriptedMoves (2026-09-15): the content layer can now move an NPC (ContentRuleAction.MoveCreatureToLocation, expressed through the emulator's own path-following action), and McAllister walks to the S2 gear area when mission 1990 is turned in - the same event whose line is \"Follow me over to the ...\" (footage A2-044 at 285.333); the destination is inferred (+/-5 m) from the gear crate placement's own position. Still open: Captain Youngblood does not walk into the camp on arrival (his placement already stands at his post) and no mechanism follows the player, so this is a walk to a place rather than a follow.",
    "evidence": [
-    "footage A3-011 (McAllister walks away with the recruit, 297.133)",
-    "footage A5-33 (Youngblood walks up, 558.867)",
-    "no NPC path movement mechanism exists (build plan section 1.3)"
+    "footage A2-044 (Mission Completion: \"Follow me over to the ...\")",
+    "content_rule 1985014 + action 14 (placement 198650 -> location 19853)",
+    "src/Rasa.Game/Managers/BehaviorManager.cs WalkTo"
    ],
-   "closes_with": "evidence for a path movement mechanism",
+   "closes_with": "partly closed by BootcampScriptedMoves 2026-09-15 (McAllister's walk; Youngblood and follow remain)",
    "surfaced_by": [
     "manifest omitted"
    ],
@@ -28109,12 +28109,12 @@
   },
   {
    "id": "GAP-S5-REINFORCEMENT-MOVE",
-   "summary": "The reinforcements walk north-east off the pad by 98.0 (S5P-05); no path mechanism exists, so they stand at inferred pad positions (OD-29).",
+   "summary": "Closed by BootcampScriptedMoves (2026-09-15): the three placed reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) walk to a point 15 m north-east of the dropship pad when 1995 objective 1 completes (the wreck destroyed), the direction the footage records them walking (S5P-05). The destination is inferred (+/-5 m); the pad is area 198603 at (-225.35, 99.6, -70.52).",
    "evidence": [
-    "frame reading S5P-05",
-    "positions pad.reinforcement.*"
+    "footage S5P-05 (reinforcements walk north-east off the pad at 98.0)",
+    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854)"
    ],
-   "closes_with": "a path mechanism and an in-client calibration (build plan E2)",
+   "closes_with": "closed by BootcampScriptedMoves 2026-09-15",
    "surfaced_by": [
     "manifest"
    ],

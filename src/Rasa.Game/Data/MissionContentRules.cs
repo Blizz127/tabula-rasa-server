@@ -55,7 +55,9 @@ namespace Rasa.Data
                 ContentRuleAction.SetFact,
                 ContentRuleAction.ClearFact,
                 // S5: the wreck bursts open when the bomb detonates.
-                ContentRuleAction.SetPlacementState
+                ContentRuleAction.SetPlacementState,
+                // W3: escorts and reinforcements walking to a place.
+                ContentRuleAction.MoveCreatureToLocation
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {

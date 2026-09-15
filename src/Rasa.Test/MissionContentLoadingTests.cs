@@ -260,7 +260,8 @@ namespace Rasa.Test
                 ContentRuleAction.DispenseRadioMission, ContentRuleAction.OfferMissionAtNpc, ContentRuleAction.GrantLogos,
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
                 ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp,
-                ContentRuleAction.SetFact, ContentRuleAction.ClearFact, ContentRuleAction.SetPlacementState
+                ContentRuleAction.SetFact, ContentRuleAction.ClearFact, ContentRuleAction.SetPlacementState,
+                ContentRuleAction.MoveCreatureToLocation
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {

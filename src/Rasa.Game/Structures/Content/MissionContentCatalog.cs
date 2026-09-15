@@ -825,6 +825,15 @@ namespace Rasa.Structures.Content
                             gap("needs a fact key");
                         break;
 
+                    case ContentRuleAction.MoveCreatureToLocation:
+                        used.Add("placement_id");
+                        used.Add("location_id");
+                        if (!_c.Placements.TryGetValue(action.PlacementId, out var walker) || (ContentPlacementKind)walker.Kind != ContentPlacementKind.Creature)
+                            gap("needs a creature placement");
+                        else if (!_c.Locations.TryGetValue(action.LocationId, out var walkDestination) || (ContentLocationPurpose)walkDestination.Purpose != ContentLocationPurpose.ScriptedMoveDestination)
+                            gap("needs a scripted-move destination location");
+                        break;
+
                     case ContentRuleAction.SetPlacementState:
                         used.Add("placement_id");
                         used.Add("state_id");
