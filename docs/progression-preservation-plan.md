@@ -448,6 +448,41 @@ character picks up in Alia Das once Training Day and the class choice are behind
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
+## All-missions program (owner goal, 2026-09-15)
+
+Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of
+curating one slice at a time. Scaffolding lives in `research/20260915-aliadas-hub/tools/`.
+
+**The scope, measured** (`work/mission-catalog.json`, `work/mission-catalog-summary.md`):
+
+- The client carries **1,168 missions, 3,454 objectives and 1,727 objective-conversation rows**; our seed already
+  carries **all 3,454 objective skeletons** (1,109 distinct missions) but only **10 fully defined missions**
+  (`npc_mission` rows) — the boot camp, Training Day and the class-gear pair.
+- `tools/build_mission_catalog.py` merges the client tables, TaRapedia revisions (with the `post_d11` final-era flag),
+  the Ellatha/DaOpa detail, the package→NPC resolution and the world seed, and gives each mission a readiness verdict.
+  Current verdicts: **10 implemented, 490 ready to seed, 668 blocked**.
+- Per zone (top): Palisades 82, Wilderness 80, Mires 74, Incline 67, Plains 62, Plateau 61, Ashen Desert 58,
+  Marshes 57, Divide 52, Crucible 49, Howling Maw 49, Pools 37, Abyss 35, Thunderhead 34, Descent 21, plus 289 with
+  no zone and 59 with no objectives in the client tables.
+
+**What unblocked 420 missions at once**: the world seed's `creature` table holds only **98 creatures (92 distinct
+names)**, so resolving a mission's giver to an existing creature almost always failed. TaRapedia's **430 NPC pages**
+carry, per NPC, the **level, zone, faction, a `/loc` coordinate triple and the list of missions that NPC gives**, so
+they supply a roster and positions for the whole game. Missions anchored this way are labelled `inferred` and their
+positions are pre-shutdown wiki `/loc` values: they must be cross-checked against the world seed where it has the NPC
+(that check already caught Solis ~80 m out and confirmed Langerman/Caufield/Rogers/Cimoch to within metres) and against
+the deployment notes for zones that changed late (Twin Pillars was excavated in D14, Enigma Cave disturbed in D15).
+
+**Remaining blockers, by size**: 660 missions have no giver at all — of which many are the "Targets of Opportunity" and
+device-given families whose giver is a *thing* ("Headquarters", "Radio", "Bane CommLink Terminal", "Holographic
+Projection Device"), which the content layer can already dispense by radio rule; 289 have no zone; 59 have no
+objectives in the client tables.
+
+**Batch order** (progression first): Wilderness (the Alia Das hub, 71 ready) → Divide (19) → Palisades (48) → the
+level-banded Torden/Valverde zones → instances → the D15/D16 endgame zones (Empire Sector, Edmund Range). Each batch
+is seeded with frozen rows + paired migrations + a manifest slice + content-loading and scenario tests, and deployed
+with a DB backup.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
