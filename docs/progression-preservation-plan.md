@@ -411,6 +411,29 @@ character picks up in Alia Das once Training Day and the class choice are behind
   Alia Caverns shrine volume and its usable, the timer for 428, and the branch conditions for 1390/1391. The owner's
   tracker video (Taildrop pending, inbox empty as of this writing) is expected to settle the drop/timer/branch mechanics,
   which have no client-visible signature.
+- **Mission detail source found on disk**: the 20260913 source sweep had already cached the **DaOpa/Ellatha
+  mission DB** (`research/20260913-source-sweep/guides/raw/ellatha-missions/m1..m98.html`), which the sweep rated
+  "content retail, DB build date unverified". `research/20260915-aliadas-hub/tools/extract_ellatha_hub.py` pulls the
+  26 Alia Das hub missions out of it into `work/ellatha-hub-missions.json` and `work/ellatha-hub-digest.md`
+  (briefing, ordered objectives, tips, legend, reward rows with stats and requirements). Tier `inferred`; the sweep
+  cross-correlated the same names and ordering with the **official** RGTR Wilderness walkthrough (2007-12-13) and
+  TaRapedia carries giver/requirement/XP. It gives, for the first time, the per-mission detail:
+  - **479** objective **"Collect twelve Thrax hearts — Thrax Heart 0/12"**: the counter and its item name; reward
+    Luminar Motor Assist Armor Vest (Body Armor 154, Regen 8%/s, Condition 100%, [2] Resist: Laser +4%) + 400 credits.
+  - **1069** is the shrine: the briefing says *"Near the waterfall is the entrance to Alia Caverns… activating the
+    shrine should transmit the information directly into your mind"*; reward choice Titan or Prodigy Motor Assist
+    Armor Boots (Body Armor 77, [3] Body/Mind +3, [2] Resist: Physical/Electric +4%, Min Level 3).
+  - **1390/1391** are the two branches of the Ethical Parable, spelled out: *"Tell him that Milpas is free to leave
+    Alia Das"* vs *"…you must do your duty and arrest Milpas"*, then *"Take Milpas to Apirka"* (escort) and
+    *"Speak to Apirka"*; 1392/1393 is the report. 400 credits.
+  - The rest of the hub's objective lists and reward items are in the digest (8/5/6 counters for Boargar/Treelurker/
+    miasma, the Logos missions' six objectives each, River Recon's turn-in to Field Sgt. Weatherspoon in Lower Eloh,
+    Supplies On The Double's timer, and so on).
+  - Next concrete step: resolve those reward **item names** to client templates (`itemtemplatelanguage` /
+    `itemclass`) and record which are recovered originals versus missing, then seed 1069 and 479.
+- **Internet Archive was offline** when this pass ran (`web.archive.org` returned "Temporarily Offline"), so no
+  Wayback sweep of the D11-era pages happened; retry later for post-2007 snapshots of the same guides, which would
+  upgrade `pre_d11` structure to D11 values.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
