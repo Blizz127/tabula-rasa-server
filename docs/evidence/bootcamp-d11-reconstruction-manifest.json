@@ -1069,7 +1069,7 @@
        "position_key": "area.1990.1"
       }
      ],
-     "reasoning": "a spherical trigger around the measured objective marker"
+     "reasoning": "a vertical cylinder (OD-44): the recorded Y is the terrain under the bridge, 12.6-18.6 m below the deck the recruit walks on, so the trigger spans the height instead of hanging under the span"
     },
     "pos_x": {
      "value": 387.22,
@@ -1117,7 +1117,7 @@
      }
     },
     "radius": {
-     "value": 4.0,
+     "value": 10.0,
      "tier": "inferred",
      "citations": [
       {
@@ -1125,7 +1125,7 @@
        "position_key": "area.1990.1"
       }
      ],
-     "reasoning": "the player stood 8.2 m from the icon for 3 s without completing it, so the radius is above 2x the horizontal uncertainty (3 m) and below about 8 m; 4 m is taken"
+     "reasoning": "OD-44 (2026-09-15): a trigger must be generous enough that crossing the place cannot miss it, without reaching outside it. The measured marker fixes its X,Z; the original radius was never observed. Live play showed a recruit walking this bridge without touching the previous 4 m sphere."
     },
     "half_height": {
      "value": 0.0,
@@ -1167,7 +1167,7 @@
        "position_key": "area.1990.2"
       }
      ],
-     "reasoning": "a spherical trigger around the measured objective marker"
+     "reasoning": "a vertical cylinder (OD-44): the recorded Y is the terrain under the bridge, 12.6-18.6 m below the deck the recruit walks on, so the trigger spans the height instead of hanging under the span"
     },
     "pos_x": {
      "value": 387.83,
@@ -1215,7 +1215,7 @@
      }
     },
     "radius": {
-     "value": 4.0,
+     "value": 10.0,
      "tier": "inferred",
      "citations": [
       {
@@ -1223,7 +1223,7 @@
        "position_key": "area.1990.2"
       }
      ],
-     "reasoning": "the player waited 9 m from the icon for 12 s without completing it, so the radius is above 3 m and below about 9 m; 4 m is taken"
+     "reasoning": "OD-44 (2026-09-15): a trigger must be generous enough that crossing the place cannot miss it, without reaching outside it. The measured marker fixes its X,Z; the original radius was never observed. Live play showed a recruit walking this bridge without touching the previous 4 m sphere."
     },
     "half_height": {
      "value": 0.0,
@@ -5353,25 +5353,15 @@
      }
     },
     "radius": {
-     "value": 5.0,
+     "value": 10.0,
      "tier": "inferred",
      "citations": [
       {
        "source": "measurement:bootcamp-positions",
        "position_key": "area.1994.2"
-      },
-      {
-       "source": "video:7Lrst9SG3pk",
-       "event": "A4-03",
-       "t": 395.0
-      },
-      {
-       "source": "video:7Lrst9SG3pk",
-       "event": "A4-20",
-       "t": 430.533
       }
      ],
-     "reasoning": "the player fought 45 s at x 298-311 (>= 19 m from the icon) without completing it, so the radius is below ~19 m; >= 2x the 2 m horizontal uncertainty; the navmesh route passes 1.2-1.7 m from the centre; 5 m is taken. Open: banner timing puts the completion ~4-8 m west of the icon, which a larger radius would not explain either (see findings). CONFLICT (centre): build plan S4 names the first post-cut frame (A4-22) as the centre with a large uncertainty; the measured objective icon is used instead, following the S1 practice (area centre = objective icon)"
+     "reasoning": "OD-44 (2026-09-15): a trigger must be generous enough that crossing the place cannot miss it, without reaching outside it. The measured marker fixes its X,Z; the original radius was never observed. This cave-in step is walked past on the way into the tunnel, as the S1 triggers were."
     },
     "half_height": {
      "value": 0.0,
@@ -28510,13 +28500,13 @@
   },
   {
    "id": "GAP-S1-TRIGGER-RADIUS",
-   "summary": "The S1 objective triggers' radius is a reconstruction parameter, not a recovered value. The markers' X,Z come from the footage's objective icons (+/-1.5 to 2.0 m) but no source gives the sphere the original used; the slice inferred 4 m. Play on 2026-09-15 showed a recruit crossing the 16.8 m wide ceremonial bridge, completing objective 1 and then walking the span past objective 2 without touching it, with the tracker still reading \"Approach the Eloh Hologram\" while they stood at the hologram. BootcampObjectiveAreaRadius widened both to 10 m - the smallest value that makes the crossing reliable - and the vertical extent (20 m half-height) is an adaptation for the same reason.",
+   "summary": "The S1 objective triggers' radius is a reconstruction parameter, not a recovered value, and OD-44 (2026-09-15) now governs it: generous enough that crossing the place cannot miss it, without reaching outside it. The markers' X,Z come from the footage's objective icons (+/-1.5-2.0 m) but no source gives the sphere the original used. Play on 2026-09-15 showed a recruit crossing the 16.8 m wide ceremonial bridge, completing objective 1 and then walking the span past objective 2 without touching its 4 m sphere, with the tracker still reading \"Approach the Eloh Hologram\" while they stood at the hologram. Both S1 triggers are 10 m now, and 1994's cave-in trigger 10 m with them.",
    "evidence": [
     "docs/evidence/bootcamp-d11-positions.json area.1990.1/area.1990.2 (XZ measured, radius unobserved)",
     "live play 2026-09-15: objective 1 completed, objective 2 missed on the same crossing",
     "content_area 198600/198601 radius 10, shape 2, half_height 20"
    ],
-   "closes_with": "original trigger radii unrecovered; 10 m is the reconstruction minimum that plays",
+   "closes_with": "original trigger radii unrecovered; OD-44 governs the reconstruction values",
    "surfaced_by": [
     "S1 owner client check"
    ],
@@ -29004,6 +28994,16 @@
    "choice": "Seed 2010/2011 now: the class-selected trigger exists, the reward identities are evidenced from the final client (the D11 new-player item block and its class-owned skills), and Quartermaster Caufield keeps the world seed's creature with the original dialogue package 133. Use the D11 block's uniform world-seed quality/flags (quality 2, sellable, tradeable) and the world seed's machine-gun/tool itemtemplate_weapon family row as labelled analogues; keep the unrecovered XP/credits, prices, weapon fields, offer presentation and Caufield position as gaps (GAP-W2-*).",
    "approved_on": "2026-09-15",
    "record": "docs/progression-preservation-plan.md#w2-class-gear-status (Wilderness class gear, 2026-09-15): decided by the agent on the owner's behalf, continuing the 2026-09-13 evidence-bounded reconstruction decision; pending owner review"
+  },
+  {
+   "id": "OD-44",
+   "decision": "Trigger radii for objective and area triggers",
+   "default": "Use the inferred radius",
+   "status": "approved",
+   "review_status": "approved-by-owner 2026-09-15",
+   "choice": "An objective or area trigger takes a larger radius than a bare reading of the measurement suggests - enough that a player crossing the intended place cannot miss it - but not so large that it fires from outside that place. The radius is a reconstruction parameter, not a recovered value, and every use says so. Applied so far: S1's two bridge objectives 4 m -> 10 m (the ceremonial bridge is 16.8 m wide and a recruit crossed it without touching the 4 m sphere), and 1994's cave-in trigger 5 m -> 10 m.",
+   "approved_on": "2026-09-15",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (trigger radii, 2026-09-15)"
   }
  ]
 }
