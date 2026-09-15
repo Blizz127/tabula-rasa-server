@@ -380,12 +380,23 @@ character picks up in Alia Das once Training Day and the class choice are behind
   but **no `npc_mission` rows** (only 429 has one, and the loader reports it "not offered, definition incomplete"), no
   rewards, no placements and no indicators. Package 116 (Rogers) is the only one of these NPCs already bound to a
   creature; 112 (Apirka) and 168 (Solis) have none.
+- **The NPCs are already in the original world seed** (checked 2026-09-15 against `rasaworld.db`), so no position has to be
+  inferred for the chain: Council Elder Solis **creature 42** (name 3005, level 10, spawnpool 184, 809.3/302.1/503.8),
+  Warrior Apirka **43** (2969, pool 219 at 826.9/301.4/502.3 in Alia Das, plus pools 63/72/78 elsewhere),
+  Dr. Munson **109** (6888, pool 187, 763.7/304.0/514.3), Lt. Colonel Cimoch **118** (9639, pool 196, 815.4/294.1/390.6),
+  Lt. Saviours **120** (3073, pool 198, 784.2/294.5/367.1), Information Spec. Saviours **116** (3074, Twin Pillars,
+  -757.6/175.0/-277.9), Receptive Liaison Langerman **133** (10010, pool 211, 871.0/294.2/385.4), Receptive Liaison
+  Standley **134** (10011, Twin Pillars, -110.0/220.3/-494.3) and Outpost Commander Rogers **100** (2973, pool 100,
+  870.0/294.2/385.5, already carrying package 116). Only **Dr. Elise Corman (2989) and Brigadier General Beacham (6733)**
+  have no creature row yet. This supersedes the earlier note in this section that treated these positions as missing.
+  Cross-check: Langerman's seed spawn (871.0/294.2/385.4) sits ~1.5 m from the arrival footage's `measured` position
+  (869.48/294.14/385.49), and Rogers' measured position (855.84/294.14/387.4 ±1.5 m) is ~14 m from creature 100's seed
+  spawn - the seed value is original data and takes precedence; the footage point is worth re-checking against the command
+  tent before it is used for anything. Note also that the boot-camp S6 slice placed a *new* creature 198514 for Rogers
+  (unspawned, level 20) rather than using the seed's own creature 100, so the two must be reconciled when the arrival
+  segment is rebased.
 - **Evidence gaps to close before seeding**: per-objective semantics (area / item / kill / counter, e.g. the twelve Thrax
-  hearts and their item template, the Alia Caverns shrine volume), each NPC's creature row and position, reward items →
-  templates, and the offer conditions. Positions exist for Apirka (825.0, 301.0, 499.5, TaRapedia `/loc` revid 33267,
-  2008-09-16, `inferred`) and Solis (784.7, 287.2, 581.1, revid 12872, **2007-11-06, `pre_d11`** — the era rule forbids
-  using those as analogues, so Solis needs a `d11_to_shutdown` source). Rogers has a `measured` footage position
-  (855.84, 294.14, 387.4 ±1.5 m) from `research/20260914-segment3-arrival/positions-arrival.json`.
+  hearts and their item template, the Alia Caverns shrine volume), the reward items' templates, and the offer conditions.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
