@@ -353,6 +353,42 @@ the final-live rule.
   they equip at level 5 and whether any XP or credits were paid; (6) that the offer does not repeat after the turn-in.
   Full suite 853/853 under the .NET 5 SDK image.
 
+## W3 (Alia Das hub: the first Wilderness missions) status
+
+Reconnaissance only as of 2026-09-15 (nothing seeded yet). This is the next segment after W2: the missions the
+character picks up in Alia Das once Training Day and the class choice are behind them. Evidence gathered in
+`/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk` (`work/client.json`, `work/tarapedia.json`,
+`work/npc_resolution.json`, `work/membership.json`, and the `tools/` extraction scripts).
+
+- **Givers, from the client's own texts** (`work/tarapedia.json` lists → zone Wilderness, area Alia Das, revision
+  2008-03-06T13:23:08Z): Outpost Commander Rogers (River Recon, Miner Difficulties, Too Close For Comfort), Council Elder
+  Solis (Receptive Reception), Lt. Colonel Cimoch (Wilderness Targets of Opportunity), Dr. Elise Corman (Supplies On The
+  Double), Lt. Saviours (A Father's Goodbye), Quartermaster Caufield (Lurking In The Shadows), Warrior Apirka (Forming
+  Alliances, Conscientious Objector I/II), Dr. Munson (Boargar Acquisition, Treelurker Samples, Mighty Miasma), Brigadier
+  General Beacham (Orders From High Command), Receptive Liaison Langerman (the eight `Logos:` missions and Report to
+  Liaison Standley).
+- **Resolved client ids and the chain**, with TaRapedia's per-mission fields (giver, requirement, follow-up, XP, credits,
+  reward items — each page carries `last_ts`/`revid` so the revision can be cited): Receptive Reception **1069** (Solis;
+  objectives: locate the Logos shrine in Alia Caverns, return to Solis via package 168, speak to Apirka via package 112) →
+  Forming Alliances **479** (Apirka; one objective, "Collect twelve Thrax hearts") → Conscientious Objector **1390/1391**
+  (Apirka; 8 objectives, packages 112/1646; 2,000 XP / 400 credits) → Conscientious Objector – Part Two **1392/1393**
+  (turned in to Rogers via package 116; 8,000 XP / 800 credits). Parallel from Forming Alliances: Lurking In The Shadows
+  **427** (Caufield, 4,000 XP / 400 credits) and River Recon **429** (Rogers, 10,000 XP / 1,000 credits, follow-up
+  Distress On The River). Separate line: Supplies On The Double **428** (Corman) → A Father's Goodbye **421** (Saviours
+  gives it, Information Spec. Saviours pays it). The `Logos:` line (1638 and siblings) is the Logos training path.
+- **What the seed already has**: objective skeletons and objective-conversation rows for all of these (`MissionClientObjectiveSkeleton`),
+  but **no `npc_mission` rows** (only 429 has one, and the loader reports it "not offered, definition incomplete"), no
+  rewards, no placements and no indicators. Package 116 (Rogers) is the only one of these NPCs already bound to a
+  creature; 112 (Apirka) and 168 (Solis) have none.
+- **Evidence gaps to close before seeding**: per-objective semantics (area / item / kill / counter, e.g. the twelve Thrax
+  hearts and their item template, the Alia Caverns shrine volume), each NPC's creature row and position, reward items →
+  templates, and the offer conditions. Positions exist for Apirka (825.0, 301.0, 499.5, TaRapedia `/loc` revid 33267,
+  2008-09-16, `inferred`) and Solis (784.7, 287.2, 581.1, revid 12872, **2007-11-06, `pre_d11`** — the era rule forbids
+  using those as analogues, so Solis needs a `d11_to_shutdown` source). Rogers has a `measured` footage position
+  (855.84, 294.14, 387.4 ±1.5 m) from `research/20260914-segment3-arrival/positions-arrival.json`.
+- **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
+  the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
+
 ## Boot-camp owner decisions
 
 The user decided these open points of the boot-camp build plan on 2026-09-13, after the S0
