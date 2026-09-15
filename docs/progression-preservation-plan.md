@@ -389,14 +389,28 @@ character picks up in Alia Das once Training Day and the class choice are behind
   Standley **134** (10011, Twin Pillars, -110.0/220.3/-494.3) and Outpost Commander Rogers **100** (2973, pool 100,
   870.0/294.2/385.5, already carrying package 116). Only **Dr. Elise Corman (2989) and Brigadier General Beacham (6733)**
   have no creature row yet. This supersedes the earlier note in this section that treated these positions as missing.
-  Cross-check: Langerman's seed spawn (871.0/294.2/385.4) sits ~1.5 m from the arrival footage's `measured` position
-  (869.48/294.14/385.49), and Rogers' measured position (855.84/294.14/387.4 ±1.5 m) is ~14 m from creature 100's seed
-  spawn - the seed value is original data and takes precedence; the footage point is worth re-checking against the command
-  tent before it is used for anything. Note also that the boot-camp S6 slice placed a *new* creature 198514 for Rogers
-  (unspawned, level 20) rather than using the seed's own creature 100, so the two must be reconciled when the arrival
-  segment is rebased.
-- **Evidence gaps to close before seeding**: per-objective semantics (area / item / kill / counter, e.g. the twelve Thrax
-  hearts and their item template, the Alia Caverns shrine volume), the reward items' templates, and the offer conditions.
+  Cross-check against Ten Ton Hammer's 2007 "Alia Das Missions" guide (`research/20260915-aliadas-hub`, era
+  `pre_d11`, so structure only): the guide's `/loc` values are 0.9 m (Langerman), 1.2 m (Standley), 1.8 m (Rogers in the
+  tent), 3.6 m (Caufield), 4.1 m (Lt. Saviours), 8.2 m (Munson) and 13.9 m (Apirka) from the seed spawns, so the map was
+  not moved wholesale after 2007 and the page is a usable lead. **Solis is the outlier at 79.9 m** (guide 783/579.3 and
+  TaRapedia's `/loc` 784.7/287.2/581.1 agree with each other, not with creature 42) - open question, not to be guessed.
+  **The "two Rogers" question is answered**: the guide names a Rogers "in a tent at 869, 384" (the hand-off NPC, 1.8 m from
+  creature 100) *and* the Conscientious Objector turn-in "at 855.6, 294.1, 389.0" (1.6 m from the footage's measured
+  Rogers, 14.8 m from creature 100), so the boot-camp S6 slice's creature 198514 at the 855.6 hub is the mission-hub NPC
+  and creature 100 is the tent NPC beside Langerman - both are the original data, and the arrival rebase should treat them
+  as two NPCs rather than reconciling one away.
+- **Objective mechanics settled by the guide** (structure, `inferred`): Forming Alliances' twelve Thrax hearts are a
+  counter fed by **random drops off ordinary Thrax**; Receptive Reception is an **interaction** with the Logos shrine in
+  Alia Caverns plus the two conversation completions the client already carries (packages 168, 112); Conscientious
+  Objector is an **Ethical Parable with two branches** (arrest and lead back, or release and escort to the Divide
+  entrance) which is why the client holds the 1392/1393 pair; Supplies On The Double **is on a timer**; Boargar
+  Acquisition, Treelurker Samples and Mighty Miasma are counters of 8/5/6. Logos: Enhance is expected to be doable
+  alongside Receptive Reception, and the other Logos missions unlock after it.
+- **Evidence gaps left before seeding**: the reward items' templates (the guide's credit and item values are pre-D11 and
+  cannot be seeded as analogues), the Thrax / Boargar / Treelurker / miasma drop wiring and their item templates, the
+  Alia Caverns shrine volume and its usable, the timer for 428, and the branch conditions for 1390/1391. The owner's
+  tracker video (Taildrop pending, inbox empty as of this writing) is expected to settle the drop/timer/branch mechanics,
+  which have no client-visible signature.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 
