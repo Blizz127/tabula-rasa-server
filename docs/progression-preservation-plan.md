@@ -464,6 +464,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
     over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
     (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
     walk-in and a follow-the-player mechanism remain).
+  - **Placement heights (2026-09-15, live report "I do not see Captain Delessio")**: the camp's placements are now
+    measured against the walkable surface the navmesh gives at each XZ (original-tier: the navmesh is built from the
+    client's map data), and `PlacementHeightAuditTests` repeats that measurement on every run, failing on anything
+    more than 1.5 m off. 30 of 33 placements were already on the surface; Delessio and the 1992 supply crate were
+    8.1 m **under** the grating platform (their Y came from the platform static's *origin*, which is its base, not
+    its top at 122.11) and DeSimone was 2.1 m under. Fixed by `BootcampPlacementGroundSnap` +
+    `BootcampPlatformTopCorrection`. The audit also exposed **GAP-S2-PLACEMENT-PROVENANCE**: the S2 slice's six
+    placements have no manifest rows at all.
   - `e183d80` added the **detonation self-damage**: a `damage` column on `content_rule_action`, the
     `ContentRuleAction.DamagePlayer` action (armour first then health, death announced if the bar empties) and a
     damage-21 action on the bomb rule - the value read straight off the footage's "-21" health line, so `observed`.

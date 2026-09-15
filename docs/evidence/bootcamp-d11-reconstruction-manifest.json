@@ -28513,6 +28513,38 @@
    "slices": [
     "S1"
    ]
+  },
+  {
+   "id": "GAP-PLACEMENT-HEIGHT",
+   "summary": "Closed by measurement and by a standing check (2026-09-15). A live report (\"I do not see Captain Delessio\") led to measuring every camp placement against the walkable surface the navmesh gives at its XZ. The navmesh is built from the client's own map data, so it is original-tier evidence of where a body can stand. Result: 30 of 33 placements already stood on the surface within 0.6 m; Delessio and the 1992 supply crate were 8.1 m under the grating platform (their Y came from the *origin* of the platform static ArchHumBaseGatesystemPlatform16Mx24M at (405, 114, 166), and a static's origin is its base, not its top, whose probe is 122.11), and DeSimone was 2.1 m under. BootcampPlacementGroundSnap and BootcampPlatformTopCorrection put all three on the surface. PlacementHeightAuditTests now re-measures every camp placement on each run and fails on anything more than 1.5 m off, with the one deliberate exception (the bomb rests on the wreck hull) named in the test.",
+   "closes_with": "closed by BootcampPlacementGroundSnap + BootcampPlatformTopCorrection 2026-09-15, guarded by PlacementHeightAuditTests",
+   "evidence": [
+    "live report 2026-09-15 (\"I do not see Captain Delessio\")",
+    "navmesh adv_bootcamp.nav probed at each placement XZ: Delessio 114 vs 122.11, crate 114 vs 122.11, DeSimone 125.57 vs 127.7",
+    "content_placement 198655/198651/198657 at the measured surface",
+    "src/Rasa.Test/PlacementHeightAuditTests.cs"
+   ],
+   "surfaced_by": [
+    "S2 owner client check"
+   ],
+   "slices": [
+    "S2"
+   ]
+  },
+  {
+   "id": "GAP-S2-PLACEMENT-PROVENANCE",
+   "summary": "The S2 slice's placements have no manifest rows. content_placement 198651 (supply crate), 198652 (practice dummy), 198653 (target dummy), 198655 (Delessio), 198656 (Hartmann) and 198657 (DeSimone) are seeded by BootcampS2CaptureTheFlag and scoped to this manifest (ids 198650-198899) but are absent from its rows, so their provenance lives only in the migration's comments. The height audit made this visible: the Delessio/crate Y was a static's origin rather than a measured surface, and nothing in the manifest could have flagged it. Their XZ tiers and their now-measured Y (the navmesh surface) should be written as rows, and the validator's scope check should be tightened to require every placement in the declared range.",
+   "closes_with": "needs GAP-S2 rows plus a scope check that requires every placement in range",
+   "evidence": [
+    "manifest rows: content_placement covers 198650, 198658-198684, 198685 but not 198651-198657",
+    "BootcampS2CaptureTheFlag seeds those placements with their provenance only in code comments"
+   ],
+   "surfaced_by": [
+    "placement height audit 2026-09-15"
+   ],
+   "slices": [
+    "S2"
+   ]
   }
  ],
  "non_content_settings": [
