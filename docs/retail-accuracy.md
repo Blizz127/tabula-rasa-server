@@ -1362,6 +1362,25 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   4 condition rows, 2 rules, 12 item templates) and the game now reports `Loaded 14 content rules (130 content rows,
   0 gaps)` and `Successfully authenticated with the Auth server!`. The first deployment of this slice aborted startup on
   the NPC-load defect above; the rebuilt image fixes it and `CreatureNpcBindingTests` guards it.
+- Upstream merge, 2026-09-15 (**PR #91**, commit `e64d6a1`, "Send players the regions they stand in…"): the PR was
+  **closed, not merged**, upstream; the commit is the only one in the PR branch that our `development` did not already
+  carry, and it is now merged here (`fcb744b`). It adds the `map_region` table, `RegionManager` (per-second per-map check,
+  `UpdateRegions` sent on change and once on map entry), `MapRegionEntry`/`MapRegionRepository`, the `NavMeshFlags.
+  Underground` flag with `NavMeshQuery.IsUnderground`, GM commands (`.regions`, `.region`, `.setregion`), `docs/regions.md`,
+  and a preload of **373 volumes on 58 maps**. Provenance: emulator implementation (**supporting evidence**, not proof of
+  final retail behaviour). The volumes themselves are *not* original: the original server decided regions from volumes that
+  are lost, and no `.map` carries a `GBB_RegionTrigger` entity; the rows are derived from client artifacts
+  (`generated.client.uimapmarker` REGION_LABEL positions for surface circles, `generated.client.gamecontextuiradarinfo`
+  minimap rectangles negated in z for boxes), i.e. `measured`/`inferred` with the method documented in `docs/regions.md`.
+  Confidence: region ids, names and the client's `UpdateRegions` behaviour are client-backed; the *shapes* are
+  approximations — label circles use half the distance to the nearest label (60–200 m) and 51 boxes are marked
+  underground-only. 21 volumes sit on the Wilderness context 1220 (Alia Das, Ranja/Pinhole Falls caverns, the outpost
+  villages); regions with neither a label nor a minimap (e.g. Alia Caverns) have no volume yet. **Unverified**: the
+  underground flag cannot take effect with the `.nav` files in this repository, which were built before
+  `NavMeshFlags.Underground` — cavern regions report the surface until the navmeshes are rebuilt (the commit says old files
+  load unchanged). Also note `20260915120000_Add_map_region.Designer.cs` carries upstream's snapshot, which lacks our
+  content-layer tables; the standalone `*ContextModelSnapshot.cs` files auto-merged correctly and are what scaffolding
+  reads, but the Designer is inconsistent with the convention the other migrations follow.
 - Client login path, 2026-09-15: the realm's launcher (`banshee-realm-client`) expects the Tabula Rasa auth
   server on **2116** (`TabulaRasaLaunchPlan.DefaultAuthPort`, `docs/MARVEL_HEROES_TABULA_RASA.md`), while Rasa.NET's own
   default is **2106** (`src/Rasa.Auth/appsettings.json`). The compose file now publishes both to the same listener, and
