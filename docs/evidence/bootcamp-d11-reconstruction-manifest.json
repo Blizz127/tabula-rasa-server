@@ -27841,11 +27841,12 @@
   },
   {
    "id": "GAP-GM",
-   "summary": "Every account is GM level 1 and can use .tele or .givelogos to bypass content.",
+   "summary": "Closed by verification (2026-09-15): accounts are not forced to GM level 1. The live auth database shows 0 for new accounts (2, 3 and 5 are level 0) and a level only where it was granted deliberately (the test account 4 is 10). The `test` account at level 1 is a seed row, not a code path: the game reads `account.Level` and only the explicit `.gmlevel` command raises it (src/Rasa.Game/Game/Server.cs). The old evidence pointer (src/Rasa.Game/Client.cs:278-280) no longer exists. The remaining exposure is that .tele/.givelogos follow an account whose level is raised, which is intended for the test account.",
    "evidence": [
-    "src/Rasa.Game/Client.cs:278-280 (all accounts GM level 1)"
+    "read-only rasaauth.db: accounts 2, 3, 5 level 0; account 4 level 10",
+    "src/Rasa.Game/Game/Server.cs .gmlevel command"
    ],
-   "closes_with": "separate security fix (F10)",
+   "closes_with": "closed by verification 2026-09-15 (live auth database + Server.cs)",
    "surfaced_by": [
     "manifest",
     "docs/retail-accuracy.md"
