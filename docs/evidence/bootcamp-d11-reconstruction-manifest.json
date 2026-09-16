@@ -43838,6 +43838,273 @@
      "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in this column."
     }
    }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 767
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "giver_id": {
+     "value": 109,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 767 infobox, giver"
+      }
+     ],
+     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 767 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 767,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 767/2"
+      }
+     ],
+     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 88,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 767/2"
+      }
+     ],
+     "reasoning": "the objective names Bane Miasma, which the world seed carries as creature 88."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 767,
+    "objective_id": 2,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "target_value": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective name text 767/2"
+      }
+     ],
+     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11162 (Miasma Goo)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 771
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "giver_id": {
+     "value": 110,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 771 infobox, giver"
+      }
+     ],
+     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 771 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 771,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 771/2"
+      }
+     ],
+     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 85,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 771/2"
+      }
+     ],
+     "reasoning": "the objective names Bane Shield Drone, which the world seed carries as creature 85."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 771,
+    "objective_id": 2,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "target_value": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective name text 771/2"
+      }
+     ],
+     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 24084 (Shield Drone)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 787
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "giver_id": {
+     "value": 111,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 787 infobox, giver"
+      }
+     ],
+     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 787 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 787,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 787/3"
+      }
+     ],
+     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 87,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 787/3"
+      }
+     ],
+     "reasoning": "the objective names Bane Xanx, which the world seed carries as creature 87."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 787,
+    "objective_id": 3,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop",
+   "fields": {
+    "target_value": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective name text 787/3"
+      }
+     ],
+     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11160 (Xanx Pincers)."
+    }
+   }
   }
  ],
  "omitted": [
@@ -45729,6 +45996,16 @@
    "choice": "No surviving source gives a destroyable object's hit points. Where an object objective is reconstructed (mission 430's four mortar launchers) the value is 100, the hit points the boot camp's practice dummy - the one destroyable the emulator already had - uses, and every such field is recorded as an analogue with this decision. The position, class and binding of such objects come from the client's own map data and the client's own objective data, so only this one number is a stand-in.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#destroyable-objectives"
+  },
+  {
+   "id": "OD-47",
+   "decision": "Objectives that collect a creature drop",
+   "default": "Count the deaths of the creature the objective names",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "An objective like \"Get 6 Miasma Goo Samples\" needs three things: the item, the creature that drops it and the drop itself. The client gives the first two - the item is its own physical entity class (Miasma Goo 11162, Xanx Pincers 11160) and the objective's own words name the creature family, which the world seed carries (Bane Miasma 88, Bane Shield Drone 85, Bane Xanx 87) - but no surviving source ties a mission item to an item template or to a loot table, so the drop cannot be reconstructed. Until it can, such an objective is bound as a count of that creature's deaths, which is what it means in play. Every field keeps its own tier: the creature and the item class are original, the target comes from the objective's text, and the binding is the reconstruction this decision authorises. A later pass with drop data would replace the binding with a real loot counter.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#collection-objectives"
   }
  ]
 }

@@ -874,7 +874,9 @@ namespace Rasa.Test
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
-                references.Creatures.UnionWith(new uint[] { 76, 77 });
+                // The Wilderness collection missions count kills of the creature that drops the item: Bane Shield
+                // Drone 85, Bane Xanx 87 and Bane Miasma 88 (W3 batch 14).
+                references.Creatures.UnionWith(new uint[] { 76, 77, 85, 87, 88 });
 
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);

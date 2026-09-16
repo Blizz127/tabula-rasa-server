@@ -508,7 +508,20 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
-  - **Destroyable objectives (2026-09-16)**: the client's `.map` files carry every static entity with its class and
+  - **Collection objectives (2026-09-16)**: three more Wilderness missions went in by a new rule - 767 Mighty
+    Miasma (6 Miasma Goo Samples), 771 Droning On (6 Shield Drone Parts), 787 Xanx For the Help (4 Xanx Pincers).
+    The client carries each item as its own **physical entity class** ("Miasma Goo" 11162, "Xanx Pincers" 11160 -
+    which is why the item name table has no match for mission items) and the objective's own words name the creature
+    family the world seed carries (Bane Miasma 88, Bane Shield Drone 85, Bane Xanx 87). No source ties a mission item
+    to an item template or loot table, so the objective is counted as that creature's deaths - a reconstruction,
+    recorded as **OD-47** with the item class each counter stands for. Also fixed here: the generated rows classes
+    did not remove their kill bindings on rollback, which the migration rollback test caught.
+  - **All 77 client maps are now decoded (2026-09-16)**: the archive.org client's `data/maps/*.map` (12.8 MB, 73 of
+    77 decode with the existing tool) give every static entity with class and position for every zone. They do **not**
+    carry NPCs (those are server-spawned) but they do carry the props and places missions name - which is how mission
+    430's launchers were placed, and where "Walk of Giants", "Fort Defiance", "Fluxite Mines", "Minos Caverns"
+    destinations come from. One map (`sanctusgrotto`) needs an older entity loader the decoder does not implement.
+  - **Destroyable objectives (2026-09-16)**  - **Destroyable objectives (2026-09-16)**: the client's `.map` files carry every static entity with its class and
     position, and the objects the object-missions name are in them - `adv_foreas_concordia_wilderness.map` has six
     intact `ArchBaneGenObjMortarlauncherV01` (class 7478) and one destroyed. Mission **430 Mortar By Numbers** is the
     first mission rebuilt from that data: four destroyable placements at the map's own positions, each bound with the
