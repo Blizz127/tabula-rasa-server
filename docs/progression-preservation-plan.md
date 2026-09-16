@@ -545,6 +545,19 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
     only the reconstruction rules can supply.
+  - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
+    yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
+    `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its
+    result (template and amount), an energy cost, `KraftwerksTimeSeconds` and the level required. Schematic **641** is
+    the whole chain in one row: 500 of item 1765 into 500 of item 28 (standard-grade cartridges), five seconds, level 1 -
+    which the tests assert, since it cross-checks the client table, the decoder and the data class together. Fabrication
+    now resolves the schematic (from the item the player carries in the 1.16.5 window's form, from the recipe id in the
+    older one), requires its level, **plans every input before consuming anything** so an unaffordable recipe leaves the
+    materials alone, consumes with the same tested stack path item use takes, and starts a job timed by the recipe.
+    Collection checks the station's clock and creates the item only at that point, so an uncollected job holds no item
+    row. Salvaging, extraction, integration and upgrading still decline: their Mimeogel costs are recovered from the
+    client's `moduleClassTable`, but the emulator has no item-module support to act on (**GAP-W3-CRAFTING-MODULES**).
+    **OD-53**.
   - **Auction house (2026-09-16)**: the handlers were ToDo stubs - every request logged and ignored, and creation
     sent one of each failure message in a loop. It is implemented now from two pieces of the client itself.
     **The protocol**: the client's own handlers (recovered in the client protocol inventory from

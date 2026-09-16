@@ -50013,6 +50013,20 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-CRAFTING-MODULES",
+   "summary": "Fabrication is implemented from the client's recipes. The other four Kraftwerks actions are not: salvaging, module extraction, module integration and module upgrading. Their costs are recovered (the client's moduleClassTable carries MimeogelGainFromSalvage, MimeogelCostToExtract, MimeogelCostToIntegrate and MimeogelCostToUpgrade per module class, and ModuleClassCrafting the skill and reverse-engineering level they need), but the emulator has no item-module support to act on, so they still decline. Four of the 160 recipes also carry an empty input list, which is what the client's own rows hold.",
+   "closes_with": "item-module support in the emulator, or a capture of a salvage/module action",
+   "evidence": [
+    "shared/crafting.pyo recipeItemTemplateTable (160 recipes) and moduleClassTable (5,893 rows)"
+   ],
+   "surfaced_by": [
+    "crafting fabrication 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -50584,6 +50598,16 @@
    "choice": "The auction house's handlers were ToDo stubs - every request logged and ignored, and the creation path sent one of each failure message in a loop. It is implemented from two pieces of the client itself. The replies are the ones the client's own handlers expect, recovered from client/auctionhouse.pyo in the client protocol inventory (AuctionCreationSuccess(itemId), AuctionCreationFailed(itemId, message), QuerySuccess(itemList), QueryFailed(message), AuctionStatusSuccess(itemList), AuctionStatusFailed(message), AuctionBuyoutSuccess(itemId), AuctionBuyoutFailed(itemId, message), CancelAuctionSuccess(itemId), CancelAuctionFailed(itemId, message), AuctionSold(itemId, price), AuctionExpired(itemId)) - CreationSuccess, CreationFailed, QuerySuccess and QueryFailed already existed; the other eight are new. The parameters are the client's own tables: the four listing durations with the deposit each costs (5%, 10%, 20%, 25%) and the 83-row catalogue the browse window filters by, matched to an item through its class name (its parent/leaf pairs: Weapon contains Weapon_Pistol, Armor contains Armor_MotorAssist).\n\nThree things the original had and no source shows are stated rather than invented: listings live in memory for the session, so a restart ends every auction; the seller is paid the full buyout price with no commission; and a sold or expired item goes straight into its owner's inventory instead of a pickup window. All three are GAP-W3-AUCTION-PERSISTENCE.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#auction"
+  },
+  {
+   "id": "OD-53",
+   "decision": "Kraftwerks fabrication",
+   "default": "The client's own recipes, consumed from the player's inventory",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Every crafting request was declined with \"not available on this server yet\" - the manager's own doc said the recipes were the next step. The recipes are the client's: shared/crafting.pyo's recipeItemTemplateTable holds 160 schematics, each naming its inputs (an item template and a quantity), its result (template and amount), its energy cost, its KraftwerksTimeSeconds and the level it needs - and schematic 641 spells the whole chain out as 500 of item 1765 into 500 of item 28 (standard-grade cartridges) in five seconds at level 1. Fabrication now resolves the schematic (from the item the player is carrying in the 1.16.5 window's form, or from the recipe id in the older one), requires its level, plans every input against the player's own inventory before consuming anything, takes them with the same tested stack-consumption path item use takes, and starts a job whose time is the recipe's own. Collection (RequestRetrieveFinishedCraftItem and RetrieveAllFinishedItems) checks the station's clock before handing the item over, and creates the item only then, so an uncollected job holds no item row. Salvaging, module extraction, integration and upgrading still decline: their Mimeogel costs are in the same client table, but their item side is not in the emulator (GAP-W3-CRAFTING-MODULES).",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#crafting"
   }
  ]
 }

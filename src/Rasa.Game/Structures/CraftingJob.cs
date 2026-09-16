@@ -15,6 +15,10 @@ namespace Rasa.Structures
         public double TimeLeftSeconds { get; set; }
         public uint CraftingPage { get; set; }
         public uint QualityId { get; set; }
+
+        /// <summary>The schematic it was started from, and when, so a retrieval can be checked against its time.</summary>
+        public uint RecipeTemplateId { get; set; }
+        public long StartedAtMs { get; set; }
         public List<uint> LootModuleIds { get; set; } = new List<uint>();
     }
 }
