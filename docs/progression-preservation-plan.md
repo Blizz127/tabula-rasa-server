@@ -545,6 +545,30 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
     only the reconstruction rules can supply.
+  - **(5) Mechs, PvP control points and endgame — research state (2026-09-16)**: not implemented; the evidence and the
+    exact starting points are written up in
+    `research/20260915-aliadas-hub/work/mechs-pvp-endgame-evidence.md`, and the reusable discovery is worth recording
+    here. The original client's 996 `.pyo` modules are on disk (`client-code/verify/pyo/`) with every `Recv_*` handler
+    and its argument list already extracted into `client-protocol-inventory.json`, and a static disassembler
+    (`disassemble-all.py`, `vdis.py`) drives xdis over them without executing game code - that pair is what made the
+    auction's eight missing reply packets and the radio/sharing tuples recoverable, and it is what (5) needs next.
+
+    **Control points**: 17 rows in `client/controlpointdata.pyo`, the ownership types (1 `NO_OWNERSHIP`, 2
+    `PVE_OWNERSHIP`, 3 `PVP_OWNERSHIP`), the protocol (`Recv_ControlPointStatus(statusList)` on the control-point
+    manager, `Recv_SetOwnerId(ownerId)` on `ownablecontrolpoint`, plus a `clancontrolpoint` variant), the emulator's own
+    `ControlPointStatus` / `GetPvPClanMembershipStatus`, and four arena maps among the 77 decoded. What is **not** yet
+    recovered is what a row's five fields mean: the second is not a physical entity class and the third is not one of
+    this world's 78 map contexts, and the rows pair up (6015/6016/6017/6021/6022 appear under both 2365 and 2377), which
+    reads as "capture points per area" but is a reading rather than a decoding. Next step: find the module that *reads*
+    `controlpointdata` (`grep -l controlpointdata` over the extracted `.pyo` set) and name the fields from it.
+
+    **Mechs (D16)**: the client has `augmentations/mechpad.pyo` (boarding), `gameeffects/mechmorph.pyo` (the
+    transformation) and two mech abilities, plus the vehicle entity classes. Nothing server-side exists, so it is a
+    system to build rather than data to fill - and self-contained: one augmentation, one effect, two abilities.
+
+    **Endgame zones**: the twelve level-banded adventure zones are among the decoded maps, but nothing places creatures
+    or content above the Wilderness - the same wall the mission work hit, and the same reconstruction rules (OD-45,
+    OD-48) are what fill it. No new mechanics are needed.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

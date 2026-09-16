@@ -50027,6 +50027,22 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-PVP-CONTROL-POINTS",
+   "summary": "The PvP control-point system is not implemented. Its evidence is recovered - the client's 17-row controlpointdata table, the three ownership types, the protocol (Recv_ControlPointStatus(statusList), Recv_SetOwnerId(ownerId), and the clan variant) and four arena maps among the 77 decoded - but what a row's five fields mean is not: the second field is not a physical entity class and the third is not one of this world's 78 map contexts, and the rows pair up (6015/6016/6017/6021/6022 under both 2365 and 2377). The mech system (D16) is in the same state: the client has mechpad, mechmorph and two mech abilities, and no server side exists.",
+   "closes_with": "the module that reads controlpointdata, or a capture of a control point changing hands",
+   "evidence": [
+    "client/controlpointdata.pyo (17 rows)",
+    "shared/controlpointtype.pyo",
+    "work/controlpoint-dis/ (statically disassembled control-point client modules)"
+   ],
+   "surfaced_by": [
+    "systems order item 5, 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
