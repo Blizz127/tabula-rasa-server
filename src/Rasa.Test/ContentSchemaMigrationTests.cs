@@ -57,6 +57,7 @@ namespace Rasa.Test
         private const string WildernessHubConversationChainMigration = "20260916180000_WildernessHubConversationChain";
         private const string WildernessHubConversationChainRewardsMigration = "20260916200000_WildernessHubConversationChainRewards";
         private const string WildernessHubKillObjectiveMigration = "20260916220000_WildernessHubKillObjective";
+        private const string DivideConversationNpcMigration = "20260917000000_DivideConversationNpc";
 
         public static readonly string[] WorldTables =
         {
@@ -120,7 +121,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -136,14 +137,14 @@ namespace Rasa.Test
             connection.Open();
             using var context = World(connection);
             CreatePreviousWorld(context, connection);
-            context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
+            context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10)");
             context.Database.ExecuteSqlRaw("INSERT INTO npc_mission (id, giver_id, reciver_id, level, group_type, category_id, shareable, radio_completeable, comment) VALUES (321, 101, 100, 5, 1, 1, 0, 0, 'Assemble With Lieutenant Perkins')");
             context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
             var before = WorldRows(connection);
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -270,6 +271,13 @@ namespace Rasa.Test
             Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (431, 442, 444, 549, 836)"));
             Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id IN (431, 442, 444, 549, 836) AND ordinal IS NULL"));
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id IN (431, 442, 444, 549, 836) AND type = 3"));
+            // DivideConversationNpc: the Divide's conversation missions and the four giver NPCs they needed,
+            // created from the client name table (ids), TaRapedia (level/zone/loc) and an appearance analogue.
+            Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (332, 347, 382, 796, 1743)"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199000 AND 199003 AND name_id > 0"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id BETWEEN 199000 AND 199003 AND kind = 1"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id IN (332, 347, 382, 796, 1743) AND ordinal IS NULL"));
+
             // WildernessHubKillObjective: two hub missions whose blocking objective is a kill of a creature the world
             // seed carries, bound through the binding kind the boot camp's 1994 already uses.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (427, 682)"));
@@ -401,7 +409,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);

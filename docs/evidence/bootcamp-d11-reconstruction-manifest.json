@@ -139,6 +139,12 @@
    "era": "pre_d11",
    "url": "https://www.ellatha.com/TR",
    "locator": "research/20260915-aliadas-hub/work/ellatha-hub-missions.json (mission DB frozen at or before Feb 2008)"
+  },
+  "client_table:creature-names": {
+   "kind": "client_table",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0 generated/client/language/english/creaturenamelanguage.pyo",
+   "locator": "research/20260912-new-character/generated-client-language-english-creaturenamelanguage.pyo.tables.json"
   }
  },
  "scope": [
@@ -147,10 +153,10 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 198599
+     "max": 199003
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice)."
   },
   {
    "table": "content_area",
@@ -166,10 +172,10 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 198899
+     "max": 199003
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36)."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements."
   },
   {
    "table": "content_condition",
@@ -283,16 +289,16 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 1700
+     "max": 199003
     }
    },
-   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2)."
+   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs."
   },
   {
    "table": "npc_mission",
    "key_ranges": {
     "id": {
-     "min": 427,
+     "min": 332,
      "max": 2011
     }
    },
@@ -30700,6 +30706,1442 @@
      "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199000
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Lt. Sebastian",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 125"
+      }
+     ],
+     "reasoning": "the name the mission sources use for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 125,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 125"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Sebastian infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100; 22636: Solis 42 and Quillas 114)",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199000
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -48.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Sebastian page /loc"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 119.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Sebastian page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 434.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Sebastian page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Sebastian infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199000
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 74,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 74"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is handed out and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199001
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Shaman Horea",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 3000"
+      }
+     ],
+     "reasoning": "the name the mission sources use for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 3000,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3000"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 13,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Shaman Horea infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 22636,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 22636"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100; 22636: Solis 42 and Quillas 114)",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 750,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 22636"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199001
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 284.2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Shaman Horea page /loc"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 170.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Shaman Horea page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 1094.3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Shaman Horea page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Shaman Horea infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199001
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 67,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 67"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is handed out and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199002
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Field Dr. Dawson",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 126"
+      }
+     ],
+     "reasoning": "the name the mission sources use for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 126,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 126"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 14,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Dr. Dawson infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100; 22636: Solis 42 and Quillas 114)",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199002
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 19.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Dr. Dawson page /loc"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 116.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Dr. Dawson page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 524.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Dr. Dawson page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Dr. Dawson infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199002
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 732,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 732"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is handed out and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199003
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Receptive Liaison Brice",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 10012"
+      }
+     ],
+     "reasoning": "the name the mission sources use for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 10012,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10012"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Brice infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100; 22636: Solis 42 and Quillas 114)",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199003
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -773.7,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Brice page /loc"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 179.3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Brice page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 615.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Brice page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Brice infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199003
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2051,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2051"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is handed out and completed through."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 332
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 332 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission's conversations to; that is who hands it out. TaRapedia also names a giver for the mission, and where the two disagree the client wins."
+    },
+    "reciver_id": {
+     "value": 199000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 332 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 332 infobox"
+      }
+     ],
+     "reasoning": "the zone band, as every other slice does; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 332,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Field Sergeant Hayes at Crossroads Waypoint",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 332/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 332,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver Ammo to Line Captain Dobbs in Thoria Das",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 332/2"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 332,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver Ammo to Field Lieutenant McMurray along the Foreas Base Trench",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 332/3"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 332,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 11000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 332 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 347
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 347 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission's conversations to; that is who hands it out. TaRapedia also names a giver for the mission, and where the two disagree the client wins."
+    },
+    "reciver_id": {
+     "value": 199001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 347 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 347 infobox"
+      }
+     ],
+     "reasoning": "the zone band, as every other slice does; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 347,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver the Toxin",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 347/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 347,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 14000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 347 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 347,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 347 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 382
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 382 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission's conversations to; that is who hands it out. TaRapedia also names a giver for the mission, and where the two disagree the client wins."
+    },
+    "reciver_id": {
+     "value": 199000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 382 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 382 infobox"
+      }
+     ],
+     "reasoning": "the zone band, as every other slice does; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 382,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find Recon Officer Tyler",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 382/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 382,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 17000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 382 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 382,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2550,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 382 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 796
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199002,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 796 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission's conversations to; that is who hands it out. TaRapedia also names a giver for the mission, and where the two disagree the client wins."
+    },
+    "reciver_id": {
+     "value": 199002,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 796 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 796 infobox"
+      }
+     ],
+     "reasoning": "the zone band, as every other slice does; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 796,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Talk to Agent Franz",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 796/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 796,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 5500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 796 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 796,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 796 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1743
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199003,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1743 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission's conversations to; that is who hands it out. TaRapedia also names a giver for the mission, and where the two disagree the client wins."
+    },
+    "reciver_id": {
+     "value": 199003,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1743 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1743 infobox"
+      }
+     ],
+     "reasoning": "the zone band, as every other slice does; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1743,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Receptive Liaison Noonan",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1743/3"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its own objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound, so every one is required."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance and the rest follow."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1743,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 6500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1743 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1743,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "DivideConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 700,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1743 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
   }
  ],
  "omitted": [
@@ -32049,6 +33491,21 @@
     "combat fidelity pass 2026-09-16"
    ],
    "slices": []
+  },
+  {
+   "id": "GAP-W3-NPC-POSITION-COVERAGE",
+   "summary": "Two of the four NPCs created for the Divide's missions stand where the wilderness navmesh has no polygon within reach of their recorded position: Field Dr. Dawson at (19, 116.9, 524.9) and Receptive Liaison Brice at (-773.7, 179.3, 615.9), both on adv_foreas_concordia_wilderness. The positions are TaRapedia's /loc values, placed as sourced; what is unverified is the ground under them, which may be a part of the map the navmesh does not model rather than a wrong reading. WorldPositionAuditTests lists both with that reason so the check stays strict everywhere else, and a capture or a wider navmesh would settle them.",
+   "closes_with": "needs the map ground under those two points (navmesh coverage or a capture)",
+   "evidence": [
+    "WorldPositionAuditTests: no walkable surface within reach of either position",
+    "content_placement 199002 (Dawson) and 199003 (Brice), both from TaRapedia /loc"
+   ],
+   "surfaced_by": [
+    "world position audit 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -32540,6 +33997,16 @@
    "choice": "An objective or area trigger takes a larger radius than a bare reading of the measurement suggests - enough that a player crossing the intended place cannot miss it - but not so large that it fires from outside that place. The radius is a reconstruction parameter, not a recovered value, and every use says so. Applied so far: S1's two bridge objectives 4 m -> 10 m (the ceremonial bridge is 16.8 m wide and a recruit crossed it without touching the 4 m sphere), and 1994's cave-in trigger 5 m -> 10 m.",
    "approved_on": "2026-09-15",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (trigger radii, 2026-09-15)"
+  },
+  {
+   "id": "OD-45",
+   "decision": "Appearance of the NPCs created for content, where no per-NPC source exists",
+   "default": "Use the closest world-seed counterpart",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "An NPC the content needs but the world seed does not have is created with the appearance of an existing world-seed NPC of the same faction and kind - an AFS humanoid's class for an AFS mission giver (3846, the class McAllister and Rogers use), a Forean elder's for a Forean elder (22636, Solis' and Quillas' class) - and that field is recorded as an analogue with this decision. Everything else about the NPC comes from evidence: the client's own name table for the name id, TaRapedia's page for the level, zone and /loc. No appearance is claimed to be the original one, and a per-NPC source would replace these.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#npcs-created-from-evidence"
   }
  ]
 }

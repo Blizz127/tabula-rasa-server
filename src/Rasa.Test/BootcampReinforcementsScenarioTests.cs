@@ -144,7 +144,9 @@ namespace Rasa.Test
         {
             private readonly IReadOnlyDictionary<uint, Mission> _missions;
             public References(IReadOnlyDictionary<uint, Mission> missions) => _missions = missions;
-            public bool MapContextExists(uint mapContextId) => mapContextId is 1985 or 1220;
+            // 1148 is the Divide and 1244 the Palisades: W3 batch 5 placed four NPCs there from TaRapedia's own
+            // zone for each of them.
+            public bool MapContextExists(uint mapContextId) => mapContextId is 1985 or 1220 or 1148 or 1244;
             public bool MissionExists(uint missionId) => _missions.ContainsKey(missionId);
             public bool ObjectiveExists(uint missionId, uint objectiveId) => _missions.TryGetValue(missionId, out var m) && m.Objectives.ContainsKey(objectiveId);
             public uint MissionGiver(uint missionId) => _missions.TryGetValue(missionId, out var m) ? m.MissionGiver : 0;
@@ -172,7 +174,7 @@ namespace Rasa.Test
             _worldConnection.Open();
             using var context = WorldContext(_worldConnection);
             ContentSchemaMigrationTests.CreatePreviousWorld(context, _worldConnection);
-            context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
+            context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10)");
             context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
             context.Database.Migrate();
             RewardItemFixtures.SeedOriginalTemplateRows(_worldConnection);
@@ -323,7 +325,15 @@ namespace Rasa.Test
         private Creature ArriveAtAliaDas()
         {
             var live = ContentMaterializer.PlacementsToSpawn(_content.Content, AliaDas).OrderBy(placement => placement.Id).ToList();
-            CollectionAssert.AreEqual(new[] { (RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u), (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary, 0u) },
+            // 199002 (Field Dr. Dawson) and 199003 (Receptive Liaison Brice) joined the shared Wilderness in W3 batch 5:
+            // TaRapedia puts both of them in that zone, so W3's Divide missions are handed out by NPCs standing here.
+            CollectionAssert.AreEqual(new[]
+                {
+                    (RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
+                    (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
+                    (199002u, (byte)ContentPlacementBehavior.Stationary, 0u),
+                    (199003u, (byte)ContentPlacementBehavior.Stationary, 0u)
+                },
                 live.Select(placement => (placement.Id, placement.Behavior, placement.PresentConditionId)).ToArray());
 
             var wilderness = _wilderness = new MapChannel { MapInfo = new MapInfo(AliaDas, "adv_foreas_concordia_wilderness", 1556, 0), ClientList = new List<Client>() };

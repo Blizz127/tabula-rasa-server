@@ -848,7 +848,9 @@ namespace Rasa.Test
                     ContentSchemaMigrationTests.CreatePreviousWorld(context, connection);
                     // Seed-data rows the boot-camp content references outside its own migrations (the full world
                     // seed is not replayed): the boot-camp map, the S6 destination map and the Power Logos granted by S1.
-                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0)");
+                    // 1148 is the Divide, where the four NPCs W3 batch 5 creates stand; 1244 Palisades, which the
+                    // Liaison missions' receivers are in.
+                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10)");
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
                     context.Database.Migrate();
                 }
@@ -945,7 +947,9 @@ namespace Rasa.Test
                 Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1220));
                 Assert.IsFalse(validation.WithheldContexts.Contains(1220u));
                 var aliaDasPlacements = ContentMaterializer.PlacementsToSpawn(validation, 1220).ToDictionary(placement => placement.Id);
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685 }, aliaDasPlacements.Keys.ToArray());
+                // 199002 (Field Dr. Dawson) and 199003 (Receptive Liaison Brice) were created by W3 batch 5 from
+                // TaRapedia's own zone for them, which is the Wilderness, so they stand in the same shared context.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 199002, 199003 }, aliaDasPlacements.Keys.ToArray());
                 var rogers = aliaDasPlacements[198684];
                 Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));
