@@ -54,6 +54,7 @@ namespace Rasa.Context.World
         public DbSet<MapLinkEntry> MapLinkEntries { get; set; }
         public DbSet<KraftwerksEntry> KraftwerksEntries { get; set; }
         public DbSet<MapRegionEntry> MapRegionEntries { get; set; }
+        public DbSet<CreatureLootEntry> CreatureLootEntries { get; set; }
         public DbSet<NpcMissionEntry> NpcMissionEntries { get; set; }
         public DbSet<NpcMissionObjectiveEntry> NpcMissionObjectiveEntries { get; set; }
         public DbSet<NpcMissionObjectiveBindingEntry> NpcMissionObjectiveBindingEntries { get; set; }

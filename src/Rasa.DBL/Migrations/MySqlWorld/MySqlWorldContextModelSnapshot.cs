@@ -18,6 +18,43 @@ namespace Rasa.Migrations.MySqlWorld
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
+            modelBuilder.Entity("Rasa.Structures.World.CreatureLootEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<double>("Chance")
+                        .HasColumnType("double")
+                        .HasColumnName("chance");
+
+                    b.Property<uint>("CreatureId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("creature_id");
+
+                    b.Property<uint>("ItemTemplateId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("item_template_id");
+
+                    b.Property<uint>("StacksizeMax")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("stacksize_max");
+
+                    b.Property<uint>("StacksizeMin")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("stacksize_min");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("comment");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("creature_loot");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.ArmorClassEntry", b =>
                 {
                     b.Property<uint>("Id")

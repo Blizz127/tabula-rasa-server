@@ -417,6 +417,15 @@ namespace Rasa.Managers
             var creatureList = unitOfWork.Creatures.Get();
             var creatureActions = unitOfWork.Creatures.GetCreatureActions();
 
+            // The world's creature_type_loot equivalent: what each creature type drops.
+            var creatureLoot = new Dictionary<uint, CreatureLootData>();
+            foreach (var lootRow in unitOfWork.Creatures.GetCreatureLoot())
+            {
+                if (!creatureLoot.TryGetValue(lootRow.CreatureId, out var lootData))
+                    creatureLoot[lootRow.CreatureId] = lootData = new CreatureLootData();
+                lootData.Add(lootRow);
+            }
+
             var vendorsList = unitOfWork.Creatures.GetVendors();
             var vendorItemList = unitOfWork.Creatures.GetVendorItems();
 
@@ -465,6 +474,9 @@ namespace Rasa.Managers
                 {
                     AppearanceData = tempAppearanceData,
                 };
+
+                if (creatureLoot.TryGetValue(data.Id, out var data2))
+                    creature.LootData = data2;
 
                 // load Creature Actions
                 if (data.Action1 != 0)

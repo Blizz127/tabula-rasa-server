@@ -125,7 +125,7 @@ namespace Rasa.Managers
             loot.AttachedTo = creature.EntityId;
             loot.Owner = killer.Player.EntityId;
 
-            CreateLoot(killer, loot);
+            CreateLoot(killer, creature, loot);
 
             mapChannel.LootDispensers.Add(loot.EntityId, loot);
 
@@ -142,8 +142,32 @@ namespace Rasa.Managers
         /// </summary>
         private static readonly Random Roll = new Random();
 
-        private LootDispenser CreateLoot(Client killer, LootDispenser loot)
+        private LootDispenser CreateLoot(Client killer, Creature creature, LootDispenser loot)
         {
+            // The creature's own loot rows first: each is an item template, a percentage chance and a stack size
+            // range, exactly as the original server's creature_type_loot table held them.
+            var rows = creature?.LootData;
+            if (rows != null && rows.Any)
+            {
+                lock (Roll)
+                {
+                    loot.Credits = 0;
+                    loot.LootQuality = (LootQuality)Roll.Next(1, 7);
+
+                    // Each of the creature's rows is rolled on its own chance (CreatureLoot.Roll), exactly as the
+                    // original creature_type_loot table's per-row chance column implies.
+                    foreach (var drop in CreatureLoot.Roll(rows, () => Roll.NextDouble(), (min, max) => Roll.Next(min, max)))
+                    {
+                        var item = ItemManager.Instance.CreateFromTemplateId(drop.ItemTemplateId, drop.Count);
+                        if (item != null)
+                            loot.LootItems.Add(new LootItem(item, killer.Player.EntityId, 0));
+                    }
+                }
+
+                return loot;
+            }
+
+
             int giveLoot;
 
             lock (Roll)

@@ -13,5 +13,6 @@ namespace Rasa.Repositories.World
         List<CreatureAppearanceEntry> GetCreatureAppearances(uint creatureId);
         List<VendorItemEntry> GetVendorItems();
         List<VendorEntry> GetVendors();
+        List<CreatureLootEntry> GetCreatureLoot();
     }
 }

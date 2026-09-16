@@ -508,6 +508,16 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Creature loot (2026-09-16)**: the loot mechanic now has the original server's shape. Its
+    `creature_type_loot` table is (itemTemplateId, chance as a float, stacksizeMin, stacksizeMax) keyed on the creature
+    *type* - and this world's `creature` table already **is** the type table (name, name_id, class_id, faction, speeds,
+    hit points, actions), so a creature row is a type and loot hangs off its id. New `creature_loot` table, preloader,
+    repository, model snapshots and the roll (`CreatureLoot.Roll`, tested: chance is a percentage, the stack size is
+    drawn between the bounds, every row rolls on its own). Only **seven** rows survived, all for original type 20
+    "(Raiding) Trainee Thrax Footsoldier" - 12% for a 1-35 stack of standard cartridges, 5% for Class I Basic Med Packs,
+    and 0.5% each for the five Motor Assist armour pieces - and they now sit on this world's Thrax soldiers (creature 3
+    and the boot camp's initiates). Recorded as **OD-49**; every other creature keeps the stand-in drop
+    (**GAP-CREATURE-LOOT**), because the client carries no loot data at all (369 decoded tables checked).
   - **Reconstructed species and placement respawn (2026-09-16)**: with the owner's go-ahead for labelled best-guess
     reconstruction, the Mires got its first reconstructed species. The client's entity class table says what each class
     *is* (augmentation 1 = living creature, 6 = item, 41 = usable object, 52 = NPC), which separates a species from a

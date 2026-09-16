@@ -91,6 +91,15 @@ namespace Rasa.Repositories.World
             return vendorItemEntries;
         }
 
+        /// <summary>
+        /// Every creature's loot rows, in the shape the original server's creature_type_loot had.
+        /// </summary>
+        public List<CreatureLootEntry> GetCreatureLoot()
+        {
+            var query = _worldContext.CreateNoTrackingQuery(_worldContext.CreatureLootEntries);
+            return query.ToList();
+        }
+
         public List<VendorEntry> GetVendors()
         {
             var query = _worldContext.CreateNoTrackingQuery(_worldContext.VendorEntries);
