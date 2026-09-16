@@ -464,6 +464,15 @@ character picks up in Alia Das once Training Day and the class choice are behind
     over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
     (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
     walk-in and a follow-the-player mechanism remain).
+  - **W3 batch 3 (2026-09-16)**: five more Wilderness missions seeded mechanically, with the rule made explicit -
+    431 Distress On The River, 442 Quarantine, 444 Unity Among Men, 549 Failure to Launch, 836 Incoming! Their
+    givers resolved to single world-seed creatures, **every** objective already carried a client conversation row
+    (so nothing is invented to complete them), and the experience and credits are TaRapedia's recorded values
+    (2,500/500, 3,500/700, -/1,200, 3,000/600, 11,000/1,650). One trap found on the way: npc_mission_reward keeps
+    *both* amounts in its `credits` column, so the first pass wrote experience 0 and the loader refused all five
+    ("Experience reward amount 0 is not positive"); corrected by WildernessHubConversationChainRewards.
+    751 Boargar Acquisition was deliberately held back - its objective collects eight samples, and a conversation
+    alone would let the collection be skipped (**GAP-W3-COUNTER-OBJECTIVES**).
   - **W3 batch 2 (2026-09-16)**: the hub's conversation chain is live - **1390 Conscientious Objector** (the Ethical
     Parable: question Elder Quillas, either answer, report to Warrior Apirka), **1392/1393 Conscientious Objector -
     Part Two** (the report to Rogers) and **1407 Too Close For Comfort** (Moawi sends you to check on Solis). Their

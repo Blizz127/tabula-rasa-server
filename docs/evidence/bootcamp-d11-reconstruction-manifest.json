@@ -28629,6 +28629,22 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-COUNTER-OBJECTIVES",
+   "summary": "Collection objectives have no counter. The client skeleton carries conversation bindings but no npc_mission_objective_counter rows at all - the only counter row in the world is the one the S4 slice seeded for 1994 - so a mission whose objective is \"Acquire 8 Boargar Cell Samples\" (751) or \"Collect twelve Thrax hearts\" (479) can only be seeded as conversation-only, which would let the collection be skipped. The bulk generator therefore selects only missions whose every objective is conversation-bound and held 751 back; the counter-driven ones (479, 489, 665, 751, 758, 780 and the rest) wait for the loot-counter mechanism. That mechanism needs two things: a way for looted items to advance a counter, and the drop source for each item, since item loot tables are not in the world seed either.",
+   "closes_with": "needs the loot counter mechanism plus each objective item's drop source",
+   "evidence": [
+    "npc_mission_objective_counter holds one row (1994/1, seeded by BootcampS4CaptureTheFlag)",
+    "research/20260915-aliadas-hub/work/ellatha-hub-missions.json: \"Thrax Heart 0/12\", \"Acquire 8 Boargar Cell Samples\"",
+    "generator selection rule: every objective must have a conversation row"
+   ],
+   "surfaced_by": [
+    "W3 bulk seeding 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
