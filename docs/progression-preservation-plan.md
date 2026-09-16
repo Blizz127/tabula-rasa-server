@@ -490,6 +490,11 @@ character picks up in Alia Das once Training Day and the class choice are behind
     analogue under **OD-45** (see "NPCs created from evidence" below). Missions 332, 347, 382, 796 and 1743 came with
     them. 751 Boargar Acquisition was held back - its objective collects eight samples and a conversation alone would
     let the collection be skipped (**GAP-W3-COUNTER-OBJECTIVES**).
+  - **W3 batch 6-7 (2026-09-16)**: the pipeline above then ran over the next two zones - **Palisades** (eight NPCs,
+    nine missions) and **Valverde** (six NPCs: six missions on the plateau and in the pools). Eighteen NPCs and
+    twenty missions came out of it in one session. The world position audit earned its keep: six of the eighteen
+    stand where their map's navmesh has no polygon within reach of TaRapedia's /loc, all listed with that reason in
+    **GAP-W3-NPC-POSITION-COVERAGE**.
   - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
     inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
     that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the

@@ -34,12 +34,15 @@ network/port overrides and persistent databases predate this work.
 Five missions later in the Wilderness and the Divide were seeded from the client's own conversations, and the
 resistance curve finally reached combat.
 
-- **Seeded** (all objectives already conversation-bound in the client, rewards TaRapedia's recorded values):
+- **Seeded** (all objectives already conversation-bound in the client, rewards TaRapedia's recorded values), 36
+  missions in total by the end of the session: 431, 442, 444, 549, 836, 427, 682 (Wilderness), 332, 347, 382, 796,
+  1743 (Divide), nine Palisades missions (199100-199107 givers) and six Valverde ones (199200-199205).
   431 Distress On The River, 442 Quarantine, 444 Unity Among Men, 549 Failure to Launch, 836 Incoming!,
   427 Lurking In The Shadows (Proctor Fulgor, creature 76), 682 Childhood's End (Arioch Xanx, creature 77),
   332 Ammo Express, 347 Cleansing the Toxins: Part II, 382 Retrieval for Recon, 796 Behind Closed Doors,
   1743 Report to Liaison Noonan.
-- **NPCs created** (199000-199003): Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice. Name id
+- **NPCs created** (18 in total): 199000-199003 Divide (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive
+  Liaison Brice), 199100-199107 Palisades, 199200-199205 Valverde. Name id
   from the client's `creaturenamelanguage` (original), level/zone//loc from TaRapedia (inferred, dated), appearance
   an analogue under OD-45. The pipeline is the answer to the 660 missions whose giver is not in the world seed.
 - **Defect found and fixed**: `npc_mission_reward` carries experience and credits in the same `credits` column, which
