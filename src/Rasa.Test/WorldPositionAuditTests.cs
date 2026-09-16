@@ -62,7 +62,8 @@ namespace Rasa.Test
             { "content_placement:Ranger Urialia (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Warden Lagori (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Field Lt. Bagby (TaRapedia /loc)", TaRapediaOutsideNavmesh },
-            { "content_placement:Lt. Galloway (TaRapedia /loc)", TaRapediaOutsideNavmesh }
+            { "content_placement:Lt. Galloway (TaRapedia /loc)", TaRapediaOutsideNavmesh },
+            { "content_placement:Retread Jeska (TaRapedia /loc)", TaRapediaOutsideNavmesh }
         };
 
         [TestMethod]

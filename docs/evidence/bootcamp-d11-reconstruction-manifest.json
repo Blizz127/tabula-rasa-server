@@ -153,10 +153,10 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 199205
+     "max": 199303
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205)."
   },
   {
    "table": "content_area",
@@ -172,10 +172,10 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199205
+     "max": 199303
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements."
   },
   {
    "table": "content_condition",
@@ -289,10 +289,10 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 199205
+     "max": 199303
     }
    },
-   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
+   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
   },
   {
    "table": "npc_mission",
@@ -36683,6 +36683,1214 @@
      "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199300
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Lieutenant Morrison",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 3113"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 3113,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3113"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 40,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lieutenant Morrison infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199300
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -205.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lieutenant Morrison page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 219.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lieutenant Morrison page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 600.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lieutenant Morrison page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lieutenant Morrison infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199300
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 299,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 299"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199301
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Retread Jeska",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 10321"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 10321,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10321"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 36,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Jeska infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199301
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -777.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Jeska page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 270.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Jeska page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -552.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Jeska page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Jeska infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199301
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2367,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2367"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199302
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Retread Lou",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 10323"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 10323,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10323"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 36,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Lou infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199302
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -776.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Lou page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 241.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Lou page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -542.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Lou page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Lou infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199302
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2356,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2356"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199303
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Retread Duvall",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 8551"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 8551,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8551"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 36,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Duvall infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199303
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -593.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Duvall page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 216.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Duvall page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -438.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Duvall page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retread Duvall infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199303
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 950,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 950"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1673
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199300,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1673 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199300,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1673 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1673 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1673,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report in to Lieutenant Morrison in Falcon Hold",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1673/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 75000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1673 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1673 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1863
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199301,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1863 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199301,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1863 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1863 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1863,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Locate Lt. Koffman to the east of High Point Retreat.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1863/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 65000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1863 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 5400,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1863 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1868
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199302,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1868 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199302,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1868 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1868 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1868,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Retread Lou at High Point Retreat.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1868/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1868,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 32500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1868 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1868,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1868 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1904
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199303,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1904 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199303,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1904 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1904 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1904,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Retread Duval at the forest north of high point retreat.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1904/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1904,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 32500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1904 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1904,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MarshesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1904 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
   }
  ],
  "omitted": [
@@ -38035,7 +39243,7 @@
   },
   {
    "id": "GAP-W3-NPC-POSITION-COVERAGE",
-   "summary": "Six of the twelve NPCs created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Field Dr. Dawson (19, 116.9, 524.9) and Receptive Liaison Brice (-773.7, 179.3, 615.9) on the Wilderness, Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them.",
+   "summary": "Seven of the twenty-two NPCs created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Field Dr. Dawson (19, 116.9, 524.9) and Receptive Liaison Brice (-773.7, 179.3, 615.9) on the Wilderness, Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades, plus Retread Jeska (-777, 270, -552) in the marshes. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them.",
    "closes_with": "needs the map ground under those two points (navmesh coverage or a capture)",
    "evidence": [
     "WorldPositionAuditTests: no walkable surface within reach of either position",

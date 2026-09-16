@@ -495,6 +495,9 @@ character picks up in Alia Das once Training Day and the class choice are behind
     twenty missions came out of it in one session. The world position audit earned its keep: six of the eighteen
     stand where their map's navmesh has no polygon within reach of TaRapedia's /loc, all listed with that reason in
     **GAP-W3-NPC-POSITION-COVERAGE**.
+  - **W3 batch 8 (2026-09-16)**: a fourth zone, the **Marshes** - Lieutenant Morrison and three Retreads, with their
+    four missions. That makes 22 NPCs and 24 missions created from this pipeline in one session, and the count of
+    seeded missions in the world 42 (18 hub/boot-camp, 24 new).
   - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
     inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
     that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the
