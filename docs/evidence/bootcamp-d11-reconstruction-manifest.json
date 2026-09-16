@@ -50132,6 +50132,23 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-S2-GEAR-OBJECTIVES",
+   "summary": "Mission 1992 'Gearing Up for Battle' cannot progress past its first objective. Its placements exist and work - the supply crate 198651 (class 26714, usable_kind 1) dispenses item set 19858, and the practice and target dummies 198652/198653 (class 29365, 100 hp, restore 930 ms) stand where they should - but no content_rule targets objectives 1 ('Get your gear from the nearby crate'), 2 ('Equip the gear by right-clicking it in your backpack'), 3 ('Shoot the Practice Dummy') or 5-9. Only the 1990 turn-in offer (rule 1985004) and McAllister's walk (1985014) touch 1992, so a player takes the gear, equips it, and the mission log never moves. Reported live 2026-09-16 ('i got my gear ... and it didn't update i equipped it too').",
+   "closes_with": "three new ContentRuleEvent kinds and the rules built on them: a usable-used/looted event for objective 1, an item-equipped event for objective 2, and a placement-damaged event for objective 3 (PlacementDestroyed is not it - the dummy restores after 930 ms rather than dying). The footage events for the sequence are already in docs/evidence/bootcamp-d11-footage-events.json.",
+   "evidence": [
+    "rasaworld.db content_placement 198651, 198652, 198653",
+    "rasaworld.db content_rule: no row with mission_id 1992 and objective_id in (1,2,3,5,6,7,8,9)",
+    "src/Rasa.Game/Data/MissionContent.cs ContentRuleEvent - no used/equipped/damaged event exists",
+    "rasachar.db character 5 on 2026-09-16: mission 1992 objective 4 complete, objective 1 still open with the gear taken"
+   ],
+   "surfaced_by": [
+    "live play report, 2026-09-16"
+   ],
+   "slices": [
+    "S2"
+   ]
   }
  ],
  "non_content_settings": [

@@ -1490,3 +1490,36 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
 - Also learned: the challenge-board window (clan bidding on control points) is dead code in the final client, and
   `battlegroundrulestype` names a single ruleset, `EDMUND_RANGE`. A survey of the owner's Alienware found the same
   1.16.5.0 client twice, toolkit map renders of both battlegrounds, and no battleground or mech footage.
+
+## 2026-09-16 UTC — Two live findings: the auth handoff after a redeploy, and mission 1992
+
+- **Players hang at "authenticating" after the game container is recreated.** Auth keeps a stale game-server
+  registration for the replaced container - it never logs a disconnect for it, and the new game server's
+  registration does not take - so authenticated clients have nowhere to be handed to. The game's own log is
+  misleading here: `Connected to the Auth Server!` is only the TCP connect. The fix is to restart auth after the
+  game redeploy and confirm both sides: auth must log
+  `The Game server (Id: ..., Address: ..., Public Address: ...) has authenticated! Requesting info...` and the game
+  `Successfully authenticated with the Auth server!`. The game retries every ~10 s, so restarting auth is enough.
+  Observed today: game recreated 23:36, auth's last registration 22:19, clients connecting and dropping in under
+  70 ms until auth was restarted at 23:42, after which registration succeeded in 5 s.
+- **Mission 1992 "Gearing Up for Battle" cannot progress** (`GAP-S2-GEAR-OBJECTIVES`, reported from live play). The
+  placements work: the supply crate dispenses its item set and the two dummies stand correctly. But no content rule
+  targets the mission's gear objectives, so a player takes the gear, equips it, and the log never moves. Closing it
+  needs three `ContentRuleEvent` kinds the engine does not have - a usable-used/looted event, an item-equipped
+  event, and a placement-damaged event (`PlacementDestroyed` is not it: the dummy restores after 930 ms instead of
+  dying). This is an unimplemented slice, not a regression from the control-point deploy.
+- **The endgame-zone wall is structural, now with numbers.** No client map places a single creature spawner or NPC -
+  zero entities of any class carrying augmentation 61, 68 or 52 across all fifteen level-banded adventure zones,
+  the Wilderness included - and the world seed's 218 spawn pools are all in context 1220. Creature placement was
+  entirely server-side and none of it survives, so the zones above the Wilderness need the reconstruction rules
+  (OD-45, OD-48) applied at scale rather than any new mechanic.
+- **Mechs: the pads were never shipped content.** Only two entity classes carry the MechPad augmentation (83),
+  30421 `TEST_KGS_Mechpad` and 30464 `UsableOwnableMechStation`, and the shipped English strings name **both** of
+  them "Testing Mechpad"; both have an all-null `usabledata` row, and no client map places either. What did ship
+  for players is the Mech PAU line - 26892 `PAU_Vehicle_AFS_MECH` ("Mech PAU"), `Weapon_PAU_AFS_Mech_MiniGun_Physical`
+  and `_Laser`, `Ability_PAU_AFS_Mech_Sprint`, and a complete `Shield_Vehicle_Mech_{Light,Medium,Heavy}_{30..50}`
+  ladder - alongside the mech NPC/vehicle classes (`Vehicle_AFS_Mech`, `NPC_Vehicle_AFS_Mech`, the Hominis Machina
+  family). So the D16 note that mechs were "usable only on Edmund and only from mech pads" is not reflected in the
+  client's pad data, and the mech work should start from the PAU vehicle and its shield ladder rather than from the
+  pad augmentation (`GAP-W3-MECH-SERVER-SIDE`).
+
