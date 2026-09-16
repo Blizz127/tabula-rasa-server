@@ -205,7 +205,11 @@ namespace Rasa.Test.Reconstruction
                 "itemtemplate:id:122859-122871",
                 "itemtemplate_weapon:id:122865-122871",
                 "itemtemplate_armor:id:122859-122870",
-                "npc_package:id:132-132"
+                // W3 (2026-09-16): the Wilderness hub's missions and the dialogue packages their NPCs needed. The
+                // mission ids run from the hub's 427 to the boot camp's 2011; the package ids from Elder Moawi's 38
+                // to Quillas' 1646, which is what the range below covers.
+                "npc_package:id:38-1700",
+                "npc_mission:id:427-2011"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

@@ -120,6 +120,25 @@
    "era": "pre_d11",
    "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/pre-d11-map/raw/old-client/decoded",
    "note": "The 2007-11-16 launch client tables (entityclass, usabledata, stringtable). Cited ONLY to show what changed before the final client (the 24586 wreck rework, asset 49851 absent); never a value source and never an analogue."
+  },
+  "client_table:missions": {
+   "kind": "client_table",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0 mission tables (missionobjective, objectiveconversation, missionconversation)",
+   "locator": "research/20260913-source-sweep/mission-tables (census + per-mission extracts)"
+  },
+  "community_db:tarapedia": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://tarapedia.fandom.com",
+   "locator": "research/20260915-wilderness-bulk/work/tarapedia.json (per-revision infoboxes with set_ts dates)",
+   "note": "community transcription; every value cites the revision date it was set on"
+  },
+  "community_db:ellatha": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://www.ellatha.com/TR",
+   "locator": "research/20260915-aliadas-hub/work/ellatha-hub-missions.json (mission DB frozen at or before Feb 2008)"
   }
  },
  "scope": [
@@ -263,11 +282,21 @@
    "table": "npc_package",
    "key_ranges": {
     "id": {
-     "min": 132,
-     "max": 132
+     "min": 38,
+     "max": 1700
     }
    },
-   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id."
+   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2)."
+  },
+  {
+   "table": "npc_mission",
+   "key_ranges": {
+    "id": {
+     "min": 427,
+     "max": 2011
+    }
+   },
+   "note": "W3: the Wilderness hub missions seeded on 2026-09-16 (Conscientious Objector and Part Two, Too Close For Comfort, the conversation chain batch, and the two kill missions)."
   }
  ],
  "rows": [
@@ -27308,6 +27337,3367 @@
     "comment": {
      "value": "dispense 2011 forced",
      "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1390
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "giver_id": {
+     "value": 42,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1390 infobox, giver",
+       "date": "2007-09-02",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Warrior Apirka as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 43,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Question Elder Quillas.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Speak to Quillas again.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/2 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Speak to Quillas again.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/3 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Take Milpas to Apirka.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/4 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 8
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Escort Milpas to Divide entrance.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/8 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Speak to Apirka",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/10 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 11
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Return to Warrior Apirka.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/11 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1390,
+    "objective_id": 12
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "no desc",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1390/12 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 2,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 2,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 3,
+    "revealed_objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 3,
+    "revealed_objective_id": 8
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 3,
+    "revealed_objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 4,
+    "revealed_objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1390,
+    "completed_objective_id": 8,
+    "revealed_objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 8,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1390,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "credits": {
+     "value": 400,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1390 infobox, reward_credits",
+       "date": "2007-10-18",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 1646
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "package_id": {
+     "value": 1646,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1390 package 1646"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 112
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "package_id": {
+     "value": 112,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1390 package 112"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1392
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "giver_id": {
+     "value": 100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1392 infobox, giver",
+       "date": "2007-10-18",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Warrior Apirka as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 100,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1392,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Bring the report to Rogers.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1392/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 116
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "package_id": {
+     "value": 116,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1392 package 116"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1393
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "giver_id": {
+     "value": 100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1393 infobox, giver",
+       "date": "2007-10-18",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Warrior Apirka as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 100,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1393,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Bring the report to Rogers.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1393/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1407
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "giver_id": {
+     "value": 38,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1407 infobox, giver",
+       "date": "2007-09-01",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Outpost Commander Rogers as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 42,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1407,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Speak to Elder Moawi.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1407/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1407,
+    "objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "comment": {
+     "value": "Check on Elder Solis.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1407/10 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 1407,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 10
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 113
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "package_id": {
+     "value": 113,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1407 package 113"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 168
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector",
+   "fields": {
+    "package_id": {
+     "value": 168,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1407 package 168"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 431
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "giver_id": {
+     "value": 101,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 431 infobox, giver",
+       "date": "2007-07-01",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Field Sgt. Witherspoon as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 101,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 431,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Get a field report from Surveyor Hugh Corman",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 431/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 431,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Get a field report from Tribal Leader Oingin",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 431/2 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 431,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Get a field report from Lieutenant Wood",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 431/3 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 431,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 431,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "completed_objective_id": {
+     "value": 2,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 431,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 2500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 431 infobox, reward_xp",
+       "date": "2007-07-01",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 431,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 431 infobox, reward_credits",
+       "date": "2007-07-01",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 251
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 251,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 431 package 251"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 252
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 252,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 431 package 252"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 253
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 253,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 431 package 253"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 442
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "giver_id": {
+     "value": 140,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 442 infobox, giver",
+       "date": "2007-08-15",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Victor Corman as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 140,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 442,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Speak to Duncan.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 442/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 442,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Analyze the Blood Sample.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 442/2 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 442,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 442,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 3500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 442 infobox, reward_xp",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 442,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 700,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 442 infobox, reward_credits",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 218
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 218,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 442 package 218"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 1486
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 1486,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 442 package 1486"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 444
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "giver_id": {
+     "value": 140,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 444 infobox, giver",
+       "date": "2007-08-15",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Victor Corman as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 140,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 444,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Take test results to Eleanor.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 444/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 444,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 1200,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 444 infobox, reward_credits",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 117
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 117,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 444 package 117"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 549
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "giver_id": {
+     "value": 104,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 549 infobox, giver",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Aviation Coordinator Wagner as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 104,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 549,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Get a new catalyzer.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 549/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 549,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 3000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 549 infobox, reward_xp",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 549,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 549 infobox, reward_credits",
+       "date": "2007-10-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 382
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 382,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 549 package 382"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 836
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "giver_id": {
+     "value": 137,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 836 infobox, giver",
+       "date": "2007-11-12",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Scott Corman as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 137,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 836,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "comment": {
+     "value": "Deliver the data.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 836/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 836,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 11000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 836 infobox, reward_xp",
+       "date": "2007-11-12",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 836,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "credits": {
+     "value": 1650,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 836 infobox, reward_credits",
+       "date": "2007-11-12",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 802
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConversationChain",
+   "fields": {
+    "package_id": {
+     "value": 802,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 836 package 802"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 427
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "giver_id": {
+     "value": 132,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 427 infobox, giver",
+       "date": "2007-06-30",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Quartermaster Caufield as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 132,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 427,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Speak to Oliver.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 427/1 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 427,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Kill Proctor Fulgor.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 427/6 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 427,
+    "objective_id": 7
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Return to Caufield.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 427/7 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 427,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 427,
+    "completed_objective_id": 6,
+    "revealed_objective_id": 7
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 6,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 427,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "credits": {
+     "value": 4000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 427 infobox, reward_xp",
+       "date": "2007-07-11",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 427,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "credits": {
+     "value": 400,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 427 infobox, reward_credits",
+       "date": "2007-07-11",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 427,
+    "objective_id": 6,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 427/6"
+      }
+     ],
+     "reasoning": "the objective text names a kill, so the binding is the kill kind the boot camp's Capture the Flag uses."
+    },
+    "creature_id": {
+     "value": 76,
+     "tier": "inferred",
+     "reasoning": "the objective's creature name matched exactly one creature in the world seed, longest name first.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 254
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "package_id": {
+     "value": 254,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 427 package 254"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 133
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "package_id": {
+     "value": 133,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 427 package 133"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 682
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "giver_id": {
+     "value": 91,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 682 infobox, giver",
+       "date": "2007-08-15",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Council Advisor Todae as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+    },
+    "reciver_id": {
+     "value": 91,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "giver NPC page level"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Speak to Ranger Anjuhi.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 682/2 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Kill the Xanx!",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 682/3 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Speak to Ranger Tirna.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 682/4 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 5
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Speak to Ranger Anjuhi.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 682/5 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "comment": {
+     "value": "Return to Luminary Doyen.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 682/6 text"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; the client's own objective-id order is used, which is what a conversation chain follows."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "an objective the client binds with a conversation is required; one it does not bind (the escort and technical steps) is optional, so it can never strand a character.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective of the chain is revealed on acceptance and the rest follow from the transitions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 682,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 2,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 682,
+    "completed_objective_id": 3,
+    "revealed_objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 682,
+    "completed_objective_id": 4,
+    "revealed_objective_id": 5
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 682,
+    "completed_objective_id": 5,
+    "revealed_objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "completed_objective_id": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "the client carries no transitions; the chain follows the objective-id order.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective id order"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 682,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "credits": {
+     "value": 10000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 682 infobox, reward_xp",
+       "date": "2007-11-11",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 682,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "credits": {
+     "value": 1500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 682 infobox, reward_credits",
+       "date": "2007-11-11",
+       "era": "pre_d11"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox records this amount; both reward kinds carry it in the credits column, which is how the Training Day rows store experience."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 682/3"
+      }
+     ],
+     "reasoning": "the objective text names a kill, so the binding is the kill kind the boot camp's Capture the Flag uses."
+    },
+    "creature_id": {
+     "value": 77,
+     "tier": "inferred",
+     "reasoning": "the objective's creature name matched exactly one creature in the world seed, longest name first.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 102
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "package_id": {
+     "value": 102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 682 package 102"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 570
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "package_id": {
+     "value": 570,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 682 package 570"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 566
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective",
+   "fields": {
+    "package_id": {
+     "value": 566,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 682 package 566"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package; which creature owns it follows from the package resolver's identity vote plus TaRapedia's page for that NPC."
     }
    }
   }
