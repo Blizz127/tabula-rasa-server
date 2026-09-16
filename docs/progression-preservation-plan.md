@@ -508,6 +508,43 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Systems pass, owner goal 2026-09-16 (five items, in order)**: (1) **creature loot** — done, the original
+    table's shape with the seven surviving rows (commit `ddcc921`); (2) **escort** — done, `Escort` behavior +
+    `escort_mission_id` + the arrival rule, first escort seeded for 1390 (commit `0c288b6`); (3) **mission sharing and
+    radio missions** — *not started*, and here is exactly what it needs; (4) **auction and crafting depth** — not
+    started; (5) **mechs/PvP/endgame instances** — not started.
+
+    ### (3) Radio completion and mission sharing — where to start
+
+    The two features are the same five opcodes (`UnsupportedMissionRequestPackets.cs`, whose argument shapes were read
+    from `client/missionlog.pyo`): radio is `CompleteRadioMission` / `RewardRadioMission`, both
+    `(missionId, selectionIdx, rating)`; sharing is `ShareMission(missionId)`, `AssignSharedMission(playerId, missionId)`
+    and `DeclineSharedMission(playerId, missionId)`. The mission definition flags that gate them are already loaded and
+    sent to the client (`npc_mission.radio_completeable`, `npc_mission.shareable`; `MissionConstantData`), and
+    `Mission.DefinitionGaps()` still adds "radio completion is not implemented" and "mission sharing is not
+    implemented" for those flags — which is what keeps every such mission unoffered.
+
+    The work: **radio** needs the payout path of `MissionManager.CompleteNpcMission` (lines ~789-900) split out of its
+    NPC-specific checks (receiver id, conversation range) into a shared `PayOut(client, definition, selectionIdx)`, then
+    a `CompleteByRadio(client, missionId, selectionIdx)` that requires `RadioCompletable` and complete required
+    objectives instead; `RewardRadioMission` is the same call (the two packets carry identical tuples, so which one the
+    client sends for "complete" and which for "claim the reward" is not established — record it as an open question
+    rather than guessing). **Sharing** needs a pending-share map (sharer → target → mission), `ShareMission` to record
+    one and offer the mission into the target's log, and `AssignSharedMission`/`DeclineSharedMission` to accept or drop
+    it; the client-side presentation of a share offer is unverified, so it should be built to the smallest form that
+    does not invent UI, with the gap recorded.
+
+    ### (4) Auction and crafting depth
+
+    `AuctionHouseManager` is 129 lines and `KraftwerksManager` 345; both have their client packets (8 crafting, and the
+    auction requests ride the vendor packets). Nothing here is known to be wrong — it is simply thin, and the original
+    auctioneer/vendor item tables and the Kraftwerks recipe data would be needed to deepen it. The original dump has
+    `vendor_items` and an `items` table, so the auction's own data should be checked there first.
+
+    ### (5) Mechs, PvP and endgame instances
+
+    D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
+    only the reconstruction rules can supply.
   - **Escort mechanic (2026-09-16)**: the piece 40-odd objectives were waiting on. `content_placement` gained
     `escort_mission_id` and a third behavior (`Escort = 3`): the creature walks with the player whose mission it is
     (re-pathing at most every two seconds once it falls more than six metres behind), and an **area objective on that
