@@ -29,6 +29,33 @@ The initial local HEAD and GitHub default branch both resolved to
 `2a3e4bb8f9f153ebf64805cbd420f855f850c78b` (2023-12-27). The existing Compose
 network/port overrides and persistent databases predate this work.
 
+## Content and combat, 2026-09-16
+
+Five missions later in the Wilderness and the Divide were seeded from the client's own conversations, and the
+resistance curve finally reached combat.
+
+- **Seeded** (all objectives already conversation-bound in the client, rewards TaRapedia's recorded values):
+  431 Distress On The River, 442 Quarantine, 444 Unity Among Men, 549 Failure to Launch, 836 Incoming!,
+  427 Lurking In The Shadows (Proctor Fulgor, creature 76), 682 Childhood's End (Arioch Xanx, creature 77),
+  332 Ammo Express, 347 Cleansing the Toxins: Part II, 382 Retrieval for Recon, 796 Behind Closed Doors,
+  1743 Report to Liaison Noonan.
+- **NPCs created** (199000-199003): Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice. Name id
+  from the client's `creaturenamelanguage` (original), level/zone//loc from TaRapedia (inferred, dated), appearance
+  an analogue under OD-45. The pipeline is the answer to the 660 missions whose giver is not in the world seed.
+- **Defect found and fixed**: `npc_mission_reward` carries experience and credits in the same `credits` column, which
+  the first batch got wrong (the loader refused all five for "Experience reward amount 0 is not positive").
+- **Combat**: the resistance conversion the client itself carries (`shared/damageresistance.pyo`, cross-checked against
+  Deployment 14's published table on all eight points) was recovered, tested - and unused. The equipment pass now sums
+  each worn item's resist list per damage type onto the player, and a landed hit is scaled by the target's resistance
+  before armour absorbs it. The rounding the live server used stays a recorded parameter
+  (GAP-D14-RESISTANCE-ROUNDING).
+- **Provenance**: 125 manifest rows added across the day's slices plus the `community_db` source kind (TaRapedia, the
+  Ellatha mission DB) and the W3 slice; two gaps opened for what the sources do not settle
+  (GAP-W3-COUNTER-OBJECTIVES, GAP-W3-NPC-POSITION-COVERAGE) and one for the rounding above.
+- **Not verified in-game**: none of the new missions, NPCs or the resistance change has been played yet; the audit
+  that did catch something was the world position one, which flagged the two NPCs whose TaRapedia /loc has no navmesh
+  under it.
+
 ## Sources and confidence
 
 - [Rasa.NET](https://github.com/InfiniteRasa/Rasa.NET): authoritative for this

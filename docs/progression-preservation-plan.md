@@ -483,6 +483,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
     (**GAP-W3-1390-ESCORT**), and the content loader now only requires a completion binding for a *required*
     objective, since an optional one cannot strand a character. Rewards and the chain's gates are recorded as
     **GAP-W3-HUB-REWARDS** and **GAP-W3-HUB-PREREQUISITES** rather than guessed.
+  - **W3 batch 3-5 (2026-09-16)**: the Wilderness hub's conversation missions went in by rule (431, 442, 444, 549,
+    836), then its first two real fights through the boot camp's existing kill binding (427 Proctor Fulgor, 682 the
+    Xanx), then the **Divide**, which needed its givers created first: Lt. Sebastian, Shaman Horea, Field Dr. Dawson
+    and Receptive Liaison Brice, each with the client's own name id, TaRapedia's level/zone//loc and an appearance
+    analogue under **OD-45** (see "NPCs created from evidence" below). Missions 332, 347, 382, 796 and 1743 came with
+    them. 751 Boargar Acquisition was held back - its objective collects eight samples and a conversation alone would
+    let the collection be skipped (**GAP-W3-COUNTER-OBJECTIVES**).
+  - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
+    inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
+    that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the
+    client's conversation rows bind, take its identity, then create the NPC that owns it.
   - **Combat fidelity (2026-09-16)**: the resistance curve the client itself carries
     (`shared/damageresistance.pyo`, with Deployment 14's published table matching it on all eight points) was
     recovered, tested - and then never used. Nothing accumulated the equipped resist lists and no damage path read
