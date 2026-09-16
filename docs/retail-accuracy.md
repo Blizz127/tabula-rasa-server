@@ -1472,6 +1472,21 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   battleground maps, and refuses an owner change for a point the map has not. The emulator's one Wilderness PvE
   control point (class 3814 at (197.66, 162.27, -54.08), status id 215) is emulator-authored - neither is in the
   client map or table - and is now labelled as such (`GAP-W3-PVE-CONTROL-POINT-PLACEMENT`) rather than removed.
+- Deployed 2026-09-16 23:36 UTC. The candidate image ran the whole suite with no network and no database mounts:
+  **905 of 907 pass**, the two failures being `EveryCampPlacementStandsOnTheWalkableSurface` and
+  `EveryWorldPositionStandsWhereABodyCanWalk`, which need the `navmesh` folder the Dockerfile does not copy and fail
+  identically in the pre-change image (both pass on the host tree with `rasaworld.db` present, where the suite is
+  1012/1012). The image's `src` and `docs/evidence` hash identically to the reviewed workspace. Backups with
+  `PRAGMA integrity_check` = ok are in `/home/blizz/backups/rasa-net/20260916T233502Z-retail-pvp-control-points/`,
+  the previous image is kept as `rasa_net:before-retail-pvp-control-points-20260916`, and only `game` was recreated -
+  `docker compose up -d --no-deps --no-build game` worked this time without the network workaround the earlier
+  deploys needed, and `auth` was not touched (same container since 22:19 UTC, 0 restarts). The game reports
+  `Server ready!`, `Loaded navmeshes for 76 of 78 maps`, `Loaded 16 content rules (239 content rows, 0 gaps)`,
+  `Connected to the Auth Server!`, 0 restarts and no error or exception lines.
+- One manifest correction found by the deploy's own gate: the wire-format fix was first written into the manifest's
+  `changes` array, which the schema reserves for content-row changes with a migration and object citations. A packet
+  shape is not a content row, so the entry is removed; the corrected gap entry and this log carry the record.
+  `RealManifestsAndCompanionFilesPass` and `RealObservedCitationsResolveAgainstTheRealFootageEvents` pass again.
 - Also learned: the challenge-board window (clan bidding on control points) is dead code in the final client, and
   `battlegroundrulestype` names a single ruleset, `EDMUND_RANGE`. A survey of the owner's Alienware found the same
   1.16.5.0 client twice, toolkit map renders of both battlegrounds, and no battleground or mech footage.
