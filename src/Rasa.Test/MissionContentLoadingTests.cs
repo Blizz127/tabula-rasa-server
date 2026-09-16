@@ -867,6 +867,8 @@ namespace Rasa.Test
                 // S2 usable placements: crate 26714 UsableTreasureDispHumCrateV04, dummies 29365 UsableStatelessHumPracticeDummyV01.
                 // S5: Conrad's corpse 21961 UsableStatelessFlightSalvage, bomb 7870 UsableBombHumV01, wreck 24586.
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
+                // Mission 430's mortar launchers, the entity class the client map gives them (W3 batch 13).
+                references.Classes.UnionWith(new uint[] { 7478 });
                 // S2 crate item set 19858.
                 references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
@@ -882,7 +884,7 @@ namespace Rasa.Test
                 Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
                 Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
 
-                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011 })
+                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011, 430 })
                 {
                     Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");

@@ -508,6 +508,20 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Destroyable objectives (2026-09-16)**: the client's `.map` files carry every static entity with its class and
+    position, and the objects the object-missions name are in them - `adv_foreas_concordia_wilderness.map` has six
+    intact `ArchBaneGenObjMortarlauncherV01` (class 7478) and one destroyed. Mission **430 Mortar By Numbers** is the
+    first mission rebuilt from that data: four destroyable placements at the map's own positions, each bound with the
+    destroying-hit kind the camp's practice dummy uses. Only the hit points are a stand-in (OD-46). The map data does
+    **not** carry NPCs - those are server-spawned - so TaRapedia's /loc stays the source for people.
+  - **What still blocks the rest (2026-09-16)**: of 434 ready missions, 369 are blocked by an objective with no client
+    conversation. Classifying the 1,004 such objectives by their own words: 377 are internal counter steps ("Inc 1 to
+    2"), 251 collect items, 247 kill something, 42 place/use an object, 40 escort, 36 reach a place, 11 talk. The
+    client marks the kill ones (592 objectives carry a counter label like "Thrax Soldiers Killed") - but the target
+    creatures of most of them are in zones the world seed does not carry (it holds 155 creatures, all Wilderness), and
+    the original server dump's `creature_type` has only 21 rows, so there is no surviving source for them. Collections
+    need the item each counter counts, and the original loot table (`creature_type_loot`, 7 rows) does not name them
+    either. These stay explicit evidence gaps rather than guesses.
   - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
     inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
     that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the

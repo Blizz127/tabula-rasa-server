@@ -150,6 +150,11 @@
    "kind": "client_map",
    "era": "final_live",
    "locator": "navmesh/adv_arieki_torden_incline.nav (client map data, read by WorldPositionAuditTests)"
+  },
+  "client_map:adv_foreas_concordia_wilderness": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "research/20260913-bootcamp/map/decoded/adv_foreas_concordia_wilderness-entities.csv (7,622 entities decoded from the client .map, each with entity class and position)"
   }
  },
  "scope": [
@@ -177,10 +182,10 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199601
+     "max": 199703
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703)."
   },
   {
    "table": "content_condition",
@@ -43250,6 +43255,589 @@
      "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
     }
    }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199700
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "pos_x": {
+     "value": 360.8661,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (360.8661, 218.1929, 95.2629)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_y": {
+     "value": 218.1929,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (360.8661, 218.1929, 95.2629)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_z": {
+     "value": 95.2629,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (360.8661, 218.1929, 95.2629)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "entity_class_id": {
+     "value": 7478,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 100,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "destroyable object objective (430/3)"
+      }
+     ],
+     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
+     "required_because": "a destroyable object needs hit points and no surviving source gives them",
+     "decision": "OD-46"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199701
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "pos_x": {
+     "value": 212.7184,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (212.7184, 227.3504, 286.1895)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_y": {
+     "value": 227.3504,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (212.7184, 227.3504, 286.1895)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_z": {
+     "value": 286.1895,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (212.7184, 227.3504, 286.1895)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "entity_class_id": {
+     "value": 7478,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 100,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "destroyable object objective (430/3)"
+      }
+     ],
+     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
+     "required_because": "a destroyable object needs hit points and no surviving source gives them",
+     "decision": "OD-46"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199702
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "pos_x": {
+     "value": 185.0261,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (185.0261, 238.0952, 399.923)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_y": {
+     "value": 238.0952,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (185.0261, 238.0952, 399.923)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_z": {
+     "value": 399.923,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (185.0261, 238.0952, 399.923)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "entity_class_id": {
+     "value": 7478,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 100,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "destroyable object objective (430/3)"
+      }
+     ],
+     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
+     "required_because": "a destroyable object needs hit points and no surviving source gives them",
+     "decision": "OD-46"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199703
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "pos_x": {
+     "value": 99.713,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (99.713, 232.3222, 551.5623)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_y": {
+     "value": 232.3222,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (99.713, 232.3222, 551.5623)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "pos_z": {
+     "value": 551.5623,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity ArchBaneGenObjMortarlauncherV01 at (99.713, 232.3222, 551.5623)"
+      }
+     ],
+     "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
+    },
+    "entity_class_id": {
+     "value": 7478,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 100,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "destroyable object objective (430/3)"
+      }
+     ],
+     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
+     "required_because": "a destroyable object needs hit points and no surviving source gives them",
+     "decision": "OD-46"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 430
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "giver_id": {
+     "value": 104,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 430 infobox, giver"
+      }
+     ],
+     "reasoning": "Aviation Coordinator Wagner, who the world seed carries as creature 104."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 430 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every other hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "comment": {
+     "value": "Destroy Mortar #1",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 430/3"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used, which is the order the objectives read in."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "comment": {
+     "value": "Destroy Mortar #2",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 430/4"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used, which is the order the objectives read in."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 5
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "comment": {
+     "value": "Destroy Mortar #3",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 430/5"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used, which is the order the objectives read in."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "comment": {
+     "value": "Destroy Mortar #4.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 430/6"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used, which is the order the objectives read in."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "kind": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 430/3"
+      }
+     ],
+     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+    },
+    "placement_id": {
+     "value": 199700,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the launcher the map carries"
+      }
+     ],
+     "reasoning": "the mortar this objective names, matched to the map entity of the same class."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 4,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "kind": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 430/4"
+      }
+     ],
+     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+    },
+    "placement_id": {
+     "value": 199701,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the launcher the map carries"
+      }
+     ],
+     "reasoning": "the mortar this objective names, matched to the map entity of the same class."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 5,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "kind": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 430/5"
+      }
+     ],
+     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+    },
+    "placement_id": {
+     "value": 199702,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the launcher the map carries"
+      }
+     ],
+     "reasoning": "the mortar this objective names, matched to the map entity of the same class."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 430,
+    "objective_id": 6,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "kind": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 430/6"
+      }
+     ],
+     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+    },
+    "placement_id": {
+     "value": 199703,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the launcher the map carries"
+      }
+     ],
+     "reasoning": "the mortar this objective names, matched to the map entity of the same class."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 430,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarByNumbers",
+   "fields": {
+    "credits": {
+     "value": 6000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 430 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in this column."
+    }
+   }
   }
  ],
  "omitted": [
@@ -44614,6 +45202,22 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-WORLD-CONTENT",
+   "summary": "369 of the 434 ready missions are blocked because an objective has no client conversation, and for most of them the missing thing is world content that no surviving source carries. The world seed holds 155 creatures, all on the Wilderness; the original server dump's creature_type holds 21 rows; the original loot table (creature_type_loot) holds 7 rows and names no mission item. So a mission that says \"Kill 40 Xanx!\" in the Palisades has no Xanx to kill there, and one that says \"Acquire 10 Fithik Spleens\" has no item to collect. The client's own data does mark which objectives count kills (592 carry a counter label such as \"Thrax Soldiers Killed\"), which is what makes the count and the kind recoverable - the creature and the item are what is missing. These stay gaps; the zones whose creatures the seed does carry (the Wilderness) were seeded from exactly that evidence.",
+   "closes_with": "the original creature placements and loot tables for the other zones, or a capture showing a kill",
+   "evidence": [
+    "client missionobjective: 3,454 objectives, 592 carrying a counter label",
+    "rasaworld.db: 155 creature rows, all map_context 1220",
+    "upstream gameserver dump: creature_type 21 rows, creature_type_loot 7 rows"
+   ],
+   "surfaced_by": [
+    "mission blocker classification 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -45115,6 +45719,16 @@
    "choice": "An NPC the content needs but the world seed does not have is created with the appearance of an existing world-seed NPC of the same faction and kind - an AFS humanoid's class for an AFS mission giver (3846, the class McAllister and Rogers use), a Forean elder's for a Forean elder (22636, Solis' and Quillas' class) - and that field is recorded as an analogue with this decision. Everything else about the NPC comes from evidence: the client's own name table for the name id, TaRapedia's page for the level, zone and /loc. No appearance is claimed to be the original one, and a per-NPC source would replace these.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#npcs-created-from-evidence"
+  },
+  {
+   "id": "OD-46",
+   "decision": "Hit points of reconstructed destroyable objects",
+   "default": "Use the value the camp's destroyables use",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "No surviving source gives a destroyable object's hit points. Where an object objective is reconstructed (mission 430's four mortar launchers) the value is 100, the hit points the boot camp's practice dummy - the one destroyable the emulator already had - uses, and every such field is recorded as an analogue with this decision. The position, class and binding of such objects come from the client's own map data and the client's own objective data, so only this one number is a stand-in.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#destroyable-objectives"
   }
  ]
 }
