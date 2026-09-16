@@ -501,6 +501,13 @@ character picks up in Alia Das once Training Day and the class choice are behind
   - **W3 batch 9 (2026-09-16)**: Torden - the **Mires** (Sgt. Jeansonne, Chakel, Corporal Cooper, Lt. Foushee,
     Corporal Hairston on map 1759) and one plateau liaison (Receptive Liaison Ridout), with seven missions. Twenty-
     eight NPCs and 31 missions from this pipeline now; 53 missions in the world.
+  - **W3 batch 10-11 (2026-09-16)**: Torden completed - the **Plains** (Colonel Whitaker, Xenori, Captain Reyko,
+    Engineer Tralos and Receptive Liaison Sage, 11 missions) and the **Incline** (two NPCs, two missions). Two Plains
+    missions (648, 1064) were **skipped because Colonel Franks has no /loc recorded anywhere**, and the generator now
+    refuses a giver it cannot place instead of inventing a position. Receptive Liaison Sage's Y reading sat 3.2 m
+    above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
+    reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
+  - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
   - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
     inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
     that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the

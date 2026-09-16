@@ -145,6 +145,11 @@
    "era": "final_live",
    "member": "Tabula Rasa 1.16.5.0 generated/client/language/english/creaturenamelanguage.pyo",
    "locator": "research/20260912-new-character/generated-client-language-english-creaturenamelanguage.pyo.tables.json"
+  },
+  "client_map:adv_arieki_torden_incline": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "navmesh/adv_arieki_torden_incline.nav (client map data, read by WorldPositionAuditTests)"
   }
  },
  "scope": [
@@ -153,10 +158,10 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 199405
+     "max": 199601
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601)."
   },
   {
    "table": "content_area",
@@ -172,10 +177,10 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199405
+     "max": 199601
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements."
   },
   {
    "table": "content_condition",
@@ -289,10 +294,10 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 199405
+     "max": 199601
     }
    },
-   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
+   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
   },
   {
    "table": "npc_mission",
@@ -40057,6 +40062,3189 @@
       {
        "source": "community_db:tarapedia",
        "locator": "mission 1748 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199500
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Colonel Whitaker",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 8919"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 8919,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8919"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Whitaker infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199500
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 320.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Whitaker page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 499.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Whitaker page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -47.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Whitaker page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Whitaker infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199500
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 1095,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1095"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199501
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Xenori",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 8862"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 8862,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8862"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 24,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Xenori infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199501
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 163.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Xenori page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 417.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Xenori page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -262.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Xenori page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Xenori infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199501
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 1119,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1119"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199502
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Captain Reyko",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 9007"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 9007,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9007"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 24,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Captain Reyko infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199502
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 324.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Captain Reyko page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 433.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Captain Reyko page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -59.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Captain Reyko page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Captain Reyko infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199502
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 1213,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1213"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199503
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Engineer Tralos",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 9011"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 9011,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9011"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Engineer Tralos infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199503
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 265.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Engineer Tralos page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 433.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Engineer Tralos page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -234.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Engineer Tralos page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Engineer Tralos infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199503
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 1204,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1204"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199504
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Receptive Liaison Sage",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 9941"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 9941,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9941"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Sage infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199504
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 137.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Sage page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 233.8,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_map:adv_arieki_torden_incline",
+       "locator": "navmesh surface under (137, -268), read by WorldPositionAuditTests"
+      }
+     ],
+     "reasoning": "TaRapedia's Y reading sits 3.2 m above the surface the client's own map data has under the same X and Z. The height is therefore the map's, an original value, and the horizontal position stays the community reading recorded on pos_x/pos_z."
+    },
+    "pos_z": {
+     "value": -268.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Sage page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1761,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Sage infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199504
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2027,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2027"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 640
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 640 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 640 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 640 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 640,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Upgrade the Relay Station Computer",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 640/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 640,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 21000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 640 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 640,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3150,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 640 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1063
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199501,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1063 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199501,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1063 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1063 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1063,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Speak to Lt. Liu",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1063/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1063,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 23000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1063 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1063,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3450,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1063 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1112
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1112 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1112 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1112 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1112,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find and report the electrical disturbance",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1112/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1112,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 50000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1112 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1112,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 5000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1112 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1118
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1118 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1118 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1118 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1118,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Speak with Engineer Tralos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1118/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1118,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 12500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1118 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1118,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1118 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1119
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1119 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1119 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1119 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1119,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find Surveyor Miras",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1119/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1119,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 50000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1119 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1119,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 5000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1119 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1122
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1122 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199503,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1122 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1122 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1122,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver Miras' message to Tralos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1122/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1122,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 25000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1122 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1122,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 3750,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1122 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1125
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1125 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1125 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1125 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1125,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Captain Reyko",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1125/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1125,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 50000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1125 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1125,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 5000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1125 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1183
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1183 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1183 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1183 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1183,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Sargeant Phenix",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1183/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1183,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 12500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1183 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1183,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1183 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1186
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1186 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1186 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1186 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1186,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find Eloh Artifacts",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1186/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1186,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 46000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1186 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1186,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 4600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1186 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1310
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1310 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1310 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1310 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1310,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Speak with Captain Reyko",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1310/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1310,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 11000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1310 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1310,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2200,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1310 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1746
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199504,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1746 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199504,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1746 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1746 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1746,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Receptive Liaison Sage",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1746/6"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1746,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 12000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1746 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1746,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PlainsConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1200,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1746 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199600
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Receptive Liaison Maddox",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 9942"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 9942,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9942"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Maddox infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199600
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 584.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Maddox page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 222.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Maddox page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 329.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Maddox page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Maddox infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199600
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2028,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2028"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199601
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Supply Sergeant Otto",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 10272"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 10272,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10272"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Supply Sergeant Otto infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199601
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": 326.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Supply Sergeant Otto page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 260.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Supply Sergeant Otto page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 17.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Supply Sergeant Otto page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1761,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Supply Sergeant Otto infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199601
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 2329,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 2329"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1747
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1747 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199600,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1747 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1747 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1747,
+    "objective_id": 7
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Report to Receptive Liaison Maddox",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1747/7"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1747,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 14500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1747 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1747,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1350,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1747 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1826
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199601,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1826 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199601,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1826 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1826 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1826,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Get the supplies.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1826/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1826,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Pick up the supply boxes.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1826/2"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1826,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver the Supplies to Plains Post.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1826/3"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1826,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver the supply box to Mires Pass.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1826/4"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1826,
+    "objective_id": 5
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return with signed paperwork.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1826/5"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1826,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 12500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1826 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1826,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "InclineConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1826 infobox reward"
       }
      ],
      "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
