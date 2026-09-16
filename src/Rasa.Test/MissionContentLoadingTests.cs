@@ -797,7 +797,7 @@ namespace Rasa.Test
         private sealed class MigratedWorldReferences : IContentReferences
         {
             private readonly HashSet<uint> _contexts;
-            private readonly HashSet<uint> _creatures;
+            public readonly HashSet<uint> Creatures;
             private readonly HashSet<uint> _logos;
             private readonly HashSet<uint> _legacyContexts;
             private readonly IReadOnlyDictionary<uint, Mission> _missions;
@@ -808,7 +808,7 @@ namespace Rasa.Test
             {
                 _missions = missions;
                 _contexts = Ids(connection, "SELECT map_context_id FROM map_info");
-                _creatures = Ids(connection, "SELECT id FROM creature");
+                Creatures = Ids(connection, "SELECT id FROM creature");
                 _logos = Ids(connection, "SELECT id FROM logos");
                 _legacyContexts = Ids(connection, "SELECT map_context_id FROM spawnpool UNION SELECT map_context_id FROM footlocker UNION SELECT map_context_id FROM logos");
             }
@@ -829,7 +829,7 @@ namespace Rasa.Test
             public bool ObjectiveExists(uint missionId, uint objectiveId) => _missions.TryGetValue(missionId, out var m) && m.Objectives.ContainsKey(objectiveId);
             public uint MissionGiver(uint missionId) => _missions.TryGetValue(missionId, out var m) ? m.MissionGiver : 0;
             public bool MissionOfferable(uint missionId) => _missions.TryGetValue(missionId, out var m) && m.IsDispensable;
-            public bool CreatureExists(uint creatureId) => _creatures.Contains(creatureId);
+            public bool CreatureExists(uint creatureId) => Creatures.Contains(creatureId);
             public bool EntityClassExists(uint entityClassId) => Classes.Contains(entityClassId);
             public bool ItemTemplateExists(uint itemTemplateId) => Items.Contains(itemTemplateId);
             public bool LogosExists(uint logosId) => _logos.Contains(logosId);
@@ -867,6 +867,10 @@ namespace Rasa.Test
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
                 // S2 crate item set 19858.
                 references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
+                // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
+                // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
+                // world carries only the content's own rows, so the two ids the bindings use are declared here.
+                references.Creatures.UnionWith(new uint[] { 76, 77 });
 
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);
