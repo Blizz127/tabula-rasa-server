@@ -354,6 +354,14 @@ namespace Rasa.Game.Handlers
             DynamicObjectManager.Instance.RequestUseObjectPacket(Client, packet);
         }
 
+        // PvP control points: the client asks its control-point manager's status list (client/controlpointmanager.py
+        // RequestControlPointStatus) and is answered with ControlPointStatus(statusList). See ControlPointManager.
+        [PacketHandler(GameOpcode.RequestControlPointStatus)]
+        private void RequestControlPointStatus(RequestControlPointStatusPacket packet)
+        {
+            ControlPointManager.Instance.RequestControlPointStatus(Client);
+        }
+
         // Crafting, all made at a Kraftwerks station; see KraftwerksManager.
 
         [PacketHandler(GameOpcode.RequestCraftItemNew)]

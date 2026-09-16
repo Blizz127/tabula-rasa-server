@@ -1447,3 +1447,31 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   `Rasa.Networking.NetworkAddress` resolves it (literal IPs still parse first, so old configs stay valid);
   `NetworkAddressTests` covers both paths. The untracked `appsettings.env.json` was repointed from 192.168.16.2 to `auth`
   and the previous copy is in `/home/blizz/backups/rasa-net/20260915T005518Z-retail-class-gear-w2`.
+
+## 2026-09-16 UTC — PvP control points: the client's table decoded, the wire format corrected
+
+- The `controlpointdata` row is now a decoding, not a reading: `client/gameuiutil.pyo` `GetControlPointLabel` /
+  `GetShortControlPointLabel` / `SortControlPointList` (lines 2228-2264) unpack it as
+  `(typeId, nameId, mapTemplateId, level, sortOrder)`. `typeId` is `controlpointownershiptype`, `nameId` a `uielement`
+  id, `mapTemplateId` a `maptemplate` id joined to a context through `gamecontext`. Twelve of the 17 rows are the two
+  final-live battlegrounds (`adv_wargame_provinggroundsv002` 2361, `adv_wargame_edmundrange2` 2374: Whiskey, Charlie,
+  Echo, Blue Base, Red Base, and Edmund Range's East and West Depots, level 50); five are test-map rows. Full record
+  with hashes and line numbers: [pvp-control-point-client-evidence.md](pvp-control-point-client-evidence.md).
+- **Defect corrected**: `ControlPointStatusPacket` (814) wrote one bare `ControlPointStatus` struct with no argument
+  tuple; the client's `Recv_ControlPointStatus(statusList)` takes one list and iterates it. It now writes
+  `(statusList,)`, and `ControlPointStatus` carries `ownerId` as the nullable long `shared/controlpointdefs.py`
+  declares, with the four `kCPState_*` ids typed. `RequestControlPointStatus` (817), which had no handler, is
+  answered with the channel's points - a faithful pair whose only client reader is the dead challenge-board window;
+  the live battleground UI takes its points from `ScoreBoardGameScore`'s `cpData` and from CONTROL_POINT map markers
+  `(ownerTypeId, ownerId)`, both part of the unbuilt lifecycle. `SetOwnerId` (884) exists as a packet. `UsePacket` writes the extra arguments
+  `Usable.Recv_Use(*args)` accepts (declared before, never written). `ControlPointDataTests` (7) pass under net5.
+- **Not reproduced, recorded as gaps**: the points' positions (the client maps of both battlegrounds carry no
+  control-point entity), capture rules and war timings, the battleground team/scoreboard/win lifecycle (protocol
+  recovered in the evidence doc's section 4, no server side), and the mech server side (`mechpad`, `MORPH_MECH` 457,
+  pad states 216-219 recorded). `ControlPointManager` answers with every point unheld and `New`, spawns nothing on the
+  battleground maps, and refuses an owner change for a point the map has not. The emulator's one Wilderness PvE
+  control point (class 3814 at (197.66, 162.27, -54.08), status id 215) is emulator-authored - neither is in the
+  client map or table - and is now labelled as such (`GAP-W3-PVE-CONTROL-POINT-PLACEMENT`) rather than removed.
+- Also learned: the challenge-board window (clan bidding on control points) is dead code in the final client, and
+  `battlegroundrulestype` names a single ruleset, `EDMUND_RANGE`. A survey of the owner's Alienware found the same
+  1.16.5.0 client twice, toolkit map renders of both battlegrounds, and no battleground or mech footage.

@@ -545,30 +545,50 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
     only the reconstruction rules can supply.
-  - **(5) Mechs, PvP control points and endgame — research state (2026-09-16)**: not implemented; the evidence and the
-    exact starting points are written up in
-    `research/20260915-aliadas-hub/work/mechs-pvp-endgame-evidence.md`, and the reusable discovery is worth recording
-    here. The original client's 996 `.pyo` modules are on disk (`client-code/verify/pyo/`) with every `Recv_*` handler
-    and its argument list already extracted into `client-protocol-inventory.json`, and a static disassembler
-    (`disassemble-all.py`, `vdis.py`) drives xdis over them without executing game code - that pair is what made the
-    auction's eight missing reply packets and the radio/sharing tuples recoverable, and it is what (5) needs next.
+  - **(5) Mechs, PvP control points and endgame — control points decoded and wired (2026-09-16)**: the research
+    state recorded earlier that day is superseded. The `grep -l controlpointdata` step it named found the readers -
+    `client/gameuiutil.pyo` `GetControlPointLabel` / `GetShortControlPointLabel` / `SortControlPointList` (source
+    lines 2228-2264), which unpack a row as **`(typeId, nameId, mapTemplateId, level, sortOrder)`**. The full write-up
+    is [pvp-control-point-client-evidence.md](pvp-control-point-client-evidence.md); the reusable discovery stands: the
+    original client's 996 `.pyo` modules are on disk (`client-code/verify/pyo/`) with every `Recv_*` handler and its
+    argument list in `client-protocol-inventory.json`, and a static disassembler drives xdis over them.
 
-    **Control points**: 17 rows in `client/controlpointdata.pyo`, the ownership types (1 `NO_OWNERSHIP`, 2
-    `PVE_OWNERSHIP`, 3 `PVP_OWNERSHIP`), the protocol (`Recv_ControlPointStatus(statusList)` on the control-point
-    manager, `Recv_SetOwnerId(ownerId)` on `ownablecontrolpoint`, plus a `clancontrolpoint` variant), the emulator's own
-    `ControlPointStatus` / `GetPvPClanMembershipStatus`, and four arena maps among the 77 decoded. What is **not** yet
-    recovered is what a row's five fields mean: the second is not a physical entity class and the third is not one of
-    this world's 78 map contexts, and the rows pair up (6015/6016/6017/6021/6022 appear under both 2365 and 2377), which
-    reads as "capture points per area" but is a reading rather than a decoding. Next step: find the module that *reads*
-    `controlpointdata` (`grep -l controlpointdata` over the extracted `.pyo` set) and name the fields from it.
+    **Control points, decoded**: `typeId` is `controlpointownershiptype` (1 `CLAN_OWNED`, 3 `TEAM_OWNED`, 6
+    `FACTION_OWNED`), not `controlpointtype`; `nameId` is a `uielement` id (Whiskey, Charlie, Echo, Blue Base, Red
+    Base, Control Point: East/West Depot), which is why it was not an entity class; `mapTemplateId` is a `maptemplate`
+    id resolved to a context through `gamecontext` field 4 (2365 = `adv_wargame_provinggroundsv002` = context 2361,
+    2377 = `adv_wargame_edmundrange2` = context 2374), which is why it was not a context; `level` is 50; `sortOrder`
+    orders the tracker with `None` first. Twelve rows are the two final-live battlegrounds and five are test-map rows;
+    `battlegroundrulestype` names one ruleset, `EDMUND_RANGE`. The status struct is `shared/controlpointdefs.py`
+    `(controlPointId int, ownerId long nullable, stateId int, endTime int)`, states `kCPState_New/PreWar/War/PostWar`
+    0-3, and `SetOwnerId`'s owner ids are -1 none / 0 neutral / 1 `RED_TEAM` (Bane package) / 2 `BLUE_TEAM` (AFS
+    package). The challenge-board window that also reads the table is dead code (it names a constant no module
+    defines, and the bid opcodes have no handler): clan bidding on control points was cut before shutdown.
 
-    **Mechs (D16)**: the client has `augmentations/mechpad.pyo` (boarding), `gameeffects/mechmorph.pyo` (the
-    transformation) and two mech abilities, plus the vehicle entity classes. Nothing server-side exists, so it is a
-    system to build rather than data to fill - and self-contained: one augmentation, one effect, two abilities.
+    **Emulator**: `Data/ControlPointData.cs` carries the 17 rows with named fields and English text, the three enums,
+    the owner ids and the ten `scorekeeperconstants` indices; `ControlPointStatus` has a nullable long owner and a
+    typed state; `ControlPointStatusPacket` (814) now writes `(statusList,)` - it wrote one bare struct where
+    `Recv_ControlPointStatus(statusList)` takes a list; `SetOwnerIdPacket` (884) is new; `RequestControlPointStatus`
+    (817) is handled and answered by `ControlPointManager` with the channel's points, unheld and `New`, and
+    `SetOwner` exists for when a capture rule is evidenced. The 814/817 pair's only client reader is the dead
+    challenge board; the live tracker reads `ScoreBoardGameScore`'s `cpData` and the map/radar read CONTROL_POINT
+    markers `(ownerTypeId, ownerId)` - both in the lifecycle gap. `UsePacket` writes its extra arguments (the mech pad's
+    `Use(actorId, curStateId, windupTimeMs, boardingTimeMs, effectTypeId)` needs them). `ControlPointDataTests`
+    pins the rows, the tracker order and the wire shapes (7 tests, net5 container).
 
-    **Endgame zones**: the twelve level-banded adventure zones are among the decoded maps, but nothing places creatures
-    or content above the Wilderness - the same wall the mission work hit, and the same reconstruction rules (OD-45,
-    OD-48) are what fill it. No new mechanics are needed.
+    **Still gaps, now narrower** (`GAP-W3-PVP-CP-PLACEMENT`, `GAP-W3-PVP-CP-CAPTURE`, `GAP-W3-BATTLEGROUND-LIFECYCLE`,
+    `GAP-W3-PVE-CONTROL-POINT-PLACEMENT`, `GAP-W3-MECH-SERVER-SIDE`): the client maps of both battlegrounds hold no
+    control-point entity, so the points' positions are server data; capture rules, war timings and the token items are
+    not in the client; the team/scoreboard/win protocol is recovered (section 4 of the evidence doc) with no server
+    lifecycle to drive it; the emulator's one Wilderness PvE control point (class 3814, status 215) is
+    emulator-authored and now says so. **Mechs (D16)**: `mechpad.py OnBeforeUse(actorId, boardingTimeMs,
+    effectTypeId)`, `MORPH_MECH` 457, the two abilities, pad use states 216-219 and class 30464
+    `UsableOwnableMechStation` (augmentation 83) are recorded; the server side is a system to build. The 2026-09-16
+    Alienware survey found the same 1.16.5.0 client twice, toolkit renders of both battleground maps and no
+    battleground or mech footage; its unmounted Windows partition is the one unsearched place there.
+
+    **Endgame zones**: unchanged - the twelve level-banded adventure zones are decoded, and nothing places creatures or
+    content above the Wilderness; the reconstruction rules (OD-45, OD-48) are what fill it, no new mechanics.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

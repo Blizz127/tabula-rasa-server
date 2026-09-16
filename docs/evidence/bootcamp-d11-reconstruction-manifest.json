@@ -50030,15 +50030,104 @@
   },
   {
    "id": "GAP-W3-PVP-CONTROL-POINTS",
-   "summary": "The PvP control-point system is not implemented. Its evidence is recovered - the client's 17-row controlpointdata table, the three ownership types, the protocol (Recv_ControlPointStatus(statusList), Recv_SetOwnerId(ownerId), and the clan variant) and four arena maps among the 77 decoded - but what a row's five fields mean is not: the second field is not a physical entity class and the third is not one of this world's 78 map contexts, and the rows pair up (6015/6016/6017/6021/6022 under both 2365 and 2377). The mech system (D16) is in the same state: the client has mechpad, mechmorph and two mech abilities, and no server side exists.",
-   "closes_with": "the module that reads controlpointdata, or a capture of a control point changing hands",
+   "summary": "Closed 2026-09-16 as a decoding, reopened narrower as GAP-W3-PVP-CP-PLACEMENT, GAP-W3-PVP-CP-CAPTURE and GAP-W3-BATTLEGROUND-LIFECYCLE. The controlpointdata row is (typeId, nameId, mapTemplateId, level, sortOrder) - named by client/gameuiutil.py GetControlPointLabel/GetShortControlPointLabel/SortControlPointList (lines 2228-2264), which UNPACK_SEQUENCE 5 into those names. typeId is controlpointownershiptype (1 CLAN_OWNED, 3 TEAM_OWNED, 6 FACTION_OWNED); nameId is a uielement id (Whiskey, Charlie, Echo, Blue Base, Red Base, Control Point: East/West Depot); mapTemplateId is a maptemplate id resolved to a context through gamecontext field 4 (2365 -> adv_wargame_provinggroundsv002 = context 2361, 2377 -> adv_wargame_edmundrange2 = context 2374); level is 50; sortOrder orders the tracker with None first. Twelve rows are live, five are test-map rows. The status struct is shared/controlpointdefs.py (controlPointId int, ownerId long nullable, stateId int, endTime int) with states kCPState_New 0 / PreWar 1 / War 2 / PostWar 3; the emulator's ControlPointStatusPacket wrote one bare struct where Recv_ControlPointStatus(statusList) takes a list, and is corrected. SetOwnerId(ownerId) owner ids are -1 none, 0 neutral, 1 RED_TEAM (Bane package), 2 BLUE_TEAM (AFS package). The challenge board (clan bidding) is dead code in the final client. Mechs remain a system to build: the client has mechpad OnBeforeUse(actorId, boardingTimeMs, effectTypeId), MORPH_MECH 457 and two abilities; no server side exists.",
+   "closes_with": "closed by the decoding; see the narrower gaps",
    "evidence": [
-    "client/controlpointdata.pyo (17 rows)",
-    "shared/controlpointtype.pyo",
-    "work/controlpoint-dis/ (statically disassembled control-point client modules)"
+    "docs/pvp-control-point-client-evidence.md",
+    "client/gameuiutil.pyo GetControlPointLabel line 2228, SortControlPointList line 2252 (sha256 0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b)",
+    "generated/client/controlpointdata.pyo (sha256 05e80d280a79fe0a34d9d90716eda969da3f7ea9e01d3e297d43e724d3e77f5e)",
+    "shared/controlpointdefs.pyo (sha256 762cffe0d3acf089ff5db9db79774e54b6b9675f3144cc0bd8e800dea50e617c)",
+    "shared/controlpointstatus.pyo (sha256 054c55d7f8c04994393a24760c4fbecafad2828e004b3cbfb9a28ff026c56e21)",
+    "client/controlpointmanager.pyo Recv_ControlPointStatus line 72 (sha256 4846e393806fca394158dc88fd399ec4213eb9d1defe805bfa61277635ec363e)",
+    "client/augmentations/ownablecontrolpoint.pyo Recv_SetOwnerId line 60 (sha256 d8bc7bc634978952f6814ad77cf7404ba5251725cba2edbdb09bb887325e5828)",
+    "generated/client/constant/teamconstants.pyo RED_TEAM 1, BLUE_TEAM 2",
+    "generated/shared/battlegroundrulestype.pyo EDMUND_RANGE 1",
+    "src/Rasa.Game/Data/ControlPointData.cs; src/Rasa.Test/ControlPointDataTests.cs"
    ],
    "surfaced_by": [
     "systems order item 5, 2026-09-16"
+   ],
+   "closed_on": "2026-09-16",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-PVP-CP-PLACEMENT",
+   "summary": "Where the twelve live control points stand is not recoverable from the client: adv_wargame_provinggroundsv002 (1,224 entities) and adv_wargame_edmundrange2 (1,511 entities) contain no entity of a class with augmentation 57, 77 or 82, so the points were server-placed. Until a placement is evidenced, ControlPointManager answers RequestControlPointStatus with every point of the channel's map unheld (ownerId None) and kCPState_New, and spawns no control-point entity on either map.",
+   "closes_with": "a capture or footage of a battleground showing the points' positions, or the server's own placement table",
+   "evidence": [
+    "research/20260913-bootcamp/map/all-decoded/adv_wargame_provinggroundsv002-entities.csv",
+    "research/20260913-bootcamp/map/all-decoded/adv_wargame_edmundrange2-entities.csv",
+    "Alienware survey 2026-09-16: no battleground footage; Windows partition (nvme1n1p3, NTFS 'OS') not yet searched"
+   ],
+   "surfaced_by": [
+    "control-point decoding, 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-PVP-CP-CAPTURE",
+   "summary": "How a team takes a control point, the durations behind kCPState_PreWar / War / PostWar, what endTime counts down to, and what the Control Point Assault Token and Control Point Defense Token items do are server rules the client does not carry. ControlPointManager.SetOwner records an owner and state and sends ControlPointStatus and SetOwnerId, but nothing calls it.",
+   "closes_with": "footage of a capture (timer, state changes, messages) or the server's rules",
+   "evidence": [
+    "shared/controlpointstatus.pyo (state ids only)",
+    "physicalentityclassdesclanguage: 'Control Point Assault Token', 'Control Point Defense Token' (Alienware survey 2026-09-16)"
+   ],
+   "surfaced_by": [
+    "control-point decoding, 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-BATTLEGROUND-LIFECYCLE",
+   "summary": "The battleground itself - queueing, team assignment (JoinedTeam(teamId, members), SetNumberOfTeams(numTeams)), the scoreboard (ScoreBoardActive, ScoreBoardGameScore(remainingTime, cpData) - whose cpData dict cpId -> teamId is what the wargame tracker actually lists, ScoreBoardIndividualUpdate, ScoreBoardTrackerUpdate), the CONTROL_POINT map markers (uimapmarker 1; MapMarkerInfo / UpdateMapMarker(entityId, (ownerTypeId, ownerId)), for which the emulator has opcodes and no packets) and the win condition (WonBattleground / LostBattleground) - has its client protocol recovered in docs/pvp-control-point-client-evidence.md section 4, and no server side. The only ruleset name the final client knows is EDMUND_RANGE (battlegroundrulestype 1).",
+   "closes_with": "footage of a battleground match, or the server's rules; the protocol is ready to be driven",
+   "evidence": [
+    "client/team.pyo (sha256 1208f4935a006f0ef7a7f00f9477a5c7a2e6c4f3fdbf1fd79c0a8db8d1d53b14)",
+    "client/scorekeeperclient.pyo (sha256 84dc66029761e4afbf28c87ba081ca0a45c5668deea8eda0a68cbbf7f8aef1f6)",
+    "shared/scorekeeperconstants.pyo (sha256 82840bc11ebbe5ec585abd1538587add7ce229da034c1249a6f320b4ef5a30c2)",
+    "client/augmentations/manifestation.pyo Recv_WonBattleground line 466 / Recv_LostBattleground line 473",
+    "client/mapstate.pyo GetMarkerStateText line 87, Recv_UpdateMapMarker line 169; client/ui/wargametracker.pyo UpdateGameData line 211"
+   ],
+   "surfaced_by": [
+    "control-point decoding, 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-PVE-CONTROL-POINT-PLACEMENT",
+   "summary": "The emulator's one PvE control point - class 3814 UsableControlPointElohV01 (augmentation 57) at (197.66, 162.27, -54.08) rotation 3.05 in context 1220, status id 215 - is emulator-authored: the Wilderness client map has no entity of class 3814 (or of 29415, 26232, 26486, 3911, 22092), and 215 is not a controlpointdata key. Its use flips faction and state with a 10 s windup (DynamicObjectManager.CaptureControlPointRecovery), which is likewise unevidenced. It is left as it was and its status tuple is never sent.",
+   "closes_with": "the original Wilderness outpost control points' positions and rules (footage or server data)",
+   "evidence": [
+    "research/20260913-bootcamp/map/all-decoded/adv_foreas_concordia_wilderness-entities.csv (no class 3814)",
+    "src/Rasa.Game/Managers/DynamicObjectManager.cs InitControlPoints"
+   ],
+   "surfaced_by": [
+    "control-point decoding, 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-MECH-SERVER-SIDE",
+   "summary": "Mechs (D16) have a client side only: mechpad.py OnBeforeUse(actorId, boardingTimeMs, effectTypeId) schedules AnnounceGameEffectAttach(effectTypeId) after boardingTimeMs; mechmorph.py is MORPH_MECH (gameeffectdata 457) with allowDetach; the abilities are mechgroundpoundability / mechmissilesability; UseObjectState has MechpadOff 216 / OnReady 217 / Boarding 218 / OnEmpty 219; class 30464 UsableOwnableMechStation carries augmentation 83. Where pads stand, what boarding does to the actor and how the abilities behave are not in the client. UsePacket now writes its extra arguments so a pad's Use(actorId, curStateId, windupTimeMs, boardingTimeMs, effectTypeId) can be sent when the rest is evidenced.",
+   "closes_with": "footage of boarding a mech and using its abilities, or the server's mech tables",
+   "evidence": [
+    "client/augmentations/mechpad.pyo (sha256 3d629a11f332b90b4306a31d114b191d62db6fdf4bb2ba7d705395c4b9b5871d)",
+    "client/gameeffects/mechmorph.pyo (sha256 fa6db362295f8bcb2738290953c417c1c781e56558a71d59237c9c71a38fbb84)",
+    "client/augmentations/usable.pyo Recv_Use line 902 (*args)",
+    "Alienware data/catalogs.glm mech art set; physicalentityclassdesclanguage mech suit names (survey 2026-09-16)"
+   ],
+   "surfaced_by": [
+    "control-point decoding, 2026-09-16"
    ],
    "slices": [
     "W3"

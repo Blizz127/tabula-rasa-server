@@ -338,7 +338,10 @@ namespace Rasa.Managers
 
         internal void InitControlPoints()
         {
-            //var contolPoints = ControlPointTable.GetControlPoints();
+            // An emulator-authored PvE control point (class 3814 UsableControlPointElohV01, augmentation 57) in the
+            // Wilderness. Neither its position nor its id 215 is in the client map or the client's controlpointdata
+            // table (GAP-W3-PVE-CONTROL-POINT-PLACEMENT); it is kept as it was, and its status tuple is not sent to
+            // anyone. The evidenced PvP points are ControlPointManager's.
             var mapChannel = MapChannelManager.Instance.FindByContextId(1220);
 
             var newControlPoint = new DynamicObject
@@ -348,7 +351,7 @@ namespace Rasa.Managers
                 MapContextId = 1220,
                 EntityClassId = (EntityClasses)3814,
                 DynamicObjectType = DynamicObjectType.ControlPoint,
-                ObjectData = new ControlPointStatus(215, 1, 1, 30000)
+                ObjectData = new ControlPointStatus(215, 1, ControlPointState.PreWar, 30000)
             };
 
             newControlPoint.DynamicObjectType = DynamicObjectType.ControlPoint;
