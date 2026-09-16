@@ -357,8 +357,20 @@ namespace Rasa.Managers
         #endregion
 
         #region Auctioneer
+        /// <summary>
+        /// Opens an auctioneer's window. Everything in the packet is the client's word, so the entity has to be an
+        /// auctioneer standing close enough to use - the same test RequestVendorPurchase makes for a vendor. It used to
+        /// open the window for whatever entity id the client named.
+        /// </summary>
         public void RequestNPCOpenAuctionHouse(Client client, ulong entityId)
         {
+            if (!AuctionHouseManager.IsAuctioneer(client, entityId))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry.Id} tried to open an auction house at {entityId}, which is not an auctioneer.");
+                return;
+            }
+
             client.CallMethod(entityId, new OpenAuctionHousePacket());
         }
         #endregion

@@ -49998,6 +49998,21 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-AUCTION-PERSISTENCE",
+   "summary": "The auction house's implementation is complete in behaviour - listing with the client's own deposit, browsing with its own catalogue, buying out, cancelling and expiry - but three things about it are reconstructions rather than recoveries: listings live in memory (the original's tables are gone, so a restart ends every auction), the seller is paid the full buyout price because no commission is recorded anywhere, and a sold or expired item is put straight into its owner's inventory because no source shows the pickup window's request.",
+   "closes_with": "the original auction tables, or a capture of a sale and a pickup",
+   "evidence": [
+    "client/auctionhouse.pyo handler argument lists (client-protocol-inventory.json)",
+    "client/auctionhouse.pyo categorydata (83 rows) and durationdata (4 rows)"
+   ],
+   "surfaced_by": [
+    "auction implementation 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -50559,6 +50574,16 @@
    "choice": "Two mission features were withheld by design: Mission.DefinitionGaps() added \"radio completion is not implemented\" and \"mission sharing is not implemented\" for every definition flagged radio_completeable or shareable, which kept those missions out of the game entirely. Both are implemented now, from the only evidence that exists - the client's own requests (missionlog.pyo: CompleteRadioMission and RewardRadioMission carry (missionId, selectionIdx, rating); ShareMission carries (missionId); AssignSharedMission and DeclineSharedMission carry (playerId, missionId)) and the flags in npc_mission, which decide what the client's mission log offers rather than what the server allows.\n\nRadio: the NPC turn-in's payout was split out of its NPC-specific checks (receiver id and conversation range) into MissionManager.PayOut, and CompleteRadioMission reaches it while requiring the radio_completeable flag. RewardRadioMission carries the identical tuple, so it goes through the same path - which cannot double-pay, because a completed mission is no longer completeable. Which of the two the client sends for the completion and which for the reward claim is NOT established: GAP-W3-RADIO-REWARD-STEP.\n\nSharing: the mission goes into the party member's log at share time and the sharer is recorded as a pending share; accepting clears it and declining drops the mission back out. Whether the original logged the mission at share time or only on acceptance is NOT established - missionlog.pyo has the accept and decline requests, but no surviving data has the offer packet: GAP-W3-SHARING-OFFER.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#radio-and-sharing"
+  },
+  {
+   "id": "OD-52",
+   "decision": "The auction house",
+   "default": "The client's own protocol and its own catalogue and duration tables",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The auction house's handlers were ToDo stubs - every request logged and ignored, and the creation path sent one of each failure message in a loop. It is implemented from two pieces of the client itself. The replies are the ones the client's own handlers expect, recovered from client/auctionhouse.pyo in the client protocol inventory (AuctionCreationSuccess(itemId), AuctionCreationFailed(itemId, message), QuerySuccess(itemList), QueryFailed(message), AuctionStatusSuccess(itemList), AuctionStatusFailed(message), AuctionBuyoutSuccess(itemId), AuctionBuyoutFailed(itemId, message), CancelAuctionSuccess(itemId), CancelAuctionFailed(itemId, message), AuctionSold(itemId, price), AuctionExpired(itemId)) - CreationSuccess, CreationFailed, QuerySuccess and QueryFailed already existed; the other eight are new. The parameters are the client's own tables: the four listing durations with the deposit each costs (5%, 10%, 20%, 25%) and the 83-row catalogue the browse window filters by, matched to an item through its class name (its parent/leaf pairs: Weapon contains Weapon_Pistol, Armor contains Armor_MotorAssist).\n\nThree things the original had and no source shows are stated rather than invented: listings live in memory for the session, so a restart ends every auction; the seller is paid the full buyout price with no commission; and a sold or expired item goes straight into its owner's inventory instead of a pickup window. All three are GAP-W3-AUCTION-PERSISTENCE.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#auction"
   }
  ]
 }

@@ -365,6 +365,9 @@ namespace Rasa.Managers
                         // content creatures whose placement asked for a respawn
                         WorkContentRespawns(mapChannel);
 
+                        // auction listings whose duration has run out
+                        AuctionHouseManager.Instance.ExpireDue();
+
                         // ambient/music/sky/minimap regions: tell whoever changed region
                         RegionManager.Instance.Worker(mapChannel);
                     }

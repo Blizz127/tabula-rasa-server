@@ -545,6 +545,22 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
     only the reconstruction rules can supply.
+  - **Auction house (2026-09-16)**: the handlers were ToDo stubs - every request logged and ignored, and creation
+    sent one of each failure message in a loop. It is implemented now from two pieces of the client itself.
+    **The protocol**: the client's own handlers (recovered in the client protocol inventory from
+    `client/auctionhouse.pyo`) give every reply's argument list - CreationSuccess(itemId), CreationFailed(itemId,
+    message), QuerySuccess(itemList), QueryFailed(message), StatusSuccess(itemList), StatusFailed(message),
+    BuyoutSuccess(itemId), BuyoutFailed(itemId, message), CancelSuccess(itemId), CancelFailed(itemId, message),
+    AuctionSold(itemId, price), AuctionExpired(itemId). Four existed; the other eight are new server packets, replacing
+    a ToDo list of names with shapes. **The parameters**: the client's own `durationdata` (four durations whose deposits
+    are 5/10/20/25% of the price) and its 83-row `categorydata`, matched to an item through its class name using the
+    table's parent/leaf pairs (Weapon contains Weapon_Pistol, Armor contains Armor_MotorAssist). Listing validates that
+    the item is really the player's (the same test the vendor path makes), that it is sellable and not bound or
+    character-unique, takes the deposit, and hands the item to the listing; buyout checks the client's stated price
+    against the listing's and hands the item over before charging anyone; cancel returns it; expiry runs on the map
+    channel tick. The auctioneer open request now verifies it is an auctioneer in range - it used to open the window for
+    whatever entity id the client named. **OD-52**; the in-memory listings, the missing commission and the bypassed
+    pickup window are **GAP-W3-AUCTION-PERSISTENCE**.
   - **Radio turn-in and mission sharing (2026-09-16)**: the last two mission-layer holes, and the ones that were
     actively withholding content - `Mission.DefinitionGaps()` added "radio completion is not implemented" and "mission
     sharing is not implemented" for any definition carrying those flags, which kept every such mission out of the game.
