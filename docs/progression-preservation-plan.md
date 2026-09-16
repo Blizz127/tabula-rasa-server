@@ -508,6 +508,10 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Giver naming fix (2026-09-16)**: the mission sources name givers without the world seed's rank prefix - "Lt.
+    Saviours" for creature 120 "AFS Officer Lt. Saviours", "Council Elder Nula" for 93, "Elder Gadfly" for 113. The
+    giver match now accepts a suffix match, which unblocked four conversation missions that every earlier batch had
+    skipped for a *naming* reason rather than a missing one: 421, 422, 451 and 698.
   - **Collection objectives (2026-09-16)**: three more Wilderness missions went in by a new rule - 767 Mighty
     Miasma (6 Miasma Goo Samples), 771 Droning On (6 Shield Drone Parts), 787 Xanx For the Help (4 Xanx Pincers).
     The client carries each item as its own **physical entity class** ("Miasma Goo" 11162, "Xanx Pincers" 11160 -

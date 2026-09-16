@@ -44105,6 +44105,444 @@
      "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11160 (Xanx Pincers)."
     }
    }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 421
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "giver_id": {
+     "value": 120,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 421 infobox, giver"
+      }
+     ],
+     "reasoning": "the sources name this giver without the world seed's rank prefix; the world seed carries them as AFS Officer Lt. Saviours (creature 120)."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 421 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 421,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "Deliver Saviours' dogtags.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 421/3"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 421,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 6000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 421 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 421,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 900,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 421 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 422
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "giver_id": {
+     "value": 100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 422 infobox, giver"
+      }
+     ],
+     "reasoning": "the sources name this giver without the world seed's rank prefix; the world seed carries them as Outpost Commander Rogers (creature 100)."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 422 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 422,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "Resupply the mining team.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 422/1"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 422,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 5000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 422 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 422,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 215,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 422 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 451
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "giver_id": {
+     "value": 93,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 451 infobox, giver"
+      }
+     ],
+     "reasoning": "the sources name this giver without the world seed's rank prefix; the world seed carries them as Forean Council Elder Nula (creature 93)."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 451 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 451,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "Speak to Doyan.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 451/1"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 451,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "Speak to Todae.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 451/2"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 451,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "A Visit To The Elders",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 451/3"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 451,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 10000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 451 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 451,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 1500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 451 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 698
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "giver_id": {
+     "value": 113,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 698 infobox, giver"
+      }
+     ],
+     "reasoning": "the sources name this giver without the world seed's rank prefix; the world seed carries them as Forean Elder Gadfly (creature 113)."
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 698 infobox"
+      }
+     ],
+     "reasoning": "the Wilderness band, as every hub slice uses."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 698,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "comment": {
+     "value": "Deliver the Tinctu Essence.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 698/1"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 698,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 11000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 698 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 698,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessGiverFix",
+   "fields": {
+    "credits": {
+     "value": 550,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 698 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
+    }
+   }
   }
  ],
  "omitted": [
