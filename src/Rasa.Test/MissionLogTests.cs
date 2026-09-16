@@ -942,9 +942,17 @@ namespace Rasa.Test
             Assert.IsFalse(Drain().OfType<MissionGainedPacket>().Any());
             Assert.AreEqual(0, _client.Player.Missions.Count);
 
+            // A required objective with nothing to complete it strands the character, so it keeps the mission
+            // unoffered; an optional one cannot strand anybody and is allowed to stay unbindable (1390's escort and
+            // technical steps are the live case, GAP-W3-1390-ESCORT).
             var unbound = Definition();
             unbound.ObjectiveConversations.RemoveAll(c => c.ObjectiveId == 4);
-            CollectionAssert.AreEqual(new[] { "objective 4 has no completion binding" }, unbound.DefinitionGaps());
+            CollectionAssert.AreEqual(new[] { "required objective 4 has no completion binding" }, unbound.DefinitionGaps());
+
+            var optionalUnbound = Definition();
+            optionalUnbound.ObjectiveConversations.RemoveAll(c => c.ObjectiveId == 4);
+            optionalUnbound.Objectives[4].IsRequired = false;
+            CollectionAssert.AreEqual(new string[0], optionalUnbound.DefinitionGaps());
             var unreachable = Definition();
             unreachable.Transitions.Clear();
             CollectionAssert.AreEqual(new[] { "required objective 4 is never revealed" }, unreachable.DefinitionGaps());

@@ -464,6 +464,16 @@ character picks up in Alia Das once Training Day and the class choice are behind
     over to the ...") and the three placed reinforcements 15 m north-east off the pad when 1995 objective 1 completes
     (S5P-05). Destinations inferred +/-5 m. **GAP-S5-REINFORCEMENT-MOVE closed, GAP-ESCORT partly closed** (Youngblood's
     walk-in and a follow-the-player mechanism remain).
+  - **W3 batch 2 (2026-09-16)**: the hub's conversation chain is live - **1390 Conscientious Objector** (the Ethical
+    Parable: question Elder Quillas, either answer, report to Warrior Apirka), **1392/1393 Conscientious Objector -
+    Part Two** (the report to Rogers) and **1407 Too Close For Comfort** (Moawi sends you to check on Solis). Their
+    client objectives and conversation bindings were already in the seed; what was seeded is the definition: giver,
+    receiver, the objective ordering and flags, the branch transitions, Elder Quillas' and Moawi's dialogue packages
+    (114->1646, 38->113) and 1390's 400 credits. Two findings worth keeping: the client only exports *conversation*
+    bindings, so 1390's escort steps (objectives 4, 8, 12) have none and are optional
+    (**GAP-W3-1390-ESCORT**), and the content loader now only requires a completion binding for a *required*
+    objective, since an optional one cannot strand a character. Rewards and the chain's gates are recorded as
+    **GAP-W3-HUB-REWARDS** and **GAP-W3-HUB-PREREQUISITES** rather than guessed.
   - **Whole-world position audit (2026-09-15, owner request)**: every position in the world is now measured against
     the walkable surface the navmesh gives at its XZ - 434 rows over content placements, locations, trigger areas,
     objective markers, Logos shrines and creature spawns. Our content must sit within 2 m of the surface; original

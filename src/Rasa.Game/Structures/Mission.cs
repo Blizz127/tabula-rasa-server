@@ -108,7 +108,16 @@ namespace Rasa.Structures
             foreach (var objective in ObjectivesInOrder)
                 if (!ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objective.ObjectiveId) &&
                     !Bindings.Any(binding => binding.ObjectiveId == objective.ObjectiveId))
-                    gaps.Add($"objective {objective.ObjectiveId} has no completion binding");
+                {
+                    // Only a required objective has to be completable: an optional one that nothing binds can never
+                    // be finished, but it cannot strand the character either, because the mission completes on its
+                    // required objectives. The client's skeleton carries conversation bindings alone, so a mission's
+                    // escort or technical steps land here - 1390 Conscientious Objector's objectives 4 ("Take Milpas
+                    // to Apirka."), 8 ("Escort Milpas to Divide entrance.") and 12 are the first case, and GAP-W3-1390-ESCORT
+                    // records what is missing.
+                    if (objective.IsRequired == true)
+                        gaps.Add($"required objective {objective.ObjectiveId} has no completion binding");
+                }
 
             var reachable = new HashSet<uint>(Objectives.Values.Where(objective => objective.RevealedOnAccept == true).Select(objective => objective.ObjectiveId));
             var pending = new Queue<uint>(reachable);

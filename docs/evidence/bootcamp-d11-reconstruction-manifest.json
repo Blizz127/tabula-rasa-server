@@ -28583,6 +28583,52 @@
     "world position audit 2026-09-15"
    ],
    "slices": []
+  },
+  {
+   "id": "GAP-W3-1390-ESCORT",
+   "summary": "1390 Conscientious Objector's escort and technical steps cannot complete: the client skeleton carries conversation bindings for objectives 1, 2, 3, 10 and 11 and none for 4 \"Take Milpas to Apirka.\", 8 \"Escort Milpas to Divide entrance.\" or 12 (the client's own \"no desc\"), because their real completion is not a conversation and so is not in the exported data at all. The mission is offered and completable through the conversations that do exist (question Elder Quillas, answer him, speak to Warrior Apirka); those three objectives stay in the mission as the client carries them but are optional, and the content loader now only insists on a completion binding for a required objective, since an optional one cannot strand a character. Closing this needs the escort behaviour (a creature following the player) plus the escort destination, neither of which is evidenced yet.",
+   "closes_with": "needs the follow-a-player escort mechanic and bindings for objectives 4, 8 and 12",
+   "evidence": [
+    "client skeleton: npc_mission_objective_conversation has rows for 1390 objectives 1, 2, 3, 10, 11 only",
+    "npc_mission_objective 1390: 8 objectives, the three unbound ones now is_required = 0",
+    "src/Rasa.Game/Structures/Mission.cs DefinitionGaps (rule narrowed 2026-09-16)"
+   ],
+   "surfaced_by": [
+    "W3 hub seeding 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-HUB-REWARDS",
+   "summary": "The hub chain's experience and item rewards are unresolved. Ellatha records 400 credits for 1390 (seeded) but no experience for it; 1407 Too Close For Comfort's recorded reward is a choice between the Vitalius Leech Gun and the Vextronics Chaingun, with no credits or experience recorded; 1392 and 1393 carry no recorded reward at all. The weapon templates also need the item-name resolution (prefix + base name through weaponclass/quality, see research/20260915-aliadas-hub/work/item-name-structure.md). No value is invented in the meantime: the missions are completable and simply pay what is evidenced.",
+   "closes_with": "needs Ellatha/TaRapedia reward values plus the reward item templates resolved",
+   "evidence": [
+    "research/20260915-aliadas-hub/work/ellatha-hub-missions.json (1390: 400 credits; 1407: two weapons)",
+    "npc_mission_reward: only 1390/credits/400 is seeded for this batch"
+   ],
+   "surfaced_by": [
+    "W3 hub seeding 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-HUB-PREREQUISITES",
+   "summary": "The hub chain's gates are recorded but not enforced. TaRapedia gates 1069 Receptive Reception on 1407 Too Close For Comfort, and the Conscientious Objector branches lead to 1392/1393 Part Two, but the content loader rejects a prerequisite naming a mission without a definition, and parts of the chain (479 Forming Alliances, 1391 Part One) are still unseeded. Today the missions are reachable directly so the chain plays; each gate lands as it becomes seedable. The rows to add are listed here so they are not lost: npc_mission_prerequisite (1069 <- 1407, state 4), (1392 <- 1390 or 1393 <- 1391), (1407 <- 479).",
+   "closes_with": "needs 479 and 1391 seeded, then the prerequisite rows themselves",
+   "evidence": [
+    "content loader: a prerequisite naming an unknown mission is rejected",
+    "research/20260915-aliadas-hub/work/guide-crosscheck.md (the hub order)"
+   ],
+   "surfaced_by": [
+    "W3 hub seeding 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
