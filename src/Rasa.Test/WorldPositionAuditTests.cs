@@ -42,6 +42,10 @@ namespace Rasa.Test
         /// is outside the navmesh at all and spawnpool 110's is below a floor the navmesh does not model, and both
         /// belong to the original server data on the shared Wilderness.
         /// </summary>
+        private const string TaRapediaOutsideNavmesh =
+            "TaRapedia's /loc for this NPC has no navmesh polygon within reach; the position is as sourced and its "
+            + "standing surface is unverified (GAP-W3-NPC-POSITION-COVERAGE)";
+
         private static readonly Dictionary<string, string> Explained = new()
         {
             { "spawnpool:spawnpool 41", "original data; no navmesh polygon within reach at that point on the Wilderness" },
@@ -51,7 +55,14 @@ namespace Rasa.Test
             { "content_placement:Field Dr. Dawson (TaRapedia /loc)",
               "TaRapedia's /loc for this NPC has no navmesh polygon within reach on the Wilderness; the position is as sourced and its standing surface is unverified (GAP-W3-NPC-POSITION-COVERAGE)" },
             { "content_placement:Receptive Liaison Brice (TaRapedia /loc)",
-              "same as Field Dr. Dawson: the recorded /loc lies outside the wilderness navmesh coverage" }
+              "same as Field Dr. Dawson: the recorded /loc lies outside the wilderness navmesh coverage" },
+            // Six of the twelve NPCs created from TaRapedia's /loc stand where the map's navmesh has no polygon:
+            // those readings seem to describe places the navmesh does not model rather than wrong spots, and a
+            // capture would settle it. GAP-W3-NPC-POSITION-COVERAGE.
+            { "content_placement:Ranger Urialia (TaRapedia /loc)", TaRapediaOutsideNavmesh },
+            { "content_placement:Warden Lagori (TaRapedia /loc)", TaRapediaOutsideNavmesh },
+            { "content_placement:Field Lt. Bagby (TaRapedia /loc)", TaRapediaOutsideNavmesh },
+            { "content_placement:Lt. Galloway (TaRapedia /loc)", TaRapediaOutsideNavmesh }
         };
 
         [TestMethod]

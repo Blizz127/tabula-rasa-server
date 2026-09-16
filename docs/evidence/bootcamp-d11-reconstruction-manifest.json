@@ -153,10 +153,10 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 199003
+     "max": 199107
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107)."
   },
   {
    "table": "content_area",
@@ -172,10 +172,10 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199003
+     "max": 199107
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements."
   },
   {
    "table": "content_condition",
@@ -289,10 +289,10 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 199003
+     "max": 199107
     }
    },
-   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs."
+   "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them."
   },
   {
    "table": "npc_mission",
@@ -32142,6 +32142,2650 @@
      "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199100
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Ranger Kogari",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2955"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2955,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2955"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Kogari infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199100
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -42.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Kogari page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 153.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Kogari page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 42.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Kogari page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Kogari infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199100
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 44,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 44"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199101
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Ranger Urialia",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2961"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2961,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2961"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Urialia infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199101
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -230.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Urialia page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 166.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Urialia page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -462.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Urialia page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Ranger Urialia infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199101
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 154,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 154"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199102
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Warden Brocail",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2947"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2947,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2947"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Brocail infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199102
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -531.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Brocail page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 186.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Brocail page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -41.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Brocail page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Brocail infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199102
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 40,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 40"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199103
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Warden Lagori",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2948"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2948,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2948"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Lagori infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199103
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -439.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Lagori page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 166.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Lagori page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 37.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Lagori page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Lagori infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199103
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 42,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 42"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199104
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Warden Kahlee",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2949"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2949,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2949"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Kahlee infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199104
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -694.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Kahlee page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 192.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Kahlee page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -91.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Kahlee page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warden Kahlee infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199104
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 41,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 41"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199105
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Field Lt. Brody",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2946"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2946,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2946"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Brody infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199105
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -570.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Brody page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 186.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Brody page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 170.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Brody page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Brody infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199105
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 550,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 550"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199106
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Field Lt. Bagby",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 2964"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 2964,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2964"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Bagby infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199106
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -337.2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Bagby page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 103.6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Bagby page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 353.7,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Bagby page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Lt. Bagby infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199106
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 46,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 46"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199107
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Lt. Galloway",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "name id 6705"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id"
+    },
+    "name_id": {
+     "value": 6705,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 6705"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 23,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Galloway infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199107
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "pos_x": {
+     "value": -122.2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Galloway page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 100.3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Galloway page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 128.2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Galloway page /loc"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Galloway infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199107
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "package_id": {
+     "value": 565,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 565"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission is offered and completed through."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 366
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 366 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 366 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 366 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 366,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Meet With Ranger Kogari",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 366/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 366,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 366 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 366,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 366 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 367
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199101,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 367 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199101,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 367 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 367 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 367,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Speak with Ranger Urialia",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 367/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 367,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 367 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 367,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 367 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 368
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 368 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199100,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 368 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 368 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 368,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Kill Warnets",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 368/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 368,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Searching For Acceptance",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 368/2"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 368,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 19000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 368 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 368,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2850,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 368 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 411
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 411 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 411 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 411 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 411,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Warden Brocail at the Temple of the Bowed Patriarch",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 411/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 411,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 411 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 411,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 900,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 411 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 412
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199103,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 412 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199103,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 412 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 412 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 412,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Warden Lagori at the Temple of the Raging Patriarch",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 412/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 412,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 412 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 412,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 412 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 413
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199104,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 413 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199104,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 413 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 413 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 413,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Warden Kahlee at the Temple of the Proud Patriarch",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 413/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 413,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 20000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 413 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 413,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 2000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 413 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 670
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199105,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 670 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199105,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 670 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 670 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 670,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find the missing strike team.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 670/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 670,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Return to Field Lt. Brody with information about the first Strike Team",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 670/2"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 670,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 40000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 670 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1788
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199106,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1788 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199106,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1788 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1788 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1788,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Find Lt. Bagby in the Treeback Camp",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1788/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1788,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1788 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1788,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1788 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1789
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "giver_id": {
+     "value": 199107,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1789 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199107,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1789 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1789 infobox"
+      }
+     ],
+     "reasoning": "the zone band; TaRapedia records no per-mission level."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1789,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "comment": {
+     "value": "Deliver the Report to Galloway",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 1789/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation presence"
+      }
+     ],
+     "reasoning": "every objective here is conversation-bound."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "reveal chain"
+      }
+     ],
+     "reasoning": "the first objective is revealed on acceptance."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1789,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 9000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1789 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1789,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesConversationNpc",
+   "fields": {
+    "credits": {
+     "value": 1800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1789 infobox reward"
+      }
+     ],
+     "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
+    }
+   }
   }
  ],
  "omitted": [
@@ -33494,7 +36138,7 @@
   },
   {
    "id": "GAP-W3-NPC-POSITION-COVERAGE",
-   "summary": "Two of the four NPCs created for the Divide's missions stand where the wilderness navmesh has no polygon within reach of their recorded position: Field Dr. Dawson at (19, 116.9, 524.9) and Receptive Liaison Brice at (-773.7, 179.3, 615.9), both on adv_foreas_concordia_wilderness. The positions are TaRapedia's /loc values, placed as sourced; what is unverified is the ground under them, which may be a part of the map the navmesh does not model rather than a wrong reading. WorldPositionAuditTests lists both with that reason so the check stays strict everywhere else, and a capture or a wider navmesh would settle them.",
+   "summary": "Six of the twelve NPCs created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Field Dr. Dawson (19, 116.9, 524.9) and Receptive Liaison Brice (-773.7, 179.3, 615.9) on the Wilderness, Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them.",
    "closes_with": "needs the map ground under those two points (navmesh coverage or a capture)",
    "evidence": [
     "WorldPositionAuditTests: no walkable surface within reach of either position",
