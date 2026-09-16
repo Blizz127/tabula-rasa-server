@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rasa.Context.World;
 
 namespace Rasa.Migrations.SqliteWorld
 {
     [DbContext(typeof(SqliteWorldContext))]
-    partial class SqliteWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20260918040000_WildernessEscortMilpas")]
+    partial class WildernessEscortMilpas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1259,75 +1261,6 @@ namespace Rasa.Migrations.SqliteWorld
                     b.ToTable("map_link");
                 });
 
-            modelBuilder.Entity("Rasa.Structures.World.MapRegionEntry", b =>
-                {
-                    b.Property<uint>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("varchar(96)")
-                        .HasColumnName("comment");
-
-                    b.Property<byte>("Enabled")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("enabled");
-
-                    b.Property<double>("HalfX")
-                        .HasColumnType("REAL")
-                        .HasColumnName("half_x");
-
-                    b.Property<double>("HalfZ")
-                        .HasColumnType("REAL")
-                        .HasColumnName("half_z");
-
-                    b.Property<uint>("MapContextId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("map_context_id");
-
-                    b.Property<double>("MaxY")
-                        .HasColumnType("REAL")
-                        .HasColumnName("max_y");
-
-                    b.Property<double>("MinY")
-                        .HasColumnType("REAL")
-                        .HasColumnName("min_y");
-
-                    b.Property<double>("PosX")
-                        .HasColumnType("REAL")
-                        .HasColumnName("pos_x");
-
-                    b.Property<double>("PosY")
-                        .HasColumnType("REAL")
-                        .HasColumnName("pos_y");
-
-                    b.Property<double>("PosZ")
-                        .HasColumnType("REAL")
-                        .HasColumnName("pos_z");
-
-                    b.Property<double>("Radius")
-                        .HasColumnType("REAL")
-                        .HasColumnName("radius");
-
-                    b.Property<uint>("RegionId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("region_id");
-
-                    b.Property<byte>("Shape")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("shape");
-
-                    b.Property<byte>("Underground")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("underground");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("map_region");
-                });
-
             modelBuilder.Entity("Rasa.Structures.World.NpcMissionEntry", b =>
                 {
                     b.Property<uint>("Id")
@@ -2009,6 +1942,75 @@ namespace Rasa.Migrations.SqliteWorld
                     b.HasKey("Id");
 
                     b.ToTable("weaponclass");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.MapRegionEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("varchar(96)")
+                        .HasColumnName("comment");
+
+                    b.Property<byte>("Enabled")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("enabled");
+
+                    b.Property<double>("HalfX")
+                        .HasColumnType("REAL")
+                        .HasColumnName("half_x");
+
+                    b.Property<double>("HalfZ")
+                        .HasColumnType("REAL")
+                        .HasColumnName("half_z");
+
+                    b.Property<uint>("MapContextId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("map_context_id");
+
+                    b.Property<double>("MaxY")
+                        .HasColumnType("REAL")
+                        .HasColumnName("max_y");
+
+                    b.Property<double>("MinY")
+                        .HasColumnType("REAL")
+                        .HasColumnName("min_y");
+
+                    b.Property<double>("PosX")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_x");
+
+                    b.Property<double>("PosY")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_y");
+
+                    b.Property<double>("PosZ")
+                        .HasColumnType("REAL")
+                        .HasColumnName("pos_z");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("REAL")
+                        .HasColumnName("radius");
+
+                    b.Property<uint>("RegionId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("region_id");
+
+                    b.Property<byte>("Shape")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("shape");
+
+                    b.Property<byte>("Underground")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("underground");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("map_region");
                 });
 #pragma warning restore 612, 618
         }

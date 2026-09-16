@@ -190,6 +190,7 @@ namespace Rasa.Test.Reconstruction
             CollectionAssert.AreEquivalent(new[]
             {
                 "creature:id:198500-199812",
+                "creature_loot:id:1-21",
                 "content_area:id:198600-198649",
                 "content_placement:id:198650-199865",
                 "content_condition:condition_id:198900-198999",
@@ -274,7 +275,7 @@ namespace Rasa.Test.Reconstruction
                 "map_info", "content_map_setting", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
-                "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon"
+                "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot"
             }, ProvenanceRegistry.Default.Tables.Select(t => t.Table).ToList());
 
             foreach (var table in ProvenanceRegistry.Default.Tables)
@@ -312,7 +313,7 @@ namespace Rasa.Test.Reconstruction
                 typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
                 typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),
-                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry)
+                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry)
             };
 
             foreach (var entity in entities)

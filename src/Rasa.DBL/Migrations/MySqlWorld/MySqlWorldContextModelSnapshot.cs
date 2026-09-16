@@ -281,6 +281,10 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnType("int unsigned")
                         .HasColumnName("entity_class_id");
 
+                    b.Property<uint>("EscortMissionId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("escort_mission_id");
+
                     b.Property<uint>("FuseMs")
                         .HasColumnType("int unsigned")
                         .HasColumnName("fuse_ms");

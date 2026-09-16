@@ -52,7 +52,14 @@ namespace Rasa.Data
     public enum ContentPlacementBehavior : byte
     {
         Stationary = 1,
-        CreatureAi = 2
+        CreatureAi = 2,
+
+        /// <summary>
+        /// Walks with the player on the placement's escort mission instead of standing or wandering: the escort
+        /// objectives ("Take Milpas to Apirka", "Escort Milpas to Divide entrance") depend on it, and an area
+        /// objective on that mission only completes once this creature is inside the area too.
+        /// </summary>
+        Escort = 3
     }
 
     public enum ContentConditionKind : byte

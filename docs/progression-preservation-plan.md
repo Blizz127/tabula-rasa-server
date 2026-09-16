@@ -508,6 +508,16 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Escort mechanic (2026-09-16)**: the piece 40-odd objectives were waiting on. `content_placement` gained
+    `escort_mission_id` and a third behavior (`Escort = 3`): the creature walks with the player whose mission it is
+    (re-pathing at most every two seconds once it falls more than six metres behind), and an **area objective on that
+    mission only completes once the escort is inside the area** - so "Take Milpas to Apirka" cannot be finished by
+    walking to Apirka alone. The rule lives in `ContentEscort` (tested: no escorts means unaffected, an escort behind
+    means no completion, a sphere bounds vertically by its radius and a cylinder by its half height).
+    First seeded escort: **1390 Conscientious Objector**, whose objective 4 ("Take Milpas to Apirka", area at Warrior
+    Apirka's recorded position) and objective 8 ("Escort Milpas to Divide entrance", area at the world's own
+    Wilderness -> Divide map link 11) were the two branch ends. **Ranger Milpas** is created with the client's own name
+    id (9519) plus the OD-45 class/level treatment, standing beside the Alia Das arrival. **OD-50**.
   - **Creature loot (2026-09-16)**: the loot mechanic now has the original server's shape. Its
     `creature_type_loot` table is (itemTemplateId, chance as a float, stacksizeMin, stacksizeMax) keyed on the creature
     *type* - and this world's `creature` table already **is** the type table (name, name_id, class_id, faction, speeds,

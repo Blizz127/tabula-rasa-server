@@ -332,7 +332,9 @@ namespace Rasa.Test
                     (RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
                     (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
                     (199002u, (byte)ContentPlacementBehavior.Stationary, 0u),
-                    (199003u, (byte)ContentPlacementBehavior.Stationary, 0u)
+                    (199003u, (byte)ContentPlacementBehavior.Stationary, 0u),
+                    // Ranger Milpas stands at the arrival and walks with whoever takes 1390 (the escort mechanic).
+                    (199803u, (byte)ContentPlacementBehavior.Escort, 0u)
                 },
                 live.Select(placement => (placement.Id, placement.Behavior, placement.PresentConditionId)).ToArray());
 

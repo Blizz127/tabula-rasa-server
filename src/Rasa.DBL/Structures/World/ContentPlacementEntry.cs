@@ -64,6 +64,13 @@ namespace Rasa.Structures.World
         [Required]
         public byte Behavior { get; set; }
 
+        /// <summary>
+        /// For a placement whose behavior is Escort: the mission the creature walks with the player on. 0 means the
+        /// placement is not an escort.
+        /// </summary>
+        [Column("escort_mission_id")]
+        public uint EscortMissionId { get; set; }
+
         [Column("initial_state")]
         [Required]
         public uint InitialState { get; set; }

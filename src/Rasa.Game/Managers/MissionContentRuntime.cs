@@ -24,6 +24,12 @@ namespace Rasa.Managers
     /// </summary>
     public partial class MissionContentManager
     {
+        /// <summary>How close an escort has to stay to its player before it is sent after them.</summary>
+        public const float EscortFollowDistance = 6.0f;
+
+        /// <summary>How often an escort may be re-pathed (milliseconds).</summary>
+        public const long EscortRepathMs = 2000;
+
         private Dictionary<uint, List<ContentRuleEntry>> _rulesByContext = new();
         private Dictionary<(uint MissionId, uint ObjectiveId), List<ContentAreaEntry>> _areaBindings = new();
         private HashSet<uint> _contextsWithAreas = new();
@@ -1062,10 +1068,90 @@ namespace Rasa.Managers
                         if (area.MapContextId != contextId || !SegmentEntersArea(previous, current, area))
                             continue;
 
+                        // An escort objective ("Take Milpas to Apirka") is not met by the player arriving alone: the
+                        // creature being escorted has to be there too. Without this the objective would complete from
+                        // across the zone, and the escort would be decoration.
+                        if (!EscortInside(mapChannel, missionId, area, client) )
+                            continue;
+
                         Missions.CompleteBoundObjective(client, missionId, objectiveId, ObjectiveBindingKind.AreaEntered);
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// True when the mission's escort creatures are inside the area. A mission with no escort placement is
+        /// unaffected, so this only touches the escort objectives.
+        /// </summary>
+        private bool EscortInside(MapChannel mapChannel, uint missionId, ContentAreaEntry area, Client client)
+        {
+            var escorts = EscortPositions(mapChannel, missionId);
+            if (escorts.Count == 0)
+                return true;
+
+            var inside = ContentEscort.AllInside(escorts, area);
+            if (!inside)
+            {
+                // Keep the escort walking after its player while the objective waits on it.
+                WorkEscorts(mapChannel, missionId, client);
+            }
+
+            return inside;
+        }
+
+        /// <summary>The positions of the creatures escorting a mission, on this channel.</summary>
+        private List<Vector3> EscortPositions(MapChannel mapChannel, uint missionId)
+        {
+            var result = new List<Vector3>();
+            if (mapChannel == null || Content?.Catalog == null)
+                return result;
+
+            foreach (var placement in Content.Catalog.Placements.Values)
+            {
+                if (placement.Behavior != (byte)ContentPlacementBehavior.Escort || placement.EscortMissionId != missionId)
+                    continue;
+
+                var creature = mapChannel.MapCellInfo.Cells.Values.SelectMany(cell => cell.CreatureList)
+                    .FirstOrDefault(c => c.ContentPlacementId == placement.Id && c.State != CharacterState.Dead);
+
+                if (creature != null)
+                    result.Add(creature.Position);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sends the mission's escorts after the player when they fall behind, at most every EscortRepathMs.
+        /// </summary>
+        private void WorkEscorts(MapChannel mapChannel, uint missionId, Client client)
+        {
+            var player = client?.Player;
+            if (player == null || mapChannel == null || Content?.Catalog == null)
+                return;
+
+            var now = Environment.TickCount64;
+
+            foreach (var placement in Content.Catalog.Placements.Values)
+            {
+                if (placement.Behavior != (byte)ContentPlacementBehavior.Escort || placement.EscortMissionId != missionId)
+                    continue;
+
+                var creature = mapChannel.MapCellInfo.Cells.Values.SelectMany(cell => cell.CreatureList)
+                    .FirstOrDefault(c => c.ContentPlacementId == placement.Id && c.State != CharacterState.Dead);
+
+                if (creature == null || creature.EscortRepathAt > now)
+                    continue;
+
+                var delta = creature.Position - player.Position;
+                var distanceSquared = delta.X * delta.X + delta.Y * delta.Y + delta.Z * delta.Z;
+                if (distanceSquared <= ContentEscort.EscortFollowDistanceSquared)
+                    continue;
+
+                creature.EscortRepathAt = now + MissionContentManager.EscortRepathMs;
+                BehaviorManager.Instance.WalkTo(creature, player.Position);
             }
         }
 

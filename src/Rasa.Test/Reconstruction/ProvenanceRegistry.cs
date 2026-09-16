@@ -152,10 +152,17 @@ namespace Rasa.Test.Reconstruction
             // npc_package_id: 0 = the creature's npc_package row; restore_ms: 0 = never; fuse_ms: 0 = none;
             // respawn_ms: 0 = only on instance rebuild; present/usable_condition_id: 0 = always.
             // hit_points (0 = not damageable) is required: a destroyable placement does nothing without it.
+            new TableProvenance("creature_loot",
+                keys: Cols("id"),
+                required: Cols("creature_id", "item_template_id", "chance", "stacksize_min", "stacksize_max"),
+                optional: Cols(),
+                storage: Cols("comment")),
+
             new TableProvenance("content_placement",
                 keys: Cols("id"),
                 required: Cols("kind", "creature_id", "entity_class_id", "usable_kind", "pos_x", "pos_y", "pos_z",
-                    "rotation", "behavior", "initial_state", "hit_points", "loot_item_set_id"),
+                    "rotation", "behavior", "initial_state", "hit_points", "loot_item_set_id",
+                    "escort_mission_id"),
                 optional: Cols("npc_package_id", "alternate_state", "alternate_state_condition_id", "windup_ms",
                     "name_override_id", "restore_ms", "fuse_ms", "respawn_ms", "present_condition_id", "usable_condition_id"),
                 storage: Cols("map_context_id", "comment")),

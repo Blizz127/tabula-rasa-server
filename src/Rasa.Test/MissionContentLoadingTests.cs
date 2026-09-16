@@ -269,7 +269,9 @@ namespace Rasa.Test
                 ContentConditionKind.FactEquals, ContentConditionKind.HasLogos, ContentConditionKind.CharacterClassIs
             }, implemented.ConditionKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
-            CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi }, implemented.PlacementBehaviors.ToArray());
+            CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi,
+                // W3: the escort objectives ("Take Milpas to Apirka").
+                ContentPlacementBehavior.Escort }, implemented.PlacementBehaviors.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
@@ -957,7 +959,8 @@ namespace Rasa.Test
                 var aliaDasPlacements = ContentMaterializer.PlacementsToSpawn(validation, 1220).ToDictionary(placement => placement.Id);
                 // 199002 (Field Dr. Dawson) and 199003 (Receptive Liaison Brice) were created by W3 batch 5 from
                 // TaRapedia's own zone for them, which is the Wilderness, so they stand in the same shared context.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 199002, 199003 }, aliaDasPlacements.Keys.ToArray());
+                // 199803 (Ranger Milpas) stands at the arrival too, on the escorts' side of the same shared context.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 199002, 199003, 199803 }, aliaDasPlacements.Keys.ToArray());
                 var rogers = aliaDasPlacements[198684];
                 Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));

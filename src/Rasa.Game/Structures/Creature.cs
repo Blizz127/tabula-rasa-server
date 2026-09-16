@@ -21,7 +21,10 @@ namespace Rasa.Structures
         public uint Level { get; set; }
         public uint MaxHitPoints { get; set; }
         public uint NameId { get; set; }
-        public long UpdatePositionCounter;                                       // decreases, when it hits 0 and the cell position changed, call creature_updateCellLocation()
+        public long UpdatePositionCounter;
+
+        /// <summary>When an escort creature may be sent after its player again (2000 ms between paths).</summary>
+        public long EscortRepathAt;                                       // decreases, when it hits 0 and the cell position changed, call creature_updateCellLocation()
         public Dictionary<EquipmentData, AppearanceData> AppearanceData { get; set; }
         //sint32 lastattack;
         //float velocity;

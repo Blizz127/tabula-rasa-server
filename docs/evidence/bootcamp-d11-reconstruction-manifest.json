@@ -48433,6 +48433,131 @@
      "reasoning": "the original bound."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199803
+   },
+   "slice": "W3",
+   "migration": "WildernessEscortMilpas",
+   "fields": {
+    "name_id": {
+     "value": 9519,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9519 \"Ranger Milpas\""
+      }
+     ]
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world's AFS human NPCs",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "the zone band of the missions he appears in"
+      }
+     ],
+     "counterpart": "the Wilderness mission band",
+     "required_because": "no source records Milpas' level",
+     "decision": "OD-50"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199803
+   },
+   "slice": "W3",
+   "migration": "WildernessEscortMilpas",
+   "fields": {
+    "escort_mission_id": {
+     "value": 1390,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "mission 1390 objective 4 \"Take Milpas to Apirka\""
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 884.11,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "the Alia Das arrival the boot camp exits to"
+      }
+     ],
+     "counterpart": "the Alia Das arrival point",
+     "required_because": "the escort has to start where its mission begins",
+     "decision": "OD-50"
+    }
+   }
+  },
+  {
+   "table": "content_area",
+   "key": {
+    "id": 198605
+   },
+   "slice": "W3",
+   "migration": "WildernessEscortMilpas",
+   "fields": {
+    "pos_x": {
+     "value": 825.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Warrior Apirka /loc"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0
+     },
+     "reasoning": "the position TaRapedia records for Warrior Apirka, which is where the escort objective ends; the world's creature 43 is the same NPC."
+    }
+   }
+  },
+  {
+   "table": "content_area",
+   "key": {
+    "id": 198606
+   },
+   "slice": "W3",
+   "migration": "WildernessEscortMilpas",
+   "fields": {
+    "pos_x": {
+     "value": 888.7216,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "map_link 11 (wilderness -> divide) pos_x"
+      }
+     ],
+     "reasoning": "the Wilderness -> Divide map link's own position, so the objective ends where the game itself sends you to the Divide."
+    }
+   }
   }
  ],
  "omitted": [
@@ -50384,6 +50509,16 @@
    "choice": "The original server kept loot per creature type (creature_type_loot: itemTemplateId, chance as a float, stacksizeMin, stacksizeMax), and this world's creature table is that same type table. Exactly seven rows survived, all belonging to one type - the raiding trainee Thrax footsoldier - so the mechanism is implemented in the original's shape and those seven rows are seeded on this world's Thrax soldiers. Every other creature keeps the emulator's stand-in drop (one stack of item 28 on a coin flip) rather than paying out nothing, because paying out nothing would be a behaviour change based on missing data rather than on evidence; GAP-CREATURE-LOOT names what would replace it.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-retail-accuracy.md#creature-loot"
+  },
+  {
+   "id": "OD-50",
+   "decision": "The escort mechanic",
+   "default": "A placement whose creature walks with the player on its mission; an area objective on that mission needs the escort inside it",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The original's escort objectives (\"Take Milpas to Apirka\", \"Escort Milpas to Divide entrance\") are area objectives with a condition the emulator did not have: the creature being escorted has to arrive too. content_placement gained an escort_mission_id and a third behavior (Escort); the creature follows the player on that mission, re-pathing at most every two seconds, and the area objective only completes once the escort is inside the area. Milpas' class and level follow the OD-45 pipeline and his name id is the client's own ('Ranger Milpas', 9519); the destinations are Warrior Apirka's recorded position and the world's own Wilderness->Divide map link.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#escort"
   }
  ]
 }

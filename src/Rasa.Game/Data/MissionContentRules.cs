@@ -73,7 +73,10 @@ namespace Rasa.Data
             },
             PlacementKinds = new HashSet<ContentPlacementKind> { ContentPlacementKind.Creature, ContentPlacementKind.Usable },
             // S4: creature-AI placements guard their spot (CreatureManager.ApplyPlacementBehavior).
-            PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi },
+            PlacementBehaviors = new HashSet<ContentPlacementBehavior> { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi,
+                // W3: the escort objectives ("Take Milpas to Apirka").
+                ContentPlacementBehavior.Escort
+            },
             UsableKinds = new HashSet<ContentUsableKind> { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure },
             NpcPackageOverride = true,
             // Prerequisites gate each player's offer at dispense time
