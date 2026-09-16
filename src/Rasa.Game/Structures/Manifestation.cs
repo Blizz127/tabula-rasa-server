@@ -49,6 +49,13 @@ namespace Rasa.Structures
         public List<uint> Logos = new();
         // Radio missions offered in this session and not yet accepted (MissionManager.DispenseRadioMission).
         public HashSet<uint> PendingRadioOffers { get; } = new();
+
+        /// <summary>
+        /// Missions shared with this player that they have not answered yet: mission id -> the player who shared it.
+        /// The share is already in their log (missionlog.pyo shows a shared mission there, and AssignSharedMission /
+        /// DeclineSharedMission name the sharer), so accepting clears the entry and declining drops the mission.
+        /// </summary>
+        public Dictionary<uint, uint> PendingSharedMissions { get; } = new();
         // Last position tested against content areas, per context (MissionContentManager.DoWork).
         public (uint MapContextId, System.Numerics.Vector3 Position)? LastContentSample { get; set; }
         /// <summary>Content areas with area_entered rules the player stood in at the last sample (entry fires once).</summary>

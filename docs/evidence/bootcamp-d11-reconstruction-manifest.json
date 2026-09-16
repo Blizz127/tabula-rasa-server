@@ -49968,6 +49968,36 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-RADIO-REWARD-STEP",
+   "summary": "CompleteRadioMission and RewardRadioMission carry the same (missionId, selectionIdx, rating) tuple, and no surviving source says which one the client sends to complete a radio mission and which to collect its reward. Both are handled as \"complete and pay\" (idempotent, because a completed mission is no longer completeable), which is safe but may not match the original's two steps - for instance if the original offered the reward choice only in the second step.",
+   "closes_with": "a capture of a radio turn-in in game, or client code for the reward step",
+   "evidence": [
+    "client/missionlog.pyo request signatures",
+    "npc_mission.radio_completeable / shareable"
+   ],
+   "surfaced_by": [
+    "radio and sharing implementation 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-SHARING-OFFER",
+   "summary": "Mission sharing's accept and decline requests are recovered (AssignSharedMission / DeclineSharedMission name the sharing player), but the packet the server sent to *offer* a share is not. The implementation puts the mission in the member's log at share time, so accept clears the share and decline removes the mission; if the original instead kept the mission out of the log until acceptance, a player would see a shared mission one step earlier than they should.",
+   "closes_with": "the original share-offer packet (client code or a capture)",
+   "evidence": [
+    "client/missionlog.pyo request signatures",
+    "npc_mission.radio_completeable / shareable"
+   ],
+   "surfaced_by": [
+    "radio and sharing implementation 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -50519,6 +50549,16 @@
    "choice": "The original's escort objectives (\"Take Milpas to Apirka\", \"Escort Milpas to Divide entrance\") are area objectives with a condition the emulator did not have: the creature being escorted has to arrive too. content_placement gained an escort_mission_id and a third behavior (Escort); the creature follows the player on that mission, re-pathing at most every two seconds, and the area objective only completes once the escort is inside the area. Milpas' class and level follow the OD-45 pipeline and his name id is the client's own ('Ranger Milpas', 9519); the destinations are Warrior Apirka's recorded position and the world's own Wilderness->Divide map link.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#escort"
+  },
+  {
+   "id": "OD-51",
+   "decision": "Radio turn-in and mission sharing",
+   "default": "Both are implemented from the client's own opcodes and the mission flags the seed carries",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Two mission features were withheld by design: Mission.DefinitionGaps() added \"radio completion is not implemented\" and \"mission sharing is not implemented\" for every definition flagged radio_completeable or shareable, which kept those missions out of the game entirely. Both are implemented now, from the only evidence that exists - the client's own requests (missionlog.pyo: CompleteRadioMission and RewardRadioMission carry (missionId, selectionIdx, rating); ShareMission carries (missionId); AssignSharedMission and DeclineSharedMission carry (playerId, missionId)) and the flags in npc_mission, which decide what the client's mission log offers rather than what the server allows.\n\nRadio: the NPC turn-in's payout was split out of its NPC-specific checks (receiver id and conversation range) into MissionManager.PayOut, and CompleteRadioMission reaches it while requiring the radio_completeable flag. RewardRadioMission carries the identical tuple, so it goes through the same path - which cannot double-pay, because a completed mission is no longer completeable. Which of the two the client sends for the completion and which for the reward claim is NOT established: GAP-W3-RADIO-REWARD-STEP.\n\nSharing: the mission goes into the party member's log at share time and the sharer is recorded as a pending share; accepting clears it and declining drops the mission back out. Whether the original logged the mission at share time or only on acceptance is NOT established - missionlog.pyo has the accept and decline requests, but no surviving data has the offer packet: GAP-W3-SHARING-OFFER.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#radio-and-sharing"
   }
  ]
 }

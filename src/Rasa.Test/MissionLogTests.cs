@@ -760,14 +760,23 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void UnimplementedRadioAndShareFlagsKeepDefinitionsUnoffered()
+        public void RadioAndShareFlagsNoLongerKeepDefinitionsUnoffered()
         {
+            // Both flags used to add a definition gap, which kept every radio-completeable or shareable mission out of
+            // the game. They are implemented now (MissionManager.CompleteRadioMission and ShareMission), so the flags
+            // only decide what the client's mission log offers - a definition carrying them is dispensable.
             var radio = Definition();
             radio.MissionConstantData.RadioCompletable = true;
-            CollectionAssert.AreEqual(new[] { "radio completion is not implemented" }, radio.DefinitionGaps());
+            CollectionAssert.AreEqual(new string[0], radio.DefinitionGaps(), string.Join("; ", radio.DefinitionGaps()));
+
             var shared = Definition();
             shared.MissionConstantData.Shareable = true;
-            CollectionAssert.AreEqual(new[] { "mission sharing is not implemented" }, shared.DefinitionGaps());
+            CollectionAssert.AreEqual(new string[0], shared.DefinitionGaps(), string.Join("; ", shared.DefinitionGaps()));
+
+            var both = Definition();
+            both.MissionConstantData.RadioCompletable = true;
+            both.MissionConstantData.Shareable = true;
+            CollectionAssert.AreEqual(new string[0], both.DefinitionGaps(), string.Join("; ", both.DefinitionGaps()));
         }
 
         [TestMethod]

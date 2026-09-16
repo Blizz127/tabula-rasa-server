@@ -545,6 +545,31 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     D15/D16 content (Empire Sector, mechs, Edmund Range). Nothing else depends on it, and it needs the zone data that
     only the reconstruction rules can supply.
+  - **Radio turn-in and mission sharing (2026-09-16)**: the last two mission-layer holes, and the ones that were
+    actively withholding content - `Mission.DefinitionGaps()` added "radio completion is not implemented" and "mission
+    sharing is not implemented" for any definition carrying those flags, which kept every such mission out of the game.
+    Both are implemented from the only evidence available: the client's own requests in `missionlog.pyo`
+    (`CompleteRadioMission`/`RewardRadioMission` = `(missionId, selectionIdx, rating)`, `ShareMission` = `(missionId)`,
+    `AssignSharedMission`/`DeclineSharedMission` = `(playerId, missionId)`) plus the `npc_mission` flags, which decide
+    what the client *offers* rather than what the server allows.
+
+    **Radio.** The NPC turn-in's payout (reward choice, balances with their overflow guard, item slots, mission state,
+    content reaction) was split out of its NPC checks into `MissionManager.PayOut`; `CompleteRadioMission` reaches it
+    while requiring `radio_completeable`, so the receiver id and the conversation range - the whole point of a radio
+    turn-in - are not required. `RewardRadioMission` carries an identical tuple and goes through the same path, which
+    cannot double-pay because a completed mission is no longer completeable. Which of the two the client sends for the
+    completion and which for the claim is **not established** (**GAP-W3-RADIO-REWARD-STEP**).
+
+    **Sharing.** `ShareMission` gives the mission to each party member in the channel who does not have it and records
+    the sharer as a pending share; `AssignSharedMission` clears the pending entry and `DeclineSharedMission` drops the
+    mission back out. The offer *packet* is not recoverable (**GAP-W3-SHARING-OFFER**), so the mission is logged at
+    share time - the reading that makes both accept and decline mean something.
+
+    Together with the loot and escort work this closes the mission layer: the only definitions still withheld are the
+    ones whose objective flags the seed does not carry. Tests: four radio (pays out with no receiver, non-flagged
+    refused, required objectives still enforced, no double pay) and six sharing (party member gets the share, accept,
+    decline, a share can only be answered by its sharer, unshareable refused, needs a party and an active mission).
+    **OD-51**.
   - **Escort mechanic (2026-09-16)**: the piece 40-odd objectives were waiting on. `content_placement` gained
     `escort_mission_id` and a third behavior (`Escort = 3`): the creature walks with the player whose mission it is
     (re-pathing at most every two seconds once it falls more than six metres behind), and an **area objective on that

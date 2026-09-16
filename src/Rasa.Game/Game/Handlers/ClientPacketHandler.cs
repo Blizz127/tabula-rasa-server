@@ -56,26 +56,37 @@ namespace Rasa.Game.Handlers
             MissionManager.Instance.AssignRadioMission(Client, packet.MissionId);
         }
 
-        // Shared missions and radio completion are not implemented; definitions using them are
-        // never offered. The requests are decoded so they cannot disconnect a client.
         [PacketHandler(GameOpcode.AssignSharedMission)]
-        private void AssignSharedMission(AssignSharedMissionPacket packet) => IgnoreMissionRequest(packet);
+        private void AssignSharedMission(AssignSharedMissionPacket packet)
+        {
+            MissionManager.Instance.AssignSharedMission(Client, (uint)packet.PlayerId, packet.MissionId);
+        }
 
         [PacketHandler(GameOpcode.CompleteRadioMission)]
-        private void CompleteRadioMission(CompleteRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+        private void CompleteRadioMission(CompleteRadioMissionPacket packet)
+        {
+            MissionManager.Instance.CompleteRadioMission(Client, packet.MissionId, packet.SelectionIdx);
+        }
 
         [PacketHandler(GameOpcode.DeclineSharedMission)]
-        private void DeclineSharedMission(DeclineSharedMissionPacket packet) => IgnoreMissionRequest(packet);
+        private void DeclineSharedMission(DeclineSharedMissionPacket packet)
+        {
+            MissionManager.Instance.DeclineSharedMission(Client, (uint)packet.PlayerId, packet.MissionId);
+        }
 
         [PacketHandler(GameOpcode.RewardRadioMission)]
-        private void RewardRadioMission(RewardRadioMissionPacket packet) => IgnoreMissionRequest(packet);
+        private void RewardRadioMission(RewardRadioMissionPacket packet)
+        {
+            // The client sends the same tuple for the reward step as for the completion step, so both go through the
+            // radio turn-in, which is idempotent because a completed mission is no longer completeable
+            // (GAP-W3-RADIO-REWARD-STEP).
+            MissionManager.Instance.CompleteRadioMission(Client, packet.MissionId, packet.SelectionIdx);
+        }
 
         [PacketHandler(GameOpcode.ShareMission)]
-        private void ShareMission(ShareMissionPacket packet) => IgnoreMissionRequest(packet);
-
-        private static void IgnoreMissionRequest(UnsupportedMissionRequestPacket packet)
+        private void ShareMission(ShareMissionPacket packet)
         {
-            Logger.WriteLog(LogType.Debug, $"Ignored unsupported mission request {packet.Opcode}");
+            MissionManager.Instance.ShareMission(Client, packet.MissionId);
         }
 
         [PacketHandler(GameOpcode.AutoFireKeepAlive)]

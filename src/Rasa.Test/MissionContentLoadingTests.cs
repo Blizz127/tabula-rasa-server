@@ -183,8 +183,9 @@ namespace Rasa.Test
                 Assert.AreEqual(0u, missions.LoadedMissions[321].MissionReciver);
 
                 CollectionAssert.AreEqual(new[] { "no objectives" }, missions.LoadedMissions[321].DefinitionGaps());
-                CollectionAssert.AreEqual(new[] { "no objectives", "radio completion is not implemented", "mission sharing is not implemented" },
-                    missions.LoadedMissions[429].DefinitionGaps());
+                // 429 carries the radio-completeable and shareable flags, which used to add two gaps and keep it out of
+                // the game; both are implemented now, so only its missing objectives keep it unoffered.
+                CollectionAssert.AreEqual(new[] { "no objectives" }, missions.LoadedMissions[429].DefinitionGaps());
 
                 var content = new MissionContentManager(new Factory(connection));
                 content.Load(null, new References(), missions.LoadedMissions);
@@ -194,8 +195,9 @@ namespace Rasa.Test
                 Assert.AreEqual(0, content.Content.LiveRules.Count());
                 Assert.AreEqual(BootcampEntryMode.Disabled, content.Bootcamp.EntryMode);
                 CollectionAssert.AreEqual(new[] { "no objectives" }, missions.LoadedMissions[321].DefinitionGaps());
-                CollectionAssert.AreEqual(new[] { "no objectives", "radio completion is not implemented", "mission sharing is not implemented" },
-                    missions.LoadedMissions[429].DefinitionGaps());
+                // 429 carries the radio-completeable and shareable flags, which used to add two gaps and keep it out of
+                // the game; both are implemented now, so only its missing objectives keep it unoffered.
+                CollectionAssert.AreEqual(new[] { "no objectives" }, missions.LoadedMissions[429].DefinitionGaps());
             });
         }
 

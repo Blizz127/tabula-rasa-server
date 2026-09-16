@@ -605,6 +605,89 @@ namespace Rasa.Managers
             return true;
         }
 
+        /// <summary>
+        /// Shares one of the player's active missions with the party. Only a definition whose shareable flag is set can
+        /// be shared, and only a character who does not already have it receives one.
+        ///
+        /// The original's own step order is not recoverable from the sources (GAP-W3-SHARING-OFFER): missionlog.pyo
+        /// has the accept and decline requests naming the sharer, but no surviving server data says whether the mission
+        /// was put in the target's log at share time or only on accept. This puts it in the log at share time, which is
+        /// what makes accept and decline both mean something - accept clears the share, decline drops the mission.
+        /// </summary>
+        public void ShareMission(Client client, uint missionId)
+        {
+            if (!IsInWorld(client))
+                return;
+
+            var player = client.Player;
+
+            if (!player.Missions.TryGetValue(missionId, out var mission) || mission.State != MissionState.Active)
+                return;
+
+            if (!LoadedMissions.TryGetValue(missionId, out var definition) || !definition.MissionConstantData.Shareable)
+                return;
+
+            // Party members are found through the party manager: the manifestation carries only its party id.
+            if (!PartyManager.Instance.Parties.TryGetValue(player.PartyId, out var party) || party == null)
+                return;
+
+            var channel = player.MapChannel;
+            if (channel == null)
+                return;
+
+            foreach (var member in party.Members.ToList())
+            {
+                var target = channel.ClientList.FirstOrDefault(other => other?.Player != null && other.Player.Id == member.UserId);
+                if (target == null || target.Player.Id == player.Id)
+                    continue;
+
+                // Only a character who does not already have the mission, and whose log has room, is offered it.
+                if (HasBlockingProgress(target.Player, definition))
+                    continue;
+
+                if (!AcceptMission(target, definition))
+                    continue;
+
+                target.Player.PendingSharedMissions[missionId] = player.Id;
+                Logger.WriteLog(LogType.Debug, $"ShareMission: character {player.Id} shared mission {missionId} with character {member.UserId}");
+            }
+        }
+
+        /// <summary>
+        /// Answers a share: the mission stays, the pending entry goes. The request names the sharing player, so a
+        /// player can only clear a share they actually hold from them.
+        /// </summary>
+        public void AssignSharedMission(Client client, uint sharerId, uint missionId)
+        {
+            if (!IsInWorld(client))
+                return;
+
+            var player = client.Player;
+
+            if (!player.PendingSharedMissions.TryGetValue(missionId, out var from) || from != sharerId)
+                return;
+
+            player.PendingSharedMissions.Remove(missionId);
+        }
+
+        /// <summary>
+        /// Declines a share: the mission leaves the log, exactly as abandoning it would (the client's own decline
+        /// removes the shared mission from the log, and there is nothing else the server could do with it).
+        /// </summary>
+        public void DeclineSharedMission(Client client, uint sharerId, uint missionId)
+        {
+            if (!IsInWorld(client))
+                return;
+
+            var player = client.Player;
+
+            if (!player.PendingSharedMissions.TryGetValue(missionId, out var from) || from != sharerId)
+                return;
+
+            player.PendingSharedMissions.Remove(missionId);
+            AbandonMission(client, missionId);
+        }
+
         public void CompleteNpcObjective(Client client, ulong npcEntityId, uint missionId, uint objectiveId, uint playerFlagId)
         {
             if (!TryResolveNpc(client, npcEntityId, out var creature))
@@ -786,6 +869,11 @@ namespace Rasa.Managers
             RefreshRelatedNpcStatus(client, definition);
         }
 
+        /// <summary>
+        /// Turns a mission in at its receiver: the NPC has to be the definition's receiver and the player has to be
+        /// standing with them. Everything after that - the reward choice, the balances, the item slots, the mission
+        /// state and the content reaction - is PayOut, which the radio turn-in uses as well.
+        /// </summary>
         public void CompleteNpcMission(Client client, ulong npcEntityId, uint missionId, int? selectionIdx)
         {
             if (!TryResolveNpc(client, npcEntityId, out var creature))
@@ -812,6 +900,59 @@ namespace Rasa.Managers
                 return;
             }
 
+            PayOut(client, definition, mission, selectionIdx, "CompleteNpcMission");
+        }
+
+        /// <summary>
+        /// Turns a mission in over the radio. The client's mission log offers that for a definition whose
+        /// radio_completeable flag is set, and the request carries the same (missionId, selectionIdx, rating) tuple the
+        /// NPC turn-in does - without the NPC, which is the whole point of it: the receiver and the conversation range
+        /// the NPC path insists on are exactly what this path must not require.
+        ///
+        /// RewardRadioMission carries the identical tuple, so it is handled here too: which of the two the client sends
+        /// to complete and which to collect the reward is not established (GAP-W3-RADIO-REWARD-STEP). Treating both as
+        /// "complete and pay" is the interpretation that cannot double-pay, because a completed mission is no longer
+        /// completeable.
+        /// </summary>
+        public void CompleteRadioMission(Client client, uint missionId, int? selectionIdx)
+        {
+            if (!IsInWorld(client))
+                return;
+
+            if (!LoadedMissions.TryGetValue(missionId, out var definition))
+                return;
+
+            var player = client.Player;
+
+            if (!player.Missions.TryGetValue(missionId, out var mission) || !mission.IsCompleteable(definition))
+                return;
+
+            // Only a definition the client was told is radio completeable may be turned in this way.
+            if (!definition.MissionConstantData.RadioCompletable)
+                return;
+
+            var gaps = definition.DefinitionGaps();
+
+            if (gaps.Count > 0)
+            {
+                Logger.WriteLog(LogType.Error, $"CompleteRadioMission: mission {missionId} definition incomplete ({string.Join("; ", gaps)}); turn-in refused for character {player.Id}");
+                return;
+            }
+
+            PayOut(client, definition, mission, selectionIdx, "CompleteRadioMission");
+        }
+
+        /// <summary>
+        /// Everything a turn-in does once the request itself has been accepted: the reward choice, the balances with
+        /// their overflow guard, the item slots, the mission state, the content reaction and the client's
+        /// completed/rewarded notifications. The NPC turn-in and the radio turn-in differ only in how they validate the
+        /// request, so they share this.
+        /// </summary>
+        private void PayOut(Client client, Mission definition, PlayerMission mission, int? selectionIdx, string caller)
+        {
+            var player = client.Player;
+            var missionId = definition.MissionId;
+
             // The client sends the index of the chosen selectable reward, and None when the
             // mission offers no choice; anything else is not a request it could make.
             var selectable = definition.OfferedSelectableRewards;
@@ -829,7 +970,7 @@ namespace Rasa.Managers
 
             if (placements == null)
             {
-                Logger.WriteLog(LogType.Debug, $"CompleteNpcMission: no room for the item rewards of mission {missionId}; turn-in refused for character {player.Id}");
+                Logger.WriteLog(LogType.Debug, $"{caller}: no room for the item rewards of mission {missionId}; turn-in refused for character {player.Id}");
                 return;
             }
 
@@ -845,7 +986,7 @@ namespace Rasa.Managers
 
             if (newCredits > int.MaxValue || newPrestige > int.MaxValue || newExperience > uint.MaxValue)
             {
-                Logger.WriteLog(LogType.Error, $"CompleteNpcMission: rewards of mission {missionId} would overflow character {player.Id}'s balances; turn-in refused");
+                Logger.WriteLog(LogType.Error, $"{caller}: rewards of mission {missionId} would overflow character {player.Id}'s balances; turn-in refused");
                 return;
             }
 

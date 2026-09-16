@@ -135,13 +135,9 @@ namespace Rasa.Structures
             // Prerequisites are per-player state (the required mission's state in THIS
             // character's log), so they cannot make the definition unofferable in general;
             // they gate each player's offer at dispense time (MissionManager).
-            // The client shows Radio/Share buttons for these flags; their server
-            // requests are not implemented, so such definitions stay unoffered.
-            if (MissionConstantData.RadioCompletable)
-                gaps.Add("radio completion is not implemented");
-
-            if (MissionConstantData.Shareable)
-                gaps.Add("mission sharing is not implemented");
+            // Radio completion and mission sharing are implemented (MissionManager.CompleteRadioMission and
+            // ShareMission/AssignSharedMission/DeclineSharedMission), so these flags no longer make a definition
+            // unofferable - they only decide whether the client shows the Radio and Share buttons.
 
             gaps.AddRange(RewardGaps);
             gaps.AddRange(ContentGaps);
