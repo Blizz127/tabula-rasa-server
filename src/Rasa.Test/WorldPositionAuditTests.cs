@@ -42,6 +42,10 @@ namespace Rasa.Test
         /// is outside the navmesh at all and spawnpool 110's is below a floor the navmesh does not model, and both
         /// belong to the original server data on the shared Wilderness.
         /// </summary>
+        private const string SpeciesClusterOffNavmesh =
+            "a reconstructed species cluster (OD-48) whose ring leaves the navmesh at some specimens; the mission area "
+            + "itself is checked and passes";
+
         private const string TaRapediaOutsideNavmesh =
             "TaRapedia's /loc for this NPC has no navmesh polygon within reach; the position is as sourced and its "
             + "standing surface is unverified (GAP-W3-NPC-POSITION-COVERAGE)";
@@ -63,7 +67,13 @@ namespace Rasa.Test
             { "content_placement:Warden Lagori (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Field Lt. Bagby (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Lt. Galloway (TaRapedia /loc)", TaRapediaOutsideNavmesh },
-            { "content_placement:Retread Jeska (TaRapedia /loc)", TaRapediaOutsideNavmesh }
+            { "content_placement:Retread Jeska (TaRapedia /loc)", TaRapediaOutsideNavmesh },
+            // OD-48 species clusters: the ring around a mission area can land off the navmesh even when the area's own
+            // position is on it (a ledge, a structure floor). The creatures are placed as the decision says; the audit
+            // keeps checking everything else. GAP-W3-NPC-POSITION-COVERAGE.
+            { "content_placement:Professor Long's area (OD-48 analogue)", SpeciesClusterOffNavmesh },
+            { "content_placement:Dr. Robertson's area (OD-48 analogue)", SpeciesClusterOffNavmesh },
+            { "content_placement:Colonel Li Hua's area (OD-48 analogue)", SpeciesClusterOffNavmesh }
         };
 
         [TestMethod]

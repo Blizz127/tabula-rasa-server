@@ -163,7 +163,7 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 199601
+     "max": 199812
     }
    },
    "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601)."
@@ -182,7 +182,7 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199703
+     "max": 199865
     }
    },
    "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703)."
@@ -44543,6 +44543,2422 @@
      "reasoning": "TaRapedia's recorded amount; both reward kinds carry it in this column."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199800
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Professor Long",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creature name id 8661"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id."
+    },
+    "name_id": {
+     "value": 8661,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8661"
+      }
+     ],
+     "reasoning": "the client's own creature name table."
+    },
+    "level": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Professor Long infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level of this NPC."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client_table:game.zip"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846)",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists (OD-45).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199800
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 653.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Professor Long page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's reading for this NPC.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in (the Mires)."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199801
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Dr. Robertson",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creature name id 8669"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id."
+    },
+    "name_id": {
+     "value": 8669,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8669"
+      }
+     ],
+     "reasoning": "the client's own creature name table."
+    },
+    "level": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Dr. Robertson infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level of this NPC."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client_table:game.zip"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846)",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists (OD-45).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199801
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 658.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Dr. Robertson page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's reading for this NPC.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in (the Mires)."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199802
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Colonel Li Hua",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creature name id 8666"
+      }
+     ],
+     "reasoning": "the name the mission sources use, and the name the client renders for that id."
+    },
+    "name_id": {
+     "value": 8666,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8666"
+      }
+     ],
+     "reasoning": "the client's own creature name table."
+    },
+    "level": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Li Hua infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level of this NPC."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client_table:game.zip"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846)",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists (OD-45).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199802
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 260.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Li Hua page /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's reading for this NPC.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "infobox, Zone"
+      }
+     ],
+     "reasoning": "the map of the zone TaRapedia puts the NPC in (the Mires)."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199810
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Lasher (client class 7477)",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 7477"
+      }
+     ],
+     "reasoning": "the species name the client's own entity class table carries."
+    },
+    "class_id": {
+     "value": 7477,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 7477"
+      }
+     ],
+     "reasoning": "the class the client names, marked as a living creature (augmentation 1)."
+    },
+    "level": {
+     "value": 30,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own zone band",
+     "required_because": "the mission sources give a zone but no per-creature level for an unnamed species.",
+     "decision": "OD-48"
+    },
+    "max_hp": {
+     "value": 600,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the world's comparable Bane creatures (555-1000 hit points)",
+     "required_because": "a creature needs a hit point maximum and no source gives one for a reconstructed species.",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199811
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Magmonix (client class 6338)",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 6338"
+      }
+     ],
+     "reasoning": "the species name the client's own entity class table carries."
+    },
+    "class_id": {
+     "value": 6338,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 6338"
+      }
+     ],
+     "reasoning": "the class the client names, marked as a living creature (augmentation 1)."
+    },
+    "level": {
+     "value": 30,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own zone band",
+     "required_because": "the mission sources give a zone but no per-creature level for an unnamed species.",
+     "decision": "OD-48"
+    },
+    "max_hp": {
+     "value": 600,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the world's comparable Bane creatures (555-1000 hit points)",
+     "required_because": "a creature needs a hit point maximum and no source gives one for a reconstructed species.",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199812
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Stalker (client class 3781)",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 3781"
+      }
+     ],
+     "reasoning": "the species name the client's own entity class table carries."
+    },
+    "class_id": {
+     "value": 3781,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "entityclass 3781"
+      }
+     ],
+     "reasoning": "the class the client names, marked as a living creature (augmentation 1)."
+    },
+    "level": {
+     "value": 30,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own zone band",
+     "required_because": "the mission sources give a zone but no per-creature level for an unnamed species.",
+     "decision": "OD-48"
+    },
+    "max_hp": {
+     "value": 600,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the world's comparable Bane creatures (555-1000 hit points)",
+     "required_because": "a creature needs a hit point maximum and no source gives one for a reconstructed species.",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199820
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 693.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 373.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199821
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 696.301,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 398.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199822
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 683.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 424.962,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199823
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 653.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 443.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199824
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 633.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 407.641,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199825
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 609.699,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 398.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199826
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 593.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 373.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199827
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 592.378,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 338.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199828
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 633.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 338.359,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199829
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 653.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 323.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199830
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 683.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 321.038,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199831
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 713.622,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 225.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 338.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199840
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 698.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 374.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199841
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 703.048,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 395.694,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199842
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 695.409,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 420.91,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199843
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 673.576,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 442.245,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199844
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 649.099,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 412.997,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199845
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 626.826,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 413.092,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199846
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 603.942,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 400.033,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199847
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 588.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 374.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199848
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 621.961,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 356.645,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199849
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 626.826,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 334.908,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199850
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 644.649,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 315.504,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199851
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 673.576,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 305.755,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199852
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 682.94,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 342.727,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199853
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 703.048,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 224.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 352.306,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199860
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 300.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 686.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199861
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 285.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 729.301,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199862
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 230.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 737.962,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199863
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 190.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 686.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199864
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 240.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 651.359,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199865
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "pos_x": {
+     "value": 285.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_y": {
+     "value": 229.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "the mission's own area height",
+     "required_because": "as pos_x (OD-48).",
+     "decision": "OD-48"
+    },
+    "pos_z": {
+     "value": 642.699,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client_table:missions"
+      }
+     ],
+     "counterpart": "a ring around the mission's own area",
+     "required_because": "no source records where a species lives (OD-48).",
+     "decision": "OD-48"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 955
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "giver_id": {
+     "value": 199800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 955 infobox, giver"
+      }
+     ],
+     "reasoning": "the NPC the mission sources name, created by this batch."
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 955 infobox"
+      }
+     ],
+     "reasoning": "TaRapedia's zone band for the Mires missions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 955,
+    "objective_id": 7
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Acquire 10 Lasher Claws",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 955/7"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 955,
+    "objective_id": 8
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Speak With Dr. Robertson",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 955/8"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 955,
+    "objective_id": 7,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 955/7"
+      }
+     ],
+     "reasoning": "the objective asks for a species count, bound as that species' deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 199810,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ],
+     "reasoning": "the species this batch reconstructs."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 955,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "credits": {
+     "value": 29000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 955 infobox reward"
+      }
+     ],
+     "reasoning": "the experience TaRapedia records."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 956
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "giver_id": {
+     "value": 199801,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 956 infobox, giver"
+      }
+     ],
+     "reasoning": "the NPC the mission sources name, created by this batch."
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 956 infobox"
+      }
+     ],
+     "reasoning": "TaRapedia's zone band for the Mires missions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 956,
+    "objective_id": 8
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Acquire 12 Magmonix Hooves",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 956/8"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 956,
+    "objective_id": 8,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 956/8"
+      }
+     ],
+     "reasoning": "the objective asks for a species count, bound as that species' deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 199811,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ],
+     "reasoning": "the species this batch reconstructs."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 956,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "credits": {
+     "value": 29000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 956 infobox reward"
+      }
+     ],
+     "reasoning": "the experience TaRapedia records."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 976
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "giver_id": {
+     "value": 199802,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 976 infobox, giver"
+      }
+     ],
+     "reasoning": "the NPC the mission sources name, created by this batch."
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 976 infobox"
+      }
+     ],
+     "reasoning": "TaRapedia's zone band for the Mires missions."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 976,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "comment": {
+     "value": "Kill 3 Stalkers",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "client missionobjective 976/1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective ids, ascending"
+      }
+     ],
+     "reasoning": "the client carries no ordering; its objective-id order is used."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 976,
+    "objective_id": 1,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 976/1"
+      }
+     ],
+     "reasoning": "the objective asks for a species count, bound as that species' deaths (OD-47)."
+    },
+    "creature_id": {
+     "value": 199812,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ],
+     "reasoning": "the species this batch reconstructs."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 976,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MiresReconstructedSpecies",
+   "fields": {
+    "credits": {
+     "value": 62000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 976 infobox reward"
+      }
+     ],
+     "reasoning": "the experience TaRapedia records."
+    }
+   }
   }
  ],
  "omitted": [
@@ -45923,6 +48339,21 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-PLACEMENT-RESPAWN",
+   "summary": "Placement respawn became a real mechanic on 2026-09-16 (a dead content creature whose placement carries respawn_ms is queued on the channel and materialized again by the tick) and the validator now treats it as implemented. Its behaviour has not been observed in game: what the live server did about a corpse that is still being looted, whether the respawn used the same position and rotation, and whether a player standing on the spot delayed it are all unverified. The Mires species clusters depend on it, so a check in game is the first thing to do.",
+   "closes_with": "a capture or a live check of a respawning content creature",
+   "evidence": [
+    "CreatureManager.HandleCreatureKill queues; MapChannelManager.WorkContentRespawns materializes",
+    "MissionContentRules.Implemented.PlacementRespawn"
+   ],
+   "surfaced_by": [
+    "Mires reconstruction 2026-09-16"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -46444,6 +48875,16 @@
    "choice": "An objective like \"Get 6 Miasma Goo Samples\" needs three things: the item, the creature that drops it and the drop itself. The client gives the first two - the item is its own physical entity class (Miasma Goo 11162, Xanx Pincers 11160) and the objective's own words name the creature family, which the world seed carries (Bane Miasma 88, Bane Shield Drone 85, Bane Xanx 87) - but no surviving source ties a mission item to an item template or to a loot table, so the drop cannot be reconstructed. Until it can, such an objective is bound as a count of that creature's deaths, which is what it means in play. Every field keeps its own tier: the creature and the item class are original, the target comes from the objective's text, and the binding is the reconstruction this decision authorises. A later pass with drop data would replace the binding with a real loot counter.",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#collection-objectives"
+  },
+  {
+   "id": "OD-48",
+   "decision": "Where a reconstructed species lives",
+   "default": "Cluster the specimens around the mission's own area",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "No surviving source records a creature spawn: the world seed carries 155 creatures, all Wilderness, the original dump's creature_type has 21 rows and no client table has spawn data. Where a mission names a species the client carries as an entity class (Lasher 7477, Magmonix 6338, Stalker 3781), the species is reconstructed: its class, name and the mission's own numbers are original, but its **positions** are analogues - a cluster of specimens around the area the mission's own sources put it in, one specimen more than the objective asks for, with a respawn so the cluster recovers. Health and respawn delay are analogues too, taken from the world's comparable Bane creatures. Every such field is recorded as an analogue with this decision, and the user authorised this reconstruction on 2026-09-16. The respawn delay is 60000 ms and is documented here rather than on each placement row, because content_placement.respawn_ms is an optional column and the manifest's rule is to leave an optional column out rather than fill it with an analogue.",
+   "approved_on": "2026-09-16",
+   "record": "docs/progression-preservation-plan.md#reconstructed-species"
   }
  ]
 }

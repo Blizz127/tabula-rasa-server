@@ -81,6 +81,9 @@ namespace Rasa.Data
             Prerequisites = true,
             // S4: kill bindings advance objective counters (MissionContentRuntime.OnKillBinding).
             Counters = true,
+            // 2026-09-16: a dead content creature whose placement carries respawn_ms comes back on the channel's tick
+            // (CreatureManager.HandleCreatureKill queues it, MapChannelManager.WorkContentRespawns materializes it).
+            PlacementRespawn = true,
             // S5: wall-clock objective timers fail their objective (and mission) on expiry
             // (MissionManager.ExpireObjectiveTimers).
             Timers = true,

@@ -113,6 +113,16 @@ namespace Rasa.Managers
             // StateChange(Dead) alone skips the client's AnnounceDeath cleanup.
             creature.State = CharacterState.Dead;
 
+            // Content creatures whose placement asks for a respawn come back after its delay; the tick in
+            // MapChannelManager.WorkContentRespawns brings them in again.
+            if (creature.ContentPlacementId != 0)
+            {
+                var placements = MissionManager.Instance.Content?.Content?.Catalog?.Placements;
+                if (placements != null && placements.TryGetValue(creature.ContentPlacementId, out var placement)
+                    && placement.RespawnMs != 0)
+                    mapChannel.ContentRespawns[placement.Id] = Environment.TickCount64 + placement.RespawnMs;
+            }
+
             // tell spawnpool if set
             if (creature.SpawnPool != null)
             {

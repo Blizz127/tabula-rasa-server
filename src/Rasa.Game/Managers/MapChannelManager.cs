@@ -362,6 +362,9 @@ namespace Rasa.Managers
                         // kill streaks whose window has passed
                         KillRewardManager.Instance.ExpireStreaks(mapChannel);
 
+                        // content creatures whose placement asked for a respawn
+                        WorkContentRespawns(mapChannel);
+
                         // ambient/music/sky/minimap regions: tell whoever changed region
                         RegionManager.Instance.Worker(mapChannel);
                     }
@@ -686,5 +689,45 @@ namespace Rasa.Managers
 
             return map;
         }
+        /// <summary>
+        /// Brings back content creatures whose placement asked for a respawn. The placement's respawn_ms is the
+        /// game's own field; the creature is materialized again at its placement position, and only when nothing of
+        /// that placement is alive.
+        /// </summary>
+        private static void WorkContentRespawns(MapChannel mapChannel)
+        {
+            if (mapChannel.ContentRespawns.Count == 0)
+                return;
+
+            var now = Environment.TickCount64;
+            List<uint> due = null;
+            foreach (var pair in mapChannel.ContentRespawns)
+            {
+                if (pair.Value > now)
+                    continue;
+                (due ??= new List<uint>()).Add(pair.Key);
+            }
+
+            if (due == null)
+                return;
+
+            var content = MissionManager.Instance.Content?.Content;
+            foreach (var placementId in due)
+            {
+                mapChannel.ContentRespawns.Remove(placementId);
+
+                if (content == null || !content.Catalog.Placements.TryGetValue(placementId, out var placement))
+                    continue;
+
+                var alive = mapChannel.MapCellInfo.Cells.Values
+                    .SelectMany(cell => cell.CreatureList)
+                    .Any(creature => creature.ContentPlacementId == placementId && creature.State != CharacterState.Dead);
+                if (alive)
+                    continue;
+
+                ContentMaterializer.Respawn(mapChannel, placement);
+            }
+        }
+
     }
 }

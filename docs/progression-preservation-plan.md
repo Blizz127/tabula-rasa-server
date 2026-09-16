@@ -508,6 +508,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **Reconstructed species and placement respawn (2026-09-16)**: with the owner's go-ahead for labelled best-guess
+    reconstruction, the Mires got its first reconstructed species. The client's entity class table says what each class
+    *is* (augmentation 1 = living creature, 6 = item, 41 = usable object, 52 = NPC), which separates a species from a
+    mission item - and the item classes carry the creature they come from in their own name ("MisXenoFlareGasherTeeth").
+    Lasher 7477, Magmonix 6338 and Stalker 3781 are now real creatures in the world, clustered around the area each
+    mission's own sources place them in, under **OD-48**: class, name and the mission's numbers are original, positions
+    and health are analogues. Three givers came with them through the OD-45 pipeline (Professor Long, Dr. Robertson,
+    Colonel Li Hua), and missions 955, 956 and 976 are live.
+    Placement respawn became a real mechanic for this: `respawn_ms` was a field the validator withheld as
+    unimplemented, so a dead content creature whose placement asks for one is now queued on the channel and
+    materialized again by the tick (**GAP-PLACEMENT-RESPAWN** covers what a live check should confirm).
   - **Giver naming fix (2026-09-16)**: the mission sources name givers without the world seed's rank prefix - "Lt.
     Saviours" for creature 120 "AFS Officer Lt. Saviours", "Council Elder Nula" for 93, "Elder Gadfly" for 113. The
     giver match now accepts a suffix match, which unblocked four conversation missions that every earlier batch had

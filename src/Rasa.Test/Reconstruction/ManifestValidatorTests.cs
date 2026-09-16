@@ -189,9 +189,9 @@ namespace Rasa.Test.Reconstruction
                 .ToList();
             CollectionAssert.AreEquivalent(new[]
             {
-                "creature:id:198500-199601",
+                "creature:id:198500-199812",
                 "content_area:id:198600-198649",
-                "content_placement:id:198650-199703",
+                "content_placement:id:198650-199865",
                 "content_condition:condition_id:198900-198999",
                 "content_rule:id:1985000-1985999",
                 "content_rule_action:rule_id:1985000-1985999",

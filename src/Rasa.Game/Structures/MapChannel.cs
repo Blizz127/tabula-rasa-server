@@ -54,6 +54,13 @@ namespace Rasa.Structures
         // Dictionary<dynamicObjectEntityId, content placement id> for reconstructed-content usables.
         public Dictionary<ulong, uint> ContentUsables = new Dictionary<ulong, uint>();
 
+        /// <summary>
+        /// Content creatures waiting to come back: placement id -> the tick they are due on. A placement's respawn_ms
+        /// is the game's own field, so a dead creature whose placement asks for a respawn is queued here and the
+        /// channel's tick materializes it again (placement respawn).
+        /// </summary>
+        public Dictionary<uint, long> ContentRespawns = new Dictionary<uint, long>();
+
         /// <summary>Crafting stations by kraftwerks row id; see KraftwerksManager.</summary>
         public Dictionary<uint, DynamicObject> Kraftwerks = new Dictionary<uint, DynamicObject>();
 

@@ -274,7 +274,9 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
             Assert.IsTrue(implemented.Timers && implemented.Indicators);
-            Assert.IsFalse(implemented.PlacementRespawn);
+            // Placement respawn became a real mechanic on 2026-09-16: the Mires species clusters are seeded with
+            // respawn_ms and rely on it, so the capability is now claimed rather than withheld.
+            Assert.IsTrue(implemented.PlacementRespawn);
             Assert.IsTrue(MissionContentRules.BootcampEntryImplemented);
         }
 
@@ -869,6 +871,8 @@ namespace Rasa.Test
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
                 // Mission 430's mortar launchers, the entity class the client map gives them (W3 batch 13).
                 references.Classes.UnionWith(new uint[] { 7478 });
+                // Placement respawn (2026-09-16): the Mires species clusters rely on it, and the validator treats it
+                // as implemented, so the capability is asserted here rather than described in a gap.
                 // S2 crate item set 19858.
                 references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx

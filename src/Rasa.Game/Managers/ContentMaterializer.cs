@@ -32,6 +32,12 @@ namespace Rasa.Managers
                     SpawnUsable(mapChannel, placement, content, null, 0);
         }
 
+        /// <summary>
+        /// Materializes a placement's creature again after its respawn delay (placement respawn).
+        /// </summary>
+        public static void Respawn(MapChannel mapChannel, ContentPlacementEntry placement)
+            => SpawnCreature(mapChannel, placement);
+
         private static void SpawnCreature(MapChannel mapChannel, ContentPlacementEntry placement)
         {
             var creature = CreatureManager.Instance.CreatePlacedCreature(placement, mapChannel);
