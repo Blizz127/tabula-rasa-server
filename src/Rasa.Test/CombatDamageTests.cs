@@ -31,6 +31,44 @@ namespace Rasa.Test
             Assert.AreEqual(mitigation, Math.Round(DamageResistance.GetResistedPercent(value), 2));
         }
 
+        // A landed hit is scaled by the same curve, through the helper the player damage path calls. Before
+        // 2026-09-16 nothing called it: the curve was recovered and tested but combat ignored it, so resistance
+        // gear changed nothing in a fight.
+        [DataTestMethod]
+        [DataRow(1000, 0, 1000)]
+        [DataRow(1000, 10, 833)]
+        [DataRow(1000, 25, 667)]
+        [DataRow(1000, 50, 500)]
+        [DataRow(1000, 75, 400)]
+        [DataRow(1000, 100, 333)]
+        [DataRow(1000, 150, 250)]
+        [DataRow(1000, 200, 200)]
+        [DataRow(1000, 250, 167)]
+        [DataRow(20, 250, 3)]
+        // A hit that lands always takes a point, however small it is against the resistance.
+        [DataRow(1, 250, 1)]
+        public void LandedHitsAreScaledByTheResistanceCurve(int damage, int resistance, int expected)
+        {
+            Assert.AreEqual(expected, DamageResistance.ScaleDamage(damage, resistance));
+        }
+
+        [TestMethod]
+        public void ResistanceIsSummedPerDamageTypeFromEverythingWorn()
+        {
+            var resistances = new List<ResistanceData>
+            {
+                new ResistanceData(DamageType.Laser, 4),
+                new ResistanceData(DamageType.Laser, 6),
+                new ResistanceData(DamageType.Physical, 3)
+            };
+
+            Assert.AreEqual(10, DamageResistance.ResistanceFor(resistances, DamageType.Laser));
+            Assert.AreEqual(3, DamageResistance.ResistanceFor(resistances, DamageType.Physical));
+            Assert.AreEqual(0, DamageResistance.ResistanceFor(resistances, DamageType.Fire));
+            Assert.AreEqual(0, DamageResistance.ResistanceFor(resistances, null));
+            Assert.AreEqual(0, DamageResistance.ResistanceFor(new List<ResistanceData>(), DamageType.Laser));
+        }
+
         [DataTestMethod]
         [DataRow(-100.0, 2.0, -100.0)]
         [DataRow(-50.0, 1.5, -50.0)]

@@ -1299,6 +1299,11 @@ namespace Rasa.Managers
             var armorBonusPct = player.Attributes[Attributes.Body].CurrentMax * 0.0066666d;
             var armorRegenRate = 0;
 
+            // Resistances come from the equipment's own resist lists, summed per damage type. The client already
+            // applies the same conversion to what it is sent, but until now the list was only ever sent: nothing
+            // accumulated it and combat never read it, so resistance gear did nothing in a fight.
+            var resistances = new Dictionary<DamageType, int>();
+
             for (var i = 1; i < 21; i++)
             {
                 if (client.Player.Inventory.EquippedInventory[i] == 0)
@@ -1324,9 +1329,19 @@ namespace Rasa.Managers
                 }
                 armorMax += equipmentItem.ItemTemplate.ArmorValue;      // ToDo
                 armorRegenRate += classInfo.ArmorClassInfo.RegenRate;
+
+                foreach (var resistance in equipmentItem.ItemTemplate.EquipableInfo?.ResistList ?? new List<ResistanceData>())
+                    resistances[resistance.ResistanceType] =
+                        resistances.TryGetValue(resistance.ResistanceType, out var current)
+                            ? current + resistance.ResistanceAmmount
+                            : resistance.ResistanceAmmount;
                 
                 // what about damage absorbed? Was it used at all?
             }
+            player.ResistanceData.Clear();
+            foreach (var (damageType, amount) in resistances)
+                player.ResistanceData.Add(new ResistanceData(damageType, amount));
+
             armorMax = armorMax * (1.0d + armorBonusPct);
             attribute[Attributes.Armor].NormalMax = (int)Math.Round(armorMax, 0);
             attribute[Attributes.Armor].CurrentMax = attribute[Attributes.Armor].NormalMax;

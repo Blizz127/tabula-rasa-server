@@ -32035,6 +32035,20 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-D14-RESISTANCE-ROUNDING",
+   "summary": "The resistance curve is original - the client's own shared/damageresistance.pyo, and Deployment 14's published table matches it on all eight points - but the rounding the live server applied to a scaled hit is not recorded anywhere. Integer rounding to the nearest point is used, with a landed hit never falling below one, and combat.py's ordering (resistance before armour) is followed. Both choices are reconstruction parameters. The wiring itself is the fix: until 2026-09-16 the curve was recovered, tested and then ignored - no member ever accumulated the equipped resist lists and no damage path read them, so resistance gear did nothing in a fight.",
+   "closes_with": "needs a capture or client script showing how the live server rounded a scaled hit",
+   "evidence": [
+    "docs/combat-damage-client-evidence.md (client shared/damageresistance.pyo, sha256 18518f0c...)",
+    "Deployment 14 patch notes: 10->16.67%, 25->33.33%, 50->50%, 75->60%, 100->66.67%, 150->75%, 200->80%, 250->83.33%",
+    "src/Rasa.Test/CombatDamageTests.cs: the published table, the scaling and the per-type sum"
+   ],
+   "surfaced_by": [
+    "combat fidelity pass 2026-09-16"
+   ],
+   "slices": []
   }
  ],
  "non_content_settings": [

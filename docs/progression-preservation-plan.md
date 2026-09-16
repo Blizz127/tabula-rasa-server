@@ -483,6 +483,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
     (**GAP-W3-1390-ESCORT**), and the content loader now only requires a completion binding for a *required*
     objective, since an optional one cannot strand a character. Rewards and the chain's gates are recorded as
     **GAP-W3-HUB-REWARDS** and **GAP-W3-HUB-PREREQUISITES** rather than guessed.
+  - **Combat fidelity (2026-09-16)**: the resistance curve the client itself carries
+    (`shared/damageresistance.pyo`, with Deployment 14's published table matching it on all eight points) was
+    recovered, tested - and then never used. Nothing accumulated the equipped resist lists and no damage path read
+    them, so resistance gear changed nothing in a fight. The equipment pass now sums each worn item's resist list
+    per damage type onto the player, and the player damage path scales a landed hit by that resistance before
+    armour absorbs it, through the same curve. Nine published points, the scaling arithmetic and the per-type sum
+    are pinned by tests; the rounding the live server used is recorded as **GAP-D14-RESISTANCE-ROUNDING** rather
+    than assumed.
   - **Whole-world position audit (2026-09-15, owner request)**: every position in the world is now measured against
     the walkable surface the navmesh gives at its XZ - 434 rows over content placements, locations, trigger areas,
     objective markers, Logos shrines and creature spawns. Our content must sit within 2 m of the surface; original

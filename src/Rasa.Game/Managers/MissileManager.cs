@@ -133,16 +133,28 @@ namespace Rasa.Managers
             if (actor.State == CharacterState.Dead)
                 return;
 
+            // Resistance to the missile's damage type scales the hit before armour absorbs it, through the
+            // conversion the client's own shared/damageresistance.pyo uses (Deployment 14's diminishing returns:
+            // resistance / (resistance + 50)). A missile with no damage type, or a target with no resistance of
+            // that type, takes it in full.
+            var damage = missile.DamageA;
+            if (actor is Manifestation target)
+            {
+                var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType);
+                if (resistance > 0)
+                    damage = DamageResistance.ScaleDamage(damage, resistance);
+            }
+
             // decrease armor first
-            var armorDecrease = Math.Min(missile.DamageA, actor.Attributes[Attributes.Armor].Current);
+            var armorDecrease = Math.Min(damage, actor.Attributes[Attributes.Armor].Current);
             hit.Absorbed = (uint)armorDecrease;
-            hit.FinalAmt = missile.DamageA - armorDecrease;
+            hit.FinalAmt = damage - armorDecrease;
 
             actor.Attributes[Attributes.Armor].Current -= armorDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateArmorPacket(actor.Attributes[Attributes.Armor], 0));
 
             // decrease health (if armor is depleted)
-            var healthDecrease = Math.Min(missile.DamageA - armorDecrease, actor.Attributes[Attributes.Health].Current);
+            var healthDecrease = Math.Min(damage - armorDecrease, actor.Attributes[Attributes.Health].Current);
 
             actor.Attributes[Attributes.Health].Current -= healthDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateHealthPacket(actor.Attributes[Attributes.Health], 0));
