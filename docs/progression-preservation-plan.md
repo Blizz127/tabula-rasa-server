@@ -498,6 +498,9 @@ character picks up in Alia Das once Training Day and the class choice are behind
   - **W3 batch 8 (2026-09-16)**: a fourth zone, the **Marshes** - Lieutenant Morrison and three Retreads, with their
     four missions. That makes 22 NPCs and 24 missions created from this pipeline in one session, and the count of
     missions in the world 46 (8 boot camp, 14 hub and Wilderness, 24 from this pipeline).
+  - **W3 batch 9 (2026-09-16)**: Torden - the **Mires** (Sgt. Jeansonne, Chakel, Corporal Cooper, Lt. Foushee,
+    Corporal Hairston on map 1759) and one plateau liaison (Receptive Liaison Ridout), with seven missions. Twenty-
+    eight NPCs and 31 missions from this pipeline now; 53 missions in the world.
   - **NPCs created from evidence (OD-45)**: name id = original (client `creaturenamelanguage`), level/zone//loc =
     inferred (TaRapedia, dated), appearance = analogue of a world-seed NPC of the same faction. This is the pipeline
     that unblocks the 660 missions with no giver in the world seed, and it is mechanical: resolve the package the
