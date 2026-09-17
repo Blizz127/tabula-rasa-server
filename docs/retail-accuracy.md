@@ -1560,6 +1560,20 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
   the manifest entry says so.
 
+## 2026-09-17 UTC — Deploy: twelve NPCs given their dialogue (commit 1a83292)
+
+- Candidate `rasa_net:candidate-dialogue-binding-20260917`; the suite ran **918 of 918, nothing skipped**, with
+  the world database and the navmesh mounted. Previous image kept as `rasa_net:before-dialogue-binding-20260917`.
+- Integrity-checked backups in `/home/blizz/backups/rasa-net/20260917T231510Z-dialogue-binding/`.
+- `WildernessDialogueBinding` applied by `dotnet ef database update` against a copy and swapped in with the game
+  stopped; afterwards the live world carries all twelve `npc_package` rows and `PRAGMA integrity_check` is ok.
+- Deploy order as before: stop game → swap the world → recreate game → restart auth (23:15:44) → restart game.
+  Both handshake lines postdate the auth restart at 23:16:07. Nobody was online. After it: `Loaded 16 content
+  rules (249 content rows, 0 gaps)`, no error lines, only mission 321 unoffered.
+- **Fifteen objectives over nine missions stop being dead ends**: 421/3, 427/1, 431/1, 431/2, 431/3, 442/1,
+  444/1, 451/1, 451/2, 549/1, 682/2, 682/4, 682/5, 682/6 and 698/1. The audit's recorded set is down from 34 to
+  19.
+
 ## 2026-09-17 UTC — Deploy: the respawn the player never saw, and the floor (commit 88be25f)
 
 - Candidate `rasa_net:candidate-respawn-floor-20260917`; the suite ran **918 of 918, nothing skipped**, with the
