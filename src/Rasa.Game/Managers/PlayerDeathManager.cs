@@ -290,8 +290,15 @@ namespace Rasa.Managers
             client.CellCallMethod(client, player.EntityId, new PreTeleportPacket(TeleportType.Default));
             client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
             client.CallMethod(player.EntityId, new TeleportPacket(hospital.Position, player.Rotation, TeleportType.Default, 0));
+
+            // ignoreSelf must be false. The client's Actor.Recv_Teleport does not carry the body anywhere: it
+            // blocks movement, runs the post-teleport fade and schedules _TelportMovementCompleted after the
+            // delay. The position arrives on the movement channel, so leaving the owner out of this send moved
+            // everyone's picture of the player except the player's own - which is the live report of 2026-09-17,
+            // where the server logged "Blizz respawns at hospital 20000001" and the recruit stayed at the
+            // Thrax that killed them. The waypoint teleport (DynamicObjectManager) has always passed false here.
             client.CellMoveObject(client, new MoveObjectMessage(player.EntityId,
-                new Movement(hospital.Position, 0f, 0, new Vector2((float)player.Rotation, 0f))), true);
+                new Movement(hospital.Position, 0f, 0, new Vector2((float)player.Rotation, 0f))), false);
         }
 
         /// <summary>

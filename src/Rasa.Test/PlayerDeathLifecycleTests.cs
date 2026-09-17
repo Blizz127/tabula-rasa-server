@@ -126,6 +126,15 @@ namespace Rasa.Test
             Assert.IsNull(_owner.Player.DeathOffer);
             Assert.AreEqual(1, _persisted.Count(entry => entry.Update == CharacterUpdate.Position));
 
+            // The body travels on the movement channel, not on CallMethod: the client's Recv_Teleport only
+            // blocks movement and runs the fade. The owner has to be told where they now are, or they stand at
+            // the place they died while everyone else sees them at the hospital (live report 2026-09-17).
+            var ownerMoves = DrainMoves(_owner);
+            Assert.AreEqual(1, ownerMoves.Count, "the respawning player is told their own new position");
+            Assert.AreEqual(hospital.Position, ownerMoves[0].Movement.Position);
+            Assert.AreEqual(_owner.Player.EntityId, ownerMoves[0].EntityId);
+            Assert.AreEqual(1, DrainMoves(_observer).Count, "and so is everyone who can see them");
+
             var owner = Drain(_owner);
             var begin = owner.FindIndex(message => message.MethodId == GameOpcode.BeginTeleport);
             var teleport = owner.FindIndex(message => message.MethodId == GameOpcode.Teleport);
@@ -401,13 +410,25 @@ namespace Rasa.Test
             return stream.ToArray();
         }
 
-        private static List<CallMethodMessage> Drain(Client client)
+        private static List<CallMethodMessage> Drain(Client client) => DrainQueue<CallMethodMessage>(client);
+
+        /// <summary>The movement channel, which Drain used to throw away with everything that was not a CallMethod.</summary>
+        private static List<MoveObjectMessage> DrainMoves(Client client) => DrainQueue<MoveObjectMessage>(client);
+
+        private static List<T> DrainQueue<T>(Client client) where T : class
         {
             var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(client);
-            var messages = new List<CallMethodMessage>();
+            var messages = new List<T>();
+            var kept = new List<ProtocolPacket>();
             while (queue.PopOutgoing() is ProtocolPacket protocol)
-                if (protocol.Message is CallMethodMessage call)
-                    messages.Add(call);
+                if (protocol.Message is T wanted)
+                    messages.Add(wanted);
+                else
+                    kept.Add(protocol);
+
+            foreach (var protocol in kept)
+                queue.EnqueueOutgoing(protocol);
+
             return messages;
         }
     }

@@ -6,6 +6,7 @@ using System.Numerics;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rasa.Data;
+using Rasa.Migrations.WildernessData;
 using Rasa.Navigation;
 
 namespace Rasa.Test
@@ -32,8 +33,23 @@ namespace Rasa.Test
     [DoNotParallelize]
     public class WorldPositionAuditTests
     {
-        /// <summary>How far our own content may sit off the walkable surface.</summary>
-        private const double SurfaceTolerance = 2.0;
+        /// <summary>
+        /// How far our own content may sit off the floor. The reference is not the navmesh surface itself:
+        /// measured on 2026-09-17, the original server's own 217 creature spawns sit 0.276 m below it, its
+        /// teleporters 0.150 m below it, and the three characters' own client-reported standing positions 0.08
+        /// to 0.47 m below it - a body demonstrably on the floor reads under the navmesh, because Recast's
+        /// walkable surface is the top of a voxel column rather than the terrain under it. So content is
+        /// measured against <c>surface + WorldPlacementFloorSnapRows.OriginalSpawnOffset</c>, and this is how
+        /// far off that a row may be before it is not standing on the floor at all.
+        /// </summary>
+        private const double SurfaceTolerance = WorldPlacementFloorSnapRows.FloorTolerance;
+
+        /// <summary>
+        /// How far our own non-body geometry - trigger areas, walk destinations, objective markers - may sit off
+        /// the surface. A trigger sphere carries its own vertical extent and a map marker is drawn, not stood on,
+        /// so neither is measured against the floor a creature stands on.
+        /// </summary>
+        private const double GeometryTolerance = 2.0;
 
         /// <summary>How far below the surface original data may sit before it counts as buried.</summary>
         private const double BuriedTolerance = 1.0;
@@ -75,6 +91,7 @@ namespace Rasa.Test
             // OD-48 species clusters: the ring around a mission area can land off the navmesh even when the area's own
             // position is on it (a ledge, a structure floor). The creatures are placed as the decision says; the audit
             // keeps checking everything else. GAP-W3-NPC-POSITION-COVERAGE.
+            { "content_placement:bomb on the wreck hull", "S5's bomb is mounted on the dropship wreck's hull (OD-30), not stood on the floor" },
             { "content_placement:Professor Long's area (OD-48 analogue)", SpeciesClusterOffNavmesh },
             { "content_placement:Dr. Robertson's area (OD-48 analogue)", SpeciesClusterOffNavmesh },
             { "content_placement:Colonel Li Hua's area (OD-48 analogue)", SpeciesClusterOffNavmesh }
@@ -101,9 +118,11 @@ namespace Rasa.Test
             var checkedRows = 0;
             var skippedRows = 0;
 
-            // Our content: must be on the surface.
+            // Bodies: must stand on the floor the original spawns define.
             Audit("content_placement", "content placements", strict: true,
-                "SELECT map_context_id, pos_x, pos_y, pos_z, comment FROM content_placement");
+                "SELECT map_context_id, pos_x, pos_y, pos_z, comment FROM content_placement", onTheFloor: true);
+
+            // Our other geometry: near the surface, but not a body standing on it.
             Audit("content_location", "content locations", strict: true,
                 "SELECT map_context_id, pos_x, pos_y, pos_z, comment FROM content_location");
             Audit("content_area", "trigger areas", strict: true,
@@ -125,7 +144,7 @@ namespace Rasa.Test
                 $"{problems.Count} world position(s) are not where a body can stand:\n" + string.Join("\n", problems));
             return;
 
-            void Audit(string table, string label, bool strict, string sql, long? forcedContext = null)
+            void Audit(string table, string label, bool strict, string sql, long? forcedContext = null, bool onTheFloor = false)
             {
                 using var command = connection.CreateCommand();
                 command.CommandText = sql;
@@ -168,8 +187,10 @@ namespace Rasa.Test
                         continue;
                     }
 
-                    var delta = y - ground.Value;
-                    var limit = strict ? SurfaceTolerance : BuriedTolerance;
+                    // A body is measured against the floor the original spawns define; everything else against
+                    // the raw surface, original data included - it is what defined that offset in the first place.
+                    var delta = y - ground.Value - (onTheFloor ? WorldPlacementFloorSnapRows.OriginalSpawnOffset : 0);
+                    var limit = !strict ? BuriedTolerance : onTheFloor ? SurfaceTolerance : GeometryTolerance;
                     if (strict ? Math.Abs(delta) <= limit : delta >= -limit)
                         continue;
 

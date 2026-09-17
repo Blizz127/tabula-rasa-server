@@ -682,6 +682,34 @@ character picks up in Alia Das once Training Day and the class choice are behind
     its measurement. The 66 markers the recipe cannot resolve - no `graveyardlanguage` entry reads their name, so
     the id Hospital Selection would show is unrecovered - are **GAP-HOSPITAL-UNRESOLVED-GRAVEYARD**; they are
     mostly instances and the wargame maps, and those maps keep the revive-in-place fallback.
+  - **"Thrax infantry is in the ground" (2026-09-17, live report)**: measuring every position in the world at
+    once showed the audit's own reference was off. Our 107 content placements sit a median **0.415 m below** the
+    walkable surface the navmesh gives - but so does everything else: the original server's own 217 creature
+    spawns sit 0.276 m below it, its 357 teleporters 0.150 m below it, and the three characters' **own
+    client-reported standing positions** 0.08, 0.31, 0.41 and 0.47 m below it. A player who is demonstrably on
+    the floor reads under the navmesh, so the navmesh reads high on terrain - Recast's walkable surface is the
+    top of a voxel column, not the terrain under it - and a row that matched the navmesh exactly was floating.
+    The floor is now taken to be `surface - 0.276 m`, the offset the original spawns sit at, which is the one
+    reference that is both original and about the same thing: a creature standing somewhere
+    (**GAP-NAVMESH-FLOOR-OFFSET**). The bias is a terrain effect and not a constant - the grating platform's top,
+    taken from the client's own map file at 122.11, matches the navmesh there to 0.01 m - so nothing was
+    re-snapped wholesale. `WorldPlacementFloorSnap` moves only the **14 rows more than 0.5 m off that floor**:
+    seven buried, the worst by 1.66 m, including the boot camp's **Thrax Initiate at the base gate, 0.73 m
+    under** - the report's own sighting, and the shape of the invisible attacker of the same day, whose shots
+    rendered while its body did not - and seven floating, the worst by 0.72 m. Only X and Z carry evidence for
+    those rows; Y was never recovered for any of them. `WorldPositionAuditTests` now measures bodies against the
+    floor at 0.5 m and everything else (trigger spheres, walk destinations, map markers) against the raw surface
+    at 2.0 m, with the bomb on the wreck hull named as the one placement not stood on the floor.
+  - **The respawn teleport reached everyone but the player (2026-09-17, live report)**: the hospital fix of the
+    same day was not the whole of it. The log showed the server doing exactly the right thing -
+    `Blizz died on map 1985 ... offering 1 hospital(s)` then `Blizz respawns at hospital 20000001 (357.9, 120.3,
+    156.5)` - while the recruit stayed at the Thrax that killed them. The client's own `Actor.Recv_Teleport`
+    carries no body: it blocks movement, runs the post-teleport fade and schedules `_TelportMovementCompleted`
+    after the delay. The position arrives on the **movement channel**, and `MoveToHospital` sent that with
+    `ignoreSelf: true` - so every observer's picture of the player moved to the hospital and the player's own did
+    not. The waypoint teleport in `DynamicObjectManager` has always passed `false`. The death test could not see
+    it, because its `Drain` helper kept only `CallMethodMessage` and threw the movement channel away; it now
+    drains both and asserts the owner is told their own new position.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

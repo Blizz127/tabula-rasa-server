@@ -52332,6 +52332,23 @@
    "slices": [
     "S8"
    ]
+  },
+  {
+   "id": "GAP-NAVMESH-FLOOR-OFFSET",
+   "summary": "The navmesh reads high on terrain, so 'on the navmesh surface' was never the same as 'on the floor'. Measured 2026-09-17 against everything in the world at once: the original server's own 217 creature spawns sit a median 0.276 m below the surface, its 357 teleporters 0.150 m below it, and the three characters' own client-reported standing positions 0.08, 0.31, 0.41 and 0.47 m below it - a body demonstrably on the floor reads under the navmesh, because Recast's walkable surface is the top of a voxel column rather than the terrain under it. The floor is therefore taken to be surface - 0.276 m, the offset the original spawns sit at, and WorldPositionAudit measures bodies against that with a 0.5 m tolerance instead of 2.0 m against the raw surface. The bias is a terrain effect and not a constant: the grating platform's top, taken from the client's own map file at 122.11, matches the navmesh there to 0.01 m, so nothing was re-snapped wholesale - WorldPlacementFloorSnap moved only the 14 rows more than 0.5 m off.",
+   "evidence": [
+    "src/Rasa.DBL/Migrations/WildernessData/WorldPlacementFloorSnapRows.cs",
+    "rasachar.db character positions on 2026-09-17 (client-reported)",
+    "rasaworld.db spawnpool and teleporter tables (original server data)"
+   ],
+   "closes_with": "a navmesh rebuild whose surface lands on the terrain, or a per-map measurement of the bias",
+   "surfaced_by": [
+    "live play 2026-09-17 (\"thrax infantry is in the ground too\")"
+   ],
+   "slices": [
+    "S4",
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
