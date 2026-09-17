@@ -52275,6 +52275,22 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-MISASSIGNED-PACKAGE",
+   "summary": "Two NPCs created by earlier W3 batches carry a dialogue package that belongs to someone else, so they speak the wrong lines and their own objectives stay dead ends. Found 2026-09-17 by reading each package's full usage across the client's objectiveconversation table instead of one mission at a time.\n\nField Lt. Brody (creature 199105) carries package 550, whose line is the rescued squad member's \"Man, am I glad you showed up ... get back to Brody\" - spoken TO the player ABOUT Brody, so it cannot be his. Brody's own package is 145, which completes 361/1 (\"Report to Field Lieutenant Brody who is stationed at the Walk of Giants\") and 670/2 (\"return to Field Lieutenant Brody\"). Package 550 belongs to Captain Fransisco, the survivor in Devil's Den, who is client name 6587 and is not in the world at all.\n\nCaptain Reyko (creature 199502) carries package 1213, whose line is a machine's: \"This console appears to have an active communications system. You should be able to contact Captain Reyko from here.\" Reyko's own package is 1200, which completes four missions that all name him - 1113/7, 1125/1, 1310/1 and the 20000003 Halloween mission.\n\nNeither can be corrected on its own: moving Brody to 145 leaves 550 unbound until Fransisco exists, and moving Reyko to 1200 leaves 1213 unbound until the console is dispensed as a usable. The npc_package table keys on the creature id, so one creature cannot carry two.",
+   "evidence": [
+    "client objectiveconversation and missiontextlanguage for packages 145, 550, 1200, 1213",
+    "rasaworld.db npc_package rows 199105 -> 550 and 199502 -> 1213",
+    "creaturenamelanguage 6587 'Captain Fransisco', 2946 'Field Lt. Brody', 9007 'Captain Reyko'"
+   ],
+   "closes_with": "Captain Fransisco created at Devil's Den with package 550 and Brody moved to 145; the Irendas console dispensed as a usable with package 1213 and Reyko moved to 1200",
+   "surfaced_by": [
+    "package-usage sweep, 2026-09-17"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
