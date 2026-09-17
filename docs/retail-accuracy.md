@@ -1560,6 +1560,24 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
   the manifest entry says so.
 
+## 2026-09-17 UTC — Deploy: the respawn the player never saw, and the floor (commit 88be25f)
+
+- Candidate `rasa_net:candidate-respawn-floor-20260917`; the suite ran **918 of 918, nothing skipped**, with the
+  world database and the navmesh mounted. Previous image kept as `rasa_net:before-respawn-floor-20260917`.
+- Integrity-checked backups in `/home/blizz/backups/rasa-net/20260917T223912Z-respawn-floor/`.
+- The world database was migrated by `dotnet ef database update` against a copy (`WorldPlacementFloorSnap`) and
+  swapped in with the game stopped; placement 198674 reads 110.23 and 199603 reads 223.48 afterwards, as the
+  migration's own rows say. `PRAGMA integrity_check` ok.
+- **Mission progress was cleared at the owner's request** ("can you restart the quests?"): all of
+  `character_mission`, `character_mission_objective` and `character_mission_objective_counter`, which held six
+  mission rows and ten objective rows for the three live characters and three deleted ones. Initiation is a forced
+  radio offer on entering the camp, so the chain starts over by itself.
+- Deploy order as before: stop game → swap the databases → recreate game (22:40:04) → restart auth (22:40:16) →
+  restart game. Both handshake lines postdate the auth restart — auth *"has authenticated! Requesting info..."* and
+  the game *"Successfully authenticated with the Auth server!"* at 22:40:38 — with the expected failed attempt at
+  22:40:09 while auth was mid-restart. Nobody was online. After it: `Loaded 16 content rules (249 content rows, 0
+  gaps)`, 76 of 78 navmeshes, no error lines, and only mission 321 unoffered.
+
 ## 2026-09-17 UTC — Deploy: hospital coverage on 41 maps, and mission 429 offered (commit fca47bb)
 
 - Candidate `rasa_net:candidate-hospital-coverage-20260917` ran the whole suite with the world database and the
