@@ -1560,6 +1560,30 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
   the manifest entry says so.
 
+## 2026-09-17 UTC — Deploy: hospital coverage on 41 maps, and mission 429 offered (commit fca47bb)
+
+- Candidate `rasa_net:candidate-hospital-coverage-20260917` ran the whole suite with the world database and the
+  navmesh mounted: **918 of 918, nothing skipped** — the first run in which both `MissionLinkAuditTests` checks
+  actually execute (they look for `rasaworld.db` beside the `navmesh` folder, which no test container carried, so
+  they had been reported *inconclusive* every time). The previous image is kept as
+  `rasa_net:before-hospital-coverage-20260917`.
+- Integrity-checked backups (`PRAGMA integrity_check` = ok for all three) in
+  `/home/blizz/backups/rasa-net/20260917T190310Z-hospital-coverage/`.
+- **The world database needed a repair, not just a migration.** `WildernessPinholeNpc` was deployed on its first
+  build, before the objective transition row was added to it, so the live database carried the migration as applied
+  and mission 429 still logged *"not offered, definition incomplete: required objective 4 is never revealed"*. The
+  migration was reverted and re-applied with `dotnet ef database update` against a copy, and the copy's full
+  `.dump` differs from the live one by exactly one line — `INSERT INTO npc_mission_objective_transition
+  VALUES(429,5,4)` — which is what was swapped in.
+- Deploy order as the 2026-09-16 entry requires: stop game → swap the database → recreate game (19:50:19) →
+  restart auth (19:50:52) → restart game (19:51:06). Both handshake lines postdate the auth restart — auth *"has
+  authenticated! Requesting info..."* 19:51:14.991 and the game *"Successfully authenticated with the Auth
+  server!"* 19:51:15.000 — and the game's first attempt at 19:50:45, while auth was mid-restart, failed exactly as
+  that entry predicts. Nobody was online.
+- After the deploy: `Loaded 16 content rules (249 content rows, 0 gaps)`, `Loaded navmeshes for 76 of 78 maps`,
+  373 region volumes, 141 map links, no error lines. **The "Mission 429 is not offered" line is gone**; only 321
+  remains, which has no giver in the client tables at all.
+
 ## 2026-09-17 UTC — Deploy: the supply crate fix (commit a117311)
 
 - Candidate `rasa_net:candidate-retail-crate-loot-20260917` (sha256 f134d7e3…) ran the whole suite with no network and no
