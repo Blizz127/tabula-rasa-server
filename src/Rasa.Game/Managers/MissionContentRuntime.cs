@@ -655,9 +655,19 @@ namespace Rasa.Managers
                     foreach (var entry in entries)
                     {
                         var item = ItemManager.Instance.CreateFromTemplateId(entry.ItemTemplateId, entry.Quantity);
+
                         if (item != null)
                             open.Items.Add(new LootItem(item, client.Player.EntityId, 0));
+                        else
+                            // A row whose item cannot be built is not added at all. If it were, the window
+                            // would list an item the player can never take, and the container would never
+                            // read as empty.
+                            Logger.WriteLog(LogType.Error,
+                                $"Content container {placement.Id}: item template {entry.ItemTemplateId} could not be built, so its row is omitted.");
                     }
+
+                Logger.WriteLog(LogType.Debug,
+                    $"{client.Player.Name} opened content container {placement.Id} ({open.Items.Count} row(s)).");
 
                 _openContainers[obj.EntityId] = open;
             }
@@ -701,11 +711,11 @@ namespace Rasa.Managers
             if (open == null)
                 return;
 
-            var remaining = open.Remaining();
-            if (remaining.Count == 0)
-                return;
-
-            foreach (var row in remaining)
+            // A container with nothing left to hand over still settles: the objective bound to it is
+            // satisfied by the container being empty, and returning early here meant a crate whose rows
+            // had already been emptied - by the player, by an earlier session, or by a row that could not
+            // be built - could never complete the objective waiting on it (live report 2026-09-17).
+            foreach (var row in open.Remaining())
                 TakeContainerRow(client, row, null);
 
             SettleContainer(client, entityId, open);
@@ -767,11 +777,40 @@ namespace Rasa.Managers
             client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
             client.CallMethod(entityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
 
-            if (remaining.Count > 0)
+            // "Get your gear from the crate" is satisfied when the player has the gear, however they came by
+            // it: rows they took are gone from here, and rows they are already wearing or carrying count too,
+            // or a player who picked the gear up before the objective was revealed would be stuck short of it
+            // (live report 2026-09-17).
+            var outstanding = remaining.Count(row => !PlayerHolds(client.Player, row.Item?.ItemTemplateId ?? 0));
+
+            Logger.WriteLog(LogType.Debug,
+                $"Content container {entityId} settled for {client.Player.Name}: {open.Taken().Count} taken, {remaining.Count} left, {outstanding} still missing.");
+
+            if (outstanding > 0)
                 return;
 
             foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LootAll).Where(binding => binding.PlacementId == ContentUsablesPlacementId(mapChannel, entityId)))
                 Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.LootAll);
+        }
+
+        /// <summary>
+        /// Whether the player is already carrying or wearing an item of that template, in any inventory.
+        /// </summary>
+        private static bool PlayerHolds(Manifestation player, uint itemTemplateId)
+        {
+            if (player == null || itemTemplateId == 0)
+                return false;
+
+            foreach (var inventory in new[] { player.Inventory.PersonalInventory, player.Inventory.EquippedInventory })
+                foreach (var entityId in inventory ?? new List<ulong>())
+                {
+                    var item = EntityManager.Instance.GetItem(entityId);
+
+                    if (item?.ItemTemplate != null && item.ItemTemplate.ItemTemplateId == itemTemplateId)
+                        return true;
+                }
+
+            return false;
         }
 
         private uint ContentUsablesPlacementId(MapChannel mapChannel, ulong entityId) =>

@@ -172,7 +172,7 @@
      "max": 199812
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601)."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0."
   },
   {
    "table": "content_area",
@@ -305,7 +305,7 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 199601
+     "max": 199603
     }
    },
    "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
@@ -48558,6 +48558,1306 @@
      "reasoning": "the Wilderness -> Divide map link's own position, so the objective ends where the game itself sends you to the Divide."
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199004
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Receptive Liaison Noonan",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10013"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 10013,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10013"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Noonan page (2007-12-18): no infobox; the Divide band"
+      }
+     ],
+     "reasoning": "the zone band the mission levels use; TaRapedia's page for this NPC has no infobox"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199005
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Agent Franz",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 6945"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 6945,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 6945"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz infobox, Level (2008-08-09)"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199206
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Colonel Bosley",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8618"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 8618,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8618"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 34,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley infobox, Level (2008-03-02)"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199505
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Receptive Liaison Repp",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9940"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 9940,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9940"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp infobox, Level (2008-08-28)"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199602
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Private Parsons",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10270"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 10270,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10270"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons infobox, Level (2008-02-06)"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199603
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "comment": {
+     "value": "Lt. Gerry",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10271"
+      }
+     ],
+     "reasoning": "the name TaRapedia's mission page uses for this giver, and the name the client renders for the id below"
+    },
+    "name_id": {
+     "value": 10271,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10271"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry infobox, Level (2008-03-26)"
+      }
+     ],
+     "reasoning": "TaRapedia records the NPC's level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same faction and kind that uses this class (3846: McAllister 198500 and Rogers 100), as every W3 NPC batch",
+     "required_because": "an entity class is mandatory for the creature to exist and be drawn, and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the same world-seed NPC the class comes from, whose hit points the server sets",
+     "required_because": "the server needs a hit point maximum and no source gives one per mission NPC",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199004
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "REGION_LABEL 'Foreas Base' (map_region 4: -42, 116, 479) and the navmesh surface under it (116.50)"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199004,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "REGION_LABEL 'Foreas Base' (map_region 4: -42, 116, 479) and the navmesh surface under it (116.50)"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": -42.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "REGION_LABEL 'Foreas Base' (map_region 4: -42, 116, 479) and the navmesh surface under it (116.50)"
+      }
+     ],
+     "reasoning": "no /loc exists for Noonan anywhere; TaRapedia's mission page puts him at Foreas Base (Report to Liaison Noonan, RewardGiverLocation), so he stands at the client map's own label point for that base, on the navmesh's ground. The point inside the base is not evidenced (GAP-W3-NOONAN-POSITION).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 116.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "REGION_LABEL 'Foreas Base' (map_region 4: -42, 116, 479) and the navmesh surface under it (116.50)"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 116.5 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 479.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "REGION_LABEL 'Foreas Base' (map_region 4: -42, 116, 479) and the navmesh surface under it (116.50)"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Report to Liaison Noonan mission page (2007-11-12): RewardGiver Noonan, RewardGiverLocation Foreas Base, Zone Divide"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "navmesh surface under (-42.0, 479.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the Divide, where Foreas Base is"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199005
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table (2008-08-09): Foreas Base, In the Base Prison, 107.7 / 59.0 / 442.1"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199005,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table (2008-08-09): Foreas Base, In the Base Prison, 107.7 / 59.0 / 442.1"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": 107.7,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table (2008-08-09): Foreas Base, In the Base Prison, 107.7 / 59.0 / 442.1"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC in its Location table, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 59.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table (2008-08-09): Foreas Base, In the Base Prison, 107.7 / 59.0 / 442.1"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 59.2 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 442.1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table (2008-08-09): Foreas Base, In the Base Prison, 107.7 / 59.0 / 442.1"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Agent Franz page Location table: Divide"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_divide",
+       "locator": "navmesh surface under (107.7, 442.1), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the zone the Location table names; the navmesh confirms the reading is a Divide coordinate (ground 59.20)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199206
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table (2008-03-02): AFS Camp Resistance, -621 / 442 / -212"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199206,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table (2008-03-02): AFS Camp Resistance, -621 / 442 / -212"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": -621.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table (2008-03-02): AFS Camp Resistance, -621 / 442 / -212"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC in its Location table, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 442.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table (2008-03-02): AFS Camp Resistance, -621 / 442 / -212"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 443.05 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -212.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table (2008-03-02): AFS Camp Resistance, -621 / 442 / -212"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1497,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Colonel Bosley page Location table and infobox: Plateau"
+      },
+      {
+       "source": "client_map:adv_foreas_valverde_plateau",
+       "locator": "navmesh surface under (-621.0, -212.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the zone the Location table names; the navmesh confirms it (ground 443.05)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199505
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table (2008-08-28): Irendas Penal Colony, Close to the wormhole, 336 / 430 / -187"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199505,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table (2008-08-28): Irendas Penal Colony, Close to the wormhole, 336 / 430 / -187"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": 336.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table (2008-08-28): Irendas Penal Colony, Close to the wormhole, 336 / 430 / -187"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC in its Location table, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 430.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table (2008-08-28): Irendas Penal Colony, Close to the wormhole, 336 / 430 / -187"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 430.59 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -187.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table (2008-08-28): Irendas Penal Colony, Close to the wormhole, 336 / 430 / -187"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Receptive Liaison Repp page Location table and infobox: Plains"
+      },
+      {
+       "source": "client_map:adv_arieki_torden_plains",
+       "locator": "navmesh surface under (336.0, -187.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the zone the Location table names; the navmesh confirms it (ground 430.59)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199602
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table (2008-02-06): Plains Post, inside the tent, 164 / 232 / -278"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199602,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table (2008-02-06): Plains Post, inside the tent, 164 / 232 / -278"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": 164.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table (2008-02-06): Plains Post, inside the tent, 164 / 232 / -278"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC in its Location table, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 232.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table (2008-02-06): Plains Post, inside the tent, 164 / 232 / -278"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 232.03 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -278.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table (2008-02-06): Plains Post, inside the tent, 164 / 232 / -278"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1761,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Private Parsons page Location table and infobox: Incline"
+      },
+      {
+       "source": "client_map:adv_arieki_torden_incline",
+       "locator": "navmesh surface under (164.0, -278.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the zone the Location table names; the navmesh confirms it (ground 232.03)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199603
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table (2008-03-26): Mires Post, by some crates near waypoint, -336 / 222 / -400"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199603,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table (2008-03-26): Mires Post, by some crates near waypoint, -336 / 222 / -400"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": -336.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table (2008-03-26): Mires Post, by some crates near waypoint, -336 / 222 / -400"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the NPC in its Location table, a community transcription of an in-game reading; the page carries the revision date.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 222.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table (2008-03-26): Mires Post, by some crates near waypoint, -336 / 222 / -400"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 223.76 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -400.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table (2008-03-26): Mires Post, by some crates near waypoint, -336 / 222 / -400"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1761,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Lt. Gerry page Location table: Incline (the infobox's 'Zone=Mires Post' names the base)"
+      },
+      {
+       "source": "client_map:adv_arieki_torden_incline",
+       "locator": "navmesh surface under (-336.0, -400.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the zone the Location table names; the navmesh confirms it (ground 223.76)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198686
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table (2008-09-16): Lower Eloh Creek, Near the Lower Eloh Creek teleporter, 501.5 / 238.3 / 214.0"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 101,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table (2008-09-16): Lower Eloh Creek, Near the Lower Eloh Creek teleporter, 501.5 / 238.3 / 214.0"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": 501.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table (2008-09-16): Lower Eloh Creek, Near the Lower Eloh Creek teleporter, 501.5 / 238.3 / 214.0"
+      }
+     ],
+     "reasoning": "the /loc TaRapedia records for the world-seed NPC; his only spawnpool (101) has counts 0/0 at Langerman's spot and never spawns him",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 238.3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table (2008-09-16): Lower Eloh Creek, Near the Lower Eloh Creek teleporter, 501.5 / 238.3 / 214.0"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 238.6 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 214.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table (2008-09-16): Lower Eloh Creek, Near the Lower Eloh Creek teleporter, 501.5 / 238.3 / 214.0"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Witherspoon page Location table and infobox: Wilderness"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "navmesh surface under (501.5, 214.0), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the Wilderness, as the Location table says and the navmesh confirms (ground 238.60)"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198687
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page (2008-09-19): 'in a hut along the back of Alia Das'; position from the world seed's spawnpool 64 (812.0, 302.09, 505.20), beside Solis' pool 184"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 38,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page (2008-09-19): 'in a hut along the back of Alia Das'; position from the world seed's spawnpool 64 (812.0, 302.09, 505.20), beside Solis' pool 184"
+      }
+     ],
+     "reasoning": "the placement instantiates the creature row the mission names"
+    },
+    "pos_x": {
+     "value": 812.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page (2008-09-19): 'in a hut along the back of Alia Das'; position from the world seed's spawnpool 64 (812.0, 302.09, 505.20), beside Solis' pool 184"
+      }
+     ],
+     "reasoning": "TaRapedia gives no /loc; the emulator world seed's own spawnpool 64 carries him at this point with counts 0/0, 3 m from Solis' pool 184 at the back of Alia Das, which matches the page's description. The seed row is left untouched and this placement spawns him there.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 302.09375,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page (2008-09-19): 'in a hut along the back of Alia Das'; position from the world seed's spawnpool 64 (812.0, 302.09, 505.20), beside Solis' pool 184"
+      }
+     ],
+     "reasoning": "as pos_x; the map's navmesh has ground 302.12 under this X and Z, within the audit's 2 m surface tolerance, so the reading stands",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 505.1953,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page (2008-09-19): 'in a hut along the back of Alia Das'; position from the world seed's spawnpool 64 (812.0, 302.09, 505.20), beside Solis' pool 184"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Council Elder Moawi page: Alia Das (Wilderness)"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "navmesh surface under (812.0, 505.1953), read with NavMeshQuery.GroundHeight on 2026-09-17"
+      }
+     ],
+     "reasoning": "the Wilderness; Alia Das"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199004
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 2051,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1743/3 'Report to Receptive Liaison Noonan' package 2051"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199005
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 732,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 796/1 'Talk to Agent Franz' package 732"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199206
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 1001,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation packages naming Colonel Bosley in missions 555/1, 877/13 and 939/2: package 1001"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199505
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 2026,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1745/5 naming Receptive Liaison Repp: package 2026"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199602
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 2327,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1826/3 'Deliver the Supplies to Plains Post' package 2327 (Private Parsons named in 1826/3 and 1853/4)"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199603
+   },
+   "slice": "W3",
+   "migration": "MissionAreaLinks",
+   "fields": {
+    "package_id": {
+     "value": 2328,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1826/4 'Deliver the supply box to Mires Pass' package 2328 (Lt. Gerry named in 1826/4 and 1827/1,3)"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
+    }
+   }
   }
  ],
  "omitted": [
@@ -49910,11 +51210,11 @@
   },
   {
    "id": "GAP-W3-NPC-POSITION-COVERAGE",
-   "summary": "Seven of the twenty-two NPCs created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Field Dr. Dawson (19, 116.9, 524.9) and Receptive Liaison Brice (-773.7, 179.3, 615.9) on the Wilderness, Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades, plus Retread Jeska (-777, 270, -552) in the marshes. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them.",
+   "summary": "Five of the twenty-two NPCs (seven until 2026-09-17) created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades, plus Retread Jeska (-777, 270, -552) in the marshes. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them. Correction 2026-09-17: Dawson and Brice were on this list because they had been placed on the Wilderness; their readings are Divide coordinates (ground 117.00 and 179.42 on the Divide navmesh) and MissionAreaLinks moved them, so they no longer need excusing.",
    "closes_with": "needs the map ground under those two points (navmesh coverage or a capture)",
    "evidence": [
     "WorldPositionAuditTests: no walkable surface within reach of either position",
-    "content_placement 199002 (Dawson) and 199003 (Brice), both from TaRapedia /loc"
+    "content_placement 199002 and 199003 moved to map 1148 by MissionAreaLinks (2026-09-17)"
    ],
    "surfaced_by": [
     "world position audit 2026-09-16"
@@ -50153,6 +51453,69 @@
    "slices": [
     "S2"
    ]
+  },
+  {
+   "id": "GAP-W3-NOONAN-POSITION",
+   "summary": "Receptive Liaison Noonan (199004) has no /loc anywhere in the TaRapedia snapshot (his page is a bare mission list). TaRapedia's mission page puts him at Foreas Base, so he stands at the client map's own 'Foreas Base' region label (-42, 479) on the navmesh's ground (116.5) - the base, not a spot inside it.",
+   "closes_with": "a capture or a dated reading of where he stood inside Foreas Base",
+   "evidence": [
+    "Report to Liaison Noonan mission page (2007-11-12): RewardGiverLocation Foreas Base",
+    "map_region 4 (REGION_LABEL Foreas Base, adv_foreas_concordia_divide)",
+    "content_placement 199004"
+   ],
+   "surfaced_by": [
+    "mission-area audit 2026-09-17"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-DAWSON-PACKAGE",
+   "summary": "Field Dr. Dawson's own dialogue package is not named by any client conversation row: his only seeded mission, 796, completes through Agent Franz's package 732, which the Divide batch put on Dawson so the mission could be finished at all. Franz now exists with 732, and Dawson keeps it too, so talking to Dawson also satisfies 'Talk to Agent Franz'.",
+   "closes_with": "the client package Dawson's own dialogue uses (a second Dawson mission in the client's conversation table, e.g. 'Top Secret Salvage', or a capture)",
+   "evidence": [
+    "npc_mission_objective_conversation 796/1 package 732",
+    "npc_package 199002 = 732; npc_package 199005 = 732"
+   ],
+   "surfaced_by": [
+    "mission-area audit 2026-09-17"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-CRATE-OBJECTIVE-DEAD-END",
+   "summary": "A live player stood at the boot camp supply crate unable to finish 'Get your gear from the nearby crate' (2026-09-17) while already wearing three of the five pieces. Two defects were found and fixed: Loot All returned early when a container had no rows left, so an objective bound to an emptied container could never complete; and a row whose item could not be built stayed in the container forever, listing an item that could never be taken. The objective is now satisfied when every row has been taken or is already in the player's hands, which is what the objective asks for. What remains unverified is whether the player's own crate was in one of those two states or was simply never reopened: the container is per session and the report arrived without the log lines this now writes.",
+   "closes_with": "the player retrying the crate with the new open/take/settle log lines, or a capture of the crate window",
+   "evidence": [
+    "live report 2026-09-17",
+    "character 5 inventory (three crate pieces equipped, two rows outstanding)"
+   ],
+   "surfaced_by": [
+    "live play 2026-09-17"
+   ],
+   "slices": [
+    "S2"
+   ]
+  },
+  {
+   "id": "GAP-INVISIBLE-ATTACKER",
+   "summary": "A live player was killed twice in the boot camp by an attacker they could not see, whose shots rendered (purple) but whose body did not (2026-09-17). The deaths were at (298.3, 120.5, 65.4) and (303.7, 122.3, 62.1) on map 1985, which is where content placements 198660-198668 (Thrax Infantry Initiate L2, creature 198507, class 29769 Bane_Thrax_Soldier_Grunt_Pistol) stand - and that class resolves to a real model (49675), so a missing class is not the cause. The death line now names the killer with its entity, class and position, so the next death identifies the source instead of leaving it to be guessed.",
+   "closes_with": "the next death line from live play, which names the attacking entity",
+   "evidence": [
+    "live report 2026-09-17",
+    "content placements 198660-198668",
+    "client entityclass 29769 (model 49675)"
+   ],
+   "surfaced_by": [
+    "live play 2026-09-17"
+   ],
+   "slices": [
+    "S2",
+    "S5"
+   ]
   }
  ],
  "non_content_settings": [
@@ -50227,6 +51590,404 @@
     {
      "source": "measurement:bootcamp-positions",
      "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 422
+   },
+   "field": "giver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 422
+   },
+   "field": "reciver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1392
+   },
+   "field": "giver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1392
+   },
+   "field": "reciver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1393
+   },
+   "field": "giver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1393
+   },
+   "field": "reciver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 429
+   },
+   "field": "giver_id",
+   "old": 100,
+   "new": 198514,
+   "reason": "Creature 100's only spawn is world-seed spawnpool 100 with counts 0/0: SpawnPoolManager draws Random.Next(0, 1) = 0 of him, so no NPC in the world could hand this mission out. The reserved Rogers row 198514 stands at his measured command-tent position (placement 198684, BootcampFixRogersTurnIn) and carries the same dialogue package 116 the client binds this mission's conversations to.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation rows for the mission: package 116"
+    },
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "npc.outpost_commander_rogers"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1743
+   },
+   "field": "reciver_id",
+   "old": 199003,
+   "new": 199004,
+   "reason": "TaRapedia's mission page: MissionGiver Receptive Liaison Brice at Nidu Dav, RewardGiver Receptive Liaison Noonan at Foreas Base (Divide). The Divide batch had no Noonan and made Brice both; Noonan is now creature 199004 with the package 2051 this objective completes through.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Report to Liaison Noonan mission page (2007-11-12)"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1743/3 package 2051"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1746
+   },
+   "field": "giver_id",
+   "old": 199504,
+   "new": 199505,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Receptive Liaison Repp at Irendas Penal Colony (Plains), RewardGiver=Receptive Liaison Sage at Plains Post. The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Report to Liaison Sage mission page (2007-11-27)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1747
+   },
+   "field": "giver_id",
+   "old": 199600,
+   "new": 199504,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Receptive Liaison Sage at Plains Post (Incline), RewardGiver=Receptive Liaison Maddox on Mires. The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists. Sage was already seeded (199504).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Report to Liaison Maddox mission page (2008-01-03)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1748
+   },
+   "field": "giver_id",
+   "old": 199405,
+   "new": 199600,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Receptive Liaison Maddox at Fort Haroun (Mires), RewardGiver=Receptive Liaison Ridout at Fort Defiance (Plateau). The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists. Maddox was already seeded (199600).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Report to Liaison Ridout mission page (2008-01-03)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1068
+   },
+   "field": "giver_id",
+   "old": 199203,
+   "new": 199206,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Colonel Bosley at AFS Camp Resistance (Plateau), RewardGiver=Colonel 'Snake' Washington at The Snakepit (Pools). The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "South Of The Border mission page (2008-03-04)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1541
+   },
+   "field": "giver_id",
+   "old": 199204,
+   "new": 199206,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Colonel Bosley at AFS Camp Resistance (Plateau), RewardGiver=Amee Corman at Retread Camp (Pools). The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "New Orders From The General mission page (2008-03-04)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 796
+   },
+   "field": "reciver_id",
+   "old": 199002,
+   "new": 199005,
+   "reason": "TaRapedia's mission page: MissionGiver Field Dr. Dawson at Foreas Base, RewardGiver Agent Franz at Foreas Base (Divide); the objective is 'Talk to Agent Franz' through package 732. The Divide batch had no Franz and made Dawson both; Franz is now creature 199005 in the Base Prison.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Behind Closed Doors mission page (2008-09-04)"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 796/1 package 732"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_mission",
+   "key": {
+    "id": 1826
+   },
+   "field": "giver_id",
+   "old": 199601,
+   "new": 199602,
+   "reason": "TaRapedia's mission page names the giver: MissionGiver=Private Parsons at Plains Post (Incline), RewardGiver=Supply Sergeant Otto at Ortho Post. The zone batch that seeded the mission had no giver NPC and set giver = receiver; the giver now exists. Objectives 3 and 4 complete through packages 2327 (Parsons) and 2328 (Lt. Gerry), which no seeded NPC carried; both are created.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Helping Parsons mission page (2008-08-31)"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1826/3 package 2327, 1826/4 package 2328"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "content_placement",
+   "key": {
+    "id": 199002
+   },
+   "field": "map_context_id",
+   "old": 1220,
+   "new": 1148,
+   "reason": "The Divide batch took the map from TaRapedia's infobox (Zone=Wilderness). The same page's Location table says Divide - Foreas Base, In the back of the Base Hospital - and the reading (19.0, 116.9, 524.9) is a Divide coordinate: the Divide navmesh has ground 117.0 under it, the Wilderness navmesh has no walkable surface within reach (the mismatch WorldPositionAuditTests had excused as coverage since 2026-09-16).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Field Dr. Dawson page Location table (2007-11-16): Divide, Foreas Base"
+    },
+    {
+     "source": "client_map:adv_foreas_concordia_divide",
+     "locator": "navmesh surface under (19.0, 524.9), read with NavMeshQuery.GroundHeight on 2026-09-17"
+    },
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Behind Closed Doors mission page (2008-09-04): MissionGiverLocation Foreas Base, Zone Divide"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "content_placement",
+   "key": {
+    "id": 199003
+   },
+   "field": "map_context_id",
+   "old": 1220,
+   "new": 1148,
+   "reason": "The Divide batch took the map from TaRapedia's infobox (Zone=Wilderness). The same page's Location table says Divide - Nidu Dav, Up the hill near the teleporter pad - and the reading (-773.7, 179.3, 615.9) is a Divide coordinate: the Divide navmesh has ground 179.42 under it, the Wilderness navmesh has no walkable surface within reach (the mismatch WorldPositionAuditTests had excused as coverage since 2026-09-16).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Receptive Liaison Brice page Location table (2008-01-01): Divide, Nidu Dav"
+    },
+    {
+     "source": "client_map:adv_foreas_concordia_divide",
+     "locator": "navmesh surface under (-773.7, 615.9), read with NavMeshQuery.GroundHeight on 2026-09-17"
+    },
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Report to Liaison Noonan mission page (2007-11-12): MissionGiver Brice at Nidu Dav, Zone Divide"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "npc_package",
+   "key": {
+    "id": 199003
+   },
+   "field": "package_id",
+   "old": 2051,
+   "new": 2050,
+   "reason": "Package 2051 is Noonan's: 1743/3 'Report to Receptive Liaison Noonan' completes through it. Brice's own is 2050, the package 1742/2 'Report to Liaison Brice' completes through. With Noonan seeded, Brice speaks with his own.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1742/2 package 2050; 1743/3 package 2051"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "MissionAreaLinks",
+   "table": "content_placement",
+   "key": {
+    "id": 199003
+   },
+   "field": "npc_package_id",
+   "old": 2051,
+   "new": 2050,
+   "reason": "As the npc_package change: CreatureManager takes the placement's package when it is set, so both rows carry Brice's own 2050.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1742/2 package 2050"
     }
    ]
   }

@@ -1266,6 +1266,60 @@ namespace Rasa.Test
             Assert.AreEqual(0, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0 && slot != filler.EntityId));
         }
 
+        // Live report 2026-09-17: a player who took the gear out of the crate before the objective asked
+        // for it stood at the crate with nothing left to take, and the objective never completed - Loot All
+        // returned early on an empty container instead of settling it. The container settles now, whatever
+        // emptied it.
+        [TestMethod]
+        public void AnAlreadyEmptiedContainerCompletesItsObjectiveWhenItIsOpenedAgain()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+
+            // Take both rows before the mission exists.
+            UseCrate(content, usable);
+            foreach (var row in CrateLootItems())
+                content.RequestLootItemFromContentContainer(_client, usable.EntityId, row.EntityId, null);
+
+            // Both rows are in the player's backpack, and the crate has nothing left.
+            Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+
+            // Now the mission arrives and asks for the gear that is already gone from the crate.
+            Accept(missionId: CrateMissionId);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+        }
+
+        // And a row the player is already wearing counts: the objective is "get your gear", not "take it from
+        // this exact box", so a player who put the crate's contents on before the objective was revealed is not
+        // left short of it. Live report 2026-09-17: three of the five pieces were equipped and the mission waited.
+        [TestMethod]
+        public void GearThePlayerAlreadyWearsSatisfiesTheCrateObjective()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rows = CrateLootItems();
+
+            // The first row is taken, the second is already in the player's backpack before the crate is opened.
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+
+            var worn = ItemManager.Instance.CreateFromTemplateId(rows[1].Item.ItemTemplateId, 1);
+            Assert.IsNotNull(worn);
+            Assert.IsNotNull(InventoryManager.Instance.AddItemToInventory(_client, worn));
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+        }
+
         [TestMethod]
         public void SecondLootAllIsRefused()
         {

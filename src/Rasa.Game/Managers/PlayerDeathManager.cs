@@ -80,6 +80,19 @@ namespace Rasa.Managers
                 waypoint.WaypointType == (byte)WaypointType.Hospital);
 
         /// <summary>
+        /// Who landed the killing blow, for the log: a creature by entity, class and position, anything else by type.
+        /// A live report of an invisible attacker (2026-09-17) could not be acted on because the death line did not
+        /// name the source.
+        /// </summary>
+        private static string Describe(Actor source)
+        {
+            if (source is Creature creature)
+                return $"creature {creature.EntityId} (class {(uint)creature.EntityClass}) at ({creature.Position.X:0.#}, {creature.Position.Y:0.#}, {creature.Position.Z:0.#})";
+
+            return source == null ? "an unknown source" : source.GetType().Name;
+        }
+
+        /// <summary>
         /// Called after the killing hit's recovery (deathBlow set) has gone to the source's
         /// observers. The player is already Dead, so later hits and actions skip it.
         /// </summary>
@@ -96,7 +109,7 @@ namespace Rasa.Managers
             // Deaths are not otherwise logged, and a player whose respawn does nothing cannot be told apart
             // from one who never asked: every death records the map and what was offered.
             Logger.WriteLog(LogType.Debug,
-                $"{player.Name} died on map {mapChannel.MapInfo?.MapContextId} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}); offering {hospitals.Count} hospital(s).");
+                $"{player.Name} died on map {mapChannel.MapInfo?.MapContextId} at ({player.Position.X:0.#}, {player.Position.Y:0.#}, {player.Position.Z:0.#}); offering {hospitals.Count} hospital(s); killed by {Describe(source)}.");
             // Help text 5687: trauma follows a death to a non-player character or to a player of a
             // clan at war, never a duel. Player kills are not implemented, so only NPC deaths count;
             // gameconstants DEATH_PENALTY_MIN_LEVEL keeps it from characters below level 5.

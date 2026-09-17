@@ -56,11 +56,10 @@ namespace Rasa.Test
             { "spawnpool:spawnpool 110", "original data; the navmesh models only the floor above it on the Wilderness" },
             { "logos:These", "position unset in the original data - the row is (0, 0, 0); GAP-LOGOS-POSITION-UNSET" },
             { "logos:Those", "a cavern shrine whose interaction point lies 2.01 m under the floor the navmesh models" },
-            { "content_placement:Field Dr. Dawson (TaRapedia /loc)",
-              "TaRapedia's /loc for this NPC has no navmesh polygon within reach on the Wilderness; the position is as sourced and its standing surface is unverified (GAP-W3-NPC-POSITION-COVERAGE)" },
-            { "content_placement:Receptive Liaison Brice (TaRapedia /loc)",
-              "same as Field Dr. Dawson: the recorded /loc lies outside the wilderness navmesh coverage" },
-            // Six of the twelve NPCs created from TaRapedia's /loc stand where the map's navmesh has no polygon:
+            // Field Dr. Dawson and Receptive Liaison Brice were listed here until 2026-09-17: their /loc readings had no
+            // surface on the Wilderness because they are Divide coordinates (MissionAreaLinks moved them; the Divide
+            // navmesh has ground 0.1 m under each reading).
+            // Five of the NPCs created from TaRapedia's /loc stand where the map's navmesh has no polygon:
             // those readings seem to describe places the navmesh does not model rather than wrong spots, and a
             // capture would settle it. GAP-W3-NPC-POSITION-COVERAGE.
             { "content_placement:Ranger Urialia (TaRapedia /loc)", TaRapediaOutsideNavmesh },
