@@ -1559,3 +1559,23 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
 - **Not established:** whether the original completed the objective when the crate was emptied one row at a time.
   The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
   the manifest entry says so.
+
+## 2026-09-17 UTC — Deploy: the supply crate fix (commit a117311)
+
+- Candidate `rasa_net:candidate-retail-crate-loot-20260917` (sha256 f134d7e3…) ran the whole suite with no network and no
+  database mounts: 909 of 911, the two failures the navmesh/`rasaworld.db` audits that need files the Dockerfile does
+  not copy; with the database present those two pass (21 s, in the sdk:5.0 iteration container). The image's `src`,
+  `docs/evidence` and solution file are byte-identical to the reviewed workspace.
+- Integrity-checked backups (`PRAGMA integrity_check` = ok for all three) in `/home/blizz/backups/rasa-net/20260917T010527Z-retail-crate-loot/`; the previous image is kept as
+  `rasa_net:before-retail-crate-loot-20260917` (0132e6f6). Compose `--dry-run` named only `game`, so plain
+  `docker compose up -d --no-deps --no-build game` recreated it (01:08:00 UTC); nobody was online (last client left
+  00:46:34).
+- **The auth hand-off needs one more step than the 2026-09-16 entry says.** After the recreate, auth was restarted at
+  01:08:44 as prescribed - but the game did *not* re-register: it had logged `Could not connect to the Auth server!
+  Trying again in a few seconds...` at 01:08:43 (auth was mid-restart) and then nothing for four minutes, and auth
+  showed no new game-server connection. Restarting `game` at 01:13:21 fixed it in 19 s: auth
+  `has authenticated! Requesting info...` and the game `Successfully authenticated with the Auth server!` both at
+  01:13:40, `Server ready!` 01:13:42, `Loaded navmeshes for 76 of 78 maps`, `Loaded 16 content rules (239 content
+  rows, 0 gaps)`, 0 restarts, no further error lines. So the order is: recreate game → restart auth → restart game →
+  confirm both log lines. Checking only the game's first `Successfully authenticated` (which predates the auth
+  restart) is not enough.
