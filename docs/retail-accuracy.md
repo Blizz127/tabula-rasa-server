@@ -1508,6 +1508,8 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   needs three `ContentRuleEvent` kinds the engine does not have - a usable-used/looted event, an item-equipped
   event, and a placement-damaged event (`PlacementDestroyed` is not it: the dummy restores after 930 ms instead of
   dying). This is an unimplemented slice, not a regression from the control-point deploy.
+  *Superseded 2026-09-17: this diagnosis was wrong - the bindings and their runtime paths existed; the crate's loot
+  window was empty. See the next entry.*
 - **The endgame-zone wall is structural, now with numbers.** No client map places a single creature spawner or NPC -
   zero entities of any class carrying augmentation 61, 68 or 52 across all fifteen level-banded adventure zones,
   the Wilderness included - and the world seed's 218 spawn pools are all in context 1220. Creature placement was
@@ -1523,3 +1525,37 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   client's pad data, and the mech work should start from the PAU vehicle and its shield ladder rather than from the
   pad augmentation (`GAP-W3-MECH-SERVER-SIDE`).
 
+## 2026-09-17 UTC — Mission 1992 re-diagnosed: the supply crate's window was empty, not ruleless
+
+- **The 2026-09-16 diagnosis of `GAP-S2-GEAR-OBJECTIVES` was wrong.** The bindings for 1992/1 (loot_all on crate
+  198651), 1992/2 (equip, any item), 1992/3 and 1992/8 (hit on dummies 198652/198653, the second with action 194)
+  are in `npc_mission_objective_binding`, were seeded by `BootcampS2GearingUp`, load with 0 gaps, and their runtime
+  paths were already tested. The crate is gated by `content_condition` 198800 (ObjectiveStateIs 1992/1 Incomplete),
+  so it cannot be looted before the objective is revealed. No new `ContentRuleEvent` kinds were needed.
+- **What the character database says.** Character 5 on 2026-09-17: mission 1992 objective 4 status 2, objective 1
+  status 1. Its inventory is items 23-27 only - 145 in the ability drawer, 13126/13186/13156 equipped, 28 x65 -
+  all created 2026-09-15 17:01:10, i.e. the creation kit, and nothing from item set 19858 (13066, 13096, 13156,
+  13186, 13713). The "gear" the player equipped was the starter armour; the crate handed over nothing.
+- **The actual defect, and why the crate window showed nothing.** `OpenContentContainer` built the window's rows
+  as `new LootItem(templateId, 0, quantity, owner, 0)`: a fresh entity id with no item behind it, and no
+  `ItemInfo` sent. The client's `corpselootwindow` resolves every row with `GetEntity(itemId)` before drawing it and
+  skips one that comes back `None` (research `client-code/verify/dis/trpython-client-ui-corpselootwindow.pyo.dis`
+  lines 316, 373, 596, 663), so the window listed nothing to take. The corpse path had done this right since
+  06b3352 (2026-09-13, `RequestCorpseLooting` sends the items before the window); the content path of 6e5f5b0
+  (same day, later) did not. And the window's right-click path - `RequestLootItemFromCorpse(entityId, itemId,
+  destSlot)`, one row at a time - was routed only to `LootDispenserManager`, never to content containers.
+- **The fix.** A content container now holds real items, created once per owner from its item set and introduced
+  to the client with `SendItemDataToClient` before `LootInfo`/`CanLootItems`, as the corpse path does.
+  `RequestLootItemFromCorpse` on an entity in `ContentUsables` routes to
+  `RequestLootItemFromContentContainer`; a row that is gone or was never there is answered with `TakenInfo`, since
+  it is still on the asker's screen; a row that does not fit shows `PmInventoryFull`. Loot All takes every row that
+  still fits, like the corpse dispenser, instead of the earlier all-or-nothing transaction. The loot_all binding
+  completes when the container is empty by either path. Tests: `ContentContainerRowsAreRealItemsIntroducedBeforeTheWindowOpens`
+  (every row is a registered item and its `ItemInfo` precedes `LootInfo`),
+  `TakingContainerItemsOneAtATimeCompletesTheObjectiveOnTheLastOne`, `TakingAnUnknownOrAlreadyTakenContainerRowChangesNothing`,
+  `LootAllTakesWhatIsLeftAfterSingleTakes`; `LootAllIsRefusedWhenTheInventoryCannotTakeEverything` became
+  `LootAllTakesNothingWhenNothingFits`. Under .NET 5 (sdk:5.0 container, `--no-incremental`): 909 of 911, the two
+  failures the navmesh/`rasaworld.db` audits that need files the scratch tree does not carry.
+- **Not established:** whether the original completed the objective when the crate was emptied one row at a time.
+  The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
+  the manifest entry says so.

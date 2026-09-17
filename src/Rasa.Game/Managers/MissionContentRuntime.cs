@@ -8,6 +8,7 @@ namespace Rasa.Managers
     using Data;
     using Game;
     using Packets.ClientMethod.Server;
+    using Packets.Communicator.Server;
     using Packets.Game.Server;
     using Packets.LootDispenser.Server;
     using Packets.MapChannel.Client;
@@ -637,82 +638,137 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// Opens a content container's per-owner loot window with its item set as the
-        /// lootable items. The objective completes when the player loots all of it.
+        /// Opens a content container's per-owner loot window. Its rows are real items, created once
+        /// per owner from the placement's item set and introduced to the client before the window
+        /// opens: corpselootwindow resolves every row with GetEntity(itemId) and skips one it cannot
+        /// resolve, so a row built from a bare template id is an empty window - which is what the
+        /// boot camp's supply crate showed the live player on 2026-09-16 (GAP-S2-GEAR-OBJECTIVES).
+        /// The loot_all binding completes when the container is empty, however it was emptied.
         /// </summary>
         private void OpenContentContainer(Client client, ContentPlacementEntry placement, DynamicObject obj)
         {
             if (!_openContainers.TryGetValue(obj.EntityId, out var open) || open.OwnerEntityId != client.Player.EntityId)
             {
-                open = new ContentContainerLoot
-                {
-                    OwnerEntityId = client.Player.EntityId,
-                    Items = Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var entries)
-                        ? entries.Select(entry => (entry.ItemTemplateId, entry.Quantity)).ToList()
-                        : new List<(uint, uint)>()
-                };
+                open = new ContentContainerLoot { OwnerEntityId = client.Player.EntityId };
+
+                if (Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var entries))
+                    foreach (var entry in entries)
+                    {
+                        var item = ItemManager.Instance.CreateFromTemplateId(entry.ItemTemplateId, entry.Quantity);
+                        if (item != null)
+                            open.Items.Add(new LootItem(item, client.Player.EntityId, 0));
+                    }
+
                 _openContainers[obj.EntityId] = open;
             }
 
-            open.Sent = true;
+            var remaining = open.Remaining();
+
             client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(obj.EntityId, obj.EntityClassId));
-            client.CallMethod(obj.EntityId, new LootInfoPacket(open.Items.Select(item => new LootItem(item.ItemTemplateId, 0, item.Quantity, client.Player.EntityId, 0)).ToList()));
-            client.CallMethod(obj.EntityId, new CanLootItemsPacket(true, open.Items.Select(item => new LootItem(item.ItemTemplateId, 0, item.Quantity, client.Player.EntityId, 0)).ToList()));
+
+            // The items have to exist on the client before the window lists them (the corpse
+            // path does the same in RequestCorpseLooting); re-sending one it has is an update.
+            foreach (var row in remaining)
+                ItemManager.Instance.SendItemDataToClient(client, row.Item, false);
+
+            client.CallMethod(obj.EntityId, new LootInfoPacket(remaining));
+            client.CallMethod(obj.EntityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
         }
 
         private sealed class ContentContainerLoot
         {
             public ulong OwnerEntityId;
-            public List<(uint ItemTemplateId, uint Quantity)> Items = new();
-            public bool Sent;
-            public bool Granted;
+            public readonly List<LootItem> Items = new();
+
+            public List<LootItem> Remaining() => Items.FindAll(row => !row.Taken);
+            public List<LootItem> Taken() => Items.FindAll(row => row.Taken);
         }
 
         private readonly Dictionary<ulong, ContentContainerLoot> _openContainers = new();
 
+        private ContentContainerLoot OpenContainerFor(Client client, ulong entityId) =>
+            client.Player?.MapChannel != null && _openContainers.TryGetValue(entityId, out var open) && open.OwnerEntityId == client.Player.EntityId
+                ? open
+                : null;
+
         /// <summary>
-        /// Loot All on a content container: grants every item of the open container's
-        /// item set in one all-or-nothing transaction, then completes the bound objective.
+        /// Loot All on a content container: takes every row that still fits, as the corpse
+        /// dispenser does, then settles the container.
         /// </summary>
         public void RequestLootAllFromContentContainer(Client client, ulong entityId)
         {
-            var player = client.Player;
-            var mapChannel = player.MapChannel;
-
-            if (mapChannel == null || !_openContainers.TryGetValue(entityId, out var open) || open.OwnerEntityId != player.EntityId)
+            var open = OpenContainerFor(client, entityId);
+            if (open == null)
                 return;
 
-            if (open.Items.Count == 0 || open.Granted)
+            var remaining = open.Remaining();
+            if (remaining.Count == 0)
                 return;
 
-            // All-or-nothing: nothing is granted unless every item fits.
-            var planned = new List<Item>();
-            foreach (var (templateId, quantity) in open.Items)
+            foreach (var row in remaining)
+                TakeContainerRow(client, row, null);
+
+            SettleContainer(client, entityId, open);
+        }
+
+        /// <summary>
+        /// One row off a content container - the window's right-click path
+        /// (lootdispenser.RequestLootItemFromCorpse(self.entityId, itemId, destSlot)). A row that is
+        /// gone or was never there is answered with TakenInfo, since it is still on the asker's screen.
+        /// </summary>
+        public void RequestLootItemFromContentContainer(Client client, ulong entityId, ulong itemId, uint? destSlot)
+        {
+            var open = OpenContainerFor(client, entityId);
+            if (open == null)
+                return;
+
+            var row = open.Items.Find(candidate => candidate.EntityId == itemId);
+            if (row == null || row.Taken)
             {
-                var item = ItemManager.Instance.CreateFromTemplateId(templateId, quantity);
-                if (item == null)
-                {
-                    foreach (var created in planned)
-                        EntityManager.Instance.UnregisterItem(created.EntityId);
-                    return;
-                }
-                planned.Add(item);
+                client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
+                return;
             }
 
-            foreach (var item in planned)
-                if (InventoryManager.Instance.AddItemToInventory(client, item) == null)
-                {
-                    // The inventory could not take it: roll back what was added.
-                    foreach (var created in planned)
-                        if (created != item)
-                            InventoryManager.Instance.RemoveItemBySlot(client, InventoryType.Personal, created.OwnerSlotId);
-                    return;
-                }
+            if (!TakeContainerRow(client, row, destSlot))
+                return;
 
-            open.Granted = true;
-            open.Items.Clear();
-            client.CallMethod(entityId, new TakenInfoPacket(player.EntityId, new List<LootItem>()));
-            client.CallMethod(entityId, new CanLootItemsPacket(false, new List<LootItem>()));
+            SettleContainer(client, entityId, open);
+        }
+
+        private static bool TakeContainerRow(Client client, LootItem row, uint? destSlot)
+        {
+            if (row.Taken || row.Item == null)
+                return false;
+
+            var placed = destSlot.HasValue
+                ? InventoryManager.Instance.AddItemToInventory(client, row.Item, destSlot.Value)
+                : InventoryManager.Instance.AddItemToInventory(client, row.Item);
+
+            if (placed == null)
+            {
+                client.CallMethod(SysEntity.CommunicatorId,
+                    new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return false;
+            }
+
+            row.Taken = true;
+            return true;
+        }
+
+        /// <summary>
+        /// Tells the window what is gone and what is left; an emptied container completes the
+        /// loot_all bindings bound to its placement.
+        /// </summary>
+        private void SettleContainer(Client client, ulong entityId, ContentContainerLoot open)
+        {
+            var mapChannel = client.Player.MapChannel;
+            var remaining = open.Remaining();
+
+            client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
+            client.CallMethod(entityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
+
+            if (remaining.Count > 0)
+                return;
 
             foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LootAll).Where(binding => binding.PlacementId == ContentUsablesPlacementId(mapChannel, entityId)))
                 Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.LootAll);

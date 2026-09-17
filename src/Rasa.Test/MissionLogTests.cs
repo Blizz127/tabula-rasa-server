@@ -1244,7 +1244,7 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void LootAllIsRefusedWhenTheInventoryCannotTakeEverything()
+        public void LootAllTakesNothingWhenNothingFits()
         {
             _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
             var content = LoadCrateContent();
@@ -1282,6 +1282,116 @@ namespace Rasa.Test
             content.RequestLootAllFromContentContainer(_client, usable.EntityId);
 
             Assert.AreEqual(afterFirst, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+        }
+
+        // corpselootwindow draws a row only when GetEntity(itemId) resolves, so every row must be a
+        // real item the client was told about before the window opened. The live supply crate of
+        // 2026-09-16 listed template ids with no item behind them and showed nothing.
+        [TestMethod]
+        public void ContentContainerRowsAreRealItemsIntroducedBeforeTheWindowOpens()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+
+            UseCrate(content, usable);
+
+            var packets = DrainAddressed();
+            var lootInfoIndex = packets.FindIndex(entry => entry.Packet is LootInfoPacket);
+            Assert.IsTrue(lootInfoIndex >= 0, "the window was not opened");
+            var rows = ((LootInfoPacket)packets[lootInfoIndex].Packet).LootItems;
+            Assert.AreEqual(2, rows.Count);
+
+            foreach (var row in rows)
+            {
+                Assert.IsNotNull(row.Item, "a row must stand for a real item");
+                Assert.AreEqual(row.Item.EntityId, row.EntityId);
+                Assert.AreSame(row.Item, EntityManager.Instance.GetItem(row.EntityId));
+                var itemInfoIndex = packets.FindIndex(entry => entry.EntityId == row.EntityId && entry.Packet is ItemInfoPacket);
+                Assert.IsTrue(itemInfoIndex >= 0 && itemInfoIndex < lootInfoIndex, $"item {row.EntityId} must exist on the client before the window lists it");
+            }
+
+            var canLoot = packets.Select(entry => entry.Packet).OfType<CanLootItemsPacket>().Single();
+            Assert.IsTrue(canLoot.CanLootItems);
+            CollectionAssert.AreEqual(rows.Select(row => row.EntityId).ToArray(), canLoot.LootItems.Select(row => row.EntityId).ToArray());
+        }
+
+        [TestMethod]
+        public void TakingContainerItemsOneAtATimeCompletesTheObjectiveOnTheLastOne()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rows = CrateLootItems();
+
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            CollectionAssert.AreEquivalent(new[] { rows[0].EntityId }, _client.Player.Inventory.PersonalInventory.Where(slot => slot != 0).ToArray());
+            var packets = Drain();
+            CollectionAssert.AreEqual(new[] { rows[0].EntityId }, packets.OfType<TakenInfoPacket>().Single().LootItems.Select(row => row.EntityId).ToArray());
+            var canLoot = packets.OfType<CanLootItemsPacket>().Single();
+            Assert.IsTrue(canLoot.CanLootItems);
+            CollectionAssert.AreEqual(new[] { rows[1].EntityId }, canLoot.LootItems.Select(row => row.EntityId).ToArray());
+            Assert.IsFalse(packets.Any(packet => packet is ObjectiveCompletedPacket));
+
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[1].EntityId, null);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            CollectionAssert.AreEquivalent(rows.Select(row => row.EntityId).ToArray(), _client.Player.Inventory.PersonalInventory.Where(slot => slot != 0).ToArray());
+            packets = Drain();
+            Assert.IsTrue(packets.Any(packet => packet is ObjectiveCompletedPacket completed && completed.MissionId == CrateMissionId && completed.ObjectiveId == 1));
+            Assert.IsFalse(packets.OfType<CanLootItemsPacket>().Single().CanLootItems);
+
+            using var context = WeaponReloadPersistenceTests.Context(_connection);
+            var row = context.CharacterMissionObjectiveEntries.Single(entry =>
+                entry.CharacterId == CharacterId && entry.MissionId == CrateMissionId && entry.ObjectiveId == 1);
+            Assert.AreEqual((uint)MissionObjectiveState.Completed, row.Status);
+        }
+
+        [TestMethod]
+        public void TakingAnUnknownOrAlreadyTakenContainerRowChangesNothing()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rows = CrateLootItems();
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            Drain();
+
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, 0xDEAD, null);
+
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            Assert.AreEqual(1, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+            var answers = Drain().OfType<TakenInfoPacket>().ToList();
+            Assert.AreEqual(2, answers.Count, "each stale request is answered with what has been taken");
+            foreach (var answer in answers)
+                CollectionAssert.AreEqual(new[] { rows[0].EntityId }, answer.LootItems.Select(row => row.EntityId).ToArray());
+        }
+
+        [TestMethod]
+        public void LootAllTakesWhatIsLeftAfterSingleTakes()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rows = CrateLootItems();
+            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            Drain();
+
+            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            // What is handed over is the rows' own items, not copies built from their templates.
+            CollectionAssert.AreEquivalent(rows.Select(row => row.EntityId).ToArray(), _client.Player.Inventory.PersonalInventory.Where(slot => slot != 0).ToArray());
         }
     }
 }

@@ -50135,16 +50135,20 @@
   },
   {
    "id": "GAP-S2-GEAR-OBJECTIVES",
-   "summary": "Mission 1992 'Gearing Up for Battle' cannot progress past its first objective. Its placements exist and work - the supply crate 198651 (class 26714, usable_kind 1) dispenses item set 19858, and the practice and target dummies 198652/198653 (class 29365, 100 hp, restore 930 ms) stand where they should - but no content_rule targets objectives 1 ('Get your gear from the nearby crate'), 2 ('Equip the gear by right-clicking it in your backpack'), 3 ('Shoot the Practice Dummy') or 5-9. Only the 1990 turn-in offer (rule 1985004) and McAllister's walk (1985014) touch 1992, so a player takes the gear, equips it, and the mission log never moves. Reported live 2026-09-16 ('i got my gear ... and it didn't update i equipped it too').",
-   "closes_with": "three new ContentRuleEvent kinds and the rules built on them: a usable-used/looted event for objective 1, an item-equipped event for objective 2, and a placement-damaged event for objective 3 (PlacementDestroyed is not it - the dummy restores after 930 ms rather than dying). The footage events for the sequence are already in docs/evidence/bootcamp-d11-footage-events.json.",
+   "summary": "Mission 1992 'Gearing Up for Battle' stalled at objective 1 ('Get your gear from the nearby crate') in live play on 2026-09-16 (character 5: objective 4 complete, objective 1 open). First written up as three missing ContentRuleEvent kinds; that diagnosis was wrong. The objective bindings for 1992/1 (loot_all on crate 198651), 1992/2 (equip any), 1992/3 and 1992/8 (hit on dummies 198652/198653) were seeded by BootcampS2GearingUp, load with 0 gaps, and their runtime paths exist and are tested. The actual defect: the crate's loot window rows were built from bare item template ids with fresh entity ids and no item behind them, while the client's corpselootwindow resolves every row with GetEntity(itemId) and skips one it cannot resolve - so the window listed nothing to take - and the window's right-click path (RequestLootItemFromCorpse, one row at a time) was never routed to content containers. Character 5's inventory confirms it: only the creation kit (templates 145, 13126, 13186, 13156, 28, all created 2026-09-15 17:01:10) and nothing from item set 19858; the 'gear' the player equipped was the starter armour.",
+   "closes_with": "content containers hold real items, created once per owner from the item set and introduced to the client (SendItemDataToClient) before LootInfo/CanLootItems, as RequestCorpseLooting already does for corpses; RequestLootItemFromCorpse on a content container routes to RequestLootItemFromContentContainer; Loot All takes every row that fits, like the corpse dispenser; the loot_all binding completes when the container is empty by either path. Tests: MissionLogTests ContentContainerRowsAreRealItemsIntroducedBeforeTheWindowOpens, TakingContainerItemsOneAtATimeCompletesTheObjectiveOnTheLastOne, TakingAnUnknownOrAlreadyTakenContainerRowChangesNothing, LootAllTakesWhatIsLeftAfterSingleTakes. Not established: whether the original completed the objective when the crate was emptied one row at a time; the footage shows only Loot All (A3-017 to A3-024).",
    "evidence": [
-    "rasaworld.db content_placement 198651, 198652, 198653",
-    "rasaworld.db content_rule: no row with mission_id 1992 and objective_id in (1,2,3,5,6,7,8,9)",
-    "src/Rasa.Game/Data/MissionContent.cs ContentRuleEvent - no used/equipped/damaged event exists",
-    "rasachar.db character 5 on 2026-09-16: mission 1992 objective 4 complete, objective 1 still open with the gear taken"
+    "rasachar.db character 5 on 2026-09-17: mission 1992 objective 4 status 2, objective 1 status 1; inventory items 23-27 only (145 drawer, 13126/13186/13156 equipped, 28 x65), all created 2026-09-15 17:01:10 - nothing from item set 19858",
+    "rasaworld.db npc_mission_objective_binding: 1992/1 kind 3 placement 198651; 1992/2 kind 4 equip_match 0; 1992/3 kind 5 placement 198652 destroying_hit_only 1; 1992/8 kind 5 placement 198653 action 194",
+    "rasaworld.db content_condition 198800 = ObjectiveStateIs 1992/1 Incomplete gates the crate, so it cannot be looted before the objective is revealed",
+    "game log 2026-09-16 23:36 UTC: Loaded 16 content rules (239 content rows, 0 gaps)",
+    "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-corpselootwindow.pyo.dis: GetEntity(itemId) before a row is drawn (lines 316, 373, 596, 663)",
+    "src/Rasa.Game/Managers/LootDispenserManager.cs RequestCorpseLooting (commit 06b3352, 2026-09-13): the corpse path sends the items before the window; the content path of commit 6e5f5b0 (same day, later) did not",
+    "src/Rasa.Game/Managers/MissionContentRuntime.cs OpenContentContainer before the fix: new LootItem(templateId, 0, quantity, owner, 0) rows, no SendItemDataToClient; ClientPacketHandler.RequestLootItemFromCorpse routed only to LootDispenserManager"
    ],
    "surfaced_by": [
-    "live play report, 2026-09-16"
+    "live play report, 2026-09-16",
+    "re-diagnosis against the character database and the client's loot window, 2026-09-17"
    ],
    "slices": [
     "S2"

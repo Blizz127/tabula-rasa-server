@@ -897,6 +897,14 @@ namespace Rasa.Game.Handlers
         [PacketHandler(GameOpcode.RequestLootItemFromCorpse)]
         private void RequestLootItemFromCorpse(RequestLootItemFromCorpsePacket packet)
         {
+            // The same window serves a reconstructed-content container (the boot camp's supply
+            // crate), and its right-click path is this request, one row at a time.
+            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
+            {
+                MissionManager.Instance.Content.RequestLootItemFromContentContainer(Client, packet.EntityId, packet.ItemId, packet.DestSlot);
+                return;
+            }
+
             LootDispenserManager.Instance.RequestLootItemFromCorpse(Client, packet);
         }
 
