@@ -51516,6 +51516,22 @@
     "S2",
     "S5"
    ]
+  },
+  {
+   "id": "GAP-W3-UNBOUND-CONVERSATION-PACKAGE",
+   "summary": "Two Wilderness missions cannot be completed in game because the NPC who completes their objectives is not in the world. The client's objectiveconversation table says which package completes each objective, and the emulator only offers a conversation from a creature carrying that package.\n\n422 'Miner Difficulties' completes objective 1 through package 213 (dialog 1276: \"You're a sight for sore eyes, soldier! We've been waiting on these supplies for too damn long!\"). The mission's own text names that NPC: \"Deliver two crates of mining equipment and medical supplies to Mining Coordinator Richards at the entrance to the Pinhole Falls Caverns\". Mining Coordinator Richards is not in the world seed and has not been created.\n\n429 'River Recon' completes objective 5 through package 726 (dialog 3886: \"Bane ambush... they killed... all of us... Please... must tell human commander... they are moving... towards Alia Das... Tell Witherspoon...\") - the dying Forean Ranger the mission sends the player to find. Objective 4's two packages (116 Rogers, 208 Witherspoon) are both present, so only this one is missing.\n\nBoth NPCs are reconstructable through OD-45: the client names them, TaRapedia records their zones and /loc, and the mission text states their role. Until they exist those two objectives have no conversation to complete through, which the MissionAreaLinks test now names explicitly rather than letting pass.",
+   "closes_with": "creating Mining Coordinator Richards and the wounded Forean Ranger through the OD-45 pipeline",
+   "evidence": [
+    "client/objectiveconversation.pyo (422,1,213,1,1)->1276 and (429,5,726,1,1)->3886",
+    "client/language/missiontextlanguage.pyo texts 714, 1276 and 3886",
+    "client/language/npcgreetinglanguage.pyo packages 213 and 726"
+   ],
+   "surfaced_by": [
+    "boot camp scenario test repair 2026-09-17"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [

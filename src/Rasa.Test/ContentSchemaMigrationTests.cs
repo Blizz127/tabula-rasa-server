@@ -95,6 +95,15 @@ namespace Rasa.Test
         private static SqliteCharContext Char(SqliteConnection connection)
             => new SqliteCharContext(Options.Create(new DatabaseConfiguration()), new TestConfiguration(connection), new SqliteDbContextPropertyModifier());
 
+        /// <summary>
+        /// The missions a batch's NPCs are part of, on either side. The batches seeded most missions with
+        /// giver = receiver and MissionAreaLinks then gave the cross-zone hand-offs the givers TaRapedia names, which
+        /// moves a mission out of one batch's giver set and into another's receiver set; counting either side is what
+        /// the original numbers meant and it stays true as those corrections land.
+        /// </summary>
+        private static long MissionsInvolving(Microsoft.Data.Sqlite.SqliteConnection connection, uint first, uint last)
+            => Scalar(connection, $"SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN {first} AND {last} OR reciver_id BETWEEN {first} AND {last}");
+
         private static long Scalar(SqliteConnection connection, string sql)
         {
             using var command = connection.CreateCommand();
@@ -328,33 +337,39 @@ namespace Rasa.Test
             // the client's navmesh has under her (233.8).
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 199504 AND pos_y = 233.8"));
 
-            // PlainsConversationNpc: five Torden NPCs on the plains (1764) and the incline (1761) with eleven
-            // missions; two missions were skipped because Colonel Franks has no /loc recorded anywhere.
+            // PlainsConversationNpc: five Torden NPCs on the plains (1764) and the incline (1761) with twelve
+            // missions between them; two missions were skipped because Colonel Franks has no /loc recorded anywhere.
+            // One of the twelve is the incline's 1747, which Sage hands out from here.
             Assert.AreEqual(5L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199500 AND 199504 AND name_id > 0"));
-            Assert.AreEqual(11L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199500 AND 199504"));
-            // InclineConversationNpc: two more NPCs and their missions.
+            Assert.AreEqual(12L, MissionsInvolving(connection, 199500, 199504));
+            // InclineConversationNpc: two more NPCs and their missions. Both were first seeded with
+            // giver = receiver because no giver was known; MissionAreaLinks gave them the givers TaRapedia names -
+            // 1747 is handed out by Sage (199504) and 1826 by Parsons - so the incline pair now *receive* both, and
+            // only 1748 is handed out from here, by Maddox.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199600 AND 199601 AND name_id > 0"));
-            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199600 AND 199601"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199600 AND 199601"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE reciver_id BETWEEN 199600 AND 199601 AND id IN (1747, 1826)"));
 
             // MiresConversationNpc: five Torden NPCs on the mires map 1759 and one liaison on the plateau.
             Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199400 AND 199405 AND name_id > 0"));
-            Assert.AreEqual(7L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199400 AND 199405"));
+            Assert.AreEqual(7L, MissionsInvolving(connection, 199400, 199405));
 
             // MarshesConversationNpc: four more (Lieutenant Morrison and three Retreads) and their missions, all on
             // the main marshes map 1454 that TaRapedia gives them.
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199300 AND 199303 AND name_id > 0"));
-            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199300 AND 199303"));
+            Assert.AreEqual(4L, MissionsInvolving(connection, 199300, 199303));
 
             // PlateauConversationNpc: six more giver NPCs and their six conversation missions on the Valverde
             // plateau (map 1497) and in the pools (1304), which is where TaRapedia puts them.
             Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199200 AND 199205 AND name_id > 0"));
-            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199200 AND 199205"));
+            // Two of the six are handed out from the Divide (Bosley) and received here.
+            Assert.AreEqual(6L, MissionsInvolving(connection, 199200, 199205));
 
             // PalisadesConversationNpc: the same pipeline applied to the Palisades - eight giver NPCs and the
             // nine conversation missions they hand out.
             Assert.AreEqual(8L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id BETWEEN 199100 AND 199107 AND name_id > 0"));
             Assert.AreEqual(8L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id BETWEEN 199100 AND 199107 AND map_context_id = 1244"));
-            Assert.AreEqual(9L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE giver_id BETWEEN 199100 AND 199107"));
+            Assert.AreEqual(9L, MissionsInvolving(connection, 199100, 199107));
 
             // DivideConversationNpc: the Divide's conversation missions and the four giver NPCs they needed,
             // created from the client name table (ids), TaRapedia (level/zone/loc) and an appearance analogue.

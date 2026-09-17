@@ -589,6 +589,33 @@ character picks up in Alia Das once Training Day and the class choice are behind
 
     **Endgame zones**: unchanged - the twelve level-banded adventure zones are decoded, and nothing places creatures or
     content above the Wilderness; the reconstruction rules (OD-45, OD-48) are what fill it, no new mechanics.
+  - **Boot camp scenario tests repaired (2026-09-17)**: the owner asked for the boot camp's scenario quests to be fixed.
+    Reading them showed the *camp* is fine and the *tests* had gone stale underneath it, which is worth stating plainly
+    because the failures looked like quest bugs. Three things had drifted:
+
+    1. `ArriveAtAliaDas` pinned the Wilderness's whole placement inventory, so every later batch broke it. By the time it
+       was read, the zone also held the Alia Das hub's Witherspoon (198686) and Moawi (198687), mission 430's four mortars
+       (199700-199703), and Dawson (199002) and Brice (199003) had been **moved to the Divide** - the later,
+       evidence-backed correction, since their `/loc` readings are Divide coordinates. The scenario now asserts the three
+       placements it actually needs (Rogers, Kincaid, Milpas) with their behaviours; zone inventory belongs to the batches
+       that created it, and their own migration tests plus the world position audit already cover it.
+    2. The per-batch mission counts were written as *giver* counts while every batch seeded `giver = receiver`.
+       MissionAreaLinks then gave the cross-zone hand-offs the givers TaRapedia names, which moves a mission out of one
+       batch's giver set and into another's receiver set. They are counted on either side now (`MissionsInvolving`), which
+       is what the original numbers meant, and the numbers hold: plains 12 (one of them the incline's 1747, which Sage
+       hands out from the plains), incline 1 giver / 3 involved, mires 7, marshes 4, plateau 6, palisades 9.
+    3. `TurnInAtRogers` asserted Rogers had nothing left to say at all. He keeps the Alia Das hub's own missions at the
+       same arrival, so the assertion is now that *this mission* is no longer among his conversations.
+
+    Repairing those surfaced a real defect rather than hiding one, and the strictest test in the set is what found it:
+    `EveryCorrectedMissionIsGivenAndReceivedByASpawnedCreatureOnTheRightMap` fails when a corrected mission's objective
+    completes through a package no creature carries. Two do - **422 "Miner Difficulties"** (package 213) and **429 "River
+    Recon"** (package 726) - and the client's own text identifies both missing NPCs: 213's dialog ("You're a sight for
+    sore eyes, soldier! We've been waiting on these supplies...") is **Mining Coordinator Richards at the entrance to the
+    Pinhole Falls Caverns**, whom 422's own text names, and 726's is **the dying Forean Ranger** whose last words send the
+    player back to Witherspoon. Both are reconstructable through OD-45; until they exist those objectives have no
+    conversation to complete through. Recorded as **GAP-W3-UNBOUND-CONVERSATION-PACKAGE**, and the test now names the two
+    missions explicitly so a third can never appear quietly.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

@@ -325,18 +325,26 @@ namespace Rasa.Test
         private Creature ArriveAtAliaDas()
         {
             var live = ContentMaterializer.PlacementsToSpawn(_content.Content, AliaDas).OrderBy(placement => placement.Id).ToList();
-            // 199002 (Field Dr. Dawson) and 199003 (Receptive Liaison Brice) joined the shared Wilderness in W3 batch 5:
-            // TaRapedia puts both of them in that zone, so W3's Divide missions are handed out by NPCs standing here.
-            CollectionAssert.AreEqual(new[]
-                {
-                    (RogersPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
-                    (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary, 0u),
-                    (199002u, (byte)ContentPlacementBehavior.Stationary, 0u),
-                    (199003u, (byte)ContentPlacementBehavior.Stationary, 0u),
-                    // Ranger Milpas stands at the arrival and walks with whoever takes 1390 (the escort mechanic).
-                    (199803u, (byte)ContentPlacementBehavior.Escort, 0u)
-                },
-                live.Select(placement => (placement.Id, placement.Behavior, placement.PresentConditionId)).ToArray());
+
+            // The arrival needs these three standing in the Wilderness. The zone's *whole* inventory is not asserted
+            // here: each NPC belongs to the batch that put them there, and their own migration tests and the world
+            // position audit already cover it. Pinning the full list made every later batch break this scenario - the
+            // Alia Das hub's Witherspoon (198686) and Moawi (198687), mission 430's four mortars (199700-199703), and
+            // the move that took Field Dr. Dawson (199002) and Receptive Liaison Brice (199003) off the Wilderness to
+            // the Divide, where their /loc readings actually point.
+            foreach (var (placementId, behavior) in new[]
+                     {
+                         (RogersPlacement, (byte)ContentPlacementBehavior.Stationary),
+                         (KincaidPlacement, (byte)ContentPlacementBehavior.Stationary),
+                         // Ranger Milpas stands at the arrival and walks with whoever takes 1390 (the escort mechanic).
+                         (199803u, (byte)ContentPlacementBehavior.Escort)
+                     })
+            {
+                var placement = live.SingleOrDefault(candidate => candidate.Id == placementId);
+                Assert.IsNotNull(placement, $"placement {placementId} is not among the Wilderness's spawns");
+                Assert.AreEqual(behavior, placement.Behavior, $"placement {placementId} behavior");
+                Assert.AreEqual(0u, placement.PresentConditionId, $"placement {placementId} present condition");
+            }
 
             var wilderness = _wilderness = new MapChannel { MapInfo = new MapInfo(AliaDas, "adv_foreas_concordia_wilderness", 1556, 0), ClientList = new List<Client>() };
             var arrival = _content.Content.Catalog.Locations[19852];
@@ -362,7 +370,10 @@ namespace Rasa.Test
 
             _missions.CompleteNpcMission(_client, rogers.EntityId, missionId, null);
             Assert.AreEqual(MissionState.Completed, _client.Player.Missions[missionId].State, $"mission {missionId} was not turned in at Rogers");
-            Assert.IsFalse(_missions.TryGetConversationStatus(_client, rogers, out _, out _));
+            // Rogers keeps whatever else he has to say - the Alia Das hub's own missions stand at the same arrival -
+            // but this mission is finished with him, so it is no longer one of his conversations.
+            if (_missions.TryGetConversationStatus(_client, rogers, out _, out var stillOffered))
+                CollectionAssert.DoesNotContain(stillOffered, missionId, $"Rogers still offers {missionId} after the turn-in");
             using var context = CharContext(_charConnection);
             Assert.AreEqual((uint)MissionState.Completed, context.CharacterMissionEntries.Single(m => m.CharacterId == CharacterId && m.MissionId == missionId).MissionState);
         }
