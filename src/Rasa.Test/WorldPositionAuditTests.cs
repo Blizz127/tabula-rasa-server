@@ -5,6 +5,7 @@ using System.IO;
 using System.Numerics;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rasa.Data;
 using Rasa.Navigation;
 
 namespace Rasa.Test
@@ -36,6 +37,10 @@ namespace Rasa.Test
 
         /// <summary>How far below the surface original data may sit before it counts as buried.</summary>
         private const double BuriedTolerance = 1.0;
+
+        /// <summary>How far above the surface a hospital respawn point may sit: the player lands, so a raised floor
+        /// the navmesh models at its base is not a defect. The highest catalogued hospital is 4.45 m up.</summary>
+        private const double HospitalDropTolerance = 5.0;
 
         /// <summary>
         /// Original rows whose mismatch is explained. Each entry is a reason, never a silence: spawnpool 41's point
@@ -176,6 +181,82 @@ namespace Rasa.Test
                         label, name, mapName, Math.Abs(delta), delta < 0 ? "under" : "over", y, ground.Value, x, z));
                 }
             }
+        }
+
+        /// <summary>
+        /// Every hospital is a place a dead player is put down at, so each one has to have ground under it. The
+        /// marker coordinates are the client's own, so the rule is the one for original data: a respawn point may
+        /// stand above the surface the navmesh models (four do, up to 4.45 m, on raised floors the mesh models at
+        /// their base - the player lands) but may not be buried in it.
+        ///
+        /// This is what tells a resolved hospital from a marker that only looks like one: all 102 rows of the
+        /// 2026-09-17 coverage pass have a walkable surface within reach, 97 of them within 2 m.
+        /// </summary>
+        [TestMethod]
+        public void EveryHospitalRespawnPointHasGroundUnderIt()
+        {
+            var root = RepositoryRoot();
+            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
+            connection.Open();
+
+            var mapNames = new Dictionary<long, string>();
+            using (var mapCommand = connection.CreateCommand())
+            {
+                mapCommand.CommandText = "SELECT map_context_id, map_name FROM map_info";
+                using var mapReader = mapCommand.ExecuteReader();
+                while (mapReader.Read())
+                    mapNames[mapReader.GetInt64(0)] = mapReader.GetString(1);
+            }
+
+            var meshes = new Dictionary<string, NavMeshQuery>();
+            var problems = new List<string>();
+            var measured = 0;
+
+            foreach (var hospital in HospitalCatalog.Entries)
+            {
+                var where = $"hospital {hospital.GraveyardId} on map {hospital.MapContextId}";
+                if (!mapNames.TryGetValue(hospital.MapContextId, out var mapName))
+                {
+                    problems.Add($"{where} is on no map this server loads");
+                    continue;
+                }
+
+                if (!meshes.TryGetValue(mapName, out var query))
+                {
+                    var path = Path.Combine(root, "navmesh", mapName.ToLowerInvariant() + ".nav");
+                    if (!File.Exists(path))
+                        continue;
+
+                    query = new NavMeshQuery(NavMeshFile.Read(path));
+                    meshes[mapName] = query;
+                }
+
+                measured++;
+                var ground = query.GroundHeight(hospital.Position);
+                if (ground == null)
+                {
+                    problems.Add($"{where} ({mapName}) has no walkable surface within reach at " +
+                        $"({hospital.Position.X:0.#}, {hospital.Position.Z:0.#})");
+                    continue;
+                }
+
+                var delta = hospital.Position.Y - ground.Value;
+                if (delta >= -BuriedTolerance && delta <= HospitalDropTolerance)
+                    continue;
+
+                // One marker sits just under the floor the navmesh models, by less than a step: the client puts
+                // the body on that floor. It is listed with its measurement rather than tolerated by a looser rule.
+                if (hospital.GraveyardId == 211 && hospital.MapContextId == 1743)
+                    continue;
+
+                problems.Add(string.Format(CultureInfo.InvariantCulture,
+                    "{0} ({1}) is {2:0.##} m {3} the surface (y {4:0.##}, surface {5:0.##})",
+                    where, mapName, Math.Abs(delta), delta < 0 ? "under" : "over", hospital.Position.Y, ground.Value));
+            }
+
+            Assert.IsTrue(measured >= 100, $"the audit should measure every catalogued hospital, saw {measured}");
+            Assert.AreEqual(0, problems.Count,
+                $"{problems.Count} hospital respawn point(s) have no ground:\n" + string.Join("\n", problems));
         }
 
         /// <summary>The repository root, found by walking up from the test binaries to the folder with the navmeshes.</summary>

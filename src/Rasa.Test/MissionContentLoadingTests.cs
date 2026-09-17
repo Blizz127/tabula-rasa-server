@@ -858,6 +858,12 @@ namespace Rasa.Test
                     // Liaison missions' receivers are in.
                     context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10)");
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
+                    // Mission 429 River Recon is a world-seed row, not a migrated one: MissionAreaLinks and
+                    // WildernessPinholeNpc only correct it, so without the seed row this migrated world has the
+                    // objective flags and the 5->4 transition of a mission it does not carry.
+                    context.Database.ExecuteSqlRaw(
+                        "INSERT INTO npc_mission (id, giver_id, reciver_id, level, group_type, category_id, shareable, radio_completeable, comment) " +
+                        "VALUES (429, 100, 101, 3, 2, 2, 1, 1, 'River Recon')");
                     context.Database.Migrate();
                 }
 
@@ -884,7 +890,9 @@ namespace Rasa.Test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
                 // The Wilderness collection missions count kills of the creature that drops the item: Bane Shield
                 // Drone 85, Bane Xanx 87 and Bane Miasma 88 (W3 batch 14).
-                references.Creatures.UnionWith(new uint[] { 76, 77, 85, 87, 88 });
+                // MissionAreaLinks places two world-seed NPCs the Wilderness missions turn in at, because their
+                // spawnpool slots never drew them: Field Sgt. Witherspoon (101) and Council Elder Moawi (38).
+                references.Creatures.UnionWith(new uint[] { 76, 77, 85, 87, 88, 101, 38 });
 
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);
@@ -959,10 +967,17 @@ namespace Rasa.Test
                 Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1220));
                 Assert.IsFalse(validation.WithheldContexts.Contains(1220u));
                 var aliaDasPlacements = ContentMaterializer.PlacementsToSpawn(validation, 1220).ToDictionary(placement => placement.Id);
-                // 199002 (Field Dr. Dawson) and 199003 (Receptive Liaison Brice) were created by W3 batch 5 from
-                // TaRapedia's own zone for them, which is the Wilderness, so they stand in the same shared context.
-                // 199803 (Ranger Milpas) stands at the arrival too, on the escorts' side of the same shared context.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 199002, 199003, 199803 }, aliaDasPlacements.Keys.ToArray());
+                // Everyone our content puts on the shared Wilderness: Rogers (198684) and Training Officer Kincaid
+                // (198685) at the arrival, the two world-seed NPCs MissionAreaLinks had to place because their
+                // spawnpool slots never drew them - Field Sgt. Witherspoon (198686) and Council Elder Moawi
+                // (198687) - Ranger Milpas (199803) on the escorts' side, and the two the missions 422 and 429
+                // complete through: Mining Coord. Richards (199910) at the Pinhole Falls Caverns and the wounded
+                // Forean Ranger (199911) at the top of the falls. Field Dr. Dawson (199002) and Receptive Liaison
+                // Brice (199003) stood here until MissionAreaLinks read their TaRapedia /loc as Divide coordinates
+                // and moved them to 1148, where the navmesh has ground 0.1 m under each.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199803, 199910, 199911 },
+                    aliaDasPlacements.Keys.ToArray(),
+                    "Alia Das: " + string.Join(", ", aliaDasPlacements.Keys.OrderBy(id => id)));
                 var rogers = aliaDasPlacements[198684];
                 Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));

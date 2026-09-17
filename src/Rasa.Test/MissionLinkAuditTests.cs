@@ -18,8 +18,31 @@ namespace Rasa.Test
     [TestClass]
     public class MissionLinkAuditTests
     {
-        // Missions recorded without a giver or receiver on purpose (mission-research.md, 2026-09-13).
-        private static readonly HashSet<long> KnownUnplaced = new() { 321 };
+        // Missions recorded without a giver on purpose. 321 has neither giver nor receiver in the client tables
+        // (mission-research.md, 2026-09-13); the other four are dispensed by a content rule instead of by an NPC,
+        // so a giver creature would be wrong rather than missing:
+        //   1990 Initiation      - the boot camp's forced radio offer on entering the camp (S1)
+        //   1526 Training Day    - the forced radio offer on arriving at Alia Das (W1, GAP-W1-OFFER-RULE)
+        //   2010/2011 class gear - dispatched on the class choice (W2, OD-43)
+        private static readonly HashSet<long> KnownUnplaced = new() { 321, 1526, 1990, 2010, 2011 };
+
+        /// <summary>
+        /// The objectives that still complete through a dialogue package no NPC in the world carries, named one by
+        /// one so a thirty-fifth cannot appear quietly. Each is a mission a player can accept and then not finish:
+        /// the client's objectiveconversation row says which package completes it, and the server only offers a
+        /// conversation from a creature carrying that package. Closing one means creating its NPC by the OD-45
+        /// pipeline, as Mining Coord. Richards and the wounded Forean Ranger were on 2026-09-17.
+        /// GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
+        /// </summary>
+        private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
+        {
+            (321, 310, 105), (332, 2, 32), (332, 3, 98), (382, 1, 177), (421, 3, 210), (427, 1, 254),
+            (431, 1, 251), (431, 2, 252), (431, 3, 253), (442, 1, 218), (442, 2, 1486), (444, 1, 117),
+            (451, 1, 566), (451, 2, 567), (451, 3, 569), (549, 1, 382), (670, 2, 145), (682, 2, 102),
+            (682, 4, 570), (682, 5, 102), (682, 6, 566), (698, 1, 117), (836, 1, 802), (969, 3, 1065),
+            (969, 4, 1092), (977, 2, 1075), (977, 3, 1051), (1040, 2, 1118), (1040, 3, 1117),
+            (1119, 1, 1203), (1125, 1, 1200), (1183, 1, 1273), (1186, 1, 1300), (1310, 1, 1200)
+        };
 
         [TestMethod]
         public void EveryMissionGiverAndReceiverIsACreatureThatSpawns()
@@ -79,12 +102,28 @@ namespace Rasa.Test
                 SELECT c.mission_id, c.objective_id, c.npc_package_id, m.comment
                 FROM npc_mission_objective_conversation c JOIN npc_mission m ON m.id = c.mission_id
                 ORDER BY c.mission_id, c.objective_id";
+            var closed = new List<string>();
             using (var reader = command.ExecuteReader())
                 while (reader.Read())
-                    if (!carried.Contains(reader.GetInt64(2)))
-                        problems.Add($"mission {reader.GetInt64(0)}/{reader.GetInt64(1)} ({reader.GetString(3)}) completes through package {reader.GetInt64(2)}, which no spawned creature carries");
+                {
+                    var triple = (reader.GetInt64(0), reader.GetInt64(1), reader.GetInt64(2));
+                    if (carried.Contains(reader.GetInt64(2)))
+                    {
+                        if (UnboundPackages.Contains(triple))
+                            closed.Add($"mission {triple.Item1}/{triple.Item2} package {triple.Item3}");
+                        continue;
+                    }
 
-            Assert.AreEqual(0, problems.Count, string.Join("\n", problems));
+                    if (!UnboundPackages.Contains(triple))
+                        problems.Add($"mission {reader.GetInt64(0)}/{reader.GetInt64(1)} ({reader.GetString(3)}) completes through package {reader.GetInt64(2)}, which no spawned creature carries");
+                }
+
+            Assert.AreEqual(0, problems.Count,
+                "these objectives complete through a package no spawned creature carries, and are not in the recorded set:\n"
+                + string.Join("\n", problems));
+            // A closed one must leave the list, or the list stops meaning anything.
+            Assert.AreEqual(0, closed.Count,
+                "these objectives now have their NPC and must be taken out of UnboundPackages:\n" + string.Join("\n", closed.Distinct()));
         }
 
         /// <summary>Creature ids that exist in the world: placed, or in a spawnpool slot that draws at least one.</summary>

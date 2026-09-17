@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Sqlite;
@@ -49,10 +50,16 @@ namespace Rasa.Test
             using var context = World(connection);
             context.Database.Migrate();
 
+            // Two batches have corrected a receiver since this migration ran: WildernessPinholeNpc pointed 422 at
+            // Mining Coord. Richards (199910), the RewardGiver TaRapedia records and the NPC its completion package
+            // belongs to, so MissionAreaLinks' value is the one before that. Everyone else still stands.
+            var correctedLater = new Dictionary<uint, ulong> { { 422u, 199910u } };
+
             foreach (var (missionId, giverId, receiverId) in MissionAreaLinksRows.Corrected)
             {
                 Assert.AreEqual(giverId, (ulong)Scalar(connection, $"SELECT giver_id FROM npc_mission WHERE id = {missionId}"), $"giver of {missionId}");
-                Assert.AreEqual(receiverId, (ulong)Scalar(connection, $"SELECT reciver_id FROM npc_mission WHERE id = {missionId}"), $"receiver of {missionId}");
+                var expectedReceiver = correctedLater.TryGetValue(missionId, out var later) ? later : receiverId;
+                Assert.AreEqual(expectedReceiver, (ulong)Scalar(connection, $"SELECT reciver_id FROM npc_mission WHERE id = {missionId}"), $"receiver of {missionId}");
                 foreach (var creatureId in new[] { giverId, receiverId })
                     Assert.AreEqual(1, Scalar(connection, $"SELECT COUNT(*) FROM content_placement WHERE kind = 1 AND creature_id = {creatureId}"),
                         $"creature {creatureId} of mission {missionId} is placed exactly once");
@@ -93,8 +100,11 @@ namespace Rasa.Test
                     unbound.Add(missionId);
             }
 
-            CollectionAssert.AreEquivalent(new uint[] { 422u, 429u }, unbound,
-                "only these two corrected missions complete through a package no creature carries");
+            // Nothing is unbound now: WildernessPinholeNpc put Mining Coord. Richards (package 213) at the Pinhole
+            // Falls Caverns and the wounded Forean Ranger (726) at the top of the falls, which is what 422 and 429
+            // were waiting for. A third mission growing a package no creature carries still fails here.
+            CollectionAssert.AreEquivalent(Array.Empty<uint>(), unbound,
+                $"these corrected missions complete through a package no creature carries: {string.Join(", ", unbound)}");
 
             // Brice speaks with his own package on both rows; Noonan has the one 1743 completes through.
             Assert.AreEqual(2050, Scalar(connection, "SELECT package_id FROM npc_package WHERE id = 199003"));

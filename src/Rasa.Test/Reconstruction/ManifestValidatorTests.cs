@@ -189,10 +189,10 @@ namespace Rasa.Test.Reconstruction
                 .ToList();
             CollectionAssert.AreEquivalent(new[]
             {
-                "creature:id:198500-199812",
+                "creature:id:198500-199911",
                 "creature_loot:id:1-21",
                 "content_area:id:198600-198649",
-                "content_placement:id:198650-199865",
+                "content_placement:id:198650-199911",
                 "content_condition:condition_id:198900-198999",
                 "content_rule:id:1985000-1985999",
                 "content_rule_action:rule_id:1985000-1985999",
@@ -209,7 +209,7 @@ namespace Rasa.Test.Reconstruction
                 // W3 (2026-09-16): the Wilderness hub's missions and the dialogue packages their NPCs needed. The
                 // mission ids run from the hub's 427 to the boot camp's 2011; the package ids from Elder Moawi's 38
                 // to Lt. Gerry's 199603 (MissionAreaLinks, 2026-09-17), which is what the range below covers.
-                "npc_package:id:38-199603",
+                "npc_package:id:38-199911",
                 "npc_mission:id:332-2016"
             }, scope);
 

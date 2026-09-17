@@ -616,6 +616,72 @@ character picks up in Alia Das once Training Day and the class choice are behind
     player back to Witherspoon. Both are reconstructable through OD-45; until they exist those objectives have no
     conversation to complete through. Recorded as **GAP-W3-UNBOUND-CONVERSATION-PACKAGE**, and the test now names the two
     missions explicitly so a third can never appear quietly.
+  - **The two NPCs 422 and 429 were waiting for (2026-09-17)**: the broken-quest gap found while repairing the boot
+    camp tests is closed. The client's `objectiveconversation` table says which conversation package completes each
+    objective and the server only offers a conversation from a creature carrying that package; two packages - 213 and
+    726 - belonged to nobody in the world.
+
+    **Mining Coord. Richards** (client name **3077**) now stands at the entrance to the **Pinhole Falls Caverns**
+    (341.16, 228.70, 477.85). Two independent sources name him: the dialogue that completes 422 objective 1
+    ("You're a sight for sore eyes, soldier! We've been waiting on these supplies for too damn long!") and 422's own
+    text ("deliver two crates of mining equipment and medical supplies to Mining Coordinator Richards at the entrance
+    to the Pinhole Falls Caverns"), while TaRapedia records him as 422's **RewardGiver** at Pinhole Falls Cavern - and
+    as the giver of its follow-up "Mama Miasma". 422 is now turned in at him, which is what that page says and what
+    the completion package requires.
+
+    **The wounded Forean Ranger** (client name 3013) stands at the **top of Pinhole Falls** (309.51, 271.38, 436.97),
+    where 429 sends the player to look for the lost patrol. His dialogue is the one 429 objective 5 completes through:
+    "Bane ambush... they killed... all of us... Please... must tell human commander... they are moving... towards Alia
+    Das... Tell Witherspoon...". 429's other completion packages (Rogers' 116, Witherspoon's 208) were already in the
+    world, so only this one was missing.
+
+    Both positions are the **client's own map markers** (`uimapmarker` text ids 40 "Pinhole Falls Caverns" and 39
+    "Pinhole Falls"), and the navmesh floor under each agrees with the marker's own Y within 0.3 m; the falls has two
+    floors (226.32 at the river, 271.38 at the top) and the mission says "near the top", so the top one is used. The
+    appearance is the OD-45 analogue: the package 213 greeting is the Forean welcome ("our kind were not born of this
+    world..."), so Richards is a Forean civilian (`NPC_Forean_Unarmed`, as Council Elder Moawi is a
+    `Redshirt_Forean_Elder`) and the ranger a Forean archer (`NPC_Forean_Archer`).
+
+    The batch also **offers 429 at last**. The loader had refused it since the client skeleton exports no objective
+    flags: its objectives carried no ordinal, required or revealed flag at all, so it could not be dispensed. Their
+    order is the one the mission text states - "search for signs of a lost patrol of Forean Rangers near the top of
+    Pinhole Falls, *then* report your findings to Field Sgt. Witherspoon" - so the recon (objective 5) is first and
+    revealed on acceptance, the report (objective 4) second. The live loader's "not offered" line for 429 is the
+    acceptance check.
+
+    The manifest carries a row per field for the two creatures, their packages and their placements, and a `change`
+    per correction (422's receiver, 429's objective flags). Raising the scopes for the new ids also surfaced two
+    client maps that earlier hand-off rows cited without being declared; they are declared now, with the two that are
+    not decoded to entities saying so in their locator rather than implying decoded positions exist.
+  - **Every quest the world cannot finish, named (2026-09-17)**: `MissionLinkAuditTests` reads the deployed
+    `rasaworld.db`, but it looks for it beside the `navmesh` folder - and the folder was not in the test container,
+    so both of its checks had been reported as *inconclusive* on every run since they were written. With the navmesh
+    mounted they run, and they name **34 objectives over 22 missions whose completion package no spawned creature
+    carries**: 321, 332, 382, 421, 427, 431, 442, 444, 451, 549, 670, 682, 698, 836, 969, 977, 1040, 1119, 1125,
+    1183, 1186 and 1310. Each is a mission a player can accept and then not finish, and the two closed on the same
+    day (422 and 429) were the first two of that list, not the whole of it. Every triple is now written into the
+    test's `UnboundPackages` set, which fails both ways: a thirty-fifth cannot appear quietly, and one that gains
+    its NPC must be taken out. Recorded as **GAP-W3-UNBOUND-CONVERSATION-PACKAGE** with the row list in the
+    manifest; the closing recipe per row is the OD-45 pipeline. The same run found the camp's own content test
+    two rows behind the world - the placements of Field Sgt. Witherspoon and Council Elder Moawi were withheld in
+    its fixture because they name world-seed creatures, and mission 429 is a world-seed row no migration inserts -
+    and four missions failing the giver check that have no giver on purpose (1990, 1526, 2010, 2011 are dispensed
+    by a content rule). All three are fixed, and the camp's content now loads its seven Alia Das placements with
+    zero gaps.
+  - **Death anywhere but the two starting maps left the body where it fell (2026-09-17, live report)**: the death
+    work of 2026-09-14 shipped a hand-built catalogue of **seven hospitals on two maps**. `OfferedHospitals` looks
+    up the map the player died on, finds nothing anywhere else, and `ReviveMe` takes the documented
+    revive-in-place fallback - which is exactly what "when i die ... it respawns in place" describes. The
+    catalogue is now built by running the same recipe over **every map the server loads**: each client
+    `uimapmarker` HOSPITAL (3) or SAFE_ZONE (19) marker, joined to `graveyardlanguage` and `waypointlanguage` by
+    its name, with the world seed's type-5 teleporter row naming the marker whose own text has no waypoint entry.
+    It reproduces all seven hand-built rows **exactly** - ids, marker entities, positions, the safe-zone flag and
+    the 136-over-183 ambiguity choice - and resolves **102 hospitals on 41 maps**. A new standing audit measures
+    every one against the navmesh: all 102 have walkable ground, 97 within 2 m, the four highest on raised floors
+    the mesh models at their base (up to 4.45 m, so the player lands), and one 1.06 m under a floor, listed with
+    its measurement. The 66 markers the recipe cannot resolve - no `graveyardlanguage` entry reads their name, so
+    the id Hospital Selection would show is unrecovered - are **GAP-HOSPITAL-UNRESOLVED-GRAVEYARD**; they are
+    mostly instances and the wargame maps, and those maps keep the revive-in-place fallback.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

@@ -235,9 +235,12 @@ namespace Rasa.Test
                 int Int(string field) => record.GetProperty(field).GetProperty("value").GetInt32();
                 bool Bool(string field) => record.GetProperty(field).GetProperty("value").GetBoolean();
 
-                var hospital = HospitalCatalog.Entries.Single(entry => entry.GraveyardId == Int("graveyard_id"));
+                // A graveyard id is unique per map, not across the world: the Landing Zone control point
+                // carries 136 on both the Wilderness and the Palisades, and ReviveMe only ever chooses from
+                // the hospitals of the map the player died on.
+                var hospital = HospitalCatalog.Entries.Single(entry => entry.GraveyardId == Int("graveyard_id") &&
+                    entry.MapContextId == (uint)Int("map_context_id"));
                 Assert.AreEqual((uint)Int("waypoint_id"), hospital.WaypointId);
-                Assert.AreEqual((uint)Int("map_context_id"), hospital.MapContextId);
                 Assert.AreEqual(record.GetProperty("marker_entity_id").GetProperty("value").GetUInt64(), hospital.MarkerEntityId);
                 var position = record.GetProperty("position").GetProperty("value").EnumerateArray().Select(value => (float)value.GetDouble()).ToArray();
                 Assert.AreEqual(new Vector3(position[0], position[1], position[2]), hospital.Position);

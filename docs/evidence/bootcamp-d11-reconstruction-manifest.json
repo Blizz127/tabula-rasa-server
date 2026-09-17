@@ -161,6 +161,21 @@
    "era": "unknown",
    "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql",
    "note": "the original game server's own schema and seed data (creature_type, creature_type_loot, itemtemplate, items, vendors). A development snapshot whose date is unknown, so it is cited as unknown era rather than as final-live data: it is the only surviving record of the loot table's shape and of the seven rows it held."
+  },
+  "client_map:adv_foreas_concordia_divide": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "research/20260913-bootcamp/map/decoded/adv_foreas_concordia_divide-entities.csv (decoded from the client .map)"
+  },
+  "client_map:adv_foreas_valverde_plateau": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "research/20260913-bootcamp/map/maps/adv_foreas_valverde_plateau.map (the client map itself; not decoded to entities yet - the rows citing it use its identity, not decoded positions)"
+  },
+  "client_map:adv_arieki_torden_plains": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "research/20260913-bootcamp/map/maps/adv_arieki_torden_plains.map (the client map itself; not decoded to entities yet - the rows citing it use its identity, not decoded positions)"
   }
  },
  "scope": [
@@ -169,7 +184,7 @@
    "key_ranges": {
     "id": {
      "min": 198500,
-     "max": 199812
+     "max": 199911
     }
    },
    "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0."
@@ -188,7 +203,7 @@
    "key_ranges": {
     "id": {
      "min": 198650,
-     "max": 199865
+     "max": 199911
     }
    },
    "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703)."
@@ -305,7 +320,7 @@
    "key_ranges": {
     "id": {
      "min": 38,
-     "max": 199603
+     "max": 199911
     }
    },
    "note": "W2: Quartermaster Caufield, the existing world-seed creature (id 132) whose missing dialogue package 133 is attached so missions 2010/2011 can complete at him. Not a reserved range: the id is the world-seed creature id. W3: the dialogue packages attached to the hub NPCs (Elder Quillas 1646, Elder Moawi 113, Apirka 112, Solis 168, Rogers 116, Witherspoon 251-253, Caufield 132 in W2). W3 batch 5: the dialogue packages attached to those NPCs. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them. W3: the dialogue packages attached to them."
@@ -49858,6 +49873,569 @@
      "reasoning": "the client's conversation rows name the package the mission's objective completes through, and the same NPC hands the mission out"
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199910
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "name_id": {
+     "value": 3077,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3077 \"Mining Coord. Richards\" - the name 422's own text uses"
+      }
+     ]
+    },
+    "class_id": {
+     "value": 26833,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 26833 NPC_Forean_Unarmed"
+      }
+     ],
+     "counterpart": "the world's Forean civilians (Council Elder Moawi uses Redshirt_Forean_Elder, 6163)",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "reasoning": "Mining Coord. Richards has no page of his own, so his level follows the NPC beside him in the same mission chain (Witherspoon, level 25 in the world seed)",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs, for instance Field Sgt. Witherspoon (creature 101) at level 25, the other Pinhole Falls quest NPC"
+      }
+     ]
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "every Wilderness quest NPC stands in the AFS faction (1) in the world seed",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs 555 hit points",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 9,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs run speed 9",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "walk_speed": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs walk speed 5",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a stationary quest NPC needs no action slot; the world seed leaves them empty",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's stationary quest NPCs carry no default action"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199911
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "name_id": {
+     "value": 3013,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3013 \"Young Forean Ranger\""
+      }
+     ],
+     "counterpart": "the \"lost patrol of Forean Rangers\" 429's text names; the package's owner is not recoverable",
+     "required_because": "a name is mandatory and no source binds package 726 to a named NPC",
+     "decision": "OD-45"
+    },
+    "class_id": {
+     "value": 7036,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7036 NPC_Forean_Archer"
+      }
+     ],
+     "counterpart": "a Forean ranger (the Forean Ranger NPC classes: NPC_Forean_Archer 7036, NPC_Forean_Gunner 7033)",
+     "required_because": "an entity class is mandatory and no per-NPC appearance source exists",
+     "decision": "OD-45"
+    },
+    "level": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "the mission he belongs to (429 River Recon) is level 3, the band he is met in",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs, for instance Field Sgt. Witherspoon (creature 101) at level 25, the other Pinhole Falls quest NPC"
+      }
+     ]
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "every Wilderness quest NPC stands in the AFS faction (1) in the world seed",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs 555 hit points",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 9,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs run speed 9",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "walk_speed": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "the world seed gives its quest NPCs walk speed 5",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp, run 9, walk 5, faction 1)"
+      }
+     ]
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a stationary quest NPC needs no action slot; the world seed leaves them empty",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's stationary quest NPCs carry no default action"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199910
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "package_id": {
+     "value": 213,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client objectiveconversation 422 objective 1 completes through package 213 (dialogue 1276)"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199911
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "package_id": {
+     "value": 726,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client objectiveconversation 429 objective 5 completes through package 726 (dialogue 3886)"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199910
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "pos_x": {
+     "value": 341.16,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client uimapmarker text id 40 \"Pinhole Falls Caverns\" at (341.16, 228.52, 477.85)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 228.7,
+     "tier": "inferred",
+     "reasoning": "the client map marker carries a Y too (228.52 and 271.08) and the navmesh floor under each agrees within 0.3 m; the floor is what a placement can actually stand on, so it is used",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the navmesh floor at the marker's X,Z"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 477.85,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client uimapmarker text id 40 \"Pinhole Falls Caverns\" at (341.16, 228.52, 477.85)"
+      }
+     ]
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "both rows place a creature",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's creature placements use kind 1 (creature)"
+      }
+     ]
+    },
+    "creature_id": {
+     "value": 199910,
+     "tier": "inferred",
+     "reasoning": "the placement belongs to the NPC created alongside it",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the creature row this batch creates"
+      }
+     ]
+    },
+    "npc_package_id": {
+     "value": 213,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "the conversation package Mining Coord. Richards answers through (objectiveconversation)"
+      }
+     ]
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the class comes from the creature row",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements name their creature, not a class, and carry 0"
+      }
+     ]
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC is a usable object",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry usable_kind 0"
+      }
+     ]
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "reasoning": "no source gives a facing for either NPC; every world-seed NPC placement faces north",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's NPC placements face north"
+      }
+     ]
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "both NPCs stand where the mission puts them: a mining coordinator at his cavern and a dying ranger where he fell",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's mission NPC placements are stationary (Rogers 198684, Kincaid 198685)"
+      }
+     ]
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "state is for usables",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry initial_state 0"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC is damageable content",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry hit_points 0"
+      }
+     ]
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC has a loot window",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry loot_item_set_id 0"
+      }
+     ]
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC walks with the player",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry escort_mission_id 0 unless they escort"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199911
+   },
+   "slice": "W3",
+   "migration": "WildernessPinholeNpc",
+   "fields": {
+    "pos_x": {
+     "value": 309.51,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client uimapmarker text id 39 \"Pinhole Falls\" at (309.51, 271.08, 436.97), whose two floors are 226.32 at the river and 271.38 at the top"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 271.38,
+     "tier": "inferred",
+     "reasoning": "the client map marker carries a Y too (228.52 and 271.08) and the navmesh floor under each agrees within 0.3 m; the floor is what a placement can actually stand on, so it is used",
+     "citations": [
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness",
+       "locator": "the navmesh floor at the marker's X,Z"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 436.97,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "client uimapmarker text id 39 \"Pinhole Falls\" at (309.51, 271.08, 436.97), whose two floors are 226.32 at the river and 271.38 at the top"
+      }
+     ]
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "both rows place a creature",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's creature placements use kind 1 (creature)"
+      }
+     ]
+    },
+    "creature_id": {
+     "value": 199911,
+     "tier": "inferred",
+     "reasoning": "the placement belongs to the NPC created alongside it",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the creature row this batch creates"
+      }
+     ]
+    },
+    "npc_package_id": {
+     "value": 726,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "the conversation package the wounded Forean Ranger answers through (objectiveconversation)"
+      }
+     ]
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the class comes from the creature row",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements name their creature, not a class, and carry 0"
+      }
+     ]
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC is a usable object",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry usable_kind 0"
+      }
+     ]
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "reasoning": "no source gives a facing for either NPC; every world-seed NPC placement faces north",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's NPC placements face north"
+      }
+     ]
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "both NPCs stand where the mission puts them: a mining coordinator at his cavern and a dying ranger where he fell",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's mission NPC placements are stationary (Rogers 198684, Kincaid 198685)"
+      }
+     ]
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "state is for usables",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry initial_state 0"
+      }
+     ]
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC is damageable content",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry hit_points 0"
+      }
+     ]
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC has a loot window",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry loot_item_set_id 0"
+      }
+     ]
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neither NPC walks with the player",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature placements carry escort_mission_id 0 unless they escort"
+      }
+     ]
+    }
+   }
   }
  ],
  "omitted": [
@@ -51519,18 +52097,240 @@
   },
   {
    "id": "GAP-W3-UNBOUND-CONVERSATION-PACKAGE",
-   "summary": "Two Wilderness missions cannot be completed in game because the NPC who completes their objectives is not in the world. The client's objectiveconversation table says which package completes each objective, and the emulator only offers a conversation from a creature carrying that package.\n\n422 'Miner Difficulties' completes objective 1 through package 213 (dialog 1276: \"You're a sight for sore eyes, soldier! We've been waiting on these supplies for too damn long!\"). The mission's own text names that NPC: \"Deliver two crates of mining equipment and medical supplies to Mining Coordinator Richards at the entrance to the Pinhole Falls Caverns\". Mining Coordinator Richards is not in the world seed and has not been created.\n\n429 'River Recon' completes objective 5 through package 726 (dialog 3886: \"Bane ambush... they killed... all of us... Please... must tell human commander... they are moving... towards Alia Das... Tell Witherspoon...\") - the dying Forean Ranger the mission sends the player to find. Objective 4's two packages (116 Rogers, 208 Witherspoon) are both present, so only this one is missing.\n\nBoth NPCs are reconstructable through OD-45: the client names them, TaRapedia records their zones and /loc, and the mission text states their role. Until they exist those two objectives have no conversation to complete through, which the MissionAreaLinks test now names explicitly rather than letting pass.",
-   "closes_with": "creating Mining Coordinator Richards and the wounded Forean Ranger through the OD-45 pipeline",
+   "summary": "Reopened wider by the mission-link audit (2026-09-17). The two the boot-camp batch closed - Mining Coord. Richards (package 213) and the wounded Forean Ranger (726) - were not the only ones: running MissionLinkAuditTests against the deployed world, which needs the navmesh folder beside rasaworld.db and had been skipping without it, names 34 objectives over 22 missions whose completion package no spawned creature carries. Each is a mission a player can accept and then not finish. Every one is now named in the test's UnboundPackages set, so a thirty-fifth cannot appear quietly and a closed one must be taken out.",
+   "closes_with": "one NPC per package by the OD-45 pipeline: the client's objectiveconversation row gives the package, npcgreetinglanguage and missiontextlanguage its dialogue, the mission text and TaRapedia the name and place, creaturenamelanguage the name id, and an existing world NPC of the same race the appearance",
    "evidence": [
     "client/objectiveconversation.pyo (422,1,213,1,1)->1276 and (429,5,726,1,1)->3886",
     "client/language/missiontextlanguage.pyo texts 714, 1276 and 3886",
     "client/language/npcgreetinglanguage.pyo packages 213 and 726"
    ],
    "surfaced_by": [
-    "boot camp scenario test repair 2026-09-17"
+    "MissionLinkAuditTests, run with the navmesh present (2026-09-17)"
    ],
    "slices": [
     "W3"
+   ],
+   "rows": [
+    {
+     "mission": 321,
+     "objective": 310,
+     "package": 105,
+     "mission_name": "Assemble With Lieutenant Perkins"
+    },
+    {
+     "mission": 332,
+     "objective": 2,
+     "package": 32,
+     "mission_name": "Ammo Express (Divide)"
+    },
+    {
+     "mission": 332,
+     "objective": 3,
+     "package": 98,
+     "mission_name": "Ammo Express (Divide)"
+    },
+    {
+     "mission": 382,
+     "objective": 1,
+     "package": 177,
+     "mission_name": "Retrieval for Recon (Divide)"
+    },
+    {
+     "mission": 421,
+     "objective": 3,
+     "package": 210,
+     "mission_name": "A Father's Goodbye (Wilderness)"
+    },
+    {
+     "mission": 427,
+     "objective": 1,
+     "package": 254,
+     "mission_name": "Lurking In The Shadows (W3)"
+    },
+    {
+     "mission": 431,
+     "objective": 1,
+     "package": 251,
+     "mission_name": "Distress On The River (W3)"
+    },
+    {
+     "mission": 431,
+     "objective": 2,
+     "package": 252,
+     "mission_name": "Distress On The River (W3)"
+    },
+    {
+     "mission": 431,
+     "objective": 3,
+     "package": 253,
+     "mission_name": "Distress On The River (W3)"
+    },
+    {
+     "mission": 442,
+     "objective": 1,
+     "package": 218,
+     "mission_name": "Quarantine (W3)"
+    },
+    {
+     "mission": 442,
+     "objective": 2,
+     "package": 1486,
+     "mission_name": "Quarantine (W3)"
+    },
+    {
+     "mission": 444,
+     "objective": 1,
+     "package": 117,
+     "mission_name": "Unity Among Men (W3)"
+    },
+    {
+     "mission": 451,
+     "objective": 1,
+     "package": 566,
+     "mission_name": "A Visit To The Elders (Wilderness)"
+    },
+    {
+     "mission": 451,
+     "objective": 2,
+     "package": 567,
+     "mission_name": "A Visit To The Elders (Wilderness)"
+    },
+    {
+     "mission": 451,
+     "objective": 3,
+     "package": 569,
+     "mission_name": "A Visit To The Elders (Wilderness)"
+    },
+    {
+     "mission": 549,
+     "objective": 1,
+     "package": 382,
+     "mission_name": "Failure to Launch (W3)"
+    },
+    {
+     "mission": 670,
+     "objective": 2,
+     "package": 145,
+     "mission_name": "Missing Strike Team (Palisades)"
+    },
+    {
+     "mission": 682,
+     "objective": 2,
+     "package": 102,
+     "mission_name": "Childhood's End (W3)"
+    },
+    {
+     "mission": 682,
+     "objective": 4,
+     "package": 570,
+     "mission_name": "Childhood's End (W3)"
+    },
+    {
+     "mission": 682,
+     "objective": 5,
+     "package": 102,
+     "mission_name": "Childhood's End (W3)"
+    },
+    {
+     "mission": 682,
+     "objective": 6,
+     "package": 566,
+     "mission_name": "Childhood's End (W3)"
+    },
+    {
+     "mission": 698,
+     "objective": 1,
+     "package": 117,
+     "mission_name": "Elixir Vitae (Wilderness)"
+    },
+    {
+     "mission": 836,
+     "objective": 1,
+     "package": 802,
+     "mission_name": "Incoming! (W3)"
+    },
+    {
+     "mission": 969,
+     "objective": 3,
+     "package": 1065,
+     "mission_name": "Bring It On Home (Mires)"
+    },
+    {
+     "mission": 969,
+     "objective": 4,
+     "package": 1092,
+     "mission_name": "Bring It On Home (Mires)"
+    },
+    {
+     "mission": 977,
+     "objective": 2,
+     "package": 1075,
+     "mission_name": "Find Me A Rock (Mires)"
+    },
+    {
+     "mission": 977,
+     "objective": 3,
+     "package": 1051,
+     "mission_name": "Find Me A Rock (Mires)"
+    },
+    {
+     "mission": 1040,
+     "objective": 2,
+     "package": 1118,
+     "mission_name": "Incommunicado (Plateau)"
+    },
+    {
+     "mission": 1040,
+     "objective": 3,
+     "package": 1117,
+     "mission_name": "Incommunicado (Plateau)"
+    },
+    {
+     "mission": 1119,
+     "objective": 1,
+     "package": 1203,
+     "mission_name": "A Tale of Two Brothers (Plains)"
+    },
+    {
+     "mission": 1125,
+     "objective": 1,
+     "package": 1200,
+     "mission_name": "Security Threat (Plains)"
+    },
+    {
+     "mission": 1183,
+     "objective": 1,
+     "package": 1273,
+     "mission_name": "Into the Facility (Plains)"
+    },
+    {
+     "mission": 1186,
+     "objective": 1,
+     "package": 1300,
+     "mission_name": "Underground Mysteries (Plains)"
+    },
+    {
+     "mission": 1310,
+     "objective": 1,
+     "package": 1200,
+     "mission_name": "Speak to Captain Reyko (Plains)"
+    }
+   ]
+  },
+  {
+   "id": "GAP-HOSPITAL-COVERAGE",
+   "summary": "Closed 2026-09-17 for 41 maps. Player death shipped on 2026-09-14 with a catalogue of seven hand-built hospitals on two maps, so a player who died anywhere else met the revive-in-place fallback - which is what a live report of 'it respawns in place' describes. The same recipe, run over every map the server loads, reproduces all seven exactly and resolves 102 hospitals on 41 maps, every one of them with walkable ground under it. What is left is GAP-HOSPITAL-UNRESOLVED-GRAVEYARD: 66 markers, mostly on instances and the wargame maps, whose name no graveyardlanguage entry reads, so the id Hospital Selection would show is unrecovered.",
+   "evidence": [
+    "docs/evidence/hospital-catalog.json",
+    "research/20260917-hospital-coverage/tools/02_resolve.py",
+    "src/Rasa.Test/WorldPositionAuditTests.EveryHospitalRespawnPointHasGroundUnderIt"
+   ],
+   "closes_with": "the graveyard ids of the remaining markers, from a capture or the original graveyard table",
+   "surfaced_by": [
+    "live play 2026-09-17 (\"when i die i should respawn at a medical facility ... but it respawns in place\")"
+   ],
+   "slices": [
+    "S8"
    ]
   }
  ],
@@ -52004,6 +52804,143 @@
     {
      "source": "client_table:missions",
      "locator": "objectiveconversation 1742/2 package 2050"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429
+   },
+   "field": "ordinal",
+   "old": null,
+   "new": 1,
+   "reason": "429 was never offered because its objectives carried no ordinal (the client skeleton exports none). The order is the one the mission text states: \"search for signs of a lost patrol of Forean Rangers near the top of Pinhole Falls, then report your findings to Field Sgt. Witherspoon\".",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 objective 5 -> 726 (the ranger), objective 4 -> 116/208 (the report)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429,
+    "objective_id": 5
+   },
+   "field": "is_required",
+   "old": null,
+   "new": true,
+   "reason": "429 carries no objective flags in the client skeleton; the mission text gives the order (recon 5 first and revealed on acceptance, report 4 second) and the loader will not offer a mission without them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429,
+    "objective_id": 5
+   },
+   "field": "revealed_on_accept",
+   "old": null,
+   "new": true,
+   "reason": "429 carries no objective flags in the client skeleton; the mission text gives the order (recon 5 first and revealed on acceptance, report 4 second) and the loader will not offer a mission without them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429,
+    "objective_id": 4
+   },
+   "field": "ordinal",
+   "old": null,
+   "new": 2,
+   "reason": "429 carries no objective flags in the client skeleton; the mission text gives the order (recon 5 first and revealed on acceptance, report 4 second) and the loader will not offer a mission without them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429,
+    "objective_id": 4
+   },
+   "field": "is_required",
+   "old": null,
+   "new": true,
+   "reason": "429 carries no objective flags in the client skeleton; the mission text gives the order (recon 5 first and revealed on acceptance, report 4 second) and the loader will not offer a mission without them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-17",
+   "migration": "WildernessPinholeNpc",
+   "table": "npc_mission_objective",
+   "key": {
+    "id": 429,
+    "objective_id": 4
+   },
+   "field": "revealed_on_accept",
+   "old": null,
+   "new": false,
+   "reason": "429 carries no objective flags in the client skeleton; the mission text gives the order (recon 5 first and revealed on acceptance, report 4 second) and the loader will not offer a mission without them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 742"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
     }
    ]
   }
