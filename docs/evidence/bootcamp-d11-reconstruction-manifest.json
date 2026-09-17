@@ -52097,8 +52097,8 @@
   },
   {
    "id": "GAP-W3-UNBOUND-CONVERSATION-PACKAGE",
-   "summary": "Reopened wider by the mission-link audit (2026-09-17). The two the boot-camp batch closed - Mining Coord. Richards (package 213) and the wounded Forean Ranger (726) - were not the only ones: running MissionLinkAuditTests against the deployed world, which needs the navmesh folder beside rasaworld.db and had been skipping without it, names 34 objectives over 22 missions whose completion package no spawned creature carries. Each is a mission a player can accept and then not finish. Every one is now named in the test's UnboundPackages set, so a thirty-fifth cannot appear quietly and a closed one must be taken out.",
-   "closes_with": "one NPC per package by the OD-45 pipeline: the client's objectiveconversation row gives the package, npcgreetinglanguage and missiontextlanguage its dialogue, the mission text and TaRapedia the name and place, creaturenamelanguage the name id, and an existing world NPC of the same race the appearance",
+   "summary": "Started at 34 objectives over 22 missions whose completion package no spawned creature carried, found by MissionLinkAuditTests on 2026-09-17 once the navmesh was put beside rasaworld.db so it ran instead of reporting inconclusive. WildernessDialogueBinding closed 15 of them the same day without building anything: the first assumption - that the NPCs did not exist and needed the OD-45 pipeline that built Mining Coord. Richards - was wrong. Twelve of them were already in the world seed, with their client name, class, level and health, drawn by a spawnpool slot in the right place, and simply had no npc_package row to speak through. 19 objectives are left, and the seed is the first place to look for each one.",
+   "closes_with": "for each package: the client's objectiveconversation row gives it, its missiontextlanguage line and the mission text name who speaks it, and the world seed's own creature table is checked for that name before anything is created",
    "evidence": [
     "client/objectiveconversation.pyo (422,1,213,1,1)->1276 and (429,5,726,1,1)->3886",
     "client/language/missiontextlanguage.pyo texts 714, 1276 and 3886",
@@ -52136,64 +52136,10 @@
      "mission_name": "Retrieval for Recon (Divide)"
     },
     {
-     "mission": 421,
-     "objective": 3,
-     "package": 210,
-     "mission_name": "A Father's Goodbye (Wilderness)"
-    },
-    {
-     "mission": 427,
-     "objective": 1,
-     "package": 254,
-     "mission_name": "Lurking In The Shadows (W3)"
-    },
-    {
-     "mission": 431,
-     "objective": 1,
-     "package": 251,
-     "mission_name": "Distress On The River (W3)"
-    },
-    {
-     "mission": 431,
-     "objective": 2,
-     "package": 252,
-     "mission_name": "Distress On The River (W3)"
-    },
-    {
-     "mission": 431,
-     "objective": 3,
-     "package": 253,
-     "mission_name": "Distress On The River (W3)"
-    },
-    {
-     "mission": 442,
-     "objective": 1,
-     "package": 218,
-     "mission_name": "Quarantine (W3)"
-    },
-    {
      "mission": 442,
      "objective": 2,
      "package": 1486,
      "mission_name": "Quarantine (W3)"
-    },
-    {
-     "mission": 444,
-     "objective": 1,
-     "package": 117,
-     "mission_name": "Unity Among Men (W3)"
-    },
-    {
-     "mission": 451,
-     "objective": 1,
-     "package": 566,
-     "mission_name": "A Visit To The Elders (Wilderness)"
-    },
-    {
-     "mission": 451,
-     "objective": 2,
-     "package": 567,
-     "mission_name": "A Visit To The Elders (Wilderness)"
     },
     {
      "mission": 451,
@@ -52202,46 +52148,10 @@
      "mission_name": "A Visit To The Elders (Wilderness)"
     },
     {
-     "mission": 549,
-     "objective": 1,
-     "package": 382,
-     "mission_name": "Failure to Launch (W3)"
-    },
-    {
      "mission": 670,
      "objective": 2,
      "package": 145,
      "mission_name": "Missing Strike Team (Palisades)"
-    },
-    {
-     "mission": 682,
-     "objective": 2,
-     "package": 102,
-     "mission_name": "Childhood's End (W3)"
-    },
-    {
-     "mission": 682,
-     "objective": 4,
-     "package": 570,
-     "mission_name": "Childhood's End (W3)"
-    },
-    {
-     "mission": 682,
-     "objective": 5,
-     "package": 102,
-     "mission_name": "Childhood's End (W3)"
-    },
-    {
-     "mission": 682,
-     "objective": 6,
-     "package": 566,
-     "mission_name": "Childhood's End (W3)"
-    },
-    {
-     "mission": 698,
-     "objective": 1,
-     "package": 117,
-     "mission_name": "Elixir Vitae (Wilderness)"
     },
     {
      "mission": 836,
@@ -52347,6 +52257,22 @@
    ],
    "slices": [
     "S4",
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-W3-TIRNA-NAME",
+   "summary": "The world seed's Ranger at Stone Anvil that package 570 belongs to - the one who says \"Yes, I was once called Pundi\" - carries creature name 135, which the client renders 'Ranger Tarina', while every mission text of 682 says 'Ranger Tirna' and the client has that name at 6711. The seed's name is left alone rather than corrected on a guess: the emulator database is supporting evidence, not the original server's, and nothing establishes which name the original creature carried. The player sees 'Ranger Tarina' where the mission says 'Ranger Tirna'.",
+   "evidence": [
+    "rasaworld.db creature 99 (name 135), spawnpool 177 at (-495.2, 531.7) on the Wilderness",
+    "creaturenamelanguage 135 = 'Ranger Tarina', 6711 = 'Ranger Tirna'",
+    "missiontextlanguage for 682/5: \"speak to Ranger Tirna\""
+   ],
+   "closes_with": "a capture of the NPC at Stone Anvil, or the original creature table",
+   "surfaced_by": [
+    "WildernessDialogueBinding, 2026-09-17"
+   ],
+   "slices": [
     "W3"
    ]
   }

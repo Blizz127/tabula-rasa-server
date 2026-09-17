@@ -28,20 +28,24 @@ namespace Rasa.Test
 
         /// <summary>
         /// The objectives that still complete through a dialogue package no NPC in the world carries, named one by
-        /// one so a thirty-fifth cannot appear quietly. Each is a mission a player can accept and then not finish:
-        /// the client's objectiveconversation row says which package completes it, and the server only offers a
-        /// conversation from a creature carrying that package. Closing one means creating its NPC by the OD-45
-        /// pipeline, as Mining Coord. Richards and the wounded Forean Ranger were on 2026-09-17.
-        /// GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
+        /// one so a new one cannot appear quietly. Each is a mission a player can accept and then not finish: the
+        /// client's objectiveconversation row says which package completes it, and the server only offers a
+        /// conversation from a creature carrying that package.
+        ///
+        /// It started at 34. WildernessDialogueBinding closed 15 of them without building anything, because the
+        /// NPCs were already in the world seed - named, classed, levelled and spawned - with no npc_package row
+        /// to speak through. Look there first before reaching for the OD-45 pipeline that built Mining Coord.
+        /// Richards. GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
         /// </summary>
         private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
         {
-            (321, 310, 105), (332, 2, 32), (332, 3, 98), (382, 1, 177), (421, 3, 210), (427, 1, 254),
-            (431, 1, 251), (431, 2, 252), (431, 3, 253), (442, 1, 218), (442, 2, 1486), (444, 1, 117),
-            (451, 1, 566), (451, 2, 567), (451, 3, 569), (549, 1, 382), (670, 2, 145), (682, 2, 102),
-            (682, 4, 570), (682, 5, 102), (682, 6, 566), (698, 1, 117), (836, 1, 802), (969, 3, 1065),
-            (969, 4, 1092), (977, 2, 1075), (977, 3, 1051), (1040, 2, 1118), (1040, 3, 1117),
-            (1119, 1, 1203), (1125, 1, 1200), (1183, 1, 1273), (1186, 1, 1300), (1310, 1, 1200)
+            (321, 310, 105), (332, 2, 32), (332, 3, 98),
+            (382, 1, 177), (442, 2, 1486), (451, 3, 569),
+            (670, 2, 145), (836, 1, 802), (969, 3, 1065),
+            (969, 4, 1092), (977, 2, 1075), (977, 3, 1051),
+            (1040, 2, 1118), (1040, 3, 1117), (1119, 1, 1203),
+            (1125, 1, 1200), (1183, 1, 1273), (1186, 1, 1300),
+            (1310, 1, 1200)
         };
 
         [TestMethod]

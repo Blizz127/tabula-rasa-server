@@ -724,6 +724,33 @@ character picks up in Alia Das once Training Day and the class choice are behind
     Python (2, 4) evaluating to `234: (u'Banshee Realm', u'Preservation', 8001)`. Delivered as loose modules and
     as a `trpython.zip` whose 970 original entries are asserted byte-identical. Untested: whether the shipped
     loader picks up an added zip entry, and whether a launcher integrity check rejects the repack.
+  - **Fifteen of the 34 dead-end objectives closed, by looking before building (2026-09-17)**: the first read of
+    the mission-link audit was that those NPCs did not exist and each would need the OD-45 pipeline that built
+    Mining Coord. Richards - a name id, a TaRapedia position, an analogue appearance, an invented level. That was
+    wrong. Checking the world seed for the names the client's mission text gives found **twelve of them already
+    standing in the world**: Council Luminary Doyan, Council Advisor Todae, Dr. Eleanor Corman, Ranger Anjuhi,
+    Ranger Tirna, Arms Supplier Oliver, Engineer Salter, Information Spec. Saviours, Lt. Wood, Medical Assistant
+    Duncan, Surveyor Hugh Corman and Tribal Leader Oingin - each with its client name, class, level and health,
+    each drawn by a spawnpool slot in the right place, and each with **no `npc_package` row**, so the server had
+    no conversation to offer from it. `WildernessDialogueBinding` is twelve rows, and it invents no position, no
+    appearance and no level.
+
+    The bindings are the client's own `objectiveconversation` rows read back to the NPC its own text names: 427
+    "Locate Arms Supplier Oliver", 431 "a Corman surveyor named Hugh", 441 and 700 "Medical Assistant Duncan at
+    the Twin Pillars infirmary", 444 "take the test results to Dr. Eleanor at Ranja", 549 and 623 "Engineer
+    Salter at Alia Das". Two are settled by the dialogue itself - Lt. Wood is named by the line before his, and
+    Ranger Tirna says "Yes, I was once called Pundi". Tribal Leader Oingin is the interpolation between two
+    confirmed neighbours: packages 251, 252, 253 map to client names 3093, 3094, 3095, the outer two confirmed by
+    text, and the middle line is a Forean's. Ranger Anjuhi is elimination: 682 sends the player to the Rangers at
+    Stone Anvil, the seed has exactly two of them there, and the other is Tirna.
+
+    **Nineteen are left**, and the seed is now the first place to look for each. Two of them are known not to be
+    NPCs at all: 451/3's package 569 is the villager who directs the player into the Urn, whose client name is
+    not established, and 442/2's package 1486 is the **blood analyzer** at Twin Pillars ("ANALYZING...
+    ANALYZATION COMPLETE"), a usable the content layer would have to dispense rather than a creature.
+    **GAP-W3-TIRNA-NAME** records the one cosmetic mismatch left: the seed's Ranger carries a name the client
+    renders "Ranger Tarina" while every mission text says "Ranger Tirna", and the seed's value is kept rather
+    than corrected on a guess.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its
