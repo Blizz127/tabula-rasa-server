@@ -710,6 +710,20 @@ character picks up in Alia Das once Training Day and the class choice are behind
     not. The waypoint teleport in `DynamicObjectManager` has always passed `false`. The death test could not see
     it, because its `Drain` helper kept only `CallMethodMessage` and threw the movement channel away; it now
     drains both and asserts the owner is told their own new position.
+  - **The server's name is the client's, not ours (2026-09-17, owner request)**: nothing on the wire carries a
+    server name - `ServerInfo` sends id, address, ports, age limit, PK flag, player counts and status - so the
+    client turns the id into a name itself, and our id 234 reads `QA: Programming` out of its own
+    `serverselectionlanguage` table. The original client already has the hook for this:
+    `clientlanguagemanager.GetServerNameAndDesc` consults `client.development.devserverlanguage` **first** and
+    only falls back to that table, and `client/development/` is not in the shipped 1.16.5.0 `trpython.zip`. So
+    the rename is one added module and **no original file changed**. Built and verified in
+    `research/20260917-server-name`: a Python 2.4 marshal writer that round-trips shipped modules
+    byte-identically, bytecode copied from the pattern `serverselectionlanguage.pyo` itself uses for this table,
+    all 21 shipped rows carried through (the override is all-or-nothing - `success` is set unconditionally, so a
+    missing id would render as `None`) with only 234 replaced, and the result read back with xdis 6.1.7 as
+    Python (2, 4) evaluating to `234: (u'Banshee Realm', u'Preservation', 8001)`. Delivered as loose modules and
+    as a `trpython.zip` whose 970 original entries are asserted byte-identical. Untested: whether the shipped
+    loader picks up an added zip entry, and whether a launcher integrity check rejects the repack.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its
