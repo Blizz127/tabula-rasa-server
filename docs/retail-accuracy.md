@@ -1560,6 +1560,20 @@ gaps (`docs/evidence/kill-rewards.json`). Full suite 811/811.
   The footage shows only Loot All (A3-017 to A3-024); the one-at-a-time completion is the emulator's choice, and
   the manifest entry says so.
 
+## 2026-09-18 UTC — Deploy: the crate window (commit 31a5a88)
+
+- Candidate `rasa_net:candidate-crate-window-20260918`; the suite ran **918 of 918, nothing skipped**, with the
+  world database and the navmesh mounted. Previous image kept as `rasa_net:before-crate-window-20260918`.
+- Integrity-checked backups in `/home/blizz/backups/rasa-net/20260918T060857Z-crate-window/`. No database change:
+  this deploy is code only.
+- Deploy order as before: recreate game (06:09) → restart auth (06:09:37) → restart game. Both handshake lines
+  postdate the auth restart at 06:10:00. Nobody was online. After it: `Loaded 16 content rules (249 content rows,
+  0 gaps)`, no error lines, only mission 321 unoffered.
+- A caveat for the next crate open: the five items the failed 05:43 open created (item ids 61-65) are orphaned in
+  `items` with no `character_inventory` row, and the container is per session, so the next open builds five new
+  ones. They are harmless, and `PlayerHolds` means the two templates the player already wears from their creation
+  loadout will not need taking again.
+
 ## 2026-09-17 UTC — Deploy: twelve NPCs given their dialogue (commit 1a83292)
 
 - Candidate `rasa_net:candidate-dialogue-binding-20260917`; the suite ran **918 of 918, nothing skipped**, with
