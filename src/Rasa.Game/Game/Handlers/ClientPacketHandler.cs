@@ -877,46 +877,27 @@ namespace Rasa.Game.Handlers
         [PacketHandler(GameOpcode.RequestCorpseLooting)]
         private void RequestCorpseLooting(RequestCorpseLootingPacket packet)
         {
-            // The other two loot requests have routed to the content layer since the crate was
-            // given real items; this one did not, and it is the one the client sends itself -
-            // lootdispenser.Recv_Use calls RequestCorpseLooting(actorId) on any use of a dispenser.
-            // Against a content container it fell through to the corpse manager, which finds no
-            // dispenser for that entity and returns, so re-opening a crate window did nothing.
-            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
-            {
-                MissionManager.Instance.Content.ReopenContentContainer(Client, packet.EntityId);
-                return;
-            }
-
+            // A content container's window is a real loot dispenser attached to the crate, so this
+            // needs no special case: the client addresses the dispenser and FindLootable finds it.
             LootDispenserManager.Instance.RequestCorpseLooting(Client, packet);
         }
 
         [PacketHandler(GameOpcode.RequestLootAllFromCorpse)]
         private void RequestLootAllFromCorpse(RequestLootAllFromCorpsePacket packet)
         {
-            // A reconstructed-content container routes to the content layer; the
-            // corpse path stays untouched.
-            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
-            {
-                MissionManager.Instance.Content.RequestLootAllFromContentContainer(Client, packet.EntityId);
-                return;
-            }
-
+            // One path for corpses and for a content container's dispenser alike: the loot manager
+            // hands the rows over, then the content layer completes any objective bound to the
+            // container this dispenser belongs to. It does nothing for a corpse.
             LootDispenserManager.Instance.RequestLootAllFromCorpse(Client, packet);
+            MissionManager.Instance.Content.SettleContainerDispenser(Client, packet.EntityId);
         }
 
         [PacketHandler(GameOpcode.RequestLootItemFromCorpse)]
         private void RequestLootItemFromCorpse(RequestLootItemFromCorpsePacket packet)
         {
-            // The same window serves a reconstructed-content container (the boot camp's supply
-            // crate), and its right-click path is this request, one row at a time.
-            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
-            {
-                MissionManager.Instance.Content.RequestLootItemFromContentContainer(Client, packet.EntityId, packet.ItemId, packet.DestSlot);
-                return;
-            }
-
+            // As above: the window's right-click path, one row at a time, for either kind.
             LootDispenserManager.Instance.RequestLootItemFromCorpse(Client, packet);
+            MissionManager.Instance.Content.SettleContainerDispenser(Client, packet.EntityId);
         }
 
         [PacketHandler(GameOpcode.CancelCorpseLooting)]

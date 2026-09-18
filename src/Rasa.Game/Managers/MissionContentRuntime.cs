@@ -645,11 +645,43 @@ namespace Rasa.Managers
         /// boot camp's supply crate showed the live player on 2026-09-16 (GAP-S2-GEAR-OBJECTIVES).
         /// The loot_all binding completes when the container is empty, however it was emptied.
         /// </summary>
+        /// <summary>
+        /// Opens a container's loot window - by attaching a real loot dispenser to it, which is the only
+        /// way the client has one.
+        ///
+        /// The crate is entity class 26714 UsableTreasureDispHumCrateV04, chosen under OD-12 as "the first
+        /// TreasureDispenser candidate". Its only augmentation is 64 TreasureDispenser, "drops loot into
+        /// inventory (or world) when used", which carries no Recv_ handlers at all. Every window method -
+        /// LootInfo, CanLootItems, TakenInfo, LootCorpse - belongs to augmentation 50 LootDispenser, and the
+        /// client silently dropped all of them. Exactly two classes in the whole client carry 50,
+        /// Sys_LootDispenser (3331) and CorpseLootDispenser (10000035), and neither is a crate, so no class
+        /// swap can give the crate a window.
+        ///
+        /// The original had one: footage A3-017 shows a window headed "Supply Crate" listing the five items
+        /// with a Loot All button, and A3-023/A3-024 the receipt lines and the objective completing. A
+        /// dispenser is attached to the crate, as LootDispenser.AttachedTo exists for and as every corpse
+        /// does it, and the window's heading is the attached entity. From there the corpse machinery serves
+        /// it: the client addresses the dispenser's entity id, FindLootable finds it in
+        /// MapChannel.LootDispensers, and taking, Loot All and TakenInfo are the paths that already work in
+        /// play. This layer only has to open it and notice when it is empty.
+        /// </summary>
         private void OpenContentContainer(Client client, ContentPlacementEntry placement, DynamicObject obj)
         {
-            if (!_openContainers.TryGetValue(obj.EntityId, out var open) || open.OwnerEntityId != client.Player.EntityId)
+            var mapChannel = client.Player.MapChannel;
+
+            if (!_containerDispensers.TryGetValue((client.Player.EntityId, placement.Id), out var lootEntityId) ||
+                !mapChannel.LootDispensers.TryGetValue(lootEntityId, out var loot))
             {
-                open = new ContentContainerLoot { OwnerEntityId = client.Player.EntityId };
+                loot = new LootDispenser
+                {
+                    // The class proven to drive the window in play. Sys_LootDispenser (3331) is the other
+                    // candidate and reads as the one meant for a world container, but it has never been
+                    // seen working and the window's heading comes from AttachInfo either way.
+                    EntityClassId = (EntityClasses)10000035,
+                    IsLootable = true,
+                    AttachedTo = obj.EntityId,
+                    Owner = client.Player.EntityId
+                };
 
                 if (Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var entries))
                     foreach (var entry in entries)
@@ -657,7 +689,7 @@ namespace Rasa.Managers
                         var item = ItemManager.Instance.CreateFromTemplateId(entry.ItemTemplateId, entry.Quantity);
 
                         if (item != null)
-                            open.Items.Add(new LootItem(item, client.Player.EntityId, 0));
+                            loot.LootItems.Add(new LootItem(item, client.Player.EntityId, 0));
                         else
                             // A row whose item cannot be built is not added at all. If it were, the window
                             // would list an item the player can never take, and the container would never
@@ -666,167 +698,70 @@ namespace Rasa.Managers
                                 $"Content container {placement.Id}: item template {entry.ItemTemplateId} could not be built, so its row is omitted.");
                     }
 
+                mapChannel.LootDispensers[loot.EntityId] = loot;
+                _containerDispensers[(client.Player.EntityId, placement.Id)] = loot.EntityId;
+                _dispenserPlacements[loot.EntityId] = placement.Id;
+
                 Logger.WriteLog(LogType.Debug,
-                    $"{client.Player.Name} opened content container {placement.Id} ({open.Items.Count} row(s)).");
-
-                _openContainers[obj.EntityId] = open;
+                    $"{client.Player.Name} opened content container {placement.Id} ({loot.LootItems.Count} row(s)) " +
+                    $"through loot dispenser {loot.EntityId} attached to {obj.EntityId}.");
             }
 
-            var remaining = open.Remaining();
+            var remaining = loot.Remaining();
 
-            // No CreatePhysicalEntity here. The corpse path sends one because it invents a loot
-            // dispenser entity on the spot; this container is a content usable that materialized
-            // into the world with the map and that every client in range already has, with its
-            // position, rotation and use state. Re-creating it from an entity id and a class alone
-            // replaced all of that with a bare entity - the live report of 2026-09-18 read it as
-            // "the crate looked a little translucent".
+            // The dispenser is a new entity, so it does have to be created - unlike the crate, which
+            // materialized with the map and which every client in range already has with its position and
+            // use state. Re-creating that one from an id and a class threw all of it away, and read in live
+            // play as a translucent crate.
+            client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(loot.EntityId, loot.EntityClassId));
+            client.CallMethod(loot.EntityId, new AttachInfoPacket(loot.AttachedTo));
 
-            // The items have to exist on the client before the window lists them (the corpse
-            // path does the same in RequestCorpseLooting); re-sending one it has is an update.
+            // The items have to exist on the client before the window lists them, as the corpse path does.
             foreach (var row in remaining)
                 ItemManager.Instance.SendItemDataToClient(client, row.Item, false);
 
-            client.CallMethod(obj.EntityId, new LootInfoPacket(remaining));
-            client.CallMethod(obj.EntityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
+            client.CallMethod(loot.EntityId, new LootInfoPacket(remaining));
+            client.CallMethod(loot.EntityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
 
-            // And this is what actually opens the window. lootdispenser.Recv_LootCorpse is the only
-            // place the client posts UI_SHOW_CORPSELOOT; Recv_LootInfo and Recv_CanLootItems just
-            // update state it is already showing. Without it the player used the crate, the server
-            // built all five items and sent them, and no window ever appeared - so no take could be
-            // requested and the objective bound to the container could never complete
-            // (live report 2026-09-18, and the character database showed the five items created and
-            // owned by nobody).
-            client.CallMethod(obj.EntityId, new LootCorpsePacket(client.Player.EntityId, remaining));
+            // And this is what opens it. lootdispenser.Recv_LootCorpse is the only place the client posts
+            // UI_SHOW_CORPSELOOT; Recv_LootInfo and Recv_CanLootItems only update a window already on screen.
+            client.CallMethod(loot.EntityId, new LootCorpsePacket(client.Player.EntityId, remaining));
         }
 
+        /// <summary>(player, placement) -> the dispenser opened for them, so a second use reopens one window.</summary>
+        private readonly Dictionary<(ulong Player, uint Placement), ulong> _containerDispensers = new();
+
+        /// <summary>A content container's dispenser -> the placement whose objective its emptying completes.</summary>
+        private readonly Dictionary<ulong, uint> _dispenserPlacements = new();
+
         /// <summary>
-        /// The client asking to open a container's window again (lootdispenser.Recv_Use sends
-        /// RequestCorpseLooting on every use). Only a container already opened by this player is
-        /// re-shown; nothing is created, so a player cannot use this to refill one.
+        /// Called after the loot manager has served a take or a Loot All. Does nothing unless the entity is a
+        /// container's dispenser; when it is, the objective bound to that container completes once the player
+        /// has everything it held.
         /// </summary>
-        public void ReopenContentContainer(Client client, ulong entityId)
+        public void SettleContainerDispenser(Client client, ulong lootEntityId)
         {
-            var open = OpenContainerFor(client, entityId);
             var mapChannel = client?.Player?.MapChannel;
-            if (open == null || mapChannel == null)
+            if (mapChannel == null || !_dispenserPlacements.TryGetValue(lootEntityId, out var placementId) ||
+                !mapChannel.LootDispensers.TryGetValue(lootEntityId, out var loot) ||
+                loot.Owner != client.Player.EntityId)
                 return;
 
-            var remaining = open.Remaining();
-
-            foreach (var row in remaining)
-                ItemManager.Instance.SendItemDataToClient(client, row.Item, false);
-
-            client.CallMethod(entityId, new LootInfoPacket(remaining));
-            client.CallMethod(entityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
-            client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
-            client.CallMethod(entityId, new LootCorpsePacket(client.Player.EntityId, remaining));
-        }
-
-        private sealed class ContentContainerLoot
-        {
-            public ulong OwnerEntityId;
-            public readonly List<LootItem> Items = new();
-
-            public List<LootItem> Remaining() => Items.FindAll(row => !row.Taken);
-            public List<LootItem> Taken() => Items.FindAll(row => row.Taken);
-        }
-
-        private readonly Dictionary<ulong, ContentContainerLoot> _openContainers = new();
-
-        private ContentContainerLoot OpenContainerFor(Client client, ulong entityId) =>
-            client.Player?.MapChannel != null && _openContainers.TryGetValue(entityId, out var open) && open.OwnerEntityId == client.Player.EntityId
-                ? open
-                : null;
-
-        /// <summary>
-        /// Loot All on a content container: takes every row that still fits, as the corpse
-        /// dispenser does, then settles the container.
-        /// </summary>
-        public void RequestLootAllFromContentContainer(Client client, ulong entityId)
-        {
-            var open = OpenContainerFor(client, entityId);
-            if (open == null)
-                return;
-
-            // A container with nothing left to hand over still settles: the objective bound to it is
-            // satisfied by the container being empty, and returning early here meant a crate whose rows
-            // had already been emptied - by the player, by an earlier session, or by a row that could not
-            // be built - could never complete the objective waiting on it (live report 2026-09-17).
-            foreach (var row in open.Remaining())
-                TakeContainerRow(client, row, null);
-
-            SettleContainer(client, entityId, open);
-        }
-
-        /// <summary>
-        /// One row off a content container - the window's right-click path
-        /// (lootdispenser.RequestLootItemFromCorpse(self.entityId, itemId, destSlot)). A row that is
-        /// gone or was never there is answered with TakenInfo, since it is still on the asker's screen.
-        /// </summary>
-        public void RequestLootItemFromContentContainer(Client client, ulong entityId, ulong itemId, uint? destSlot)
-        {
-            var open = OpenContainerFor(client, entityId);
-            if (open == null)
-                return;
-
-            var row = open.Items.Find(candidate => candidate.EntityId == itemId);
-            if (row == null || row.Taken)
-            {
-                client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
-                return;
-            }
-
-            if (!TakeContainerRow(client, row, destSlot))
-                return;
-
-            SettleContainer(client, entityId, open);
-        }
-
-        private static bool TakeContainerRow(Client client, LootItem row, uint? destSlot)
-        {
-            if (row.Taken || row.Item == null)
-                return false;
-
-            var placed = destSlot.HasValue
-                ? InventoryManager.Instance.AddItemToInventory(client, row.Item, destSlot.Value)
-                : InventoryManager.Instance.AddItemToInventory(client, row.Item);
-
-            if (placed == null)
-            {
-                client.CallMethod(SysEntity.CommunicatorId,
-                    new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
-                return false;
-            }
-
-            row.Taken = true;
-            return true;
-        }
-
-        /// <summary>
-        /// Tells the window what is gone and what is left; an emptied container completes the
-        /// loot_all bindings bound to its placement.
-        /// </summary>
-        private void SettleContainer(Client client, ulong entityId, ContentContainerLoot open)
-        {
-            var mapChannel = client.Player.MapChannel;
-            var remaining = open.Remaining();
-
-            client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
-            client.CallMethod(entityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
+            var remaining = loot.Remaining();
 
             // "Get your gear from the crate" is satisfied when the player has the gear, however they came by
             // it: rows they took are gone from here, and rows they are already wearing or carrying count too,
-            // or a player who picked the gear up before the objective was revealed would be stuck short of it
-            // (live report 2026-09-17).
+            // or a player who picked the gear up before the objective was revealed would be stuck short of it.
             var outstanding = remaining.Count(row => !PlayerHolds(client.Player, row.Item?.ItemTemplateId ?? 0));
 
             Logger.WriteLog(LogType.Debug,
-                $"Content container {entityId} settled for {client.Player.Name}: {open.Taken().Count} taken, {remaining.Count} left, {outstanding} still missing.");
+                $"Content container {placementId} settled for {client.Player.Name}: " +
+                $"{loot.LootItems.Count - remaining.Count} taken, {remaining.Count} left, {outstanding} still missing.");
 
             if (outstanding > 0)
                 return;
 
-            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LootAll).Where(binding => binding.PlacementId == ContentUsablesPlacementId(mapChannel, entityId)))
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.LootAll).Where(binding => binding.PlacementId == placementId))
                 Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.LootAll);
         }
 

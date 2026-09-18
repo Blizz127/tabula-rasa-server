@@ -1211,6 +1211,33 @@ namespace Rasa.Test
             _client.Player.CurrentAction = 0;
         }
 
+        /// <summary>
+        /// The loot dispenser the container opened. The crate's own class carries augmentation 64
+        /// TreasureDispenser, which has no Recv_ handlers at all, so the window is a real dispenser
+        /// attached to it - and the client addresses that entity, not the crate.
+        /// </summary>
+        private ulong CrateDispenserId() =>
+            _client.Player.MapChannel.LootDispensers
+                .Single(entry => entry.Value.AttachedTo == CrateObjectId && entry.Value.Owner == _client.Player.EntityId).Key;
+
+        /// <summary>Loot All, through the same two calls the packet handler makes.</summary>
+        private void LootAllFromCrate(MissionContentManager content)
+        {
+            var dispenser = CrateDispenserId();
+            LootDispenserManager.Instance.RequestLootAllFromCorpse(_client,
+                new RequestLootAllFromCorpsePacket { EntityId = dispenser, AutoLootOnly = false });
+            content.SettleContainerDispenser(_client, dispenser);
+        }
+
+        /// <summary>One row, through the same two calls the packet handler makes.</summary>
+        private void TakeFromCrate(MissionContentManager content, ulong itemId, uint? destSlot = null)
+        {
+            var dispenser = CrateDispenserId();
+            LootDispenserManager.Instance.RequestLootItemFromCorpse(_client,
+                new RequestLootItemFromCorpsePacket { EntityId = dispenser, ItemId = itemId, DestSlot = destSlot });
+            content.SettleContainerDispenser(_client, dispenser);
+        }
+
         private List<LootItem> CrateLootItems()
         {
             var packets = DrainAddressed();
@@ -1232,7 +1259,7 @@ namespace Rasa.Test
             var lootItems = CrateLootItems();
             Assert.AreEqual(2, lootItems.Count);
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
             Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
@@ -1262,7 +1289,7 @@ namespace Rasa.Test
             for (var i = 200; i < 250; i++)
                 _client.Player.Inventory.PersonalInventory[i] = filler.EntityId;
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
             Assert.AreEqual(0, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0 && slot != filler.EntityId));
@@ -1282,7 +1309,7 @@ namespace Rasa.Test
             // Take both rows before the mission exists.
             UseCrate(content, usable);
             foreach (var row in CrateLootItems())
-                content.RequestLootItemFromContentContainer(_client, usable.EntityId, row.EntityId, null);
+                TakeFromCrate(content, row.EntityId, null);
 
             // Both rows are in the player's backpack, and the crate has nothing left.
             Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
@@ -1291,7 +1318,7 @@ namespace Rasa.Test
             Accept(missionId: CrateMissionId);
             Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
         }
@@ -1311,13 +1338,13 @@ namespace Rasa.Test
             var rows = CrateLootItems();
 
             // The first row is taken, the second is already in the player's backpack before the crate is opened.
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            TakeFromCrate(content, rows[0].EntityId, null);
 
             var worn = ItemManager.Instance.CreateFromTemplateId(rows[1].Item.ItemTemplateId, 1);
             Assert.IsNotNull(worn);
             Assert.IsNotNull(InventoryManager.Instance.AddItemToInventory(_client, worn));
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
         }
@@ -1331,11 +1358,11 @@ namespace Rasa.Test
 
             Accept(missionId: CrateMissionId);
             UseCrate(content, usable);
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
             var afterFirst = _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0);
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(afterFirst, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
         }
@@ -1366,7 +1393,11 @@ namespace Rasa.Test
             var lootCorpseIndex = packets.FindIndex(entry => entry.Packet is LootCorpsePacket);
             Assert.IsTrue(lootCorpseIndex > lootInfoIndex, "the window is opened by LootCorpse, after the rows");
             var lootCorpse = (LootCorpsePacket)packets[lootCorpseIndex].Packet;
-            Assert.AreEqual(usable.EntityId, packets[lootCorpseIndex].EntityId, "sent on the container's entity");
+            Assert.AreEqual(CrateDispenserId(), packets[lootCorpseIndex].EntityId,
+                "sent on the dispenser attached to the container, which is the entity the client addresses");
+            Assert.AreEqual(usable.EntityId,
+                packets.Select(entry => entry.Packet).OfType<AttachInfoPacket>().Single().AttachedToEnityId,
+                "and attached to the crate, which is where the window gets its heading");
             Assert.AreEqual(_client.Player.EntityId, lootCorpse.ActorId,
                 "actorId is the looting player, or Recv_LootCorpse stores the rows without opening");
             CollectionAssert.AreEqual(rows.Select(row => row.EntityId).ToArray(),
@@ -1402,24 +1433,30 @@ namespace Rasa.Test
             UseCrate(content, usable);
             var rows = CrateLootItems();
 
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            TakeFromCrate(content, rows[0].EntityId, null);
 
             Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
             CollectionAssert.AreEquivalent(new[] { rows[0].EntityId }, _client.Player.Inventory.PersonalInventory.Where(slot => slot != 0).ToArray());
+            // The corpse path settles a partly emptied dispenser by refreshing what can still be
+            // taken and leaving it open; TakenInfo is its answer to a row that is already gone.
             var packets = Drain();
-            CollectionAssert.AreEqual(new[] { rows[0].EntityId }, packets.OfType<TakenInfoPacket>().Single().LootItems.Select(row => row.EntityId).ToArray());
-            var canLoot = packets.OfType<CanLootItemsPacket>().Single();
-            Assert.IsTrue(canLoot.CanLootItems);
-            CollectionAssert.AreEqual(new[] { rows[1].EntityId }, canLoot.LootItems.Select(row => row.EntityId).ToArray());
+            var canLoot = packets.OfType<CanLootItemsPacket>().Last();
+            Assert.IsTrue(canLoot.CanLootItems, "a partly emptied container stays lootable");
+            // The dispenser lists every row it ever held and lets the per-row flags say what is
+            // still there, which is what the corpse window has always been sent.
+            CollectionAssert.AreEqual(rows.Select(row => row.EntityId).ToArray(),
+                canLoot.LootItems.Select(row => row.EntityId).ToArray());
+            Assert.IsTrue(canLoot.LootItems.Single(row => row.EntityId == rows[0].EntityId).Taken,
+                "the row just taken is marked taken");
             Assert.IsFalse(packets.Any(packet => packet is ObjectiveCompletedPacket));
 
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[1].EntityId, null);
+            TakeFromCrate(content, rows[1].EntityId, null);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
             CollectionAssert.AreEquivalent(rows.Select(row => row.EntityId).ToArray(), _client.Player.Inventory.PersonalInventory.Where(slot => slot != 0).ToArray());
             packets = Drain();
             Assert.IsTrue(packets.Any(packet => packet is ObjectiveCompletedPacket completed && completed.MissionId == CrateMissionId && completed.ObjectiveId == 1));
-            Assert.IsFalse(packets.OfType<CanLootItemsPacket>().Single().CanLootItems);
+            Assert.IsFalse(packets.OfType<CanLootItemsPacket>().Last().CanLootItems);
 
             using var context = WeaponReloadPersistenceTests.Context(_connection);
             var row = context.CharacterMissionObjectiveEntries.Single(entry =>
@@ -1436,11 +1473,11 @@ namespace Rasa.Test
             Accept(missionId: CrateMissionId);
             UseCrate(content, usable);
             var rows = CrateLootItems();
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            TakeFromCrate(content, rows[0].EntityId, null);
             Drain();
 
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, 0xDEAD, null);
+            TakeFromCrate(content, rows[0].EntityId, null);
+            TakeFromCrate(content, 0xDEAD, null);
 
             Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
             Assert.AreEqual(1, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
@@ -1459,10 +1496,10 @@ namespace Rasa.Test
             Accept(missionId: CrateMissionId);
             UseCrate(content, usable);
             var rows = CrateLootItems();
-            content.RequestLootItemFromContentContainer(_client, usable.EntityId, rows[0].EntityId, null);
+            TakeFromCrate(content, rows[0].EntityId, null);
             Drain();
 
-            content.RequestLootAllFromContentContainer(_client, usable.EntityId);
+            LootAllFromCrate(content);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
             // What is handed over is the rows' own items, not copies built from their templates.

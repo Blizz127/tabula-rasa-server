@@ -52065,14 +52065,19 @@
   },
   {
    "id": "GAP-CRATE-OBJECTIVE-DEAD-END",
-   "summary": "Closed 2026-09-18, on the third diagnosis. A live player could not finish 'Get your gear from the nearby crate' on 2026-09-16, 2026-09-17 and again on 2026-09-18. The first diagnosis blamed three missing ContentRuleEvent kinds and was wrong. The second found that the crate's rows were bare template ids with no item behind them and fixed that - correctly, but it was not the whole of it. The third read the live log and the character database together: the crate opened and logged 'Blizz opened content container 198651 (5 row(s))', the five items of set 19858 were created at that exact millisecond and sent to the client - and then nothing. No take, no Loot All, no settle line, and all five items sat in the item table owned by nobody. The gear the player thought they had taken was their creation loadout, which shares two of the crate's five templates.\n\nThe window never opened. OpenContentContainer sent LootInfo and CanLootItems, and the client's own lootdispenser augmentation only stores those - Recv_LootInfo sets _lootItems, Recv_CanLootItems sets _isLootable and posts an item-status update for a window already on screen. The single place the client posts UI_SHOW_CORPSELOOT is Recv_LootCorpse, and the content path never sent LootCorpse. The corpse path, which works, sends it as the last thing RequestCorpseLooting does.\n\nThe same open also sent CreatePhysicalEntity for the crate. The corpse path needs that because it invents a loot dispenser entity on the spot; a content container materialized into the world with the map and every client in range already has it with its position, rotation and use state, so re-creating it from an id and a class replaced all of that with a bare entity. The player's words were 'the crate looked a little transluscent'.\n\nAnd RequestCorpseLooting - the request the client sends itself, from lootdispenser.Recv_Use on every use of a dispenser - was the one loot request with no content-layer route, so it fell through to the corpse manager, found no dispenser for that entity and returned. Re-opening a crate window did nothing. It now reopens the container without creating anything.",
-   "closes_with": "the player opening the crate and seeing a window; the test now requires LootCorpse after the rows and forbids re-creating the container entity, and fails if either changes",
+   "summary": "Fourth diagnosis, and the first that reached the entity class. The crate is entity class 26714 UsableTreasureDispHumCrateV04, chosen under OD-12 as 'the first TreasureDispenser candidate' - picked by name, never checked against the loot protocol. Its only augmentation is 64 TreasureDispenser, 'Usable: drops loot into inventory (or world) when used', and the client's treasuredispenser augmentation carries no Recv_ handlers at all: __init__, IsClosed, IsCipherable. Every window method the server was sending - LootInfo, CanLootItems, TakenInfo and the LootCorpse added earlier the same day - belongs to augmentation 50 LootDispenser, so the client dropped all of them. Exactly two classes in the entire client carry 50, Sys_LootDispenser (3331) and CorpseLootDispenser (10000035), and neither is a crate, so no class swap can give the crate a window.\n\nThe original had one. Footage A3-017 (t=304.733) shows a window headed 'Supply Crate' listing the items with a 'Loot All' button, A3-022 the five rows, A3-023 the 'You received 1 ...' lines and A3-024 the objective completing. A loot dispenser is attached to the crate - which is what LootDispenser.AttachedTo is for and what every corpse does - and the window takes its heading from the attached entity. From there the corpse machinery serves it: the client addresses the dispenser's entity id, FindLootable finds it in MapChannel.LootDispensers, and taking, Loot All and the settle are the paths already proven in play. The content layer now only opens the window and completes the objective when the container is empty, and the three loot handlers no longer need a content-container special case at all.\n\nThree earlier diagnoses were wrong or incomplete: missing rule kinds (wrong); rows built from bare template ids with no item behind them (real, and fixed, but not why the window was empty); and the missing LootCorpse (real, and necessary, but sent to an entity that cannot receive it).",
+   "closes_with": "the player opening the crate and seeing a window headed \"Supply Crate\"; the test now requires LootCorpse on the dispenser, AttachInfo pointing at the crate, and no re-creation of the crate entity",
    "evidence": [
     "game log 2026-09-18 05:43:24.360: \"Blizz opened content container 198651 (5 row(s))\", and no take, Loot All or settle line after it",
     "rasachar.db items 61-65 (templates 13066, 13096, 13156, 13186, 13713) created 05:43:24.32-.35 with no character_inventory row; character 8 wears items 58-60 from its 23:58:54 creation loadout",
     "client augmentations/lootdispenser.pyo: Recv_LootCorpse is the only caller of PostEvent(UI_SHOW_CORPSELOOT); Recv_LootInfo and Recv_CanLootItems only update state",
     "src/Rasa.Game/Managers/LootDispenserManager.cs RequestCorpseLooting, which ends with LootCorpsePacket",
-    "live report 2026-09-18: \"the crate looked a little transluscent\""
+    "live report 2026-09-18: \"the crate looked a little transluscent\"",
+    "client entityclass 26714 = (\"UsableTreasureDispHumCrateV04\", ..., [64]); augmentation 64 = TreasureDispenser, 50 = LootDispenser",
+    "client augmentations/treasuredispenser.pyo defines only __init__, IsClosed, IsCipherable",
+    "only entity classes 3331 Sys_LootDispenser and 10000035 CorpseLootDispenser carry augmentation 50",
+    "footage A3-017/A3-022/A3-023/A3-024: a \"Supply Crate\" window with Loot All, the receipt lines and the objective completing",
+    "OD-12 as recorded in BootcampS2GearingUpRows: \"crate class 26714 UsableTreasureDispHumCrateV04, the first TreasureDispenser candidate\""
    ],
    "surfaced_by": [
     "live play 2026-09-17"
@@ -52309,6 +52314,21 @@
    ],
    "slices": [
     "W3"
+   ]
+  },
+  {
+   "id": "GAP-S2-CRATE-DISPENSER-CLASS",
+   "summary": "The loot dispenser attached to the boot camp crate uses entity class 10000035 CorpseLootDispenser, the one proven to drive the window in play. Sys_LootDispenser (3331) is the other class carrying augmentation 50 and reads as the one meant for a world container rather than a body, but it has never been observed working. The window takes its heading from AttachInfo either way, so the choice is not visible to the player; it is recorded rather than presented as established.",
+   "evidence": [
+    "client entityclass 3331 Sys_LootDispenser and 10000035 CorpseLootDispenser, both augmentation 50",
+    "LootDispenserManager has used 10000035 for every corpse since the loot work"
+   ],
+   "closes_with": "a capture showing which class the original attached to a world container",
+   "surfaced_by": [
+    "crate window rebuild, 2026-09-18"
+   ],
+   "slices": [
+    "S2"
    ]
   }
  ],

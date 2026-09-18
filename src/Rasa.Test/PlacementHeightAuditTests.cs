@@ -85,6 +85,53 @@ namespace Rasa.Test
                 "placements that do not stand where a body can walk:\n" + string.Join("\n", offSurface));
         }
 
+        /// <summary>
+        /// The first-login start (content_location 19851 / spawn.first_login) and McAllister's scripted-walk
+        /// destination (19853) have to stand on the camp navmesh within the same 1.5 m height tolerance as
+        /// placements, or be listed as labelled off-ground exceptions.
+        /// </summary>
+        [TestMethod]
+        public void FirstLoginStartAndMcAllisterWalkStandOnTheCampNavmesh()
+        {
+            var root = RepositoryRoot();
+            var navMesh = NavMeshFile.Read(Path.Combine(root, "navmesh", CampNavMesh));
+            var query = new NavMeshQuery(navMesh);
+
+            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT id, pos_x, pos_y, pos_z, comment FROM content_location WHERE id IN (19851, 19853) ORDER BY id";
+            using var reader = command.ExecuteReader();
+
+            var offSurface = new List<string>();
+            var checkedRows = 0;
+            while (reader.Read())
+            {
+                var id = reader.GetInt64(0);
+                var y = reader.GetDouble(2);
+                var position = new Vector3((float)reader.GetDouble(1), (float)y, (float)reader.GetDouble(3));
+                var ground = query.GroundHeight(position);
+                checkedRows++;
+
+                if (ground == null)
+                {
+                    offSurface.Add($"{id} has no walkable surface within reach (y {y:0.##}) {reader.GetString(4)}");
+                    continue;
+                }
+
+                var delta = y - ground.Value;
+                if (Math.Abs(delta) > Tolerance)
+                    offSurface.Add(string.Format(CultureInfo.InvariantCulture,
+                        "{0} stands {1:0.##} m off the surface (y {2:0.##}, ground {3:0.##}) {4}",
+                        id, delta, y, ground.Value, reader.GetString(4)));
+            }
+
+            Assert.AreEqual(2, checkedRows, "the first-login start and McAllister destination must both be present");
+            Assert.AreEqual(0, offSurface.Count,
+                "opening locations that do not stand where a body can walk:\n" + string.Join("\n", offSurface));
+        }
+
         /// <summary>The repository root, found by walking up from the test binaries to the folder with the navmeshes.</summary>
         private static string RepositoryRoot()
         {
