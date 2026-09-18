@@ -674,7 +674,12 @@ namespace Rasa.Managers
 
             var remaining = open.Remaining();
 
-            client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(obj.EntityId, obj.EntityClassId));
+            // No CreatePhysicalEntity here. The corpse path sends one because it invents a loot
+            // dispenser entity on the spot; this container is a content usable that materialized
+            // into the world with the map and that every client in range already has, with its
+            // position, rotation and use state. Re-creating it from an entity id and a class alone
+            // replaced all of that with a bare entity - the live report of 2026-09-18 read it as
+            // "the crate looked a little translucent".
 
             // The items have to exist on the client before the window lists them (the corpse
             // path does the same in RequestCorpseLooting); re-sending one it has is an update.
@@ -683,6 +688,38 @@ namespace Rasa.Managers
 
             client.CallMethod(obj.EntityId, new LootInfoPacket(remaining));
             client.CallMethod(obj.EntityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
+
+            // And this is what actually opens the window. lootdispenser.Recv_LootCorpse is the only
+            // place the client posts UI_SHOW_CORPSELOOT; Recv_LootInfo and Recv_CanLootItems just
+            // update state it is already showing. Without it the player used the crate, the server
+            // built all five items and sent them, and no window ever appeared - so no take could be
+            // requested and the objective bound to the container could never complete
+            // (live report 2026-09-18, and the character database showed the five items created and
+            // owned by nobody).
+            client.CallMethod(obj.EntityId, new LootCorpsePacket(client.Player.EntityId, remaining));
+        }
+
+        /// <summary>
+        /// The client asking to open a container's window again (lootdispenser.Recv_Use sends
+        /// RequestCorpseLooting on every use). Only a container already opened by this player is
+        /// re-shown; nothing is created, so a player cannot use this to refill one.
+        /// </summary>
+        public void ReopenContentContainer(Client client, ulong entityId)
+        {
+            var open = OpenContainerFor(client, entityId);
+            var mapChannel = client?.Player?.MapChannel;
+            if (open == null || mapChannel == null)
+                return;
+
+            var remaining = open.Remaining();
+
+            foreach (var row in remaining)
+                ItemManager.Instance.SendItemDataToClient(client, row.Item, false);
+
+            client.CallMethod(entityId, new LootInfoPacket(remaining));
+            client.CallMethod(entityId, new CanLootItemsPacket(remaining.Count > 0, remaining));
+            client.CallMethod(entityId, new TakenInfoPacket(client.Player.EntityId, open.Taken()));
+            client.CallMethod(entityId, new LootCorpsePacket(client.Player.EntityId, remaining));
         }
 
         private sealed class ContentContainerLoot

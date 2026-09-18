@@ -22,9 +22,11 @@ using Rasa.Memory;
 using Rasa.Packets;
 using Rasa.Packets.MapChannel.Client;
 using Rasa.Packets.LootDispenser.Client;
+using Rasa.Packets.ClientMethod.Server;
 using Rasa.Packets.LootDispenser.Server;
 using Rasa.Packets.Manifestation.Server;
 using Rasa.Packets.MapChannel.Server;
+using Rasa.Packets.Game.Server;
 using Rasa.Packets.Mission.Server;
 using Rasa.Packets.Inventory.Server;
 using Rasa.Packets.Protocol;
@@ -1353,9 +1355,28 @@ namespace Rasa.Test
 
             var packets = DrainAddressed();
             var lootInfoIndex = packets.FindIndex(entry => entry.Packet is LootInfoPacket);
-            Assert.IsTrue(lootInfoIndex >= 0, "the window was not opened");
+            Assert.IsTrue(lootInfoIndex >= 0, "the rows were never sent");
             var rows = ((LootInfoPacket)packets[lootInfoIndex].Packet).LootItems;
             Assert.AreEqual(2, rows.Count);
+
+            // LootInfo does not open anything. lootdispenser.Recv_LootCorpse is the only place the
+            // client posts UI_SHOW_CORPSELOOT; Recv_LootInfo and Recv_CanLootItems only update a
+            // window it is already showing. This test used to call LootInfo "the window" and that is
+            // how a crate that never opened for the player passed it (live report 2026-09-18).
+            var lootCorpseIndex = packets.FindIndex(entry => entry.Packet is LootCorpsePacket);
+            Assert.IsTrue(lootCorpseIndex > lootInfoIndex, "the window is opened by LootCorpse, after the rows");
+            var lootCorpse = (LootCorpsePacket)packets[lootCorpseIndex].Packet;
+            Assert.AreEqual(usable.EntityId, packets[lootCorpseIndex].EntityId, "sent on the container's entity");
+            Assert.AreEqual(_client.Player.EntityId, lootCorpse.ActorId,
+                "actorId is the looting player, or Recv_LootCorpse stores the rows without opening");
+            CollectionAssert.AreEqual(rows.Select(row => row.EntityId).ToArray(),
+                lootCorpse.LootItems.Select(row => row.EntityId).ToArray());
+
+            // The container is a content usable that materialized with the map and that the client
+            // already has. Re-creating it from an id and a class threw away its position and use
+            // state, which read as a translucent crate in live play.
+            Assert.IsFalse(packets.Any(entry => entry.Packet is CreatePhysicalEntityPacket create && create.EntityId == usable.EntityId),
+                "the container already exists on the client and must not be re-created");
 
             foreach (var row in rows)
             {

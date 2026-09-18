@@ -751,6 +751,30 @@ character picks up in Alia Das once Training Day and the class choice are behind
     **GAP-W3-TIRNA-NAME** records the one cosmetic mismatch left: the seed's Ranger carries a name the client
     renders "Ranger Tarina" while every mission text says "Ranger Tirna", and the seed's value is kept rather
     than corrected on a guess.
+  - **The crate window never opened (2026-09-18, live report, third diagnosis)**: "I got my gear from the nearby
+    crate and equipped it but the quest didn't advance", with "the crate looked a little transluscent". The log
+    and the character database together said what the previous two diagnoses had not. The crate opened and logged
+    `Blizz opened content container 198651 (5 row(s))`; the five items of set 19858 were created at that exact
+    millisecond and sent to the client; and then **nothing** - no take, no Loot All, no settle line - and all
+    five items sat in the item table **owned by nobody**. The gear the player had equipped was their creation
+    loadout, which happens to share two of the crate's five templates.
+
+    `OpenContentContainer` sent `LootInfo` and `CanLootItems`, and the client's own lootdispenser augmentation
+    only *stores* those: `Recv_LootInfo` sets `_lootItems`, `Recv_CanLootItems` sets `_isLootable` and posts an
+    item-status update for a window already on screen. The one place the client posts **`UI_SHOW_CORPSELOOT`** is
+    `Recv_LootCorpse` - and the content path never sent `LootCorpse`. The corpse path, which works, sends it as
+    the last thing `RequestCorpseLooting` does. The test that was supposed to cover this asserted `LootInfo` and
+    called it "the window was not opened", which is how a crate that never opened for anyone passed it.
+
+    Two more came out of the same read. The open also sent `CreatePhysicalEntity` for the crate: the corpse path
+    needs that because it invents a dispenser entity on the spot, but a content container materialized into the
+    world with the map and every client in range already has it, with its position, rotation and use state -
+    re-creating it from an id and a class threw all of that away, which is the translucent crate. And
+    `RequestCorpseLooting`, the request the client sends *itself* from `lootdispenser.Recv_Use` on every use of a
+    dispenser, was the one loot request with no content-layer route, so re-opening a crate window fell through to
+    the corpse manager and did nothing. **GAP-CRATE-OBJECTIVE-DEAD-END closed**; the test now requires
+    `LootCorpse` after the rows, on the container's entity, carrying the looting player's actor id, and forbids
+    re-creating the container entity.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

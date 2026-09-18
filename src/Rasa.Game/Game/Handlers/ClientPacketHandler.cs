@@ -877,6 +877,17 @@ namespace Rasa.Game.Handlers
         [PacketHandler(GameOpcode.RequestCorpseLooting)]
         private void RequestCorpseLooting(RequestCorpseLootingPacket packet)
         {
+            // The other two loot requests have routed to the content layer since the crate was
+            // given real items; this one did not, and it is the one the client sends itself -
+            // lootdispenser.Recv_Use calls RequestCorpseLooting(actorId) on any use of a dispenser.
+            // Against a content container it fell through to the corpse manager, which finds no
+            // dispenser for that entity and returns, so re-opening a crate window did nothing.
+            if (Client?.Player?.MapChannel?.ContentUsables.ContainsKey(packet.EntityId) == true)
+            {
+                MissionManager.Instance.Content.ReopenContentContainer(Client, packet.EntityId);
+                return;
+            }
+
             LootDispenserManager.Instance.RequestCorpseLooting(Client, packet);
         }
 
