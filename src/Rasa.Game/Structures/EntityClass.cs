@@ -27,6 +27,7 @@ namespace Rasa.Structures
         public int HasServerSkeleton { get; set; }
 
         public Dictionary<uint, ItemTemplate> ItemTemplates = new Dictionary<uint, ItemTemplate>();
+        public List<CreatureFlag> CreatureFlags = new List<CreatureFlag>();
         public ItemClassInfo ItemClassInfo { get; set; }
         public ArmorClassInfo ArmorClassInfo { get; set; }
         public EquipableClassInfo EquipableClassInfo { get; set; }

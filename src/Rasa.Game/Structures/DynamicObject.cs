@@ -30,6 +30,9 @@ namespace Rasa.Structures
         public List<Client> TriggeredByPlayers = new List<Client>();
         public string Comment { get; set; }
 
+        /// <summary>What keeps this shut, or null. Nothing in the recovered world carries a lock yet.</summary>
+        public UsableLock Lock { get; set; }
+
         public bool IsInWorld = false;
         public UseObjectState StateId = 0;
         public bool IsEnabled = true;

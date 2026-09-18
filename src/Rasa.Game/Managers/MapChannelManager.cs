@@ -424,6 +424,16 @@ namespace Rasa.Managers
 
         public void MapLoaded(Client client)
         {
+            if (!client.AwaitingMapLoaded
+                || (client.State != ClientState.Loading && client.State != ClientState.Teleporting))
+            {
+                Logger.WriteLog(LogType.Security,
+                    $"AccountId = {client.AccountEntry?.Id} sent MapLoaded in state {client.State} with {(client.AwaitingMapLoaded ? "a" : "no")} map load pending; ignored.");
+                return;
+            }
+
+            client.AwaitingMapLoaded = false;
+
             if (client.State == ClientState.Teleporting)
             {
                 var dropship = new Dropship(Factions.AFS, DropshipType.Teleporter, client);
@@ -524,6 +534,7 @@ namespace Rasa.Managers
 
             client.State = ClientState.Loading;
             client.State = ClientState.Loading;
+            client.AwaitingMapLoaded = true;
             client.Player.MapChannel.QueuedClients.Enqueue(client);
         }
 
@@ -571,6 +582,7 @@ namespace Rasa.Managers
                 orientation);
 
             client.CallMethod(SysEntity.CurrentInputStateId, packet);
+            client.AwaitingMapLoaded = true;
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position, packet);
             mapChannel.ClientList.Add(client);
 

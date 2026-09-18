@@ -40,6 +40,8 @@ namespace Rasa.Game
         public ClientCryptData Data { get; private set; }
         public GameAccountEntry AccountEntry { get; private set; }
         public uint LoadingMap { get; set; }
+        /// <summary>Set by each Wonkavate; MapLoaded is accepted only while this is true.</summary>
+        public bool AwaitingMapLoaded { get; set; }
         private volatile ClientState _state;
         public ClientState State
         {

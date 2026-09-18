@@ -192,6 +192,41 @@ namespace Rasa.Managers
             return applied;
         }
 
+        /// <summary>
+        /// Raises armour and tells everyone who can see them. The armour counterpart of
+        /// <see cref="Heal"/>; the dead are refused, because MissileManager zeroes armour on death.
+        /// </summary>
+        public int RestoreArmor(Actor target, int amount, ulong sourceEntityId = 0)
+        {
+            if (target == null || amount <= 0)
+                return 0;
+
+            if (!target.Attributes.TryGetValue(Attributes.Armor, out var armor))
+                return 0;
+
+            if (target.State == CharacterState.Dead)
+                return 0;
+
+            var applied = Math.Min(amount, armor.CurrentMax - armor.Current);
+
+            if (applied <= 0)
+                return 0;
+
+            armor.Current += applied;
+
+            var mapChannel = target switch
+            {
+                Manifestation player => player.MapChannel,
+                Creature creature => MapChannelManager.ChannelOf(creature),
+                _ => MapChannelManager.Instance.TryFindByContextId(target.MapContextId, out var found) ? found : null
+            };
+
+            if (mapChannel != null)
+                CellManager.Instance.CellCallMethod(mapChannel, target, new UpdateArmorPacket(armor, target.EntityId));
+
+            return applied;
+        }
+
         /// <summary>Puts an actor back to its maximum, and says how much that took.</summary>
         public int HealToFull(Actor target, ulong sourceEntityId = 0)
         {

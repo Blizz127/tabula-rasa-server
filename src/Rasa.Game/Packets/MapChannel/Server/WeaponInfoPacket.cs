@@ -45,7 +45,12 @@
             pw.WriteUInt(_reloadTime);
             pw.WriteUInt(_altActionId);
             pw.WriteUInt(_altActionArgId);
-            pw.WriteUInt(_aeType);
+            // aetypes starts at 1; 0 means none. basetoolaction.py treats a non-None aeType as
+            // TARGET_NONE, so writing 0 made every tool an area tool that could not be aimed.
+            if (_aeType == 0)
+                pw.WriteNoneStruct();
+            else
+                pw.WriteUInt(_aeType);
             pw.WriteUInt(_aeRadius);
             pw.WriteUInt(_recoilAmount);
             pw.WriteNoneStruct();       // ReuseOverride ToDo

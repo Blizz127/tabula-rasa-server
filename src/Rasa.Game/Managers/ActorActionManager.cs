@@ -317,6 +317,13 @@ namespace Rasa.Managers
                             break;
                     }
                     break;
+                case ActionId.ToolHealingDisc:
+                case ActionId.ToolFieldRepair:
+                case ActionId.ToolArmorAugmentation:
+                case ActionId.ToolHarvest:
+                case ActionId.ToolCipher:
+                    ToolActionManager.Instance.PerformRecovery(mapChannel, action);
+                    break;
                 case ActionId.WeaponAttack:
                     Logger.WriteLog(LogType.Debug, $"PerformRecovery {action.ActionArgId} {action.ActionId} {action.Args}");
                     /*

@@ -805,8 +805,17 @@ namespace Rasa.Managers
             if (obj == null || obj.HitPoints == 0)
                 return null;
 
+            var before = obj.HitPoints;
             obj.HitPoints = (uint)Math.Max(0, (int)obj.HitPoints - damage);
             CellManager.Instance.CellCallMethod(obj, new UpdateHitPointsPacket(obj.HitPoints));
+
+            // A destroyable placement is the only thing between "I shot it" and the objective that
+            // waits on the destroying hit, and nothing recorded either side of it. Live play could
+            // not tell a shot that never arrived from one that arrived for too little.
+            Logger.WriteLog(LogType.Debug,
+                $"Content usable {placementId} took {damage} from {sourceClient?.Player?.Name ?? "?"}: " +
+                $"{before} -> {obj.HitPoints} of {obj.MaxHitPoints}" +
+                (obj.HitPoints == 0 ? ", destroyed" : ""));
 
             if (obj.HitPoints > 0)
             {

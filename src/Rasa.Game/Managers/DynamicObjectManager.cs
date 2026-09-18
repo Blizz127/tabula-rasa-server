@@ -470,6 +470,7 @@ namespace Rasa.Managers
                                     dropship.Client.CallMethod(SysEntity.ClientMethodId, new UnrequestMovementBlockPacket());
                                     dropship.Client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
                                     dropship.Client.CallMethod(SysEntity.CurrentInputStateId, new WonkavatePacket(dropship.DestinationMapId, 1, MapChannelManager.Instance.MapChannelArray[dropship.DestinationMapId].MapInfo.MapVersion, dropship.Destination, 0));
+                                    dropship.Client.AwaitingMapLoaded = true;
                                     dropship.Client.Player.Position = dropship.Destination;
                                     dropship.Client.Player.Target = 0;
                                     dropship.Client.State = ClientState.Teleporting;

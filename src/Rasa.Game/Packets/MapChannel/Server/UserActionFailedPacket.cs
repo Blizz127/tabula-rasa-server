@@ -9,10 +9,18 @@ namespace Rasa.Packets.MapChannel.Server
         public ActionId ActionId { get; }
         public int ActionArgId { get; }
 
+        public PlayerMessage? MsgId { get; }
+
         public UserActionFailedPacket(ActionId actionId, int actionArgId)
+            : this(actionId, (uint)actionArgId, null)
+        {
+        }
+
+        public UserActionFailedPacket(ActionId actionId, uint actionArgId, PlayerMessage? msgId)
         {
             ActionId = actionId;
-            ActionArgId = actionArgId;
+            ActionArgId = (int)actionArgId;
+            MsgId = msgId;
         }
 
         public override void Write(PythonWriter pw)
@@ -22,7 +30,10 @@ namespace Rasa.Packets.MapChannel.Server
             pw.WriteTuple(3);
             pw.WriteInt((int)ActionId);
             pw.WriteInt(ActionArgId);
-            pw.WriteNoneStruct();
+            if (MsgId.HasValue)
+                pw.WriteInt((int)MsgId.Value);
+            else
+                pw.WriteNoneStruct();
         }
     }
 }

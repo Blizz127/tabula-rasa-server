@@ -79,6 +79,12 @@ namespace Rasa.Structures
             WalkSpeed = data.WalkSpeed;
         }
 
+        /// <summary>Who may harvest this corpse: the player whose kill it was.</summary>
+        public ulong HarvestOwnerEntityId { get; set; }
+
+        /// <summary>Attempts left on this corpse. Zero on a living creature, and after depletion.</summary>
+        public int HarvestAttemptsLeft { get; set; }
+
         public Creature()
         {
         }

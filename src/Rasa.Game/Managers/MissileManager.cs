@@ -316,6 +316,15 @@ namespace Rasa.Managers
                         killedPlayer = player;
                 }
             }
+            else if (!MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId) &&
+                     missile.Source is Manifestation shooter)
+            {
+                // The shot resolved to neither a living actor nor a destroyable placement, so it hit
+                // nothing the server knows about. Silence here reads exactly like a shot that landed.
+                Logger.WriteLog(LogType.Debug,
+                    $"{shooter.Name} fired action {missile.ActionId} at entity {missile.TargetEntityId}, " +
+                    $"which is neither a live actor nor a content usable on map {mapChannel.MapInfo?.MapContextId}.");
+            }
             else if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId))
             {
                 // A destroyable content placement takes the damage; no HitData goes

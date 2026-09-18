@@ -160,6 +160,11 @@ namespace Rasa.Managers
                     MissionManager.Instance.OnCreatureKilled(owner, creature);
             }
 
+            // Harvest claim: written on every kill so a spawn-pool reuse cannot keep a previous
+            // owner's claim. A death with no player behind it leaves attempts at zero.
+            creature.HarvestOwnerEntityId = client?.Player.EntityId ?? 0;
+            creature.HarvestAttemptsLeft = client != null ? Harvest.AttemptsPerCorpse : 0;
+
             // spawn loot
             if (killedBy != null && client != null)
                 LootDispenserManager.Instance.Loot(client, creature);
