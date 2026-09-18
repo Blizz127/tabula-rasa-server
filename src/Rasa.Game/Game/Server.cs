@@ -132,6 +132,10 @@ namespace Rasa.Game
 
             Logger.UpdateConfig(Config.LoggerConfig);
 
+            Client.TraceClientMethods = Config.GameDataConfig?.TraceClientMethods ?? false;
+            if (Client.TraceClientMethods)
+                Logger.WriteLog(LogType.Initialize, "Client method tracing is ON: every method a client calls is logged.");
+
             ServerFlagManager.Instance.LoadConfiguredFlags(Config.GameDataConfig?.ServerFlags);
 
             if (!KnowledgeBaseManager.Instance.Load(Config.GameDataConfig?.KnowledgeBaseFile, out var kbProblem))

@@ -28,6 +28,9 @@ namespace Rasa.Game
 
     public class Client
     {
+        /// <summary>Set once at startup from GameDataConfig.TraceClientMethods.</summary>
+        internal static bool TraceClientMethods;
+
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
 
         public const int LengthSize = 2;
@@ -436,6 +439,16 @@ namespace Rasa.Game
 
                     // MethodId, not Packet.Opcode: an opcode with no handler leaves Packet null.
                     ManifestationManager.Instance.NotifyPlayerActivity(this, csmPacket.MethodId);
+
+                    // Every method the client calls, by name, while TraceClientMethods is on. Three
+                    // successive attempts to open the boot camp crate's loot window were reasoned from
+                    // the client's decompiled source and each was wrong in a different way; the log
+                    // could say what the server sent but never what the client did with it. This says
+                    // it. It is off by default and costs one line per client action while on.
+                    if (TraceClientMethods)
+                        Logger.WriteLog(LogType.Debug,
+                            $"<- {Player?.Name ?? "?"} calls {csmPacket.MethodId}" +
+                            (csmPacket.Packet == null ? " (no server packet type for it)" : ""));
 
                     PacketRouter.RoutePacket(_handler, csmPacket.Packet);
                     break;

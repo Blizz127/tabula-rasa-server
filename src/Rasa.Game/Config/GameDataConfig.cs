@@ -4,6 +4,13 @@ namespace Rasa.Config
 
     public class GameDataConfig
     {
+        /// <summary>
+        /// Log every method the client calls, by name. Off unless a diagnosis needs it: the crate
+        /// window took four attempts partly because the log recorded what the server sent and never
+        /// what the client sent back, so a wrong guess about the client looked exactly like a right one.
+        /// </summary>
+        public bool TraceClientMethods { get; set; }
+
         public int[] EnabledRaces { get; set; }
         public BootcampConfig Bootcamp { get; set; } = new BootcampConfig();
 
