@@ -297,6 +297,11 @@ namespace Rasa.Managers
             {
                 // PhysicalEntity
                 new IsTargetablePacket(classInfo.TargetFlag),
+                // As for creatures: no category, no target. The boot camp's practice dummy carries the
+                // inertdestroyable augmentation, which has its own Recv_TargetCategory, and "Shoot the
+                // Practice Dummy" cannot be done until it has one. An object is Object, not a faction -
+                // which the old Factions-typed packet could not say at all.
+                new TargetCategoryPacket(TargetCategory.Object),
                 new WorldLocationDescriptorPacket(dynamicObject.Position, dynamicObject.Rotation),
                 // set state
                 new UsableInfoPacket(dynamicObject.IsEnabled, dynamicObject.StateId, 0, dynamicObject.WindupTime, dynamicObject.ActivateMission)

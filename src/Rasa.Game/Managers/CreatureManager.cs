@@ -396,7 +396,11 @@ namespace Rasa.Managers
                 new AppearanceDataPacket(creature.AppearanceData),
                 new LevelPacket(creature.Level),
                 new AttributeInfoPacket(creature.Attributes),
-                new TargetCategoryPacket(creature.Faction),
+                // Creatures have always been sent a category, and it was right only by coincidence:
+                // Factions.Bane is 0 and Factions.AFS is 1, which happen to be the client's HOSTILE and
+                // FRIENDLY. Said explicitly now, because the same packet has to carry Object for a
+                // destroyable, and a faction cannot say that.
+                new TargetCategoryPacket(creature.Faction == Factions.AFS ? TargetCategory.Friendly : TargetCategory.Hostile),
                 new UpdateAttributesPacket(creature.Attributes, 0),
                 new IsRunningPacket(false)
             };

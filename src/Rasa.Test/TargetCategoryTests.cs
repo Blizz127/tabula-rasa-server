@@ -1,0 +1,90 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rasa.Data;
+using Rasa.Game;
+using Rasa.Game.Handlers;
+using Rasa.Managers;
+using Rasa.Memory;
+using Rasa.Packets;
+using Rasa.Packets.Game.Server;
+using Rasa.Packets.MapChannel.Server;
+using Rasa.Packets.Protocol;
+using Rasa.Structures;
+
+namespace Rasa.Test
+{
+    /// <summary>
+    /// The client will not target an entity it has not been given a category for: targeting.py's
+    /// SetDirectTarget returns False when GetTargetCategory() is None, before it sends SetTargetId.
+    /// Dynamic objects were never sent one, so the boot camp's practice dummy could not be targeted and
+    /// every shot at it resolved against entity 0 (live trace, 2026-09-18).
+    /// </summary>
+    [TestClass]
+    [DoNotParallelize]
+    public class TargetCategoryTests
+    {
+        private const ulong DummyEntityId = 0x7a11;
+        private const EntityClasses DummyClass = (EntityClasses)29365;
+
+        [TestMethod]
+        public void ADestroyableIsIntroducedAsATargetableObject()
+        {
+            var classes = EntityClassManager.Instance.LoadedEntityClasses;
+            var hadClass = classes.TryGetValue(DummyClass, out var previousClass);
+            classes[DummyClass] = new EntityClass(29365, "UsableStatelessHumPracticeDummyV01", 48957, 1, new List<AugmentationType>(), true);
+
+            var dummy = new DynamicObject
+            {
+                EntityId = DummyEntityId,
+                EntityClassId = DummyClass,
+                Position = new Vector3(1f, 2f, 3f),
+                DynamicObjectType = DynamicObjectType.ContentUsable,
+                StateId = (UseObjectState)110
+            };
+            EntityManager.Instance.RegisterEntity(DummyEntityId, EntityType.Object);
+            EntityManager.Instance.RegisterDynamicObject(dummy);
+
+            try
+            {
+                var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                DynamicObjectManager.Instance.CreateDynamicObjectOnClient(client, dummy);
+
+                var create = Drain(client).Select(message => message.Packet).OfType<CreatePhysicalEntityPacket>().Single();
+                var category = create.EntityData.OfType<TargetCategoryPacket>().SingleOrDefault();
+                Assert.IsNotNull(category, "a dynamic object without a target category cannot be targeted by the client");
+                Assert.AreEqual(TargetCategory.Object, category.TargetCategory);
+                Assert.IsTrue(create.EntityData.OfType<IsTargetablePacket>().Single().IsTargetable);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterDynamicObject(DummyEntityId);
+                EntityManager.Instance.UnregisterEntity(DummyEntityId);
+                if (hadClass) classes[DummyClass] = previousClass; else classes.Remove(DummyClass);
+            }
+        }
+
+        [TestMethod]
+        public void TheClientCategoriesAreTheClientsOwnValues()
+        {
+            // generated/client/targetdata.pyo
+            Assert.AreEqual(0, (int)TargetCategory.Hostile);
+            Assert.AreEqual(1, (int)TargetCategory.Friendly);
+            Assert.AreEqual(2, (int)TargetCategory.Object);
+            Assert.AreEqual(3, (int)TargetCategory.Neutral);
+            Assert.AreEqual(4, (int)TargetCategory.Decoration);
+        }
+
+        private static List<CallMethodMessage> Drain(Client client)
+        {
+            var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(client);
+            var messages = new List<CallMethodMessage>();
+            while (queue.PopOutgoing() is ProtocolPacket protocol)
+                if (protocol.Message is CallMethodMessage call)
+                    messages.Add(call);
+            return messages;
+        }
+    }
+}

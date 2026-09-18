@@ -513,7 +513,9 @@ namespace Rasa.Managers
                 new CharacterNamePacket(player.Name),
                 new ActorNamePacket(player.FamilyName),
                 new IsRunningPacket(player.IsRunning),
-                new TargetCategoryPacket(Factions.AFS),
+                // The player reads as friendly to themselves. This was Factions.AFS, which is also 1,
+                // so the value is unchanged - only the type now says what it means.
+                new TargetCategoryPacket(TargetCategory.Friendly),
                 new PlayerFlagsPacket(player.PlayerFlags),
                 new IsTrialAccountPacket(player.IsTrialAccount),
                 new EquipmentInfoPacket(client.Player.Inventory.EquippedInventory)
