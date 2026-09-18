@@ -52291,6 +52291,22 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-W3-SAVIOURS-SON-POSITION",
+   "summary": "421 \"A Father's Goodbye\" is completable since WildernessDialogueBinding, but the player will not find its NPC where the mission sends them. The client's text says Lt. Saviours' son is \"somewhere on the far side of the Lower Eloh Creek bridge\" - the creek is around (385, 190) to (508, 227) - while the world seed spawns Information Spec. Saviours (creature 116, spawnpool 194) at (-758, 175, -278), at Ranja Gorge, about 1.2 km away and next to Dr. Eleanor Corman. The eleven other NPCs bound in the same batch all stand where their mission text says. The binding itself is not in doubt - 3074 is the only other Saviours the client names - so this is the seed's spawn position disagreeing with the client's text, and the seed's is left alone because nothing establishes the original.",
+   "evidence": [
+    "missiontextlanguage for 421: \"on the far side of the Lower Eloh Creek bridge\"",
+    "rasaworld.db spawnpool 194, creature 116 at (-758, 175, -278) on the Wilderness",
+    "uimapmarker region label \"Lower Eloh Creek\" at (385.4, 228.4, 190.7)"
+   ],
+   "closes_with": "a capture or a source giving the original spawn point for this NPC",
+   "surfaced_by": [
+    "test-itinerary check, 2026-09-18"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
