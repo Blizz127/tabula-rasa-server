@@ -782,6 +782,20 @@ character picks up in Alia Das once Training Day and the class choice are behind
     built from bare template ids with no item behind them (real, fixed, but not why the window was empty); the
     missing `LootCorpse` (real, necessary, but sent to an entity that cannot receive it). Each was reasoned from
     the server's own code. The one that reached the cause started from the client's entity class table.
+  - **The crate works (2026-09-18 22:23 UTC, confirmed in play)**: `RequestUseObject` -> the container opens
+    through its attached dispenser -> **three `RequestTooltipForItemTemplateId` calls**, which is the proof the
+    window is up, because the client only asks for a tooltip for a row it is drawing -> `RequestLootAllFromCorpse`
+    -> `Content container 198651 settled for Blizz: 5 taken, 0 left, 0 still missing` -> `CancelCorpseLooting` ->
+    `RequestEquipArmor`. The database agrees: the crate's five items created at 22:23:39 and held, four equipped,
+    **1992 objective 1 Completed**, the equip objective Completed with it, and objective 5 revealed. Five attempts,
+    and the one that finished was the one where the log could show what the *client* did rather than only what the
+    server sent. **GAP-CRATE-OBJECTIVE-DEAD-END closed.**
+
+    One thing is left unexplained and is recorded as such: the same build had already failed at 19:40, the open
+    logging and the client again answering with nothing. Two restarts and a reconnect separate that from the
+    working run, so the likeliest reading is a stale client-side crate entity from a build that re-sent
+    `CreatePhysicalEntity` for it - the translucent crate - which would leave the attached entity the window
+    measures its use range against unresolvable. Nothing was captured from the failing session to confirm it.
   - **Kraftwerks fabrication (2026-09-16)**: every crafting request was declined with "not available on this server
     yet" - the manager's own doc named the recipes as the next step. They are the client's: `shared/crafting.pyo`'s
     `recipeItemTemplateTable` holds **160 schematics**, each with its inputs (an item template and a quantity), its

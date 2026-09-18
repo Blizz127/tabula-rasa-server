@@ -52065,8 +52065,8 @@
   },
   {
    "id": "GAP-CRATE-OBJECTIVE-DEAD-END",
-   "summary": "Fourth diagnosis, and the first that reached the entity class. The crate is entity class 26714 UsableTreasureDispHumCrateV04, chosen under OD-12 as 'the first TreasureDispenser candidate' - picked by name, never checked against the loot protocol. Its only augmentation is 64 TreasureDispenser, 'Usable: drops loot into inventory (or world) when used', and the client's treasuredispenser augmentation carries no Recv_ handlers at all: __init__, IsClosed, IsCipherable. Every window method the server was sending - LootInfo, CanLootItems, TakenInfo and the LootCorpse added earlier the same day - belongs to augmentation 50 LootDispenser, so the client dropped all of them. Exactly two classes in the entire client carry 50, Sys_LootDispenser (3331) and CorpseLootDispenser (10000035), and neither is a crate, so no class swap can give the crate a window.\n\nThe original had one. Footage A3-017 (t=304.733) shows a window headed 'Supply Crate' listing the items with a 'Loot All' button, A3-022 the five rows, A3-023 the 'You received 1 ...' lines and A3-024 the objective completing. A loot dispenser is attached to the crate - which is what LootDispenser.AttachedTo is for and what every corpse does - and the window takes its heading from the attached entity. From there the corpse machinery serves it: the client addresses the dispenser's entity id, FindLootable finds it in MapChannel.LootDispensers, and taking, Loot All and the settle are the paths already proven in play. The content layer now only opens the window and completes the objective when the container is empty, and the three loot handlers no longer need a content-container special case at all.\n\nThree earlier diagnoses were wrong or incomplete: missing rule kinds (wrong); rows built from bare template ids with no item behind them (real, and fixed, but not why the window was empty); and the missing LootCorpse (real, and necessary, but sent to an entity that cannot receive it).",
-   "closes_with": "the player opening the crate and seeing a window headed \"Supply Crate\"; the test now requires LootCorpse on the dispenser, AttachInfo pointing at the crate, and no re-creation of the crate entity",
+   "summary": "CLOSED and confirmed in live play on 2026-09-18 22:23 UTC. Fourth diagnosis, and the first that reached the entity class. The crate is entity class 26714 UsableTreasureDispHumCrateV04, chosen under OD-12 as 'the first TreasureDispenser candidate' - picked by name, never checked against the loot protocol. Its only augmentation is 64 TreasureDispenser, 'Usable: drops loot into inventory (or world) when used', and the client's treasuredispenser augmentation carries no Recv_ handlers at all: __init__, IsClosed, IsCipherable. Every window method the server was sending - LootInfo, CanLootItems, TakenInfo and the LootCorpse added earlier the same day - belongs to augmentation 50 LootDispenser, so the client dropped all of them. Exactly two classes in the entire client carry 50, Sys_LootDispenser (3331) and CorpseLootDispenser (10000035), and neither is a crate, so no class swap can give the crate a window.\n\nThe original had one. Footage A3-017 (t=304.733) shows a window headed 'Supply Crate' listing the items with a 'Loot All' button, A3-022 the five rows, A3-023 the 'You received 1 ...' lines and A3-024 the objective completing. A loot dispenser is attached to the crate - which is what LootDispenser.AttachedTo is for and what every corpse does - and the window takes its heading from the attached entity. From there the corpse machinery serves it: the client addresses the dispenser's entity id, FindLootable finds it in MapChannel.LootDispensers, and taking, Loot All and the settle are the paths already proven in play. The content layer now only opens the window and completes the objective when the container is empty, and the three loot handlers no longer need a content-container special case at all.\n\nThree earlier diagnoses were wrong or incomplete: missing rule kinds (wrong); rows built from bare template ids with no item behind them (real, and fixed, but not why the window was empty); and the missing LootCorpse (real, and necessary, but sent to an entity that cannot receive it).",
+   "closes_with": "closed: the confirming trace and database state are in confirmed_by below",
    "evidence": [
     "game log 2026-09-18 05:43:24.360: \"Blizz opened content container 198651 (5 row(s))\", and no take, Loot All or settle line after it",
     "rasachar.db items 61-65 (templates 13066, 13096, 13156, 13186, 13713) created 05:43:24.32-.35 with no character_inventory row; character 8 wears items 58-60 from its 23:58:54 creation loadout",
@@ -52084,7 +52084,23 @@
    ],
    "slices": [
     "S2"
-   ]
+   ],
+   "status": "closed",
+   "confirmed_by": {
+    "when": "2026-09-18T22:23:39Z-22:23:43Z",
+    "client_method_trace": [
+     "22:23:39.356  RequestUseObject                     (the crate is right-clicked)",
+     "22:23:39.607  opened content container 198651 (5 row(s)) through loot dispenser 1935 attached to 1924",
+     "22:23:39.702  RequestTooltipForItemTemplateId x3   (the window is open and drawing its rows)",
+     "22:23:43.013  RequestLootAllFromCorpse             (Loot All)",
+     "22:23:43.081  Content container 198651 settled for Blizz: 5 taken, 0 left, 0 still missing",
+     "22:23:43.390  CancelCorpseLooting                  (the window closes)",
+     "22:23:51.490  RequestEquipArmor x4, RequestEquipWeapon"
+    ],
+    "reasoning": "The tooltip requests are the proof the window opened: the client only asks for a tooltip for a row it is displaying. Every earlier attempt logged the server sending its packets and the client answering with nothing at all.",
+    "database": "rasachar.db character 9: items 86-90 (templates 13066, 13096, 13156, 13186, 13713 - the crate's item set 19858) created 22:23:39 and held, four of them equipped; mission 1992 objective 1 status 2 (Completed), objective 2 (equip) also Completed, objective 5 revealed and open."
+   },
+   "unexplained": "The same build had already failed once, at 19:40, with the dispenser model in place: the open logged and the client again answered with nothing. Between that attempt and the working one the server was restarted twice and the player reconnected, so the likeliest explanation is that the earlier session held a crate entity created by a build that re-sent CreatePhysicalEntity for it - the translucent crate - leaving the attached entity the window measures its use range against in a state the client could not resolve. That is a hypothesis, not a finding: nothing was captured from the failing session that would confirm it, and a fresh client was never tried against the older build."
   },
   {
    "id": "GAP-INVISIBLE-ATTACKER",
