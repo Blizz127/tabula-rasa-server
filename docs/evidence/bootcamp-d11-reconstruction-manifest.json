@@ -27423,17 +27423,15 @@
    "migration": "WildernessHubConscientiousObjector",
    "fields": {
     "giver_id": {
-     "value": 42,
+     "value": 43,
      "tier": "inferred",
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "mission 1390 infobox, giver",
-       "date": "2007-09-02",
-       "era": "pre_d11"
+       "locator": "mission 1390 infobox, MissionGiver = Warrior Apirka"
       }
      ],
-     "reasoning": "TaRapedia's infobox names Warrior Apirka as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+     "reasoning": "TaRapedia's infobox names Warrior Apirka; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 43,
@@ -28426,17 +28424,15 @@
    "migration": "WildernessHubConscientiousObjector",
    "fields": {
     "giver_id": {
-     "value": 38,
+     "value": 198514,
      "tier": "inferred",
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "mission 1407 infobox, giver",
-       "date": "2007-09-01",
-       "era": "pre_d11"
+       "locator": "mission 1407 infobox, MissionGiver = Outpost Commander Rogers"
       }
      ],
-     "reasoning": "TaRapedia's infobox names Outpost Commander Rogers as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
+     "reasoning": "TaRapedia's infobox names Outpost Commander Rogers; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 42,
@@ -29324,13 +29320,13 @@
      "reasoning": "TaRapedia's infobox names Victor Corman as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
     },
     "reciver_id": {
-     "value": 140,
+     "value": 94,
      "tier": "inferred",
-     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "reasoning": "TaRapedia's infobox names Dr. Eleanor Corman; the client's tables record no giver or receiver, and the NPC stands in the world.",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 444 infobox, RewardGiver = Dr. Eleanor Corman"
       }
      ]
     },
@@ -30232,13 +30228,13 @@
      "reasoning": "TaRapedia's infobox names Council Advisor Todae as the giver; that name resolves to exactly one creature in the world seed and the mission's own conversation rows name that creature's dialogue package, so the two agree."
     },
     "reciver_id": {
-     "value": 91,
+     "value": 92,
      "tier": "inferred",
-     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "reasoning": "TaRapedia's infobox names Council Luminary Doyan; the client's tables record no giver or receiver, and the NPC stands in the world.",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 682 infobox, RewardGiver = Council Luminary Doyan"
       }
      ]
     },
@@ -33492,15 +33488,15 @@
    "migration": "PalisadesConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199100,
+     "value": 199103,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 366 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 366 infobox, MissionGiver = Warden Lagori"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Warden Lagori; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 199100,
@@ -33635,15 +33631,15 @@
    "migration": "PalisadesConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199101,
+     "value": 199104,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 367 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 367 infobox, MissionGiver = Warden Kahlee"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Warden Kahlee; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 199101,
@@ -34261,15 +34257,15 @@
    "migration": "PalisadesConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199104,
+     "value": 199101,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 413 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 413 infobox, MissionGiver = Ranger Urialia"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Ranger Urialia; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 199104,
@@ -36104,26 +36100,26 @@
    "migration": "PlateauConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199202,
+     "value": 199206,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1040 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1040 infobox, MissionGiver = Colonel Bosley"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Colonel Bosley; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
-     "value": 199202,
+     "value": 199206,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1040 objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1040 infobox, RewardGiver = Colonel Bosley"
       }
      ],
-     "reasoning": "the NPC the last objective ends at."
+     "reasoning": "TaRapedia's infobox names Colonel Bosley; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "level": {
      "value": 20,
@@ -37837,15 +37833,15 @@
      "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
     },
     "reciver_id": {
-     "value": 199303,
+     "value": 199302,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1904 objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1904 infobox, RewardGiver = Retread Lou"
       }
      ],
-     "reasoning": "the NPC the last objective ends at."
+     "reasoning": "TaRapedia's infobox names Retread Lou; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "level": {
      "value": 25,
@@ -39328,15 +39324,15 @@
      "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
     },
     "reciver_id": {
-     "value": 199402,
+     "value": 199408,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 977 objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 977 infobox, RewardGiver = Major Ston"
       }
      ],
-     "reasoning": "the NPC the last objective ends at."
+     "reasoning": "TaRapedia's infobox names Major Ston; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "level": {
      "value": 30,
@@ -41513,15 +41509,15 @@
      "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
     },
     "reciver_id": {
-     "value": 199503,
+     "value": 199506,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1119 objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1119 infobox, RewardGiver = Surveyor Miras"
       }
      ],
-     "reasoning": "the NPC the last objective ends at."
+     "reasoning": "TaRapedia's infobox names Surveyor Miras; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "level": {
      "value": 35,
@@ -41645,15 +41641,15 @@
    "migration": "PlainsConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199503,
+     "value": 199506,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1122 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1122 infobox, MissionGiver = Surveyor Miras"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Surveyor Miras; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 199503,
@@ -41788,15 +41784,15 @@
    "migration": "PlainsConversationNpc",
    "fields": {
     "giver_id": {
-     "value": 199502,
+     "value": 199503,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1125 objectiveconversation"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1125 infobox, MissionGiver = Engineer Tralos"
       }
      ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+     "reasoning": "TaRapedia's infobox names Engineer Tralos; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "reciver_id": {
      "value": 199502,
@@ -41942,15 +41938,15 @@
      "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
     },
     "reciver_id": {
-     "value": 199502,
+     "value": 199507,
      "tier": "inferred",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "mission 1183 objective texts"
+       "source": "community_db:tarapedia",
+       "locator": "mission 1183 infobox, RewardGiver = Sargeant Phenix"
       }
      ],
-     "reasoning": "the NPC the last objective ends at."
+     "reasoning": "TaRapedia's infobox names Sargeant Phenix; the client's tables record no giver or receiver, and the NPC stands in the world."
     },
     "level": {
      "value": 35,
@@ -54442,6 +54438,23 @@
     "EffectAbilityTests.RegenerationAddsTheRefreshAmountEachSecondUpToTheMaximum",
     "EffectAbilityTests.DealingDamageEntersCombatWhichSlowsRegenerationToAFifthUntilItLapses"
    ]
+  },
+  {
+   "id": "GAP-W3-TARAPEDIA-GIVERS",
+   "summary": "Twenty-three more missions name a giver or reward giver TaRapedia records and the world does not have - Cmd. Sgt. Price and Field Lt. Perkins (321), Watchman Hillenmeyer (411), Transportation Officer Mamede (887), Outpost Cmdr. Russ (970), Lt. Cockerell (983), Captain Gaston (1041), Researcher Erodan (1118), Sgt. Van Winkle (1141), Major Silvia (1310), Retread Vincent (1673), Captain Tayros (1788), Sgt. Longshanks (1789), Shaman Masai (1868, 1904), Archeologist Wynne Topper (2016), Base Guard Kapler (347), Operations Mainframe (640), Lieutenant Liu (1063), the Computer Access Terminal (1112), Lieutenant Seguine (836), Line Capt. Dobbs (332), Sgt. Ricardo (940). Each keeps the NPC it was reconstructed with until that one is created, which needs a position no source gives for most of them.",
+   "evidence": [
+    "TaRapedia mission infoboxes, MissionGiver and RewardGiver",
+    "the audit of every seeded mission against its page, 2026-09-19"
+   ],
+   "closes_with": "for each: the named NPC created where a source places them, then the mission's giver or receiver moved to it",
+   "surfaced_by": [
+    "1:1 fidelity audit against TaRapedia, 2026-09-19"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -55241,6 +55254,330 @@
     {
      "source": "client_table:missions",
      "locator": "objectiveconversation 1112/1 package 1213; 1113/7, 1125/1, 1310/1, 20000003/7 package 1200"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 366
+   },
+   "field": "giver_id",
+   "old": 199100,
+   "new": 199103,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Warden Lagori.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 366 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 367
+   },
+   "field": "giver_id",
+   "old": 199101,
+   "new": 199104,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Warden Kahlee.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 367 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 413
+   },
+   "field": "giver_id",
+   "old": 199104,
+   "new": 199101,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Ranger Urialia.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 413 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 421
+   },
+   "field": "reciver_id",
+   "old": 120,
+   "new": 116,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Information Spec. Saviours.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 421 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 444
+   },
+   "field": "reciver_id",
+   "old": 140,
+   "new": 94,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Dr. Eleanor Corman.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 444 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 451
+   },
+   "field": "reciver_id",
+   "old": 93,
+   "new": 91,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Council Advisor Todae.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 451 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 682
+   },
+   "field": "reciver_id",
+   "old": 91,
+   "new": 92,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Council Luminary Doyan.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 682 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 698
+   },
+   "field": "reciver_id",
+   "old": 113,
+   "new": 94,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Dr. Eleanor Corman.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 698 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 977
+   },
+   "field": "reciver_id",
+   "old": 199402,
+   "new": 199408,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Major Ston.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 977 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1040
+   },
+   "field": "giver_id",
+   "old": 199202,
+   "new": 199206,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Colonel Bosley.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1040 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1040
+   },
+   "field": "reciver_id",
+   "old": 199202,
+   "new": 199206,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Colonel Bosley.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1040 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1119
+   },
+   "field": "reciver_id",
+   "old": 199503,
+   "new": 199506,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Surveyor Miras.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1119 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1122
+   },
+   "field": "giver_id",
+   "old": 199503,
+   "new": 199506,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Surveyor Miras.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1122 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1125
+   },
+   "field": "giver_id",
+   "old": 199502,
+   "new": 199503,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Engineer Tralos.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1125 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1183
+   },
+   "field": "reciver_id",
+   "old": 199502,
+   "new": 199507,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Sargeant Phenix.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1183 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1390
+   },
+   "field": "giver_id",
+   "old": 42,
+   "new": 43,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Warrior Apirka.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1390 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1407
+   },
+   "field": "giver_id",
+   "old": 38,
+   "new": 198514,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Outpost Commander Rogers.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1407 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaGiverAudit",
+   "table": "npc_mission",
+   "key": {
+    "id": 1904
+   },
+   "field": "reciver_id",
+   "old": 199303,
+   "new": 199302,
+   "reason": "The row was reconstructed from the NPC whose package completes an objective, or from the last objective's text, which is not the same thing as who hands the mission out. TaRapedia's infobox names Retread Lou.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1904 infobox, RewardGiver"
     }
    ]
   }

@@ -267,6 +267,29 @@ assembled from clothing pieces, and fifty of them carried no `creature_appearanc
 analogue set — Rogers' officer set, Dr. Munson's for the doctors — and a schema test fails if a 3846 creature has
 none (GAP-NPC-BODY; the footage's own clothing is still unmatched).
 
+### Against TaRapedia, everything we seeded (2026-09-19)
+
+Every NPC and mission the content work created, checked field by field against its TaRapedia page.
+
+| Checked | Result |
+| --- | --- |
+| NPC level, 69 with a page | **1 differs**: Outpost Commander Rogers, 20 here against the page's 5 — ours is measured from footage (B3-020), the page is a 2007 transcription, and the final state is the target. Kept. |
+| NPC position, 69 with a page | **1 differs by more than 8 m**: Rogers again, 14.3 m — ours is measured from the same footage; the page's point is where the world seed's own (never-spawning) Rogers sits. Kept. |
+| Mission experience, 77 missions | **all match** |
+| Mission credits | **all match** |
+| Mission giver and reward giver | **41 differ**; 18 corrected below, 23 name NPCs the world does not have (**GAP-W3-TARAPEDIA-GIVERS**) |
+
+The client's tables record no giver or receiver — that is why these were reconstructed — and each was taken from
+the NPC whose dialogue package completes an objective, or from the NPC the last objective's text names. Neither is
+the same thing as the hand that gives the mission, and TaRapedia's infoboxes record both directly. **TarapediaGiverAudit**
+moves eighteen: Proving Justice, Proving Conservation and Proven Conservation to Wardens Lagori and Kahlee and Ranger
+Urialia; A Father's Goodbye to Information Spec. Saviours; Unity Among Men and Elixir Vitae to Dr. Eleanor Corman; A
+Visit To The Elders to Council Advisor Todae; Childhood's End to Council Luminary Doyan; Find Me A Rock to Major Ston;
+Incommunicado to Colonel Bosley; A Tale of Two Brothers and Key Information to Surveyor Miras; Security Threat to
+Engineer Tralos; Into the Facility to Sergeant Phenix; Conscientious Objector to Warrior Apirka; Gun Control - Part IV
+to Retread Lou; and Too Close For Comfort to Outpost Commander Rogers, whose row named Council Elder Moawi although its
+own provenance line read "TaRapedia's infobox names Outpost Commander Rogers as the giver".
+
 ### Creature flags — fixed
 
 `CreatureInfo` was sent an empty flag list, and the harvest code read class flags that nothing loaded. Ellimist
