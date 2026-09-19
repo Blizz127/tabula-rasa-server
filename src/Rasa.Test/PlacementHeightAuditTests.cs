@@ -46,8 +46,7 @@ namespace Rasa.Test
             var navMesh = NavMeshFile.Read(Path.Combine(root, "navmesh", CampNavMesh));
             var query = new NavMeshQuery(navMesh);
 
-            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
-            connection.Open();
+            using var connection = OpenWorld(root);
             using var command = connection.CreateCommand();
             command.CommandText =
                 "SELECT id, pos_x, pos_y, pos_z, comment FROM content_placement WHERE map_context_id = @context ORDER BY id";
@@ -97,8 +96,7 @@ namespace Rasa.Test
             var navMesh = NavMeshFile.Read(Path.Combine(root, "navmesh", CampNavMesh));
             var query = new NavMeshQuery(navMesh);
 
-            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
-            connection.Open();
+            using var connection = OpenWorld(root);
             using var command = connection.CreateCommand();
             command.CommandText =
                 "SELECT id, pos_x, pos_y, pos_z, comment FROM content_location WHERE id IN (19851, 19853) ORDER BY id";
@@ -142,6 +140,21 @@ namespace Rasa.Test
 
             Assert.IsNotNull(directory, "the repository root carries the navmesh folder");
             return directory;
+        }
+
+        /// <summary>
+        /// The repository's world database, read-only so a missing file cannot be created as an empty one - which
+        /// is what happened during a full run, leaving these audits failing on "no such table" instead of skipping.
+        /// </summary>
+        private static SqliteConnection OpenWorld(string root)
+        {
+            var path = Path.Combine(root, "rasaworld.db");
+            if (!File.Exists(path) || new FileInfo(path).Length == 0)
+                Assert.Inconclusive("rasaworld.db is not in the repository root; this audit reads the world database");
+
+            var connection = new SqliteConnection($"Data Source={path};Mode=ReadOnly");
+            connection.Open();
+            return connection;
         }
     }
 }

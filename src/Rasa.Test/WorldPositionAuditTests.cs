@@ -101,8 +101,7 @@ namespace Rasa.Test
         public void EveryWorldPositionStandsWhereABodyCanWalk()
         {
             var root = RepositoryRoot();
-            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
-            connection.Open();
+            using var connection = OpenWorld(root);
 
             var mapNames = new Dictionary<long, string>();
             using (var mapCommand = connection.CreateCommand())
@@ -217,8 +216,7 @@ namespace Rasa.Test
         public void EveryHospitalRespawnPointHasGroundUnderIt()
         {
             var root = RepositoryRoot();
-            using var connection = new SqliteConnection($"Data Source={Path.Combine(root, "rasaworld.db")}");
-            connection.Open();
+            using var connection = OpenWorld(root);
 
             var mapNames = new Dictionary<long, string>();
             using (var mapCommand = connection.CreateCommand())
@@ -290,6 +288,21 @@ namespace Rasa.Test
 
             Assert.IsNotNull(directory, "the repository root carries the navmesh folder");
             return directory;
+        }
+
+        /// <summary>
+        /// The repository's world database, read-only so a missing file cannot be created as an empty one - which
+        /// is what happened during a full run, leaving these audits failing on "no such table" instead of skipping.
+        /// </summary>
+        private static SqliteConnection OpenWorld(string root)
+        {
+            var path = Path.Combine(root, "rasaworld.db");
+            if (!File.Exists(path) || new FileInfo(path).Length == 0)
+                Assert.Inconclusive("rasaworld.db is not in the repository root; this audit reads the world database");
+
+            var connection = new SqliteConnection($"Data Source={path};Mode=ReadOnly");
+            connection.Open();
+            return connection;
         }
     }
 }
