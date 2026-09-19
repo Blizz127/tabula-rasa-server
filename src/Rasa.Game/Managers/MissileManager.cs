@@ -330,7 +330,7 @@ namespace Rasa.Managers
                 // A destroyable content placement takes the damage; no HitData goes
                 // into the recovery, the client learns the result from UpdateHitPoints.
                 var attacker = mapChannel.ClientList.FirstOrDefault(client => client?.Player == missile.Source);
-                var destroyed = MissionManager.Instance.Content.DamageContentUsable(mapChannel, missile.TargetEntityId, missile.DamageA, attacker);
+                var destroyed = MissionManager.Instance.Content.DamageContentUsable(mapChannel, missile.TargetEntityId, missile.DamageA, attacker, (uint)missile.ActionId);
                 missile.Args.HitEntities.Add(missile.TargetEntityId);
             }
 

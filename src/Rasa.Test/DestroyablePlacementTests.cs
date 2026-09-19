@@ -299,6 +299,29 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void ABindingThatNamesAnActionCompletesOnlyOnThatAction()
+        {
+            // "Use your Lightning power on the Target Dummy" (1992/8) is bound with action 194. The destroy
+            // path used to report every hit as action 0, so this binding could never complete - the live
+            // player destroyed a dummy with Lightning three times on 2026-09-19 and nothing advanced.
+            foreach (var binding in _content.Content.LiveBindings.Where(b => b.MissionId == MissionId && b.ObjectiveId == 3))
+                binding.ActionId = 194;
+
+            _missions.AssignNpcMission(_client, _giver.EntityId, MissionId);
+
+            // A weapon (action 1) destroying it does not count.
+            Assert.AreEqual(PlacementId, _content.DamageContentUsable(_map, _dummy.EntityId, 100, _client, 1));
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[MissionId].Objectives[3]);
+
+            _now += 931;
+            _content.RestoreDestroyedUsables(_map, _now);
+
+            // Lightning (194) destroying it does.
+            Assert.AreEqual(PlacementId, _content.DamageContentUsable(_map, _dummy.EntityId, 100, _client, 194));
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[MissionId].Objectives[3]);
+        }
+
+        [TestMethod]
         public void NonDestroyingHitDoesNotCompleteADestroyingHitOnlyBinding()
         {
             _missions.AssignNpcMission(_client, _giver.EntityId, MissionId);

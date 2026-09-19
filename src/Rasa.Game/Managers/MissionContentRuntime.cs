@@ -794,7 +794,7 @@ namespace Rasa.Managers
         /// and after restore_ms back to 110 (intact) with hit points restored. No XP, no loot.
         /// Returns the placement when this hit destroyed it, for the hit bindings.
         /// </summary>
-        public uint? DamageContentUsable(MapChannel mapChannel, ulong entityId, int damage, Client sourceClient = null)
+        public uint? DamageContentUsable(MapChannel mapChannel, ulong entityId, int damage, Client sourceClient = null, uint actionId = 0)
         {
             if (!mapChannel.ContentUsables.TryGetValue(entityId, out var placementId) ||
                 !Content.Catalog.Placements.TryGetValue(placementId, out var placement) ||
@@ -836,7 +836,9 @@ namespace Rasa.Managers
                 obj.RestoreAt = TickNow() + placement.RestoreMs;
 
             if (sourceClient != null)
-                OnContentUsableHit(sourceClient, placementId, 0, true);
+                // The action that landed the hit, not 0: a binding that names one ("Use your Lightning power on
+                // the Target Dummy" is 194) matched a literal 0 here and could never complete, whatever hit it.
+                OnContentUsableHit(sourceClient, placementId, actionId, true);
 
             return placementId;
         }

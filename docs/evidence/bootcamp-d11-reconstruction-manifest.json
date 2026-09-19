@@ -52387,6 +52387,24 @@
     "S1",
     "S2"
    ]
+  },
+  {
+   "id": "GAP-S2-TARGET-DUMMY",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. 1992/8 'Use your Lightning power on the Target Dummy' could not complete for two reasons. (1) The destroy path reported every hit to the bindings as action 0, and this binding names action 194, so it could never match - the live player destroyed the practice dummy with Lightning three times (204, 215, 236 damage) and nothing advanced. DamageContentUsable now carries the missile's action through. (2) The Target Dummy itself stood inside a sandbag emplacement: its position was OD-13's labelled match, 2.9 m from the practice dummy, because the Lightning step is inside the 362.067/362.133 footage cut. The client's adv_bootcamp.map builds the range as lanes 5.35 m apart (flashlight at z 184.0, light at z 189.5, sandbag pair flanking z ~188.6); the practice dummy's measured position is lane 386.15, and the OD-13 dummy sat 0.95 m from the sandbag at (387.95, 188.58). It now stands in the next lane, (380.66, 119.4, 188.6).",
+   "evidence": [
+    "live trace 2026-09-19 03:33-03:34: RequestPerformAbility then \"Content usable 198652 took 204/215/236 ... destroyed\"; 198653 never hit",
+    "MissionContentRuntime.DamageContentUsable: OnContentUsableHit(sourceClient, placementId, 0, true)",
+    "adv_bootcamp.map statics: ArchHumGenObjFlashlight at x 375.31/380.66/386.15 z 184.0; ArchHumGenObjSandbags01V08 at 373.54, 377.02, 378.91, 382.38, 384.35, 387.95 z ~188.6",
+    "live report 2026-09-19: \"the dummy on the right is out of range looks a bit misplaced\""
+   ],
+   "open": "which lane the original Target Dummy used is inferred (the adjacent one); the footage cut hides it",
+   "surfaced_by": [
+    "live play 2026-09-19"
+   ],
+   "slices": [
+    "S2"
+   ]
   }
  ],
  "non_content_settings": [
