@@ -138,7 +138,7 @@ namespace Rasa.Managers
             // resistance / (resistance + 50)). A missile with no damage type, or a target with no resistance of
             // that type, takes it in full.
             var damage = DamageModifiers.ThroughShield(actor,
-                DamageModifiers.ThroughSmoke(actor, missile.DamageA, missile.ActionId == ActionId.WeaponMelee));
+                DamageModifiers.ThroughSmoke(actor, DamageModifiers.Taken(actor, missile.DamageA), missile.ActionId == ActionId.WeaponMelee));
             if (actor is Manifestation target)
             {
                 var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType) + DamageModifiers.ResistRating(target);
@@ -159,6 +159,9 @@ namespace Rasa.Managers
 
             actor.Attributes[Attributes.Health].Current -= healthDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateHealthPacket(actor.Attributes[Attributes.Health], 0));
+
+            // Reflection and Conversion answer the hit.
+            AbilityEffects.OnPlayerDamaged(mapChannel, actor, missile.Source, damage, missile.DamageType);
 
             // Zero health is death: control state Dead at once, so later hits, actions and
             // autofire skip the player. The announcement follows the killing recovery
@@ -188,7 +191,7 @@ namespace Rasa.Managers
             var missile = new Missile
             {
                 DamageA = DamageModifiers.Outgoing(action.Actor, damage),
-                DamageType = damageType,
+                DamageType = DamageModifiers.DealtType(action.Actor, damageType),
                 Source = action.Actor
             };
 

@@ -41,6 +41,13 @@ namespace Rasa.Managers
         public const int NapalmPoolType = 394;                // FIRE_SUPPORT_NAPALM_POOL_EFFECT
         public const int IonStrikeType = 395;                 // FIRE_SUPPORT_ION_STRIKE_EFFECT
         public const int NapalmBombType = 396;                // FIRE_SUPPORT_NAPALM_BOMB_EFFECT
+        public const int ReflectionType = 93;                 // REFLECTION
+        public const int ConversionType = 199;                // CONVERSION
+        public const int ShieldWaveType = 201;                // SHIELDWAVEEFFECT
+        public const int RegenerationWaveType = 10000019;     // REGENERATIONWAVE
+        public const int ResistanceType = 10000085;           // RESISTANCE, "Damage Resist: %(resistMod)s"
+        public const int DiseaseType = 179;                   // DISEASE_EFFECT, "Spirit: %(modifier)s%%"
+        public const int DamageConversionType = 354;          // DAMAGE_CONVERSION, "Virulent Damage dealt converted to: ..."
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
@@ -323,11 +330,7 @@ namespace Rasa.Managers
             void Heal(Game.Client member)
             {
                 if (healMax > 0)
-                {
-                    var health = member.Player.Attributes[Attributes.Health];
-                    health.Current = Math.Min(health.CurrentMax, health.Current + random.Next(healMin, healMax + 1));
-                    CellManager.Instance.CellCallMethod(map, member.Player, new Packets.MapChannel.Server.UpdateHealthPacket(health, member.Player.EntityId));
-                }
+                    AbilityEffects.Heal(map, member.Player, random.Next(healMin, healMax + 1));
                 if (adrenaline > 0 && member.Player.Attributes.TryGetValue(Attributes.Chi, out var chi))
                 {
                     chi.Current = Math.Min(chi.CurrentMax, chi.Current + adrenaline);
@@ -599,6 +602,197 @@ namespace Rasa.Managers
                 }
             }
             return new Packets.MapChannel.Server.PerformRecovery.CureRecovery(actionId, level, reached, revived, guarded);
+        }
+
+        /// <summary>
+        /// A player took damage: Reflection sends its percent of a hit of a reflected type back at a creature that dealt
+        /// it (reflection.py Recv_AnnounceReflect(entityId, rawInfo, delayMs)), and Conversion turns its percent of the
+        /// hit into healing for the squad within its radius (conversion.py Recv_AnnounceHealing([(entityId, amount)])).
+        /// </summary>
+        public static void OnPlayerDamaged(MapChannel map, Actor victim, Actor source, int damage, DamageType? type)
+        {
+            if (map == null || victim == null || damage <= 0)
+                return;
+            foreach (var effect in victim.ActiveEffects.Values.ToList())
+            {
+                if (effect.ReflectTypes != null && type is { } dealt && effect.ReflectTypes.Contains(dealt) &&
+                    source is Creature attacker && attacker.State != CharacterState.Dead)
+                {
+                    var hit = MissileManager.Instance.DamageTick(map, victim, attacker, damage * effect.ReflectPercent / 100, dealt);
+                    CellManager.Instance.CellCallMethod(map, victim, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceReflect(
+                        effect.EffectId, attacker.EntityId, hit, 0));
+                }
+                if (effect.ConversionHealPercent > 0 && effect.ConversionClient != null)
+                {
+                    var amount = damage * effect.ConversionHealPercent / 100;
+                    var healed = new List<(ulong, int)>();
+                    foreach (var member in SquadAround(map, effect.ConversionClient, victim.Position, effect.ConversionRadius))
+                    {
+                        if (member.Player == victim)
+                            continue;
+                        Heal(map, member.Player, amount);
+                        healed.Add((member.Player.EntityId, amount));
+                    }
+                    if (healed.Count > 0)
+                        CellManager.Instance.CellCallMethod(map, victim, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceHealing(effect.EffectId, healed));
+                }
+            }
+        }
+
+        /// <summary>Heals a player, unless an effect on them prevents healing (Disease, pump 5).</summary>
+        public static void Heal(MapChannel map, Actor player, int amount)
+        {
+            if (amount <= 0 || player.ActiveEffects.Values.Any(e => e.PreventsHealing) ||
+                !player.Attributes.TryGetValue(Attributes.Health, out var health))
+                return;
+            health.Current = Math.Min(health.CurrentMax, health.Current + amount);
+            CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.UpdateHealthPacket(health, player.EntityId));
+        }
+
+        /// <summary>
+        /// Reflection: "a damage reflection effect that sends a portion of the damage back to the source" for DURATION;
+        /// the types reflected accumulate over the pumps ("Pump 2: Adds Sonic ..."), so the effect reflects the
+        /// DAMAGE_TYPE of every row up to the one used, at DAMAGE_PERCENT.
+        /// </summary>
+        public static void Reflection(MapChannel map, Manifestation guardian, ActionId actionId, ActionLevelInfo info)
+        {
+            var types = new HashSet<DamageType>();
+            for (uint pump = 1; pump <= info.Level; pump++)
+                if (ActionTableManager.Instance.TryGetLevel(actionId, pump, out _, out var row) && row.Has(AbilityProperty.DamageType))
+                    types.Add((DamageType)row.Get(AbilityProperty.DamageType));
+            var reflect = GameEffectManager.Instance.AttachEffect(map, guardian, ReflectionType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                guardian.EntityId, true, new Dictionary<string, double>());
+            reflect.ReflectTypes = types;
+            reflect.ReflectPercent = info.Get(AbilityProperty.DamagePercentMax, info.Get(AbilityProperty.DamagePercentMin));
+        }
+
+        /// <summary>
+        /// Conversion: "Debuffs the user by increasing the amount of damage they take from all attacks for a set time.
+        /// The damage is also converted to healing and applied to all nearby squad members" - DAMAGE_PERCENT more taken,
+        /// HEAL_PERCENT of each hit healed on the squad within EFFECT_RADIUS, for DURATION.
+        /// </summary>
+        public static void Conversion(MapChannel map, Game.Client guardian, ActionLevelInfo info)
+        {
+            var conversion = GameEffectManager.Instance.AttachEffect(map, guardian.Player, ConversionType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                guardian.Player.EntityId, true, new Dictionary<string, double>());
+            conversion.DamageTakenPercent = info.Get(AbilityProperty.DamagePercentMax, info.Get(AbilityProperty.DamagePercentMin));
+            conversion.ConversionHealPercent = info.Get(AbilityProperty.HealPercentMax, info.Get(AbilityProperty.HealPercentMin));
+            conversion.ConversionRadius = info.Get(AbilityProperty.EffectRadius);
+            conversion.ConversionClient = guardian;
+        }
+
+        /// <summary>
+        /// Shield Wave: "Buffs the user and nearby squad members with damage absorption for all attacks for a set amount
+        /// of damage or a set time" - each within RADIUS_AROUND_SOURCE absorbs EFFECT_MODIFIER damage, scaled to the
+        /// guardian's level by ATTR_SCALE_TYPE, for DURATION.
+        /// </summary>
+        public static List<ulong> ShieldWave(MapChannel map, Game.Client guardian, ActionLevelInfo info)
+        {
+            var amount = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.EffectModifier), guardian.Player.Level,
+                info.Has(AbilityProperty.AttrScaleType) ? info.Get(AbilityProperty.AttrScaleType) : (int?)null);
+            var shielded = new List<ulong>();
+            foreach (var member in SquadAround(map, guardian, guardian.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+            {
+                GameEffect wave = null;
+                var pool = new ShieldPool { Percent = 100, Remaining = amount };
+                wave = GameEffectManager.Instance.AttachEffect(map, member.Player, ShieldWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    guardian.Player.EntityId, true, new Dictionary<string, double> { ["amount"] = amount });
+                wave.Shield = pool;
+                pool.Broken = () => GameEffectManager.Instance.DettachEffect(map, member.Player, wave);
+                shielded.Add(member.Player.EntityId);
+            }
+            return shielded;
+        }
+
+        /// <summary>
+        /// Regeneration Wave: "Buffs the user and nearby squad members with increased Health and Power regeneration for a
+        /// time" - ATTRIBUTE_PERCENT added to the regeneration rate of each within RADIUS_AROUND_SOURCE, for DURATION.
+        /// </summary>
+        public static List<ulong> RegenerationWave(MapChannel map, Game.Client medic, ActionLevelInfo info)
+        {
+            var touched = new List<ulong>();
+            foreach (var member in SquadAround(map, medic, medic.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+            {
+                var wave = GameEffectManager.Instance.AttachEffect(map, member.Player, RegenerationWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    medic.Player.EntityId, true, new Dictionary<string, double> { ["regenMod"] = info.Get(AbilityProperty.AttributePercent) });
+                wave.RegenBonusPercent = info.Get(AbilityProperty.AttributePercent);
+                void Refresh()
+                {
+                    ManifestationManager.Instance.UpdateStatsValues(member, false);
+                    member.CallMethod(member.Player.EntityId, new Packets.MapChannel.Server.AttributeInfoPacket(member.Player.Attributes));
+                }
+                wave.OnDetach = _ => Refresh();
+                Refresh();
+                touched.Add(member.Player.EntityId);
+            }
+            return touched;
+        }
+
+        /// <summary>
+        /// Resistance: "an aura that increases all resistances based on the ability's rank. This aura will effect all
+        /// squad mates within it" - every INTERVAL for DURATION, the medic and squad within RADIUS_AROUND_SOURCE carry
+        /// RESISTANCE with RESIST_MODIFIER added to their resistance rating against every type.
+        /// </summary>
+        public static void Resistance(MapChannel map, Game.Client medic, ActionLevelInfo info)
+        {
+            var radius = info.Get(AbilityProperty.RadiusAroundSource);
+            var rating = info.Get(AbilityProperty.ResistModifier);
+            var given = new Dictionary<Actor, GameEffect>();
+            var aura = GameEffectManager.Instance.AttachEffect(map, medic.Player, ResistanceType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                medic.Player.EntityId, true, new Dictionary<string, double> { ["resistMod"] = rating },
+                Math.Max(1, info.Get(AbilityProperty.Interval, 1)) * 1000, pulse =>
+                {
+                    var inside = SquadAround(map, medic, medic.Player.Position, radius).Select(c => (Actor)c.Player).Where(a => a != medic.Player).ToList();
+                    foreach (var (holder, effect) in given.ToList())
+                        if (!inside.Contains(holder))
+                        {
+                            GameEffectManager.Instance.DettachEffect(map, holder, effect);
+                            given.Remove(holder);
+                        }
+                    foreach (var holder in inside.Where(h => !given.ContainsKey(h)))
+                    {
+                        var resist = GameEffectManager.Instance.AttachEffect(map, holder, ResistanceType, info.Level,
+                            (int)Math.Max(0, pulse.Duration - pulse.EffectTime), medic.Player.EntityId, true,
+                            new Dictionary<string, double> { ["resistMod"] = rating });
+                        resist.ResistRating = rating;
+                        given[holder] = resist;
+                    }
+                });
+            aura.ResistRating = rating;
+            aura.OnDetach = _ =>
+            {
+                foreach (var (holder, effect) in given.ToList())
+                    GameEffectManager.Instance.DettachEffect(map, holder, effect);
+            };
+            aura.OnTick(aura);
+        }
+
+        /// <summary>
+        /// Disease on one enemy for DURATION: "Pump 1: -Spirit | Pump 2: -Body | Pump 3: -Mind | Pump 4: Stops Health
+        /// and Power Regen | Pump 5: Prevents Healing, Stops Health Regen". ATTRIBUTE_ID loses ATTRIBUTE_MAX_CHANGE
+        /// percent (shown as the tooltip's modifier); the regeneration and healing modifiers of 0 stop them. Creature
+        /// attributes other than health do not enter this server's combat, so the attribute loss is shown, not felt.
+        /// </summary>
+        public static void Disease(MapChannel map, Manifestation medic, Creature target, ActionLevelInfo info)
+        {
+            if (target == null || target.State == CharacterState.Dead)
+                return;
+            var disease = GameEffectManager.Instance.AttachEffect(map, target, DiseaseType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                medic.EntityId, false, new Dictionary<string, double> { ["modifier"] = -info.Get(AbilityProperty.AttributeMaxChange) });
+            disease.StopsRegeneration = info.Has(AbilityProperty.EffectHealthRegenModifier);
+            disease.PreventsHealing = info.Has(AbilityProperty.HealingModifier);
+        }
+
+        /// <summary>
+        /// Viral Conversion: "converts all virulent weapon damage done by the user into another damage type for a set
+        /// time" - DAMAGE_TYPE, for DURATION.
+        /// </summary>
+        public static void ViralConversion(MapChannel map, Manifestation medic, ActionLevelInfo info)
+        {
+            var to = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var conversion = GameEffectManager.Instance.AttachEffect(map, medic, DamageConversionType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                medic.EntityId, true, new Dictionary<string, double> { ["damageType"] = (int)to });
+            conversion.ConvertVirulentTo = to;
         }
 
         /// <summary>The player and the squad members on this map within radius of a point.</summary>

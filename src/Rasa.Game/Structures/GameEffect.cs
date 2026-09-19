@@ -33,6 +33,21 @@
         public int RangedReductionPercent { get; set; }
         /// <summary>A harmful effect: what Cure removes and its debuff guard keeps off.</summary>
         public bool IsDebuff { get; set; }
+        /// <summary>Reflection: the damage types sent back, and the percent of each hit.</summary>
+        public System.Collections.Generic.HashSet<Data.DamageType> ReflectTypes { get; set; }
+        public int ReflectPercent { get; set; }
+        /// <summary>Conversion: percent more damage taken, and what part of it heals the squad within ConversionRadius.</summary>
+        public int DamageTakenPercent { get; set; }
+        public int ConversionHealPercent { get; set; }
+        public float ConversionRadius { get; set; }
+        public Game.Client ConversionClient { get; set; }
+        /// <summary>Regeneration Wave: percent added to the holder's regeneration rate.</summary>
+        public int RegenBonusPercent { get; set; }
+        /// <summary>Viral Conversion: virulent damage the holder deals becomes this type.</summary>
+        public Data.DamageType? ConvertVirulentTo { get; set; }
+        /// <summary>Disease (pumps 4-5): the holder does not regenerate, or cannot be healed.</summary>
+        public bool StopsRegeneration { get; set; }
+        public bool PreventsHealing { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

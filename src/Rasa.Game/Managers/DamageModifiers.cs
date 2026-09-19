@@ -41,6 +41,21 @@ namespace Rasa.Managers
             return reduction == 0 ? damage : damage * (100 - reduction) / 100;
         }
 
+        /// <summary>Conversion: the holder takes its percent more from every hit.</summary>
+        public static int Taken(Actor target, int damage)
+        {
+            var more = target?.ActiveEffects.Values.Sum(effect => effect.DamageTakenPercent) ?? 0;
+            return more == 0 ? damage : damage * (100 + more) / 100;
+        }
+
+        /// <summary>Viral Conversion: virulent damage the source deals becomes the effect's type.</summary>
+        public static Data.DamageType? DealtType(Actor source, Data.DamageType? type)
+        {
+            if (type != Data.DamageType.Virulent || source == null)
+                return type;
+            return source.ActiveEffects.Values.Select(effect => effect.ConvertVirulentTo).FirstOrDefault(to => to != null) ?? type;
+        }
+
         public static int ResistRating(Actor target)
             => target?.ActiveEffects.Values.Sum(effect => effect.ResistRating) ?? 0;
     }

@@ -1290,6 +1290,8 @@ namespace Rasa.Managers
                     case Attributes.Spirit: spiritBonus += effect.AttributeBonus; break;
                     case Attributes.Health: healthBonus += effect.AttributeBonus; break;
                 }
+            foreach (var effect in player.ActiveEffects.Values)
+                regenBonus += effect.RegenBonusPercent;
 
             float armorBonusPercent = (float)Math.Max(0.0, (totalBody - (2 * (level - 1) + 10)) * 0.667);   // every body attribute over the default base attribute gives 0.667% bonus armo;
             float logosBonusPercent = (float)Math.Max(0.0, (totalMind - (2 * (level - 1) + 10)) * 0.375);   // every mind attribute over the default base attribute gives 0.375% bonus logos damage
@@ -1319,7 +1321,7 @@ namespace Rasa.Managers
             attribute[Attributes.Chi].CurrentMax    = NormalAdrenalineMaximum;
 
             attribute[Attributes.Regen].NormalMax   = totalRegen; // regenRate in percent
-            attribute[Attributes.Regen].CurrentMax  = totalRegen;
+            attribute[Attributes.Regen].CurrentMax  = totalRegen + regenBonus;
 
             if (fullreset)
             {

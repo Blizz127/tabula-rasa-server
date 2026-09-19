@@ -451,6 +451,97 @@ namespace Rasa.Test
             }
         }
 
+        private ActionLevelInfo Tier4(int classId, int skill, int ability, string module, int pump = 1)
+        {
+            _client.Player.Class = (uint)classId;
+            _client.Player.Skills[(SkillId)skill] = new SkillsData((SkillId)skill, ability, pump);
+            _client.Player.Logos.AddRange(LogosFor(ability));
+            return Row(ability, module, 400, 400, 0, (uint)pump);
+        }
+
+        [TestMethod]
+        public void ReflectionSendsItsShareOfAReflectedTypeBack()
+        {
+            var row = Tier4(9, 26, 177, "abilities.reflection");
+            row.Properties[AbilityProperty.Duration] = 120;
+            row.Properties[AbilityProperty.DamageType] = (int)DamageType.Laser;
+            row.Properties[AbilityProperty.DamagePercentMin] = 50;
+            row.Properties[AbilityProperty.DamagePercentMax] = 50;
+            var attacker = Creature(new Vector3(5, 0, 0));
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(177, null)));
+            Advance(400);
+            Drain();
+
+            AbilityEffects.OnPlayerDamaged(_map, _client.Player, attacker, 100, DamageType.Laser);
+            Assert.AreEqual(100000 - 50, attacker.Attributes[Attributes.Health].Current, "half of a laser hit back");
+            Assert.AreEqual("AnnounceReflect", Drain().OfType<CallGameEffectMethodPacket>().Single().MethodName);
+            AbilityEffects.OnPlayerDamaged(_map, _client.Player, attacker, 100, DamageType.Fire);
+            Assert.AreEqual(100000 - 50, attacker.Attributes[Attributes.Health].Current, "fire is not reflected at pump 1");
+        }
+
+        [TestMethod]
+        public void ConversionMakesTheGuardianTakeMore()
+        {
+            var row = Tier4(9, 43, 233, "abilities.conversion");
+            row.Properties[AbilityProperty.DamagePercentMax] = 20;
+            row.Properties[AbilityProperty.Duration] = 30;
+            row.Properties[AbilityProperty.EffectRadius] = 3;
+            row.Properties[AbilityProperty.HealPercentMax] = 60;
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(233, null)));
+            Advance(400);
+            Assert.AreEqual(120, DamageModifiers.Taken(_client.Player, 100));
+        }
+
+        [TestMethod]
+        public void ShieldWaveAbsorbsItsAmountWhole()
+        {
+            var row = Tier4(9, 92, 305, "abilities.shieldwave");
+            row.Properties[AbilityProperty.Duration] = 120;
+            row.Properties[AbilityProperty.RadiusAroundSource] = 25;
+            row.Properties[AbilityProperty.EffectModifier] = 300;
+            row.Properties[AbilityProperty.AttrScaleType] = 2;
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(305, null)));
+            Advance(400);
+            Assert.AreEqual(0, DamageModifiers.ThroughShield(_client.Player, 200), "all of it, while the 300 lasts");
+            Assert.AreEqual(100, DamageModifiers.ThroughShield(_client.Player, 200), "100 left to absorb");
+            Assert.IsFalse(_client.Player.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.ShieldWaveType), "spent");
+        }
+
+        [TestMethod]
+        public void ResistanceAddsItsRatingAndViralConversionChangesVirulent()
+        {
+            var row = Tier4(14, 153, 386, "abilities.resistance");
+            row.Properties[AbilityProperty.Duration] = 45;
+            row.Properties[AbilityProperty.RadiusAroundSource] = 20;
+            row.Properties[AbilityProperty.ResistModifier] = 10;
+            row.Properties[AbilityProperty.Interval] = 5;
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(386, null)));
+            Advance(400);
+            Assert.AreEqual(10, DamageModifiers.ResistRating(_client.Player));
+
+            var viral = Row(187, "abilities.damageconversion", 500, 500, 0);
+            viral.Properties[AbilityProperty.Duration] = 30;
+            viral.Properties[AbilityProperty.DamageType] = (int)DamageType.Physical;
+            AbilityEffects.ViralConversion(_map, _client.Player, viral);
+            Assert.AreEqual(DamageType.Physical, DamageModifiers.DealtType(_client.Player, DamageType.Virulent));
+            Assert.AreEqual(DamageType.Fire, DamageModifiers.DealtType(_client.Player, DamageType.Fire));
+        }
+
+        [TestMethod]
+        public void DiseaseAtPumpFiveStopsHealing()
+        {
+            var row = Row(246, "abilities.disease", 500, 700, 20, 5);
+            row.Properties[AbilityProperty.Duration] = 20;
+            row.Properties[AbilityProperty.EffectHealthRegenModifier] = 0;
+            row.Properties[AbilityProperty.HealingModifier] = 0;
+            var target = Creature(new Vector3(5, 0, 0));
+            target.Attributes[Attributes.Health].Current = 500;
+            AbilityEffects.Disease(_map, _client.Player, target, row);
+            Assert.IsTrue(target.ActiveEffects.Values.Single(e => e.TypeId == AbilityEffects.DiseaseType).PreventsHealing);
+            AbilityEffects.Heal(_map, target, 100);
+            Assert.AreEqual(500, target.Attributes[Attributes.Health].Current);
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);
