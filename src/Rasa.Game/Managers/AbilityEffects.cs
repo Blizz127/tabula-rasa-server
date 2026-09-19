@@ -1260,6 +1260,59 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Reanimation: "Reanimates a single biological enemy corpse to assist the user in combat for a set time. Corpse is
+        /// reanimated at a lower level than the user." The corpse stands up - announced with the client's own Revived and a
+        /// friendly target category - at the user's level plus CREATURE_LEVEL_DIFFERENCE, AFS for DURATION so the AI sets
+        /// it on the user's enemies, and falls again when the time runs out.
+        /// </summary>
+        public static bool Reanimate(MapChannel map, Manifestation exobiologist, Creature corpse, ActionLevelInfo info)
+        {
+            if (corpse == null || corpse.State != CharacterState.Dead || !ReferenceEquals(MapChannelManager.ChannelOf(corpse), map) ||
+                !CreatureManager.CreatureFlagsOf(corpse).Contains((int)CreatureFlag.Biological))
+                return false;
+            var (faction, level) = (corpse.Faction, corpse.Level);
+            corpse.State = CharacterState.Normal;
+            corpse.Faction = Factions.AFS;
+            corpse.Level = (uint)Math.Max(1, exobiologist.Level + info.Get(AbilityProperty.CreatureLevelDifference));
+            corpse.Controller.DeadTime = 0;
+            var health = corpse.Attributes[Attributes.Health];
+            health.Current = health.CurrentMax;
+            CellManager.Instance.CellCallMethod(map, corpse, new Packets.ClientMethod.Server.RevivedPacket(exobiologist.EntityId));
+            CellManager.Instance.CellCallMethod(map, corpse, new Packets.MapChannel.Server.UpdateHealthPacket(health, corpse.EntityId));
+            CellManager.Instance.CellCallMethod(map, corpse, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Friendly));
+            BehaviorManager.Instance.DropFight(corpse);
+            // No client effect is named for the reanimated time, so it is a server-side timer.
+            GameEffectManager.Instance.AttachServerTimer(map, corpse, info.Get(AbilityProperty.Duration) * 1000, _ =>
+                {
+                    corpse.Faction = faction;
+                    corpse.Level = level;
+                    if (corpse.State == CharacterState.Dead)
+                        return;
+                    health.Current = 0;
+                    corpse.State = CharacterState.Dead;
+                    CellManager.Instance.CellCallMethod(map, corpse, new Packets.MapChannel.Server.UpdateHealthPacket(health, corpse.EntityId));
+                    CellManager.Instance.CellCallMethod(map, corpse, new Packets.MapChannel.Server.ActorKilledPacket());
+                });
+            return true;
+        }
+
+        /// <summary>Reanimation Wave: "Reanimates all nearby biological enemy corpses" within RADIUS_AROUND_SOURCE.</summary>
+        public static List<ulong> ReanimationWave(MapChannel map, Manifestation exobiologist, ActionLevelInfo info)
+        {
+            var raised = new List<ulong>();
+            var radius = info.Get(AbilityProperty.RadiusAroundSource);
+            if (exobiologist.Cells == null)
+                return raised;
+            foreach (var seed in exobiologist.Cells)
+                if (map.MapCellInfo.Cells.TryGetValue(seed, out var cell))
+                    foreach (var corpse in cell.CreatureList.ToList())
+                        if (corpse.State == CharacterState.Dead && corpse.Faction != Factions.AFS &&
+                            Vector3.Distance(corpse.Position, exobiologist.Position) <= radius && Reanimate(map, exobiologist, corpse, info))
+                            raised.Add(corpse.EntityId);
+            return raised;
+        }
+
+        /// <summary>
         /// Cadaver Immolation: "Explodes a single enemy corpse after a set time and damages all enemies within the blast
         /// radius" - after DELAY seconds, DAMAGE_AMOUNT of the row's type to every hostile within EFFECT_RADIUS of the corpse.
         /// </summary>

@@ -771,6 +771,37 @@ namespace Rasa.Test
                 Assert.AreEqual(ally.EntityId, target.Controller.ActionFighting.TargetEntityId, "it attacks an ally");
         }
 
+        [TestMethod]
+        public void ReanimationRaisesABiologicalCorpseToFightForTheUserThenLetsItFall()
+        {
+            var row = Row(240, "abilities.reanimation", 1000, 966, 40);
+            row.Properties[AbilityProperty.Duration] = 120;
+            row.Properties[AbilityProperty.CreatureLevelDifference] = -4;
+            const EntityClasses beastClass = (EntityClasses)9000033;
+            var classes = EntityClassManager.Instance.LoadedEntityClasses;
+            classes[beastClass] = new EntityClass((uint)beastClass, "test beast", 0, 1, new List<AugmentationType>(), true);
+            classes[beastClass].CreatureFlags.Add(CreatureFlag.Biological);
+            try
+            {
+                _client.Player.Level = 10;
+                var corpse = Creature(new Vector3(10, 0, 0));
+                corpse.EntityClass = beastClass;
+                corpse.State = CharacterState.Dead;
+                corpse.Attributes[Attributes.Health].Current = 0;
+                Assert.IsTrue(AbilityEffects.Reanimate(_map, _client.Player, corpse, row));
+                Assert.AreEqual((CharacterState.Normal, Factions.AFS, 6u, 100000),
+                    (corpse.State, corpse.Faction, corpse.Level, corpse.Attributes[Attributes.Health].Current));
+                Assert.IsTrue(Drain().OfType<Packets.ClientMethod.Server.RevivedPacket>().Any());
+                GameEffectManager.Instance.DoWork(_map, 120000);
+                Assert.AreEqual((CharacterState.Dead, Factions.Bane), (corpse.State, corpse.Faction));
+                Assert.IsFalse(Drain().OfType<GameEffectAttachedPacket>().Any(), "no invented client effect");
+            }
+            finally
+            {
+                classes.Remove(beastClass);
+            }
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

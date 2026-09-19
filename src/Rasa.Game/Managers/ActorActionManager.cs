@@ -168,7 +168,7 @@ namespace Rasa.Managers
                         return false;
                 }
             }
-            else if (actionInfo.Module == "abilities.corpseexplode")
+            else if (actionInfo.Module == "abilities.corpseexplode" || actionInfo.Module == "abilities.reanimation")
             {
                 // corpseexplode.py canTargetDead, and only a creature's corpse.
                 if (!EntityManager.Instance.Creatures.TryGetValue(packet.Target ?? 0, out var corpse) || corpse.State != CharacterState.Dead ||
@@ -312,7 +312,7 @@ namespace Rasa.Managers
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
             var isCure = rowAction?.Module == "abilities.cure";
-            var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && rowAction?.Module != "abilities.corpseexplode" &&
+            var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && rowAction?.Module != "abilities.corpseexplode" && rowAction?.Module != "abilities.reanimation" &&
                 (ActionTableManager.EnemyModules.Contains(rowAction?.Module ?? "") ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
@@ -445,6 +445,12 @@ namespace Rasa.Managers
                             (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
                         }));
                         return;
+                    case "abilities.reanimation":
+                        AbilityEffects.Reanimate(map, player, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.reanimationwave":
+                        AbilityEffects.ReanimationWave(map, player, info);
+                        break;
                     case "abilities.corpseexplode":
                         AbilityEffects.CadaverImmolation(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
                         break;

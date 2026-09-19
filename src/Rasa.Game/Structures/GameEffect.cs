@@ -71,6 +71,8 @@
         public System.Action<GameEffect> OnAttack { get; set; }
         /// <summary>Cloak Wave: creatures do not see the holder; any combat action ends it.</summary>
         public bool Stealth { get; set; }
+        /// <summary>A server-side timer with no client effect behind it: nothing is sent when it attaches or ends.</summary>
+        public bool ServerOnly { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

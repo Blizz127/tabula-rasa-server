@@ -84,7 +84,7 @@ namespace Rasa.Managers
             "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.weaponenhancement", "abilities.calledshot",
             "abilities.controlledfission", "abilities.explodingnanites", "abilities.polarityfield", "abilities.feedback",
             "abilities.realityripper", "abilities.cloakwave", "abilities.traitor", "abilities.corpseexplode", "abilities.hack",
-            "abilities.mindcontrol" };
+            "abilities.mindcontrol", "abilities.reanimation", "abilities.reanimationwave" };
 
         /// <summary>Modules aimed at one living enemy creature (TARGET_NON_FRIENDLY).</summary>
         public static readonly HashSet<string> EnemyModules = new HashSet<string>
@@ -108,7 +108,7 @@ namespace Rasa.Managers
         public static readonly HashSet<string> SelfModules = new HashSet<string> { "abilities.rage", "abilities.scourge", "abilities.reconstruction", "abilities.tacticalevasion",
             "abilities.reflection", "abilities.conversion", "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance",
             "abilities.damageconversion", "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.cloakwave",
-            "abilities.realityripper" };
+            "abilities.realityripper", "abilities.reanimationwave" };
 
         /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
         public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)

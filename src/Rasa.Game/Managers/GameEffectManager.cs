@@ -107,7 +107,8 @@ namespace Rasa.Managers
             if (!actor.ActiveEffects.Remove(gameEffect.EffectId))
                 return;
             gameEffect.OnDetach?.Invoke(gameEffect);
-            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectDetachedPacket { EffectId = gameEffect.EffectId });
+            if (!gameEffect.ServerOnly)
+                CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectDetachedPacket { EffectId = gameEffect.EffectId });
             if (gameEffect.TypeId == SprintEffectType)
             {
                 actor.MovementSpeed = gameEffect.MovementBeforeAttach;
@@ -144,6 +145,16 @@ namespace Rasa.Managers
                 TooltipValues = tooltip ?? new System.Collections.Generic.Dictionary<string, double>()
             });
             return gameEffect;
+        }
+
+        /// <summary>A timer kept with the actor's effects - expired and detached as they are - that the client never hears of.</summary>
+        public GameEffect AttachServerTimer(MapChannel mapChannel, Actor actor, int durationMs, Action<GameEffect> onEnd)
+        {
+            var timer = new GameEffect { EffectId = ++mapChannel.CurrentEffectId, Duration = durationMs, ServerOnly = true, OnDetach = onEnd };
+            AddToList(actor, timer);
+            if (actor is Creature creature)
+                mapChannel.CreaturesWithEffects.Add(creature);
+            return timer;
         }
 
         /// <summary>Runs an effect's due ticks, never past its duration.</summary>
