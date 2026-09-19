@@ -120,9 +120,14 @@ Shrapnel (178), Tectonic Strike (229), Vortex (231), Rushing Blow (302), and the
 on everything within `RADIUS_AROUND_SOURCE`/`CONE_RADIUS` of the performer, and answers with one recovery in the
 shape `damagebase.py` reads.
 
-Still open (**GAP-CLASS-ABILITIES**): the damage abilities' secondary effects (knockback distance, stun chance)
-are not applied, and a cone is taken as a full circle (the row carries no angle); every class ability that is not
-direct damage — heals, buffs, shields, summons, stealth — is refused as before. The ability system on
+Their stuns (`STUN_CHANCE`/`STUN_DURATION` under the client's `STUN` effect 86) and knockbacks
+(`KNOCKBACK_DISTANCE` under `KNOCKBACK` 8; the push direction and navmesh limit are inferred) are applied, and
+`CONE_RADIUS` is used as what `client/targeting.py` shows it to be — the cone's angle in degrees, over the
+ability's range (half-width inferred). Lightning ranks 4–5 now stun, 50% for 3 s, as their row says.
+
+Still open (**GAP-CLASS-ABILITIES**): the 45 player abilities that are not direct damage — each its own client
+module, and most a system this server does not have (summons, clones, pets, mind control, stealth, shields, heals
+over time, weapon enhancement). They are refused as before. The ability system on
 `ellimist/development` covers the same damage family and Sprint and no more; merging the rest of that branch
 stays an owner decision.
 
