@@ -73,6 +73,25 @@ namespace Rasa.Structures
             return skills;
         }
 
+        /// <summary>
+        /// The ability tray a new Recruit starts with, as (drawer slot, ability id). Slot ids are the
+        /// client's: abilitydrawerwindow numbers a slot as its position on the page plus page times
+        /// NUM_ABILITY_DRAWER_SLOTS, from 0, so the tray's first slot is 0.
+        ///
+        /// Slot 0 is Lightning (194), observed: the first HUD frame of the boot-camp footage (A2-011,
+        /// 7Lrst9SG3pk t=224.8) shows "slot 1 has a white lightning-bolt icon", and when the Eloh grants the
+        /// Power Logos (A2-026, t=252.733) that slot flashes. Slot 1 is Sprint (401), inferred: the same
+        /// frame shows slot 2 holding a dark red icon, and by level 2 (A3-068) slot 2 is Sprint's blue
+        /// running figure with no drag seen in between. Without these a new character's tray is empty, and
+        /// "Use your Lightning power on the Target Dummy" asks for a power the player cannot find
+        /// (live report 2026-09-19).
+        /// </summary>
+        public static readonly (int Slot, int AbilityId)[] InitialRecruitAbilityDrawer =
+        {
+            (0, 194),   // Lightning, skill 49
+            (1, 401)    // Sprint, skill 165
+        };
+
         private static bool IsSignature(int skillId) => Array.IndexOf(SignatureSkillIds, skillId) >= 0;
 
         public static int GetMaximumRank(int skillId) => IsSignature(skillId) ? 1 : 5;

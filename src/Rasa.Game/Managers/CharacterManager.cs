@@ -275,6 +275,10 @@ namespace Rasa.Managers
                     unitOfWork.CharacterSkills.AddOrUpdate(skills.Values.Select(skill =>
                         new CharacterSkillsEntry(characterId, (uint)skill.SkillId, skill.AbilityId, skill.SkillLevel)).ToArray());
 
+                    // The Recruit's starting ability tray: Lightning in the first slot, Sprint in the second.
+                    foreach (var (slot, abilityId) in SkillTraining.InitialRecruitAbilityDrawer)
+                        unitOfWork.CharacterAbilityDrawers.AddOrUpdate(characterId, slot, abilityId, 1);
+
                     GiveBasicItems(client, characterId, unitOfWork);
 
                     if (unitOfWork.CharacterLockboxes.Get(client.AccountEntry.Id) == null)

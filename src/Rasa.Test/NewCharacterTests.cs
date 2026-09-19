@@ -46,6 +46,7 @@ namespace Rasa.Test
                     case "get_GameAccounts": return new GameAccountRepository(Context);
                     case "get_CharacterAppearances": return new CharacterAppearanceRepository(Context);
                     case "get_CharacterSkills": return new CharacterSkillsRepository(Context);
+                    case "get_CharacterAbilityDrawers": return new Rasa.Repositories.Char.CharacterAbilityDrawer.CharacterAbilityDrawerRepository(Context);
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
                     case "get_CharacterLockboxes": return new CharacterLockboxRepository(Context);
@@ -176,8 +177,15 @@ namespace Rasa.Test
             };
             Assert.AreEqual(0, SkillTraining.GetAvailablePoints(actor));
             CollectionAssert.AreEquivalent(new[] { 194, 401 }, new AbilitiesPacket(actor.Skills).AbilityList.Values.Select(s => s.AbilityId).ToArray());
+            // And both are on the tray from the start, Lightning first - footage A2-011 shows it in slot 1
+            // on the first HUD frame, and without it "Use your Lightning power" names a power the player
+            // cannot find.
+            var tray = new Rasa.Repositories.Char.CharacterAbilityDrawer.CharacterAbilityDrawerRepository(context).GetCharacterAbilities(character.Id);
+            CollectionAssert.AreEquivalent(new[] { (0, 194), (1, 401) }, tray.Select(t => (t.AbilitySlot, t.AbilityId)).ToArray());
             Assert.AreEqual(0, context.CharacterLogosEntries.Count());
-            Assert.AreEqual(0, context.CharacterAbilityDrawerEntries.Count());
+            // This asserted an empty tray, which was the gap docs/new-character-client-evidence.md left open
+            // ("does not ... assign a drawer slot"). The footage fills it: two slots, nothing else.
+            Assert.AreEqual(2, context.CharacterAbilityDrawerEntries.Count());
             Assert.AreEqual(5, context.ItemEntries.Count());
             Assert.AreEqual(5, context.CharacterInventoryEntries.Count());
             foreach (var item in context.ItemEntries.ToArray())

@@ -52368,6 +52368,25 @@
    "slices": [
     "S2"
    ]
+  },
+  {
+   "id": "GAP-S2-STARTING-ABILITY-TRAY",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. A new Recruit started with an empty ability tray, so 1992/8 'Use your Lightning power on the Target Dummy' named a power the player could not find (live report: 'its asking to do lightning but i don't see that spell'). The character had the skill (49 at rank 1, ability 194) and the Power Logos (23), but no character_ability_drawer rows - docs/new-character-client-evidence.md had left the drawer open ('does not ... assign a drawer slot'), and NewCharacterTests pinned the tray as empty. New characters now start with Lightning (194) in drawer slot 0 and Sprint (401) in slot 1. Slot 0 is observed; slot 1 is inferred.",
+   "evidence": [
+    "footage 7Lrst9SG3pk A2-011 t=224.8: \"Ability tray page 1: slot 1 has a white lightning-bolt/figure icon, slot 2 a dark red icon, slots 3-5 empty\"",
+    "footage A2-026 t=252.733: the slot-1 lightning icon flashes when the Eloh grants the Power Logos",
+    "footage A3-068 t=362.133: \"tray slot 2 now a blue running-figure (Sprint) icon\" at level 2, with no drag seen in between",
+    "client ui/abilitydrawerwindow.pyo: slot index = position on page + loadout * NUM_ABILITY_DRAWER_SLOTS, from 0"
+   ],
+   "open": "Slot 1's dark red icon at level 1 is taken to be Sprint drawn unavailable; that it becomes Sprint's blue icon by level 2 with no drag on screen is why, but the red state itself is unexplained.",
+   "surfaced_by": [
+    "live play 2026-09-19"
+   ],
+   "slices": [
+    "S1",
+    "S2"
+   ]
   }
  ],
  "non_content_settings": [
