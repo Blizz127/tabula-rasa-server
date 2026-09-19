@@ -148,9 +148,8 @@ namespace Rasa.Test
             // Turn this isolated class fixture into helmet equipment.
             info.EquipableClassInfo.EquipmentSlotId = EquipmentData.Helmet;
             info.WeaponClassInfo = null;
-            info.ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { RegenRate = 1 });
+            info.ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { MinDamageAbsorbed = 1000, MaxDamageAbsorbed = 1000, RegenRate = 1 });
             incoming.ItemTemplate.WeaponInfo = null;
-            incoming.ItemTemplate.ArmorValue = 100;
             foreach (var invalidSlot in new uint[] { 2, 13, 22, uint.MaxValue })
             {
                 _inventory.RequestEquipArmor(client, new RequestEquipArmorPacket { SrcInventory = InventoryType.Personal, SrcSlot = 1, DestSlot = invalidSlot });
@@ -179,9 +178,8 @@ namespace Rasa.Test
             var info = EntityClassManager.Instance.LoadedEntityClasses[WeaponClass];
             info.EquipableClassInfo.EquipmentSlotId = EquipmentData.Helmet;
             info.WeaponClassInfo = null;
-            info.ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { RegenRate = 1 });
+            info.ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { MinDamageAbsorbed = 1000, MaxDamageAbsorbed = 1000, RegenRate = 1 });
             incoming.ItemTemplate.WeaponInfo = null;
-            incoming.ItemTemplate.ArmorValue = 100;
             using (var context = Context())
                 context.Database.ExecuteSqlRaw("CREATE TRIGGER fail_appearance BEFORE INSERT ON character_appearance BEGIN SELECT RAISE(ABORT, 'fixture appearance save'); END");
             Drain(client);
