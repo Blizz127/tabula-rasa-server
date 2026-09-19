@@ -132,6 +132,7 @@ namespace Rasa.Managers
             }
 
             Creature target = null;
+            Manifestation friendly = null;
             DynamicObject contentTarget = null;
             if (actionInfo.Module == "abilities.decay")
             {
@@ -139,6 +140,13 @@ namespace Rasa.Managers
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
                 if (target == null || info.MaxRange > 0 &&
                     System.Numerics.Vector3.Distance(player.Position, target.Position) > info.MaxRange + AbilityRangeSlack)
+                    return false;
+            }
+            else if (ActionTableManager.FriendlyModules.Contains(actionInfo.Module))
+            {
+                friendly = GetFriendlyTarget(map, player, packet.Target);
+                if (friendly == null || info.MaxRange > 0 &&
+                    System.Numerics.Vector3.Distance(player.Position, friendly.Position) > info.MaxRange + AbilityRangeSlack)
                     return false;
             }
             else if (actionInfo.Module != "abilities.rage" && !AimedFromSource(info))
@@ -153,18 +161,27 @@ namespace Rasa.Managers
             }
 
             WeaponActionManager.Instance.InterruptForAbility(client);
-            var targetEntityId = target?.EntityId ?? contentTarget?.EntityId ?? 0;
+            var targetEntityId = target?.EntityId ?? friendly?.EntityId ?? contentTarget?.EntityId ?? 0;
             var action = new ActionData(player, packet.ActionId, level, targetEntityId, info.WindupMs)
             {
                 TargetLocation = packet.TargetLocation, ItemId = packet.ItemId, ClientYaw = packet.ClientYaw
             };
             var windupEndsAt = now + info.WindupMs;
             var recoveryEndsAt = windupEndsAt + info.RecoveryMs;
-            player.CurrentAbility = new AbilityExecution(action, map, target, contentTarget, windupEndsAt,
+            player.CurrentAbility = new AbilityExecution(action, map, (Actor)target ?? friendly, contentTarget, windupEndsAt,
                 recoveryEndsAt, recoveryEndsAt + info.ReuseMs) { Level = info };
             CellManager.Instance.CellCallMethod(map, player,
                 new PerformWindupPacket(PerformType.ThreeArgs, action.ActionId, level, targetEntityId));
             return true;
+        }
+
+        /// <summary>A friendly ability's target: the performer when nothing (or they) is named, else a living player here.</summary>
+        private static Manifestation GetFriendlyTarget(MapChannel map, Manifestation player, ulong? targetId)
+        {
+            if (targetId == null || targetId == 0 || targetId == player.EntityId)
+                return player;
+            return EntityManager.Instance.Players.TryGetValue(targetId.Value, out var other) &&
+                ReferenceEquals(other.MapChannel, map) && other.State != CharacterState.Dead ? other : null;
         }
 
         /// <summary>Area-around-source and cone abilities are aimed from the performer, not at a target.</summary>
@@ -250,7 +267,14 @@ namespace Rasa.Managers
             var contentTargetValid = execution.OriginalContentTarget != null &&
                 ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
-            var targeted = rowAction?.Module == "abilities.decay" || rowAction?.Module != "abilities.rage" && !AimedFromSource(info);
+            var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
+            var targeted = !friendlyAbility && (rowAction?.Module == "abilities.decay" || rowAction?.Module != "abilities.rage" && !AimedFromSource(info));
+            if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
+                    !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
+            {
+                EndAbility(client, execution, false);
+                return;
+            }
             if (!AbilityRequirements.CanUseSkillAbility(player, action.ActionId, (int)action.ActionArgId) || !CanPay(player, info) ||
                 (targeted && execution.OriginalContentTarget == null &&
                     !ReferenceEquals(GetLightningTarget(map, player, action.TargetId), execution.OriginalTarget)) ||
@@ -274,14 +298,24 @@ namespace Rasa.Managers
             player.AbilityReuseDeadlines[action.ActionId] = execution.ReuseEndsAt;
 
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var actionInfo, out _);
-            if (actionInfo?.Module == "abilities.decay" || actionInfo?.Module == "abilities.rage")
+            if (ActionTableManager.EffectModules.Contains(actionInfo?.Module ?? ""))
             {
                 // BaseActorAbility.DoAbility reads no hit data: these abilities show their result through the game
                 // effect they attach.
-                if (actionInfo.Module == "abilities.decay")
-                    AbilityEffects.Decay(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
-                else
-                    AbilityEffects.Rage(map, client, info);
+                switch (actionInfo.Module)
+                {
+                    case "abilities.decay":
+                        AbilityEffects.Decay(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
+                        break;
+                    case "abilities.rage":
+                        AbilityEffects.Rage(map, client, info);
+                        break;
+                    case "abilities.bioaugmentation":
+                        var targetClient = execution.OriginalTarget == player ? client
+                            : map.ClientList?.FirstOrDefault(c => c?.Player == execution.OriginalTarget);
+                        AbilityEffects.BioAugmentation(map, player, targetClient, info);
+                        break;
+                }
                 CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.DamageAbilityRecovery(action.ActionId, action.ActionArgId,
                     new[] { execution.OriginalTarget?.EntityId ?? player.EntityId }, Array.Empty<HitData>()));
                 client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]

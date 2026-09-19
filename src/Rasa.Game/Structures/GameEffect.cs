@@ -24,5 +24,8 @@
         /// <summary>Rage (235): percent added to the holder's damage, and resistance rating added against every type.</summary>
         public int DamageBonusPercent { get; set; }
         public int ResistRating { get; set; }
+        /// <summary>Bio Augmentation (329): a flat amount added to one attribute while the effect lasts.</summary>
+        public Data.Attributes? BonusAttribute { get; set; }
+        public int AttributeBonus { get; set; }
     }
 }

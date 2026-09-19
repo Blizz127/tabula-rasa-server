@@ -27,6 +27,7 @@ namespace Rasa.Managers
         public const int DecayEffectType = 82;          // gameeffectdata DECAY, actions.abilities.decay.DecayEffect
         public const int RageEffectType = 235;          // RAGE, actions.abilities.rage.RageEffect
         public const int RageSourceEffectType = 236;    // RAGESOURCE, actions.abilities.rage.RageSourceEffect
+        public const int BioAugmentationEffectType = 329; // BIO_AUGMENTATION_EFFECT, "Increases %(attrId)s by %(amount)s"
         private static readonly Random Random = new Random();
 
         public static void Apply(MapChannel map, Actor source, Creature target, ActionLevelInfo info, Func<int, bool> roll = null)
@@ -139,6 +140,36 @@ namespace Rasa.Managers
                     GameEffectManager.Instance.DettachEffect(map, holder, rage);
             };
             Pulse(sourceEffect);
+        }
+
+        /// <summary>
+        /// Bio Augmentation: a friendly target (bioaugmentation.py TARGET_FRIENDLY) carries BIO_AUGMENTATION_EFFECT for
+        /// EFFECT_DURATION_MS, raising ATTRIBUTE_ID by EFFECT_MODIFIER - the effect's tooltip, "Increases %(attrId)s by
+        /// %(amount)s", shows the amount without a percent sign, so it is a flat amount (inferred from that). The target's
+        /// attributes are recalculated when it attaches and again when it ends.
+        /// </summary>
+        public static void BioAugmentation(MapChannel map, Manifestation source, Game.Client targetClient, ActionLevelInfo info)
+        {
+            var target = targetClient?.Player;
+            if (map == null || source == null || target == null)
+                return;
+            var attribute = (Attributes)info.Get(AbilityProperty.AttributeId);
+            var amount = info.Get(AbilityProperty.EffectModifier);
+            // One at a time: a new augmentation replaces the running one.
+            foreach (var old in target.ActiveEffects.Values.Where(e => e.TypeId == BioAugmentationEffectType).ToList())
+                GameEffectManager.Instance.DettachEffect(map, target, old);
+            var effect = GameEffectManager.Instance.AttachEffect(map, target, BioAugmentationEffectType, info.Level,
+                info.Get(AbilityProperty.EffectDurationMs), source.EntityId, true,
+                new System.Collections.Generic.Dictionary<string, double> { ["attrId"] = (int)attribute, ["amount"] = amount });
+            effect.BonusAttribute = attribute;
+            effect.AttributeBonus = amount;
+            void Recalculate()
+            {
+                ManifestationManager.Instance.UpdateStatsValues(targetClient, false);
+                targetClient.CallMethod(target.EntityId, new Packets.MapChannel.Server.AttributeInfoPacket(target.Attributes));
+            }
+            effect.OnDetach = _ => Recalculate();
+            Recalculate();
         }
 
         public static void Stun(MapChannel map, Creature target, int durationMs)

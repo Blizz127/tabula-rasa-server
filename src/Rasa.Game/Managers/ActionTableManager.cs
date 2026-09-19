@@ -77,7 +77,10 @@ namespace Rasa.Managers
         /// time on one enemy) and Rage (abilities.rage, a toggled damage and resistance buff on the soldier and,
         /// at some levels, the squad around them).
         /// </summary>
-        public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage" };
+        public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage", "abilities.bioaugmentation" };
+
+        /// <summary>Modules aimed at a friendly player (TARGET_FRIENDLY in the client module): self when nothing else is named.</summary>
+        public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation" };
 
         /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
         public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)

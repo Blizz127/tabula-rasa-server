@@ -129,6 +129,45 @@ namespace Rasa.Test
             Assert.AreEqual(100, DamageModifiers.Outgoing(_client.Player, 100));
         }
 
+        [TestMethod]
+        public void BioAugmentationRaisesTheAttributeUntilItEnds()
+        {
+            var player = _client.Player;
+            player.Class = 7;
+            player.Race = Race.Human;
+            foreach (Attributes attribute in System.Enum.GetValues(typeof(Attributes)))
+                if (!player.Attributes.ContainsKey(attribute))
+                    player.Attributes[attribute] = new ActorAttributes(attribute, 0, 0, 0, 0, 0);
+            player.Inventory.EquippedInventory.AddRange(new ulong[22]);
+            player.Skills[(SkillId)173] = new SkillsData((SkillId)173, 421, 1);
+            player.Logos.AddRange(LogosFor(421));
+            ManifestationManager.Instance.UpdateStatsValues(_client, true);
+            var healthBefore = player.Attributes[Attributes.Health].CurrentMax;
+
+            var row = Row(421, "abilities.bioaugmentation", 300, 300, 20);
+            row.Properties[AbilityProperty.EffectModifier] = 30;
+            row.Properties[AbilityProperty.EffectDurationMs] = 900000;
+            row.Properties[AbilityProperty.AttributeId] = 4;
+            row.Costs.Add(new ActionCost { Attribute = Attributes.Power, Amount = 100 });
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(421, null)), "no target named: the biotechnician");
+            Advance(300);
+            var effect = player.ActiveEffects.Values.Single(e => e.TypeId == AbilityEffects.BioAugmentationEffectType);
+            Assert.AreEqual(900000, effect.Duration);
+            Assert.AreEqual(healthBefore + 30, player.Attributes[Attributes.Health].CurrentMax, "Health (attribute 4) +30");
+            var attached = Drain().OfType<GameEffectAttachedPacket>().Single(p => p.EffectTypeId == 329);
+            Assert.AreEqual((4d, 30d), (attached.TooltipValues["attrId"], attached.TooltipValues["amount"]));
+
+            GameEffectManager.Instance.DettachEffect(_map, player, effect);
+            Assert.AreEqual(healthBefore, player.Attributes[Attributes.Health].CurrentMax);
+        }
+
+        private static IEnumerable<uint> LogosFor(int abilityId)
+        {
+            var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);
+            return ((Dictionary<int, uint[]>)field.GetValue(null))[abilityId];
+        }
+
         private ActionLevelInfo Row(int actionId, string module, int windup, int recovery, int range, uint level = 1)
         {
             var info = new ActionInfo { ActionId = (ActionId)actionId, Module = module };

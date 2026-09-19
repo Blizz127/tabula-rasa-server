@@ -1281,6 +1281,16 @@ namespace Rasa.Managers
             var chiBonus    = 0;
             var regenBonus  = 0;
 
+            // Attribute buffs held as game effects (Bio Augmentation).
+            foreach (var effect in player.ActiveEffects.Values)
+                switch (effect.BonusAttribute)
+                {
+                    case Attributes.Body: bodyBonus += effect.AttributeBonus; break;
+                    case Attributes.Mind: mindBonus += effect.AttributeBonus; break;
+                    case Attributes.Spirit: spiritBonus += effect.AttributeBonus; break;
+                    case Attributes.Health: healthBonus += effect.AttributeBonus; break;
+                }
+
             float armorBonusPercent = (float)Math.Max(0.0, (totalBody - (2 * (level - 1) + 10)) * 0.667);   // every body attribute over the default base attribute gives 0.667% bonus armo;
             float logosBonusPercent = (float)Math.Max(0.0, (totalMind - (2 * (level - 1) + 10)) * 0.375);   // every mind attribute over the default base attribute gives 0.375% bonus logos damage
             float critBonusPercent = (float)Math.Max(0.0, (totalSpirit - (2 * (level - 1) + 10)) * 0.065);  // every spirit attribute over the default base attribute gives 0.065% bonus crit chance;
@@ -1301,7 +1311,7 @@ namespace Rasa.Managers
 
             // health
             attribute[Attributes.Health].NormalMax  = totalHealth;
-            attribute[Attributes.Health].CurrentMax = totalHealth;
+            attribute[Attributes.Health].CurrentMax = totalHealth + healthBonus;
 
             // chi/adrenaline: the signature shows a fixed 1000-unit bar (percentage units),
             // not a power-scaled pool. See docs/sprint-client-evidence.md.
