@@ -37,6 +37,10 @@ namespace Rasa.Managers
         public const int SmokeScreenAuraType = 10000077;      // TACTICAL_EVASION_SMOKE_SCREEN_AURA_EFFECT
         public const int EvasionTeleportType = 10000078;      // TACTICAL_EVASION_TELEPORT_EFFECT, "Tactical Retreat", detachable
         public const int EvasionLocationType = 10000079;      // TACTICAL_EVASION_LOCATION_EFFECT
+        public const int AirStrikeType = 393;                 // FIRE_SUPPORT_AIR_STRIKE_EFFECT
+        public const int NapalmPoolType = 394;                // FIRE_SUPPORT_NAPALM_POOL_EFFECT
+        public const int IonStrikeType = 395;                 // FIRE_SUPPORT_ION_STRIKE_EFFECT
+        public const int NapalmBombType = 396;                // FIRE_SUPPORT_NAPALM_BOMB_EFFECT
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
         public const int ReconstructionHarmType = 10000063;     // "Spirit: -x% / Damage: min - max HP / Adrenaline Drain ... every interval"
         public const int ReconstructionHelpPoolType = 10000064; // "Maximum Health: +x%"
@@ -479,6 +483,62 @@ namespace Rasa.Managers
             };
             named.Add(ranger.EntityId);
             return named;
+        }
+
+        /// <summary>
+        /// Fire Support: "Damages a single enemy target or location after a set time" (the skill text: pumps 1 and 3 AoE
+        /// at a location, 2 and 4 a single target with splash and stun, 5 AoE with a pool of fire). After DELAY_TIME_MS
+        /// every hostile within EFFECT_RADIUS of the point (or of the target, where it still stands) takes a DAMAGE_AMOUNT
+        /// roll; at the targeted pumps each is stunned for EFFECT_DURATION_MS; at the pool pump the napalm then burns
+        /// every INTERVAL_MS for EFFECT_DURATION_MS. The strike is shown as the client's strike effect on the ranger,
+        /// with its damage announced through it: air strike at a location, ion strike on a target, napalm bomb and pool
+        /// for the fire (which effect goes with which pump is inferred from the skill text).
+        /// </summary>
+        public static void FireSupport(MapChannel map, Manifestation ranger, ActionLevelInfo info, Vector3? location, Creature target, Random random)
+        {
+            if (map == null || ranger == null || location == null && target == null)
+                return;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), ranger.Level, scaleType);
+            var max = Math.Max(min, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), ranger.Level, scaleType));
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var delay = Math.Max(1, info.Get(AbilityProperty.DelayTimeMs));
+            var after = info.Get(AbilityProperty.EffectDurationMs);
+            var poolInterval = info.Get(AbilityProperty.IntervalMs);
+            var napalm = poolInterval > 0 && after > 0;
+            var stuns = target != null && !napalm && after > 0;
+            var strikeType = napalm ? NapalmBombType : target != null ? IonStrikeType : AirStrikeType;
+
+            List<(ulong, HitData)> Burn()
+            {
+                var centre = target != null && target.State != CharacterState.Dead ? target.Position : location ?? target.Position;
+                var hits = new List<(ulong, HitData)>();
+                foreach (var enemy in HostilesAround(map, ranger, centre, radius))
+                {
+                    hits.Add((enemy.EntityId, MissileManager.Instance.DamageTick(map, ranger, enemy,
+                        DamageModifiers.Outgoing(ranger, random.Next(min, max + 1)), DamageType.Physical)));
+                    if (stuns && enemy.State != CharacterState.Dead)
+                        Stun(map, enemy, after);
+                }
+                return hits;
+            }
+
+            GameEffectManager.Instance.AttachEffect(map, ranger, strikeType, info.Level, delay, ranger.EntityId, true,
+                new Dictionary<string, double>(), delay, strike =>
+                {
+                    var hits = Burn();
+                    if (hits.Count > 0)
+                        CellManager.Instance.CellCallMethod(map, ranger, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(strike.EffectId, hits));
+                    if (!napalm)
+                        return;
+                    GameEffectManager.Instance.AttachEffect(map, ranger, NapalmPoolType, info.Level, after, ranger.EntityId, true,
+                        new Dictionary<string, double>(), poolInterval, pool =>
+                        {
+                            var burned = Burn();
+                            if (burned.Count > 0)
+                                CellManager.Instance.CellCallMethod(map, ranger, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(pool.EffectId, burned));
+                        });
+                });
         }
 
         /// <summary>The player and the squad members on this map within radius of a point.</summary>

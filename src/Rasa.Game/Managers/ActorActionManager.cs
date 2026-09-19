@@ -134,7 +134,24 @@ namespace Rasa.Managers
             Creature target = null;
             Manifestation friendly = null;
             DynamicObject contentTarget = null;
-            if (actionInfo.Module == "abilities.decay")
+            if (actionInfo.Module == "abilities.firesupport")
+            {
+                // firesupport.py TARGET_LOCATION: a point on the ground, or (at the targeted pumps) an enemy.
+                if (packet.TargetLocation is { } point)
+                {
+                    var spot = new System.Numerics.Vector3((float)point.X, (float)point.Y, (float)point.Z);
+                    if (info.MaxRange > 0 && System.Numerics.Vector3.Distance(player.Position, spot) > info.MaxRange + AbilityRangeSlack)
+                        return false;
+                }
+                else
+                {
+                    target = GetLightningTarget(map, player, packet.Target ?? 0);
+                    if (target == null || info.MaxRange > 0 &&
+                        System.Numerics.Vector3.Distance(player.Position, target.Position) > info.MaxRange + AbilityRangeSlack)
+                        return false;
+                }
+            }
+            else if (actionInfo.Module == "abilities.decay")
             {
                 // A single enemy (decay.py TARGET_NON_FRIENDLY); a destroyable placement cannot decay.
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
@@ -268,7 +285,7 @@ namespace Rasa.Managers
                 ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
-            var targeted = !friendlyAbility && (rowAction?.Module == "abilities.decay" ||
+            var targeted = !friendlyAbility && rowAction?.Module != "abilities.firesupport" && (rowAction?.Module == "abilities.decay" ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
                     !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
@@ -322,6 +339,11 @@ namespace Rasa.Managers
                         break;
                     case "abilities.scourge":
                         AbilityEffects.Scourge(map, player, info, _damageRandom);
+                        break;
+                    case "abilities.firesupport":
+                        AbilityEffects.FireSupport(map, player, info,
+                            action.TargetLocation is { } spot ? new System.Numerics.Vector3((float)spot.X, (float)spot.Y, (float)spot.Z) : null,
+                            execution.OriginalTarget as Creature, _damageRandom);
                         break;
                     case "abilities.tacticalevasion":
                         var evaded = AbilityEffects.TacticalEvasion(map, client, info);

@@ -79,7 +79,7 @@ namespace Rasa.Managers
         /// </summary>
         public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage", "abilities.bioaugmentation",
             "abilities.scourge", "abilities.shieldextender", "abilities.reconstruction",
-            "abilities.tacticalevasion" };
+            "abilities.tacticalevasion", "abilities.firesupport" };
 
         /// <summary>Modules aimed at a friendly player (TARGET_FRIENDLY in the client module): self when nothing else is named.</summary>
         public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation", "abilities.shieldextender" };

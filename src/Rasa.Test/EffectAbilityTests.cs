@@ -333,6 +333,53 @@ namespace Rasa.Test
             Assert.AreEqual(new Vector3(1, 2, 3), _client.Player.Position);
         }
 
+        [TestMethod]
+        public void FireSupportStrikesTheGroundAfterItsDelay()
+        {
+            _client.Player.Class = 5;
+            _client.Player.Skills[(SkillId)163] = new SkillsData((SkillId)163, 387, 1);
+            _client.Player.Logos.AddRange(LogosFor(387));
+            var row = Row(387, "abilities.firesupport", 666, 966, 60);
+            row.Properties[AbilityProperty.DamageAmountMin] = 270;
+            row.Properties[AbilityProperty.DamageAmountMax] = 540;
+            row.Properties[AbilityProperty.EffectRadius] = 15;
+            row.Properties[AbilityProperty.DelayTimeMs] = 2500;
+            row.Properties[AbilityProperty.IntervalMs] = 500;
+            var inside = Creature(new Vector3(30, 0, 5));
+            var outside = Creature(new Vector3(30, 0, 30));
+
+            var request = Request(387, null);
+            request.TargetLocation = (30, 0, 0);
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, request));
+            Advance(666);
+            GameEffectManager.Instance.DoWork(_map, 2400);
+            Assert.AreEqual(100000, inside.Attributes[Attributes.Health].Current, "not before the delay");
+            GameEffectManager.Instance.DoWork(_map, 100);
+            Assert.IsTrue(100000 - inside.Attributes[Attributes.Health].Current is >= 270 and <= 540);
+            Assert.AreEqual(100000, outside.Attributes[Attributes.Health].Current);
+        }
+
+        [TestMethod]
+        public void FireSupportPumpTwoStrikesItsTargetAndStunsIt()
+        {
+            _client.Player.Class = 5;
+            _client.Player.Skills[(SkillId)163] = new SkillsData((SkillId)163, 387, 2);
+            _client.Player.Logos.AddRange(LogosFor(387));
+            var row = Row(387, "abilities.firesupport", 666, 666, 100, 2);
+            row.Properties[AbilityProperty.DamageAmountMin] = 150;
+            row.Properties[AbilityProperty.DamageAmountMax] = 180;
+            row.Properties[AbilityProperty.EffectRadius] = 2;
+            row.Properties[AbilityProperty.DelayTimeMs] = 5000;
+            row.Properties[AbilityProperty.EffectDurationMs] = 4000;
+            var target = Creature(new Vector3(40, 0, 0));
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(387, target.EntityId, 2)));
+            Advance(666);
+            GameEffectManager.Instance.DoWork(_map, 5000);
+            Assert.IsTrue(100000 - target.Attributes[Attributes.Health].Current is >= 150 and <= 180);
+            Assert.IsTrue(target.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.StunEffectType && e.Duration == 4000));
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);
