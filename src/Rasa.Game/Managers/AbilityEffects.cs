@@ -28,6 +28,15 @@ namespace Rasa.Managers
         public const int RageEffectType = 235;          // RAGE, actions.abilities.rage.RageEffect
         public const int RageSourceEffectType = 236;    // RAGESOURCE, actions.abilities.rage.RageSourceEffect
         public const int BioAugmentationEffectType = 329; // BIO_AUGMENTATION_EFFECT, "Increases %(attrId)s by %(amount)s"
+        public const int ScourgeEffectType = 256;        // SCOURGE_EFFECT, "Continuously damages all hostiles in a radius around you"
+        public const int ShieldExtenderSourceType = 10000056; // SHIELD_EXTENDER_SOURCE
+        public const int ShieldExtenderShieldedType = 10000055; // SHIELD_EXTENDER_SHIELDED
+
+        /// <summary>
+        /// The pulse of an effect whose row gives no interval (Scourge, Shield Extender's reach): one second, inferred -
+        /// the tooltips say "continuously" and "within".
+        /// </summary>
+        public const int DefaultPulseMs = 1000;
         private static readonly Random Random = new Random();
 
         public static void Apply(MapChannel map, Actor source, Creature target, ActionLevelInfo info, Func<int, bool> roll = null)
@@ -170,6 +179,106 @@ namespace Rasa.Managers
             }
             effect.OnDetach = _ => Recalculate();
             Recalculate();
+        }
+
+        /// <summary>
+        /// Scourge: "Damages all enemies in a radius around the user at an interval over a set time" (the skill text).
+        /// SCOURGE_EFFECT on the commando for DURATION seconds; every pulse, each hostile creature within EFFECT_RADIUS
+        /// takes a DAMAGE_AMOUNT roll (scaled like any ability damage), announced through the effect's own
+        /// Recv_AnnounceDamage - Scourge's effect has tickOnDamage, so the client marks each pulse.
+        /// </summary>
+        public static void Scourge(MapChannel map, Manifestation source, ActionLevelInfo info, Random random)
+        {
+            if (map == null || source == null)
+                return;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), source.Level, scaleType);
+            var max = Math.Max(min, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), source.Level, scaleType));
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var damageType = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            GameEffectManager.Instance.AttachEffect(map, source, ScourgeEffectType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                source.EntityId, true, new System.Collections.Generic.Dictionary<string, double> { ["dmgMin"] = min, ["dmgMax"] = max, ["radius"] = radius },
+                DefaultPulseMs, pulse =>
+                {
+                    var hits = new System.Collections.Generic.List<(ulong, HitData)>();
+                    foreach (var creature in HostilesAround(map, source, source.Position, radius))
+                        hits.Add((creature.EntityId, MissileManager.Instance.DamageTick(map, source, creature,
+                            DamageModifiers.Outgoing(source, random.Next(min, max + 1)), damageType)));
+                    if (hits.Count > 0)
+                        CellManager.Instance.CellCallMethod(map, source, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(pulse.EffectId, hits));
+                });
+        }
+
+        /// <summary>
+        /// Shield Extender: "a reduction to incoming damage to the target and all nearby squad members for a set time or
+        /// until the shield has absorbed a set amount of damage" (the skill text). SHIELD_EXTENDER_SOURCE on the friendly
+        /// target for EFFECT_DURATION_MS; every pulse, the target and each squad member within EFFECT_RADIUS of it carry
+        /// SHIELD_EXTENDER_SHIELDED, under which EFFECT_MODIFIER percent of each hit is absorbed from one pool of
+        /// EFFECT_DAMAGE_MAX. When the pool runs dry the shield breaks and every SHIELDED goes with it.
+        /// </summary>
+        public static void ShieldExtender(MapChannel map, Manifestation sapper, Game.Client targetClient, ActionLevelInfo info)
+        {
+            var target = targetClient?.Player;
+            if (map == null || sapper == null || target == null)
+                return;
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var pool = new ShieldPool { Percent = info.Get(AbilityProperty.EffectModifier), Remaining = info.Get(AbilityProperty.EffectDamageMax) };
+            var shielded = new System.Collections.Generic.Dictionary<Actor, GameEffect>();
+            GameEffect source = null;
+
+            void Pulse(GameEffect bubble)
+            {
+                var under = new System.Collections.Generic.List<Actor> { target };
+                if (PartyManager.Instance.PartyOf(targetClient) is { } party)
+                    foreach (var member in party.Members)
+                        if (member.EntityId != target.EntityId && EntityManager.Instance.Players.TryGetValue(member.EntityId, out var mate) &&
+                            ReferenceEquals(mate.MapChannel, map) && mate.State != CharacterState.Dead &&
+                            Vector3.Distance(mate.Position, target.Position) <= radius)
+                            under.Add(mate);
+                // Leaving the bubble ends its protection.
+                foreach (var (holder, effect) in shielded.ToList())
+                    if (!under.Contains(holder))
+                    {
+                        GameEffectManager.Instance.DettachEffect(map, holder, effect);
+                        shielded.Remove(holder);
+                    }
+                var remaining = (int)Math.Max(0, bubble.Duration - bubble.EffectTime);
+                foreach (var holder in under)
+                    if (!shielded.ContainsKey(holder))
+                    {
+                        var effect = GameEffectManager.Instance.AttachEffect(map, holder, ShieldExtenderShieldedType, info.Level, remaining,
+                            sapper.EntityId, true, new System.Collections.Generic.Dictionary<string, double>());
+                        effect.Shield = pool;
+                        shielded[holder] = effect;
+                    }
+            }
+
+            source = GameEffectManager.Instance.AttachEffect(map, target, ShieldExtenderSourceType, info.Level, info.Get(AbilityProperty.EffectDurationMs),
+                sapper.EntityId, true, new System.Collections.Generic.Dictionary<string, double>(), DefaultPulseMs, Pulse);
+            source.OnDetach = _ =>
+            {
+                foreach (var (holder, effect) in shielded.ToList())
+                    GameEffectManager.Instance.DettachEffect(map, holder, effect);
+                shielded.Clear();
+            };
+            pool.Broken = () => GameEffectManager.Instance.DettachEffect(map, target, source);
+            Pulse(source);
+        }
+
+        /// <summary>Living, non-AFS creatures within radius metres of a point, from the cells around the performer.</summary>
+        public static System.Collections.Generic.List<Creature> HostilesAround(MapChannel map, Actor performer, Vector3 centre, float radius)
+        {
+            var found = new System.Collections.Generic.List<Creature>();
+            if (performer?.Cells == null || radius <= 0)
+                return found;
+            foreach (var seed in performer.Cells)
+                if (map.MapCellInfo.Cells.TryGetValue(seed, out var cell))
+                    foreach (var creature in cell.CreatureList)
+                        if (creature.State != CharacterState.Dead && creature.Faction != Factions.AFS && !found.Contains(creature) &&
+                            (creature.MapChannel == null || ReferenceEquals(creature.MapChannel, map)) &&
+                            Vector3.Distance(centre, creature.Position) <= radius)
+                            found.Add(creature);
+            return found;
         }
 
         public static void Stun(MapChannel map, Creature target, int durationMs)

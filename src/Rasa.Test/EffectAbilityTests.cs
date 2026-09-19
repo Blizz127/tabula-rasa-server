@@ -162,6 +162,61 @@ namespace Rasa.Test
             Assert.AreEqual(healthBefore, player.Attributes[Attributes.Health].CurrentMax);
         }
 
+        [TestMethod]
+        public void ScourgeDamagesEveryHostileAroundTheCommandoEachPulse()
+        {
+            _client.Player.Class = 4;
+            _client.Player.Skills[(SkillId)164] = new SkillsData((SkillId)164, 380, 1);
+            _client.Player.Logos.AddRange(LogosFor(380));
+            var row = Row(380, "abilities.scourge", 500, 500, 0);
+            row.Properties[AbilityProperty.Duration] = 15;
+            row.Properties[AbilityProperty.DamageAmountMin] = 23;
+            row.Properties[AbilityProperty.DamageAmountMax] = 30;
+            row.Properties[AbilityProperty.EffectRadius] = 6;
+            row.Costs.Add(new ActionCost { Attribute = Attributes.Power, Amount = 30 });
+            var near = Creature(new Vector3(4, 0, 0));
+            var far = Creature(new Vector3(9, 0, 0));
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(380, null)), "a self ability takes no target");
+            Advance(500);
+            Assert.AreEqual(15000, _client.Player.ActiveEffects.Values.Single(e => e.TypeId == AbilityEffects.ScourgeEffectType).Duration);
+            Drain();
+            for (var second = 0; second < 15; second++)
+                GameEffectManager.Instance.DoWork(_map, 1000);
+            var announced = Drain().OfType<CallGameEffectMethodPacket>().ToList();
+            Assert.AreEqual(15, announced.Count);
+            Assert.IsTrue(announced.All(p => p.MethodName == "AnnounceDamage" && p.Damage.Single().TargetId == near.EntityId));
+            var taken = 100000 - near.Attributes[Attributes.Health].Current;
+            Assert.IsTrue(taken >= 15 * 23 && taken <= 15 * 30, $"fifteen pulses of 23-30, took {taken}");
+            Assert.AreEqual(100000, far.Attributes[Attributes.Health].Current, "outside the 6 m radius");
+        }
+
+        [TestMethod]
+        public void ShieldExtenderAbsorbsItsShareUntilThePoolIsSpent()
+        {
+            _client.Player.Class = 6;
+            _client.Player.Skills[(SkillId)174] = new SkillsData((SkillId)174, 446, 1);
+            _client.Player.Logos.AddRange(LogosFor(446));
+            var row = Row(446, "abilities.shieldextender", 400, 500, 20);
+            row.Properties[AbilityProperty.EffectRadius] = 6;
+            row.Properties[AbilityProperty.EffectModifier] = 15;
+            row.Properties[AbilityProperty.EffectDurationMs] = 45000;
+            row.Properties[AbilityProperty.EffectDamageMax] = 120;
+            row.Costs.Add(new ActionCost { Attribute = Attributes.Power, Amount = 70 });
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(446, null)), "the sapper may shield themself");
+            Advance(400);
+            var player = _client.Player;
+            Assert.IsTrue(player.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.ShieldExtenderSourceType));
+            Assert.IsTrue(player.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.ShieldExtenderShieldedType));
+
+            Assert.AreEqual(85, DamageModifiers.ThroughShield(player, 100), "15% of the hit absorbed");
+            for (var hit = 0; hit < 7; hit++)
+                DamageModifiers.ThroughShield(player, 100);                 // 15 more each: 120 in all after 8 hits
+            Assert.AreEqual(0, player.ActiveEffects.Count, "a spent shield breaks, and its protection with it");
+            Assert.AreEqual(100, DamageModifiers.ThroughShield(player, 100));
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

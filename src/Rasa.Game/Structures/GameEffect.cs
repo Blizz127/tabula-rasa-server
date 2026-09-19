@@ -27,5 +27,15 @@
         /// <summary>Bio Augmentation (329): a flat amount added to one attribute while the effect lasts.</summary>
         public Data.Attributes? BonusAttribute { get; set; }
         public int AttributeBonus { get; set; }
+        /// <summary>Shield Extender (SHIELDED): the shield pool this holder draws on, shared with the squad under it.</summary>
+        public ShieldPool Shield { get; set; }
+    }
+
+    /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>
+    public class ShieldPool
+    {
+        public int Percent { get; set; }
+        public int Remaining { get; set; }
+        public System.Action Broken { get; set; }
     }
 }

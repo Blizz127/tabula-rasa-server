@@ -77,10 +77,14 @@ namespace Rasa.Managers
         /// time on one enemy) and Rage (abilities.rage, a toggled damage and resistance buff on the soldier and,
         /// at some levels, the squad around them).
         /// </summary>
-        public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage", "abilities.bioaugmentation" };
+        public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage", "abilities.bioaugmentation",
+            "abilities.scourge", "abilities.shieldextender" };
 
         /// <summary>Modules aimed at a friendly player (TARGET_FRIENDLY in the client module): self when nothing else is named.</summary>
-        public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation" };
+        public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation", "abilities.shieldextender" };
+
+        /// <summary>Modules aimed at the performer alone (TARGET_SELF), which take no target.</summary>
+        public static readonly HashSet<string> SelfModules = new HashSet<string> { "abilities.rage", "abilities.scourge" };
 
         /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
         public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)

@@ -149,7 +149,7 @@ namespace Rasa.Managers
                     System.Numerics.Vector3.Distance(player.Position, friendly.Position) > info.MaxRange + AbilityRangeSlack)
                     return false;
             }
-            else if (actionInfo.Module != "abilities.rage" && !AimedFromSource(info))
+            else if (!ActionTableManager.SelfModules.Contains(actionInfo.Module) && !AimedFromSource(info))
             {
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
                 contentTarget = target == null ? WeaponAttackManager.GetEligibleContentTarget(player, packet.Target ?? 0) : null;
@@ -268,7 +268,8 @@ namespace Rasa.Managers
                 ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
-            var targeted = !friendlyAbility && (rowAction?.Module == "abilities.decay" || rowAction?.Module != "abilities.rage" && !AimedFromSource(info));
+            var targeted = !friendlyAbility && (rowAction?.Module == "abilities.decay" ||
+                !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
                     !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
             {
@@ -311,9 +312,16 @@ namespace Rasa.Managers
                         AbilityEffects.Rage(map, client, info);
                         break;
                     case "abilities.bioaugmentation":
+                    case "abilities.shieldextender":
                         var targetClient = execution.OriginalTarget == player ? client
                             : map.ClientList?.FirstOrDefault(c => c?.Player == execution.OriginalTarget);
-                        AbilityEffects.BioAugmentation(map, player, targetClient, info);
+                        if (actionInfo.Module == "abilities.bioaugmentation")
+                            AbilityEffects.BioAugmentation(map, player, targetClient, info);
+                        else
+                            AbilityEffects.ShieldExtender(map, player, targetClient, info);
+                        break;
+                    case "abilities.scourge":
+                        AbilityEffects.Scourge(map, player, info, _damageRandom);
                         break;
                 }
                 CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.DamageAbilityRecovery(action.ActionId, action.ActionArgId,
