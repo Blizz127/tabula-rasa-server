@@ -41,6 +41,8 @@ namespace Rasa.Managers
         public const int NapalmPoolType = 394;                // FIRE_SUPPORT_NAPALM_POOL_EFFECT
         public const int IonStrikeType = 395;                 // FIRE_SUPPORT_ION_STRIKE_EFFECT
         public const int NapalmBombType = 396;                // FIRE_SUPPORT_NAPALM_BOMB_EFFECT
+        public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
+        public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
         public const int ReconstructionHarmType = 10000063;     // "Spirit: -x% / Damage: min - max HP / Adrenaline Drain ... every interval"
         public const int ReconstructionHelpPoolType = 10000064; // "Maximum Health: +x%"
@@ -539,6 +541,64 @@ namespace Rasa.Managers
                                 CellManager.Instance.CellCallMethod(map, ranger, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(pool.EffectId, burned));
                         });
                 });
+        }
+
+        /// <summary>
+        /// Cure: "Removing debuffs, Preventing debuffs for a time, and Resurrecting with no penalties and a summon to the
+        /// user" (the skill text; pumps 1 single, 2 self and squad, 3 resuscitate single, 4 debuffs and protection,
+        /// 5 resuscitate squad). From the row: ATTRIBUTE_MAX_CHANGE marks a resuscitation - the dead come back at that
+        /// percent of their health beside the biotechnician; RADIUS_AROUND_SOURCE makes it the squad within it; DURATION
+        /// adds the debuff guard for that long. Every other pump removes the debuffs of whoever it reaches - all harmful
+        /// effects except Resuscitation Trauma, which is the death penalty rather than a combat debuff (inferred).
+        /// </summary>
+        public static Packets.MapChannel.Server.PerformRecovery.CureRecovery Cure(MapChannel map, Game.Client biotech, Game.Client target,
+            ActionLevelInfo info, ActionId actionId, uint level)
+        {
+            var reached = new List<ulong>();
+            var revived = new List<ulong>();
+            var guarded = new List<ulong>();
+            var reviveShare = info.Get(AbilityProperty.AttributeMaxChange);
+            var radius = info.Get(AbilityProperty.RadiusAroundSource);
+            var members = new List<Game.Client>();
+            if (radius > 0)
+            {
+                members.Add(biotech);
+                if (PartyManager.Instance.PartyOf(biotech) is { } party)
+                    foreach (var member in party.Members)
+                        if (member.EntityId != biotech.Player.EntityId &&
+                            map.ClientList?.FirstOrDefault(c => c?.Player?.EntityId == member.EntityId) is { } mate &&
+                            Vector3.Distance(mate.Player.Position, biotech.Player.Position) <= radius)
+                            members.Add(mate);
+            }
+            else if (target != null)
+                members.Add(target);
+
+            foreach (var member in members)
+            {
+                var player = member.Player;
+                reached.Add(player.EntityId);
+                if (reviveShare > 0)
+                {
+                    if (player.State == CharacterState.Dead)
+                    {
+                        PlayerDeathManager.Instance.Resuscitate(member, biotech.Player.Position, reviveShare);
+                        revived.Add(player.EntityId);
+                    }
+                    continue;
+                }
+                if (player.State == CharacterState.Dead)
+                    continue;
+                foreach (var debuff in player.ActiveEffects.Values.Where(e => e.IsDebuff &&
+                             e.TypeId != DeathPenaltyRules.RezSicknessEffectType && e.TypeId != DeathPenaltyRules.RezSicknessNoHealEffectType).ToList())
+                    GameEffectManager.Instance.DettachEffect(map, player, debuff);
+                if (info.Has(AbilityProperty.Duration))
+                {
+                    GameEffectManager.Instance.AttachEffect(map, player, CureDebuffGuardType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                        biotech.Player.EntityId, true, new Dictionary<string, double>());
+                    guarded.Add(player.EntityId);
+                }
+            }
+            return new Packets.MapChannel.Server.PerformRecovery.CureRecovery(actionId, level, reached, revived, guarded);
         }
 
         /// <summary>The player and the squad members on this map within radius of a point.</summary>

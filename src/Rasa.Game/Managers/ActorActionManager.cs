@@ -134,7 +134,24 @@ namespace Rasa.Managers
             Creature target = null;
             Manifestation friendly = null;
             DynamicObject contentTarget = null;
-            if (actionInfo.Module == "abilities.firesupport")
+            if (actionInfo.Module == "abilities.cure")
+            {
+                // cure.py TARGET_FRIENDLY; the resuscitating pumps want a dead player, the others a living one, and the
+                // squad pumps no target at all.
+                if (!info.Has(AbilityProperty.RadiusAroundSource))
+                {
+                    var wanted = packet.Target is null or 0 ? player.EntityId : packet.Target.Value;
+                    if (wanted == player.EntityId)
+                        friendly = player;
+                    else if (!EntityManager.Instance.Players.TryGetValue(wanted, out friendly))
+                        return false;
+                    if (!ReferenceEquals(friendly.MapChannel, map) ||
+                        (friendly.State == CharacterState.Dead) != info.Has(AbilityProperty.AttributeMaxChange) ||
+                        info.MaxRange > 0 && System.Numerics.Vector3.Distance(player.Position, friendly.Position) > info.MaxRange + AbilityRangeSlack)
+                        return false;
+                }
+            }
+            else if (actionInfo.Module == "abilities.firesupport")
             {
                 // firesupport.py TARGET_LOCATION: a point on the ground, or (at the targeted pumps) an enemy.
                 if (packet.TargetLocation is { } point)
@@ -285,7 +302,8 @@ namespace Rasa.Managers
                 ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
-            var targeted = !friendlyAbility && rowAction?.Module != "abilities.firesupport" && (rowAction?.Module == "abilities.decay" ||
+            var isCure = rowAction?.Module == "abilities.cure";
+            var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && (rowAction?.Module == "abilities.decay" ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
                     !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
@@ -345,6 +363,14 @@ namespace Rasa.Managers
                             action.TargetLocation is { } spot ? new System.Numerics.Vector3((float)spot.X, (float)spot.Y, (float)spot.Z) : null,
                             execution.OriginalTarget as Creature, _damageRandom);
                         break;
+                    case "abilities.cure":
+                        var cured = map.ClientList?.FirstOrDefault(c => c?.Player != null && c.Player == execution.OriginalTarget);
+                        CellManager.Instance.CellCallMethod(map, player, AbilityEffects.Cure(map, client, cured, info, action.ActionId, action.ActionArgId));
+                        client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
+                        {
+                            (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
+                        }));
+                        return;
                     case "abilities.tacticalevasion":
                         var evaded = AbilityEffects.TacticalEvasion(map, client, info);
                         CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.IdListRecovery(

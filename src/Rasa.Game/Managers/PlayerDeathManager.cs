@@ -202,6 +202,39 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// A resuscitation by another player (Cure): "Resurrecting with no penalties and a summon to the user" - the
+        /// player stands up beside the biotechnician with the given share of their health, no trauma and no hospital
+        /// trip. Armour and adrenaline are handled as a hospital revival handles them (inferred).
+        /// </summary>
+        public void Resuscitate(Client client, Vector3 beside, int healthPercent)
+        {
+            var player = client?.Player;
+            if (player == null || player.State != CharacterState.Dead || player.MapChannel == null)
+                return;
+            player.DeathOffer = null;
+            TeleportWithinMap(client, beside);
+            player.State = CharacterState.Normal;
+            var mapChannel = player.MapChannel;
+            CellManager.Instance.CellCallMethod(mapChannel, player, new RevivedPacket(0));
+            if (player.Attributes.TryGetValue(Attributes.Health, out var health))
+            {
+                health.Current = Math.Max(1, health.CurrentMax * healthPercent / 100);
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateHealthPacket(health, 0));
+            }
+            if (player.Attributes.TryGetValue(Attributes.Armor, out var armor))
+            {
+                armor.Current = armor.CurrentMax;
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateArmorPacket(armor, 0));
+            }
+            if (player.Attributes.TryGetValue(Attributes.Chi, out var adrenaline))
+            {
+                adrenaline.Current = 0;
+                CellManager.Instance.CellCallMethod(mapChannel, player, new UpdateChiPacket(adrenaline, player.EntityId));
+            }
+            _persist(client, CharacterUpdate.Position, null);
+        }
+
+        /// <summary>
         /// Resuscitation Trauma after a revival: 20% of the attributes for two minutes, and each
         /// further resuscitation while traumatized adds 20% and two minutes, up to 60% and six minutes
         /// (tooltip 506, help 5687, D10.6 live notes). The no-heal effect runs 30 s from each one.

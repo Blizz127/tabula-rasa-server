@@ -128,8 +128,11 @@ namespace Rasa.Managers
             var gameEffect = new GameEffect
             {
                 TypeId = typeId, EffectId = ++mapChannel.CurrentEffectId, EffectLevel = level, Duration = durationMs,
-                TickInterval = tickInterval, NextTickTime = tickInterval, OnTick = onTick
+                TickInterval = tickInterval, NextTickTime = tickInterval, OnTick = onTick, IsDebuff = !isBuff
             };
+            // Cure's debuff guard keeps new debuffs off its holder; the effect is returned but never attached.
+            if (!isBuff && actor.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.CureDebuffGuardType))
+                return gameEffect;
             AddToList(actor, gameEffect);
             if (actor is Creature creature)
                 mapChannel.CreaturesWithEffects.Add(creature);
@@ -163,7 +166,8 @@ namespace Rasa.Managers
                 TypeId = typeId,
                 EffectId = ++mapChannel.CurrentEffectId,
                 EffectLevel = level,
-                Duration = durationMs
+                Duration = durationMs,
+                IsDebuff = true
             };
             AddToList(actor, gameEffect);
             CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket

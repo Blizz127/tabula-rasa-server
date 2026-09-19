@@ -380,6 +380,77 @@ namespace Rasa.Test
             Assert.IsTrue(target.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.StunEffectType && e.Duration == 4000));
         }
 
+        private ActionLevelInfo Biotechnician(int pump)
+        {
+            _client.Player.Class = 7;
+            _client.Player.Skills[(SkillId)34] = new SkillsData((SkillId)34, 186, pump);
+            _client.Player.Logos.AddRange(LogosFor(186));
+            return Row(186, "abilities.cure", 300, 300, 60, (uint)pump);
+        }
+
+        [TestMethod]
+        public void CurePumpOneRemovesDebuffsButNotTheDeathPenalty()
+        {
+            Biotechnician(1);
+            var poison = GameEffectManager.Instance.AttachEffect(_map, _client.Player, AbilityEffects.DecayEffectType, 1, 10000, 0, false, null);
+            var trauma = GameEffectManager.Instance.AttachTimedDebuff(_map, _client.Player, DeathPenaltyRules.RezSicknessEffectType, 1, 120000);
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(186, null)));
+            Advance(300);
+            Assert.IsFalse(_client.Player.ActiveEffects.ContainsKey(poison.EffectId));
+            Assert.IsTrue(_client.Player.ActiveEffects.ContainsKey(trauma.EffectId));
+        }
+
+        [TestMethod]
+        public void CurePumpFourGuardsAgainstNewDebuffs()
+        {
+            var row = Biotechnician(4);
+            row.Properties[AbilityProperty.Duration] = 25;
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(186, null, 4)));
+            Advance(300);
+            Assert.IsTrue(_client.Player.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.CureDebuffGuardType && e.Duration == 25000));
+            var poison = GameEffectManager.Instance.AttachEffect(_map, _client.Player, AbilityEffects.DecayEffectType, 1, 10000, 0, false, null);
+            Assert.IsFalse(_client.Player.ActiveEffects.ContainsKey(poison.EffectId), "kept off by the guard");
+        }
+
+        [TestMethod]
+        public void CurePumpThreeRevivesTheDeadBesideTheBiotechnician()
+        {
+            var row = Biotechnician(3);
+            row.Properties[AbilityProperty.AttributeMaxChange] = 50;
+            var fallen = new Manifestation
+            {
+                Level = 1, State = CharacterState.Dead, MapContextId = 1220, MapChannel = _map, Cells = new uint[1, 1],
+                Position = new Vector3(20, 0, 0)
+            };
+            fallen.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 1000, 1000, 0, 0, 0);
+            var fallenClient = new Client(null, new ClientPacketHandler()) { Player = fallen, State = ClientState.Ingame };
+            _map.ClientList.Add(fallenClient);
+            EntityManager.Instance.RegisterEntity(fallen.EntityId, EntityType.Character);
+            EntityManager.Instance.Players[fallen.EntityId] = fallen;
+            var persist = typeof(PlayerDeathManager).GetField("_persist", BindingFlags.NonPublic | BindingFlags.Instance);
+            var saved = persist.GetValue(PlayerDeathManager.Instance);
+            persist.SetValue(PlayerDeathManager.Instance, new System.Action<Client, CharacterUpdate, object>((_, _, _) => { }));
+            try
+            {
+                Assert.IsFalse(_actions.TryStartDamageAbility(_client, Request(186, _client.Player.EntityId, 3)), "only the dead can be resuscitated");
+                Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(186, fallen.EntityId, 3)));
+                Advance(300);
+                Assert.AreEqual(CharacterState.Normal, fallen.State);
+                Assert.AreEqual(500, fallen.Attributes[Attributes.Health].Current, "back at 50% health");
+                Assert.AreEqual(_client.Player.Position, fallen.Position, "summoned to the biotechnician");
+                Assert.IsFalse(fallen.ActiveEffects.Values.Any(e => e.TypeId == DeathPenaltyRules.RezSicknessEffectType), "no penalty");
+                CollectionAssert.AreEqual(new[] { fallen.EntityId },
+                    Drain().OfType<Packets.MapChannel.Server.PerformRecovery.CureRecovery>().Single().Revived.ToArray());
+            }
+            finally
+            {
+                persist.SetValue(PlayerDeathManager.Instance, saved);
+                EntityManager.Instance.Players.Remove(fallen.EntityId);
+                EntityManager.Instance.UnregisterEntity(fallen.EntityId);
+            }
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);
@@ -426,7 +497,8 @@ namespace Rasa.Test
             var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_client);
             var packets = new List<PythonPacket>();
             while (queue.PopOutgoing() is ProtocolPacket packet)
-                packets.Add(((CallMethodMessage)packet.Message).Packet);
+                if (packet.Message is CallMethodMessage call)
+                    packets.Add(call.Packet);
             return packets;
         }
     }
