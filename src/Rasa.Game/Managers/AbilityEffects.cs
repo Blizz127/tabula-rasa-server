@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -68,6 +68,8 @@ namespace Rasa.Managers
         public const int StealthType = 123;                   // STEALTH_EFFECT (Cloak Wave's targetGameEffect)
         public const int TraitorType = 10000057;              // TRAITOR_EFFECT
         public const int CorpseImmolationType = 126;          // CORPSE_IMMOLATION
+        public const int HackedType = 223;                    // HACKED_EFFECT
+        public const int MindControlType = 168;               // MIND_CONTROL_EFFECT
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
@@ -1177,26 +1179,84 @@ namespace Rasa.Managers
         /// on the nearest former ally within EFFECT_RADIUS. Its faction returns when the effect ends.
         /// </summary>
         public static bool Traitor(MapChannel map, Manifestation spy, Creature target, ActionLevelInfo info)
+            => Turn(map, spy, target, info, TraitorType, info.Get(AbilityProperty.Duration) * 1000) != null;
+
+        /// <summary>
+        /// Makes a creature AFS for a time (Traitor, Hack, Mind Control 4-5): the AI already sets creatures of different
+        /// factions on each other, the client is told it is now friendly, and it is set on the nearest former ally within
+        /// EFFECT_RADIUS. Its faction returns when the effect ends.
+        /// </summary>
+        private static GameEffect Turn(MapChannel map, Actor source, Creature target, ActionLevelInfo info, int effectType, int durationMs)
         {
             if (target == null || target.State == CharacterState.Dead || target.Faction == Factions.AFS)
-                return false;
+                return null;
             var faction = target.Faction;
             target.Faction = Factions.AFS;
             CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Friendly));
             if (target.Controller.CurrentAction == BehaviorManager.BehaviorActionFighting)
                 BehaviorManager.Instance.DropFight(target);
-            var former = HostilesAround(map, target, target.Position, info.Get(AbilityProperty.EffectRadius))
+            var radius = info.Get(AbilityProperty.EffectRadius, 20);
+            var former = HostilesAround(map, target, target.Position, radius)
                 .Where(c => c != target && c.Faction == faction).OrderBy(c => Vector3.Distance(c.Position, target.Position)).FirstOrDefault();
             if (former != null)
                 BehaviorManager.Instance.SetActionFighting(target, former.EntityId);
-            GameEffectManager.Instance.AttachEffect(map, target, TraitorType, info.Level, info.Get(AbilityProperty.Duration) * 1000, spy.EntityId, false,
-                new Dictionary<string, double>()).OnDetach = _ =>
+            var effect = GameEffectManager.Instance.AttachEffect(map, target, effectType, info.Level, durationMs, source.EntityId, false, new Dictionary<string, double>());
+            effect.OnDetach = _ =>
+            {
+                target.Faction = faction;
+                CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Hostile));
+                BehaviorManager.Instance.DropFight(target);
+            };
+            return effect;
+        }
+
+        /// <summary>
+        /// Hack: "Debuffs a single enemy mechanical target making it attack other enemy units within a given radius for a
+        /// set time. Larger mechanicals such as Stalkers, Striders and Juggernauts are immune" (hack.py checks MECHANICAL or
+        /// MACHINA). Turned for DURATION with HACKED_EFFECT.
+        /// </summary>
+        public static bool Hack(MapChannel map, Manifestation sapper, Creature target, ActionLevelInfo info)
+        {
+            var flags = CreatureManager.CreatureFlagsOf(target).Select(f => (CreatureFlag)f).ToList();
+            if (!flags.Contains(CreatureFlag.Mechanical) && !flags.Contains(CreatureFlag.Machina) ||
+                flags.Any(f => f is CreatureFlag.SpeciesStalker or CreatureFlag.SpeciesStrider or CreatureFlag.SpeciesJuggernaut))
+                return false;
+            return Turn(map, sapper, target, info, HackedType, info.Get(AbilityProperty.Duration) * 1000) != null;
+        }
+
+        /// <summary>
+        /// Mind Control on one biological enemy for DURATION, deciding again every INTERVAL (the skill text, PvE: "Pump 1:
+        /// Flee Combat | Pump 2: Attack Allies or Enemies randomly | Pump 3: Attack Allies randomly | Pump 4: Assist User,
+        /// Attack Allies | Pump 5: Assists User, Apply Mind Control 2"). Fleeing is disengaging and holding still here
+        /// (inferred); at pump 5 a creature that attacks the controlled one has PERCENTAGE_CHANCE of falling under pump 2.
+        /// </summary>
+        public static GameEffect MindControl(MapChannel map, Manifestation medic, Creature target, ActionId actionId, ActionLevelInfo info, Random random)
+        {
+            if (target == null || target.State == CharacterState.Dead)
+                return null;
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var interval = Math.Max(1, info.Get(AbilityProperty.Interval, 4)) * 1000;
+            if (info.Level >= 4)
+                return Turn(map, medic, target, info, MindControlType, duration);
+            var faction = target.Faction;
+            return GameEffectManager.Instance.AttachEffect(map, target, MindControlType, info.Level, duration, medic.EntityId, false,
+                new Dictionary<string, double>(), interval, control =>
                 {
-                    target.Faction = faction;
-                    CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Hostile));
-                    BehaviorManager.Instance.DropFight(target);
-                };
-            return true;
+                    if (target.State == CharacterState.Dead)
+                        return;
+                    if (info.Level == 1)
+                    {
+                        BehaviorManager.Instance.DropFight(target);
+                        target.StunnedUntil = Environment.TickCount64 + interval;
+                        return;
+                    }
+                    var allies = HostilesAround(map, target, target.Position, 30).Where(c => c != target && c.Faction == faction).Cast<Actor>().ToList();
+                    if (info.Level == 2)
+                        allies.AddRange(map.ClientList?.Where(c => c?.Player != null && c.Player.State != CharacterState.Dead &&
+                            Vector3.Distance(c.Player.Position, target.Position) <= 30).Select(c => (Actor)c.Player) ?? Enumerable.Empty<Actor>());
+                    if (allies.Count > 0)
+                        BehaviorManager.Instance.SetActionFighting(target, allies[random.Next(allies.Count)].EntityId);
+                });
         }
 
         /// <summary>

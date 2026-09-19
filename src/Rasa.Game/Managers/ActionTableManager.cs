@@ -83,13 +83,14 @@ namespace Rasa.Managers
             "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance", "abilities.disease", "abilities.damageconversion",
             "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.weaponenhancement", "abilities.calledshot",
             "abilities.controlledfission", "abilities.explodingnanites", "abilities.polarityfield", "abilities.feedback",
-            "abilities.realityripper", "abilities.cloakwave", "abilities.traitor", "abilities.corpseexplode" };
+            "abilities.realityripper", "abilities.cloakwave", "abilities.traitor", "abilities.corpseexplode", "abilities.hack",
+            "abilities.mindcontrol" };
 
         /// <summary>Modules aimed at one living enemy creature (TARGET_NON_FRIENDLY).</summary>
         public static readonly HashSet<string> EnemyModules = new HashSet<string>
         {
             "abilities.decay", "abilities.disease", "abilities.calledshot", "abilities.controlledfission", "abilities.explodingnanites",
-            "abilities.polarityfield", "abilities.feedback", "abilities.traitor"
+            "abilities.polarityfield", "abilities.feedback", "abilities.traitor", "abilities.hack", "abilities.mindcontrol"
         };
 
         /// <summary>Toggled abilities and the effect whose presence means they are on: using one again ends it.</summary>

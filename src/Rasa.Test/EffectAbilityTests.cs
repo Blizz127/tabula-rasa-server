@@ -719,6 +719,58 @@ namespace Rasa.Test
             Assert.AreEqual(Factions.Bane, turned.Faction);
         }
 
+        [TestMethod]
+        public void HackTurnsOnlyMechanicalCreatures()
+        {
+            var row = Row(303, "abilities.hack", 400, 400, 20);
+            row.Properties[AbilityProperty.Duration] = 10;
+            row.Properties[AbilityProperty.EffectRadius] = 10;
+            const EntityClasses droneClass = (EntityClasses)9000031, beastClass = (EntityClasses)9000032;
+            var classes = EntityClassManager.Instance.LoadedEntityClasses;
+            classes[droneClass] = new EntityClass((uint)droneClass, "test drone", 0, 1, new List<AugmentationType>(), true);
+            classes[droneClass].CreatureFlags.Add(CreatureFlag.Mechanical);
+            classes[beastClass] = new EntityClass((uint)beastClass, "test beast", 0, 1, new List<AugmentationType>(), true);
+            classes[beastClass].CreatureFlags.Add(CreatureFlag.Biological);
+            try
+            {
+                var drone = Creature(new Vector3(10, 0, 0));
+                drone.EntityClass = droneClass;
+                var beast = Creature(new Vector3(12, 0, 0));
+                beast.EntityClass = beastClass;
+                Assert.IsFalse(AbilityEffects.Hack(_map, _client.Player, beast, row), "a biological creature cannot be hacked");
+                Assert.IsTrue(AbilityEffects.Hack(_map, _client.Player, drone, row));
+                Assert.AreEqual(Factions.AFS, drone.Faction);
+                Assert.AreEqual(beast.EntityId, drone.Controller.ActionFighting.TargetEntityId, "it attacks its former ally");
+            }
+            finally
+            {
+                classes.Remove(droneClass);
+                classes.Remove(beastClass);
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(3)]
+        public void MindControlMakesTheTargetFleeOrTurnOnItsAllies(int pump)
+        {
+            var row = Row(304, "abilities.mindcontrol", 500, 700, 20, (uint)pump);
+            row.Properties[AbilityProperty.Duration] = 15;
+            row.Properties[AbilityProperty.Interval] = 4;
+            var target = Creature(new Vector3(10, 0, 0));
+            var ally = Creature(new Vector3(14, 0, 0));
+            BehaviorManager.Instance.SetActionFighting(target, _client.Player.EntityId);
+            AbilityEffects.MindControl(_map, _client.Player, target, (ActionId)304, row, new System.Random(1));
+            GameEffectManager.Instance.DoWork(_map, 4000);
+            if (pump == 1)
+            {
+                Assert.AreNotEqual(BehaviorManager.BehaviorActionFighting, target.Controller.CurrentAction, "it flees the fight");
+                Assert.IsTrue(target.StunnedUntil > System.Environment.TickCount64);
+            }
+            else
+                Assert.AreEqual(ally.EntityId, target.Controller.ActionFighting.TargetEntityId, "it attacks an ally");
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

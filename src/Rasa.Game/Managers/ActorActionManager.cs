@@ -432,6 +432,19 @@ namespace Rasa.Managers
                     case "abilities.traitor":
                         AbilityEffects.Traitor(map, player, execution.OriginalTarget as Creature, info);
                         break;
+                    case "abilities.hack":
+                        AbilityEffects.Hack(map, player, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.mindcontrol":
+                        var controlled = AbilityEffects.MindControl(map, player, execution.OriginalTarget as Creature, action.ActionId, info, _damageRandom);
+                        CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.EffectListRecovery(
+                            action.ActionId, action.ActionArgId, controlled == null ? Array.Empty<(ulong, int)>()
+                                : new[] { (execution.OriginalTarget.EntityId, AbilityEffects.MindControlType) }));
+                        client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
+                        {
+                            (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
+                        }));
+                        return;
                     case "abilities.corpseexplode":
                         AbilityEffects.CadaverImmolation(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
                         break;
