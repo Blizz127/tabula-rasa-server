@@ -36,16 +36,19 @@ namespace Rasa.Test
         /// NPCs were already in the world seed - named, classed, levelled and spawned - with no npc_package row
         /// to speak through. Look there first before reaching for the OD-45 pipeline that built Mining Coord.
         /// Richards. GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
+        ///
+        /// 2026-09-19: DevilsDenFransisco closed 670/2 and QuestNpcDialogueBatch eight more, each an NPC TaRapedia
+        /// gives a /loc for. 1112/1 joined the list the same day: Captain Reyko carried the Irendas console's line
+        /// and now carries his own, so that objective waits for the console, which no source places. The nine left
+        /// are the ones no source places: 321 is not offered at all, 332's two delivery points, 442/2 (an analyser's
+        /// readout, and the Duncan in the world already speaks for another mission), 451/3 and 977/2 (speakers no
+        /// page names), 836/1 (Lieutenant Seguine, no page), and 1186/1 (an Eloh artifact, not a person).
         /// </summary>
         private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
         {
             (321, 310, 105), (332, 2, 32), (332, 3, 98),
-            (382, 1, 177), (442, 2, 1486), (451, 3, 569),
-            (836, 1, 802), (969, 3, 1065),
-            (969, 4, 1092), (977, 2, 1075), (977, 3, 1051),
-            (1040, 2, 1118), (1040, 3, 1117), (1119, 1, 1203),
-            (1125, 1, 1200), (1183, 1, 1273), (1186, 1, 1300),
-            (1310, 1, 1200)
+            (442, 2, 1486), (451, 3, 569), (836, 1, 802),
+            (977, 2, 1075), (1112, 1, 1213), (1186, 1, 1300)
         };
 
         [TestMethod]
@@ -89,11 +92,16 @@ namespace Rasa.Test
             var carried = new HashSet<long>();
             using (var packages = connection.CreateCommand())
             {
-                // The placement's package wins when set (CreatureManager), else the npc_package row.
+                // The placement's package wins when set (CreatureManager), else the npc_package row - so a creature
+                // that a placement spawns speaks the placement's package and nothing else. Counting its npc_package
+                // row as well is what let Field Lt. Brody's correction pass while he still carried the old one in
+                // play (2026-09-19): only a creature with no placement of its own speaks from that table.
                 packages.CommandText = @"
                     SELECT p.creature_id, CASE WHEN p.npc_package_id <> 0 THEN p.npc_package_id ELSE COALESCE(n.package_id, 0) END
                     FROM content_placement p LEFT JOIN npc_package n ON n.id = p.creature_id WHERE p.kind = 1 AND p.creature_id <> 0
-                    UNION ALL SELECT n.id, n.package_id FROM npc_package n";
+                    UNION ALL
+                    SELECT n.id, n.package_id FROM npc_package n
+                    WHERE NOT EXISTS (SELECT 1 FROM content_placement p WHERE p.kind = 1 AND p.creature_id = n.id)";
                 using var reader = packages.ExecuteReader();
                 while (reader.Read())
                     if (spawned.ContainsKey(reader.GetInt64(0)) && reader.GetInt64(1) != 0)

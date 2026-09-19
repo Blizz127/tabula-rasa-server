@@ -227,25 +227,45 @@ weapon classes carry `range_type` 0 and zero overrides in every row, so nothing 
 
 ## Still to audit
 
-1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE (18 objectives
-   left) and GAP-W3-MISASSIGNED-PACKAGE (Reyko).
+1. **Placed NPCs and their dialogue packages**: nine objectives left (GAP-W3-UNBOUND-CONVERSATION-PACKAGE), each
+   waiting on a source that places its speaker. GAP-W3-MISASSIGNED-PACKAGE is closed.
 
 Done since: **class abilities** — all 53 abilities an active skill grants (`AbilityRequirements.RequiredLogos`,
 the client's logos sequences) resolve through a server handler: direct damage, a game effect, or Sprint's own
 path (checked 2026-09-19). The last ten are OD-56 stand-ins, described above.
 
-### Misassigned dialogue — Brody fixed (2026-09-19)
+### Dialogue: nine objectives left, and every NPC now wears a body (2026-09-19)
 
 Field Lt. Brody carried package 550, the found commander's "Man, am I glad you showed up ... get back to Brody", so
-mission 670 "Missing Strike Team" completed its first objective at Brody and could never complete its second
-("return to Field Lieutenant Brody", package 145, carried by no one). **DevilsDenFransisco** places Captain
-Fransisco (client name 6587) in the Devil's Den at TaRapedia's coordinates (-59, 96, 50; navmesh floor 95.82) with
-550, and gives Brody his own 145, which also binds 361/1. The appearance is OD-45's AFS analogue; his following
-the player through the instance is not built (GAP-ESCORT).
+mission 670 completed its first objective at Brody and could never complete its second. **DevilsDenFransisco** puts
+Captain Fransisco in the Devil's Den at TaRapedia's coordinates with 550 and gives Brody his own 145, which also
+binds 361/1. **QuestNpcDialogueBatch** then closed eight more, each at TaRapedia's own /loc, every reading within
+0.5 m of the navmesh floor under it:
 
-Captain Reyko still speaks the Irendas console's line (1213). Moving him to his own 1200 would bind 1113/7,
-1125/1 and 1310/1 but unbind 1112/1 "Into The Hive", which today completes at him; no source gives the
-console's position. Left for the owner to decide.
+| Objective | Speaker | Where |
+| --- | --- | --- |
+| 382/1 | Recon Officer Tyler | Minos Caverns, 58, -30, -49 |
+| 969/3 | Field Sgt. Kalinowski | Fort Haroun, 565, 232, 355 |
+| 969/4 | Mohindra | Fort Haroun main room, 603, 224, 342 |
+| 977/3 | Major Ston | Fort Haroun, 571, 224, 333 |
+| 1040/2 | Beta Squad Cmdr Petrie | Martyr's Canyon, -147, 408, -882 |
+| 1040/3 | Delta Squad Cmdr Locke | Maligo Creek, 164, 323, -771 |
+| 1119/1 | Surveyor Miras | Kardash Atta Colony, 4, 273, -200 |
+| 1183/1 | Sergeant Phenix | Phanin Research Facility, -11, -8, 8 |
+
+Captain Reyko carried 1213, the Irendas console's own line, and now carries his own 1200, which binds 1113/7,
+1125/1, 1310/1 and 20000003/7. That leaves 1112/1 waiting for the console, which no source places — the owner chose
+that trade.
+
+**Nine objectives remain, each blocked on a source, not on work:** 321 is not offered at all; 332's two delivery
+points, 451/3, 977/2 and 836/1 name speakers no page places; 442/2 is an analyser's readout, and the Duncan already
+in the world speaks for another mission (one creature carries one package); 1186/1 is an Eloh artifact, not a
+person; 1112/1 is the console.
+
+**Every created NPC was naked and headless** until 2026-09-19: entity class 3846 `NPC_Human_Swapset_Male` is a body
+assembled from clothing pieces, and fifty of them carried no `creature_appearance` rows. Each now wears a shipped
+analogue set — Rogers' officer set, Dr. Munson's for the doctors — and a schema test fails if a 3846 creature has
+none (GAP-NPC-BODY; the footage's own clothing is still unmatched).
 
 ### Creature flags — fixed
 

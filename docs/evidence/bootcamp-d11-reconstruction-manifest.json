@@ -187,7 +187,7 @@
      "max": 199911
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements."
   },
   {
    "table": "content_area",
@@ -206,7 +206,7 @@
      "max": 199911
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements."
   },
   {
    "table": "content_condition",
@@ -50937,6 +50937,1190 @@
      }
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199006
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 3017,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3017 \"Recon Officer Tyler\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Retrieval for Recon, mission level"
+      }
+     ],
+     "reasoning": "the mission is level 10; his page gives no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199006
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 177,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 382 objective 1 -> package 177"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199006
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1347,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Recon Officer Tyler infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 58.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia Retrieval for Recon walkthrough: \"Recon Officer Tyler is located in Minos Caverns (entrance loc: 634, 160, -125), at loc: 58, -30, -49\""
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": -30.748,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia Retrieval for Recon walkthrough: \"Recon Officer Tyler is located in Minos Caverns (entrance loc: 634, 160, -125), at loc: 58, -30, -49\""
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -49.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia Retrieval for Recon walkthrough: \"Recon Officer Tyler is located in Minos Caverns (entrance loc: 634, 160, -125), at loc: 58, -30, -49\""
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199406
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 8686,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8686 \"Field Sgt. Kalinowski\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 27,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Kalinowski infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199406
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1065,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 969 objective 3 -> package 1065"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199406
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Kalinowski infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 565.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Kalinowski page, Location: Fort Haroun, side room on second floor, 565 232 355"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 231.884,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Kalinowski page, Location: Fort Haroun, side room on second floor, 565 232 355"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 355.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Field Sgt. Kalinowski page, Location: Fort Haroun, side room on second floor, 565 232 355"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199407
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 8688,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8688 \"Mohindra\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Mohindra infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 7253,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7253"
+      }
+     ],
+     "counterpart": "the world's Brann NPCs (Redshirt_Brann_Male carries its own mesh)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199407
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1092,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 969 objective 4 -> package 1092; the same package completes 1012/2, where the speaker is the one Ashwon sends the player to"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199407
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Mohindra infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 603.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Mohindra page, Location: Fort Haroun main room, 603 224 342"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 223.884,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Mohindra page, Location: Fort Haroun main room, 603 224 342"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 342.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Mohindra page, Location: Fort Haroun main room, 603 224 342"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199408
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 8672,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8672 \"Major Ston\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 31,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Major Ston infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199408
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1051,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 977 objective 3 -> package 1051; Find Me A Rock's objectives are Ask Sirth / Ask Rohish / Ask Major Ston, and 1051's line answers for the paperwork at Fort Haroun"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199408
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Major Ston infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 571.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Major Ston page, Location: Fort Haroun, just west of the waypoint, 571 224 333"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 223.884,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Major Ston page, Location: Fort Haroun, just west of the waypoint, 571 224 333"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 333.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Major Ston page, Location: Fort Haroun, just west of the waypoint, 571 224 333"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199207
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 8848,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8848 \"Beta Squad Commander Petrie\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Beta Squad Commander Petrie infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199207
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1118,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1040 objective 2 -> package 1118; the mission names Alpha, Beta then Delta and objective 1 is Carvelle's 1116"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199207
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1497,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Beta Squad Commander Petrie infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": -147.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Beta Squad Commander Petrie page, Location: Martyr's Canyon, -147 408 -882"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 408.155,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Beta Squad Commander Petrie page, Location: Martyr's Canyon, -147 408 -882"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -882.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Beta Squad Commander Petrie page, Location: Martyr's Canyon, -147 408 -882"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199208
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 8849,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8849 \"Delta Squad Commander Locke\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Delta Squad Commander Locke infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199208
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1117,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1040 objective 3 -> package 1117; as Petrie, by the order the mission names them"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199208
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1497,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Delta Squad Commander Locke infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 164.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Delta Squad Commander Locke page, Location: Maligo Creek, 164 323 -771"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 322.552,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Delta Squad Commander Locke page, Location: Maligo Creek, 164 323 -771"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -771.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Delta Squad Commander Locke page, Location: Maligo Creek, 164 323 -771"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199506
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 9010,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9010 \"Surveyor Miras\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 23,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Surveyor Miras infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 7253,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7253"
+      }
+     ],
+     "counterpart": "the world's Brann NPCs (Redshirt_Brann_Male carries its own mesh)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199506
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1203,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1119 objective 1 -> package 1203"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199506
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 1773,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Surveyor Miras infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": 4.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Surveyor Miras page, Location: Kardash Atta Colony, Research Outpost Alpha, 4 273 -200"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 272.35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Surveyor Miras page, Location: Kardash Atta Colony, Research Outpost Alpha, 4 273 -200"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -200.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Surveyor Miras page, Location: Kardash Atta Colony, Research Outpost Alpha, 4 273 -200"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199507
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "name_id": {
+     "value": 9141,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9141 \"Sergeant Phenix\""
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the exact name the mission sources use"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Sergeant Phenix infobox, Level"
+      }
+     ],
+     "reasoning": "TaRapedia records the level; community transcription, dated on the page."
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed AFS NPC that uses this class (3846: McAllister 198500, Rogers 100)",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's own quest NPCs (Rogers 100, Witherspoon 101: 555 hp)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199507
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "package_id": {
+     "value": 1273,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation 1183 objective 1 -> package 1273"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199507
+   },
+   "slice": "W3",
+   "migration": "QuestNpcDialogueBatch",
+   "fields": {
+    "map_context_id": {
+     "value": 2034,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Sergeant Phenix infobox, Zone/Instance"
+      }
+     ],
+     "reasoning": "the map of the zone or instance TaRapedia puts the NPC in."
+    },
+    "pos_x": {
+     "value": -11.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Sargeant Phenix page, Location: Phanin Research Facility, just inside the entrance, -11 -8 8"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription of an in-game reading.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": -7.776,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Sargeant Phenix page, Location: Phanin Research Facility, just inside the entrance, -11 -8 8"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 0.5 m of it) plus the world's spawn offset -0.276.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 8.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Sargeant Phenix page, Location: Phanin Research Facility, just inside the entrance, -11 -8 8"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
   }
  ],
  "omitted": [
@@ -52622,7 +53806,7 @@
   },
   {
    "id": "GAP-W3-UNBOUND-CONVERSATION-PACKAGE",
-   "summary": "Started at 34 objectives over 22 missions whose completion package no spawned creature carried, found by MissionLinkAuditTests on 2026-09-17 once the navmesh was put beside rasaworld.db so it ran instead of reporting inconclusive. WildernessDialogueBinding closed 15 of them the same day without building anything: the first assumption - that the NPCs did not exist and needed the OD-45 pipeline that built Mining Coord. Richards - was wrong. Twelve of them were already in the world seed, with their client name, class, level and health, drawn by a spawnpool slot in the right place, and simply had no npc_package row to speak through. 19 objectives are left, and the seed is the first place to look for each one. Update 2026-09-19: 670/2 bound by DevilsDenFransisco; 18 left.",
+   "summary": "Started at 34 objectives over 22 missions whose completion package no spawned creature carried, found by MissionLinkAuditTests on 2026-09-17 once the navmesh was put beside rasaworld.db so it ran instead of reporting inconclusive. WildernessDialogueBinding closed 15 of them the same day without building anything: the first assumption - that the NPCs did not exist and needed the OD-45 pipeline that built Mining Coord. Richards - was wrong. Twelve of them were already in the world seed, with their client name, class, level and health, drawn by a spawnpool slot in the right place, and simply had no npc_package row to speak through. 19 objectives are left, and the seed is the first place to look for each one. Update 2026-09-19: 670/2 bound by DevilsDenFransisco; 18 left. Update 2026-09-19 (QuestNpcDialogueBatch): eight more closed - Tyler, Kalinowski, Mohindra, Major Ston, Petrie, Locke, Miras and Phenix, each at TaRapedia's own /loc, every reading within 0.5 m of the navmesh floor under it. Nine are left, and each is blocked on a source rather than on work: 321 is not offered at all, 332's two delivery points and 451/3, 977/2 and 836/1 name speakers no page places, 442/2 is an analyser's readout (the Duncan in the world speaks for another mission and one creature carries one package), 1186/1 is an Eloh artifact rather than a person, and 1112/1 waits for the Irendas console.",
    "closes_with": "for each package: the client's objectiveconversation row gives it, its missiontextlanguage line and the mission text name who speaks it, and the world seed's own creature table is checked for that name before anything is created",
    "evidence": [
     "client/objectiveconversation.pyo (422,1,213,1,1)->1276 and (429,5,726,1,1)->3886",
@@ -52803,18 +53987,23 @@
   },
   {
    "id": "GAP-W3-MISASSIGNED-PACKAGE",
-   "summary": "Two NPCs created by earlier W3 batches carry a dialogue package that belongs to someone else, so they speak the wrong lines and their own objectives stay dead ends. Found 2026-09-17 by reading each package's full usage across the client's objectiveconversation table instead of one mission at a time.\n\nField Lt. Brody (creature 199105) carries package 550, whose line is the rescued squad member's \"Man, am I glad you showed up ... get back to Brody\" - spoken TO the player ABOUT Brody, so it cannot be his. Brody's own package is 145, which completes 361/1 (\"Report to Field Lieutenant Brody who is stationed at the Walk of Giants\") and 670/2 (\"return to Field Lieutenant Brody\"). Package 550 belongs to Captain Fransisco, the survivor in Devil's Den, who is client name 6587 and is not in the world at all.\n\nCaptain Reyko (creature 199502) carries package 1213, whose line is a machine's: \"This console appears to have an active communications system. You should be able to contact Captain Reyko from here.\" Reyko's own package is 1200, which completes four missions that all name him - 1113/7, 1125/1, 1310/1 and the 20000003 Halloween mission.\n\nNeither can be corrected on its own: moving Brody to 145 leaves 550 unbound until Fransisco exists, and moving Reyko to 1200 leaves 1213 unbound until the console is dispensed as a usable. The npc_package table keys on the creature id, so one creature cannot carry two. Update 2026-09-19 (DevilsDenFransisco): the Brody half is closed - Captain Fransisco stands in the Devil's Den at TaRapedia's coordinates with package 550 and Brody carries his own 145, so 670 can be finished and 361/1 is bound. Reyko remains: moving him to 1200 would bind 1113/7, 1125/1 and 1310/1 but unbind 1112/1 until the console is placed, and no source gives the console's position.",
+   "summary": "Two NPCs created by earlier W3 batches carry a dialogue package that belongs to someone else, so they speak the wrong lines and their own objectives stay dead ends. Found 2026-09-17 by reading each package's full usage across the client's objectiveconversation table instead of one mission at a time.\n\nField Lt. Brody (creature 199105) carries package 550, whose line is the rescued squad member's \"Man, am I glad you showed up ... get back to Brody\" - spoken TO the player ABOUT Brody, so it cannot be his. Brody's own package is 145, which completes 361/1 (\"Report to Field Lieutenant Brody who is stationed at the Walk of Giants\") and 670/2 (\"return to Field Lieutenant Brody\"). Package 550 belongs to Captain Fransisco, the survivor in Devil's Den, who is client name 6587 and is not in the world at all.\n\nCaptain Reyko (creature 199502) carries package 1213, whose line is a machine's: \"This console appears to have an active communications system. You should be able to contact Captain Reyko from here.\" Reyko's own package is 1200, which completes four missions that all name him - 1113/7, 1125/1, 1310/1 and the 20000003 Halloween mission.\n\nNeither can be corrected on its own: moving Brody to 145 leaves 550 unbound until Fransisco exists, and moving Reyko to 1200 leaves 1213 unbound until the console is dispensed as a usable. The npc_package table keys on the creature id, so one creature cannot carry two. Update 2026-09-19 (DevilsDenFransisco): the Brody half is closed - Captain Fransisco stands in the Devil's Den at TaRapedia's coordinates with package 550 and Brody carries his own 145, so 670 can be finished and 361/1 is bound. Reyko remains: moving him to 1200 would bind 1113/7, 1125/1 and 1310/1 but unbind 1112/1 until the console is placed, and no source gives the console's position. Closed 2026-09-19: Brody carries 145 with Captain Fransisco seeded for 550, and Reyko carries his own 1200. The console half is now GAP-W3-UNBOUND-CONVERSATION-PACKAGE's 1112/1.",
    "evidence": [
     "client objectiveconversation and missiontextlanguage for packages 145, 550, 1200, 1213",
     "rasaworld.db npc_package rows 199105 -> 550 and 199502 -> 1213",
     "creaturenamelanguage 6587 'Captain Fransisco', 2946 'Field Lt. Brody', 9007 'Captain Reyko'"
    ],
-   "closes_with": "the Irendas console dispensed as a usable with package 1213 and Reyko moved to 1200",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "package-usage sweep, 2026-09-17"
    ],
    "slices": [
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "MissionLinkAuditTests.EveryObjectiveConversationPackageIsCarriedByASpawnedCreature",
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -53998,6 +55187,60 @@
     {
      "source": "server_sql:gameserver_dev_Full",
      "locator": "creature_appearance of Outpost Commander Rogers (100) and Dr. Munson"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "QuestNpcDialogueBatch",
+   "table": "npc_package",
+   "key": {
+    "id": 199502
+   },
+   "field": "package_id",
+   "old": 1213,
+   "new": 1200,
+   "reason": "Package 1213 is the Irendas console's line (\"This console appears to have an active communications system. You should be able to contact Captain Reyko from here\"), so Captain Reyko cannot be its speaker. His own is 1200, which completes 1113/7, 1125/1, 1310/1 and 20000003/7. 1112/1 is unbound until the console is dispensed as a usable; the owner chose that trade on 2026-09-19.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1112/1 package 1213; 1113/7, 1125/1, 1310/1, 20000003/7 package 1200"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "QuestNpcDialogueBatch",
+   "table": "content_placement",
+   "key": {
+    "creature_id": 199105
+   },
+   "field": "npc_package_id",
+   "old": 550,
+   "new": 145,
+   "reason": "CreatureManager takes the placement's package when it is set, so DevilsDenFransisco's npc_package row alone left Field Lt. Brody still speaking Captain Fransisco's 550 in play. MissionLinkAuditTests counted both sources and missed it; it now counts the npc_package row only for creatures with no placement.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 670/1 package 550; 670/2 and 361/1 package 145"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "QuestNpcDialogueBatch",
+   "table": "content_placement",
+   "key": {
+    "creature_id": 199502
+   },
+   "field": "npc_package_id",
+   "old": 1213,
+   "new": 1200,
+   "reason": "Captain Reyko's placement carried the Irendas console's package, which is what he speaks from; his npc_package row is changed with it.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation 1112/1 package 1213; 1113/7, 1125/1, 1310/1, 20000003/7 package 1200"
     }
    ]
   }
