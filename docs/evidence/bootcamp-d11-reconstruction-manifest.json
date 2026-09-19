@@ -52740,11 +52740,11 @@
   },
   {
    "id": "GAP-CREATURE-FLAGS",
-   "summary": "CreatureInfo is sent an empty flag list. The client reads BIOLOGICAL, MECHANICAL, MACHINA, CAN_BE_REVIVED and the epic/boss indicators from it (harvest, salvage, heal disc, repair tool, corpse abilities, overhead markers). Without flags the client is permissive rather than broken. No per-creature flag data survives in the research.",
+   "summary": "Closed 2026-09-19. CreatureInfo is sent an empty flag list. The client reads BIOLOGICAL, MECHANICAL, MACHINA, CAN_BE_REVIVED and the epic/boss indicators from it (harvest, salvage, heal disc, repair tool, corpse abilities, overhead markers). Without flags the client is permissive rather than broken. No per-creature flag data survives in the research. Ellimist had already reconstructed them on ellimist/development (0e2a53c): species from the entity class name (293 of 421 creature classes), biological or mechanical checked against each species' Loot_Junk parts, keyed by class in creature_class_flag. Only the harvest half of that work had reached development, so the harvest code read flags nothing loaded. The commit is cherry-picked; CreatureInfo now sends the class flags, and the Bane Mortar class 7482 carries Mechanical and SpeciesTurret.",
    "evidence": [
     "client augmentations/creature.pyo Recv_CreatureInfo, HasFlag; actions/tools/harvest.pyo"
    ],
-   "closes_with": "a per-creature flag source",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "slices": [
     "S1",
     "S2",
@@ -52760,11 +52760,16 @@
    ],
    "surfaced_by": [
     "1:1 fidelity audit, packet-contract check, 2026-09-19"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "TargetCategoryTests.ACreatureIsIntroducedWithItsClassFlags",
+    "ContentSchemaMigrationTests"
    ]
   },
   {
    "id": "GAP-CLASS-ABILITIES",
-   "summary": "Only the Recruit abilities (Lightning 194, Sprint 401) are resolved, both from the client's own abilityData rows. Every T2-T4 class ability logs 'unsuported' in PerformAction and does nothing. The client data for each is complete; the original server's resolution rules are not.",
+   "summary": "Only the Recruit abilities (Lightning 194, Sprint 401) are resolved, both from the client's own abilityData rows. Every T2-T4 class ability logs 'unsuported' in PerformAction and does nothing. The client data for each is complete; the original server's resolution rules are not. A data-driven ability system exists on ellimist/development (474d1ce the client action tables, 0fd63df AbilityManager driving ownership, cost, cooldown, range, windup and effect, with follow-ups cf897a0, 2929630, a404651). It replaces development's Lightning path and rewrites the action, missile and effect managers, so bringing it in is a branch integration awaiting the owner.",
    "evidence": [
     "client generated/client/actiondata.pyo abilityData (1,084 rows)",
     "client generated/client/skilldata.pyo (73 skills)"

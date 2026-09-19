@@ -126,10 +126,17 @@ weapon classes carry `range_type` 0 and zero overrides in every row, so nothing 
 ## Still to audit
 
 1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
-2. **Creature flags.** `CreatureInfo` is sent an empty flag list. The client reads `BIOLOGICAL`, `MECHANICAL`,
-   `MACHINA`, `CAN_BE_REVIVED` and the epic/boss indicators from it (harvest, salvage, heal disc, repair tool,
-   corpse abilities, overhead markers). With none, the client is permissive rather than broken. No per-creature
-   flag data survives anywhere in the research; open: **GAP-CREATURE-FLAGS**.
+2. **Class abilities** (GAP-CLASS-ABILITIES). A data-driven ability system already exists on
+   `ellimist/development` (474d1ce, 0fd63df and follow-ups). It replaces this branch's Lightning path and
+   rewrites the action, missile and effect managers, so bringing it in is a branch integration for the owner
+   to decide, not a patch.
+
+### Creature flags — fixed
+
+`CreatureInfo` was sent an empty flag list, and the harvest code read class flags that nothing loaded. Ellimist
+had reconstructed them on `ellimist/development` (0e2a53c: species from the class name, biological or mechanical
+checked against each species' harvest parts); only the harvest half had reached this branch. That commit is
+cherry-picked, and creatures are now introduced with their class's flags.
 
 ## Packet contract — first pass (2026-09-19)
 
