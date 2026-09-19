@@ -289,6 +289,7 @@ namespace Rasa.Game
 
             // Load items from db
             EntityClassManager.Instance.LoadEntityClasses();
+            ActionTableManager.Instance.ActionTableInit();
             MissionManager.Instance.LoadMissions();
             CreatureManager.Instance.CreatureInit();
             SpawnPoolManager.Instance.SpawnPoolInit();

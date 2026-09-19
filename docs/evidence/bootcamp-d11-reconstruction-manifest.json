@@ -52939,10 +52939,11 @@
   },
   {
    "id": "GAP-CLASS-ABILITIES",
-   "summary": "Only the Recruit abilities (Lightning 194, Sprint 401) are resolved, both from the client's own abilityData rows. Every T2-T4 class ability logs 'unsuported' in PerformAction and does nothing. The client data for each is complete; the original server's resolution rules are not. A data-driven ability system exists on ellimist/development (474d1ce the client action tables, 0fd63df AbilityManager driving ownership, cost, cooldown, range, windup and effect, with follow-ups cf897a0, 2929630, a404651). It replaces development's Lightning path and rewrites the action, missile and effect managers, so bringing it in is a branch integration awaiting the owner.",
+   "summary": "Narrowed 2026-09-19. The client's action tables are loaded (Ellimist's 474d1ce, cherry-picked; every row checked against the decoded client: 1,813 levels, 405 costs, 4,259 properties). The class damage abilities now resolve from them through the same lifecycle Lightning uses - windup, cost, reuse and recovery from the ability's own row, damage from DAMAGE_AMOUNT_MIN/MAX scaled by DAMAGE_SCALE_TYPE, targets from RADIUS_AROUND_SOURCE / RADIUS_AROUND_TARGET / CONE_RADIUS, one DamageBase recovery listing every hit: Force Blast (158), Shrapnel (178), Tectonic Strike (229), Vortex (231), Rushing Blow (302), Explosive Wave (137) and Concussive Wave (234). Still open: their secondary effects (KNOCKBACK_DISTANCE, STUN_CHANCE and the like are not applied; a cone is taken as the full circle of its radius, as the row has no angle), and every class ability that is not direct damage - heals, buffs, shields, summons, stealth and the rest - which is refused as before. ellimist/development's AbilityManager resolves the same damage family and sprint and no more; its wider integration stays with the owner.",
    "evidence": [
     "client generated/client/actiondata.pyo abilityData (1,084 rows)",
-    "client generated/client/skilldata.pyo (73 skills)"
+    "client generated/client/skilldata.pyo (73 skills)",
+    "client/actions/abilities/damagebase.pyo DoAbility: hitdata[i] = (rawInfo, data); no DamageBase module reads data"
    ],
    "closes_with": "per ability, the client ability module plus its abilityData row, built and tested one class at a time",
    "slices": [
@@ -52951,6 +52952,9 @@
    ],
    "surfaced_by": [
     "1:1 fidelity audit, ability compare, 2026-09-19"
+   ],
+   "confirmed_by": [
+    "DamageAbilityLifecycleTests"
    ]
   },
   {

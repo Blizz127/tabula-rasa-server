@@ -845,6 +845,14 @@ namespace Rasa.Managers
                 return;
             }
 
+            // The class damage abilities, from the client's action tables.
+            if (ActionTableManager.Instance.TryGetDirectDamage(packet.ActionId, (uint)packet.ActionArgId, out _, out _))
+            {
+                if (!ActorActionManager.Instance.TryStartDamageAbility(client, packet))
+                    RejectAbilityRequest(client, packet);
+                return;
+            }
+
             if (packet.ActionId == ActionId.AaRecruitSprint &&
                 !GameEffectManager.Instance.CanAttachSprint(client.Player, (uint)packet.ActionArgId))
             {

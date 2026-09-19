@@ -112,10 +112,19 @@ Lightning (194) and Sprint (401) are built from the client's own `actiondata.abi
 power, windup/recovery/reuse 500/700/1200 ms, damage 180–240 then 240–300, damage type 13 (`ENERGY`) with a
 `SONIC` (7) extra at rank 3+; Sprint's 3600/5000 s duration, 2 s drain interval and adrenaline costs. Both agree.
 
-Every class ability beyond Recruit (the T2–T4 ability skills of `skilldata`; `abilitydata` has 1,084 `(action, rank)` rows) is
-**unimplemented**: `PerformAction` logs "unsuported" and nothing happens. That is a missing system, not a
-misidentified one; the client data for each is complete, the original server's resolution rules are not.
-Open: **GAP-CLASS-ABILITIES**.
+The client's action tables are now loaded whole (Ellimist's `474d1ce`, cherry-picked; every row checked against
+the decoded client — 1,813 levels, 405 costs, 4,259 properties, no differences). From them the **class damage
+abilities** resolve through Lightning's lifecycle with every number from their own row: Force Blast (158),
+Shrapnel (178), Tectonic Strike (229), Vortex (231), Rushing Blow (302), and the Explosive (137) and Concussive
+(234) Wave signature abilities. Each lands on its target, on everything within `RADIUS_AROUND_TARGET` of it, or
+on everything within `RADIUS_AROUND_SOURCE`/`CONE_RADIUS` of the performer, and answers with one recovery in the
+shape `damagebase.py` reads.
+
+Still open (**GAP-CLASS-ABILITIES**): the damage abilities' secondary effects (knockback distance, stun chance)
+are not applied, and a cone is taken as a full circle (the row carries no angle); every class ability that is not
+direct damage — heals, buffs, shields, summons, stealth — is refused as before. The ability system on
+`ellimist/development` covers the same damage family and Sprint and no more; merging the rest of that branch
+stays an owner decision.
 
 ### Weapons
 
@@ -126,10 +135,8 @@ weapon classes carry `range_type` 0 and zero overrides in every row, so nothing 
 ## Still to audit
 
 1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
-2. **Class abilities** (GAP-CLASS-ABILITIES). A data-driven ability system already exists on
-   `ellimist/development` (474d1ce, 0fd63df and follow-ups). It replaces this branch's Lightning path and
-   rewrites the action, missile and effect managers, so bringing it in is a branch integration for the owner
-   to decide, not a patch.
+2. **Class abilities that are not direct damage**, and the damage abilities' knockback and stun
+   (GAP-CLASS-ABILITIES).
 
 ### Creature flags — fixed
 

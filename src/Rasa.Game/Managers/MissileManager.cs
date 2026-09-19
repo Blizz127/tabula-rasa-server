@@ -279,6 +279,55 @@ namespace Rasa.Managers
             }
         }
 
+        /// <summary>
+        /// Lands a damage ability on every target it reached at once, and sends the single recovery the client's
+        /// DamageBase.DoAbility expects - one hits list, one hitdata entry per hit. Each target takes its own roll
+        /// through the same armour-then-health path a weapon hit takes, so kills, kill rewards and mission credit
+        /// work as they do for Lightning. A destroyable content placement named as the target takes its roll too,
+        /// reported with the ability's action so action-bound objectives can match it.
+        /// </summary>
+        public void AbilityStrike(MapChannel mapChannel, Actor source, ActionId actionId, uint actionArgId, DamageType damageType,
+            IReadOnlyList<(Creature Target, int Damage)> targets, DynamicObject contentTarget = null, int contentDamage = 0)
+        {
+            var hitEntities = new List<ulong>();
+            var hits = new List<HitData>();
+            var killed = new List<Creature>();
+
+            foreach (var (target, damage) in targets)
+            {
+                if (target == null || target.State == CharacterState.Dead)
+                    continue;
+
+                var missile = new Missile
+                {
+                    DamageA = damage, DamageType = damageType, Source = source, ActionId = actionId, ActionArgId = actionArgId,
+                    IsAbility = true, TargetEntityId = target.EntityId, TargetActor = target
+                };
+                var hit = new HitData { DamageType = damageType, FinalAmt = damage, EntityId = target.EntityId };
+                DoDamageToCreature(mapChannel, missile, target, hit);
+                if (target.State == CharacterState.Dead)
+                {
+                    hit.DeathBlow = 1;
+                    killed.Add(target);
+                }
+                hitEntities.Add(target.EntityId);
+                hits.Add(hit);
+            }
+
+            if (contentTarget != null && MissionManager.Instance.Content.IsContentUsableSource(mapChannel, contentTarget.EntityId))
+            {
+                var attacker = mapChannel.ClientList?.FirstOrDefault(client => client?.Player == source);
+                MissionManager.Instance.Content.DamageContentUsable(mapChannel, contentTarget.EntityId, contentDamage, attacker, (uint)actionId);
+                hitEntities.Add(contentTarget.EntityId);
+                hits.Add(new HitData { DamageType = damageType, FinalAmt = contentDamage, EntityId = contentTarget.EntityId });
+            }
+
+            CellManager.Instance.CellCallMethod(mapChannel, source, new DamageAbilityRecovery(actionId, actionArgId, hitEntities, hits));
+
+            foreach (var creature in killed)
+                CellManager.Instance.CellCallMethod(mapChannel, creature, new ActorKilledPacket());
+        }
+
         public void MissileTrigger(MapChannel mapChannel, Missile missile)
         {
             // ToDo: Some weapons can hit multiple targets

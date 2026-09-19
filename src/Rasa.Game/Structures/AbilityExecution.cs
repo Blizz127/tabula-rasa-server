@@ -13,6 +13,8 @@ namespace Rasa.Structures
         public long RecoveryEndsAt { get; }
         public long ReuseEndsAt { get; }
         public bool Resolved { get; set; }
+        /// <summary>The client action-table row a table-driven damage ability resolves with; null for Lightning.</summary>
+        public ActionLevelInfo Level { get; set; }
 
         public AbilityExecution(ActionData action, MapChannel map, Actor target,
             long windupEndsAt, long recoveryEndsAt, long reuseEndsAt)

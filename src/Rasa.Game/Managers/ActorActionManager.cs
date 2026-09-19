@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -95,6 +97,159 @@ namespace Rasa.Managers
             return true;
         }
 
+        /// <summary>Metres past an ability's range a target may be: the client checks range before it asks.</summary>
+        private const float AbilityRangeSlack = 2.5f;
+
+        /// <summary>
+        /// A damage ability from the client's action tables (ActionTableManager.TryGetDirectDamage): Force Blast,
+        /// Shrapnel, Tectonic Strike, Vortex, Rushing Blow, the Explosive and Concussive Waves. The lifecycle is
+        /// Lightning's - windup, then cost, reuse and resolution, then recovery - with every number taken from the
+        /// ability's own row instead of LightningAbilityData. An ability aimed at a target needs a hostile creature or
+        /// a destroyable placement within its range; one centred on the performer (RADIUS_AROUND_SOURCE, CONE_RADIUS)
+        /// needs none.
+        /// </summary>
+        public bool TryStartDamageAbility(Client client, RequestPerformAbilityPacket packet)
+        {
+            var player = client.Player;
+            var map = player?.MapChannel;
+            var level = (uint)packet.ActionArgId;
+            if (client.State != ClientState.Ingame || player == null || map == null || player.RemoveFromMap ||
+                !ActionTableManager.Instance.TryGetDirectDamage(packet.ActionId, level, out _, out var info) ||
+                !AbilityRequirements.CanUseSkillAbility(player, packet.ActionId, packet.ActionArgId) ||
+                !CanBeginAbility(player) || !CanPay(player, info))
+                return false;
+
+            var now = _getMonotonicMilliseconds();
+            if (player.AbilityReuseDeadlines.TryGetValue(packet.ActionId, out var reuseUntil) && now < reuseUntil)
+                return false;
+
+            Creature target = null;
+            DynamicObject contentTarget = null;
+            if (!AimedFromSource(info))
+            {
+                target = GetLightningTarget(map, player, packet.Target ?? 0);
+                contentTarget = target == null ? WeaponAttackManager.GetEligibleContentTarget(player, packet.Target ?? 0) : null;
+                if (target == null && contentTarget == null)
+                    return false;
+                if (target != null && info.MaxRange > 0 &&
+                    System.Numerics.Vector3.Distance(player.Position, target.Position) > info.MaxRange + AbilityRangeSlack)
+                    return false;
+            }
+
+            WeaponActionManager.Instance.InterruptForAbility(client);
+            var targetEntityId = target?.EntityId ?? contentTarget?.EntityId ?? 0;
+            var action = new ActionData(player, packet.ActionId, level, targetEntityId, info.WindupMs)
+            {
+                TargetLocation = packet.TargetLocation, ItemId = packet.ItemId, ClientYaw = packet.ClientYaw
+            };
+            var windupEndsAt = now + info.WindupMs;
+            var recoveryEndsAt = windupEndsAt + info.RecoveryMs;
+            player.CurrentAbility = new AbilityExecution(action, map, target, contentTarget, windupEndsAt,
+                recoveryEndsAt, recoveryEndsAt + info.ReuseMs) { Level = info };
+            CellManager.Instance.CellCallMethod(map, player,
+                new PerformWindupPacket(PerformType.ThreeArgs, action.ActionId, level, targetEntityId));
+            return true;
+        }
+
+        /// <summary>Area-around-source and cone abilities are aimed from the performer, not at a target.</summary>
+        public static bool AimedFromSource(ActionLevelInfo info)
+            => info.Has(AbilityProperty.RadiusAroundSource) || info.Has(AbilityProperty.ConeRadius);
+
+        /// <summary>The action's costs, scaled by CONSUMABLE_SCALE_TYPE where the row has one.</summary>
+        private static int CostOf(Manifestation player, ActionLevelInfo info, ActionCost cost)
+            => AbilityScaling.ScaleActorAmount(cost.Amount, player.Level,
+                info.Has(AbilityProperty.ConsumableScaleType) ? info.Get(AbilityProperty.ConsumableScaleType) : (int?)null);
+
+        private static bool CanPay(Manifestation player, ActionLevelInfo info)
+        {
+            foreach (var cost in info.Costs)
+                if (!player.Attributes.TryGetValue(cost.Attribute, out var attribute) || attribute.Current < CostOf(player, info, cost))
+                    return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Who a damage ability reaches when it lands: the target alone; the target and every hostile within
+        /// RADIUS_AROUND_TARGET of it; or every hostile within RADIUS_AROUND_SOURCE or CONE_RADIUS of the performer.
+        /// The cone's angle is not in the ability's row, so a cone is taken as the full circle of its radius.
+        /// </summary>
+        private static List<Creature> DamageAbilityTargets(MapChannel map, Manifestation player, ActionLevelInfo info, Creature primary)
+        {
+            var targets = new List<Creature>();
+            System.Numerics.Vector3? centre = null;
+            var radius = 0f;
+            if (AimedFromSource(info))
+            {
+                centre = player.Position;
+                radius = Math.Max(info.Get(AbilityProperty.RadiusAroundSource), info.Get(AbilityProperty.ConeRadius));
+            }
+            else
+            {
+                if (primary != null)
+                    targets.Add(primary);
+                if (primary != null && info.Has(AbilityProperty.RadiusAroundTarget))
+                {
+                    centre = primary.Position;
+                    radius = info.Get(AbilityProperty.RadiusAroundTarget);
+                }
+            }
+
+            if (centre.HasValue && radius > 0 && player.Cells != null)
+                foreach (var seed in player.Cells)
+                    if (map.MapCellInfo.Cells.TryGetValue(seed, out var cell))
+                        foreach (var creature in cell.CreatureList)
+                            if (!targets.Contains(creature) &&
+                                ReferenceEquals(GetLightningTarget(map, player, creature.EntityId), creature) &&
+                                System.Numerics.Vector3.Distance(centre.Value, creature.Position) <= radius)
+                                targets.Add(creature);
+            return targets;
+        }
+
+        private void ResolveDamageAbility(MapChannel map, Client client, AbilityExecution execution, long now)
+        {
+            var player = client.Player;
+            var action = execution.Action;
+            var info = execution.Level;
+            var contentTargetValid = execution.OriginalContentTarget != null &&
+                ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
+            var targeted = !AimedFromSource(info);
+            if (!AbilityRequirements.CanUseSkillAbility(player, action.ActionId, (int)action.ActionArgId) || !CanPay(player, info) ||
+                (targeted && execution.OriginalContentTarget == null &&
+                    !ReferenceEquals(GetLightningTarget(map, player, action.TargetId), execution.OriginalTarget)) ||
+                (targeted && execution.OriginalContentTarget != null && !contentTargetValid))
+            {
+                EndAbility(client, execution, false);
+                return;
+            }
+
+            // Paid on landing, as Lightning is.
+            foreach (var cost in info.Costs)
+            {
+                var attribute = player.Attributes[cost.Attribute];
+                attribute.Current -= CostOf(player, info, cost);
+                if (cost.Attribute == Attributes.Power)
+                    CellManager.Instance.CellCallMethod(map, player, new UpdatePowerPacket(attribute, player.EntityId));
+                else if (cost.Attribute == Attributes.Chi)
+                    client.CallMethod(player.EntityId, new UpdateChiPacket(attribute, player.EntityId));
+            }
+            execution.Resolved = true;
+            player.AbilityReuseDeadlines[action.ActionId] = execution.ReuseEndsAt;
+
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = info.Get(AbilityProperty.DamageAmountMin);
+            var max = Math.Max(min, info.Get(AbilityProperty.DamageAmountMax, min));
+            int Roll() => AbilityScaling.ScaleActorAmount(_damageRandom.Next(min, max + 1), player.Level, scaleType);
+            var damageType = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var hits = DamageAbilityTargets(map, player, info, execution.OriginalTarget as Creature)
+                .Select(target => (target, Roll())).ToList();
+            MissileManager.Instance.AbilityStrike(map, player, action.ActionId, action.ActionArgId, damageType, hits,
+                targeted ? execution.OriginalContentTarget : null, Roll());
+            client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
+            {
+                (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
+            }));
+        }
+
         private static Creature GetLightningTarget(MapChannel map, Manifestation player, ulong targetId)
         {
             var entities = EntityManager.Instance;
@@ -159,7 +314,13 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (!execution.Resolved && now >= execution.WindupEndsAt)
+            if (!execution.Resolved && now >= execution.WindupEndsAt && execution.Level != null)
+            {
+                ResolveDamageAbility(map, client, execution, now);
+                if (!execution.Resolved)
+                    return;
+            }
+            else if (!execution.Resolved && now >= execution.WindupEndsAt)
             {
                 var action = execution.Action;
                 var contentTargetValid = execution.OriginalContentTarget != null &&
