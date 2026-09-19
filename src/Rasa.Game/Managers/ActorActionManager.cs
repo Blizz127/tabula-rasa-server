@@ -168,7 +168,16 @@ namespace Rasa.Managers
                         return false;
                 }
             }
-            else if (actionInfo.Module == "abilities.decay" || actionInfo.Module == "abilities.disease" || actionInfo.Module == "abilities.calledshot")
+            else if (actionInfo.Module == "abilities.corpseexplode")
+            {
+                // corpseexplode.py canTargetDead, and only a creature's corpse.
+                if (!EntityManager.Instance.Creatures.TryGetValue(packet.Target ?? 0, out var corpse) || corpse.State != CharacterState.Dead ||
+                    !MapChannelManager.IsOnChannel(corpse, map) || info.MaxRange > 0 &&
+                    System.Numerics.Vector3.Distance(player.Position, corpse.Position) > info.MaxRange + AbilityRangeSlack)
+                    return false;
+                target = corpse;
+            }
+            else if (ActionTableManager.EnemyModules.Contains(actionInfo.Module))
             {
                 // A single enemy (decay.py TARGET_NON_FRIENDLY); a destroyable placement cannot decay.
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
@@ -303,8 +312,8 @@ namespace Rasa.Managers
             ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
             var isCure = rowAction?.Module == "abilities.cure";
-            var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && (rowAction?.Module == "abilities.decay" ||
-                rowAction?.Module == "abilities.disease" || rowAction?.Module == "abilities.calledshot" ||
+            var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && rowAction?.Module != "abilities.corpseexplode" &&
+                (ActionTableManager.EnemyModules.Contains(rowAction?.Module ?? "") ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
                     !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
@@ -320,6 +329,9 @@ namespace Rasa.Managers
                 EndAbility(client, execution, false);
                 return;
             }
+
+            // Any combat action ends Cloak Wave's stealth.
+            AbilityEffects.BreakStealth(map, player);
 
             // Paid on landing, as Lightning is.
             foreach (var cost in info.Costs)
@@ -396,6 +408,32 @@ namespace Rasa.Managers
                         break;
                     case "abilities.calledshot":
                         AbilityEffects.CalledShot(map, player, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.controlledfission":
+                        AbilityEffects.ControlledFission(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
+                        break;
+                    case "abilities.explodingnanites":
+                        AbilityEffects.ExplosiveNanites(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
+                        break;
+                    case "abilities.polarityfield":
+                        AbilityEffects.PolarityField(map, player, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.feedback":
+                        AbilityEffects.Feedback(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
+                        break;
+                    case "abilities.realityripper":
+                        AbilityEffects.RealityRipper(map, player,
+                            action.TargetLocation is { } rip ? new System.Numerics.Vector3((float)rip.X, (float)rip.Y, (float)rip.Z) : player.Position,
+                            info, _damageRandom);
+                        break;
+                    case "abilities.cloakwave":
+                        AbilityEffects.CloakWave(map, client, info);
+                        break;
+                    case "abilities.traitor":
+                        AbilityEffects.Traitor(map, player, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.corpseexplode":
+                        AbilityEffects.CadaverImmolation(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
                         break;
                     case "abilities.firesupport":
                         AbilityEffects.FireSupport(map, player, info,

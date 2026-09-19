@@ -91,8 +91,10 @@ namespace Rasa.Managers
             if (creature.State == CharacterState.Dead)
                 return;
 
-            // Called Shot and Sacrifice answer a hit before it lands (the head shot adds to it).
+            // Called Shot and Sacrifice answer a hit before it lands (the head shot adds to it); Polarity Field
+            // makes the creature vulnerable to its type.
             AbilityEffects.OnCreatureHit(mapChannel, missile, creature, hit);
+            missile.DamageA = DamageModifiers.AgainstCreature(creature, missile.DamageA, missile.DamageType);
 
             // decrease armor first
             var armorDecrease = Math.Min(missile.DamageA, creature.Attributes[Attributes.Armor].Current);
@@ -125,6 +127,8 @@ namespace Rasa.Managers
             }
             else
             {
+                // Explosive Nanites answer every hit the creature takes.
+                AbilityEffects.OnCreatureDamaged(creature);
                 // shooting at wandering creatures makes them ANGRY
                 if (creature.Controller.CurrentAction == BehaviorManager.BehaviorActionWander || creature.Controller.CurrentAction == BehaviorManager.BehaviorActionFollowingPath)
                     BehaviorManager.Instance.SetActionFighting(creature, missile.Source.EntityId);
@@ -191,6 +195,11 @@ namespace Rasa.Managers
 
         public void MissileLaunch(MapChannel mapChannel, ActionData action, int damage, DamageType? damageType = null)
         {
+            // Any combat action ends the attacker's stealth (Cloak Wave).
+            AbilityEffects.BreakStealth(mapChannel, action.Actor);
+            if (action.Actor is Creature attackingCreature)
+                AbilityEffects.OnCreatureAttack(attackingCreature);
+
             var missile = new Missile
             {
                 DamageA = DamageModifiers.Outgoing(action.Actor, damage),

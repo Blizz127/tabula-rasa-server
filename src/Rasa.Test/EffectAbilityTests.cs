@@ -632,6 +632,93 @@ namespace Rasa.Test
             Assert.AreEqual(100, next.DamageA);
         }
 
+        [TestMethod]
+        public void ControlledFissionBlastsAroundItsTargetAfterTheDelay()
+        {
+            var row = Row(381, "abilities.controlledfission", 500, 500, 60);
+            row.Properties[AbilityProperty.EffectRadius] = 10;
+            row.Properties[AbilityProperty.DamageAmountMin] = 150;
+            row.Properties[AbilityProperty.DamageAmountMax] = 150;
+            row.Properties[AbilityProperty.DelayTimeMs] = 10000;
+            var target = Creature(new Vector3(20, 0, 0));
+            var beside = Creature(new Vector3(25, 0, 0));
+            AbilityEffects.ControlledFission(_map, _client.Player, target, row, new System.Random(1));
+            GameEffectManager.Instance.DoWork(_map, 9999);
+            Assert.AreEqual(100000, beside.Attributes[Attributes.Health].Current);
+            GameEffectManager.Instance.DoWork(_map, 1);
+            Assert.AreEqual((100000 - 150, 100000 - 150), (target.Attributes[Attributes.Health].Current, beside.Attributes[Attributes.Health].Current));
+        }
+
+        [TestMethod]
+        public void ExplosiveNanitesGoOffOnEachHitUntilSpent()
+        {
+            var row = Row(383, "abilities.explodingnanites", 500, 500, 60);
+            row.Properties[AbilityProperty.DamageAmountMin] = 40;
+            row.Properties[AbilityProperty.DamageAmountMax] = 40;
+            row.Properties[AbilityProperty.Duration] = 30;
+            row.Properties[AbilityProperty.UseCount] = 3;
+            row.Properties[AbilityProperty.UseDropoff] = 5;
+            var target = Creature(new Vector3(20, 0, 0));
+            AbilityEffects.ExplosiveNanites(_map, _client.Player, target, row, new System.Random(1));
+            for (var hit = 0; hit < 5; hit++)
+                MissileManager.Instance.DamageTick(_map, _client.Player, target, 1, DamageType.Physical);
+            Assert.AreEqual(100000 - 5 - (40 + 38 + 36), target.Attributes[Attributes.Health].Current, "three explosions, 5% weaker each, then spent");
+        }
+
+        [TestMethod]
+        public void PolarityFieldMakesTheTargetVulnerableToItsType()
+        {
+            var row = Row(388, "abilities.polarityfield", 400, 400, 60);
+            row.Properties[AbilityProperty.PerPumpMod] = -10;
+            row.Properties[AbilityProperty.DamageType] = (int)DamageType.Electrical;
+            row.Properties[AbilityProperty.DurationMs] = 30000;
+            var target = Creature(new Vector3(20, 0, 0));
+            AbilityEffects.PolarityField(_map, _client.Player, target, row);
+            Assert.AreEqual(110, DamageModifiers.AgainstCreature(target, 100, DamageType.Electrical), "the client's (100 - r) / 100");
+            Assert.AreEqual(100, DamageModifiers.AgainstCreature(target, 100, DamageType.Fire));
+        }
+
+        [TestMethod]
+        public void FeedbackHurtsTheCreatureEachTimeItAttacks()
+        {
+            var row = Row(298, "abilities.feedback", 500, 500, 60);
+            row.Properties[AbilityProperty.DamageAmountMin] = 50;
+            row.Properties[AbilityProperty.DamageAmountMax] = 50;
+            row.Properties[AbilityProperty.Duration] = 20;
+            var target = Creature(new Vector3(20, 0, 0));
+            AbilityEffects.Feedback(_map, _client.Player, target, row, new System.Random(1));
+            AbilityEffects.OnCreatureAttack(target);
+            AbilityEffects.OnCreatureAttack(target);
+            Assert.AreEqual(100000 - 100, target.Attributes[Attributes.Health].Current);
+        }
+
+        [TestMethod]
+        public void CloakWaveHidesThePlayerUntilTheyAct()
+        {
+            var row = Row(252, "abilities.cloakwave", 2300, 847, 0);
+            row.Properties[AbilityProperty.RadiusAroundSource] = 25;
+            row.Properties[AbilityProperty.EffectDurationMs] = 60000;
+            AbilityEffects.CloakWave(_map, _client, row);
+            Assert.IsTrue(_client.Player.ActiveEffects.Values.Any(e => e.Stealth));
+            AbilityEffects.BreakStealth(_map, _client.Player);
+            Assert.IsFalse(_client.Player.ActiveEffects.Values.Any(e => e.Stealth));
+        }
+
+        [TestMethod]
+        public void TraitorTurnsTheCreatureUntilTheEffectEnds()
+        {
+            var row = Row(393, "abilities.traitor", 500, 700, 20);
+            row.Properties[AbilityProperty.Duration] = 10;
+            row.Properties[AbilityProperty.EffectRadius] = 10;
+            var turned = Creature(new Vector3(10, 0, 0));
+            var former = Creature(new Vector3(14, 0, 0));
+            Assert.IsTrue(AbilityEffects.Traitor(_map, _client.Player, turned, row));
+            Assert.AreEqual(Factions.AFS, turned.Faction);
+            Assert.AreEqual(former.EntityId, turned.Controller.ActionFighting.TargetEntityId, "set on its nearest former ally");
+            GameEffectManager.Instance.DoWork(_map, 10000);
+            Assert.AreEqual(Factions.Bane, turned.Faction);
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

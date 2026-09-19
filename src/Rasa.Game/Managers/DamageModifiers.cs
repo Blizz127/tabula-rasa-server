@@ -56,6 +56,18 @@ namespace Rasa.Managers
             return source.ActiveEffects.Values.Select(effect => effect.ConvertVirulentTo).FirstOrDefault(to => to != null) ?? type;
         }
 
+        /// <summary>
+        /// Polarity Field: a creature's rating against the hit's type (negative: vulnerable), converted with the client's
+        /// own multiplier - (100 - rating) / 100 below zero.
+        /// </summary>
+        public static int AgainstCreature(Actor target, int damage, Data.DamageType? type)
+        {
+            if (target == null || type == null || damage <= 0)
+                return damage;
+            var rating = target.ActiveEffects.Values.Where(effect => effect.VulnerableType == type).Sum(effect => effect.VulnerableRating);
+            return rating == 0 ? damage : (int)System.Math.Round(damage * Data.DamageResistance.GetDamageMultiplier(rating), System.MidpointRounding.AwayFromZero);
+        }
+
         public static int ResistRating(Actor target)
             => target?.ActiveEffects.Values.Sum(effect => effect.ResistRating) ?? 0;
     }

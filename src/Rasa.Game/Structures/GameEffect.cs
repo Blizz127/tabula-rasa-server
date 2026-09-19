@@ -60,6 +60,17 @@
         public int ShredderDamage { get; set; }
         public int ShredderIntervalMs { get; set; }
         public long ShredderReadyAt { get; set; }
+        /// <summary>Polarity Field: resistance rating (negative: a vulnerability) against one type.</summary>
+        public Data.DamageType? VulnerableType { get; set; }
+        public int VulnerableRating { get; set; }
+        /// <summary>Explosive Nanites: explosions left, and what each does; Busy stops an explosion setting off the next.</summary>
+        public int NanitesLeft { get; set; }
+        public System.Action<GameEffect> OnDamaged { get; set; }
+        public bool Busy { get; set; }
+        /// <summary>Feedback: what happens when the holder attacks.</summary>
+        public System.Action<GameEffect> OnAttack { get; set; }
+        /// <summary>Cloak Wave: creatures do not see the holder; any combat action ends it.</summary>
+        public bool Stealth { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

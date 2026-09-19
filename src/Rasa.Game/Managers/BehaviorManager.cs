@@ -115,6 +115,10 @@ namespace Rasa.Managers
                     if (client.Player.GmFlagAlwaysFriendly)
                         continue;
 
+                    // Cloak Wave: a stealthed player is not seen.
+                    if (client.Player.ActiveEffects.Values.Any(effect => effect.Stealth))
+                        continue;
+
                     if (client.Player.Attributes[Attributes.Health].Current <= 0)
                         continue;
 

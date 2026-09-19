@@ -59,6 +59,15 @@ namespace Rasa.Managers
         public const int CalledEyeType = 293;                 // "Ranged attack damage reduced by %(damageMod)s%%"
         public const int CalledChestType = 294;               // "You are bleeding profusely!"
         public const int CalledHeadType = 295;                // CALLED_SHOT_HEAD
+        public const int FeedbackType = 383;                  // FEEDBACK_EFFECT
+        public const int RealityRipperSourceType = 203;       // REALITY_RIPPER_SOURCE
+        public const int RealityRipperTargetType = 204;       // REALITY_RIPPER_TARGET
+        public const int ControlledFissionType = 207;         // CONTROLLED_FISSION_EFFECT
+        public const int ExplodingNanitesType = 10000020;     // EXPLODING_NANITES_EFFECT, "Increases damage taken by this target"
+        public const int PolarityFieldType = 262;             // POLARITY_FIELD, "Converts one or more damage resistances into vulnerabilities"
+        public const int StealthType = 123;                   // STEALTH_EFFECT (Cloak Wave's targetGameEffect)
+        public const int TraitorType = 10000057;              // TRAITOR_EFFECT
+        public const int CorpseImmolationType = 126;          // CORPSE_IMMOLATION
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
@@ -974,6 +983,236 @@ namespace Rasa.Managers
                     GameEffectManager.Instance.AttachEffect(map, target, CalledHeadType, info.Level, duration, sniper.EntityId, false, new Dictionary<string, double>());
                 }
             };
+        }
+
+        /// <summary>A creature took a hit: Explosive Nanites go off (never from their own explosion).</summary>
+        public static void OnCreatureDamaged(Creature creature)
+        {
+            foreach (var effect in creature.ActiveEffects.Values.Where(e => e.OnDamaged != null && !e.Busy).ToList())
+            {
+                effect.Busy = true;
+                try { effect.OnDamaged(effect); }
+                finally { effect.Busy = false; }
+            }
+        }
+
+        /// <summary>A creature attacked: Feedback answers it.</summary>
+        public static void OnCreatureAttack(Creature creature)
+        {
+            foreach (var effect in creature.ActiveEffects.Values.Where(e => e.OnAttack != null).ToList())
+                effect.OnAttack(effect);
+        }
+
+        /// <summary>Cloak Wave: any combat action ends the holder's stealth.</summary>
+        public static void BreakStealth(MapChannel map, Actor actor)
+        {
+            if (actor == null)
+                return;
+            foreach (var effect in actor.ActiveEffects.Values.Where(e => e.Stealth).ToList())
+                GameEffectManager.Instance.DettachEffect(map, actor, effect);
+        }
+
+        private static (int Min, int Max) DamageRange(Actor source, ActionLevelInfo info)
+        {
+            var level = source is Manifestation player ? player.Level : 1;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), level, scaleType);
+            var max = Math.Max(min, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), level, scaleType));
+            return (min, max);
+        }
+
+        private static void Blast(MapChannel map, Actor source, GameEffect shownOn, Actor shownAt, Vector3 centre, float radius,
+            int min, int max, DamageType type, Random random)
+        {
+            var hits = HostilesAround(map, source, centre, radius)
+                .Select(enemy => (enemy.EntityId, MissileManager.Instance.DamageTick(map, source, enemy,
+                    DamageModifiers.Outgoing(source, random.Next(min, max + 1)), type))).ToList();
+            if (hits.Count > 0 && shownOn != null)
+                CellManager.Instance.CellCallMethod(map, shownAt, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(shownOn.EffectId, hits));
+        }
+
+        /// <summary>
+        /// Controlled Fission: "causes them to explode once they have taken a set amount of damage, or after a set time.
+        /// The explosion will damage all enemies within the blast radius." After DELAY_TIME_MS the target bursts,
+        /// DAMAGE_AMOUNT to every hostile within EFFECT_RADIUS of it. The damage threshold that sets it off early is not in
+        /// the row and is not applied.
+        /// </summary>
+        public static void ControlledFission(MapChannel map, Manifestation demolitionist, Creature target, ActionLevelInfo info, Random random)
+        {
+            if (target == null)
+                return;
+            var (min, max) = DamageRange(demolitionist, info);
+            var delay = Math.Max(1, info.Get(AbilityProperty.DelayTimeMs));
+            GameEffectManager.Instance.AttachEffect(map, target, ControlledFissionType, info.Level, delay, demolitionist.EntityId, false,
+                new Dictionary<string, double>(), delay, fission =>
+                    Blast(map, demolitionist, fission, target, target.Position, info.Get(AbilityProperty.EffectRadius), min, max, DamageType.Physical, random));
+        }
+
+        /// <summary>
+        /// Explosive Nanites: "causes an explosion each time the enemy takes damage from any source. Effect lasts until all
+        /// explosions are triggered or a set time has passed" - USE_COUNT explosions of DAMAGE_AMOUNT of the row's
+        /// DAMAGE_TYPE on the target within DURATION, each USE_DROPOFF percent weaker than the last (the dropoff's reading
+        /// is inferred).
+        /// </summary>
+        public static void ExplosiveNanites(MapChannel map, Manifestation demolitionist, Creature target, ActionLevelInfo info, Random random)
+        {
+            if (target == null)
+                return;
+            var (min, max) = DamageRange(demolitionist, info);
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var dropoff = info.Get(AbilityProperty.UseDropoff);
+            var nanites = GameEffectManager.Instance.AttachEffect(map, target, ExplodingNanitesType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                demolitionist.EntityId, false, new Dictionary<string, double>());
+            nanites.NanitesLeft = Math.Max(1, info.Get(AbilityProperty.UseCount, 1));
+            var used = 0;
+            nanites.OnDamaged = effect =>
+            {
+                if (target.State == CharacterState.Dead)
+                    return;
+                var amount = random.Next(min, max + 1) * Math.Max(0, 100 - dropoff * used) / 100;
+                used++;
+                var hit = MissileManager.Instance.DamageTick(map, demolitionist, target, DamageModifiers.Outgoing(demolitionist, amount), type);
+                CellManager.Instance.CellCallMethod(map, target, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(effect.EffectId,
+                    new[] { (target.EntityId, hit) }));
+                if (--effect.NanitesLeft <= 0)
+                    GameEffectManager.Instance.DettachEffect(map, target, effect);
+            };
+        }
+
+        /// <summary>
+        /// Polarity Field: "lowering resistance to a single damage type for a set time" - the row's DAMAGE_TYPE takes
+        /// PER_PUMP_MOD (negative) as a resistance rating for DURATION_MS. The skill's proficiency adds to it for every pump
+        /// the spy holds; the rating used here is that per-pump amount times the pump used (inferred from "Each pump level
+        /// gains an increase to the resistance debuff amount").
+        /// </summary>
+        public static void PolarityField(MapChannel map, Manifestation spy, Creature target, ActionLevelInfo info)
+        {
+            if (target == null)
+                return;
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var field = GameEffectManager.Instance.AttachEffect(map, target, PolarityFieldType, info.Level, info.Get(AbilityProperty.DurationMs),
+                spy.EntityId, false, new Dictionary<string, double> { ["damageType"] = (int)type });
+            field.VulnerableType = type;
+            field.VulnerableRating = info.Get(AbilityProperty.PerPumpMod) * (int)Math.Max(1, info.Level);
+        }
+
+        /// <summary>
+        /// Feedback: "Damages a single enemy target when they perform certain actions within a set time" (pumps: healing and
+        /// item use, combat actions, healing AoE, attack AoE, all actions AoE). Creatures here neither heal nor use items,
+        /// so the triggers that can fire are their attacks: at the rows with a radius (RADIUS_AROUND_TARGET or
+        /// EFFECT_RADIUS) every hostile around the target is marked too. Each attack a marked creature makes costs it a
+        /// DAMAGE_AMOUNT roll of the row's type, for DURATION.
+        /// </summary>
+        public static void Feedback(MapChannel map, Manifestation engineer, Creature target, ActionLevelInfo info, Random random)
+        {
+            if (target == null)
+                return;
+            var (min, max) = DamageRange(engineer, info);
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var radius = Math.Max(info.Get(AbilityProperty.RadiusAroundTarget), info.Get(AbilityProperty.EffectRadius));
+            var marked = new List<Creature> { target };
+            if (radius > 0)
+                marked.AddRange(HostilesAround(map, engineer, target.Position, radius).Where(c => c != target));
+            foreach (var creature in marked)
+            {
+                var feedback = GameEffectManager.Instance.AttachEffect(map, creature, FeedbackType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    engineer.EntityId, false, new Dictionary<string, double> { ["level"] = info.Level });
+                feedback.OnAttack = effect =>
+                {
+                    var hit = MissileManager.Instance.DamageTick(map, engineer, creature, DamageModifiers.Outgoing(engineer, random.Next(min, max + 1)), type);
+                    CellManager.Instance.CellCallMethod(map, creature, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(effect.EffectId,
+                        new[] { (creature.EntityId, hit) }));
+                };
+            }
+        }
+
+        /// <summary>
+        /// Reality Ripper: "Creates an effect at the feet of the user that pulls enemies toward it and damages them at
+        /// intervals over a set time." Every INTERVAL for DURATION, each hostile within EFFECT_RADIUS of where it was made
+        /// takes a DAMAGE_AMOUNT roll and is drawn halfway to the centre (the pull's strength is not in the row; halfway
+        /// is inferred), held by REALITY_RIPPER_TARGET while it lasts. The rip being a destroyable object is not built.
+        /// </summary>
+        public static void RealityRipper(MapChannel map, Manifestation demolitionist, Vector3 centre, ActionLevelInfo info, Random random)
+        {
+            var (min, max) = DamageRange(demolitionist, info);
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var held = new HashSet<Creature>();
+            GameEffectManager.Instance.AttachEffect(map, demolitionist, RealityRipperSourceType, info.Level, duration, demolitionist.EntityId, true,
+                new Dictionary<string, double>(), Math.Max(1, info.Get(AbilityProperty.Interval, 1)) * 1000, rip =>
+                {
+                    var hits = new List<(ulong, HitData)>();
+                    foreach (var enemy in HostilesAround(map, demolitionist, centre, radius))
+                    {
+                        if (held.Add(enemy))
+                            GameEffectManager.Instance.AttachEffect(map, enemy, RealityRipperTargetType, info.Level,
+                                (int)Math.Max(0, rip.Duration - rip.EffectTime), demolitionist.EntityId, false, new Dictionary<string, double>());
+                        enemy.Position = NavMeshManager.SnapToGround(map, Vector3.Lerp(enemy.Position, centre, 0.5f));
+                        CellManager.Instance.CellMoveObject(enemy, new Movement(enemy.Position, 0f, 0x08, new Vector2((float)enemy.Rotation, 0f)));
+                        hits.Add((enemy.EntityId, MissileManager.Instance.DamageTick(map, demolitionist, enemy,
+                            DamageModifiers.Outgoing(demolitionist, random.Next(min, max + 1)), DamageType.Physical)));
+                    }
+                    if (hits.Count > 0)
+                        CellManager.Instance.CellCallMethod(map, demolitionist, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(rip.EffectId, hits));
+                });
+        }
+
+        /// <summary>
+        /// Cloak Wave: "Buffs the user and nearby squad members with world and radar invisibility for a set time. Player
+        /// movement speed is reduced, and any combat action will break the effect." Each within RADIUS_AROUND_SOURCE carries
+        /// the client's STEALTH_EFFECT for EFFECT_DURATION_MS; creatures do not pick them as targets, and an attack or an
+        /// ability ends it. The speed reduction is not in the row and is not applied.
+        /// </summary>
+        public static void CloakWave(MapChannel map, Game.Client spy, ActionLevelInfo info)
+        {
+            foreach (var member in SquadAround(map, spy, spy.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+                GameEffectManager.Instance.AttachEffect(map, member.Player, StealthType, info.Level, info.Get(AbilityProperty.EffectDurationMs),
+                    spy.Player.EntityId, true, new Dictionary<string, double>()).Stealth = true;
+        }
+
+        /// <summary>
+        /// Traitor: "Changes a single enemy target to the user's faction for a time, causing it to attack and be attacked by
+        /// former friendly targets. Mechanized creatures and bosses are immune." For DURATION the creature is AFS - the AI
+        /// already sets creatures of different factions on each other - and told the client it is now friendly; it is set
+        /// on the nearest former ally within EFFECT_RADIUS. Its faction returns when the effect ends.
+        /// </summary>
+        public static bool Traitor(MapChannel map, Manifestation spy, Creature target, ActionLevelInfo info)
+        {
+            if (target == null || target.State == CharacterState.Dead || target.Faction == Factions.AFS)
+                return false;
+            var faction = target.Faction;
+            target.Faction = Factions.AFS;
+            CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Friendly));
+            if (target.Controller.CurrentAction == BehaviorManager.BehaviorActionFighting)
+                BehaviorManager.Instance.DropFight(target);
+            var former = HostilesAround(map, target, target.Position, info.Get(AbilityProperty.EffectRadius))
+                .Where(c => c != target && c.Faction == faction).OrderBy(c => Vector3.Distance(c.Position, target.Position)).FirstOrDefault();
+            if (former != null)
+                BehaviorManager.Instance.SetActionFighting(target, former.EntityId);
+            GameEffectManager.Instance.AttachEffect(map, target, TraitorType, info.Level, info.Get(AbilityProperty.Duration) * 1000, spy.EntityId, false,
+                new Dictionary<string, double>()).OnDetach = _ =>
+                {
+                    target.Faction = faction;
+                    CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.TargetCategoryPacket(TargetCategory.Hostile));
+                    BehaviorManager.Instance.DropFight(target);
+                };
+            return true;
+        }
+
+        /// <summary>
+        /// Cadaver Immolation: "Explodes a single enemy corpse after a set time and damages all enemies within the blast
+        /// radius" - after DELAY seconds, DAMAGE_AMOUNT of the row's type to every hostile within EFFECT_RADIUS of the corpse.
+        /// </summary>
+        public static void CadaverImmolation(MapChannel map, Manifestation exobiologist, Creature corpse, ActionLevelInfo info, Random random)
+        {
+            if (corpse == null)
+                return;
+            var (min, max) = DamageRange(exobiologist, info);
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var delay = Math.Max(1, info.Get(AbilityProperty.Delay)) * 1000;
+            var at = corpse.Position;
+            GameEffectManager.Instance.AttachEffect(map, exobiologist, CorpseImmolationType, info.Level, delay, exobiologist.EntityId, true,
+                new Dictionary<string, double>(), delay, burn => Blast(map, exobiologist, burn, exobiologist, at, info.Get(AbilityProperty.EffectRadius), min, max, type, random));
         }
 
         /// <summary>The player and the squad members on this map within radius of a point.</summary>
