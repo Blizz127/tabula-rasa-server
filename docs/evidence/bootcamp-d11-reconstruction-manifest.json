@@ -51437,7 +51437,7 @@
   },
   {
    "id": "GAP-NPC-BODY",
-   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows. S6: Outpost Commander Rogers (198514, tan/khaki uniform in B3-020) has no creature_appearance rows; the officer set of emulator creature 100 is emulator-authored and unmatched to the footage, so none is seeded. W1: Training Officer Kincaid (198515, dark beret and uniform collar in B2-036) has no creature_appearance rows.",
+   "summary": "NPC classes and appearance are analogues, and NPC hues are random. S4: Captain Youngblood (tan/brown leather jacket in A5-33) has no creature_appearance rows and renders without equipment, and the Thrax placements carry no weapon appearance; no appearance source was identified, so none is seeded. S5: Corporal Van Valkenberg, the unnamed wounded soldier, the two Infantrymen and the Forean Gunner Initiate use labelled analogue classes (OD-11, OD-17) and have no creature_appearance rows. S6: Outpost Commander Rogers (198514, tan/khaki uniform in B3-020) has no creature_appearance rows; the officer set of emulator creature 100 is emulator-authored and unmatched to the footage, so none is seeded. W1: Training Officer Kincaid (198515, dark beret and uniform collar in B2-036) has no creature_appearance rows. Update 2026-09-19 (ContentNpcAppearance): every created NPC is NPC_Human_Swapset_Male, which renders bare - head included - with no creature_appearance rows, and fifty of them had none ('captain youngblood is naked and headless'). Each now carries a shipped set of the same kind as an analogue: Rogers' officer set as BootcampFixNpcAppearance used (OD-11), and Dr. Munson's for the doctors. The footage's own clothing (Youngblood's tan leather jacket, Rogers' khaki, Kincaid's beret) is still unmatched, so none of these is claimed to be the original.",
    "evidence": [
     "src/Rasa.Game/Managers/CreatureManager.cs:259-261 (random hues)",
     "footage A2-040, A3-028, A5-33, B2-012 (NPC appearance)"
@@ -53976,6 +53976,28 @@
     {
      "source": "client_table:missions",
      "locator": "objectiveconversation 670/1 package 550; 670/2 and 361/1 package 145"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "ContentNpcAppearance",
+   "table": "creature_appearance",
+   "key": {
+    "class_id": 3846
+   },
+   "field": "rows",
+   "old": null,
+   "new": "6 slots for each of 50 created NPCs",
+   "reason": "Every NPC created for content rendered naked and headless: entity class 3846 NPC_Human_Swapset_Male is assembled from clothing pieces and they carried no creature_appearance rows. The sets are shipped ones, analogues under OD-11/OD-45.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 3846 NPC_Human_Swapset_Male"
+    },
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "creature_appearance of Outpost Commander Rogers (100) and Dr. Munson"
     }
    ]
   }
