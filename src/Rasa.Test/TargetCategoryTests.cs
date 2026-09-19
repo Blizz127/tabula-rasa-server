@@ -42,7 +42,9 @@ namespace Rasa.Test
                 EntityClassId = DummyClass,
                 Position = new Vector3(1f, 2f, 3f),
                 DynamicObjectType = DynamicObjectType.ContentUsable,
-                StateId = (UseObjectState)110
+                StateId = (UseObjectState)110,
+                HitPoints = 100,
+                MaxHitPoints = 100
             };
             EntityManager.Instance.RegisterEntity(DummyEntityId, EntityType.Object);
             EntityManager.Instance.RegisterDynamicObject(dummy);
@@ -57,6 +59,15 @@ namespace Rasa.Test
                 Assert.IsNotNull(category, "a dynamic object without a target category cannot be targeted by the client");
                 Assert.AreEqual(TargetCategory.Object, category.TargetCategory);
                 Assert.IsTrue(create.EntityData.OfType<IsTargetablePacket>().Single().IsTargetable);
+
+                // And it has to be told it can be damaged: the client's usabledata row for 29365 is all
+                // None, and IsDirectTargetable - which a weapon's Hostile target type needs for anything
+                // not hostile - returns False without canBeDamaged.
+                var damage = create.EntityData.OfType<DamageInfoPacket>().SingleOrDefault();
+                Assert.IsNotNull(damage, "a destroyable the client thinks cannot be damaged cannot be targeted by a weapon");
+                Assert.IsTrue(damage.CanBeDamaged);
+                Assert.AreEqual(100u, damage.TotalHitPoints);
+                Assert.AreEqual(100u, damage.CurrentHitPoints);
             }
             finally
             {

@@ -307,6 +307,17 @@ namespace Rasa.Managers
                 new UsableInfoPacket(dynamicObject.IsEnabled, dynamicObject.StateId, 0, dynamicObject.WindupTime, dynamicObject.ActivateMission)
         };
 
+            // A usable the client does not believe can be damaged cannot be targeted by a weapon. Its
+            // canBeDamaged starts from the client's own usabledata row for the class, and for the boot
+            // camp's practice dummy (29365) that row is all None - the server is expected to say. Under
+            // a weapon's Hostile target type, targeting._IsTargetType only lets a non-hostile entity
+            // through when IsDirectTargetable(), which requires canBeDamaged; without it the crosshair
+            // never locks, SetTargetId is never sent, and every shot lands on entity 0 (live trace
+            // 2026-09-19, after the target category was already being sent). DamageInfoPacket existed and
+            // was never used.
+            if (dynamicObject.MaxHitPoints > 0)
+                entityData.Add(new DamageInfoPacket(true, false, dynamicObject.MaxHitPoints, dynamicObject.HitPoints));
+
             client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(dynamicObject.EntityId, dynamicObject.EntityClassId, entityData));
         }
 
