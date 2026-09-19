@@ -17,6 +17,7 @@ checked the server against itself.
 | Practice dummy could not be targeted (2) | `canBeDamaged` starts from `usabledata` (all `None` for 29365) and is set by `Recv_DamageInfo` | `DamageInfoPacket` existed and was never sent |
 | Lightning did not count on the Target Dummy | the binding names action 194 | every destroying hit was reported as action 0 |
 | Target Dummy unreachable | `adv_bootcamp.map` lanes 5.35 m apart, a sandbag pair flanking each target | a labelled-match position inside a sandbag emplacement |
+| Target Dummy "can't see it" (2026-09-19) | the practice dummy stands in front of its sandbags, 1.45 m left of the lane centre; the Target Dummy now does the same one lane over (379.21, 186.8) | the lane fix put it on the centre line, which is inside the overlapping sandbag pair |
 
 So the audit compares what the server believes against the **client's own tables and code**, and every
 comparison that passes becomes a standing test, so the next mismatch fails CI instead of a play session.
