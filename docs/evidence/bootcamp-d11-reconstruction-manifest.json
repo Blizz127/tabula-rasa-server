@@ -4196,13 +4196,13 @@
    "table": "content_item_set",
    "key": {
     "item_set_id": 19858,
-    "item_template_id": 13066
+    "item_template_id": 12209
    },
    "slice": "S2",
-   "migration": "BootcampS2GearingUp",
+   "migration": "BootcampCrateUncommonGear",
    "fields": {
     "item_template_id": {
-     "value": 13066,
+     "value": 12209,
      "tier": "analogue",
      "citations": [
       {
@@ -4211,13 +4211,18 @@
        "t": 306.467
       },
       {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-034",
+       "t": 319.6
+      },
+      {
        "source": "client_table:game.zip",
-       "locator": "rasaworld.db itemtemplate_itemclass; level-1 Motor Assist band classes 15542/15572/15632/15662 and rifle class 27220"
+       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
       }
      ],
-     "counterpart": "template 13066 (Astra Motor Assist Armor Boots): the level-1 generic variant of the observed item; the client holds no binding for the observed maker variants (runtime-composed module names) and the tooltip-stat match does not resolve unique template ids",
+     "counterpart": "template 12209 (Astra Motor Assist Armor Boots): V06 UNC boots, level-1 band, no level requirement (13066 requires level 30); the band is taken from the gloves, whose tooltip is observed",
      "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-19"
+     "decision": "OD-54"
     },
     "quantity": {
      "value": 1,
@@ -4237,14 +4242,14 @@
    "table": "content_item_set",
    "key": {
     "item_set_id": 19858,
-    "item_template_id": 13096
+    "item_template_id": 15803
    },
    "slice": "S2",
-   "migration": "BootcampS2GearingUp",
+   "migration": "BootcampCrateUncommonGear",
    "fields": {
     "item_template_id": {
-     "value": 13096,
-     "tier": "analogue",
+     "value": 15803,
+     "tier": "inferred",
      "citations": [
       {
        "source": "video:7Lrst9SG3pk",
@@ -4252,13 +4257,16 @@
        "t": 306.467
       },
       {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-034",
+       "t": 319.6
+      },
+      {
        "source": "client_table:game.zip",
-       "locator": "rasaworld.db itemtemplate_itemclass; level-1 Motor Assist band classes 15542/15572/15632/15662 and rifle class 27220"
+       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
       }
      ],
-     "counterpart": "template 13096 (Teleract Motor Assist Armor Gloves): the level-1 generic variant of the observed item; the client holds no binding for the observed maker variants (runtime-composed module names) and the tooltip-stat match does not resolve unique template ids",
-     "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-19"
+     "reasoning": "The gloves tooltip reads Body Armor 28, Motor Assist Armor 1, Min Level 1. Body armour is armorclass absorption / 10, and 15803 (Armor_T1_MotorAssist_V06_UNC_Gloves_01_to_02) is the only Motor Assist gloves template on the server absorbing 281 without a level requirement; V04/V05/V07 require levels 22/15/49. The maker name is a runtime module prefix and does not select a template."
     },
     "quantity": {
      "value": 1,
@@ -4278,13 +4286,13 @@
    "table": "content_item_set",
    "key": {
     "item_set_id": 19858,
-    "item_template_id": 13156
+    "item_template_id": 26879
    },
    "slice": "S2",
-   "migration": "BootcampS2GearingUp",
+   "migration": "BootcampCrateUncommonGear",
    "fields": {
     "item_template_id": {
-     "value": 13156,
+     "value": 26879,
      "tier": "analogue",
      "citations": [
       {
@@ -4293,13 +4301,18 @@
        "t": 306.467
       },
       {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-034",
+       "t": 319.6
+      },
+      {
        "source": "client_table:game.zip",
-       "locator": "rasaworld.db itemtemplate_itemclass; level-1 Motor Assist band classes 15542/15572/15632/15662 and rifle class 27220"
+       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
       }
      ],
-     "counterpart": "template 13156 (Teleract Motor Assist Armor Legs): the level-1 generic variant of the observed item; the client holds no binding for the observed maker variants (runtime-composed module names) and the tooltip-stat match does not resolve unique template ids",
+     "counterpart": "template 26879 (Teleract Motor Assist Armor Legs): V05 UNC legs, level-1 band, no level requirement (V06 legs 15801 requires level 8); the band is taken from the gloves, whose tooltip is observed",
      "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-19"
+     "decision": "OD-54"
     },
     "quantity": {
      "value": 1,
@@ -4319,13 +4332,13 @@
    "table": "content_item_set",
    "key": {
     "item_set_id": 19858,
-    "item_template_id": 13186
+    "item_template_id": 12208
    },
    "slice": "S2",
-   "migration": "BootcampS2GearingUp",
+   "migration": "BootcampCrateUncommonGear",
    "fields": {
     "item_template_id": {
-     "value": 13186,
+     "value": 12208,
      "tier": "analogue",
      "citations": [
       {
@@ -4334,13 +4347,18 @@
        "t": 306.467
       },
       {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-034",
+       "t": 319.6
+      },
+      {
        "source": "client_table:game.zip",
-       "locator": "rasaworld.db itemtemplate_itemclass; level-1 Motor Assist band classes 15542/15572/15632/15662 and rifle class 27220"
+       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
       }
      ],
-     "counterpart": "template 13186 (Hellstrom Motor Assist Armor Vest): the level-1 generic variant of the observed item; the client holds no binding for the observed maker variants (runtime-composed module names) and the tooltip-stat match does not resolve unique template ids",
+     "counterpart": "template 12208 (Hellstrom Motor Assist Armor Vest): V05 UNC vest, level-1 band, no level requirement (V06 vest 26997 requires level 34); the band is taken from the gloves, whose tooltip is observed",
      "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-19"
+     "decision": "OD-54"
     },
     "quantity": {
      "value": 1,
@@ -43302,7 +43320,7 @@
     "id": 199700
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "pos_x": {
      "value": 360.8661,
@@ -43337,28 +43355,39 @@
      ],
      "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
     },
-    "entity_class_id": {
-     "value": 7478,
-     "tier": "original",
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
      "citations": [
       {
-       "source": "client_map:adv_foreas_concordia_wilderness",
-       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
-      }
-     ]
-    },
-    "hit_points": {
-     "value": 100,
-     "tier": "analogue",
-     "citations": [
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
       {
-       "source": "client_table:missions",
-       "locator": "destroyable object objective (430/3)"
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
       }
      ],
-     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
-     "required_because": "a destroyable object needs hit points and no surviving source gives them",
-     "decision": "OD-46"
+     "reasoning": "TaRapedia calls the mortars automated turrets and fortifications; the client's fortifications are creatures (Emplacement_* classes with the Creature augmentation, targetable), while the launcher class 7478 is scenery the client can neither target nor damage."
+    },
+    "creature_id": {
+     "value": 199720,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ],
+     "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
     }
    }
   },
@@ -43368,7 +43397,7 @@
     "id": 199701
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "pos_x": {
      "value": 212.7184,
@@ -43403,28 +43432,39 @@
      ],
      "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
     },
-    "entity_class_id": {
-     "value": 7478,
-     "tier": "original",
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
      "citations": [
       {
-       "source": "client_map:adv_foreas_concordia_wilderness",
-       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
-      }
-     ]
-    },
-    "hit_points": {
-     "value": 100,
-     "tier": "analogue",
-     "citations": [
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
       {
-       "source": "client_table:missions",
-       "locator": "destroyable object objective (430/3)"
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
       }
      ],
-     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
-     "required_because": "a destroyable object needs hit points and no surviving source gives them",
-     "decision": "OD-46"
+     "reasoning": "TaRapedia calls the mortars automated turrets and fortifications; the client's fortifications are creatures (Emplacement_* classes with the Creature augmentation, targetable), while the launcher class 7478 is scenery the client can neither target nor damage."
+    },
+    "creature_id": {
+     "value": 199720,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ],
+     "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
     }
    }
   },
@@ -43434,7 +43474,7 @@
     "id": 199702
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "pos_x": {
      "value": 185.0261,
@@ -43469,28 +43509,39 @@
      ],
      "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
     },
-    "entity_class_id": {
-     "value": 7478,
-     "tier": "original",
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
      "citations": [
       {
-       "source": "client_map:adv_foreas_concordia_wilderness",
-       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
-      }
-     ]
-    },
-    "hit_points": {
-     "value": 100,
-     "tier": "analogue",
-     "citations": [
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
       {
-       "source": "client_table:missions",
-       "locator": "destroyable object objective (430/3)"
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
       }
      ],
-     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
-     "required_because": "a destroyable object needs hit points and no surviving source gives them",
-     "decision": "OD-46"
+     "reasoning": "TaRapedia calls the mortars automated turrets and fortifications; the client's fortifications are creatures (Emplacement_* classes with the Creature augmentation, targetable), while the launcher class 7478 is scenery the client can neither target nor damage."
+    },
+    "creature_id": {
+     "value": 199720,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ],
+     "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
     }
    }
   },
@@ -43500,7 +43551,7 @@
     "id": 199703
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "pos_x": {
      "value": 99.713,
@@ -43535,28 +43586,39 @@
      ],
      "reasoning": "the position the client's own map file gives this launcher; the mission's four targets are the northern group of intact launchers."
     },
-    "entity_class_id": {
-     "value": 7478,
-     "tier": "original",
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
      "citations": [
       {
-       "source": "client_map:adv_foreas_concordia_wilderness",
-       "locator": "entity class 7478 ArchBaneGenObjMortarlauncherV01"
-      }
-     ]
-    },
-    "hit_points": {
-     "value": 100,
-     "tier": "analogue",
-     "citations": [
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
       {
-       "source": "client_table:missions",
-       "locator": "destroyable object objective (430/3)"
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
       }
      ],
-     "counterpart": "the boot camp's practice dummy (content_placement 198652), the emulator's existing destroyable",
-     "required_because": "a destroyable object needs hit points and no surviving source gives them",
-     "decision": "OD-46"
+     "reasoning": "TaRapedia calls the mortars automated turrets and fortifications; the client's fortifications are creatures (Emplacement_* classes with the Creature augmentation, targetable), while the launcher class 7478 is scenery the client can neither target nor damage."
+    },
+    "creature_id": {
+     "value": 199720,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ],
+     "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
     }
    }
   },
@@ -43728,18 +43790,22 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "kind": {
-     "value": 5,
+     "value": 6,
      "tier": "inferred",
      "citations": [
       {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
        "source": "client_table:missions",
-       "locator": "objective text 430/3"
+       "locator": "missiontextlanguage 'Destroy Mortar #N' (430/3-6)"
       }
      ],
-     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+     "reasoning": "the mortar is a creature, so destroying it is a kill of its placement"
     },
     "placement_id": {
      "value": 199700,
@@ -43762,18 +43828,22 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "kind": {
-     "value": 5,
+     "value": 6,
      "tier": "inferred",
      "citations": [
       {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
        "source": "client_table:missions",
-       "locator": "objective text 430/4"
+       "locator": "missiontextlanguage 'Destroy Mortar #N' (430/3-6)"
       }
      ],
-     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+     "reasoning": "the mortar is a creature, so destroying it is a kill of its placement"
     },
     "placement_id": {
      "value": 199701,
@@ -43796,18 +43866,22 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "kind": {
-     "value": 5,
+     "value": 6,
      "tier": "inferred",
      "citations": [
       {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
        "source": "client_table:missions",
-       "locator": "objective text 430/5"
+       "locator": "missiontextlanguage 'Destroy Mortar #N' (430/3-6)"
       }
      ],
-     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+     "reasoning": "the mortar is a creature, so destroying it is a kill of its placement"
     },
     "placement_id": {
      "value": 199702,
@@ -43830,18 +43904,22 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessMortarByNumbers",
+   "migration": "WildernessMortarCreature",
    "fields": {
     "kind": {
-     "value": 5,
+     "value": 6,
      "tier": "inferred",
      "citations": [
       {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949 (2007-12-08): 'An automated Bane mortar turret. Like all fortifications, these have exceptionally heavy armor for their level'"
+      },
+      {
        "source": "client_table:missions",
-       "locator": "objective text 430/6"
+       "locator": "missiontextlanguage 'Destroy Mortar #N' (430/3-6)"
       }
      ],
-     "reasoning": "the objective destroys an object, which is the destroying-hit binding the boot camp already uses for its practice dummy."
+     "reasoning": "the mortar is a creature, so destroying it is a kill of its placement"
     },
     "placement_id": {
      "value": 199703,
@@ -50436,6 +50514,96 @@
      ]
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199720
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarCreature",
+   "fields": {
+    "name_id": {
+     "value": 8186,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ]
+    },
+    "class_id": {
+     "value": 7482,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      }
+     ],
+     "counterpart": "7482 Emplacement_Bane_Turret_Standard, the Bane fortification creature class; its mesh 19366 neighbours the destroyed launcher's 19367",
+     "required_because": "no client class names a mortar creature, and a creature needs a class",
+     "decision": "OD-55"
+    },
+    "faction": {
+     "value": 0,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8186 'Bane Mortar'"
+      }
+     ],
+     "reasoning": "a Bane creature"
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "npc_mission 430 level 5"
+      }
+     ],
+     "reasoning": "the mission's level"
+    },
+    "max_hp": {
+     "value": 1500,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed creature 9 AFS_Turret_Mini (class 11302 Emplacement_AFS_Turret_Mini), level 4, max_hp 1500"
+      }
+     ],
+     "counterpart": "AFS_Turret_Mini (creature 9, level 4, 1,500), the only fortification creature in the world seed",
+     "required_because": "a creature needs hit points and no surviving source gives the mortar's",
+     "decision": "OD-55"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 199720,
+    "slot_id": 13
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarCreature",
+   "fields": {
+    "Class_id": {
+     "value": 10604,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 7478 (no augmentations, target_flag 0), 7482 Emplacement_Bane_Turret_Standard (Creature, Harvestable, mesh 19366), 7479 destroyed launcher (mesh 19367), 10604 Weapon_Creature_Bane_Mortar_Launcher"
+      }
+     ],
+     "reasoning": "the client's only creature mortar weapon, Weapon_Creature_Bane_Mortar_Launcher, in the weapon slot (13)"
+    }
+   }
   }
  ],
  "omitted": [
@@ -52449,17 +52617,22 @@
   },
   {
    "id": "GAP-BOOTCAMP-CRATE-TIER",
-   "summary": "The boot-camp crate's gloves in the footage read 'Body Armor: 28', which is the uncommon Motor Assist row (absorb 281, V04-V07); the seeded crate gives template 13096, the common V01 row (234 -> 23). Item names resolve through module prefix families, so which template the original crate held is not settled.",
+   "summary": "Closed 2026-09-19. The boot-camp crate's gloves in the footage read 'Body Armor: 28', which is the uncommon Motor Assist row (absorb 281, V04-V07); the seeded crate gives template 13096, the common V01 row (234 -> 23). Item names resolve through module prefix families, so which template the original crate held is not settled. BootcampCrateUncommonGear moves the crate to 15803 gloves (the only template matching the tooltip: absorb 281, Motor Assist 1, no level requirement) and the level-1 uncommon boots 12209, legs 26879 and vest 12208 (inferred band, no level requirement).",
    "evidence": [
     "footage A3-034 t=319.6",
     "itemtemplate 13096 Armor_T1_MotorAssist_V01_CMN_Gloves_01_to_02"
    ],
-   "closes_with": "a template whose prefix family and tier both match the footage tooltip, confirmed against the other crate items shown",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "slices": [
     "S2"
    ],
    "surfaced_by": [
     "1:1 fidelity audit, footage tooltip compare, 2026-09-19"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests",
+    "MissionContentLoadingTests"
    ]
   },
   {
@@ -52539,11 +52712,11 @@
   },
   {
    "id": "GAP-USABLE-ACTOR-LOCK",
-   "summary": "LockToActor / UseInterruptible / UseInterrupted are never sent. They mark a usable as in use by another player and play its channelling effect; of what the world places, only the Logos shrines (usabledata.specialFX state 81) have one. The client gives their meaning but not the order the original server sent them in.",
+   "summary": "Closed 2026-09-19 (inferred order). LockToActor / UseInterruptible / UseInterrupted are never sent. They mark a usable as in use by another player and play its channelling effect; of what the world places, only the Logos shrines (usabledata.specialFX state 81) have one. The client gives their meaning but not the order the original server sent them in. Logos shrines are now locked to the drawing player with LockToActor then UseInterruptible at windup, and released with LockToActor(0) on completion, preceded by UseInterrupted on interruption. The order is read from the client: ClanControlPoint.OnBeforeUseInterruptible shows UseInterruptible starting a use, and usable.py plays it only for the actor LockToActor named. Control points are left out: their client handler also takes a clan id.",
    "evidence": [
     "client augmentations/usable.py Recv_LockToActor, Recv_UseInterruptible, Recv_UseInterrupted, IsAlreadyInUse"
    ],
-   "closes_with": "a packet capture or footage of two players at one Logos shrine, or an owner decision to build the inferred order (lock and interruptible at windup, interrupted and unlock on interrupt, unlock on completion)",
+   "closes_with": "closed: the confirming tests are in confirmed_by; a packet capture would confirm the inferred order",
    "slices": [
     "S1",
     "S2",
@@ -52559,6 +52732,10 @@
    ],
    "surfaced_by": [
     "1:1 fidelity audit, packet-contract check, 2026-09-19"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "UsableActorLockTests"
    ]
   },
   {
@@ -52603,18 +52780,59 @@
   },
   {
    "id": "GAP-W3-430-MORTAR-CREATURE",
-   "summary": "Mission 430 'Mortar By Numbers' cannot be completed: its four launchers are placed as destroyables of class 7478 ArchBaneGenObjMortarlauncherBaseV01, which has no augmentations and target_flag 0, so the client can neither target nor damage them. TaRapedia describes the original as 'an automated Bane mortar turret. Like all fortifications...' - a creature. No client class names a mortar creature. Candidate reconstruction (inferred): class 7482 Emplacement_Bane_Turret_Standard (mesh 19366, next to the destroyed launcher's 19367), name 8186 'Bane Mortar', weapon class 10604 Weapon_Creature_Bane_Mortar_Launcher, at the four launcher positions.",
+   "summary": "Closed 2026-09-19 (OD-55, pending owner review). Mission 430 'Mortar By Numbers' cannot be completed: its four launchers are placed as destroyables of class 7478 ArchBaneGenObjMortarlauncherBaseV01, which has no augmentations and target_flag 0, so the client can neither target nor damage them. TaRapedia describes the original as 'an automated Bane mortar turret. Like all fortifications...' - a creature. No client class names a mortar creature. Candidate reconstruction (inferred): class 7482 Emplacement_Bane_Turret_Standard (mesh 19366, next to the destroyed launcher's 19367), name 8186 'Bane Mortar', weapon class 10604 Weapon_Creature_Bane_Mortar_Launcher, at the four launcher positions. WildernessMortarCreature makes the four placements kill targets of that creature.",
    "evidence": [
     "client generated/client/entityclass.pyo 7478, 7479, 7482, 10604",
     "client creaturenamelanguage 8186 'Bane Mortar'",
     "TaRapedia 'Mortar' rev. 18949 (2007-12-08); 'Mortar By Numbers' rev. 33276"
    ],
-   "closes_with": "owner decision on the candidate class, then a migration replacing the four destroyables with creatures bound to objectives 1-4",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "slices": [
     "W3"
    ],
    "surfaced_by": [
     "1:1 fidelity audit, placed-usable augmentation check, 2026-09-19"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests",
+    "MissionContentLoadingTests",
+    "KillBindingTests"
+   ]
+  },
+  {
+   "id": "GAP-W3-430-MORTAR-FIRE",
+   "summary": "The Bane Mortar's weapon (10604) attacks with action 411 WEAPON_GROUNDTARGET, 3,600 damage, which creature AI does not perform; the mortars stand and take fire without returning it.",
+   "evidence": [
+    "client generated/client/weaponclass.pyo 10604: attack action 411 arg 1",
+    "client generated/client/actiondata.pyo 411 weapons.groundtarget"
+   ],
+   "closes_with": "a ground-targeted creature attack in the AI, with the damage scaled as the client's own weapon data implies",
+   "surfaced_by": [
+    "1:1 fidelity audit, mortar reconstruction, 2026-09-19"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-KILL-BINDING-PLACEMENT",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. A kill binding that names a placement (1994/1 Tizzik Gi; 430/3-6 the Bane Mortars) was accepted by the content catalog and never completed: MissionManager.OnCreatureKilled matched only creature_id, and a placement binding's creature_id is 0. It now matches the dead creature's content placement for placement bindings and its creature id otherwise.",
+   "evidence": [
+    "npc_mission_objective_binding 1994/1 kind 6 placement 198659 creature 0",
+    "MissionManager.OnCreatureKilled"
+   ],
+   "closes_with": "closed: the confirming tests are in confirmed_by",
+   "surfaced_by": [
+    "1:1 fidelity audit, mortar reconstruction, 2026-09-19"
+   ],
+   "confirmed_by": [
+    "KillBindingTests"
+   ],
+   "slices": [
+    "S7",
+    "W3"
    ]
   }
  ],
@@ -53227,6 +53445,102 @@
      "locator": "objectiveconversation 429 (5 -> 726, 4 -> 116/208)"
     }
    ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "BootcampCrateUncommonGear",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 13066
+   },
+   "field": "item_template_id",
+   "old": 13066,
+   "new": 12209,
+   "reason": "The crate's gloves tooltip (Body Armor 28, Min Level 1) is the uncommon level-1 row, not the common one; the common rows also carry level requirements a level-1 recruit cannot meet (boots 30, gloves 15).",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-034",
+     "t": 319.6
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "BootcampCrateUncommonGear",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 13096
+   },
+   "field": "item_template_id",
+   "old": 13096,
+   "new": 15803,
+   "reason": "The crate's gloves tooltip (Body Armor 28, Min Level 1) is the uncommon level-1 row, not the common one; the common rows also carry level requirements a level-1 recruit cannot meet (boots 30, gloves 15).",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-034",
+     "t": 319.6
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "BootcampCrateUncommonGear",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 13156
+   },
+   "field": "item_template_id",
+   "old": 13156,
+   "new": 26879,
+   "reason": "The crate's gloves tooltip (Body Armor 28, Min Level 1) is the uncommon level-1 row, not the common one; the common rows also carry level requirements a level-1 recruit cannot meet (boots 30, gloves 15).",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-034",
+     "t": 319.6
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "BootcampCrateUncommonGear",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 13186
+   },
+   "field": "item_template_id",
+   "old": 13186,
+   "new": 12208,
+   "reason": "The crate's gloves tooltip (Body Armor 28, Min Level 1) is the uncommon level-1 row, not the common one; the common rows also carry level requirements a level-1 recruit cannot meet (boots 30, gloves 15).",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-034",
+     "t": 319.6
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -53732,6 +54046,26 @@
    "choice": "Every crafting request was declined with \"not available on this server yet\" - the manager's own doc said the recipes were the next step. The recipes are the client's: shared/crafting.pyo's recipeItemTemplateTable holds 160 schematics, each naming its inputs (an item template and a quantity), its result (template and amount), its energy cost, its KraftwerksTimeSeconds and the level it needs - and schematic 641 spells the whole chain out as 500 of item 1765 into 500 of item 28 (standard-grade cartridges) in five seconds at level 1. Fabrication now resolves the schematic (from the item the player is carrying in the 1.16.5 window's form, or from the recipe id in the older one), requires its level, plans every input against the player's own inventory before consuming anything, takes them with the same tested stack-consumption path item use takes, and starts a job whose time is the recipe's own. Collection (RequestRetrieveFinishedCraftItem and RetrieveAllFinishedItems) checks the station's clock before handing the item over, and creates the item only then, so an uncollected job holds no item row. Salvaging, module extraction, integration and upgrading still decline: their Mimeogel costs are in the same client table, but their item side is not in the emulator (GAP-W3-CRAFTING-MODULES).",
    "approved_on": "2026-09-16",
    "record": "docs/progression-preservation-plan.md#crafting"
+  },
+  {
+   "id": "OD-54",
+   "decision": "Boot-camp crate armour band",
+   "default": "The band the observed gloves tooltip resolves to",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The gloves tooltip (A3-034: Body Armor 28, Motor Assist Armor 1, Min Level 1) resolves to exactly one template, 15803 (V06 UNC, absorb 281, no level requirement). The boots, legs and vest, whose tooltips are not shown, are taken from the same uncommon level-1 band without a level requirement: 12209, 26879, 12208. This replaces OD-19's common-row analogues, two of which carry level requirements (30, 15) a level-1 recruit cannot meet.",
+   "approved_on": "2026-09-19",
+   "record": "docs/fidelity-audit.md"
+  },
+  {
+   "id": "OD-55",
+   "decision": "Mission 430 Bane Mortar creature",
+   "default": "The Bane fortification creature class with the client's creature mortar weapon",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The four mortars become one reconstructed creature, 199720: name 8186 'Bane Mortar' (original), class 7482 Emplacement_Bane_Turret_Standard (analogue), weapon class 10604 in the weapon slot, level 5 (the mission's), 1,500 hit points (the AFS_Turret_Mini fortification's), stationary at the client map's launcher positions with a 60 s respawn. Their fire (action 411 WEAPON_GROUNDTARGET) is not built.",
+   "approved_on": "2026-09-19",
+   "record": "docs/fidelity-audit.md"
   }
  ]
 }

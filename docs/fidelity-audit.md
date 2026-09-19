@@ -35,7 +35,7 @@ comparison that passes becomes a standing test, so the next mismatch fails CI in
 | Equipable class → slot; slot numbers | 6,935; 28 | **identical** |
 | Server enums on the wire against the client's constant modules | 16 enums | values identical except **`CharacterState.ToolReady` 22, client 24** (fixed); method ids 978/978, action ids 284/284, augmentations 64/64, creature flags 148/148 |
 
-### Mission 430 "Mortar By Numbers" cannot be completed
+### Mission 430 "Mortar By Numbers" could not be completed — fixed
 
 Its four launchers are placed as destroyables of class **7478 `ArchBaneGenObjMortarlauncherBaseV01`** — which has
 **no augmentations and `target_flag` 0**: plain scenery to the client, which can neither target nor damage it.
@@ -51,8 +51,16 @@ No client class names a mortar creature, and no class of any kind reuses the lau
 nearest evidence for a reconstruction: `Emplacement_Bane_Turret_Standard` (7482, Creature + Harvestable,
 targetable) uses mesh **19366**, next to the destroyed launcher's 19367; the client has a creature weapon class
 `Weapon_Creature_Bane_Mortar_Launcher` (10604); and the name "Bane Mortar" (8186). A creature of class 7482,
-named 8186, carrying weapon 10604, at the four launcher positions, is the candidate — **inferred**, so it waits on
-an owner decision before it is built. Open: **GAP-W3-430-MORTAR-CREATURE**.
+named 8186, carrying weapon 10604, at the four launcher positions — **built** (`WildernessMortarCreature`,
+OD-55, pending owner review): level 5 (the mission's), 1,500 hit points (the world's only fortification creature,
+AFS_Turret_Mini), stationary, 60 s respawn. The four objectives are kill bindings on the placements.
+
+Building it exposed a runtime defect: a kill binding that names a **placement** never completed — the kill hook
+compared creature ids only. That also blocked the boot camp's 1994/1 (Tizzik Gi). Fixed
+(`MissionManager.KillBindingNames`, GAP-KILL-BINDING-PLACEMENT).
+
+Still open: the mortar's own fire. Its weapon attacks with action 411 `WEAPON_GROUNDTARGET`, which creature AI
+does not perform (**GAP-W3-430-MORTAR-FIRE**).
 
 ### 2,495 armour pieces gave no armour — fixed
 
@@ -67,9 +75,14 @@ follow the same rule; truncation misses 6 of them. `min` and `max` are equal for
 observed is how an exact half rounds: 238 classes end in 5, and half-up is inferred. Recorded as
 **GAP-ITEM-ARMOR-ROUNDING** (inferred tier).
 
-A related open point: the crate's gloves in the footage are the *uncommon* V04–V07 row (281 → 28); the seeded
-crate gives template 13096, the common V01 row (234 → 23). Item names resolve through the prefix families of
-2026-09-15, so which template the original crate held is not settled. Open: **GAP-BOOTCAMP-CRATE-TIER**.
+### The boot-camp crate held the wrong armour — fixed
+
+The footage tooltip for the crate's gloves reads Body Armor 28, Motor Assist Armor 1, **Min Level 1**. Exactly one
+gloves template on the server matches all three: **15803** `Armor_T1_MotorAssist_V06_UNC_Gloves_01_to_02`
+(absorb 281, regen 1 — the tooltip's "Regen Rate: 1 per sec" too). The seeded 13096 was the common row (23) and,
+by the client's own requirement data, needs level 15; the seeded boots needed level 30. `BootcampCrateUncommonGear`
+gives the crate 15803 and the rest of the level-1 uncommon band without a level requirement — boots 12209, legs
+26879, vest 12208 (inferred from the gloves; OD-54, pending owner review).
 
 `BODY_ARMOR_DIVISOR` (1.5) in `shared/gameconstants` is not that divisor: the client never uses it, and it
 matches the server's existing Body-to-armour bonus (Body ÷ 1.5 %).
@@ -141,10 +154,12 @@ Checked by hand (2026-09-19):
 - **`UpdateEscortStatus` — fixed.** The client's `IsEscort` and its overhead escort marker are set only by
   `Recv_UpdateEscortStatus(bIsEscort)`. A creature materialized from an escort placement (Ranger Milpas, mission
   1390) is now introduced with it.
-- **`LockToActor` / `UseInterruptible` / `UseInterrupted` — recorded, not built.** They mark a usable as in use by
+- **`LockToActor` / `UseInterruptible` / `UseInterrupted` — built for Logos shrines (inferred order).** They mark a usable as in use by
   another player (`IsAlreadyInUse`) and play its channelling effect: `usabledata.specialFX` has one for 393
   classes, and of what the world places only the **Logos shrines** (state 81) carry one. The client code gives
-  their meaning but not the order the original server sent them in, and nothing else in the research does.
-  Open: **GAP-USABLE-ACTOR-LOCK**.
+  their meaning; the order comes from the client too: `ClanControlPoint.OnBeforeUseInterruptible` shows
+  `UseInterruptible` starting a use, and `usable.py` plays it only for the actor `LockToActor` named. A shrine is
+  now locked and plays its effect at windup, and is released on completion or interruption. Control points are
+  left out, because their handler also takes a clan id. **GAP-USABLE-ACTOR-LOCK** (closed, inferred).
 - **`BlockInfo`** is a no-op in the base usable. The game-effect and wargame handlers are unimplemented systems
   rather than mis-identified things, and belong to their own work.

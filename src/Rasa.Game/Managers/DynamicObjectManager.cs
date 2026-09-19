@@ -110,6 +110,7 @@ namespace Rasa.Managers
                         client.Player.MapChannel.PerformRecovery.Add(actionData);
 
                         obj.TriggeredByPlayers.Add(client);
+                        LockForUse(obj, client.Player.EntityId);
                         break;
                     }
                 case DynamicObjectType.ContentUsable:
@@ -135,6 +136,32 @@ namespace Rasa.Managers
             client.CallMethod(entityId, new SetUsablePacket(enabled));
         }
 
+        /// <summary>
+        /// A Logos shrine is locked to the player drawing from it and plays its channelling effect: the client's
+        /// usabledata.specialFX has an interruptible package for the shrine classes (state 81), and
+        /// Recv_UseInterruptible only plays it for the actor Recv_LockToActor named. The order is the client's:
+        /// ClanControlPoint.OnBeforeUseInterruptible shows UseInterruptible starting the use, and usable.py's gate
+        /// shows the lock has to come first. It is released on completion (UnlockAfterUse) or interruption
+        /// (CancelPendingUse). No capture records the original server's order; this one is inferred
+        /// (GAP-USABLE-ACTOR-LOCK). Control points are left out - their client handler takes a clan id as well.
+        /// </summary>
+        internal static void LockForUse(DynamicObject obj, ulong actorId)
+        {
+            if (obj is not Logos || MapChannelManager.ChannelOf(obj)?.MapCellInfo == null)
+                return;
+            CellManager.Instance.CellCallMethod(obj, new LockToActorPacket(actorId));
+            CellManager.Instance.CellCallMethod(obj, new UseInterruptiblePacket(actorId));
+        }
+
+        internal static void UnlockAfterUse(DynamicObject obj, ulong actorId, bool interrupted)
+        {
+            if (obj is not Logos || MapChannelManager.ChannelOf(obj)?.MapCellInfo == null)
+                return;
+            if (interrupted)
+                CellManager.Instance.CellCallMethod(obj, new UseInterruptedPacket(actorId));
+            CellManager.Instance.CellCallMethod(obj, new LockToActorPacket(0));
+        }
+
         internal static void CancelPendingUse(MapChannel mapChannel, ActionData action)
         {
             if (action.ActionId != ActionId.UseObject)
@@ -142,7 +169,8 @@ namespace Rasa.Managers
             void RemoveTrigger(DynamicObject obj)
             {
                 if (action.SourceId == 0 || action.SourceId == obj.EntityId)
-                    obj.TriggeredByPlayers.RemoveAll(client => client?.Player == action.Actor);
+                    if (obj.TriggeredByPlayers.RemoveAll(client => client?.Player == action.Actor) > 0)
+                        UnlockAfterUse(obj, action.Actor.EntityId, interrupted: true);
             }
             foreach (var obj in mapChannel.DynamicObjects)
                 RemoveTrigger(obj);
@@ -562,12 +590,14 @@ namespace Rasa.Managers
                         {
                             Logger.WriteLog(LogType.Debug, $"Action is interupted");
                             obj.TriggeredByPlayers.Remove(client);
+                            UnlockAfterUse(obj, action.Actor.EntityId, interrupted: true);
                             //CellManager.Instance.CellCallMethod(mapChannel, action.Actor, new PerformWindupPacket(PerformType.TwoArgs, action.ActionId, action.ActionArgId));
                             break;
                         }
 
                         Logger.WriteLog(LogType.Debug, $"Action Exicuted");
                         obj.TriggeredByPlayers.Remove(client);
+                        UnlockAfterUse(obj, action.Actor.EntityId, interrupted: false);
                         CellManager.Instance.CellCallMethod(obj, new UsableInfoPacket(true, obj.StateId, 0, 10000, 0));
 
                         var logosId = 0u;

@@ -442,10 +442,20 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// A creature died. Completes the kill-bound objectives whose creature_id matches
-        /// (killer-only credit in shared contexts; the content runtime handles per-character
-        /// placement credit and counters).
+        /// A creature died. Completes the kill-bound objectives that name it - by its creature_id, or by the
+        /// placement it was materialized from (killer-only credit in shared contexts; the content runtime
+        /// handles per-character placement credit and counters).
         /// </summary>
+        /// <summary>
+        /// A kill binding names either a placement (Tizzik Gi, the Bane Mortars) or a creature type (Proctor
+        /// Fulgor, the collection drops). The catalog accepted placement bindings long before anything completed
+        /// them: matching on creature_id alone compared the placement's 0 with the creature's id and never fired.
+        /// </summary>
+        public static bool KillBindingNames(NpcMissionObjectiveBindingEntry binding, Creature creature)
+            => binding.PlacementId != 0
+                ? creature.ContentPlacementId == binding.PlacementId
+                : binding.CreatureId == creature.DbId;
+
         public void OnCreatureKilled(Client killer, Creature creature)
         {
             if (!IsInWorld(killer))
@@ -455,7 +465,7 @@ namespace Rasa.Managers
             {
                 foreach (var binding in definition.Bindings)
                 {
-                    if ((ObjectiveBindingKind)binding.Kind != ObjectiveBindingKind.Kill || binding.CreatureId != creature.DbId)
+                    if ((ObjectiveBindingKind)binding.Kind != ObjectiveBindingKind.Kill || !KillBindingNames(binding, creature))
                         continue;
 
                     if (!killer.Player.Missions.TryGetValue(definition.MissionId, out var mission) ||

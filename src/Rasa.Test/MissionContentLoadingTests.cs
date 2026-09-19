@@ -879,12 +879,10 @@ namespace Rasa.Test
                 // S2 usable placements: crate 26714 UsableTreasureDispHumCrateV04, dummies 29365 UsableStatelessHumPracticeDummyV01.
                 // S5: Conrad's corpse 21961 UsableStatelessFlightSalvage, bomb 7870 UsableBombHumV01, wreck 24586.
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
-                // Mission 430's mortar launchers, the entity class the client map gives them (W3 batch 13).
-                references.Classes.UnionWith(new uint[] { 7478 });
                 // Placement respawn (2026-09-16): the Mires species clusters rely on it, and the validator treats it
                 // as implemented, so the capability is asserted here rather than described in a gap.
-                // S2 crate item set 19858.
-                references.Items.UnionWith(new uint[] { 13066, 13096, 13156, 13186, 13713 });
+                // S2 crate item set 19858, with the uncommon armour of BootcampCrateUncommonGear.
+                references.Items.UnionWith(new uint[] { 12209, 15803, 26879, 12208, 13713 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -974,8 +972,9 @@ namespace Rasa.Test
                 // complete through: Mining Coord. Richards (199910) at the Pinhole Falls Caverns and the wounded
                 // Forean Ranger (199911) at the top of the falls. Field Dr. Dawson (199002) and Receptive Liaison
                 // Brice (199003) stood here until MissionAreaLinks read their TaRapedia /loc as Divide coordinates
-                // and moved them to 1148, where the navmesh has ground 0.1 m under each.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199803, 199910, 199911 },
+                // and moved them to 1148, where the navmesh has ground 0.1 m under each. Mission 430's four Bane
+                // Mortars (199700-199703) are creatures since WildernessMortarCreature, so they spawn here too.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199700, 199701, 199702, 199703, 199803, 199910, 199911 },
                     aliaDasPlacements.Keys.ToArray(),
                     "Alia Das: " + string.Join(", ", aliaDasPlacements.Keys.OrderBy(id => id)));
                 var rogers = aliaDasPlacements[198684];
