@@ -73,6 +73,8 @@
         public bool Stealth { get; set; }
         /// <summary>A server-side timer with no client effect behind it: nothing is sent when it attaches or ends.</summary>
         public bool ServerOnly { get; set; }
+        /// <summary>Paint Target: percent of each hit on the holder that goes past its armour.</summary>
+        public int ArmorPiercePercent { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

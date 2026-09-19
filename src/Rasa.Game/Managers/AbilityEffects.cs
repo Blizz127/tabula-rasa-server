@@ -70,6 +70,7 @@ namespace Rasa.Managers
         public const int CorpseImmolationType = 126;          // CORPSE_IMMOLATION
         public const int HackedType = 223;                    // HACKED_EFFECT
         public const int MindControlType = 168;               // MIND_CONTROL_EFFECT
+        public const int PaintTargetType = 10000045;          // PAINT_TARGET_EFFECT, "Reduced Cover / Armor Recharge / Armor Piercing"
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
@@ -1310,6 +1311,24 @@ namespace Rasa.Managers
                             Vector3.Distance(corpse.Position, exobiologist.Position) <= radius && Reanimate(map, exobiologist, corpse, info))
                             raised.Add(corpse.EntityId);
             return raised;
+        }
+
+        /// <summary>
+        /// Paint Target on one enemy for DURATION, whose effect reads "Reduced Cover: %(coverMod)s%% | Armor Recharge:
+        /// %(armorMod)s%% | Armor Piercing: +%(pierceMod)s%%". EFFECT_ARMOR_PIERCE_PERCENT of every hit on it goes past its
+        /// armour. The cover and armour-recharge values are shown but have nothing to act on here: this server has no
+        /// cover, and creatures do not recharge armour.
+        /// </summary>
+        public static void PaintTarget(MapChannel map, Manifestation sniper, Creature target, ActionLevelInfo info)
+        {
+            if (target == null)
+                return;
+            GameEffectManager.Instance.AttachEffect(map, target, PaintTargetType, info.Level, info.Get(AbilityProperty.Duration) * 1000, sniper.EntityId, false,
+                new Dictionary<string, double>
+                {
+                    ["coverMod"] = info.Get(AbilityProperty.EffectCoverModifier), ["armorMod"] = info.Get(AbilityProperty.EffectArmorRegenModifier),
+                    ["pierceMod"] = info.Get(AbilityProperty.EffectArmorPiercePercent)
+                }).ArmorPiercePercent = info.Get(AbilityProperty.EffectArmorPiercePercent);
         }
 
         /// <summary>

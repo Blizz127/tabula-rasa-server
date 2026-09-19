@@ -96,8 +96,9 @@ namespace Rasa.Managers
             AbilityEffects.OnCreatureHit(mapChannel, missile, creature, hit);
             missile.DamageA = DamageModifiers.AgainstCreature(creature, missile.DamageA, missile.DamageType);
 
-            // decrease armor first
-            var armorDecrease = Math.Min(missile.DamageA, creature.Attributes[Attributes.Armor].Current);
+            // decrease armor first - less the part Paint Target's pierce sends past it
+            var pierced = missile.DamageA * Math.Min(100, creature.ActiveEffects.Values.Sum(e => e.ArmorPiercePercent)) / 100;
+            var armorDecrease = Math.Min(missile.DamageA - pierced, creature.Attributes[Attributes.Armor].Current);
             // Client combat messages add finalAmt + absorbed. Report the existing
             // partition without counting armor absorption again as final damage.
             // Overkill remains unclamped in this report, as in the previous code.

@@ -802,6 +802,20 @@ namespace Rasa.Test
             }
         }
 
+        [TestMethod]
+        public void PaintTargetSendsItsPierceShareOfEachHitPastTheArmour()
+        {
+            var row = Row(295, "abilities.painttarget", 500, 666, 100, 5);
+            row.Properties[AbilityProperty.Duration] = 15;
+            row.Properties[AbilityProperty.EffectArmorPiercePercent] = 40;
+            var target = Creature(new Vector3(20, 0, 0));
+            target.Attributes[Attributes.Armor] = new ActorAttributes(Attributes.Armor, 1000, 1000, 1000, 0, 0);
+            AbilityEffects.PaintTarget(_map, _client.Player, target, row);
+            MissileManager.Instance.DamageTick(_map, _client.Player, target, 100, DamageType.Physical);
+            Assert.AreEqual((940, 100000 - 40), (target.Attributes[Attributes.Armor].Current, target.Attributes[Attributes.Health].Current),
+                "60 into the armour, 40 past it");
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

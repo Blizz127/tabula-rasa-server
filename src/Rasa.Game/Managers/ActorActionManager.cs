@@ -445,6 +445,9 @@ namespace Rasa.Managers
                             (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
                         }));
                         return;
+                    case "abilities.painttarget":
+                        AbilityEffects.PaintTarget(map, player, execution.OriginalTarget as Creature, info);
+                        break;
                     case "abilities.reanimation":
                         AbilityEffects.Reanimate(map, player, execution.OriginalTarget as Creature, info);
                         break;
