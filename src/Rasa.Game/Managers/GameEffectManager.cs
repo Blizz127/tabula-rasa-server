@@ -106,6 +106,7 @@ namespace Rasa.Managers
         {
             if (!actor.ActiveEffects.Remove(gameEffect.EffectId))
                 return;
+            gameEffect.OnDetach?.Invoke(gameEffect);
             CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectDetachedPacket { EffectId = gameEffect.EffectId });
             if (gameEffect.TypeId == SprintEffectType)
             {
@@ -114,6 +115,44 @@ namespace Rasa.Managers
             }
             if (gameEffect.TypeId == DeathPenaltyRules.RezSicknessEffectType && actor is Manifestation player)
                 PlayerDeathManager.Instance.OnTraumaEnded(mapChannel, player);
+        }
+
+        /// <summary>
+        /// An effect with a duration, tooltip values and, optionally, a tick: Ruin's DECAY on its target, Rage's
+        /// RAGESOURCE on the soldier and RAGE on whoever it buffs. A creature holding one is expired and ticked with
+        /// the players' effects.
+        /// </summary>
+        public GameEffect AttachEffect(MapChannel mapChannel, Actor actor, int typeId, uint level, int durationMs, ulong sourceId,
+            bool isBuff, System.Collections.Generic.Dictionary<string, double> tooltip, int tickInterval = 0, Action<GameEffect> onTick = null)
+        {
+            var gameEffect = new GameEffect
+            {
+                TypeId = typeId, EffectId = ++mapChannel.CurrentEffectId, EffectLevel = level, Duration = durationMs,
+                TickInterval = tickInterval, NextTickTime = tickInterval, OnTick = onTick
+            };
+            AddToList(actor, gameEffect);
+            if (actor is Creature creature)
+                mapChannel.CreaturesWithEffects.Add(creature);
+            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
+            {
+                EffectTypeId = typeId, EffectId = gameEffect.EffectId, EffectLevel = level, SourceId = sourceId,
+                Announced = true, Duration = durationMs / 1000.0, IsActive = true,
+                IsBuff = isBuff, IsDebuff = !isBuff, IsNegativeEffect = !isBuff,
+                TooltipValues = tooltip ?? new System.Collections.Generic.Dictionary<string, double>()
+            });
+            return gameEffect;
+        }
+
+        /// <summary>Runs an effect's due ticks, never past its duration.</summary>
+        private static void Tick(GameEffect effect)
+        {
+            if (effect.TickInterval <= 0 || effect.OnTick == null)
+                return;
+            while (effect.NextTickTime <= effect.EffectTime && (effect.Duration <= 0 || effect.NextTickTime <= effect.Duration))
+            {
+                effect.OnTick(effect);
+                effect.NextTickTime += effect.TickInterval;
+            }
         }
 
         /// <summary>A debuff with a fixed duration and no arguments (Resuscitation Trauma and its no-heal part).</summary>
@@ -152,6 +191,7 @@ namespace Rasa.Managers
                 foreach (var effect in creature.ActiveEffects.Values.ToArray())
                 {
                     effect.EffectTime += passedTime;
+                    Tick(effect);
                     if (effect.Duration > 0 && effect.EffectTime >= effect.Duration)
                         DettachEffect(mapChannel, creature, effect);
                 }
@@ -169,6 +209,7 @@ namespace Rasa.Managers
                 {
                     effect.EffectTime = passedTime > long.MaxValue - effect.EffectTime
                         ? long.MaxValue : effect.EffectTime + passedTime;
+                    Tick(effect);
                     if (effect.TypeId == SprintEffectType)
                     {
                         var chiChanged = false;

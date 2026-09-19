@@ -22,6 +22,8 @@
         public bool? IsDebuff { get; set; }
         public bool? IsNegativeEffect { get; set; }
         public double[] EffectArguments { get; set; } = Array.Empty<double>();
+        /// <summary>Further tooltip values, named as the effect's tooltip template names them (dmgMin, interval, dmgMod).</summary>
+        public System.Collections.Generic.Dictionary<string, double> TooltipValues { get; set; } = new System.Collections.Generic.Dictionary<string, double>();
         
         public override void Write(PythonWriter pw)
         {
@@ -34,7 +36,7 @@
             var count = (Duration.HasValue ? 1 : 0) + (DamageType.HasValue ? 1 : 0) +
                 (AttrId.HasValue ? 1 : 0) + (IsActive.HasValue ? 1 : 0) +
                 (IsBuff.HasValue ? 1 : 0) + (IsDebuff.HasValue ? 1 : 0) +
-                (IsNegativeEffect.HasValue ? 1 : 0);
+                (IsNegativeEffect.HasValue ? 1 : 0) + TooltipValues.Count;
             pw.WriteDictionary(count);
             if (Duration.HasValue) { pw.WriteString("duration"); pw.WriteDouble(Duration.Value); }
             if (DamageType.HasValue) { pw.WriteString("damageType"); pw.WriteInt(DamageType.Value); }
@@ -43,6 +45,14 @@
             if (IsBuff.HasValue) { pw.WriteString("isBuff"); pw.WriteBool(IsBuff.Value); }
             if (IsDebuff.HasValue) { pw.WriteString("isDebuff"); pw.WriteBool(IsDebuff.Value); }
             if (IsNegativeEffect.HasValue) { pw.WriteString("isNegativeEffect"); pw.WriteBool(IsNegativeEffect.Value); }
+            foreach (var (name, value) in TooltipValues)
+            {
+                pw.WriteString(name);
+                if (value == Math.Floor(value) && Math.Abs(value) < int.MaxValue)
+                    pw.WriteInt((int)value);
+                else
+                    pw.WriteDouble(value);
+            }
             // These are variadic arguments, not a nested list. Sprint expects one scalar.
             foreach (var argument in EffectArguments)
                 pw.WriteDouble(argument);

@@ -114,7 +114,7 @@ namespace Rasa.Managers
             var map = player?.MapChannel;
             var level = (uint)packet.ActionArgId;
             if (client.State != ClientState.Ingame || player == null || map == null || player.RemoveFromMap ||
-                !ActionTableManager.Instance.TryGetDirectDamage(packet.ActionId, level, out _, out var info) ||
+                !ActionTableManager.Instance.TryGetResolvable(packet.ActionId, level, out var actionInfo, out var info) ||
                 !AbilityRequirements.CanUseSkillAbility(player, packet.ActionId, packet.ActionArgId) ||
                 !CanBeginAbility(player) || !CanPay(player, info))
                 return false;
@@ -123,9 +123,25 @@ namespace Rasa.Managers
             if (player.AbilityReuseDeadlines.TryGetValue(packet.ActionId, out var reuseUntil) && now < reuseUntil)
                 return false;
 
+            // Rage is a toggle (client rage.py RageAction.isToggle): asking again while it runs ends it.
+            if (actionInfo.Module == "abilities.rage" &&
+                player.ActiveEffects.Values.FirstOrDefault(e => e.TypeId == AbilityEffects.RageSourceEffectType) is { } running)
+            {
+                GameEffectManager.Instance.DettachEffect(map, player, running);
+                return false;
+            }
+
             Creature target = null;
             DynamicObject contentTarget = null;
-            if (!AimedFromSource(info))
+            if (actionInfo.Module == "abilities.decay")
+            {
+                // A single enemy (decay.py TARGET_NON_FRIENDLY); a destroyable placement cannot decay.
+                target = GetLightningTarget(map, player, packet.Target ?? 0);
+                if (target == null || info.MaxRange > 0 &&
+                    System.Numerics.Vector3.Distance(player.Position, target.Position) > info.MaxRange + AbilityRangeSlack)
+                    return false;
+            }
+            else if (actionInfo.Module != "abilities.rage" && !AimedFromSource(info))
             {
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
                 contentTarget = target == null ? WeaponAttackManager.GetEligibleContentTarget(player, packet.Target ?? 0) : null;
@@ -233,7 +249,8 @@ namespace Rasa.Managers
             var info = execution.Level;
             var contentTargetValid = execution.OriginalContentTarget != null &&
                 ReferenceEquals(WeaponAttackManager.GetEligibleContentTarget(player, action.TargetId), execution.OriginalContentTarget);
-            var targeted = !AimedFromSource(info);
+            ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var rowAction, out _);
+            var targeted = rowAction?.Module == "abilities.decay" || rowAction?.Module != "abilities.rage" && !AimedFromSource(info);
             if (!AbilityRequirements.CanUseSkillAbility(player, action.ActionId, (int)action.ActionArgId) || !CanPay(player, info) ||
                 (targeted && execution.OriginalContentTarget == null &&
                     !ReferenceEquals(GetLightningTarget(map, player, action.TargetId), execution.OriginalTarget)) ||
@@ -255,6 +272,24 @@ namespace Rasa.Managers
             }
             execution.Resolved = true;
             player.AbilityReuseDeadlines[action.ActionId] = execution.ReuseEndsAt;
+
+            ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out var actionInfo, out _);
+            if (actionInfo?.Module == "abilities.decay" || actionInfo?.Module == "abilities.rage")
+            {
+                // BaseActorAbility.DoAbility reads no hit data: these abilities show their result through the game
+                // effect they attach.
+                if (actionInfo.Module == "abilities.decay")
+                    AbilityEffects.Decay(map, player, execution.OriginalTarget as Creature, info, _damageRandom);
+                else
+                    AbilityEffects.Rage(map, client, info);
+                CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.DamageAbilityRecovery(action.ActionId, action.ActionArgId,
+                    new[] { execution.OriginalTarget?.EntityId ?? player.EntityId }, Array.Empty<HitData>()));
+                client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
+                {
+                    (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
+                }));
+                return;
+            }
 
             var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
             var min = info.Get(AbilityProperty.DamageAmountMin);

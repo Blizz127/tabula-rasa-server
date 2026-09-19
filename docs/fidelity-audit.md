@@ -125,7 +125,15 @@ Their stuns (`STUN_CHANCE`/`STUN_DURATION` under the client's `STUN` effect 86) 
 `CONE_RADIUS` is used as what `client/targeting.py` shows it to be — the cone's angle in degrees, over the
 ability's range (half-width inferred). Lightning ranks 4–5 now stun, 50% for 3 s, as their row says.
 
-Still open (**GAP-CLASS-ABILITIES**): the 45 player abilities that are not direct damage — each its own client
+The two tier-2 effect abilities are built on their client contracts. **Ruin** (162) attaches `DECAY` (82), whose
+own tooltip reads "Deals dmgMin - dmgMax damage every interval seconds": the row's damage is rolled every
+`INTERVAL` for `DURATION` and sent as `GameEffectTick(effectId, [(target, rawInfo)])`, what `DamageOverTime.OnTick`
+reads; pump 5's movement modifier slows the target (inferred as a percent). **Rage** (307) is a toggle: `RAGESOURCE`
+(236) on the soldier pulses every `INTERVAL`, putting `RAGE` (235) on the soldier and, at the pumps with a radius,
+the squad in reach; `RAGE` adds `DAMAGE_PERCENT` to their damage and `RESIST_MODIFIER` to their resistance rating,
+which the server converts with the client's own rating / (rating + 50).
+
+Still open (**GAP-CLASS-ABILITIES**): the 43 player abilities that are not direct damage — each its own client
 module, and most a system this server does not have (summons, clones, pets, mind control, stealth, shields, heals
 over time, weapon enhancement). They are refused as before. The ability system on
 `ellimist/development` covers the same damage family and Sprint and no more; merging the rest of that branch

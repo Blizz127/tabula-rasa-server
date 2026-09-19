@@ -72,6 +72,21 @@ namespace Rasa.Managers
                 DirectDamageModules.Contains(action.Module) && info.Has(AbilityProperty.DamageAmountMin);
         }
 
+        /// <summary>
+        /// Abilities resolved by their own game effect rather than a damage hit: Ruin (abilities.decay, a damage over
+        /// time on one enemy) and Rage (abilities.rage, a toggled damage and resistance buff on the soldier and,
+        /// at some levels, the squad around them).
+        /// </summary>
+        public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage" };
+
+        /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
+        public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)
+        {
+            if (TryGetDirectDamage(actionId, level, out action, out info))
+                return true;
+            return TryGetLevel(actionId, level, out action, out info) && EffectModules.Contains(action.Module);
+        }
+
         public void ActionTableInit()
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateWorld();

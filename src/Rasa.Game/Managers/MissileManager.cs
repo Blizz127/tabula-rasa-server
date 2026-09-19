@@ -140,7 +140,7 @@ namespace Rasa.Managers
             var damage = missile.DamageA;
             if (actor is Manifestation target)
             {
-                var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType);
+                var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType) + DamageModifiers.ResistRating(target);
                 if (resistance > 0)
                     damage = DamageResistance.ScaleDamage(damage, resistance);
             }
@@ -186,7 +186,7 @@ namespace Rasa.Managers
         {
             var missile = new Missile
             {
-                DamageA = damage,
+                DamageA = DamageModifiers.Outgoing(action.Actor, damage),
                 DamageType = damageType,
                 Source = action.Actor
             };
@@ -286,6 +286,23 @@ namespace Rasa.Managers
         /// work as they do for Lightning. A destroyable content placement named as the target takes its roll too,
         /// reported with the ability's action so action-bound objectives can match it.
         /// </summary>
+        /// <summary>One tick of a damage over time on a creature, through the armour-then-health path a hit takes.</summary>
+        public HitData DamageTick(MapChannel mapChannel, Actor source, Creature target, int damage, DamageType damageType)
+        {
+            var missile = new Missile
+            {
+                DamageA = damage, DamageType = damageType, Source = source, IsAbility = true, TargetEntityId = target.EntityId, TargetActor = target
+            };
+            var hit = new HitData { DamageType = damageType, FinalAmt = damage, EntityId = target.EntityId };
+            DoDamageToCreature(mapChannel, missile, target, hit);
+            if (target.State == CharacterState.Dead)
+            {
+                hit.DeathBlow = 1;
+                CellManager.Instance.CellCallMethod(mapChannel, target, new ActorKilledPacket());
+            }
+            return hit;
+        }
+
         public void AbilityStrike(MapChannel mapChannel, Actor source, ActionId actionId, uint actionArgId, DamageType damageType,
             IReadOnlyList<(Creature Target, int Damage)> targets, DynamicObject contentTarget = null, int contentDamage = 0)
         {
@@ -300,7 +317,7 @@ namespace Rasa.Managers
 
                 var missile = new Missile
                 {
-                    DamageA = damage, DamageType = damageType, Source = source, ActionId = actionId, ActionArgId = actionArgId,
+                    DamageA = DamageModifiers.Outgoing(source, damage), DamageType = damageType, Source = source, ActionId = actionId, ActionArgId = actionArgId,
                     IsAbility = true, TargetEntityId = target.EntityId, TargetActor = target
                 };
                 var hit = new HitData { DamageType = damageType, FinalAmt = damage, EntityId = target.EntityId };

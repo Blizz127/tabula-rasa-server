@@ -846,7 +846,7 @@ namespace Rasa.Managers
             }
 
             // The class damage abilities, from the client's action tables.
-            if (ActionTableManager.Instance.TryGetDirectDamage(packet.ActionId, (uint)packet.ActionArgId, out _, out _))
+            if (ActionTableManager.Instance.TryGetResolvable(packet.ActionId, (uint)packet.ActionArgId, out _, out _))
             {
                 if (!ActorActionManager.Instance.TryStartDamageAbility(client, packet))
                     RejectAbilityRequest(client, packet);
