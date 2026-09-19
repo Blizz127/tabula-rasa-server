@@ -133,7 +133,20 @@ reads; pump 5's movement modifier slows the target (inferred as a percent). **Ra
 the squad in reach; `RAGE` adds `DAMAGE_PERCENT` to their damage and `RESIST_MODIFIER` to their resistance rating,
 which the server converts with the client's own rating / (rating + 50).
 
-Still open (**GAP-CLASS-ABILITIES**): the 43 player abilities that are not direct damage — each its own client
+Tier 3 so far, each on its client contract (effect types, recovery shape and tooltip names from the client; the
+numbers from its row):
+
+| Ability | What it does here | Inferred |
+| --- | --- | --- |
+| Bio Augmentation (421) | +`EFFECT_MODIFIER` to `ATTRIBUTE_ID` on a friendly player for `EFFECT_DURATION_MS` | the amount is flat (tooltip has no %) |
+| Scourge (380) | `DAMAGE_AMOUNT` to every hostile within `EFFECT_RADIUS` each pulse for `DURATION`, via `AnnounceDamage` | 1 s pulse |
+| Shield Extender (446) | target and squad within `EFFECT_RADIUS` lose `EFFECT_MODIFIER`% of each hit to a pool of `EFFECT_DAMAGE_MAX` | 1 s pulse |
+| Reconstruction (188) | heal/HoT, ±Spirit, adrenaline, ±max health on the squad; damage/DoT on enemies in `RADIUS_AROUND_SOURCE` | — |
+| Tactical Evasion (10000005) | cleared hate + mag flash; smoke screen (−ranged %); a delayed retreat to the cast point | the retreat fires when it runs out |
+| Fire Support (387) | a strike after `DELAY_TIME_MS` on a point or target; stun or a napalm pool by pump | which strike effect goes with which pump |
+| Cure (186) | cleanse, debuff guard for `DURATION`, resuscitation at `ATTRIBUTE_MAX_CHANGE`% beside the biotechnician | trauma is not a debuff it removes |
+
+Still open (**GAP-CLASS-ABILITIES**): the 36 player abilities that are not direct damage — each its own client
 module, and most a system this server does not have (summons, clones, pets, mind control, stealth, shields, heals
 over time, weapon enhancement). They are refused as before. The ability system on
 `ellimist/development` covers the same damage family and Sprint and no more; merging the rest of that branch
