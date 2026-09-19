@@ -43320,7 +43320,7 @@
     "id": 199700
    },
    "slice": "W3",
-   "migration": "WildernessMortarCreature",
+   "migration": "WildernessMortarFire",
    "fields": {
     "pos_x": {
      "value": 360.8661,
@@ -43388,6 +43388,17 @@
       }
      ],
      "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949: 'An automated Bane mortar turret'"
+      }
+     ],
+     "reasoning": "an automated turret engages whoever comes in range; with no speed it never leaves its base"
     }
    }
   },
@@ -43397,7 +43408,7 @@
     "id": 199701
    },
    "slice": "W3",
-   "migration": "WildernessMortarCreature",
+   "migration": "WildernessMortarFire",
    "fields": {
     "pos_x": {
      "value": 212.7184,
@@ -43465,6 +43476,17 @@
       }
      ],
      "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949: 'An automated Bane mortar turret'"
+      }
+     ],
+     "reasoning": "an automated turret engages whoever comes in range; with no speed it never leaves its base"
     }
    }
   },
@@ -43474,7 +43496,7 @@
     "id": 199702
    },
    "slice": "W3",
-   "migration": "WildernessMortarCreature",
+   "migration": "WildernessMortarFire",
    "fields": {
     "pos_x": {
      "value": 185.0261,
@@ -43542,6 +43564,17 @@
       }
      ],
      "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949: 'An automated Bane mortar turret'"
+      }
+     ],
+     "reasoning": "an automated turret engages whoever comes in range; with no speed it never leaves its base"
     }
    }
   },
@@ -43551,7 +43584,7 @@
     "id": 199703
    },
    "slice": "W3",
-   "migration": "WildernessMortarCreature",
+   "migration": "WildernessMortarFire",
    "fields": {
     "pos_x": {
      "value": 99.713,
@@ -43619,6 +43652,17 @@
       }
      ],
      "reasoning": "the reconstructed Bane Mortar creature (see the creature row 199720)"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Mortar' rev. 18949: 'An automated Bane mortar turret'"
+      }
+     ],
+     "reasoning": "an automated turret engages whoever comes in range; with no speed it never leaves its base"
     }
    }
   },
@@ -50580,6 +50624,17 @@
      "counterpart": "AFS_Turret_Mini (creature 9, level 4, 1,500), the only fortification creature in the world seed",
      "required_because": "a creature needs hit points and no surviving source gives the mortar's",
      "decision": "OD-55"
+    },
+    "action1": {
+     "value": 45,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo 10604 Weapon_Creature_Bane_Mortar_Launcher: attack 411/1, damage 3600; 21843 Weapon_Creature_AFS_Mini_Turret: damage 2250"
+      }
+     ],
+     "reasoning": "the creature fires its own weapon class's attack"
     }
    }
   },
@@ -50602,6 +50657,114 @@
       }
      ],
      "reasoning": "the client's only creature mortar weapon, Weapon_Creature_Bane_Mortar_Launcher, in the weapon slot (13)"
+    }
+   }
+  },
+  {
+   "table": "creature_action",
+   "key": {
+    "id": 45
+   },
+   "slice": "W3",
+   "migration": "WildernessMortarFire",
+   "fields": {
+    "action_id": {
+     "value": 411,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo 10604 Weapon_Creature_Bane_Mortar_Launcher: attack 411/1, damage 3600; 21843 Weapon_Creature_AFS_Mini_Turret: damage 2250"
+      }
+     ]
+    },
+    "action_arg_id": {
+     "value": 1,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo 10604 Weapon_Creature_Bane_Mortar_Launcher: attack 411/1, damage 3600; 21843 Weapon_Creature_AFS_Mini_Turret: damage 2250"
+      }
+     ]
+    },
+    "windup": {
+     "value": 500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (411, 1) = (0, None, 500, 954, 60, 0, 0, 1); actionModules 411 WEAPON_GROUNDTARGET weapons.groundtarget"
+      }
+     ],
+     "reasoning": "third field of the action's arguments, where Lightning's row carries its 500 ms windup"
+    },
+    "cooldown": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (411, 1) = (0, None, 500, 954, 60, 0, 0, 1); actionModules 411 WEAPON_GROUNDTARGET weapons.groundtarget"
+      }
+     ],
+     "reasoning": "windup 500 plus the 954 ms recovery in the fourth field; the reuse field is 0"
+    },
+    "range_max": {
+     "value": 60,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (411, 1) = (0, None, 500, 954, 60, 0, 0, 1); actionModules 411 WEAPON_GROUNDTARGET weapons.groundtarget"
+      }
+     ],
+     "reasoning": "the fifth field, 60, in the place Lightning's row has its range"
+    },
+    "min_damage": {
+     "value": 16,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo 10604 Weapon_Creature_Bane_Mortar_Launcher: attack 411/1, damage 3600; 21843 Weapon_Creature_AFS_Mini_Turret: damage 2250"
+      },
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature_action 8 'Weapon - Emplacement_AFS_Turret_Mini' 10-20"
+      }
+     ],
+     "counterpart": "the AFS mini turret's 10-20 action scaled by the two weapons' damage ratio (3600 / 2250 = 1.6)",
+     "required_because": "creature damage here is the server's own scale and no source gives the mortar's",
+     "decision": "OD-55"
+    },
+    "max_damage": {
+     "value": 32,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/weaponclass.pyo 10604 Weapon_Creature_Bane_Mortar_Launcher: attack 411/1, damage 3600; 21843 Weapon_Creature_AFS_Mini_Turret: damage 2250"
+      },
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "creature_action 8 'Weapon - Emplacement_AFS_Turret_Mini' 10-20"
+      }
+     ],
+     "counterpart": "the AFS mini turret's 10-20 action scaled by the two weapons' damage ratio (3600 / 2250 = 1.6)",
+     "required_because": "creature damage here is the server's own scale and no source gives the mortar's",
+     "decision": "OD-55"
+    },
+    "range_min": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/actiondata.pyo actionArguments (411, 1): no minimum range"
+      }
+     ],
+     "reasoning": "the client's arguments carry no minimum range"
     }
    }
   }
@@ -52579,7 +52742,7 @@
   {
    "id": "GAP-ITEM-ARMOR-VALUES",
    "status": "closed",
-   "summary": "Closed 2026-09-19. Worn armour came only from itemtemplate_armor (15 rows), so 2,495 armour templates - including 15 vendor items - added 0 when worn. ManifestationManager.BodyArmor now uses the seeded value where one exists and otherwise the client's own armorclass max_damage_absorbed / 10, rounded half up. The scale is observed (footage tooltip 'Body Armor: 28' for gloves absorbing 281); all 15 seeded rows follow the rule and truncation misses 6 of them.",
+   "summary": "Closed 2026-09-19. Worn armour came only from itemtemplate_armor (15 rows), so 2,495 armour templates - including 15 vendor items - added 0 when worn. ManifestationManager.BodyArmor now uses the seeded value where one exists and otherwise the client's own armorclass max_damage_absorbed / 10, truncated (see GAP-ITEM-ARMOR-ROUNDING). The scale is observed (footage tooltip 'Body Armor: 28' for gloves absorbing 281); all 15 seeded rows follow the rule and truncation misses 6 of them.",
    "evidence": [
     "footage 7Lrst9SG3pk A3-034 t=319.6: \"Body Armor: 28 | Regen Rate: 1 per sec\"",
     "client generated/client/armorclass.pyo: 3,377 rows, min == max in every row, identical to the server table",
@@ -52600,8 +52763,8 @@
   },
   {
    "id": "GAP-ITEM-ARMOR-ROUNDING",
-   "summary": "How the original rounded an exact half when turning armorclass absorption into displayed body armour is not observed; 238 of 3,377 classes end in 5. Half-up is inferred (it and banker's rounding both match every known row).",
-   "closes_with": "a tooltip in footage or a screenshot for an armour piece whose absorption ends in 5",
+   "summary": "Closed 2026-09-19: truncation. A transcribed original tooltip, 'Pulsar Reflective Armor Gloves, Min Level 5, Body Armor: 73' (TaRapedia User:Zarevak/Sandbox), fixes it: the level-5 Reflective gloves absorb 526, 631, 736 or 841, and only floor(736/10) gives 73 - half-up gives 74. Its regen line (7% per sec) does not match that class's regen of 2, so the match rests on the armour line. The half-up rule came from the 15 itemtemplate_armor rows, which the 2026-09-13 sweep traced to Infinite Rasa rather than to original data; they are no longer used.",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "slices": [
     "W1",
     "W2",
@@ -52612,7 +52775,14 @@
    ],
    "evidence": [
     "client generated/client/armorclass.pyo: 238 of 3,377 max_damage_absorbed values end in 5",
-    "the 15 itemtemplate_armor rows: half-up and banker's rounding both 15/15"
+    "the 15 itemtemplate_armor rows: half-up and banker's rounding both 15/15",
+    "TaRapedia User:Zarevak/Sandbox: Pulsar Reflective Armor Gloves, Body Armor 73, Min Level 5",
+    "armorclass: Armor_T2_Reflective_V04/V05_RAR_Gloves_05_to_08 absorb 736",
+    "docs/source-sweep-2026-09-13.md section 5: itemtemplate_armor is Infinite Rasa's armorValue"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "BodyArmorTests"
    ]
   },
   {
@@ -52807,17 +52977,21 @@
   },
   {
    "id": "GAP-W3-430-MORTAR-FIRE",
-   "summary": "The Bane Mortar's weapon (10604) attacks with action 411 WEAPON_GROUNDTARGET, 3,600 damage, which creature AI does not perform; the mortars stand and take fire without returning it.",
+   "summary": "Closed 2026-09-19. The Bane Mortar's weapon (10604) attacks with action 411 WEAPON_GROUNDTARGET, 3,600 damage, which on the client is weapons.groundtarget.GroundTargetAttack - a RocketLauncherAttack, itself a BaseWeaponAttack at a target entity - so the server fires it like any creature weapon and resolves it with the weapon-attack recovery. WildernessMortarFire gives the Bane Mortar that action with the client's timing and range, and makes the placements creature-AI guards (zero speed, so they never leave their base). Damage is an OD-55 analogue.",
    "evidence": [
     "client generated/client/weaponclass.pyo 10604: attack action 411 arg 1",
     "client generated/client/actiondata.pyo 411 weapons.groundtarget"
    ],
-   "closes_with": "a ground-targeted creature attack in the AI, with the damage scaled as the client's own weapon data implies",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "1:1 fidelity audit, mortar reconstruction, 2026-09-19"
    ],
    "slices": [
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests"
    ]
   },
   {
@@ -54068,7 +54242,7 @@
    "default": "The Bane fortification creature class with the client's creature mortar weapon",
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
-   "choice": "The four mortars become one reconstructed creature, 199720: name 8186 'Bane Mortar' (original), class 7482 Emplacement_Bane_Turret_Standard (analogue), weapon class 10604 in the weapon slot, level 5 (the mission's), 1,500 hit points (the AFS_Turret_Mini fortification's), stationary at the client map's launcher positions with a 60 s respawn. Their fire (action 411 WEAPON_GROUNDTARGET) is not built.",
+   "choice": "The four mortars become one reconstructed creature, 199720: name 8186 'Bane Mortar' (original), class 7482 Emplacement_Bane_Turret_Standard (analogue), weapon class 10604 in the weapon slot, level 5 (the mission's), 1,500 hit points (the AFS_Turret_Mini fortification's), stationary at the client map's launcher positions with a 60 s respawn. They fire their launcher (action 411) as creature-AI guards with the client's windup (500 ms), recovery (954 ms) and range (60), for 16-32 damage: the AFS mini turret's action scaled by the two weapons' damage ratio.",
    "approved_on": "2026-09-19",
    "record": "docs/fidelity-audit.md"
   }

@@ -23,8 +23,7 @@ namespace Rasa.Migrations.WildernessData
     ///     mission - analogue (OD-48).
     /// The positions stay the client map's own launcher positions: the base is map scenery, the turret stands on it.
     ///
-    /// The mortar's own fire is not built: its weapon attacks with action 411 WEAPON_GROUNDTARGET, which creature
-    /// AI does not perform, so the placements are stationary (GAP-W3-430-MORTAR-FIRE).
+    /// Their fire is WildernessMortarFire's.
     /// </summary>
     public static class WildernessMortarCreatureRows
     {

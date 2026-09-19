@@ -110,6 +110,15 @@ namespace Rasa.Test.Reconstruction
                 optional: Cols("action2", "action3", "action4", "action5", "action6", "action7", "action8"),
                 storage: Cols("comment")),
 
+            // Existing table: a creature's attack. Every column is required - an attack without its action, reach,
+            // timing or damage does not function - so, as with creature.action1 (OD-23), a value no source gives may
+            // carry a labelled analogue.
+            new TableProvenance("creature_action",
+                keys: Cols("id"),
+                required: Cols("action_id", "action_arg_id", "range_min", "range_max", "cooldown", "windup", "min_damage", "max_damage"),
+                optional: Cols(),
+                storage: Cols("description")),
+
             new TableProvenance("npc_mission_prerequisite",
                 keys: Cols("mission_id", "or_group", "required_mission_id"),
                 required: Cols("required_state"),

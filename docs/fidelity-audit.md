@@ -59,21 +59,21 @@ Building it exposed a runtime defect: a kill binding that names a **placement** 
 compared creature ids only. That also blocked the boot camp's 1994/1 (Tizzik Gi). Fixed
 (`MissionManager.KillBindingNames`, GAP-KILL-BINDING-PLACEMENT).
 
-Still open: the mortar's own fire. Its weapon attacks with action 411 `WEAPON_GROUNDTARGET`, which creature AI
-does not perform (**GAP-W3-430-MORTAR-FIRE**).
+The mortars fire back (`WildernessMortarFire`). Their weapon attacks with action 411 `WEAPON_GROUNDTARGET`, which
+on the client is a rocket-launcher attack and so an ordinary weapon attack at a target: windup 500 ms, recovery
+954 ms and range 60 come from the client's own action arguments; the 16–32 damage is an analogue (OD-55).
 
 ### 2,495 armour pieces gave no armour — fixed
 
 The worn-armour total was built only from `itemtemplate_armor.armor_value`, which has 15 rows, so every other
-armour template — including 15 sold by vendors — added **0** when worn. Worn armour is now the seeded value where
-one exists, and otherwise the client's own `armorclass.max_damage_absorbed ÷ 10`, rounded half up
-(`ManifestationManager.BodyArmor`).
+armour template added **0** when worn. Worn armour is now the client's own `armorclass.max_damage_absorbed ÷ 10`,
+**truncated**, for every piece (`ManifestationManager.BodyArmor`).
 
-The scale is observed: the original client's tooltip for the boot-camp crate's gloves reads **"Body Armor: 28 |
-Regen Rate: 1 per sec"** (A3-034, t=319.6), and the uncommon Motor Assist gloves absorb 281. All 15 seeded values
-follow the same rule; truncation misses 6 of them. `min` and `max` are equal for all 3,377 classes. What is *not*
-observed is how an exact half rounds: 238 classes end in 5, and half-up is inferred. Recorded as
-**GAP-ITEM-ARMOR-ROUNDING** (inferred tier).
+The scale is observed: the boot-camp crate's gloves read **"Body Armor: 28"** (A3-034) and absorb 281. The
+rounding comes from a transcribed original tooltip, "Pulsar Reflective Armor Gloves, Min Level 5, Body Armor: 73"
+(TaRapedia): the level-5 Reflective gloves absorb 526, 631, 736 or 841, and only truncating 736 gives 73. The 15
+seeded values, which round, are Infinite Rasa's (source sweep 2026-09-13 §5), not original, and are no longer
+read. `min` and `max` are equal for all 3,377 classes.
 
 ### The boot-camp crate held the wrong armour — fixed
 

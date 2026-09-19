@@ -343,6 +343,9 @@ namespace Rasa.Managers
                 // packet is the same shape. It fell through to the default here, which did the
                 // right thing but logged every swing as an unsupported action.
                 case ActionId.WeaponMelee:
+                // The Bane Mortar's launcher (411): client weapons.groundtarget.GroundTargetAttack is a
+                // RocketLauncherAttack, itself a BaseWeaponAttack at a target entity, so it resolves the same way.
+                case ActionId.WeaponGroundtarget:
                     CellManager.Instance.CellCallMethod(mapChannel, missile.Source, new WeaponAttackRecovery(missile));
                     break;
                 case ActionId.AaRecruitLightning:

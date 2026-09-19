@@ -19,11 +19,11 @@ namespace Rasa.Test
         {
             const EntityClasses armorClass = (EntityClasses)9000003;
             var armor = new Item { ItemTemplate = new ItemTemplate(new ItemTemplateItemClassEntry
-                { ItemClass = (uint)armorClass }) { ArmorValue = 1000 } };
+                { ItemClass = (uint)armorClass }) };
             EntityManager.Instance.RegisterItem(armor.EntityId, armor);
             EntityClassManager.Instance.LoadedEntityClasses[armorClass] =
                 new EntityClass((uint)armorClass, "test armor", 0, 0, new List<AugmentationType>(), false)
-                { ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { RegenRate = 5 }) };
+                { ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { MinDamageAbsorbed = 10000, MaxDamageAbsorbed = 10000, RegenRate = 5 }) };
             try
             {
                 var player = new Manifestation { Level = 1, Race = Race.Human };

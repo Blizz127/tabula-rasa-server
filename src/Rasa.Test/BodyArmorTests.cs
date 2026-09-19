@@ -21,15 +21,16 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void UnseededArmorTakesTheClientsAbsorptionOnTheTooltipScale()
+        public void ArmorIsTheClientsAbsorptionOverTenTruncated()
         {
             const EntityClasses gloves = (EntityClasses)9000011;
             try
             {
-                // Footage A3-034: the uncommon Motor Assist gloves (absorb 281) read "Body Armor: 28".
+                // Original tooltips: 281 -> 28 (footage A3-034) and 736 -> 73 (Pulsar Reflective gloves, which
+                // rounding would show as 74).
                 Assert.AreEqual(28, ManifestationManager.BodyArmor(Armor(gloves, 281)));
-                Assert.AreEqual(24, ManifestationManager.BodyArmor(Armor(gloves, 235)));
-                Assert.AreEqual(23, ManifestationManager.BodyArmor(Armor(gloves, 234)));
+                Assert.AreEqual(73, ManifestationManager.BodyArmor(Armor(gloves, 736)));
+                Assert.AreEqual(23, ManifestationManager.BodyArmor(Armor(gloves, 235)));
             }
             finally
             {
@@ -38,12 +39,13 @@ namespace Rasa.Test
         }
 
         [TestMethod]
-        public void ASeededArmorValueIsKept()
+        public void TheInfiniteRasaArmorValueIsIgnored()
         {
+            // itemtemplate_armor came from Infinite Rasa and has no client counterpart; the client's class decides.
             const EntityClasses chest = (EntityClasses)9000012;
             try
             {
-                Assert.AreEqual(55, ManifestationManager.BodyArmor(Armor(chest, 281, 55)));
+                Assert.AreEqual(28, ManifestationManager.BodyArmor(Armor(chest, 281, 55)));
             }
             finally
             {

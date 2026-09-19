@@ -1181,28 +1181,28 @@ namespace Rasa.Managers
          * If fullreset is true, the current values of each attribute are set to the maximum
          */
         /// <summary>
-        /// A worn piece's body armour: its itemtemplate_armor value where one is seeded, otherwise the client's own
-        /// armorclass absorption for its class, divided by ten and rounded half up.
+        /// A worn piece's body armour: the client's own armorclass absorption for its class, divided by ten and
+        /// truncated.
         ///
-        /// Only 15 of the 2,510 armour templates had a seeded value, so every other piece - including everything
-        /// vendors sell - added nothing when worn. The scale is observed: the original client's tooltip for the boot
-        /// camp crate's gloves reads "Body Armor: 28 | Regen Rate: 1 per sec" (footage A3-034, t=319.6), and the
-        /// uncommon Motor Assist gloves' armorclass absorbs 281. All 15 seeded values follow the same rule (and
-        /// truncation does not: it misses 6 of them). The rounding of an exact .5 is not observed; 238 classes end
-        /// in 5. armorclass min and max are equal for all 3,377 classes, so which one is used makes no difference.
+        /// The scale is observed: the boot-camp crate's gloves read "Body Armor: 28" (footage A3-034 t=319.6) and
+        /// absorb 281. The rounding comes from a transcribed original tooltip, "Pulsar Reflective Armor Gloves, Min
+        /// Level 5, Body Armor: 73" (TaRapedia User:Zarevak/Sandbox): the level-5 Reflective gloves absorb 526, 631,
+        /// 736 or 841, and only truncating 736 gives 73 - rounding would show 74. (Its "Regen Rate: 7% per sec" does
+        /// not match that class's regen of 2, so the match is the armour line's alone.)
+        /// itemtemplate_armor's values are not used: the 2026-09-13 source sweep traced them to Infinite Rasa, whose
+        /// armorValue has no client counterpart and mixes rounding with truncation. min and max absorption are
+        /// equal for all 3,377 classes, so which one is read makes no difference.
         /// </summary>
         public static int BodyArmor(Item item)
         {
             var template = item?.ItemTemplate;
             if (template == null)
                 return 0;
-            if (template.ArmorValue > 0)
-                return template.ArmorValue;
 
             var armorClass = EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(template.Class, out var entityClass)
                 ? entityClass.ArmorClassInfo
                 : null;
-            return armorClass == null ? 0 : (int)Math.Floor(armorClass.MaxDamageAbsorbed / 10.0 + 0.5);
+            return armorClass == null ? 0 : (int)(armorClass.MaxDamageAbsorbed / 10);
         }
 
         public void UpdateStatsValues(Client client, bool fullreset)
