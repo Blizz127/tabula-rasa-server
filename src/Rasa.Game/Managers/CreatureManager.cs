@@ -410,6 +410,11 @@ namespace Rasa.Managers
             if (creature.Npc != null && creature.Npc.NpcPackageId != 0)
                 entityData.Add(new NPCInfoPacket(creature.Npc.NpcPackageId));
 
+            // Creature augmentation: the client's IsEscort and its overhead escort marker
+            // (UI_UPDATE_ESCORT_OVERHEAD) come only from Recv_UpdateEscortStatus.
+            if (creature.IsEscort)
+                entityData.Add(new UpdateEscortStatusPacket(true));
+
             client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(creature.EntityId, creature.EntityClass, entityData));
 
             // NPC  & Vendor augmentation

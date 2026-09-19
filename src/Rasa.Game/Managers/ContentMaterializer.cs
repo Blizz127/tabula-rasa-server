@@ -46,6 +46,7 @@ namespace Rasa.Managers
                 return;
 
             creature.ContentPlacementId = placement.Id;
+            creature.IsEscort = placement.Behavior == (byte)ContentPlacementBehavior.Escort;
             CellManager.Instance.AddToWorld(mapChannel, creature);
         }
 

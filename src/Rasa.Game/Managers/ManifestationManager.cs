@@ -1180,6 +1180,31 @@ namespace Rasa.Managers
          * Does not send values to clients
          * If fullreset is true, the current values of each attribute are set to the maximum
          */
+        /// <summary>
+        /// A worn piece's body armour: its itemtemplate_armor value where one is seeded, otherwise the client's own
+        /// armorclass absorption for its class, divided by ten and rounded half up.
+        ///
+        /// Only 15 of the 2,510 armour templates had a seeded value, so every other piece - including everything
+        /// vendors sell - added nothing when worn. The scale is observed: the original client's tooltip for the boot
+        /// camp crate's gloves reads "Body Armor: 28 | Regen Rate: 1 per sec" (footage A3-034, t=319.6), and the
+        /// uncommon Motor Assist gloves' armorclass absorbs 281. All 15 seeded values follow the same rule (and
+        /// truncation does not: it misses 6 of them). The rounding of an exact .5 is not observed; 238 classes end
+        /// in 5. armorclass min and max are equal for all 3,377 classes, so which one is used makes no difference.
+        /// </summary>
+        public static int BodyArmor(Item item)
+        {
+            var template = item?.ItemTemplate;
+            if (template == null)
+                return 0;
+            if (template.ArmorValue > 0)
+                return template.ArmorValue;
+
+            var armorClass = EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(template.Class, out var entityClass)
+                ? entityClass.ArmorClassInfo
+                : null;
+            return armorClass == null ? 0 : (int)Math.Floor(armorClass.MaxDamageAbsorbed / 10.0 + 0.5);
+        }
+
         public void UpdateStatsValues(Client client, bool fullreset)
         {
             var player = client.Player;
@@ -1329,7 +1354,7 @@ namespace Rasa.Managers
                     Logger.WriteLog(LogType.Error, "UpdateStatsValues: Player try to equip non_armor item");
                     continue;
                 }
-                armorMax += equipmentItem.ItemTemplate.ArmorValue;      // ToDo
+                armorMax += BodyArmor(equipmentItem);
                 armorRegenRate += classInfo.ArmorClassInfo.RegenRate;
 
                 foreach (var resistance in equipmentItem.ItemTemplate.EquipableInfo?.ResistList ?? new List<ResistanceData>())

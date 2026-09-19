@@ -52386,7 +52386,8 @@
    "slices": [
     "S1",
     "S2"
-   ]
+   ],
+   "closes_with": "closed: see summary and evidence"
   },
   {
    "id": "GAP-S2-TARGET-DUMMY",
@@ -52404,6 +52405,216 @@
    ],
    "slices": [
     "S2"
+   ],
+   "closes_with": "closed: see summary and evidence"
+  },
+  {
+   "id": "GAP-ITEM-ARMOR-VALUES",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. Worn armour came only from itemtemplate_armor (15 rows), so 2,495 armour templates - including 15 vendor items - added 0 when worn. ManifestationManager.BodyArmor now uses the seeded value where one exists and otherwise the client's own armorclass max_damage_absorbed / 10, rounded half up. The scale is observed (footage tooltip 'Body Armor: 28' for gloves absorbing 281); all 15 seeded rows follow the rule and truncation misses 6 of them.",
+   "evidence": [
+    "footage 7Lrst9SG3pk A3-034 t=319.6: \"Body Armor: 28 | Regen Rate: 1 per sec\"",
+    "client generated/client/armorclass.pyo: 3,377 rows, min == max in every row, identical to the server table",
+    "the 15 itemtemplate_armor rows: half-up 15/15, floor 9/15"
+   ],
+   "confirmed_by": [
+    "BodyArmorTests"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "closes_with": "closed: the confirming tests are in confirmed_by",
+   "surfaced_by": [
+    "1:1 fidelity audit (docs/fidelity-audit.md), 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-ITEM-ARMOR-ROUNDING",
+   "summary": "How the original rounded an exact half when turning armorclass absorption into displayed body armour is not observed; 238 of 3,377 classes end in 5. Half-up is inferred (it and banker's rounding both match every known row).",
+   "closes_with": "a tooltip in footage or a screenshot for an armour piece whose absorption ends in 5",
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, armour fix, 2026-09-19"
+   ],
+   "evidence": [
+    "client generated/client/armorclass.pyo: 238 of 3,377 max_damage_absorbed values end in 5",
+    "the 15 itemtemplate_armor rows: half-up and banker's rounding both 15/15"
+   ]
+  },
+  {
+   "id": "GAP-BOOTCAMP-CRATE-TIER",
+   "summary": "The boot-camp crate's gloves in the footage read 'Body Armor: 28', which is the uncommon Motor Assist row (absorb 281, V04-V07); the seeded crate gives template 13096, the common V01 row (234 -> 23). Item names resolve through module prefix families, so which template the original crate held is not settled.",
+   "evidence": [
+    "footage A3-034 t=319.6",
+    "itemtemplate 13096 Armor_T1_MotorAssist_V01_CMN_Gloves_01_to_02"
+   ],
+   "closes_with": "a template whose prefix family and tier both match the footage tooltip, confirmed against the other crate items shown",
+   "slices": [
+    "S2"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, footage tooltip compare, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-ENTITYCLASS-DRIFT",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. A full compare of 15,823 entityclass rows against the client's own table found every mesh, collision role and target flag equal and seven rows different: four names an old import corrupted by replacing 'none' case-insensitively with '0', one trimmed trailing space, 20684 MisCavesofDonn_DyingForean (client NPC 52, server stateless switch 8) and 28699 DELETEME_BROKEN (client no augmentations, server equipable item). Migration EntityClassClientFidelity and the seed now carry the client's values. None is placed or spawned.",
+   "evidence": [
+    "client generated/client/entityclass.pyo (1.16.5.0 game.zip, sha256 b4e99d0c...)"
+   ],
+   "confirmed_by": [
+    "ContentSchemaMigrationTests"
+   ],
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "closes_with": "closed: the confirming tests are in confirmed_by",
+   "surfaced_by": [
+    "1:1 fidelity audit, entityclass compare, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-WIRE-CHARACTER-STATE",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. CharacterState.ToolReady was 22; the client's TOOL_READY is 24. ActorInfo sent the state's type (Control = 5) as desiredPostureId, which the client looks up as a state id (5 = DEAD) and acts on only for CROUCHED; it now sends Standing or Crouched. Sixteen other wire enums (method ids 978, action ids 284, augmentations 64, creature flags 148, damage types 20, ...) matched the client's constant modules value for value.",
+   "evidence": [
+    "client generated/shared/characterstatedata.pyo",
+    "client augmentations/actor.py Recv_ActorInfo"
+   ],
+   "confirmed_by": [
+    "ClientConstantTests"
+   ],
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "closes_with": "closed: the confirming tests are in confirmed_by",
+   "surfaced_by": [
+    "1:1 fidelity audit, wire-enum compare, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-ESCORT-STATUS",
+   "status": "closed",
+   "summary": "Closed 2026-09-19. The client's Creature.IsEscort and its overhead escort marker are set only by Recv_UpdateEscortStatus, which the server never sent. A creature materialized from an escort placement (Ranger Milpas, mission 1390) is now introduced with it.",
+   "evidence": [
+    "client augmentations/creature.pyo Recv_UpdateEscortStatus(bIsEscort) -> UI_UPDATE_ESCORT_OVERHEAD"
+   ],
+   "confirmed_by": [
+    "TargetCategoryTests.AnEscortIsIntroducedAsAnEscortAndNoOtherCreatureIs"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "closes_with": "closed: the confirming tests are in confirmed_by",
+   "surfaced_by": [
+    "1:1 fidelity audit, packet-contract check, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-USABLE-ACTOR-LOCK",
+   "summary": "LockToActor / UseInterruptible / UseInterrupted are never sent. They mark a usable as in use by another player and play its channelling effect; of what the world places, only the Logos shrines (usabledata.specialFX state 81) have one. The client gives their meaning but not the order the original server sent them in.",
+   "evidence": [
+    "client augmentations/usable.py Recv_LockToActor, Recv_UseInterruptible, Recv_UseInterrupted, IsAlreadyInUse"
+   ],
+   "closes_with": "a packet capture or footage of two players at one Logos shrine, or an owner decision to build the inferred order (lock and interruptible at windup, interrupted and unlock on interrupt, unlock on completion)",
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, packet-contract check, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-CREATURE-FLAGS",
+   "summary": "CreatureInfo is sent an empty flag list. The client reads BIOLOGICAL, MECHANICAL, MACHINA, CAN_BE_REVIVED and the epic/boss indicators from it (harvest, salvage, heal disc, repair tool, corpse abilities, overhead markers). Without flags the client is permissive rather than broken. No per-creature flag data survives in the research.",
+   "evidence": [
+    "client augmentations/creature.pyo Recv_CreatureInfo, HasFlag; actions/tools/harvest.pyo"
+   ],
+   "closes_with": "a per-creature flag source",
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, packet-contract check, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-CLASS-ABILITIES",
+   "summary": "Only the Recruit abilities (Lightning 194, Sprint 401) are resolved, both from the client's own abilityData rows. Every T2-T4 class ability logs 'unsuported' in PerformAction and does nothing. The client data for each is complete; the original server's resolution rules are not.",
+   "evidence": [
+    "client generated/client/actiondata.pyo abilityData (1,084 rows)",
+    "client generated/client/skilldata.pyo (73 skills)"
+   ],
+   "closes_with": "per ability, the client ability module plus its abilityData row, built and tested one class at a time",
+   "slices": [
+    "W2",
+    "W3"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, ability compare, 2026-09-19"
+   ]
+  },
+  {
+   "id": "GAP-W3-430-MORTAR-CREATURE",
+   "summary": "Mission 430 'Mortar By Numbers' cannot be completed: its four launchers are placed as destroyables of class 7478 ArchBaneGenObjMortarlauncherBaseV01, which has no augmentations and target_flag 0, so the client can neither target nor damage them. TaRapedia describes the original as 'an automated Bane mortar turret. Like all fortifications...' - a creature. No client class names a mortar creature. Candidate reconstruction (inferred): class 7482 Emplacement_Bane_Turret_Standard (mesh 19366, next to the destroyed launcher's 19367), name 8186 'Bane Mortar', weapon class 10604 Weapon_Creature_Bane_Mortar_Launcher, at the four launcher positions.",
+   "evidence": [
+    "client generated/client/entityclass.pyo 7478, 7479, 7482, 10604",
+    "client creaturenamelanguage 8186 'Bane Mortar'",
+    "TaRapedia 'Mortar' rev. 18949 (2007-12-08); 'Mortar By Numbers' rev. 33276"
+   ],
+   "closes_with": "owner decision on the candidate class, then a migration replacing the four destroyables with creatures bound to objectives 1-4",
+   "slices": [
+    "W3"
+   ],
+   "surfaced_by": [
+    "1:1 fidelity audit, placed-usable augmentation check, 2026-09-19"
    ]
   }
  ],

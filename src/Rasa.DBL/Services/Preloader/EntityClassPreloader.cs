@@ -6158,7 +6158,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 20680, "MisTreasureDispenserCLRFCrystals", 13792, 1, 0, "6" };
             yield return new object[] { 20681, "ArchHumCorrRoomEdgeStraight8mmV02", 49404, 1, 0, "" };
             yield return new object[] { 20682, "MisDivideItemPurgasLevel1Card", 29248, 1, 0, "6" };
-            yield return new object[] { 20684, "MisCavesofDonn_DyingForean", 30264, 1, 1, "8" };
+            yield return new object[] { 20684, "MisCavesofDonn_DyingForean", 30264, 1, 1, "52" };
             yield return new object[] { 20685, "FloraForeasGenTree04V01", 30534, 1, 0, "" };
             yield return new object[] { 20686, "FloraForeasGenTree04V02", 30535, 1, 0, "" };
             yield return new object[] { 20687, "FloraForeasGenTree04V03", 30536, 1, 0, "" };
@@ -6731,7 +6731,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 21304, "UsableItemDispElohLogosNeither", 31820, 1, 1, "34" };
             yield return new object[] { 21305, "UsableItemDispElohLogosNephV01", 31821, 1, 1, "34" };
             yield return new object[] { 21306, "UsableItemDispElohLogosNightV01", 31822, 1, 1, "34" };
-            yield return new object[] { 21307, "UsableItemDispElohLogos0V01", 31823, 1, 1, "34" };
+            yield return new object[] { 21307, "UsableItemDispElohLogosNoneV01", 31823, 1, 1, "34" };
             yield return new object[] { 21308, "UsableItemDispElohLogosNorV01", 31824, 1, 0, "34" };
             yield return new object[] { 21309, "UsableItemDispElohLogosNorthV01", 31825, 1, 1, "34" };
             yield return new object[] { 21311, "UsableItemDispElohLogosNoseV01", 31826, 1, 1, "34" };
@@ -7663,7 +7663,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 22359, "ArchElohLogosSignNeither", 34883, 1, 0, "" };
             yield return new object[] { 22360, "ArchElohLogosSignNeph", 34884, 1, 0, "" };
             yield return new object[] { 22361, "ArchElohLogosSignNight", 34885, 1, 0, "" };
-            yield return new object[] { 22362, "ArchElohLogosSign0", 34886, 1, 0, "" };
+            yield return new object[] { 22362, "ArchElohLogosSignNone", 34886, 1, 0, "" };
             yield return new object[] { 22363, "ArchElohLogosSignNor", 34887, 1, 0, "" };
             yield return new object[] { 22364, "ArchElohLogosSignNorth", 34888, 1, 0, "" };
             yield return new object[] { 22365, "ArchElohLogosSignNose", 34889, 1, 0, "" };
@@ -8106,7 +8106,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 22819, "ItemElohLogosMuseum", 20299, 1, 0, "6,54" };
             yield return new object[] { 22820, "ItemElohLogosNeph", 20299, 1, 0, "6,54" };
             yield return new object[] { 22821, "ItemElohLogosNight", 20299, 1, 0, "6,54" };
-            yield return new object[] { 22822, "ItemElohLogos0", 20299, 1, 0, "6,54" };
+            yield return new object[] { 22822, "ItemElohLogosNone", 20299, 1, 0, "6,54" };
             yield return new object[] { 22823, "ItemElohLogosNor", 20299, 1, 0, "6,54" };
             yield return new object[] { 22824, "ItemElohLogosNorth", 20299, 1, 0, "6,54" };
             yield return new object[] { 22825, "ItemElohLogosNose", 20299, 1, 0, "6,54" };
@@ -13802,7 +13802,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 28696, "NPC_Corman_Hermit_Male", 47255, 2, 1, "1,52" };
             yield return new object[] { 28697, "Redshirt_Human_Female_Child", 44141, 1, 0, "1" };
             yield return new object[] { 28698, "Redshirt_Human_Male_Child", 44142, 1, 0, "1" };
-            yield return new object[] { 28699, "DELETEME_BROKEN", 17801, 1, 0, "4,6" };
+            yield return new object[] { 28699, "DELETEME_BROKEN", 17801, 1, 0, "" };
             yield return new object[] { 28700, "Tool_Avatar_Field_Repair_Conical_UNC_05_to_09_DELETE", 17801, 1, 0, "2,4,6" };
             yield return new object[] { 28701, "Tool_Avatar_Field_Repair_Conical_UNC_10_to_14_DELETE", 17801, 1, 0, "2,4,6" };
             yield return new object[] { 28702, "Tool_Avatar_Field_Repair_Conical_UNC_15_to_19_DELETE", 17801, 1, 0, "2,4,6" };
@@ -15500,7 +15500,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 30472, "ArchHumCorrRoomStraight64mV14", 51201, 1, 0, "" };
             yield return new object[] { 30473, "PropEarthSignStopV01", 51212, 1, 0, "" };
             yield return new object[] { 30474, "PropEarthSignStopV02", 51213, 1, 0, "" };
-            yield return new object[] { 30475, "PropEarthSig0wayV01", 51211, 1, 0, "" };
+            yield return new object[] { 30475, "PropEarthSignOnewayV01", 51211, 1, 0, "" };
             yield return new object[] { 30476, "ArchHumCorrRoomOfficeV11", 51217, 1, 0, "" };
             yield return new object[] { 30477, "PropEarthStreetlightV02", 51218, 1, 0, "" };
             yield return new object[] { 30478, "PropEarthStreetlightV03", 51219, 1, 0, "" };
@@ -15735,7 +15735,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 30711, "Weapon_Avatar_Sunset_PropellantGun_Sonic_MaXxX", 28267, 1, 0, "2,4,6" };
             yield return new object[] { 30712, "Weapon_Avatar_Sunset_Rifle_EMP_Willbrind", 27937, 1, 0, "2,4,6" };
             yield return new object[] { 30713, "Weapon_Avatar_Sunset_Staff_Virulent_Oklysh", 28777, 1, 0, "2,4,6" };
-            yield return new object[] { 30714, "Weapon_Avatar_Sunset_MachineGun_v3_Physical_Sajud_Soljar", 49853, 1, 0, "2,4,6" };
+            yield return new object[] { 30714, "Weapon_Avatar_Sunset_MachineGun_v3_Physical_Sajud_Soljar ", 49853, 1, 0, "2,4,6" };
             yield return new object[] { 30715, "Weapon_Avatar_Sunset_Torqueshell_Rifle_Sonic_Chazor", 42514, 1, 0, "2,4,6" };
             yield return new object[] { 30716, "Weapon_Avatar_Sunset_Shotgun_v2_Fire_Pixxie", 48963, 1, 0, "2,4,6" };
             yield return new object[] { 30717, "Weapon_Avatar_Sunset_Shotgun_v3_Fire_Kaczmanchoy", 48961, 1, 0, "2,4,6" };

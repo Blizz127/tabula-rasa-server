@@ -29,6 +29,11 @@ comparison that passes becomes a standing test, so the next mismatch fails CI in
 | Placed usables vs their class augmentations | 10 placements | crate, both dummies, corpse, bomb, wreck consistent; **mission 430's four mortars are undamageable** (below) |
 | Spawned creatures: class has `Creature` and is targetable | 194 | **194 / 194 correct** |
 | Item templates: class is an `Item`; weapons have a weapon row | 4,999 | crate set 5/5 and mission rewards 14/14 clean; **2,495 armour templates have no armour value** (below) |
+| Entity classes, every column, against the decoded client table | 15,823 | mesh, collision role, target flag all equal; the 5 names and 2 augmentation lists **fixed** (below) |
+| `armorclass`, `weaponclass`, `itemclass` against the client's tables | 3,377 / 2,946 / 9,115 | **identical**, every column |
+| Item template → class, skill / race / attribute requirements | 30,225 / 19,564 / 70 / 5,293 | **identical** |
+| Equipable class → slot; slot numbers | 6,935; 28 | **identical** |
+| Server enums on the wire against the client's constant modules | 16 enums | values identical except **`CharacterState.ToolReady` 22, client 24** (fixed); method ids 978/978, action ids 284/284, augmentations 64/64, creature flags 148/148 |
 
 ### Mission 430 "Mortar By Numbers" cannot be completed
 
@@ -38,31 +43,80 @@ The client has no destroyable mortar class (only 7478 and its `…Destroyed` var
 client's creature-name table, however, has **"Bane Mortar" (8186)** and its Light/Heavy/Ultraheavy siblings: in
 the original the mortars were **creatures**, like the turret emplacements (`Emplacement_Bane_Turret_Standard`,
 Creature + Harvestable, targetable). The world seed has none, and the class the original used is not recovered.
-Open: **GAP-W3-430-MORTAR-CREATURE**.
 
-### 2,495 armour pieces give no armour
+TaRapedia's "Mortar" page (rev. 18949, 2007-12-08) settles the kind: *"An automated Bane mortar turret. Like all
+fortifications, these have exceptionally heavy armor for their level … they regenerate armor at a rapid rate."*
 
-The worn-armour total is built only from `itemtemplate_armor.armor_value`, which has 15 rows. Every other armour
-template — including 15 sold by vendors — adds **0** when worn. The 15 existing values all equal the client's
-`armorclass.max_damage_absorbed ÷ 10`, rounded. The 2026-09-13 sweep traced that `÷10` to another emulator with no
-client counterpart and warned against extending it. The footage now bears on it: the original client's tooltip
-for the crate's gloves reads **"Body Armor: 28 | Regen Rate: 1 per sec"** (A3-034, t=319.6). The client never
-reads the absorption values for display, so 28 was server-sent, and it is on the ÷10 scale. Still open before
-any bulk fill: the exact rounding, and which template the original gloves were (item names resolve through the
-prefix-family structure of 2026-09-15, not by template id). Open: **GAP-ITEM-ARMOR-VALUES**.
+No client class names a mortar creature, and no class of any kind reuses the launcher meshes (28988, 19367). The
+nearest evidence for a reconstruction: `Emplacement_Bane_Turret_Standard` (7482, Creature + Harvestable,
+targetable) uses mesh **19366**, next to the destroyed launcher's 19367; the client has a creature weapon class
+`Weapon_Creature_Bane_Mortar_Launcher` (10604); and the name "Bane Mortar" (8186). A creature of class 7482,
+named 8186, carrying weapon 10604, at the four launcher positions, is the candidate — **inferred**, so it waits on
+an owner decision before it is built. Open: **GAP-W3-430-MORTAR-CREATURE**.
+
+### 2,495 armour pieces gave no armour — fixed
+
+The worn-armour total was built only from `itemtemplate_armor.armor_value`, which has 15 rows, so every other
+armour template — including 15 sold by vendors — added **0** when worn. Worn armour is now the seeded value where
+one exists, and otherwise the client's own `armorclass.max_damage_absorbed ÷ 10`, rounded half up
+(`ManifestationManager.BodyArmor`).
+
+The scale is observed: the original client's tooltip for the boot-camp crate's gloves reads **"Body Armor: 28 |
+Regen Rate: 1 per sec"** (A3-034, t=319.6), and the uncommon Motor Assist gloves absorb 281. All 15 seeded values
+follow the same rule; truncation misses 6 of them. `min` and `max` are equal for all 3,377 classes. What is *not*
+observed is how an exact half rounds: 238 classes end in 5, and half-up is inferred. Recorded as
+**GAP-ITEM-ARMOR-ROUNDING** (inferred tier).
+
+A related open point: the crate's gloves in the footage are the *uncommon* V04–V07 row (281 → 28); the seeded
+crate gives template 13096, the common V01 row (234 → 23). Item names resolve through the prefix families of
+2026-09-15, so which template the original crate held is not settled. Open: **GAP-BOOTCAMP-CRATE-TIER**.
 
 `BODY_ARMOR_DIVISOR` (1.5) in `shared/gameconstants` is not that divisor: the client never uses it, and it
 matches the server's existing Body-to-armour bonus (Body ÷ 1.5 %).
 
+### Entity-class drift — fixed
+
+Migration `EntityClassClientFidelity` puts seven rows back to the client's table: four names an old import
+corrupted by replacing "none", case-insensitively, with "0" (`UsableItemDispElohLogosNoneV01`,
+`ArchElohLogosSignNone`, `ItemElohLogosNone`, and `PropEarthSignOnewayV01`, which lost its "nOne"); one trailing
+space the import trimmed; **20684 `MisCavesofDonn_DyingForean`**, an NPC (52) to the client and a stateless switch
+(8) here; and **28699 `DELETEME_BROKEN`**, which the client gives no augmentations. None of the seven is placed or
+spawned, so nothing in play changes. The seed (`EntityClassPreloader`) carries the same values for new databases.
+
+### Wire constants — one wrong, one misused
+
+- `CharacterState.ToolReady` was 22; the client's `TOOL_READY` is **24** (22 is unused). Nothing assigned it yet.
+- `ActorInfo.desiredPostureId` was sent the state's **type** (Control = 5, Posture = 1…). The client looks it up
+  as a state id and acts only on `CROUCHED` (14); a `Normal` actor was announced with the id of `DEAD`. It now
+  sends `Standing`, or `Crouched` for a crouched actor.
+
+Pinned by `ClientConstantTests`. Names still differ where the value does not (the server's `Laser` is the client's
+`LIGHT`, `Electrical` is `ENERGY`, `Physical` is `NORMAL`); only the number goes on the wire.
+
+### Abilities
+
+Lightning (194) and Sprint (401) are built from the client's own `actiondata.abilityData` rows: costs 25–150
+power, windup/recovery/reuse 500/700/1200 ms, damage 180–240 then 240–300, damage type 13 (`ENERGY`) with a
+`SONIC` (7) extra at rank 3+; Sprint's 3600/5000 s duration, 2 s drain interval and adrenaline costs. Both agree.
+
+Every class ability beyond Recruit (the T2–T4 ability skills of `skilldata`; `abilitydata` has 1,084 `(action, rank)` rows) is
+**unimplemented**: `PerformAction` logs "unsuported" and nothing happens. That is a missing system, not a
+misidentified one; the client data for each is complete, the original server's resolution rules are not.
+Open: **GAP-CLASS-ABILITIES**.
+
+### Weapons
+
+Damage, clip size, ammunition class and damage type come from `weaponclass`, which is identical to the client's.
+Range, windup, recovery and refire come from the server-only `itemtemplate_weapon` (2,444 rows): the client's
+weapon classes carry `range_type` 0 and zero overrides in every row, so nothing client-side contradicts them.
+
 ## Still to audit
 
-1. **Packet contract per augmentation.** For each augmentation carried by anything the server spawns, the
-   client's initial-state `Recv_` methods versus what the introduction actually sends. This is the
-   generalisation of the target-category and damage-info bugs, and it would have caught three of them.
-2. **Abilities.** Every ability a class can learn, against the actions the server can resolve (the missile
-   path still logs "unsupported missile actionId ... using default" for anything it does not name).
-3. **Weapons.** Weapon templates against the client's `weaponclass` — ammunition, damage type, range.
-4. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
+1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
+2. **Creature flags.** `CreatureInfo` is sent an empty flag list. The client reads `BIOLOGICAL`, `MECHANICAL`,
+   `MACHINA`, `CAN_BE_REVIVED` and the epic/boss indicators from it (harvest, salvage, heal disc, repair tool,
+   corpse abilities, overhead markers). With none, the client is permissive rather than broken. No per-creature
+   flag data survives anywhere in the research; open: **GAP-CREATURE-FLAGS**.
 
 ## Packet contract — first pass (2026-09-19)
 
@@ -82,7 +136,15 @@ anything is built.
 | door | 3 | 3 | — |
 | lootdispenser | 8 | 8 | — |
 
-The ones most likely to be *identity* defects of the kind this audit is for — a thing the client mis-classifies
-because it was never told what it is — are `UseInterruptible` / `UseInterrupted` / `LockToActor` on usables and
-`UpdateEscortStatus` on escorted creatures. The game-effect and wargame handlers are unimplemented systems rather
-than mis-identified things, and belong to their own work.
+Checked by hand (2026-09-19):
+
+- **`UpdateEscortStatus` — fixed.** The client's `IsEscort` and its overhead escort marker are set only by
+  `Recv_UpdateEscortStatus(bIsEscort)`. A creature materialized from an escort placement (Ranger Milpas, mission
+  1390) is now introduced with it.
+- **`LockToActor` / `UseInterruptible` / `UseInterrupted` — recorded, not built.** They mark a usable as in use by
+  another player (`IsAlreadyInUse`) and play its channelling effect: `usabledata.specialFX` has one for 393
+  classes, and of what the world places only the **Logos shrines** (state 81) carry one. The client code gives
+  their meaning but not the order the original server sent them in, and nothing else in the research does.
+  Open: **GAP-USABLE-ACTOR-LOCK**.
+- **`BlockInfo`** is a no-op in the base usable. The game-effect and wargame handlers are unimplemented systems
+  rather than mis-identified things, and belong to their own work.

@@ -14,35 +14,13 @@ namespace Rasa.Packets.MapChannel.Server
         public ulong TrackingTarget { get; set; }
         public double Yaw { get; set; }
         public double MovementMode { get; set; }
-        public CharacterStateType DesiredPostureId { get; set; }
+        /// <summary>
+        /// A posture state id, not a state type: the client's Recv_ActorInfo looks it up with GetStateFromId and acts
+        /// only when it is CROUCHED (14). The server tracks no posture apart from the actor's state, so an actor is
+        /// crouched when that state says so and standing otherwise.
+        /// </summary>
+        public CharacterState DesiredPostureId { get; set; }
         public bool CombatMode { get; set; }
-
-
-        public Dictionary<CharacterState, CharacterStateType> Tester = new Dictionary<CharacterState, CharacterStateType> {
-            { CharacterState.Standing, CharacterStateType.Posture },
-            { CharacterState.Sitting, CharacterStateType.Posture },
-            { CharacterState.LyingDown,CharacterStateType.Posture},
-            { CharacterState.Swimming, CharacterStateType.Posture},
-            { CharacterState.Dead, CharacterStateType.Control},
-            { CharacterState.Stopped, CharacterStateType.Movement},
-            { CharacterState.Slow, CharacterStateType.Movement},
-            { CharacterState.Fast, CharacterStateType.Movement},
-            { CharacterState.Flying, CharacterStateType.Posture},
-            { CharacterState.Flailing, CharacterStateType.Posture},
-            { CharacterState.Normal, CharacterStateType.Control},
-            { CharacterState.Uncontrolled, CharacterStateType.Control},
-            { CharacterState.Stunned, CharacterStateType.Control},
-            { CharacterState.Crouched, CharacterStateType.Posture},
-            { CharacterState.AtPeace, CharacterStateType.Combat},
-            { CharacterState.CombatEngaged, CharacterStateType.Combat},
-            { CharacterState.Idle, CharacterStateType.Action},
-            { CharacterState.Recovery, CharacterStateType.Action},
-            { CharacterState.Windup, CharacterStateType.Action},
-            { CharacterState.NoTool, CharacterStateType.Tool},
-            { CharacterState.ToolReady, CharacterStateType.Tool},
-            { CharacterState.Special, CharacterStateType.Movement},
-            { CharacterState.Dying, CharacterStateType.Control}
-        };
 
         public ActorInfoPacket(Actor actor)
         {
@@ -50,7 +28,7 @@ namespace Rasa.Packets.MapChannel.Server
             TrackingTarget = actor.Target;
             Yaw = actor.Rotation;
             MovementMode = actor.MovementSpeed;
-            DesiredPostureId = Tester[actor.State];
+            DesiredPostureId = actor.State == CharacterState.Crouched ? CharacterState.Crouched : CharacterState.Standing;
             CombatMode = actor.InCombatMode;
         }
 

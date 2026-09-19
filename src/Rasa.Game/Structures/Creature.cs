@@ -13,6 +13,8 @@ namespace Rasa.Structures
         public MapChannel MapChannel { get; set; }
         /// <summary>The content placement this creature was materialized from; 0 for spawn-pool and world creatures.</summary>
         public uint ContentPlacementId { get; set; }
+        /// <summary>Materialized from an escort placement: the client is told so, and marks it overhead.</summary>
+        public bool IsEscort { get; set; }
         // npc data (only if creature is a NPC)
         public Npc Npc { get; set; }
         // loot data (only if creature is harvestable)

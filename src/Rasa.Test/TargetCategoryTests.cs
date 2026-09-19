@@ -78,6 +78,43 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void AnEscortIsIntroducedAsAnEscortAndNoOtherCreatureIs()
+        {
+            // client/augmentations/creature.pyo: IsEscort and the overhead escort marker are set only by
+            // Recv_UpdateEscortStatus(bIsEscort).
+            const EntityClasses rangerClass = (EntityClasses)9000021;
+            var classes = EntityClassManager.Instance.LoadedEntityClasses;
+            classes[rangerClass] = new EntityClass((uint)rangerClass, "test ranger", 0, 1, new List<AugmentationType>(), true);
+            var escort = new Creature { EntityClass = rangerClass, IsEscort = true, AppearanceData = new Dictionary<EquipmentData, AppearanceData>() };
+            var bystander = new Creature { EntityClass = rangerClass, AppearanceData = new Dictionary<EquipmentData, AppearanceData>() };
+            foreach (var creature in new[] { escort, bystander })
+            {
+                EntityManager.Instance.RegisterEntity(creature.EntityId, EntityType.Creature);
+                EntityManager.Instance.RegisterCreature(creature);
+            }
+            try
+            {
+                var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                CreatureManager.Instance.CreateCreatureOnClient(client, escort);
+                CreatureManager.Instance.CreateCreatureOnClient(client, bystander);
+
+                var created = Drain(client).Select(message => message.Packet).OfType<CreatePhysicalEntityPacket>().ToList();
+                Assert.AreEqual(2, created.Count);
+                Assert.IsTrue(created[0].EntityData.OfType<UpdateEscortStatusPacket>().Single().IsEscort);
+                Assert.IsFalse(created[1].EntityData.OfType<UpdateEscortStatusPacket>().Any());
+            }
+            finally
+            {
+                foreach (var creature in new[] { escort, bystander })
+                {
+                    EntityManager.Instance.UnregisterCreature(creature.EntityId);
+                    EntityManager.Instance.UnregisterEntity(creature.EntityId);
+                }
+                classes.Remove(rangerClass);
+            }
+        }
+
+        [TestMethod]
         public void TheClientCategoriesAreTheClientsOwnValues()
         {
             // generated/client/targetdata.pyo
