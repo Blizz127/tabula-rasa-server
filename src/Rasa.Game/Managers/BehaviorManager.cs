@@ -481,7 +481,8 @@ namespace Rasa.Managers
                     MissileManager.Instance.MissileLaunch(mapChannel, actionData, dmg);
 
                     // set cooldown
-                    action.CooldownTimer = action.Cooldown;
+                    // Called Shot's arm effect slows the creature's attacks.
+                    action.CooldownTimer = action.Cooldown * (100 + creature.ActiveEffects.Values.Sum(e => e.AttackDelayPercent)) / 100;
 
                     // creature used action, break loop
                     break;

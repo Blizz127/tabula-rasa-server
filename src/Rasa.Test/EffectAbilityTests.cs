@@ -542,6 +542,96 @@ namespace Rasa.Test
             Assert.AreEqual(500, target.Attributes[Attributes.Health].Current);
         }
 
+        private static Missile WeaponHit(Actor source, Creature target, int damage)
+            => new Missile { Source = source, TargetActor = target, TargetEntityId = target.EntityId, DamageA = damage, ActionId = ActionId.WeaponAttack };
+
+        [TestMethod]
+        public void SacrificeTradesMitigationForDamageAndDrawsThreatUntilUsedAgain()
+        {
+            var row = Tier4(8, 155, 385, "abilities.sacrifice");
+            row.Properties[AbilityProperty.ResistModifier] = 10;
+            row.Properties[AbilityProperty.OffensiveDamageModifier] = -10;
+            row.Properties[AbilityProperty.ThreatModifierPercent] = 30;
+            var creature = Creature(new Vector3(5, 0, 0));
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(385, null)));
+            Advance(400);
+            Assert.AreEqual(90, DamageModifiers.Outgoing(_client.Player, 100));
+            Assert.AreEqual(10, DamageModifiers.ResistRating(_client.Player));
+            AbilityEffects.OnCreatureHit(_map, WeaponHit(_client.Player, creature, 50), creature, new HitData());
+            Assert.AreEqual((BehaviorManager.BehaviorActionFighting, _client.Player.EntityId),
+                (creature.Controller.CurrentAction, creature.Controller.ActionFighting.TargetEntityId), "the creature turns on the grenadier");
+            Advance(3000);
+            Assert.IsFalse(_actions.TryStartDamageAbility(_client, Request(385, null)), "used again, it ends");
+            Assert.AreEqual(100, DamageModifiers.Outgoing(_client.Player, 100));
+        }
+
+        [TestMethod]
+        public void SelfDestructBlastsAroundAndReturnsTheDemolitionistHome()
+        {
+            var row = Tier4(12, 114, 267, "abilities.selfdestruct");
+            row.Properties[AbilityProperty.Duration] = 30;
+            row.Properties[AbilityProperty.DamageAmountMin] = 226;
+            row.Properties[AbilityProperty.DamageAmountMax] = 300;
+            row.Properties[AbilityProperty.EffectRadius] = 10;
+            _client.Player.Position = new Vector3(0, 0, 0);
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(267, null)));
+            Advance(400);
+            _client.Player.Position = new Vector3(40, 0, 0);
+            var nearby = Creature(new Vector3(45, 0, 0));
+            for (var second = 0; second < 30; second++)
+                GameEffectManager.Instance.DoWork(_map, 1000);
+            Assert.IsTrue(100000 - nearby.Attributes[Attributes.Health].Current is >= 226 and <= 300, "the blast where the demolitionist stood");
+            Assert.AreEqual(Vector3.Zero, _client.Player.Position, "back at the mark");
+        }
+
+        [TestMethod]
+        public void ScatterbombsReachTheScatterPlusTheBurst()
+        {
+            var row = Tier4(8, 79, 232, "abilities.scatterbombs");
+            row.Properties[AbilityProperty.RadiusAroundSource] = 5;
+            row.Properties[AbilityProperty.EffectRadius] = 7;
+            row.Properties[AbilityProperty.DamageAmountMin] = 100;
+            row.Properties[AbilityProperty.DamageAmountMax] = 175;
+            var inside = Creature(new Vector3(11, 0, 0));
+            var outside = Creature(new Vector3(13, 0, 0));
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(232, null)));
+            Advance(400);
+            Assert.IsTrue(100000 - inside.Attributes[Attributes.Health].Current is >= 100 and <= 175);
+            Assert.AreEqual(100000, outside.Attributes[Attributes.Health].Current);
+        }
+
+        [TestMethod]
+        public void ShredderAmmoAddsItsDamageOncePerInterval()
+        {
+            var row = Row(390, "abilities.weaponenhancement", 400, 400, 40);
+            row.Properties[AbilityProperty.DamageAmountMin] = 60;
+            row.Properties[AbilityProperty.DamageType] = (int)DamageType.Physical;
+            row.Properties[AbilityProperty.DurationMs] = 30000;
+            var target = Creature(new Vector3(5, 0, 0));
+            AbilityEffects.ShredderAmmo(_map, _client.Player, _client, row);
+            AbilityEffects.OnCreatureHit(_map, WeaponHit(_client.Player, target, 10), target, new HitData());
+            AbilityEffects.OnCreatureHit(_map, WeaponHit(_client.Player, target, 10), target, new HitData());
+            Assert.AreEqual(100000 - 60, target.Attributes[Attributes.Health].Current, "the extra 60 once, not twice within the interval");
+        }
+
+        [TestMethod]
+        public void CalledShotToTheHeadMakesTheNextHitHarder()
+        {
+            var row = Row(430, "abilities.calledshot", 500, 500, 100, 5);
+            row.Properties[AbilityProperty.Duration] = 20;
+            row.Properties[AbilityProperty.DamageModifierPercent] = 50;
+            row.Properties[AbilityProperty.EffectDurationMs] = 5000;
+            var target = Creature(new Vector3(50, 0, 0));
+            AbilityEffects.CalledShot(_map, _client.Player, target, row);
+            var shot = WeaponHit(_client.Player, target, 100);
+            AbilityEffects.OnCreatureHit(_map, shot, target, new HitData());
+            Assert.AreEqual(150, shot.DamageA, "+50% on the called head shot");
+            Assert.IsFalse(target.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.CalledShotType), "the mark is spent");
+            var next = WeaponHit(_client.Player, target, 100);
+            AbilityEffects.OnCreatureHit(_map, next, target, new HitData());
+            Assert.AreEqual(100, next.DamageA);
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

@@ -48,6 +48,18 @@
         /// <summary>Disease (pumps 4-5): the holder does not regenerate, or cannot be healed.</summary>
         public bool StopsRegeneration { get; set; }
         public bool PreventsHealing { get; set; }
+        /// <summary>Sacrifice: a creature this holder damages turns on it.</summary>
+        public bool DrawsThreat { get; set; }
+        /// <summary>Called Shot (arm): percent added to the holder's attack cooldowns.</summary>
+        public int AttackDelayPercent { get; set; }
+        /// <summary>Called Shot: the sniper whose next hit on the holder springs the called part, and what it does.</summary>
+        public Actor CalledBy { get; set; }
+        public System.Action<Missile> OnCalledHit { get; set; }
+        /// <summary>Shredder Ammo: extra damage of this type added to the holder's weapon hits, once per interval.</summary>
+        public Data.DamageType? ShredderType { get; set; }
+        public int ShredderDamage { get; set; }
+        public int ShredderIntervalMs { get; set; }
+        public long ShredderReadyAt { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

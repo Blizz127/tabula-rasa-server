@@ -48,6 +48,17 @@ namespace Rasa.Managers
         public const int ResistanceType = 10000085;           // RESISTANCE, "Damage Resist: %(resistMod)s"
         public const int DiseaseType = 179;                   // DISEASE_EFFECT, "Spirit: %(modifier)s%%"
         public const int DamageConversionType = 354;          // DAMAGE_CONVERSION, "Virulent Damage dealt converted to: ..."
+        public const int SacrificeType = 192;                 // SACRIFICE, "Damage Modifier / Resist Modifier / Threat Modifier"
+        public const int SelfDestructLocationType = 10000031; // SELF_DESTRUCT_LOCATION
+        public const int SelfDestructBombType = 10000032;     // SELF_DESTRUCT_BOMB
+        public const int ScatterBombType = 355;               // SCATTER_BOMB_EXPLOSION
+        public const int WeaponEnhancementType = 10000035;    // WEAPON_ENHANCEMENT (Shredder Ammo)
+        public const int CalledShotType = 290;                // CALLED_SHOT_EFFECT, "A sniper is aiming a deadly shot at you!"
+        public const int CalledLegType = 291;                 // "Run speed reduced by %(movementMod)s%%"
+        public const int CalledArmType = 292;                 // "Your attack rate is slowed."
+        public const int CalledEyeType = 293;                 // "Ranged attack damage reduced by %(damageMod)s%%"
+        public const int CalledChestType = 294;               // "You are bleeding profusely!"
+        public const int CalledHeadType = 295;                // CALLED_SHOT_HEAD
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
@@ -793,6 +804,176 @@ namespace Rasa.Managers
             var conversion = GameEffectManager.Instance.AttachEffect(map, medic, DamageConversionType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
                 medic.EntityId, true, new Dictionary<string, double> { ["damageType"] = (int)to });
             conversion.ConvertVirulentTo = to;
+        }
+
+        /// <summary>
+        /// A creature is about to take a hit: Shredder Ammo adds its extra damage (once per interval, weapon hits only),
+        /// a called shot springs on the sniper's next hit, and Sacrifice's threat turns the creature on the grenadier.
+        /// Ability ticks are not weapon hits and trigger none of these.
+        /// </summary>
+        public static void OnCreatureHit(MapChannel map, Missile missile, Creature creature, HitData hit)
+        {
+            var source = missile.Source;
+            if (map == null || source == null || missile.IsAbility)
+                return;
+            foreach (var effect in creature.ActiveEffects.Values.Where(e => e.CalledBy == source && e.OnCalledHit != null).ToList())
+            {
+                effect.OnCalledHit(missile);
+                GameEffectManager.Instance.DettachEffect(map, creature, effect);
+            }
+            var now = Environment.TickCount64;
+            foreach (var shredder in source.ActiveEffects.Values.Where(e => e.ShredderType != null && e.ShredderReadyAt <= now).ToList())
+            {
+                shredder.ShredderReadyAt = now + shredder.ShredderIntervalMs;
+                var extra = MissileManager.Instance.DamageTick(map, source, creature, shredder.ShredderDamage, shredder.ShredderType.Value);
+                CellManager.Instance.CellCallMethod(map, source, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(
+                    shredder.EffectId, new[] { (creature.EntityId, extra) }));
+            }
+            if (source.ActiveEffects.Values.Any(e => e.DrawsThreat) && creature.State != CharacterState.Dead)
+                BehaviorManager.Instance.SetActionFighting(creature, source.EntityId);
+        }
+
+        /// <summary>
+        /// Sacrifice: "increasing damage by sacrificing mitigation or increasing mitigation by sacrificing damage.
+        /// Sacrificing damage to raise mitigation will also increase the threat generated" - OFFENSIVE_DAMAGE_MODIFIER
+        /// percent on the grenadier's damage, RESIST_MODIFIER on their resistance rating, and, where the row has threat,
+        /// every creature they hit turns on them (this server has no threat list; turning the creature is inferred). The
+        /// rows carry no duration: it holds until used again, which ends it (inferred, like Rage's toggle).
+        /// </summary>
+        public static void Sacrifice(MapChannel map, Manifestation grenadier, ActionLevelInfo info)
+        {
+            var damage = info.Get(AbilityProperty.OffensiveDamageModifier);
+            var resist = info.Get(AbilityProperty.ResistModifier);
+            var threat = info.Get(AbilityProperty.ThreatModifierPercent);
+            var sacrifice = GameEffectManager.Instance.AttachEffect(map, grenadier, SacrificeType, info.Level, 0, grenadier.EntityId, true,
+                new Dictionary<string, double> { ["dmgMod"] = damage, ["resistMod"] = resist, ["threatMod"] = threat });
+            sacrifice.DamageBonusPercent = damage;
+            sacrifice.ResistRating = resist;
+            sacrifice.DrawsThreat = threat > 0;
+        }
+
+        /// <summary>
+        /// Self Destruct: "marks their location and causes them to explode after a set time. User can self-detonate before
+        /// time has elapsed by activating the ability again. The explosion will damage ... all enemies within the blast
+        /// radius. User will be teleported back to the marked location." The bomb lasts DURATION; when it ends - run out
+        /// or ended by the second activation - every hostile within EFFECT_RADIUS takes a DAMAGE_AMOUNT roll and the
+        /// demolitionist returns to the mark. The damage the user takes is not in the row and is not dealt.
+        /// </summary>
+        public static void SelfDestruct(MapChannel map, Game.Client client, ActionLevelInfo info, Random random)
+        {
+            var demolitionist = client.Player;
+            var home = demolitionist.Position;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), demolitionist.Level, scaleType);
+            var max = Math.Max(min, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), demolitionist.Level, scaleType));
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var mark = GameEffectManager.Instance.AttachEffect(map, demolitionist, SelfDestructLocationType, info.Level, duration, demolitionist.EntityId, true,
+                new Dictionary<string, double>());
+            var bomb = GameEffectManager.Instance.AttachEffect(map, demolitionist, SelfDestructBombType, info.Level, duration, demolitionist.EntityId, true,
+                new Dictionary<string, double>());
+            bomb.OnDetach = effect =>
+            {
+                if (demolitionist.State == CharacterState.Dead || !ReferenceEquals(demolitionist.MapChannel, map))
+                    return;
+                var hits = HostilesAround(map, demolitionist, demolitionist.Position, radius)
+                    .Select(enemy => (enemy.EntityId, MissileManager.Instance.DamageTick(map, demolitionist, enemy,
+                        DamageModifiers.Outgoing(demolitionist, random.Next(min, max + 1)), DamageType.Physical))).ToList();
+                if (hits.Count > 0)
+                    CellManager.Instance.CellCallMethod(map, demolitionist, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(effect.EffectId, hits));
+                GameEffectManager.Instance.DettachEffect(map, demolitionist, mark);
+                PlayerDeathManager.TeleportWithinMap(client, home);
+            };
+        }
+
+        /// <summary>
+        /// Scatterbombs: "Damages all enemies in an area around the user" - bombs scattered within RADIUS_AROUND_SOURCE,
+        /// each bursting over EFFECT_RADIUS, so every hostile within their sum takes a DAMAGE_AMOUNT roll of the row's
+        /// DAMAGE_TYPE (the reach as the sum is inferred), shown as SCATTER_BOMB_EXPLOSION on the grenadier.
+        /// </summary>
+        public static void Scatterbombs(MapChannel map, Manifestation grenadier, ActionLevelInfo info, Random random)
+        {
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var min = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), grenadier.Level, scaleType);
+            var max = Math.Max(min, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), grenadier.Level, scaleType));
+            var type = DamageModifiers.DealtType(grenadier, (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical)) ?? DamageType.Physical;
+            var reach = info.Get(AbilityProperty.RadiusAroundSource) + info.Get(AbilityProperty.EffectRadius);
+            var burst = GameEffectManager.Instance.AttachEffect(map, grenadier, ScatterBombType, info.Level, 1000, grenadier.EntityId, true, new Dictionary<string, double>());
+            var hits = HostilesAround(map, grenadier, grenadier.Position, reach)
+                .Select(enemy => (enemy.EntityId, MissileManager.Instance.DamageTick(map, grenadier, enemy,
+                    DamageModifiers.Outgoing(grenadier, random.Next(min, max + 1)), type))).ToList();
+            if (hits.Count > 0)
+                CellManager.Instance.CellCallMethod(map, grenadier, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(burst.EffectId, hits));
+        }
+
+        /// <summary>
+        /// Shredder Ammo: "additional damage for weapon attacks for a set time. Extra damage is applied once per interval
+        /// when damage is done to the target" - DAMAGE_AMOUNT of DAMAGE_TYPE on the holder's weapon hits for DURATION_MS.
+        /// The interval is not in the row (it shrinks with proficiency); one second is inferred.
+        /// </summary>
+        public static void ShredderAmmo(MapChannel map, Manifestation sniper, Game.Client targetClient, ActionLevelInfo info)
+        {
+            var holder = targetClient?.Player ?? sniper;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var shredder = GameEffectManager.Instance.AttachEffect(map, holder, WeaponEnhancementType, info.Level, info.Get(AbilityProperty.DurationMs),
+                sniper.EntityId, true, new Dictionary<string, double>());
+            shredder.ShredderType = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            shredder.ShredderDamage = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), sniper.Level, scaleType);
+            shredder.ShredderIntervalMs = DefaultPulseMs;
+        }
+
+        /// <summary>
+        /// Called Shot: the target carries CALLED_SHOT_EFFECT ("A sniper is aiming a deadly shot at you!") for
+        /// EFFECT_DURATION_MS, and the sniper's next weapon hit on it springs the called part for DURATION (that the next
+        /// hit springs it is inferred from the effect's text). Which part is the row's: EFFECT_MOVEMENT_MODIFIER, the leg
+        /// (run speed down that percent); EFFECT_MODIFIER, the arm (attacks that percent slower); INTERVAL, the chest
+        /// (DAMAGE_MODIFIER_PERCENT of the hit bled every INTERVAL); a negative DAMAGE_MODIFIER_PERCENT, the eye (its damage
+        /// down that much); a positive one, the head (that hit that much harder).
+        /// </summary>
+        public static void CalledShot(MapChannel map, Manifestation sniper, Creature target, ActionLevelInfo info)
+        {
+            if (target == null || target.State == CharacterState.Dead)
+                return;
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var mark = GameEffectManager.Instance.AttachEffect(map, target, CalledShotType, info.Level, info.Get(AbilityProperty.EffectDurationMs),
+                sniper.EntityId, false, new Dictionary<string, double>());
+            mark.CalledBy = sniper;
+            mark.OnCalledHit = missile =>
+            {
+                if (info.Has(AbilityProperty.EffectMovementModifier))
+                {
+                    var slow = info.Get(AbilityProperty.EffectMovementModifier);
+                    var (walk, run) = (target.WalkSpeed, target.RunSpeed);
+                    target.WalkSpeed = walk * (100 - slow) / 100f;
+                    target.RunSpeed = run * (100 - slow) / 100f;
+                    GameEffectManager.Instance.AttachEffect(map, target, CalledLegType, info.Level, duration, sniper.EntityId, false,
+                        new Dictionary<string, double> { ["movementMod"] = slow }).OnDetach = _ => { target.WalkSpeed = walk; target.RunSpeed = run; };
+                }
+                else if (info.Has(AbilityProperty.EffectModifier))
+                    GameEffectManager.Instance.AttachEffect(map, target, CalledArmType, info.Level, duration, sniper.EntityId, false,
+                        new Dictionary<string, double>()).AttackDelayPercent = info.Get(AbilityProperty.EffectModifier);
+                else if (info.Has(AbilityProperty.Interval))
+                {
+                    var bleed = Math.Max(1, missile.DamageA * info.Get(AbilityProperty.DamageModifierPercent) / 100);
+                    GameEffectManager.Instance.AttachEffect(map, target, CalledChestType, info.Level, duration, sniper.EntityId, false,
+                        new Dictionary<string, double>(), info.Get(AbilityProperty.Interval) * 1000, tick =>
+                        {
+                            if (target.State == CharacterState.Dead)
+                                return;
+                            var hit = MissileManager.Instance.DamageTick(map, sniper, target, bleed, DamageType.Physical);
+                            CellManager.Instance.CellCallMethod(map, target, new Packets.MapChannel.Server.GameEffectTickPacket(tick.EffectId, new[] { (target.EntityId, hit) }));
+                        });
+                }
+                else if (info.Get(AbilityProperty.DamageModifierPercent) < 0)
+                    GameEffectManager.Instance.AttachEffect(map, target, CalledEyeType, info.Level, duration, sniper.EntityId, false,
+                        new Dictionary<string, double> { ["damageMod"] = -info.Get(AbilityProperty.DamageModifierPercent) }).DamageBonusPercent =
+                        info.Get(AbilityProperty.DamageModifierPercent);
+                else
+                {
+                    missile.DamageA = missile.DamageA * (100 + info.Get(AbilityProperty.DamageModifierPercent)) / 100;
+                    GameEffectManager.Instance.AttachEffect(map, target, CalledHeadType, info.Level, duration, sniper.EntityId, false, new Dictionary<string, double>());
+                }
+            };
         }
 
         /// <summary>The player and the squad members on this map within radius of a point.</summary>

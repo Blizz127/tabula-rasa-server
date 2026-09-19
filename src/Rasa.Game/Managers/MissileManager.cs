@@ -91,6 +91,9 @@ namespace Rasa.Managers
             if (creature.State == CharacterState.Dead)
                 return;
 
+            // Called Shot and Sacrifice answer a hit before it lands (the head shot adds to it).
+            AbilityEffects.OnCreatureHit(mapChannel, missile, creature, hit);
+
             // decrease armor first
             var armorDecrease = Math.Min(missile.DamageA, creature.Attributes[Attributes.Armor].Current);
             // Client combat messages add finalAmt + absorbed. Report the existing

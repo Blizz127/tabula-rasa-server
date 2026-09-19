@@ -123,9 +123,9 @@ namespace Rasa.Managers
             if (player.AbilityReuseDeadlines.TryGetValue(packet.ActionId, out var reuseUntil) && now < reuseUntil)
                 return false;
 
-            // Rage is a toggle (client rage.py RageAction.isToggle): asking again while it runs ends it.
-            if (actionInfo.Module == "abilities.rage" &&
-                player.ActiveEffects.Values.FirstOrDefault(e => e.TypeId == AbilityEffects.RageSourceEffectType) is { } running)
+            // Toggles (rage.py and selfdestruct.py isToggle; Sacrifice has no duration): asking again while it runs ends it.
+            if (ActionTableManager.ToggleEffects.TryGetValue(actionInfo.Module, out var toggleType) &&
+                player.ActiveEffects.Values.FirstOrDefault(e => e.TypeId == toggleType) is { } running)
             {
                 GameEffectManager.Instance.DettachEffect(map, player, running);
                 return false;
@@ -168,7 +168,7 @@ namespace Rasa.Managers
                         return false;
                 }
             }
-            else if (actionInfo.Module == "abilities.decay" || actionInfo.Module == "abilities.disease")
+            else if (actionInfo.Module == "abilities.decay" || actionInfo.Module == "abilities.disease" || actionInfo.Module == "abilities.calledshot")
             {
                 // A single enemy (decay.py TARGET_NON_FRIENDLY); a destroyable placement cannot decay.
                 target = GetLightningTarget(map, player, packet.Target ?? 0);
@@ -304,7 +304,7 @@ namespace Rasa.Managers
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
             var isCure = rowAction?.Module == "abilities.cure";
             var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && (rowAction?.Module == "abilities.decay" ||
-                rowAction?.Module == "abilities.disease" ||
+                rowAction?.Module == "abilities.disease" || rowAction?.Module == "abilities.calledshot" ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
                     !ReferenceEquals((execution.OriginalTarget as Manifestation)?.MapChannel, map)))
@@ -379,6 +379,23 @@ namespace Rasa.Managers
                         break;
                     case "abilities.damageconversion":
                         AbilityEffects.ViralConversion(map, player, info);
+                        break;
+                    case "abilities.sacrifice":
+                        AbilityEffects.Sacrifice(map, player, info);
+                        break;
+                    case "abilities.selfdestruct":
+                        AbilityEffects.SelfDestruct(map, client, info, _damageRandom);
+                        break;
+                    case "abilities.scatterbombs":
+                        AbilityEffects.Scatterbombs(map, player, info, _damageRandom);
+                        break;
+                    case "abilities.weaponenhancement":
+                        var enhanced = execution.OriginalTarget == player ? client
+                            : map.ClientList?.FirstOrDefault(c => c?.Player == execution.OriginalTarget);
+                        AbilityEffects.ShredderAmmo(map, player, enhanced, info);
+                        break;
+                    case "abilities.calledshot":
+                        AbilityEffects.CalledShot(map, player, execution.OriginalTarget as Creature, info);
                         break;
                     case "abilities.firesupport":
                         AbilityEffects.FireSupport(map, player, info,

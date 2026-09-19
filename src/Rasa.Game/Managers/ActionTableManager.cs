@@ -80,15 +80,24 @@ namespace Rasa.Managers
         public static readonly HashSet<string> EffectModules = new HashSet<string> { "abilities.decay", "abilities.rage", "abilities.bioaugmentation",
             "abilities.scourge", "abilities.shieldextender", "abilities.reconstruction",
             "abilities.tacticalevasion", "abilities.firesupport", "abilities.cure", "abilities.reflection", "abilities.conversion",
-            "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance", "abilities.disease", "abilities.damageconversion" };
+            "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance", "abilities.disease", "abilities.damageconversion",
+            "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.weaponenhancement", "abilities.calledshot" };
+
+        /// <summary>Toggled abilities and the effect whose presence means they are on: using one again ends it.</summary>
+        public static readonly Dictionary<string, int> ToggleEffects = new Dictionary<string, int>
+        {
+            ["abilities.rage"] = AbilityEffects.RageSourceEffectType,
+            ["abilities.sacrifice"] = AbilityEffects.SacrificeType,
+            ["abilities.selfdestruct"] = AbilityEffects.SelfDestructBombType
+        };
 
         /// <summary>Modules aimed at a friendly player (TARGET_FRIENDLY in the client module): self when nothing else is named.</summary>
-        public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation", "abilities.shieldextender" };
+        public static readonly HashSet<string> FriendlyModules = new HashSet<string> { "abilities.bioaugmentation", "abilities.shieldextender", "abilities.weaponenhancement" };
 
         /// <summary>Modules aimed at the performer alone (TARGET_SELF), which take no target.</summary>
         public static readonly HashSet<string> SelfModules = new HashSet<string> { "abilities.rage", "abilities.scourge", "abilities.reconstruction", "abilities.tacticalevasion",
             "abilities.reflection", "abilities.conversion", "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance",
-            "abilities.damageconversion" };
+            "abilities.damageconversion", "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs" };
 
         /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
         public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)
