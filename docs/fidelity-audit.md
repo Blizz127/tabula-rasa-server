@@ -226,9 +226,25 @@ weapon classes carry `range_type` 0 and zero overrides in every row, so nothing 
 
 ## Still to audit
 
-1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE.
-2. **Class abilities that are not direct damage**, and the damage abilities' knockback and stun
-   (GAP-CLASS-ABILITIES).
+1. **Placed NPCs and their dialogue packages**, continuing GAP-W3-UNBOUND-CONVERSATION-PACKAGE (18 objectives
+   left) and GAP-W3-MISASSIGNED-PACKAGE (Reyko).
+
+Done since: **class abilities** — all 53 abilities an active skill grants (`AbilityRequirements.RequiredLogos`,
+the client's logos sequences) resolve through a server handler: direct damage, a game effect, or Sprint's own
+path (checked 2026-09-19). The last ten are OD-56 stand-ins, described above.
+
+### Misassigned dialogue — Brody fixed (2026-09-19)
+
+Field Lt. Brody carried package 550, the found commander's "Man, am I glad you showed up ... get back to Brody", so
+mission 670 "Missing Strike Team" completed its first objective at Brody and could never complete its second
+("return to Field Lieutenant Brody", package 145, carried by no one). **DevilsDenFransisco** places Captain
+Fransisco (client name 6587) in the Devil's Den at TaRapedia's coordinates (-59, 96, 50; navmesh floor 95.82) with
+550, and gives Brody his own 145, which also binds 361/1. The appearance is OD-45's AFS analogue; his following
+the player through the instance is not built (GAP-ESCORT).
+
+Captain Reyko still speaks the Irendas console's line (1213). Moving him to his own 1200 would bind 1113/7,
+1125/1 and 1310/1 but unbind 1112/1 "Into The Hive", which today completes at him; no source gives the
+console's position. Left for the owner to decide.
 
 ### Creature flags — fixed
 
