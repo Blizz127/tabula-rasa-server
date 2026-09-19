@@ -146,6 +146,18 @@ namespace Rasa.Managers
         {
             if (passedTime <= 0 || mapChannel.ClientList == null)
                 return;
+            // Timed effects on creatures (AbilityEffects' stuns and knockbacks) expire as a player's do.
+            foreach (var creature in mapChannel.CreaturesWithEffects.ToArray())
+            {
+                foreach (var effect in creature.ActiveEffects.Values.ToArray())
+                {
+                    effect.EffectTime += passedTime;
+                    if (effect.Duration > 0 && effect.EffectTime >= effect.Duration)
+                        DettachEffect(mapChannel, creature, effect);
+                }
+                if (creature.ActiveEffects.Count == 0)
+                    mapChannel.CreaturesWithEffects.Remove(creature);
+            }
             foreach (var client in mapChannel.ClientList)
             {
                 if (client?.Player == null)

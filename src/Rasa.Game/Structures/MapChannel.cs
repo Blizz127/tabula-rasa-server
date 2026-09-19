@@ -38,6 +38,8 @@ namespace Rasa.Structures
         public Navigation.NavMeshQuery NavMesh { get; set; }
         // effect
         public int CurrentEffectId { get; set; } // increases with every spawned game effect
+        /// <summary>Creatures carrying a timed game effect (a stun, a knockback), so the effect can expire.</summary>
+        public HashSet<Creature> CreaturesWithEffects { get; } = new HashSet<Creature>();
 
         // Dynamic Object List
         public List<DynamicObject> DynamicObjects = new List<DynamicObject>();

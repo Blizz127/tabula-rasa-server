@@ -128,6 +128,65 @@ namespace Rasa.Test
             }
         }
 
+        [TestMethod]
+        public void AConeReachesWhatIsInFrontWithinTheAbilitysRange()
+        {
+            // Tectonic Strike (229) level 1: CONE_RADIUS 10 is the cone's angle in degrees (client/targeting.py turns it
+            // into radians), and the reach is the ability's range, 20 m.
+            var strike = new ActionInfo { ActionId = (ActionId)178, Module = "abilities.tectonicstrike" };
+            var level = new ActionLevelInfo { ActionId = (ActionId)178, Level = 1, WindupMs = 333, RecoveryMs = 333, MaxRange = 20 };
+            level.Properties[AbilityProperty.ConeRadius] = 10;
+            level.Properties[AbilityProperty.DamageAmountMin] = 180;
+            level.Properties[AbilityProperty.DamageAmountMax] = 210;
+            strike.Levels[1] = level;
+            ActionTableManager.Instance.Add(strike);
+            _client.Player.Rotation = 0;   // facing +Z
+
+            var ahead = Creature(new Vector3(0.5f, 0, 15), Factions.Bane);     // 1.9 degrees off, 15 m
+            var wide = Creature(new Vector3(8, 0, 8), Factions.Bane);          // 45 degrees off
+            var beyond = Creature(new Vector3(0, 0, 25), Factions.Bane);       // straight ahead, past 20 m
+            var behind = Creature(new Vector3(0, 0, -3), Factions.Bane);
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, new RequestPerformAbilityPacket { ActionId = (ActionId)178, ActionArgId = 1, ClientYaw = 0 }));
+            Advance(333);
+            Assert.IsTrue(Health(ahead) < 100000);
+            foreach (var missed in new[] { wide, beyond, behind })
+                Assert.AreEqual(100000, Health(missed));
+        }
+
+        [TestMethod]
+        public void AStunHoldsTheCreatureAndItsEffectExpires()
+        {
+            var target = Creature(new Vector3(3, 0, 0), Factions.Bane);
+            var row = new ActionLevelInfo();
+            row.Properties[AbilityProperty.StunChance] = 50;
+            row.Properties[AbilityProperty.StunDuration] = 3;
+
+            AbilityEffects.Apply(_map, _client.Player, target, row, percent => percent == 50);
+            Assert.IsTrue(target.StunnedUntil > System.Environment.TickCount64 + 2000);
+            var stun = target.ActiveEffects.Values.Single();
+            Assert.AreEqual(AbilityEffects.StunEffectType, stun.TypeId);
+            Assert.AreEqual(3000, stun.Duration);
+            Assert.IsTrue(Drain().OfType<GameEffectAttachedPacket>().Any(p => p.EffectTypeId == 86));
+
+            GameEffectManager.Instance.DoWork(_map, 3000);
+            Assert.AreEqual(0, target.ActiveEffects.Count);
+            Assert.IsFalse(_map.CreaturesWithEffects.Contains(target));
+            Assert.IsTrue(Drain().OfType<GameEffectDetachedPacket>().Any());
+        }
+
+        [TestMethod]
+        public void AFailedStunRollDoesNothing()
+        {
+            var target = Creature(new Vector3(3, 0, 0), Factions.Bane);
+            var row = new ActionLevelInfo();
+            row.Properties[AbilityProperty.StunChance] = 50;
+            row.Properties[AbilityProperty.StunDuration] = 3;
+            AbilityEffects.Apply(_map, _client.Player, target, row, percent => false);
+            Assert.AreEqual(0L, target.StunnedUntil);
+            Assert.AreEqual(0, target.ActiveEffects.Count);
+        }
+
         private Creature Creature(Vector3 position, Factions faction)
         {
             var creature = new Creature

@@ -255,6 +255,11 @@ namespace Rasa.Managers
                 creature.UpdatePositionCounter = CreatureManager.CreatureLocationUpdateTime;
             }
 
+            // A stunned creature does nothing until the stun ends (AbilityEffects; the client's StunEffect makes it
+            // uncontrolled and blocks its movement for the same time).
+            if (creature.StunnedUntil > Environment.TickCount64)
+                return;
+
             if (creature.Controller.CurrentAction == BehaviorActionWander)
             {
                 // scan for enemy

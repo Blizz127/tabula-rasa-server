@@ -170,18 +170,39 @@ namespace Rasa.Managers
 
         /// <summary>
         /// Who a damage ability reaches when it lands: the target alone; the target and every hostile within
-        /// RADIUS_AROUND_TARGET of it; or every hostile within RADIUS_AROUND_SOURCE or CONE_RADIUS of the performer.
-        /// The cone's angle is not in the ability's row, so a cone is taken as the full circle of its radius.
+        /// RADIUS_AROUND_TARGET of it; every hostile within RADIUS_AROUND_SOURCE of the performer; or, for a cone, every
+        /// hostile within the ability's range and inside the cone.
+        ///
+        /// CONE_RADIUS is an angle, not a distance: client/targeting.py turns it into the cone reticle's width with
+        /// radius * 2 * pi / 360, and takes the reach from the ability's max range. Whether the angle is the half-width
+        /// or the full width is not in the client; it is taken as the half-width (inferred).
         /// </summary>
-        private static List<Creature> DamageAbilityTargets(MapChannel map, Manifestation player, ActionLevelInfo info, Creature primary)
+        private static List<Creature> DamageAbilityTargets(MapChannel map, Manifestation player, ActionLevelInfo info, Creature primary, double? yaw)
         {
             var targets = new List<Creature>();
-            System.Numerics.Vector3? centre = null;
-            var radius = 0f;
-            if (AimedFromSource(info))
+            Func<Creature, bool> reaches = null;
+            if (info.Has(AbilityProperty.ConeRadius))
             {
-                centre = player.Position;
-                radius = Math.Max(info.Get(AbilityProperty.RadiusAroundSource), info.Get(AbilityProperty.ConeRadius));
+                var halfAngle = info.Get(AbilityProperty.ConeRadius) * Math.PI / 180.0;
+                var facing = yaw ?? player.Rotation;
+                var reach = info.MaxRange;
+                reaches = creature =>
+                {
+                    var dx = creature.Position.X - player.Position.X;
+                    var dz = creature.Position.Z - player.Position.Z;
+                    var distance = Math.Sqrt(dx * dx + dz * dz);
+                    if (distance > reach)
+                        return false;
+                    if (distance < 0.01)
+                        return true;
+                    var cos = (dx * Math.Sin(facing) + dz * Math.Cos(facing)) / distance;
+                    return Math.Acos(Math.Clamp(cos, -1.0, 1.0)) <= halfAngle;
+                };
+            }
+            else if (info.Has(AbilityProperty.RadiusAroundSource))
+            {
+                var radius = info.Get(AbilityProperty.RadiusAroundSource);
+                reaches = creature => System.Numerics.Vector3.Distance(player.Position, creature.Position) <= radius;
             }
             else
             {
@@ -189,18 +210,18 @@ namespace Rasa.Managers
                     targets.Add(primary);
                 if (primary != null && info.Has(AbilityProperty.RadiusAroundTarget))
                 {
-                    centre = primary.Position;
-                    radius = info.Get(AbilityProperty.RadiusAroundTarget);
+                    var centre = primary.Position;
+                    var radius = info.Get(AbilityProperty.RadiusAroundTarget);
+                    reaches = creature => System.Numerics.Vector3.Distance(centre, creature.Position) <= radius;
                 }
             }
 
-            if (centre.HasValue && radius > 0 && player.Cells != null)
+            if (reaches != null && player.Cells != null)
                 foreach (var seed in player.Cells)
                     if (map.MapCellInfo.Cells.TryGetValue(seed, out var cell))
                         foreach (var creature in cell.CreatureList)
                             if (!targets.Contains(creature) &&
-                                ReferenceEquals(GetLightningTarget(map, player, creature.EntityId), creature) &&
-                                System.Numerics.Vector3.Distance(centre.Value, creature.Position) <= radius)
+                                ReferenceEquals(GetLightningTarget(map, player, creature.EntityId), creature) && reaches(creature))
                                 targets.Add(creature);
             return targets;
         }
@@ -240,10 +261,12 @@ namespace Rasa.Managers
             var max = Math.Max(min, info.Get(AbilityProperty.DamageAmountMax, min));
             int Roll() => AbilityScaling.ScaleActorAmount(_damageRandom.Next(min, max + 1), player.Level, scaleType);
             var damageType = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
-            var hits = DamageAbilityTargets(map, player, info, execution.OriginalTarget as Creature)
+            var hits = DamageAbilityTargets(map, player, info, execution.OriginalTarget as Creature, action.ClientYaw)
                 .Select(target => (target, Roll())).ToList();
             MissileManager.Instance.AbilityStrike(map, player, action.ActionId, action.ActionArgId, damageType, hits,
                 targeted ? execution.OriginalContentTarget : null, Roll());
+            foreach (var (target, _) in hits)
+                AbilityEffects.Apply(map, player, target, info);
             client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
             {
                 (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
@@ -440,6 +463,10 @@ namespace Rasa.Managers
                         var range = LightningAbilityData.GetBaseDamageRange(action.ActionArgId, player.Level);
                         MissileManager.Instance.MissileLaunch(mapChannel, action,
                             _damageRandom.Next(range.Minimum, range.Maximum + 1));
+                        // Ranks 4 and 5 stun: 50% for 3 s in the client's row (194, 4-5).
+                        if (EntityManager.Instance.GetCreature(action.TargetId) is { } struck &&
+                            ActionTableManager.Instance.TryGetLevel(action.ActionId, action.ActionArgId, out _, out var lightningRow))
+                            AbilityEffects.Apply(mapChannel, player, struck, lightningRow);
                     }
                     break;
                 case ActionId.AaRecruitSprint:

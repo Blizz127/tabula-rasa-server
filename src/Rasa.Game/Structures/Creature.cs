@@ -15,6 +15,8 @@ namespace Rasa.Structures
         public uint ContentPlacementId { get; set; }
         /// <summary>Materialized from an escort placement: the client is told so, and marks it overhead.</summary>
         public bool IsEscort { get; set; }
+        /// <summary>Environment.TickCount64 until which a stun holds the creature's AI (AbilityEffects).</summary>
+        public long StunnedUntil { get; set; }
         // npc data (only if creature is a NPC)
         public Npc Npc { get; set; }
         // loot data (only if creature is harvestable)
