@@ -15,6 +15,7 @@ namespace Rasa.Managers
 
     public class MissileManager
     {
+        private readonly Random _critRandom = new Random();
         private static MissileManager _instance;
         private static readonly object InstanceLock = new object();
         public readonly Timer Timer = new Timer();
@@ -201,8 +202,12 @@ namespace Rasa.Managers
             if (action.Actor is Creature attackingCreature)
                 AbilityEffects.OnCreatureAttack(attackingCreature);
 
+            var critical = damage > 0 && DamageModifiers.RollCrit(action.Actor, _critRandom);
+            if (critical)
+                damage = DamageModifiers.Crit(damage, GetTargetActor(action.TargetId));
             var missile = new Missile
             {
+                IsCritical = critical,
                 DamageA = DamageModifiers.Outgoing(action.Actor, damage),
                 DamageType = DamageModifiers.DealtType(action.Actor, damageType),
                 Source = action.Actor
@@ -332,12 +337,14 @@ namespace Rasa.Managers
                 if (target == null || target.State == CharacterState.Dead)
                     continue;
 
+                var critical = DamageModifiers.RollCrit(source, _critRandom);
                 var missile = new Missile
                 {
-                    DamageA = DamageModifiers.Outgoing(source, damage), DamageType = damageType, Source = source, ActionId = actionId, ActionArgId = actionArgId,
+                    IsCritical = critical,
+                    DamageA = DamageModifiers.Outgoing(source, critical ? DamageModifiers.Crit(damage, target) : damage), DamageType = damageType, Source = source, ActionId = actionId, ActionArgId = actionArgId,
                     IsAbility = true, TargetEntityId = target.EntityId, TargetActor = target
                 };
-                var hit = new HitData { DamageType = damageType, FinalAmt = damage, EntityId = target.EntityId };
+                var hit = new HitData { DamageType = damageType, FinalAmt = damage, EntityId = target.EntityId, IsCritical = critical ? 1 : 0 };
                 DoDamageToCreature(mapChannel, missile, target, hit);
                 if (target.State == CharacterState.Dead)
                 {
@@ -379,7 +386,8 @@ namespace Rasa.Managers
                     DamageType = missile.DamageType ??
                         (missile.ActionId == ActionId.AaRecruitLightning ? DamageType.Electrical : DamageType.Physical),
                     FinalAmt = missile.DamageA,
-                    EntityId = missile.TargetEntityId
+                    EntityId = missile.TargetEntityId,
+                    IsCritical = missile.IsCritical ? 1 : 0
                 };
                 missile.Args.HitData.Add(hit);
 

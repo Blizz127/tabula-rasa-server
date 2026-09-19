@@ -168,7 +168,8 @@ namespace Rasa.Managers
                         return false;
                 }
             }
-            else if (actionInfo.Module == "abilities.corpseexplode" || actionInfo.Module == "abilities.reanimation")
+            else if (actionInfo.Module == "abilities.corpseexplode" || actionInfo.Module == "abilities.reanimation" ||
+                     actionInfo.Module == "abilities.hortimonculus")
             {
                 // corpseexplode.py canTargetDead, and only a creature's corpse.
                 if (!EntityManager.Instance.Creatures.TryGetValue(packet.Target ?? 0, out var corpse) || corpse.State != CharacterState.Dead ||
@@ -313,6 +314,7 @@ namespace Rasa.Managers
             var friendlyAbility = ActionTableManager.FriendlyModules.Contains(rowAction?.Module ?? "");
             var isCure = rowAction?.Module == "abilities.cure";
             var targeted = !friendlyAbility && !isCure && rowAction?.Module != "abilities.firesupport" && rowAction?.Module != "abilities.corpseexplode" && rowAction?.Module != "abilities.reanimation" &&
+                rowAction?.Module != "abilities.hortimonculus" &&
                 (ActionTableManager.EnemyModules.Contains(rowAction?.Module ?? "") ||
                 !ActionTableManager.SelfModules.Contains(rowAction?.Module ?? "") && !AimedFromSource(info));
             if (friendlyAbility && (execution.OriginalTarget == null || execution.OriginalTarget.State == CharacterState.Dead ||
@@ -445,6 +447,39 @@ namespace Rasa.Managers
                             (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
                         }));
                         return;
+                    case "abilities.turret":
+                    case "abilities.trap":
+                        System.Numerics.Vector3? spotAt = action.TargetLocation is { } p
+                            ? new System.Numerics.Vector3((float)p.X, (float)p.Y, (float)p.Z) : null;
+                        if (actionInfo.Module == "abilities.turret")
+                            AbilityEffects.Turret(map, player, spotAt, info);
+                        else
+                            AbilityEffects.Trap(map, player, spotAt, info, _damageRandom);
+                        break;
+                    case "abilities.botconstruction":
+                        AbilityEffects.BotConstruction(map, player, info);
+                        break;
+                    case "abilities.spotter":
+                        AbilityEffects.Spotter(map, player, info);
+                        break;
+                    case "abilities.createclone":
+                        AbilityEffects.CreateClone(map, player, info);
+                        break;
+                    case "abilities.crabmines":
+                        AbilityEffects.CrabMine(map, player, info, _damageRandom);
+                        break;
+                    case "abilities.hortimonculus":
+                        AbilityEffects.Hortimunculus(map, client, execution.OriginalTarget as Creature, info);
+                        break;
+                    case "abilities.basewave":
+                        AbilityEffects.BaseWave(map, client, info);
+                        break;
+                    case "abilities.critwave":
+                        AbilityEffects.CritWave(map, client, info);
+                        break;
+                    case "abilities.polymorph":
+                        AbilityEffects.Polymorph(map, player, info);
+                        break;
                     case "abilities.painttarget":
                         AbilityEffects.PaintTarget(map, player, execution.OriginalTarget as Creature, info);
                         break;

@@ -70,6 +70,12 @@ namespace Rasa.Managers
         public const int CorpseImmolationType = 126;          // CORPSE_IMMOLATION
         public const int HackedType = 223;                    // HACKED_EFFECT
         public const int MindControlType = 168;               // MIND_CONTROL_EFFECT
+        public const int CritWaveType = 202;                  // CRITWAVEEFFECT, "Crit Hit: +%(critAmt)s%%"
+        public const int BaseWaveType = 206;                  // BASEWAVEEFFECT
+        public const int HortimunculusBuffType = 225;         // HORTIMONCULUS_BUFF, "Improves various damage resistances and heals damage over time"
+        public const int CrabMineExplosionType = 10000088;    // CRAB_MINE_EXPLOSION
+        public const int TrapExplosionType = 10000042;        // TRAP_EXPLOSION_EFFECT
+        public const int PolymorphType = 10000039;            // POLYMORPH_EFFECT
         public const int PaintTargetType = 10000045;          // PAINT_TARGET_EFFECT, "Reduced Cover / Armor Recharge / Armor Piercing"
         public const int CureReviveType = 167;                // CURE_REVIVE_EFFECT
         public const int CureDebuffGuardType = 181;           // CURE_DEBUFF_GUARD
@@ -1330,6 +1336,219 @@ namespace Rasa.Managers
                     ["pierceMod"] = info.Get(AbilityProperty.EffectArmorPiercePercent)
                 }).ArmorPiercePercent = info.Get(AbilityProperty.EffectArmorPiercePercent);
         }
+
+        // ---- OD-56 (owner decision 2026-09-19, "build them labelled"): stand-ins where the original data is lost ----
+
+        /// <summary>
+        /// World-seed creatures standing in for the summons, whose CREATURE_VARIANT_IDs index a creature-variant table no
+        /// recovered source holds: the AFS mini turret (9) for Turret and Trap, the friendly Hominis Machina (8) for the
+        /// engineer's bot, the military-surplus soldier (10) for the Spotter, and the human NPC of the player's gender
+        /// (4 male, 6 female) wearing their appearance for the clone. Every one is an analogue.
+        /// </summary>
+        public const uint TurretStandIn = 9, BotStandIn = 8, SpotterStandIn = 10, CloneMaleStandIn = 4, CloneFemaleStandIn = 6;
+
+        private static readonly Dictionary<(ulong Owner, string Kind), Creature> Summons = new Dictionary<(ulong, string), Creature>();
+
+        /// <summary>For tests: makes the summoned creature instead of CreatureManager.SpawnSummon (which reads the database).</summary>
+        public static Func<MapChannel, uint, Vector3, uint, Creature> SpawnOverride { get; set; }
+
+        /// <summary>
+        /// Spawns a stand-in beside the player - "Only 1 ... can be active at a time", so a new one of the same kind
+        /// replaces the old - and removes it when its time is up.
+        /// </summary>
+        public static Creature Summon(MapChannel map, Manifestation owner, string kind, uint template, Vector3 at, int lifetimeMs, int levelDifference)
+        {
+            if (Summons.TryGetValue((owner.EntityId, kind), out var previous))
+                Unsummon(map, previous);
+            var level = (uint)Math.Max(1, owner.Level + levelDifference);
+            var summon = SpawnOverride != null ? SpawnOverride(map, template, at, level)
+                : CreatureManager.Instance.SpawnSummon(map, template, at, owner.Rotation, level);
+            if (summon == null)
+                return null;
+            Summons[(owner.EntityId, kind)] = summon;
+            GameEffectManager.Instance.AttachServerTimer(map, summon, lifetimeMs, _ =>
+            {
+                Summons.Remove((owner.EntityId, kind));
+                Unsummon(map, summon);
+            });
+            return summon;
+        }
+
+        private static void Unsummon(MapChannel map, Creature summon)
+        {
+            map.CreaturesWithEffects.Remove(summon);
+            foreach (var cell in map.MapCellInfo.Cells.Values)
+                cell.CreatureList.Remove(summon);
+            CellManager.Instance.RemoveCreatureFromWorld(map, summon);
+        }
+
+        private static Vector3 Beside(Manifestation player, float metres = 2f)
+            => player.Position + new Vector3((float)Math.Sin(player.Rotation), 0, (float)Math.Cos(player.Rotation)) * metres;
+
+        /// <summary>Turret: "Creates a turret at a location to assist the user in combat for a set time" - the stand-in turret, its shots set to the row's DAMAGE_AMOUNT (level-scaled), for DURATION.</summary>
+        public static Creature Turret(MapChannel map, Manifestation engineer, Vector3? at, ActionLevelInfo info)
+        {
+            var turret = Summon(map, engineer, "turret", TurretStandIn, at ?? Beside(engineer), info.Get(AbilityProperty.Duration) * 1000, 0);
+            if (turret == null)
+                return null;
+            var scale = info.Has(AbilityProperty.AttrScaleType) ? info.Get(AbilityProperty.AttrScaleType) : (int?)null;
+            foreach (var action in turret.Actions)
+            {
+                action.MinDamage = (uint)AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), engineer.Level, scale);
+                action.MaxDamage = (uint)AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), engineer.Level, scale);
+            }
+            return turret;
+        }
+
+        /// <summary>
+        /// Trap: "a special turret ... It will fire at enemies and create a high amount of hate, drawing the enemy to attack
+        /// it. When it is destroyed, it damages the enemy and then disappears." The stand-in turret deals DAMAGE_MODIFIER_PERCENT
+        /// less; every second the hostiles within EFFECT_RADIUS are set on it; when it dies or its DURATION ends it bursts,
+        /// DAMAGE_AMOUNT of the row's type to every hostile within EFFECT_RADIUS.
+        /// </summary>
+        public static Creature Trap(MapChannel map, Manifestation engineer, Vector3? at, ActionLevelInfo info, Random random)
+        {
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var trap = Summon(map, engineer, "trap", TurretStandIn, at ?? Beside(engineer), duration + 1000, 0);
+            if (trap == null)
+                return null;
+            foreach (var action in trap.Actions)
+            {
+                action.MinDamage = (uint)(action.MinDamage * (100 + info.Get(AbilityProperty.DamageModifierPercent)) / 100);
+                action.MaxDamage = (uint)(action.MaxDamage * (100 + info.Get(AbilityProperty.DamageModifierPercent)) / 100);
+            }
+            var (min, max) = DamageRange(engineer, info);
+            var radius = info.Get(AbilityProperty.EffectRadius);
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            var burst = false;
+            GameEffectManager.Instance.AttachEffect(map, engineer, TrapExplosionType, info.Level, duration, engineer.EntityId, true,
+                new Dictionary<string, double>(), DefaultPulseMs, pulse =>
+                {
+                    if (burst)
+                        return;
+                    if (trap.State == CharacterState.Dead || pulse.EffectTime + DefaultPulseMs >= pulse.Duration)
+                    {
+                        burst = true;
+                        Blast(map, engineer, pulse, engineer, trap.Position, radius, min, max, type, random);
+                        return;
+                    }
+                    foreach (var enemy in HostilesAround(map, engineer, trap.Position, radius))
+                        if (enemy.Controller.ActionFighting.TargetEntityId != trap.EntityId)
+                            BehaviorManager.Instance.SetActionFighting(enemy, trap.EntityId);
+                });
+            return trap;
+        }
+
+        /// <summary>Bot Construction: "Creates a bot to assist the user in combat for a set time" - the stand-in bot for CREATURE_LIFETIME_MS at the user's level plus CREATURE_LEVEL_DIFFERENCE.</summary>
+        public static Creature BotConstruction(MapChannel map, Manifestation engineer, ActionLevelInfo info)
+            => Summon(map, engineer, "bot", BotStandIn, Beside(engineer), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+
+        /// <summary>Spotter: "Summons a helper to assist the user in combat for a set time" - the stand-in soldier for CREATURE_LIFETIME_MS.</summary>
+        public static Creature Spotter(MapChannel map, Manifestation ranger, ActionLevelInfo info)
+            => Summon(map, ranger, "spotter", SpotterStandIn, Beside(ranger), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+
+        /// <summary>
+        /// Create Clone: "Creates a clone of the user to assist in combat for a set time" - a human NPC of the user's gender
+        /// wearing their appearance, for CREATURE_LIFETIME_MS at the user's level plus CREATURE_LEVEL_DIFFERENCE. Its attacks are
+        /// the stand-in's, not the user's.
+        /// </summary>
+        public static Creature CreateClone(MapChannel map, Manifestation exobiologist, ActionLevelInfo info)
+        {
+            var clone = Summon(map, exobiologist, "clone", exobiologist.Gender == 0 ? CloneMaleStandIn : CloneFemaleStandIn, Beside(exobiologist),
+                info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+            if (clone != null && exobiologist.AppearanceData != null)
+            {
+                clone.AppearanceData = new Dictionary<EquipmentData, AppearanceData>(exobiologist.AppearanceData);
+                CreatureManager.Instance.UpdateCreatureAppearance(clone);
+            }
+            return clone;
+        }
+
+        /// <summary>
+        /// Crab Mines: "Creates a mobile mine that will seek out a nearby single enemy target and explode. The explosion will
+        /// damage all enemies within the blast radius. The user may have up to 3 Crab Mines active at once." No mine creature
+        /// survives, so the mine is not a creature: it picks the nearest hostile within 30 m, reaches it after two seconds and
+        /// bursts there, DAMAGE_AMOUNT of the row's type within EFFECT_RADIUS (the seek range and travel time are stand-ins).
+        /// </summary>
+        public static bool CrabMine(MapChannel map, Manifestation sapper, ActionLevelInfo info, Random random)
+        {
+            if (sapper.ActiveEffects.Values.Count(e => e.TypeId == CrabMineExplosionType) >= 3)
+                return false;
+            var prey = HostilesAround(map, sapper, sapper.Position, 30).OrderBy(c => Vector3.Distance(c.Position, sapper.Position)).FirstOrDefault();
+            if (prey == null)
+                return false;
+            var (min, max) = DamageRange(sapper, info);
+            var type = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+            GameEffectManager.Instance.AttachEffect(map, sapper, CrabMineExplosionType, info.Level, 2000, sapper.EntityId, true,
+                new Dictionary<string, double>(), 2000, mine =>
+                    Blast(map, sapper, mine, sapper, prey.Position, info.Get(AbilityProperty.EffectRadius), min, max, type, random));
+            return true;
+        }
+
+        /// <summary>
+        /// Hortimunculus: "Creates a plant lifeform from a single enemy corpse that will heal the user and nearby squad members
+        /// at a set interval for as long as the plant is alive. Plant will increase player resistances ... Plant will decay over
+        /// time." The plant stands where the corpse lay, starting at HEALTH_PERCENTAGE and losing DECAY_PERCENTAGE every
+        /// INTERVAL; while it lives, every INTERVAL the squad within EFFECT_RADIUS carries HORTIMONCULUS_BUFF with
+        /// RESIST_PERCENTAGE added to every resistance and heals 5% of their health (the heal amount is a stand-in: the row
+        /// gives none). The plant is not a destroyable creature.
+        /// </summary>
+        public static bool Hortimunculus(MapChannel map, Game.Client exobiologist, Creature corpse, ActionLevelInfo info)
+        {
+            if (corpse == null || corpse.State != CharacterState.Dead ||
+                !CreatureManager.CreatureFlagsOf(corpse).Contains((int)CreatureFlag.Biological))
+                return false;
+            var at = corpse.Position;
+            var interval = Math.Max(1, info.Get(AbilityProperty.Interval, 5)) * 1000;
+            var decay = Math.Max(1, info.Get(AbilityProperty.DecayPercentage, 20));
+            var life = info.Get(AbilityProperty.HealthPercentage, 100) * interval / decay;
+            var resist = info.Get(AbilityProperty.ResistPercentage);
+            GameEffectManager.Instance.AttachEffect(map, exobiologist.Player, HortimunculusBuffType, info.Level, life, exobiologist.Player.EntityId, true,
+                new Dictionary<string, double>(), interval, pulse =>
+                {
+                    foreach (var member in SquadAround(map, exobiologist, at, info.Get(AbilityProperty.EffectRadius)))
+                    {
+                        var health = member.Player.Attributes[Attributes.Health];
+                        Heal(map, member.Player, Math.Max(1, health.CurrentMax * 5 / 100));
+                        if (!member.Player.ActiveEffects.Values.Any(e => e.TypeId == HortimunculusBuffType && e != pulse))
+                            GameEffectManager.Instance.AttachEffect(map, member.Player, HortimunculusBuffType, info.Level, interval, exobiologist.Player.EntityId, true,
+                                new Dictionary<string, double>()).ResistRating = resist;
+                    }
+                });
+            return true;
+        }
+
+        /// <summary>
+        /// Base Wave: "Buffs the user and nearby squad members with increased damage resistance and armor regeneration for a
+        /// set time" - RESIST_MODIFIER on every resistance for DURATION to each within RADIUS_AROUND_SOURCE. The armour
+        /// regeneration part (EFFECT_ARMOR_REGEN_MODIFIER) has nothing to act on: this server does not regenerate armour.
+        /// </summary>
+        public static void BaseWave(MapChannel map, Game.Client engineer, ActionLevelInfo info)
+        {
+            foreach (var member in SquadAround(map, engineer, engineer.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+                GameEffectManager.Instance.AttachEffect(map, member.Player, BaseWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    engineer.Player.EntityId, true, new Dictionary<string, double> { ["resistMod"] = info.Get(AbilityProperty.ResistModifier) })
+                    .ResistRating = info.Get(AbilityProperty.ResistModifier);
+        }
+
+        /// <summary>Crit Wave: "improved chances for critical hits for a set time" - EFFECT_MODIFIER percentage points for each within RADIUS_AROUND_SOURCE, for DURATION.</summary>
+        public static void CritWave(MapChannel map, Game.Client sniper, ActionLevelInfo info)
+        {
+            foreach (var member in SquadAround(map, sniper, sniper.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+                GameEffectManager.Instance.AttachEffect(map, member.Player, CritWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    sniper.Player.EntityId, true, new Dictionary<string, double> { ["critAmt"] = info.Get(AbilityProperty.EffectModifier) })
+                    .CritBonusPercent = info.Get(AbilityProperty.EffectModifier);
+        }
+
+        /// <summary>
+        /// Polymorph: "Transforms the user into a specific enemy for a set time. The user will obtain all combat actions of an
+        /// equal level enemy, including their faction." The creature form (CREATURE_VARIANT_ID) is lost; the stand-in keeps the
+        /// user's own body and actions and only lends the faction - creatures do not pick them as a target - for DURATION.
+        /// Using it again ends it.
+        /// </summary>
+        public static void Polymorph(MapChannel map, Manifestation spy, ActionLevelInfo info)
+            => GameEffectManager.Instance.AttachEffect(map, spy, PolymorphType, info.Level, info.Get(AbilityProperty.Duration) * 1000, spy.EntityId, true,
+                new Dictionary<string, double>()).Disguised = true;
 
         /// <summary>
         /// Cadaver Immolation: "Explodes a single enemy corpse after a set time and damages all enemies within the blast

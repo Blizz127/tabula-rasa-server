@@ -68,6 +68,30 @@ namespace Rasa.Managers
             return rating == 0 ? damage : (int)System.Math.Round(damage * Data.DamageResistance.GetDamageMultiplier(rating), System.MidpointRounding.AwayFromZero);
         }
 
+        /// <summary>
+        /// Critical hits (OD-56, owner decision 2026-09-19). TaRapedia's "Critical Hit" (2008-10-19): a crit "occurs
+        /// randomly with a low percentage chance, modified by your Spirit attribute, each time you deal damage"; "Each point
+        /// spent in Spirit increases your Critical Hit chance by 0.065%"; crits "do around 50% more damage to mobs ... In
+        /// PvP ... only ... 25%". Crit Wave adds its percentage. The base chance is not recorded: 5% is a labelled stand-in.
+        /// Only players crit here; the per-type secondary effects the page lists are not applied.
+        /// </summary>
+        public const double BaseCritPercent = 5.0;
+
+        /// <summary>For tests: decides every crit roll instead of chance (null: roll).</summary>
+        public static System.Func<Actor, bool> CritRollOverride { get; set; }
+
+        public static bool RollCrit(Actor source, System.Random random)
+        {
+            if (CritRollOverride != null)
+                return CritRollOverride(source);
+            if (source is not Manifestation player)
+                return false;
+            var chance = BaseCritPercent + player.SpiritCritPercent + player.ActiveEffects.Values.Sum(effect => effect.CritBonusPercent);
+            return random.NextDouble() * 100 < chance;
+        }
+
+        public static int Crit(int damage, Actor target) => target is Manifestation ? damage * 125 / 100 : damage * 150 / 100;
+
         public static int ResistRating(Actor target)
             => target?.ActiveEffects.Values.Sum(effect => effect.ResistRating) ?? 0;
     }

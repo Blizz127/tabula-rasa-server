@@ -9,7 +9,9 @@
         public DamageType? DamageType { get; set; }
         public ActionId ActionId { get; set; }
         public uint ActionArgId { get; set; }
-        public bool IsAbility { get; set; }         // set to true to use PerformAbility instead of Windup/Recovery
+        public bool IsAbility { get; set; }
+        /// <summary>The hit is a critical one (DamageModifiers.Crit).</summary>
+        public bool IsCritical { get; set; }         // set to true to use PerformAbility instead of Windup/Recovery
         public ulong TargetEntityId { get; set; }    // the entityId of the destination (it is possible that the object does no more exist on arrival)
         public Actor TargetActor { get; set; }
         public Actor Source { get; set; }

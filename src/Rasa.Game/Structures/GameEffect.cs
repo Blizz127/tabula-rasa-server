@@ -75,6 +75,10 @@
         public bool ServerOnly { get; set; }
         /// <summary>Paint Target: percent of each hit on the holder that goes past its armour.</summary>
         public int ArmorPiercePercent { get; set; }
+        /// <summary>Crit Wave: percentage points added to the holder's critical-hit chance.</summary>
+        public int CritBonusPercent { get; set; }
+        /// <summary>Polymorph: creatures take the holder for one of their own.</summary>
+        public bool Disguised { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

@@ -52939,7 +52939,7 @@
   },
   {
    "id": "GAP-CLASS-ABILITIES",
-   "summary": "Narrowed 2026-09-19. Every player class ability now resolves from the client's own action tables (Ellimist's 474d1ce, verified row for row) except ten. Built, each on its client module's contract (effect type ids, recovery hitdata shape, tooltip value names) with the numbers from its row: the direct-damage family (Force Blast, Shrapnel, Tectonic Strike, Vortex, Rushing Blow, Explosive and Concussive Wave) with stuns, knockbacks and cones; Ruin, Rage, Bio Augmentation, Scourge, Shield Extender, Reconstruction, Tactical Evasion, Fire Support, Cure; Reflection, Conversion, Shield Wave, Regeneration Wave, Resistance, Disease, Viral Conversion, Sacrifice, Self Destruct, Scatterbombs, Shredder Ammo, Called Shot, Controlled Fission, Explosive Nanites, Polarity Field, Feedback, Reality Ripper, Cloak Wave, Traitor, Cadaver Immolation, Hack, Mind Control, Reanimation, Reanimation Wave, Paint Target. Inferred parts are named in docs/fidelity-audit.md. Not built: Turret (197), Bot Construction (262), Base Wave (260), Trap (384), Crab Mines (282), Spotter (389), Hortimunculus (185) and Polymorph (392) summon or become a creature by CREATURE_VARIANT_ID, an index into the original server's creature-variant table, which no recovered source holds (the fan server dump's creature_type has 21 rows, ids 1-21); Create Clone (253) needs a creature that copies the player and its attacks; Crit Wave (281) raises crit chance, and this server rolls no critical hits - the original crit rules are not recorded. Chaff (175) is granted by no skill. Partial: Mind Control pump 5's spread to attackers, Cloak Wave's speed reduction, Controlled Fission's damage threshold, Scatterbombs' crit proficiency and Paint Target's cover and armour recharge have nothing recorded or nothing to act on.",
+   "summary": "Narrowed 2026-09-19. Every player class ability now resolves from the client's own action tables (Ellimist's 474d1ce, verified row for row) except ten. Built, each on its client module's contract (effect type ids, recovery hitdata shape, tooltip value names) with the numbers from its row: the direct-damage family (Force Blast, Shrapnel, Tectonic Strike, Vortex, Rushing Blow, Explosive and Concussive Wave) with stuns, knockbacks and cones; Ruin, Rage, Bio Augmentation, Scourge, Shield Extender, Reconstruction, Tactical Evasion, Fire Support, Cure; Reflection, Conversion, Shield Wave, Regeneration Wave, Resistance, Disease, Viral Conversion, Sacrifice, Self Destruct, Scatterbombs, Shredder Ammo, Called Shot, Controlled Fission, Explosive Nanites, Polarity Field, Feedback, Reality Ripper, Cloak Wave, Traitor, Cadaver Immolation, Hack, Mind Control, Reanimation, Reanimation Wave, Paint Target. Inferred parts are named in docs/fidelity-audit.md. Not built: Turret (197), Bot Construction (262), Base Wave (260), Trap (384), Crab Mines (282), Spotter (389), Hortimunculus (185) and Polymorph (392) summon or become a creature by CREATURE_VARIANT_ID, an index into the original server's creature-variant table, which no recovered source holds (the fan server dump's creature_type has 21 rows, ids 1-21); Create Clone (253) needs a creature that copies the player and its attacks; Crit Wave (281) raises crit chance, and this server rolls no critical hits - the original crit rules are not recorded. Chaff (175) is granted by no skill. Partial: Mind Control pump 5's spread to attackers, Cloak Wave's speed reduction, Controlled Fission's damage threshold, Scatterbombs' crit proficiency and Paint Target's cover and armour recharge have nothing recorded or nothing to act on. Update 2026-09-19 (OD-56): the ten are built with labelled stand-ins - Turret, Trap, Bot Construction, Spotter and Create Clone summon world-seed creatures; Crab Mines seek and burst without a creature; Hortimunculus is a healing plant where the corpse lay; Base Wave and Crit Wave are squad buffs (neither needed a variant); Polymorph lends the faction only. What remains a stand-in, not the original: the summoned creatures' identities and attacks, Crab Mines' seek range and travel time, Hortimunculus' heal amount, Polymorph's creature body.",
    "evidence": [
     "client generated/client/actiondata.pyo abilityData (1,084 rows)",
     "client generated/client/skilldata.pyo (73 skills)",
@@ -53021,14 +53021,45 @@
   },
   {
    "id": "GAP-CRITICAL-HITS",
-   "summary": "The server never rolls a critical hit: HitData.IsCritical is always 0. The client has crit effects, crit deaths (RequestCritDeathFinish), crit tooltips and the Spirit crit bonus, but the chance formula and the damage multiplier were the original server's and are not recorded. Crit Wave and Scatterbombs' proficiency depend on it.",
+   "summary": "Closed 2026-09-19 (OD-56). The server never rolls a critical hit: HitData.IsCritical is always 0. The client has crit effects, crit deaths (RequestCritDeathFinish), crit tooltips and the Spirit crit bonus, but the chance formula and the damage multiplier were the original server's and are not recorded. Crit Wave and Scatterbombs' proficiency depend on it. Critical hits now roll for players: 5% base (stand-in) + Spirit's 0.065% a point + Crit Wave; +50% against creatures, +25% against players (TaRapedia 'Critical Hit', 2008-10-19). The page's per-type secondary effects (armour-piercing DoT, snare, stun ...) and overkill are not applied.",
    "evidence": [
     "client gameeffectdata CRIT_* effects, CRITWAVEEFFECT; methodid RequestCritDeathFinish",
-    "ManifestationManager's unused critBonusPercent"
+    "ManifestationManager's unused critBonusPercent",
+    "TaRapedia 'Critical Hit' rev. 2008-10-19"
    ],
-   "closes_with": "a recovered crit rule, or an owner decision on an inferred one",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "1:1 fidelity audit, Crit Wave, 2026-09-19"
+   ],
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "EffectAbilityTests.ACriticalHitDoesHalfAgainAgainstACreatureAndIsMarked",
+    "EffectAbilityTests.CritWaveRaisesTheChanceOfEveryoneInReach"
+   ]
+  },
+  {
+   "id": "GAP-REGENERATION",
+   "summary": "Nothing regenerates on this branch: health, power and armour refresh amounts are computed but no refresh period is ever set and the server never ticks them, so the client predicts no regeneration either. The worn armour's regen rate (its tooltip's 'Regen Rate: 1 per sec') is summed and unused. Regeneration Wave's bonus, Base Wave's armour regeneration and Disease's 'stops regeneration' therefore have nothing to act on. ellimist/development has 'Tell players when they are in combat, and make regeneration exist' (94b4485).",
+   "evidence": [
+    "ManifestationManager.UpdateStatsValues: no RefreshPeriod assignment; armorRegenRate unused",
+    "commit 94b4485 on ellimist/development"
+   ],
+   "closes_with": "a regeneration tick with the client's refresh fields, from Ellimist's commit or rebuilt",
+   "surfaced_by": [
+    "1:1 fidelity audit, Base Wave, 2026-09-19"
    ],
    "slices": [
     "S1",
@@ -54273,6 +54304,15 @@
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
    "choice": "The four mortars become one reconstructed creature, 199720: name 8186 'Bane Mortar' (original), class 7482 Emplacement_Bane_Turret_Standard (analogue), weapon class 10604 in the weapon slot, level 5 (the mission's), 1,500 hit points (the AFS_Turret_Mini fortification's), stationary at the client map's launcher positions with a 60 s respawn. They fire their launcher (action 411) as creature-AI guards with the client's windup (500 ms), recovery (954 ms) and range (60), for 16-32 damage: the AFS mini turret's action scaled by the two weapons' damage ratio.",
+   "approved_on": "2026-09-19",
+   "record": "docs/fidelity-audit.md"
+  },
+  {
+   "id": "OD-56",
+   "decision": "Class abilities whose original data is lost",
+   "default": "Labelled stand-ins",
+   "status": "approved",
+   "choice": "The owner answered 'build them labelled' (2026-09-19). The summons use world-seed creatures in place of the lost creature-variant table - the AFS mini turret (creature 9) for Turret and Trap, the friendly Hominis Machina (8) for Bot Construction, the military-surplus soldier (10) for Spotter, the human NPC of the player's gender (4 or 6) wearing their appearance for Create Clone; Crab Mines and Hortimunculus act without a creature; Polymorph lends the faction without the creature body. Critical hits follow TaRapedia 'Critical Hit' (2008-10-19): +50% against creatures, +25% against players, Spirit 0.065% a point, with a 5% base chance as the stand-in.",
    "approved_on": "2026-09-19",
    "record": "docs/fidelity-audit.md"
   }

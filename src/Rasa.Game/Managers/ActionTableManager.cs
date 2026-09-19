@@ -84,7 +84,9 @@ namespace Rasa.Managers
             "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.weaponenhancement", "abilities.calledshot",
             "abilities.controlledfission", "abilities.explodingnanites", "abilities.polarityfield", "abilities.feedback",
             "abilities.realityripper", "abilities.cloakwave", "abilities.traitor", "abilities.corpseexplode", "abilities.hack",
-            "abilities.mindcontrol", "abilities.reanimation", "abilities.reanimationwave", "abilities.painttarget" };
+            "abilities.mindcontrol", "abilities.reanimation", "abilities.reanimationwave", "abilities.painttarget",
+            "abilities.turret", "abilities.trap", "abilities.botconstruction", "abilities.spotter", "abilities.createclone",
+            "abilities.crabmines", "abilities.hortimonculus", "abilities.basewave", "abilities.critwave", "abilities.polymorph" };
 
         /// <summary>Modules aimed at one living enemy creature (TARGET_NON_FRIENDLY).</summary>
         public static readonly HashSet<string> EnemyModules = new HashSet<string>
@@ -98,7 +100,8 @@ namespace Rasa.Managers
         {
             ["abilities.rage"] = AbilityEffects.RageSourceEffectType,
             ["abilities.sacrifice"] = AbilityEffects.SacrificeType,
-            ["abilities.selfdestruct"] = AbilityEffects.SelfDestructBombType
+            ["abilities.selfdestruct"] = AbilityEffects.SelfDestructBombType,
+            ["abilities.polymorph"] = AbilityEffects.PolymorphType
         };
 
         /// <summary>Modules aimed at a friendly player (TARGET_FRIENDLY in the client module): self when nothing else is named.</summary>
@@ -108,7 +111,9 @@ namespace Rasa.Managers
         public static readonly HashSet<string> SelfModules = new HashSet<string> { "abilities.rage", "abilities.scourge", "abilities.reconstruction", "abilities.tacticalevasion",
             "abilities.reflection", "abilities.conversion", "abilities.shieldwave", "abilities.regenerationwave", "abilities.resistance",
             "abilities.damageconversion", "abilities.sacrifice", "abilities.selfdestruct", "abilities.scatterbombs", "abilities.cloakwave",
-            "abilities.realityripper", "abilities.reanimationwave" };
+            "abilities.realityripper", "abilities.reanimationwave", "abilities.botconstruction", "abilities.spotter",
+            "abilities.createclone", "abilities.crabmines", "abilities.basewave", "abilities.critwave", "abilities.polymorph",
+            "abilities.turret", "abilities.trap" };
 
         /// <summary>Any table-driven ability this server resolves: the damage family and the effect abilities.</summary>
         public bool TryGetResolvable(ActionId actionId, uint level, out ActionInfo action, out ActionLevelInfo info)

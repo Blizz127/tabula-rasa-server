@@ -816,6 +816,95 @@ namespace Rasa.Test
                 "60 into the armour, 40 past it");
         }
 
+        [TestMethod]
+        public void ACriticalHitDoesHalfAgainAgainstACreatureAndIsMarked()
+        {
+            var target = Creature(new Vector3(5, 0, 0));
+            try
+            {
+                DamageModifiers.CritRollOverride = _ => true;
+                MissileManager.Instance.AbilityStrike(_map, _client.Player, (ActionId)178, 1, DamageType.Physical, new[] { (target, 100) });
+                Assert.AreEqual(100000 - 150, target.Attributes[Attributes.Health].Current, "+50% against a mob (TaRapedia 'Critical Hit')");
+                Assert.AreEqual(1, Drain().OfType<Packets.MapChannel.Server.PerformRecovery.DamageAbilityRecovery>().Single().Hits.Single().IsCritical);
+                Assert.AreEqual(125, DamageModifiers.Crit(100, _client.Player), "+25% against a player");
+            }
+            finally
+            {
+                DamageModifiers.CritRollOverride = _ => false;
+            }
+        }
+
+        [TestMethod]
+        public void CritWaveRaisesTheChanceOfEveryoneInReach()
+        {
+            var row = Row(281, "abilities.critwave", 2300, 593, 0);
+            row.Properties[AbilityProperty.Duration] = 120;
+            row.Properties[AbilityProperty.RadiusAroundSource] = 25;
+            row.Properties[AbilityProperty.EffectModifier] = 50;
+            AbilityEffects.CritWave(_map, _client, row);
+            Assert.AreEqual(50, _client.Player.ActiveEffects.Values.Sum(e => e.CritBonusPercent));
+            try
+            {
+                DamageModifiers.CritRollOverride = null;
+                var crits = Enumerable.Range(0, 2000).Count(i => DamageModifiers.RollCrit(_client.Player, new System.Random(i)));
+                Assert.IsTrue(crits is > 1000 and < 1300, $"about 55% (5 base + 50), got {crits} of 2000");
+            }
+            finally
+            {
+                DamageModifiers.CritRollOverride = _ => false;
+            }
+        }
+
+        [TestMethod]
+        public void ATurretStandInIsSummonedForItsTimeAndOnlyOneAtATime()
+        {
+            var spawned = new List<(uint Template, Creature Creature)>();
+            AbilityEffects.SpawnOverride = (map, template, at, level) =>
+            {
+                var turret = Creature(at);
+                turret.Cells = new uint[5, 5];          // a live creature's cell matrix
+                turret.Faction = Factions.AFS;
+                turret.Level = level;
+                turret.Actions.Add(new CreatureAction(new Rasa.Structures.World.CreatureActionEntry { ActionId = 1, MinDamage = 10, MaxDamage = 20 }));
+                spawned.Add((template, turret));
+                return turret;
+            };
+            try
+            {
+                var row = Row(197, "abilities.turret", 666, 666, 20);
+                row.Properties[AbilityProperty.Duration] = 60;
+                row.Properties[AbilityProperty.DamageAmountMin] = 22;
+                row.Properties[AbilityProperty.DamageAmountMax] = 23;
+                var first = AbilityEffects.Turret(_map, _client.Player, new Vector3(5, 0, 5), row);
+                Assert.AreEqual(AbilityEffects.TurretStandIn, spawned.Single().Template, "the AFS mini turret stands in");
+                Assert.AreEqual((22u, 23u), (first.Actions.Single().MinDamage, first.Actions.Single().MaxDamage), "shots set to the row");
+                var second = AbilityEffects.Turret(_map, _client.Player, new Vector3(6, 0, 6), row);
+                Assert.IsFalse(_map.MapCellInfo.Cells[0].CreatureList.Contains(first), "one turret at a time: the first goes");
+                GameEffectManager.Instance.DoWork(_map, 60000);
+                Assert.IsFalse(_map.MapCellInfo.Cells[0].CreatureList.Contains(second), "gone when its time is up");
+            }
+            finally
+            {
+                AbilityEffects.SpawnOverride = null;
+            }
+        }
+
+        [TestMethod]
+        public void PolymorphHidesTheSpyFromCreaturesAndBaseWaveAddsResistance()
+        {
+            var poly = Row(392, "abilities.polymorph", 2499, 466, 0);
+            poly.Properties[AbilityProperty.Duration] = 120;
+            AbilityEffects.Polymorph(_map, _client.Player, poly);
+            Assert.IsTrue(_client.Player.ActiveEffects.Values.Any(e => e.Disguised));
+
+            var wave = Row(260, "abilities.basewave", 2300, 847, 40);
+            wave.Properties[AbilityProperty.Duration] = 120;
+            wave.Properties[AbilityProperty.RadiusAroundSource] = 25;
+            wave.Properties[AbilityProperty.ResistModifier] = 25;
+            AbilityEffects.BaseWave(_map, _client, wave);
+            Assert.AreEqual(25, DamageModifiers.ResistRating(_client.Player));
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

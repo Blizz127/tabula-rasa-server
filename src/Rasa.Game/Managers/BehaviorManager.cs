@@ -115,8 +115,8 @@ namespace Rasa.Managers
                     if (client.Player.GmFlagAlwaysFriendly)
                         continue;
 
-                    // Cloak Wave: a stealthed player is not seen.
-                    if (client.Player.ActiveEffects.Values.Any(effect => effect.Stealth))
+                    // Cloak Wave: a stealthed player is not seen; Polymorph: a disguised one passes for a creature.
+                    if (client.Player.ActiveEffects.Values.Any(effect => effect.Stealth || effect.Disguised))
                         continue;
 
                     if (client.Player.Attributes[Attributes.Health].Current <= 0)

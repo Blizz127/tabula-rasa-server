@@ -174,15 +174,28 @@ Tier 4, the same way (effect types, recovery shapes and tooltip names from the c
 | Reanimation (240), Wave (176) | biological corpses stand up on the user's side for `DURATION` | — |
 | Paint Target (295) | `EFFECT_ARMOR_PIERCE_PERCENT` of each hit past the armour | cover and armour recharge have nothing to act on |
 
-Still open (**GAP-CLASS-ABILITIES**), ten abilities:
+The last ten, built with **labelled stand-ins** at the owner's word ("build them labelled", 2026-09-19, **OD-56**):
 
-- **Turret, Bot Construction, Base Wave, Trap, Crab Mines, Spotter, Hortimunculus, Polymorph** summon or become a
-  creature named by `CREATURE_VARIANT_ID` — an index into the original server's creature-variant table, which no
-  recovered source holds (the fan server dump's `creature_type` has 21 rows, ids 1–21). Building them needs that
-  table or an owner decision to use analogue creatures.
-- **Create Clone** needs a creature that copies the player and their attacks.
-- **Crit Wave** raises critical-hit chance; this server rolls no critical hits at all, and the original crit rules
-  are not recorded. That is a combat system of its own (**GAP-CRITICAL-HITS**).
+| Ability | Stand-in | What is not original |
+| --- | --- | --- |
+| Turret (197) | AFS mini turret (creature 9), its shots set to the row's damage | the turret creature |
+| Trap (384) | the same turret, −75% damage, drawing hostiles in `EFFECT_RADIUS`, bursting when it dies or ends | the turret creature |
+| Bot Construction (262) | friendly Hominis Machina (creature 8) | the bot creatures (Flame/Rocket/Repair/Shield/Multi) |
+| Spotter (389) | military-surplus soldier (creature 10) | the Pistoleer/Rifleman/... creatures |
+| Create Clone (253) | human NPC of the player's gender wearing their appearance | the clone's attacks |
+| Crab Mines (282) | no creature: seeks the nearest hostile within 30 m, bursts after 2 s | seek range, travel time, the mine as a target |
+| Hortimunculus (185) | a plant where the corpse lay: heals the squad 5% a pulse, +`RESIST_PERCENTAGE`, decaying | heal amount; the plant as a target |
+| Polymorph (392) | creatures ignore the spy for `DURATION` | the creature body and its attacks |
+| Base Wave (260) | squad +`RESIST_MODIFIER` rating (no variant needed) | armour regeneration (**GAP-REGENERATION**) |
+| Crit Wave (281) | squad +`EFFECT_MODIFIER`% crit chance (no variant needed) | — |
+
+**Critical hits** now exist: 5% base (stand-in) + Spirit's 0.065% a point + Crit Wave, +50% against creatures and
++25% against players, as TaRapedia's "Critical Hit" page (2008-10-19) describes. Its per-type secondary effects and
+overkill are not built.
+
+**Found on the way — GAP-REGENERATION:** nothing regenerates on this branch. Refresh amounts are computed but no
+refresh period is ever set and the server never ticks them, so Regeneration Wave's bonus, Base Wave's armour regen
+and Disease's "stops regeneration" act on nothing yet. `ellimist/development` has a commit for it (94b4485).
 
 Chaff (175) is granted by no skill and is not a class ability.
 

@@ -391,6 +391,23 @@ namespace Rasa.Managers
                     CreateCreatureOnClient(client, creature);
         }
 
+        /// <summary>
+        /// A summoned creature (the stand-ins of OD-56): made from a world-seed template, placed, set on the player's side
+        /// at the given level and added to the map. It fights for them through the AI's cross-faction targeting.
+        /// </summary>
+        public Creature SpawnSummon(MapChannel mapChannel, uint templateId, Vector3 position, double rotation, uint level)
+        {
+            var creature = CreateFromTemplate(templateId);
+            if (creature == null || mapChannel?.MapInfo == null)
+                return null;
+            SetLocation(creature, position, rotation, mapChannel.MapInfo.MapContextId);
+            creature.MapChannel = mapChannel;
+            creature.Faction = Factions.AFS;
+            creature.Level = Math.Max(1, level);
+            CellManager.Instance.AddToWorld(mapChannel, creature);
+            return creature;
+        }
+
         public void CreateCreatureOnClient(Client client, Creature creature)
         {
             if (creature == null)

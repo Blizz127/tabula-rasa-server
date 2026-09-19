@@ -12,6 +12,8 @@ namespace Rasa.Structures
     {
         public uint Id { get; set; }
         public uint Gender { get; set; }
+        /// <summary>Critical-hit chance from Spirit, percent (ManifestationManager.UpdateStatsValues).</summary>
+        public double SpiritCritPercent { get; set; }
         public Dictionary<EquipmentData, AppearanceData> AppearanceData { get; set; }
         public List<CharacterOptions> CharacterOptions = new();
         public double Scale { get; set; }
