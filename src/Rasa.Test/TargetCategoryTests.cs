@@ -115,6 +115,34 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void ACreatureIsIntroducedWithItsClassFlags()
+        {
+            // The client's harvest, salvage, heal-disc and repair actions read BIOLOGICAL / MECHANICAL from the
+            // CreatureInfo flag list, which was always sent empty.
+            const EntityClasses mortarClass = (EntityClasses)9000022;
+            var classes = EntityClassManager.Instance.LoadedEntityClasses;
+            classes[mortarClass] = new EntityClass((uint)mortarClass, "test turret", 0, 1, new List<AugmentationType>(), true);
+            classes[mortarClass].CreatureFlags.AddRange(new[] { CreatureFlag.Mechanical, CreatureFlag.SpeciesTurret });
+            var mortar = new Creature { EntityClass = mortarClass, AppearanceData = new Dictionary<EquipmentData, AppearanceData>() };
+            EntityManager.Instance.RegisterEntity(mortar.EntityId, EntityType.Creature);
+            EntityManager.Instance.RegisterCreature(mortar);
+            try
+            {
+                var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
+                CreatureManager.Instance.CreateCreatureOnClient(client, mortar);
+                var info = Drain(client).Select(message => message.Packet).OfType<CreatePhysicalEntityPacket>().Single()
+                    .EntityData.OfType<CreatureInfoPacket>().Single();
+                CollectionAssert.AreEquivalent(new[] { 11, 95 }, info.CreatureFlags);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterCreature(mortar.EntityId);
+                EntityManager.Instance.UnregisterEntity(mortar.EntityId);
+                classes.Remove(mortarClass);
+            }
+        }
+
+        [TestMethod]
         public void TheClientCategoriesAreTheClientsOwnValues()
         {
             // generated/client/targetdata.pyo
