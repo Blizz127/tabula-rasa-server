@@ -23,6 +23,11 @@ namespace Rasa.Context.World
             _databaseConfiguration = databaseConfiguration;
             _dbContextPropertyModifier = dbContextPropertyModifier;
         }
+        public DbSet<ActionEntry> ActionEntries { get; set; }
+        public DbSet<ActionLevelEntry> ActionLevelEntries { get; set; }
+        public DbSet<ActionCostEntry> ActionCostEntries { get; set; }
+        public DbSet<ActionPropertyEntry> ActionPropertyEntries { get; set; }
+        public DbSet<ActionItemRequirementEntry> ActionItemRequirementEntries { get; set; }
         public DbSet<ArmorClassEntry> ArmorClassEntries { get; set; }
         public DbSet<ContentAreaEntry> ContentAreaEntries { get; set; }
         public DbSet<ContentConditionEntry> ContentConditionEntries { get; set; }
@@ -43,6 +48,7 @@ namespace Rasa.Context.World
         public DbSet<FootlockerEntry> FootlockerEntries { get; set; }
         public DbSet<ItemClassEntry> ItemClassEntries { get; set; }
         public DbSet<ItemTemplateEntry> ItemTemplateEntries { get; set; }
+        public DbSet<ItemTemplateActionEntry> ItemTemplateActionEntries { get; set; }
         public DbSet<ItemTemplateArmorEntry> ItemTemplateArmorEntries { get; set; }
         public DbSet<ItemTemplateItemClassEntry> ItemTemplateItemClassEntries { get; set; }
         public DbSet<ItemTemplateRequirementEntry> ItemTemplateRequirementEntries { get; set; }

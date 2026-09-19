@@ -121,6 +121,7 @@ namespace Rasa
 
             // World
             services.AddScoped<IWorldUnitOfWork, WorldUnitOfWork>();
+            services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<ICreatureRepository, CreatureRepository>();
             services.AddScoped<IEntityClassRepository, EntityClassRepository>();
