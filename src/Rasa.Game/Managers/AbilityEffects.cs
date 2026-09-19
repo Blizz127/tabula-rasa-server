@@ -1323,7 +1323,7 @@ namespace Rasa.Managers
         /// Paint Target on one enemy for DURATION, whose effect reads "Reduced Cover: %(coverMod)s%% | Armor Recharge:
         /// %(armorMod)s%% | Armor Piercing: +%(pierceMod)s%%". EFFECT_ARMOR_PIERCE_PERCENT of every hit on it goes past its
         /// armour. The cover and armour-recharge values are shown but have nothing to act on here: this server has no
-        /// cover, and creatures do not recharge armour.
+        /// cover, and creatures do not recharge armour (only players regenerate).
         /// </summary>
         public static void PaintTarget(MapChannel map, Manifestation sniper, Creature target, ActionLevelInfo info)
         {
@@ -1520,15 +1520,26 @@ namespace Rasa.Managers
 
         /// <summary>
         /// Base Wave: "Buffs the user and nearby squad members with increased damage resistance and armor regeneration for a
-        /// set time" - RESIST_MODIFIER on every resistance for DURATION to each within RADIUS_AROUND_SOURCE. The armour
-        /// regeneration part (EFFECT_ARMOR_REGEN_MODIFIER) has nothing to act on: this server does not regenerate armour.
+        /// set time" - RESIST_MODIFIER on every resistance and EFFECT_ARMOR_REGEN_MODIFIER percent of the normal armour
+        /// recharge (500: five times) for DURATION to each within RADIUS_AROUND_SOURCE.
         /// </summary>
         public static void BaseWave(MapChannel map, Game.Client engineer, ActionLevelInfo info)
         {
             foreach (var member in SquadAround(map, engineer, engineer.Player.Position, info.Get(AbilityProperty.RadiusAroundSource)))
-                GameEffectManager.Instance.AttachEffect(map, member.Player, BaseWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
-                    engineer.Player.EntityId, true, new Dictionary<string, double> { ["resistMod"] = info.Get(AbilityProperty.ResistModifier) })
-                    .ResistRating = info.Get(AbilityProperty.ResistModifier);
+            {
+                var wave = GameEffectManager.Instance.AttachEffect(map, member.Player, BaseWaveType, info.Level, info.Get(AbilityProperty.Duration) * 1000,
+                    engineer.Player.EntityId, true, new Dictionary<string, double> { ["resistMod"] = info.Get(AbilityProperty.ResistModifier) });
+                wave.ResistRating = info.Get(AbilityProperty.ResistModifier);
+                if (info.Has(AbilityProperty.EffectArmorRegenModifier))
+                    wave.ArmorRegenPercent = info.Get(AbilityProperty.EffectArmorRegenModifier);
+                void Refresh()
+                {
+                    ManifestationManager.Instance.UpdateStatsValues(member, false);
+                    member.CallMethod(member.Player.EntityId, new Packets.MapChannel.Server.AttributeInfoPacket(member.Player.Attributes));
+                }
+                wave.OnDetach = _ => Refresh();
+                Refresh();
+            }
         }
 
         /// <summary>Crit Wave: "improved chances for critical hits for a set time" - EFFECT_MODIFIER percentage points for each within RADIUS_AROUND_SOURCE, for DURATION.</summary>

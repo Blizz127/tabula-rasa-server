@@ -53021,7 +53021,7 @@
   },
   {
    "id": "GAP-CRITICAL-HITS",
-   "summary": "Closed 2026-09-19 (OD-56). The server never rolls a critical hit: HitData.IsCritical is always 0. The client has crit effects, crit deaths (RequestCritDeathFinish), crit tooltips and the Spirit crit bonus, but the chance formula and the damage multiplier were the original server's and are not recorded. Crit Wave and Scatterbombs' proficiency depend on it. Critical hits now roll for players: 5% base (stand-in) + Spirit's 0.065% a point + Crit Wave; +50% against creatures, +25% against players (TaRapedia 'Critical Hit', 2008-10-19). The page's per-type secondary effects (armour-piercing DoT, snare, stun ...) and overkill are not applied.",
+   "summary": "Closed 2026-09-19 (OD-56). The server never rolls a critical hit: HitData.IsCritical is always 0. The client has crit effects, crit deaths (RequestCritDeathFinish), crit tooltips and the Spirit crit bonus, but the chance formula and the damage multiplier were the original server's and are not recorded. Crit Wave and Scatterbombs' proficiency depend on it. Critical hits now roll for players: 5% base (BASE_CRITICAL_CHANCE, shared/gameconstants.pyo; CRITICAL_DAMAGE_MODIFIER 1.5 and PVP_CRITICAL_DAMAGE_MODIFIER 1.25 agree) + Spirit's 0.065% a point + Crit Wave; +50% against creatures, +25% against players (TaRapedia 'Critical Hit', 2008-10-19). The page's per-type secondary effects (armour-piercing DoT, snare, stun ...) and overkill are not applied.",
    "evidence": [
     "client gameeffectdata CRIT_* effects, CRITWAVEEFFECT; methodid RequestCritDeathFinish",
     "ManifestationManager's unused critBonusPercent",
@@ -53052,12 +53052,15 @@
   },
   {
    "id": "GAP-REGENERATION",
-   "summary": "Nothing regenerates on this branch: health, power and armour refresh amounts are computed but no refresh period is ever set and the server never ticks them, so the client predicts no regeneration either. The worn armour's regen rate (its tooltip's 'Regen Rate: 1 per sec') is summed and unused. Regeneration Wave's bonus, Base Wave's armour regeneration and Disease's 'stops regeneration' therefore have nothing to act on. ellimist/development has 'Tell players when they are in combat, and make regeneration exist' (94b4485).",
+   "summary": "Closed 2026-09-19. Nothing regenerates on this branch: health, power and armour refresh amounts are computed but no refresh period is ever set and the server never ticks them, so the client predicts no regeneration either. The worn armour's regen rate (its tooltip's 'Regen Rate: 1 per sec') is summed and unused. Regeneration Wave's bonus, Base Wave's armour regeneration and Disease's 'stops regeneration' therefore have nothing to act on. ellimist/development has 'Tell players when they are in combat, and make regeneration exist' (94b4485). Now: health, power and armour regenerate each second (HEALTH/POWER/ARMOR_REGEN_PERIOD = 1), a fifth in combat (IN_COMBAT_REGEN_MODIFIER = 0.2, on the amount because Actor.UpdateAttribute resets the period to 1), armour at the worn pieces' RegenRate times any EFFECT_ARMOR_REGEN_MODIFIER (Base Wave 500). Inferred: health and power at 2 x Regeneration Rate / 100 a second, and combat lasting 15 s after the last damage. Creatures still do not regenerate.",
    "evidence": [
     "ManifestationManager.UpdateStatsValues: no RefreshPeriod assignment; armorRegenRate unused",
-    "commit 94b4485 on ellimist/development"
+    "commit 94b4485 on ellimist/development",
+    "trpython.zip:shared/gameconstants.pyo sha256 e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40",
+    "trpython.zip:client/augmentations/actor.pyo Actor.UpdateAttribute line 961 (refreshPeriod = 1)",
+    "uielementlanguage ID_TOOLTIP_ATTRIBUTES_REGEN (2302)"
    ],
-   "closes_with": "a regeneration tick with the client's refresh fields, from Ellimist's commit or rebuilt",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "1:1 fidelity audit, Base Wave, 2026-09-19"
    ],
@@ -53073,6 +53076,12 @@
     "W1",
     "W2",
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "StatRecalculationTests.RecalculationSetsTheRegenerationRatesTheClientPredictsFrom",
+    "EffectAbilityTests.RegenerationAddsTheRefreshAmountEachSecondUpToTheMaximum",
+    "EffectAbilityTests.DealingDamageEntersCombatWhichSlowsRegenerationToAFifthUntilItLapses"
    ]
   }
  ],
@@ -54312,7 +54321,7 @@
    "decision": "Class abilities whose original data is lost",
    "default": "Labelled stand-ins",
    "status": "approved",
-   "choice": "The owner answered 'build them labelled' (2026-09-19). The summons use world-seed creatures in place of the lost creature-variant table - the AFS mini turret (creature 9) for Turret and Trap, the friendly Hominis Machina (8) for Bot Construction, the military-surplus soldier (10) for Spotter, the human NPC of the player's gender (4 or 6) wearing their appearance for Create Clone; Crab Mines and Hortimunculus act without a creature; Polymorph lends the faction without the creature body. Critical hits follow TaRapedia 'Critical Hit' (2008-10-19): +50% against creatures, +25% against players, Spirit 0.065% a point, with a 5% base chance as the stand-in.",
+   "choice": "The owner answered 'build them labelled' (2026-09-19). The summons use world-seed creatures in place of the lost creature-variant table - the AFS mini turret (creature 9) for Turret and Trap, the friendly Hominis Machina (8) for Bot Construction, the military-surplus soldier (10) for Spotter, the human NPC of the player's gender (4 or 6) wearing their appearance for Create Clone; Crab Mines and Hortimunculus act without a creature; Polymorph lends the faction without the creature body. Critical hits follow TaRapedia 'Critical Hit' (2008-10-19): +50% against creatures, +25% against players, Spirit 0.065% a point, with a 5% base chance - later found to be the client's own BASE_CRITICAL_CHANCE, so not a stand-in.",
    "approved_on": "2026-09-19",
    "record": "docs/fidelity-audit.md"
   }

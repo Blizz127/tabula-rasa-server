@@ -1340,7 +1340,12 @@ namespace Rasa.Managers
             // percentage. CurrentMax / 100 was int division, so any rate below 200% rounded
             // to the base 2 and the rate only mattered in whole multiples of 100.
             attribute[Attributes.Regen].RefreshAmount = (int)Math.Round(2D * attribute[Attributes.Regen].CurrentMax / 100, 0);
-            // 2.0 per second is the base regeneration for health
+            // 2.0 per second is the base regeneration for health. The Regen attribute is only displayed; health and
+            // power regenerate from their own refresh amounts - "Regeneration Rate: Improves natural Health and Power
+            // regeneration, and Adrenaline gain" (ID_TOOLTIP_ATTRIBUTES_REGEN) - so both take the same rate. Inferred:
+            // the 2-per-second base is this emulator's, and no source gives power a separate one.
+            player.HealthRegenRate = 2D * attribute[Attributes.Regen].CurrentMax / 100;
+            player.PowerRegenRate = player.HealthRegenRate;
             // calculate armor max
             var armorMax = 0.0d;
             //float armorBonus = 0; // todo! (From item modules)
@@ -1391,6 +1396,14 @@ namespace Rasa.Managers
                 player.ResistanceData.Add(new ResistanceData(damageType, amount));
 
             armorMax = armorMax * (1.0d + armorBonusPct);
+
+            // The worn armour's own recharge ("Regen Rate: 1 per sec" on its tooltip), scaled by any
+            // EFFECT_ARMOR_REGEN_MODIFIER in force - Base Wave's 500 is five times the recharge.
+            var armorRegenPercent = 100D;
+            foreach (var effect in player.ActiveEffects.Values)
+                if (effect.ArmorRegenPercent is int percent)
+                    armorRegenPercent = armorRegenPercent * percent / 100;
+            player.ArmorRegenRate = armorRegenRate * armorRegenPercent / 100;
             attribute[Attributes.Armor].NormalMax = (int)Math.Round(armorMax, 0);
             attribute[Attributes.Armor].CurrentMax = attribute[Attributes.Armor].NormalMax;
             if (fullreset)
@@ -1406,6 +1419,108 @@ namespace Rasa.Managers
                 attribute[Attributes.Power].Current = attribute[Attributes.Power].CurrentMax;
             else
                 attribute[Attributes.Power].Current = Math.Min(attribute[Attributes.Power].Current, attribute[Attributes.Power].CurrentMax);
+
+            ApplyRegenRates(player);
+        }
+
+        // ------------------------------------------------------------------ regeneration and combat
+
+        /// <summary>
+        /// Sets the health, power and armour refresh amounts the client predicts from, for the player's combat state:
+        /// the out-of-combat rate, times IN_COMBAT_REGEN_MODIFIER in a fight, rounded to the whole amount the wire
+        /// carries. The period is the client's 1 s. See <see cref="CombatRegen"/>.
+        /// </summary>
+        public void ApplyRegenRates(Manifestation player)
+        {
+            var modifier = player.InCombat ? CombatRegen.InCombatModifier : 1D;
+            void Set(Attributes type, double rate)
+            {
+                if (!player.Attributes.TryGetValue(type, out var attribute))
+                    return;
+                attribute.RefreshAmount = (int)Math.Round(rate * modifier, MidpointRounding.AwayFromZero);
+                attribute.RefreshPeriod = CombatRegen.RegenPeriodSeconds;
+            }
+            Set(Attributes.Health, player.HealthRegenRate);
+            Set(Attributes.Power, player.PowerRegenRate);
+            Set(Attributes.Armor, player.ArmorRegenRate);
+        }
+
+        /// <summary>Puts a player in combat, or keeps them there: called for both the one dealing damage and the one taking it.</summary>
+        public void EnterCombat(Actor actor)
+        {
+            if (actor is not Manifestation player || player.State == CharacterState.Dead)
+                return;
+            player.CombatExpiresAt = Environment.TickCount64 + CombatRegen.CombatTimeoutMs;
+            if (player.InCombat)
+                return;
+            player.InCombat = true;
+            CombatChanged(player, new PlayerEnteredCombatPacket());
+        }
+
+        /// <summary>Takes a player out of combat and restores their full regeneration.</summary>
+        public void ExitCombat(Manifestation player)
+        {
+            if (!player.InCombat)
+                return;
+            player.InCombat = false;
+            player.CombatExpiresAt = 0;
+            CombatChanged(player, new PlayerExitedCombatPacket());
+        }
+
+        /// <summary>
+        /// The new rates go out as UpdateHealth, UpdatePower and UpdateArmor - the packets whose receiver sets the
+        /// refresh amount - to everyone who sees the player; the combat indicator only to the player.
+        /// </summary>
+        private void CombatChanged(Manifestation player, ServerPythonPacket indicator)
+        {
+            ApplyRegenRates(player);
+            var map = player.MapChannel;
+            if (map == null)
+                return;
+            foreach (var client in map.ClientList)
+                if (client.Player == player && client.State == ClientState.Ingame)
+                    client.CallMethod(player.EntityId, indicator);
+            if (player.Attributes.TryGetValue(Attributes.Health, out var health))
+                CellManager.Instance.CellCallMethod(map, player, new UpdateHealthPacket(health, player.EntityId));
+            if (player.Attributes.TryGetValue(Attributes.Power, out var power))
+                CellManager.Instance.CellCallMethod(map, player, new UpdatePowerPacket(power, player.EntityId));
+            if (player.Attributes.TryGetValue(Attributes.Armor, out var armor))
+                CellManager.Instance.CellCallMethod(map, player, new UpdateArmorPacket(armor, player.EntityId));
+        }
+
+        /// <summary>
+        /// Once a second, adds each living player's refresh amounts to health, power and armour, up to their maxima - the
+        /// same whole amounts the client is predicting, so no packet is needed - and drops players whose combat has lapsed.
+        /// </summary>
+        public void RegenWorker(MapChannel map, long delta)
+        {
+            var now = Environment.TickCount64;
+            foreach (var client in map.ClientList)
+            {
+                var player = client?.Player;
+                if (player == null)
+                    continue;
+                if (player.InCombat && now >= player.CombatExpiresAt)
+                    ExitCombat(player);
+
+                if (player.State == CharacterState.Dead)
+                {
+                    player.RegenElapsedMs = 0;
+                    continue;
+                }
+                player.RegenElapsedMs += delta;
+                var periodMs = CombatRegen.RegenPeriodSeconds * 1000L;
+                while (player.RegenElapsedMs >= periodMs)
+                {
+                    player.RegenElapsedMs -= periodMs;
+                    foreach (var type in new[] { Attributes.Health, Attributes.Power, Attributes.Armor })
+                    {
+                        if (player.Attributes.TryGetValue(type, out var attribute) && attribute.RefreshAmount > 0
+                            && attribute.Current < attribute.CurrentMax)
+                            attribute.Current = Math.Min(attribute.CurrentMax, attribute.Current + attribute.RefreshAmount);
+                    }
+                }
+            }
         }
 
         public void WeaponReady(Client client, bool isReady)

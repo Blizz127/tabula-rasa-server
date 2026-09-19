@@ -336,6 +336,9 @@ namespace Rasa.Managers
                     MissileManager.Instance.DoWork(mapChannel, delta);
                     BehaviorManager.Instance.MapChannelThink(mapChannel, delta);
 
+                    // regeneration, and players whose combat has lapsed
+                    ManifestationManager.Instance.RegenWorker(mapChannel, delta);
+
                     // CellManager worker
                     if (Timer.IsTriggered("CellUpdateVisibility"))
                         CellManager.Instance.DoWork(mapChannel);

@@ -186,16 +186,35 @@ The last ten, built with **labelled stand-ins** at the owner's word ("build them
 | Crab Mines (282) | no creature: seeks the nearest hostile within 30 m, bursts after 2 s | seek range, travel time, the mine as a target |
 | Hortimunculus (185) | a plant where the corpse lay: heals the squad 5% a pulse, +`RESIST_PERCENTAGE`, decaying | heal amount; the plant as a target |
 | Polymorph (392) | creatures ignore the spy for `DURATION` | the creature body and its attacks |
-| Base Wave (260) | squad +`RESIST_MODIFIER` rating (no variant needed) | armour regeneration (**GAP-REGENERATION**) |
+| Base Wave (260) | squad +`RESIST_MODIFIER` rating and 5× armour recharge (no variant needed) | — |
 | Crit Wave (281) | squad +`EFFECT_MODIFIER`% crit chance (no variant needed) | — |
 
-**Critical hits** now exist: 5% base (stand-in) + Spirit's 0.065% a point + Crit Wave, +50% against creatures and
-+25% against players, as TaRapedia's "Critical Hit" page (2008-10-19) describes. Its per-type secondary effects and
-overkill are not built.
+**Critical hits** now exist: 5% base + Spirit's 0.065% a point + Crit Wave, +50% against creatures and +25% against
+players. The 5% and both multipliers are the client's own `shared/gameconstants.pyo` (sha256 `e0fc260a…`):
+`BASE_CRITICAL_CHANCE = 5`, `CRITICAL_DAMAGE_MODIFIER = 1.5`, `PVP_CRITICAL_DAMAGE_MODIFIER = 1.25`, agreeing with
+TaRapedia's "Critical Hit" page (2008-10-19). The same file has `SPIRIT_CRIT_DIVISOR = 15.0`, which the client never
+reads; how the server used it is lost, so the Spirit share stays TaRapedia's 0.065% a point (1/15 would be 0.067%).
+The page's per-type secondary effects and overkill are not built.
 
-**Found on the way — GAP-REGENERATION:** nothing regenerates on this branch. Refresh amounts are computed but no
-refresh period is ever set and the server never ticks them, so Regeneration Wave's bonus, Base Wave's armour regen
-and Disease's "stops regeneration" act on nothing yet. `ellimist/development` has a commit for it (94b4485).
+**Regeneration (GAP-REGENERATION, closed 2026-09-19).** Health, power and armour now regenerate every second, on the
+client's constants in `shared/gameconstants.pyo`: `HEALTH_REGEN_PERIOD`, `POWER_REGEN_PERIOD` and `ARMOR_REGEN_PERIOD`
+are 1; `IN_COMBAT_REGEN_MODIFIER = 0.2`. The client predicts regeneration itself (`elapsed × refreshAmount ÷
+refreshPeriod`), and its `Actor.UpdateAttribute` puts the period back to 1 on every UpdateHealth/Power/Armor, so the
+combat penalty rides on the amount: a fifth, rounded to the whole number the wire carries. The server adds the same
+whole amounts each second, so a later update does not snap the bar back.
+
+| Part | Value | Tier |
+| --- | --- | --- |
+| Period, all three | 1 s | original (client constants) |
+| In combat | × 0.2 (`IN_COMBAT_REGEN_MODIFIER`), rounded | original constant; the rounding is the wire's |
+| Armour amount | the worn pieces' `RegenRate` (the tooltip's "Regen Rate: 1 per sec") | original |
+| Base Wave | `EFFECT_ARMOR_REGEN_MODIFIER` 500 = five times the armour recharge | original row; percent reading from Paint Target's "Armor Recharge: %s%%" (100, then 0) |
+| Health amount | 2 × Regeneration Rate ÷ 100 a second | inferred (this emulator's existing formula) |
+| Power amount | the same as health: "Regeneration Rate — Improves natural Health and Power regeneration" (`ID_TOOLTIP_ATTRIBUTES_REGEN`) | inferred |
+| Combat lasts | 15 s after the last damage dealt or taken; `PlayerEnteredCombat`/`PlayerExitedCombat` toggle the indicator | inferred (no constant names it; follows `ellimist/development` 94b4485) |
+
+Regeneration Wave's bonus now acts. Creatures still do not regenerate, so Disease's "stops regeneration" and Paint
+Target's "Armor Recharge" (both only land on creatures) still act on nothing.
 
 Chaff (175) is granted by no skill and is not a class ability.
 

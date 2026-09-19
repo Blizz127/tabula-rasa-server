@@ -14,6 +14,18 @@ namespace Rasa.Structures
         public uint Gender { get; set; }
         /// <summary>Critical-hit chance from Spirit, percent (ManifestationManager.UpdateStatsValues).</summary>
         public double SpiritCritPercent { get; set; }
+
+        /// <summary>In a fight: dealt or took damage within CombatRegen.CombatTimeoutMs. Regeneration runs at a fifth.</summary>
+        public bool InCombat { get; set; }
+        public long CombatExpiresAt { get; set; }
+
+        /// <summary>Out-of-combat regeneration per second, before rounding: health, power, armour.</summary>
+        public double HealthRegenRate { get; set; }
+        public double PowerRegenRate { get; set; }
+        public double ArmorRegenRate { get; set; }
+
+        /// <summary>Time towards the next whole regeneration second, in milliseconds.</summary>
+        public long RegenElapsedMs { get; set; }
         public Dictionary<EquipmentData, AppearanceData> AppearanceData { get; set; }
         public List<CharacterOptions> CharacterOptions = new();
         public double Scale { get; set; }

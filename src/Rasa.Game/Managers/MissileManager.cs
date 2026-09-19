@@ -92,6 +92,9 @@ namespace Rasa.Managers
             if (creature.State == CharacterState.Dead)
                 return;
 
+            // Shooting something is being in a fight, as much as being shot.
+            ManifestationManager.Instance.EnterCombat(missile.Source);
+
             // Called Shot and Sacrifice answer a hit before it lands (the head shot adds to it); Polarity Field
             // makes the creature vulnerable to its type.
             AbilityEffects.OnCreatureHit(mapChannel, missile, creature, hit);
@@ -141,6 +144,9 @@ namespace Rasa.Managers
         {
             if (actor.State == CharacterState.Dead)
                 return;
+
+            ManifestationManager.Instance.EnterCombat(actor);
+            ManifestationManager.Instance.EnterCombat(missile.Source);
 
             // Resistance to the missile's damage type scales the hit before armour absorbs it, through the
             // conversion the client's own shared/damageresistance.pyo uses (Deployment 14's diminishing returns:

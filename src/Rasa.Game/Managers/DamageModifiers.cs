@@ -72,7 +72,9 @@ namespace Rasa.Managers
         /// Critical hits (OD-56, owner decision 2026-09-19). TaRapedia's "Critical Hit" (2008-10-19): a crit "occurs
         /// randomly with a low percentage chance, modified by your Spirit attribute, each time you deal damage"; "Each point
         /// spent in Spirit increases your Critical Hit chance by 0.065%"; crits "do around 50% more damage to mobs ... In
-        /// PvP ... only ... 25%". Crit Wave adds its percentage. The base chance is not recorded: 5% is a labelled stand-in.
+        /// PvP ... only ... 25%". Crit Wave adds its percentage. The 5% base and
+        /// both multipliers are the client's shared/gameconstants.pyo: BASE_CRITICAL_CHANCE = 5, CRITICAL_DAMAGE_MODIFIER = 1.5,
+        /// PVP_CRITICAL_DAMAGE_MODIFIER = 1.25.
         /// Only players crit here; the per-type secondary effects the page lists are not applied.
         /// </summary>
         public const double BaseCritPercent = 5.0;

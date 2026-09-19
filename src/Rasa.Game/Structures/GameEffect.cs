@@ -47,6 +47,9 @@
         public Data.DamageType? ConvertVirulentTo { get; set; }
         /// <summary>Disease (pumps 4-5): the holder does not regenerate, or cannot be healed.</summary>
         public bool StopsRegeneration { get; set; }
+
+        /// <summary>EFFECT_ARMOR_REGEN_MODIFIER, a percentage of the normal armour recharge (100 = unchanged; Base Wave 500).</summary>
+        public int? ArmorRegenPercent { get; set; }
         public bool PreventsHealing { get; set; }
         /// <summary>Sacrifice: a creature this holder damages turns on it.</summary>
         public bool DrawsThreat { get; set; }

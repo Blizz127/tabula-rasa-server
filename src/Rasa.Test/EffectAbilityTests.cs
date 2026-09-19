@@ -60,6 +60,58 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void RegenerationAddsTheRefreshAmountEachSecondUpToTheMaximum()
+        {
+            var player = _client.Player;
+            player.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 100, 100, 90, 3, 1);
+            player.Attributes[Attributes.Armor] = new ActorAttributes(Attributes.Armor, 50, 50, 50, 5, 1);
+            player.Attributes[Attributes.Power] = new ActorAttributes(Attributes.Power, 100, 100, 10, 0, 1);
+
+            ManifestationManager.Instance.RegenWorker(_map, 999);
+            Assert.AreEqual(90, player.Attributes[Attributes.Health].Current);
+            ManifestationManager.Instance.RegenWorker(_map, 1);
+            Assert.AreEqual(93, player.Attributes[Attributes.Health].Current);
+            Assert.AreEqual(50, player.Attributes[Attributes.Armor].Current);
+            Assert.AreEqual(10, player.Attributes[Attributes.Power].Current);
+            ManifestationManager.Instance.RegenWorker(_map, 5000);
+            Assert.AreEqual(100, player.Attributes[Attributes.Health].Current);
+
+            player.Attributes[Attributes.Health].Current = 0;
+            player.State = CharacterState.Dead;
+            ManifestationManager.Instance.RegenWorker(_map, 3000);
+            Assert.AreEqual(0, player.Attributes[Attributes.Health].Current);
+        }
+
+        [TestMethod]
+        public void DealingDamageEntersCombatWhichSlowsRegenerationToAFifthUntilItLapses()
+        {
+            var player = _client.Player;
+            player.HealthRegenRate = 10;
+            player.PowerRegenRate = 10;
+            player.ArmorRegenRate = 3;
+            player.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 100, 100, 50, 0, 0);
+            player.Attributes[Attributes.Armor] = new ActorAttributes(Attributes.Armor, 50, 50, 50, 0, 0);
+            ManifestationManager.Instance.ApplyRegenRates(player);
+            Assert.AreEqual(10, player.Attributes[Attributes.Health].RefreshAmount);
+            Assert.AreEqual(1, player.Attributes[Attributes.Health].RefreshPeriod);
+
+            var target = Creature(new Vector3(10, 0, 0));
+            MissileManager.Instance.DamageTick(_map, player, target, 1, DamageType.Physical);
+            Assert.IsTrue(player.InCombat);
+            Assert.AreEqual(2, player.Attributes[Attributes.Health].RefreshAmount);
+            Assert.AreEqual(2, player.Attributes[Attributes.Power].RefreshAmount);
+            Assert.AreEqual(1, player.Attributes[Attributes.Armor].RefreshAmount);
+            ManifestationManager.Instance.RegenWorker(_map, 1000);
+            Assert.AreEqual(52, player.Attributes[Attributes.Health].Current);
+
+            player.CombatExpiresAt = 0;
+            ManifestationManager.Instance.RegenWorker(_map, 1000);
+            Assert.IsFalse(player.InCombat);
+            Assert.AreEqual(10, player.Attributes[Attributes.Health].RefreshAmount);
+            Assert.AreEqual(62, player.Attributes[Attributes.Health].Current);
+        }
+
+        [TestMethod]
         public void RuinDamagesItsTargetEverySecondForTenSeconds()
         {
             _client.Player.Class = 3;
@@ -897,12 +949,20 @@ namespace Rasa.Test
             AbilityEffects.Polymorph(_map, _client.Player, poly);
             Assert.IsTrue(_client.Player.ActiveEffects.Values.Any(e => e.Disguised));
 
+            var player = _client.Player;
+            player.Race = Race.Human;
+            foreach (Attributes attribute in System.Enum.GetValues(typeof(Attributes)))
+                if (!player.Attributes.ContainsKey(attribute))
+                    player.Attributes[attribute] = new ActorAttributes(attribute, 0, 0, 0, 0, 0);
+            player.Inventory.EquippedInventory.AddRange(new ulong[22]);
             var wave = Row(260, "abilities.basewave", 2300, 847, 40);
             wave.Properties[AbilityProperty.Duration] = 120;
             wave.Properties[AbilityProperty.RadiusAroundSource] = 25;
             wave.Properties[AbilityProperty.ResistModifier] = 25;
+            wave.Properties[AbilityProperty.EffectArmorRegenModifier] = 500;
             AbilityEffects.BaseWave(_map, _client, wave);
-            Assert.AreEqual(25, DamageModifiers.ResistRating(_client.Player));
+            Assert.AreEqual(25, DamageModifiers.ResistRating(player));
+            Assert.AreEqual(500, player.ActiveEffects.Values.Single(e => e.TypeId == AbilityEffects.BaseWaveType).ArmorRegenPercent);
         }
 
         private static IEnumerable<uint> LogosFor(int abilityId)

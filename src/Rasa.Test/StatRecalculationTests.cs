@@ -58,5 +58,50 @@ namespace Rasa.Test
                 EntityClassManager.Instance.LoadedEntityClasses.Remove(armorClass);
             }
         }
+
+        [TestMethod]
+        public void RecalculationSetsTheRegenerationRatesTheClientPredictsFrom()
+        {
+            const EntityClasses armorClass = (EntityClasses)9000004;
+            var armor = new Item { ItemTemplate = new ItemTemplate(new ItemTemplateItemClassEntry { ItemClass = (uint)armorClass }) };
+            EntityManager.Instance.RegisterItem(armor.EntityId, armor);
+            EntityClassManager.Instance.LoadedEntityClasses[armorClass] =
+                new EntityClass((uint)armorClass, "test armor", 0, 0, new List<AugmentationType>(), false)
+                { ArmorClassInfo = new ArmorClassInfo(new ArmorClassEntry { MinDamageAbsorbed = 100, MaxDamageAbsorbed = 100, RegenRate = 5 }) };
+            try
+            {
+                var player = new Manifestation { Level = 1, Race = Race.Human };
+                foreach (Attributes attribute in Enum.GetValues(typeof(Attributes)))
+                    player.Attributes[attribute] = new ActorAttributes(attribute, 0, 0, 0, 0, 0);
+                player.Inventory.EquippedInventory.AddRange(new ulong[22]);
+                player.Inventory.EquippedInventory[1] = armor.EntityId;
+                var client = new Client(null, new ClientPacketHandler()) { Player = player };
+                ManifestationManager.Instance.UpdateStatsValues(client, true);
+
+                var perSecond = (int)Math.Round(2D * player.Attributes[Attributes.Regen].CurrentMax / 100, MidpointRounding.AwayFromZero);
+                Assert.IsTrue(perSecond > 0);
+                Assert.AreEqual(perSecond, player.Attributes[Attributes.Health].RefreshAmount);
+                Assert.AreEqual(perSecond, player.Attributes[Attributes.Power].RefreshAmount);
+                Assert.AreEqual(5, player.Attributes[Attributes.Armor].RefreshAmount);
+                foreach (var attribute in new[] { Attributes.Health, Attributes.Power, Attributes.Armor })
+                    Assert.AreEqual(1, player.Attributes[attribute].RefreshPeriod);
+
+                // Base Wave's EFFECT_ARMOR_REGEN_MODIFIER 500: five times the recharge.
+                player.ActiveEffects[1] = new GameEffect { EffectId = 1, ArmorRegenPercent = 500 };
+                ManifestationManager.Instance.UpdateStatsValues(client, false);
+                Assert.AreEqual(25, player.Attributes[Attributes.Armor].RefreshAmount);
+
+                // In a fight a recalculation keeps the penalty: a fifth, rounded.
+                player.InCombat = true;
+                ManifestationManager.Instance.UpdateStatsValues(client, false);
+                Assert.AreEqual(5, player.Attributes[Attributes.Armor].RefreshAmount);
+                Assert.AreEqual((int)Math.Round(player.HealthRegenRate * 0.2, MidpointRounding.AwayFromZero), player.Attributes[Attributes.Health].RefreshAmount);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterItem(armor.EntityId);
+                EntityClassManager.Instance.LoadedEntityClasses.Remove(armorClass);
+            }
+        }
     }
 }
