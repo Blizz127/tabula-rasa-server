@@ -46,9 +46,7 @@ namespace Rasa.Test
         /// </summary>
         private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
         {
-            (321, 310, 105), (332, 2, 32), (332, 3, 98),
-            (442, 2, 1486), (451, 3, 569), (836, 1, 802),
-            (977, 2, 1075), (1112, 1, 1213), (1186, 1, 1300)
+            (442, 2, 1486), (451, 3, 569), (1186, 1, 1300)
         };
 
         [TestMethod]

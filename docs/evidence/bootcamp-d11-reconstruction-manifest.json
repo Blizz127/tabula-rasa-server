@@ -187,7 +187,7 @@
      "max": 199911
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements."
   },
   {
    "table": "content_area",
@@ -206,7 +206,7 @@
      "max": 199911
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements."
   },
   {
    "table": "content_condition",
@@ -52117,6 +52117,3180 @@
      }
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199007
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 205,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 205"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 13,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc, AFS Preparation Camp"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199007
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1430,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc, AFS Preparation Camp"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -268.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc, AFS Preparation Camp"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc, AFS Preparation Camp",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 6.884,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc, AFS Preparation Camp"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc, AFS Preparation Camp",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -127.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc, AFS Preparation Camp"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc, AFS Preparation Camp",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199008
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 204,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 204"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199008
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1430,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -308.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 16.264,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": -107.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission says the north-west fortification, and this is the raised walkable ground 40 m west and 20 m north of Price",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199008
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 105,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 105"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199109
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 2937,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2937"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 16,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199109
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 323.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 128.174,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 604.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199209
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8554,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8554"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 33,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199209
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1497,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -266.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 420.774,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 857.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199210
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 4677,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 4677"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199210
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1497,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 449.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 378.004,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 367.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199409
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8674,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8674"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 33,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199409
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 615.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 241.244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 550.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199410
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8677,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8677"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199410
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -547.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 262.284,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -451.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199411
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8659,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8659"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199411
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 622.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 240.814,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 584.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199412
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8683,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8683"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 29,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199412
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 228.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 229.344,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 696.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199413
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8697,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8697"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199413
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1759,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 219.59,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 230.684,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": 735.15,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; Find Me A Rock sends the player to Sirth at Fort Condor and 1075's speaker answers there, so the client's Fort Condor marker",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199413
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 1075,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1075"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199508
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 9009,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 9009"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 25,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 7253,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7253"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199508
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 253.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 433.114,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -149.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199509
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8782,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8782"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 20,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199509
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 348.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 429.924,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -170.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199510
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8856,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8856"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 23,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199510
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 700.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 413.324,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 230.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199511
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8576,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8576"
+      }
+     ],
+     "reasoning": "the closest name the client's table has; the page's own name is not in it"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 7123,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7123"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199511
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1764,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 900.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 427.924,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -132.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the client has no name for it, so CID Mainframe Computer stands in",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199512
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 10169,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10169"
+      }
+     ],
+     "reasoning": "the closest name the client's table has; the page's own name is not in it"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 7123,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7123"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199512
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1773,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 5.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 272.354,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -212.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc x,z; its y of 233 matches no floor, so the colony floor under it",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199512
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 1213,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 1213"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199304
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8596,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8596"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 36,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 22636,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 22636"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199304
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -735.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 217.674,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 171.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199305
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 8552,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 8552"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 36,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199305
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1454,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -268.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 216.644,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -812.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc; the reading matches the Marshes floor, which is where Retread City is",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199110
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 10203,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10203"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 22,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199110
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -155.4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 172.244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -719.8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199111
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 10205,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10205"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 22,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199111
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1244,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -154.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 172.374,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -691.8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199009
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 10650,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10650"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 50,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199009
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -132.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 231.964,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -628.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "TaRapedia /loc"
+      }
+     ],
+     "reasoning": "TaRapedia's /loc, a dated community transcription: TaRapedia /loc",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199010
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 162,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 162"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199010
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -243.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 57.324,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": 43.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no /loc; the mission puts the turn-in at the Hydro Plant, and this is the client's own control-point marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199011
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 7033,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 7033"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199011
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -770.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 179.374,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": 612.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission puts him in Nidu Dav, and Receptive Liaison Brice's own /loc places that village at -773.7, 179.3, 615.9",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199011
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 802,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 802"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199012
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 2993,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 2993"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199012
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": 265.45,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 167.724,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": 1110.51,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him at Thoria Das, and this is the client's own waypoint marker there",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199012
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 32,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 32"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199013
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "name_id": {
+     "value": 193,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 193"
+      }
+     ],
+     "reasoning": "the client's own creature name table"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199013
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1148,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)"
+      }
+     ],
+     "reasoning": "the map whose navmesh floor the reading lands on, and whose zone the page names"
+    },
+    "pos_x": {
+     "value": -121.87,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 84.784,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    },
+    "pos_z": {
+     "value": -355.63,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)"
+      }
+     ],
+     "reasoning": "a best guess at the owner's word (2026-09-19): GUESS: no page; the mission delivers to him along the Foreas Base trench, and this is the client's Central Trench waypoint (a Western Trench marker is the other candidate)",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 40.0,
+      "vertical_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199013
+   },
+   "slice": "W3",
+   "migration": "TarapediaMissingNpcs",
+   "fields": {
+    "package_id": {
+     "value": 98,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation package 98"
+      }
+     ],
+     "reasoning": "the client's conversation rows name the package the objective completes through."
+    }
+   }
   }
  ],
  "omitted": [
@@ -53802,7 +56976,7 @@
   },
   {
    "id": "GAP-W3-UNBOUND-CONVERSATION-PACKAGE",
-   "summary": "Started at 34 objectives over 22 missions whose completion package no spawned creature carried, found by MissionLinkAuditTests on 2026-09-17 once the navmesh was put beside rasaworld.db so it ran instead of reporting inconclusive. WildernessDialogueBinding closed 15 of them the same day without building anything: the first assumption - that the NPCs did not exist and needed the OD-45 pipeline that built Mining Coord. Richards - was wrong. Twelve of them were already in the world seed, with their client name, class, level and health, drawn by a spawnpool slot in the right place, and simply had no npc_package row to speak through. 19 objectives are left, and the seed is the first place to look for each one. Update 2026-09-19: 670/2 bound by DevilsDenFransisco; 18 left. Update 2026-09-19 (QuestNpcDialogueBatch): eight more closed - Tyler, Kalinowski, Mohindra, Major Ston, Petrie, Locke, Miras and Phenix, each at TaRapedia's own /loc, every reading within 0.5 m of the navmesh floor under it. Nine are left, and each is blocked on a source rather than on work: 321 is not offered at all, 332's two delivery points and 451/3, 977/2 and 836/1 name speakers no page places, 442/2 is an analyser's readout (the Duncan in the world speaks for another mission and one creature carries one package), 1186/1 is an Eloh artifact rather than a person, and 1112/1 waits for the Irendas console.",
+   "summary": "Started at 34 objectives over 22 missions whose completion package no spawned creature carried, found by MissionLinkAuditTests on 2026-09-17 once the navmesh was put beside rasaworld.db so it ran instead of reporting inconclusive. WildernessDialogueBinding closed 15 of them the same day without building anything: the first assumption - that the NPCs did not exist and needed the OD-45 pipeline that built Mining Coord. Richards - was wrong. Twelve of them were already in the world seed, with their client name, class, level and health, drawn by a spawnpool slot in the right place, and simply had no npc_package row to speak through. 19 objectives are left, and the seed is the first place to look for each one. Update 2026-09-19: 670/2 bound by DevilsDenFransisco; 18 left. Update 2026-09-19 (QuestNpcDialogueBatch): eight more closed - Tyler, Kalinowski, Mohindra, Major Ston, Petrie, Locke, Miras and Phenix, each at TaRapedia's own /loc, every reading within 0.5 m of the navmesh floor under it. Nine are left, and each is blocked on a source rather than on work: 321 is not offered at all, 332's two delivery points and 451/3, 977/2 and 836/1 name speakers no page places, 442/2 is an analyser's readout (the Duncan in the world speaks for another mission and one creature carries one package), 1186/1 is an Eloh artifact rather than a person, and 1112/1 waits for the Irendas console. Update 2026-09-19 (TarapediaMissingNpcs): five more bound - 321/310 at Field Lt. Perkins, 332/2 at Line Capt. Dobbs, 332/3 at Field Lt. McMurray, 836/1 at Lieutenant Seguine, 977/2 at Rohish and 1112/1 at the Computer Access Terminal, whose own /loc the Into The Hive page gives. Three are left: 442/2 (an analyser's readout; the Duncan in the world speaks for another mission), 451/3 (a villager at Dagdha's Urn no page names) and 1186/1 (an Eloh artifact, not a person).",
    "closes_with": "for each package: the client's objectiveconversation row gives it, its missiontextlanguage line and the mission text name who speaks it, and the world seed's own creature table is checked for that name before anything is created",
    "evidence": [
     "client/objectiveconversation.pyo (422,1,213,1,1)->1276 and (429,5,726,1,1)->3886",
@@ -54441,12 +57615,12 @@
   },
   {
    "id": "GAP-W3-TARAPEDIA-GIVERS",
-   "summary": "Twenty-three more missions name a giver or reward giver TaRapedia records and the world does not have - Cmd. Sgt. Price and Field Lt. Perkins (321), Watchman Hillenmeyer (411), Transportation Officer Mamede (887), Outpost Cmdr. Russ (970), Lt. Cockerell (983), Captain Gaston (1041), Researcher Erodan (1118), Sgt. Van Winkle (1141), Major Silvia (1310), Retread Vincent (1673), Captain Tayros (1788), Sgt. Longshanks (1789), Shaman Masai (1868, 1904), Archeologist Wynne Topper (2016), Base Guard Kapler (347), Operations Mainframe (640), Lieutenant Liu (1063), the Computer Access Terminal (1112), Lieutenant Seguine (836), Line Capt. Dobbs (332), Sgt. Ricardo (940). Each keeps the NPC it was reconstructed with until that one is created, which needs a position no source gives for most of them.",
+   "summary": "Twenty-three more missions name a giver or reward giver TaRapedia records and the world does not have - Cmd. Sgt. Price and Field Lt. Perkins (321), Watchman Hillenmeyer (411), Transportation Officer Mamede (887), Outpost Cmdr. Russ (970), Lt. Cockerell (983), Captain Gaston (1041), Researcher Erodan (1118), Sgt. Van Winkle (1141), Major Silvia (1310), Retread Vincent (1673), Captain Tayros (1788), Sgt. Longshanks (1789), Shaman Masai (1868, 1904), Archeologist Wynne Topper (2016), Base Guard Kapler (347), Operations Mainframe (640), Lieutenant Liu (1063), the Computer Access Terminal (1112), Lieutenant Seguine (836), Line Capt. Dobbs (332), Sgt. Ricardo (940). Each keeps the NPC it was reconstructed with until that one is created, which needs a position no source gives for most of them. Closed 2026-09-19 (TarapediaMissingNpcs): all twenty-four are created - eighteen at their page's own /loc, each landing on the navmesh floor of the zone the page names, and six placed where the mission's words and the client's markers put them as labelled guesses at the owner's word. Two are machines on a computer class that can be spoken to.",
    "evidence": [
     "TaRapedia mission infoboxes, MissionGiver and RewardGiver",
     "the audit of every seeded mission against its page, 2026-09-19"
    ],
-   "closes_with": "for each: the named NPC created where a source places them, then the mission's giver or receiver moved to it",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "1:1 fidelity audit against TaRapedia, 2026-09-19"
    ],
@@ -54454,6 +57628,11 @@
     "W1",
     "W2",
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables",
+    "MissionLinkAuditTests.EveryMissionGiverAndReceiverIsACreatureThatSpawns"
    ]
   }
  ],
@@ -55578,6 +58757,420 @@
     {
      "source": "community_db:tarapedia",
      "locator": "mission 1904 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 321
+   },
+   "field": "giver_id",
+   "old": 0,
+   "new": 199007,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 321 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 321
+   },
+   "field": "reciver_id",
+   "old": 0,
+   "new": 199008,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 321 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 411
+   },
+   "field": "giver_id",
+   "old": 199102,
+   "new": 199109,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 411 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 887
+   },
+   "field": "giver_id",
+   "old": 199200,
+   "new": 199209,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 887 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 970
+   },
+   "field": "giver_id",
+   "old": 199201,
+   "new": 199210,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 970 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 983
+   },
+   "field": "giver_id",
+   "old": 199403,
+   "new": 199409,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 983 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1041
+   },
+   "field": "giver_id",
+   "old": 199403,
+   "new": 199410,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1041 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1141
+   },
+   "field": "giver_id",
+   "old": 199404,
+   "new": 199411,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1141 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 940
+   },
+   "field": "reciver_id",
+   "old": 199400,
+   "new": 199412,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 940 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1118
+   },
+   "field": "giver_id",
+   "old": 199503,
+   "new": 199508,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1118 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1310
+   },
+   "field": "giver_id",
+   "old": 199502,
+   "new": 199509,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1310 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1063
+   },
+   "field": "reciver_id",
+   "old": 199501,
+   "new": 199510,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1063 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 640
+   },
+   "field": "reciver_id",
+   "old": 199500,
+   "new": 199511,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 640 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1112
+   },
+   "field": "reciver_id",
+   "old": 199502,
+   "new": 199512,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1112 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1868
+   },
+   "field": "giver_id",
+   "old": 199302,
+   "new": 199304,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1868 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1904
+   },
+   "field": "giver_id",
+   "old": 199303,
+   "new": 199304,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1904 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1673
+   },
+   "field": "giver_id",
+   "old": 199300,
+   "new": 199305,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1673 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1788
+   },
+   "field": "giver_id",
+   "old": 199106,
+   "new": 199110,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1788 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 1789
+   },
+   "field": "giver_id",
+   "old": 199107,
+   "new": 199111,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 1789 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 2016
+   },
+   "field": "giver_id",
+   "old": 199205,
+   "new": 199009,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 2016 infobox, MissionGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 347
+   },
+   "field": "reciver_id",
+   "old": 199001,
+   "new": 199010,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 347 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 836
+   },
+   "field": "reciver_id",
+   "old": 137,
+   "new": 199011,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 836 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-19",
+   "migration": "TarapediaMissingNpcs",
+   "table": "npc_mission",
+   "key": {
+    "id": 332
+   },
+   "field": "reciver_id",
+   "old": 199000,
+   "new": 199012,
+   "reason": "TaRapedia's infobox names an NPC the world did not have; that NPC is created by this batch and the mission now points at it.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "mission 332 infobox, RewardGiver"
     }
    ]
   }

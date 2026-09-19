@@ -856,7 +856,7 @@ namespace Rasa.Test
                     // seed is not replayed): the boot-camp map, the S6 destination map and the Power Logos granted by S1.
                     // 1148 is the Divide, where the four NPCs W3 batch 5 creates stand; 1244 Palisades, which the
                     // Liaison missions' receivers are in.
-                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10), (1394, 'adv_foreas_concordia_palisades_devilsden', 327, 0), (1347, 'adv_foreas_concordia_divide_minoscaverns', 293, 4), (1773, 'adv_arieki_torden_plains_attacolony', 274, 0), (2034, 'adv_arieki_torden_plains_penalresearch', 230, 0)");
+                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10), (1394, 'adv_foreas_concordia_palisades_devilsden', 327, 0), (1347, 'adv_foreas_concordia_divide_minoscaverns', 293, 4), (1773, 'adv_arieki_torden_plains_attacolony', 274, 0), (2034, 'adv_arieki_torden_plains_penalresearch', 230, 0), (1430, 'adv_foreas_concordia_wilderness_pravusresearch', 555, 0)");
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
                     // Mission 429 River Recon is a world-seed row, not a migrated one: MissionAreaLinks and
                     // WildernessPinholeNpc only correct it, so without the seed row this migrated world has the
@@ -973,8 +973,9 @@ namespace Rasa.Test
                 // Forean Ranger (199911) at the top of the falls. Field Dr. Dawson (199002) and Receptive Liaison
                 // Brice (199003) stood here until MissionAreaLinks read their TaRapedia /loc as Divide coordinates
                 // and moved them to 1148, where the navmesh has ground 0.1 m under each. Mission 430's four Bane
-                // Mortars (199700-199703) are creatures since WildernessMortarCreature, so they spawn here too.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199700, 199701, 199702, 199703, 199803, 199910, 199911 },
+                // Mortars (199700-199703) are creatures since WildernessMortarCreature, so they spawn here too, and
+                // Archaeologist Wynne Topper (199009) at the Twin Pillars Outpost since TarapediaMissingNpcs.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199009, 199700, 199701, 199702, 199703, 199803, 199910, 199911 },
                     aliaDasPlacements.Keys.ToArray(),
                     "Alia Das: " + string.Join(", ", aliaDasPlacements.Keys.OrderBy(id => id)));
                 var rogers = aliaDasPlacements[198684];
