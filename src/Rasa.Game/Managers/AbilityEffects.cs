@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
@@ -31,6 +32,10 @@ namespace Rasa.Managers
         public const int ScourgeEffectType = 256;        // SCOURGE_EFFECT, "Continuously damages all hostiles in a radius around you"
         public const int ShieldExtenderSourceType = 10000056; // SHIELD_EXTENDER_SOURCE
         public const int ShieldExtenderShieldedType = 10000055; // SHIELD_EXTENDER_SHIELDED
+        public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
+        public const int ReconstructionHarmType = 10000063;     // "Spirit: -x% / Damage: min - max HP / Adrenaline Drain ... every interval"
+        public const int ReconstructionHelpPoolType = 10000064; // "Maximum Health: +x%"
+        public const int ReconstructionHarmPoolType = 10000065; // "Maximum Health: -x%"
 
         /// <summary>
         /// The pulse of an effect whose row gives no interval (Scourge, Shield Extender's reach): one second, inferred -
@@ -263,6 +268,132 @@ namespace Rasa.Managers
             };
             pool.Broken = () => GameEffectManager.Instance.DettachEffect(map, target, source);
             Pulse(source);
+        }
+
+        /// <summary>
+        /// Reconstruction: "Heals and Buffs the user and nearby squad members as well as Damages and Debuffs nearby
+        /// enemies for a set time" (the skill text). Everyone within RADIUS_AROUND_SOURCE is reached - the biotechnician
+        /// and squad members on the map get the HELP effect, hostile creatures the HARM effect - and the recovery lists
+        /// (entityId, effectTypeId) for each, which reconstruction.py DoAbility announces. From the row:
+        ///   - HEAL_AMOUNT / DAMAGE_AMOUNT once when the row has no INTERVAL (pumps 1, 3), else every INTERVAL for
+        ///     DURATION (pumps 2, 4), with ADRENALINE_INCREASE added to the squad and drained from nothing (creatures
+        ///     have no adrenaline) at each pulse (pump 4);
+        ///   - ATTRIBUTE_MAX_CHANGE as the tooltips' "Spirit: +%(spiritBuff)s%%" on the squad for DURATION (pump 3);
+        ///   - EFFECT_MODIFIER as "Maximum Health: +/-%(healthPoolMod)s%%" for DURATION (pump 5).
+        /// </summary>
+        public static List<(ulong, int)> Reconstruction(MapChannel map, Game.Client client, ActionLevelInfo info, Random random)
+        {
+            var biotech = client?.Player;
+            var announced = new List<(ulong, int)>();
+            if (map == null || biotech == null)
+                return announced;
+            var radius = info.Get(AbilityProperty.RadiusAroundSource);
+            var duration = info.Get(AbilityProperty.Duration) * 1000;
+            var interval = info.Get(AbilityProperty.Interval) * 1000;
+            var scaleType = info.Has(AbilityProperty.DamageScaleType) ? info.Get(AbilityProperty.DamageScaleType) : (int?)null;
+            var dmgMin = AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMin), biotech.Level, scaleType);
+            var dmgMax = Math.Max(dmgMin, AbilityScaling.ScaleActorAmount(info.Get(AbilityProperty.DamageAmountMax, info.Get(AbilityProperty.DamageAmountMin)), biotech.Level, scaleType));
+            var healMin = info.Get(AbilityProperty.HealAmountMin);
+            var healMax = Math.Max(healMin, info.Get(AbilityProperty.HealAmountMax, healMin));
+            var adrenaline = info.Get(AbilityProperty.AdrenalineIncreaseMin);
+            var spirit = info.Get(AbilityProperty.AttributeMaxChange);
+            var pool = info.Get(AbilityProperty.EffectModifier);
+            var damageType = (DamageType)info.Get(AbilityProperty.DamageType, (int)DamageType.Physical);
+
+            var squad = new List<Game.Client> { client };
+            if (PartyManager.Instance.PartyOf(client) is { } party)
+                foreach (var member in party.Members)
+                    if (member.EntityId != biotech.EntityId &&
+                        map.ClientList?.FirstOrDefault(c => c?.Player?.EntityId == member.EntityId) is { } mate &&
+                        mate.Player.State != CharacterState.Dead && Vector3.Distance(mate.Player.Position, biotech.Position) <= radius)
+                        squad.Add(mate);
+            var enemies = HostilesAround(map, biotech, biotech.Position, radius);
+
+            void Heal(Game.Client member)
+            {
+                if (healMax > 0)
+                {
+                    var health = member.Player.Attributes[Attributes.Health];
+                    health.Current = Math.Min(health.CurrentMax, health.Current + random.Next(healMin, healMax + 1));
+                    CellManager.Instance.CellCallMethod(map, member.Player, new Packets.MapChannel.Server.UpdateHealthPacket(health, member.Player.EntityId));
+                }
+                if (adrenaline > 0 && member.Player.Attributes.TryGetValue(Attributes.Chi, out var chi))
+                {
+                    chi.Current = Math.Min(chi.CurrentMax, chi.Current + adrenaline);
+                    member.CallMethod(member.Player.EntityId, new Packets.MapChannel.Server.UpdateChiPacket(chi, member.Player.EntityId));
+                }
+            }
+
+            void Harm(Creature enemy, GameEffect effect)
+            {
+                if (dmgMax <= 0 || enemy.State == CharacterState.Dead)
+                    return;
+                var hit = MissileManager.Instance.DamageTick(map, biotech, enemy, DamageModifiers.Outgoing(biotech, random.Next(dmgMin, dmgMax + 1)), damageType);
+                if (effect != null)
+                    CellManager.Instance.CellCallMethod(map, enemy, Packets.MapChannel.Server.CallGameEffectMethodPacket.AnnounceDamage(effect.EffectId,
+                        new[] { (enemy.EntityId, hit) }));
+            }
+
+            foreach (var member in squad)
+            {
+                var helpType = pool > 0 ? ReconstructionHelpPoolType : ReconstructionHelpType;
+                announced.Add((member.Player.EntityId, helpType));
+                if (duration <= 0)
+                {
+                    Heal(member);
+                    continue;
+                }
+                var tooltip = new Dictionary<string, double>
+                {
+                    ["healMin"] = healMin, ["healMax"] = healMax, ["interval"] = interval / 1000, ["spiritBuff"] = spirit,
+                    ["adrenalineMin"] = adrenaline, ["adrenalineMax"] = info.Get(AbilityProperty.AdrenalineIncreaseMax, adrenaline),
+                    ["healthPoolMod"] = pool
+                };
+                var help = GameEffectManager.Instance.AttachEffect(map, member.Player, helpType, info.Level, duration, biotech.EntityId, true,
+                    tooltip, interval, interval > 0 ? _ => Heal(member) : null);
+                if (interval <= 0 && pool <= 0)
+                    Heal(member);
+                if (spirit > 0 || pool > 0)
+                {
+                    help.BonusAttribute = pool > 0 ? Attributes.Health : Attributes.Spirit;
+                    var baseline = member.Player.Attributes[help.BonusAttribute.Value].NormalMax;
+                    help.AttributeBonus = baseline * (pool > 0 ? pool : spirit) / 100;
+                    ManifestationManager.Instance.UpdateStatsValues(member, false);
+                    member.CallMethod(member.Player.EntityId, new Packets.MapChannel.Server.AttributeInfoPacket(member.Player.Attributes));
+                    help.OnDetach = _ =>
+                    {
+                        ManifestationManager.Instance.UpdateStatsValues(member, false);
+                        member.CallMethod(member.Player.EntityId, new Packets.MapChannel.Server.AttributeInfoPacket(member.Player.Attributes));
+                    };
+                }
+            }
+
+            foreach (var enemy in enemies)
+            {
+                var harmType = pool > 0 ? ReconstructionHarmPoolType : ReconstructionHarmType;
+                announced.Add((enemy.EntityId, harmType));
+                if (duration <= 0)
+                {
+                    Harm(enemy, null);
+                    continue;
+                }
+                GameEffect harm = null;
+                harm = GameEffectManager.Instance.AttachEffect(map, enemy, harmType, info.Level, duration, biotech.EntityId, false,
+                    new Dictionary<string, double> { ["dmgMin"] = dmgMin, ["dmgMax"] = dmgMax, ["interval"] = interval / 1000, ["spiritMod"] = spirit, ["healthPoolMod"] = pool },
+                    interval, interval > 0 ? _ => Harm(enemy, harm) : null);
+                if (interval <= 0)
+                    Harm(enemy, harm);
+                if (pool > 0)
+                {
+                    var health = enemy.Attributes[Attributes.Health];
+                    var cut = health.CurrentMax * pool / 100;
+                    health.CurrentMax -= cut;
+                    health.Current = Math.Min(health.Current, health.CurrentMax);
+                    CellManager.Instance.CellCallMethod(map, enemy, new Packets.MapChannel.Server.UpdateHealthPacket(health, enemy.EntityId));
+                    harm.OnDetach = _ => health.CurrentMax += cut;
+                }
+            }
+            return announced;
         }
 
         /// <summary>Living, non-AFS creatures within radius metres of a point, from the cells around the performer.</summary>

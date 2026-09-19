@@ -217,6 +217,61 @@ namespace Rasa.Test
             Assert.AreEqual(100, DamageModifiers.ThroughShield(player, 100));
         }
 
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(2)]
+        public void ReconstructionHealsTheBiotechnicianAndHurtsTheEnemiesAround(int pump)
+        {
+            var player = _client.Player;
+            player.Class = 7;
+            player.Skills[(SkillId)35] = new SkillsData((SkillId)35, 188, pump);
+            player.Logos.AddRange(LogosFor(188));
+            player.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 1000, 1000, 500, 0, 0);
+            var row = Row(188, "abilities.reconstruction", 300, 300, 0, (uint)pump);
+            row.Properties[AbilityProperty.RadiusAroundSource] = 15;
+            row.Properties[AbilityProperty.DamageScaleType] = 2;
+            row.Properties[AbilityProperty.DamageType] = 4;
+            if (pump == 1)
+            {
+                row.Properties[AbilityProperty.DamageAmountMin] = 90;
+                row.Properties[AbilityProperty.DamageAmountMax] = 120;
+                row.Properties[AbilityProperty.HealAmountMin] = 100;
+                row.Properties[AbilityProperty.HealAmountMax] = 100;
+            }
+            else
+            {
+                row.Properties[AbilityProperty.DamageAmountMin] = 36;
+                row.Properties[AbilityProperty.DamageAmountMax] = 58;
+                row.Properties[AbilityProperty.HealAmountMin] = 40;
+                row.Properties[AbilityProperty.HealAmountMax] = 60;
+                row.Properties[AbilityProperty.Duration] = 15;
+                row.Properties[AbilityProperty.Interval] = 3;
+            }
+            var enemy = Creature(new Vector3(10, 0, 0));
+            var far = Creature(new Vector3(20, 0, 0));
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(188, null, pump)));
+            Advance(300);
+            var recovery = Drain().OfType<Packets.MapChannel.Server.PerformRecovery.EffectListRecovery>().Single();
+            CollectionAssert.AreEquivalent(new[] { (player.EntityId, AbilityEffects.ReconstructionHelpType), (enemy.EntityId, AbilityEffects.ReconstructionHarmType) },
+                recovery.Entries.ToArray());
+            if (pump == 1)
+            {
+                Assert.AreEqual(600, player.Attributes[Attributes.Health].Current, "healed 100 at once");
+                Assert.IsTrue(100000 - enemy.Attributes[Attributes.Health].Current is >= 90 and <= 120);
+            }
+            else
+            {
+                for (var second = 0; second < 15; second++)
+                    GameEffectManager.Instance.DoWork(_map, 1000);
+                var healed = player.Attributes[Attributes.Health].Current - 500;
+                Assert.IsTrue(healed >= 5 * 40 && healed <= 5 * 60, $"five pulses of 40-60, healed {healed}");
+                var taken = 100000 - enemy.Attributes[Attributes.Health].Current;
+                Assert.IsTrue(taken >= 5 * 36 && taken <= 5 * 58, $"five pulses of 36-58, took {taken}");
+            }
+            Assert.AreEqual(100000, far.Attributes[Attributes.Health].Current, "outside the 15 m radius");
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);
