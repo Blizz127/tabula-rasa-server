@@ -32,6 +32,11 @@ namespace Rasa.Managers
         public const int ScourgeEffectType = 256;        // SCOURGE_EFFECT, "Continuously damages all hostiles in a radius around you"
         public const int ShieldExtenderSourceType = 10000056; // SHIELD_EXTENDER_SOURCE
         public const int ShieldExtenderShieldedType = 10000055; // SHIELD_EXTENDER_SHIELDED
+        public const int MagFlashType = 10000075;             // TACTICAL_EVASION_MAG_FLASH_EFFECT
+        public const int SmokeScreenType = 10000076;          // TACTICAL_EVASION_SMOKE_SCREEN_EFFECT, "Incoming ranged damage reduced by %(modAmt)s%%"
+        public const int SmokeScreenAuraType = 10000077;      // TACTICAL_EVASION_SMOKE_SCREEN_AURA_EFFECT
+        public const int EvasionTeleportType = 10000078;      // TACTICAL_EVASION_TELEPORT_EFFECT, "Tactical Retreat", detachable
+        public const int EvasionLocationType = 10000079;      // TACTICAL_EVASION_LOCATION_EFFECT
         public const int ReconstructionHelpType = 180;          // "Spirit: +x% / Healing: min - max HP / Adrenaline Gain ... every interval"
         public const int ReconstructionHarmType = 10000063;     // "Spirit: -x% / Damage: min - max HP / Adrenaline Drain ... every interval"
         public const int ReconstructionHelpPoolType = 10000064; // "Maximum Health: +x%"
@@ -394,6 +399,99 @@ namespace Rasa.Managers
                 }
             }
             return announced;
+        }
+
+        /// <summary>
+        /// Tactical Evasion, whose PvE skill text reads "Pump 1: Clear Enemy Hate | Pump 2: -Damage Taken, +Radius | Pump 3:
+        /// Clear Enemy Hate | Pump 4: -Damage Taken, +Radius | Pump 5: Delayed Teleport". From the row:
+        ///   - RADIUS_AROUND_SOURCE (pumps 1, 3): every hostile within it fighting the ranger or their squad drops the fight,
+        ///     and carries the mag flash for EFFECT_DURATION_MS; the recovery names them, as tacticalevasion.py reads;
+        ///   - EFFECT_RADIUS with EFFECT_MODIFIER (pumps 2, 4): the smoke-screen aura on the ranger pulses every
+        ///     EFFECT_INTERVAL_MS for EFFECT_DURATION_MS, keeping the smoke screen - "Incoming ranged damage reduced by
+        ///     %(modAmt)s%%" - on the squad within the radius;
+        ///   - otherwise (pump 5): "Tactical Retreat" marks where the ranger stands and returns them there when it runs out
+        ///     after EFFECT_DURATION_MS; detaching it (the client allows that) cancels the return. That the return comes at
+        ///     the end is inferred from "Delayed Teleport".
+        /// Returns the entities the recovery names.
+        /// </summary>
+        public static List<ulong> TacticalEvasion(MapChannel map, Game.Client client, ActionLevelInfo info)
+        {
+            var ranger = client?.Player;
+            var named = new List<ulong>();
+            if (map == null || ranger == null)
+                return named;
+            var duration = info.Get(AbilityProperty.EffectDurationMs);
+            var squad = SquadAround(map, client, ranger.Position, float.MaxValue);
+            if (info.Has(AbilityProperty.RadiusAroundSource))
+            {
+                var fought = new HashSet<ulong>(squad.Select(c => c.Player.EntityId));
+                foreach (var enemy in HostilesAround(map, ranger, ranger.Position, info.Get(AbilityProperty.RadiusAroundSource)))
+                {
+                    if (enemy.Controller.CurrentAction == BehaviorManager.BehaviorActionFighting &&
+                        fought.Contains(enemy.Controller.ActionFighting.TargetEntityId))
+                        BehaviorManager.Instance.DropFight(enemy);
+                    GameEffectManager.Instance.AttachEffect(map, enemy, MagFlashType, info.Level, duration, ranger.EntityId, false, new Dictionary<string, double>());
+                    named.Add(enemy.EntityId);
+                }
+                return named;
+            }
+            if (info.Has(AbilityProperty.EffectModifier))
+            {
+                var radius = info.Get(AbilityProperty.EffectRadius);
+                var reduction = info.Get(AbilityProperty.EffectModifier);
+                var screened = new Dictionary<Actor, GameEffect>();
+                var aura = GameEffectManager.Instance.AttachEffect(map, ranger, SmokeScreenAuraType, info.Level, duration, ranger.EntityId, true,
+                    new Dictionary<string, double>(), Math.Max(1, info.Get(AbilityProperty.EffectIntervalMs, DefaultPulseMs)), pulse =>
+                    {
+                        var inside = SquadAround(map, client, ranger.Position, radius).Select(c => (Actor)c.Player).ToList();
+                        foreach (var (holder, effect) in screened.ToList())
+                            if (!inside.Contains(holder))
+                            {
+                                GameEffectManager.Instance.DettachEffect(map, holder, effect);
+                                screened.Remove(holder);
+                            }
+                        foreach (var holder in inside.Where(h => !screened.ContainsKey(h)))
+                        {
+                            var smoke = GameEffectManager.Instance.AttachEffect(map, holder, SmokeScreenType, info.Level,
+                                (int)Math.Max(0, pulse.Duration - pulse.EffectTime), ranger.EntityId, true,
+                                new Dictionary<string, double> { ["modAmt"] = reduction });
+                            smoke.RangedReductionPercent = reduction;
+                            screened[holder] = smoke;
+                        }
+                    });
+                aura.OnDetach = _ =>
+                {
+                    foreach (var (holder, effect) in screened.ToList())
+                        GameEffectManager.Instance.DettachEffect(map, holder, effect);
+                };
+                aura.OnTick(aura);
+                named.Add(ranger.EntityId);
+                return named;
+            }
+            var home = ranger.Position;
+            var location = GameEffectManager.Instance.AttachEffect(map, ranger, EvasionLocationType, info.Level, duration, ranger.EntityId, true, new Dictionary<string, double>());
+            var retreat = GameEffectManager.Instance.AttachEffect(map, ranger, EvasionTeleportType, info.Level, duration, ranger.EntityId, true, new Dictionary<string, double>());
+            retreat.OnDetach = effect =>
+            {
+                GameEffectManager.Instance.DettachEffect(map, ranger, location);
+                if (effect.EffectTime >= effect.Duration && ranger.State != CharacterState.Dead && ReferenceEquals(ranger.MapChannel, map))
+                    PlayerDeathManager.TeleportWithinMap(client, home);
+            };
+            named.Add(ranger.EntityId);
+            return named;
+        }
+
+        /// <summary>The player and the squad members on this map within radius of a point.</summary>
+        public static List<Game.Client> SquadAround(MapChannel map, Game.Client client, Vector3 centre, float radius)
+        {
+            var squad = new List<Game.Client> { client };
+            if (PartyManager.Instance.PartyOf(client) is { } party)
+                foreach (var member in party.Members)
+                    if (member.EntityId != client.Player.EntityId &&
+                        map.ClientList?.FirstOrDefault(c => c?.Player?.EntityId == member.EntityId) is { } mate &&
+                        mate.Player.State != CharacterState.Dead && Vector3.Distance(mate.Player.Position, centre) <= radius)
+                        squad.Add(mate);
+            return squad;
         }
 
         /// <summary>Living, non-AFS creatures within radius metres of a point, from the cells around the performer.</summary>

@@ -283,13 +283,20 @@ namespace Rasa.Managers
             var player = client.Player;
             Logger.WriteLog(LogType.Debug,
                 $"{player.Name} respawns at hospital {hospital.GraveyardId} ({hospital.Position.X:0.#}, {hospital.Position.Y:0.#}, {hospital.Position.Z:0.#}).");
-            player.Position = hospital.Position;
+            TeleportWithinMap(client, hospital.Position);
+        }
+
+        /// <summary>Moves a player to a point on their own map, the way the client's teleport expects (see below).</summary>
+        public static void TeleportWithinMap(Client client, System.Numerics.Vector3 position)
+        {
+            var player = client.Player;
+            player.Position = position;
 
             // Actor.BeginTeleport queues the acknowledgement that Recv_Teleport then sends, so it
             // goes first. The hospital's facing is unrecovered: the player keeps their own.
             client.CellCallMethod(client, player.EntityId, new PreTeleportPacket(TeleportType.Default));
             client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
-            client.CallMethod(player.EntityId, new TeleportPacket(hospital.Position, player.Rotation, TeleportType.Default, 0));
+            client.CallMethod(player.EntityId, new TeleportPacket(position, player.Rotation, TeleportType.Default, 0));
 
             // ignoreSelf must be false. The client's Actor.Recv_Teleport does not carry the body anywhere: it
             // blocks movement, runs the post-teleport fade and schedules _TelportMovementCompleted after the
@@ -298,7 +305,7 @@ namespace Rasa.Managers
             // where the server logged "Blizz respawns at hospital 20000001" and the recruit stayed at the
             // Thrax that killed them. The waypoint teleport (DynamicObjectManager) has always passed false here.
             client.CellMoveObject(client, new MoveObjectMessage(player.EntityId,
-                new Movement(hospital.Position, 0f, 0, new Vector2((float)player.Rotation, 0f))), false);
+                new Movement(position, 0f, 0, new Vector2((float)player.Rotation, 0f))), false);
         }
 
         /// <summary>

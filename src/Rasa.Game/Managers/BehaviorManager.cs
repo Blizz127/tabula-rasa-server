@@ -801,6 +801,13 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.AI, $"path 1{creature.Controller.AiPathFollowing.RandomPathNodeBiasXZ[1]}");
         }
 
+        /// <summary>A creature forgets its fight and goes back to what it was doing (Tactical Evasion's cleared hate).</summary>
+        public void DropFight(Creature creature)
+        {
+            if (creature.State != CharacterState.Dead && creature.Controller.CurrentAction == BehaviorActionFighting)
+                SetActionWander(creature);
+        }
+
         private void SetActionWander(Creature creature)
         {
             creature.Controller.CurrentAction = BehaviorActionWander;

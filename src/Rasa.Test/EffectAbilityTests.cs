@@ -272,6 +272,67 @@ namespace Rasa.Test
             Assert.AreEqual(100000, far.Attributes[Attributes.Health].Current, "outside the 15 m radius");
         }
 
+        private void Ranger(int pump)
+        {
+            _client.Player.Class = 5;
+            _client.Player.Skills[(SkillId)54] = new SkillsData((SkillId)54, 10000005, pump);
+            _client.Player.Logos.AddRange(LogosFor(10000005));
+        }
+
+        [TestMethod]
+        public void TacticalEvasionPumpOneMakesTheEnemiesAroundForgetTheRanger()
+        {
+            Ranger(1);
+            var row = Row(10000005, "abilities.tacticalevasion", 400, 400, 60);
+            row.Properties[AbilityProperty.RadiusAroundSource] = 10;
+            row.Properties[AbilityProperty.EffectDurationMs] = 5000;
+            var hunter = Creature(new Vector3(5, 0, 0));
+            BehaviorManager.Instance.SetActionFighting(hunter, _client.Player.EntityId);
+            Assert.AreEqual(BehaviorManager.BehaviorActionFighting, hunter.Controller.CurrentAction);
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(10000005, null)));
+            Advance(400);
+            Assert.AreNotEqual(BehaviorManager.BehaviorActionFighting, hunter.Controller.CurrentAction, "its hate is cleared");
+            Assert.IsTrue(hunter.ActiveEffects.Values.Any(e => e.TypeId == AbilityEffects.MagFlashType));
+            CollectionAssert.AreEqual(new[] { hunter.EntityId },
+                Drain().OfType<Packets.MapChannel.Server.PerformRecovery.IdListRecovery>().Single().Ids.ToArray());
+        }
+
+        [TestMethod]
+        public void TacticalEvasionPumpTwoScreensTheRangerFromRangedDamage()
+        {
+            Ranger(2);
+            var row = Row(10000005, "abilities.tacticalevasion", 400, 400, 60, 2);
+            row.Properties[AbilityProperty.EffectRadius] = 5;
+            row.Properties[AbilityProperty.EffectModifier] = 30;
+            row.Properties[AbilityProperty.EffectDurationMs] = 10000;
+            row.Properties[AbilityProperty.EffectIntervalMs] = 1000;
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(10000005, null, 2)));
+            Advance(400);
+            Assert.AreEqual(70, DamageModifiers.ThroughSmoke(_client.Player, 100, melee: false), "ranged damage -30%");
+            Assert.AreEqual(100, DamageModifiers.ThroughSmoke(_client.Player, 100, melee: true), "a melee swing is not ranged");
+            for (var second = 0; second < 10; second++)
+                GameEffectManager.Instance.DoWork(_map, 1000);
+            Assert.AreEqual(100, DamageModifiers.ThroughSmoke(_client.Player, 100, melee: false), "the screen has lifted");
+        }
+
+        [TestMethod]
+        public void TacticalEvasionPumpFiveReturnsTheRangerWhenTheRetreatRunsOut()
+        {
+            Ranger(5);
+            var row = Row(10000005, "abilities.tacticalevasion", 400, 400, 60, 5);
+            row.Properties[AbilityProperty.EffectDurationMs] = 60000;
+            _client.Player.Position = new Vector3(1, 2, 3);
+
+            Assert.IsTrue(_actions.TryStartDamageAbility(_client, Request(10000005, null, 5)));
+            Advance(400);
+            _client.Player.Position = new Vector3(50, 2, 50);
+            for (var second = 0; second < 60; second++)
+                GameEffectManager.Instance.DoWork(_map, 1000);
+            Assert.AreEqual(new Vector3(1, 2, 3), _client.Player.Position);
+        }
+
         private static IEnumerable<uint> LogosFor(int abilityId)
         {
             var field = typeof(AbilityRequirements).GetField("RequiredLogos", BindingFlags.NonPublic | BindingFlags.Static);

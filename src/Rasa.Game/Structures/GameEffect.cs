@@ -29,6 +29,8 @@
         public int AttributeBonus { get; set; }
         /// <summary>Shield Extender (SHIELDED): the shield pool this holder draws on, shared with the squad under it.</summary>
         public ShieldPool Shield { get; set; }
+        /// <summary>Tactical Evasion's smoke screen: percent taken off incoming ranged damage.</summary>
+        public int RangedReductionPercent { get; set; }
     }
 
     /// <summary>A shield bubble: the percent of each hit it takes, and how much it has left before it breaks.</summary>

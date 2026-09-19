@@ -137,7 +137,8 @@ namespace Rasa.Managers
             // conversion the client's own shared/damageresistance.pyo uses (Deployment 14's diminishing returns:
             // resistance / (resistance + 50)). A missile with no damage type, or a target with no resistance of
             // that type, takes it in full.
-            var damage = DamageModifiers.ThroughShield(actor, missile.DamageA);
+            var damage = DamageModifiers.ThroughShield(actor,
+                DamageModifiers.ThroughSmoke(actor, missile.DamageA, missile.ActionId == ActionId.WeaponMelee));
             if (actor is Manifestation target)
             {
                 var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType) + DamageModifiers.ResistRating(target);

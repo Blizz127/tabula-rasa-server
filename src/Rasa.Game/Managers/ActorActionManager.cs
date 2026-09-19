@@ -323,6 +323,15 @@ namespace Rasa.Managers
                     case "abilities.scourge":
                         AbilityEffects.Scourge(map, player, info, _damageRandom);
                         break;
+                    case "abilities.tacticalevasion":
+                        var evaded = AbilityEffects.TacticalEvasion(map, client, info);
+                        CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.IdListRecovery(
+                            action.ActionId, action.ActionArgId, evaded));
+                        client.CallMethod(player.EntityId, new ActionReuseTimesPacket(new[]
+                        {
+                            (action.ActionId, Math.Max(0, execution.ReuseEndsAt - now))
+                        }));
+                        return;
                     case "abilities.reconstruction":
                         var entries = AbilityEffects.Reconstruction(map, client, info, _damageRandom);
                         CellManager.Instance.CellCallMethod(map, player, new Packets.MapChannel.Server.PerformRecovery.EffectListRecovery(

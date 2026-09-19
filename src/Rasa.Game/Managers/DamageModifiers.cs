@@ -32,6 +32,15 @@ namespace Rasa.Managers
             return damage - absorbed;
         }
 
+        /// <summary>Smoke screen: ranged hits (anything but a melee swing) lose the holder's reduction percent.</summary>
+        public static int ThroughSmoke(Actor target, int damage, bool melee)
+        {
+            if (melee || target == null)
+                return damage;
+            var reduction = System.Math.Min(100, target.ActiveEffects.Values.Sum(effect => effect.RangedReductionPercent));
+            return reduction == 0 ? damage : damage * (100 - reduction) / 100;
+        }
+
         public static int ResistRating(Actor target)
             => target?.ActiveEffects.Values.Sum(effect => effect.ResistRating) ?? 0;
     }
