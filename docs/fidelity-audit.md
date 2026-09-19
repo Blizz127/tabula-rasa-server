@@ -146,11 +146,45 @@ numbers from its row):
 | Fire Support (387) | a strike after `DELAY_TIME_MS` on a point or target; stun or a napalm pool by pump | which strike effect goes with which pump |
 | Cure (186) | cleanse, debuff guard for `DURATION`, resuscitation at `ATTRIBUTE_MAX_CHANGE`% beside the biotechnician | trauma is not a debuff it removes |
 
-Still open (**GAP-CLASS-ABILITIES**): the 36 player abilities that are not direct damage — each its own client
-module, and most a system this server does not have (summons, clones, pets, mind control, stealth, shields, heals
-over time, weapon enhancement). They are refused as before. The ability system on
-`ellimist/development` covers the same damage family and Sprint and no more; merging the rest of that branch
-stays an owner decision.
+Tier 4, the same way (effect types, recovery shapes and tooltip names from the client; numbers from the row):
+
+| Ability | What it does here | Inferred / not acted on |
+| --- | --- | --- |
+| Reflection (177) | `DAMAGE_PERCENT` of a hit of a reflected type back at the attacker; types accumulate over the pumps | — |
+| Conversion (233) | +`DAMAGE_PERCENT` taken; `HEAL_PERCENT` of each hit heals the squad in `EFFECT_RADIUS` | — |
+| Shield Wave (305) | each in radius absorbs `EFFECT_MODIFIER` (level-scaled) | — |
+| Regeneration Wave (193) | +`ATTRIBUTE_PERCENT` regeneration for the squad | — |
+| Resistance (386) | aura of `RESIST_MODIFIER` rating for the squad | — |
+| Disease (246) | −attribute %, or no regeneration / no healing | creature attributes are shown, not felt |
+| Viral Conversion (187) | the medic's virulent damage becomes the row's type | — |
+| Sacrifice (385) | ±damage %, ±resistance rating, threat turns creatures on the grenadier | threat as turning (no threat list); held until used again |
+| Self Destruct (267) | blast in `EFFECT_RADIUS` when it ends or is used again, then back to the mark | the user's own damage (not in the row) |
+| Scatterbombs (232) | every hostile within scatter + burst | the reach as their sum; crit proficiency |
+| Shredder Ammo (390) | +`DAMAGE_AMOUNT` of its type on weapon hits once per interval | 1 s interval |
+| Called Shot (430) | marks; the next hit springs leg / arm / chest / eye / head | that the next hit springs it |
+| Controlled Fission (381) | burst around the target after `DELAY_TIME_MS` | the damage threshold (not in the row) |
+| Explosive Nanites (383) | `USE_COUNT` explosions, one per hit taken | `USE_DROPOFF` as % weaker each |
+| Polarity Field (388) | negative rating on one type, the client's (100 − r)/100 | rating × pump |
+| Feedback (298) | a marked creature takes damage each time it attacks | creatures neither heal nor use items |
+| Reality Ripper (301) | pulls and damages every `INTERVAL` around its point | pull strength (halfway); the rip is not a destroyable object |
+| Cloak Wave (252) | the squad is invisible to creature targeting until they act | speed reduction (not in the row) |
+| Traitor (393), Hack (303) | the creature is AFS for `DURATION`, fighting its former allies | — |
+| Mind Control (304) | flee / random / allies / assist, re-decided every `INTERVAL` | pump 5's spread to attackers |
+| Cadaver Immolation (251) | a corpse bursts after `DELAY` | — |
+| Reanimation (240), Wave (176) | biological corpses stand up on the user's side for `DURATION` | — |
+| Paint Target (295) | `EFFECT_ARMOR_PIERCE_PERCENT` of each hit past the armour | cover and armour recharge have nothing to act on |
+
+Still open (**GAP-CLASS-ABILITIES**), ten abilities:
+
+- **Turret, Bot Construction, Base Wave, Trap, Crab Mines, Spotter, Hortimunculus, Polymorph** summon or become a
+  creature named by `CREATURE_VARIANT_ID` — an index into the original server's creature-variant table, which no
+  recovered source holds (the fan server dump's `creature_type` has 21 rows, ids 1–21). Building them needs that
+  table or an owner decision to use analogue creatures.
+- **Create Clone** needs a creature that copies the player and their attacks.
+- **Crit Wave** raises critical-hit chance; this server rolls no critical hits at all, and the original crit rules
+  are not recorded. That is a combat system of its own (**GAP-CRITICAL-HITS**).
+
+Chaff (175) is granted by no skill and is not a class ability.
 
 ### Weapons
 

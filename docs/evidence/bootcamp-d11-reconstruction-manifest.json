@@ -52939,13 +52939,13 @@
   },
   {
    "id": "GAP-CLASS-ABILITIES",
-   "summary": "Narrowed 2026-09-19. The client's action tables are loaded (Ellimist's 474d1ce, cherry-picked; every row checked against the decoded client: 1,813 levels, 405 costs, 4,259 properties). The class damage abilities now resolve from them through the same lifecycle Lightning uses - windup, cost, reuse and recovery from the ability's own row, damage from DAMAGE_AMOUNT_MIN/MAX scaled by DAMAGE_SCALE_TYPE, targets from RADIUS_AROUND_SOURCE / RADIUS_AROUND_TARGET / CONE_RADIUS, one DamageBase recovery listing every hit: Force Blast (158), Shrapnel (178), Tectonic Strike (229), Vortex (231), Rushing Blow (302), Explosive Wave (137) and Concussive Wave (234). Their stuns (STUN_CHANCE/STUN_DURATION, the client's STUN effect 86) and knockbacks (KNOCKBACK_DISTANCE under the KNOCKBACK effect 8; direction and pathing inferred) are applied, and cones use CONE_RADIUS as the angle it is in client/targeting.py over the ability's range (half-width inferred). Lightning ranks 4-5 now stun as their row says. Ruin (162) and Rage (307) are built as the effect abilities they are on the client: Ruin attaches DECAY (82) and ticks DAMAGE_AMOUNT every INTERVAL for DURATION through GameEffectTick, as its tooltip says; Rage toggles RAGESOURCE (236), pulsing RAGE (235) onto the soldier and, where the row has a radius, the squad, adding DAMAGE_PERCENT to their damage and RESIST_MODIFIER to their resistance rating. Bio Augmentation, Scourge, Shield Extender, Reconstruction, Tactical Evasion, Fire Support and Cure are built on their client contracts (docs/fidelity-audit.md lists what each reads and what is inferred). Still open: the 36 player abilities that are not direct damage, each its own client module and most a system this server lacks (summons, clones, pets, mind control, stealth, shields, heals over time, weapon enhancement): Chaff (175), Reanimation Wave (176), Reflection (177), Hortimunculus (185), Viral Conversion (187), Regeneration Wave (193), Turret (197), Scatterbombs (232), Conversion (233), Reanimation (240), Disease (246), Cadaver Immolation (251), Cloak Wave (252), Create Clone (253), Base Wave (260), Bot Construction (262), Self Destruct (267), Crit Wave (281), Crab Mines (282), Paint Target (295), Feedback (298), Reality Ripper (301), Hack (303), Mind Control (304), Shield Wave (305), Controlled Fission (381), Explosive Nanites (383), Trap (384), Sacrifice (385), Resistance (386), Polarity Field (388), Spotter (389), Shredder Ammo (390), Polymorph (392), Traitor (393), Called Shot (430). They are refused as before.",
+   "summary": "Narrowed 2026-09-19. Every player class ability now resolves from the client's own action tables (Ellimist's 474d1ce, verified row for row) except ten. Built, each on its client module's contract (effect type ids, recovery hitdata shape, tooltip value names) with the numbers from its row: the direct-damage family (Force Blast, Shrapnel, Tectonic Strike, Vortex, Rushing Blow, Explosive and Concussive Wave) with stuns, knockbacks and cones; Ruin, Rage, Bio Augmentation, Scourge, Shield Extender, Reconstruction, Tactical Evasion, Fire Support, Cure; Reflection, Conversion, Shield Wave, Regeneration Wave, Resistance, Disease, Viral Conversion, Sacrifice, Self Destruct, Scatterbombs, Shredder Ammo, Called Shot, Controlled Fission, Explosive Nanites, Polarity Field, Feedback, Reality Ripper, Cloak Wave, Traitor, Cadaver Immolation, Hack, Mind Control, Reanimation, Reanimation Wave, Paint Target. Inferred parts are named in docs/fidelity-audit.md. Not built: Turret (197), Bot Construction (262), Base Wave (260), Trap (384), Crab Mines (282), Spotter (389), Hortimunculus (185) and Polymorph (392) summon or become a creature by CREATURE_VARIANT_ID, an index into the original server's creature-variant table, which no recovered source holds (the fan server dump's creature_type has 21 rows, ids 1-21); Create Clone (253) needs a creature that copies the player and its attacks; Crit Wave (281) raises crit chance, and this server rolls no critical hits - the original crit rules are not recorded. Chaff (175) is granted by no skill. Partial: Mind Control pump 5's spread to attackers, Cloak Wave's speed reduction, Controlled Fission's damage threshold, Scatterbombs' crit proficiency and Paint Target's cover and armour recharge have nothing recorded or nothing to act on.",
    "evidence": [
     "client generated/client/actiondata.pyo abilityData (1,084 rows)",
     "client generated/client/skilldata.pyo (73 skills)",
     "client/actions/abilities/damagebase.pyo DoAbility: hitdata[i] = (rawInfo, data); no DamageBase module reads data"
    ],
-   "closes_with": "per ability, the client ability module plus its abilityData row, built and tested one class at a time",
+   "closes_with": "the creature-variant table (or an owner decision on analogue creatures) for the eight variant abilities; a crit system with its rules for Crit Wave; a clone creature for Create Clone",
    "slices": [
     "W2",
     "W3"
@@ -53016,6 +53016,31 @@
    ],
    "slices": [
     "S7",
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-CRITICAL-HITS",
+   "summary": "The server never rolls a critical hit: HitData.IsCritical is always 0. The client has crit effects, crit deaths (RequestCritDeathFinish), crit tooltips and the Spirit crit bonus, but the chance formula and the damage multiplier were the original server's and are not recorded. Crit Wave and Scatterbombs' proficiency depend on it.",
+   "evidence": [
+    "client gameeffectdata CRIT_* effects, CRITWAVEEFFECT; methodid RequestCritDeathFinish",
+    "ManifestationManager's unused critBonusPercent"
+   ],
+   "closes_with": "a recovered crit rule, or an owner decision on an inferred one",
+   "surfaced_by": [
+    "1:1 fidelity audit, Crit Wave, 2026-09-19"
+   ],
+   "slices": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "W1",
+    "W2",
     "W3"
    ]
   }
