@@ -100,6 +100,15 @@ namespace Rasa.Networking
         /// and its state has to advance in the same order the bytes go out, so Send does that work
         /// under the same lock that fixes the order.
         /// </summary>
+        /// <summary>
+        /// Guards the one-receive-per-socket rule (InfiniteRasa 492954a). <see cref="ReceiveAsync()"/> explains why
+        /// it matters; these two say where this socket is: dispatching a buffer to its handlers, and whether one of
+        /// those handlers asked for a receive while it was.
+        /// </summary>
+        private readonly object _receiveLock = new object();
+        private bool _receiveDispatching;
+        private bool _receiveDeferred;
+
         private readonly object _sendLock = new object();
         private readonly Queue<SocketAsyncEventArgs> _sendQueue = new Queue<SocketAsyncEventArgs>();
         private bool _sending;
@@ -326,15 +335,46 @@ namespace Rasa.Networking
                 case SocketAsyncOperation.Receive:
                     // This value may change in the middle of processing, causing odd behavior
                     var receiveAfter = AutoReceive;
-                    var result = ProcessInputBuffer(data, args);
 
+                    InputResult result;
+
+                    lock (_receiveLock)
+                        _receiveDispatching = true;
+
+                    try
+                    {
+                        result = ProcessInputBuffer(data, args);
+                    }
+                    finally
+                    {
+                        lock (_receiveLock)
+                            _receiveDispatching = false;
+                    }
+
+                    // A receive is already armed on this args to finish a partial frame. Any deferred request
+                    // keeps until that frame lands, which is the pass that decides whether to arm again.
                     if (result == InputResult.Reading)
                         return Completion.Pending;
 
+                    bool deferred;
+
+                    lock (_receiveLock)
+                    {
+                        deferred = _receiveDeferred;
+                        _receiveDeferred = false;
+                    }
+
                     // A broken stream gets its buffer back but no new receive: there is
-                    // nothing left to read that could be made sense of.
-                    if (result == InputResult.Consumed && receiveAfter)
-                        ReceiveAsync();
+                    // nothing left to read that could be made sense of. That beats a handler's request too -
+                    // the handover it belonged to is moot on a connection being dropped.
+                    if (result != InputResult.Consumed)
+                        return Completion.Released;
+
+                    // Otherwise a handler that took the socket over mid-dispatch and asked for a receive gets
+                    // one, whatever AutoReceive says: AutoReceive was read before the handover and describes
+                    // the owner this socket no longer has.
+                    if (deferred || receiveAfter)
+                        StartReceive();
 
                     return Completion.Released;
 
@@ -580,7 +620,31 @@ namespace Rasa.Networking
                 OperationCompleted(Socket, args);
         }
 
+        /// <summary>
+        /// Arms a receive, unless this socket is already inside one (InfiniteRasa 492954a).
+        ///
+        /// One receive is in flight per socket, and everything downstream depends on it: bytes from a connection
+        /// have to reach its owner in the order they arrived, and two completions on one socket can run on two IOCP
+        /// threads at once. The completion path keeps to that by only re-arming after it has finished dispatching,
+        /// but a *handler* can call this from inside that dispatch - the login exchange hands the socket to the game
+        /// client, whose RegisterAtServer arms a receive of its own while the frame loop it was called from is still
+        /// running. So a request made mid-dispatch is remembered and honoured as the dispatch unwinds.
+        /// </summary>
         public void ReceiveAsync()
+        {
+            lock (_receiveLock)
+            {
+                if (_receiveDispatching)
+                {
+                    _receiveDeferred = true;
+                    return;
+                }
+            }
+
+            StartReceive();
+        }
+
+        private void StartReceive()
         {
             var args = SetupEventArgs(SocketAsyncOperation.Receive);
 

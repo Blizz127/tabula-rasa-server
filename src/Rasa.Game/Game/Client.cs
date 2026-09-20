@@ -582,6 +582,20 @@ namespace Rasa.Game
             }
         }
 
+        /// <summary>
+        /// Hands the inbound stream's pooled arrays back (InfiniteRasa 492954a). Anything drained into it but not
+        /// yet decoded - a partial frame, which is what every Alt+F4 leaves behind - is held by arrays only Dispose
+        /// returns, so the shared pool lost a block on each of those disconnects. DiscardPendingChunks covers the
+        /// other half, the chunks not yet drained.
+        ///
+        /// Called by the map loop when it finally drops the client, not by Close(): Close() runs on socket threads
+        /// too, and this stream belongs to the loop that decodes it.
+        /// </summary>
+        internal void ReleaseInboundBuffers()
+        {
+            _incomingDataQueue.Dispose();
+        }
+
         private IEnumerable<ProtocolPacket> DecodeIncomingPackets()
         {
             // A skipped packet (out of order, or the untyped send-timeout check) used to come
