@@ -55291,6 +55291,164 @@
      "reasoning": "the client's conversation rows name the package the objective completes through."
     }
    }
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "key": {
+    "mission_id": 2005,
+    "objective_id": 1,
+    "indicator_index": 0
+   },
+   "slice": "S5",
+   "migration": "BootcampRetryIndicators",
+   "fields": {
+    "indicator_id": {
+     "value": 432,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "missionobjectiveindicatorlanguage 432, the id 1995's own objective carries"
+      }
+     ],
+     "reasoning": "the indicator id 1995's own objective carries; 1995's is inferred too"
+    },
+    "pos_x": {
+     "value": -223.26,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.1.432"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 100.72,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.1.432"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": -65.7,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.1.432"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "show_3d": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "the retry repeats 1995's objective, which carries this flag"
+      }
+     ],
+     "reasoning": "as 1995's own objective carries it; the retry repeats the objective"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_indicator",
+   "key": {
+    "mission_id": 2005,
+    "objective_id": 4,
+    "indicator_index": 0
+   },
+   "slice": "S5",
+   "migration": "BootcampRetryIndicators",
+   "fields": {
+    "indicator_id": {
+     "value": 438,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "missionobjectiveindicatorlanguage 438, the id 1995's own objective carries"
+      }
+     ],
+     "reasoning": "the indicator id 1995's own objective carries; 1995's is inferred too"
+    },
+    "pos_x": {
+     "value": -225.53,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.4.438"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 100.8,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.4.438"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": -69.81,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "indicator.1995.4.438"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "show_3d": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "the retry repeats 1995's objective, which carries this flag"
+      }
+     ],
+     "reasoning": "as 1995's own objective carries it; the retry repeats the objective"
+    }
+   }
   }
  ],
  "omitted": [

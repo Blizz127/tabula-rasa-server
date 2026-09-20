@@ -946,7 +946,10 @@ namespace Rasa.Test
                     retry.Prerequisites.Select(prerequisite => (prerequisite.OrGroup, prerequisite.RequiredMissionId, prerequisite.RequiredState)).ToArray());
                 Assert.IsTrue(retry.HasObjectiveConversation(4, 2564, 1));
                 Assert.AreEqual(198514u, retry.MissionReciver);
-                Assert.AreEqual(0, retry.Indicators.Count);
+                // Both waypoints, since BootcampRetryIndicators: the wreck for objective 1 and Van Valkenberg for 4, the
+                // places 1995's own indicators point at. Without them the retry's timer ran with nothing to walk towards.
+                CollectionAssert.AreEquivalent(new[] { (1u, 432u), (4u, 438u) },
+                    retry.Indicators.SelectMany(entry => entry.Value).Select(indicator => (indicator.ObjectiveId, indicator.IndicatorId)).ToArray());
 
                 // The usables and their conditions: the corpse while (1995,3) is open, the bomb while the dropship stands and one
                 // of the bomb objectives is open (armed again after a rebuild while planted), the wreck open once destroyed.
