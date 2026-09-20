@@ -227,8 +227,9 @@ weapon classes carry `range_type` 0 and zero overrides in every row, so nothing 
 
 ## Still to audit
 
-1. **Placed NPCs and their dialogue packages**: nine objectives left (GAP-W3-UNBOUND-CONVERSATION-PACKAGE), each
-   waiting on a source that places its speaker. GAP-W3-MISASSIGNED-PACKAGE is closed.
+1. **Placed NPCs and their dialogue packages**: three objectives left (GAP-W3-UNBOUND-CONVERSATION-PACKAGE) — an
+   analyser's readout, an unnamed villager and an Eloh artifact. GAP-W3-MISASSIGNED-PACKAGE and
+   GAP-W3-TARAPEDIA-GIVERS are closed.
 
 Done since: **class abilities** — all 53 abilities an active skill grants (`AbilityRequirements.RequiredLogos`,
 the client's logos sequences) resolve through a server handler: direct damage, a game effect, or Sprint's own
@@ -277,7 +278,7 @@ Every NPC and mission the content work created, checked field by field against i
 | NPC position, 69 with a page | **1 differs by more than 8 m**: Rogers again, 14.3 m — ours is measured from the same footage; the page's point is where the world seed's own (never-spawning) Rogers sits. Kept. |
 | Mission experience, 77 missions | **all match** |
 | Mission credits | **all match** |
-| Mission giver and reward giver | **41 differ**; 18 corrected below, 23 name NPCs the world does not have (**GAP-W3-TARAPEDIA-GIVERS**) |
+| Mission giver and reward giver | **41 differ**; all corrected — 18 moved to an NPC already standing, and the other 23 name NPCs that are now created |
 
 The client's tables record no giver or receiver — that is why these were reconstructed — and each was taken from
 the NPC whose dialogue package completes an objective, or from the NPC the last objective's text names. Neither is
@@ -289,6 +290,26 @@ Incommunicado to Colonel Bosley; A Tale of Two Brothers and Key Information to S
 Engineer Tralos; Into the Facility to Sergeant Phenix; Conscientious Objector to Warrior Apirka; Gun Control - Part IV
 to Retread Lou; and Too Close For Comfort to Outpost Commander Rogers, whose row named Council Elder Moawi although its
 own provenance line read "TaRapedia's infobox names Outpost Commander Rogers as the giver".
+
+**TarapediaMissingNpcs** then created the twenty-four NPCs the other mismatches name, so every mission we seed is now
+given and turned in where TaRapedia says. Eighteen stand at their page's own /loc, and each of those readings lands on
+the navmesh floor of the zone the page names — which settles the map as firmly as the zone does: Retread Vincent's
+reading only matches the Marshes, and the Computer Access Terminal's x and z sit twelve metres from Surveyor Miras in
+the Kardash colony while its y matches no floor, so the colony's floor is used.
+
+Six have no page at all and are **labelled guesses**, at the owner's word, placed where the mission's words and the
+client's own markers put them: Field Lt. Perkins at the north-west fortification of the Pravus instance, Base Guard
+Kapler at the Hydro Plant control point, Lieutenant Seguine in Nidu Dav (the village Receptive Liaison Brice's /loc
+locates), Line Capt. Dobbs at the Thoria Das waypoint, Field Lt. McMurray at the Central Trench waypoint (the Western
+Trench is the other candidate) and Rohish at Fort Condor. Each says so in its own row.
+
+Two are machines rather than people — the Operations Mainframe at the Viro Relay Tower and the Computer Access
+Terminal at Research Outpost Alpha — on `UsableNPCCormanComputerV01`, a computer that carries the NPC augmentation and
+so can be spoken to. The terminal is what mission 1112 "Into The Hive" had been waiting for.
+
+Six more dialogue packages are bound with them, leaving **three** objectives open: 442/2 (an analyser's readout, and
+the Duncan in the world speaks for another mission), 451/3 (a villager at Dagdha's Urn no page names) and 1186/1 (an
+Eloh artifact, not a person).
 
 ### Creature flags — fixed
 
