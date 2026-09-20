@@ -137,8 +137,8 @@
   "community_db:ellatha": {
    "kind": "community_db",
    "era": "pre_d11",
-   "url": "https://www.ellatha.com/TR",
-   "locator": "research/20260915-aliadas-hub/work/ellatha-hub-missions.json (mission DB frozen at or before Feb 2008)"
+   "locator": "ellatha.com/TR/npcview.asp - DaOpa's Tabula Rasa fan site NPC database, one page per NPC with a Loc coordinate; harvested 2026-09-20 to research/20260920-ellatha/web",
+   "note": "Community transcription of the live game, not original server data. Corroborated here: of its 71 NPCs, 53 are in this world and 51 stand within 10 m of where it puts them, and every reading used lands within 1.1 m of the navmesh floor."
   },
   "client_table:creature-names": {
    "kind": "client_table",
@@ -57313,18 +57313,22 @@
   },
   {
    "id": "GAP-W3-TIRNA-NAME",
-   "summary": "The world seed's Ranger at Stone Anvil that package 570 belongs to - the one who says \"Yes, I was once called Pundi\" - carries creature name 135, which the client renders 'Ranger Tarina', while every mission text of 682 says 'Ranger Tirna' and the client has that name at 6711. The seed's name is left alone rather than corrected on a guess: the emulator database is supporting evidence, not the original server's, and nothing establishes which name the original creature carried. The player sees 'Ranger Tarina' where the mission says 'Ranger Tirna'.",
+   "summary": "The world seed's Ranger at Stone Anvil that package 570 belongs to - the one who says \"Yes, I was once called Pundi\" - carries creature name 135, which the client renders 'Ranger Tarina', while every mission text of 682 says 'Ranger Tirna' and the client has that name at 6711. The seed's name is left alone rather than corrected on a guess: the emulator database is supporting evidence, not the original server's, and nothing establishes which name the original creature carried. The player sees 'Ranger Tarina' where the mission says 'Ranger Tirna'. Closed 2026-09-20: Ellatha names her Ranger Tirna at this creature's own spawn point, which is a second source for what the mission text says, so creature 99 now carries name 6711.",
    "evidence": [
     "rasaworld.db creature 99 (name 135), spawnpool 177 at (-495.2, 531.7) on the Wilderness",
     "creaturenamelanguage 135 = 'Ranger Tarina', 6711 = 'Ranger Tirna'",
     "missiontextlanguage for 682/5: \"speak to Ranger Tirna\""
    ],
-   "closes_with": "a capture of the NPC at Stone Anvil, or the original creature table",
+   "closes_with": "closed: EllathaNpcPositions",
    "surfaced_by": [
     "WildernessDialogueBinding, 2026-09-17"
    ],
    "slices": [
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -57350,18 +57354,22 @@
   },
   {
    "id": "GAP-W3-SAVIOURS-SON-POSITION",
-   "summary": "421 \"A Father's Goodbye\" is completable since WildernessDialogueBinding, but the player will not find its NPC where the mission sends them. The client's text says Lt. Saviours' son is \"somewhere on the far side of the Lower Eloh Creek bridge\" - the creek is around (385, 190) to (508, 227) - while the world seed spawns Information Spec. Saviours (creature 116, spawnpool 194) at (-758, 175, -278), at Ranja Gorge, about 1.2 km away and next to Dr. Eleanor Corman. The eleven other NPCs bound in the same batch all stand where their mission text says. The binding itself is not in doubt - 3074 is the only other Saviours the client names - so this is the seed's spawn position disagreeing with the client's text, and the seed's is left alone because nothing establishes the original.",
+   "summary": "421 \"A Father's Goodbye\" is completable since WildernessDialogueBinding, but the player will not find its NPC where the mission sends them. The client's text says Lt. Saviours' son is \"somewhere on the far side of the Lower Eloh Creek bridge\" - the creek is around (385, 190) to (508, 227) - while the world seed spawns Information Spec. Saviours (creature 116, spawnpool 194) at (-758, 175, -278), at Ranja Gorge, about 1.2 km away and next to Dr. Eleanor Corman. The eleven other NPCs bound in the same batch all stand where their mission text says. The binding itself is not in doubt - 3074 is the only other Saviours the client names - so this is the seed's spawn position disagreeing with the client's text, and the seed's is left alone because nothing establishes the original. Closed 2026-09-20: Ellatha's NPC database puts Information Spec. Savious at 158, 172, 212 in the Wilderness, on the navmesh floor, and names 421 as his mission.",
    "evidence": [
     "missiontextlanguage for 421: \"on the far side of the Lower Eloh Creek bridge\"",
     "rasaworld.db spawnpool 194, creature 116 at (-758, 175, -278) on the Wilderness",
     "uimapmarker region label \"Lower Eloh Creek\" at (385.4, 228.4, 190.7)"
    ],
-   "closes_with": "a capture or a source giving the original spawn point for this NPC",
+   "closes_with": "closed: EllathaNpcPositions",
    "surfaced_by": [
     "test-itinerary check, 2026-09-18"
    ],
    "slices": [
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -59441,6 +59449,86 @@
     {
      "source": "client_map:adv_arieki_ligo_burningsteps",
      "locator": "ArchHumDropshipLandingpad, Dropship Transport marker"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "EllathaNpcPositions",
+   "table": "content_placement",
+   "key": {
+    "id": 199008
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "(-308, 16.26, -107), a guess at the Pravus north-west fortification",
+   "new": "(-77, 31.74, 176)",
+   "reason": "Field Lt. Perkins was placed as a labelled guess because no page gave a position. Ellatha's NPC database does, and its reading lands on the navmesh floor.",
+   "citations": [
+    {
+     "source": "community_db:ellatha",
+     "locator": "npcview.asp, Field Lt. Perkins"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "EllathaNpcPositions",
+   "table": "content_placement",
+   "key": {
+    "id": 199011
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "(-770, 179.37, 612), a guess from Brice’s Nidu Dav /loc",
+   "new": "(-556, 162.12, 426)",
+   "reason": "Lieutenant Seguine was placed as a labelled guess because no page gave a position. Ellatha's NPC database does, and its reading lands on the navmesh floor.",
+   "citations": [
+    {
+     "source": "community_db:ellatha",
+     "locator": "npcview.asp, Lieutenant Seguine"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "EllathaNpcPositions",
+   "table": "spawnpool",
+   "key": {
+    "id": 194
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "(-757.62, 175.04, -277.93), Ranja Gorge",
+   "new": "(158, 172.75, 212)",
+   "reason": "421 sends the player to Lt. Saviours' son across the Lower Eloh Creek bridge and the seed spawned him a kilometre away at Ranja Gorge. Ellatha puts Information Spec. Savious in the Wilderness and names the same mission.",
+   "citations": [
+    {
+     "source": "community_db:ellatha",
+     "locator": "npcview.asp, Information Spec. Savious"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "421 objective text"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "EllathaNpcPositions",
+   "table": "creature",
+   "key": {
+    "id": 99
+   },
+   "field": "name_id",
+   "old": 135,
+   "new": 6711,
+   "reason": "Client name 135 renders 'Ranger Tarina' while every mission text of 682 says 'Ranger Tirna', which the client also has at 6711. Ellatha names her Ranger Tirna at this creature's own spawn point, so the mission text is not alone any more.",
+   "citations": [
+    {
+     "source": "community_db:ellatha",
+     "locator": "npcview.asp, Ranger Tirna, -495 216 532"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "135 'Ranger Tarina'; 6711 'Ranger Tirna'"
     }
    ]
   }
