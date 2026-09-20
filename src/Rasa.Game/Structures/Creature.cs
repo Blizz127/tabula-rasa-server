@@ -67,6 +67,25 @@ namespace Rasa.Structures
         // creature actions
         public List<CreatureAction> Actions = new List<CreatureAction>();
 
+        /// <summary>
+        /// The player this creature belongs to, or 0 for an ordinary world creature (InfiniteRasa 492954a).
+        ///
+        /// Set, a creature is a minion: it takes commands from that player, follows them rather than wandering a
+        /// spawn point, and goes away when they do. The client is never told this - it has no concept of which
+        /// entity is its minion, and the ack packets carry the minion's entity id purely so the message text can
+        /// name it.
+        /// </summary>
+        public ulong MasterEntityId { get; set; }
+
+        /// <summary>Whether this minion fights back, goes looking, or does neither.</summary>
+        public MinionStance Stance { get; set; } = MinionStance.Defensive;
+
+        /// <summary>
+        /// Milliseconds of life left, counted down by MinionManager. Zero means no timer, which is what a
+        /// GM-spawned test minion gets; a summoned one has the ability's duration.
+        /// </summary>
+        public long DespawnTime { get; set; }
+
         // creature tumers
         public long LastAgression { get; internal set; }
         public long LastRestTime { get; internal set; }

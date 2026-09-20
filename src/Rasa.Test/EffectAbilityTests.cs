@@ -942,6 +942,48 @@ namespace Rasa.Test
         }
 
         [TestMethod]
+        public void TheBotSpotterAndCloneBecomeMinionsThatFollowTheirOwner()
+        {
+            var player = _client.Player;
+            var summoned = new List<Creature>();
+            AbilityEffects.SpawnOverride = (map, template, at, level) =>
+            {
+                var creature = Creature(at);
+                creature.Level = level;
+                creature.Cells = new uint[5, 5];   // RemoveCreatureFromWorld reads the middle of the grid
+                summoned.Add(creature);
+                return creature;
+            };
+            try
+            {
+                var row = Row(262, "abilities.botconstruction", 2100, 700, 30);
+                row.Properties[AbilityProperty.CreatureLifetimeMs] = 60000;
+                row.Properties[AbilityProperty.CreatureLevelDifference] = 0;
+                AbilityEffects.BotConstruction(_map, player, row);
+
+                var bot = summoned.Single();
+                Assert.AreEqual(player.EntityId, bot.MasterEntityId, "the bot belongs to the player who built it");
+                Assert.AreEqual(MinionStance.Defensive, bot.Stance, "subordinates enter the world Defensive");
+                Assert.AreEqual(BehaviorManager.BehaviorActionFollow, bot.Controller.CurrentAction, "and follow their master");
+                Assert.AreEqual(player.EntityId, bot.Controller.ActionFollow.FollowTargetId);
+                CollectionAssert.Contains(MinionManager.Instance.MinionsOf(_client).ToArray(), bot);
+
+                // A turret is put somewhere and stays there; it takes no orders.
+                var turretRow = Row(197, "abilities.turret", 2000, 600, 25);
+                turretRow.Properties[AbilityProperty.Duration] = 60;
+                turretRow.Properties[AbilityProperty.DamageAmountMin] = 50;
+                turretRow.Properties[AbilityProperty.DamageAmountMax] = 60;
+                AbilityEffects.Turret(_map, player, null, turretRow);
+                Assert.AreEqual(0UL, summoned.Last().MasterEntityId, "a turret is not a subordinate");
+            }
+            finally
+            {
+                AbilityEffects.SpawnOverride = null;
+                MinionManager.Instance.DismissAll(_client);
+            }
+        }
+
+        [TestMethod]
         public void PolymorphHidesTheSpyFromCreaturesAndBaseWaveAddsResistance()
         {
             var poly = Row(392, "abilities.polymorph", 2499, 466, 0);

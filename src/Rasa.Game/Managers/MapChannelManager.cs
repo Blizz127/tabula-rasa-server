@@ -336,6 +336,9 @@ namespace Rasa.Managers
                     MissileManager.Instance.DoWork(mapChannel, delta);
                     BehaviorManager.Instance.MapChannelThink(mapChannel, delta);
 
+                    // despawn timers, and minions whose master has gone (InfiniteRasa 492954a)
+                    MinionManager.Instance.Worker(mapChannel, delta);
+
                     // regeneration, and players whose combat has lapsed
                     ManifestationManager.Instance.RegenWorker(mapChannel, delta);
 
@@ -662,6 +665,11 @@ namespace Rasa.Managers
 
             if (registered)
                 ManifestationManager.Instance.StopAutoFire(client);
+            // Before the player leaves the cells, while their minions can still be told to go: "Player-controlled
+            // subordinates will teleport with their masters, but not change maps." Leaving the map is leaving them
+            // behind, so they are dismissed, not orphaned. (InfiniteRasa 492954a)
+            MinionManager.Instance.DismissAll(client);
+
             CellManager.Instance.RemoveFromWorld(client);
             MapLinkManager.Instance.RemovePlayer(client);
             RegionManager.Instance.RemovePlayer(client);

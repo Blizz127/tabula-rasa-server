@@ -1356,7 +1356,14 @@ namespace Rasa.Managers
         /// Spawns a stand-in beside the player - "Only 1 ... can be active at a time", so a new one of the same kind
         /// replaces the old - and removes it when its time is up.
         /// </summary>
-        public static Creature Summon(MapChannel map, Manifestation owner, string kind, uint template, Vector3 at, int lifetimeMs, int levelDifference)
+        /// <param name="commandable">
+        /// Whether the client may command it. The game calls these subordinates and its own Command System help
+        /// names the three that can be ordered about - "Create Clone, Spotter, and Bot Construction" - so those
+        /// three are adopted as minions (InfiniteRasa 492954a) and follow their owner; a turret, a trap and a crab
+        /// mine stay where they are put. The lifetime stays with the timer below, so Adopt is given none.
+        /// </param>
+        public static Creature Summon(MapChannel map, Manifestation owner, string kind, uint template, Vector3 at, int lifetimeMs, int levelDifference,
+            bool commandable = false)
         {
             if (Summons.TryGetValue((owner.EntityId, kind), out var previous))
                 Unsummon(map, previous);
@@ -1366,6 +1373,14 @@ namespace Rasa.Managers
             if (summon == null)
                 return null;
             Summons[(owner.EntityId, kind)] = summon;
+
+            if (commandable)
+            {
+                var master = map.ClientList.FirstOrDefault(client => client?.Player == owner);
+                if (master != null)
+                    MinionManager.Instance.Adopt(master, summon);
+            }
+
             GameEffectManager.Instance.AttachServerTimer(map, summon, lifetimeMs, _ =>
             {
                 Summons.Remove((owner.EntityId, kind));
@@ -1441,11 +1456,11 @@ namespace Rasa.Managers
 
         /// <summary>Bot Construction: "Creates a bot to assist the user in combat for a set time" - the stand-in bot for CREATURE_LIFETIME_MS at the user's level plus CREATURE_LEVEL_DIFFERENCE.</summary>
         public static Creature BotConstruction(MapChannel map, Manifestation engineer, ActionLevelInfo info)
-            => Summon(map, engineer, "bot", BotStandIn, Beside(engineer), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+            => Summon(map, engineer, "bot", BotStandIn, Beside(engineer), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference), commandable: true);
 
         /// <summary>Spotter: "Summons a helper to assist the user in combat for a set time" - the stand-in soldier for CREATURE_LIFETIME_MS.</summary>
         public static Creature Spotter(MapChannel map, Manifestation ranger, ActionLevelInfo info)
-            => Summon(map, ranger, "spotter", SpotterStandIn, Beside(ranger), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+            => Summon(map, ranger, "spotter", SpotterStandIn, Beside(ranger), info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference), commandable: true);
 
         /// <summary>
         /// Create Clone: "Creates a clone of the user to assist in combat for a set time" - a human NPC of the user's gender
@@ -1455,7 +1470,7 @@ namespace Rasa.Managers
         public static Creature CreateClone(MapChannel map, Manifestation exobiologist, ActionLevelInfo info)
         {
             var clone = Summon(map, exobiologist, "clone", exobiologist.Gender == 0 ? CloneMaleStandIn : CloneFemaleStandIn, Beside(exobiologist),
-                info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference));
+                info.Get(AbilityProperty.CreatureLifetimeMs), info.Get(AbilityProperty.CreatureLevelDifference), commandable: true);
             if (clone != null && exobiologist.AppearanceData != null)
             {
                 clone.AppearanceData = new Dictionary<EquipmentData, AppearanceData>(exobiologist.AppearanceData);

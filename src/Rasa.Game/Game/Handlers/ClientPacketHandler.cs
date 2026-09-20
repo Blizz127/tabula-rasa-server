@@ -3,6 +3,7 @@ namespace Rasa.Game.Handlers
     using Data;
     using Managers;
     using Packets;
+    using Packets.Minion.Client;
     using Packets.MapChannel.Client;
     using Packets.Manifestation.Client;
     using Packets.Clan.Client;
@@ -32,6 +33,67 @@ namespace Rasa.Game.Handlers
             Client = client;
         }
         
+        // SendCallActorMethod, which the router does not care about - it dispatches on opcode -
+        // and none of them names the minion, because the client does not know which entity that
+        // is. MinionManager resolves it.
+        //
+        // The client hides every one of these unless the MinionCommands server flag is set, so a
+        // server that has not turned the feature on never sees them.
+
+        [PacketHandler(GameOpcode.MinionAssistMe)]
+        private void MinionAssistMe(MinionAssistMePacket packet)
+        {
+            MinionManager.Instance.AssistMe(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionAssistTarget)]
+        private void MinionAssistTarget(MinionAssistTargetPacket packet)
+        {
+            MinionManager.Instance.AssistTarget(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionCommand)]
+        private void MinionCommand(MinionCommandPacket packet)
+        {
+            MinionManager.Instance.Command(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionFollowMe)]
+        private void MinionFollowMe(MinionFollowMePacket packet)
+        {
+            MinionManager.Instance.FollowMe(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionFollowTarget)]
+        private void MinionFollowTarget(MinionFollowTargetPacket packet)
+        {
+            MinionManager.Instance.FollowTarget(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionGo)]
+        private void MinionGo(MinionGoPacket packet)
+        {
+            MinionManager.Instance.Go(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionStay)]
+        private void MinionStay(MinionStayPacket packet)
+        {
+            MinionManager.Instance.Stay(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionTarget)]
+        private void MinionTarget(MinionTargetPacket packet)
+        {
+            MinionManager.Instance.Target(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.MinionTargetMe)]
+        private void MinionTargetMe(MinionTargetMePacket packet)
+        {
+            MinionManager.Instance.TargetMe(Client, packet);
+        }
+
         [PacketHandler(GameOpcode.AllocateAttributePoints)]
         private void AllocateAttributePoints(AllocateAttributePointsPacket packet)
         {
