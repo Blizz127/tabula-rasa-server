@@ -53842,15 +53842,15 @@
      "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
     },
     "class_id": {
-     "value": 7123,
+     "value": 10642,
      "tier": "analogue",
      "citations": [
       {
        "source": "client_table:game.zip",
-       "locator": "entityclass 7123"
+       "locator": "entityclass 10642 NPC_Hominis_Machina, augmentations [1, 52, 59]"
       }
      ],
-     "counterpart": "the world-seed NPC of the same kind",
+     "counterpart": "the world's own talking machine; the console class 7123 carries the NPC augmentation but not Creature, so no actor can be built from it",
      "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
      "decision": "OD-45"
     },
@@ -53969,15 +53969,15 @@
      "reasoning": "TaRapedia's infobox level, or the mission's own level where the page gives none"
     },
     "class_id": {
-     "value": 7123,
+     "value": 10642,
      "tier": "analogue",
      "citations": [
       {
        "source": "client_table:game.zip",
-       "locator": "entityclass 7123"
+       "locator": "entityclass 10642 NPC_Hominis_Machina, augmentations [1, 52, 59]"
       }
      ],
-     "counterpart": "the world-seed NPC of the same kind",
+     "counterpart": "the world's own talking machine; the console class 7123 carries the NPC augmentation but not Creature, so no actor can be built from it",
      "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
      "decision": "OD-45"
     },
@@ -59171,6 +59171,42 @@
     {
      "source": "community_db:tarapedia",
      "locator": "mission 332 infobox, RewardGiver"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "TarapediaMachineClass",
+   "table": "creature",
+   "key": {
+    "id": 199511
+   },
+   "field": "class_id",
+   "old": 7123,
+   "new": 10642,
+   "reason": "UsableNPCCormanComputerV01 carries the NPC augmentation but not Creature, and the server logged \"don't have creature Augmentation\" for both machines. NPC_Hominis_Machina carries both.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 7123 augmentations [52]; 10642 augmentations [1, 52, 59]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "TarapediaMachineClass",
+   "table": "creature",
+   "key": {
+    "id": 199512
+   },
+   "field": "class_id",
+   "old": 7123,
+   "new": 10642,
+   "reason": "UsableNPCCormanComputerV01 carries the NPC augmentation but not Creature, and the server logged \"don't have creature Augmentation\" for both machines. NPC_Hominis_Machina carries both.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 7123 augmentations [52]; 10642 augmentations [1, 52, 59]"
     }
    ]
   }
