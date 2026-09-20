@@ -183,6 +183,40 @@ namespace Rasa.Test
             Assert.AreEqual(307L, (long)count.ExecuteScalar());
         }
 
+        /// <summary>
+        /// Every dropship pad the travel window offers stands somewhere. Ligo Crucible (359) carried no position and
+        /// no map, so the zone could not be flown to at all, and "Shadow Edge Post" (536) was a second row 0.4 m from
+        /// Ashen Desert (263) with a name the client cannot translate, so the window listed the same place twice
+        /// (InfiniteRasa 492954a).
+        /// </summary>
+        [TestMethod]
+        public void TheDropshipPadsAreReachable()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT id, description, map_context_id, pos_x, pos_y, pos_z FROM teleporter WHERE type = 4";
+
+            var problems = new List<string>();
+            var seen = new List<(long Id, string Name, double X, double Y, double Z, long Map)>();
+
+            using (var reader = command.ExecuteReader())
+                while (reader.Read())
+                {
+                    var row = (reader.GetInt64(0), reader.GetString(1), reader.GetDouble(3), reader.GetDouble(4), reader.GetDouble(5), reader.GetInt64(2));
+
+                    if (row.Item6 == 0 || (row.Item3 == 0 && row.Item4 == 0 && row.Item5 == 0))
+                        problems.Add($"pad {row.Item1} ({row.Item2}) has no position or no map");
+
+                    foreach (var other in seen)
+                        if (other.Map == row.Item6 && System.Math.Abs(other.X - row.Item3) < 2 && System.Math.Abs(other.Z - row.Item5) < 2)
+                            problems.Add($"pad {row.Item1} ({row.Item2}) stands on pad {other.Id} ({other.Name})");
+
+                    seen.Add(row);
+                }
+
+            Assert.AreEqual(0, problems.Count, string.Join(" | ", problems));
+        }
+
         private static SqliteConnection OpenWorld()
         {
             var directory = AppContext.BaseDirectory;

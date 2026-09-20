@@ -195,12 +195,14 @@ namespace Rasa.Managers
             // add race requirements to itemTemplate
             var itemRaceReq = unitOfWork.Equipment.GetRequirementsRace();
             foreach (var raceReq in itemRaceReq)
-                LoadedItemTemplates[raceReq.Id].ItemInfo.RaceReq = raceReq.RaceId;
+                if (LoadedItemTemplates.ContainsKey(raceReq.Id))
+                    LoadedItemTemplates[raceReq.Id].ItemInfo.RaceReq = raceReq.RaceId;
 
             // add skill requirements to itemTemplate
             var itemSkillReq = unitOfWork.Equipment.GetRequirementsSkill();
             foreach (var skillReq in itemSkillReq)
-                LoadedItemTemplates[skillReq.Id].EquipableInfo = new EquipableInfo(skillReq.SkillId, skillReq.SkillLevel);
+                if (LoadedItemTemplates.ContainsKey(skillReq.Id))
+                    LoadedItemTemplates[skillReq.Id].EquipableInfo = new EquipableInfo(skillReq.SkillId, skillReq.SkillLevel);
 
             // add resistance data to itemTemplate
             var itemTemplateResistance = unitOfWork.Equipment.GetItemResistances();
@@ -229,15 +231,26 @@ namespace Rasa.Managers
 
             var weaponTemplates = unitOfWork.Equipment.GetWeaponItems();
             foreach (var weaponTemplate in weaponTemplates)
-                LoadedItemTemplates[weaponTemplate.Id].WeaponInfo = new WeaponInfo(weaponTemplate);
+                if (LoadedItemTemplates.ContainsKey(weaponTemplate.Id))
+                    LoadedItemTemplates[weaponTemplate.Id].WeaponInfo = new WeaponInfo(weaponTemplate);
 
             var armorTemplates = unitOfWork.Equipment.GetArmorItems();
             foreach (var armorTemplate in armorTemplates)
-                LoadedItemTemplates[armorTemplate.Id].ArmorValue = armorTemplate.ArmorValue;
+                if (LoadedItemTemplates.ContainsKey(armorTemplate.Id))
+                    LoadedItemTemplates[armorTemplate.Id].ArmorValue = armorTemplate.ArmorValue;
 
             var itemTemplatesData = unitOfWork.Equipment.GetItemTemplates();
             foreach (var template in itemTemplatesData)
             {
+                // A row here for a template with no class mapping describes an item that cannot exist; it is not a
+                // reason to stop loading. The regenerated table carries a row for every one of the client's 30225
+                // templates, and a world that maps fewer classes than that is a legitimate state (fixtures do it).
+                if (!LoadedItemTemplates.ContainsKey(template.Id))
+                {
+                    skipped++;
+                    continue;
+                }
+
                 LoadedItemTemplates[template.Id].BoundToCharacter = template.BoundToCharacterFlag != 0;
                 LoadedItemTemplates[template.Id].BuyPrice = template.BuyPrice;
                 LoadedItemTemplates[template.Id].HasAccountUniqueFlag = template.HasAccountUniqueFlag != 0;
@@ -262,7 +275,14 @@ namespace Rasa.Managers
             foreach (var entry in LoadedItemTemplates)
             {
                 var itemTemplate = entry.Value;
-                var entityClass = EntityClassManager.Instance.LoadedEntityClasses[itemTemplate.Class];
+
+                // A template whose entity class is not loaded cannot be built into an item, and one missing row
+                // should not stop the server (or a fixture) from loading the other thirty thousand. Counted below.
+                if (!EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(itemTemplate.Class, out var entityClass))
+                {
+                    skipped++;
+                    continue;
+                }
 
                 if (itemTemplate.InventoryCategory == 0)
                 {

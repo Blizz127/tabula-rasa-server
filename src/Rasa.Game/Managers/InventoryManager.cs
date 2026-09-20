@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rasa.Managers
 {
@@ -1352,5 +1353,60 @@ namespace Rasa.Managers
         }
 
         #endregion
+
+
+        /// <summary>How many items of the entity class the player carries in their personal inventory, all stacks together.</summary>
+        public uint CountItemsByClass(Client client, EntityClasses entityClass)
+        {
+            var total = 0u;
+
+            foreach (var entityId in client.Player.Inventory.PersonalInventory)
+            {
+                if (entityId == 0)
+                    continue;
+
+                var item = EntityManager.Instance.GetItem(entityId);
+
+                if (item?.ItemTemplate != null && item.ItemTemplate.Class == entityClass)
+                    total += item.StackSize;
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Takes <paramref name="quantity"/> items of the entity class out of the personal
+        /// inventory, smallest stacks first so partial stacks are used up before full ones are
+        /// broken. Returns how many it could not take (0 when the player had enough); check with
+        /// <see cref="CountItemsByClass"/> first when the whole amount has to be there.
+        /// </summary>
+        public uint RemoveItemsByClass(Client client, EntityClasses entityClass, uint quantity)
+        {
+            var stacks = new List<Item>();
+
+            foreach (var entityId in client.Player.Inventory.PersonalInventory)
+            {
+                if (entityId == 0)
+                    continue;
+
+                var item = EntityManager.Instance.GetItem(entityId);
+
+                if (item?.ItemTemplate != null && item.ItemTemplate.Class == entityClass && item.StackSize > 0)
+                    stacks.Add(item);
+            }
+
+            foreach (var stack in stacks.OrderBy(s => s.StackSize))
+            {
+                if (quantity == 0)
+                    break;
+
+                var take = Math.Min(quantity, stack.StackSize);
+                ReduceStackCount(client, InventoryType.Personal, stack, take);
+                quantity -= take;
+            }
+
+            return quantity;
+        }
+
     }
 }

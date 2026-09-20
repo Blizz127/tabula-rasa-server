@@ -61,6 +61,9 @@ namespace Rasa.Context.World
         public DbSet<MapLinkEntry> MapLinkEntries { get; set; }
         public DbSet<KraftwerksEntry> KraftwerksEntries { get; set; }
         public DbSet<MapMarkerEntry> MapMarkerEntries { get; set; }
+        public DbSet<RecipeEntry> RecipeEntries { get; set; }
+        public DbSet<RecipeInputEntry> RecipeInputEntries { get; set; }
+        public DbSet<SkillCharacterEntry> SkillCharacterEntries { get; set; }
         public DbSet<MapRegionEntry> MapRegionEntries { get; set; }
         public DbSet<CreatureLootEntry> CreatureLootEntries { get; set; }
         public DbSet<NpcMissionEntry> NpcMissionEntries { get; set; }

@@ -118,7 +118,7 @@ namespace Rasa.Managers
                     MissionManager.Instance.Content.RequestUseContentUsable(client, packet, obj);
                     break;
                 case DynamicObjectType.Kraftwerks:
-                    KraftwerksManager.Instance.Use(client, obj, packet.ActionId, packet.ActionArgId);
+                    KraftwerksManager.Instance.Use(client, obj, packet.ActionArgId);
                     break;
                 default:
                     Logger.WriteLog(LogType.Debug, $"ToDo: RequestUseObjectPacket: unsuported object type {obj.DynamicObjectType}");

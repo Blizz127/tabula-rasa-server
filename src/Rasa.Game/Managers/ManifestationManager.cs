@@ -736,6 +736,25 @@ namespace Rasa.Managers
             return SkillTraining.GetAvailablePoints(player);
         }
 
+        /// <summary>
+        /// The level each skill needs, from skill_character - a verbatim copy of the client's own
+        /// skilldata.skillCharacter (InfiniteRasa 492954a). The client will not draw the spend buttons above the
+        /// player's level and nothing here enforced it, so a level 1 recruit could buy a tier 4 skill and perform
+        /// that class's abilities. The class rule is ours (SkillTraining.IsAvailableToClass), which also follows
+        /// the promotion chain; this adds the level.
+        /// </summary>
+        public void LoadSkillClasses()
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateWorld();
+
+            SkillTraining.RequiredLevel.Clear();
+
+            foreach (var entry in unitOfWork.Actions.GetSkillCharacters())
+                SkillTraining.RequiredLevel[(int)entry.Id] = (int)entry.RequiredLevel;
+
+            Logger.WriteLog(LogType.Initialize, $"Loaded {SkillTraining.RequiredLevel.Count} skill level requirements.");
+        }
+
         public void LevelSkills(Client client, LevelSkillsPacket packet)
         {
             if (packet.SkillIds == null || packet.ListLenght != packet.SkillIds.Length ||

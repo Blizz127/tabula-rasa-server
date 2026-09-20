@@ -134,6 +134,14 @@ namespace Rasa.Structures
             return (int)Math.Max(0, points);
         }
 
+        /// <summary>
+        /// The level each skill needs before it can be trained, from the client's own
+        /// generated.client.skilldata.skillCharacter (InfiniteRasa 492954a, the skill_character table). The client
+        /// will not draw the spend buttons for a skill above the player's level, and nothing here enforced it: the
+        /// only cost of training a tier 4 skill on a level 1 recruit was the points. Empty until the world loads.
+        /// </summary>
+        public static readonly Dictionary<int, int> RequiredLevel = new Dictionary<int, int>();
+
         public static bool TryPlan(Manifestation player, int[] skillIds, int[] ranks,
             out Dictionary<SkillId, SkillsData> changes)
         {
@@ -148,6 +156,9 @@ namespace Rasa.Structures
             {
                 var index = Array.IndexOf(SkillIds, skillIds[i]);
                 if (index < 0 || !seen.Add(skillIds[i]) || !IsAvailableToClass(player.Class, skillIds[i]))
+                    return false;
+
+                if (RequiredLevel.TryGetValue(skillIds[i], out var needed) && player.Level < needed)
                     return false;
 
                 var id = (SkillId)skillIds[i];

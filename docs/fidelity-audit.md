@@ -311,6 +311,38 @@ Six more dialogue packages are bound with them, leaving **three** objectives ope
 the Duncan in the world speaks for another mission), 451/3 (a villager at Dagdha's Urn no page names) and 1186/1 (an
 Eloh artifact, not a person).
 
+### Merged from InfiniteRasa (2026-09-20)
+
+`origin` is InfiniteRasa/Rasa.NET, which this branch forked from in December 2023; it has one commit since (PR #95,
+Ellimist's work) against our 309, and a straight merge conflicts in 94 files because both sides rewrote combat and
+content. Taken piece by piece instead, and only where upstream is better:
+
+| Taken | Why |
+| --- | --- |
+| Three stability fixes | the auth server's double teardown, a socket receive race on the login hand-off, and a pooled-buffer leak on every Alt+F4 |
+| Map markers | 307 of them; the map's Acquired / Not Acquired dots had never shown anything |
+| Minions | the nine subordinate commands, carried here by Bot Construction, Spotter and Create Clone (OD-56), which upstream had no abilities to summon |
+| Crafting recipes | 160 recipes, 353 inputs, and fabrication at the Kraftwerks stations |
+| Item templates regenerated | 30,225 rows priced from the item class's loot value, against 4,985 stubs priced at a credit each |
+| Service NPCs, mission NPCs, class trainers, bosses | 324 + 177 + trainers + 62, at the client's own markers |
+| Skill level requirements | a level 1 recruit could train a tier 4 skill and use that class's abilities |
+| Dropship pads, logos shrines | the Crucible pad had no position at all; two shrines had no stone |
+| `tool_type` | every row carried 15, which the client's table does not have, so tooltips printed a damage line on tools and reload modifiers did nothing |
+
+**Left alone, and why.** Upstream's `MainLoop` clock is wall-clock time; ours is monotonic, so timers cannot jump.
+Its weapon heat retune calls its own numbers "a working default, not a reconstruction", and ours are a placeholder
+too — one guess is not worth swapping for another. Its `AbilityManager` predates our ability work. Its four
+placeholder bot creatures are invented by its own account, and the real abilities carry minions here.
+
+**Held back from its data, to protect ours.** The 25 mission NPCs it places at a town's map marker that we had
+already placed at TaRapedia's own /loc — ours are the more precise, and a test now fails if any upstream NPC shares
+a name with one of ours. The three bosses and one service NPC it puts inside the boot camp, which is per-character
+instanced content here with its own reconstructed cast.
+
+**Superseded of ours.** The 14 item templates we seeded carried prices of 0 (GAP-W1/W2-ITEM-PRICES, now closed) and
+analogue flags; upstream's rows are derived from the item class's loot value, matching all 188 templates the C++
+server dump prices, and its flags are the ones that dump and the original server table agree on.
+
 ### Creature flags — fixed
 
 `CreatureInfo` was sent an empty flag list, and the harvest code read class flags that nothing loaded. Ellimist

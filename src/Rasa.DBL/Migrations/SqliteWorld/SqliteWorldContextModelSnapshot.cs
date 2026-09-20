@@ -1946,6 +1946,81 @@ namespace Rasa.Migrations.SqliteWorld
                     b.ToTable("player_random_name");
                 });
 
+            modelBuilder.Entity("Rasa.Structures.World.RecipeEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("EnergyCost")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("energy_cost");
+
+                    b.Property<uint>("KraftwerksSeconds")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("kraftwerks_seconds");
+
+                    b.Property<uint>("MinLevel")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("min_level");
+
+                    b.Property<uint>("ResultAmount")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("result_amount");
+
+                    b.Property<uint>("ResultTemplateId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("result_template_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("recipe");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.RecipeInputEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("InputClassId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("input_class_id");
+
+                    b.Property<uint>("Quantity")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("quantity");
+
+                    b.Property<uint>("RecipeId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("recipe_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("recipe_input");
+                });
+
+            modelBuilder.Entity("Rasa.Structures.World.SkillCharacterEntry", b =>
+                {
+                    b.Property<uint>("Id")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<uint>("ClassId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("class_id");
+
+                    b.Property<uint>("RequiredLevel")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("required_level");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("skill_character");
+                });
+
             modelBuilder.Entity("Rasa.Structures.World.SpawnPoolEntry", b =>
                 {
                     b.Property<uint>("Id")

@@ -8,6 +8,7 @@ namespace Rasa.Repositories.World
 
     public interface IActionRepository
     {
+        List<SkillCharacterEntry> GetSkillCharacters();
         List<ActionEntry> GetActions();
         List<ActionLevelEntry> GetActionLevels();
         List<ActionCostEntry> GetActionCosts();
@@ -54,5 +55,11 @@ namespace Rasa.Repositories.World
         {
             return _worldContext.CreateNoTrackingQuery(_worldContext.ItemTemplateActionEntries).ToList();
         }
+
+        public List<SkillCharacterEntry> GetSkillCharacters()
+        {
+            return _worldContext.CreateNoTrackingQuery(_worldContext.SkillCharacterEntries).ToList();
+        }
+
     }
 }

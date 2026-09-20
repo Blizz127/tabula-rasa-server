@@ -176,6 +176,12 @@
    "kind": "client_map",
    "era": "final_live",
    "locator": "research/20260913-bootcamp/map/maps/adv_arieki_torden_plains.map (the client map itself; not decoded to entities yet - the rows citing it use its identity, not decoded positions)"
+  },
+  "client_map:adv_arieki_ligo_burningsteps": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "research/20260913-bootcamp/map/maps/adv_arieki_ligo_burningsteps.map (the client map itself; cited for the dropship landing pad the Crucible's pad stands on)",
+   "note": "Read for Place_dropship_pads (InfiniteRasa 492954a): the Ligo Crucible pad had no position and no map, so the zone could not be flown to."
   }
  },
  "scope": [
@@ -56485,7 +56491,7 @@
   },
   {
    "id": "GAP-W1-WEAPON-PLACEHOLDERS",
-   "summary": "Twelve sent itemtemplate_weapon values of 116929/116930 (aim rate, reload time, alt action pair, AE radius, recoil, cool rate, heat per shot, tool type 15 (the client enum names PISTOL 8), alt range, alt AE radius and type) have no evidence and carry the emulator placeholder shared by all 2,440 weapon rows as labelled analogues; reuse_override is stored as 0. The melee alt-fire damage 115/122 is tooltip-only.",
+   "summary": "Twelve sent itemtemplate_weapon values of 116929/116930 (aim rate, reload time, alt action pair, AE radius, recoil, cool rate, heat per shot, tool type 15 (the client enum names PISTOL 8), alt range, alt AE radius and type) have no evidence and carry the emulator placeholder shared by all 2,440 weapon rows as labelled analogues; reuse_override is stored as 0. The melee alt-fire damage 115/122 is tooltip-only. Update 2026-09-20: tool_type is no longer a placeholder - Retune_weapon_tool_type reconstructs it from the entity class's attack action, which is the field the client dispatches on (15 was not a value its table has). cool_rate and heat_per_shot stay as they are: upstream's retune calls its own values \"a working default, not a reconstruction\", and one guess is not worth swapping for another. The rest of the twelve are unchanged.",
    "evidence": [
     "research/20260914-trainingday-items/field-matrix.json",
     "docs/world-equipment-client-audit.md"
@@ -56500,17 +56506,21 @@
   },
   {
    "id": "GAP-W1-ITEM-PRICES",
-   "summary": "buy_price and sell_price of 116929/116930 are stored as 0 (no price): no vendor stocks them, they sell for nothing and their repair is free. The item flags (Not Tradeable, Not Sellable) are analogues from the equipped AccuMax Shotgun (B2-027); the server does not refuse a vendor sale of a not-sellable item.",
+   "summary": "buy_price and sell_price of 116929/116930 are stored as 0 (no price): no vendor stocks them, they sell for nothing and their repair is free. The item flags (Not Tradeable, Not Sellable) are analogues from the equipped AccuMax Shotgun (B2-027); the server does not refuse a vendor sale of a not-sellable item. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0.",
    "evidence": [
     "footage B2-027",
     "src/Rasa.Game/Managers/NpcManager.cs (sell price, repair cost)"
    ],
-   "closes_with": "final-era price or repair evidence",
+   "closes_with": "closed: the confirming test is ContentSchemaMigrationTests",
    "surfaced_by": [
     "manifest omitted"
    ],
    "slices": [
     "W1"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -56592,17 +56602,21 @@
   },
   {
    "id": "GAP-W2-ITEM-PRICES",
-   "summary": "The buy/sell prices of the class-gear templates are unrecovered; both are stored 0 (no vendor price), the neutral value the W1 reward pistols use.",
+   "summary": "The buy/sell prices of the class-gear templates are unrecovered; both are stored 0 (no vendor price), the neutral value the W1 reward pistols use. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0.",
    "evidence": [
     "no surviving source gives an item price",
     "the D11 block rows use a nominal 1"
    ],
-   "closes_with": "original itemtemplate rows or a vendor capture",
+   "closes_with": "closed: the confirming test is ContentSchemaMigrationTests",
    "surfaced_by": [
     "manifest itemtemplate buy_price/sell_price"
    ],
    "slices": [
     "W2"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -59365,6 +59379,68 @@
     {
      "source": "client_table:game.zip",
      "locator": "entityclass 7123 augmentations [52]; 10642 augmentations [1, 52, 59]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "Regenerate_item_template",
+   "table": "itemtemplate",
+   "key": {
+    "scope": "all 30225 templates"
+   },
+   "field": "buy_price, sell_price, flags, quality_id",
+   "old": "4985 stub rows priced at 1 credit, 25240 templates with no row",
+   "new": "one row per template, priced from the item class's loot_value",
+   "reason": "Taken from InfiniteRasa 492954a. buy_price is the item class's loot_value, which matches all 188 templates the C++ server's dump carries real prices for, exactly; sell_price is floor(buy/4)+1, fitting 174 of those 188. quality_id comes from the quality code in the class name, agreeing with 4984 of the 4985 stored values. The flags are the ones the original server table and the C++ dump agree on. It supersedes this branch's own 14 seeded rows, whose prices were the neutral 0 of GAP-W1-ITEM-PRICES and GAP-W2-ITEM-PRICES and whose flags and class-gear quality were analogues.",
+   "citations": [
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "itemtemplate, 4985 rows"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "itemclass loot_value, quality code in the class name"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "Retune_weapon_tool_type",
+   "table": "itemtemplate_weapon",
+   "key": {
+    "scope": "2444 rows"
+   },
+   "field": "tool_type",
+   "old": 15,
+   "new": "1428 rows reconstructed from the entity class's attack action, the rest 0",
+   "reason": "15 is not a value the client's tooltype table has - it stops at 12 - and the client reads the column twice: the tooltip printed a damage line on tools and a blank line on every weapon, and reload-modifier effects silently did nothing. Taken from InfiniteRasa 492954a, which derives the value from the field the client itself dispatches on.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "tooltype; entityclass attack action id"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "_AddWeaponToolInfo, weaponreload.py"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-20",
+   "migration": "Place_dropship_pads",
+   "table": "teleporter",
+   "key": {
+    "id": 359
+   },
+   "field": "map_context_id, pos",
+   "old": "0, (0,0,0)",
+   "new": "1993, (968, 144.16, -76)",
+   "reason": "The Ligo Crucible pad had no position and no map, so the zone could not be flown to. The client's map puts its Dropship Transport marker on the landing pad at that point.",
+   "citations": [
+    {
+     "source": "client_map:adv_arieki_ligo_burningsteps",
+     "locator": "ArchHumDropshipLandingpad, Dropship Transport marker"
     }
    ]
   }

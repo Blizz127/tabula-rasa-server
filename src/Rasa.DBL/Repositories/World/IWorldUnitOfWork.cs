@@ -6,6 +6,7 @@ namespace Rasa.Repositories.World
     public interface IWorldUnitOfWork : IUnitOfWork
     {
         IMapMarkerRepository MapMarkers { get; }
+        IRecipeRepository Recipes { get; }
         IActionRepository Actions { get; }
         IEquipmentRepository Equipment { get; }
         ICreatureRepository Creatures { get; }

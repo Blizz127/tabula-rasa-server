@@ -303,6 +303,8 @@ namespace Rasa.Game
             MapLinkManager.Instance.MapLinkInit();
             RegionManager.Instance.RegionInit();
             MapMarkerManager.Instance.MapMarkerInit();
+            RecipeManager.Instance.RecipeInit();
+            ManifestationManager.Instance.LoadSkillClasses();
 
             return true;
         }

@@ -1011,7 +1011,10 @@ namespace Rasa.Test
                 foreach (var (templateId, refire, altDamage) in new[] { (116929u, 150u, 115u), (116930u, 100u, 122u) })
                 {
                     var template = rewardItems.Items.GetItemTemplateById(templateId);
-                    Assert.AreEqual((InventoryCategory.Equipment, 3, false, false), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
+                    // Sellable and tradable since Regenerate_item_template (InfiniteRasa 492954a): this branch had
+                    // chosen both flags as analogues, and upstream's are the ones the original server table and the
+                    // C++ dump agree on - sellable in every row of both, the other six clear.
+                    Assert.AreEqual((InventoryCategory.Equipment, 3, true, true), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
                     Assert.AreEqual((1, 1), (template.EquipableInfo.SkillId, template.EquipableInfo.SkillLevel));
                     Assert.AreEqual(5, template.ItemInfo.Requirements[RequirementsType.ReqXpLevel]);
                     Assert.IsNotNull(template.WeaponInfo, $"template {templateId} has no weapon row");
@@ -1052,7 +1055,10 @@ namespace Rasa.Test
                 foreach (var templateId in new uint[] { 122859u, 122860u, 122862u, 122863u, 122864u, 122866u, 122867u, 122868u, 122869u, 122870u })
                 {
                     var template = rewardItems.Items.GetItemTemplateById(templateId);
-                    Assert.AreEqual((InventoryCategory.Equipment, 2, true, true), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
+                    // Quality 3 since Regenerate_item_template (InfiniteRasa 492954a): the class gear's own class names
+                    // carry the UNC code, and reading quality from that code agrees with 4984 of the 4985 stored
+                    // values, where this branch had chosen 2 as an analogue.
+                    Assert.AreEqual((InventoryCategory.Equipment, 3, true, true), (template.InventoryCategory, template.QualityId, template.HasSellableFlag, template.ItemInfo.Tradable));
                     Assert.AreEqual(5, template.ItemInfo.Requirements[RequirementsType.ReqXpLevel]);
                     Assert.IsTrue(template.ArmorValue > 0, $"template {templateId} has no armor value");
                 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -7,13 +7,13 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Packets.Communicator.Server;
     using Packets.Crafting.Client;
     using Packets.Crafting.Server;
     using Packets.MapChannel.Server;
     using Repositories.UnitOfWork;
     using Structures;
     using Structures.World;
-    using System.IO;
 
     /// <summary>
     /// Crafting stations (Kraftwerks, to the client) and the crafting requests made at them.
@@ -25,9 +25,15 @@ namespace Rasa.Managers
     /// the window reports. The client resets its job list when it uses a station, so a status
     /// message follows every use.
     ///
-    /// This is the first step of the crafting roadmap: stations exist, the window opens, requests
-    /// are read and answered. The recipes themselves (fabrication, roadmap 3.2) come next, and until
-    /// then every request is declined with a failure the window can show.
+    /// Fabrication (roadmap 3.2) is implemented here with the rules of the client's shared/crafting.py:
+    /// a schematic in the player's inventory names a recipe (RecipeManager); the player must be at
+    /// the recipe's level, able to pay its credit cost and holding every ingredient class in the
+    /// stated quantity, standing within reach of a station with no job of theirs still running
+    /// there. The ingredients and credits are taken, the schematic is kept, and a job with the
+    /// recipe's time goes on the station for that player; the result is created when they take
+    /// it. The Crafting v2 pages - salvage, extraction, integration, upgrade - need per-item
+    /// modules the server does not have yet, and are still declined with a failure the window
+    /// can show.
     /// </summary>
     public class KraftwerksManager
     {
@@ -42,6 +48,14 @@ namespace Rasa.Managers
 
         /// <summary>shared/gameconstants.py MAX_INTERACTION_RANGE; a request from further away than this is not honoured.</summary>
         public const float InteractionRange = 5.0f;
+
+        /// <summary>shared/crafting.py g_maxSimultaneousCraftItems: jobs a player may have waiting at one station.</summary>
+        public const int MaxJobsPerStation = 301;
+
+        /// <summary>The crafting window's fabrication page (generated.shared.crafting CRAFTACTION_FABRICATION); the page a job reports decides which page the window reopens on.</summary>
+        public const uint FabricationPage = 1;
+
+        private ulong _nextJobId = 1;
 
         private readonly IGameUnitOfWorkFactory _gameUnitOfWorkFactory;
 
@@ -150,7 +164,11 @@ namespace Rasa.Managers
             _stations.Remove(station.Entry.Id);
         }
 
-        /// <summary>From DynamicObjectWorker: puts stations that are not in the world yet into it.</summary>
+        /// <summary>
+        /// From DynamicObjectWorker, once a second: puts stations that are not in the world yet
+        /// into it, and tells players whose jobs on this map's stations have just finished, so the
+        /// window shows the Take button without them having to use the station again.
+        /// </summary>
         internal void Worker(MapChannel mapChannel)
         {
             foreach (var station in mapChannel.Kraftwerks.Values)
@@ -161,18 +179,52 @@ namespace Rasa.Managers
                 CellManager.Instance.AddToWorld(mapChannel, station);
                 station.IsInWorld = true;
             }
+
+            if (_jobs.Count == 0)
+                return;
+
+            foreach (var entry in _jobs)
+            {
+                var (stationId, characterId) = entry.Key;
+                var finished = false;
+
+                foreach (var job in entry.Value)
+                    if (!job.FinishReported && job.IsFinished)
+                    {
+                        job.FinishReported = true;
+                        finished = true;
+                    }
+
+                if (!finished)
+                    continue;
+
+                var client = mapChannel.ClientList.FirstOrDefault(c => c?.Player != null && c.Player.Id == characterId && c.State == ClientState.Ingame);
+
+                if (client != null && EntityManager.Instance.TryGetObject(stationId, out var station) && station.MapContextId == mapChannel.MapInfo.MapContextId)
+                    SendStatus(client, station);
+            }
         }
 
         #endregion
 
         #region Using a station
 
-        /// <summary>RequestUseObject on a station: the windup, the Use the client opens its window on, and the player's jobs there.</summary>
-        internal void Use(Client client, DynamicObject station, ActionId actionId, uint actionArgId)
+        /// <summary>
+        /// RequestUseObject on a station: the windup, the Use the client opens its window on, and
+        /// the player's jobs there.
+        ///
+        /// The action is a use of this station - <see cref="ActionId.UseObject"/>, which
+        /// DynamicObjectManager has established before this is reached. It used to be whatever
+        /// action id the packet named, which made a station a way to have any action at all
+        /// performed on the player. The arg id is still the client's, because the client matches
+        /// the windup and recovery it gets against the ones it sent (every one of the 39 station
+        /// classes carries <see cref="UseObjectArgId"/> as its own).
+        /// </summary>
+        internal void Use(Client client, DynamicObject station, uint actionArgId)
         {
-            client.CallMethod(client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, actionId, actionArgId));
+            client.CallMethod(client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, ActionId.UseObject, actionArgId));
             client.CallMethod(station.EntityId, new UsePacket(client.Player.EntityId, station.StateId, UseWindupMs));
-            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, actionId, actionArgId, UseWindupMs));
+            client.Player.MapChannel.PerformRecovery.Add(new ActionData(client.Player, ActionId.UseObject, actionArgId, UseWindupMs));
             station.TriggeredByPlayers.Add(client);
 
             SendStatus(client, station);
@@ -202,6 +254,16 @@ namespace Rasa.Managers
             return _jobs.TryGetValue((station.EntityId, client.Player.Id), out var jobs) ? jobs : new List<CraftingJob>();
         }
 
+        private List<CraftingJob> JobsForWriting(Client client, DynamicObject station)
+        {
+            var key = (station.EntityId, client.Player.Id);
+
+            if (!_jobs.TryGetValue(key, out var jobs))
+                _jobs[key] = jobs = new List<CraftingJob>();
+
+            return jobs;
+        }
+
         private void SendStatus(Client client, DynamicObject station)
         {
             client.CallMethod(station.EntityId, new CraftingStatusPacket(client.Player.EntityId, JobsFor(client, station)));
@@ -229,7 +291,7 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// Every crafting request, until the recipes land (roadmap 3.2): the window is told the
+        /// The Crafting v2 requests, until items can carry modules: the window is told the
         /// request failed so it re-enables its buttons, and the player is told why.
         /// </summary>
         private void Decline(Client client, ulong kraftwerksId, string request, string what)
@@ -244,214 +306,251 @@ namespace Rasa.Managers
             CommunicatorManager.Instance.SystemMessage(client, $"{what} is not available on this server yet.");
         }
 
-        /// <summary>
-        /// Fabrication, the 1.16.5 window's form: RequestCraftItemNew(kraftwerksId, recipeItemEntityId, craftingPage).
-        /// The recipe is the schematic *item* the player is carrying, so the request names an entity and the schematic
-        /// is consumed with the inputs.
-        /// </summary>
+        /// <summary>Tells the window the request failed (so it re-enables its buttons) and the player why.</summary>
+        private void Fail(Client client, DynamicObject station, string why)
+        {
+            SendStatus(client, station);
+            client.CallMethod(station.EntityId, CraftingResultPacket.Failure(client.Player.EntityId));
+
+            if (why != null)
+                CommunicatorManager.Instance.SystemMessage(client, why);
+        }
+
+        private void Fail(Client client, DynamicObject station, PlayerMessage message)
+        {
+            SendStatus(client, station);
+            client.CallMethod(station.EntityId, CraftingResultPacket.Failure(client.Player.EntityId));
+            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(message, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+        }
+
+        /// <summary>The 1.16.5 window: (station, the schematic item's entity id, page).</summary>
         internal void RequestCraftItemNew(Client client, RequestCraftItemNewPacket packet)
         {
+            var station = StationFor(client, packet.KraftwerksId, "RequestCraftItemNew");
+
+            if (station == null)
+                return;
+
+            if (packet.CraftingPage != FabricationPage)
+            {
+                Fail(client, station, "Only fabrication is available on this server yet.");
+                return;
+            }
+
+            if (!client.Player.Inventory.PersonalInventory.Contains(packet.RecipeItemId))
+            {
+                Logger.WriteLog(LogType.Security, $"{client.Player.FamilyName} asked to craft from item {packet.RecipeItemId}, which is not in their inventory");
+                Fail(client, station, null);
+                return;
+            }
+
             var schematic = EntityManager.Instance.GetItem(packet.RecipeItemId);
 
-            if (schematic?.ItemTemplate == null || !Owns(client.Player, schematic.EntityId))
+            if (schematic?.ItemTemplate == null)
             {
-                Decline(client, packet.KraftwerksId, "RequestCraftItemNew", "That schematic");
+                Fail(client, station, null);
                 return;
             }
 
-            Fabricate(client, packet.KraftwerksId, schematic.ItemTemplate.ItemTemplateId, packet.CraftingPage, schematic, "RequestCraftItemNew");
+            Fabricate(client, station, schematic.ItemTemplate.ItemTemplateId);
         }
 
-        /// <summary>
-        /// Fabrication, the older window's form: RequestCraftItem(kraftwerksId, recipeTemplateId). No schematic item is
-        /// consumed, because the request names the recipe itself rather than an item carrying it.
-        /// </summary>
+        /// <summary>The older form: (station, schematic template id). The player still has to be holding one.</summary>
         internal void RequestCraftItem(Client client, RequestCraftItemPacket packet)
-            => Fabricate(client, packet.KraftwerksId, packet.RecipeTemplateId, 0, null, "RequestCraftItem");
-
-        /// <summary>
-        /// Starts a job: the recipe's own inputs are consumed, its level is required, and the station is told how long
-        /// it will take (the recipe's KraftwerksTimeSeconds, which the client counts down from the status message).
-        /// </summary>
-        private void Fabricate(Client client, ulong kraftwerksId, uint recipeTemplateId, uint craftingPage, Item schematic, string request)
         {
-            var station = StationFor(client, kraftwerksId, request);
+            var station = StationFor(client, packet.KraftwerksId, "RequestCraftItem");
 
             if (station == null)
                 return;
 
-            var recipe = CraftingData.ForTemplate(recipeTemplateId);
+            var holdsOne = client.Player.Inventory.PersonalInventory.Any(id => id != 0 && EntityManager.Instance.GetItem(id)?.ItemTemplate?.ItemTemplateId == packet.RecipeTemplateId);
 
-            if (recipe == null)
+            if (!holdsOne)
             {
-                Refuse(client, station, "That is not a schematic this station knows how to make.");
+                Logger.WriteLog(LogType.Security, $"{client.Player.FamilyName} asked to craft recipe {packet.RecipeTemplateId} without holding the schematic");
+                Fail(client, station, null);
                 return;
             }
 
-            if (client.Player.Level < recipe.MinimumPlayerLevel)
+            Fabricate(client, station, packet.RecipeTemplateId);
+        }
+
+        /// <summary>
+        /// CanManifestationUseRecipeNow and CanManifestationUseKraftwerksNow from shared/crafting.py,
+        /// then the job. A plain fabrication cannot fail once it has been accepted: the shared rules
+        /// roll dice only for the module paths.
+        /// </summary>
+        private void Fabricate(Client client, DynamicObject station, uint schematicTemplateId)
+        {
+            var player = client.Player;
+
+            if (!RecipeManager.Instance.TryGet(schematicTemplateId, out var recipe))
             {
-                Refuse(client, station, $"That schematic needs level {recipe.MinimumPlayerLevel}.");
+                Logger.WriteLog(LogType.Debug, $"{player.FamilyName}: no recipe for schematic template {schematicTemplateId}");
+                Fail(client, station, "That schematic has no recipe on this server.");
                 return;
             }
 
-            // Every input has to be present before anything is consumed, so a recipe the player cannot afford leaves
-            // their materials where they were.
-            var plan = PlanInputs(client.Player, recipe);
-
-            if (plan == null)
+            if (player.Level < recipe.MinLevel)
             {
-                Refuse(client, station, "The station is missing materials for that schematic.");
+                Fail(client, station, $"You need to be level {recipe.MinLevel} to fabricate that.");
                 return;
             }
 
-            foreach (var (item, count) in plan)
-                if (!InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, item, count))
+            if (player.Credits[CurencyType.Credits] < recipe.EnergyCost)
+            {
+                Fail(client, station, PlayerMessage.PmInsufficientFunds);
+                return;
+            }
+
+            foreach (var input in recipe.Inputs)
+            {
+                var have = InventoryManager.Instance.CountItemsByClass(client, (EntityClasses)input.ClassId);
+
+                if (have < input.Quantity)
                 {
-                    Refuse(client, station, "The station could not take the materials for that schematic.");
+                    Fail(client, station, $"You need {input.Quantity} {NameOfClass(input.ClassId)} and have {have}.");
                     return;
                 }
+            }
 
-            if (schematic != null && !InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, schematic, 1))
+            var jobs = JobsForWriting(client, station);
+
+            if (jobs.Count >= MaxJobsPerStation)
             {
-                Refuse(client, station, "The station could not take that schematic.");
+                Fail(client, station, "This station is holding too many finished items for you; take some first.");
                 return;
             }
 
-            var key = (station.EntityId, client.Player.Id);
-
-            if (!_jobs.TryGetValue(key, out var jobs))
-                _jobs[key] = jobs = new List<CraftingJob>();
-
-            jobs.Add(new CraftingJob
+            if (jobs.Any(j => !j.IsFinished))
             {
-                ResultItemId = EntityManager.Instance.GetEntityId,
-                ResultClassId = recipe.ResultEntityClassId,
-                ResultItemTemplateId = recipe.ResultItemTemplateId,
-                Count = recipe.ResultItemAmount,
-                TimeLeftSeconds = recipe.KraftwerksTimeSeconds,
-                CraftingPage = craftingPage,
-                RecipeTemplateId = recipeTemplateId,
-                StartedAtMs = nowMs()
-            });
-
-            SendStatus(client, station);
-            client.CallMethod(station.EntityId, CraftingResultPacket.Success(client.Player.EntityId));
-        }
-
-        /// <summary>
-        /// Collects a finished job: RequestRetrieveFinishedCraftItem(kraftwerksId, resultItemId). The client sends this
-        /// when its countdown reaches zero, and the station checks its own clock before handing anything over.
-        /// </summary>
-        internal void RequestRetrieveFinishedCraftItem(Client client, RequestRetrieveFinishedCraftItemPacket packet)
-        {
-            var station = StationFor(client, packet.KraftwerksId, "RequestRetrieveFinishedCraftItem");
-
-            if (station == null)
-                return;
-
-            var job = JobsFor(client, station).FirstOrDefault(candidate => candidate.ResultItemId == packet.ItemId);
-
-            if (job == null || !IsFinished(job))
-            {
-                Refuse(client, station, "That is not ready yet.");
+                Fail(client, station, "This station is still working on something for you.");
                 return;
             }
 
-            Deliver(client, station, job);
-        }
+            var result = ItemManager.Instance.GetItemTemplateById(recipe.ResultTemplateId);
 
-        /// <summary>Collects everything that is ready: RequestRetrieveAllFinishedItems.</summary>
-        internal void RequestRetrieveAllFinishedItems(Client client, RequestRetrieveAllFinishedItemsPacket packet)
-        {
-            var station = StationFor(client, packet.KraftwerksId, "RequestRetrieveAllFinishedItems");
-
-            if (station == null)
+            if (result == null)
+            {
+                Fail(client, station, null);
                 return;
+            }
 
-            foreach (var job in JobsFor(client, station).Where(IsFinished).ToList())
-                Deliver(client, station, job);
+            // Everything checked; now take the ingredients and the credits. The schematic stays.
+            foreach (var input in recipe.Inputs)
+            {
+                var short_ = InventoryManager.Instance.RemoveItemsByClass(client, (EntityClasses)input.ClassId, input.Quantity);
+
+                if (short_ != 0)
+                    Logger.WriteLog(LogType.Error, $"fabricate {recipe.TemplateId} for {player.FamilyName}: {short_} of class {input.ClassId} could not be removed after the count passed");
+            }
+
+            if (recipe.EnergyCost > 0)
+                ManifestationManager.Instance.LossCredits(client, (int)recipe.EnergyCost);
+
+            var job = new CraftingJob
+            {
+                ResultItemId = _nextJobId++,
+                ResultClassId = (uint)result.Class,
+                ResultItemTemplateId = recipe.ResultTemplateId,
+                Count = recipe.ResultAmount,
+                CraftingPage = FabricationPage,
+                QualityId = (uint)result.QualityId,
+                FinishTick = Environment.TickCount64 + recipe.KraftwerksSeconds * 1000L
+            };
+
+            jobs.Add(job);
+
+            Logger.WriteLog(LogType.Debug, $"{player.FamilyName} fabricates {recipe.ResultAmount} x template {recipe.ResultTemplateId} from schematic {recipe.TemplateId} at station {station.EntityId}, ready in {recipe.KraftwerksSeconds} s");
 
             SendStatus(client, station);
+            client.CallMethod(station.EntityId, CraftingResultPacket.Success(player.EntityId));
+        }
+
+        private static string NameOfClass(uint classId)
+        {
+            var entityClass = EntityClassManager.Instance.GetClassInfo((EntityClasses)classId);
+
+            return entityClass?.ClassName ?? $"items of class {classId}";
         }
 
         /// <summary>
-        /// Salvaging, module extraction, integration and upgrading are not implemented: their costs are in the client's
-        /// crafting table (MimeogelCostToExtract and its siblings), but the only one of the four whose item side the
-        /// emulator has is fabrication, so these still decline with a message the window can show
-        /// (GAP-W3-CRAFTING-MODULES).
+        /// Creates the result of a finished job in the player's inventory, in stacks of the class's
+        /// stack size. What does not fit stays on the job, so the player can make room and take it
+        /// again. Returns true when the whole job was handed over.
         /// </summary>
+        private bool HandOver(Client client, CraftingJob job)
+        {
+            var classInfo = EntityClassManager.Instance.GetClassInfo((EntityClasses)job.ResultClassId);
+            var stackSize = Math.Max(1u, classInfo?.ItemClassInfo?.StackSize ?? 1u);
+
+            while (job.Count > 0)
+            {
+                var amount = Math.Min(job.Count, stackSize);
+                var item = ItemManager.Instance.CreateFromTemplateId(job.ResultItemTemplateId, amount, client.Player.FamilyName);
+
+                if (item == null)
+                    return false;
+
+                item.Crafter = client.Player.FamilyName;
+
+                if (InventoryManager.Instance.AddItemToInventory(client, item) != null)
+                {
+                    job.Count -= amount;
+                    continue;
+                }
+
+                // Some or none of this stack fitted; the remainder's row and entity go away and
+                // the job keeps what the player has not got yet.
+                var placed = amount - item.StackSize;
+                EntityManager.Instance.DestroyPhysicalEntity(client, item.EntityId, EntityType.Item);
+
+                if (item.Id != 0)
+                    using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
+                        unitOfWork.Items.DeleteItem(item.Id);
+
+                job.Count -= placed;
+                client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmInventoryFull, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return false;
+            }
+
+            return true;
+        }
+
+        private void Collect(Client client, DynamicObject station, Func<CraftingJob, bool> which)
+        {
+            var jobs = JobsForWriting(client, station);
+
+            foreach (var job in jobs.Where(j => j.IsFinished && which(j)).ToList())
+                if (HandOver(client, job))
+                    jobs.Remove(job);
+                else
+                    break;
+
+            if (jobs.Count == 0)
+                _jobs.Remove((station.EntityId, client.Player.Id));
+
+            SendStatus(client, station);
+        }
         internal void RequestSalvageItem(Client client, RequestSalvageItemPacket packet) => Decline(client, packet.KraftwerksId, "RequestSalvageItem", "Salvage");
         internal void RequestExtractModule(Client client, RequestExtractModulePacket packet) => Decline(client, packet.KraftwerksId, "RequestExtractModule", "Module extraction");
         internal void RequestIntegrateItem(Client client, RequestIntegrateItemPacket packet) => Decline(client, packet.KraftwerksId, "RequestIntegrateItem", "Module integration");
         internal void RequestUpgradeItem(Client client, RequestUpgradeItemPacket packet) => Decline(client, packet.KraftwerksId, "RequestUpgradeItem", "Module upgrade");
 
-        /// <summary>
-        /// Hands one job's result over. The item is made here rather than when the job starts, so a job that is never
-        /// collected holds no item row: a full inventory refuses the collection and the job stays where it is.
-        /// </summary>
-        private void Deliver(Client client, DynamicObject station, CraftingJob job)
+        internal void RequestRetrieveFinishedCraftItem(Client client, RequestRetrieveFinishedCraftItemPacket packet)
         {
-            var item = ItemManager.Instance.CreateFromTemplateId(job.ResultItemTemplateId, job.Count);
+            var station = StationFor(client, packet.KraftwerksId, "RequestRetrieveFinishedCraftItem");
 
-            if (item == null || InventoryManager.Instance.AddItemToInventory(client, item) == null)
-            {
-                Refuse(client, station, "There is no room for that in your inventory.");
-                return;
-            }
-
-            JobsFor(client, station).Remove(job);
-            SendStatus(client, station);
-            client.CallMethod(station.EntityId, CraftingResultPacket.Success(client.Player.EntityId));
+            if (station != null)
+                Collect(client, station, j => j.ResultItemId == packet.ItemId);
         }
 
-        private static bool IsFinished(CraftingJob job)
-            => Environment.TickCount64 - job.StartedAtMs >= (long)(job.TimeLeftSeconds * 1000);
-
-        private static long nowMs() => Environment.TickCount64;
-
-        /// <summary>
-        /// What a recipe needs from the player's own inventory, or null when something is short. Counted by item
-        /// template, so several stacks of one material count as a single pool.
-        /// </summary>
-        private static List<(Item Item, uint Count)> PlanInputs(Manifestation player, CraftingData.Recipe recipe)
+        internal void RequestRetrieveAllFinishedItems(Client client, RequestRetrieveAllFinishedItemsPacket packet)
         {
-            var plan = new List<(Item, uint)>();
+            var station = StationFor(client, packet.KraftwerksId, "RequestRetrieveAllFinishedItems");
 
-            foreach (var input in recipe.Inputs)
-            {
-                var remaining = input.Quantity;
-
-                foreach (var entityId in player.Inventory.PersonalInventory)
-                {
-                    if (remaining == 0)
-                        break;
-
-                    var item = EntityManager.Instance.GetItem(entityId);
-
-                    if (item?.ItemTemplate == null || item.ItemTemplate.ItemTemplateId != input.ItemTemplateId || item.StackSize == 0)
-                        continue;
-
-                    var take = Math.Min(remaining, item.StackSize);
-                    plan.Add((item, take));
-                    remaining -= take;
-                }
-
-                if (remaining > 0)
-                    return null;
-            }
-
-            return plan;
-        }
-
-        private static bool Owns(Manifestation player, ulong entityId)
-            => player.Inventory.PersonalInventory.Contains(entityId);
-
-        /// <summary>Refuses a request the way the window expects: status, failure, and a line for the player.</summary>
-        private void Refuse(Client client, DynamicObject station, string reason)
-        {
-            SendStatus(client, station);
-            client.CallMethod(station.EntityId, CraftingResultPacket.Failure(client.Player.EntityId));
-            CommunicatorManager.Instance.SystemMessage(client, reason);
+            if (station != null)
+                Collect(client, station, _ => true);
         }
 
         #endregion
