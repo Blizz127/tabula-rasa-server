@@ -155,6 +155,34 @@ namespace Rasa.Test
             return spawned;
         }
 
+        /// <summary>
+        /// Every map marker names a teleporter or a crafting station the world has. The markers are keyed by the
+        /// client's own marker entity ids (InfiniteRasa 492954a, generated from uimapmarker by position match), and
+        /// the state the map window draws comes from the row each one points at - a marker pointing at nothing would
+        /// simply never light up.
+        /// </summary>
+        [TestMethod]
+        public void EveryMapMarkerPointsAtSomethingInTheWorld()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText = @"
+                SELECT m.marker_entity_id, m.object_kind, m.object_id, m.comment FROM map_marker m
+                WHERE (m.object_kind = 1 AND NOT EXISTS (SELECT 1 FROM teleporter t WHERE t.id = m.object_id))
+                   OR (m.object_kind = 2 AND NOT EXISTS (SELECT 1 FROM kraftwerks k WHERE k.id = m.object_id))";
+
+            var problems = new List<string>();
+            using (var reader = command.ExecuteReader())
+                while (reader.Read())
+                    problems.Add($"marker {reader.GetInt64(0)} ({reader.GetString(3)}) points at {(reader.GetInt64(1) == 1 ? "teleporter" : "kraftwerks")} {reader.GetInt64(2)}, which the world does not have");
+
+            Assert.AreEqual(0, problems.Count, string.Join(" | ", problems));
+
+            using var count = connection.CreateCommand();
+            count.CommandText = "SELECT COUNT(*) FROM map_marker";
+            Assert.AreEqual(307L, (long)count.ExecuteScalar());
+        }
+
         private static SqliteConnection OpenWorld()
         {
             var directory = AppContext.BaseDirectory;
