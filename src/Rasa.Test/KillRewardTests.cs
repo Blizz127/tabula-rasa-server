@@ -129,6 +129,31 @@ namespace Rasa.Test
             Assert.AreEqual(stream.Length, stream.Position);
         }
 
+        /// <summary>
+        /// A vendor purchase travels the same way a kill payout does, with the item in the list instead of
+        /// credits in the tail. The live report of 2026-09-20 read "You received 30 3147." because the server
+        /// built the message itself and put the entity class id where the name goes; Recv_GotLoot is what turns
+        /// a class id into "Standard Grade Cartridges", so the class id has to reach the client unformatted.
+        /// </summary>
+        [TestMethod]
+        public void APurchasedItemCarriesItsClassIdSoTheClientCanNameIt()
+        {
+            using var stream = new MemoryStream();
+            using (var writer = new Rasa.Memory.PythonWriter(new BinaryWriter(stream, System.Text.Encoding.UTF8, true)))
+                new GotLootPacket(0x100000009UL, 3147, 30, 0x2000000AAUL).Write(writer);
+            stream.Position = 0;
+            using var reader = new Rasa.Memory.PythonReader(new BinaryReader(stream));
+            Assert.AreEqual(3, reader.ReadTuple());
+            Assert.AreEqual(0x100000009UL, reader.ReadULong());
+            Assert.AreEqual(1, reader.ReadList());
+            Assert.AreEqual(3, reader.ReadTuple());
+            Assert.AreEqual(3147u, reader.ReadUInt());
+            Assert.AreEqual(30u, reader.ReadUInt());
+            Assert.AreEqual(0x2000000AAUL, reader.ReadULong());
+            Assert.AreEqual(0, reader.ReadInt());
+            Assert.AreEqual(stream.Length, stream.Position);
+        }
+
         private (KillRewardManager, Client) Arrange(byte playerLevel)
         {
             _experience.Clear();

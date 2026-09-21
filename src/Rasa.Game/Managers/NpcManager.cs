@@ -6,6 +6,7 @@ namespace Rasa.Managers
 {
     using Data;
     using Game;
+    using Packets.ClientMethod.Server;
     using Packets.Communicator.Server;
     using Packets.Inventory.Server;
     using Packets.MapChannel.Client;
@@ -599,8 +600,12 @@ namespace Rasa.Managers
                 total = (long) unitPrice * quantity;
             }
 
-            // send player message
-            client.CallMethod(SysEntity.CommunicatorId, new DisplayClientMessagePacket(PlayerMessage.PmGotLootFromUnknown, new Dictionary<string, string> { { "quantity", quantity.ToString() }, { "loot", vendorItem.ItemTemplate.Class.ToString() } }, MsgFilterId.LootObtained));
+            // "You received 30 Standard Grade Cartridges." - through GotLoot, which is how the client gets the
+            // name. Sending the message ourselves printed the entity class id where the name belongs ("You
+            // received 30 3147.", live report 2026-09-20): PmGotLootFromUnknown substitutes %(loot)s verbatim,
+            // and it is Recv_GotLoot that turns a class id into a name through GetEntityClassName.
+            client.CallMethod(SysEntity.ClientMethodId, new GotLootPacket(packet.VendorEntityId, (uint)vendorItem.ItemTemplate.Class,
+                (uint)quantity, placedItem?.EntityId ?? 0));
 
             // remove credits
             ManifestationManager.Instance.LossCredits(client, -(int) total);

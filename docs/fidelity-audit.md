@@ -382,3 +382,96 @@ Checked by hand (2026-09-19):
   left out, because their handler also takes a clan id. **GAP-USABLE-ACTOR-LOCK** (closed, inferred).
 - **`BlockInfo`** is a no-op in the base usable. The game-effect and wargame handlers are unimplemented systems
   rather than mis-identified things, and belong to their own work.
+
+## World placement sweep (2026-09-21)
+
+Three live reports on 2026-09-20 — *"commander rogers is giving me quests to go to outpost commander rogers"*,
+*"You received 30 3147"*, *"npc placement seems off too"* with a shot of an NPC standing in a cot at Alia Das —
+and one question, *"ran into cellar arena not sure what that is"*. Each is answered by a measurement rather than
+a guess.
+
+### Every body against the floor — 126 corrected
+
+`WorldFloorSweepTests` probes every `content_placement` **and every `spawnpool`** on every map we hold a navmesh
+for, against the floor the 2026-09-17 batch measured (`navmesh surface − 0.276 m`). The earlier sweep read
+placements only — 107 rows — so the 819 spawn pools taken in from upstream had never been measured at all.
+
+| | probed | more than 0.5 m off | worst |
+| --- | ---: | ---: | --- |
+| content_placement | 153 | 13 | Lt. Galloway, 40.4 m (a TaRapedia `/loc` with an invented Y) |
+| spawnpool | 819 | 113 | Torcastra Prison vendor, +5.90 m |
+
+Two are deliberate and stay where they are: the boot camp bomb mounted on the wreck hull, and the mini turrets
+on their posts. Upstream's service NPCs are the bulk of the rest: vendors, field medics and hospital markers two to six metres in the
+air, their Y evidently taken from a map marker rather than from the ground. Both A.F.S. Outpost Lexington
+hospitals stood +4.72 m up; upstream's Boargar General spawn was 15.66 m *under* the Wilderness terrain.
+Corrections are in `WorldFloorSweep`; no sourced X or Z changes, and the five rows whose column had to be
+scanned are the ones whose Y was never sourced in the first place.
+
+### Standing inside the furniture — 7 corrected
+
+A cot is half a metre tall, so an NPC in one passes a floor check. `PropOverlapAuditTests` reads the furniture
+the client's own map files place (`mapprops/`, 31,380 props over 72 maps, boxes rotated into each prop's frame)
+and finds the bodies inside them. Sixteen were: nine are deliberate or original (mission 430's mortars stand on
+the client map's own mortar launchers; two camp dummies on the gate catwalk; the original server's own vendor
+behind her counter), and **seven were upstream coordinates that put an NPC inside a cot, a bed, a chair, an
+armour mannequin, a console or a workstation** — including the Ranger Trainer at Alia Das, the report's own NPC.
+They are pushed clear of the box and re-seated on the floor in `PropOverlapFix`.
+
+### Against TaRapedia — 165 readings, 20 corrected
+
+The wiki had only ever been read page by page for cited NPCs. This sweep reads its **complete pre-shutdown
+history** (3,516 pages, each at its last revision before 2009-03-01): 430 carry the NPC infobox and 165 a
+location table with coordinates.
+
+| against this world | count |
+| --- | ---: |
+| within 25 m of ours — corroborated | 45 |
+| same zone, further than 25 m | 24 |
+| our body on a different map from the zone named | 3 |
+| documented by the wiki, not in this world at all | 62 |
+| zone not resolvable to one of our maps | 21 |
+
+Twenty of the 24 are moved (`TarapediaNpcPositions`). They are upstream's mission NPCs, whose coordinates
+upstream derived from the sentence of a mission, against a wiki reading that carries the revision date it was
+set on: Brigadier General Beacham stood 57 m from the reading and away from Rogers, whom the same wiki puts
+beside him; the Irendas Penal Colony group stood ~200 m east of the colony; Fort Defiance's staff ~100 m out.
+The wiki's Y is a player's standing height, so only X and Z are taken and Y is the navmesh floor under them.
+
+Four are deliberately **not** moved, and the reasons are worth keeping: pools 171 and 184 are the original
+server's own spawns, and an original coordinate outranks a community transcription of one; Corporal Orton's
+disagreement is a map change rather than a move; and Ranger Cyrida's wiki reading (38, 154, 48) has no walkable
+ground under it while ours (−46, 154, 48) does — same Y, same Z, so the wiki's X looks to have lost its sign.
+
+The **62 NPCs the wiki documents that this world does not have** are the obvious next batch, the same shape as
+the Ellatha seven: Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders,
+the Penumbra Headquarters staff, and the rest. **GAP-TARAPEDIA-MISSING-NPCS** (open).
+
+### The giver the briefing names — 3 missions
+
+Of the 21 missions where giver and receiver are the same creature, 18 are meant to be. Three were not:
+
+- **1392, 1393 Conscientious Objector Part Two** — given *and* received by Outpost Commander Rogers, so the
+  mission asked the player to carry a report to the NPC who had handed it over. The chain turns on entity class
+  25696, *"Apirka's Report detailing your involvement in the case of the deserter, Ranger Milpas"*: the giver is
+  Warrior Apirka (creature 43), the receiver stays Rogers.
+- **976 Restraining Order** — ours hung on Colonel Li Hua. The client's mission text (5334–5336) reads *"Colonel
+  Bruce wants you to help the ground forces out by taking out 3 Bane Stalkers. Return to him at Fort Haroun"*.
+  Colonel Bruce (client name 8657) had no creature at all, which is why the mission was on the nearest colonel.
+  He is created and takes both ends. His coordinates are **inferred** — no source gives them — and he stands
+  beside Dr. Torpor, the mission NPC already at Fort Haroun.
+
+### "You received 30 3147" — fixed
+
+`PmGotLootFromUnknown` substitutes `%(loot)s` verbatim, and the server was passing the item's entity class id as
+that string. The client resolves item names itself: `Recv_GotLoot` reads `(entityClassId, quantity, itemId)` and
+calls `GetEntityClassName`. A vendor purchase now sends `GotLoot` the way a kill payout does, so the line reads
+"You received 30 Standard Grade Cartridges."
+
+### CELLAR Arena — original content, unreachable here
+
+Not ours and not misplaced: the client's own tables carry game context `20000009 = "CELLAR Arena"` (map
+`adv_afs_arena`), and what can be run into in the world is entity class `29211 ArchHumBaseHolosignChallengeArena`,
+an AFS holo-sign that the client's map file places. The arena itself holds three NPCs here — Field Medic Madison,
+Armor Supplier Shetro, Arms Supplier Oliver — on a map nothing teleports to. **GAP-CELLAR-ARENA-ACCESS** (open):
+the way in is not in any data we hold.

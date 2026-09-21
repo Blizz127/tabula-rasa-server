@@ -182,6 +182,19 @@
    "era": "final_live",
    "locator": "research/20260913-bootcamp/map/maps/adv_arieki_ligo_burningsteps.map (the client map itself; cited for the dropship landing pad the Crucible's pad stands on)",
    "note": "Read for Place_dropship_pads (InfiniteRasa 492954a): the Ligo Crucible pad had no position and no map, so the zone could not be flown to."
+  },
+  "client_map:furniture": {
+   "kind": "client_map",
+   "era": "final_live",
+   "locator": "mapprops/*.csv - furniture-sized props decoded from the client 1.16.5.0 map files of 72 maps, with the grammar of the client loader client/gamemap.pyo",
+   "note": "Object boxes used to tell whether a body stands inside a cot, console, workstation or mannequin. Static decode; nothing from the game is executed."
+  },
+  "community_db:tarapedia-history": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://tarapedia.fandom.com",
+   "locator": "research/20260914-wilderness-missions/work/tarapedia_all_last_pre_shutdown.json - the wiki’s complete page history dump (tabularasafandomcom-20220702), reduced to each page’s last revision before 2009-03-01",
+   "note": "3,516 pages; 430 carry the NPC infobox and 165 a location table with coordinates. Each reading keeps the revision id and timestamp it was set on."
   }
  },
  "scope": [
@@ -193,7 +206,7 @@
      "max": 199911
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements."
   },
   {
    "table": "content_area",
@@ -212,7 +225,7 @@
      "max": 199911
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements."
   },
   {
    "table": "content_condition",
@@ -55455,6 +55468,895 @@
      "reasoning": "as 1995's own objective carries it; the retry repeats the objective"
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199014
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 10002,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 10002"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Captain Burba: Ellatha -245, 100, -67"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199014
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1985,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Captain Burba: Ellatha -245, 100, -67"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -245.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Captain Burba: Ellatha -245, 100, -67"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 101.334,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Captain Burba: Ellatha -245, 100, -67"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -67.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Captain Burba: Ellatha -245, 100, -67"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199015
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 5262,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 5262"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Evac Pilot Constant: Ellatha 93, 109, 127"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199015
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1985,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Evac Pilot Constant: Ellatha 93, 109, 127"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": 93.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Evac Pilot Constant: Ellatha 93, 109, 127"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 109.044,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Evac Pilot Constant: Ellatha 93, 109, 127"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 127.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Evac Pilot Constant: Ellatha 93, 109, 127"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199016
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 206,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 206"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 13,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Information Spec. Johnson: Ellatha -83, 33, -132"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199016
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1430,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Information Spec. Johnson: Ellatha -83, 33, -132"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -83.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Information Spec. Johnson: Ellatha -83, 33, -132"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 33.194,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Information Spec. Johnson: Ellatha -83, 33, -132"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -132.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Information Spec. Johnson: Ellatha -83, 33, -132"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199017
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 4843,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 4843"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 13,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Ranger Nylla: Ellatha -185, 5, -123"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 7036,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 7036"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199017
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1430,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Ranger Nylla: Ellatha -185, 5, -123"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -185.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Ranger Nylla: Ellatha -185, 5, -123"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 4.864,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Ranger Nylla: Ellatha -185, 5, -123"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -123.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Ranger Nylla: Ellatha -185, 5, -123"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199018
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 6696,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 6696"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lieutenant Stone: Ellatha -275, 23, -301"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199018
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1506,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lieutenant Stone: Ellatha -275, 23, -301"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -275.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lieutenant Stone: Ellatha -275, 23, -301"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 23.004,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lieutenant Stone: Ellatha -275, 23, -301"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -301.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lieutenant Stone: Ellatha -275, 23, -301"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199019
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 6740,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 6740"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lost Forean: Ellatha -203, 7, -109"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 26833,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 26833"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199019
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1506,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lost Forean: Ellatha -203, 7, -109"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -203.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lost Forean: Ellatha -203, 7, -109"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 7.894,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lost Forean: Ellatha -203, 7, -109"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": -109.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Lost Forean: Ellatha -203, 7, -109"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199020
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "name_id": {
+     "value": 3097,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage 3097"
+      }
+     ],
+     "reasoning": "the client's own creature name table, looked up by the name the database gives"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Sgt. Pierre: Ellatha -281, 170, 86"
+      }
+     ],
+     "reasoning": "the level of the NPCs already standing in that place; the database records no level"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 3846"
+      }
+     ],
+     "counterpart": "the world-seed NPC of the same kind",
+     "required_because": "mandatory for the creature to exist and be drawn, and no per-NPC source exists",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs",
+     "required_because": "mandatory and no per-NPC source exists",
+     "decision": "OD-45"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199020
+   },
+   "slice": "W3",
+   "migration": "EllathaWorldNpcs",
+   "fields": {
+    "map_context_id": {
+     "value": 1220,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Sgt. Pierre: Ellatha -281, 170, 86"
+      }
+     ],
+     "reasoning": "the map of the zone the database names, whose navmesh floor the reading lands on"
+    },
+    "pos_x": {
+     "value": -281.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Sgt. Pierre: Ellatha -281, 170, 86"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 170.334,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Sgt. Pierre: Ellatha -281, 170, 86"
+      }
+     ],
+     "reasoning": "the navmesh floor under the reading (within 1.6 m of it) plus the world's spawn offset -0.276",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    },
+    "pos_z": {
+     "value": 86.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp, Sgt. Pierre: Ellatha -281, 170, 86"
+      }
+     ],
+     "reasoning": "the database's own coordinate",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 2.0
+     }
+    }
+   }
   }
  ],
  "omitted": [
@@ -57814,6 +58716,42 @@
     "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables",
     "MissionLinkAuditTests.EveryMissionGiverAndReceiverIsACreatureThatSpawns"
    ]
+  },
+  {
+   "id": "GAP-TARAPEDIA-MISSING-NPCS",
+   "summary": "TaRapedia’s complete pre-shutdown history carries 165 NPC location tables, and 62 of those NPCs are not in this world at all - Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders, the Penumbra Headquarters staff, Master Phanin, the Irendas lookout scouts, and the rest. Fifty-two of them resolve to a map this world carries. Creating them is the same shape of work as EllathaWorldNpcs: the wiki’s x and z, the navmesh floor for y, client names, analogue classes, and no dialogue until a mission needs one.",
+   "evidence": [
+    "research/20260914-wilderness-missions/work/tarapedia_all_last_pre_shutdown.json - 165 NPC location tables",
+    "the cross-check of every NPC in this world against them, 2026-09-21"
+   ],
+   "closes_with": "a migration creating the 52 whose zone resolves to one of our maps, at the wiki’s coordinates",
+   "surfaced_by": [
+    "world placement sweep, 2026-09-21"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-CELLAR-ARENA-ACCESS",
+   "summary": "The CELLAR Arena is original content - the client’s game context 20000009 \"CELLAR Arena\", map adv_afs_arena, with its holo-sign (entity class 29211) standing in the world where the client map puts it. Three NPCs are seeded on that map (Field Medic Madison, Armor Supplier Shetro, Arms Supplier Oliver) and nothing this world holds teleports to it: no teleporter row, no map link, no mission. How a player entered the arena is not in any data we have.",
+   "evidence": [
+    "client gamecontext 20000009 = adv_afs_arena",
+    "client gamecontextlanguage 20000009 = \"CELLAR Arena\"",
+    "client physicalentityclassnamelanguage 29211 = \"CELLAR Arena\" (ArchHumBaseHolosignChallengeArena)",
+    "live report 2026-09-20: \"ran into cellar arena not sure what that is\""
+   ],
+   "closes_with": "the entrance the original used, from client code or footage",
+   "surfaced_by": [
+    "live report, 2026-09-20"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
   }
  ],
  "non_content_settings": [
@@ -59529,6 +60467,96 @@
     {
      "source": "client_table:creature-names",
      "locator": "135 'Ranger Tarina'; 6711 'Ranger Tirna'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "WorldFloorSweep",
+   "table": "spawnpool, content_placement",
+   "key": {
+    "rows": 126,
+    "spawnpool": 113,
+    "content_placement": 13
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "up to 15.66 m off the floor",
+   "new": "the navmesh floor at the body’s own x,z",
+   "reason": "A live report on 2026-09-20 (\"npc placement seems off too\") sent every body in the world back through the navmesh. The 2026-09-17 sweep read content_placement only, so the 819 spawn pools taken from upstream had never been measured: 113 of them stood more than half a metre off the floor, vendors and field medics among them two to six metres in the air. Y was never sourced for any row moved here, so the measured floor replaces a derived value with a better one; for the five whose column had to be scanned, the x and z from TaRapedia are kept and only the invented Y changes. Two rows the sweep flagged are left where they are: the boot camp bomb on the wreck hull and the mini turrets on their posts, which are mounted rather than standing.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_wilderness",
+     "locator": "navmesh ground under each body, floor = surface - 0.276 m (WorldPlacementFloorSnapRows)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "QuestGiverBriefingFix",
+   "table": "npc_mission",
+   "key": {
+    "id": [
+     1392,
+     1393,
+     976
+    ]
+   },
+   "field": "giver_id, reciver_id",
+   "old": "1392/1393 given and received by Outpost Commander Rogers (198514); 976 by Colonel Li Hua (199802)",
+   "new": "1392/1393 given by Warrior Apirka (43) and received by Rogers; 976 given and received by Colonel Bruce (199021, created)",
+   "reason": "A live report on 2026-09-20 - \"commander rogers is giving me quests to go to outpost commander rogers\". Of the 21 missions with giver == receiver, three disagree with the client’s own text: the Conscientious Objector chain turns on entity class 25696, \"Apirka’s Report detailing your involvement in the case of the deserter, Ranger Milpas\", so the report is Apirka’s to hand over and Rogers the C.O. it is carried to; mission 976’s text reads \"Colonel Bruce wants you to help the ground forces out by taking out 3 Bane Stalkers. Return to him at Fort Haroun when you’re done\", and Colonel Bruce (client name 8657) had no creature in this world.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "mission text 5334-5336 \"Restraining Order\" / \"Return to him at Fort Haroun\""
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "8657 'Colonel Bruce'; 2969 'Warrior Apirka'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "PropOverlapFix",
+   "table": "spawnpool, content_placement",
+   "key": {
+    "ids": [
+     500088,
+     501026,
+     500106,
+     500154,
+     501004,
+     500267,
+     199210
+    ]
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "inside a cot, a bed, a chair, two armour mannequins, a Wardenbot computer and a workstation",
+   "new": "clear of the prop box by 0.3 m, on the navmesh floor there",
+   "reason": "A live report on 2026-09-20 showed an NPC standing in a cot at Alia Das. Sixteen bodies in the world stand inside furniture the client’s own map files place; nine are deliberate or original (mission 430’s mortars on the map’s mortar launchers, four camp placements measured from footage, the original server’s own vendor behind her counter) and the seven here are upstream coordinates, or in Outpost Cmdr. Russ’s case a TaRapedia x,z that lands on a workstation.",
+   "citations": [
+    {
+     "source": "client_map:furniture",
+     "locator": "mapprops/*.csv - prop boxes rotated into each prop’s frame"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "TarapediaNpcPositions",
+   "table": "spawnpool, content_placement",
+   "key": {
+    "rows": 20
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "upstream coordinates derived from the sentence of a mission, 28 to 351 m from the wiki reading",
+   "new": "the wiki’s x and z, with the navmesh floor for y",
+   "reason": "Of 165 NPC pages with a location table, 45 corroborate our positions within 25 m and 24 disagree by more. The 20 moved here are upstream’s, whose positions upstream inferred from mission text while the wiki gives a coordinate with the date it was set. Not moved: the original server’s own spawns (pools 171 and 184), a cross-map disagreement (Corporal Orton), a wiki reading with no ground under it (Ranger Cyrida, whose x appears to have lost its sign), a 0,0,0 row (Dr. Eleanor Corman), a sub-map case (Lieutenant Donners) and a shared name (Medic Campbell).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "165 NPC location tables, last pre-shutdown revision of each page"
     }
    ]
   }

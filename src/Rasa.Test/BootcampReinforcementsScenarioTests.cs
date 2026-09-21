@@ -146,7 +146,7 @@ namespace Rasa.Test
             public References(IReadOnlyDictionary<uint, Mission> missions) => _missions = missions;
             // 1148 is the Divide and 1244 the Palisades: W3 batch 5 placed four NPCs there from TaRapedia's own
             // zone for each of them. 1394 is the Devil's Den and 1347, 1773 and 2034 the instances where Tyler, Miras and Phenix stand.
-            public bool MapContextExists(uint mapContextId) => mapContextId is 1985 or 1220 or 1148 or 1244 or 1497 or 1304 or 1454 or 1759 or 1764 or 1761 or 1394 or 1347 or 1773 or 2034 or 1430;
+            public bool MapContextExists(uint mapContextId) => mapContextId is 1985 or 1220 or 1148 or 1244 or 1497 or 1304 or 1454 or 1759 or 1764 or 1761 or 1394 or 1347 or 1773 or 2034 or 1430 or 1506;
             public bool MissionExists(uint missionId) => _missions.ContainsKey(missionId);
             public bool ObjectiveExists(uint missionId, uint objectiveId) => _missions.TryGetValue(missionId, out var m) && m.Objectives.ContainsKey(objectiveId);
             public uint MissionGiver(uint missionId) => _missions.TryGetValue(missionId, out var m) ? m.MissionGiver : 0;

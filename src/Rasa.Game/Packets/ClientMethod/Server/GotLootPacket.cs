@@ -12,6 +12,9 @@
 
         private readonly ulong _creatureEntityId;
         private readonly int _credits;
+        private readonly uint _itemClassId;
+        private readonly uint _itemQuantity;
+        private readonly ulong _itemEntityId;
 
         public GotLootPacket(LootDispenser loot)
         {
@@ -25,13 +28,39 @@
             _credits = credits;
         }
 
+        /// <summary>
+        /// One item, for a vendor purchase. The client's Recv_GotLoot reads the entity class id out of the list
+        /// and asks its own language manager for the name (GetEntityClassName), which is why the item has to
+        /// travel as a class id and not as the text of one.
+        /// </summary>
+        public GotLootPacket(ulong sourceEntityId, uint itemClassId, uint quantity, ulong itemEntityId)
+        {
+            _creatureEntityId = sourceEntityId;
+            _itemClassId = itemClassId;
+            _itemQuantity = quantity;
+            _itemEntityId = itemEntityId;
+        }
+
         public override void Write(PythonWriter pw)
         {
             pw.WriteTuple(3);
             if (Loot == null)
             {
                 pw.WriteULong(_creatureEntityId);
-                pw.WriteList(0);
+
+                if (_itemClassId == 0)
+                {
+                    pw.WriteList(0);
+                }
+                else
+                {
+                    pw.WriteList(1);
+                    pw.WriteTuple(3);
+                    pw.WriteUInt(_itemClassId);
+                    pw.WriteUInt(_itemQuantity);
+                    pw.WriteULong(_itemEntityId);
+                }
+
                 pw.WriteInt(_credits);
                 return;
             }
