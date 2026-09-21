@@ -447,6 +447,14 @@ The **62 NPCs the wiki documents that this world does not have** are the obvious
 the Ellatha seven: Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders,
 the Penumbra Headquarters staff, and the rest. **GAP-TARAPEDIA-MISSING-NPCS** (open).
 
+### What the audits caught in the sweep itself — 3 rows
+
+The two guards found three rows the sweep had left wrong, which is the point of shipping them together. Snapping
+the Edmund Range and Proving Grounds wargame vendors down from 2.4 m in the air landed them inside an ammo
+crate, because the prop check had run before the snap rather than after; and Ranger Kaely's new spot at New
+Velon Village has two walkable levels 1.2 m apart, where the probe took the lower and left her reading as buried
+under the upper. `WorldSweepCorrections` puts all three right.
+
 ### The giver the briefing names — 3 missions
 
 Of the 21 missions where giver and receiver are the same creature, 18 are meant to be. Three were not:

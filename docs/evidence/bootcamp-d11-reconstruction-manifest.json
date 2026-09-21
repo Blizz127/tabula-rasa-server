@@ -60559,6 +60559,28 @@
      "locator": "165 NPC location tables, last pre-shutdown revision of each page"
     }
    ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "WorldSweepCorrections",
+   "table": "spawnpool",
+   "key": {
+    "ids": [
+     500319,
+     500325,
+     510189
+    ]
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "two vendors snapped onto a floor that is inside an ammo crate; Ranger Kaely on the lower of two walkable levels",
+   "new": "1.25 m clear of the crate on the same floor; Kaely on the upper level",
+   "reason": "The same sweep’s own guards caught three rows it had left wrong: PropOverlapAuditTests found the two wargame vendors inside ArchHumGenObjCrateAmo01V03 after WorldFloorSweep put them on the ground under it, and WorldPositionAuditTests found Ranger Kaely 1.19 m under the surface at the TaRapedia reading, where two walkable levels sit 1.2 m apart and the probe took the lower.",
+   "citations": [
+    {
+     "source": "client_map:furniture",
+     "locator": "ArchHumGenObjCrateAmo01V03 at Edmund Range and the Proving Grounds"
+    }
+   ]
   }
  ],
  "owner_decisions": [
