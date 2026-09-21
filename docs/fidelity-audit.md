@@ -443,9 +443,30 @@ server's own spawns, and an original coordinate outranks a community transcripti
 disagreement is a map change rather than a move; and Ranger Cyrida's wiki reading (38, 154, 48) has no walkable
 ground under it while ours (−46, 154, 48) does — same Y, same Z, so the wiki's X looks to have lost its sign.
 
-The **62 NPCs the wiki documents that this world does not have** are the obvious next batch, the same shape as
-the Ellatha seven: Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders,
-the Penumbra Headquarters staff, and the rest. **GAP-TARAPEDIA-MISSING-NPCS** (open).
+### The NPCs the wiki has and we did not — 51 created
+
+Sixty of the 165 had no creature here at all, and the Ellatha pass had since created two of them. Fifty-one are
+created in `TarapediaMissingNpcBatch`, across 19 maps: Field Officer Hogan and Medical Officer Mayes at Foreas
+Base, the Temple of Paludos elders, the Penumbra Headquarters staff, Master Phanin in his research facility,
+the Irendas lookout scouts, and the rest. 26 Human, 9 Brann, 7 Forean, 3 Thrax, 2 Thrax Grenadier, 2 Lightbender, 1 Caretaker, 1 AFS Mech.
+
+Name and coordinates are the wiki's, each row carrying the revision id and date it was last set on before the
+shutdown; Y is the navmesh floor under that x,z; level, species, gender and faction are its infobox. The entity
+class is an analogue under OD-45 — the class this world already uses for that species and gender — and the body
+an analogue under OD-11, the set a shipped NPC of that class wears, because a swapset with no appearance rows
+renders naked and headless. None carries dialogue: the wiki calls 30 of them mission givers, but those missions
+are not seeded here.
+
+Seven needed their reading resolved before they would land: Master Phanin's zone is an instance whose floor
+matches his wiki Y to 0.4 m; Researcher Endala Berish's "Indra Pass" is the Ashen Desert surface, not the
+caverns 103 m below; Information Spec. Nye's row reads 331, 522.6, 37, where 522.6 is a z on the Palisades and
+the resulting spot is 80 m from Watchman Hillenmeyer at Lake Elinor on ground of the same height; Base Cmdr.
+Matlin's Y of 1318 is not a height on any map here. Two are labelled map guesses (Downed Prisoner, Rijii).
+
+Nine stay out: eight whose pages name no zone that resolves to a map here, and **Commander Elvers**, whose page
+puts him at Denzil's Caldera on the boot camp map — what stands in the reconstructed camp is the manifest's
+business, and Ellatha's pass left him out too ("Spawns in 3 different spots" instead of a coordinate). He needs
+an owner decision. **GAP-TARAPEDIA-MISSING-NPCS** (closed for the 51; the nine are recorded on it).
 
 ### What the audits caught in the sweep itself — 3 rows
 

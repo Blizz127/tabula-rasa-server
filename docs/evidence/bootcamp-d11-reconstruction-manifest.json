@@ -58719,12 +58719,12 @@
   },
   {
    "id": "GAP-TARAPEDIA-MISSING-NPCS",
-   "summary": "TaRapedia’s complete pre-shutdown history carries 165 NPC location tables, and 62 of those NPCs are not in this world at all - Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders, the Penumbra Headquarters staff, Master Phanin, the Irendas lookout scouts, and the rest. Fifty-two of them resolve to a map this world carries. Creating them is the same shape of work as EllathaWorldNpcs: the wiki’s x and z, the navmesh floor for y, client names, analogue classes, and no dialogue until a mission needs one.",
+   "summary": "TaRapedia’s complete pre-shutdown history carries 165 NPC location tables, and 62 of those NPCs are not in this world at all - Field Officer Hogan and Medical Officer Mayes at Foreas Base, the Temple of Paludos elders, the Penumbra Headquarters staff, Master Phanin, the Irendas lookout scouts, and the rest. Fifty-two of them resolve to a map this world carries. Creating them is the same shape of work as EllathaWorldNpcs: the wiki’s x and z, the navmesh floor for y, client names, analogue classes, and no dialogue until a mission needs one. Closed 2026-09-21 (TarapediaMissingNpcBatch): 51 are created at the wiki’s coordinates on the navmesh floor. Nine remain out - eight whose zone resolves to no map here (Commander Figgins, Hermit, Jumna, Ranger Helka, Research Chemist Horsh, Retread Karl, Shaman Siva, Warrior Veska) and Commander Elvers, who belongs to the boot camp and so to an owner decision.",
    "evidence": [
     "research/20260914-wilderness-missions/work/tarapedia_all_last_pre_shutdown.json - 165 NPC location tables",
     "the cross-check of every NPC in this world against them, 2026-09-21"
    ],
-   "closes_with": "a migration creating the 52 whose zone resolves to one of our maps, at the wiki’s coordinates",
+   "closes_with": "closed: the confirming tests are in confirmed_by",
    "surfaced_by": [
     "world placement sweep, 2026-09-21"
    ],
@@ -58733,7 +58733,12 @@
     "W2",
     "W3"
    ],
-   "status": "open"
+   "status": "closed",
+   "confirmed_by": [
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables",
+    "WorldFloorSweepTests.EveryBodyInTheWorldStandsOnTheWalkableSurface",
+    "PropOverlapAuditTests.NoBodyStandsInsideAProp"
+   ]
   },
   {
    "id": "GAP-CELLAR-ARENA-ACCESS",
@@ -60579,6 +60584,34 @@
     {
      "source": "client_map:furniture",
      "locator": "ArchHumGenObjCrateAmo01V03 at Edmund Range and the Proving Grounds"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "TarapediaMissingNpcBatch",
+   "table": "creature, content_placement, creature_appearance",
+   "key": {
+    "ids": "199022-199073",
+    "created": 51,
+    "maps": 19
+   },
+   "field": "new rows",
+   "old": "no creature at all for any of them",
+   "new": "the wiki's x and z with the navmesh floor for y, the client's name, its infobox level, species, gender and faction, an OD-45 class analogue and an OD-11 body analogue, and no dialogue",
+   "reason": "Of the 165 NPC pages in TaRapedia’s pre-shutdown history that carry a location table, 60 named NPCs this world had no creature for. These 51 resolve to a map this world carries and to walkable ground on it, and none of them lands inside the furniture the client’s map files place. Nine stay out: eight whose zone resolves to no map here, and Commander Elvers, whose page puts him in the boot camp, where what stands is the manifest’s business and an owner decision.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "one revision id and date per row, recorded in each placement’s comment"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "every name matched to the client’s own creature name table; no name id was already on a creature here"
+    },
+    {
+     "source": "client_map:furniture",
+     "locator": "none of the 51 stands inside a prop"
     }
    ]
   }
