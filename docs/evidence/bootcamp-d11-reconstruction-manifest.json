@@ -60614,6 +60614,24 @@
      "locator": "none of the 51 stands inside a prop"
     }
    ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "PhostBenonFloor",
+   "table": "content_placement",
+   "key": {
+    "id": 199034
+   },
+   "field": "pos_y",
+   "old": 227.28,
+   "new": 229.114,
+   "reason": "The navmesh has two walkable levels in Phost'Benon's column in the Mires, 227.56 and 229.39. The probe took the wiki's own Y as its hint and found the lower, which left him 1.83 m under the upper; WorldFloorSweepTests and WorldPositionAuditTests both caught it against the deployed world.",
+   "citations": [
+    {
+     "source": "client_map:adv_arieki_torden_incline",
+     "locator": "navmesh column at -282, 71 on adv_arieki_torden_mires"
+    }
+   ]
   }
  ],
  "owner_decisions": [
