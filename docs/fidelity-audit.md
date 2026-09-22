@@ -463,10 +463,31 @@ caverns 103 m below; Information Spec. Nye's row reads 331, 522.6, 37, where 522
 the resulting spot is 80 m from Watchman Hillenmeyer at Lake Elinor on ground of the same height; Base Cmdr.
 Matlin's Y of 1318 is not a height on any map here. Two are labelled map guesses (Downed Prisoner, Rijii).
 
-Nine stay out: eight whose pages name no zone that resolves to a map here, and **Commander Elvers**, whose page
+Nine stayed out at first: eight whose pages named no zone that resolved to a map here, and **Commander Elvers**, whose page
 puts him at Denzil's Caldera on the boot camp map — what stands in the reconstructed camp is the manifest's
 business, and Ellatha's pass left him out too ("Spawns in 3 different spots" instead of a coordinate). He needs
-an owner decision. **GAP-TARAPEDIA-MISSING-NPCS** (closed for the 51; the nine are recorded on it).
+an owner decision.
+
+Eight of those nine turned out to be a **parser failure, not a source failure**: those pages write the location
+row as plain table cells (`| Foreas | Valverde | Marshes | Paludos`) where the rest use wiki links, and the
+reader only read links. Read properly, all eight name a zone this world carries, and each lands on the navmesh
+floor within a metre of the wiki's own Y — the closest corroboration this source has given. They are created in
+`TarapediaLastNpcs`, which also corrects five bodies the same re-read moved out of the "zone unknown" bucket:
+
+- **Lieutenant Holloway** stood on the Pools map at a height of 862 m; the wiki puts him in Retread City in the
+  Marshes, where the floor is 216.8 m against his wiki Y of 216. A map change, on the map's own ground.
+- **Rijii** had been created on the Plains because his zone read "Brann LZ" and that was the only walkable
+  ground at his x,z. His page reads Arieki / Torden / Mires / Brann LZ, *"In the same room as the Brann LZ
+  Waypoint"*, and the Mires floor there is 238.28 against his wiki Y of 238.5. He moves to the Mires.
+- **MP Price**, **Sergeant Elway** and **The Director** stood 116, 46 and 104 m from the reading.
+
+Not taken, and worth recording: **Ranger Taavik**, **Shaman Geli**, **Sergeant Starling** and **Retread
+McCormick** all carry the identical coordinate −268, 216, −812, which is Retread Karl's. The first three were
+edited within minutes of each other on 2007-12-15 (revisions 21096, 21097, 21099) and their pages say Paludos
+while that coordinate is Retread City. That is one editor's copy-paste, not four NPCs on one spot.
+
+**GAP-TARAPEDIA-MISSING-NPCS** (closed for 59 of 60; Commander Elvers is the one left, and he is an owner
+decision).
 
 ### What the audits caught in the sweep itself — 3 rows
 
@@ -497,10 +518,179 @@ that string. The client resolves item names itself: `Recv_GotLoot` reads `(entit
 calls `GetEntityClassName`. A vendor purchase now sends `GotLoot` the way a kill payout does, so the line reads
 "You received 30 Standard Grade Cartridges."
 
-### CELLAR Arena — original content, unreachable here
+### CELLAR Arena — original content, and reachable after all
 
 Not ours and not misplaced: the client's own tables carry game context `20000009 = "CELLAR Arena"` (map
 `adv_afs_arena`), and what can be run into in the world is entity class `29211 ArchHumBaseHolosignChallengeArena`,
-an AFS holo-sign that the client's map file places. The arena itself holds three NPCs here — Field Medic Madison,
-Armor Supplier Shetro, Arms Supplier Oliver — on a map nothing teleports to. **GAP-CELLAR-ARENA-ACCESS** (open):
-the way in is not in any data we hold.
+an AFS holo-sign that the client's map file places. It is signage, not the door — it has an empty augmentation
+list and no `usabledata` row.
+
+**A correction to the first version of this section, which said the way in was not in any data we hold.** It is:
+a player walked onto a battlefield-entrance pad in the barracks of six AFS bases. Two original sources agree —
+`uimapmarker.maplinkmarkers[2232]` carries eight type-8 BATTLEFIELD_ENTRANCE markers, and exactly six outdoor
+maps carry the reciprocal marker back — and NCsoft's own patch note names the six: Foreas Base, Alia Das, Fort
+Defiance, Mt. Hellas, Tantalus, Fort Intrepid. `MapLinkPreloader` seeded all fourteen rows in `ae831e9`, and
+`rasaworld.db` has them enabled (ids 9, 17, 51, 77, 99, 104, 134 inbound; 135–141 back out).
+
+What is actually wrong there is smaller and worth fixing: the arena's **hospital sits on the wrong map**.
+`TeleporterPreloader` puts "Hospital: CELLAR Arena Medic" at 24.9, 40.0, 114.79 on context **2259**, while the
+medic that defines it — spawn pool 500006 — stands at those exact coordinates on **20000009**, and the client's
+own marker (uimapmarker 134419591463366, UI map key 2232) says 20000009 too. Map 2259 holds nothing else at all.
+So a player who dies in the arena has no respawn point in it. Corrected in `CodexPlacementFixes`.
+
+## The mission wiring audit (2026-09-21)
+
+Every one of the 77 seeded missions read against the client's own mission text, and the whole of TaRapedia's
+pre-shutdown history (926 mission pages) read against both. The live report that started it — *"commander rogers
+is giving me quests to go to outpost commander rogers"* — was one case of a pattern.
+
+### Objectives that completed at the wrong NPC — 6 fixed, 3 to go
+
+A conversation objective completes by talking to whoever carries its NPC package. In six missions the package sat
+on the wrong body, usually the giver's, so the mission sent the player back to the person who had just briefed
+them. Four needed nothing but moving the package to an NPC already standing here:
+
+| mission | was on | belongs to |
+| --- | --- | --- |
+| 347 | Shaman Horea | Base Guard Kapler (199010) |
+| 640 | Colonel Whitaker | the Operations Mainframe (199511) |
+| 940 | Sgt. Jeansonne | Sgt. Ricardo (199412) |
+| 1063 | Xenori | Lieutenant Liu (199510) |
+
+Three more were hung on a giver because the NPC the client names **did not exist in this world at all**: Field
+Sgt. Hayes (332), Ashwon (969) and Sirth (977). They are created in `MissionSpeakers` at the client's own UI map
+markers, each landing within 0.4 m of the marker's height. The tenth, mission 1863's Koffman's corpse, is still
+open: the client has no map markers at all for the Marshes and no source gives it a coordinate.
+
+### Missions that cannot be finished — 3, now diagnosed
+
+442, 451 and 1186 are offered, accepted, and impossible: the required objective's only route is a conversation on
+packages 1486, 569 and 1300, which no body carries. None of the three is a forgotten NPC — they are **props**.
+1486 is the *Blood Analyzation Terminal* in the Twin Pillars hospital, which the client names itself
+(`usablenameoverride` 73). 1300 is the Eloh obelisk in the Kardash Atta Colony, whose own conversation text ends
+"The obelisk is too large to move on your own". 569 is a directions villager at Daghda's Urn whom no client table
+names. Building them means creating usables, which is content: **GAP-MISSION-PROP-SPEAKERS** (open).
+
+### Order, receiver, rewards
+
+Five missions listed their steps out of the order the client's own conversation chain implies (332, 682, 955, 969,
+1992) — the log sorts by ordinal, so the player read them wrong. 1904 was received by Retread Lou while its own
+log, objective and package all name Retread Duvall. 429 paid nothing and 1390 was missing its 2,000 XP; TaRapedia
+supplies both, and it is trustworthy for this column because all 53 XP figures and all 55 credit figures already
+seeded match it exactly.
+
+**Reward items are a firm negative.** The wiki names them by manufacturer — "Olympia Reflective Armor Vest" — and
+the manufacturer is a module display pattern, not a template: no client table maps a template to a module. One
+armour icon resolves to 492 templates and narrowing by level requirement reaches three, not one. Of 400 reward
+lines, 67 resolve (nearly all consumables, which the client names directly) and 305 do not.
+**GAP-MISSION-REWARD-ITEMS** (open).
+
+### What the wiki could still give us
+
+859 of its missions are not seeded here. 164 have both giver and receiver already standing in the world, and of
+those exactly **one** is ready to seed outright (1659 *Logos: Vortex*) with 26 more a single named gap away — 22
+of them Logos missions whose only gap is the mission level. That is the next content batch worth shipping, and it
+waits on one decision, because **the client has no mission-level field anywhere** and TaRapedia states a level for
+only 126 of 926 pages: **GAP-MISSION-LEVEL** (open).
+
+## The parallel audit, and what it shipped (2026-09-21)
+
+Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and
+this server's source. The headline is reassuring: **every static table copied from the client is exact** — 19
+tables compared row for row, zero value mismatches, and `Lightning` verified end to end (SkillId 49 →
+`AA_RECRUIT_LIGHTNING` → damage-type property 13 → the client displays "Electric"). Every defect found was in a
+row the emulator *derived* or in server code formatting a name the client should format.
+
+### The mute world speaks once
+
+`BarkPackage` existed but only a GM command reached it, so 859 bark rows and 1,718 localised lines had never
+been heard. Bark 852 is original end to end — the client's table gives it a 10 s bubble, `stringtable` names the
+file `boot_camp_major_mcallister_bark.ogg`, and the audio set is "Bark English Male Bootcamp McAllister" — so
+Major McAllister now shouts *"Soldier! If you're done communing with your alien buddies, we could use a hand
+saving our asses around here!"* when the recruit comes back from the Eloh holograms. The trigger moved from the
+design's first proposal, which sat 48.3 m from him against the client's hard 20 m bark range: it would have
+shipped silent.
+
+**Bark 232 shipped nothing, deliberately.** Its line — "Get a charge over here to clear out this wreckage!" —
+belongs at the crashed dropship, and the NPC chosen to say it, Corporal Van Valkenberg, does not exist in the
+world at that moment: his placement carries `present_condition 198907`, `bootcamp.dropship_destroyed = 1`, so he
+and the three other reinforcements only materialise *after* the detonation. Nothing else stands within 100 m of
+the wreck during the demolition; the nearest present body is Conrad's corpse, 187 m away. The bark is weak
+evidence that the original had someone at that pad and this reconstruction does not.
+**GAP-BOOTCAMP-DROPSHIP-SPEAKER** (open).
+
+### Everything wearing its clothes properly
+
+421 outfit rows over 159 NPCs were filed under the wrong slot — the officer boots under GLOVES, torso and legs
+keyed to each other — and every affected NPC is somewhere a player can reach, including all nine humans in the
+boot camp. Five shipped creatures carry the defect; the other 154 are ours, each a copy of one of three donor
+bodies taken as an OD-11 analogue and carried forward batch after batch. The donors are corrected at source and
+`AppearanceSlotAuditTests` now reads every row in the world against the client's own
+`equipableClassEquipmentSlot`, so the next batch cannot inherit it.
+
+### Weapons that can be looked at
+
+3,381 of 5,825 weapon templates had no `itemtemplate_weapon` row at all, and the tooltip packet dereferences
+`WeaponInfo` unconditionally — a tooltip on any of them would have thrown. The rule that derives a row from its
+weapon class reproduces 2,441 of the 2,444 existing rows exactly, and the three it disagrees with turned out to
+be the defect rather than counter-examples. 120 blades read "Ranged" and now read Melee, which is the first
+melee weapon this world has had and wants an in-game check, since `attack_type` is what knockback keys on.
+
+### Names, again
+
+The server has no display names: `entityclass.class_name` is the client's *internal* name and the player-visible
+one lives only in a client language table, which is why a server-built sentence can never name an item in any
+language. That is the same fact behind "You received 30 3147". Crafting was saying "You need 50
+Ammo_Nucleotides_1_Pyrimidines"; it now sends the client's own messages (236, 237) and the helper that turned a
+class id into a word is gone. Fifteen classes labelled `Missing_ItemClassId_N` take the names the client gives
+them — and with them goes an accident, a `StartsWith("Mis")` rule that had been making Rifle Ammo and the Botany
+Kit mission items on the strength of a label no client ever saw.
+
+## Systems the server never drove (2026-09-22)
+
+Each of these was built only after the client's own bytecode was read for what it expects; two of the four
+survey premises turned out to be wrong and were replaced by what the client actually needs.
+
+- **Missions are tracked, and stay tracked.** The client already tracks a mission the instant
+  `Recv_MissionGained` arrives (`missionlog.py:286`) and persists the tracked set as character options
+  `MissionTrack0..29` — options this server stored and echoed but never *wrote*, so every zone change re-sent
+  blank slots and the tracker emptied. The accept path now writes the changed slots in the same transaction
+  that saves the mission; unticking in the log still sticks. The 30-slot cap and drop-the-newest overflow are
+  the client's own.
+- **Missions on the map.** The only server-driven mission marker the client has is the objective indicator
+  (`MISSION_INDICATOR`, many per objective, self-removing on completion, gated on the tracked list) — there is
+  no "available mission" map kind and no "ready to turn in" state, and neither can be invented. 116 of 124
+  objectives now derive a marker from data the world already holds: a conversation's speaker, a shrine, an area
+  centre with its radius, a usable, or the spawn pools of a kill target; the 8 that cannot are named. Markers are
+  filtered to the player's own map because the client's indicator tuple carries none. Turn-in shows through the
+  receiver's existing conversation status: overhead icon, radar pip, and a map marker once the NPC streams.
+- **Teleport effects, corrected premise.** `teleporter.type` is the *waypoint kind*, not the effect key, so the
+  survey's "203 pads play the wrong effect" was unfounded. The real bug was next door: onlookers were sent
+  `PreTeleport` and nothing else, and the departure effect it attaches is released only by the arrival beat —
+  so on every other screen it stayed glued to the body for as long as the entity lived. Onlookers now get post
+  and arrival; the owner is deliberately excluded, since its own client runs both and a second post replays the
+  flash as DEFAULT. The one teleport whose effect the client names — Tactical Retreat, `TACTICAL_EVASION = 7` —
+  now plays it.
+- **Corpses.** Nothing told a client that an entity it met for the first time was already dead, so a body
+  you did not watch die stood upright and was looted on its feet. `DeadOnArrival` is sent at introduction —
+  *before* `ActorInfo`, because its handler announces only `if not IsDead()` and `ActorInfo` would already have
+  made it so.
+- **Effects catch-up and aiming.** `Recv_GameEffects` is the bulk send at entity creation; without it every
+  buff and debuff was invisible to anyone who did not witness it land. The survey's "everything needed is in
+  hand" was wrong — the effect carried no source, no tooltip, no arguments — so the announcement is kept on the
+  effect and replayed byte-identical with a fresh countdown. `TargetId` now broadcasts on change, clearing with
+  `None` rather than `0` (a `0` leaves the weapon synced to a nonexistent entity); creatures and players are
+  aimed correctly the moment they appear.
+- **The duel.** Right-click → Challenge to Duel sent opcode 626 into nothing. The 21-opcode wargame protocol is
+  now read from the bytecode and the duel slice built end to end: the two dialogs, every refusal in the client's
+  own words, accept/decline/revoke/timeout, the tracker with clock and score, friendly fire scoped to the pair,
+  and the losing blow refused as a death — the client's `WARGAME_FLAGS_DUEL` carries none of the death bits, so
+  the loser is left standing at 1 HP. Team tokens are evidenced (`WargameTeamIds` shirt 0 / skin 1), not
+  inferred; PvP damage is halved by the client's own `PVP_DAMAGE_MODIFIER`. Server choices are labelled: a 60 s
+  challenge timeout, first-blood / five minutes when the client sends 0/0, separation cancels rather than
+  forfeits. Squads, clan feuds, and duel *abilities* (the ability paths are creature-typed throughout) are left
+  out and said so.
+- **Footlockers.** All 35 announced a control point's state, which the LOCKBOX augmentation rejects, so the
+  container never entered a state; each now announces the one state its class owns, and the two clan lockboxes
+  are driven as clan lockboxes. Teleporter 425's item class is left as an owner decision between two wormhole
+  classes.

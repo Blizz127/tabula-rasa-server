@@ -195,6 +195,13 @@
    "url": "https://tarapedia.fandom.com",
    "locator": "research/20260914-wilderness-missions/work/tarapedia_all_last_pre_shutdown.json - the wiki’s complete page history dump (tabularasafandomcom-20220702), reduced to each page’s last revision before 2009-03-01",
    "note": "3,516 pages; 430 carry the NPC infobox and 165 a location table with coordinates. Each reading keeps the revision id and timestamp it was set on."
+  },
+  "community_db:codex-tr": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://web.archive.org/web/*/codex-tr.net/*",
+   "locator": "research/20260920-codex and scratchpad agent-codex/agent-codex2 extractions - a period pin-map, POI contents surviving for Concordia Wilderness and Palisades only (248 of 2,207 POIs, final census 2009-02-23)",
+   "note": "Coordinates are stored times ten: pos_x = locW/10, pos_z = locS/10 in world metres, no heights; proven by 21 of 22 Logos stones agreeing with our own logos rows to under 2 m. Contributors sometimes read positions inside instances and filed them under the parent zone; French/German re-entries sit 10-90 m from the English pin."
   }
  },
  "scope": [
@@ -58742,16 +58749,146 @@
   },
   {
    "id": "GAP-CELLAR-ARENA-ACCESS",
-   "summary": "The CELLAR Arena is original content - the client’s game context 20000009 \"CELLAR Arena\", map adv_afs_arena, with its holo-sign (entity class 29211) standing in the world where the client map puts it. Three NPCs are seeded on that map (Field Medic Madison, Armor Supplier Shetro, Arms Supplier Oliver) and nothing this world holds teleports to it: no teleporter row, no map link, no mission. How a player entered the arena is not in any data we have.",
+   "summary": "The CELLAR Arena is original content - client game context 20000009 \"CELLAR Arena\", map adv_afs_arena, with its holo-sign (entity class 29211) standing where the client map puts it. This gap was opened on 2026-09-21 on the belief that nothing in our data reaches the arena. That was wrong and the gap is closed the same day: a player walked onto a battlefield-entrance pad in the barracks of six AFS bases, uimapmarker.maplinkmarkers[2232] carries eight type-8 BATTLEFIELD_ENTRANCE markers, six outdoor maps carry the reciprocal marker back, and MapLinkPreloader had already seeded all fourteen rows in commit ae831e9 - verified enabled in rasaworld.db. The holo-sign is signage, not the door: empty augmentation list, no usabledata row.",
    "evidence": [
     "client gamecontext 20000009 = adv_afs_arena",
     "client gamecontextlanguage 20000009 = \"CELLAR Arena\"",
     "client physicalentityclassnamelanguage 29211 = \"CELLAR Arena\" (ArchHumBaseHolosignChallengeArena)",
-    "live report 2026-09-20: \"ran into cellar arena not sure what that is\""
+    "live report 2026-09-20: \"ran into cellar arena not sure what that is\"",
+    "uimapmarker.maplinkmarkers[2232]: eight BATTLEFIELD_ENTRANCE (type 8) markers",
+    "rasaworld.db map_link ids 9/17/51/77/99/104/134 inbound and 135-141 outbound, all enabled",
+    "NCsoft patch note naming the six bases: Foreas Base, Alia Das, Fort Defiance, Mt. Hellas, Tantalus, Fort Intrepid"
    ],
-   "closes_with": "the entrance the original used, from client code or footage",
+   "closes_with": "closed: the map_link rows were already seeded and are verified enabled",
    "surfaced_by": [
     "live report, 2026-09-20"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "closed"
+  },
+  {
+   "id": "GAP-MISSION-REWARD-ITEMS",
+   "summary": "Item rewards are missing from almost every mission: 54 of the 65 wiki-covered missions seeded here list a reward item and only three carry item rows. They cannot be resolved from the sources we have, and the reason is structural rather than a gap in effort. TaRapedia names reward items by manufacturer (\"Olympia Reflective Armor Vest\", \"Prodigy Motor Assist Armor Boots 5\"); the manufacturer is a modulenamelanguage row whose display pattern is \"Prodigy %(ClassName)s\", the module belongs to the item instance, and no client table maps a template to a module. One armour icon resolves by class family and slot to 492 templates, and narrowing by the class level requirement takes that to three, not to one. Of 400 reward lines across the wiki’s seedable missions, 67 resolve (nearly all consumables, which the client names directly), 6 narrow to a handful, and 305 do not resolve at all.",
+   "evidence": [
+    "TaRapedia reward icons, e.g. {{Icon/Armor|Prodigy|Motor Assist Armor|Boots|5}}",
+    "client modulenamelanguage: \"Prodigy\" is a module display pattern, not a template",
+    "search of physicalentityclassnamelanguage, itemtemplatelanguage and the 60,004-row stringtable: no hits for Olympia, Pulsar or Vextronics"
+   ],
+   "closes_with": "a source that names reward items by template, or footage of the reward window",
+   "surfaced_by": [
+    "mission text audit and TaRapedia mission mining, 2026-09-21"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSION-LEVEL",
+   "summary": "The client carries no mission-level field anywhere - missionconversation, missionobjective, missiongrouptype, campaign and the language tables were all checked. TaRapedia states a level for only 126 of its 926 mission pages, and where both a wiki level and the giver creature’s level are known they differ by up to 8, so the giver’s level is not a substitute. Any batch that seeds missions the wiki does not level needs an owner decision on what that column should hold.",
+   "evidence": [
+    "client tables searched for a mission level field: none exists",
+    "TaRapedia: 126 of 926 mission pages state a level"
+   ],
+   "closes_with": "an owner decision on the level policy, or a source that gives mission levels",
+   "surfaced_by": [
+    "TaRapedia mission mining, 2026-09-21"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSION-PROP-SPEAKERS",
+   "summary": "Missions 442, 451 and 1186 are offered, accepted and impossible: the required objective’s only completion route is a conversation on NPC package 1486, 569 or 1300, which no creature and no content_placement carries. None is a forgotten NPC. 1486 is the Blood Analyzation Terminal in the Twin Pillars hospital, which the client names itself (usablenameoverride 73, \"Blood Analyzation Terminal\"), sourced position uimapmarker \"Twin Pillars Hospital\" -125.89, 220.75, -468.62. 1300 is the Eloh obelisk in the Kardash Atta Colony, whose conversation text ends \"The obelisk is too large to move on your own\"; no uimapmarker references the Obelisk string, so the best sourced spot is the Eloh Retreat marker at -111.49, 191.83, 322.62. 569 is a directions villager at Daghda’s Urn whom no client table names at all, so the speaker would have to be invented; TaRapedia lists only two objectives for 451, which suggests the third should be optional rather than the final required step.",
+   "evidence": [
+    "client usablenameoverride 73 = WILDERNESS_TP_BLOOD_ANALYZER; usablenameoverridelanguage 73 = \"Blood Analyzation Terminal\"",
+    "objective conversation text for 1186: \"The obelisk is too large to move on your own\"",
+    "MissionLinkAuditTests.UnboundPackages has carried (442,2,1486), (451,3,569) and (1186,1,1300) as accepted gaps"
+   ],
+   "closes_with": "usable placements for the terminal and the obelisk, and an owner decision on the Daghda’s Urn villager",
+   "surfaced_by": [
+    "mission text audit, 2026-09-21"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-BOOTCAMP-DROPSHIP-SPEAKER",
+   "summary": "Bark 232 - \"Get a charge over here to clear out this wreckage!\" - belongs at the crashed dropship during mission 1995, and this reconstruction has nobody there to say it. Its text, clip and duration are original (bark.pyo[232] = (30440, 6000); stringtable[30440] = m_ca_cute_BC_4.ogg; audioSet 1213 \"Bark English Male Bootcamp Bomb Dropship\"), but the clip is a generic male AFS personality asset naming no creature, and no surviving table binds a bark to one. The owner chose Corporal Van Valkenberg on 2026-09-21, and he cannot say it as the camp is staged: placement 198679 carries present_condition 198907 (bootcamp.dropship_destroyed = 1), so he and the three other reinforcements exist only after the detonation, while the line belongs before it. Of the 32 camp placements none other is within 100 m of the wreck during the demolition; the nearest present body is Conrad’s corpse at 187 m. Three ways out: fire it when he lands (the line then contradicts what the player just did), pick another speaker (there is none present), or restage him at the pad before the detonation with the existing negated condition - which reopens OD-25..OD-31, since those say the detonation is what brings him.",
+   "evidence": [
+    "bark.pyo[232], stringtable[30440], audiosetdata audioSet 1213",
+    "content_placement 198679 present_condition_id 198907; BootcampS5ReinforcementsRows condition block",
+    "ContentMaterializer skips placements with a presence condition and spawns them only while it holds",
+    "mission 1995 objective order: locate, take the bomb, destroy the dropship, then check in with Van Valkenberg"
+   ],
+   "closes_with": "an owner decision between moving the moment, moving the speaker, or restaging him at the pad",
+   "surfaced_by": [
+    "bark restoration, 2026-09-21"
+   ],
+   "slices": [
+    "S5"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-SOLIS-SEED-POSITION",
+   "summary": "Council Elder Solis is the original server’s spawnpool 184 (creature 42), placed 3.1 m from Council Elder Moawi at an identical height at Daghda’s Urn. TaRapedia rev 12872 (2007-11-06) and codex-tr.net agree, to 5.6 m, that he stood at the back of Alia Das near the Alia Caverns (784.7, 287.2, 581.1) - and our own spawnpool 92, an unnamed NPC_Forean_Shaman, already stands 2.2 m from that spot at the wiki’s own height to four centimetres. Two readings fit: 92 is Solis under a generic class and 184 is a seed duplicate; or the seed pairing with Moawi is deliberate and the wiki records an earlier position. Moving 184 would put two bodies 2 m apart; the migration holds it and records this instead.",
+   "evidence": [
+    "TaRapedia rev 12872 Council Elder Solis (784.7, 287.2, 581.1)",
+    "codex-tr.net poi (781, 577)",
+    "rasaworld.db spawnpool 92 NPC_Forean_Shaman at y 287.24; spawnpool 184 at y 302.09 beside Moawi"
+   ],
+   "closes_with": "an owner decision: retire 184, name 92, or move 184 and accept the stack",
+   "surfaced_by": [
+    "codex reconciliation, 2026-09-22"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-CONTROL-POINT-VENDORS",
+   "summary": "Every AFS control point in the shipped build holds two NPCs, the CP Token Banker and the CP Prestige Vendor (TaRapedia Control Point page rev 33836, 2008-09-22, post-Deployment 8). This world holds 38 Token Bankers against 4 Prestige Vendors. The launch-era client names the same two slots \"CP Assault Commander\" (9473) and \"CP Defense Commander\" (9472); codex-tr.net’s pins use those names, and at River-base Krimm its Defense pin is 0.4 m from our Prestige Vendor 500186 while at three other points its Assault pin is 0.3-1.1 m from our Token Banker. So the four \"Defense Vendors\" a reconciliation proposed were not missing NPCs but the Prestige Vendor under its old name; inserting them was refused. What the world is actually short of: a Prestige Vendor at Fort Dew, Imperial Valley and the Wilderness LZ, and a Token Banker at River-base Krimm (9473, 170, 354). Also in that pass: Captain Marsh (9049, 168, 530.3), whom codex files as a mission marker rather than an NPC.",
+   "evidence": [
+    "TaRapedia Control Point rev 33836",
+    "codex-tr.net CP pins at four control points against rasaworld.db",
+    "the 1.2.2.0 client’s creature name table: 9472 CP Defense Commander, 9473 CP Assault Commander"
+   ],
+   "closes_with": "a control-point pass that seeds the missing Prestige Vendors and the Krimm Token Banker",
+   "surfaced_by": [
+    "codex reconciliation, 2026-09-22"
+   ],
+   "slices": [
+    "W1",
+    "W2",
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-WORMHOLE-425-CLASS",
+   "summary": "Teleporter 425 \"Guardian Prominence Personal Wormhole\" carries entity class 28478, \"Bane Deployment Data\" - an ITEM class with no usabledata row, so the server’s forced two-state announcement names a state nothing on that object can hold. Two wormhole classes fit, both TWOSTATESWITCH (states 55/56): 25408 UsableTwoStateHumWormhole, which the other six type-3 rows use, and 28474 UsableTwoStateHumPersonalWormholeV01, whose name matches the row’s own. The client’s waypoint table is a name and nothing else, and no map marker sits within 8 m of the row. Picking one is a guess.",
+   "evidence": [
+    "client entityclass 28478 aug [6] ITEM, no usabledata row",
+    "entityclass 25408 and 28474 aug [9]; usableaugmentationstate[9] = 55, 56",
+    "waypointlanguage 425"
+   ],
+   "closes_with": "an owner decision between 25408 and 28474, or footage of the pad",
+   "surfaced_by": [
+    "lockbox and usable state fix, 2026-09-21"
    ],
    "slices": [
     "W3"
@@ -60630,6 +60767,291 @@
     {
      "source": "client_map:adv_arieki_torden_incline",
      "locator": "navmesh column at -282, 71 on adv_arieki_torden_mires"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "TarapediaLastNpcs",
+   "table": "creature, content_placement, creature_appearance, spawnpool",
+   "key": {
+    "created": 8,
+    "ids": "199074-199081",
+    "moved": 5
+   },
+   "field": "new rows; map_context_id, pos_x, pos_y, pos_z",
+   "old": "eight NPCs absent because their wiki page wrote its location row as plain cells rather than links; five bodies elsewhere than the wiki puts them",
+   "new": "the wiki's zone and x,z with the navmesh floor for y",
+   "reason": "Re-reading the wiki with a parser that accepts plain table cells resolved eight of the nine NPCs the previous batch left out, and each lands within a metre of its wiki Y - Jumna in the Retread City subterranean chamber at 111.8 against a wiki 111, the rest on surface ground. The same re-read corrected Lieutenant Holloway (on the Pools at 862 m, the wiki puts him in the Marshes at 216), Rijii (created on the Plains, whose page in fact reads Mires / Brann LZ \"in the same room as the Brann LZ Waypoint\", where the floor is 238.28 against a wiki 238.5), and three positions 46-116 m out. Not taken: Ranger Taavik, Shaman Geli, Sergeant Starling and Retread McCormick, whose pages all carry Retread Karl’s coordinate -268, 216, -812 from one editor’s copy-paste on 2007-12-15 (revisions 21096, 21097, 21099) while naming Paludos.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "one revision id and date per row"
+    },
+    {
+     "source": "client_map:furniture",
+     "locator": "none of the thirteen stands inside a prop"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "QuestWiringFixes",
+   "table": "content_placement, npc_package, npc_mission_objective, npc_mission_objective_transition, npc_mission, npc_mission_reward",
+   "key": {
+    "missions": [
+     347,
+     640,
+     940,
+     1063,
+     796,
+     332,
+     682,
+     955,
+     969,
+     1992,
+     1904,
+     429,
+     1390
+    ]
+   },
+   "field": "npc_package_id, ordinal, transitions, reciver_id, rewards",
+   "old": "six conversation packages on the wrong body, five missions with their steps out of order, 1904 received by Retread Lou, 429 and 1390 short of their currency",
+   "new": "the package on the body the client names, ordinals agreeing with the client's conversation chain, 1904 received by Retread Duvall, the currency TaRapedia records",
+   "reason": "An audit of all 77 seeded missions against the client’s own mission text. A placement’s npc_package_id wins over an npc_package row, so each move changes both and drops the stale row. The currency is taken from TaRapedia because every one of the 53 XP and 55 credit figures already seeded matches that source exactly; item rewards are not taken, because the wiki names them by a manufacturer no client table maps to a template.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missionconversation and objectiveconversation rows per mission"
+    },
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "429 and 1390 currency"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "CodexPlacementFixes",
+   "table": "spawnpool, teleporter",
+   "key": {
+    "pools": [
+     510121,
+     510125,
+     510127
+    ],
+    "teleporter": 480
+   },
+   "field": "pos_x, pos_y, pos_z; map_context_id",
+   "old": "the Staging Point trio 150 m from the Staging Point; the CELLAR Arena hospital on map 2259",
+   "new": "codex-tr.net's positions, 10-25 m from this world's own Staging Point fixtures; the hospital on 20000009",
+   "reason": "codex-tr.net is a period pin-map recovered from the Internet Archive; its coordinate encoding is locW/10 and locS/10 in world metres, proven by 21 of 22 Logos stones agreeing with our own rows to under 2 m. Its Staging Point positions agree with our own client-sourced waypoint and hospital rows against an upstream position with no provenance. The arena hospital sat on a map that carries nothing else at all, while the medic defining it stands at the identical coordinates on 20000009, which is what the client’s own marker says.",
+   "citations": [
+    {
+     "source": "community_db:codex-tr",
+     "locator": "poi 1607/1608/1609, Palisades pin map, snapshot 2009-02-23"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "uimapmarker 134419591463366 (UI map key 2232) for the arena medic"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "MissionSpeakers",
+   "table": "creature, content_placement, creature_appearance, npc_package",
+   "key": {
+    "ids": [
+     199082,
+     199083,
+     199084
+    ],
+    "missions": [
+     332,
+     969,
+     977
+    ]
+   },
+   "field": "new rows; npc_package_id",
+   "old": "the conversation that completes each objective was hung on the mission’s giver, because the NPC the client names had no creature row",
+   "new": "Field Sgt. Hayes, Ashwon and Sirth created at the client’s own map markers, each carrying the package",
+   "reason": "Three of the ten wrong-speaker objectives could not be fixed by moving a package, because the speaker did not exist. Names and packages are the client’s; positions are its UI map markers, each landing within 0.4 m of the marker height on the navmesh. No source records their species, class or level, so the class is the OD-45 analogue, the body the OD-11 donor set, and the level the giver’s - all labelled.",
+   "citations": [
+    {
+     "source": "client_table:creature-names",
+     "locator": "169 Field Sgt. Hayes; 8692 Ashwon; 8704 Sirth"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "uimapmarker: Crossroads Waypoint, Quicksilver Post, Outpost Condor medical tent"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "AppearanceSlotRepair",
+   "table": "creature_appearance",
+   "key": {
+    "rows": 421,
+    "creatures": 159
+   },
+   "field": "slot_id, Class_id",
+   "old": "the officer boots filed under GLOVES on 104 rows, and the officer torso and legs keyed to each other on 157 each",
+   "new": "the slot the client's equipmentdata.equipableClassEquipmentSlot gives each class",
+   "reason": "The slot key is not bookkeeping: the client reads FACE by key for skin colour, WEAPON then HANDTOHAND for the weapon, and decides accessory effects by key; only mesh placement survives a wrong one. Our own data corroborated the client table by a large majority before the repair (4022 under LEGS in 432 rows against TORSO in 157). Five shipped creatures carry the defect and the other 154 are ours - every one a copy of creature 100, 101 or 67 taken as an OD-11 analogue body and carried forward batch after batch, which is why the donor literals are corrected at the same time and AppearanceSlotAuditTests now reads every row in the world against the client table.",
+   "citations": [
+    {
+     "source": "client_map:furniture",
+     "locator": "not applicable"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "equipmentdata.equipableClassEquipmentSlot, 6935 classes, copied to clientdata/equipment-slots.csv"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "SeedLogosMissions",
+   "table": "npc_mission, npc_mission_objective, npc_mission_objective_binding, npc_mission_reward",
+   "key": {
+    "missions": 23,
+    "objectives": 24
+   },
+   "field": "new rows",
+   "old": "none of the 23 were offered at all",
+   "new": "the client's own objective rows bound by LogosRecovered to shrines this world already places, with TaRapedia's credits and experience",
+   "reason": "Of 859 wiki missions this world does not seed, 164 have both giver and receiver already placed and the Logos set is the one class that needs no new content: one objective each, bound to a Logos row we hold, credits and XP known. Level follows the owner decision of 2026-09-21 - the giver creature’s level where no source gives one, labelled an analogue - except 1659, where the wiki states 30. All 24 shrine bindings were verified against the live world: every shrine exists, sits on its giver’s map, and its name matches the objective text.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missionobjective and missiontextlanguage rows per mission"
+    },
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "credits, experience and the level of 1659"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "MissionPropSpeakers",
+   "table": "creature, npc_package, content_placement",
+   "key": {
+    "ids": [
+     199912,
+     199913
+    ],
+    "missions": [
+     442,
+     1186
+    ]
+   },
+   "field": "new rows",
+   "old": "both missions could be accepted and never finished: the required objective’s only route was a conversation on a package nothing carried",
+   "new": "the Blood Analyzation Terminal and the Eloh obelisk, each carrying its package on a creature placement",
+   "reason": "A usable cannot carry a conversation package in this server - SpawnUsable never reads npc_package_id, CompleteNpcObjective resolves through creatures only, and the catalog drops a usable row that carries one - and both props are TwoStateSwitch usables whose kind this server has not recovered. So both take the talking-machine shape TarapediaMachineClass established. The terminal’s position is corroborated from both sides: the client names it (usablenameoverride 73) and objective 1 of the same mission is Medical Assistant Duncan pointing at it (\"see that analyzer over there?\"), who stands 2.7 m from the marker. The obelisk’s position is INFERRED from the Eloh Retreat marker, and its class NPC_Eloh_Holgram_Large is an OD-45 analogue - no obelisk class in the client carries the Creature augmentation. Both Y values are the navmesh floor, probed 2026-09-21.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation (442,2,1486) -> missiontext 10573; (1186,1,1300) -> 10665"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "usablenameoverridelanguage 73 \"Blood Analyzation Terminal\"; uimapmarker \"Twin Pillars Hospital\" and \"Eloh Retreat\""
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "WeaponRowRepair",
+   "table": "itemtemplate_weapon",
+   "key": {
+    "new": 3381,
+    "corrected": 123
+   },
+   "field": "new rows; attack_type, tool_type",
+   "old": "3381 weapon templates had no row at all, every blade read Ranged, and three tool types had been swept to 0",
+   "new": "a row per weapon template, derived the way the existing 2444 were, with attack_type from the client's own action module",
+   "reason": "ItemTemplateTooltipInfoPacket dereferences WeaponInfo unconditionally, so a tooltip on any of the 3381 would have thrown - latent only because nothing reachable is one of them. The derivation rule reproduces 2441 of the 2444 existing rows exactly and the three it disagrees with are themselves the defect, inserted after Retune_weapon_tool_type built its id lists and then swept to 0. The 20 uniform columns are the placeholders the existing rows already carry: this makes the tooltips possible and self-consistent, not retail-accurate. The 120 blades moving to Melee is a behaviour change (knockback keys on attack_type) taken on the owner’s decision of 2026-09-21, to be checked in game.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "weaponclass, itemclass, actiondata.actionModules; raw fields copied to docs/evidence/client-weaponclass.csv"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "ContentRuleBark",
+   "table": "content_area, content_condition, content_rule, content_rule_action",
+   "key": {
+    "bark": 852,
+    "rule": 1985016
+   },
+   "field": "new rows; content_rule_action.bark_id",
+   "old": "the world was mute: BarkPackage existed but only a GM command reached it",
+   "new": "Major McAllister speaks his own recorded line on the recruit's return from the Eloh holograms",
+   "reason": "Bark 852 is original end to end - bark.pyo gives (49815, 10000), stringtable names the file boot_camp_major_mcallister_bark.ogg and the audio set is \"Bark English Male Bootcamp McAllister\" - and the speaker is therefore original too. What is inferred is only that the return is the moment, labelled INFERRED-medium. The trigger is an area on McAllister’s own placement with the client’s own 20 m bark radius, because the design’s first proposal (the hologram’s own area) is 48.3 m from him and the client draws no bubble past 20 m: the line would have shipped silent. No ambient layer and no creature_bark table were built, per the owner decision of 2026-09-21.",
+   "citations": [
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "Creature.Recv_Bark: one argument, the bark id; text and audio resolved client-side; kOverheadDisplayMaxDistance = 20"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "bark.pyo[852], stringtable[49815], audiosetdata audioSet 2777"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-21",
+   "migration": "ClientNamesForItems",
+   "table": "entityclass",
+   "key": {
+    "classes": 15
+   },
+   "field": "class_name",
+   "old": "fifteen classes labelled Missing_ItemClassId_N, which also made Rifle Ammo and the Botany Kit mission items through a StartsWith(\"Mis\") rule",
+   "new": "the names the client's own physicalentityclassnamelanguage gives them",
+   "reason": "Same family as \"You received 30 3147\": the server has no display names at all - entityclass.class_name is the internal name and the player-visible one lives only in the client’s language table, which is why a server-built sentence can never name an item. The crafting messages that named items are replaced by the client’s own player messages (236, 237), the helper that turned a class id into a word is deleted, and the mission-item rule is now shape-checked against the client’s own naming convention (identical on all 15,823 client class names, and it refuses Missing_).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "physicalentityclassnamelanguage for all fifteen ids"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "clientlanguagemanager.BuildPlayerMessage translates only missionId and logosId"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "CodexNpcCorrections",
+   "table": "creature, content_placement, creature_appearance, spawnpool",
+   "key": {
+    "created": 11,
+    "ids": "199085-199095",
+    "moved": [
+     171,
+     510005,
+     510004
+    ]
+   },
+   "field": "new rows; pos_x, pos_y, pos_z; creature.comment on 510196",
+   "old": "eleven NPCs codex-tr.net and TaRapedia record with no creature here; George Corman 148 m from his camp at the wrong height; Dr. Elise Corman outside the hospital tent; Lieutenant Burke 63 m from anything of ours",
+   "new": "created at the recovered coordinates with the navmesh floor for y; the three moved to where two sources agree",
+   "reason": "Codex positions are taken only where a second source or one of this world’s own client-sourced fixtures corroborates them. Lieutenant Burke is an original-seed row overruled on two independent sources (TaRapedia rev 27920 and codex, 4.1 m apart, both naming Monarch Grove) plus the seed row’s own height matching the new spot and not the old. Council Elder Solis, the other seed candidate, is held (GAP-SOLIS-SEED-POSITION). The Pools Corporal Orton (510196) is flagged, not deleted. Every Y is the navmesh floor probed 2026-09-22.",
+   "citations": [
+    {
+     "source": "community_db:codex-tr",
+     "locator": "Palisades and Wilderness pin maps, snapshot 2009-02-23"
+    },
+    {
+     "source": "community_db:tarapedia-history",
+     "locator": "revs 25740, 27661, 35394, 27616, 27920 per row"
     }
    ]
   }
