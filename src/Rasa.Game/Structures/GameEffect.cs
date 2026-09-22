@@ -1,7 +1,15 @@
 ﻿namespace Rasa.Structures
 {
+    using Packets.MapChannel.Server;
+
     public class GameEffect
     {
+        /// <summary>
+        /// What the client was told when this effect attached, kept so that a client who only now sees the holder
+        /// can be told the same thing through the bulk GameEffects catch-up. Null for an effect the client never
+        /// heard of: a server-side timer, or one the Cure guard refused.
+        /// </summary>
+        public GameEffectAttachedPacket Announcement { get; set; }
         // owner
         public int TypeId { get; set; } // effect class
         public int EffectId { get; set; } // effect id

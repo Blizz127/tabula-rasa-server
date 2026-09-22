@@ -63,6 +63,7 @@ namespace Rasa.Test
                 {
                     case "get_Characters": return new CharacterRepository(Context);
                     case "get_CharacterMissions": return new CharacterMissionRepository(Context);
+                    case "get_CharacterOptions": return new Rasa.Repositories.Char.CharacterOption.CharacterOptionRepository(Context);
                     case "get_CharacterContentFacts": return new CharacterContentFactRepository(Context);
                     case "Complete": Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;

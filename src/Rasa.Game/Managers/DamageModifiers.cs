@@ -94,6 +94,18 @@ namespace Rasa.Managers
 
         public static int Crit(int damage, Actor target) => target is Manifestation ? damage * 125 / 100 : damage * 150 / 100;
 
+        /// <summary>
+        /// One player's damage to another is halved: shared/gameconstants.pyo
+        /// PVP_DAMAGE_MODIFIER = 0.5, beside the PVP_CRITICAL_DAMAGE_MODIFIER that Crit above
+        /// already honours. The constant is in the client's shared constants and is read nowhere
+        /// in the 1.16.5.0 client bytecode, which is what shared constants the server applied look
+        /// like. A creature hitting a player is not PvP and is untouched.
+        ///
+        /// Today the only player-to-player damage is a duel.
+        /// </summary>
+        public static int PlayerVersusPlayer(int damage, Actor source, Actor target)
+            => source is Manifestation && target is Manifestation ? damage / 2 : damage;
+
         public static int ResistRating(Actor target)
             => target?.ActiveEffects.Values.Sum(effect => effect.ResistRating) ?? 0;
     }

@@ -153,7 +153,8 @@ namespace Rasa.Managers
             // resistance / (resistance + 50)). A missile with no damage type, or a target with no resistance of
             // that type, takes it in full.
             var damage = DamageModifiers.ThroughShield(actor,
-                DamageModifiers.ThroughSmoke(actor, DamageModifiers.Taken(actor, missile.DamageA), missile.ActionId == ActionId.WeaponMelee));
+                DamageModifiers.ThroughSmoke(actor, DamageModifiers.Taken(actor, DamageModifiers.PlayerVersusPlayer(missile.DamageA, missile.Source, actor)),
+                    missile.ActionId == ActionId.WeaponMelee));
             if (actor is Manifestation target)
             {
                 var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType) + DamageModifiers.ResistRating(target);
@@ -172,11 +173,29 @@ namespace Rasa.Managers
             // decrease health (if armor is depleted)
             var healthDecrease = Math.Min(damage - armorDecrease, actor.Attributes[Attributes.Health].Current);
 
+            // In a duel the losing blow is a takedown, not a death. The client says so itself:
+            // shared/gameconstants.py gives a duel WARGAME_FLAGS_DUEL of WARGAME_BLOCK_INTERACTTIONS
+            // | WARGAME_IS_AGGRESSIVE, with none of the WARGAME_REZ_SICKNESS or WARGAME_WEAPON_DECAY
+            // that WARGAME_FLAGS_CLAN carries, and client/wargame.py Recv_WargameDefeat shows text
+            // and nothing else. The victim is left standing on one point of health - server choice:
+            // the damage dealt stays dealt, only the death is refused.
+            var duelTakedown = healthDecrease >= actor.Attributes[Attributes.Health].Current &&
+                               WargameManager.Instance.AreDuelOpponents(actor, missile.Source);
+
+            if (duelTakedown)
+                healthDecrease = Math.Max(0, actor.Attributes[Attributes.Health].Current - 1);
+
             actor.Attributes[Attributes.Health].Current -= healthDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, actor, new UpdateHealthPacket(actor.Attributes[Attributes.Health], 0));
 
             // Reflection and Conversion answer the hit.
             AbilityEffects.OnPlayerDamaged(mapChannel, actor, missile.Source, damage, missile.DamageType);
+
+            if (duelTakedown)
+            {
+                WargameManager.Instance.ScoreDuelTakedown(actor, missile.Source);
+                return;
+            }
 
             // Zero health is death: control state Dead at once, so later hits, actions and
             // autofire skip the player. The announcement follows the killing recovery

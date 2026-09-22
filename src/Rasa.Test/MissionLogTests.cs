@@ -35,6 +35,7 @@ using Rasa.Repositories.Char.Character;
 using Rasa.Repositories.Char.Items;
 using Rasa.Repositories.Char.CharacterInventory;
 using Rasa.Repositories.Char.CharacterMission;
+using Rasa.Repositories.Char.CharacterOption;
 using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
 using Rasa.Repositories.World.MissionContent;
@@ -77,6 +78,7 @@ namespace Rasa.Test
                     case "get_CharacterMissions": return new CharacterMissionRepository(Context);
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
+                    case "get_CharacterOptions": return new CharacterOptionRepository(Context);
                     case "BeginTransaction": return Context.Database.BeginTransaction();
                     case "Complete":
                         if (FailComplete != null && FailComplete()) throw new InvalidOperationException("injected save failure");

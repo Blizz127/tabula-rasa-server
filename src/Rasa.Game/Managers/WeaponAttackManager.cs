@@ -106,18 +106,38 @@ namespace Rasa.Managers
             return true;
         }
 
-        private static Creature GetEligibleTarget(Manifestation player, ulong id)
+        /// <summary>
+        /// Who a base weapon attack may be aimed at. Creatures, as before - and, since duels, the
+        /// one other player this player is fighting.
+        /// </summary>
+        private static Actor GetEligibleTarget(Manifestation player, ulong id)
         {
             var map = player.MapChannel;
             var entities = EntityManager.Instance;
             if (map?.MapInfo == null || player.MapContextId != map.MapInfo.MapContextId ||
-                !entities.RegisteredEntities.TryGetValue(id, out var type) || type != EntityType.Creature ||
+                !entities.RegisteredEntities.TryGetValue(id, out var type))
+                return null;
+
+            // Friendly fire between players exists in exactly one place: the two sides of a duel
+            // that is under way. WargameManager.AreDuelOpponents is the whole rule - it is false
+            // for every other pair, and false again the moment the duel ends. The client is held
+            // to the same rule from its side, by the Hostile TargetCategory the duel sends and
+            // takes back (client/actions/targetedaction.py refuses a TARGET_HOSTILE action
+            // against anything whose category is not HOSTILE).
+            if (type == EntityType.Character)
+                return entities.Players.TryGetValue(id, out var opponent) &&
+                       opponent.State != CharacterState.Dead &&
+                       ReferenceEquals(opponent.MapChannel, map) &&
+                       WargameManager.Instance.AreDuelOpponents(player, opponent)
+                    ? opponent : null;
+
+            if (type != EntityType.Creature ||
                 !entities.Creatures.TryGetValue(id, out var target) || target.MapContextId != player.MapContextId ||
                 !MapChannelManager.IsOnChannel(target, map) ||
                 target.State == CharacterState.Dead || target.Faction == Factions.AFS)
                 return null;
             // Invalid targets become blind shots in the original base attack.
-            // Native geometry, neutral/object categories and wargames still need reconstruction.
+            // Native geometry and neutral/object categories still need reconstruction.
             return target;
         }
 

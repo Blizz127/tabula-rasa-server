@@ -209,5 +209,23 @@ namespace Rasa.Test
             Assert.AreEqual(1, reader.ReadTuple());
             Assert.AreEqual(4, reader.ReadInt());
         }
+
+        [TestMethod]
+        public void APlayerWhoDiedBeforeYouArrivedIsIntroducedAsACorpse()
+        {
+            // Nothing on this path carries a state - there is no ActorInfo in a player's entity
+            // data at all - so a body someone else killed stood up, kept its weapons drawn and wore
+            // a living player's nameplate. Actor.Recv_DeadOnArrival(canRevive) is AnnounceDeath with
+            // doDeathFX = 0; canRevive is 0 for the same reason PlayerDead sends 0 here.
+            var client = Login();
+            // The fixture loads only the weapon and ammo classes into EntityClassManager, and the entity
+            // data starts by reading the player's own class info; the race test above does the same.
+            client.Player.EntityClass = WeaponClass;
+            Assert.IsFalse(_manifestation.CreatePlayerEntityData(client).OfType<DeadOnArrivalPacket>().Any());
+            client.Player.State = CharacterState.Dead;
+            var dead = _manifestation.CreatePlayerEntityData(client).OfType<DeadOnArrivalPacket>().Single();
+            Assert.IsFalse(dead.CanRevive);
+            client.Player.State = CharacterState.Normal;
+        }
     }
 }

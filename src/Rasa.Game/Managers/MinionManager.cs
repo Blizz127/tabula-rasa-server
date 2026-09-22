@@ -483,6 +483,7 @@ namespace Rasa.Managers
             if (stance == MinionStance.Passive && minion.Controller.CurrentAction == BehaviorManager.BehaviorActionFighting)
             {
                 minion.Controller.ActionFighting.TargetEntityId = 0;
+                ActorManager.Instance.AnnounceTarget(minion.MapChannel, minion, 0);
                 BehaviorManager.Instance.SetActionFollow(minion, minion.MasterEntityId);
             }
         }

@@ -117,6 +117,29 @@ namespace Rasa.Managers
                         }
         }
 
+        /// <summary>
+        /// Tells everyone who can see this actor what it is aiming at, and only when that changes - the client
+        /// acts on every TargetId it receives (it re-syncs the weapon bone tracker), so a behaviour tick that
+        /// re-sent the same target every pass would be pure traffic.
+        ///
+        /// A player's own client set this target itself and has already aimed; it is the rest of the cell that
+        /// has never been told. Creatures have no owner to skip.
+        /// </summary>
+        public void AnnounceTarget(MapChannel mapChannel, Actor actor, ulong targetEntityId, Client owner = null)
+        {
+            if (mapChannel == null || actor == null || actor.AnnouncedTarget == targetEntityId)
+                return;
+
+            actor.AnnouncedTarget = targetEntityId;
+
+            var packet = new TargetIdPacket(targetEntityId);
+
+            if (owner != null)
+                owner.CellIgnoreSelfCallMethod(owner, packet);
+            else
+                CellManager.Instance.CellCallMethod(mapChannel, actor, packet);
+        }
+
         public void RequestVisualCombatMode(Client client, bool combatMode)
         {
             client.Player.InCombatMode = combatMode;

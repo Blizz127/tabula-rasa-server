@@ -27,12 +27,38 @@
         
         public override void Write(PythonWriter pw)
         {
-            pw.WriteTuple(6 + EffectArguments.Length);
+            WriteEffectData(pw, true);
+        }
+
+        /// <summary>
+        /// The same announcement with a different tooltip countdown, for a catch-up send: the client reads the
+        /// tooltip's duration as an offset from the moment it arrives, not from when the effect began
+        /// (BaseGameEffect.SetTooltipDict: __expireTime = gameclient.Time() + duration, first=482).
+        /// </summary>
+        public GameEffectAttachedPacket WithDuration(double? duration)
+        {
+            var copy = (GameEffectAttachedPacket)MemberwiseClone();
+            copy.Duration = duration;
+            return copy;
+        }
+
+        /// <summary>
+        /// One effect, as both this packet and an element of the bulk GameEffects catch-up write it. The bulk form
+        /// is this tuple minus the announce flag, because its elements go straight to AttachGameEffect(typeId,
+        /// effectId, level, sourceId, tooltipDict, *args) while Recv_GameEffectAttached takes announce in between
+        /// and drops it before making the same call.
+        /// (verify/dis/trpython-client-physicalentity.pyo.dis :: Recv_GameEffectAttached first=601 args=('self',
+        ///  'typeId', 'effectId', 'level', 'sourceId', 'announce', 'tooltipDict'); AttachGameEffect first=488)
+        /// </summary>
+        public void WriteEffectData(PythonWriter pw, bool includeAnnounce)
+        {
+            pw.WriteTuple((includeAnnounce ? 6 : 5) + EffectArguments.Length);
             pw.WriteInt(EffectTypeId);      //typeId
             pw.WriteInt(EffectId);          //effectId
             pw.WriteUInt(EffectLevel);       //level
             pw.WriteULong(SourceId);          //sourceId
-            pw.WriteBool(Announced);        //announce
+            if (includeAnnounce)
+                pw.WriteBool(Announced);    //announce
             var count = (Duration.HasValue ? 1 : 0) + (DamageType.HasValue ? 1 : 0) +
                 (AttrId.HasValue ? 1 : 0) + (IsActive.HasValue ? 1 : 0) +
                 (IsBuff.HasValue ? 1 : 0) + (IsDebuff.HasValue ? 1 : 0) +

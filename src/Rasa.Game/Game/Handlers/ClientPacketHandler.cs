@@ -19,6 +19,7 @@ namespace Rasa.Game.Handlers
     using Packets.Summon.Client;
     using Packets.Social.Client;
     using Packets.Trade.Client;
+    using Packets.Wargame.Client;
 
     public partial class ClientPacketHandler
     {
@@ -806,7 +807,7 @@ namespace Rasa.Game.Handlers
         [PacketHandler(GameOpcode.SurrenderWargame)]
         private void SurrenderWargame(SurrenderWargamePacket packet)
         {
-            Logger.WriteLog(LogType.Debug, "ToDo: SurrenderWargamePacket");
+            WargameManager.Instance.SurrenderWargame(Client);
         }
 
         [PacketHandler(GameOpcode.ToggleAfk)]
@@ -825,6 +826,32 @@ namespace Rasa.Game.Handlers
         private void Who(WhoPacket packet)
         {
             CommunicatorManager.Instance.Who(Client, packet);
+        }
+
+        #endregion
+
+        #region Wargame
+
+        // client/wargame.py, on sysentity.ClientWargameManagerId (23). Duels only: the squad and
+        // clan-feud branches of the same client manager are still unimplemented. /surrender
+        // (SurrenderWargame 674) arrives on the communicator's channel and is handled above.
+
+        [PacketHandler(GameOpcode.ChallengeUserToWargameByName)]
+        private void ChallengeUserToWargameByName(ChallengeUserToWargameByNamePacket packet)
+        {
+            WargameManager.Instance.ChallengeUserToWargameByName(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.WargameChallengeResponse)]
+        private void WargameChallengeResponse(WargameChallengeResponsePacket packet)
+        {
+            WargameManager.Instance.WargameChallengeResponse(Client, packet);
+        }
+
+        [PacketHandler(GameOpcode.WargameChallengeRevoked)]
+        private void WargameChallengeRevoked(WargameChallengeRevokedPacket packet)
+        {
+            WargameManager.Instance.WargameChallengeRevoked(Client);
         }
 
         #endregion

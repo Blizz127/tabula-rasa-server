@@ -512,8 +512,12 @@ namespace Rasa.Managers
             retreat.OnDetach = effect =>
             {
                 GameEffectManager.Instance.DettachEffect(map, ranger, location);
+                // The one teleport in this world whose effect the client names: teleportertype has
+                // TACTICAL_EVASION = 7 -> (36108, None, 45518), and the effect this ability attaches
+                // is TACTICAL_EVASION_TELEPORT_EFFECT (EvasionTeleportType above). Everything else
+                // here teleports as DEFAULT.
                 if (effect.EffectTime >= effect.Duration && ranger.State != CharacterState.Dead && ReferenceEquals(ranger.MapChannel, map))
-                    PlayerDeathManager.TeleportWithinMap(client, home);
+                    PlayerDeathManager.TeleportWithinMap(client, home, TeleportType.TacticalEvasion);
             };
             named.Add(ranger.EntityId);
             return named;

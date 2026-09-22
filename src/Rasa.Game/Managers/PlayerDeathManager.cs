@@ -320,16 +320,29 @@ namespace Rasa.Managers
         }
 
         /// <summary>Moves a player to a point on their own map, the way the client's teleport expects (see below).</summary>
-        public static void TeleportWithinMap(Client client, System.Numerics.Vector3 position)
+        public static void TeleportWithinMap(Client client, System.Numerics.Vector3 position,
+            TeleportType teleportType = TeleportType.Default)
         {
             var player = client.Player;
             player.Position = position;
 
             // Actor.BeginTeleport queues the acknowledgement that Recv_Teleport then sends, so it
             // goes first. The hospital's facing is unrecovered: the player keeps their own.
-            client.CellCallMethod(client, player.EntityId, new PreTeleportPacket(TeleportType.Default));
+            client.CellCallMethod(client, player.EntityId, new PreTeleportPacket(teleportType));
             client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
-            client.CallMethod(player.EntityId, new TeleportPacket(position, player.Rotation, TeleportType.Default, 0));
+            client.CallMethod(player.EntityId, new TeleportPacket(position, player.Rotation, teleportType, 0));
+
+            // The rest of the sequence, for everyone but the owner. The owner's client runs it
+            // itself: Actor.Recv_Teleport calls Recv_PostTeleport and schedules Recv_TeleportArrival
+            // after the delay (_TelportMovementCompleted), so sending either to the owner would play
+            // the middle beat twice - the second time as DEFAULT, because Recv_PostTeleport deletes
+            // the tmp_preTeleportType it reads. Onlookers get neither on their own, and the effect
+            // Recv_PreTeleport attached (_StartPreTeleportFX stores __attachedPreTeleportEffect) is
+            // released by nothing but _PlayTeleportArrivalFX, so without the arrival the departure
+            // effect stays glued to the player's body on every other screen for as long as the
+            // entity lives. PostTeleport plays its flash at body.GetPosition(), so it belongs before
+            // the move - the departure point, which is where the owner's own client plays it.
+            client.CellIgnoreSelfCallMethod(client, new PostTeleportPacket());
 
             // ignoreSelf must be false. The client's Actor.Recv_Teleport does not carry the body anywhere: it
             // blocks movement, runs the post-teleport fade and schedules _TelportMovementCompleted after the
@@ -339,6 +352,8 @@ namespace Rasa.Managers
             // Thrax that killed them. The waypoint teleport (DynamicObjectManager) has always passed false here.
             client.CellMoveObject(client, new MoveObjectMessage(player.EntityId,
                 new Movement(position, 0f, 0, new Vector2((float)player.Rotation, 0f))), false);
+
+            client.CellIgnoreSelfCallMethod(client, new TeleportArrivalPacket());
         }
 
         /// <summary>

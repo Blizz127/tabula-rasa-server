@@ -27,6 +27,14 @@ namespace Rasa.Structures
         // Live objective counters and map indicators (MissionContentManager.Load), per objective id, in key order.
         public Dictionary<uint, List<NpcMissionObjectiveCounterEntry>> Counters { get; } = new();
         public Dictionary<uint, List<NpcMissionObjectiveIndicatorEntry>> Indicators { get; } = new();
+
+        /// <summary>
+        /// Map and radar markers read from where the world already says each objective is finished
+        /// (MissionContentManager.Load through MissionMapIndicators.Derive), per objective id. Only used for an
+        /// objective that has no <see cref="Indicators"/> row of its own: a stored row is evidence, a derived one
+        /// is the world's own geometry standing in for the row that was never recovered.
+        /// </summary>
+        public Dictionary<uint, List<MissionIndicator>> DerivedIndicators { get; } = new();
         public List<NpcMissionRewardEntry> Rewards { get; } = new();
 
         // Normalized once by MissionManager.BuildRewardInfo; the client's reward

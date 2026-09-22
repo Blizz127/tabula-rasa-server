@@ -53,6 +53,7 @@ namespace Rasa.Test
                     case "get_CharacterLogoses": return new Rasa.Repositories.Char.CharacterLogos.CharacterLogosRepository(Context);
                     case "get_CharacterTeleporters": return new Rasa.Repositories.Char.CharacterTeleporter.CharacterTeleporterRepository(Context);
                     case "get_CharacterMissions": return new Rasa.Repositories.Char.CharacterMission.CharacterMissionRepository(Context);
+                    case "get_CharacterOptions": return new Rasa.Repositories.Char.CharacterOption.CharacterOptionRepository(Context);
                     case "BeginTransaction": return Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
                     case "Complete": Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;

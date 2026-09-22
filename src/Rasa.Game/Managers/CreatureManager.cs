@@ -439,6 +439,22 @@ namespace Rasa.Managers
                 new IsRunningPacket(false)
             };
 
+            // A corpse this client never watched die. Recv_DeadOnArrival is AnnounceDeath with
+            // doDeathFX = 0: the dead control state, the cancelled action, StopTracking,
+            // HideWeapons, StopPersistantEffects and the ACTOR_STATE_DEAD event that the nameplate
+            // (overheadwindow.OnActorDied), the radar and targeting all listen for - without the
+            // death FX, which belongs to a death that was witnessed. canRevive is 0; nothing here
+            // revives a creature.
+            //
+            // Before ActorInfo, not after. Recv_DeadOnArrival announces only `if not self.IsDead()`,
+            // and ActorInfo's stateIds carry CharacterState.Dead into SetCurrentStateIds ->
+            // TransitionTo(dead), which would make the guard true and swallow everything above,
+            // leaving a body that is dead to the state machine but still has its weapons out, its
+            // effects running and a living creature's nameplate. Nothing later undoes it either:
+            // HideWeapons is a counter that every subsequent UpdateAppearance honours.
+            if (creature.State == CharacterState.Dead)
+                entityData.Insert(entityData.FindIndex(packet => packet is ActorInfoPacket), new DeadOnArrivalPacket(false));
+
             // NPC augmentation: the client resolves objective-completion dialogue
             // through npc.npcPackageId, which only Recv_NPCInfo sets.
             if (creature.Npc != null && creature.Npc.NpcPackageId != 0)
@@ -448,6 +464,20 @@ namespace Rasa.Managers
             // (UI_UPDATE_ESCORT_OVERHEAD) come only from Recv_UpdateEscortStatus.
             if (creature.IsEscort)
                 entityData.Add(new UpdateEscortStatusPacket(true));
+
+            // Whatever is already running on it. Recv_GameEffects attaches each one and announces it, which is
+            // exactly what an effect that landed before this client could see the creature needs; without it a
+            // burning or stunned creature that walks into view carries no icon and plays no effect visual.
+            // After the appearance: DoAnnounceAttachVisuals hangs its FX off the body that AppearanceData built.
+            var gameEffects = GameEffectManager.CatchUpPacket(creature);
+
+            if (gameEffects != null)
+                entityData.Add(gameEffects);
+
+            // And what it is aiming at, for the same reason: a creature already in a fight when this client
+            // arrives would otherwise never attach its bone tracker, because SetActionFighting has been and gone.
+            if (creature.AnnouncedTarget != 0)
+                entityData.Add(new TargetIdPacket(creature.AnnouncedTarget));
 
             client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(creature.EntityId, creature.EntityClass, entityData));
 

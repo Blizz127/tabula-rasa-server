@@ -470,6 +470,9 @@ namespace Rasa.Managers
 
                 tempClient.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(player.EntityId, player.EntityClass, CreatePlayerEntityData(client)));
 
+                // CreatePlayerEntityData says Friendly for everyone and carries no wargame data,
+                // so a duellist coming back into a cell would arrive as an untouchable ally.
+                WargameManager.Instance.OnActorIntroduced(tempClient, client);
             }
         }
 
@@ -489,6 +492,9 @@ namespace Rasa.Managers
                     continue;
 
                 client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(tempClient.Player.EntityId, tempClient.Player.EntityClass, CreatePlayerEntityData(tempClient)));
+
+                // The other half of the same repair (see CellIntroduceClientToPlayers).
+                WargameManager.Instance.OnActorIntroduced(client, tempClient);
             }
         }
 		
@@ -521,6 +527,27 @@ namespace Rasa.Managers
                 new IsTrialAccountPacket(player.IsTrialAccount),
                 new EquipmentInfoPacket(client.Player.Inventory.EquippedInventory)
             };
+
+            // A player who died before this client could see them. Nothing above carries a state -
+            // there is no ActorInfo on this path at all - so without this the body stands, keeps
+            // its weapons drawn and wears a living player's nameplate until it revives.
+            // Recv_DeadOnArrival is AnnounceDeath with doDeathFX = 0: the dead control state and
+            // the ACTOR_STATE_DEAD event, without replaying a death nobody was there for.
+            // canRevive is 0 for the same reason PlayerDead sends 0 - no ally revival exists here.
+            if (player.State == CharacterState.Dead)
+                entityData.Add(new DeadOnArrivalPacket(false));
+
+            // The effects already on this player. Recv_GameEffects is the catch-up send, and without it everyone
+            // who did not watch a buff land sees none of it: zone in beside a sprinting player and they run at
+            // sprint speed with no effect on them at all.
+            var gameEffects = GameEffectManager.CatchUpPacket(player);
+
+            if (gameEffects != null)
+                entityData.Add(gameEffects);
+
+            // What they are aiming at, so a player already in a fight is aimed correctly the moment they appear.
+            if (player.AnnouncedTarget != 0)
+                entityData.Add(new TargetIdPacket(player.AnnouncedTarget));
 
             return entityData;
         }
@@ -1053,10 +1080,23 @@ namespace Rasa.Managers
             if (packet.OptionsList.Count == 0)
                 return;
 
-            client.Player.CharacterOptions = packet.OptionsList;
+            // Merged, not replaced: the client saves the options it changed, and the stored rows are
+            // merged per option anyway. Replacing the list dropped every option the client left out
+            // of this save - including the MissionTrack slots the mission manager writes on accept,
+            // which the next accept reads back to decide what is already tracked.
+            foreach (var option in packet.OptionsList)
+            {
+                var existing = client.Player.CharacterOptions.FirstOrDefault(entry => entry.OptionId == option.OptionId);
+
+                if (existing != null)
+                    existing.Value = option.Value;
+                else
+                    client.Player.CharacterOptions.Add(option);
+            }
+
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
 
-            foreach (var option in client.Player.CharacterOptions)
+            foreach (var option in packet.OptionsList)
                 unitOfWork.CharacterOptions.AddOrUpdate(client.Player.Id, (uint)option.OptionId, option.Value);
 
             // AddOrUpdate only stages the rows; without this they were thrown away on dispose,
@@ -1128,6 +1168,9 @@ namespace Rasa.Managers
         public void SetTargetId(Client client, ulong entityId)
         {
             client.Player.Target = entityId;
+            // Manifestation.SetTargetId runs UpdateAccuracyRates and UpdateBoneTracking(bForce = True), so other
+            // players turn their weapon onto what they are shooting. Reached with 0 from ClearTargetId too.
+            ActorManager.Instance.AnnounceTarget(client.Player.MapChannel, client.Player, entityId, client);
         }
 
         public void SetTrackingTarget(Client client, ulong entityId)

@@ -91,7 +91,14 @@ namespace Rasa.Managers
                         obj.TriggeredByPlayers.Add(client);
                         break;
                     }
+                // Both containers are used the same way. The client's own state machines say so:
+                // usableaugmentationstatetransition[66 LOCKBOX] is [(3, 3, 163)] and [76
+                // CLANLOCKBOX] is [(10000010, 10000010, 163)] - one self-transition each, playing
+                // the same animation 163, with no second state to move to. What differs is the
+                // state each announces (see LockboxStateFor) and the window the client opens off
+                // its own augmentation, neither of which is decided here.
                 case DynamicObjectType.Lockbox:
+                case DynamicObjectType.ClanLockbox:
                     {
                         client.CallMethod(client.Player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, packet.ActionId, packet.ActionArgId));
                         client.CallMethod(packet.EntityId, new UsePacket(client.Player.EntityId, obj.StateId, 100));
@@ -219,10 +226,14 @@ namespace Rasa.Managers
 
                     if (footlocker.RespawnTime <= 0)
                     {
+                        // The state goes on before the object goes out: AddToWorld introduces it
+                        // to every client already in the cell, and the UsableInfoPacket that
+                        // introduction carries is built from the StateId the object holds at that
+                        // moment. Set afterwards, the first clients to see it were told 0.
+                        footlocker.StateId = LockboxStateFor(footlocker.EntityClassId);
+                        footlocker.WindupTime = 10000;
                         CellManager.Instance.AddToWorld(mapChannel, footlocker);
                         footlocker.IsInWorld = true;
-                        footlocker.StateId = UseObjectState.CpointStateUnclaimed;
-                        footlocker.WindupTime = 10000;
                     }
                 }
             }
@@ -553,6 +564,60 @@ namespace Rasa.Managers
             Logger.WriteLog(LogType.Debug, $"ToDo: FootlockerRecovery, ActionId = {action.ActionId} ActionArgId = {action.ActionArgId}");
         }
 
+        /// <summary>
+        /// The one state a lockbox class is allowed to be in.
+        ///
+        /// A usable's state machine is built on the client out of the states its augmentation
+        /// owns, and the two lockbox augmentations own one each:
+        /// usabledata.usableaugmentationstate[66 LOCKBOX] is [3] (USE_LOCKBOX_STATE_0) and
+        /// [76 CLANLOCKBOX] is [10000010] (USE_CLANLOCKBOX_STATE_0). Announce anything else and
+        /// Usable._SetState looks the id up in self._fsmStates, takes the KeyError and returns:
+        /// _curStateId stays None, every later _Transition on the object fails the same way, and
+        /// the container never plays a state at all. Every one of the 35 rows in the footlocker
+        /// table used to be announced in 181 USE_CPOINT_STATE_UNCLAIMED, which is not a lockbox
+        /// state - it belongs to augmentation 57 CONTROLPOINT.
+        ///
+        /// Which augmentation a row has is the row's own class: entityclass lookup[21030]
+        /// (UsableLockBoxHumFootlockerV01) carries [66], lookup[10000063] (UsableClanLockboxV01)
+        /// carries [76]. Read from the 1.16.5.0 client's generated/client/usabledata.pyo and
+        /// generated/client/entityclass.pyo, decoded 2026-09-13; the footlocker table holds no
+        /// other class, and a class we do not know is treated as the personal footlocker it is
+        /// filed with.
+        /// </summary>
+        internal static UseObjectState LockboxStateFor(EntityClasses entityClassId)
+        {
+            return entityClassId == EntityClasses.UsableClanLockboxV01
+                ? UseObjectState.ClanlockboxState0
+                : UseObjectState.LockboxState0;
+        }
+
+        /// <summary>
+        /// The world object for one row of the footlocker table. The row's class says what it is:
+        /// 21030 is the AFS issued footlocker, one player's own, and 10000063 is a clan's lockbox
+        /// - a different container, with a different window, a different inventory and a state of
+        /// its own (see <see cref="LockboxStateFor"/>). Two of the 35 rows are the clan kind, at
+        /// Paludos and Twin Pillars, so the kind has to be read off the class rather than off the
+        /// table the row arrived in. The client keeps them apart too: uimapmarker has FOOTLOCKER
+        /// (17) and CLAN_FOOTLOCKER (21) as separate marker kinds.
+        /// </summary>
+        internal static DynamicObject CreateFootlocker(Structures.World.FootlockerEntry footlocker)
+        {
+            var entityClassId = (EntityClasses)footlocker.ClassId;
+
+            return new DynamicObject
+            {
+                Position = footlocker.Position,
+                Rotation = footlocker.Rotation,
+                MapContextId = footlocker.MapContextId,
+                EntityClassId = entityClassId,
+                DynamicObjectType = entityClassId == EntityClasses.UsableClanLockboxV01
+                    ? DynamicObjectType.ClanLockbox
+                    : DynamicObjectType.Lockbox,
+                StateId = LockboxStateFor(entityClassId),
+                Comment = footlocker.Comment
+            };
+        }
+
         internal void InitFootlockers()
         {
             using var unitOfWork = _gameUnitOfWorkFactory.CreateWorld();
@@ -562,17 +627,7 @@ namespace Rasa.Managers
             {
                 var mapChannel = MapChannelManager.Instance.FindByContextId(footlocker.MapContextId);
 
-                var newFootlocker = new DynamicObject
-                {
-                    Position = footlocker.Position,
-                    Rotation = footlocker.Rotation,
-                    MapContextId = footlocker.MapContextId,
-                    EntityClassId = (EntityClasses)footlocker.ClassId,
-                    DynamicObjectType = DynamicObjectType.Lockbox,
-                    Comment = footlocker.Comment
-                };
-
-                mapChannel.FootLockers.Add(footlocker.Id, newFootlocker);
+                mapChannel.FootLockers.Add(footlocker.Id, CreateFootlocker(footlocker));
             }
         }
 
@@ -809,15 +864,41 @@ namespace Rasa.Managers
                 new Vector2((float)teleporter.Rotation, 0f)
             );
 
+            var teleportType = FxTypeOf(objData.WaypointType);
+
             // Actor.BeginTeleport ("Notified by the server that we are about to teleport ... send an
             // acknowledgement after the teleport message is received") has to come before Teleport,
             // or Recv_Teleport finds no pending acknowledgement to send.
-            client.CellCallMethod(client, client.Player.EntityId, new PreTeleportPacket(TeleportType.Default));
+            client.CellCallMethod(client, client.Player.EntityId, new PreTeleportPacket(teleportType));
             client.CallMethod(SysEntity.ClientMethodId, new BeginTeleportPacket());
-            client.CallMethod(client.Player.EntityId, new TeleportPacket(teleporter.Position, teleporter.Rotation, TeleportType.Default, 5));
+            client.CallMethod(client.Player.EntityId, new TeleportPacket(teleporter.Position, teleporter.Rotation, teleportType, 5));
+
+            // The onlookers' half of the sequence; see PlayerDeathManager.TeleportWithinMap for why
+            // it straddles the move and why the teleporting client is left out of both sends.
+            client.CellIgnoreSelfCallMethod(client, new PostTeleportPacket());
             client.CellMoveObject(client, new MoveObjectMessage(client.Player.EntityId, movementData), false);
+            client.CellIgnoreSelfCallMethod(client, new TeleportArrivalPacket());
 
             teleporter.TriggeredByPlayers.Remove(client);    // ToDO: maybe safely remove client
+        }
+
+        /// <summary>
+        /// The effect a pad plays, for PreTeleport and Teleport.
+        ///
+        /// teleporter.type is a <see cref="WaypointType"/> - what the pad is for - and not the
+        /// client's teleporterFX key, which is a separate thing the original server held and this
+        /// world does not: generated/client/teleportertype.pyo keys the three-part effect
+        /// (pre, post, arrive) by DEFAULT 0, BRIDGE_TELEPORTER 1, ADVENTURE_LAUNCHER 2, NOFX 3,
+        /// BANE_TELEPORTER 4, SELF_DESTRUCT 5, LOCAL_TELEPORTER 6, TACTICAL_EVASION 7, and nothing
+        /// in the surviving client data binds a pad to one (usabledata has no row for any of the
+        /// teleporter entity classes). So only the one binding the names already make is taken:
+        /// a LocalTeleporter pad is LOCAL_TELEPORTER, whose effect tuple (8555, 8551, 8550) is the
+        /// same tuple as DEFAULT's, which is why this is a label and not a guess at content.
+        /// Everything else stays DEFAULT until evidence turns up.
+        /// </summary>
+        private static TeleportType FxTypeOf(WaypointType waypointType)
+        {
+            return waypointType == WaypointType.LocalTeleporter ? TeleportType.LocalTeleporter : TeleportType.Default;
         }
 
         /// <summary>

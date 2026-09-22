@@ -840,6 +840,9 @@ namespace Rasa.Managers
             creature.Controller.TimerPathUpdateLock = 0;
             creature.Controller.ActionFighting.TargetEntityId = targetEntityId;
             creature.LastAgression = 0;
+            // Aim the weapon. Creature.SetTargetId attaches the class's bone tracker and syncs it to the target;
+            // without this a turret or a mech fires at you from an idle authored heading.
+            ActorManager.Instance.AnnounceTarget(creature.MapChannel, creature, targetEntityId);
         }
         
         /// <summary>
@@ -890,6 +893,9 @@ namespace Rasa.Managers
 
         private void SetActionWander(Creature creature)
         {
+            // The one way out of a fight - the target died, left, logged out or outran the creature's leash - so
+            // it is the one place the aim has to drop. None removes the bone tracker; a 0 would not.
+            ActorManager.Instance.AnnounceTarget(creature.MapChannel, creature, 0);
             creature.Controller.CurrentAction = BehaviorActionWander;
             creature.Controller.ActionWander.State = WanderIdle;
             creature.Controller.Path.Clear();

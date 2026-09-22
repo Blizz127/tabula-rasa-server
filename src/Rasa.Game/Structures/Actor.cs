@@ -21,6 +21,11 @@ namespace Rasa.Structures
         public bool InCombatMode { get; set; }
         public CharacterState State { get; set; }
         public ulong Target { get; set; }
+        /// <summary>
+        /// The target last broadcast to this actor's cell as TargetId, so the aim goes out when it changes and not
+        /// on every behaviour tick. Distinct from Target, which a minion order sets without a fight starting.
+        /// </summary>
+        public ulong AnnouncedTarget { get; set; }
         public double MovementSpeed { get; set; }
         public bool WeaponReady { get; set; }
         // action data

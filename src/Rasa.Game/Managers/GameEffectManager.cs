@@ -73,7 +73,7 @@ namespace Rasa.Managers
             actor.Attributes[Attributes.Chi].Current -= cost;
             AddToList(actor, gameEffect);
             AnnounceChi(mapChannel, actor);
-            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
+            Announce(mapChannel, actor, gameEffect, new GameEffectAttachedPacket
             {
                 EffectTypeId = gameEffect.TypeId,
                 EffectId = gameEffect.EffectId,
@@ -90,6 +90,55 @@ namespace Rasa.Managers
             });
             UpdateMovementMod(mapChannel, actor);
             return true;
+        }
+
+        /// <summary>
+        /// Tells the cell an effect has attached, and keeps the announcement on the effect so that a client who
+        /// only later sees this actor can be told the same thing through <see cref="CatchUpPacket"/>.
+        /// </summary>
+        private static void Announce(MapChannel mapChannel, Actor actor, GameEffect gameEffect, GameEffectAttachedPacket announcement)
+        {
+            gameEffect.Announcement = announcement;
+            CellManager.Instance.CellCallMethod(mapChannel, actor, announcement);
+        }
+
+        /// <summary>
+        /// Every effect running on this actor, as the bulk GameEffects catch-up, or null when there is nothing to
+        /// say. It is what an entity's creation payload carries so that a buff or debuff is visible to someone who
+        /// did not watch it land.
+        ///
+        /// A timed effect goes out with what is left of it rather than what it started with: the client reads the
+        /// tooltip's duration as an offset from the moment the packet arrives
+        /// (basegameeffect.SetTooltipDict: __expireTime = gameclient.Time() + duration).
+        /// An effect whose announcement was open-ended keeps no countdown, and one with nothing left is skipped -
+        /// the expiry tick is about to take it anyway.
+        /// </summary>
+        public static GameEffectsPacket CatchUpPacket(Actor actor)
+        {
+            if (actor == null || actor.ActiveEffects.Count == 0)
+                return null;
+
+            var effects = new System.Collections.Generic.List<GameEffectAttachedPacket>();
+
+            foreach (var effect in actor.ActiveEffects.Values)
+            {
+                // A server-side timer, or an effect the Cure guard refused: the client never heard of it.
+                if (effect.Announcement == null)
+                    continue;
+
+                if (!effect.Announcement.Duration.HasValue)
+                {
+                    effects.Add(effect.Announcement);
+                    continue;
+                }
+
+                var remaining = (effect.Duration - effect.EffectTime) / 1000.0;
+
+                if (remaining > 0.0)
+                    effects.Add(effect.Announcement.WithDuration(remaining));
+            }
+
+            return effects.Count == 0 ? null : new GameEffectsPacket(effects);
         }
 
         public bool TryDetachRequestedEffect(MapChannel mapChannel, Actor actor, int effectId)
@@ -137,7 +186,7 @@ namespace Rasa.Managers
             AddToList(actor, gameEffect);
             if (actor is Creature creature)
                 mapChannel.CreaturesWithEffects.Add(creature);
-            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
+            Announce(mapChannel, actor, gameEffect, new GameEffectAttachedPacket
             {
                 EffectTypeId = typeId, EffectId = gameEffect.EffectId, EffectLevel = level, SourceId = sourceId,
                 Announced = true, Duration = durationMs / 1000.0, IsActive = true,
@@ -181,7 +230,7 @@ namespace Rasa.Managers
                 IsDebuff = true
             };
             AddToList(actor, gameEffect);
-            CellManager.Instance.CellCallMethod(mapChannel, actor, new GameEffectAttachedPacket
+            Announce(mapChannel, actor, gameEffect, new GameEffectAttachedPacket
             {
                 EffectTypeId = typeId,
                 EffectId = gameEffect.EffectId,

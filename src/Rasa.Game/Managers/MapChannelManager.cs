@@ -310,6 +310,11 @@ namespace Rasa.Managers
 
             PartyManager.Instance.ExpireHeldMembers();
 
+            // Unanswered duel challenges, bout clocks, and duellists who have walked away from
+            // each other. Server-wide, like the squad sweep above: a duel is between two clients,
+            // not a property of a map.
+            WargameManager.Instance.Worker();
+
             // Server-wide lists, ticked once. Dropships used to run inside the per-map loop
             // below, guarded by that map having players, so with N populated maps every
             // dropship advanced N times per tick.
@@ -636,8 +641,11 @@ namespace Rasa.Managers
             var player = client.Player;
 
             // A target is an entity on this map; the client does not always re-target after a
-            // map change, and MissileLaunch refuses cross-map targets, so drop it here.
+            // map change, and MissileLaunch refuses cross-map targets, so drop it here. The
+            // announced aim goes with it: nobody on the next map has been told anything, and a
+            // stale value would suppress the TargetId for a genuine re-target to the same entity.
             player.Target = 0;
+            player.AnnouncedTarget = 0;
 
             // A socket can close before MapLoaded registered the character; nothing below that
             // speaks for a registration may then run against whoever holds the entity id.
@@ -669,6 +677,10 @@ namespace Rasa.Managers
             // subordinates will teleport with their masters, but not change maps." Leaving the map is leaving them
             // behind, so they are dismissed, not orphaned. (InfiniteRasa 492954a)
             MinionManager.Instance.DismissAll(client);
+
+            // Before the cells let go of them: ending a duel takes the wargame data back off both
+            // bodies, and that is a cell broadcast from this player's own cells.
+            WargameManager.Instance.RemovePlayer(client);
 
             CellManager.Instance.RemoveFromWorld(client);
             MapLinkManager.Instance.RemovePlayer(client);
