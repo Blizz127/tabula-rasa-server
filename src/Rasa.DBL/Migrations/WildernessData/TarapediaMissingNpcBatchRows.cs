@@ -49,8 +49,8 @@ namespace Rasa.Migrations.WildernessData
         private static readonly System.Collections.Generic.Dictionary<uint, uint[][]> Bodies = new()
         {
             // Field Sgt. Witherspoon, creature 101
-            { 3846u, new[] { new[] { 3u, 4021u, 22120u }, new[] { 13u, 27120u, 1u }, new[] { 14u, 3672u, 1u },
-                new[] { 15u, 4022u, 13933202u }, new[] { 16u, 4023u, 13933202u }, new[] { 17u, 20824u, 4286886614u } } },
+            { 3846u, new[] { new[] { 2u, 4021u, 22120u }, new[] { 13u, 27120u, 1u }, new[] { 14u, 3672u, 1u },
+                new[] { 16u, 4022u, 13933202u }, new[] { 15u, 4023u, 13933202u }, new[] { 17u, 20824u, 4286886614u } } },
             // General Supply Vendor Twin Pillars, creature 63
             { 3848u, new[] { new[] { 2u, 4021u, 266553u }, new[] { 14u, 25255u, 266553u }, new[] { 15u, 19296u, 266553u },
                 new[] { 16u, 19250u, 266553u }, new[] { 17u, 24019u, 4286886614u } } },

@@ -46,8 +46,8 @@ namespace Rasa.Migrations.WildernessData
         /// <summary>The officer set of ContentNpcAppearance, for the ones on the swapset class.</summary>
         private static readonly uint[][] Officer =
         {
-            new[] { 3u, 4021u, 22120u }, new[] { 13u, 27120u, 1u }, new[] { 14u, 3672u, 14404004u },
-            new[] { 15u, 4022u, 933202u }, new[] { 16u, 4023u, 13933202u }, new[] { 17u, 24019u, 4286886614u }
+            new[] { 2u, 4021u, 22120u }, new[] { 13u, 27120u, 1u }, new[] { 14u, 3672u, 14404004u },
+            new[] { 16u, 4022u, 933202u }, new[] { 15u, 4023u, 13933202u }, new[] { 17u, 24019u, 4286886614u }
         };
 
         public static void InsertData(MigrationBuilder migrationBuilder)
