@@ -263,7 +263,9 @@ namespace Rasa.Test
                 ContentRuleAction.ForceConverseGreeting, ContentRuleAction.TutorialNotification, ContentRuleAction.GrantRewards,
                 ContentRuleAction.TransferToLocation, ContentRuleAction.SetAccountSkipBootcamp,
                 ContentRuleAction.SetFact, ContentRuleAction.ClearFact, ContentRuleAction.SetPlacementState,
-                ContentRuleAction.MoveCreatureToLocation, ContentRuleAction.DamagePlayer
+                ContentRuleAction.MoveCreatureToLocation, ContentRuleAction.DamagePlayer,
+                // The camp's first spoken line: McAllister's bark 852.
+                ContentRuleAction.PlayBark
             }, implemented.Actions.ToArray());
             CollectionAssert.AreEquivalent(new[]
             {
@@ -981,7 +983,8 @@ namespace Rasa.Test
                 // Sgt. Pierre (199020) stands out in the Wilderness at -281, 86 since EllathaWorldNpcs - the map
                 // is Alia Das's, so he is counted here although he is nowhere near the outpost.
                 // Logos Mentor Ensine (199060) stands at the Alia Caverns since TarapediaMissingNpcBatch.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199009, 199020, 199060, 199700, 199701, 199702, 199703, 199803, 199910, 199911 },
+                // The Blood Analyzation Terminal (199912) stands in the Twin Pillars hospital since MissionPropSpeakers.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199009, 199020, 199060, 199700, 199701, 199702, 199703, 199803, 199910, 199911, 199912 },
                     aliaDasPlacements.Keys.ToArray(),
                     "Alia Das: " + string.Join(", ", aliaDasPlacements.Keys.OrderBy(id => id)));
                 var rogers = aliaDasPlacements[198684];

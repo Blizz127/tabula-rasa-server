@@ -43,10 +43,16 @@ namespace Rasa.Test
         /// are the ones no source places: 321 is not offered at all, 332's two delivery points, 442/2 (an analyser's
         /// readout, and the Duncan in the world already speaks for another mission), 451/3 and 977/2 (speakers no
         /// page names), 836/1 (Lieutenant Seguine, no page), and 1186/1 (an Eloh artifact, not a person).
+        ///
+        /// 2026-09-21: MissionPropSpeakers closed 442/2 and 1186/1. Neither was a person - the client's own tables
+        /// name the first the Blood Analyzation Terminal (usablenameoverride 73) and the second's line ends "The
+        /// obelisk is too large to move on your own" - and both now stand in the world as creatures on a class
+        /// that can be spoken to, the shape TarapediaMachineClass established for a talking machine. 451/3 stays:
+        /// its speaker has no name in any source and the owner chose not to invent one.
         /// </summary>
         private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
         {
-            (442, 2, 1486), (451, 3, 569), (1186, 1, 1300)
+            (451, 3, 569)
         };
 
         [TestMethod]
@@ -215,6 +221,90 @@ namespace Rasa.Test
                 }
 
             Assert.AreEqual(0, problems.Count, string.Join(" | ", problems));
+        }
+
+        /// <summary>
+        /// Every hospital stands on a map that has something on it.
+        ///
+        /// A hospital is where a dead player is put back down, so a hospital on a map nothing else occupies is a
+        /// map whose dead have nowhere to go - and a map with a hospital and nothing else is a row that was filed
+        /// under the wrong context. That is exactly what "Hospital: CELLAR Arena Medic" was: it sat on 2259, the
+        /// wargame indoor arena, which carries no spawn, no placement and no map link, while the medic who
+        /// defines it stands at the identical coordinates on 20000009 and the client's own marker for it (UI map
+        /// key 2232) says 20000009 too.
+        /// </summary>
+        [TestMethod]
+        public void EveryHospitalIsOnAMapThatCarriesSomething()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText =
+                "SELECT t.id, t.description, t.map_context_id, " +
+                "  (SELECT COUNT(*) FROM spawnpool s WHERE s.map_context_id = t.map_context_id) " +
+                "+ (SELECT COUNT(*) FROM content_placement p WHERE p.map_context_id = t.map_context_id) " +
+                "+ (SELECT COUNT(*) FROM map_link l WHERE l.map_context_id = t.map_context_id) " +
+                "FROM teleporter t WHERE t.type = 5 AND t.map_context_id <> 0";
+
+            var stranded = new List<string>();
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                if (reader.GetInt64(3) == 0)
+                    stranded.Add($"{reader.GetString(1)} (teleporter {reader.GetInt64(0)}) is on map {reader.GetInt64(2)}, which carries nothing at all");
+
+            Assert.AreEqual(0, stranded.Count, string.Join("\n", stranded));
+        }
+
+        /// <summary>
+        /// A prop that finishes a mission by being spoken to needs the client's Creature augmentation (1), or
+        /// CreatureManager cannot build an actor for it at all, and the NPC augmentation (52), or the client has
+        /// nothing to open a conversation on. The Blood Analyzation Terminal and the Eloh obelisk stand on such
+        /// classes; entityclass is seed data, so this is checked against the real world rather than the migrations.
+        /// </summary>
+        [TestMethod]
+        public void TheTalkingPropsStandOnClassesThatCanBeSpokenTo()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT c.id, e.aug_list FROM creature c JOIN entityclass e ON e.id = c.class_id WHERE c.id IN (199912, 199913)";
+            var seen = 0;
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                seen++;
+                var augmentations = ("," + reader.GetString(1).Replace(" ", "") + ",");
+                Assert.IsTrue(augmentations.Contains(",1,"), $"prop {reader.GetInt64(0)} has no Creature augmentation: {reader.GetString(1)}");
+                Assert.IsTrue(augmentations.Contains(",52,"), $"prop {reader.GetInt64(0)} has no NPC augmentation: {reader.GetString(1)}");
+            }
+            Assert.AreEqual(2, seen, "both talking props are in the world");
+        }
+
+        /// <summary>The fifteen classes once labelled Missing_ItemClassId carry the names the client gives them.</summary>
+        [TestMethod]
+        public void NoEntityClassIsStillAPlaceholderName()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM entityclass WHERE class_name LIKE 'Missing_ItemClassId%'";
+            Assert.AreEqual(0L, (long)command.ExecuteScalar(), "classes still carrying a placeholder name");
+            command.CommandText = "SELECT COUNT(*) FROM entityclass WHERE (id = 3180 AND class_name = 'Rifle Ammo') OR (id = 4327 AND class_name = 'Botany Kit')";
+            Assert.AreEqual(2L, (long)command.ExecuteScalar(), "Rifle Ammo and the Botany Kit carry the client's names");
+        }
+
+        /// <summary>
+        /// Lieutenant Burke is the one original-seed spawn CodexNpcCorrections overrules, on two independent
+        /// sources 4 m apart that both name Monarch Grove, plus the seed row's own height matching the new spot
+        /// and not the old. Council Elder Solis, the other seed candidate, is deliberately left where the seed
+        /// puts him (GAP-SOLIS-SEED-POSITION).
+        /// </summary>
+        [TestMethod]
+        public void BurkeStandsAtMonarchGroveAndSolisIsLeftToTheSeed()
+        {
+            using var connection = OpenWorld();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM spawnpool WHERE id = 171 AND pos_x = -46 AND pos_z = 418 AND map_context_id = 1220";
+            Assert.AreEqual(1L, (long)command.ExecuteScalar(), "Lieutenant Burke at Monarch Grove");
+            command.CommandText = "SELECT COUNT(*) FROM spawnpool WHERE id = 184 AND pos_x <> 784.7";
+            Assert.AreEqual(1L, (long)command.ExecuteScalar(), "Council Elder Solis where the seed put him");
         }
 
         private static SqliteConnection OpenWorld()
