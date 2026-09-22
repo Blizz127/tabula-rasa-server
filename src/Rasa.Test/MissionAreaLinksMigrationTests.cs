@@ -55,9 +55,17 @@ namespace Rasa.Test
             // belongs to, so MissionAreaLinks' value is the one before that. Everyone else still stands.
             var correctedLater = new Dictionary<uint, ulong> { { 422u, 199910u } };
 
+            // And two have had their giver corrected since: QuestGiverBriefingFix read the client's own item
+            // 25696, "Apirka's Report detailing your involvement in the case of the deserter, Ranger Milpas", and
+            // moved 1392 and 1393 off Outpost Commander Rogers - who receives the report - onto Warrior Apirka,
+            // creature 43, whose report it is. Apirka stands in a spawn pool rather than a content placement, so
+            // the "placed exactly once" rule below is checked against the giver this migration set.
+            var giverCorrectedLater = new Dictionary<uint, ulong> { { 1392u, 43u }, { 1393u, 43u } };
+
             foreach (var (missionId, giverId, receiverId) in MissionAreaLinksRows.Corrected)
             {
-                Assert.AreEqual(giverId, (ulong)Scalar(connection, $"SELECT giver_id FROM npc_mission WHERE id = {missionId}"), $"giver of {missionId}");
+                var expectedGiver = giverCorrectedLater.TryGetValue(missionId, out var newGiver) ? newGiver : giverId;
+                Assert.AreEqual(expectedGiver, (ulong)Scalar(connection, $"SELECT giver_id FROM npc_mission WHERE id = {missionId}"), $"giver of {missionId}");
                 var expectedReceiver = correctedLater.TryGetValue(missionId, out var later) ? later : receiverId;
                 Assert.AreEqual(expectedReceiver, (ulong)Scalar(connection, $"SELECT reciver_id FROM npc_mission WHERE id = {missionId}"), $"receiver of {missionId}");
                 foreach (var creatureId in new[] { giverId, receiverId })
