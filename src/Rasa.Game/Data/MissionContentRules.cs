@@ -59,7 +59,9 @@ namespace Rasa.Data
                 // W3: escorts and reinforcements walking to a place.
                 ContentRuleAction.MoveCreatureToLocation,
                 // W3: the bomb blast hurts the recruit who armed it.
-                ContentRuleAction.DamagePlayer
+                ContentRuleAction.DamagePlayer,
+                // The camp's first spoken line: McAllister's bark 852.
+                ContentRuleAction.PlayBark
             },
             ConditionKinds = new HashSet<ContentConditionKind>
             {

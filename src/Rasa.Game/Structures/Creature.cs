@@ -17,6 +17,12 @@ namespace Rasa.Structures
         public bool IsEscort { get; set; }
         /// <summary>Environment.TickCount64 until which a stun holds the creature's AI (AbilityEffects).</summary>
         public long StunnedUntil { get; set; }
+        /// <summary>
+        /// Environment.TickCount64 until which this creature's last bark is still on screen, plus a beat. The
+        /// client replaces the bubble and plays a second clip over the first if another arrives inside it
+        /// (creature.pyo Recv_Bark), so the server holds the speaker silent (BarkManager).
+        /// </summary>
+        public long BarkSpeakingUntil { get; set; }
         // npc data (only if creature is a NPC)
         public Npc Npc { get; set; }
         // loot data (only if creature is harvestable)

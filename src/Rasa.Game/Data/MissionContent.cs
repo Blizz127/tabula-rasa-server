@@ -120,7 +120,15 @@ namespace Rasa.Data
         /// boot camp's bomb blast is the recorded case: the recruit who arms it sees "-21" take off their bar
         /// when it detonates (footage B1-049), which is why the 2005 text warns "Not yourself!" (21566).
         /// </summary>
-        DamagePlayer = 15
+        DamagePlayer = 15,
+
+        /// <summary>
+        /// A creature says one of the client's 859 bark lines: placement_id names the placement whose creature
+        /// speaks and bark_id the row of the client's own table (Bark = 411, one argument; the client resolves
+        /// the text, the voice clip and how long the bubble stays up). Nothing is persisted, and nothing is sent
+        /// to a player outside the client's 20 m bark range (BarkManager).
+        /// </summary>
+        PlayBark = 16
     }
 
     public enum LogosGrantProtocol : byte

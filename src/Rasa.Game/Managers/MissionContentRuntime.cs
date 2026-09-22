@@ -296,6 +296,10 @@ namespace Rasa.Managers
                         SetPlacementState(client, action);
                         break;
 
+                    case ContentRuleAction.PlayBark:
+                        PlayBark(client, action);
+                        break;
+
                     default:
                         throw new InvalidOperationException($"content action {(ContentRuleAction)action.Action} has no handler");
                 }
@@ -995,6 +999,32 @@ namespace Rasa.Managers
                 player.State = CharacterState.Dead;
                 PlayerDeathManager.Instance.AnnounceDeath(player.MapChannel, player, null);
             }
+        }
+
+        /// <summary>
+        /// A placement's creature says one of the client's bark lines.
+        ///
+        /// The speaker is found the way <see cref="SendCreatureToLocation"/> finds one - the creature materialized
+        /// for that placement in the map channel the player is on - so a rule that fires for a player speaks with
+        /// the NPCs of that player's own instance. BarkManager keeps the client's two rules: nothing is sent to a
+        /// player more than 20 m away, because the client will neither play the clip nor draw the bubble past
+        /// that, and a creature already mid-line stays silent rather than talking over itself.
+        /// </summary>
+        private void PlayBark(Client client, ContentRuleActionEntry action)
+        {
+            var speaker = client?.Player?.MapChannel?.MapCellInfo?.Cells.Values
+                .SelectMany(cell => cell.CreatureList)
+                .FirstOrDefault(candidate => candidate.ContentPlacementId == action.PlacementId);
+
+            if (speaker == null)
+            {
+                Logger.WriteLog(LogType.Error,
+                    $"bark {action.BarkId}: placement {action.PlacementId} has no creature in context {client?.Player?.MapChannel?.MapInfo?.MapContextId}; ignored.");
+                return;
+            }
+
+            if (BarkManager.Instance.Say(speaker, action.BarkId))
+                Logger.WriteLog(LogType.Debug, $"{speaker.Name} (placement {action.PlacementId}) says bark {action.BarkId}.");
         }
 
         /// <summary>

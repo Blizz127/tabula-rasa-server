@@ -95,6 +95,15 @@ namespace Rasa.Structures.World
         [Required]
         public int Damage { get; set; }
 
+        /// <summary>
+        /// The bark a play_bark action says: a row of the client's own bark table
+        /// (generated/client/bark.pyo), which holds its text, its voice clip and how long the bubble stays up.
+        /// Zero for every other action.
+        /// </summary>
+        [Column("bark_id")]
+        [Required]
+        public uint BarkId { get; set; }
+
         [Column("comment", TypeName = "varchar(50)")]
         [Required]
         public string Comment { get; set; } = string.Empty;

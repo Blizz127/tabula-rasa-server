@@ -863,6 +863,15 @@ namespace Rasa.Structures.Content
                         if (action.AudioSetId == 0)
                             gap("needs an audio set id");
                         break;
+
+                    case ContentRuleAction.PlayBark:
+                        used.Add("placement_id");
+                        used.Add("bark_id");
+                        if (!_c.Placements.TryGetValue(action.PlacementId, out var speaker) || (ContentPlacementKind)speaker.Kind != ContentPlacementKind.Creature)
+                            gap("needs a creature placement to speak");
+                        if (!BarkTable.TryGetDuration(action.BarkId, out _))
+                            gap($"bark {action.BarkId} is not a row of the client's bark table");
+                        break;
                 }
 
                 CheckUnused(gap, used,
@@ -871,7 +880,8 @@ namespace Rasa.Structures.Content
                     ("logos_protocol", action.LogosProtocol != 0), ("experience", action.Experience != 0), ("credits", action.Credits != 0),
                     ("item_set_id", action.ItemSetId != 0), ("placement_id", action.PlacementId != 0), ("state_id", action.StateId != 0),
                     ("fact_key", !string.IsNullOrEmpty(action.FactKey)), ("fact_value", action.FactValue != 0),
-                    ("location_id", action.LocationId != 0), ("audio_set_id", action.AudioSetId != 0));
+                    ("location_id", action.LocationId != 0), ("audio_set_id", action.AudioSetId != 0),
+                    ("bark_id", action.BarkId != 0));
             }
 
             private void ItemSets()

@@ -568,6 +568,14 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnType("int unsigned")
                         .HasColumnName("audio_set_id");
 
+                    b.Property<uint>("BarkId")
+                        .HasColumnType("int unsigned")
+                        .HasColumnName("bark_id");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int")
+                        .HasColumnName("damage");
+
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
