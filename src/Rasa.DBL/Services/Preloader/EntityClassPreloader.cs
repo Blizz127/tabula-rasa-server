@@ -122,7 +122,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 2913, "TerraTunnelRoomTurnLeft", 12704, 1, 0, "" };
             yield return new object[] { 2914, "TerraTunnelRoomTurnRight", 12705, 1, 0, "" };
             yield return new object[] { 3147, "Ammo_Cartridge_1_Standard_Grade", 14472, 1, 0, "6" };
-            yield return new object[] { 3180, "Missing_ItemClassId_1/15", 776, 1, 0, "6" };
+            yield return new object[] { 3180, "Rifle Ammo", 776, 1, 0, "6" };
             yield return new object[] { 3181, "Ammo_Rocket_1_Standard_Grade", 14475, 1, 0, "6" };
             yield return new object[] { 3219, "GBB_MissionAssigner", 776, 1, 0, "" };
             yield return new object[] { 3220, "GBB_MissionObjective", 776, 1, 0, "" };
@@ -166,7 +166,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 3586, "SystemAvatarLookModeFemaleStealth", 33475, 1, 0, "" };
             yield return new object[] { 3587, "GBB_SlaveSpawnRegion_Cylinder", 776, 1, 0, "" };
             yield return new object[] { 3590, "TerraforeasPinholefalls", 16134, 1, 0, "" };
-            yield return new object[] { 3600, "Missing_ItemClassId_2/15", 776, 7, 0, "6" };
+            yield return new object[] { 3600, "Combat Suit Paint Tier 3 Soldier", 776, 7, 0, "6" };
             yield return new object[] { 3602, "FloraForeasGenTree01V01", 13608, 1, 0, "" };
             yield return new object[] { 3603, "TerraForeasGenRock02V03", 13618, 1, 0, "" };
             yield return new object[] { 3604, "FloraForeasGenTree01V02", 13619, 1, 0, "" };
@@ -241,19 +241,19 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 3728, "FloraForeasGenGrassclump01V02", 13779, 1, 0, "" };
             yield return new object[] { 3729, "FloraForeasGenGrassclump01V03", 13780, 1, 0, "" };
             yield return new object[] { 3733, "TerraForeasLandbridge01V01", 16332, 1, 0, "" };
-            yield return new object[] { 3734, "Missing_ItemClassId_3/15", 776, 1, 0, "6" };
+            yield return new object[] { 3734, "Melanotan for Caucasians", 776, 1, 0, "6" };
             yield return new object[] { 3735, "Modification_HairColor_Caucasian", 776, 1, 0, "6,19" };
             yield return new object[] { 3736, "ArchHumBaseElementV01", 13788, 1, 0, "" };
             yield return new object[] { 3737, "ArchHumBaseElementV02", 13789, 1, 0, "" };
             yield return new object[] { 3738, "ArchHumBaseElementV03", 13790, 1, 0, "" };
             yield return new object[] { 3739, "ArchHumBaseElementV04", 13791, 1, 0, "" };
             yield return new object[] { 3740, "ArchHumBaseElementV05", 13792, 1, 0, "" };
-            yield return new object[] { 3741, "Missing_ItemClassId_4/15", 776, 1, 0, "6" };
+            yield return new object[] { 3741, "Combat Suit Paint Tier 3 Specialist", 776, 1, 0, "6" };
             yield return new object[] { 3742, "Modification_ClothingColor", 14474, 1, 0, "6,19" };
-            yield return new object[] { 3743, "Missing_ItemClassId_5/15", 776, 1, 0, "6" };
-            yield return new object[] { 3744, "Missing_ItemClassId_6/15", 776, 1, 0, "6" };
-            yield return new object[] { 3745, "Missing_ItemClassId_7/15", 776, 1, 0, "6" };
-            yield return new object[] { 3746, "Missing_ItemClassId_8/15", 776, 1, 0, "6" };
+            yield return new object[] { 3743, "Combat Suit Paint Tier 2 Soldier", 776, 1, 0, "6" };
+            yield return new object[] { 3744, "Combat Suit Paint Tier 2 Specialist", 776, 1, 0, "6" };
+            yield return new object[] { 3745, "Combat Suit Paint Tier 4 Soldier", 776, 1, 0, "6" };
+            yield return new object[] { 3746, "Combat Suit Paint Tier 4 Specialist", 776, 1, 0, "6" };
             yield return new object[] { 3751, "FloraForeasGenBush04V01", 13816, 1, 0, "" };
             yield return new object[] { 3753, "ArchHumDropshipPropV02Destroyed", 26209, 1, 0, "" };
             yield return new object[] { 3754, "ArchHumBaseGatesystemPlatform8M", 13822, 1, 0, "" };
@@ -490,7 +490,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 4068, "ArchHumBaseGatesystemWall16M", 48377, 1, 0, "" };
             yield return new object[] { 4082, "Weapon_Creature_AFS_Turret", 776, 1, 0, "2,4,6" };
             yield return new object[] { 4083, "AvatarSwap_Face_Asian_Standard_1", 776, 1, 0, "4,6" };
-            yield return new object[] { 4086, "Missing_ItemClassId_9/15", 776, 1, 0, "6" };
+            yield return new object[] { 4086, "Melanotan for Africans", 776, 1, 0, "6" };
             yield return new object[] { 4087, "Modification_SkinColor", 776, 1, 0, "6,19" };
             yield return new object[] { 4088, "Modification_HairColor_Asian", 776, 1, 0, "6,19" };
             yield return new object[] { 4089, "Modification_HairColor_African", 776, 1, 0, "6,19" };
@@ -642,7 +642,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 4322, "FloraForeasSwampLillypad01V03", 15912, 1, 0, "" };
             yield return new object[] { 4323, "FloraForeasSwampLillypad01V04", 15913, 1, 0, "" };
             yield return new object[] { 4324, "FloraForeasSwampPlant09V01", 15927, 1, 0, "" };
-            yield return new object[] { 4327, "Missing_ItemClassId_10/15", 776, 1, 0, "4,6" };
+            yield return new object[] { 4327, "Botany Kit", 776, 1, 0, "4,6" };
             yield return new object[] { 4338, "FloraForeasSwampTree02V02", 15994, 1, 0, "" };
             yield return new object[] { 4339, "FloraForeasSwampTree02V03", 15995, 1, 0, "" };
             yield return new object[] { 4340, "TerraForeasStoneanvil", 16016, 1, 0, "" };
@@ -899,7 +899,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 6247, "ArchBaneIndustrialChunnelStraight02Prison32mV01", 17444, 1, 0, "" };
             yield return new object[] { 6248, "ArchBaneIndustrialChunnelStraight02Prison32mV02", 17445, 1, 0, "" };
             yield return new object[] { 6250, "TEST_JM_Recipe", 776, 1, 0, "6" };
-            yield return new object[] { 6251, "Missing_ItemClassId_11/15", 776, 1, 0, "6" };
+            yield return new object[] { 6251, "Your favorite text sucks.", 776, 1, 0, "6" };
             yield return new object[] { 6260, "ArchCormanSolarPanelV01", 17480, 1, 0, "" };
             yield return new object[] { 6261, "ArchCormanWindmillV01", 17481, 1, 0, "" };
             yield return new object[] { 6262, "Creature_Warnet_Soldier", 17227, 2, 1, "1,59" };
@@ -949,7 +949,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 6318, "UsableInertDestBaneArticulatedDrillV01", 17692, 1, 1, "41" };
             yield return new object[] { 6319, "ArchBaneGenObjMiningcontrolterminalV01", 17693, 1, 0, "" };
             yield return new object[] { 6320, "ArchBaneGenObjThermalventV01", 17694, 1, 0, "" };
-            yield return new object[] { 6331, "Missing_ItemClassId_12/15", 776, 1, 0, "4,6" };
+            yield return new object[] { 6331, "RCH_TestRecord has no display text", 776, 1, 0, "4,6" };
             yield return new object[] { 6332, "Creature_Maw", 17298, 2, 1, "1,59" };
             yield return new object[] { 6334, "ArchHumGenObjBagV01", 21640, 1, 0, "" };
             yield return new object[] { 6335, "TerraAriekiGenSmallrockV01", 17715, 1, 0, "" };
@@ -6224,7 +6224,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 20756, "UsableInertDestBaneStasisChamberHumMV01", 30744, 1, 0, "41" };
             yield return new object[] { 20757, "Bane_Thrax_Soldier_Pistol_NoBeaminBirth", 30407, 2, 1, "1,59" };
             yield return new object[] { 20758, "UsableCrSpawnerDestFithikEgg", 30756, 1, 1, "68" };
-            yield return new object[] { 20759, "Missing_ItemClassId_13/15", 776, 1, 0, "6" };
+            yield return new object[] { 20759, "New record for rholtrop", 776, 1, 0, "6" };
             yield return new object[] { 20760, "UsableInertDestBaneSleepPodV03", 30301, 1, 1, "41" };
             yield return new object[] { 20761, "TerraBaneGooLake128mV01", 30808, 1, 0, "" };
             yield return new object[] { 20762, "UsableStatelessBaneFaultHammer", 42185, 1, 0, "" };
@@ -6243,7 +6243,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 20776, "UsableBombDELETEV01", 19000, 1, 0, "42" };
             yield return new object[] { 20778, "ArchBaneLightPostV01", 30883, 1, 0, "" };
             yield return new object[] { 20780, "NPC_Hominis_Machina_Boss", 15868, 2, 1, "1,52,59" };
-            yield return new object[] { 20781, "Missing_ItemClassId_14/15", 776, 1, 0, "6" };
+            yield return new object[] { 20781, "New record for rholtrop", 776, 1, 0, "6" };
             yield return new object[] { 20782, "ArchBaneSandbagsPivotV01", 30919, 1, 0, "" };
             yield return new object[] { 20783, "ArchBaneSandbagsStraight4MV01", 30920, 1, 0, "" };
             yield return new object[] { 20784, "ArchBaneSandbagsStraight8MV01", 30921, 1, 0, "" };
@@ -6436,7 +6436,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 20980, "TerraForeasValRockPileMossy01V03", 31111, 1, 0, "" };
             yield return new object[] { 20981, "TerraForeasValRockPileMossy01V04", 31112, 1, 0, "" };
             yield return new object[] { 20982, "TerraForeasValRockPileMossy01V05", 31113, 1, 0, "" };
-            yield return new object[] { 20987, "Missing_ItemClassId_15/15", 776, 1, 0, "6" };
+            yield return new object[] { 20987, "RCH_ThisBeTestDataHere has no display text.", 776, 1, 0, "6" };
             yield return new object[] { 20988, "FloraForeasGenTree03BunchV01", 31116, 1, 0, "" };
             yield return new object[] { 20989, "FloraForeasGenTree03BunchV02", 31117, 1, 0, "" };
             yield return new object[] { 20990, "FloraForeasGenTree03BunchV03", 31118, 1, 0, "" };

@@ -302,8 +302,10 @@ namespace Rasa.Managers
         /// <summary>
         /// The inventory tab an item belongs in when its template has no item_template row. The
         /// class augmentations decide equipment and crafting; the class name pattern decides the
-        /// rest (Consumable_*, Ammo_* -> consumable; Mis*, *_Mission_* and the zone-prefixed
-        /// mission items -> mission; anything else -> misc). An item_template row overrides this.
+        /// rest (Consumable_*, Ammo_* -> consumable; the client's mission-item names, *_Mission_*
+        /// and the zone-prefixed mission items -> mission; anything else -> misc). An item_template
+        /// row overrides this. Only a name the client itself carries may decide anything here; see
+        /// <see cref="IsMissionClassName"/>.
         /// </summary>
         public static InventoryCategory DefaultInventoryCategory(EntityClass entityClass)
         {
@@ -323,10 +325,35 @@ namespace Rasa.Managers
             if (name.StartsWith("Consumable_") || name.StartsWith("Ammo_") || augmentations.Contains(AugmentationType.Customization))
                 return InventoryCategory.Consumable;
 
-            if (name.StartsWith("Mis", System.StringComparison.OrdinalIgnoreCase) || name.StartsWith("TESTMis") || name.StartsWith("MixXeno") || name.Contains("_Mission_") || IsZoneMissionItem(name))
+            if (IsMissionClassName(name) || name.StartsWith("TESTMis") || name.StartsWith("MixXeno") || name.Contains("_Mission_") || IsZoneMissionItem(name))
                 return InventoryCategory.Mission;
 
             return InventoryCategory.Misc;
+        }
+
+        /// <summary>
+        /// The client's mission-item naming convention. Its entityclass table (1.16.5.0 game.zip,
+        /// generated/client/entityclass.pyo) holds 857 class names beginning "Mis" in any case, and every
+        /// one of them is one of three shapes: "Mis_" and a zone (Mis_Palisades_ToolHealingDisc), "Mis"
+        /// and a capital (MisPalisadesItemDatabladedeployment, MISBaneArmoryBlueprints), or the whole word
+        /// "Mission" (MissionThraxHead).
+        ///
+        /// The rule used to be a bare StartsWith("Mis", OrdinalIgnoreCase), which matches all 857 and one
+        /// thing more: the "Missing_ItemClassId_N/15" labels this server invented for the fifteen classes
+        /// the client's entityclass table has no row for. Rifle Ammo (3180) and the Botany Kit (4327) were
+        /// therefore mission items by accident, on the strength of a name no client ever saw. The labels
+        /// are gone (migration 20260920340000_ClientNamesForItems), and this shape test refuses them even
+        /// if one comes back: "Missing_" is "Mis" followed by a lower-case letter and is not "Mission".
+        /// Checked against the client's 15,823 class names: the two rules agree on every one of them.
+        /// </summary>
+        private static bool IsMissionClassName(string name)
+        {
+            if (name.Length < 4 || !name.StartsWith("Mis", System.StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return name.StartsWith("Mission", System.StringComparison.OrdinalIgnoreCase)
+                   || name[3] == '_'
+                   || char.IsUpper(name[3]);
         }
 
         // Metal1, Liquid1, Hide1, Superconductor1, Combustible1, Adhesive1, Gas1, Glass1, HardMineral1,

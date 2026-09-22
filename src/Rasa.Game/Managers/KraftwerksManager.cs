@@ -306,7 +306,13 @@ namespace Rasa.Managers
             CommunicatorManager.Instance.SystemMessage(client, $"{what} is not available on this server yet.");
         }
 
-        /// <summary>Tells the window the request failed (so it re-enables its buttons) and the player why.</summary>
+        /// <summary>
+        /// Tells the window the request failed (so it re-enables its buttons) and the player why, in a
+        /// sentence this server wrote. Reserved for what this server has not built yet, which retail had
+        /// no message for; anything the game itself refuses goes through the overload below, because a
+        /// sentence written here can never name an item - the display names live in the client's
+        /// physicalentityclassnamelanguage and nowhere on the server.
+        /// </summary>
         private void Fail(Client client, DynamicObject station, string why)
         {
             SendStatus(client, station);
@@ -316,6 +322,11 @@ namespace Rasa.Managers
                 CommunicatorManager.Instance.SystemMessage(client, why);
         }
 
+        /// <summary>
+        /// The same, with one of the client's own crafting messages instead of a sentence this server
+        /// wrote. Preferred wherever the refusal is a rule of the game rather than a gap in this server:
+        /// only the client has the words, and in any language but English only the client has them at all.
+        /// </summary>
         private void Fail(Client client, DynamicObject station, PlayerMessage message)
         {
             SendStatus(client, station);
@@ -387,13 +398,13 @@ namespace Rasa.Managers
             if (!RecipeManager.Instance.TryGet(schematicTemplateId, out var recipe))
             {
                 Logger.WriteLog(LogType.Debug, $"{player.FamilyName}: no recipe for schematic template {schematicTemplateId}");
-                Fail(client, station, "That schematic has no recipe on this server.");
+                Fail(client, station, PlayerMessage.PmNoRecipesToCraft);
                 return;
             }
 
             if (player.Level < recipe.MinLevel)
             {
-                Fail(client, station, $"You need to be level {recipe.MinLevel} to fabricate that.");
+                Fail(client, station, PlayerMessage.PmNoRecipesToCraft);
                 return;
             }
 
@@ -409,7 +420,19 @@ namespace Rasa.Managers
 
                 if (have < input.Quantity)
                 {
-                    Fail(client, station, $"You need {input.Quantity} {NameOfClass(input.ClassId)} and have {have}.");
+                    // "You need 50 Ammo_Nucleotides_1_Pyrimidines and have 2." used to be built here out of the
+                    // entity class's internal name, the one entityclass.pyo carries; the client calls class
+                    // 9289 "Pyramidine Nucleotides" (language/english/physicalentityclassnamelanguage). The
+                    // server has no display name for any class - only the client ships
+                    // physicalentityclassnamelanguage - so it cannot name an ingredient at all, and the same
+                    // mistake is what printed "You received 30 3147" at a vendor. The client's own answer is
+                    // PM_NO_RECIPES_TO_CRAFT, which is exactly this state: shared/crafting.py
+                    // GetValidRecipeIdList keeps only the recipes CanManifestationUseRecipeNow accepts, and it
+                    // is the ingredient count that has just failed. No client module posts that message, so it
+                    // is one of the four the retail server sent (236, 237, 240, and 239 which the old crafting
+                    // window also posts).
+                    Logger.WriteLog(LogType.Debug, $"{player.FamilyName} is short of class {input.ClassId} for recipe {recipe.TemplateId}: {have} of {input.Quantity}");
+                    Fail(client, station, PlayerMessage.PmNoRecipesToCraft);
                     return;
                 }
             }
@@ -418,13 +441,14 @@ namespace Rasa.Managers
 
             if (jobs.Count >= MaxJobsPerStation)
             {
-                Fail(client, station, "This station is holding too many finished items for you; take some first.");
+                // "This crafting facility cannot accept any more items to craft until you claim previous items."
+                Fail(client, station, PlayerMessage.PmNoRoomInOven);
                 return;
             }
 
             if (jobs.Any(j => !j.IsFinished))
             {
-                Fail(client, station, "This station is still working on something for you.");
+                Fail(client, station, PlayerMessage.PmNoRoomInOven);
                 return;
             }
 
@@ -465,13 +489,6 @@ namespace Rasa.Managers
 
             SendStatus(client, station);
             client.CallMethod(station.EntityId, CraftingResultPacket.Success(player.EntityId));
-        }
-
-        private static string NameOfClass(uint classId)
-        {
-            var entityClass = EntityClassManager.Instance.GetClassInfo((EntityClasses)classId);
-
-            return entityClass?.ClassName ?? $"items of class {classId}";
         }
 
         /// <summary>
