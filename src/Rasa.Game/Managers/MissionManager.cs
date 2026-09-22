@@ -395,6 +395,8 @@ namespace Rasa.Managers
             // needs; the level-triggered check covers that without any new equip.
             Content.OnEquipCommitted(client);
 
+            // Derived objective indicators are filtered to the player's own map: the client's indicator tuple
+            // carries no map and the map window places it on whatever map is open (MissionMapIndicators).
             var missionStatus = new Dictionary<uint, MissionInfo>();
             var nowMs = NowMs();
 
@@ -406,7 +408,7 @@ namespace Rasa.Managers
                     continue;
 
                 if (LoadedMissions.TryGetValue(mission.MissionId, out var definition))
-                    missionStatus[mission.MissionId] = mission.ToMissionInfo(definition, nowMs);
+                    missionStatus[mission.MissionId] = mission.ToMissionInfo(definition, nowMs, client.Player.MapContextId);
                 else
                     Logger.WriteLog(LogType.Error, $"Character {client.Player.Id}: saved mission {mission.MissionId} has no definition and is not sent");
             }
@@ -548,6 +550,22 @@ namespace Rasa.Managers
                 player.PendingRadioOffers.Remove(missionId);
         }
 
+        // An option the character has never saved reads as its default, which for every MissionTrack
+        // slot is "0" (generated/client/defaultoption.py). Treating it that way keeps the first accept
+        // from writing twenty-nine empty slots to say nothing.
+        private static string CurrentOptionValue(Manifestation player, CharacterOption optionId)
+            => player.CharacterOptions.FirstOrDefault(option => option.OptionId == optionId)?.Value ?? "0";
+
+        private static void SetOptionValue(Manifestation player, CharacterOptions slot)
+        {
+            var existing = player.CharacterOptions.FirstOrDefault(option => option.OptionId == slot.OptionId);
+
+            if (existing != null)
+                existing.Value = slot.Value;
+            else
+                player.CharacterOptions.Add(slot);
+        }
+
         private bool AcceptMission(Client client, Mission definition)
         {
             var player = client.Player;
@@ -584,6 +602,18 @@ namespace Rasa.Managers
 
             var reaction = Content.Plan(new ContentEvent(ContentRuleEvent.MissionAccepted, player.MapContextId, missionId), state);
 
+            // A newly accepted mission starts tracked. The client tracks it for this session on its
+            // own (missionlog.py Recv_MissionGained calls gameui.AddMissionTracking), but the tracker
+            // is client-local state that only survives in the MissionTrack character options, and the
+            // client rebuilds it from those options every time the server sends them - which is every
+            // map change. Writing the slots here is what keeps the accept tracked past the next zone;
+            // see MissionTrackingRules for the client evidence.
+            var trackedSlots = MissionTrackingRules.Track(
+                player.CharacterOptions,
+                trackedId => trackedId == missionId || (player.Missions.TryGetValue(trackedId, out var tracked) && tracked.IsInLog),
+                missionId);
+            var changedSlots = trackedSlots.Where(slot => CurrentOptionValue(player, slot.OptionId) != slot.Value).ToList();
+
             try
             {
                 using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
@@ -594,6 +624,10 @@ namespace Rasa.Managers
                 unitOfWork.CharacterMissions.Add(
                     new CharacterMissionEntry(player.Id, missionId, (uint)newMission.State, newMission.ChangeTime),
                     newMission.Objectives.Keys.Select(objectiveId => ObjectiveRow(player.Id, missionId, objectiveId, timers)));
+
+                foreach (var slot in changedSlots)
+                    unitOfWork.CharacterOptions.AddOrUpdate(player.Id, (uint)slot.OptionId, slot.Value);
+
                 Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);
                 unitOfWork.Complete();
             }
@@ -608,7 +642,13 @@ namespace Rasa.Managers
                 newMission.Timers[objectiveId] = timer;
 
             player.Missions[missionId] = newMission;
-            client.CallMethod(player.EntityId, new MissionGainedPacket(missionId, newMission.ToMissionInfo(definition, nowMs)));
+
+            // The saved slots are the player's own options from here on; the client is not told
+            // again, because Recv_MissionGained below is what puts the mission in its tracker now.
+            foreach (var slot in changedSlots)
+                SetOptionValue(player, slot);
+
+            client.CallMethod(player.EntityId, new MissionGainedPacket(missionId, newMission.ToMissionInfo(definition, nowMs, player.MapContextId)));
             Content.Apply(client, reaction);
             Content.Present(client, reaction);
             RefreshRelatedNpcStatus(client, definition);
@@ -862,7 +902,7 @@ namespace Rasa.Managers
                 client.CallMethod(player.EntityId, new MissionCompleteablePacket((int)missionId, true));
 
             foreach (var revealedId in revealed)
-                client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition, nowMs)));
+                client.CallMethod(player.EntityId, new ObjectiveRevealedPacket(missionId, revealedId, mission.ToMissionInfo(definition, nowMs, player.MapContextId)));
 
             // A just-revealed equip objective can already be satisfied by what the
             // player wears; the check is level-triggered and idempotent.

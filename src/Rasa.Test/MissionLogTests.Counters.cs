@@ -27,7 +27,7 @@ namespace Rasa.Test
             var counter = objective.CounterDict.Single();
             Assert.AreEqual((0u, 0, 0, 1), (counter.Key, counter.Value.Count, counter.Value.InitialCount, counter.Value.TargetCount));
             var indicator = objective.IndicatorList.Single();
-            Assert.AreEqual((437u, 95.1f, 109.25f, 150.8f, false), (indicator.IndicatorId, indicator.Position.X, indicator.Position.Y, indicator.Position.Z, indicator.Show3DEffect));
+            Assert.AreEqual(((uint?)437u, 95.1f, 109.25f, 150.8f, false), (indicator.IndicatorId, indicator.Position.X, indicator.Position.Y, indicator.Position.Z, indicator.Show3DEffect));
 
             // A saved counter value replaces the initial value; objectives without rows carry neither.
             _client.Player.Missions[MissionId].Counters[(5, 0)] = 1;

@@ -53,11 +53,37 @@ namespace Rasa.Managers
 
         internal void Load(Func<BootcampConfig> bootcamp)
         {
-            Load(bootcamp, new LoadedContentReferences(_gameUnitOfWorkFactory), MissionManager.Instance.LoadedMissions);
+            Load(bootcamp, new LoadedContentReferences(_gameUnitOfWorkFactory), MissionManager.Instance.LoadedMissions,
+                null, LoadIndicatorWorld());
         }
 
+        /// <summary>
+        /// The world rows the objective markers are read from: the shrines, the spawn pools and the npc_package
+        /// bindings the content catalog does not carry, plus the catalog's own areas and placements. Read once,
+        /// at load, from the world database.
+        ///
+        /// Areas and placements are taken as they are rather than filtered to the live ones: a binding that
+        /// references a withheld row makes its mission a gap, and BuildRuntime attaches only live bindings, so a
+        /// withheld area or placement is never reachable from an objective in the first place.
+        /// </summary>
+        private Structures.Content.MissionIndicatorWorld LoadIndicatorWorld()
+        {
+            using var unitOfWork = _gameUnitOfWorkFactory.CreateWorld();
+
+            return Structures.Content.MissionIndicatorWorld.Build(
+                unitOfWork.MissionContent.GetAreas(),
+                unitOfWork.MissionContent.GetPlacements(),
+                unitOfWork.Logoses.GetLogos(),
+                unitOfWork.Spawnpools.Get(),
+                unitOfWork.NpcPackages.Get());
+        }
+
+        /// <param name="indicatorWorld">
+        /// Where the derived objective markers are read from, or null to derive none. The server passes the world
+        /// database; a test passes the rows it is about.
+        /// </param>
         public void Load(Func<BootcampConfig> bootcamp, IContentReferences references, IReadOnlyDictionary<uint, Structures.Mission> missions,
-            ContentCapabilities capabilities = null)
+            ContentCapabilities capabilities = null, Structures.Content.MissionIndicatorWorld indicatorWorld = null)
         {
             _bootcamp = bootcamp ?? (() => null);
 
@@ -90,6 +116,7 @@ namespace Rasa.Managers
                 mission.Timers.Clear();
                 mission.Counters.Clear();
                 mission.Indicators.Clear();
+                mission.DerivedIndicators.Clear();
             }
 
             foreach (var prerequisite in Content.LivePrerequisites)
@@ -115,6 +142,37 @@ namespace Rasa.Managers
                         mission.Indicators[indicator.ObjectiveId] = indicators = new List<Rasa.Structures.World.NpcMissionObjectiveIndicatorEntry>();
                     indicators.Add(indicator);
                 }
+
+            // The markers the world can be read for: one per objective completion route with a sourced position.
+            // Bindings are attached by now (BuildRuntime above), which is what a binding-bound objective is read
+            // from. Objectives that already carry a stored row keep it; the derived list is the fallback
+            // (PlayerMission.IndicatorList).
+            if (indicatorWorld != null)
+            {
+                var derivedObjectives = 0;
+                var derivedMarkers = 0;
+                var bySource = new SortedDictionary<Structures.Content.MissionIndicatorSource, int>();
+
+                foreach (var mission in missions.Values)
+                {
+                    foreach (var (objectiveId, markers) in Structures.Content.MissionMapIndicators.Derive(mission, indicatorWorld))
+                    {
+                        if (mission.Indicators.ContainsKey(objectiveId))
+                            continue;
+
+                        mission.DerivedIndicators[objectiveId] = markers;
+                        derivedObjectives++;
+                        derivedMarkers += markers.Count;
+
+                        foreach (var marker in markers)
+                            bySource[marker.Source] = bySource.TryGetValue(marker.Source, out var count) ? count + 1 : 1;
+                    }
+                }
+
+                var breakdown = string.Join(", ", bySource.Select(entry => $"{entry.Key} {entry.Value}"));
+                Logger.WriteLog(LogType.Initialize,
+                    $"Derived {derivedMarkers} objective map markers for {derivedObjectives} objectives ({breakdown})");
+            }
 
             // A shared context holds its placements for the life of the server; per-character channels
             // materialize their own when they are created (a later slice).

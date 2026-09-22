@@ -44,7 +44,14 @@ namespace Rasa.Structures
         public MissionInfo ToMissionInfo(Mission definition) => ToMissionInfo(definition, System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
 
         /// <param name="nowMs">Unix time in milliseconds, for the remaining time of running objective timers.</param>
-        public MissionInfo ToMissionInfo(Mission definition, long nowMs)
+        /// <param name="mapContextId">
+        /// The map the player is standing on, for the derived objective markers. The client's indicator tuple
+        /// carries no map and mapwindow._PlaceWidget draws every marker with the open map's offset and scale, so
+        /// a marker for another map would land at a wrong spot on this one; 0 means the map is not known and
+        /// filters nothing. The mission log is resent on every map entry (MapChannelManager calls
+        /// MissionManager.SendMissionStatusInfo), so the set follows the player.
+        /// </param>
+        public MissionInfo ToMissionInfo(Mission definition, long nowMs, uint mapContextId = 0)
         {
             var info = new MissionInfo
             {
@@ -76,7 +83,7 @@ namespace Rasa.Structures
                         ? timer.SecondsRemaining(nowMs)
                         : null,
                     CounterDict = CounterDict(definition, objective.ObjectiveId),
-                    IndicatorList = IndicatorList(definition, objective.ObjectiveId)
+                    IndicatorList = IndicatorList(definition, objective.ObjectiveId, mapContextId)
                 });
             }
 
@@ -113,16 +120,27 @@ namespace Rasa.Structures
         }
 
         // Sent for every listed objective; missionlog.pyo _UpdateIndicators itself clears those of completed and failed ones.
-        private static List<MissionIndicator> IndicatorList(Mission definition, uint objectiveId) =>
-            definition.Indicators.TryGetValue(objectiveId, out var rows)
-                ? rows.Select(row => new MissionIndicator
+        //
+        // A stored npc_mission_objective_indicator row is recovered evidence and always wins. Only an objective
+        // with no row of its own falls back to the markers derived from where the world says it is finished
+        // (MissionMapIndicators), and those are filtered to the player's map: the client's tuple has no map and
+        // mapwindow._PlaceWidget would draw an off-map marker at a wrong spot on the open one.
+        private static List<MissionIndicator> IndicatorList(Mission definition, uint objectiveId, uint mapContextId)
+        {
+            if (definition.Indicators.TryGetValue(objectiveId, out var rows))
+                return rows.Select(row => new MissionIndicator
                 {
                     Position = new System.Numerics.Vector3((float)row.PosX, (float)row.PosY, (float)row.PosZ),
                     Radius = row.Radius,
                     IndicatorId = row.IndicatorId,
                     Show3DEffect = row.Show3d
-                }).ToList()
-                : new List<MissionIndicator>();
+                }).ToList();
+
+            if (!definition.DerivedIndicators.TryGetValue(objectiveId, out var derived))
+                return new List<MissionIndicator>();
+
+            return derived.Where(indicator => mapContextId == 0 || indicator.MapContextId == mapContextId).ToList();
+        }
     }
 
     /// <summary>

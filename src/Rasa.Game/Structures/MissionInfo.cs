@@ -67,7 +67,12 @@ namespace Rasa.Structures
                         pw.WriteDouble(indicator.Position.Y);
                         pw.WriteDouble(indicator.Position.Z);
                     pw.WriteDouble(indicator.Radius);               // radius
-                    pw.WriteUInt(indicator.IndicatorId);            // indicatorId
+                    // indicatorId: None captions the map marker with the objective's own text
+                    // (mapwindow.OnMissionMarkerHighlighted, 1.16.5.0 line 797).
+                    if (indicator.IndicatorId.HasValue)
+                        pw.WriteUInt(indicator.IndicatorId.Value);  // indicatorId
+                    else
+                        pw.WriteNoneStruct();
                     pw.WriteBool(indicator.Show3DEffect);           // bShow3DEffect
                 }
             }
