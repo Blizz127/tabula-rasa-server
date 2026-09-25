@@ -1,0 +1,825 @@
+{
+  "schemaVersion": 1,
+  "researchDateUtc": "2026-09-24",
+  "scope": "User-supplied Tabula Rasa playlists and three standalone videos. Upload dates are not recording dates. No video alone certifies final-live rules.",
+  "mediaStorage": "Private working copy at /home/blizz/.cache/rasa-footage; media files are not checked into Git.",
+  "fanout20260925": {
+    "reviewedRemainder": true,
+    "taughtToNeuronet": false,
+    "files": [
+      "docs/evidence/footage-fanout-20260925/soundtrack.json",
+      "docs/evidence/footage-fanout-20260925/e3.json",
+      "docs/evidence/footage-fanout-20260925/events.json",
+      "docs/evidence/footage-fanout-20260925/neuronet.json"
+    ]
+  },
+  "playlists": [
+    {
+      "playlistId": "PLABF434091136716C",
+      "title": "Tabula Rasa",
+      "url": "https://www.youtube.com/playlist?list=PLABF434091136716C",
+      "items": [
+        {
+          "position": 1,
+          "videoId": "QhCRUyA9rUY",
+          "title": "Tabula Rasa - Duel (PvP)",
+          "durationSeconds": 54,
+          "url": "https://www.youtube.com/watch?v=QhCRUyA9rUY",
+          "uploadDate": "20110423",
+          "channel": "Klintonix",
+          "localCopySha256": "d5923a4871302cdb2687e7503cc24b326414935d8409db4f7c99d8e3882aca8f",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 2,
+          "videoId": "x_ujwmKj8jA",
+          "title": "Tabula Rasa - Foreas (Dramatic)",
+          "durationSeconds": 166,
+          "url": "https://www.youtube.com/watch?v=x_ujwmKj8jA"
+        },
+        {
+          "position": 3,
+          "videoId": "jhw3kEPHZv8",
+          "title": "Tabula Rasa - Valverde Plateau",
+          "durationSeconds": 154,
+          "url": "https://www.youtube.com/watch?v=jhw3kEPHZv8"
+        },
+        {
+          "position": 4,
+          "videoId": "BMUI6Akuv9E",
+          "title": "Tabula Rasa - Foreas (Action)",
+          "durationSeconds": 207,
+          "url": "https://www.youtube.com/watch?v=BMUI6Akuv9E"
+        },
+        {
+          "position": 5,
+          "videoId": "iNtYRWv_Fs0",
+          "title": "Tabula Rasa - Foreas (Final)",
+          "durationSeconds": 198,
+          "url": "https://www.youtube.com/watch?v=iNtYRWv_Fs0"
+        },
+        {
+          "position": 6,
+          "videoId": "2_knJpz5QbU",
+          "title": "Tabula Rasa - Main Menu",
+          "durationSeconds": 87,
+          "url": "https://www.youtube.com/watch?v=2_knJpz5QbU"
+        },
+        {
+          "position": 7,
+          "videoId": "wg4qYJpOJ-M",
+          "title": "Tabula Rasa - Benevolent",
+          "durationSeconds": 241,
+          "url": "https://www.youtube.com/watch?v=wg4qYJpOJ-M"
+        },
+        {
+          "position": 8,
+          "videoId": "aOtqXKj69Yc",
+          "title": "Tabula Rasa - AFS Outpost",
+          "durationSeconds": 138,
+          "url": "https://www.youtube.com/watch?v=aOtqXKj69Yc"
+        },
+        {
+          "position": 9,
+          "videoId": "RGWKETi_1bw",
+          "title": "Tabula Rasa - AFS Base",
+          "durationSeconds": 133,
+          "url": "https://www.youtube.com/watch?v=RGWKETi_1bw"
+        },
+        {
+          "position": 10,
+          "videoId": "H2vuIiIamU8",
+          "title": "Tabula Rasa - Forean",
+          "durationSeconds": 212,
+          "url": "https://www.youtube.com/watch?v=H2vuIiIamU8"
+        },
+        {
+          "position": 11,
+          "videoId": "Jvug1Bn2YYE",
+          "title": "Tabula Rasa - Forean Encampment",
+          "durationSeconds": 139,
+          "url": "https://www.youtube.com/watch?v=Jvug1Bn2YYE"
+        },
+        {
+          "position": 12,
+          "videoId": "N6NMlvij7SQ",
+          "title": "Tabula Rasa - Cormans",
+          "durationSeconds": 167,
+          "url": "https://www.youtube.com/watch?v=N6NMlvij7SQ"
+        },
+        {
+          "position": 13,
+          "videoId": "Z9fn31_ht_I",
+          "title": "Tabula Rasa - All Game's Soundtracks [DOWNLOAD]",
+          "durationSeconds": 37,
+          "url": "https://www.youtube.com/watch?v=Z9fn31_ht_I"
+        }
+      ]
+    },
+    {
+      "playlistId": "PL46DD681D8F1C45C8",
+      "title": "Tabula Rasa",
+      "url": "https://www.youtube.com/playlist?list=PL46DD681D8F1C45C8",
+      "items": [
+        {
+          "position": 1,
+          "videoId": "FkBfT5t4ffQ",
+          "title": "Tabula Rasa Olympics - Opening Ceremonies",
+          "durationSeconds": 81,
+          "url": "https://www.youtube.com/watch?v=FkBfT5t4ffQ",
+          "uploadDate": "20080809",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "0404af61f6751760799fd1352fd4266025f3f8c2d17f2d6dd1327984df84a7d5",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 2,
+          "videoId": "EiE2oodlP8A",
+          "title": "Tabula Rasa - D11 Bootcamp Mini-Game",
+          "durationSeconds": 67,
+          "url": "https://www.youtube.com/watch?v=EiE2oodlP8A",
+          "uploadDate": "20080808",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "d937492c5187ec7fac00c7b8c08e955bd97739da7d91f984b6f0dcfb7e725942",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 3,
+          "videoId": "Ik3CErtdVHU",
+          "title": "Tabula Rasa - Friday Night Fights Special Event",
+          "durationSeconds": 596,
+          "url": "https://www.youtube.com/watch?v=Ik3CErtdVHU",
+          "uploadDate": "20080727",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "de1b92a42281d1d1c3b16573573b7adb5f4c968cd0d1995d31c0ae028e54a7f9",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 4,
+          "videoId": "044VUt2WPdY",
+          "title": "Tabula Rasa - Friday Night Fights (Gut Check)",
+          "durationSeconds": 225,
+          "url": "https://www.youtube.com/watch?v=044VUt2WPdY",
+          "uploadDate": "20080714",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "b589767e2b661fac6b40a976ec35cc9cfcd9980b78220b1b566d64e82bf6749d",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 5,
+          "videoId": "JaHuTTJ7QM0",
+          "title": "Tabula Rasa - Weapons of the AFS",
+          "durationSeconds": 579,
+          "url": "https://www.youtube.com/watch?v=JaHuTTJ7QM0",
+          "uploadDate": "20080714",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "1ea46985fb91a9c7cfaeaa52cfd19c3c81b1ecdcb2e527b3366ceb5fff474384",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 6,
+          "videoId": "OPoZ6pXNC0Q",
+          "title": "Tabula Rasa - CuppaJo Going Away Party",
+          "durationSeconds": 94,
+          "url": "https://www.youtube.com/watch?v=OPoZ6pXNC0Q",
+          "uploadDate": "20080708",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "0008904ffc97a386d1bd57b87f3fc380622d5068224d63de7e8f87af339fe29a",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 7,
+          "videoId": "BQMu3jIZf6k",
+          "title": "Tabula Rasa - 2nd Blind Race Event",
+          "durationSeconds": 583,
+          "url": "https://www.youtube.com/watch?v=BQMu3jIZf6k",
+          "uploadDate": "20080630",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "8dc5054591f285bc4dd854f1b673fe44621aee9b603e182f8740f139c31b5d79",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 8,
+          "videoId": "R4YJs0GOjB0",
+          "title": "Tabula Rasa - CP Wargame on PTS",
+          "durationSeconds": 194,
+          "url": "https://www.youtube.com/watch?v=R4YJs0GOjB0",
+          "uploadDate": "20080614",
+          "channel": "Joe Kaczmarek"
+        },
+        {
+          "position": 9,
+          "videoId": "LUAPx89dxTw",
+          "title": "Tabula Rasa End of Beta Event - Part 2",
+          "durationSeconds": 459,
+          "url": "https://www.youtube.com/watch?v=LUAPx89dxTw",
+          "uploadDate": "20080413",
+          "channel": "Joe Kaczmarek"
+        },
+        {
+          "position": 10,
+          "videoId": "HmX-Qc-U2Ns",
+          "title": "Tabula Rasa End of Beta Event - Part 1",
+          "durationSeconds": 535,
+          "url": "https://www.youtube.com/watch?v=HmX-Qc-U2Ns",
+          "uploadDate": "20080413",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "f88b751964313f96144dae552c47446e1b1148a0ed72e7d9b215134d6e996a4d",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 11,
+          "videoId": "bCQgVDS-OJQ",
+          "title": "Tabula Rasa - Now/Here",
+          "durationSeconds": 257,
+          "url": "https://www.youtube.com/watch?v=bCQgVDS-OJQ",
+          "uploadDate": "20080406",
+          "channel": "Joe Kaczmarek"
+        },
+        {
+          "position": 12,
+          "videoId": "7erRjukj90c",
+          "title": "Tabula Rasa - Brick Dance",
+          "durationSeconds": 71,
+          "url": "https://www.youtube.com/watch?v=7erRjukj90c",
+          "uploadDate": "20080329",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "5ee3bf1a01a4e51243502df8edddfd8e5e3c743ed06c0192ecfb34636c9a63af",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 13,
+          "videoId": "7Wr-HEzPFEM",
+          "title": "Tabula Rasa - Spy Style",
+          "durationSeconds": 302,
+          "url": "https://www.youtube.com/watch?v=7Wr-HEzPFEM",
+          "uploadDate": "20080222",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "8b18b2123d826db6262e31652dc69885167b6a425088dbbc39e7c0612f717243",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 14,
+          "videoId": "tH94rmzbt1Y",
+          "title": "Tabula Rasa Blind Race Event",
+          "durationSeconds": 571,
+          "url": "https://www.youtube.com/watch?v=tH94rmzbt1Y",
+          "uploadDate": "20080211",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "5d3e1573dac7ab2b580bf2ec5c9380a60364914a6dfa09661ff44cd7d3fe297f",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 15,
+          "videoId": "kmL7t3rnzpA",
+          "title": "Tabula Rasa 3 Month Veteran Rewards MiniClip",
+          "durationSeconds": 17,
+          "url": "https://www.youtube.com/watch?v=kmL7t3rnzpA",
+          "uploadDate": "20080208",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "606773de5784f623a7ee034feadf8f1c4717b746b74002c1cf09aac893344c0e",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 16,
+          "videoId": "Of3Uxw9MNec",
+          "title": "Tabula Rasa - Random Gameplay",
+          "durationSeconds": 190,
+          "url": "https://www.youtube.com/watch?v=Of3Uxw9MNec",
+          "uploadDate": "20071207",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "9d9ceacc81c68c6a39854f553bfc965187184948fb25adeffc336365e2fc1a3f",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 17,
+          "videoId": "5HU2nOUPwzM",
+          "title": "Tabula Rasa - x6 XP Grind",
+          "durationSeconds": 233,
+          "url": "https://www.youtube.com/watch?v=5HU2nOUPwzM",
+          "uploadDate": "20071102",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "f3b0edcc7d3acceddfcddbf00d22534fb3fc1d0f9a42f5a428b1a785aab1142f",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 18,
+          "videoId": "Iiq8oaJXxVc",
+          "title": "Tabula Rasa Beta Test Characters",
+          "durationSeconds": 271,
+          "url": "https://www.youtube.com/watch?v=Iiq8oaJXxVc",
+          "uploadDate": "20071025",
+          "channel": "Joe Kaczmarek"
+        },
+        {
+          "position": 19,
+          "videoId": "4-r9TiNImVk",
+          "title": "Tabula Rasa Olympics - Opening Ceremonies After Party",
+          "durationSeconds": 336,
+          "url": "https://www.youtube.com/watch?v=4-r9TiNImVk",
+          "uploadDate": "20080809",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "6e302570ded783e06127be135ab1c65f4ba76e163f66a973b3cafc98ac9888c4",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 20,
+          "videoId": "pLl2i-iJSWU",
+          "title": "Tabula Rasa Olympics - Day 1 Events",
+          "durationSeconds": 382,
+          "url": "https://www.youtube.com/watch?v=pLl2i-iJSWU",
+          "uploadDate": "20080810",
+          "channel": "Joe Kaczmarek",
+          "localCopySha256": "91e8ff0d8db63936b506db7f55799011952bdfb438db93346cd5536fcf52c5d9",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        }
+      ]
+    },
+    {
+      "playlistId": "PL6D06D05B72861EF5",
+      "title": "Tabula Rasa -- Game Play Shorts",
+      "url": "https://www.youtube.com/playlist?list=PL6D06D05B72861EF5",
+      "items": [
+        {
+          "position": 1,
+          "videoId": "UDqXF3dxJwE",
+          "title": "Tabula Rasa Gameplay Short #1",
+          "durationSeconds": 157,
+          "url": "https://www.youtube.com/watch?v=UDqXF3dxJwE",
+          "uploadDate": "20061002",
+          "channel": "Sean Neubert",
+          "localCopySha256": "e0ceac0d48f4211ccaaac5889e190de643c218a3c938ce52d7acd276782876b6",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        },
+        {
+          "position": 2,
+          "videoId": "NtogPR3B9rI",
+          "title": "Tabula Rasa -- E3 Footage #6",
+          "durationSeconds": 36,
+          "url": "https://www.youtube.com/watch?v=NtogPR3B9rI"
+        },
+        {
+          "position": 3,
+          "videoId": "jNxEdYl6fr4",
+          "title": "Tabula Rasa -- E3 Footage #7",
+          "durationSeconds": 27,
+          "url": "https://www.youtube.com/watch?v=jNxEdYl6fr4"
+        },
+        {
+          "position": 4,
+          "videoId": "3reasGu9M9c",
+          "title": "Tabula Rasa -- E3 Footage #5",
+          "durationSeconds": 38,
+          "url": "https://www.youtube.com/watch?v=3reasGu9M9c"
+        },
+        {
+          "position": 5,
+          "videoId": "2mOneHr2pJA",
+          "title": "Tabula Rasa -- E3 Footage #4",
+          "durationSeconds": 61,
+          "url": "https://www.youtube.com/watch?v=2mOneHr2pJA"
+        },
+        {
+          "position": 6,
+          "videoId": "b-WhHUWv8WA",
+          "title": "Tabula Rasa -- E3 Footage #2",
+          "durationSeconds": 38,
+          "url": "https://www.youtube.com/watch?v=b-WhHUWv8WA"
+        },
+        {
+          "position": 7,
+          "videoId": "v1GogJZ9wxQ",
+          "title": "Tabula Rasa -- E3 Footage #3",
+          "durationSeconds": 32,
+          "url": "https://www.youtube.com/watch?v=v1GogJZ9wxQ"
+        },
+        {
+          "position": 8,
+          "videoId": "TaxGO-rjLxg",
+          "title": "Tabula Rasa Online Welten Short Video",
+          "durationSeconds": 68,
+          "url": "https://www.youtube.com/watch?v=TaxGO-rjLxg"
+        },
+        {
+          "position": 9,
+          "videoId": "n1ekRiQB1iY",
+          "title": "Tabula Rasa -- E3 Footage",
+          "durationSeconds": 37,
+          "url": "https://www.youtube.com/watch?v=n1ekRiQB1iY"
+        },
+        {
+          "position": 10,
+          "videoId": "TaxGO-rjLxg",
+          "title": "Tabula Rasa Online Welten Short Video",
+          "durationSeconds": 68,
+          "url": "https://www.youtube.com/watch?v=TaxGO-rjLxg"
+        },
+        {
+          "position": 11,
+          "videoId": "95ls4AKYAUA",
+          "title": "tabularasa2_e32006_onlinewelten.wmv",
+          "durationSeconds": 80,
+          "url": "https://www.youtube.com/watch?v=95ls4AKYAUA"
+        },
+        {
+          "position": 12,
+          "videoId": "t7aX-sACBTw",
+          "title": "tabularasa3_e32006_onlinewelten.wmv",
+          "durationSeconds": 47,
+          "url": "https://www.youtube.com/watch?v=t7aX-sACBTw"
+        },
+        {
+          "position": 13,
+          "videoId": "jqEQ3fjC2do",
+          "title": "Compound Infiltration",
+          "durationSeconds": 159,
+          "url": "https://www.youtube.com/watch?v=jqEQ3fjC2do",
+          "uploadDate": "20070617",
+          "channel": "Sean Neubert",
+          "localCopySha256": "56edbd29bf8c9384cb63858f2cb28c44937d60fe93ea2ba443ffc22b56c7417e",
+          "reviewMethod": "sampled frames across the video, with targeted stills where noted"
+        }
+      ]
+    }
+  ],
+  "standalone": [
+    {
+      "videoId": "-I1WM5ddg-k",
+      "url": "https://www.youtube.com/watch?v=-I1WM5ddg-k",
+      "title": "Tabula Rasa: Walkabout",
+      "durationSeconds": 2959,
+      "uploadDate": "20120104",
+      "channel": "unacomn",
+      "localCopySha256": "211e7b55d1b9460525ad7ed08915b6f3310b3cfc83c6eb39293cb5dcfcf5e7ac",
+      "reviewMethod": "sampled video frames at ~150s intervals for Walkabout, ~14s for 2007 Gameplay, ~28s for Pravus; targeted original-resolution stills for Pravus"
+    },
+    {
+      "videoId": "3nZ7eca_vRA",
+      "url": "https://www.youtube.com/watch?v=3nZ7eca_vRA",
+      "title": "Tabula Rasa Gameplay",
+      "durationSeconds": 274,
+      "uploadDate": "20071109",
+      "channel": "Lankist",
+      "localCopySha256": "92a708f77c77a0046d7c7b98b6869f6c030dc24c2b599be484ef5a1fbe72f7b8",
+      "reviewMethod": "sampled video frames at ~150s intervals for Walkabout, ~14s for 2007 Gameplay, ~28s for Pravus; targeted original-resolution stills for Pravus"
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "url": "https://www.youtube.com/watch?v=A4udsM0rcLo",
+      "title": "Tabula Rasa Gameplay Pravus 1",
+      "durationSeconds": 558,
+      "uploadDate": "20090121",
+      "channel": "Zorlac",
+      "localCopySha256": "dd9c19b859203c3cd27e6f88d6bb6e61a1c08c0ecb26a12ce06fa90e53550752",
+      "reviewMethod": "sampled video frames at ~150s intervals for Walkabout, ~14s for 2007 Gameplay, ~28s for Pravus; targeted original-resolution stills for Pravus"
+    }
+  ],
+  "uploaderClaims": [
+    {
+      "videoId": "A4udsM0rcLo",
+      "location": "uploader description",
+      "claim": "First part of the Pravus instance in the Wilderness",
+      "limit": "capture date and build unknown"
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "location": "uploader description",
+      "claim": "Made a long time before its 2012 upload",
+      "limit": "capture date and build unknown"
+    },
+    {
+      "videoId": "EiE2oodlP8A",
+      "location": "uploader description",
+      "claim": "D11 rebuilt boot camp on Public Test Server",
+      "limit": "final live deployment not established by this clip"
+    },
+    {
+      "videoId": "FkBfT5t4ffQ",
+      "location": "uploader description",
+      "claim": "Olympics opening ceremonies took place 2008-08-02",
+      "limit": "edited player-organized event"
+    },
+    {
+      "videoId": "Ik3CErtdVHU",
+      "location": "uploader description",
+      "claim": "Friday Night Fights special event occurred 2008-07-25",
+      "limit": "edited player-organized event"
+    },
+    {
+      "videoId": "BQMu3jIZf6k",
+      "location": "uploader description",
+      "claim": "Second blind race on Pegasus server, coached by voice chat",
+      "limit": "special event, not normal travel"
+    },
+    {
+      "videoId": "R4YJs0GOjB0",
+      "location": "uploader description",
+      "claim": "Control-point wargame on Public Test Server",
+      "limit": "test-server PvP"
+    },
+    {
+      "videoId": "5HU2nOUPwzM",
+      "location": "uploader description",
+      "claim": "Footage from 2007-09-18 x6 XP multiplier period",
+      "limit": "special period, not final XP rate"
+    },
+    {
+      "videoId": "HmX-Qc-U2Ns",
+      "location": "uploader description",
+      "claim": "End of Beta event occurred 2007-10-26",
+      "limit": "beta event, not shutdown event"
+    },
+    {
+      "videoId": "LUAPx89dxTw",
+      "location": "uploader description",
+      "claim": "End of Beta event occurred 2007-10-26",
+      "limit": "beta event, not shutdown event"
+    },
+    {
+      "videoId": "kmL7t3rnzpA",
+      "location": "uploader description",
+      "claim": "Players waiting for boss spawn; shows Kirin mask and /robot emote",
+      "limit": "boss timer and final availability unknown"
+    },
+    {
+      "videoId": "UDqXF3dxJwE",
+      "location": "uploader description",
+      "claim": "TR Stratics gameplay short dated 2006-09-29",
+      "limit": "early promotional footage"
+    },
+    {
+      "videoId": "3nZ7eca_vRA",
+      "location": "uploader description",
+      "claim": "Short demo of gameplay, uploaded 2007-11-09",
+      "limit": "capture date/build unknown"
+    },
+    {
+      "videoId": "jqEQ3fjC2do",
+      "location": "uploader description",
+      "claim": "GameTrailers exclusive, uploaded 2007-06-17",
+      "limit": "early promotional footage"
+    },
+    {
+      "videoId": "044VUt2WPdY",
+      "location": "uploader description",
+      "claim": "Gut Check final challenge took place 2008-07-13",
+      "limit": "special Friday Night Fights event"
+    },
+    {
+      "videoId": "OPoZ6pXNC0Q",
+      "location": "uploader description",
+      "claim": "Going-away party for associate producer CuppaJo on Pegasus",
+      "limit": "special player-organized social event"
+    },
+    {
+      "videoId": "7erRjukj90c",
+      "location": "uploader description",
+      "claim": "Player level 30 against level 24 Bane while fighting Brick outside Fort Dew CP",
+      "limit": "level disparity prevents ordinary difficulty calibration"
+    },
+    {
+      "videoId": "7Wr-HEzPFEM",
+      "location": "uploader description",
+      "claim": "Spy combat montage",
+      "limit": "edited class montage"
+    },
+    {
+      "videoId": "tH94rmzbt1Y",
+      "location": "uploader description",
+      "claim": "Blind race on Pegasus from Alia Das to Hightower Outpost with voice coaches",
+      "limit": "special event, not normal travel"
+    },
+    {
+      "videoId": "pLl2i-iJSWU",
+      "location": "uploader description",
+      "claim": "Olympics Day 1 event occurred 2008-08-09",
+      "limit": "player-organized special event"
+    },
+    {
+      "videoId": "4-r9TiNImVk",
+      "location": "uploader description",
+      "claim": "After-party following Olympics opening ceremonies",
+      "limit": "special event"
+    }
+  ],
+  "observations": [
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 30,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=30s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Three squad status panels and several armed characters fighting near a sandbag line.",
+      "unverified": "No party command, target selection or exact formation inferred."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 90,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=90s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Player fires during an outdoor fight; fallen enemies and a loot glow are visible.",
+      "unverified": "No attack rate, aim rule or loot entitlement inferred."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 180,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=180s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Friendly nameplates cluster at a structure entrance while the player fights.",
+      "unverified": "Player versus NPC identity needs further source matching."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 300,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=300s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Player fights behind two visible allies inside a passage.",
+      "unverified": "Path and spacing need continuous measurement."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 420,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=420s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Several friendly characters engage a target labelled Prototype Forean Machina in the Production Chamber.",
+      "unverified": "No encounter priority, health or completion rule inferred."
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "timeSeconds": 600,
+      "sourceUrl": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=600s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Player pauses travel at the barracks interface.",
+      "unverified": "Recording date and build unknown."
+    },
+    {
+      "videoId": "Of3Uxw9MNec",
+      "timeSeconds": 60,
+      "sourceUrl": "https://www.youtube.com/watch?v=Of3Uxw9MNec&t=60s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Player advances toward a control point amid combat.",
+      "unverified": "2007 footage; no final control-point rule inferred."
+    },
+    {
+      "videoId": "Ik3CErtdVHU",
+      "timeSeconds": 30,
+      "sourceUrl": "https://www.youtube.com/watch?v=Ik3CErtdVHU&t=30s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Characters gather around a boxing event.",
+      "unverified": "Special event; no routine spectator behavior inferred."
+    },
+    {
+      "videoId": "EiE2oodlP8A",
+      "timeSeconds": 20,
+      "sourceUrl": "https://www.youtube.com/watch?v=EiE2oodlP8A&t=20s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Rows of recruits perform exercise motions before a large door.",
+      "unverified": "PTS only; final live count, layout and schedule unknown."
+    },
+    {
+      "videoId": "kmL7t3rnzpA",
+      "timeSeconds": 9,
+      "sourceUrl": "https://www.youtube.com/watch?v=kmL7t3rnzpA&t=9s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Several players idle and use emotes together.",
+      "unverified": "Edited 2008 clip; boss timer and idle cadence unknown."
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "timeSeconds": 1488,
+      "sourceUrl": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1488s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Warrior Apirka displays the Conscientious Objector mission-completion panel with two selectable item rewards and a numeric reward.",
+      "unverified": "Recording date/build and exact item templates unknown."
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "timeSeconds": 1492,
+      "sourceUrl": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1492s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Conscientious Objector completes; +2,000 XP appears on screen.",
+      "unverified": "This is the observed build, not a verified shutdown-day reward."
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "timeSeconds": 1495,
+      "sourceUrl": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1495s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Warrior Apirka offers Conscientious Objector - Part Two with the objective Bring the report to Rogers.",
+      "unverified": "The screen alone does not distinguish client mission ID 1392 from 1393."
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "timeSeconds": 1510,
+      "sourceUrl": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1510s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Player accepts Conscientious Objector - Part Two and leaves Apirka.",
+      "unverified": "Receiving interaction with Rogers is not shown in the sampled sequence."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 30,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=30s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "Wilderness Targets of Opportunity tracker shows Kill 40 Miasmas, Kill 40 Xanx and Kill 30 Shield Drones.",
+      "unverified": "Capture date/build and final live availability unknown; counters match client mission 1449 objectives 7, 3, 4."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 300,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=300s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "The location label reads Pravus Interior Halls; Thrax Technicians are visible.",
+      "unverified": "Spawn quantity and encounter mechanics unknown."
+    },
+    {
+      "videoId": "A4udsM0rcLo",
+      "timeSeconds": 420,
+      "sourceUrl": "https://www.youtube.com/watch?v=A4udsM0rcLo&t=420s",
+      "tier": "observed",
+      "confidence": "medium",
+      "observation": "The location label reads Pravus Production Chamber; target label reads Prototype Forean Machina.",
+      "unverified": "Spawn quantity and encounter mechanics unknown."
+    }
+  ],
+  "neuronetTeach": {
+    "endpoint": "POST /v1/control/learning/teach",
+    "gameId": "tabula_rasa",
+    "verification": "All four POST requests returned HTTP 200 and verified; all four operator facts were present in GET /v1/control/learning afterward.",
+    "scope": "Historical conversational context only. No autonomous movement, combat, mission, content or economy change.",
+    "entries": [
+      {
+        "taskId": "78f15fd6-1c32-4e88-bb8f-ebf242c527da",
+        "topic": "Historical Tabula Rasa Pravus squad footage",
+        "source": "https://www.youtube.com/watch?v=A4udsM0rcLo",
+        "fact": "Original player-view footage of a Wilderness Pravus run, uploaded 2009-01-21, shows a three-person squad moving and fighting outdoors at 00:30 and indoors at 05:00 and 07:00. Its capture date and client build are unverified. Use it as historical group-behavior context only; it does not establish final-live encounter rules, bot routes, combat timings, rewards, or current bot capability."
+      },
+      {
+        "taskId": "9e4279a4-a3fb-45e9-a95e-84fa5eb3da4b",
+        "topic": "Historical Tabula Rasa D11 exercise clip provenance",
+        "source": "https://www.youtube.com/watch?v=EiE2oodlP8A",
+        "fact": "The 2008-08-08 D11 boot-camp exercise clip shows rows of recruits exercising around 00:20. Its uploader explicitly identifies the Public Test Server. This clip does not verify that those recruits, placements, animations or schedules survived unchanged on the final live service."
+      },
+      {
+        "taskId": "d4aa3a8e-b8f4-4b9b-a477-1427ce6f7580",
+        "topic": "Historical Tabula Rasa player event footage",
+        "source": "https://www.youtube.com/watch?v=Ik3CErtdVHU",
+        "fact": "The July 25, 2008 Friday Night Fights footage shows players gathering around a boxing event near 00:30. The August 2, 2008 Olympics opening and June 2008 blind race videos also document player-organized social events. These edited event clips are historical context, not evidence that ordinary NPCs or companions should join, spectate or reproduce those events."
+      },
+      {
+        "taskId": "1447644c-c53b-420b-b32a-fd0d5e661378",
+        "topic": "Historical Conscientious Objector quest footage",
+        "source": "https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1495s",
+        "fact": "In original player-view footage uploaded in 2012 (recording date and build unknown), Warrior Apirka completes Conscientious Objector around 24:52 with +2,000 XP, then offers Conscientious Objector - Part Two around 24:55 with the objective Bring the report to Rogers. This supports the current shard’s Apirka giver and Rogers receiver. The video does not establish final-live item rewards or which Part Two branch ID is shown; companions cannot accept or turn in quests autonomously."
+      }
+    ]
+  },
+  "higherResolutionWorkingCopies": [
+    {
+      "videoId": "A4udsM0rcLo",
+      "format": "136",
+      "height": 720,
+      "sha256": "d1bab24cd6921b18bd57bd9a732deefa09149dab4ce4e2cc3cc4c2b6f178e62c",
+      "purpose": "mission tracker, target name and zone label stills"
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "format": "135",
+      "height": 480,
+      "sha256": "076fd02268d0552105ac32b5ecb1b2a473ca18e8c95c337fc3f6d1d97d070bfc",
+      "purpose": "Warrior Apirka completion and Part Two offer stills"
+    }
+  ],
+  "serverEvidenceCrosschecks": [
+    {
+      "sourceObservation": "-I1WM5ddg-k@1492",
+      "clientOrSeed": "mission 1390 Conscientious Objector; src/Rasa.DBL/Migrations/WildernessData/QuestWiringFixesRows.cs grants 2,000 XP",
+      "result": "corroborates seeded amount in an undated original client recording; final-live amount remains unverified"
+    },
+    {
+      "sourceObservation": "-I1WM5ddg-k@1495",
+      "clientOrSeed": "missions 1392/1393 Part Two; src/Rasa.DBL/Migrations/WildernessData/QuestGiverBriefingFixRows.cs sets giver Apirka and receiver Rogers",
+      "result": "corroborates Apirka offer and Rogers objective; branch ID and final-live timing remain unverified"
+    },
+    {
+      "sourceObservation": "A4udsM0rcLo@30",
+      "clientOrSeed": "mission 1449 objectives 7, 3, 4 in MissionClientObjectiveSkeletonRows.cs",
+      "result": "corroborates three original tracker labels and target counts; no server implementation inferred"
+    }
+  ]
+}

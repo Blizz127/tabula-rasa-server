@@ -264,6 +264,15 @@ namespace Rasa.Test
             var wilderness = characters.Create(account, 3, "Wild", 1, 1.0, 0, disabled.NewCharacterStart(account.Id));
             Assert.AreEqual((1220u, 894.9d, 307.9d, 347.1d, 0d),
                 (wilderness.MapContextId, wilderness.CoordX, wilderness.CoordY, wilderness.CoordZ, wilderness.Rotation));
+
+            using var reloaded = CharContext(_charConnection);
+            var again = new CharacterRepository(reloaded);
+            var campAgain = again.Get(placed.Id);
+            var wildAgain = again.Get(wilderness.Id);
+            Assert.AreEqual((placed.Name, placed.MapContextId, placed.CoordX, placed.CoordY, placed.CoordZ, placed.Rotation),
+                (campAgain.Name, campAgain.MapContextId, campAgain.CoordX, campAgain.CoordY, campAgain.CoordZ, campAgain.Rotation));
+            Assert.AreEqual((wilderness.Name, wilderness.MapContextId, wilderness.CoordX, wilderness.CoordY, wilderness.CoordZ, wilderness.Rotation),
+                (wildAgain.Name, wildAgain.MapContextId, wildAgain.CoordX, wildAgain.CoordY, wildAgain.CoordZ, wildAgain.Rotation));
         }
 
         [TestMethod]

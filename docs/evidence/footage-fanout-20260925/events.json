@@ -1,0 +1,320 @@
+{
+  "worker": "events",
+  "videos": [
+    {
+      "videoId": "R4YJs0GOjB0",
+      "title": "Tabula Rasa - CP Wargame on PTS",
+      "url": "https://www.youtube.com/watch?v=R4YJs0GOjB0",
+      "uploadDate": "20080614",
+      "durationSeconds": 194,
+      "sourceClass": "uploader-labeled-pts-pvp",
+      "reviewMethod": "Cached YouTube metadata plus a progressive 360p MP4 (itag 18) saved from those URLs before expiry. sha256 is of that file. ffmpeg stills every 12s, plus stills at scene-change times. Tesseract on 3x chat and nameplate crops, then visual inspection of selected stills. Not a frame-by-frame transcript. Upload date is not a recording date or client build.",
+      "localCopySha256": "6122c292771f020c067b59079648bd38b9c8f0787d9e6e3a5bf01edb39742a20",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Opening card reads Control Point Wargame on Public Test Server, with a song credit. The uploader description calls it a control-point wargame on the public test server, red versus blue PvP.",
+          "limit": "PTS boundary is explicit. This is not final-live control-point proof. No capture rule, timer, owner, or reward is shown on the card."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "Third-person view behind an armored player inside a sandy structure. Other armed humanoids stand nearby. A target portrait and red bar sit at top center. Bottom-left portrait has red and blue bars and a level badge that reads as 50. A weapon name and ability icons sit to the right of the bars.",
+          "limit": "360p. The level digit and weapon string are small. The same badge still reads as 50 at about 22s, 154s, and 180s. Do not treat 50 as a live cap or a PTS-only cap."
+        },
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "The player runs across open ground with a blue glow at the feet and the camera held behind the character. Mission Tracker is in the top right. A circular minimap with a zone label is at bottom right. Chat tabs and a combat log occupy the upper left.",
+          "limit": "Zone-label words and chat-tab names are not legible. Movement speed was not measured."
+        },
+        {
+          "tSeconds": 36,
+          "tier": "observed",
+          "text": "A large translucent red dome covers several figures. The player is in the foreground with a weapon raised. Hostile red bars are visible past the dome.",
+          "limit": "What the dome is (area effect, capture volume, or something else) is not identified."
+        },
+        {
+          "tSeconds": 60,
+          "tier": "observed",
+          "text": "The player stands aiming at a stationary turret-like machine in fog. The target frame is up. The minimap shows a tight cluster of white and red dots.",
+          "limit": "The target's name is not clean enough to quote. No interaction prompt is readable."
+        },
+        {
+          "tSeconds": 84,
+          "tier": "observed",
+          "text": "Several humanoids and smaller creatures are in one fight. White and red beams cross the group. Red floating numbers appear over targets. Friendly blue nameplates and hostile red bars are mixed in the same view. Players face their own targets rather than holding a fixed offset from the camera character.",
+          "limit": "Damage numbers were not read. No companion is identified as leashed to the player."
+        },
+        {
+          "tSeconds": 132,
+          "tier": "observed",
+          "text": "On a raised platform the player aims into a red beam or dome while other players and a large machine fight nearby. The combat log is repeating short system lines.",
+          "limit": "Nearby OCR at about 168s supports repeated 'out of range' and, at about 180s, lines about not being allowed to perform an action on the current target. Exact sentences are approximate."
+        },
+        {
+          "tSeconds": 180,
+          "tier": "observed",
+          "text": "In a red-lit corridor the player fires while another armored player and a large bipedal machine are ahead. The minimap is crowded with red and white contacts. The combat log is still refusing actions on the current target.",
+          "limit": "No control-point owner, score, or schedule is on screen in the sampled frames."
+        }
+      ],
+      "neuronetRelevance": "Useful only as a later qualitative comparison: third-person follow camera, a foot glow while running, and nearby players who stand, aim, and shoot on their own instead of holding a follower slot. Out-of-range refusals are a combat-feedback pattern. Do not turn any of this into movement rates, damage, XP, or control-point tuning. Mira Vey and Tavin Rook are not in the clip.",
+      "preservationUse": "Uploader-labeled public-test PvP footage of how a control-point wargame looked in June 2008 upload: HUD layout, mixed friendly and hostile nameplates, beams, a red dome, and clustered minimap contacts. It does not document final-live control-point rules.",
+      "unverified": [
+        "Recording date and client build.",
+        "Which map or control point this is; waypoint text above the minimap is illegible.",
+        "Exact player, weapon, and ability names. The nameplate is shaped like the uploader name Joe Kaczmarek but the glyphs are soft.",
+        "Whether a point was captured, who held it, and any timer or reward.",
+        "Any experience or credit amount. A possible reward line in chat was not confirmed by OCR.",
+        "Squad membership of the nearby players."
+      ]
+    },
+    {
+      "videoId": "LUAPx89dxTw",
+      "title": "Tabula Rasa End of Beta Event - Part 2",
+      "url": "https://www.youtube.com/watch?v=LUAPx89dxTw",
+      "uploadDate": "20080413",
+      "durationSeconds": 459,
+      "sourceClass": "uploader-labeled-end-of-beta-event",
+      "reviewMethod": "Cached YouTube metadata plus a progressive 360p MP4 (itag 18) saved from those URLs before expiry. sha256 is of that file. ffmpeg stills every 12s, plus stills at scene-change times. Tesseract on 3x chat and nameplate crops, then visual inspection of selected stills. Not a frame-by-frame transcript. Upload date is not a recording date or client build.",
+      "localCopySha256": "078da3eedeb8dfad1d0eeef579244a7707210e09790383baaa2d5a6d3cf6d752",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Title card reads End of Beta Event 2007-10-26. The description says this is part two of a montage from that event and points at a part one.",
+          "limit": "Beta event, not the 2009 shutdown. The upload date 20080413 is months later. The card date is the uploader's event date, not a verified client build."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "Large overlay text reads Bane Hospital Camping and Alia Das over a blue-lit indoor crowd. The HUD is already up: chat, Mission Tracker, target frame, minimap, and the same third-person bars. Many players are packed in the room. The level badge reads as 21.",
+          "limit": "The overlay is an editor title for the montage segment, not a client mission name. Alia Das is legible as the second line. The level digit is small but the same badge still reads as 21 in later samples."
+        },
+        {
+          "tSeconds": 42,
+          "tier": "observed",
+          "text": "A wide indoor view is filled with blue friendly nameplates and a few red hostile bars. The camera character is at the bottom edge rather than in the middle of the group. Players are spread through the space, not stacked on one follow point.",
+          "limit": "Individual names in the stack are not readable."
+        },
+        {
+          "tSeconds": 70,
+          "tier": "observed",
+          "text": "A bright horizontal beam fight with many nameplates. The combat log shows short failure lines, including wording consistent with not having enough power, and chat about getting someone off the team. A hostile target portrait is at top center.",
+          "limit": "Exact log sentences are approximate at 360p. Power costs were not read."
+        },
+        {
+          "tSeconds": 130,
+          "tier": "observed",
+          "text": "Outdoors, the player looks along a fenced path. A few other players walk ahead on their own heading. Creatures are off to the side. Chat shows join and leave lines plus player chat. One humanoid is the current target.",
+          "limit": "Channel names in those join lines were not certified. This is loose co-presence, not a measured follow distance."
+        },
+        {
+          "tSeconds": 144,
+          "tier": "observed",
+          "text": "On a metal bridge or walkway, many players and creatures fight at once. Blue and red nameplates overlap. The player stands in the foreground while the group engages ahead.",
+          "limit": "No squad-frame or pet bar was identified."
+        },
+        {
+          "tSeconds": 216,
+          "tier": "observed",
+          "text": "The player runs toward a vertical blue beam on a paved pad. Several other players stand around the beam at different facings. The minimap is a dense knot of dots.",
+          "limit": "The beam is not identified as a spawn, teleport, or event object."
+        },
+        {
+          "tSeconds": 324,
+          "tier": "observed",
+          "text": "A paved gathering with many players in different armor colors. Chat includes lines that OCR fragments match to admin or server messages, plus ordinary player chat. People stand in a loose cluster and face different directions.",
+          "limit": "Admin message wording was not recovered cleanly enough to quote."
+        },
+        {
+          "tSeconds": 396,
+          "tier": "observed",
+          "text": "A very large outdoor crowd, with chat that includes an event call for more people. Players and large creatures share the frame. The camera character is in the foreground, not leading a formation.",
+          "limit": "OCR supports a 'few more' / event-call fragment only. The full sentence is not certified."
+        },
+        {
+          "tSeconds": 432,
+          "tier": "observed",
+          "text": "The clip ends on a bright outdoor crowd and a large white-blue effect, still with the full HUD and a packed minimap.",
+          "limit": "No closing rules text was sampled."
+        }
+      ],
+      "neuronetRelevance": "Best of this set for a later crowd comparison: many independent players, someone running through them, people idling around a blue beam, and squad-flavored chat. A follower bot should be compared with that loose human spacing, not given a numeric leash, speed, or assist rule from this montage. Mira Vey and Tavin Rook are not in the clip.",
+      "preservationUse": "Beta-event social and combat density on 2007-10-26 as dated by the uploader, including an Alia Das segment title, mass nameplates, channel join lines, and a gathering. Not a source for final-live schedules, XP, or squad rules.",
+      "unverified": [
+        "Client build and whether every shot is from 2007-10-26 rather than edited in from other beta sessions.",
+        "Map names other than the Alia Das overlay. Minimap labels are illegible.",
+        "Exact chat, including admin lines and the event call.",
+        "Weapon and ability names beside the bars.",
+        "Certified spelling of the player name. It is shaped like Joe Kaczmarek.",
+        "What the blue beam and the large white effect are."
+      ]
+    },
+    {
+      "videoId": "bCQgVDS-OJQ",
+      "title": "Tabula Rasa - Now/Here",
+      "url": "https://www.youtube.com/watch?v=bCQgVDS-OJQ",
+      "uploadDate": "20080406",
+      "durationSeconds": 256,
+      "sourceClass": "music-montage",
+      "reviewMethod": "Cached YouTube metadata plus a progressive 360p MP4 (itag 18) saved from those URLs before expiry. sha256 is of that file. Container duration is 256.3s; the playlist inventory lists 257. ffmpeg stills every 12s, plus stills at scene-change times. Tesseract on 3x chat crops, then visual inspection of selected stills. Not a frame-by-frame transcript. Upload date is not a recording date or client build.",
+      "localCopySha256": "34d032f22cd2c5f9f456fe9694a11c2208dcaed3bb80e3a7933f7d84a6337b1e",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Black card with a glowing mark and the credit 'by Spartan Fidelity'. The description says the clip is set to that band rather than a Mad World cut, and links the retail site.",
+          "limit": "The uploader does not call this PTS, beta, or a live event. Same channel as the labeled beta and PTS clips. No client build."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "Sepia third-person shot of an armored figure approaching a large multi-legged creature in grass. No chat, bars, minimap, or target frame are visible.",
+          "limit": "HUD may be hidden by the video rather than absent from the client. Empty chat-crop OCR through the sampled gameplay frames agrees that no log is on screen."
+        },
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "The figure swings a weapon at tall plant-like or creature forms beside a carved circular structure. The grade stays monochrome.",
+          "limit": "No damage numbers or nameplates, so this is not a combat-rules sample."
+        },
+        {
+          "tSeconds": 60,
+          "tier": "observed",
+          "text": "The figure stands before a tall bright column in a dark ruined space, seen from behind.",
+          "limit": "The column is not identified."
+        },
+        {
+          "tSeconds": 96,
+          "tier": "observed",
+          "text": "Wide sepia view of disc-shaped structures on a terraced rock face. A small humanoid is on the terraces. No HUD.",
+          "limit": "Location is not identified."
+        },
+        {
+          "tSeconds": 132,
+          "tier": "observed",
+          "text": "The figure walks away from the camera across a dark plain toward raised platforms and distant lights, weapon in hand.",
+          "limit": "Gait and speed were not measured."
+        },
+        {
+          "tSeconds": 168,
+          "tier": "observed",
+          "text": "A bright explosion fills the frame, with the top of a helmet at the bottom edge.",
+          "limit": "Cause of the effect is not shown."
+        },
+        {
+          "tSeconds": 221,
+          "tier": "observed",
+          "text": "From a rise, the figure fires into a dusty courtyard where several other figures are gathered. Still no HUD.",
+          "limit": "Cannot tell players from NPCs."
+        },
+        {
+          "tSeconds": 240,
+          "tier": "observed",
+          "text": "Two armored figures stand side by side at a railing, seen from behind, looking at a rock formation. They are close but not in a stacked follow pose.",
+          "limit": "A posed or edited shot. Not evidence of follower pathing."
+        }
+      ],
+      "neuronetRelevance": "Poor comparison footage for followers. The HUD is absent in every sampled gameplay frame, combat has no readable feedback, and the only social image is two figures standing together at a railing. Do not infer movement, combat, or quest behavior from it. Mira Vey and Tavin Rook are not in the clip.",
+      "preservationUse": "A graded music montage from the same uploader. It shows third-person presentation and a few environments with the interface removed or hidden. It is not a rules source.",
+      "unverified": [
+        "Whether the recording is beta, PTS, or live.",
+        "Recording date and client build.",
+        "Whether the HUD was toggled off, cropped, or never drawn.",
+        "Map names, NPC identities, and whether the second figure at the railing is a player.",
+        "Audio content was not transcribed."
+      ]
+    },
+    {
+      "videoId": "Iiq8oaJXxVc",
+      "title": "Tabula Rasa Beta Test Characters",
+      "url": "https://www.youtube.com/watch?v=Iiq8oaJXxVc",
+      "uploadDate": "20071025",
+      "durationSeconds": 271,
+      "sourceClass": "uploader-labeled-beta-characters",
+      "reviewMethod": "Cached YouTube metadata plus a progressive 360p MP4 (itag 18) saved from those URLs before expiry. sha256 is of that file. ffmpeg stills every 12s, plus stills at scene-change times. Tesseract on 3x chat and nameplate crops, then visual inspection of selected stills. Not a frame-by-frame transcript. Upload date is not a recording date or client build.",
+      "localCopySha256": "cdcfee6d974bc107b513ad45aeb2ed6ef2880a5234e79978d8d6407fd30d38b2",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Title card reads Beta Test Characters, with a Spartan Fidelity song credit. The description says these are the uploader's characters from the beta test.",
+          "limit": "Explicit beta. Upload 20071025 is before retail launch and is still only an upload date. Not final-live character or XP rules."
+        },
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "Third-person run toward red crystal structures. A hostile bar is targeted. The combat log is filling with short yellow gain lines. Bottom-left bars, a weapon label, Mission Tracker, and a minimap are present. The level badge on this nameplate reads in the low 20s.",
+          "limit": "OCR later in the reel supports experience and credit gain lines as a class of message. Amounts are not reliable and are omitted. Name spelling is not certified."
+        },
+        {
+          "tSeconds": 36,
+          "tier": "observed",
+          "text": "The same red-accented character stands on stone while several tall creatures approach across a red patch of ground. Greenish name text sits on the creatures. The player is alone in the foreground.",
+          "limit": "Creature names were not read. No follower is beside the player."
+        },
+        {
+          "tSeconds": 60,
+          "tier": "observed",
+          "text": "A different armor set, blue with a glow, runs through trees toward a creature. The nameplate has changed from the red-accented character. Foot glow returns while moving. Ability icons remain to the right of the bars.",
+          "limit": "This is a character reel, so the change of body and nameplate is the point of the video. Exact names and weapon strings stay illegible."
+        },
+        {
+          "tSeconds": 96,
+          "tier": "observed",
+          "text": "Another character, red cloak, level badge reading in the mid-teens, with Mission Tracker text on the right that is too small to read. The view is over the character toward an empty slope and a large pale structure.",
+          "limit": "Objective text was not recovered."
+        },
+        {
+          "tSeconds": 132,
+          "tier": "observed",
+          "text": "A grey-armored character advances with a green spherical effect and green ground light. The combat log continues. Minimap shows green terrain with white and red dots.",
+          "limit": "The effect is not named."
+        },
+        {
+          "tSeconds": 168,
+          "tier": "observed",
+          "text": "Another nameplate, level badge again in the mid-teens, firing uphill at creatures with red bars. Gain lines continue in the log.",
+          "limit": "Do not convert those lines into an XP or credit table."
+        },
+        {
+          "tSeconds": 185,
+          "tier": "observed",
+          "text": "Camera sits on the weapon, yellow lights along the barrel, still with the HUD and gain lines. The character is shooting rather than locked to another player.",
+          "limit": "Whether this is aim-down-sights or a tight follow camera was not separated."
+        },
+        {
+          "tSeconds": 204,
+          "tier": "observed",
+          "text": "A further armor and nameplate, badge reading around 20, fights a creature at a rock face with a white muzzle effect and green impact. Solo framing continues.",
+          "limit": "Level digit is small."
+        },
+        {
+          "tSeconds": 240,
+          "tier": "observed",
+          "text": "A full-screen location card reads Memory Tree Hill and Concordia Wilderness over ongoing combat. The HUD remains visible behind the card, including a different nameplate whose badge reads in the high teens.",
+          "limit": "The card is large and legible. It labels the shot. It does not state quest steps."
+        },
+        {
+          "tSeconds": 264,
+          "tier": "observed",
+          "text": "Closing card thanks developers, designers, and support personnel and says thanks for a great game.",
+          "limit": "Editor card, not client UI."
+        }
+      ],
+      "neuronetRelevance": "Shows solo third-person beta combat: run with a foot glow, shoot creatures, keep Mission Tracker and a gain log on screen, and swap the whole character between segments. No persistent human or NPC follower shares the player's offset. A later comparison can ask whether Mira Vey or Tavin Rook stay in frame the way these clips do not. Do not copy beta XP lines, levels, or weapon timing.",
+      "preservationUse": "Beta character reel uploaded 20071025: several of the uploader's characters, the standard HUD, creature combat, gain-log lines, and a Concordia Wilderness / Memory Tree Hill card. Beta only.",
+      "unverified": [
+        "Client build and the beta phase inside the test.",
+        "Exact character names and levels. Badges change across segments; only the approximate range was readable.",
+        "Weapon and ability names.",
+        "Experience and credit amounts in the gain log.",
+        "Mission Tracker objective text.",
+        "Map names other than the Memory Tree Hill / Concordia Wilderness card."
+      ]
+    }
+  ]
+}

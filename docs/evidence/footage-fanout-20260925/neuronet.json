@@ -1,0 +1,324 @@
+{
+  "worker": "neuronet",
+  "reviewScope": "Closer behavior pass on four assigned videos. Candidate conversational facts are recorded here only. They were not sent to any teach or Neuronet API. None of them set movement speed, combat tuning, or quest execution.",
+  "method": "Local copies under /home/blizz/.cache/rasa-footage were reused; nothing new was downloaded. yt-dlp info JSON supplied title, upload date, duration, channel, and description. ffmpeg extracted contact sheets and stills. UI crops were enlarged and read. Frames were sampled, not transcribed continuously. No audio transcript. Upload dates are upload dates, not recording dates or client builds.",
+  "comparisonChecks": [
+    {
+      "name": "Squad continuity",
+      "canMeasure": "Pravus (A4udsM0rcLo) keeps the same two other player names on the squad frames from the opening camp through the Production Chamber, including stretches where their bodies are off camera. Walkabout (-I1WM5ddg-k) samples show only the player's own unit frame across travel, fights, and NPC talks; other people appear in a camp, a plaza, and a landing area and are absent on the next path sample. Imperial Valley (Of3Uxw9MNec) shows other fighters at a control point without a second persistent unit frame. The boot-camp clip (EiE2oodlP8A) has no unit frames at all.",
+      "cannotMeasure": "Whether Mira Vey or Tavin Rook should stay spawned, how far they may drift, or whether they survive a zone change. The Pravus pair are other players in a player squad. Walkabout and Valley extras are whoever was already in the camp or fight. Sample gaps are about 12 seconds on Pravus and much wider on Walkabout. No path or distance was measured."
+    },
+    {
+      "name": "Combat pause and approach",
+      "canMeasure": "On Pravus the squadmates are already in the fight while the camera character is still running up (about 180s at Frontlines and about 408s in the Production Chamber). On Walkabout the player closes into melee (about 225s and 1360s) or runs with a weapon toward a distant target (about 1260s and 2700s) with no second character holding beside them. Valley shows the player already in contact or running into the control point. The boot-camp clip is a group exercise, not a combat approach.",
+      "cannotMeasure": "A hold-fire range, an approach distance, target priority, ability timing, or a rule that companions wait for the leader. These are human players and ambient fighters acting on their own. The stills do not show the frame where a fight started."
+    },
+    {
+      "name": "Recovery when the leader moves",
+      "canMeasure": "At about 8s the Pravus player tells the squad to lead, both squad nameplates are ahead on the path, and the chat says one member is out of range to receive a shared mission while still visible. Around 244s to 292s the player is alone in the interior halls while both squad frames remain. By about 408s to 548s those same two names are in the Production Chamber fight. On Walkabout the player leaves Warrior Apirka running alone at about 1510s and is still alone on later path samples (about 1850s, 2200s, and 2700s).",
+      "cannotMeasure": "Catch-up speed, a follow slot, or a recovery timer for Mira Vey or Tavin Rook. The people ahead in Pravus are players the camera character asked to lead, not companions closing on a leader. No coordinates or speeds were measured, and the stills skip the path between the empty hall and the chamber."
+    }
+  ],
+  "candidateFacts": [
+    {
+      "topic": "Human squad share and pace in a Pravus run",
+      "source": "https://www.youtube.com/watch?v=A4udsM0rcLo",
+      "dateBuildLimit": "Uploaded 2009-01-21. Capture date and client build are unknown. Uploader calls it the first part of the Pravus instance in the Wilderness. Not shutdown-day proof.",
+      "fact": "At about 8 seconds, squad chat shows The Means of Production being shared with Varko Ulliuvenn while Radmon Aolon is out of range to receive that share, and the player tells the squad to lead. The same squad frames (Ulliuvenn and Aolon, with the player Zorlac Ripslayer) stay up through Frontlines, the Interior Halls, and the Production Chamber, where those players are seen fighting again. This is other players coordinating, not a companion script. It does not set movement speed, combat tuning, or quest execution."
+    },
+    {
+      "topic": "Solo travel between talks and fights",
+      "source": "https://www.youtube.com/watch?v=-I1WM5ddg-k",
+      "dateBuildLimit": "Uploaded 2012-01-04, after shutdown. The uploader says the video was made long before that. Recording date and client build are unknown.",
+      "fact": "Sampled travel shows Draco Unicornn running alone between fights and conversations: a trainer conversation around 600s, a training window around 750s, the Warrior Apirka turn-in around 1488s, and the player leaving on foot alone by 1510s. Later path samples are also alone. Other characters show up in camps and a plaza without joining the unit frame. It does not set movement speed, combat tuning, or quest execution."
+    },
+    {
+      "topic": "Early control-point fight without a follower frame",
+      "source": "https://www.youtube.com/watch?v=Of3Uxw9MNec",
+      "dateBuildLimit": "Uploaded 2007-12-07. That is early public footage, not a final-live or shutdown client. The uploader calls it random action at Imperial Valley CP. The on-screen minimap label is soft at 480x360.",
+      "fact": "The player moves and shoots among other people at the control point with only one unit frame. Nobody is shown trailing as a companion. It does not set movement speed, combat tuning, or quest execution."
+    },
+    {
+      "topic": "Deployment 11 PTS boot-camp exercise is not a follower routine",
+      "source": "https://www.youtube.com/watch?v=EiE2oodlP8A",
+      "dateBuildLimit": "Uploaded 2008-08-08. The uploader says this is the revamped boot camp on the Deployment 11 Public Test Server. The title card is the uploader's own 'Deployment 11 Bootcamp Mini-Game (Kind of)'. PTS only. Not final live.",
+      "fact": "Recruits in gray exercise in front of a large boot-camp wall, cycling through jumping jacks and a prone or push-up pose, with some bodies out of phase with the group. There is no HUD, squad frame, or talk prompt. The uploader describes trying to keep up with them. This is a PTS exercise scene, not a companion follow routine. It does not set movement speed, combat tuning, or quest execution."
+    }
+  ],
+  "videos": [
+    {
+      "videoId": "A4udsM0rcLo",
+      "title": "Tabula Rasa Gameplay Pravus 1",
+      "url": "https://www.youtube.com/watch?v=A4udsM0rcLo",
+      "uploadDate": "20090121",
+      "durationSeconds": 558,
+      "channel": "Zorlac",
+      "sourceClass": "Live-era player squad footage of a Wilderness Pravus run. Upload date only. Capture date and client build unverified. Uploader description: first part of the Pravus instance in the Wilderness.",
+      "reviewMethod": "Reviewed the existing 1152x720 copy (sha256 d1bab24c). A lower 576x360 copy also exists (sha256 dd9c19b8) and was not the frame source. Contact sheet every 12 seconds, then stills at 8, 88, 180, 244, 292, 408, 432, and 548 seconds. Enlarged crops of squad chat, squad frames, the mission tracker, the 548s target frame, and the minimap zone labels. No continuous transcription.",
+      "localCopySha256": "d1bab24cd6921b18bd57bd9a732deefa09149dab4ce4e2cc3cc4c2b6f178e62c",
+      "observations": [
+        {
+          "tSeconds": 8,
+          "tier": "observed",
+          "text": "At AFS Preparation Camp the player Zorlac Ripslayer runs behind two squad nameplates. Squad chat says The Means of Production is being shared with Varko Ulliuvenn, that Radmon Aolon is out of range to share that mission, and that the mission was accepted. The player then says 'this way', 'you guys lead', and that they have done part of it and do not know what the others have. Squad frames show Ulliuvenn at level 8 and Aolon at level 12, with Squad Options under them.",
+          "limit": "Out of range is the on-screen share message. Both nameplates are still visible, so the share range is not the same thing as render distance, and the meter value was not measured. These are other players, not NPC followers. Capture date and build unknown."
+        },
+        {
+          "tSeconds": 8,
+          "tier": "observed",
+          "text": "The mission tracker reads Wilderness Targets of Opportunity, Complete All 10 Targets of Opportunity, Kill 40 Miasmas with 8 of 40, Kill 40 Xanx with 28 of 40, and Kill 30 Shield Drones.",
+          "limit": "The shield-drone progress count was not inside the enlarged tracker crop. The counters are not used as a reward or spawn rule. Capture date and build unknown."
+        },
+        {
+          "tSeconds": 88,
+          "tier": "observed",
+          "text": "The zone label reads Frontlines. The player is in the foreground of a sandbag fight, reloading a Teleract Rifle, while squad nameplates are in the melee on the targeted Hominis Machina.",
+          "limit": "No formation spacing or firing order was measured. Group-bonus experience lines are visible in chat and are not a rate."
+        },
+        {
+          "tSeconds": 180,
+          "tier": "observed",
+          "text": "Still in Frontlines, the player is running toward a fight in which the squad nameplates are already engaged.",
+          "limit": "The squad did not wait, frozen, for the camera character. That is player behavior in this sample, not a companion hold rule."
+        },
+        {
+          "tSeconds": 244,
+          "tier": "observed",
+          "text": "The zone label context is the interior. The player moves alone through a dark cluttered passage. Both squad frames are still filled. No squad body is in view. Chat mentions a Pravus Research Facility level 1 keypass loot line.",
+          "limit": "Off-camera is not a measured leash distance. The keypass line is loot text, not a key or door rule."
+        },
+        {
+          "tSeconds": 292,
+          "tier": "observed",
+          "text": "The minimap label reads Pravus Interior Halls. The player runs down a ramp past a body. The squad frames for Ulliuvenn and Aolon are still present.",
+          "limit": "The two squadmates are not in the camera view. Their route back to the player is not shown."
+        },
+        {
+          "tSeconds": 408,
+          "tier": "observed",
+          "text": "The minimap label reads Pravus Production Chamber. Squad nameplates are in a fight ahead of the player, who is still back on the floor.",
+          "limit": "Same human squad as the opening frames. No catch-up speed is visible between this still and the empty hall."
+        },
+        {
+          "tSeconds": 548,
+          "tier": "observed",
+          "text": "Still in the Pravus Production Chamber, the target frame reads Prototype Forean Machina. The player is shooting, and the same squad nameplates are in the melee.",
+          "limit": "The target level glyph was not checked against a database. No health, phase, or completion rule is taken from this still."
+        }
+      ],
+      "neuronetRelevance": "Strongest assigned picture of a three-person group staying together from an outdoor camp into interior halls and a named chamber. Use it only as a picture of human squad continuity, of a share failing while someone is still visible, and of squadmates fighting before the camera character arrives. It is not a follow script for Mira Vey or Tavin Rook.",
+      "preservationUse": "Supports the place names AFS Preparation Camp, Frontlines, Pravus Interior Halls, and Pravus Production Chamber, the mission title The Means of Production, and a Prototype Forean Machina target in that chamber, on an undated pre-shutdown client. Does not supply spawns, paths, or final-live tuning.",
+      "unverified": [
+        "Recording date and client build.",
+        "Whether the squad share range, the keypass, or the Production Chamber encounter match the shutdown client.",
+        "Distance between the player and the squad when the share failed or when the halls looked empty.",
+        "Any numeric experience, credit, or group-bonus line as a rate."
+      ]
+    },
+    {
+      "videoId": "-I1WM5ddg-k",
+      "title": "Tabula Rasa: Walkabout",
+      "url": "https://www.youtube.com/watch?v=-I1WM5ddg-k",
+      "uploadDate": "20120104",
+      "durationSeconds": 2959,
+      "channel": "unacomn",
+      "sourceClass": "Post-shutdown upload. The uploader says it was recorded much earlier on a weak PC. Recording date and client build unknown. Not final-live proof by itself.",
+      "reviewMethod": "Reviewed the existing 640x480 copy (sha256 076fd022). A 480x360 copy also exists (sha256 211e7b55) and was not the frame source. Contact sheet every 45 seconds, then stills at 45, 120, 225, 400, 600, 750, 1260, 1360, 1488, 1510, 1850, 2200, 2500, 2700, 2880, and 2940 seconds. The Apirka completion panel at 1488 seconds was enlarged. No continuous transcription.",
+      "localCopySha256": "076fd02268d0552105ac32b5ecb1b2a473ca18e8c95c337fc3f6d1d97d070bfc",
+      "observations": [
+        {
+          "tSeconds": 45,
+          "tier": "observed",
+          "text": "Draco Unicornn walks alone toward a hostile Thrax with the reticle on it. Only one unit frame is on screen.",
+          "limit": "Approach distance was not measured. Channel and mission text in the chat was not treated as a join rule."
+        },
+        {
+          "tSeconds": 120,
+          "tier": "observed",
+          "text": "The player runs alone across open ground with a Logos window open. A creature is on the ridge ahead, not beside the player.",
+          "limit": "No companion is in frame. Travel speed was not measured."
+        },
+        {
+          "tSeconds": 225,
+          "tier": "observed",
+          "text": "The player is in melee with a pack of Thrax, shotgun out, damage numbers on the targets. No second unit frame.",
+          "limit": "This is the player already in contact, not a companion pause. Ability text such as a dead-target warning is not combat tuning."
+        },
+        {
+          "tSeconds": 400,
+          "tier": "observed",
+          "text": "The player runs alone through a dark stretch. The mission tracker is open. No second character is beside them.",
+          "limit": "A dark frame can hide a distant figure. None is identifiable here."
+        },
+        {
+          "tSeconds": 600,
+          "tier": "observed",
+          "text": "The player stands at a trainer pedestal with a character training window open and a press-to-talk prompt. Another figure stands off to the side of the camp, not on the player's unit frame.",
+          "limit": "The side figure is not shown following on later samples. Class and skill rows in the window are not a training grant."
+        },
+        {
+          "tSeconds": 750,
+          "tier": "observed",
+          "text": "Indoors, the player stands still in front of an NPC with a press-to-talk prompt while a training window covers the left side.",
+          "limit": "The player stopped for the window. That does not define how a companion should idle."
+        },
+        {
+          "tSeconds": 1260,
+          "tier": "observed",
+          "text": "The player runs alone along a path with a weapon out. A hostile name is targeted farther along the trail.",
+          "limit": "The gap to the target was not measured. No companion is in frame."
+        },
+        {
+          "tSeconds": 1360,
+          "tier": "observed",
+          "text": "The player stands in melee range of a single large Thrax and fires. Corpses are on the ground. Only the player's unit frame is shown.",
+          "limit": "No second character is assisting in this still."
+        },
+        {
+          "tSeconds": 1488,
+          "tier": "observed",
+          "text": "Warrior Apirka's mission-completion window is open for Conscientious Objector. The visible reward block shows 400 and a choice of two items, one of which reads Class I EMP Bomb. The player stands alone in front of the NPC under a press-to-talk prompt.",
+          "limit": "The second item's label is soft at 480p and is not recorded as a template id. The 400 figure and the item choice do not set a reward. Recording date and build unknown. The +2,000 XP moment just after this still was not re-sampled in this pass."
+        },
+        {
+          "tSeconds": 1510,
+          "tier": "observed",
+          "text": "The player is running away across open ground, alone, with a mission-accepted banner on screen.",
+          "limit": "No companion leaves with them. The banner's full mission title was not re-cropped in this pass."
+        },
+        {
+          "tSeconds": 1850,
+          "tier": "observed",
+          "text": "The player runs alone toward one standing NPC with a press-to-talk prompt.",
+          "limit": "Conversation has not started in this still. No companion is present."
+        },
+        {
+          "tSeconds": 2200,
+          "tier": "observed",
+          "text": "The player runs alone toward a blue gate marked Twin Pillars. A single distant figure is inside the gate, not at the player's side.",
+          "limit": "The distant figure is not a demonstrated follower."
+        },
+        {
+          "tSeconds": 2500,
+          "tier": "observed",
+          "text": "In a paved interior, several other characters stand around while say-lines scroll in chat. The player has a weapon out. They are not stacked on the player as a pair of followers.",
+          "limit": "This is a social room sample. The next outdoor sample does not carry those people."
+        },
+        {
+          "tSeconds": 2700,
+          "tier": "observed",
+          "text": "The player runs alone on a forest path with a hostile targeted ahead.",
+          "limit": "No companion recovered onto the player after the plaza or the Apirka stop."
+        },
+        {
+          "tSeconds": 2880,
+          "tier": "observed",
+          "text": "The player stands among corpses under a dropship near a landing structure. Another character is off to the side. A talk prompt is up.",
+          "limit": "The side character is not on the unit frame and is not shown following on the 2940s still."
+        }
+      ],
+      "neuronetRelevance": "Best assigned contrast to Pravus: long stretches of one player moving, stopping to talk, fighting, and leaving again without a second unit frame. Useful later as a 'no companion present' comparison, not as a follow route.",
+      "preservationUse": "Confirms the player can travel alone, stop for a trainer and for Warrior Apirka, and leave the Apirka conversation on foot. The completion window matches the already noted Conscientious Objector turn-in. It does not date the build or set rewards.",
+      "unverified": [
+        "When it was recorded and on which client.",
+        "Exact spelling of the second Apirka reward item.",
+        "Whether anyone off-camera was grouped with the player. Only one unit frame was visible in the samples.",
+        "Experience and credit lines as rates."
+      ]
+    },
+    {
+      "videoId": "Of3Uxw9MNec",
+      "title": "Tabula Rasa - Random Gameplay",
+      "url": "https://www.youtube.com/watch?v=Of3Uxw9MNec",
+      "uploadDate": "20071207",
+      "durationSeconds": 189,
+      "channel": "Joe Kaczmarek",
+      "sourceClass": "Early public gameplay upload, 7 December 2007. Uploader description: random action at Imperial Valley CP. An opening title card is the uploader's music credit, not an in-game screen. Not a final-live capture.",
+      "reviewMethod": "Reviewed the existing 480x360 copy (sha256 9d9ceacc). Contact sheet every 6 seconds, then stills at 16, 52, 100, and 148 seconds, plus a minimap crop at 52 seconds. No continuous transcription.",
+      "localCopySha256": "9d9ceacc81c68c6a39854f553bfc965187184948fb25adeffc336365e2fc1a3f",
+      "observations": [
+        {
+          "tSeconds": 2,
+          "tier": "observed",
+          "text": "An uploader title card sits over the footage before the fight continues.",
+          "limit": "The card is not game UI and not a zone name."
+        },
+        {
+          "tSeconds": 16,
+          "tier": "observed",
+          "text": "The player is already in melee beside a tree. Another humanoid is nearby in the fight. Only one unit frame is shown.",
+          "limit": "480p. The nearby fighter is not identified as a companion. No spacing was measured."
+        },
+        {
+          "tSeconds": 52,
+          "tier": "observed",
+          "text": "The player runs forward through the fight. The minimap carries a control-point label consistent with the uploader's Imperial Valley CP.",
+          "limit": "The 480x360 glyphs are soft. The label was not used to place a coordinate."
+        },
+        {
+          "tSeconds": 100,
+          "tier": "observed",
+          "text": "The player runs up a ramp into the control-point structures while fire and bodies fill the approach. Other characters are in the fight. No second unit frame trails the player.",
+          "limit": "Busy CP footage. Other people fighting nearby is not a follower routine."
+        },
+        {
+          "tSeconds": 148,
+          "tier": "observed",
+          "text": "The player shoots from behind fallen cover at a target in the trees, still with a single unit frame.",
+          "limit": "No companion is in the foreground. Weapon timing was not measured."
+        }
+      ],
+      "neuronetRelevance": "Shows a player entering an ongoing control-point fight without a paired follower. Weak as bot evidence because the frame is small, the date is early, and the crowd is other combatants.",
+      "preservationUse": "Early-live picture of Imperial Valley CP as a crowded fight, matching the uploader's description. Not a layout or AI source for the shutdown client.",
+      "unverified": [
+        "Exact minimap spelling beyond the uploader's Imperial Valley CP claim and a soft on-screen label.",
+        "Identity of the other fighters.",
+        "Any final-live control-point rule."
+      ]
+    },
+    {
+      "videoId": "EiE2oodlP8A",
+      "title": "Tabula Rasa - D11 Bootcamp Mini-Game",
+      "url": "https://www.youtube.com/watch?v=EiE2oodlP8A",
+      "uploadDate": "20080808",
+      "durationSeconds": 67,
+      "channel": "Joe Kaczmarek",
+      "sourceClass": "Public Test Server boundary. Uploader description: the revamped Deployment 11 boot camp on the Public Test Server, filmed as a game of trying to keep up with exercising NPC recruits. Not final live and not a follower routine.",
+      "reviewMethod": "Reviewed the existing 480x360 copy (sha256 d937492c). Contact sheet every 2 seconds, then stills at 4, 14, 44, and 62 seconds. No HUD to crop. No continuous transcription.",
+      "localCopySha256": "d937492c5187ec7fac00c7b8c08e955bd97739da7d91f984b6f0dcfb7e725942",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "The clip opens on the Tabula Rasa logo, then a black title card that reads Deployment 11 Bootcamp Mini-Game (Kind of).",
+          "limit": "The title card is the uploader's edit. The PTS claim comes from the description, not from an in-world PTS banner."
+        },
+        {
+          "tSeconds": 14,
+          "tier": "observed",
+          "text": "A group of recruits in gray exercise in front of a large paneled wall. Many have their arms up in a jumping-jack pose. Several are already prone. One figure in a cap is in the foreground.",
+          "limit": "No nameplates, squad frame, or talk prompt. Who is the player versus an NPC is the uploader's 'keep up' framing, not a label on screen."
+        },
+        {
+          "tSeconds": 44,
+          "tier": "observed",
+          "text": "Most of the group is standing while several are still on the ground and one is partway through a push-up.",
+          "limit": "The offset poses show the group is not a single locked animation in this frame. Cadence was not timed."
+        },
+        {
+          "tSeconds": 62,
+          "tier": "observed",
+          "text": "Nearly the whole group is down in a push-up or prone pose together, with one or two slightly out of phase.",
+          "limit": "This is the exercise cycle at the end of a 67-second PTS clip. It does not show anyone following a moving leader."
+        }
+      ],
+      "neuronetRelevance": "Record the PTS boundary so this exercise is not later treated as how Mira Vey or Tavin Rook should follow, idle, or drill. There is no follower camera and no squad UI.",
+      "preservationUse": "Evidence that a Deployment 11 PTS boot camp had a visible recruit exercise in front of a barracks-style wall. Counts, placements, and whether the live boot camp kept the same animation are unverified.",
+      "unverified": [
+        "That the exercise, headcount, or wall layout shipped unchanged from this PTS clip.",
+        "Which body is the player.",
+        "The exercise timer or animation names."
+      ]
+    }
+  ]
+}

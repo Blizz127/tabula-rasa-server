@@ -523,3 +523,8 @@ decompiles as `[4,5,6,7,8,9]` while the bytecode at offsets 373–394 loads six 
 Every conclusion above was therefore re-verified against bytecode. **Literal constants in
 the 47 decompiled `.py` files are unreliable; names and control flow are sound.**
 
+## 2026-09-24: user-supplied gameplay video cross-checks
+
+The [footage study](gameplay-footage-study-20260924.md) and its [timestamped inventory](evidence/gameplay-footage-playlists-20260924.json) cover the supplied playlists and standalone videos. In an original but undated [Walkabout recording](https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1488s), a level-5 player completes **Conscientious Objector** at Warrior Apirka, receives **2,000 XP**, then accepts **Conscientious Objector - Part Two** from Apirka with **“Bring the report to Rogers”** at [24:55](https://www.youtube.com/watch?v=-I1WM5ddg-k&t=1495s). This corroborates the seeded XP and the Apirka/Rogers giver/receiver correction. The completion panel has a choice of two items whose exact templates are still unknown. The Part Two screen does not reveal whether mission ID 1392 or 1393 is the branch being played; the recording date and client build are unknown.
+
+The [Pravus gameplay video](https://www.youtube.com/watch?v=A4udsM0rcLo&t=30s), uploaded 2009-01-21, shows the Wilderness Targets of Opportunity tracker with **40 Miasmas, 40 Xanx and 30 Shield Drones**. Those match client mission 1449 objectives 7, 3 and 4. Upload date is not capture date, and the video's group bonus/x2 XP state prevents ordinary XP calibration. Neither source certifies shutdown-day rewards or completes the missing server definitions by itself.

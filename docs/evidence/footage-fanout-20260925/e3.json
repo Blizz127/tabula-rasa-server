@@ -1,0 +1,447 @@
+{
+  "worker": "e3",
+  "videos": [
+    {
+      "videoId": "NtogPR3B9rI",
+      "title": "Tabula Rasa -- E3 Footage #6",
+      "url": "https://www.youtube.com/watch?v=NtogPR3B9rI",
+      "uploadDate": "20060512",
+      "durationSeconds": 36,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: rifle clip; photographed monitor, not a client build)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "b6c9122c72cc2ec02a7087969d88418c30e1a48a7124a518db618f9863d08935",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "The clip is a photo of a monitor in a room. A third-person humanoid in red-orange armor is on a rocky forest path, seen from behind and slightly above, with a circular minimap at the lower right and unit frames along the bottom.",
+          "limit": "Booth photograph. Armor color and UI layout are appearance only. No speed, range, or control mapping was measured."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "The same armored figure holds a long rifle across the body while a bright muzzle-side flash is in front of the weapon. A red bar sits over a small figure farther up the slope. The camera stays behind the rifle figure as the path changes between samples.",
+          "limit": "One still cannot show fire rate, projectile type, or hit detection. Uploader description says 'Fun with the rifle' and is not itself an on-screen label."
+        },
+        {
+          "tSeconds": 20,
+          "tier": "observed",
+          "text": "Between the 8s, 20s, and 32s samples the rifle figure remains in the lower center while the trail, rocks, and trees scroll, which is a following camera during travel rather than a fixed cinematic lock.",
+          "limit": "4-second sampling. Gait, turn rate, and whether movement is animated run or walk were not measured."
+        }
+      ],
+      "neuronetRelevance": "No companion of the later Mira Vey or Tavin Rook kind is identifiable. Other small figures are combat targets or distant bodies, not a documented following squad. Pre-release third-person follow and rifle flash only. Do not derive movement, combat, XP, or quest numbers from it.",
+      "preservationUse": "Boundary record that a May 2006 E3 booth photo shows over-the-shoulder rifle travel and a muzzle flash in a forest. It is not evidence for shutdown-era weapons, locomotion, or squad AI.",
+      "unverified": [
+        "Recording date versus the 2006-05-12 upload date",
+        "Client build or whether this is a playable E3 demo versus a scripted booth loop",
+        "Weapon name, damage, and whether the flash is a hitscan tracer or a projectile",
+        "Any relationship to the cleaner Online Welten rifle shots in 95ls4AKYAUA"
+      ]
+    },
+    {
+      "videoId": "jNxEdYl6fr4",
+      "title": "Tabula Rasa -- E3 Footage #7",
+      "url": "https://www.youtube.com/watch?v=jNxEdYl6fr4",
+      "uploadDate": "20060512",
+      "durationSeconds": 26,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: 'Logo shock attack'; photographed monitor)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "b13068d47c2c3efdc27e154d2604152a9c3ca8a4bc336301ec951481bddf8daa",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Photographed monitor. Third-person view behind an orange-armored humanoid on open orange-brown ground with dead trees. Bottom unit frames and a round minimap are present.",
+          "limit": "Show-floor photo. Names in the unit frames are not readable at this resolution."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "Two large translucent green domes sit in the midground. Smaller humanoid silhouettes stand between the camera character and the domes. A pale arc is in the sky. The camera character is still framed from behind at the bottom.",
+          "limit": "Uploader calls this a Logos shock attack. The frames show the domes and nearby bodies; they do not show a cast animation, power name, or Logos rules."
+        },
+        {
+          "tSeconds": 16,
+          "tier": "observed",
+          "text": "The camera character's arms are raised in front of the body while one green dome remains to the right and a small figure is nearer the center. Red bars are over at least one distant figure.",
+          "limit": "A single pose is not a verified ability timing. Green-dome footage also appears in the separate Online Welten file t7aX-sACBTw; sameness of take was not established."
+        }
+      ],
+      "neuronetRelevance": "Nearby humanoids read as a loose group on the field, not as identified neuronet companions. The green domes are a pre-release combat visual only. Do not tune follow distance, ability timing, or squad behavior from this booth photo.",
+      "preservationUse": "Records that an E3 2006 booth clip labeled by the uploader as a Logos shock shows green area domes and third-person grouping on a barren plain. Not transferable to live Logos or shutdown-era combat.",
+      "unverified": [
+        "That the green domes are the Logos power named in the description",
+        "Exact count and allegiance of the smaller figures",
+        "Whether this is the same shot as t7aX-sACBTw",
+        "Demo build and whether the scene is scripted"
+      ]
+    },
+    {
+      "videoId": "3reasGu9M9c",
+      "title": "Tabula Rasa -- E3 Footage #5",
+      "url": "https://www.youtube.com/watch?v=3reasGu9M9c",
+      "uploadDate": "20060512",
+      "durationSeconds": 38,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: inside a Bane base instance; photographed Dell monitor)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "2d3fc006a90b6d863c31449ee000a4395fb8305b17347cc5d78cde8652828e38",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "A Dell monitor bezel is in frame. The game view is a dark interior of repeating hexagonal wall pods, several with green lit panels and a few with orange fire. A red-capped figure is at the bottom center in third person, with bottom unit frames and a round minimap.",
+          "limit": "Uploader says this is a Bane base instance. The frame shows the set dressing only; instancing is not visible."
+        },
+        {
+          "tSeconds": 16,
+          "tier": "observed",
+          "text": "The view has moved into a darker corridor. The same red-capped figure remains low in frame, so the camera is still following rather than cutting to a fixed shot.",
+          "limit": "4-second samples. No corridor length or move speed was measured."
+        },
+        {
+          "tSeconds": 28,
+          "tier": "observed",
+          "text": "The character is in a chamber packed with angular green-glowing shapes. Combat is presented as dense colored light in a tight interior, not as an outdoor shootout.",
+          "limit": "Enemy silhouettes and any weapon in the character's hands are not clear enough to name."
+        }
+      ],
+      "neuronetRelevance": "Bottom unit frames imply other party members are represented in the HUD, but no following companion model is clearly separated from the player in these samples. Nothing here is a neuronet movement or combat scenario.",
+      "preservationUse": "Pre-release appearance of a dark modular interior and third-person follow at an E3 booth. The uploader's 'instance' label must stay an uploader claim. Do not seed Bane base layout or instance rules from it.",
+      "unverified": [
+        "That the space is a Bane base or an instance",
+        "Readable quest or chat text on the left of the screen",
+        "How many squad members are in the unit frames",
+        "Client build"
+      ]
+    },
+    {
+      "videoId": "2mOneHr2pJA",
+      "title": "Tabula Rasa -- E3 Footage #4",
+      "url": "https://www.youtube.com/watch?v=2mOneHr2pJA",
+      "uploadDate": "20060512",
+      "durationSeconds": 61,
+      "sourceClass": "pre-release E3 2006 booth capture (photographed monitor; uploader gives no mechanic claim beyond E3 footage)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "3f6e852522992feb63f7530f4bc0a5ce66c814a26e803013a9d985eb459db4d9",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Show-floor monitor with a neighboring screen at the right edge. Third-person view in a dark organic forest. A figure is low in the frame and taller pale figures stand ahead on the rise.",
+          "limit": "Whether the pale figures are friendly squad, NPCs, or enemies is not readable."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "The camera is still behind a central armored figure in a brighter alien forest of curved trees. A red bar is over a creature-like shape to the right, so combat targeting is presented with an overhead bar.",
+          "limit": "Creature type and weapon are not identifiable."
+        },
+        {
+          "tSeconds": 40,
+          "tier": "observed",
+          "text": "The followed character is in the lower center amid red ground effects and dark foliage. Across the minute the camera keeps that behind-the-body framing while the terrain changes, which is continuous third-person travel through a fight rather than cutscenes.",
+          "limit": "No path was measured. Red effects are not assigned to a named power."
+        }
+      ],
+      "neuronetRelevance": "Other bodies appear near the camera character in a hostile forest, but allegiance and follow behavior are not shown clearly enough to invent a companion scenario. No neuronet tuning use.",
+      "preservationUse": "E3 2006 booth appearance of third-person movement through an alien forest with overhead target bars and red combat effects. Not a source for creature stats, aggro, or live-era maps.",
+      "unverified": [
+        "Map or zone identity",
+        "Squad size and whether anyone is following",
+        "What the red ground effect is",
+        "Demo versus scripted playback"
+      ]
+    },
+    {
+      "videoId": "b-WhHUWv8WA",
+      "title": "Tabula Rasa -- E3 Footage #2",
+      "url": "https://www.youtube.com/watch?v=b-WhHUWv8WA",
+      "uploadDate": "20060511",
+      "durationSeconds": 37,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: E3 2006 instanced mission; photographed monitor)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. Tesseract did not recover UI text. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "793dabb8a9def03f67fca464b17b94233b7b32e25ea5446eefc54c61d903a6f8",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Dark interior. A huge red wireframe sphere dominates the upper center. At least two humanoids are low in the frame, one nearer the camera and one in bright green to the right. Bottom unit frames and a round blue minimap are visible.",
+          "limit": "The sphere's function (shield, explosion, deployable) is not labeled in a readable way."
+        },
+        {
+          "tSeconds": 8,
+          "tier": "observed",
+          "text": "The red wire sphere is still large in view and a green cloud or beam is on the left. The group is still clustered under the effect rather than spread across a wide field.",
+          "limit": "Who cast the effect is not visible."
+        },
+        {
+          "tSeconds": 20,
+          "tier": "observed",
+          "text": "The camera has moved down a ribbed organic corridor with fire ahead. A green-clad figure is in front of the camera character. A line of light text is centered on the screen but is not reliably readable at 360p from a photo.",
+          "limit": "Uploader calls the clip an instanced mission. Instancing is not something the picture shows. Do not transcribe the center text."
+        },
+        {
+          "tSeconds": 32,
+          "tier": "observed",
+          "text": "The followed character is on a sloped floor in the same dark complex, still third person, with the green figure nearby. Locomotion reads as the camera trailing a walking or running body through the hall.",
+          "limit": "Gait and speed were not measured."
+        }
+      ],
+      "neuronetRelevance": "A second brightly clothed humanoid stays near the camera character during the effect and the corridor move. That is a pre-release grouping picture only. It is not a scenario for Mira Vey or Tavin Rook and supplies no follow distance or combat numbers.",
+      "preservationUse": "E3 2006 booth appearance of a dark corridor fight: red wireframe sphere, a nearby second body, and third-person follow. The uploader's instance claim stays unverified. Do not copy the effect or the space into live content.",
+      "unverified": [
+        "Center-screen text and any 'interior halls' label",
+        "Whether the red sphere is a shield, a weapon, or scenery",
+        "That the mission is instanced",
+        "Names on the unit frames"
+      ]
+    },
+    {
+      "videoId": "v1GogJZ9wxQ",
+      "title": "Tabula Rasa -- E3 Footage #3",
+      "url": "https://www.youtube.com/watch?v=v1GogJZ9wxQ",
+      "uploadDate": "20060511",
+      "durationSeconds": 31,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: inside human HQ; photographed monitor)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "4261a8d14f9bdc16f30237373ce15f39358be80442366af64213279857eb07de",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Interior room with shelves and a large blue text window on the left. Two humanoids stand close together near the center, one slightly behind the other, in third person. The blue window's body text is not readable.",
+          "limit": "Uploader says this is human HQ. The room reads as an indoor base set; the proper name is the uploader's."
+        },
+        {
+          "tSeconds": 12,
+          "tier": "observed",
+          "text": "A character in a yellow-brown suit is centered, seen from behind, walking out through a rectangular doorway onto a platform. Another smaller figure is farther ahead on the platform. The camera follows from behind.",
+          "limit": "Door transition is one sample. No interact prompt was read."
+        },
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "The same behind-the-back framing continues outdoors along a walled path with trees. The character is moving away from the camera between the 12s, 16s, 20s, and 24s samples.",
+          "limit": "Run versus walk was not measured. This is booth footage, so the outdoor path is not a live-map coordinate source."
+        }
+      ],
+      "neuronetRelevance": "Two bodies stand together indoors, and a distant figure is ahead on the platform, but neither is shown assisting in combat in the samples. Not a companion-tuning clip.",
+      "preservationUse": "E3 2006 appearance of third-person travel from an interior with a blue information window out through a doorway into an outdoor path. Do not treat the space as shutdown-era human HQ geometry.",
+      "unverified": [
+        "Contents of the blue window",
+        "That the interior is the live human headquarters",
+        "Identity of the second indoor figure and the figure on the platform",
+        "Client build"
+      ]
+    },
+    {
+      "videoId": "TaxGO-rjLxg",
+      "title": "Tabula Rasa Online Welten Short Video",
+      "url": "https://www.youtube.com/watch?v=TaxGO-rjLxg",
+      "uploadDate": "20060624",
+      "durationSeconds": 68,
+      "sourceClass": "pre-release promotional package marked E3 2006 by its own title card; Online Welten / MMOG-Welten distribution (uploader: German MMO site, pre-release, Richard Garriott as executive producer). Reviewed once although the assignment listed the id twice.",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file, not the original WMV. Upload date is the YouTube upload date.",
+      "localCopySha256": "5317e1eb030cec3302e2b64358f0e45085097892f33ef3aeaa3cc44b0030d0cf",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Title card in red text on black: E3 2006 and Tabula Rasa. This is the clip labeling itself as E3, separate from the June 2006 upload date.",
+          "limit": "A title card is not a client version."
+        },
+        {
+          "tSeconds": 4,
+          "tier": "observed",
+          "text": "Third-person view in a dark rocky space. The camera character is low in frame. Another armored body lies or crouches ahead with a green marker. A round minimap is at the lower right and unit frames are along the bottom.",
+          "limit": "Whether the second body is downed, looting, or scripted is not clear from one frame."
+        },
+        {
+          "tSeconds": 16,
+          "tier": "observed",
+          "text": "Two dark armored figures stand on a path in a rocky cut, camera behind them. A light-colored objective line is across the upper screen. At 360p it appears to be an objective-completed banner that mentions speaking to a council elder. Exact spelling was not recovered.",
+          "limit": "Do not quote the banner as a verbatim mission string. It is pre-release promo text if it is text at all."
+        },
+        {
+          "tSeconds": 32,
+          "tier": "observed",
+          "text": "A full-height character window is open on the left over the third-person scene: a humanoid paper doll, rows of attributes, and a second red-armored figure still visible in the world behind the window. Another character-window page with a grid is open around 40s.",
+          "limit": "Name, body level, and attribute numbers are not reliable at this resolution and are omitted."
+        },
+        {
+          "tSeconds": 48,
+          "tier": "observed",
+          "text": "The character window is gone. An orange-suited figure runs away from the camera along a road toward a large dark gate with a bright blue opening. The same behind-the-runner framing holds at 52s and 56s, with bottom unit frames still drawn.",
+          "limit": "No run speed was measured. The gate is a presentation landmark only."
+        },
+        {
+          "tSeconds": 64,
+          "tier": "observed",
+          "text": "End card uses the MMOG-Welten web address, matching the sister files 95ls4AKYAUA and t7aX-sACBTw.",
+          "limit": "Shared distributor card does not prove the gameplay shots are the same take as those files."
+        }
+      ],
+      "neuronetRelevance": "Two armored figures stand together on the path while an objective banner is up, and unit frames stay on screen during the run to the gate. That is pre-release party presentation, not a Mira Vey or Tavin Rook behavior trace. Do not convert spacing or the banner into quest or movement tuning.",
+      "preservationUse": "Shows the Online Welten E3 2006 short's on-screen order: title card, dark encounter, objective banner, character sheet, then a third-person run to a gate. Useful only as a dated promotional boundary. Mission text, stats, and the gate are not shutdown-era data.",
+      "unverified": [
+        "Exact objective string and NPC name",
+        "Character-sheet name, level, and attributes",
+        "Whether the two path figures are a squad or a scripted pair",
+        "Overlap with 95ls4AKYAUA and t7aX-sACBTw beyond the shared title and end cards",
+        "Recording date versus the 2006-06-24 upload"
+      ]
+    },
+    {
+      "videoId": "n1ekRiQB1iY",
+      "title": "Tabula Rasa -- E3 Footage",
+      "url": "https://www.youtube.com/watch?v=n1ekRiQB1iY",
+      "uploadDate": "20060511",
+      "durationSeconds": 36,
+      "sourceClass": "pre-release E3 2006 booth capture (uploader description: female troop using a staff; photographed monitor)",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. Tesseract did not recover UI text. sha256 is of that 360p file. Upload date is the YouTube upload date.",
+      "localCopySha256": "34ca711bed1b1fea7d98cfcc0932c6d0e4e35a842ad6b11731f8ea78c44577e0",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Photographed monitor. Third person behind a white-armored humanoid on a bright forest path. The figure holds a long weapon upright. A round minimap and bottom unit frames are present.",
+          "limit": "Uploader says the troop is female and the weapon is a staff. The frames show a slim white suit and a long weapon; gender and weapon class are not independently readable."
+        },
+        {
+          "tSeconds": 16,
+          "tier": "observed",
+          "text": "The view is in blue-purple brush against rock. Small red marks are in the vegetation. The white figure is still the camera anchor at the bottom when visible in neighboring samples.",
+          "limit": "Target type is unclear."
+        },
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "The white figure is center-low with blue particle streaks around the body and a bright flash ahead, in a grove of curved trees. Combat is shown as colored particles around the followed body.",
+          "limit": "Particle source (weapon, power, or incoming fire) was not separated."
+        },
+        {
+          "tSeconds": 32,
+          "tier": "observed",
+          "text": "The white figure is on a dirt path moving away from the camera, long weapon in hand, with two or more smaller figures farther up the path. Red bars are over some of those figures.",
+          "limit": "The distant group may be enemies rather than a squad. Count is approximate because of monitor glare."
+        }
+      ],
+      "neuronetRelevance": "The clip is one followed fighter plus distant hostile-looking bars, not a companion pair. No neuronet scenario and no combat numbers.",
+      "preservationUse": "E3 2006 booth appearance of third-person travel and particle combat with a long weapon in a bright forest. The staff and 'female troop' wording stay uploader claims. Not a live-era class or weapon source.",
+      "unverified": [
+        "Weapon is a staff",
+        "Presented gender of the character",
+        "Whether distant figures are a squad or enemies",
+        "Names in the left text column"
+      ]
+    },
+    {
+      "videoId": "95ls4AKYAUA",
+      "title": "tabularasa2_e32006_onlinewelten.wmv",
+      "url": "https://www.youtube.com/watch?v=95ls4AKYAUA",
+      "uploadDate": "20060707",
+      "durationSeconds": 79,
+      "sourceClass": "pre-release promotional WMV labeled tabularasa2_e32006 from Online Welten; title card says E3 2006. Uploaded July 2006. Not final-live footage.",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file, not the original WMV. Upload date is the YouTube upload date.",
+      "localCopySha256": "cfb44d2d167cf3dbc3ede6cb4668bdc86bb09aef21c7a40267a1042c89f47f3d",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Black title card with red text reading E3 2006 and Tabula Rasa.",
+          "limit": "Title card only."
+        },
+        {
+          "tSeconds": 4,
+          "tier": "observed",
+          "text": "Clean gameplay capture, not a photo of a monitor. An orange-and-teal armored humanoid is low in frame in a running pose while a second figure higher on the rocks is wrapped in a blue energy burst. Third-person camera, round minimap, bottom unit frames.",
+          "limit": "The blue burst is a combat flash in one frame, not a measured ability."
+        },
+        {
+          "tSeconds": 28,
+          "tier": "observed",
+          "text": "Two armored humanoids stand close together in the foreground, one aiming a large rifle toward a shape on the right slope. They are grouped as a pair in front of the camera rather than a single solo avatar.",
+          "limit": "Which body is the camera player versus a squad member is not labeled readably. Names under the unit frames were not transcribed."
+        },
+        {
+          "tSeconds": 44,
+          "tier": "observed",
+          "text": "A large dark multi-legged or winged creature fills the center with a white-blue flash at its base. A smaller figure is in front of it. Red bars sit over parts of the creature. Combat presentation is a big creature effect in a forest, camera pulled back enough to show the whole body.",
+          "limit": "Creature name and whether the flash is the player's attack are not readable."
+        },
+        {
+          "tSeconds": 60,
+          "tier": "observed",
+          "text": "Camera returns behind a blue-purple haired or helmeted figure in the forest, still third person, with other bodies and red bars ahead. Locomotion across the clip is repeated behind-the-character framing while the ground and trees change.",
+          "limit": "No speed measured. 4-second samples miss most of the animation."
+        },
+        {
+          "tSeconds": 76,
+          "tier": "observed",
+          "text": "End card shows www.MMOG-Welten.de.",
+          "limit": "Distributor slate."
+        }
+      ],
+      "neuronetRelevance": "The rifle pair standing together at about 28s is the clearest pre-release picture of two fighters sharing a camera. It can later be compared, only visually, with a follower who stays beside the player in combat. It must not set follow distance, weapon timing, or assist rules for Mira Vey or Tavin Rook.",
+      "preservationUse": "Online Welten E3 2006 reel of third-person forest combat: energy flash, a close pair with a rifle, and a large creature effect, bookended by E3 and MMOG-Welten cards. Appearance boundary only.",
+      "unverified": [
+        "Unit-frame names and any ability names such as a lightning or EMP label",
+        "Which figure is the player",
+        "Creature identity",
+        "Same-take relationship to Sean Neubert's booth rifle clip NtogPR3B9rI",
+        "Original WMV integrity versus this YouTube re-encode"
+      ]
+    },
+    {
+      "videoId": "t7aX-sACBTw",
+      "title": "tabularasa3_e32006_onlinewelten.wmv",
+      "url": "https://www.youtube.com/watch?v=t7aX-sACBTw",
+      "uploadDate": "20060707",
+      "durationSeconds": 46,
+      "sourceClass": "pre-release promotional WMV labeled tabularasa3_e32006 from Online Welten; title card says E3 2006. Uploaded July 2006. Not final-live footage.",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p progressive mp4) via Brave cookies and the node JS challenge solver; ffmpeg one frame every 4s into a timestamped contact sheet plus selected stills. sha256 is of that 360p file, not the original WMV. Upload date is the YouTube upload date.",
+      "localCopySha256": "f28336cd4f44998e14bf0d6c8d906d4633432669760ddf2df9ae30505d581cf0",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Black title card with red text reading E3 2006 and Tabula Rasa.",
+          "limit": "Title card only."
+        },
+        {
+          "tSeconds": 4,
+          "tier": "observed",
+          "text": "Forest floor, third person behind a yellow-helmeted figure. Two nameplated bodies are ahead near a large green translucent dome. Red and blue bars are over those bodies. Bottom unit frames and a minimap are drawn.",
+          "limit": "Name text under the bars is below reliable reading. The dome is the same class of green bubble seen in the booth photo jNxEdYl6fr4; same take is not established."
+        },
+        {
+          "tSeconds": 20,
+          "tier": "observed",
+          "text": "The yellow-helmeted figure is still the camera anchor, now beside a pale crouching or fallen body and a small mechanical or creature shape, with green triangular markers farther out. The group is tight around the camera character.",
+          "limit": "Downed versus idle pose is a single frame."
+        },
+        {
+          "tSeconds": 36,
+          "tier": "observed",
+          "text": "Wide combat shot: thick blue and red beams cross the frame between several figures, with a bright impact flash on the right. The camera has pulled back from the tight over-the-shoulder view so multiple fighters and the beams fit. Bottom unit frames remain.",
+          "limit": "Beam owner, weapon, and travel time were not measured. This is a promo effects shot."
+        },
+        {
+          "tSeconds": 40,
+          "tier": "observed",
+          "text": "End card shows www.MMOG-Welten.de and a short German community line.",
+          "limit": "Slate text beyond the URL was not fully transcribed."
+        }
+      ],
+      "neuronetRelevance": "Several fighters share the frame during the beam exchange, and two bodies stand near a green dome while the camera sits behind one of them. That is the nearest this set comes to a squad-in-combat picture. It is E3 2006 promotional appearance. It must not become follow distance, beam timing, or assist behavior for the neuronet companions.",
+      "preservationUse": "Online Welten E3 2006 clip of third-person forest grouping, a green dome effect, and a wide beam exchange, with the E3 title card and MMOG-Welten end card. Boundary against using the beams or domes as live combat rules.",
+      "unverified": [
+        "Nameplates and unit-frame names",
+        "Whether the green dome is Logos, as the separate booth upload jNxEdYl6fr4 claims for its own similar image",
+        "Who fires the blue and red beams",
+        "Original WMV versus this re-encode"
+      ]
+    }
+  ]
+}

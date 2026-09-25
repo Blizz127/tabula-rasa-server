@@ -1,0 +1,370 @@
+{
+  "worker": "soundtrack",
+  "videos": [
+    {
+      "videoId": "x_ujwmKj8jA",
+      "title": "Tabula Rasa - Foreas (Dramatic)",
+      "url": "https://www.youtube.com/watch?v=x_ujwmKj8jA",
+      "uploadDate": "2010-02-22",
+      "durationSeconds": 165,
+      "sourceClass": "music-only",
+      "reviewMethod": "yt-dlp 2026.08.19 format 18 (360p H.264, AAC stereo 44.1 kHz about 128 kbps) saved at /home/blizz/.cache/rasa-footage/x_ujwmKj8jA.mp4. ffmpeg stills at 1s, 55s, 82s, 110s, and 163s; first-versus-later PSNR about 40. Middle 18s showspectrumpic. silencedetect noise=-35dB d=0.4. Description from the info JSON. Not every frame was viewed.",
+      "localCopySha256": "894eedcc431bb95ea713070afc548a478956f5caa3060005241db7ed4cdafa47",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Letterboxed cinematic still of a figure at a glowing circular interface facing a machine in a forest. The same still is held at 82s. No HUD, cursor, or camera motion.",
+          "limit": "A held picture is not a gameplay capture. YouTube AAC is a re-encode, not a client music file."
+        },
+        {
+          "tSeconds": 82,
+          "tier": "observed",
+          "text": "Middle spectrogram is continuous harmonic music with a steady pulse. Silence appears only as about 1.5s at the end. No speech or combat transients in that window.",
+          "limit": "One 18s window plus end-silence detection. The cue name Foreas (Dramatic) is the upload title, not a client id."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Uploader-named Foreas music variation only. Posted 2010-02-22, after the February 2009 shutdown. Description points at megaupload.com/?d=ZTPRWLEV as an all-tracks pack; that file was not retrieved.",
+      "unverified": [
+        "Whether this audio is the client Foreas dramatic cue or an edit",
+        "Which zone or build used it",
+        "Contents of the Megaupload pack"
+      ]
+    },
+    {
+      "videoId": "jhw3kEPHZv8",
+      "title": "Tabula Rasa - Valverde Plateau",
+      "url": "https://www.youtube.com/watch?v=jhw3kEPHZv8",
+      "uploadDate": "2010-02-21",
+      "durationSeconds": 153,
+      "sourceClass": "music-only",
+      "reviewMethod": "Same format-18 download and method as the other Klintonix items. Stills at 1s, 51s, 76s, 102s, and 151s; first-versus-later PSNR about 40. Middle 18s spectrogram. No silence under -35 dB for 0.4s.",
+      "localCopySha256": "4117a8c4bbe3c10ff9dd992fda096f1af786cb8f76bc6f6afaf704f2898ab1ba",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held letterboxed still of a robed figure with a purple-flamed staff beside sandbags, a second armored figure, pines, and water. A small corner mark is present. No HUD.",
+          "limit": "Still art or a frozen screenshot, not play. Upload date is not a recording date."
+        },
+        {
+          "tSeconds": 76,
+          "tier": "observed",
+          "text": "Spectrogram is sustained harmonic music. Description says only 'Valverde Plateau track.'",
+          "limit": "The place name is the uploader's label. Nothing on screen shows the Valverde map or a play session."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Post-shutdown (2010-02-21) music upload under a Valverde Plateau title. Not proof of final-live zone music.",
+      "unverified": [
+        "Client music id",
+        "That this cue played on Valverde Plateau",
+        "Client build"
+      ]
+    },
+    {
+      "videoId": "BMUI6Akuv9E",
+      "title": "Tabula Rasa - Foreas (Action)",
+      "url": "https://www.youtube.com/watch?v=BMUI6Akuv9E",
+      "uploadDate": "2010-02-21",
+      "durationSeconds": 206,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 68s, 103s, 137s, and 204s; first-versus-later PSNR about 42. Middle 18s spectrogram. silencedetect finds about 8.7s of trailing silence from 197.4s.",
+      "localCopySha256": "0407c32f07b782c6b79cd78fe842e3149e3b67cc2e05e9809af4e4125c6cad7b",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Static winged Tabula Rasa logo on a plain gray field, held across the sampled stills. No gameplay image.",
+          "limit": "Logo card only."
+        },
+        {
+          "tSeconds": 103,
+          "tier": "observed",
+          "text": "Spectrogram is rhythmic harmonic music. Description calls it one Foreas track variation. Audio continues until a silent tail.",
+          "limit": "Uploader wording. Not a client filename. Post-shutdown upload."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only Foreas variation label from Klintonix, 2010-02-21. Not final-live proof.",
+      "unverified": [
+        "Client cue id",
+        "How this variation differs from Foreas (Dramatic) and Foreas (Final) inside the client"
+      ]
+    },
+    {
+      "videoId": "iNtYRWv_Fs0",
+      "title": "Tabula Rasa - Foreas (Final)",
+      "url": "https://www.youtube.com/watch?v=iNtYRWv_Fs0",
+      "uploadDate": "2010-02-21",
+      "durationSeconds": 197,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 65s, 131s, and 195s; first-versus-later PSNR about 41. Middle 18s spectrogram. silencedetect: near-silence from about 0.16s to 2.4s, then short gaps near 186s and 196s.",
+      "localCopySha256": "04330a2c0ef5969f7cb6e6c14fec5b2869bac9cb2f3f6b5220d2fc69f7c73846",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held promotional wallpaper: a rune-lit tree, a machine, and a calendar grid. The top-left text reads tabularasavault.ign.com. No game HUD.",
+          "limit": "IGN vault wallpaper, not a client screen. The calendar is part of the wallpaper, not a recording date."
+        },
+        {
+          "tSeconds": 98,
+          "tier": "observed",
+          "text": "After the quiet open, the middle spectrogram is sustained harmonic music. Description calls this the Final variation of the Foreas track.",
+          "limit": "Variation name is uploader text. Upload is 2010-02-21, after shutdown."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music bed under a static IGN wallpaper, titled Foreas (Final). Not a play capture and not final-live proof.",
+      "unverified": [
+        "Client cue id",
+        "That 'Final' is a retail music state rather than the uploader's name"
+      ]
+    },
+    {
+      "videoId": "2_knJpz5QbU",
+      "title": "Tabula Rasa - Main Menu",
+      "url": "https://www.youtube.com/watch?v=2_knJpz5QbU",
+      "uploadDate": "2010-02-21",
+      "durationSeconds": 86,
+      "sourceClass": "menu-audio",
+      "reviewMethod": "Format-18 download. Stills at 1s, 28s, 57s, and 84s; first-versus-later PSNR about 42. Middle 18s spectrogram. Short silence only in the last 1.3s.",
+      "localCopySha256": "9fff06cc4a9ee8ba81965c0a3a3362b3c2f96e42699ecd7930903f8567105dd8",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held product photograph of a Richard Garriott's Tabula Rasa collector-style box, discs, a field guide, and a letter. The login or main-menu UI is not on screen.",
+          "limit": "The picture does not show the menu."
+        },
+        {
+          "tSeconds": 43,
+          "tier": "inferred",
+          "text": "Description says 'Track from the TR login screen.' The middle spectrogram is continuous harmonic music, consistent with a music rip rather than UI clicks.",
+          "limit": "Login-screen identity is the uploader's sentence. The file is a 2010-02-22-era YouTube AAC re-encode posted 2010-02-21, after shutdown. No build is named."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Candidate login or main-menu music reference only, and only as an unverified uploader label. The video is not a menu capture.",
+      "unverified": [
+        "That this recording is the retail login cue",
+        "Client music id and which menu revision it belonged to"
+      ]
+    },
+    {
+      "videoId": "wg4qYJpOJ-M",
+      "title": "Tabula Rasa - Benevolent",
+      "url": "https://www.youtube.com/watch?v=wg4qYJpOJ-M",
+      "uploadDate": "2010-02-21",
+      "durationSeconds": 241,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 45s, 80s, 105s, 135s, 160s, 195s, and 239s. Held slides compare at PSNR about 45 to 49 (45s vs 80s, 100s vs 110s, 135s vs 160s). First frame versus later slides is PSNR about 16, so the picture does change between slides. Middle 18s spectrogram. No silence under -35 dB for 0.4s.",
+      "localCopySha256": "0e72985e2b9a24d5a44c6559a74f99c61eeb28c0a7e1db130b880af524d36ed3",
+      "observations": [
+        {
+          "tSeconds": 105,
+          "tier": "observed",
+          "text": "Slideshow of held images, not a moving camera. Sampled cards include an Arieki concept painting (1s), a waterfall settlement (45s and 80s), a first-person still with a weapon and three glowing emblems (105s, unchanged at 100s and 110s), a tent and a staff figure (135s and 160s), a figure facing a blue humanoid projection (195s), and the winged logo (239s). No HUD, names, or combat readout.",
+          "limit": "Held screenshots and concept art. A weapon in one still is not a combat session."
+        },
+        {
+          "tSeconds": 120,
+          "tier": "observed",
+          "text": "Spectrogram is continuous harmonic music. Description offers megaupload.com/?d=ZTPRWLEV as a 293MB all-soundtracks pack.",
+          "limit": "Pack was not downloaded. Benevolent is the title, not a verified alignment or zone rule."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Post-shutdown music upload with a still slideshow. Useful only as an uploader cue name. Not gameplay and not final-live proof.",
+      "unverified": [
+        "Client cue id",
+        "What Benevolent names in the client",
+        "Map identity of the held screenshots",
+        "Megaupload pack contents"
+      ]
+    },
+    {
+      "videoId": "aOtqXKj69Yc",
+      "title": "Tabula Rasa - AFS Outpost",
+      "url": "https://www.youtube.com/watch?v=aOtqXKj69Yc",
+      "uploadDate": "2008-09-15",
+      "durationSeconds": 138,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download, 480x360 in the info JSON. Stills at 1s, 46s, 92s, and 136s; first-versus-later PSNR about 40. Middle 18s spectrogram. Trailing silence about 2.8s from 135.1s.",
+      "localCopySha256": "cedf5cfe35142edf8a81d99fc3856adc324ea2b85adc8fe6578106f00a7633c2",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held promo render of a goggled woman with a pistol and the winged logo. No HUD or environment.",
+          "limit": "Key art, not an outpost capture."
+        },
+        {
+          "tSeconds": 69,
+          "tier": "observed",
+          "text": "Spectrogram is sustained harmonic music. Description is 'Tabula Rasa - AFS Outpost - Soundtrack.' No PTS, beta, or E3 wording.",
+          "limit": "Upload date 2008-09-15 is during commercial service and is not a recording date or a client build. The outpost assignment is the title only."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only upload named AFS Outpost. Not a picture of an outpost and not proof of which cue the live zone used.",
+      "unverified": [
+        "Client music id",
+        "That this cue played at an AFS outpost",
+        "Recording date and client revision"
+      ]
+    },
+    {
+      "videoId": "RGWKETi_1bw",
+      "title": "Tabula Rasa - AFS Base",
+      "url": "https://www.youtube.com/watch?v=RGWKETi_1bw",
+      "uploadDate": "2008-09-15",
+      "durationSeconds": 132,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 44s, 88s, and 130s; first-versus-later PSNR about 42. Middle 18s spectrogram. Opening silence about 1.2s.",
+      "localCopySha256": "ee546fcbdeabd299062df6cb4228993399eab32f20a68361c9e378309153e5a3",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held winged logo card. A 2007 NCSoft copyright line is visible in the corner. No base geometry and no HUD.",
+          "limit": "The 2007 line dates the logo artwork credit, not this upload or a music session."
+        },
+        {
+          "tSeconds": 66,
+          "tier": "observed",
+          "text": "Spectrogram is harmonic music. Description is 'Tabula Rasa - AFS Base - Soundtrack.'",
+          "limit": "Title is not a verified base music assignment. Upload 2008-09-15 is not a recording date."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only logo-card upload named AFS Base. No server or spawn evidence.",
+      "unverified": [
+        "Client music id",
+        "Association with a specific AFS base map"
+      ]
+    },
+    {
+      "videoId": "H2vuIiIamU8",
+      "title": "Tabula Rasa - Forean",
+      "url": "https://www.youtube.com/watch?v=H2vuIiIamU8",
+      "uploadDate": "2008-09-15",
+      "durationSeconds": 212,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 70s, 141s, and 210s. Eight grayscale samples across the file share one hash, and first-versus-later PSNR is about 39.7. Middle 18s spectrogram. Silence only after about 206s.",
+      "localCopySha256": "b68f08bf1306980653b2b7e864f9a79d6862555b8746907940956428a986c0b3",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "One held promo render of three armed human figures and the winged logo for the whole file. No Forean character, no HUD.",
+          "limit": "Key art. The title Forean is not shown as a creature or place."
+        },
+        {
+          "tSeconds": 106,
+          "tier": "observed",
+          "text": "Spectrogram is continuous harmonic music. Description is 'Tabula Rasa - Forean - Soundtrack.'",
+          "limit": "No client id. Upload 2008-09-15 is not a recording date. No PTS, beta, or E3 claim."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only file under a Forean title. Not footage of Forean NPCs or camps.",
+      "unverified": [
+        "Client music id",
+        "Whether the cue is zone music, combat music, or another category"
+      ]
+    },
+    {
+      "videoId": "Jvug1Bn2YYE",
+      "title": "Tabula Rasa - Forean Encampment",
+      "url": "https://www.youtube.com/watch?v=Jvug1Bn2YYE",
+      "uploadDate": "2008-09-15",
+      "durationSeconds": 139,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 46s, 92s, and 137s; first-versus-later PSNR about 42. Middle 18s spectrogram. Silence about 0.7s at the start and about 5.6s from 133.0s.",
+      "localCopySha256": "0b50949c8dc62683dddac599e47bdb6011408d690ef1e6fe3d5751e36ac8b8c1",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held promo render of a tall armored non-human figure with a bladed staff, the winged logo, and www.RGTR.com. Corner copyright reads 2007 NCSoft. No camp and no HUD.",
+          "limit": "Marketing art. RGTR.com and the 2007 line are printed on the card; they do not date the audio recording."
+        },
+        {
+          "tSeconds": 70,
+          "tier": "observed",
+          "text": "Spectrogram is sustained harmonic music. Description is 'Tabula Rasa - Forean Encampment - Soundtrack.'",
+          "limit": "Encampment is the upload title only."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only upload. It does not show a Forean encampment or any spawn behavior.",
+      "unverified": [
+        "Client music id",
+        "Any link between this audio and encampment content"
+      ]
+    },
+    {
+      "videoId": "N6NMlvij7SQ",
+      "title": "Tabula Rasa - Cormans",
+      "url": "https://www.youtube.com/watch?v=N6NMlvij7SQ",
+      "uploadDate": "2008-09-15",
+      "durationSeconds": 167,
+      "sourceClass": "music-only",
+      "reviewMethod": "Format-18 download. Stills at 1s, 55s, 111s, and 165s; first-versus-later PSNR about 38.7. Middle 18s spectrogram. Opening silence about 0.5s.",
+      "localCopySha256": "12b6a02706d66437f106f26e3e51f0773f8cc5ce76ca94f9f872fe09b873b4ab",
+      "observations": [
+        {
+          "tSeconds": 1,
+          "tier": "observed",
+          "text": "Held logo over a split landscape painting, green waterfall on one side and lava on the other. No creatures, HUD, or play.",
+          "limit": "Concept-style card, not a Corman encounter."
+        },
+        {
+          "tSeconds": 83,
+          "tier": "observed",
+          "text": "Spectrogram is dense sustained harmonic music. Description is 'Tabula Rasa - Cormans - Soundtrack.'",
+          "limit": "No client id. Upload 2008-09-15 is not a recording date."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Music-only upload named Cormans. Not creature, spawn, or combat evidence.",
+      "unverified": [
+        "Client music id",
+        "Whether the cue is tied to Corman content"
+      ]
+    },
+    {
+      "videoId": "Z9fn31_ht_I",
+      "title": "Tabula Rasa - All Game's Soundtracks [DOWNLOAD]",
+      "url": "https://www.youtube.com/watch?v=Z9fn31_ht_I",
+      "uploadDate": "2013-03-13",
+      "durationSeconds": 37,
+      "sourceClass": "download-promo",
+      "reviewMethod": "Format-18 download. Stills at 1s, 12s, 24s, and 35s. Frame-to-frame PSNR about 10, so these are different cards. A spectrogram of the file from 9s was read. No silence under -35 dB for 0.4s. Description link was not opened.",
+      "localCopySha256": "f69ab674f7edb45d20e552165dcd59ff862b6b243f9e5f67e855211bc9c524b4",
+      "observations": [
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "Short card sequence: a Klintonix logo, a logo card reading Do you miss \"Tabula Rasa\" soundtrack?, a card telling the viewer to use the description link to download all soundtracks extracted from the game's database, and an end card reading Rate. Comment. Enjoy! :). No gameplay.",
+          "limit": "The database-extraction sentence is on-screen advertising, not a checked file list."
+        },
+        {
+          "tSeconds": 18,
+          "tier": "observed",
+          "text": "A music bed plays under the cards. The description link is https://www.box.com/s/n939ibijs9jeet9h3vns. That archive was not downloaded.",
+          "limit": "37 seconds cannot be the full soundtrack set. Posted 2013-03-13, years after shutdown. No PTS, beta, or E3 claim."
+        }
+      ],
+      "neuronetRelevance": "No bot or server-mechanics evidence. No companions. Do not use for movement, combat, XP, or quest tuning.",
+      "preservationUse": "Download advertisement only. It does not contain the soundtrack files and is not final-live evidence.",
+      "unverified": [
+        "Whether the Box archive exists or matches client audio",
+        "Which cues the archive claimed to include"
+      ]
+    }
+  ]
+}
