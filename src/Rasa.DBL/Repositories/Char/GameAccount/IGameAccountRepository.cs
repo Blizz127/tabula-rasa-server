@@ -1,4 +1,5 @@
 using System.Net;
+using System.Collections.Generic;
 
 namespace Rasa.Repositories.Char.GameAccount
 {
@@ -33,5 +34,10 @@ namespace Rasa.Repositories.Char.GameAccount
 
         // Staged: committed by the unit of work.
         void StageCanSkipBootcamp(uint id, bool canSkip);
+
+        IReadOnlyList<byte> GetUnlockedRaces(uint id);
+
+        // Idempotent; commits with the mission turn-in through the unit of work.
+        void StageRaceUnlock(uint id, byte raceId);
     }
 }

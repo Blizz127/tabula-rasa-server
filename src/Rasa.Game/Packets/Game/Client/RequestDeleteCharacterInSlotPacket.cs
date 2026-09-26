@@ -1,4 +1,6 @@
-﻿namespace Rasa.Packets.Game.Client
+﻿using System.IO;
+
+namespace Rasa.Packets.Game.Client
 {
     using Data;
     using Memory;
@@ -11,8 +13,9 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
-            Slot = (byte) pr.ReadUInt();
+            if (pr.ReadTuple() != 1)
+                throw new InvalidDataException("Character deletion requires one slot field.");
+            Slot = checked((byte)pr.ReadUInt());
         }
     }
 }

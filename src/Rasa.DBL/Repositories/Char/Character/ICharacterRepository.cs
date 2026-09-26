@@ -34,7 +34,7 @@ namespace Rasa.Repositories.Char.Character
         void UpdateCharacterActiveWeapon(uint id, byte activeWeapon);
         void UpdateCharacterName(uint id, string name);
 
-        /// <summary>Whether another character already has this name, matched case-insensitively.</summary>
-        bool IsCharacterNameTaken(string name, uint exceptCharacterId);
+        /// <summary>Whether another character in this account has this first name, matched case-insensitively.</summary>
+        bool IsCharacterNameTaken(string name, uint exceptCharacterId, uint accountId);
     }
 }

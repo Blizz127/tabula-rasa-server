@@ -1,0 +1,112 @@
+{
+  "schema": "rasa.implementation-verification.v1",
+  "date": "2026-09-22",
+  "scope": "Opening admission, clothing, practice dummy reconstruction",
+  "original_live_fidelity_proof": false,
+  "full_suite": {
+    "leaf_tests": 1232,
+    "passed": 1232,
+    "failed": 0,
+    "skipped": 0,
+    "elapsed_minutes": 5.0007,
+    "trx_entries_including_data_parents": 1366,
+    "sdk": "5.0.408",
+    "runtime": "5.0.17",
+    "network": "none",
+    "production_mutations": false
+  },
+  "regression_baseline": {
+    "filter": "RecruitClothingTests",
+    "old_implementation_failed": 4,
+    "old_implementation_passed": 0
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/rasa-retail-20260922-opening-snapshot.json",
+      "sha256": "f832b9e2786731a8279976c0a34e3d74ee5f81ed373f64d210090dd33f677c0c"
+    },
+    {
+      "path": "/tmp/rasa-retail-20260922-opening-final.log",
+      "sha256": "e457c9b845f0385b6eee9696af069bc86ec2b2ce594d370a4dd3810937066c3a"
+    },
+    {
+      "path": "/tmp/rasa-retail-20260922-opening-final.trx",
+      "sha256": "d7254caf3bfd46826f344b33a08161ad96afd7f11c072924ee66fa416fff1a79"
+    },
+    {
+      "path": "/tmp/rasa-retail-20260922-clothing-before.log",
+      "sha256": "4f020dcb95e053a5358c433d617dbeea7fe29673871f4d383b147aace06c61f4"
+    }
+  ],
+  "runtime_retest": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-04/admission-retest.json",
+  "limits": [
+    "Test counts validate the snapshot before the subsequent first-spawn heading migration.",
+    "Original client under isolated Wine confirms admission behavior, not original-live server implementation.",
+    "Sound disabled; tuple-argument startup error remains unresolved."
+  ],
+  "subsequent_heading_migration": {
+    "passed": 97,
+    "failed": 0,
+    "skipped": 0,
+    "elapsed_minutes": 2.8133,
+    "coverage": [
+      "Full SQLite migration Up/Down with every location field compared",
+      "Both provider migration operations and frozen target model",
+      "Provider seed parity",
+      "New character creation, admission, clothing and bootcamp opening"
+    ],
+    "artifacts": [
+      {
+        "path": "/tmp/rasa-retail-20260922-heading-snapshot.json",
+        "sha256": "2ecbc37b8e35bbcae31e105fee7f52ec76154e1b5d6aa51d6ed79ce839fab1d2"
+      },
+      {
+        "path": "/tmp/rasa-retail-20260922-heading-final.log",
+        "sha256": "285a5923f31f880dc06991b08763fb455bbb0c6dceecedaf38b919f1f16cb6fc"
+      },
+      {
+        "path": "/tmp/rasa-retail-20260922-heading-final.trx",
+        "sha256": "c0c2e8c34e7d9f4601ead2b656822d0bd8e52a5b51af02d5439898c3a6c966f3"
+      }
+    ]
+  },
+  "fresh_character_heading": {
+    "source": "Original1.16.5.0 client against isolated emulator, not original-live capture",
+    "character": "Borin Vanguard",
+    "slot": 2,
+    "stored_yaw": 2.879793,
+    "diagnostic_character_edits": false,
+    "finding": "Created through existing-family UI after migration; first Initiation offer renders facing down causeway. Prior character Alden retains normal logout position.",
+    "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-05",
+    "artifacts": [
+      {
+        "file": "06-borin-selected.png",
+        "sha256": "a3436d8d02ac93f01389bcc606274e4c24178f7faaf4b7b1905ce5255e7ef18d"
+      },
+      {
+        "file": "07-fresh-first-world.png",
+        "sha256": "5df3b0f4f68421de5f671511606a29f042ebab25c62ea6644c3aff833796bfb2"
+      },
+      {
+        "file": "new-character-state.json",
+        "sha256": "6a33922ed7d6d7f335fecd89db4cb816e1b77e88f73aec4549f85ece72c57c31"
+      },
+      {
+        "file": "migrated-world-state.json",
+        "sha256": "8b45cac06fe917f156c5d3f84551e5031f04d5302bbeb540147046880e873241"
+      },
+      {
+        "file": "game.log",
+        "sha256": "4221fac9a99f2fd9d552b5152725b379ea1c19b4b05e03c06bb8a59041c555bc"
+      },
+      {
+        "file": "tabula_rasa.log",
+        "sha256": "e852108072ddbd7ba98a762c83dc71ec4079dc748a06182987ef12b348b7dd99"
+      },
+      {
+        "file": "status.json",
+        "sha256": "0a4a8b1bbb4971e08643d7dcd7245b39bdc8fe4f85ac4de5f113eba3b9f7f4bd"
+      }
+    ]
+  }
+}

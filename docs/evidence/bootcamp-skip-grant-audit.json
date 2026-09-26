@@ -1,0 +1,70 @@
+{
+  "schema": "rasa.bootcamp-skip-grant-audit.v1",
+  "research_date": "2026-09-22",
+  "scope": "Final-live rebuilt tutorial skip; no pre-Deployment11 reward analogue",
+  "runtime_changes": [],
+  "sources": [
+    {
+      "id": "official-live-d11.6",
+      "tier": "original",
+      "publication_date": "2008-08-15",
+      "archive_capture": "20080828140209",
+      "original_url": "http://www.rgtr.com/news/patch_notes/deployment_116_8152008.html",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_116_8152008.html@@20080828140209.html",
+      "sha256": "e36041158a3d4603eb7f87d9855cb49ba96137c17d9c1ce5b2d0dbb69347cb59",
+      "location": "UI and Misc changes: account-wide tutorial bypass paragraph; text derivative20260915-aliadas-hub/web/wayback/deployments/deployment_116_8152008.html.txt:111",
+      "establishes": "Completing Boot Camp on one character allows other new account characters to bypass from selection",
+      "does_not_establish": "Skip level, XP, gear, ammo, currency, Logos, mission or title grants",
+      "confidence": "high for official wording; original server grant implementation unavailable"
+    },
+    {
+      "id": "original-prompt1293",
+      "tier": "original",
+      "client_version": "1.16.5.0 compatibility artifact; exact shutdown revision unverified",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/game-generated-client-language-english-playermessagelanguage.pyo",
+      "sha256": "b9b27bed2053b422d29069e1a8e97e26bba636512ae328d684bef16eae63fba8",
+      "location": "lookup[(1293,1)] and lookup[(1293,2)], bytecode41728-41762",
+      "value": "Would you like to skip Bootcamp and go straight to Wilderness?",
+      "establishes": "Wilderness destination context",
+      "does_not_establish": "Exact arrival position or any reward",
+      "confidence": "high"
+    }
+  ],
+  "bounded_negative_search": {
+    "decoded_root": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded",
+    "files": "*language_english* (43 JSON or gzip JSON files)",
+    "match_expression": "(?i)(skip.{0,45}(boot|tutorial)|(boot|tutorial).{0,45}skip|bypass.{0,40}(boot|tutorial))",
+    "method": "Recursively inspect decoded string values; data files are read, never executed",
+    "matches": "Only player message1293, variants1/2 in assignment and final-value views",
+    "limitation": "Absence of matching text is not evidence of no server-side grants; this scan does not enumerate all possible grant data representations"
+  },
+  "web_queries": [
+    "\"Tabula Rasa\" \"skip\" \"boot camp\" \"2008\"",
+    "\"Tabula Rasa\" \"bootcamp\" \"skip\" \"level\"",
+    "\"Tabula Rasa\" \"bypass\" \"Deployment 11\"",
+    "\"Tabula Rasa\" \"skip tutorial\"",
+    "\"Tabula Rasa\" \"tutorial\" \"skip\" \"Deployment 11\"",
+    "\"tabula rasa\" \"skip\" \"tutorial\" site:youtube.com"
+  ],
+  "excluded_sources": [
+    {
+      "url": "https://forums.mmorpg.com/discussion/158333/tabula-rasa-review-part-one-levels-1-25/p2",
+      "date": "2007-12",
+      "reason": "NPC-mediated level4.3 bypass account predates rebuilt tutorial"
+    },
+    {
+      "url": "https://arstechnica.com/civis/threads/tabula-rasa-who-is-playing.138412/page-6",
+      "date": "2008-01-28",
+      "location": "posts223-224",
+      "reason": "Level4 and quest-weapon accounts explicitly describe old arrival NPC bypass"
+    },
+    {
+      "url": "https://forums.mmorpg.com/discussion/152413/the-ultimate-tabula-rasa-review-preview-guide",
+      "date": "2007-10",
+      "reason": "Beta tutorial review; no final-live applicability"
+    }
+  ],
+  "unresolved_grants": ["level", "experience", "equipment", "loaded_ammo", "reserve_ammo", "currency", "Logos", "training_points", "attribute_points", "missions", "titles", "hospital_unlocks", "waypoint_unlocks"],
+  "next_acquisition": "Continuous post-D11 original-service selection skip prompt to first Wilderness state, including inventory/tooltips, character/Logos, mission/title panels before play; alternatively an original server packet capture of that transition",
+  "client_harness_limit": "Running the original client against current emulator verifies compatibility, not lost original server reward amounts"
+}

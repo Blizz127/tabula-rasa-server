@@ -1,0 +1,58 @@
+{
+  "target": "final live Tabula Rasa before shutdown",
+  "research_date": "2026-09-22",
+  "compatibility_client": "1.16.5.0; exact shutdown revision unverified",
+  "sources": {
+    "messages": {
+      "kind": "original_client",
+      "member": "generated/client/language/english/playermessagelanguage.pyo",
+      "sha256": "b9b27bed2053b422d29069e1a8e97e26bba636512ae328d684bef16eae63fba8",
+      "compiled_epoch": 1234238147
+    },
+    "failure_mapping": {
+      "kind": "original_client",
+      "member": "client/clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "method": "Recv_UserCreationFailed",
+      "location": "creation error mapping, bytecode offsets 28-210"
+    },
+    "creation_ui": {
+      "kind": "original_client",
+      "member": "client/ui/charactercreationwindow.pyo",
+      "sha256": "5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502",
+      "location": "_CreateCharacter, original lines708-711 offsets171-216"
+    },
+    "scope_report": {
+      "kind": "contemporary_firsthand_report",
+      "url": "https://forums.mmorpg.com/discussion/157923/pegasus-server-problem",
+      "author": "Rayx0r",
+      "date": "2007-12",
+      "location": "comment beginning just gonna throw this out there; surname uniqueness and John Aelric example",
+      "read_date": "2026-09-22",
+      "limitation": "release-era report; final-live server scope not independently captured; raw download403"
+    },
+    "last_name_revision": {
+      "kind": "contemporary_secondary_wiki",
+      "collection": "https://archive.org/details/wiki-tabularasafandomcom",
+      "title": "Last Name",
+      "revision_id": 35315,
+      "date": "2008-10-23T03:42:45Z",
+      "location": "first paragraph, delete all characters to change family",
+      "local_record": "/home/blizz/backups/rasa-net/research/20260922-character-names/last-name-historical.json"
+    }
+  },
+  "rules": [
+    { "field": "minimum_length", "value": 3, "tier": "original", "source": "messages", "location": "message134, assignment offset2972", "confidence": "high" },
+    { "field": "maximum_length", "value": 20, "tier": "original", "source": "messages", "location": "message133, assignment offset2936", "confidence": "high" },
+    { "field": "capital_initial", "value": true, "tier": "original", "source": "messages", "location": "message135, assignment offset3008", "confidence": "high" },
+    { "field": "letters_only", "value": true, "tier": "original", "source": "messages", "location": "message135, assignment offset3008", "confidence": "high" },
+    { "field": "maximum_consecutive_equal_letters", "value": 2, "tier": "original", "source": "messages", "location": "message135, assignment offset3008", "confidence": "high" },
+    { "field": "unicode_and_case_algorithm", "value": "UTF16 length, .NET uppercase/letter classification, invariant case-insensitive repetition", "tier": "inferred", "source": "messages", "location": "message132 encoding and message135 format text", "confidence": "medium", "unverified": "original native Unicode categories, normalization and supplementary characters" },
+    { "field": "first_name_unique_scope", "value": "account_family", "tier": "inferred", "source": "scope_report", "confidence": "medium", "unverified": "final-live server lookup scope and deleted-name reservation" },
+    { "field": "name_lookup_case_sensitive", "value": false, "tier": "inferred", "source": "creation_ui", "location": "names lowercased and capitalized before send; existing family lookup", "confidence": "medium", "unverified": "original locale and accent collation; implementation uses provider-independent OrdinalIgnoreCase" },
+    { "field": "family_change_requires_no_characters", "value": true, "tier": "inferred", "source": "last_name_revision", "confidence": "medium", "unverified": "final-live server-only policy changes" },
+    { "field": "duplicate_first_name_error", "value": 7, "tier": "inferred", "source": "failure_mapping", "location": "offset104-114 maps7 to PM_NAME_IN_USE", "confidence": "medium", "unverified": "exact original duplicate-request response among reserved/in-use errors" }
+  ],
+  "gaps": ["Original reserved/profanity word list", "Final-live duplicate-name capture", "Original Unicode normalization/collation", "Original deleted-name reservation lifetime"],
+  "implementation_only": ["Read persisted family state within creation transaction", "Retain existing names without rewriting", "Single-process creation lock; no cross-process uniqueness claim"]
+}

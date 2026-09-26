@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "tier": "original",
+  "version": "Compatibility client 1.16.5.0; exact shutdown revision unverified",
+  "artifacts": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/ui-flow",
+  "sources": [
+    {
+      "member": "client/ui/characterselectionwindow.pyo",
+      "sha256": "1846a19a9577aa91982600b9cd81eaa5ef3472a9edd48eeb354abcf7571992da",
+      "compiled_timestamp": 1234238123
+    },
+    {
+      "member": "client/ui/legalwindow.pyo",
+      "sha256": "6b4188891036e664a63eda43d1b70b3c47567749d24cc80b224c9a12f784d6e7",
+      "compiled_timestamp": 1234238125
+    },
+    {
+      "member": "client/ui/charactercreationwindow.pyo",
+      "sha256": "5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502",
+      "compiled_timestamp": 1234238123
+    },
+    {
+      "member": "client/main.pyo",
+      "sha256": "569bbc43f74f5cbfd04ddfe08224d8e90004ba7128ff1d9f2a762bea20c64f08",
+      "compiled_timestamp": 1234238109
+    },
+    {
+      "member": "clientbootstrap.pyo",
+      "sha256": "18943611859bcf503549a0f51a3e2a9bed9ef00b1966598c656199e80370666d",
+      "compiled_timestamp": 1234238108
+    },
+    {
+      "member": "client/inputstate/__init__.pyo",
+      "sha256": "9e9fb48be783dd803b170ffb8d3e736b4cb4da8961638c9892786d45c3661a39",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstate/intrologo.pyo",
+      "sha256": "b52f7c7715d8164531889433328a490b27af5852df59d2776ed0b9d945952a5c",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstate/intromovie.pyo",
+      "sha256": "4b5ea17658272ca25b71482f6a43f7e57e2411aae770acae163e69e4c3958e40",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstate/login.pyo",
+      "sha256": "7e5e75a1b57df9f666c8b3cd06ffc611b601d4350708485767850620e1569626",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/ui/loginwindow.pyo",
+      "sha256": "18ea01264943683031c7b360f2d11a808949be6aec2aaecfeab0fcb534652431",
+      "compiled_timestamp": 1234238125
+    },
+    {
+      "member": "client/ui/serverselectwindow.pyo",
+      "sha256": "196cef05fee22d5dadad04512967ecf1648a865b1a98d6285894a2ace7b68258",
+      "compiled_timestamp": 1234238125
+    },
+    {
+      "member": "client/inputstate/charactercreation.pyo",
+      "sha256": "60a2b2cf3d3ab57dd83ac743954cf1a20e4c07916284c6a914bcf8f0f21cbccc",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstate/characterselection.pyo",
+      "sha256": "15b0e3f85e095f213e09a1d50925faf3d3e51f5b777b5f7afdedf0197043c361",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstaterouter.pyo",
+      "sha256": "cb7400e8b61339e6ca39a4c72cf7cc4448e3f28a3f882c79168a225095f0b17d",
+      "compiled_timestamp": 1234238109
+    },
+    {
+      "member": "client/clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "compiled_timestamp": 1234238108
+    }
+  ],
+  "native_sources": [
+    {
+      "member": "tabula_rasa.exe",
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    },
+    {
+      "member": "python24.dll",
+      "sha256": "0d450c5e2c35ae0b3295b60061dcfc25fbc77701301f05e3dd3dde43ec7d7e73"
+    },
+    {
+      "member": "client.cfg",
+      "sha256": "70ae06233a1228b42c4b24c5f67207e840a53d4487d3a32be6fd4ee32a869437"
+    },
+    {
+      "member": "login.cfg",
+      "sha256": "14816a552e8282c108c3e7df635be1a1883b569375d12f2725742188bea7a15e"
+    }
+  ],
+  "rules": [
+    {
+      "id": "commandline_syntax",
+      "location": "tabula_rasa.exe VA0x401620; space delimiter0x401652; strtok0x401669; equals search0x401680\u20130x40168c",
+      "value": "Space-separated tokens. Each token split at first =; standalone flag maps to empty value. Quoted spaces are not specially handled by this tokenizer.",
+      "artifact": "native-commandline-parser.dis"
+    },
+    {
+      "id": "launch_flags",
+      "location": "native-options.dis/native-option-body.dis; option literals VA0xbc7d8c\u20130xbc7f74",
+      "value": [
+        "/NoPatch",
+        "/NoEULA",
+        "/AuthServer=HOST:PORT",
+        "/autologin=FILE",
+        "/user=USERNAME",
+        "/password=PASSWORD",
+        "/character=NAME",
+        "/server=INTEGER_ID"
+      ]
+    },
+    {
+      "id": "autologin_inputs",
+      "location": "tabula_rasa.exe VA0x401816 (/autologin lookup),0x401a4a (/user),0x401a95 (/password),0x401ae3 (/character),0x401b31 (/server); option writes0x401b8a\u20130x401c74",
+      "value": "Autologin INI section AutoLogin keys User,Password,Character,Server. Direct commandline fields override corresponding file values. Writes Client.AutoLogin.Username/Password/Character/Server."
+    },
+    {
+      "id": "intro_bypass",
+      "location": "client/main.pyo GameLoop line138 offsets53\u2013126",
+      "value": "Client.Developer.SkipToLogin bool (default False) routes directly to login; otherwise enters intrologo. Put original-supported option in client.cfg [Options]."
+    },
+    {
+      "id": "logos_and_movie",
+      "location": "client/inputstate/intrologo.pyo module offsets58\u201367; OnEnterState line14 offsets64\u2013138; OnEndMovie line63 offsets0\u2013173; client/inputstate/intromovie.pyo module offset49",
+      "value": "ncsoft.bik then dglogo.bik then intro.bik only if Client.UserInterface.ShowIntroMovie (default True). Before entering intro it saves False. Esc,Space,Enter CancelMovie on key-down. ShowIntroMovie=False still leaves both logos."
+    },
+    {
+      "id": "login_fields",
+      "location": "client/ui/loginwindow.pyo ShowLogin line73 offsets24\u2013246; OnTextEntered line132 offsets0\u2013120; OnOk line143 offsets0\u2013110",
+      "value": "UsernameEdit and PasswordEdit cleared; remembered username may be restored. OK disabled until both nonempty. OK hides login and calls login.OnLogin(user,password,remember)."
+    },
+    {
+      "id": "auto_credentials",
+      "location": "client/inputstate/login.pyo OnEnterState line86 offsets178\u2013273; ShowLogin line140 offsets0\u201360",
+      "value": "AutoLogin.Username AND Password required to autoconnect. Otherwise manual window uses Client.Networking.LoginUser. Providing just /user does not prefill that manual window."
+    },
+    {
+      "id": "auth_endpoint",
+      "location": "client/inputstate/login.pyo _ConnectToAuth line189 offsets0\u201389",
+      "value": "login.cfg [Auth] Host; default login.playtr.com:2106. Split colon, index0 host/index1 int port, then AuthConnect; port required and literal IPv6 unsupported by this split."
+    },
+    {
+      "id": "login_protocol",
+      "location": "client/inputstate/login.pyo AuthOnConnected line284 offsets0\u201345; AuthRecvLoginOk line327 offsets0\u201312; OnSelectServer line239 offsets0\u201318",
+      "value": "AuthLogin(str(username),str(password),8,1); after LoginOk requests server list mode 1; selection calls AuthSelectServer(serverId)."
+    },
+    {
+      "id": "server_selection",
+      "location": "client/inputstate/login.pyo AuthRecvServerListEx line383 offsets195\u2013224 and253\u2013526",
+      "value": "HostPort 0 defaults 8001. login.cfg [Login] AutoUseLastServer controls last-server choice; Client.AutoLogin.Server != -1 forces selection of that ID. Missing forced ID shows last-server-unavailable dialog, then list."
+    },
+    {
+      "id": "selection_entry",
+      "location": "client/clientmethod.pyo Recv_BeginCharacterSelection line803 offsets40\u2013145; client/inputstate/characterselection.pyo OnEnterState line37",
+      "value": "Sets enabled races and can-skip entitlement, posts has-characters event, enters selection with familyName and initialSlot None. Empty slot Create button calls OnCreateCharacter(selectedIndex+1)."
+    },
+    {
+      "id": "slot_update_order",
+      "location": "client/ui/characterselectionwindow.pyo HandleUpdateCharacterSelectionSlot line201 offsets0\u2013100",
+      "value": "Updates ignored while selection window hidden; None/0 slots ignored. Wire slot is one-based; subtract 1 before pod lookup."
+    },
+    {
+      "id": "family_creation",
+      "location": "client/ui/charactercreationwindow.pyo Show line244 offsets437\u2013535; OnAcceptBtn line391 offsets0\u201367",
+      "value": "Family name entered with character name on creation screen; existing non-None family locks field. None family adds ConfirmSetCharacterLastName / PM_CONFIRM_SET_CHARACTER_LAST_NAME dialog before _CreateCharacter callback. Empty string is not equivalent to None."
+    },
+    {
+      "id": "creation_packets",
+      "location": "client/inputstate/charactercreation.pyo OnCreateCharacter line83 offsets0\u2013141",
+      "value": {
+        "family_None": [
+          "CreateCharacter",
+          "familyName",
+          "characterName",
+          "gender",
+          "height",
+          "appearanceData",
+          "raceId"
+        ],
+        "clone": [
+          "RequestCloneCharacterToSlot",
+          "cloneSlot",
+          "destinationSlot",
+          "characterName",
+          "gender",
+          "height",
+          "appearanceData",
+          "raceId"
+        ],
+        "existing_family": [
+          "RequestCreateCharacterInSlot",
+          "destinationSlot",
+          "familyName",
+          "characterName",
+          "gender",
+          "height",
+          "appearanceData",
+          "raceId"
+        ]
+      }
+    },
+    {
+      "id": "creation_name_format",
+      "location": "client/ui/charactercreationwindow.pyo _CreateCharacter line694 offsets0\u2013218",
+      "value": "DisplayFamilyNameFirst swaps visual field roles. Both names must be nonempty; client lowercases then capitalizes each before sending."
+    },
+    {
+      "id": "autoplay",
+      "location": "client/ui/characterselectionwindow.pyo _AutoSelectCharacter line456 offsets28\u2013127",
+      "value": "Client.AutoLogin.Character compared case-insensitively to pod.GetCharacterName. On match clears option and _PlayCharacter(slot,false), bypassing skip dialog with skip=false."
+    }
+  ],
+  "tuple_error": {
+    "status": "precise native guard recovered; originating runtime caller not proven",
+    "dll": "python24.dll",
+    "PyObject_CallObject_RVA": "0x18ee0",
+    "PyEval_CallObjectWithKeywords_RVA": "0x25e80",
+    "type_check_RVA": "0x25e9a",
+    "error_raise_RVA": "0x25ebb",
+    "error_string_RVA": "0x166084",
+    "predicate": "Argument pointer non-NULL and argument is neither tuple nor tuple subtype. NULL accepted and replaced with empty tuple.",
+    "direct_executable_PyObject_CallObject_sites": [
+      "0x4cce7b",
+      "0x4e6ddc",
+      "0x51f9b5",
+      "0x51fa95",
+      "0x5368bd",
+      "0x5369aa",
+      "0x536c4d",
+      "0x8dc9f0",
+      "0x8dcf44",
+      "0x8f86f1"
+    ],
+    "next_verification": "Read stack when original python24 module base + 0x25ebb executes; no binary patch necessary. Python router uses tuple args; no malformed concrete caller established statically."
+  },
+  "limitations": [
+    "Original archive client.cfg contains prior user configuration; do not classify saved values as retail defaults.",
+    "No extra client launch, binary modification or .NET build performed for this research.",
+    "Screen sequencing and command options recovered statically; root-owned runtime harness still must verify actual transitions."
+  ]
+}

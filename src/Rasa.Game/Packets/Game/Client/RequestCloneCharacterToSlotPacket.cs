@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Rasa.Packets.Game.Client
 {
@@ -24,15 +24,16 @@ namespace Rasa.Packets.Game.Client
 
         public Dictionary<EquipmentData, AppearanceData> AppearanceData { get; } = new Dictionary<EquipmentData, AppearanceData>();
 
-        private static readonly Regex NameRegex = new Regex(@"^\w{3,20}$", RegexOptions.Compiled);
-
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
-            CloneSlotNum = (byte)pr.ReadInt();
-            SlotNum = (byte)pr.ReadInt();
+            // charactercreation.OnCreateCharacter sends exactly these seven fields.
+            if (pr.ReadTuple() != 7)
+                throw new InvalidDataException("Character cloning requires seven fields.");
+
+            CloneSlotNum = checked((byte)pr.ReadInt());
+            SlotNum = checked((byte)pr.ReadInt());
             CharacterName = pr.ReadUnicodeString();
-            Gender = (byte)pr.ReadInt();
+            Gender = checked((byte)pr.ReadInt());
             Scale = pr.ReadDouble();
 
             var appearanceCount = pr.ReadDictionary();
@@ -48,17 +49,18 @@ namespace Rasa.Packets.Game.Client
 
         public CreateCharacterResult Validate()
         {
-            if (CharacterName.Length < 3)
-                return CreateCharacterResult.NameTooShort;
+            var nameResult = CharacterNameRules.Validate(CharacterName);
+            if (nameResult != CreateCharacterResult.Success)
+                return nameResult;
 
-            if (CharacterName.Length > 20)
-                return CreateCharacterResult.NameTooLong;
-
-            if (!NameRegex.IsMatch(CharacterName))
-                return CreateCharacterResult.NameFormatInvalid;
-
-            if (Scale < MinHeight || Scale > MaxHeight)
+            if (!RequestCreateCharacterInSlotPacket.IsValidHeight(Scale))
                 return CreateCharacterResult.InvalidCharacterHeight;
+
+            if (RaceId < Race.Human || RaceId > Race.Thrax)
+                return CreateCharacterResult.CharacterCreationInvalidRace;
+
+            if (Gender > 1)
+                return CreateCharacterResult.InvalidEncoding;
 
             return CreateCharacterResult.Success;
         }

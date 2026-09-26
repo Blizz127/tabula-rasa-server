@@ -1,0 +1,114 @@
+{
+  "schema": "rasa.first-login-skip.v1",
+  "research_date": "2026-09-22",
+  "target": "new character selection, first admission and reconnect; final-live preservation",
+  "sources": [
+    {
+      "id": "client/inputstate/characterselection.pyo",
+      "tier": "original",
+      "sha256": "15b0e3f85e095f213e09a1d50925faf3d3e51f5b777b5f7afdedf0197043c361",
+      "timestamp": 1234238117,
+      "version": "recovered client1.16.5.0 compatibility package; independently authenticated shutdown revision unverified",
+      "location": "/home/blizz/backups/rasa-net/research/20260912-new-character/bootcamp-skip-code-manifest.json"
+    },
+    {
+      "id": "client/ui/characterselectionwindow.pyo",
+      "tier": "original",
+      "sha256": "1846a19a9577aa91982600b9cd81eaa5ef3472a9edd48eeb354abcf7571992da",
+      "timestamp": 1234238123,
+      "version": "recovered client1.16.5.0 compatibility package; independently authenticated shutdown revision unverified",
+      "location": "/home/blizz/backups/rasa-net/research/20260912-new-character/bootcamp-skip-code-manifest.json"
+    },
+    {
+      "id": "deployment11-official-live",
+      "tier": "original",
+      "location": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_116_8152008.html@@20080828140209.html",
+      "sha256": "e36041158a3d4603eb7f87d9855cb49ba96137c17d9c1ce5b2d0dbb69347cb59",
+      "version": "Official live Deployment11.6 2008-08-15; archive capture2008-08-28",
+      "confidence": "high",
+      "limitation": "Confirms entitlement; does not state reward amounts or original server completion-grant boundary."
+    },
+    {
+      "id": "deployment11-notes-copy",
+      "tier": "original",
+      "location": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Updates_2008-08-14__20090105T091151ZZ.wiki:129",
+      "sha256": "3dc3f68c9ec012c8fef4d228cd24be4408565bc4ab89573db908c199ad11427b",
+      "version": "live Deployment11 2008-08-14; preserved TaRapedia revision35870 dated2009-01-05",
+      "confidence": "medium",
+      "limitation": "Official patch wording preserved in contemporary wiki revision, rather than independently authenticated official HTML."
+    }
+  ],
+  "rules": [
+    {
+      "id": "prompt-eligibility",
+      "tier": "original",
+      "source": "client/ui/characterselectionwindow.pyo::OnPlayBtn source line271 bytecode39-95; prompt120-156",
+      "value": {
+        "num_logins": 0,
+        "last_context": null,
+        "account_can_skip_bootcamp": true
+      },
+      "confidence": "high",
+      "unverified": "This is the original client prompt gate; final-live server-side admission code is unavailable."
+    },
+    {
+      "id": "choice-wire",
+      "tier": "original",
+      "source": "client/inputstate/characterselection.pyo::OnSelectCharacter source80 bytecode113-131; client/ui/characterselectionwindow.pyo::_SkipBootcampYes source472 and _SkipBootcampNo source479",
+      "value": "RequestSwitchToCharacterInSlot(slot, skipBool)",
+      "confidence": "high",
+      "unverified": null
+    },
+    {
+      "id": "account-entitlement",
+      "tier": "original",
+      "source": "deployment11-official-live UI and Misc changes bypass paragraph; corroborating deployment11-notes-copy line129; original GetCanSkipBootcamp client gate",
+      "value": "One completed Boot Camp unlocks bypass for other new characters on that account",
+      "confidence": "high",
+      "unverified": "Exact original completion-grant event remains unrecovered; existing exit-trigger reconstruction unchanged."
+    },
+    {
+      "id": "persist-login-on-admission",
+      "tier": "inferred",
+      "source": "Original prompt-eligibility rule above; pre-correction Manifestation(CharacterEntry,...) incremented NumLogins in memory, while CharacterRepository.UpdateLoginData stored only LastLogin and CommunicatorManager.PlayerExitMap saved the counter later",
+      "value": "Persist one login increment in the same SaveChanges transaction as selected slot, LastLogin and optional skip destination; derive the manifestation from the detached pre-admission row",
+      "confidence": "high for persistence consistency, medium for exact original commit boundary",
+      "unverified": "Original server count-commit timing is not captured; this preserves the existing in-memory admission semantics through crashes and incomplete loading."
+    },
+    {
+      "id": "persisted-entitlement-authority",
+      "tier": "inferred",
+      "source": "Original account-entitlement rule; CharacterRepository.CreateCharacterQuery includes persisted GameAccount; RequestSwitchToCharacterInSlot uses that detached database row",
+      "value": "Use persisted account flag, not cached client.AccountEntry flag, when evaluating skip",
+      "confidence": "high",
+      "unverified": "Original server implementation unavailable; this enforces its documented account-wide rule without stale-cache decisions."
+    },
+    {
+      "id": "counter-saturation",
+      "tier": "inferred",
+      "source": "NumLogins is UInt32 in CharacterEntry and Manifestation; zero enables original prompt",
+      "value": "Saturate at UInt32.MaxValue instead of wrapping to zero",
+      "confidence": "high for correctness",
+      "unverified": "No original behavior at billions of admissions is documented; no ordinary gameplay changes."
+    }
+  ],
+  "changes": [
+    {
+      "date": "2026-09-22",
+      "defect": "Crash before map-exit save or disconnect before MapLoaded registration leaves a previously accepted character at NumLogins0, enabling the original skip prompt again",
+      "correction": "Persist admission count before starting world loading. Normal registered socket disconnect already saved the count through PlayerExitMap; that path was not broken."
+    },
+    {
+      "date": "2026-09-22",
+      "defect": "Skip choice consulted cached account flag",
+      "correction": "Use account flag loaded with the persisted character and recheck never-played eligibility before invoking destination resolver."
+    }
+  ],
+  "unverified": [
+    "Skip grant amounts, equipment, experience, Power Logos and Training Day behavior remain unresolved; this correction creates no new rewards.",
+    "The February2008 Bootcamp Bypass page describes obsolete Captain Burba/Major Bonham content and level4 bypass. It predates the Deployment11 rebuilt tutorial and is excluded as an analogue.",
+    "Existing skip destination reuses reconstructed exit location19852; no original skip arrival capture establishes a distinct destination.",
+    "Native-client first login, interrupted loading and reconnect still need direct verification.",
+    "Accounts outside the operational bootcamp allowlist still use the configured Wilderness fallback; rollout configuration is unchanged."
+  ]
+}

@@ -53,11 +53,14 @@ namespace Rasa.Test
             var manager = new Managers.CharacterManager(null);
             var client = new Game.Client(null, new ClientPacketHandler());
             typeof(Game.Client).GetProperty(nameof(Game.Client.AccountEntry)).SetValue(client, new Structures.Char.GameAccountEntry { Id = 10, CanSkipBootcamp = false });
-            var unplayed = new Structures.Char.CharacterEntry { Id = 101, MapContextId = 1985, NumLogins = 0 };
+            var persistedAccount = new Structures.Char.GameAccountEntry { Id = 10, CanSkipBootcamp = false };
+            var unplayed = new Structures.Char.CharacterEntry { Id = 101, MapContextId = 1985, NumLogins = 0, GameAccount = persistedAccount };
             Assert.IsNull(manager.SkipBootcampDestination(client, unplayed));
 
             client.AccountEntry.CanSkipBootcamp = true;
-            Assert.IsNull(manager.SkipBootcampDestination(client, new Structures.Char.CharacterEntry { Id = 102, MapContextId = 1985, NumLogins = 1 }));
+            Assert.IsNull(manager.SkipBootcampDestination(client, unplayed), "The cached account cannot override the persisted entitlement.");
+            persistedAccount.CanSkipBootcamp = true;
+            Assert.IsNull(manager.SkipBootcampDestination(client, new Structures.Char.CharacterEntry { Id = 102, MapContextId = 1985, NumLogins = 1, GameAccount = persistedAccount }));
         }
 
         [DataTestMethod]

@@ -1,0 +1,3032 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "sources": {
+    "starterinfo": {
+      "tier": "original",
+      "member": "generated/client/starterinfo.pyo",
+      "sha256": "9923da5b97754dbc1161badfe09c044b081d8db06b509b99c39208c040b68b94",
+      "artifact": "/home/blizz/backups/rasa-net/research/20260912-new-character/generated-client-starterinfo.pyo",
+      "version": "compatibility client 1.16.5.0; exact shutdown revision unverified",
+      "pyc_timestamp": 1234238136,
+      "compiled_utc": "2009-02-10T03:55:36+00:00"
+    },
+    "equipmentdata": {
+      "tier": "original",
+      "member": "generated/client/equipmentdata.pyo",
+      "sha256": "75c2caf08e42fea264dbf521e11350dee44faf369bfdeae035fbb3bc3d5afed8",
+      "artifact": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/world-equipment-selected/generated-client-equipmentdata.pyo",
+      "version": "compatibility client 1.16.5.0; exact shutdown revision unverified",
+      "pyc_timestamp": 1234238134,
+      "compiled_utc": "2009-02-10T03:55:34+00:00"
+    },
+    "itemclass": {
+      "tier": "original",
+      "member": "generated/client/itemclass.pyo",
+      "sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+      "artifact": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/combat-damage-selected/generated-client-itemclass.pyo",
+      "version": "compatibility client 1.16.5.0; exact shutdown revision unverified",
+      "pyc_timestamp": 1234238135,
+      "compiled_utc": "2009-02-10T03:55:35+00:00"
+    },
+    "window": {
+      "tier": "original",
+      "member": "client/ui/charactercreationwindow.pyo",
+      "sha256": "5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502",
+      "artifact": "/home/blizz/backups/rasa-net/research/20260912-new-character/client-ui-charactercreationwindow.pyo",
+      "version": "compatibility client 1.16.5.0; exact shutdown revision unverified",
+      "pyc_timestamp": 1234238123,
+      "compiled_utc": "2009-02-10T03:55:23+00:00",
+      "additional_disassembly": "/home/blizz/backups/rasa-net/research/20260922-character-appearance/rasa-appearance-methods.dis"
+    },
+    "colorpicker": {
+      "tier": "original",
+      "member": "client/ui/colorwheelpicker.pyo",
+      "sha256": "3d1826b30e329371df0677b89b35bd6aca8cf4b67ace7053ef03af60e6aec3a3",
+      "artifact": "/home/blizz/backups/rasa-net/research/20260922-character-appearance/client-ui-colorwheelpicker.pyo",
+      "version": "compatibility client 1.16.5.0; exact shutdown revision unverified",
+      "pyc_timestamp": 1234238124,
+      "compiled_utc": "2009-02-10T03:55:24+00:00",
+      "disassembly": "/home/blizz/backups/rasa-net/research/20260922-character-appearance/rasa-appearance-color-gender.dis"
+    }
+  },
+  "rules": [
+    {
+      "id": "choice_catalog",
+      "tier": "original",
+      "source": "window",
+      "method": "Init",
+      "original_line": 107,
+      "offsets": [
+        2199,
+        2389
+      ],
+      "value": "Only Hair14, Face17, Eyewear19 and Beard20 from starterItemTemplate, joined to class and slot."
+    },
+    {
+      "id": "race_filter",
+      "tier": "original",
+      "source": "window",
+      "method": "_AddItemAsChoice",
+      "original_line": 1151,
+      "offsets": [
+        0,
+        104
+      ],
+      "value": "A missing itemTemplateRaceRequirement permits every race; otherwise only that race."
+    },
+    {
+      "id": "required_slots",
+      "tier": "original",
+      "source": "window",
+      "method": "__init__",
+      "original_line": 76,
+      "offsets": [
+        204,
+        474
+      ],
+      "value": [
+        14,
+        17
+      ],
+      "optional_slots": [
+        19,
+        20
+      ],
+      "explanation": "Hair and Face lists have no None option. Eyewear and Beard start with None."
+    },
+    {
+      "id": "gender",
+      "tier": "original",
+      "source": "window",
+      "method": "_UpdateGenderToggles",
+      "original_line": 948,
+      "offsets": [
+        266,
+        357
+      ],
+      "value": "No gender filter; female Beard label becomes Accessory. _InitMannequin offsets30-59 selects gender body class."
+    },
+    {
+      "id": "opaque_color",
+      "tier": "original",
+      "source": "colorpicker",
+      "method": "_SetColorWheelPicker",
+      "original_line": 121,
+      "offsets": [
+        289,
+        345
+      ],
+      "value": 255,
+      "explanation": "GetPixelColor returns RGBA; any alpha other than255 is rejected. Original creation defaults also all use255."
+    },
+    {
+      "id": "wire_templates",
+      "tier": "original",
+      "source": "window",
+      "method": "_CreateCharacter",
+      "original_line": 694,
+      "offsets": [
+        219,
+        313
+      ],
+      "value": "slot -> (itemTemplateId, RGBA); optional None choices omitted."
+    },
+    {
+      "id": "failure_response",
+      "tier": "inferred",
+      "value": "InvalidEncoding",
+      "confidence": "medium",
+      "explanation": "No appearance-specific failure exists in recovered error enum; exact original refusal response not captured."
+    },
+    {
+      "id": "wire_channel_bounds",
+      "tier": "original",
+      "source": "window",
+      "method": "_CreateCharacter",
+      "original_line": 694,
+      "offsets": [
+        291,
+        304
+      ],
+      "value": "Integer RGBA channels in0..255 from selected colors; malformed tuple/channel values rejected without wrapping.",
+      "unverified": "Original malformed-input failure handling unknown."
+    },
+    {
+      "id": "hybrid_beard_disabled",
+      "tier": "original",
+      "source": "window",
+      "method": "_UpdateRaceToggles",
+      "original_line": 980,
+      "offsets": [
+        164,
+        328
+      ],
+      "value": "Non-Human resets Beard to None and Hair to bald then disables both picker groups. Beard/accessory entries are rejected for hybrids independently of missing table race requirements.",
+      "disassembly": "/home/blizz/backups/rasa-net/research/20260922-character-appearance/palette-paths.dis"
+    }
+  ],
+  "choices": [
+    {
+      "item_template_id": 36,
+      "entity_class_id": 3663,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 36
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 36
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 3663
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 36,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 39,
+      "entity_class_id": 3667,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 39
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 39
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 3667
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 39,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 42,
+      "entity_class_id": 3672,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 42
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 42
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 3672
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 42,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 60,
+      "entity_class_id": 3812,
+      "slot_id": 14,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 60
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 60
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 3812
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 60,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 61,
+      "entity_class_id": 3813,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 61
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 61
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 3813
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 61,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 99,
+      "entity_class_id": 4083,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 99
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 99
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 4083
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 99,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 609,
+      "entity_class_id": 7506,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 609
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 609
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7506
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 609,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 610,
+      "entity_class_id": 7507,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 610
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 610
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7507
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 610,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 611,
+      "entity_class_id": 7508,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 611
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 611
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7508
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 611,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 682,
+      "entity_class_id": 7693,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 682
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 682
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7693
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 682,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 683,
+      "entity_class_id": 7694,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 683
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 683
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7694
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 683,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 684,
+      "entity_class_id": 7695,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 684
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 684
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 7695
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 684,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1775,
+      "entity_class_id": 9355,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1775
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1775
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9355
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1775,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1776,
+      "entity_class_id": 9356,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1776
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1776
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9356
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1776,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1941,
+      "entity_class_id": 9781,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1941
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1941
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9781
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1941,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1942,
+      "entity_class_id": 9782,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1942
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1942
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9782
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1942,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1943,
+      "entity_class_id": 9783,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1943
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1943
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9783
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1943,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 1944,
+      "entity_class_id": 9784,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 1944
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 1944
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 9784
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 1944,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 2245,
+      "entity_class_id": 10239,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 2245
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 2245
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 10239
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 2245,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 42276,
+      "entity_class_id": 20824,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 42276
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 42276
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 20824
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 42276,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 42277,
+      "entity_class_id": 20825,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 42277
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 42277
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 20825
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 42277,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49668,
+      "entity_class_id": 24000,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49668
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49668
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24000
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49668,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49669,
+      "entity_class_id": 24001,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49669
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49669
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24001
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49669,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49670,
+      "entity_class_id": 24002,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49670
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49670
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24002
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49670,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49671,
+      "entity_class_id": 24003,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49671
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49671
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24003
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49671,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49672,
+      "entity_class_id": 24004,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49672
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49672
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24004
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49672,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49673,
+      "entity_class_id": 24005,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49673
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49673
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24005
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49673,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49674,
+      "entity_class_id": 24006,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49674
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49674
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24006
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49674,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49675,
+      "entity_class_id": 24007,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49675
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49675
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24007
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49675,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49676,
+      "entity_class_id": 24008,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49676
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49676
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24008
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49676,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49677,
+      "entity_class_id": 24009,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49677
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49677
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24009
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49677,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49678,
+      "entity_class_id": 24010,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49678
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49678
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24010
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49678,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49679,
+      "entity_class_id": 24011,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49679
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49679
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24011
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49679,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49680,
+      "entity_class_id": 24012,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49680
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49680
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24012
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49680,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49681,
+      "entity_class_id": 24013,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49681
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49681
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24013
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49681,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49682,
+      "entity_class_id": 24014,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49682
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49682
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24014
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49682,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49683,
+      "entity_class_id": 24015,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49683
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49683
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24015
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49683,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49684,
+      "entity_class_id": 24016,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49684
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49684
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24016
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49684,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49685,
+      "entity_class_id": 24017,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49685
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49685
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24017
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49685,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49686,
+      "entity_class_id": 24018,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49686
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49686
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24018
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49686,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49687,
+      "entity_class_id": 24019,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49687
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49687
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24019
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49687,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49688,
+      "entity_class_id": 24020,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49688
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49688
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24020
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49688,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49689,
+      "entity_class_id": 24021,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49689
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49689
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24021
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49689,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49690,
+      "entity_class_id": 24022,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49690
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49690
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24022
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49690,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49691,
+      "entity_class_id": 24023,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49691
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49691
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24023
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49691,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49692,
+      "entity_class_id": 24024,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49692
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49692
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24024
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49692,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49693,
+      "entity_class_id": 24025,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49693
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49693
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24025
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49693,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49694,
+      "entity_class_id": 24026,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49694
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49694
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24026
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49694,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49695,
+      "entity_class_id": 24027,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49695
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49695
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24027
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49695,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49696,
+      "entity_class_id": 24028,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49696
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49696
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24028
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49696,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49697,
+      "entity_class_id": 24029,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49697
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49697
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24029
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49697,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49698,
+      "entity_class_id": 24030,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49698
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49698
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24030
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49698,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49699,
+      "entity_class_id": 24031,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49699
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49699
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24031
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49699,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49700,
+      "entity_class_id": 24032,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49700
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49700
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24032
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49700,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49701,
+      "entity_class_id": 24033,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49701
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49701
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24033
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49701,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49702,
+      "entity_class_id": 24034,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49702
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49702
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24034
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49702,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 49703,
+      "entity_class_id": 24035,
+      "slot_id": 17,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 49703
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 49703
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24035
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 49703,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50311,
+      "entity_class_id": 24742,
+      "slot_id": 17,
+      "required_race": 3,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50311
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50311
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24742
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50311,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50312,
+      "entity_class_id": 24743,
+      "slot_id": 17,
+      "required_race": 2,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50312
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50312
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24743
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50312,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50313,
+      "entity_class_id": 24744,
+      "slot_id": 17,
+      "required_race": 4,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50313
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50313
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 24744
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50313,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50711,
+      "entity_class_id": 25255,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50711
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50711
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25255
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50711,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50712,
+      "entity_class_id": 25256,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50712
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50712
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25256
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50712,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 50713,
+      "entity_class_id": 25257,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 50713
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 50713
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25257
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 50713,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 97426,
+      "entity_class_id": 25330,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97426
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97426
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25330
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97426,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97427,
+      "entity_class_id": 25334,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97427
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97427
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25334
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97427,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97428,
+      "entity_class_id": 25335,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97428
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97428
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25335
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97428,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97429,
+      "entity_class_id": 25336,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97429
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97429
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25336
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97429,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97430,
+      "entity_class_id": 25337,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97430
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97430
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25337
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97430,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97431,
+      "entity_class_id": 25338,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97431
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97431
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25338
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97431,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97432,
+      "entity_class_id": 25339,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97432
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97432
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25339
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97432,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97433,
+      "entity_class_id": 25340,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97433
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97433
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25340
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97433,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97434,
+      "entity_class_id": 25341,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97434
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97434
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25341
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97434,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97435,
+      "entity_class_id": 25342,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97435
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97435
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25342
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97435,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97436,
+      "entity_class_id": 25343,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97436
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97436
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25343
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97436,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97437,
+      "entity_class_id": 25344,
+      "slot_id": 19,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97437
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97437
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25344
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97437,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97438,
+      "entity_class_id": 25345,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97438
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97438
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25345
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97438,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97439,
+      "entity_class_id": 25346,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97439
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97439
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25346
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97439,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97440,
+      "entity_class_id": 25347,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97440
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97440
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25347
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97440,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97441,
+      "entity_class_id": 25348,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97441
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97441
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25348
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97441,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97442,
+      "entity_class_id": 25349,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97442
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97442
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25349
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97442,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97443,
+      "entity_class_id": 25350,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97443
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97443
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25350
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97443,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97444,
+      "entity_class_id": 25351,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97444
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97444
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25351
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97444,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97445,
+      "entity_class_id": 25352,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97445
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97445
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25352
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97445,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 97446,
+      "entity_class_id": 25353,
+      "slot_id": 20,
+      "required_race": null,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 97446
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 97446
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 25353
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 97446,
+          "key_present": false
+        }
+      }
+    },
+    {
+      "item_template_id": 118927,
+      "entity_class_id": 28536,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118927
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118927
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28536
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118927,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118928,
+      "entity_class_id": 28537,
+      "slot_id": 14,
+      "required_race": 1,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118928
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118928
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28537
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118928,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118966,
+      "entity_class_id": 28606,
+      "slot_id": 17,
+      "required_race": 3,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118966
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118966
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28606
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118966,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118968,
+      "entity_class_id": 28608,
+      "slot_id": 17,
+      "required_race": 3,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118968
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118968
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28608
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118968,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118969,
+      "entity_class_id": 28609,
+      "slot_id": 17,
+      "required_race": 2,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118969
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118969
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28609
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118969,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118970,
+      "entity_class_id": 28610,
+      "slot_id": 17,
+      "required_race": 2,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118970
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118970
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28610
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118970,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118971,
+      "entity_class_id": 28611,
+      "slot_id": 17,
+      "required_race": 4,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118971
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118971
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28611
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118971,
+          "key_present": true
+        }
+      }
+    },
+    {
+      "item_template_id": 118972,
+      "entity_class_id": 28612,
+      "slot_id": 17,
+      "required_race": 4,
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "item_template_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplate",
+          "key": 118972
+        },
+        "entity_class_id": {
+          "source": "starterinfo",
+          "table": "starterItemTemplateClassIds",
+          "key": 118972
+        },
+        "slot_id": {
+          "source": "equipmentdata",
+          "table": "equipableClassEquipmentSlot",
+          "key": 28612
+        },
+        "required_race": {
+          "source": "itemclass",
+          "table": "itemTemplateRaceRequirement",
+          "key": 118972,
+          "key_present": true
+        }
+      }
+    }
+  ],
+  "gaps": [
+    "RGB palettes and exact native DXT sampling recovered in character-creation-palettes.json; full runtime selectable membership and clone inherited-color admission remain unverified/unenforced.",
+    "Original live server rejection response and behavior for malformed/omitted fields lack packet captures.",
+    "Gender rendering uses shared choice templates and native gender-dependent meshes; visible client session still needed."
+  ],
+  "implementation": {
+    "catalog_count": 92,
+    "class_resolution": "Frozen original starter mapping, independent of emulator world-table drift; no guessed classes."
+  }
+}

@@ -170,7 +170,9 @@ namespace Rasa.Structures
             Credits.Add(CurencyType.Credits, character.Credit);
             Credits.Add(CurencyType.Prestige, character.Prestige);
             ActiveWeapon = character.ActiveWeapon;
-            NumLogins = character.NumLogins + 1;
+            // Character selection constructs us from the detached pre-login row;
+            // UpdateLoginData has committed the same increment to persistence.
+            NumLogins = character.NumLogins == uint.MaxValue ? uint.MaxValue : character.NumLogins + 1;
             TotalTimePlayed = character.TotalTimePlayed;
             TimeSinceLastPlayed = character.LastLogin;
             // AppearanceData

@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "version": "Original compatibility client1.16.5.0; exact shutdown revision unverified",
+  "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough",
+  "sources": [
+    {
+      "member": "client/augmentations/actor.pyo",
+      "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+      "compiled_timestamp": 1234238114
+    },
+    {
+      "member": "client/ui/weapondrawerwindow.pyo",
+      "sha256": "0c05631490865de259ae9b43cb1723e7faf7b83ee50ed720e0b31e7054616933",
+      "compiled_timestamp": 1234238126
+    },
+    {
+      "member": "client/inventory.pyo",
+      "sha256": "fea5b3bc09103b261cdccd8b9396b0cef0e93c0b484fcb1039655da57990bd70",
+      "compiled_timestamp": 1234238109
+    }
+  ],
+  "rules": [
+    {
+      "id": "equipment.event.unconditional",
+      "tier": "original",
+      "source": "client/augmentations/actor.pyo Actor.Recv_EquipmentInfo line2287 offsets380-398 (source line2322)",
+      "finding": "Posts UI_UPDATE_ARMED_WEAPON after every EquipmentInfo, regardless of whether this actor is controlled."
+    },
+    {
+      "id": "weapon_drawer.requires_controlled_actor",
+      "tier": "original",
+      "source": "client/ui/weapondrawerwindow.pyo weapondrawerwindow.HandleUpdateArmedWeapon line253 offsets0-21 (source lines258-259)",
+      "finding": "Fetches gameuiutil.GetManifestation() then immediately calls GetArmedWeaponDrawerSlot without a None guard."
+    },
+    {
+      "id": "server.admission.equipment_order",
+      "tier": "inferred",
+      "source": "equipment.event.unconditional; weapon_drawer.requires_controlled_actor; run-client/tabula_rasa.log lines26-29",
+      "finding": "Create owner entity without EquipmentInfo, initialize CharacterOptions/ActorInfo/controller/WeaponDrawerSlot, then send owner EquipmentInfo before introducing nearby actors. Other players retain EquipmentInfo in introduction data. Both normal and transfer admissions use the same CellManager.AddToWorld path."
+    }
+  ],
+  "observations": [
+    {
+      "source": "run-client/tabula_rasa.log lines26-29",
+      "environment": "Original client in isolated emulator playthrough2026-09-22",
+      "finding": "weapondrawerwindow.py line259 raises AttributeError: 'NoneType' object has no attribute 'GetArmedWeaponDrawerSlot' when EquipmentInfo is in the pre-control owner entity bundle."
+    },
+    {
+      "source": "orientation/playthrough04-client-engine-admission.log (snapshot of run-client/tabula_rasa.log after playthrough04 admission)",
+      "sha256": "433a3830bc58b383d110cb3b74050ac0ed09f9cb39705083a4734706aeab673b",
+      "environment": "Original1.16.5.0 client on isolated emulator2026-09-22",
+      "finding": "GetArmedWeaponDrawerSlot traceback absent after admission fix. Three elemental-icon TypeErrors and server non-armor warning also absent after independently scoped root/bootcamp fixes. Remaining clientERROR atline7 is TypeError: argument list must be a tuple; that unrelated startup error is not claimed fixed."
+    }
+  ],
+  "validation": {
+    "automated": "1232/1232 full suite passed, none skipped,5.0007min; includes four CellManager admission and three yaw cases. /tmp/rasa-retail-20260922-opening-final.log and sameprefix.trx. This suite predates separate FirstLoginYaw data migration.",
+    "runtime": "Passed originalclient playthrough04 admission; immutable playthrough-04/tabula_rasa.log SHA256433a3830bc58b383d110cb3b74050ac0ed09f9cb39705083a4734706aeab673b and playthrough-04/admission-retest.json show weapon drawer NoneType traceback absent. Startup tuple error remains separate.",
+    "final_combined_run": {
+      "status": "passed",
+      "total": 1246,
+      "passed": 1246,
+      "failed": 0,
+      "skipped": 0,
+      "duration_minutes": 6.029,
+      "log": "/tmp/rasa-retail-20260922-selection-verified.log",
+      "log_sha256": "535787464acf67366aa8391c0ec80e5b06c920eb84bf2c788e074bc6cbabd377",
+      "trx_container_path": "/work/src/Rasa.Test/TestResults/rasa-selection-verified.trx",
+      "snapshot": "/tmp/rasa-retail-20260922-selection-verified-snapshot.json",
+      "snapshot_sha256": "ab5cc143715f1ede6b17e33828b2a5538ba551c8670cea3f3a2c7eb62ff4d375",
+      "source_snapshot_verification": {
+        "entries_under_src": 2050,
+        "mismatches": 0,
+        "csharp_and_project_files": 1972,
+        "additional_csharp_or_project_files": 0,
+        "failed_to_corrected_snapshot_changed_source_files": [
+          "src/Rasa.Test/NewCharacterTests.Deletion.cs"
+        ]
+      },
+      "scope": "Full combined suite, including deletion states/wire framing, family normalization, first-login yaw migration Up/Down, and admission packet ordering. Source/workspace equality checked after completion; research docs updated separately."
+    }
+  },
+  "preserved": [
+    "Original client files unmodified.",
+    "Living/dead entity introduction and DeadOnArrival packet retained; deferred only owner EquipmentInfo.",
+    "Observer player equipment remains included in entity introduction.",
+    "ActorInfo precedes SetControlledActorId, preserving verified yaw initialization.",
+    "Remaining AssignPlayer and map-link/region/marker/death/dropship callbacks retain their existing call sites."
+  ],
+  "deferred_control_followup": {
+    "status": "Targeted tests passed; original-client plain-option admission verified; combined full suite and grouped runtime check pending at this checkpoint",
+    "supersedes_sequence_only": "Historical direct ActorInfo-before-SetControlledActorId ordering is replaced by deferred controller creation, preserving yaw-before-controller and equipment-after-controller requirements. Historical captures and results remain valid for their recorded versions.",
+    "current_order": [
+      "CharacterOptions",
+      "SetControlledActorId while owner entity is absent",
+      "CreatePhysicalEntity owner bundle: existing state including corpse announcement, ActorInfo, read-only saved MissionStatusInfo, WorldLocationDescriptor LAST",
+      "WorldLocationDescriptor triggers AddToWorld and the deferred controller callback",
+      "WeaponDrawerSlot and owner EquipmentInfo",
+      "Nearby actor introductions with their normal equipment"
+    ],
+    "source_evidence": "docs/evidence/client-mission-tracker-reconnect.json:deferred_admission_candidate",
+    "targeted_tests": {
+      "total": 174,
+      "passed": 174,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 40.2117,
+      "log": {
+        "path": "/tmp/rasa-retail-20260922-tracking-targeted.log",
+        "bytes": 17224,
+        "sha256": "0d49880372e9e8010e8121ff70b9517d45a4db56944bbf267372e3a7fa54e5eb"
+      }
+    },
+    "runtime": {
+      "tier": "observed",
+      "scope": "Isolated original-client emulator integration, not original-live proof",
+      "run": "playthrough-09",
+      "screenshot": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/02-plain-option-loaded.png",
+        "bytes": 780696,
+        "sha256": "6bfcc31718f71bbe43fbfbeac5c228c72266295fc56a995dd29fac5611c329b4"
+      },
+      "state": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/plain-option-reconnect-state.json",
+        "bytes": 2990,
+        "sha256": "4eead0cc1f00754e68d1b575a1e5a49979fd0a7ce51d344a59a1554b983a650b"
+      },
+      "observation": "Independently viewed screenshot shows loaded Luna Cavern, Rifle HUD, and Gearing Up for Battle / Speak to Corporal Hartmann tracker before UI input. State snapshot retains plain option 1992 and saved mission progress.",
+      "limitations": "This is not a repeat of controlled yaw-axis movement probes or a claim about every client-log error. Historical run04 drawer traceback check remains separately scoped."
+    }
+  }
+}

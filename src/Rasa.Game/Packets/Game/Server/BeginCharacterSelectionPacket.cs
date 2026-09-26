@@ -15,17 +15,14 @@ namespace Rasa.Packets.Game.Server
         public List<Race> EnabledRaceList { get; } = new List<Race>();
         public bool CanSkipBootcamp { get; set; }
 
-        public BeginCharacterSelectionPacket(string familyName, bool hasCharacters, uint accountId, bool canSkipBootcamp = true)
+        public BeginCharacterSelectionPacket(string familyName, bool hasCharacters, uint accountId, bool canSkipBootcamp = true, IEnumerable<byte> unlockedRaces = null)
         {
             FamilyName = familyName;
             HasCharacters = hasCharacters;
             AccountId = accountId;
             CanSkipBootcamp = canSkipBootcamp;
 
-            EnabledRaceList.Add(Race.Human);
-            EnabledRaceList.Add(Race.Forean);
-            EnabledRaceList.Add(Race.Brann);
-            EnabledRaceList.Add(Race.Thrax);
+            EnabledRaceList.AddRange(RaceUnlocks.EnabledRaces(unlockedRaces ?? System.Array.Empty<byte>()));
         }
 
         public override void Write(PythonWriter pw)

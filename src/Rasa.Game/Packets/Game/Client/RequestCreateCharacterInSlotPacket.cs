@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Rasa.Packets.Game.Client
 {
@@ -24,8 +23,6 @@ namespace Rasa.Packets.Game.Client
         public Race RaceId { get; set; }
 
         public Dictionary<EquipmentData, AppearanceData> AppearanceData { get; } = new Dictionary<EquipmentData, AppearanceData>();
-
-        private static readonly Regex NameRegex = new Regex(@"^\w{3,20}$", RegexOptions.Compiled);
 
         public override void Read(PythonReader pr)
         {
@@ -61,19 +58,19 @@ namespace Rasa.Packets.Game.Client
             if (CharacterName == null || FamilyName == null)
                 return CreateCharacterResult.InvalidEncoding;
 
-            var characterName = ValidateName(CharacterName);
+            var characterName = CharacterNameRules.Validate(CharacterName);
 
             if (characterName != CreateCharacterResult.Success)
                 return characterName;
 
             // The family name was never checked: empty, over-long or any characters at all
             // went into account.family_name as sent, and it is shown to every other player.
-            var familyName = ValidateName(FamilyName);
+            var familyName = CharacterNameRules.Validate(FamilyName);
 
             if (familyName != CreateCharacterResult.Success)
                 return familyName;
 
-            if (Scale < MinHeight || Scale > MaxHeight)
+            if (!IsValidHeight(Scale))
                 return CreateCharacterResult.InvalidCharacterHeight;
 
             if (RaceId < Race.Human || RaceId > Race.Thrax)
@@ -86,18 +83,12 @@ namespace Rasa.Packets.Game.Client
             return CreateCharacterResult.Success;
         }
 
-        private static CreateCharacterResult ValidateName(string name)
+        internal static bool IsValidHeight(double scale)
         {
-            if (name.Length < 3)
-                return CreateCharacterResult.NameTooShort;
-
-            if (name.Length > 20)
-                return CreateCharacterResult.NameTooLong;
-
-            if (!NameRegex.IsMatch(name))
-                return CreateCharacterResult.NameFormatInvalid;
-
-            return CreateCharacterResult.Success;
+            // The protocol also carries floats (tag 0x3F). Its representation of the
+            // client's minimum 0.9 is slightly below the double constant.
+            return !double.IsNaN(scale) && (scale >= MinHeight || scale == (double)(float)MinHeight) && scale <= MaxHeight;
         }
+
     }
 }

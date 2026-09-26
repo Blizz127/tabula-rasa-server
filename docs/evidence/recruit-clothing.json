@@ -1,0 +1,670 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Recruit clothing admission and hover: valid non-armor equipment, absent skill requirement pair, and empty tooltip resistance list",
+  "client_version": "Repository compatibility artifact 1.16.5.0, compiled February 2009; exact shutdown revision unverified",
+  "sources": {
+    "entityclass": {
+      "tier": "original",
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_entityclass.pyo.json.gz",
+      "meta": {
+        "member": "generated/client/entityclass.pyo",
+        "size": 1247914,
+        "crc32": "77864207",
+        "sha256": "b4e99d0ca61b915487201b4bc75b09b8bed32a0f33127e855ea051883751a8ef",
+        "pyc_timestamp": 1234238133,
+        "bytecode_version": [
+          2,
+          4
+        ],
+        "code_filename": "data/game/generated/client\\entityclass.py",
+        "zip_mtime": [
+          2009,
+          2,
+          9,
+          21,
+          56,
+          28
+        ]
+      },
+      "selected_assignments": [
+        {
+          "offset": 547016,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000068,
+          "value": {
+            "__tuple__": [
+              "Armor_Recruit_V01_CMN_Boots",
+              776,
+              null,
+              null,
+              1,
+              0,
+              [
+                4,
+                6
+              ]
+            ]
+          }
+        },
+        {
+          "offset": 547052,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000069,
+          "value": {
+            "__tuple__": [
+              "Armor_Recruit_V01_CMN_Legs",
+              776,
+              null,
+              null,
+              1,
+              0,
+              [
+                4,
+                6
+              ]
+            ]
+          }
+        },
+        {
+          "offset": 547088,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000070,
+          "value": {
+            "__tuple__": [
+              "Armor_Recruit_V01_CMN_Vest",
+              776,
+              null,
+              null,
+              1,
+              0,
+              [
+                4,
+                6
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "itemclass": {
+      "tier": "original",
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_itemclass.pyo.json.gz",
+      "meta": {
+        "member": "generated/client/itemclass.pyo",
+        "size": 1162240,
+        "crc32": "5b573217",
+        "sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+        "pyc_timestamp": 1234238135,
+        "bytecode_version": [
+          2,
+          4
+        ],
+        "code_filename": "data/game/generated/client\\itemclass.py",
+        "zip_mtime": [
+          2009,
+          2,
+          9,
+          21,
+          56,
+          30
+        ]
+      },
+      "selected_assignments": [
+        {
+          "offset": 299807,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000068,
+          "value": {
+            "__tuple__": [
+              49816,
+              1,
+              0,
+              0,
+              35,
+              1,
+              2660,
+              2659
+            ]
+          }
+        },
+        {
+          "offset": 299840,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000069,
+          "value": {
+            "__tuple__": [
+              49817,
+              1,
+              0,
+              0,
+              59,
+              1,
+              2668,
+              2667
+            ]
+          }
+        },
+        {
+          "offset": 299873,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000070,
+          "value": {
+            "__tuple__": [
+              49818,
+              1,
+              0,
+              0,
+              70,
+              1,
+              2669,
+              2670
+            ]
+          }
+        },
+        {
+          "offset": 395933,
+          "container": [
+            "reqData"
+          ],
+          "key": 10000068,
+          "value": [
+            {
+              "__tuple__": [
+                1,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "offset": 395951,
+          "container": [
+            "reqData"
+          ],
+          "key": 10000070,
+          "value": [
+            {
+              "__tuple__": [
+                1,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "offset": 631622,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 122854,
+          "value": 10000068
+        },
+        {
+          "offset": 631631,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 122855,
+          "value": 10000069
+        },
+        {
+          "offset": 631640,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 122856,
+          "value": 10000070
+        }
+      ],
+      "absence": "No itemTemplateSkillRequirement rows for 122854,122855,122856 in the complete original table."
+    },
+    "armorclass": {
+      "tier": "original",
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_armorclass.pyo.json.gz",
+      "meta": {
+        "member": "generated/client/armorclass.pyo",
+        "size": 82113,
+        "crc32": "a90b780d",
+        "sha256": "c01b8bf0130c349b600ee202f8485ec10005fff553921fda2a28f202b6e6ea33",
+        "pyc_timestamp": 1234238128,
+        "bytecode_version": [
+          2,
+          4
+        ],
+        "code_filename": "data/game/generated/client\\armorclass.py",
+        "zip_mtime": [
+          2009,
+          2,
+          9,
+          21,
+          56,
+          28
+        ]
+      },
+      "selected_assignments": [],
+      "absence": "No lookup rows for 10000068,10000069,10000070 in the complete original table."
+    },
+    "equipmentdata": {
+      "tier": "original",
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_equipmentdata.pyo.json.gz",
+      "meta": {
+        "member": "generated/client/equipmentdata.pyo",
+        "size": 844005,
+        "crc32": "07798263",
+        "sha256": "75c2caf08e42fea264dbf521e11350dee44faf369bfdeae035fbb3bc3d5afed8",
+        "pyc_timestamp": 1234238134,
+        "bytecode_version": [
+          2,
+          4
+        ],
+        "code_filename": "data/game/generated/client\\equipmentdata.py",
+        "zip_mtime": [
+          2009,
+          2,
+          9,
+          21,
+          56,
+          30
+        ]
+      },
+      "selected_assignments": [
+        {
+          "offset": 62927,
+          "container": [
+            "equipableClass"
+          ],
+          "key": 10000068,
+          "value": 1
+        },
+        {
+          "offset": 62936,
+          "container": [
+            "equipableClass"
+          ],
+          "key": 10000069,
+          "value": 1
+        },
+        {
+          "offset": 62945,
+          "container": [
+            "equipableClass"
+          ],
+          "key": 10000070,
+          "value": 1
+        },
+        {
+          "offset": 135158,
+          "container": [
+            "equipableClassEquipmentSlot"
+          ],
+          "key": 10000068,
+          "value": 2
+        },
+        {
+          "offset": 135167,
+          "container": [
+            "equipableClassEquipmentSlot"
+          ],
+          "key": 10000069,
+          "value": 16
+        },
+        {
+          "offset": 135176,
+          "container": [
+            "equipableClassEquipmentSlot"
+          ],
+          "key": 10000070,
+          "value": 15
+        }
+      ]
+    },
+    "augmentation": {
+      "tier": "original",
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_augmentation.pyo.json",
+      "meta": {
+        "member": "generated/client/augmentation.pyo",
+        "size": 9659,
+        "crc32": "1741d431",
+        "sha256": "4b15df7c834b931910f36dcce69c3d4c397123fa0862c644eacccc8f8a3b14a9",
+        "pyc_timestamp": 1234238129,
+        "bytecode_version": [
+          2,
+          4
+        ],
+        "code_filename": "data/game/generated/client\\augmentation.py",
+        "zip_mtime": [
+          2009,
+          2,
+          9,
+          21,
+          56,
+          28
+        ]
+      },
+      "selected_assignments": [],
+      "constants": {
+        "ARMOR": {
+          "type": "int",
+          "value": 51,
+          "store_offsets": [
+            21
+          ]
+        },
+        "EQUIPABLE": {
+          "type": "int",
+          "value": 4,
+          "store_offsets": [
+            147
+          ]
+        },
+        "ITEM": {
+          "type": "int",
+          "value": 6,
+          "store_offsets": [
+            189
+          ]
+        }
+      }
+    },
+    "trpython-client-gameuiutil.pyo": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-gameuiutil.pyo",
+      "sha256": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
+      "location": "HasEquipableInfo source 514/519 offsets 13–28; GetEquipableResistances source 524/531 offsets 47–54; _LoadElementalIconForItemTemplate source 1377/1397 offsets 166–188; kEquipableIdx_SkillInfo source line 228, constant 0; GetEquipableSkillRequirements line 542, offsets 47–54; _GetClassPowerLevel line 1358, offsets 58–73"
+    },
+    "trpython-client-ui-attributeswindow.pyo": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-attributeswindow.pyo",
+      "sha256": "23610f22dd8fafeab21f8b490f2897dd5b2a0186027a942e00d44f5a7166fde6",
+      "location": "HandleReceiveItemInfo source 328/336 offsets 93–111"
+    },
+    "trpython-client-gameui.pyo": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-gameui.pyo",
+      "sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0",
+      "location": "Recv_ItemTemplateTooltipInfo source 1574/1583–1586 offsets 16–59"
+    },
+    "reproduced_exception": {
+      "tier": "observed",
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-03/tabula_rasa.log",
+      "lines": "32–47",
+      "observation": "Three identical TypeError: iteration over non-sequence exceptions, attributeswindow.HandleReceiveItemInfo→gameuiutil.LoadEntityIcon→_LoadElementalIconForItemTemplate source 1397. These are emulator admission errors reproduced with the original client, not a claim about original live service behavior.",
+      "sha256": "ed980fefcbbbc7a1229dbe640ad31637723f6bb81c217f4302f507003f13a0b7"
+    },
+    "trpython-client-ui-tooltipwindow.pyo": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-tooltipwindow.pyo",
+      "member": "client/ui/tooltipwindow.pyo",
+      "sha256": "8817f44925dac632f5b9d4167e45c003d62b68fe9ac41348d4222dbb576b2ec4",
+      "location": "_FormatIndividualItemTooltip source line 743, offsets 424–451; _AddSkillSlot source line 1564, offsets 248–257; lines 1566–1569, offsets 266–314"
+    },
+    "trpython-client-augmentations-actor.pyo": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-augmentations-actor.pyo",
+      "member": "client/augmentations/actor.pyo",
+      "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+      "location": "GetSkillLevel source line 1802, offsets 0–18"
+    },
+    "reproduced_skill_slot_exception": {
+      "tier": "observed",
+      "captured_at_utc": "2026-09-22T20:38:02.745310+00:00",
+      "source_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.log",
+      "frozen_prefix_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/clothing-skill-tooltip-audit-06/client-prefix.log",
+      "prefix_bytes": 8560,
+      "prefix_sha256": "6faf041a6a9369b7c6cc44fde0062e498377952f49439d399f78d862a72d8d4d",
+      "line_count": 80,
+      "skill_slot_error_count": 3,
+      "traceback_lines": "53–79",
+      "scope": "Mutable run 06 log frozen as a prefix; no exact timestamp or hovered template ID appears in the traceback.",
+      "observation": "Three original-client item tooltip tracebacks reach _FormatIndividualItemTooltip line 743 and _AddSkillSlot line 1564. This proves the item-tooltip path, not a skill-window hover or statmod slot. The missing skill pair reproduces this failure, but exact hovered item identity is not in the log."
+    }
+  },
+  "rules": [
+    {
+      "id": "equipable_empty_resistance_list",
+      "tier": "original",
+      "rule": "An EQUIPABLE tooltip entry is a two-tuple (skill_requirement, resistance_list). The resistance field must remain iterable; emit [] when there are no entries. The absent skill requirement is the nested pair (None, None), as established by the later hover audit.",
+      "reason": "HasEquipableInfo checks augmentation presence; GetEquipableResistances returns the second tuple member directly. The elemental-icon loader unconditionally iterates it.",
+      "implementation": "src/Rasa.Game/Packets/MapChannel/Server/ItemTemplateTooltipInfoPacket.cs:Write",
+      "confidence": "high"
+    },
+    {
+      "id": "recruit_clothing_is_not_armor",
+      "tier": "original",
+      "rule": "Classes 10000068/69/70 are legitimate equipable Item classes, augmentation [4,6], with slots 2/16/15 and no Armor 51 or armorclass data. Their item durability 35/59/70 is not player armor absorption.",
+      "corroboration": "7Lrst9SG3pk A3-035 at 321.467 s, A3-040 at 324.467 s, A3-046 at 332.467 s show Recruit Boots/Legs/Vest comparison tooltips without Body Armor/Regen/Resistance fields.",
+      "implementation": "src/Rasa.Game/Managers/ManifestationManager.cs:UpdateStatsValues now suppresses the non-armor warning for recognized equipable clothing, retaining malformed-class detection.",
+      "confidence": "high",
+      "unverified": "The protocol repair establishes no new clothing stats. No original server resistance grants are recovered; current seed has none for these templates."
+    },
+    {
+      "id": "equipable_absent_skill_pair",
+      "tier": "original",
+      "rule": "When an equipable has no skill requirement, serialize its skill field as (None, None). The complete empty EQUIPABLE payload is ((None, None), []). Preserve any existing skill identifier, skill level and resistances.",
+      "source": "tooltipwindow._AddSkillSlot source line 1564, offsets 248–257; gameuiutil.GetEquipableSkillRequirements source line 542, offsets 47–54; gameuiutil._GetClassPowerLevel source line 1358, offsets 58–73",
+      "reason": "Both consumers unconditionally unpack two values. Tooltip lines 1566–1569 explicitly accept None members; the icon consumer checks both for None. Actor.GetSkillLevel safely uses dictionary.get(skillId, 0).",
+      "implementation": "src/Rasa.Game/Packets/MapChannel/Server/ItemTemplateTooltipInfoPacket.cs:Write",
+      "confidence": "high",
+      "supersedes": "The earlier claim that scalar None was valid for the skill field was incorrect. The earlier resistance-list repair remains valid. No skill or stat is added."
+    }
+  ],
+  "tests": [
+    "RecruitClothingTests.RecruitTooltipHasIterableEmptyResistancesWithoutInventingSkillOrArmor (three original classes)",
+    "RecruitClothingTests.RecruitClothingContributesNoArmorAndOnlyInvalidEquipmentLogsAnError",
+    "RecruitClothingTests.EquipableTooltipPreservesPresentSkillRequirementAndResistance (synthetic metadata)"
+  ],
+  "verification": {
+    "baseline_regression": {
+      "path": "/tmp/rasa-retail-20260922-clothing-before.log",
+      "bytes": 3596,
+      "sha256": "4f020dcb95e053a5358c433d617dbeea7fe29673871f4d383b147aace06c61f4",
+      "total": 4,
+      "failed": 4,
+      "elapsed_seconds": 2.615,
+      "expected_failures": "Three resistance-list decoders reject None byte 00; the stat case observes all three old non_armor errors."
+    },
+    "original_client_admission": {
+      "captured_at_utc": "2026-09-22T19:51:05.319158+00:00",
+      "scope": "Isolated original-client admission 04; frozen prefixes captured while its processes were still running. No claim about later log suffixes.",
+      "logs": {
+        "client": {
+          "source_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.log",
+          "frozen_prefix_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/clothing-admission-audit-04/client-prefix.log",
+          "prefix_bytes": 5882,
+          "prefix_sha256": "433a3830bc58b383d110cb3b74050ac0ed09f9cb39705083a4734706aeab673b",
+          "line_count": 31,
+          "source_mtime_utc": "2026-09-22T19:48:54.614033+00:00",
+          "error_lines": [
+            {
+              "line": 7,
+              "text": "ERROR: TypeError: argument list must be a tuple"
+            }
+          ],
+          "iteration_over_nonsequence_count": 0,
+          "elemental_icon_stack_count": 0,
+          "non_armor_warning_count": 0,
+          "invalid_equipment_warning_count": 0,
+          "archived_complete_log": {
+            "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-04/tabula_rasa.log",
+            "bytes": 5882,
+            "sha256": "433a3830bc58b383d110cb3b74050ac0ed09f9cb39705083a4734706aeab673b",
+            "matches_captured_client_prefix": true,
+            "state": "Whole client log archived after stopping admission run 04; byte-for-byte identical to the earlier captured prefix."
+          }
+        },
+        "server": {
+          "source_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-04/game.log",
+          "frozen_prefix_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/clothing-admission-audit-04/server-prefix.log",
+          "prefix_bytes": 42810,
+          "prefix_sha256": "31dbe70c420ca0ff1754ff5c00544d9ec03d3471be1682b3dd1fa6cfee8aa919",
+          "line_count": 336,
+          "source_mtime_utc": "2026-09-22T19:50:52.199798+00:00",
+          "error_lines": [],
+          "iteration_over_nonsequence_count": 0,
+          "elemental_icon_stack_count": 0,
+          "non_armor_warning_count": 0,
+          "invalid_equipment_warning_count": 0,
+          "timestamp_range_local": [
+            "14:47:52.961",
+            "14:50:52.196"
+          ],
+          "timezone": "America/Chicago (UTC-05:00)"
+        }
+      },
+      "prior_client": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-03/tabula_rasa.log",
+        "bytes": 7613,
+        "sha256": "ed980fefcbbbc7a1229dbe640ad31637723f6bb81c217f4302f507003f13a0b7"
+      },
+      "old_code_test_log": {
+        "path": "/tmp/rasa-retail-20260922-clothing-before.log",
+        "bytes": 3596,
+        "sha256": "4f020dcb95e053a5358c433d617dbeea7fe29673871f4d383b147aace06c61f4",
+        "total": 4,
+        "failed": 4,
+        "elapsed_seconds": 2.615,
+        "expected_failures": "Three resistance-list decoders reject None byte 00; the stat case observes all three old non_armor errors."
+      },
+      "screenshot": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-04/02-half-pi-before-input.png",
+        "bytes": 622671,
+        "sha256": "57c22ebfe77f0d30a2078fd29328858b7aa31f465412fd57fd99c77abcdb71cc",
+        "observation": "Original client visibly admitted to Luna Cavern; worn Recruit clothing and Pistol HUD 20/1000. Image independently viewed in this audit."
+      },
+      "remaining_client_error": "One ERROR line 7: TypeError: argument list must be a tuple. It remains unresolved and is not attributed to the fixed clothing resistance list.",
+      "completed_admission_record": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-04/admission-retest.json",
+        "bytes": 599,
+        "sha256": "348783a1a7d3b615cacaae656b5b1a7deab2dcaf737f0dd0a9a6db09d3b14ef7"
+      }
+    },
+    "integrated_suite": {
+      "result": "passed",
+      "console_leaf_tests": 1232,
+      "passed": 1232,
+      "skipped": 0,
+      "elapsed_minutes": 5.0007,
+      "trx_result_entries": 1366,
+      "trx_data_test_parent_entries": 134,
+      "trx_count_note": "MSTest TRX includes 134 data-test parent entries as well as 1232 leaf outcomes; all 1366 entries passed.",
+      "log": {
+        "path": "/tmp/rasa-retail-20260922-opening-final.log",
+        "bytes": 102036,
+        "sha256": "e457c9b845f0385b6eee9696af069bc86ec2b2ce594d370a4dd3810937066c3a"
+      },
+      "trx": {
+        "path": "/tmp/rasa-retail-20260922-opening-final.trx",
+        "bytes": 1348483,
+        "sha256": "d7254caf3bfd46826f344b33a08161ad96afd7f11c072924ee66fa416fff1a79"
+      },
+      "scope": "Full integrated clothing and admission suite before the subsequent spawn-heading data correction."
+    },
+    "skill_pair_correction": {
+      "status": "Focused regression, combined full suite and original-client clothing hover all passed",
+      "tests": "Three original Recruit tooltip cases now require the nested two-value absent skill pair; one synthetic case preserves existing skill/resistance values. Stat regression unchanged.",
+      "builds_run_by_this_agent": false,
+      "prior_suite_limit": "The 1,246/1,246 run predates this correction and asserted the old scalar None field; it does not validate the corrected pair.",
+      "baseline": {
+        "total": 5,
+        "passed": 2,
+        "failed": 3,
+        "skipped": 0,
+        "duration_seconds": 1.5342,
+        "log": "/tmp/rasa-retail-20260922-clothing-skill-before.log",
+        "log_bytes": 3195,
+        "log_sha256": "66ed2b5054908df2213bdb889affe4c02001bcdfe8e83afaba448a2c82b184df"
+      },
+      "fixed": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "duration_seconds": 1.6888,
+        "log": "/tmp/rasa-retail-20260922-clothing-skill-after.log",
+        "log_bytes": 1966,
+        "log_sha256": "1dcdf03c31c3cf6ee7fe7b798d170d887f15b869ebedfa18b85052b9ef2317a4"
+      },
+      "comparison": "The same isolated snapshot ran all five cases before and after copying only the serializer fix. All three Recruit tooltip cases rejected scalar None at the required tuple; the present-skill/resistance and stat cases passed in both runs.",
+      "runtime_recheck": {
+        "status": "passed",
+        "tier": "observed",
+        "scope": "Original-client integration, not original-live fidelity certification",
+        "recorded_at_utc": "2026-09-22T20:49:41.707108+00:00",
+        "record": {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest.json",
+          "bytes": 731,
+          "sha256": "9fb9c03ab1ff687a0db5fe6c062158d63ddaf8fd2ec2492850e6386c84c5927f"
+        },
+        "client_log_prefix": {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest-client-prefix.log",
+          "bytes": 8468,
+          "sha256": "cddab068fa7ef4e28685304bf79679b5b077f90ed1ff08b013d1a65eb1fd5677"
+        },
+        "line_count": 63,
+        "error_counts": {
+          "unpack_non_sequence": 0,
+          "iteration_non_sequence": 0,
+          "startup_tuple": 1,
+          "zero_size_projection": 30
+        },
+        "captures": [
+          {
+            "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/02-recruit-boots-tooltip.png",
+            "bytes": 639625,
+            "sha256": "1e5f9c9bbd3add0b26204b1ce67afa404dfb620fdb04e5908abf9a75e277f3e1"
+          },
+          {
+            "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/03-recruit-legs-tooltip.png",
+            "bytes": 639468,
+            "sha256": "a26dbc0991466f5d5f37754d32bf29892bf6ec7a5632d119410c976e6360b8bf"
+          },
+          {
+            "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/04-recruit-vest-tooltip.png",
+            "bytes": 636414,
+            "sha256": "3943451eff33f005ca8e3dcdbddec85a1effcb0361d61326dc17fdd856673a97"
+          }
+        ],
+        "visual_review": "All three captures independently viewed: Recruit Boots, Recruit Legs and Recruit Vest render alongside the equipped Motor Assist Armor comparison. Recruit entries show no invented body armor, regeneration or skill requirement.",
+        "limitations": "Only the retained log prefix and these hover captures are covered. Separate startup tuple and projection warnings persist; this does not certify all retail behavior."
+      },
+      "full_suite": {
+        "total": 1251,
+        "passed": 1251,
+        "failed": 0,
+        "skipped": 0,
+        "duration_minutes": 6.2316,
+        "log": {
+          "path": "/tmp/rasa-retail-20260922-gearing-verified.log",
+          "bytes": 104672,
+          "sha256": "ea2037d8e7cb20beae9a390a8316924ed2050d5f68ffedfaca3a15886d038ac2"
+        },
+        "snapshot": {
+          "path": "/tmp/rasa-retail-20260922-gearing-snapshot.json",
+          "bytes": 311305,
+          "sha256": "8c505bd1afb4f9862e09862f5ffc2d2e69b6d7a26d2deddebbe0a53c1707e819"
+        },
+        "snapshot_total_entries": 2089,
+        "source_integrity": {
+          "src_entries": 2056,
+          "csharp_and_project_files": 1978,
+          "mismatches": [],
+          "additional_csharp_or_project_files": []
+        },
+        "scope": "Final complete snapshot excludes TestResults. The earlier incomplete-snapshot attempt is not counted as a completed test run."
+      }
+    }
+  }
+}

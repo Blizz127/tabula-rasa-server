@@ -1,0 +1,438 @@
+{
+  "schema": "rasa.new-character-loadout.v1",
+  "research_date": "2026-09-22",
+  "target": "final live boot-camp arrival; no existing character inventories rewritten",
+  "sources": [
+    {
+      "id": "client",
+      "tier": "original",
+      "source": "TR 1.16.5.0 retained original-client artifacts; docs/client-artifacts.md",
+      "version": "1.16.5.0 compatibility package (exact shutdown revision unverified)",
+      "hashes": {
+        "generated/client/itemclass.pyo": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+        "generated/client/equipmentdata.pyo": "75c2caf08e42fea264dbf521e11350dee44faf369bfdeae035fbb3bc3d5afed8",
+        "generated/client/weaponclass.pyo": "49e514546f8e30ee906b9e63c04e2c541af98bc681b8005e3a9f4f225f943591"
+      }
+    },
+    {
+      "id": "video",
+      "tier": "observed",
+      "source": "https://www.youtube.com/watch?v=7Lrst9SG3pk",
+      "version": "inferred final live, 2009-02-26 from adjacent 8VXeKzGUv0c chat; docs/bootcamp-client-evidence.md",
+      "retained": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/"
+    },
+    {
+      "id": "c321_tt.png",
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/c321_tt.png",
+      "sha256": "eaea365418e2cc824284c0f0be50a8e47c5298b221e86e95a19c68bed5222f99",
+      "reviewed": "2026-09-22; retained original video frame crop inspected directly"
+    },
+    {
+      "id": "c324_tt.png",
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/c324_tt.png",
+      "sha256": "95afcedcebcb08285c31fae9733a4eaa1bb67ebb1869ca58fcff531280aff4ad",
+      "reviewed": "2026-09-22; retained original video frame crop inspected directly"
+    },
+    {
+      "id": "c332_bp.png",
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/c332_bp.png",
+      "sha256": "f29f13ab72fc4541da9ae2d6873daf08e5086f21cc0bb93371894fc450310776",
+      "reviewed": "2026-09-22; retained original video frame crop inspected directly"
+    },
+    {
+      "id": "c334_cmp.png",
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/c334_cmp.png",
+      "sha256": "4fa39e73eaeac2acdfdda2c6ea49183c8ff0db018b084b6ffd2e6ae2a6ad4050",
+      "reviewed": "2026-09-22; retained original video frame crop inspected directly"
+    },
+    {
+      "id": "trpython-client-inventory.pyo",
+      "tier": "original",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-inventory.pyo",
+      "sha256": "fea5b3bc09103b261cdccd8b9396b0cef0e93c0b484fcb1039655da57990bd70",
+      "version": "retained 1.16.5.0 package; see docs/client-artifacts.md"
+    },
+    {
+      "id": "trpython-client-ui-weapondrawerwindow.pyo",
+      "tier": "original",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-weapondrawerwindow.pyo",
+      "sha256": "0c05631490865de259ae9b43cb1723e7faf7b83ee50ed720e0b31e7054616933",
+      "version": "retained 1.16.5.0 package; see docs/client-artifacts.md"
+    }
+  ],
+  "rows": [
+    {
+      "name": "Pistol",
+      "fields": {
+        "template_id": {
+          "value": 122875,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/itemclass.pyo itemTemplateItemClass[122875] -> 29803",
+          "confidence": "medium",
+          "unverified": "Footage names the item, not its numeric server template; pistol selected by boot-camp class identity, 88 damage and 20 magazine."
+        },
+        "class_id": {
+          "value": 29803,
+          "tier": "original",
+          "source": "generated/client/itemclass.pyo itemTemplateItemClass[122875]",
+          "confidence": "high"
+        },
+        "inventory_type": {
+          "value": 9,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/inventorydata.pyo source lines 9,16,17 bytecode 0-3,42-51 (PERSONALINVENTORY=1, EQUIPPEDINVENTORY=8, WEAPONDRAWERINVENTORY=9)",
+          "confidence": "high"
+        },
+        "slot_id": {
+          "value": 0,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "quantity": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "ammo_count": {
+          "value": 20,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "current_hit_points": {
+          "value": 150,
+          "tier": "inferred",
+          "source": "generated/client/itemclass.pyo lookup[29803][4] (maxHitPoints)",
+          "confidence": "medium",
+          "unverified": "Full initial condition inferred; maximum is original, initial instance condition not captured."
+        },
+        "color": {
+          "value": 4294967295,
+          "tier": "analogue",
+          "source": "client/ui/charactercreationwindow.pyo module line 70 offsets 538-541; Init line 126 offsets 227-314",
+          "confidence": "low",
+          "unverified": "Outfit instance tint follows original preview. Pistol/ammunition tint is not observed."
+        },
+        "has_sellable_flag": {
+          "value": 0,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "not_tradable_flag": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "name": "Standard Grade Cartridges",
+      "fields": {
+        "template_id": {
+          "value": 28,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/itemclass.pyo itemTemplateItemClass[28] -> 3147",
+          "confidence": "medium",
+          "unverified": "Footage names the item, not its numeric server template; pistol selected by boot-camp class identity, 88 damage and 20 magazine."
+        },
+        "class_id": {
+          "value": 3147,
+          "tier": "original",
+          "source": "generated/client/itemclass.pyo itemTemplateItemClass[28]",
+          "confidence": "high"
+        },
+        "inventory_type": {
+          "value": 1,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/inventorydata.pyo source lines 9,16,17 bytecode 0-3,42-51 (PERSONALINVENTORY=1, EQUIPPEDINVENTORY=8, WEAPONDRAWERINVENTORY=9)",
+          "confidence": "high",
+          "unverified": "Ammo consumables tab was not opened."
+        },
+        "slot_id": {
+          "value": 50,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high",
+          "unverified": "First consumable slot is a storage convention; footage shows reserve total, not stack position."
+        },
+        "quantity": {
+          "value": 1000,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A2-011 at 224.800 s; A3-047 at 334.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; client/ui/weapondrawerwindow.pyo::_UpdateAmmoDisplay (source lines 896-900, bytecode 219-316) formats current magazine / inventory count; client/inventory.pyo::GetCountPersonalInventoryItemsByClass (source 1423, bytecode 9-26 and 93-106) sums matching PERSONALINVENTORY stack counts only",
+          "confidence": "high",
+          "unverified": "HUD directly observes 1000 reserve; representing it as one stack is inferred and fits the original 50000 stack limit."
+        },
+        "ammo_count": {
+          "value": 0,
+          "tier": "inferred",
+          "source": "Non-weapon item; no magazine",
+          "confidence": "high"
+        },
+        "current_hit_points": {
+          "value": 1,
+          "tier": "inferred",
+          "source": "generated/client/itemclass.pyo lookup[3147][4] (maxHitPoints)",
+          "confidence": "medium",
+          "unverified": "Full initial condition inferred; maximum is original, initial instance condition not captured."
+        },
+        "color": {
+          "value": 4294967295,
+          "tier": "analogue",
+          "source": "client/ui/charactercreationwindow.pyo module line 70 offsets 538-541; Init line 126 offsets 227-314",
+          "confidence": "low",
+          "unverified": "Outfit instance tint follows original preview. Pistol/ammunition tint is not observed."
+        }
+      }
+    },
+    {
+      "name": "Recruit Boots",
+      "fields": {
+        "template_id": {
+          "value": 122854,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A3-035 at 321.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/itemclass.pyo itemTemplateItemClass[122854] -> 10000068",
+          "confidence": "high",
+          "unverified": "Template is joined from the observed name and original preview class."
+        },
+        "class_id": {
+          "value": 10000068,
+          "tier": "original",
+          "source": "generated/client/itemclass.pyo itemTemplateItemClass[122854]",
+          "confidence": "high"
+        },
+        "inventory_type": {
+          "value": 8,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-035 at 321.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/inventorydata.pyo source lines 9,16,17 bytecode 0-3,42-51 (PERSONALINVENTORY=1, EQUIPPEDINVENTORY=8, WEAPONDRAWERINVENTORY=9)",
+          "confidence": "high"
+        },
+        "slot_id": {
+          "value": 2,
+          "tier": "original",
+          "source": "generated/client/equipmentdata.pyo equipableClassEquipmentSlot[10000068]",
+          "confidence": "high"
+        },
+        "quantity": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-035 at 321.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "ammo_count": {
+          "value": 0,
+          "tier": "inferred",
+          "source": "Non-weapon item; no magazine",
+          "confidence": "high"
+        },
+        "current_hit_points": {
+          "value": 35,
+          "tier": "inferred",
+          "source": "generated/client/itemclass.pyo lookup[10000068][4] (maxHitPoints)",
+          "confidence": "medium",
+          "unverified": "Full initial condition inferred; maximum is original, initial instance condition not captured."
+        },
+        "color": {
+          "value": 4294967295,
+          "tier": "inferred",
+          "source": "client/ui/charactercreationwindow.pyo module line 70 offsets 538-541; Init line 126 offsets 227-314",
+          "confidence": "high",
+          "unverified": "Outfit instance tint follows original preview. Pistol/ammunition tint is not observed."
+        },
+        "has_sellable_flag": {
+          "value": 0,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-035 at 321.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "not_tradable_flag": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-035 at 321.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "name": "Recruit Legs",
+      "fields": {
+        "template_id": {
+          "value": 122855,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A3-040 at 324.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/itemclass.pyo itemTemplateItemClass[122855] -> 10000069",
+          "confidence": "high",
+          "unverified": "Template is joined from the observed name and original preview class."
+        },
+        "class_id": {
+          "value": 10000069,
+          "tier": "original",
+          "source": "generated/client/itemclass.pyo itemTemplateItemClass[122855]",
+          "confidence": "high"
+        },
+        "inventory_type": {
+          "value": 8,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-040 at 324.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/inventorydata.pyo source lines 9,16,17 bytecode 0-3,42-51 (PERSONALINVENTORY=1, EQUIPPEDINVENTORY=8, WEAPONDRAWERINVENTORY=9)",
+          "confidence": "high"
+        },
+        "slot_id": {
+          "value": 16,
+          "tier": "original",
+          "source": "generated/client/equipmentdata.pyo equipableClassEquipmentSlot[10000069]",
+          "confidence": "high"
+        },
+        "quantity": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-040 at 324.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "ammo_count": {
+          "value": 0,
+          "tier": "inferred",
+          "source": "Non-weapon item; no magazine",
+          "confidence": "high"
+        },
+        "current_hit_points": {
+          "value": 59,
+          "tier": "inferred",
+          "source": "generated/client/itemclass.pyo lookup[10000069][4] (maxHitPoints)",
+          "confidence": "medium",
+          "unverified": "Full initial condition inferred; maximum is original, initial instance condition not captured."
+        },
+        "color": {
+          "value": 4294967295,
+          "tier": "inferred",
+          "source": "client/ui/charactercreationwindow.pyo module line 70 offsets 538-541; Init line 126 offsets 227-314",
+          "confidence": "high",
+          "unverified": "Outfit instance tint follows original preview. Pistol/ammunition tint is not observed."
+        },
+        "has_sellable_flag": {
+          "value": 0,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-040 at 324.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "not_tradable_flag": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-040 at 324.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "name": "Recruit Vest",
+      "fields": {
+        "template_id": {
+          "value": 122856,
+          "tier": "inferred",
+          "source": "7Lrst9SG3pk A3-046 at 332.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/itemclass.pyo itemTemplateItemClass[122856] -> 10000070",
+          "confidence": "high",
+          "unverified": "Template is joined from the observed name and original preview class."
+        },
+        "class_id": {
+          "value": 10000070,
+          "tier": "original",
+          "source": "generated/client/itemclass.pyo itemTemplateItemClass[122856]",
+          "confidence": "high"
+        },
+        "inventory_type": {
+          "value": 8,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-046 at 332.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json; generated/client/inventorydata.pyo source lines 9,16,17 bytecode 0-3,42-51 (PERSONALINVENTORY=1, EQUIPPEDINVENTORY=8, WEAPONDRAWERINVENTORY=9)",
+          "confidence": "high"
+        },
+        "slot_id": {
+          "value": 15,
+          "tier": "original",
+          "source": "generated/client/equipmentdata.pyo equipableClassEquipmentSlot[10000070]",
+          "confidence": "high"
+        },
+        "quantity": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-046 at 332.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "ammo_count": {
+          "value": 0,
+          "tier": "inferred",
+          "source": "Non-weapon item; no magazine",
+          "confidence": "high"
+        },
+        "current_hit_points": {
+          "value": 70,
+          "tier": "inferred",
+          "source": "generated/client/itemclass.pyo lookup[10000070][4] (maxHitPoints)",
+          "confidence": "medium",
+          "unverified": "Full initial condition inferred; maximum is original, initial instance condition not captured."
+        },
+        "color": {
+          "value": 4294967295,
+          "tier": "inferred",
+          "source": "client/ui/charactercreationwindow.pyo module line 70 offsets 538-541; Init line 126 offsets 227-314",
+          "confidence": "high",
+          "unverified": "Outfit instance tint follows original preview. Pistol/ammunition tint is not observed."
+        },
+        "has_sellable_flag": {
+          "value": 0,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-046 at 332.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        },
+        "not_tradable_flag": {
+          "value": 1,
+          "tier": "observed",
+          "source": "7Lrst9SG3pk A3-046 at 332.467 s; retained A3/transcript.json (supporting tooltip events) and A2-011 in docs/evidence/bootcamp-d11-footage-events.json",
+          "confidence": "high"
+        }
+      }
+    }
+  ],
+  "clone_application": {
+    "tier": "inferred",
+    "source": "src/Rasa.Game/Managers/CharacterManager.cs RequestCloneCharacterToSlot resets Recruit training and already uses GiveBasicItems; same initial kit and tray used for compatibility",
+    "unverified": "No surviving clone arrival capture establishes cloned inventory quantities, tints, loaded ammo, or initial ability layout; do not describe the clone kit as observed."
+  },
+  "clone_ability_drawer": [
+    {
+      "slot": 0,
+      "ability_id": 194,
+      "level": 1,
+      "tier": "inferred",
+      "source": "new-character observed A2-011, plus original Recruit skill ability IDs"
+    },
+    {
+      "slot": 1,
+      "ability_id": 401,
+      "level": 1,
+      "tier": "inferred",
+      "source": "new-character A2-011 second icon; original Recruit Sprint identity; existing SkillTraining.InitialRecruitAbilityDrawer"
+    }
+  ],
+  "changes": [
+    {
+      "date": "2026-09-22",
+      "replaced": "Pistol 145 unloaded in backpack, 100 reserve cartridges; loose Motor Assist helmet 13126, vest 13186 and legs 13156",
+      "reason": "Contradicts final-week HUD and empty equipment backpack; clothing now matches observed equipped Recruit outfit. White garment tint follows original preview."
+    }
+  ],
+  "unverified": [
+    "Full original-client creation/reconnect/equip playthrough still required.",
+    "Video recording date inferred from chat; exact original executable revision unverified.",
+    "No automatic repair of already-created characters; their earned gear and ammunition must be preserved."
+  ],
+  "hud_ammo_semantics": {
+    "tier": "original",
+    "source": "client/ui/weapondrawerwindow.pyo::_UpdateAmmoDisplay (source lines 896-900, bytecode 219-316) formats current magazine / inventory count; client/inventory.pyo::GetCountPersonalInventoryItemsByClass (source 1423, bytecode 9-26 and 93-106) sums matching PERSONALINVENTORY stack counts only",
+    "conclusion": "20/1000 denotes 20 in the pistol magazine and 1000 cartridges in personal inventory. Loaded magazine rounds are excluded from the denominator."
+  }
+}

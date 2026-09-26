@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "scope": "Account hybrid eligibility, selection, creation, cloning and mission turn-in grants",
+  "sources": {
+    "missionconversation": {
+      "tier": "original",
+      "file": "generated/client/missionconversation.pyo",
+      "sha256": "085df01e239a86fec0f6c9d1017d2af60edf54e47f6a235e4204ee8e84c3713b",
+      "pyc_timestamp": 1234238135,
+      "extraction": "/home/blizz/backups/rasa-net/research/20260912-new-character/generated-client-missionconversation.pyo.json",
+      "version_note": "Compatibility client 1.16.5.0; February 10 2009 compiled timestamp is not proof of exact shutdown build."
+    },
+    "missiontexttype": {
+      "tier": "original",
+      "file": "generated/client/missiontexttype.pyo",
+      "sha256": "bfb3b17734e653f659130399d2bc93a40cd0c97b56db787b48ce460a2e1c71bc",
+      "pyc_timestamp": 1234238136,
+      "extraction": "/home/blizz/backups/rasa-net/research/20260912-new-character/generated-client-missiontexttype.pyo.json",
+      "version_note": "Compatibility client 1.16.5.0; February 10 2009 compiled timestamp is not proof of exact shutdown build."
+    },
+    "missionobjective": {
+      "tier": "original",
+      "file": "generated/client/missionobjective.pyo",
+      "sha256": "330f29153493c512a5a90074f4c0ae4ab45cb3f0d4dfc4b56764a0d95d232d5f",
+      "pyc_timestamp": 1234238136,
+      "extraction": "/home/blizz/backups/rasa-net/research/20260912-new-character/generated-client-missionobjective.pyo.json",
+      "version_note": "Compatibility client 1.16.5.0; February 10 2009 compiled timestamp is not proof of exact shutdown build."
+    },
+    "language-english-missiontextlanguage": {
+      "tier": "original",
+      "file": "generated/client/language/english/missiontextlanguage.pyo",
+      "sha256": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d",
+      "pyc_timestamp": 1234238145,
+      "extraction": "/home/blizz/backups/rasa-net/research/20260912-new-character/generated-client-language-english-missiontextlanguage.pyo.json",
+      "version_note": "Compatibility client 1.16.5.0; February 10 2009 compiled timestamp is not proof of exact shutdown build."
+    },
+    "sage": {
+      "tier": "original",
+      "url": "https://www.mmorpg.com/interviews/hybrid-video-and-exclusive-qanda-2000115533",
+      "date": "2008-01-29",
+      "location": "Paul Sage answer to Can you elaborate a bit about how to gain access to these hybrids?",
+      "supports": "New and clone characters require completion of the respective race mission chain."
+    },
+    "brann_guide": {
+      "tier": "observed",
+      "url": "https://www.tentonhammer.com/guides/brann-hybrid-access-mission-guide",
+      "date": "2008-02-05",
+      "location": "opening paragraphs and Remedy section final paragraph",
+      "supports": "Firsthand walkthrough: per-account on server; Remedy grants Brann access after Caretaker death and turn-in."
+    },
+    "account_report": {
+      "tier": "observed",
+      "url": "https://arstechnica.com/civis/threads/tabula-rasa-who-is-playing.138412/page-7",
+      "date": "2008-02-04",
+      "location": "post #260 by Richtus",
+      "supports": "Firsthand player reports Brann unlock applies to account and new characters."
+    },
+    "selection_client": {
+      "tier": "original",
+      "file": "client/clientmethod.pyo",
+      "extraction": "/home/blizz/backups/rasa-net/research/20260912-new-character/client-clientmethod.pyo.selected.dis",
+      "location": "Recv_BeginCharacterSelection, original line 803, offsets 58-64",
+      "supports": "Passes supplied raceList to SetEnabledRaces."
+    },
+    "race_constants": {
+      "tier": "original",
+      "file": "data/game.zip:generated/client/constant/race.pyo",
+      "sha256": "15c6905c1c9159cc712ef5cbf1641318ac154986e4199fff5e851ec578121d1a",
+      "location": "Human=1, ForeanHybrid=2, BrannHybrid=3, ThraxHybrid=4; recorded in docs/equipment-eligibility-client-evidence.md Race identifiers",
+      "supports": "Numeric race mapping."
+    }
+  },
+  "rules": [
+    {
+      "id": "human_default",
+      "tier": "original",
+      "source": [
+        "sage"
+      ],
+      "value": [
+        1
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "account_server_scope",
+      "tier": "observed",
+      "source": [
+        "account_report",
+        "brann_guide"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "persist_after_character_deletion",
+      "tier": "inferred",
+      "source": [
+        "account_report",
+        "brann_guide"
+      ],
+      "confidence": "medium",
+      "reason": "Unlock belongs to the account, independent of the character; deletion behavior lacks direct capture."
+    },
+    {
+      "id": "server_validation_failure",
+      "tier": "inferred",
+      "value": "CharacterCreationInvalidRace",
+      "confidence": "medium",
+      "reason": "Existing original-client error enumeration; exact live-server refusal response unobserved."
+    },
+    {
+      "id": "selection_race_list",
+      "tier": "original",
+      "source": [
+        "selection_client"
+      ],
+      "confidence": "high",
+      "value": "Human plus this account/server persisted hybrid unlocks"
+    }
+  ],
+  "unlocks": [
+    {
+      "mission_id": 1861,
+      "race_id": 2,
+      "title": "Traitor on the Run",
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "mission_id": {
+          "tier": "original",
+          "source": "missionconversation",
+          "key": [
+            1861,
+            4
+          ],
+          "bytecode_offset": 91352
+        },
+        "race_id": {
+          "tier": "original",
+          "source": "language-english-missiontextlanguage",
+          "key": [
+            18983,
+            1
+          ],
+          "bytecode_offset": 490556,
+          "corroboration": [
+            "sage"
+          ],
+          "numeric_constant_source": "race_constants"
+        },
+        "grant_when": {
+          "value": "successful mission turn-in",
+          "tier": "inferred",
+          "source": [
+            "missiontexttype",
+            "missionconversation",
+            "sage",
+            "brann_guide"
+          ],
+          "reason": "FINISHINGTEXT is type 4; walkthrough grants access on final turn-in."
+        }
+      },
+      "unverified": [
+        "Original server reward table and final shutdown server state unavailable."
+      ]
+    },
+    {
+      "mission_id": 1851,
+      "race_id": 3,
+      "title": "Remedy",
+      "tier": "inferred",
+      "confidence": "medium",
+      "fields": {
+        "mission_id": {
+          "tier": "original",
+          "source": "missionconversation",
+          "key": [
+            1851,
+            4
+          ],
+          "bytecode_offset": 90542
+        },
+        "race_id": {
+          "tier": "inferred",
+          "source": "language-english-missiontextlanguage",
+          "key": [
+            18825,
+            1
+          ],
+          "bytecode_offset": 486452,
+          "corroboration": [
+            "sage",
+            "brann_guide"
+          ],
+          "numeric_constant_source": "race_constants"
+        },
+        "grant_when": {
+          "value": "successful mission turn-in",
+          "tier": "inferred",
+          "source": [
+            "missiontexttype",
+            "missionconversation",
+            "sage",
+            "brann_guide"
+          ],
+          "reason": "FINISHINGTEXT is type 4; walkthrough grants access on final turn-in."
+        }
+      },
+      "unverified": [
+        "Original server reward table and final shutdown server state unavailable."
+      ]
+    },
+    {
+      "mission_id": 1899,
+      "race_id": 4,
+      "title": "Genome Sweet Genome",
+      "tier": "original",
+      "confidence": "high",
+      "fields": {
+        "mission_id": {
+          "tier": "original",
+          "source": "missionconversation",
+          "key": [
+            1899,
+            4
+          ],
+          "bytecode_offset": 94682
+        },
+        "race_id": {
+          "tier": "original",
+          "source": "language-english-missiontextlanguage",
+          "key": [
+            19494,
+            1
+          ],
+          "bytecode_offset": 505856,
+          "corroboration": [
+            "sage"
+          ],
+          "numeric_constant_source": "race_constants"
+        },
+        "grant_when": {
+          "value": "successful mission turn-in",
+          "tier": "inferred",
+          "source": [
+            "missiontexttype",
+            "missionconversation",
+            "sage",
+            "brann_guide"
+          ],
+          "reason": "FINISHINGTEXT is type 4; walkthrough grants access on final turn-in."
+        }
+      },
+      "unverified": [
+        "Original server reward table and final shutdown server state unavailable."
+      ]
+    }
+  ],
+  "brann_corroboration": {
+    "tier": "original",
+    "source": "missionobjective",
+    "key": [
+      1851,
+      2
+    ],
+    "bytecode_offset": 94547,
+    "text_key": [
+      18929,
+      1
+    ],
+    "text_bytecode_offset": 490016,
+    "observation": "Objective directs the player to let a Caretaker kill them, matching the dated Remedy walkthrough."
+  },
+  "implementation": {
+    "backfill": "Only completed mission state 4; existing hybrid appearance is never treated as proof of an earned unlock.",
+    "persistence": "account_race_unlock composite key(account_id,race_id); database representation is an implementation choice, not original server schema.",
+    "schema_migration": "20260922110000_AccountRaceUnlocks",
+    "backfill_migration": "20260922110100_BackfillRaceUnlocks"
+  },
+  "gaps": [
+    "Hybrid mission chains still require their independently validated NPC placements, objective scripts and rewards to become fully playable.",
+    "No original final-live server reward capture or deletion behavior capture.",
+    "No new client unlock notification packet is guessed: next character-selection message reads persisted state."
+  ]
+}

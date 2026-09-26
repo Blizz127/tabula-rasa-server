@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Recovered client live login smoke after DIT preservation image deployment",
+  "provenance_tier": "observed",
+  "confidence": "High for this recovered client and test account reaching Character Select through the VPS Tailscale address; owner client, account, and in-world entry remain unverified.",
+  "setup": "Recovered 1.16.5.0 client under Wine/Xvfb in a bubblewrap namespace, cloned prefix, host network, /AuthServer=100.104.53.1:2116. Live Game image sha256:a2e945d97f4ab4d4b9f153fa5235f70b71ee424c7411c1957d55bbaeda3c6493. Existing test account; no character created or selected.",
+  "observations": [
+    "At 06:42:25-06:42:26 UTC Auth received Login, ServerListExt and AboutToPlay from 100.104.53.1 and redirected the test account to Game server 234.",
+    "At 06:42:26 UTC Game accepted the redirected client. The 35-second and 50-second screenshots show the Character Select screen with empty test-account slots. The client process was still running at both captures and then was terminated by the harness.",
+    "This confirms the tested tailnet auth/game path and Character Select on the newly deployed image. It does not confirm a playable character, the owner account, or the owner device."
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-preservation-20260924a/login-after-35s.png",
+      "sha256": "667ca9780e11f21baa492b805ffc27d147ab7cdd5a6aba0ec2207b1f5e86e9e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-preservation-20260924a/login-after-50s.png",
+      "sha256": "32feeabe0467d6f3ffe2832a307c73e6bd47ce5bd6f5e8bf314dff63eaaa9d30"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-preservation-20260924a/launcher.log",
+      "sha256": "229b658956b0faff7d3d9f2ade42be8213ae75121d62558e9879d3e91840cca0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-preservation-20260924a/rasa-net-auth-1.selected.log",
+      "sha256": "d92c666084198471a5f70e6d07e76bc67bda4b379d74b26f0ee1ba71bcc2b0e2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-preservation-20260924a/rasa-net-game-1.selected.log",
+      "sha256": "047e63f0d6a6ff1bc3fc96bfa3376ecbdb3b124fa521588fedfe81f56aed146b"
+    }
+  ]
+}

@@ -1,0 +1,444 @@
+{
+  "schema": "rasa.client-attribute-allocation-reply.v1",
+  "recorded_at_utc": "2026-09-22T22:26:57.780377+00:00",
+  "client_version": "1.16.5.0 compatibility artifact; exact shutdown revision not established",
+  "status": "Verified: old-order baseline fails both regressions, clean focused 127/127 pass, full 1302/1302 pass, and frozen original-client diagnostic run 15 shows correct partial/full allocation counters.",
+  "runtime_baseline": {
+    "tier": "observed",
+    "environment": "Original client against isolated emulator, not original-live server capture",
+    "run": "playthrough-14",
+    "level": 2,
+    "before": {
+      "body": 12,
+      "mind": 12,
+      "spirit": 12,
+      "displayed_unspent_points": 3
+    },
+    "preview": {
+      "body": 13,
+      "mind": 13,
+      "spirit": 13,
+      "displayed_unspent_points": 0
+    },
+    "after_accept": {
+      "body": 13,
+      "mind": 13,
+      "spirit": 13,
+      "displayed_unspent_points": 3,
+      "persisted_spent_body": 1,
+      "persisted_spent_mind": 1,
+      "persisted_spent_spirit": 1
+    },
+    "server_call_location": "playthrough-14/game.log line856, 2026-09-22 17:21:39.942 local",
+    "limitation": "No original packet capture required for diagnosis; ordering is established by current source and original synchronous consumers"
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/16-attributes-before.png",
+      "sha256": "e76164de7056616baea7f4f5059539162a00a70fc62c635f47b0a704e6822f28"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/17-attributes-preview.png",
+      "sha256": "2abceeb56b28170ba4525d267cc79da5b9c054306a4bcdf8f26b2b0cc298e681"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/18-attributes-accepted.png",
+      "sha256": "a0a0d343a19b8fff97818264537e1e4a3926c0fe709062f173c5bacb45a23734"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/attribute-preview-state.json",
+      "sha256": "0c9063e16e0bbad8a7596e2b508e5fbafce458f041ae07c0000790383ee2ef6a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/attribute-accepted-state.json",
+      "sha256": "aaa0818eb37fe2101a4d9d66c88179ffe963c8100bfab7e7866763dd9e15fb9d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/ManifestationManager.before-attribute-reply-order.cs",
+      "sha256": "7b7d5046ba187fc1430ca2d8f3345f0d3409b3d89286e472e09c7e970852de26",
+      "purpose": "Current source with only the allocation reply-order hunk restored, for isolated before/fix tests"
+    }
+  ],
+  "original_sources": [
+    {
+      "member": "client/augmentations/manifestation.pyo",
+      "sha256": "724f68eb70e5a47338db82977c55abfa09f1b187f86a0b9a560c012a8588886d",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/trpython-client-augmentations-manifestation.pyo.selected.dis",
+      "selected_disassembly_sha256": "7319222c57078a209c12873934b9b0c61c28ae1881e06e41a4033eaa4abca340",
+      "matches_original_full_archive": true
+    },
+    {
+      "member": "client/augmentations/actor.pyo",
+      "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/trpython-client-augmentations-actor.pyo.selected.dis",
+      "selected_disassembly_sha256": "f58cd78cf6ad19d1658d3f97d338d2c81806b9007425fd9d2af5e1251dd22ce3",
+      "matches_original_full_archive": true
+    },
+    {
+      "member": "client/augmentations/actorattribute.pyo",
+      "sha256": "66b7b5aaff68d00e9c5fdbef5370fce78f17bcb57ba2d479a3f51efd58329f48",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/trpython-client-augmentations-actorattribute.pyo.selected.dis",
+      "selected_disassembly_sha256": "d7c4c479a69764565bb6bec356a8c99fe81d2ee4eb413e4753426ff9746bfd0f",
+      "matches_original_full_archive": true
+    },
+    {
+      "member": "client/ui/attributeswindow.pyo",
+      "sha256": "23610f22dd8fafeab21f8b490f2897dd5b2a0186027a942e00d44f5a7166fde6",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/trpython-client-ui-attributeswindow.pyo.selected.dis",
+      "selected_disassembly_sha256": "b45369e06a644af50c38baeef29064915d2a2d9fc69492a3dd713234ec75a4e2",
+      "matches_original_full_archive": true
+    },
+    {
+      "member": "client/gameui.pyo",
+      "sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/attribute-allocation-audit/trpython-client-gameui.pyo.selected.dis",
+      "selected_disassembly_sha256": "de4d95e334a82c3060d3c3ca71630832117357c5c98d1cbe75cf9c0a878b7be9",
+      "matches_original_full_archive": true
+    }
+  ],
+  "contract": [
+    {
+      "tier": "original",
+      "member": "client/gameui.pyo",
+      "function": "OnAttributesAllocated",
+      "source_line": 1507,
+      "offsets": [
+        0,
+        24
+      ],
+      "meaning": "Sends AllocateAttributePoints with one argument containing the three allocation deltas."
+    },
+    {
+      "tier": "original",
+      "member": "client/augmentations/manifestation.pyo",
+      "function": "Recv_AvailableAllocationPoints",
+      "source_lines": [
+        1187,
+        1192
+      ],
+      "offsets": [
+        77,
+        132
+      ],
+      "meaning": "Updates avatar point caches, then posts UI_UPDATE_CHARACTER_ADVANCEMENT on change."
+    },
+    {
+      "tier": "original",
+      "member": "client/augmentations/actor.pyo",
+      "function": "Recv_AttributeInfo",
+      "source_lines": [
+        765,
+        768
+      ],
+      "offsets": [
+        66,
+        98
+      ],
+      "meaning": "Stores each attribute, then immediately calls its _AnnounceChange."
+    },
+    {
+      "tier": "original",
+      "member": "client/augmentations/actorattribute.pyo",
+      "function": "_AnnounceChange",
+      "source_lines": [
+        72,
+        77
+      ],
+      "offsets": [
+        0,
+        48
+      ],
+      "meaning": "Posts ACTOR_ATTRIBUTE_UPDATE with the attribute values."
+    },
+    {
+      "tier": "original",
+      "member": "client/ui/attributeswindow.pyo",
+      "function": "HandleUpdateAvatarID",
+      "source_line": 277,
+      "offsets": [
+        0,
+        33
+      ],
+      "meaning": "Subscribes HandleUpdateAvatarAttribute to ACTOR_ATTRIBUTE_UPDATE; this window contains no subscription to UI_UPDATE_CHARACTER_ADVANCEMENT."
+    },
+    {
+      "tier": "original",
+      "member": "client/ui/attributeswindow.pyo",
+      "function": "HandleUpdateAvatarAttribute",
+      "source_lines": [
+        226,
+        227
+      ],
+      "offsets": [
+        137,
+        197
+      ],
+      "meaning": "Body, Mind or Spirit announcements call _LoadBMSValues."
+    },
+    {
+      "tier": "original",
+      "member": "client/ui/attributeswindow.pyo",
+      "function": "_LoadBMSValues",
+      "source_line": 1025,
+      "offsets": [
+        54,
+        63
+      ],
+      "meaning": "Copies avatar.attributePoints into the window available-point cache."
+    }
+  ],
+  "fix": {
+    "path": "src/Rasa.Game/Managers/ManifestationManager.cs",
+    "method": "AllocateAttributePoints",
+    "previous_order": [
+      "AttributeInfo",
+      "AvailableAllocationPoints"
+    ],
+    "new_order": [
+      "AvailableAllocationPoints",
+      "AttributeInfo"
+    ],
+    "commit_point": "Both packets still follow the existing database write",
+    "unchanged": "Allocation arithmetic, validation, stats formulas, persistence and rejected-request behavior"
+  },
+  "tests": {
+    "file": "src/Rasa.Test/NewCharacterTests.AttributeAllocation.cs",
+    "cases": 2,
+    "scope": [
+      "Spend all three points and render zero in the original UI-cache model",
+      "Spend one point and render the remaining two",
+      "Serialize and decode both actual replies",
+      "Check persisted allocation values and resulting Body/Mind/Spirit",
+      "Reject replay of the full-budget request without additional mutation"
+    ],
+    "status": "Both new allocation cases pass in the clean rebuilt 127-case focused run; baseline proves both fail with the old reply order."
+  },
+  "remaining_gaps": [
+    "Normal continuing-playthrough reconnect is a separate check and is not yet claimed here",
+    "This fixes cache ordering only; it does not prove all underlying stat formulas or transaction failure behavior"
+  ],
+  "automated_validation": {
+    "archive_directory": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final",
+    "archive_manifest": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/manifest.json",
+    "artifacts": [
+      {
+        "source_path": "/tmp/rasa-retail-20260922-attribute-before.log",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-before.log",
+        "bytes": 2804,
+        "sha256": "544e96782ed5c6dd8ba367939320fcd99764b6caaa07c51cc55b0000e5dfd625"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-attribute-targeted.log",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-targeted.log",
+        "bytes": 14050,
+        "sha256": "ee4f19fb469f42996556a152274f09fdd17918324da63c0bc223f5c1ef5555a5"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-attribute-targeted-rebuilt.log",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-targeted-rebuilt.log",
+        "bytes": 16464,
+        "sha256": "3b96c9b6b5d55137e2f53c8768a7fd96c6e4126428938f0fa5720116d25f045b"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/attribute-before.trx",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/attribute-before.trx",
+        "bytes": 4957,
+        "sha256": "9e5e00174c39a2081c1d73dde1319f3e6fd709f4fe7ca2242448e998fb39c23c"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/attribute-targeted.trx",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/attribute-targeted.trx",
+        "bytes": 137281,
+        "sha256": "6986b307fbecde2543aed59e7bfacc51fecd4275347cb808a94c689abae8ba55"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/attribute-targeted-rebuilt.trx",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/attribute-targeted-rebuilt.trx",
+        "bytes": 136070,
+        "sha256": "caa36b6bf3b32fa3d899f056f463cad2edd52023ada5784f2dddb81c5edbed6c"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-attribute-snapshot.json",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-snapshot.json",
+        "bytes": 314541,
+        "sha256": "c9b679ff7c7b3e01d286e1e972f74cc7a0276c20e3b0a5890b7ceab78f559d07"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-attribute-full.log",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-full.log",
+        "bytes": 107672,
+        "sha256": "a9314fdae1cac084b3e850330f5628484f4d5877d518f9cd43ebb68a77a9390c"
+      },
+      {
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/attribute-full.trx",
+        "archived_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/attribute-full.trx",
+        "bytes": 1443747,
+        "sha256": "db0d4b260885fa386939c719c8d9c0284bc4716f5b7a5880c9901854be1450b4"
+      }
+    ],
+    "baseline": {
+      "passed": 0,
+      "failed": 2,
+      "total": 2,
+      "duration_seconds": 4.5231,
+      "finding": "Both new allocation cases fail at the response ordering assertion with the preserved old-order handler."
+    },
+    "stale_first_candidate": {
+      "passed": 125,
+      "failed": 2,
+      "total": 127,
+      "finding": "Parent diagnosed MSBuild incremental reuse of the old-order compiled output after copy2 restored an older source mtime. Retained as a build-cache artifact, not a production regression."
+    },
+    "clean_rebuilt_candidate": {
+      "passed": 127,
+      "failed": 0,
+      "total": 127,
+      "duration_seconds": 8.2094,
+      "build": "Forced -t:Rebuild",
+      "filter": "NewCharacterTests|AttributePointAllocationTests|WeaponActionLifecycleTests"
+    },
+    "source_snapshot": {
+      "entries": 2112,
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-snapshot.json",
+      "sha256": "c9b679ff7c7b3e01d286e1e972f74cc7a0276c20e3b0a5890b7ceab78f559d07",
+      "checked_source": [
+        {
+          "path": "src/Rasa.Game/Managers/ManifestationManager.cs",
+          "sha256": "63ffbbd5327d75852d1c3680a82950bfc1f886d43d07ed9edf620a636ad5023c",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Test/NewCharacterTests.AttributeAllocation.cs",
+          "sha256": "8ac28a092a26f1c25232ffc95b6a805572c5b73df17719286516594fd7da8d94",
+          "matches_tested_snapshot": true
+        }
+      ]
+    },
+    "full_suite": {
+      "passed": 1302,
+      "total": 1302,
+      "failed": 0,
+      "skipped": 0,
+      "duration_minutes": 5.7901,
+      "source_files_matching_snapshot": 2072,
+      "log_sha256": "a9314fdae1cac084b3e850330f5628484f4d5877d518f9cd43ebb68a77a9390c",
+      "trx_sha256": "db0d4b260885fa386939c719c8d9c0284bc4716f5b7a5880c9901854be1450b4",
+      "source_snapshot_sha256": "c9b679ff7c7b3e01d286e1e972f74cc7a0276c20e3b0a5890b7ceab78f559d07",
+      "all_source_matches_snapshot": true
+    },
+    "runtime_candidate": "Verified in frozen diagnostic original-client run 15 for partial/full acceptance and normal logout"
+  },
+  "candidate_runtime": {
+    "tier": "observed",
+    "run": "playthrough-15",
+    "status": "Frozen after normal in-game character logout reached selection; all harness processes terminal",
+    "scope": "Original compatibility client against isolated candidate emulator; diagnostic restored checkpoint, not additional progress in the continuing playthrough database",
+    "diagnostic_inputs": {
+      "diagnostic_only": true,
+      "source_character_database": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14-char-before.db",
+      "source_sha256": "fc30456159b78fbc4eb6aab4951c0e7e04c88fef14abc3be7df1c939eddbf0ee",
+      "change": "Restored entire earlier naturally earned level-2 checkpoint into a separate server directory. Continuing playthrough databases remain unchanged.",
+      "server_directory": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-allocation-validation"
+    },
+    "input_database_hash_verified": true,
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/allocation-validation-inputs.json",
+        "bytes": 527,
+        "sha256": "939c8d6161563e80e9bc238840ba8185dc5c2d8e3f270341411e4e2d293b5544"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15-binary-inputs.json",
+        "bytes": 21688,
+        "sha256": "40828c363cc055846b3dd9d929f122efb0d8d53a7b125a1d03c8a816eabac3aa"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15-owner.json",
+        "bytes": 189,
+        "sha256": "fcb385a3fd4ebecd734348c98f45a6b1110113655182469979773c8d29de5f0e"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/05-partial-accepted.png",
+        "bytes": 659696,
+        "sha256": "ed0382cbdfa9748f072f6ec1618f7c13d547e4881bf89597f1720f94f4aa4a7b"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/08-final-points-accepted.png",
+        "bytes": 660245,
+        "sha256": "5d2eedf43e020eaec61e2774bffdf91a065bce2e8412d282dc775ed24082a6f6"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/10-diagnostic-character-selection.png",
+        "bytes": 935198,
+        "sha256": "4109ebd39e7af4b9233c3495836a83b426b4a8a5afe2b0cae6f8e09222179239"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/partial-accepted-state.json",
+        "bytes": 154,
+        "sha256": "3f8d5c7995f63c58613466df509072607437e6ef4c877fe9f3e360d90adfc31d"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/final-accepted-state.json",
+        "bytes": 154,
+        "sha256": "39ab0bc63a2516661bd890d2e861a29ac422c43f071a33a61d0f36b87ef94e08"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/logout-persisted-state.json",
+        "bytes": 740,
+        "sha256": "ae72be9d611d36187acd066191e5666f224a2b1e9de99c2f4ab3b4212101921f"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/status.json",
+        "bytes": 210,
+        "sha256": "a412f9c856e9f5ad9b39f070f33f61c8075ddefbe738023a40bcb2f990748f2c"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/client-final.log",
+        "bytes": 6237,
+        "sha256": "c78634f391ac27a252fd35b48cbe5c34c53140ce977e120976915f7762c24870"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-15/game.log",
+        "bytes": 66507,
+        "sha256": "399fad18b8eb975ebf664e6d01354e3a928fa33b7d2141fdb053548741967cc7"
+      }
+    ],
+    "partial_accept": {
+      "body": 13,
+      "mind": 12,
+      "spirit": 12,
+      "displayed_unspent_points": 2,
+      "stored_allocation": [
+        1,
+        0,
+        0
+      ],
+      "capture": "05-partial-accepted.png",
+      "server_call": "game.log line 251, 17:32:15.539 local"
+    },
+    "final_accept": {
+      "body": 14,
+      "mind": 13,
+      "spirit": 12,
+      "displayed_unspent_points": 0,
+      "stored_allocation": [
+        2,
+        1,
+        0
+      ],
+      "capture": "08-final-points-accepted.png",
+      "server_call": "game.log line 393, 17:33:36.347 local"
+    },
+    "logout": {
+      "capture": "10-diagnostic-character-selection.png",
+      "stored_allocation": [
+        2,
+        1,
+        0
+      ],
+      "server_call": "game.log line 488, 17:34:49.148 local"
+    },
+    "preview_caveat": "Capture 04 is a stale render frame still showing 12/12/12 and 3 points; not used as preview evidence. Capture 06 is the later additional Body preview; final acceptance follows another Mind increment.",
+    "conclusion": "Both partial and final accepted allocations immediately display the correct remaining budget, with matching persisted deltas; the reordered reply fixes the observed original-client UI cache defect."
+  }
+}

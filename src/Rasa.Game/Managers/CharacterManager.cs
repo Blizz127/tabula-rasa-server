@@ -60,9 +60,9 @@ namespace Rasa.Managers
             if (client.State != ClientState.LoggedIn)
                 return;
 
-            client.CallMethod(SysEntity.ClientMethodId, new BeginCharacterSelectionPacket(client.AccountEntry.FamilyName, client.AccountEntry.Characters.Any(), client.AccountEntry.Id, client.AccountEntry.CanSkipBootcamp));
-
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
+            client.CallMethod(SysEntity.ClientMethodId, new BeginCharacterSelectionPacket(client.AccountEntry.FamilyName, client.AccountEntry.Characters.Any(), client.AccountEntry.Id, client.AccountEntry.CanSkipBootcamp,
+                unitOfWork.GameAccounts.GetUnlockedRaces(client.AccountEntry.Id)));
             var charactersBySlot = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id);
 
             for (byte i = 1; i <= MaxSelectionPods; ++i)
@@ -127,6 +127,8 @@ namespace Rasa.Managers
                 result = CreateCharacterResult.CharacterCreationInvalidRace;
             if (result == CreateCharacterResult.Success && packet.Gender > 1)
                 result = CreateCharacterResult.InvalidEncoding;
+            if (result == CreateCharacterResult.Success && !CharacterCreationAppearance.IsValid(packet.RaceId, packet.AppearanceData))
+                result = CreateCharacterResult.InvalidEncoding;
 
             if (result != CreateCharacterResult.Success)
             {
@@ -143,6 +145,11 @@ namespace Rasa.Managers
                 try
                 {
                     using var transaction = unitOfWork.BeginTransaction();
+                    if (!RaceUnlocks.IsEnabled(packet.RaceId, unitOfWork.GameAccounts.GetUnlockedRaces(client.AccountEntry.Id)))
+                    {
+                        SendCharacterCreateFailed(client, CreateCharacterResult.CharacterCreationInvalidRace);
+                        return;
+                    }
                     var existing = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id);
 
                     if (!existing.TryGetValue(packet.CloneSlotNum, out source))
@@ -160,6 +167,12 @@ namespace Rasa.Managers
                     if (source.CloneCredits < 1)
                     {
                         SendCharacterCreateFailed(client, CreateCharacterResult.NotEnoughCloneCredits);
+                        return;
+                    }
+
+                    if (unitOfWork.Characters.IsCharacterNameTaken(packet.CharacterName, 0, client.AccountEntry.Id))
+                    {
+                        SendCharacterCreateFailed(client, CreateCharacterResult.NameInUse);
                         return;
                     }
 
@@ -182,6 +195,11 @@ namespace Rasa.Managers
                     var skills = SkillTraining.CreateInitialRecruitSkills();
                     unitOfWork.CharacterSkills.AddOrUpdate(skills.Values.Select(skill =>
                         new CharacterSkillsEntry(clone.Id, (uint)skill.SkillId, skill.AbilityId, skill.SkillLevel)).ToArray());
+
+                    // Inferred from the clone's reset Recruit skills; the observed new-character
+                    // tray is documented in evidence/new-character-loadout.json.
+                    foreach (var (slot, abilityId) in SkillTraining.InitialRecruitAbilityDrawer)
+                        unitOfWork.CharacterAbilityDrawers.AddOrUpdate(clone.Id, slot, abilityId, 1);
 
                     foreach (var logosId in unitOfWork.CharacterLogoses.GetLogos(source.Id))
                         unitOfWork.CharacterLogoses.Stage(clone.Id, logosId);
@@ -231,6 +249,8 @@ namespace Rasa.Managers
             }
 
             var result = packet.Validate();
+            if (result == CreateCharacterResult.Success && !CharacterCreationAppearance.IsValid(packet.RaceId, packet.AppearanceData))
+                result = CreateCharacterResult.InvalidEncoding;
             if (result != CreateCharacterResult.Success)
             {
                 SendCharacterCreateFailed(client, result);
@@ -254,6 +274,11 @@ namespace Rasa.Managers
                     // Keep the new character, appearance, starter ranks, items
                     // and first account lockbox tab in one creation transaction.
                     using var transaction = unitOfWork.BeginTransaction();
+                    if (!RaceUnlocks.IsEnabled(packet.RaceId, unitOfWork.GameAccounts.GetUnlockedRaces(client.AccountEntry.Id)))
+                    {
+                        SendCharacterCreateFailed(client, CreateCharacterResult.CharacterCreationInvalidRace);
+                        return;
+                    }
                     var existing = unitOfWork.Characters.GetByAccountId(client.AccountEntry.Id);
                     if (packet is CreateCharacterPacket &&
                         (existing.Count != 0 || !string.IsNullOrEmpty(unitOfWork.GameAccounts.Get(client.AccountEntry.Id).FamilyName)))
@@ -312,8 +337,8 @@ namespace Rasa.Managers
         /// letters, and must not contain letters repeated more than twice in a row", 3 to 20
         /// characters.
         /// </summary>
-        public const int MinNameLength = 3;
-        public const int MaxNameLength = 20;
+        public const int MinNameLength = CharacterNameRules.MinLength;
+        public const int MaxNameLength = CharacterNameRules.MaxLength;
 
         /// <summary>/changefirstname: renames the character the player is on.</summary>
         internal void ChangeFirstName(Client client, ChangeFirstNamePacket packet)
@@ -375,9 +400,9 @@ namespace Rasa.Managers
             }
             else
             {
-                // Character creation never checked this, so duplicates can exist already; a
-                // rename at least does not add more.
-                if (unitOfWork.Characters.IsCharacterNameTaken(name, target.Player.Id))
+                // Historical creation did not check this, so duplicates can exist already.
+                // First names are reserved within the account's family.
+                if (unitOfWork.Characters.IsCharacterNameTaken(name, target.Player.Id, target.AccountEntry.Id))
                 {
                     NameMessage(requester, PlayerMessage.PmNameInUse);
                     return false;
@@ -420,35 +445,15 @@ namespace Rasa.Managers
 
         public static bool IsValidName(string name, out PlayerMessage error)
         {
-            error = PlayerMessage.PmNameFormatInvalid;
-
-            if (string.IsNullOrEmpty(name) || name.Length < MinNameLength)
+            var result = CharacterNameRules.Validate(name);
+            error = result switch
             {
-                error = PlayerMessage.PmNameTooShort;
-                return false;
-            }
-
-            if (name.Length > MaxNameLength)
-            {
-                error = PlayerMessage.PmNameTooLong;
-                return false;
-            }
-
-            if (!char.IsUpper(name[0]))
-                return false;
-
-            for (var i = 0; i < name.Length; i++)
-            {
-                if (!char.IsLetter(name[i]))
-                    return false;
-
-                // No letter three times in a row.
-                if (i >= 2 && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 1])
-                           && char.ToLowerInvariant(name[i]) == char.ToLowerInvariant(name[i - 2]))
-                    return false;
-            }
-
-            return true;
+                CreateCharacterResult.InvalidEncoding => PlayerMessage.PmNameTooShort,
+                CreateCharacterResult.NameTooShort => PlayerMessage.PmNameTooShort,
+                CreateCharacterResult.NameTooLong => PlayerMessage.PmNameTooLong,
+                _ => PlayerMessage.PmNameFormatInvalid
+            };
+            return result == CreateCharacterResult.Success;
         }
 
         /// <summary>
@@ -485,10 +490,18 @@ namespace Rasa.Managers
 
         private uint? InternalCreate(Client client, RequestCreateCharacterInSlotPacket packet, ICharUnitOfWork unitOfWork)
         {
+            var account = unitOfWork.GameAccounts.Get(client.AccountEntry.Id);
             var changeFamilyName = false;
-            if (!string.IsNullOrWhiteSpace(client.AccountEntry.FamilyName) && packet.FamilyName != client.AccountEntry.FamilyName)
+            // The original creation UI lowercases/capitalizes even a disabled family
+            // field. Match that spelling to the persisted identity without renaming
+            // legacy/GM-cased families; the success reply must retain their spelling.
+            if (!string.IsNullOrWhiteSpace(account.FamilyName) &&
+                string.Equals(packet.FamilyName, account.FamilyName, StringComparison.OrdinalIgnoreCase))
+                packet.FamilyName = account.FamilyName;
+
+            if (!string.IsNullOrWhiteSpace(account.FamilyName) && packet.FamilyName != account.FamilyName)
             {
-                if (!client.AccountEntry.Characters.Any())
+                if (!account.Characters.Any())
                 {
                     changeFamilyName = true;
                 }
@@ -499,7 +512,7 @@ namespace Rasa.Managers
                 }
             }
 
-            if ((string.IsNullOrWhiteSpace(client.AccountEntry.FamilyName) || packet.FamilyName != client.AccountEntry.FamilyName))
+            if ((string.IsNullOrWhiteSpace(account.FamilyName) || packet.FamilyName != account.FamilyName))
             {
                 if (!unitOfWork.GameAccounts.CanChangeFamilyName(client.AccountEntry.Id, packet.FamilyName))
                 {
@@ -508,7 +521,13 @@ namespace Rasa.Managers
                 }
             }
 
-            var characterEntry = unitOfWork.Characters.Create(client.AccountEntry, packet.SlotNum,
+            if (unitOfWork.Characters.IsCharacterNameTaken(packet.CharacterName, 0, account.Id))
+            {
+                SendCharacterCreateFailed(client, CreateCharacterResult.NameInUse);
+                return null;
+            }
+
+            var characterEntry = unitOfWork.Characters.Create(account, packet.SlotNum,
                 packet.CharacterName,
                 (byte)packet.RaceId,
                 packet.Scale,
@@ -527,7 +546,7 @@ namespace Rasa.Managers
                 return null;
             }
 
-            if (string.IsNullOrWhiteSpace(client.AccountEntry.FamilyName) || changeFamilyName)
+            if (string.IsNullOrWhiteSpace(account.FamilyName) || changeFamilyName)
             {
                 unitOfWork.GameAccounts.UpdateFamilyName(client.AccountEntry.Id, packet.FamilyName);
             }
@@ -547,9 +566,8 @@ namespace Rasa.Managers
             yield return new CharacterAppearanceEntry((uint)EquipmentData.Torso, (uint)EntityClasses.ArmorRecruitV01CMNVest, recruitOutfitColor);
             yield return new CharacterAppearanceEntry((uint)EquipmentData.Legs, (uint)EntityClasses.ArmorRecruitV01CMNLegs, recruitOutfitColor);
 
-            using var worldUnitOfWork = _gameUnitOfWorkFactory.CreateWorld();
             var appearancesFromPacket = appearanceData
-                .Select(appearanceData => CreateCharacterAppearanceEntry(appearanceData.Value, worldUnitOfWork))
+                .Select(appearanceData => CreateCharacterAppearanceEntry(appearanceData.Value))
                 .ToList();
 
             foreach (var characterAppearanceEntry in appearancesFromPacket)
@@ -558,30 +576,46 @@ namespace Rasa.Managers
             }
         }
 
-        private static CharacterAppearanceEntry CreateCharacterAppearanceEntry(AppearanceData appearanceData, IWorldUnitOfWork unitOfWork)
+        private static CharacterAppearanceEntry CreateCharacterAppearanceEntry(AppearanceData appearanceData)
         {
             var databaseEntry = appearanceData.GetDatabaseEntry();
-            databaseEntry.Class = unitOfWork.Equipment.GetItemClass(appearanceData.Class);
+            databaseEntry.Class = CharacterCreationAppearance.EntityClassFor(appearanceData.SlotId, appearanceData.Class);
             return databaseEntry;
         }
 
         private void GiveBasicItems(Client client, uint characterId, ICharUnitOfWork unitOfWork)
         {
-            // Preserve the existing item selection pending the original complete
-            // starter-loadout audit. Durability must come from the granted item.
-            var items = new (uint Template, uint Slot, uint Quantity)[]
+            // Final-week footage: Recruit clothing already worn, pistol in drawer 1,
+            // 20 loaded / 1000 reserve cartridges, no loose equipment. Field-level
+            // evidence and remaining estimates: docs/evidence/new-character-loadout.json.
+            var items = new (uint Template, InventoryType Inventory, uint Slot, uint Quantity, uint Ammo)[]
             {
-                (145, 0, 1), (28, 50, 100), (13126, 1, 1), (13186, 2, 1), (13156, 3, 1)
+                (122875, InventoryType.WeaponDrawerInventory, 0, 1, 20),
+                (28, InventoryType.Personal, 50, 1000, 0),
+                (122854, InventoryType.EquipedInventory, (uint)EquipmentData.Shoes, 1, 0),
+                (122855, InventoryType.EquipedInventory, (uint)EquipmentData.Legs, 1, 0),
+                (122856, InventoryType.EquipedInventory, (uint)EquipmentData.Torso, 1, 0)
             };
             foreach (var entry in items)
             {
                 var itemClass = ItemManager.Instance.ItemTemplateItemClass[entry.Template];
                 var maximumHitPoints = EntityClassManager.Instance.LoadedEntityClasses[itemClass].ItemClassInfo.MaxHitPoints;
-                var itemId = unitOfWork.Items.CreateItem(new Item(entry.Template, entry.Quantity, maximumHitPoints, 2139062144));
+                // White is the original creation preview's fixed outfit color. Using it
+                // for the unobserved pistol/cartridge instance tint remains an analogue.
+                var item = new Item(entry.Template, entry.Quantity, maximumHitPoints, 0xffffffff);
+                var itemId = unitOfWork.Items.CreateItem(item);
                 if (itemId == 0)
                     throw new InvalidOperationException("A starter item could not be saved.");
+                // ItemEntry's constructor does not persist CurrentAmmo. Save the observed
+                // loaded magazine explicitly, inside the same creation transaction.
+                if (entry.Ammo != 0)
+                {
+                    item.Id = itemId;
+                    item.CurrentAmmo = entry.Ammo;
+                    unitOfWork.Items.UpdateAmmo(item);
+                }
                 unitOfWork.CharacterInventories.AddInvItem(client.AccountEntry.Id, characterId,
-                    (uint)InventoryType.Personal, entry.Slot, itemId);
+                    (uint)entry.Inventory, entry.Slot, itemId);
             }
         }
 
@@ -602,13 +636,11 @@ namespace Rasa.Managers
         /// </summary>
         public void RequestDeleteCharacterInSlot(Client client, RequestDeleteCharacterInSlotPacket packet)
         {
-            if (client.State == ClientState.Ingame
-                || client.State == ClientState.Loading
-                || client.State == ClientState.Teleporting)
+            if (client.State != ClientState.CharacterSelection)
             {
                 Logger.WriteLog(LogType.Security,
                     $"AccountId = {client.AccountEntry.Id} tried to delete the character in slot {packet.Slot} "
-                    + $"while in the world (state {client.State}).");
+                    + $"outside character selection (state {client.State}).");
 
                 client.CallMethod(SysEntity.ClientMethodId, new DeleteCharacterFailedPacket());
                 return;
@@ -624,10 +656,10 @@ namespace Rasa.Managers
 
                 using (var unitOfWork = _gameUnitOfWorkFactory.CreateChar())
                 {
-                    unitOfWork.CharacterAppearances.DeleteForChar(charactersBySlot.Id);
-                    // TODO delete ClanMember entry
+                    using var transaction = unitOfWork.BeginTransaction();
                     unitOfWork.Characters.Delete(charactersBySlot.Id);
                     unitOfWork.Complete();
+                    transaction.Commit();
                 }
 
                 // Client.Player still points at the character that was just deleted - it is left
@@ -647,8 +679,10 @@ namespace Rasa.Managers
 
                 SendCharacterInfo(client, packet.Slot, null);
             }
-            catch
+            catch (Exception exception)
             {
+                Logger.WriteLog(LogType.Error, "Failed to delete character:");
+                Logger.WriteLog(LogType.Error, exception);
                 client.CallMethod(SysEntity.ClientMethodId, new DeleteCharacterFailedPacket());
             }
         }
@@ -680,7 +714,10 @@ namespace Rasa.Managers
             // client asks only for an unplayed character of an account that may skip; the server
             // checks the same and moves the character to the boot camp's exit destination in the
             // same commit as the login. No grants (GAP-SKIP-GRANTS).
-            if (packet.SkipBootcamp && SkipBootcampDestination(client, character) is { } destination)
+            // GetByAccountId includes the persisted account, so a stale selection
+            // cache cannot grant or suppress its original account-wide entitlement.
+            if (packet.SkipBootcamp && character.GameAccount?.CanSkipBootcamp == true && character.NumLogins == 0 &&
+                SkipBootcampDestination(client, character) is { } destination)
             {
                 unitOfWork.Characters.StagePosition(character.Id, destination.PosX, destination.PosY, destination.PosZ, destination.Rotation, destination.MapContextId);
                 character.MapContextId = destination.MapContextId;
@@ -709,7 +746,7 @@ namespace Rasa.Managers
         /// </summary>
         public Func<Client, CharacterEntry, Structures.World.ContentLocationEntry> SkipBootcampDestination { get; set; } = (client, character) =>
         {
-            if (client.AccountEntry?.CanSkipBootcamp != true || character.NumLogins != 0 ||
+            if (character.GameAccount?.CanSkipBootcamp != true || character.NumLogins != 0 ||
                 !MapChannelManager.Instance.IsPerCharacterContext(character.MapContextId))
                 return null;
 

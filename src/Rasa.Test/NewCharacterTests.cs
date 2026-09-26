@@ -33,7 +33,7 @@ namespace Rasa.Test
 {
     [TestClass]
     [DoNotParallelize]
-    public class NewCharacterTests
+    public partial class NewCharacterTests
     {
         public class UnitProxy : DispatchProxy
         {
@@ -54,6 +54,8 @@ namespace Rasa.Test
                     case "get_CharacterTeleporters": return new Rasa.Repositories.Char.CharacterTeleporter.CharacterTeleporterRepository(Context);
                     case "get_CharacterMissions": return new Rasa.Repositories.Char.CharacterMission.CharacterMissionRepository(Context);
                     case "get_CharacterOptions": return new Rasa.Repositories.Char.CharacterOption.CharacterOptionRepository(Context);
+                    case "get_Friends": return new Rasa.Repositories.Char.Friend.FriendRepository(Context);
+                    case "get_Ignoreds": return new Rasa.Repositories.Char.Ignored.IgnoredRepository(Context);
                     case "BeginTransaction": return Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
                     case "Complete": Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;
@@ -86,11 +88,11 @@ namespace Rasa.Test
 
         private static readonly (uint Template, EntityClasses Class, int HitPoints, int Skill)[] Items =
         {
-            (145, (EntityClasses)6048, 100, 1),
+            (122875, (EntityClasses)29803, 150, 1),
             (28, (EntityClasses)3147, 1, 0),
-            (13126, (EntityClasses)15602, 47, 19),
-            (13186, (EntityClasses)15662, 70, 19),
-            (13156, (EntityClasses)15632, 59, 19),
+            (122854, (EntityClasses)10000068, 35, 0),
+            (122856, (EntityClasses)10000070, 70, 0),
+            (122855, (EntityClasses)10000069, 59, 0),
             // The prior creation code incorrectly read this other item's HP.
             (17131, (EntityClasses)9100301, 120, 1)
         };
@@ -166,8 +168,9 @@ namespace Rasa.Test
             using var context = Context();
             var character = context.CharacterEntries.Single();
             Assert.AreEqual("Fixture", context.GameAccountEntries.Single().FamilyName);
-            Assert.AreEqual(3, context.CharacterAppearanceEntries.Count());
-            Assert.IsTrue(context.CharacterAppearanceEntries.All(a => a.Color == 0xffffffffu));
+            Assert.AreEqual(5, context.CharacterAppearanceEntries.Count());
+            Assert.IsTrue(context.CharacterAppearanceEntries.Where(a => a.Slot == 2 || a.Slot == 15 || a.Slot == 16)
+                .All(a => a.Color == 0xffffffffu));
             var saved = new CharacterSkillsRepository(context).GetCharacterSkills(character.Id);
             CollectionAssert.AreEquivalent(new uint[] { 1, 8, 19, 49, 165 }, saved.Select(s => s.SkillId).ToArray());
             Assert.IsTrue(saved.All(s => s.SkillLevel == 1));
@@ -200,7 +203,8 @@ namespace Rasa.Test
                 Assert.AreEqual(character.Id, position.CharacterId);
                 Assert.AreEqual(10u, position.AccountId);
             }
-            Assert.AreEqual(100u, context.ItemEntries.Single(i => i.ItemTemplateId == 28).StackSize);
+            Assert.AreEqual(1000u, context.ItemEntries.Single(i => i.ItemTemplateId == 28).StackSize);
+            AssertStarterLoadout(context, character.Id);
             Assert.AreEqual(1, context.CharacterLockboxEntries.Single().PurashedTabs);
         }
 
@@ -276,8 +280,8 @@ namespace Rasa.Test
 
         [DataTestMethod]
         [DataRow("character_skills", "NEW.skill_id = 49")]
-        [DataRow("items", "NEW.item_template_id = 13156")]
-        [DataRow("character_inventory", "NEW.slot_id = 3")]
+        [DataRow("items", "NEW.item_template_id = 122855")]
+        [DataRow("character_inventory", "NEW.slot_id = 16")]
         [DataRow("character_lockbox", "1 = 1")]
         [DataRow("character_appearance", "1 = 1")]
         public void FailedCreationRollsBackCharacterRanksItemsAndFamily(string table, string condition)
@@ -355,7 +359,12 @@ namespace Rasa.Test
 
         private SqliteCharContext Context() => WeaponReloadPersistenceTests.Context(_connection);
         private static RequestCreateCharacterInSlotPacket Request(byte slot = 1, string name = "First")
-            => new() { SlotNum = slot, CharacterName = name, FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+        {
+            var request = new RequestCreateCharacterInSlotPacket
+                { SlotNum = slot, CharacterName = name, FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+            SetAppearance(request.AppearanceData, request.RaceId);
+            return request;
+        }
         [TestMethod]
         public void CloningSpendsACreditAndKeepsProgressionButResetsPointsGearAndMoney()
         {
@@ -378,8 +387,13 @@ namespace Rasa.Test
             typeof(Client).GetProperty(nameof(Client.AccountEntry)).SetValue(_client, new GameAccountRepository(Context()).Get(10));
             Drain();
 
-            RequestCloneCharacterToSlotPacket Clone(byte source, byte slot, string name) =>
-                new() { CloneSlotNum = source, SlotNum = slot, CharacterName = name, Scale = 1, Gender = 1, RaceId = Race.Human };
+            RequestCloneCharacterToSlotPacket Clone(byte source, byte slot, string name)
+            {
+                var request = new RequestCloneCharacterToSlotPacket
+                    { CloneSlotNum = source, SlotNum = slot, CharacterName = name, Scale = 1, Gender = 1, RaceId = Race.Human };
+                SetAppearance(request.AppearanceData, request.RaceId);
+                return request;
+            }
 
             // No source, an occupied slot: refused without writing.
             _manager.RequestCloneCharacterToSlot(_client, Clone(9, 2, "Second"));
@@ -405,6 +419,10 @@ namespace Rasa.Test
                 CollectionAssert.AreEqual(new uint[] { 1995 }, context.CharacterMissionEntries.Where(m => m.CharacterId == clone.Id).Select(m => m.MissionId).ToArray());
                 Assert.AreEqual(1, context.CharacterMissionObjectiveEntries.Count(o => o.CharacterId == clone.Id));
                 Assert.AreEqual(5, context.CharacterInventoryEntries.Count(i => i.CharacterId == clone.Id));
+                AssertStarterLoadout(context, clone.Id);
+                CollectionAssert.AreEquivalent(new[] { (0, 194), (1, 401) },
+                    context.CharacterAbilityDrawerEntries.Where(t => t.CharacterId == clone.Id).ToArray()
+                        .Select(t => (t.AbilitySlot, t.AbilityId)).ToArray());
             }
 
             // The credit is spent.
@@ -416,7 +434,28 @@ namespace Rasa.Test
         }
 
         private static CreateCharacterPacket FirstRequest()
-            => new() { CharacterName = "First", FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+        {
+            var request = new CreateCharacterPacket
+                { CharacterName = "First", FamilyName = "Fixture", Scale = 1, Gender = 0, RaceId = Race.Human };
+            SetAppearance(request.AppearanceData, request.RaceId);
+            return request;
+        }
+
+        private static void SetAppearance(Dictionary<EquipmentData, AppearanceData> appearance, Race race)
+        {
+            appearance.Clear();
+            appearance[EquipmentData.Hair] = new AppearanceData
+                { SlotId = EquipmentData.Hair, Class = 60, Color = new Color(82, 52, 32) };
+            var face = race switch
+            {
+                Race.Forean => (50312u, new Color(99, 113, 90)),
+                Race.Brann => (50311u, new Color(82, 125, 181)),
+                Race.Thrax => (50313u, new Color(115, 56, 41)),
+                _ => (39u, new Color(214, 178, 132))
+            };
+            appearance[EquipmentData.Face] = new AppearanceData
+                { SlotId = EquipmentData.Face, Class = face.Item1, Color = face.Item2 };
+        }
         private List<ServerPythonPacket> Drain()
         {
             var queue = (PacketQueue)typeof(Client).GetField("_packetQueue", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(_client);

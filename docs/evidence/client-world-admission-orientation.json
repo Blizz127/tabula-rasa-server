@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "version": "Compatibility client 1.16.5.0; shutdown revision not established",
+  "sources": [
+    {
+      "member": "client/augmentations/actor.pyo",
+      "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+      "compiled_timestamp": 1234238114
+    },
+    {
+      "member": "client/inputstate/wonkavator.pyo",
+      "sha256": "0b417f87d8b36b4851f2f5da42b8edfc99b7f898e792e1a19096b704f04799bd",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/physicalentity.pyo",
+      "sha256": "e897cbe3e96a7a238feacc6949811be96721dd036c581942eb7824252db75982",
+      "compiled_timestamp": 1234238109
+    },
+    {
+      "member": "client/clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "compiled_timestamp": 1234238108
+    },
+    {
+      "member": "client/ui/radarwindow.pyo",
+      "sha256": "a364e916560cbeb9a39d7df309690eb232d673b493509e08c0257eade24edf9c",
+      "compiled_timestamp": 1234238125
+    }
+  ],
+  "native_source": {
+    "member": "tabula_rasa.exe",
+    "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+  },
+  "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough",
+  "rules": [
+    {
+      "id": "actor.facing.initialization",
+      "tier": "original",
+      "source": "client/augmentations/actor.pyo Actor.Recv_ActorInfo line2382 offsets0-28",
+      "finding": "SetYaw(yaw), then SyncFacingToYaw() before applying actor state IDs."
+    },
+    {
+      "id": "controller.creation.trigger",
+      "tier": "original",
+      "source": "client/clientmethod.pyo _ControlledActorAvailable line110 offsets116-128; tabula_rasa.exe VA0x4d3020 call0x4d30b0 ->0x4f48b0",
+      "finding": "SetControlledActorId eventually creates the native user controller for an available entity."
+    },
+    {
+      "id": "location.rotation",
+      "tier": "original",
+      "source": "client/physicalentity.pyo PhysicalEntity.Recv_WorldLocationDescriptor line301 offsets9-34; native SetQuaternion VA0x905860-0x905ac0",
+      "finding": "World location sets body position and XYZW quaternion; this path does not call the ActorInfo yaw/facing methods."
+    },
+    {
+      "id": "map.camera.yaw",
+      "tier": "original",
+      "source": "client/inputstate/wonkavator.pyo BeginMapLoading line265 offsets196-238; ForceCameraSettings VA0x4d9580 call0x4d95d4 ->D3DXQuaternionRotationYawPitchRoll",
+      "finding": "Wonkavate yaw passes unchanged into ForceCameraSettings; native code supplies yaw and zero pitch/roll to D3DX radians quaternion helper."
+    },
+    {
+      "id": "server.admission.order",
+      "tier": "inferred",
+      "source": "src/Rasa.Game/Managers/ManifestationManager.cs InitializePlayerControl (originally AssignPlayer); actor.facing.initialization; controller.creation.trigger",
+      "finding": "Move existing ActorInfo before SetControlledActorId. Original-client runtime probe confirms stored pi now faces toward positive Z, where the identical saved yaw previously faced negative Z. No duplicate ActorInfo or changes to entity introduction/death announcements."
+    },
+    {
+      "id": "camera.initial_facing_snapshot",
+      "tier": "original",
+      "source": "tabula_rasa.exe mode0 activation0x54dc60 calls camera virtual+0x2c at0x54dc97; target0x56d880 reads actor+0x40 at0x56d88a; SyncFacingToYaw0x4ff2c0 writes actor+0x40 at0x4ff34d-366 without movement controller",
+      "finding": "Camera initialization snapshots actor facing yaw. Location quaternion and actor facing are distinct; ActorInfo calls SetYaw then SyncFacingToYaw before controller creation."
+    },
+    {
+      "id": "radar.arrow_camera_rotation",
+      "tier": "original",
+      "source": "client/ui/radarwindow.pyo _UpdateManifestation line1019 offsets63-81,112-161; native GetCameraDir0x8ba250 reads camera quaternion at0x8ba2a6-ce",
+      "finding": "Radar arrow animation time is int(((pi - world.GetCameraDir().yaw)/(2*pi))*1000). GetCameraDir derives angles from the rendered camera quaternion, not the saved character yaw directly."
+    },
+    {
+      "id": "camera.render_basis",
+      "tier": "original",
+      "source": "tabula_rasa.exe camera-world link0x56d7e0 writes quaternion at camera+0x58 using D3DXQuaternionRotationYawPitchRoll at0x56d829 with yaw constantVA0xbc7b10 =3.1415927410125732, pitch0,roll0",
+      "finding": "Camera link applies a pi yaw basis quaternion. Perpendicular runtime probes establish native actor yaw pi faces +Z and pi/2 faces -X, consistent with compass heading wrap(native yaw + pi)."
+    }
+  ],
+  "emulator_observations": [
+    {
+      "source": "playthrough-01/initial-character-state.json; playthrough-01/08-world-loaded.png; playthrough-01/game.log 14:19:14.764 and14:20:14.295 local",
+      "stored_yaw": 6.02139,
+      "start_xz": [
+        387.2,
+        -79.1
+      ],
+      "forward_end_xz": [
+        387.2,
+        -85.7
+      ],
+      "finding": "Original client on emulator initially looks upstairs, W moves toward negative Z."
+    },
+    {
+      "source": "playthrough-02/05-yaw-pi-world.png; playthrough-02/game.log 14:29:17 onward; root isolated DB probe",
+      "stored_yaw": 3.141592653589793,
+      "start_xz": [
+        387.2,
+        -79.1
+      ],
+      "forward_end_xz": [
+        387.2,
+        -85.4
+      ],
+      "finding": "Same facing and negative-Z movement despite changing only stored yaw. Demonstrates admission ignores/overwrites yaw somewhere; exact responsible native step not proven."
+    },
+    {
+      "source": "playthrough-03/02-world-pi-before-input.png; playthrough-03/game.log 2026-09-22 14:38:11.669 local; root controlled probe after packet ordering change",
+      "stored_yaw": 3.141592653589793,
+      "start_xyz": [
+        387.2,
+        136.75,
+        -79.09
+      ],
+      "forward_end_xyz": [
+        387.2,
+        136.8,
+        -77.5
+      ],
+      "finding": "After ActorInfo moved before controller assignment, same saved pi faces down toward cavern pillars and W moves positive Z. This verifies the ordering fix on original1.16.5.0 client under isolated Wine environment."
+    },
+    {
+      "source": "playthrough-04/02-half-pi-before-input.png; playthrough-04/game.log 2026-09-22 14:49:35.806 local",
+      "stored_yaw": 1.5707963267948966,
+      "start_xz": [
+        387.2,
+        -79.1
+      ],
+      "forward_end_xz": [
+        383.9,
+        -79.1
+      ],
+      "finding": "After orientation and weapon admission fixes, W2s moves negativeX with unchangedZ. Combined with pi→positiveZ, establishes sign and offset of native yaw."
+    }
+  ],
+  "open_questions": [
+    "Original final-live server packet ordering is not captured. Corrected order is inferred from original consumers and runtime verified with original1.16.5.0 client.",
+    "Exact original first-arrival heading is still unverified; measured345compass degrees came from238.133sec after slight movement. Corrected165degree rawyaw preserves that measurement and +/-15degree uncertainty.",
+    "Other destination and actor rotations require a progression-ordered audit of each consumer; no bulk yaw rewrite performed."
+  ],
+  "heading_conversion": {
+    "tier": "inferred",
+    "confidence": "high for native yaw/compass mapping; low for exact original first-arrival heading",
+    "source": [
+      "camera.render_basis",
+      "playthrough03 stored pi→positiveZ",
+      "playthrough04 stored pi/2→negativeX",
+      "research/20260913-bootcamp/footage/analysis/spatial/scripts/arrow2.py lines1-3,21-24 defines measured compass0=+Z,clockwise toward+X using7Lrst9SG3pk240.467 northwardmotion template"
+    ],
+    "compass_definition": "h=atan2(forwardX, forwardZ) mod2pi; zero+Z, clockwise toward+X",
+    "native_forward_xz": "(-sin(yaw), -cos(yaw))",
+    "compass_radians": "h=(yaw+pi) mod2pi",
+    "native_yaw_radians": "yaw=(h-pi) mod2pi",
+    "measured_compass_degrees": 345,
+    "proposed_native_yaw_degrees": 165,
+    "proposed_native_yaw_radians": 2.8797932657906435,
+    "proposed_seed_rounded": 2.879793,
+    "heading_uncertainty_degrees": 15,
+    "native_yaw_uncertainty_radians": 0.2617993877991494,
+    "status": "implemented and full-suite validated by20260922220000_BootcampFirstLoginYaw",
+    "limitation": "345degree estimate is from238.133sec after approximately1.8m motion; it is not an original server spawn heading capture. Applying a corrected coordinate conversion preserves that same measured estimate and uncertainty."
+  },
+  "seed_change": {
+    "row": "content_location id19851, purpose1, map_context_id1985",
+    "old_rotation": 6.02139,
+    "new_rotation": 2.879793,
+    "tier": "measured",
+    "implementation": "Paired20260922220000_BootcampFirstLoginYaw data-only migrations update only content_location19851.rotation. Down restores6.02139; frozen original S1 migration unchanged. Existingcharacters and other location fields/rows are untouched. Frozen target model Designers copied from immediately preceding20260922210000_BootcampPracticeDummyHealth for each provider.",
+    "manifest_method": "Retain original345degree measured compassheading and +/-15degree uncertainty; cite nativeconsumerchain and both2026-09-22 originalclientyaw probes for conversion to165degree rawyaw. Label exact initialheading stillunverified.",
+    "status": "implemented and full-suite validated"
+  },
+  "validation": {
+    "suite_before_yaw_data_migration": "1232/1232 passed, none skipped,5.0007min; /tmp/rasa-retail-20260922-opening-final.log and sameprefix.trx",
+    "runtime": "playthrough03 pi→+Z; playthrough04 pi/2→-X; weapon UI exception absent",
+    "yaw_migration": "Passed full combined1246/1246 run; FirstLoginYawMigrationOnlyConvertsTheArrivalRotationAndExactlyRollsBack passes.",
+    "final_combined_run": {
+      "status": "passed",
+      "total": 1246,
+      "passed": 1246,
+      "failed": 0,
+      "skipped": 0,
+      "duration_minutes": 6.029,
+      "log": "/tmp/rasa-retail-20260922-selection-verified.log",
+      "log_sha256": "535787464acf67366aa8391c0ec80e5b06c920eb84bf2c788e074bc6cbabd377",
+      "trx_container_path": "/work/src/Rasa.Test/TestResults/rasa-selection-verified.trx",
+      "snapshot": "/tmp/rasa-retail-20260922-selection-verified-snapshot.json",
+      "snapshot_sha256": "ab5cc143715f1ede6b17e33828b2a5538ba551c8670cea3f3a2c7eb62ff4d375",
+      "source_snapshot_verification": {
+        "entries_under_src": 2050,
+        "mismatches": 0,
+        "csharp_and_project_files": 1972,
+        "additional_csharp_or_project_files": 0,
+        "failed_to_corrected_snapshot_changed_source_files": [
+          "src/Rasa.Test/NewCharacterTests.Deletion.cs"
+        ]
+      },
+      "scope": "Full combined suite, including deletion states/wire framing, family normalization, first-login yaw migration Up/Down, and admission packet ordering. Source/workspace equality checked after completion; research docs updated separately."
+    }
+  },
+  "fresh_character_verification": {
+    "source": "Original1.16.5.0 client against isolated emulator, not original-live capture",
+    "character": "Borin Vanguard",
+    "slot": 2,
+    "stored_yaw": 2.879793,
+    "diagnostic_character_edits": false,
+    "finding": "Created through existing-family UI after migration; first Initiation offer renders facing down causeway. Prior character Alden retains normal logout position.",
+    "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-05",
+    "artifacts": [
+      {
+        "file": "06-borin-selected.png",
+        "sha256": "a3436d8d02ac93f01389bcc606274e4c24178f7faaf4b7b1905ce5255e7ef18d"
+      },
+      {
+        "file": "07-fresh-first-world.png",
+        "sha256": "5df3b0f4f68421de5f671511606a29f042ebab25c62ea6644c3aff833796bfb2"
+      },
+      {
+        "file": "new-character-state.json",
+        "sha256": "6a33922ed7d6d7f335fecd89db4cb816e1b77e88f73aec4549f85ece72c57c31"
+      },
+      {
+        "file": "migrated-world-state.json",
+        "sha256": "8b45cac06fe917f156c5d3f84551e5031f04d5302bbeb540147046880e873241"
+      },
+      {
+        "file": "game.log",
+        "sha256": "4221fac9a99f2fd9d552b5152725b379ea1c19b4b05e03c06bb8a59041c555bc"
+      },
+      {
+        "file": "tabula_rasa.log",
+        "sha256": "e852108072ddbd7ba98a762c83dc71ec4079dc748a06182987ef12b348b7dd99"
+      },
+      {
+        "file": "status.json",
+        "sha256": "0a4a8b1bbb4971e08643d7dcd7245b39bdc8fe4f85ac4de5f113eba3b9f7f4bd"
+      }
+    ]
+  },
+  "deferred_control_followup": {
+    "status": "Targeted tests passed; original-client plain-option admission verified; combined full suite and grouped runtime check pending at this checkpoint",
+    "supersedes_sequence_only": "Historical direct ActorInfo-before-SetControlledActorId ordering is replaced by deferred controller creation, preserving yaw-before-controller and equipment-after-controller requirements. Historical captures and results remain valid for their recorded versions.",
+    "current_order": [
+      "CharacterOptions",
+      "SetControlledActorId while owner entity is absent",
+      "CreatePhysicalEntity owner bundle: existing state including corpse announcement, ActorInfo, read-only saved MissionStatusInfo, WorldLocationDescriptor LAST",
+      "WorldLocationDescriptor triggers AddToWorld and the deferred controller callback",
+      "WeaponDrawerSlot and owner EquipmentInfo",
+      "Nearby actor introductions with their normal equipment"
+    ],
+    "source_evidence": "docs/evidence/client-mission-tracker-reconnect.json:deferred_admission_candidate",
+    "targeted_tests": {
+      "total": 174,
+      "passed": 174,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 40.2117,
+      "log": {
+        "path": "/tmp/rasa-retail-20260922-tracking-targeted.log",
+        "bytes": 17224,
+        "sha256": "0d49880372e9e8010e8121ff70b9517d45a4db56944bbf267372e3a7fa54e5eb"
+      }
+    },
+    "runtime": {
+      "tier": "observed",
+      "scope": "Isolated original-client emulator integration, not original-live proof",
+      "run": "playthrough-09",
+      "screenshot": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/02-plain-option-loaded.png",
+        "bytes": 780696,
+        "sha256": "6bfcc31718f71bbe43fbfbeac5c228c72266295fc56a995dd29fac5611c329b4"
+      },
+      "state": {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/plain-option-reconnect-state.json",
+        "bytes": 2990,
+        "sha256": "4eead0cc1f00754e68d1b575a1e5a49979fd0a7ce51d344a59a1554b983a650b"
+      },
+      "observation": "Independently viewed screenshot shows loaded Luna Cavern, Rifle HUD, and Gearing Up for Battle / Speak to Corporal Hartmann tracker before UI input. State snapshot retains plain option 1992 and saved mission progress.",
+      "limitations": "This is not a repeat of controlled yaw-axis movement probes or a claim about every client-log error. Historical run04 drawer traceback check remains separately scoped."
+    }
+  }
+}

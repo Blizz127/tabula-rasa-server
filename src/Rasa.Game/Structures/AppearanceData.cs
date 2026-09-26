@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.IO;
 
 namespace Rasa.Structures
 {
@@ -31,11 +31,20 @@ namespace Rasa.Structures
 
             var count = pr.ReadTuple();
             if (count != 2)
-                Debugger.Break();
+                throw new InvalidDataException("Creation appearance requires a template and color.");
 
             Class = pr.ReadUInt();
-            Color = pr.ReadStruct<Color>();
+            if (pr.ReadTuple() != 4)
+                throw new InvalidDataException("Creation appearance color requires four channels.");
+            Color = new Color(ReadChannel(pr), ReadChannel(pr), ReadChannel(pr), ReadChannel(pr));
         }
+
+        private static byte ReadChannel(PythonReader pr) => pr.PeekType() switch
+        {
+            PythonType.Int => checked((byte)pr.ReadInt()),
+            PythonType.Long => checked((byte)pr.ReadLong()),
+            _ => throw new InvalidDataException("Creation appearance channels must be integers.")
+        };
 
         public void Write(PythonWriter pw)
         {

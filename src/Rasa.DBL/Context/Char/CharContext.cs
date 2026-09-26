@@ -26,6 +26,7 @@ namespace Rasa.Context.Char
         }
 
         public DbSet<GameAccountEntry> GameAccountEntries { get; set; }
+        public DbSet<AccountRaceUnlockEntry> AccountRaceUnlockEntries { get; set; }
         public DbSet<CensorWordsEntry> CensorWordsEntries { get; set; }
         public DbSet<CharacterEntry> CharacterEntries { get; set; }
         public DbSet<CharacterAbilityDrawerEntry> CharacterAbilityDrawerEntries { get; set; }
@@ -56,6 +57,7 @@ namespace Rasa.Context.Char
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AccountRaceUnlockEntry>().HasKey(e => new { e.AccountId, e.RaceId });
             SetupGameAccountEntryTable(modelBuilder);
             SetupCharacterAbilityDrawerTable(modelBuilder);
             SetupCharacterTable(modelBuilder);

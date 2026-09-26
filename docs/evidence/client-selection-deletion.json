@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "version": "Original compatibility client 1.16.5.0; exact shutdown revision unverified",
+  "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/ui-flow",
+  "sources": [
+    {
+      "member": "client/ui/characterselectionwindow.pyo",
+      "sha256": "1846a19a9577aa91982600b9cd81eaa5ef3472a9edd48eeb354abcf7571992da",
+      "compiled_timestamp": 1234238123
+    },
+    {
+      "member": "client/ui/charactercreationwindow.pyo",
+      "sha256": "5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502",
+      "compiled_timestamp": 1234238123
+    },
+    {
+      "member": "client/inputstate/charactercreation.pyo",
+      "sha256": "60a2b2cf3d3ab57dd83ac743954cf1a20e4c07916284c6a914bcf8f0f21cbccc",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/inputstate/characterselection.pyo",
+      "sha256": "15b0e3f85e095f213e09a1d50925faf3d3e51f5b777b5f7afdedf0197043c361",
+      "compiled_timestamp": 1234238117
+    },
+    {
+      "member": "client/clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "compiled_timestamp": 1234238108
+    }
+  ],
+  "rules": [
+    {
+      "id": "creation.existing_family_wire",
+      "tier": "original",
+      "source": "client/inputstate/charactercreation.pyo OnCreateCharacter line 83, offsets 105–138",
+      "finding": "RequestCreateCharacterInSlot sends a seven-field tuple (slot, family, first, gender, height, appearance, race). Current server framing agrees."
+    },
+    {
+      "id": "creation.success_transition",
+      "tier": "original",
+      "source": "client/clientmethod.pyo Recv_CharacterCreateSuccess line 878, offsets 68–95",
+      "finding": "Switches to characterselection(familyName, slotNum). Current server sends this before the changed pod CharacterInfo, matching the visible selection consumer."
+    },
+    {
+      "id": "delete.wire",
+      "tier": "original",
+      "source": "client/inputstate/characterselection.pyo OnDeleteCharacter line 114, offsets 37–55; client/ui/characterselectionwindow.pyo OnDeleteBtn line 335",
+      "finding": "Selection UI sends RequestDeleteCharacterInSlot with exactly one one-based slot in a tuple."
+    },
+    {
+      "id": "delete.server_admission",
+      "tier": "inferred",
+      "source": "delete.wire; src/Rasa.Game/Packets/Game/Client/RequestDeleteCharacterInSlotPacket.cs; CharacterManager.RequestDeleteCharacterInSlot",
+      "finding": "Require one-field tuple, checked integer-to-byte slot conversion and CharacterSelection session. Previously, 257 wrapped to 1; non-world states outside selection could also delete. Existing valid deletion and linked cleanup preserved."
+    },
+    {
+      "id": "creation.family_case_normalization",
+      "tier": "original",
+      "source": "client/ui/charactercreationwindow.pyo _CreateCharacter line 694, offsets 195–216; Show line 232, offsets 467–508",
+      "finding": "Family text is always lower().capitalize() before sending; its editor is disabled while the account has characters. A persisted mixed-case family is therefore normalized even when the player cannot edit it."
+    },
+    {
+      "id": "creation.existing_family_identity",
+      "tier": "inferred",
+      "source": "creation.family_case_normalization; CharacterManager.InternalCreate persisted account identity",
+      "finding": "The original UI sends Mcdonald for persisted McDonald. InternalCreate now matches the persisted family with OrdinalIgnoreCase and substitutes its existing spelling in the request before existing ownership/rename guards, so no family rename or new identity occurs. Success and pod replies retain McDonald. A genuinely different family remains refused while characters exist."
+    }
+  ],
+  "open_findings": [
+    {
+      "id": "startup.callback_tuple_error",
+      "priority": "separate",
+      "finding": "No direct creation/selection consumer connection established. Each audited SendCallUserMethod builds a tuple. Existing original-client log error occurs at startup before world admission; do not attribute it to creation packets without a native caller trace."
+    }
+  ],
+  "validation": {
+    "tests": "All 11 NewCharacterTests.Deletion cases pass in the full 1,246/1,246 rerun, including disconnected transport suppression with unchanged persistence checks.",
+    "builds_run_by_this_agent": false,
+    "family_case_tests": "Both normalized Mcdonald acceptance and Different refusal pass in the full 1,246/1,246 rerun, retaining persisted family spelling, cache/reply spelling, and account ownership.",
+    "first_combined_run": {
+      "result": "1,245/1,246 passed",
+      "log": "/tmp/rasa-retail-20260922-selection-final.log",
+      "failure": "Disconnected state test expected one failure reply, but transport intentionally drops outgoing packets. Character and appearance persistence assertions passed.",
+      "correction": "Test expects zero replies only for Disconnected; all other rejected states still require one. No production code change.",
+      "rerun": "Passed 1,246/1,246; see final_combined_run."
+    },
+    "final_combined_run": {
+      "status": "passed",
+      "total": 1246,
+      "passed": 1246,
+      "failed": 0,
+      "skipped": 0,
+      "duration_minutes": 6.029,
+      "log": "/tmp/rasa-retail-20260922-selection-verified.log",
+      "log_sha256": "535787464acf67366aa8391c0ec80e5b06c920eb84bf2c788e074bc6cbabd377",
+      "trx_container_path": "/work/src/Rasa.Test/TestResults/rasa-selection-verified.trx",
+      "snapshot": "/tmp/rasa-retail-20260922-selection-verified-snapshot.json",
+      "snapshot_sha256": "ab5cc143715f1ede6b17e33828b2a5538ba551c8670cea3f3a2c7eb62ff4d375",
+      "source_snapshot_verification": {
+        "entries_under_src": 2050,
+        "mismatches": 0,
+        "csharp_and_project_files": 1972,
+        "additional_csharp_or_project_files": 0,
+        "failed_to_corrected_snapshot_changed_source_files": [
+          "src/Rasa.Test/NewCharacterTests.Deletion.cs"
+        ]
+      },
+      "scope": "Full combined suite, including deletion states/wire framing, family normalization, first-login yaw migration Up/Down, and admission packet ordering. Source/workspace equality checked after completion; research docs updated separately."
+    }
+  },
+  "resolved_findings": [
+    {
+      "id": "existing_family.case_equivalence",
+      "priority": "lower; legacy/GM-renamed mixed-case families only",
+      "source": "creation.family_case_normalization; CharacterManager.InternalCreate compares packet.FamilyName != account.FamilyName; CharacterNameRules and Rename accept mixed internal capitals",
+      "finding": "The original UI sends Mcdonald for persisted McDonald. InternalCreate now matches the persisted family with OrdinalIgnoreCase and substitutes its existing spelling in the request before existing ownership/rename guards, so no family rename or new identity occurs. Success and pod replies retain McDonald. A genuinely different family remains refused while characters exist.",
+      "status": "implemented"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Collections.Generic;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -83,7 +84,10 @@ namespace Rasa.Repositories.Char.GameAccount
 
         public bool CanChangeFamilyName(uint id, string newFamilyName)
         {
-            var hasOtherAccountWithName = _charContext.GameAccountEntries.Any(e => e.Id != id && e.FamilyName == newFamilyName);
+            // SQLite lower() is ASCII-only; use the same Unicode comparison for both providers.
+            var hasOtherAccountWithName = _charContext.GameAccountEntries.Where(e => e.Id != id)
+                .Select(e => e.FamilyName).AsEnumerable()
+                .Any(existing => string.Equals(existing, newFamilyName, StringComparison.OrdinalIgnoreCase));
             return !hasOtherAccountWithName;
         }
 
@@ -110,6 +114,19 @@ namespace Rasa.Repositories.Char.GameAccount
         {
             var entry = _charContext.GetWritableEnsuring(_charContext.GameAccountEntries, id);
             entry.CanSkipBootcamp = canSkip;
+        }
+
+        public IReadOnlyList<byte> GetUnlockedRaces(uint id)
+            => _charContext.AccountRaceUnlockEntries.AsNoTracking().Where(e => e.AccountId == id)
+                .Select(e => e.RaceId).ToList();
+
+        public void StageRaceUnlock(uint id, byte raceId)
+        {
+            if (raceId < 2 || raceId > 4)
+                throw new ArgumentOutOfRangeException(nameof(raceId));
+            _charContext.GetWritableEnsuring(_charContext.GameAccountEntries, id);
+            if (_charContext.AccountRaceUnlockEntries.Find(id, raceId) == null)
+                _charContext.AccountRaceUnlockEntries.Add(new AccountRaceUnlockEntry { AccountId = id, RaceId = raceId });
         }
 
         public void UpdateAccountLevel(uint id, byte level)

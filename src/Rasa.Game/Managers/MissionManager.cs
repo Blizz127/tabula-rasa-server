@@ -1071,6 +1071,8 @@ namespace Rasa.Managers
                 }
 
                 unitOfWork.CharacterMissions.UpdateState(player.Id, missionId, (uint)MissionState.Completed, changeTime);
+                if (RaceUnlocks.GrantedByMission(missionId) is Race unlockedRace)
+                    unitOfWork.GameAccounts.StageRaceUnlock(client.AccountEntry.Id, (byte)unlockedRace);
                 if (credits != 0 || prestige != 0 || experience != 0)
                     unitOfWork.Characters.UpdateCharacterRewards(player.Id, (int)newCredits, (int)newPrestige, (uint)newExperience);
                 Content.Stage(reaction, unitOfWork, player, state, client.AccountEntry?.Id ?? 0);

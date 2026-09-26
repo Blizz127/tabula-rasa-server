@@ -117,6 +117,36 @@ namespace Rasa.Repositories.Char.Character
         public void Delete(uint id)
         {
             var entry = _charContext.GetWritableEnsuring(_charContext.CharacterEntries, id);
+
+            // Most character tables have no foreign key to character. Removing the parent
+            // alone leaves starter gear, skills, missions and other state behind. The caller
+            // holds a transaction across these deletes and its final SaveChanges. Raw deletes
+            // also avoid EF Core 5's mixed UInt32/Int32 key comparer failure when removing
+            // several of these rows in one SaveChanges. Account-wide state is retained.
+            var itemIds = _charContext.CharacterInventoryEntries
+                .Where(e => e.CharacterId == id)
+                .Select(e => e.ItemId)
+                .ToArray();
+            var ownedItemIds = itemIds.Where(itemId =>
+                !_charContext.CharacterInventoryEntries.Any(e => e.ItemId == itemId && e.CharacterId != id)
+                && !_charContext.ClanInventoryEntries.Any(e => e.ItemId == itemId)).ToArray();
+            var databaseId = (long)id;
+
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `clan_member` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_appearance` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_ability_drawer` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_inventory` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_logos` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_mission_objective_counter` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_mission_objective` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_mission` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_content_fact` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_option` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_skills` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_teleporter` WHERE character_id = {databaseId}");
+            _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `character_title` WHERE character_id = {databaseId}");
+            foreach (var itemId in ownedItemIds)
+                _charContext.Database.ExecuteSqlInterpolated($"DELETE FROM `items` WHERE item_id = {(long)itemId}");
             _charContext.Remove(entry);
         }
 
@@ -124,6 +154,10 @@ namespace Rasa.Repositories.Char.Character
         {
             var entry = _charContext.GetWritableEnsuring(_charContext.CharacterEntries, id);
             entry.LastLogin = DateTime.UtcNow;
+            // First-login eligibility must survive a crash or a disconnect before
+            // MapLoaded. Previously only leaving a registered map saved this count.
+            if (entry.NumLogins < uint.MaxValue)
+                entry.NumLogins++;
         }
 
         public void SaveCharacter(ICharacterChange characterChange)
@@ -351,13 +385,12 @@ namespace Rasa.Repositories.Char.Character
             _charContext.SaveChanges();
         }
 
-        public bool IsCharacterNameTaken(string name, uint exceptCharacterId)
+        public bool IsCharacterNameTaken(string name, uint exceptCharacterId, uint accountId)
         {
-            // ToLower on both sides: SQLite compares strings with BINARY collation, so = is
-            // case-sensitive there while MySQL's default collation is not.
-            var lowered = name.ToLower();
-
-            return _charContext.CharacterEntries.Any(e => e.Id != exceptCharacterId && e.Name.ToLower() == lowered);
+            // SQLite lower() folds ASCII only. Compare the account's names in managed
+            // code so an exact accented spelling cannot evade reservation.
+            return _charContext.CharacterEntries.Where(e => e.AccountId == accountId && e.Id != exceptCharacterId)
+                .Select(e => e.Name).AsEnumerable().Any(existing => string.Equals(existing, name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

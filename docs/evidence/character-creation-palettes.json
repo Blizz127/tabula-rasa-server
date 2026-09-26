@@ -1,0 +1,318 @@
+{
+  "ui_glm_sha256": "0b818dc0a8f7f3d79600c36802b0cac353c2e374914e10fc256986d4e2d0f7d0",
+  "members": [
+    {
+      "member": "palette_skintone_brann.dds",
+      "glm_offset": 3580928,
+      "bytes": 65664,
+      "sha256": "f0bcc13950a8faef5c81cc3a38c52e9dd094ba0cafc9e0a664822c5e7a4150ea",
+      "native_rgba_sha256": "b6231a5a1424b8ea046ef6a346926f9275e2e4585e723442426ba02a31b20d69",
+      "unique_opaque_nonblack": 3882,
+      "layout_156px_candidate_count": 3221,
+      "layout_156px_candidates_sha256": "442572715a96ca11e8181118db2995cec92396deb563af1122120de4dc376e65",
+      "defaults": [
+        {
+          "rgba": [
+            82,
+            125,
+            181,
+            255
+          ],
+          "in_156px_candidates": true,
+          "in_texture": true
+        }
+      ],
+      "native_emulation_verification": {
+        "texels_compared": 65536,
+        "matches": 65536,
+        "pillow_different_pixels": 23527,
+        "first_pillow_difference": {
+          "x": 0,
+          "y": 0,
+          "native": [
+            5,
+            4,
+            5,
+            4
+          ],
+          "pillow": [
+            5,
+            5,
+            5,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "member": "palette_skintone_forean.dds",
+      "glm_offset": 3647488,
+      "bytes": 65664,
+      "sha256": "36ebe51072267295926897c8b6525cf63a1ac0f2bce0f506a4a2a676de990157",
+      "native_rgba_sha256": "bf1b6727bd0f1e72e06a5f39bc5a660519d7d662740afde3ac47a5844f179ec5",
+      "unique_opaque_nonblack": 3727,
+      "layout_156px_candidate_count": 3163,
+      "layout_156px_candidates_sha256": "1e2af9ab7f39766eb8572eb9049732a6f76864e55050537fa39cdbd22d28553c",
+      "defaults": [
+        {
+          "rgba": [
+            99,
+            113,
+            90,
+            255
+          ],
+          "in_156px_candidates": true,
+          "in_texture": true
+        }
+      ],
+      "native_emulation_verification": {
+        "texels_compared": 65536,
+        "matches": 65536,
+        "pillow_different_pixels": 21009,
+        "first_pillow_difference": {
+          "x": 0,
+          "y": 0,
+          "native": [
+            5,
+            4,
+            5,
+            5
+          ],
+          "pillow": [
+            5,
+            5,
+            5,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "member": "palette_skintone_human.dds",
+      "glm_offset": 3714048,
+      "bytes": 65664,
+      "sha256": "da3100a87cbbb0cace50de19327ea96a0d0dfcb9273eebc348bc7724963c33e8",
+      "native_rgba_sha256": "f6a850027d89f531415a9a2e7f1360dbc5a9b4961bc6f00dd4e8caf7826a5035",
+      "unique_opaque_nonblack": 3367,
+      "layout_156px_candidate_count": 2979,
+      "layout_156px_candidates_sha256": "4294366c5dd1c7d31b7382c181b359546f13079f429d3d6426bdc84f7b00c2d6",
+      "defaults": [
+        {
+          "rgba": [
+            214,
+            178,
+            132,
+            255
+          ],
+          "in_156px_candidates": true,
+          "in_texture": true
+        }
+      ],
+      "native_emulation_verification": {
+        "texels_compared": 65536,
+        "matches": 65536,
+        "pillow_different_pixels": 18376,
+        "first_pillow_difference": {
+          "x": 117,
+          "y": 3,
+          "native": [
+            16,
+            13,
+            10,
+            71
+          ],
+          "pillow": [
+            16,
+            13,
+            10,
+            70
+          ]
+        }
+      }
+    },
+    {
+      "member": "palette_skintone_thrax.dds",
+      "glm_offset": 3780608,
+      "bytes": 65664,
+      "sha256": "a6924b626f822bb245e3a2f47e9258f89a4f3315af73a77b455fa167be1e8cd8",
+      "native_rgba_sha256": "0e2224ef33d8bd2bc6f31cddcdfaf3d918b1578bf57efd3133b5f66f93936dc9",
+      "unique_opaque_nonblack": 3905,
+      "layout_156px_candidate_count": 3179,
+      "layout_156px_candidates_sha256": "6a51510b631a3a41fc4ef4d0e6065a60b03a40a6e57cc02592e9c07ac8ac4b17",
+      "defaults": [
+        {
+          "rgba": [
+            115,
+            56,
+            41,
+            255
+          ],
+          "in_156px_candidates": true,
+          "in_texture": true
+        }
+      ],
+      "native_emulation_verification": {
+        "texels_compared": 65536,
+        "matches": 65536,
+        "pillow_different_pixels": 23298,
+        "first_pillow_difference": {
+          "x": 0,
+          "y": 0,
+          "native": [
+            5,
+            4,
+            5,
+            5
+          ],
+          "pillow": [
+            5,
+            5,
+            5,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "member": "palette_standard.dds",
+      "glm_offset": 5426176,
+      "bytes": 262272,
+      "sha256": "82ee74aa0fb97372ac6a454073650a8b55ca62b2ceaec74ae9694aa3bb355cfd",
+      "native_rgba_sha256": "3ec4d01d6569d693ae0f020b243260f7db09aad11d72ac7dce173220d1cec825",
+      "unique_opaque_nonblack": 37815,
+      "layout_156px_candidate_count": 13972,
+      "layout_156px_candidates_sha256": "0cd8c1903d330d54b3497780e0d6e2d5daceb1dd8da3b026bdddb43910a1a75c",
+      "defaults": [
+        {
+          "rgba": [
+            82,
+            52,
+            32,
+            255
+          ],
+          "in_156px_candidates": false,
+          "in_texture": true
+        },
+        {
+          "rgba": [
+            168,
+            140,
+            66,
+            255
+          ],
+          "in_156px_candidates": false,
+          "in_texture": true
+        }
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "recorded": "2026-09-22",
+  "version": "Original compatibility client 1.16.5.0; exact shutdown revision unverified",
+  "tier": "original",
+  "confidence": "high for recovered bytes and isolated native sampler; runtime selectable-set completeness unverified",
+  "sources": {
+    "archive": {
+      "url": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
+      "sha256": "1ee00dc439d92a9717b9ae925ff827e345063fa4200dd202f0ccf2d22bd14f3e"
+    },
+    "executable": {
+      "member": "tabula_rasa.exe",
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+      "image_base": "0x00400000",
+      "UIBitmap_RTTI_type_descriptor": "0x00d30b94",
+      "UIBitmap_vtable": "0x00c142ac",
+      "GetPixelColor_python_wrapper": "0x008f5d80",
+      "GetPixelColor_vtable_slot": "0x214",
+      "GetPixelColor_native": "0x008f4de0\u20130x008f4f22",
+      "FindPixelForColor_native": "0x008f4f40\u20130x008f50c5",
+      "texture_pixel_getter": "0x006cb080\u20130x006cb1c6",
+      "DXT_sampler": "0x006fa2a0\u20130x006fa8c9",
+      "integer_truncation_helper": "0x00a5ce90"
+    },
+    "ui_xml": {
+      "member": "data/xml/Tabula_Rasa_UI_EXPORT.xml",
+      "sha256": "6683ae6a4fb480c0becf7d38d52901f88a647663e14b4433200336cf5dbfb3da",
+      "texture_defs_lines": [
+        789,
+        793
+      ],
+      "creation_picker_lines": [
+        4270,
+        4350
+      ],
+      "widget": "TabulaRasaUI/Definitions/TemplateWidgets/CharCreateColorPicker/ColorGroup/ColorWheelPicker/ColorWheel",
+      "size": [
+        156,
+        156
+      ],
+      "texture_region": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "mode": [
+        "stretch",
+        "stretch"
+      ]
+    },
+    "python": "character-creation-appearance.json: sources.window and sources.colorpicker"
+  },
+  "rules": [
+    {
+      "id": "palette_choice",
+      "source": "charactercreationwindow.Init slotColorData and _StartEditColor line1031 offsets52\u2013100",
+      "value": "Face uses race-specific skin texture; Hair/Beard/Eyewear use Standard."
+    },
+    {
+      "id": "pixel_selection",
+      "source": "colorwheelpicker.__init__ line17 offsets63\u2013147; _SetColorWheelPicker line121 offsets0\u2013392; UIBitmap.GetPixelColor native0x008f4e86\u20130x008f4ec5",
+      "value": "Buffer8; radius=widgetWidth/2-8; clamp cursor to circular disk and square buffer; stretch sample truncates(coord/widgetSize*regionSize); accept alpha255 and nonblack only."
+    },
+    {
+      "id": "native_DXT5_RGB",
+      "source": "DXT sampler0x006fa656\u20130x006fa8c9",
+      "value": "RGB565 endpoints expanded by bit replication; interpolation uses floor(2*A/3)+floor(B/3) or floor(A/3)+floor(2*B/3) independently per channel."
+    },
+    {
+      "id": "native_DXT5_alpha",
+      "source": "DXT sampler0x006fa458\u20130x006fa4f6",
+      "value": "Interpolated alpha adds3 before division7 or adds2 before division5. Endpoints and0/255 branches retained."
+    },
+    {
+      "id": "default_not_palette_grid",
+      "source": "charactercreationwindow module offsets396\u2013465 and reconstructed156px grid",
+      "value": "Standard Hair/Beard default82,52,32 and Eyewear default168,140,66 exist in raw texture but are not reachable from the156px mouse grid; must explicitly admit unchanged defaults."
+    },
+    {
+      "id": "clone_defaults",
+      "source": "charactercreationwindow._ResetSelections line722 offsets399\u20131016; Show line244 offsets9\u201321 and575\u2013584; _UpdateRaceToggles line980 offsets439\u2013464",
+      "value": "Reset initially copies Face/Hair/Beard colors from clone pod. Show then resets Face to race default. Human Hair/Beard inherited colors survive; Eyewear resets to its default and no selected item."
+    },
+    {
+      "id": "palette_show",
+      "source": "colorwheelpicker.Show line51 offsets19\u201399; FindPixelForColor native0x008f4ff3\u20130x008f50c5",
+      "value": "Searches row-major for exact native RGBA; returns -1,-1 when absent; inverse scales match to widget with truncation. Show positions selector but does not fire color-changed callback; opening picker does not replace default."
+    }
+  ],
+  "artifacts": {
+    "root": "/home/blizz/backups/rasa-net/research/20260922-character-appearance",
+    "native_emulation_script": "verify-native-palette.py",
+    "native_disassembly": "native-palette-disassembly.txt",
+    "native_decoder_disassembly": "native-dxt5-disassembly.txt",
+    "python_disassembly": "palette-paths.dis",
+    "candidate_outputs": "candidate-palettes/"
+  },
+  "reproduction": {
+    "script": "character-creation-palettes.recover.py",
+    "dependencies": "Python3 standard library only",
+    "independent_verification": "DXT5 decoder matches all 262,144 texels produced by isolated Unicorn emulation of original pure native routine; no OS imports/game execution."
+  },
+  "gaps": [
+    "Candidate156px sets are not enforced until native runtime UI coordinate scaling across supported resolutions is checked. XML and static routines establish logical layout but runtime screen-to-widget input path remains unverified.",
+    "Any RGB admission must preserve Human clone inherited Hair/Beard colors, including original older/customized source colors outside current wheel; parent/source comparison not implemented.",
+    "Native graphics resource loading/format or quality fallback should be checked during original client session before treating exact DDS decode as universal runtime behavior.",
+    "No original server packet capture establishes whether final server itself rejected non-picker RGB."
+  ]
+}
