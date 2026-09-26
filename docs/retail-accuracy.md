@@ -1981,3 +1981,48 @@ This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4a
 **Manifest coverage added in this documentation pass.** `docs/evidence/bootcamp-d11-reconstruction-manifest.json` had no `changes` entries for `BootcampReinforcementPadHold` or `TooCloseForComfortLevel` even though both migrations carry labelled evidence in their own Rows.cs files. Both are now recorded (each preserving its original provenance tier — `observed` for the pad-hold removal, citing footage `8VXeKzGUv0c` event B2-012 at 95.4s; `inferred` for the Too Close For Comfort level, citing TaRapedia's mission page), and gap `GAP-S5-REINFORCEMENT-MOVE` was reopened to reflect that the reinforcements' later departure, if any, remains unverified. No provenance tier or reconstructed value was changed by this pass — only the manifest's record of what was already migrated.
 
 **Estimates flagged for owner review (unchanged, listed here for visibility).** The following labelled estimates from this recovered work are not resolved by this documentation pass and are also entered in `docs/progression-preservation-plan.md`'s owner-decision table: Forming Alliances' 50% heart-drop chance and reward vest template 13738 (with the v4/v6 naming discrepancy noted above); the practice dummy's 1 HP; boot-camp companion (Initiate) stats; McAllister's 2.5 m/s walk speed (analogue, not measured); Moawi's assigned class; the Solis identity in the Solis Caverns placement; and the account-authentication 20-second wait introduced in `af0a9bb`.
+
+## 2026-09-26 — Eleven Liaison Logos missions seeded (LiaisonLogosMissions)
+
+`20260926190000_LiaisonLogosMissions` (SQLite and MySQL, frozen rows in `WildernessData/LiaisonLogosMissionsRows.cs`)
+seeds the eleven `Logos:` missions the segment-3 audit found unseeded: 1633 Attack, 1634 Target, 1635 Here, 1638
+Enhance, 1639 Power, 1640 Area, 1643 Backward, 1644 Defend, 1646 Give, 1647 Increase and 1652 Ground. They follow
+`SeedLogosMissions`: one client objective each, required and revealed on acceptance, bound by `LogosRecovered` to
+the world's `logos` row for the shrine; the giving Liaison also takes the mission back; no reward item, because the
+shrine grants the Logos. None has an objectiveconversation row, so no giver line can close an objective.
+
+Four findings changed the batch:
+
+- **The list had four givers, not one.** The audit filed all eleven under Receptive Liaison Langerman. TaRapedia's
+  mission pages (every revision up to the post-D11 ones of 2008-09-16/25) and its NPC pages give Langerman 1633,
+  1638, 1639 and 1640 (Alia Das), Standley 1634 and 1635 (Twin Pillars), Noonan 1643, 1644, 1646 and 1647 (Foreas
+  Base, Divide) and Arizpe 1652 (Cumbria Research Facility, Palisades). Each shrine stands on its giver's own map,
+  and its `logos` row id is the client's own `logosstone` constant for the word (checked read-only against the
+  deployed world). 1638's client opening text itself begins "I am Receptive Liaison Langerman". Langerman's other
+  four missions (907 Damage, 909 Time, 911 Mind, 921 Projectile) and Standley's 908/912/923/924/960 are not in
+  this batch (`GAP-LIAISON-LOGOS-UNSEEDED`).
+- **The credit amounts conflict.** Every seeded amount is a TaRapedia reading first written in October–November
+  2007. The pages' post-D11 revisions only reformatted them, so each is labelled era pre-1.4
+  (`GAP-LIAISON-LOGOS-REWARD-ERA`). Ellatha's early-2008 mission pages give different credits for Attack (800 vs
+  100), Target (900 vs 800), Enhance (500 vs 1,500), Power (500 vs 600) and Area (600 vs 1,500). Those credits
+  are left out; only Here's 900, where both sources agree, is seeded. The Divide pages' 200 credits were entered
+  at page creation by the editor whose creation-time credits on all six Liaison pages that can be checked were
+  later corrected or contradicted, so they are left out as weak. Five pages record no experience. What is seeded:
+  experience 4,000/2,500/2,500/3,000 for Langerman's four and 4,500 for each of Standley's, credits 900 for Here
+  and 1,800 for Ground (single uncorroborated reading). The Noonan missions pay nothing
+  (`GAP-LIAISON-LOGOS-REWARDS-MISSING`, which also flags the same 200 credits already seeded on 1649/1650).
+- **Langerman cannot be spoken to in this tree alone.** He stands on the Redshirt class 29423. The missing-npcs
+  batch's `MissingMissionGivers` (20260926150000) gives him an NPC class for 1741. This migration leaves creature
+  133 alone and depends on that one running first (`GAP-LIAISON-LOGOS-SPEAKER`).
+- **Levels follow the SeedLogosMissions rule.** Each mission takes its giver's level as an analogue under OD-100:
+  Langerman 15, as the final-era footage shows his nameplate (B3-024), although his creature row says 10; Standley
+  and Noonan 10, Arizpe 25.
+
+1639 and 1640 are gated on 1069 Receptive Reception, TaRapedia's Requirement since 2008-03-07. Whether 1639 Logos:
+Power was still dispensed after D11, when the rebuilt boot camp grants Power on the normal path, is unrecorded
+(`GAP-LIAISON-LOGOS-POWER-D11`). A character who skips the boot camp still arrives without Power, and no capture
+shows what the skip granted (`GAP-LOGOS-SKIP-POWER`). Nothing is granted in its place.
+
+Provenance: the manifest rows with migration `LiaisonLogosMissions` (43 rows, 11 changes, 6 new gaps, OD-100) and
+`docs/evidence/liaison-logos-missions.json`. The research is in `research/20260926-logos-missions`: TaRapedia and
+Ellatha fetches, the static client decode, and the world check.

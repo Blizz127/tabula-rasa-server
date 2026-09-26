@@ -1022,6 +1022,16 @@ character picks up in Alia Das once Training Day and the class choice are behind
   406, the pre-1.4 reward items, the carried field report / data pack, Jorai's marker position, the zone-band levels
   (GAP-READY-434-GATE, -408-GATE, -REWARD-ITEMS, -MISSION-ITEM, -JORAI-POSITION, -SPEAKER-CLASS,
   -REDIRECT-COMPLETION, GAP-MISSION-LEVEL). Details: `docs/evidence/early-ready-missions.json`.
+- **Liaison Logos missions (2026-09-26, `LiaisonLogosMissions`)**: the eleven unseeded `Logos:` missions of the
+  segment-3 audit, seeded the `SeedLogosMissions` way: one shrine objective bound by `LogosRecovered` to the world's
+  `logos` row, which is the client's `logosstone` id for the word, the giver also the receiver, no reward item.
+  TaRapedia and the shrines' maps give four givers where the audit listed one: Langerman 1633/1638/1639/1640,
+  Standley 1634/1635, Noonan 1643/1644/1646/1647, Arizpe 1652. 1639/1640 are gated on 1069. Rewards keep only the
+  TaRapedia amounts no other source contradicts. All are pre-1.4 readings carried into post-D11 formatting edits;
+  Ellatha contradicts five credit amounts. Levels are the giver's (OD-100; Langerman's observed 15). Langerman
+  needs `MissingMissionGivers` for a conversable class. Open: GAP-LIAISON-LOGOS-REWARD-ERA, -REWARDS-MISSING,
+  -SPEAKER, -POWER-D11, -UNSEEDED (907/908/909/911/912/921 are seedable the same way) and GAP-LOGOS-SKIP-POWER.
+  Details: `docs/evidence/liaison-logos-missions.json`.
 
   - **2026-09-22 to 2026-09-24 (recovered from a lost checkout; documentation reconstructed 2026-09-26,
     commit `4aa50b3`)**: Alia Das missions given by Alia Das/Warrior Apirka were seeded or corrected in

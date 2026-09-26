@@ -638,6 +638,22 @@ inferred in structure and quantity (GAP-TORDEN-1326-1330-ITEM-CHOICE). Their lev
 Pools has no band, and the value is 1068/1541's under OD-60, pending owner review. To allow that label the provenance
 registry now classifies `npc_mission`, whose columns are all required.
 
+### Liaison Logos missions: one audit list, four givers (2026-09-26)
+
+The segment-3 audit listed eleven unseeded `Logos:` missions under Receptive Liaison Langerman. Before seeding,
+each was traced through TaRapedia's full page history, its giver's NPC page and the world's shrine rows. Only four
+are Langerman's. Two are Standley's in Twin Pillars, four are Noonan's at Foreas Base in the Divide, and one is
+Arizpe's in the Palisades. Every shrine stands on its giver's map, and every shrine's `logos` id equals the client's
+`logosstone` constant for its word. They were seeded on those givers (`LiaisonLogosMissions`).
+
+The rewards did not survive as well. TaRapedia's amounts were typed in late 2007 and only reformatted after D11.
+Ellatha's early-2008 pages disagree with five of the six credit amounts they cover. The six TaRapedia pages that can
+be checked all had their creation-time credits corrected later or contradicted. So five credit amounts and the
+Divide's 200s are left out, and the rest are labelled pre-1.4 (**GAP-LIAISON-LOGOS-REWARDS-MISSING**, **-REWARD-ERA**).
+
+The same weakness sits under the already-seeded 1649/1650 (200 credits each), which was not changed.
+**GAP-LIAISON-LOGOS-UNSEEDED** lists the Logos missions still missing: six are seedable the same way.
+
 ## The parallel audit, and what it shipped (2026-09-21)
 
 Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and
