@@ -244,9 +244,8 @@ namespace Rasa.Test
                 int Int(string field) => record.GetProperty(field).GetProperty("value").GetInt32();
                 bool Bool(string field) => record.GetProperty(field).GetProperty("value").GetBoolean();
 
-                // A graveyard id is unique per map, not across the world: the Landing Zone control point
-                // carries 136 on both the Wilderness and the Palisades, and ReviveMe only ever chooses from
-                // the hospitals of the map the player died on.
+                // A graveyard id is unique per map, not across the world: the five instance entrances carry
+                // graveyard 36, and ReviveMe only ever chooses from the hospitals of the map the player died on.
                 var hospital = HospitalCatalog.Entries.Single(entry => entry.GraveyardId == Int("graveyard_id") &&
                     entry.MapContextId == (uint)Int("map_context_id"));
                 Assert.AreEqual((uint)Int("waypoint_id"), hospital.WaypointId);
@@ -367,6 +366,65 @@ namespace Rasa.Test
             _owner.Player.Position = new Vector3(884.11f, 294f, 347.81f);
             _deaths.OnPlayerEnteredMap(_owner);
             Assert.AreEqual(0, _persisted.Count);
+        }
+
+        /// <summary>
+        /// SEG3-HOSPITALS: the Palisades control-point hospital carried the Wilderness Landing Zone's waypoint 216, and
+        /// gained waypoints are keyed by id alone, so gaining the Wilderness one gained both and skipped the Palisades
+        /// zone-entry gain. The Palisades one is Fort Dew's (graveyard 221, waypoint 226).
+        /// </summary>
+        [TestMethod]
+        public void TheWildernessLandingZoneHospitalNoLongerCountsOnThePalisades()
+        {
+            var wilderness = HospitalCatalog.ForMap(1220).Single(entry => entry.MarkerEntityId == 133079561962699UL);
+            var fortDew = HospitalCatalog.ForMap(1244).Single(entry => entry.MarkerEntityId == 133182640964490UL);
+            Assert.AreEqual(216u, wilderness.WaypointId);
+            Assert.AreEqual((221, 226u), (fortDew.GraveyardId, fortDew.WaypointId));
+
+            Arrange(1244);
+            _owner.Player.GainedWaypoints.Add(new CharacterTeleporterEntry(101, 216, (byte)WaypointType.Hospital));
+            Assert.AreEqual(0, PlayerDeathManager.OfferedHospitals(_owner.Player).Count);
+            _owner.Player.Position = fortDew.Position + new Vector3(20f, 0f, 20f);
+            _deaths.OnPlayerEnteredMap(_owner);
+            var gained = _persisted.Select(entry => entry.Value).OfType<CharacterTeleporterEntry>().Single();
+            Assert.AreEqual(226u, gained.WaypointId);
+            CollectionAssert.AreEqual(new[] { 221 }, PlayerDeathManager.OfferedHospitals(_owner.Player).Select(h => h.GraveyardId).ToArray());
+        }
+
+        /// <summary>
+        /// A hospital's waypoint id is what the character keeps, so one id on two maps is one hospital to the server.
+        /// The only sharing left is the Manhattan shared-instance copy (2375 of 2327, the same markers) and the
+        /// instance entrances' "AFS Field Medic" 120 (GAP-HOSPITAL-SHARED-WAYPOINT).
+        /// </summary>
+        [TestMethod]
+        public void NoHospitalWaypointIdIsSharedBetweenMapsBeyondTheRecordedCases()
+        {
+            var shared = HospitalCatalog.Entries.GroupBy(entry => entry.WaypointId)
+                .Where(group => group.Select(entry => entry.MapContextId).Distinct().Count() > 1)
+                .ToDictionary(group => group.Key, group => group.Select(entry => entry.MapContextId).OrderBy(id => id).ToArray());
+            CollectionAssert.AreEquivalent(new uint[] { 120, 517, 518, 519 }, shared.Keys.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 1823, 1977, 1988, 2055, 2111 }, shared[120]);
+            foreach (var id in new uint[] { 517, 518, 519 })
+                CollectionAssert.AreEqual(new uint[] { 2327, 2375 }, shared[id]);
+        }
+
+        /// <summary>
+        /// The Divide's Foreas Base, the Palisades' Cumbria Research Facility and Devil's Den hospitals are offered
+        /// once gained: gained within the discovery radius as every catalogued hospital is.
+        /// </summary>
+        [DataTestMethod]
+        [DataRow(1148u, 202, 93u)]
+        [DataRow(1244u, 219, 112u)]
+        [DataRow(1394u, 41, 388u)]
+        public void TheNewlyResolvedHospitalsAreGainedAndOffered(uint map, int graveyardId, uint waypointId)
+        {
+            Arrange(map);
+            var hospital = HospitalCatalog.ForMap(map).Single(entry => entry.GraveyardId == graveyardId);
+            Assert.AreEqual(waypointId, hospital.WaypointId);
+            _owner.Player.Position = hospital.Position + new Vector3(3f, 0f, 3f);
+            _deaths.DiscoverHospitals(_map);
+            Assert.IsTrue(_persisted.Select(entry => entry.Value).OfType<CharacterTeleporterEntry>().Any(entry => entry.WaypointId == waypointId));
+            Assert.IsTrue(PlayerDeathManager.OfferedHospitals(_owner.Player).Any(entry => entry.GraveyardId == graveyardId));
         }
 
         private Missile Shot(int damage) => new Missile

@@ -286,8 +286,13 @@ namespace Rasa.Managers
         {
             switch (obj.DynamicObjectType)
             {
-                // teleporters
+                // teleporters. A local teleporter pad is gained and used by walking onto it, the way a map
+                // waypoint is: the client has a separate type for it (constant/waypointtype LOCALWAYPOINT 1), its
+                // own gain line (manifestation.Recv_WaypointGained posts PM_GAINED_WAYPOINT for type 1) and its
+                // own window (clientmethod.Recv_EnteredWaypoint takes the type). It used to fall through to the
+                // default here, so none of the 42 type-1 pads could ever be gained or used.
                 case DynamicObjectType.Waypoint:
+                case DynamicObjectType.LocalTeleporter:
                 case DynamicObjectType.Wormhole:
                 case DynamicObjectType.DropshipTeleporter:
                     {
@@ -775,7 +780,11 @@ namespace Rasa.Managers
                 var teleporter = Teleporters[waypoint.WaypointId];
                 var teleporterData = teleporter.ObjectData as WaypointInfo;
 
-                if (teleporterData.WaypointType == WaypointType.Waypoint && teleporter.MapContextId != mapChannel.MapInfo.MapContextId)
+                // Map waypoints and local teleporters both travel within the map the player stands on
+                // (help text 5697: "a list of all available waypoints on your current map"; a local teleporter
+                // plays the LOCAL_TELEPORTER effect of a within-map move). SelectWaypoint would fly a player to
+                // another map for anything listed from one.
+                if (IsWithinMapType(teleporterData.WaypointType) && teleporter.MapContextId != mapChannel.MapInfo.MapContextId)
                     continue;
 
                 if (teleporterData.WaypointType != waypointType)
@@ -803,8 +812,8 @@ namespace Rasa.Managers
             // teleporter dictionaries, so an unknown map or waypoint id threw KeyNotFoundException
             // in the handler and the player was disconnected. Now the request is checked the way
             // the waypoint window itself is built: the player has to be standing at a waypoint,
-            // the destination has to exist, and it has to be one this character has gained
-            // (dropships are offered to everyone, see CreateListOfDropships).
+            // the destination has to exist, and it has to be one this character has gained -
+            // dropships included (help text 5697, see CreateListOfDropships).
             if (client.Player == null || client.State != ClientState.Ingame)
                 return;
 
@@ -828,8 +837,7 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (objData.WaypointType != WaypointType.Dropship
-                && !client.Player.GainedWaypoints.Any(w => w.WaypointId == objData.WaypointId))
+            if (!HasGained(client.Player, objData.WaypointId, objData.WaypointType))
             {
                 Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} has not gained waypoint {objData.WaypointId}");
                 return;
@@ -875,6 +883,9 @@ namespace Rasa.Managers
 
             teleporter.TriggeredByPlayers.Remove(client);    // ToDO: maybe safely remove client
         }
+
+        private static bool IsWithinMapType(WaypointType waypointType)
+            => waypointType == WaypointType.Waypoint || waypointType == WaypointType.LocalTeleporter;
 
         /// <summary>
         /// The effect a pad plays, for PreTeleport and Teleport.
@@ -973,40 +984,66 @@ namespace Rasa.Managers
             }
         }
 
-        internal Dictionary<uint, MapWaypointInfoList> CreateListOfDropships()
+        /// <summary>
+        /// Whether the character has gained this waypoint of this kind. Persisted rows carry the type the
+        /// pad was gained as (CharacterTeleporterEntry.WaypointType).
+        /// </summary>
+        internal static bool HasGained(Manifestation player, uint waypointId, WaypointType waypointType)
+            => player.GainedWaypoints.Any(w => w.WaypointId == waypointId && (WaypointType)w.WaypointType == waypointType);
 
+        /// <summary>
+        /// Walking onto a dropship pad gains it. The final client's help text says so (uielementlanguage 5697,
+        /// "Waypoints/Dropships"): "Access to a Dropship Transport is gained by walking across the pad ... A special
+        /// travel menu will appear with a list of any available Dropship Transports. Remember, you must first travel
+        /// to another map and gain access to a Dropship Transport there before you can use this method of travel!"
+        /// The gain is kept silently: manifestation.Recv_WaypointGained has a line for types 1-3 only and the client
+        /// knows no dropship waypoint type, so no gain message is sent (GAP-DROPSHIP-GAIN-MESSAGE). The help text's
+        /// "when a Dropship is hovering with its transporter beam activated" is not modelled: the pad is always live
+        /// (GAP-DROPSHIP-HOVER).
+        /// </summary>
+        internal void GainDropship(Client client, uint waypointId)
+        {
+            if (HasGained(client.Player, waypointId, WaypointType.Dropship))
+                return;
+
+            var entry = new CharacterTeleporterEntry(client.Player.Id, waypointId, (byte)WaypointType.Dropship);
+            client.Player.GainedWaypoints.Add(entry);
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Teleporter, entry);
+        }
+
+        /// <summary>
+        /// The dropship travel window: the dropship pads this character has gained, grouped by map. It used to list
+        /// every pad of every map from level 1 (help text 5697 says the list is the gained ones), and it drew each
+        /// map's first pad at (-225.353, 99.597, -70.5246) - the world seed's position for Denzil's Caldera Outpost
+        /// Hospital on the boot-camp map - because that literal stood where the pad's own position belonged.
+        /// waypointwindow.SetupWaypointLocationRows places each location's widget at the position sent with it, so
+        /// every pad now carries its own row's position.
+        /// </summary>
+        internal Dictionary<uint, MapWaypointInfoList> CreateListOfDropships(Manifestation player)
         {
             var dropships = new Dictionary<uint, MapWaypointInfoList>();
 
-            // for now we add all dropships, ToDO: give player only gained dropships
             foreach (var entry in Teleporters)
             {
                 var teleporter = entry.Value;
-                var teleporterInfo = teleporter.ObjectData as WaypointInfo;
+
+                if (!(teleporter.ObjectData is WaypointInfo teleporterInfo) || teleporterInfo.WaypointType != WaypointType.Dropship)
+                    continue;
 
                 if (MapChannelManager.Instance.IsPerCharacterContext(teleporter.MapContextId))
                     continue;
 
-                if (teleporterInfo.WaypointType == WaypointType.Dropship)
+                if (!HasGained(player, teleporterInfo.WaypointId, WaypointType.Dropship))
+                    continue;
+
+                if (!dropships.TryGetValue(teleporter.MapContextId, out var map))
                 {
-                    if (dropships.ContainsKey(teleporter.MapContextId))
-                    {
-                        var map = dropships[teleporter.MapContextId];
-                        var waypoints = map.Waypoints;
-
-                        waypoints.Add(new WaypointInfo(teleporterInfo.WaypointId, teleporterInfo.Contested, teleporter.Position, teleporterInfo.WaypointType));
-                    }
-                    else
-                    {
-                        //create new entry
-                        var instance = new List<MapInstanceInfo> { new MapInstanceInfo(1, teleporter.MapContextId, MapInstanceStatus.Low) };
-                        var waypoints = new List<WaypointInfo> { new WaypointInfo(teleporterInfo.WaypointId, teleporterInfo.Contested, new Vector3(-225.353f, 99.597f, -70.5246f), WaypointType.Dropship) };
-
-                        var mapWaypointInfoList = new MapWaypointInfoList(teleporter.MapContextId, instance, waypoints);
-
-                        dropships.Add(teleporter.MapContextId, mapWaypointInfoList);
-                    }
+                    var instance = new List<MapInstanceInfo> { new MapInstanceInfo(1, teleporter.MapContextId, MapInstanceStatus.Low) };
+                    map = new MapWaypointInfoList(teleporter.MapContextId, instance, new List<WaypointInfo>());
+                    dropships.Add(teleporter.MapContextId, map);
                 }
+
+                map.Waypoints.Add(new WaypointInfo(teleporterInfo.WaypointId, teleporterInfo.Contested, teleporter.Position, WaypointType.Dropship));
             }
 
             return dropships;

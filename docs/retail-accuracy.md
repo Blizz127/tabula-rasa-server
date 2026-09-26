@@ -2149,3 +2149,76 @@ This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4a
 **Manifest coverage added in this documentation pass.** `docs/evidence/bootcamp-d11-reconstruction-manifest.json` had no `changes` entries for `BootcampReinforcementPadHold` or `TooCloseForComfortLevel` even though both migrations carry labelled evidence in their own Rows.cs files. Both are now recorded (each preserving its original provenance tier — `observed` for the pad-hold removal, citing footage `8VXeKzGUv0c` event B2-012 at 95.4s; `inferred` for the Too Close For Comfort level, citing TaRapedia's mission page), and gap `GAP-S5-REINFORCEMENT-MOVE` was reopened to reflect that the reinforcements' later departure, if any, remains unverified. No provenance tier or reconstructed value was changed by this pass — only the manifest's record of what was already migrated.
 
 **Estimates flagged for owner review (unchanged, listed here for visibility).** The following labelled estimates from this recovered work are not resolved by this documentation pass and are also entered in `docs/progression-preservation-plan.md`'s owner-decision table: Forming Alliances' 50% heart-drop chance and reward vest template 13738 (with the v4/v6 naming discrepancy noted above); the practice dummy's 1 HP; boot-camp companion (Initiate) stats; McAllister's 2.5 m/s walk speed (analogue, not measured); Moawi's assigned class; the Solis identity in the Solis Caverns placement; and the account-authentication 20-second wait introduced in `af0a9bb`.
+
+## 2026-09-26 — Client-contract defects: local teleporters, dropships, hospitals, sell and repair prices
+
+The segment-3 systems audit (`research/20260926-segment3-audit`, entries SEG3-LOCAL-TELEPORTERS, -DROPSHIP-WINDOW,
+-HOSPITALS and -BUYBACK-REPAIR) found four places where the server does not do what the 1.16.5.0 client expects.
+Each fix below was re-read from the client's own bytecode or tables (static decoding only; nothing imported or run).
+
+**Local teleporters.** `DynamicObjectProximityWorker` handled map waypoints, wormholes and dropships and let the
+type-1 pads fall to its default case, so none of the 42 could ever be gained. The client treats them as their own
+waypoint kind: `constant/waypointtype` has LOCALWAYPOINT 1, `manifestation.Recv_WaypointGained` posts
+PM_GAINED_WAYPOINT for it, and `clientmethod.Recv_EnteredWaypoint` opens the travel window with the type. The pads are
+now gained within the map-waypoint radius and open the window with this map's gained local pads; selecting one
+teleports within the map with the LOCAL_TELEPORTER effect. The radius (2 m) is the server's existing waypoint radius,
+inferred (`GAP-LOCAL-TELEPORTER-RADIUS`). Two things are still wrong and are recorded, not guessed: the pad ids 537-574
+are emulator ids that the final client's `waypointlanguage` does not contain (its original keys end at 533), so their
+names show as the client's missing-translation text (`GAP-LOCAL-TELEPORTER-IDS`, owner decision OD-90); and three
+type-1 rows are not local teleporters by the client's map (`GAP-LOCAL-TELEPORTER-TYPES`). Two further type-1 rows,
+595 and 597 "MIS_INDRACAVERNS_GRAVEYARD", stand 0.0 m from the client's "AFS Field Medic" HOSPITAL markers on maps 1823
+and 1977 and from no LOCAL_TELEPORTER marker; `LocalTeleporterGraveyards` re-types them to the seed's hospital type so
+walking through those hospitals gains nothing nameless.
+
+**Dropships.** The dropship window listed every pad on every map from level 1 and drew each map's first pad at
+(-225.353, 99.597, -70.5246), which is the world seed's position for Denzil's Caldera Outpost Hospital on the
+boot-camp map. `waypointwindow.SetupWaypointLocationRows` places each location at the position sent with it, so each
+pad now carries its own row's position. The discovery rule is in the final client's own help text (uielementlanguage
+5697, "Waypoints/Dropships"): "Access to a Dropship Transport is gained by walking across the pad ... A special travel
+menu will appear with a list of any available Dropship Transports. Remember, you must first travel to another map and
+gain access to a Dropship Transport there before you can use this method of travel!" Walking onto a pad now gains it
+(stored as type 4), the list holds the gained pads, and `SelectWaypoint` refuses a pad the character has not gained.
+Characters on the live world keep the waypoints and hospitals they have; they gain each dropship pad the next time
+they step on it. Not modelled: the hovering dropship the help text requires (`GAP-DROPSHIP-HOVER`) and any gain
+message, since the client has no dropship waypoint type to announce (`GAP-DROPSHIP-GAIN-MESSAGE`).
+
+**Hospitals.** The Palisades control-point hospital carried the Wilderness Landing Zone hospital's graveyard 136 and
+waypoint 216. Gained waypoints are stored by id alone (`character_teleporter` key character_id, waypointId), so gaining
+one gained both, and a player who had the Wilderness one got no zone-entry hospital on the Palisades. The Palisades
+marker reuses text 303 ("Hospital: Landing Zone (Control Point)", also on templates 1759 and 1839), while every other
+marker of that control point says Fort Dew: "Control Point: Fort Dew", "Waypoint: Fort Dew (Control Point)" 33 m away
+and "Medical Vendor: Fort Dew (Control Point)" 5 m from the hospital. The row is now graveyard 221 and waypoint 226,
+both "Hospital: Fort Dew (Control Point)" (inferred). Waypoint 226 is paired with 225 in the same way as the other
+control points' waypoint and hospital ids, the world seed places 226 8.5 m from the marker, and `map_marker` already
+bound the marker to 226.
+
+Why Divide and Palisades offered too few hospitals: the 2026-09-17 coverage recipe accepted only exact
+`graveyardlanguage` name matches. Three unresolved markers resolve on the next joins the client's data supports
+(inferred): Divide's "Hospital: Foreas Base" (graveyard 202 and waypoint 93, both "Foreas Base Hospital", in the same
+id blocks as the catalogued Divide hospitals 200/201/203 and 94/96/97), Palisades' Cumbria Research Facility Hospital
+(219, the only Cumbria graveyard, with waypoint 112 1 m from the marker) and Devil's Den (41 "Devil's Den Entrance",
+the only Devil's Den graveyard, with waypoint 388 "Hospital: Devil's Den"). Each respawns at its marker. The navmesh
+check finds ground under each marker, including Cumbria's, where the seed row is 10.8 m lower. Palisades' Hightower
+Outpost First Aid Station and Viands Village Hospital stay unresolved, because no graveyard or waypoint text names
+either. The catalogue now has 105 hospitals on 42 maps (`docs/evidence/hospital-catalog.json`). Still open:
+waypoint 120 "AFS Field Medic" is shared by five instance entrances (`GAP-HOSPITAL-SHARED-WAYPOINT`), and the Wilderness
+LZ marker's `map_marker` row names 104 while the catalogue announces 216 (`GAP-WILDERNESS-LZ-HOSPITAL-MARKER`).
+
+**Sell and repair prices.** `ItemInfo.BuyBackPrice` was never set, so the item-info tuple always carried 0. The client
+uses that number twice. With a vendor open, `inventorywindow.OnSlotEntered` adds a price line that `tooltipwindow`
+fills with stack count times `GetItemBuybackPrice`, and `vendorwindow._GetRepairPrice` bases the repair price on it.
+Players therefore saw no sale price and a 1-credit repair on everything. Per unit it is what `RequestVendorSale` pays,
+so it is now the sell price, clamped at 0 as the sale is. The repair charge was round((max - cur) × sell / 100); it is
+now the client's price: max(int(int(buyback × (100 − condition) × 0.01) × REPAIR_GLOBAL_MODIFIER), 1), with
+condition = 100 × cur // max (Python 2 integer division, `item.GetCondition`) and REPAIR_GLOBAL_MODIFIER 1.0
+(`gameconstants`). The sell prices themselves keep their existing provenance, InfiniteRasa's loot_value fit
+(`Regenerate_item_template`). Their tier is the trainers-economy batch's question, not this batch's. Items still never
+lose durability (gameconstants DURABILITYMOD_*), so a repair is rare until wear exists.
+
+Tests: `TravelPadTests` (local pad gain, window type and map filter, dropship gain, list and positions),
+`VendorPriceRulesTests` (the client's expression, evaluated by hand for seven cases),
+`InventorySessionTests.VendorRepairChargesTheClientsRepairPrice`,
+`ItemRequirementLoadingTests.LoadedSellPriceIsTheBuybackPriceTheTooltipCarries`, three `PlayerDeathLifecycleTests`
+(Fort Dew no longer shares 216, the only shared waypoint ids left are the recorded ones, and the three new hospitals are
+gained and offered), the `LocalTeleporterGraveyards` block in `ContentSchemaMigrationTests` and its provider-parity
+check. Manifest: five `changes` entries, the six gaps named above and OD-90.

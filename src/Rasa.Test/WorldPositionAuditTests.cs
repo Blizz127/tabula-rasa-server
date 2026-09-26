@@ -210,7 +210,8 @@ namespace Rasa.Test
         /// their base - the player lands) but may not be buried in it.
         ///
         /// This is what tells a resolved hospital from a marker that only looks like one: all 102 rows of the
-        /// 2026-09-17 coverage pass have a walkable surface within reach, 97 of them within 2 m.
+        /// 2026-09-17 coverage pass have a walkable surface within reach, 97 of them within 2 m, and so do the
+        /// three the 2026-09-26 client-defects pass resolved.
         /// </summary>
         [TestMethod]
         public void EveryHospitalRespawnPointHasGroundUnderIt()

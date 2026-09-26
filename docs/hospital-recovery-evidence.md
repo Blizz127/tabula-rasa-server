@@ -222,3 +222,10 @@ and facing, authoritative eligible choices and `None`/burial policy, restored
 resources, trauma application details, relocation sequencing, and death/revival
 persistence. A real-client comparison remains necessary after those pieces
 are connected.
+
+**2026-09-26 (client defects).** The Palisades control-point hospital was re-identified as Fort Dew's (graveyard
+221, waypoint 226). Until then it shared the Wilderness Landing Zone's 136/216, and because gained waypoints are keyed
+by id alone, gaining one gained both. Divide's Foreas Base (202/93), Palisades' Cumbria Research Facility (219/112) and
+Devil's Den (41/388) were resolved on inferred joins. The catalogue now has 105 hospitals on 42 maps. Field-level
+provenance is in `docs/evidence/hospital-catalog.json`; the reasoning is in `docs/retail-accuracy.md`,
+"2026-09-26 — Client-contract defects".

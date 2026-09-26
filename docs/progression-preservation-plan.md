@@ -1073,6 +1073,18 @@ character picks up in Alia Das once Training Day and the class choice are behind
   `GAP-NORTON-POSITION`, `GAP-TORDEN-MARKER-POSITIONS`). Clark is probably unreachable where he stands, which blocks
   seeding 936 until the owner decides. Details: `docs/fidelity-audit.md`, "World-data defects (2026-09-26)".
 
+- **Client-contract defects (2026-09-26, `LocalTeleporterGraveyards` and server rules)**: four segment-3 travel and
+  economy systems now follow the 1.16.5.0 client. The 42 local teleporter pads can be gained and used (LOCALWAYPOINT 1,
+  its own gain line and window); 595/597, which are hospital points, are re-typed. The dropship window lists only
+  gained pads (help text 5697: a pad is gained by walking across it), each drawn at its own position instead of a
+  boot-camp literal. The Palisades control-point hospital is Fort Dew's (221/226), so it no longer shares the
+  Wilderness LZ's waypoint 216. Divide's Foreas Base, Palisades' Cumbria and Devil's Den hospitals are offered on
+  inferred joins, which gives 105 hospitals on 42 maps. Items carry their sell price as the client's buyback price, and
+  repairs charge the client's `_GetRepairPrice`. Open: the local pads' emulator ids have no client names
+  (`GAP-LOCAL-TELEPORTER-IDS`, OD-90), plus `GAP-LOCAL-TELEPORTER-RADIUS`, `-TYPES`, `GAP-DROPSHIP-HOVER`,
+  `-GAIN-MESSAGE`, `GAP-HOSPITAL-SHARED-WAYPOINT` and `GAP-WILDERNESS-LZ-HOSPITAL-MARKER`, and Hightower and Viands
+  Village hospitals remain unresolved. Details: `docs/retail-accuracy.md`, "2026-09-26 — Client-contract defects".
+
 - **Mission reward items (2026-09-26, `MissionRewardItems`)**: seven seeded missions now offer their reward items:
   1541 and 1040 on the Plateau, 1673 in the Marshes, 983 in the Mires, and the consumable bundles of 970, 1068 and
   1863. Each is one choice at `inferred` tier from TaRapedia's post-1.4 list. The templates come from the client's
@@ -1256,6 +1268,8 @@ its evidence tier.
 | OD-66 Collection objectives once the client item is identified (2026-09-26, batch lead, pending owner review) | Where the client mission-item class and template are identified (the MisXeno block, matched to the objective by name) and the server's item-drop mechanism can carry it, a collection objective is bound as an item collection with a creature drop, as 479 is, instead of OD-47's kill count. The drop chance is 100 (inferred) where a dated walkthrough counts kills equal to the client target, otherwise OD-61's 50% analogue. Applied to 758, 776, 771 and 787 (`WildernessXenobiologySamples`); OD-47 stays for objectives whose item is not identified |
 
 | OD-67 Col. Almos and 551 (2026-09-26, open) | Almos's only reading (Ten Ton Hammer, 2007-12-02: -290.0, 178.0, -543.6) is 3.16 m above the only floor under it and never within 0.3 m of a floor inside its 8 m uncertainty, while its y/z equal the client's "Viands Village" label. Default: hold Almos and 551 (GAP-ALMOS-HEIGHT). Alternatives for the owner: stand him on the floor under the reading's x,z (174.567), or at the label point whose floor matches the reading's height; either would be an estimate, not a reading |
+
+| OD-90 Local teleporter pads the final client cannot name (2026-09-26, agent, open, pending owner review) | The 37 seed local pads (ids 537-574) are gained and used under their emulator ids, and the client shows its missing-translation text for their names. The alternative is to leave them unusable until original local-waypoint ids are found. The client's `waypointlanguage` holds no local-teleporter ids apart from magma caverns' 488-490, which the seed does not place (`GAP-LOCAL-TELEPORTER-IDS`) |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

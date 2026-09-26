@@ -48,7 +48,11 @@ namespace Rasa.Managers
 
                 mapTrigger.TriggeredBy.Add(client);
 
-                var dropshipInfoList = DynamicObjectManager.Instance.CreateListOfDropships();
+                // Walking onto the pad gains it before the list is built, so the list always has the pad the
+                // player stands on (help text 5697).
+                DynamicObjectManager.Instance.GainDropship(client, mapTrigger.TriggerId);
+
+                var dropshipInfoList = DynamicObjectManager.Instance.CreateListOfDropships(client.Player);
 
                 client.CallMethod(SysEntity.ClientMethodId, new EnteredWaypointPacket(mapTrigger.MapContextId, mapTrigger.MapContextId, dropshipInfoList, WaypointType.Dropship, mapTrigger.TriggerId));
             }

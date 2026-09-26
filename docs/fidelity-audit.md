@@ -836,3 +836,23 @@ per-binding flag (`shared_kill_credit`). Any later note that names another missi
 the flag is not a default. The shared credit reaches the whole map channel, which the notes neither confirm nor
 limit (`GAP-NOTES-682-SHARED-CREDIT-REACH`). Details: `docs/retail-accuracy.md`, "2026-09-26 — Official live notes
 checked against the seeded missions".
+
+## Client-contract defects (2026-09-26)
+
+The segment-3 systems audit (`research/20260926-segment3-audit`) found server behaviour that contradicts the client's
+own code or tables. Each was re-read from the 1.16.5.0 client before it was changed.
+
+| system | was | now | client evidence | tier |
+| --- | --- | --- | --- | --- |
+| local teleporters (42 pads) | never gained: the proximity switch had no case for them | gained and used like map waypoints; window limited to this map | `waypointtype` LOCALWAYPOINT 1; `Recv_WaypointGained` PM_GAINED_WAYPOINT; `Recv_EnteredWaypoint` | rule original; 2 m radius inferred |
+| teleporters 595/597 | type 1, standing on "AFS Field Medic" hospital markers | type 5 (`LocalTeleporterGraveyards`) | uimapmarker HOSPITAL markers at 0.0 m; no waypointlanguage 595/597 | inferred |
+| dropship window | every pad from level 1; first pad per map at a boot-camp hospital's coordinates | gained pads only, each at its own position | uielementlanguage 5697; `SetupWaypointLocationRows` places by the sent position | original |
+| Palisades control-point hospital | graveyard 136 / waypoint 216, shared with the Wilderness LZ | 221 / 226, Fort Dew | Fort Dew control-point, waypoint and medical-vendor markers; waypointlanguage 225/226 | inferred |
+| Divide, Palisades, Devil's Den hospitals | Foreas Base, Cumbria and Devil's Den not offered | offered (202/93, 219/112, 41/388) | graveyard and waypoint id blocks; one graveyard per place | inferred |
+| buyback price | 0 on every template | the sell price | `inventorywindow.OnSlotEntered` + `tooltipwindow` line 908 | original |
+| repair charge | round((max - cur) × sell / 100) | `vendorwindow._GetRepairPrice` | lines 1081-1094; `GetCondition`; REPAIR_GLOBAL_MODIFIER 1.0 | original |
+
+Left open with gaps: the local pads' ids have no client names (`GAP-LOCAL-TELEPORTER-IDS`, OD-90), the local-pad
+radius, three type-1 rows that are probably not local teleporters, the dropship hover condition and gain message, the
+shared entrance-hospital waypoint 120 and the Wilderness LZ marker binding. Details: `docs/retail-accuracy.md`,
+"2026-09-26 — Client-contract defects".
