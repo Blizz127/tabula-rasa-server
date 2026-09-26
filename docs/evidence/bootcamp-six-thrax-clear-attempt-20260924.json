@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Extended six-Thrax native-client courtyard attempt with three deployed companions",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered original compatibility client 1.16.5.0 under Wine/Xvfb and isolated bubblewrap network",
+    "game_dll_sha256": "258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32",
+    "copied_world_db_sha256": "c0dfa152576469b947c5b9fa57381b412d6226ca055d4fd591e0d195acbd49af",
+    "world": "Six Thrax placements 198660-198665 and camp companions 198688-198690; staged courtyard Warrior 198691 absent, as on the live deployment. No live container or database was changed.",
+    "character": "Copied level-2 Alden at the prior original-client-reached checkpoint (316.13,120.28,85.93), yaw 0.859892129898071; mission 1994 objective 2 active; rifle 20/980. Checkpoint placement bypasses continuous camp travel.",
+    "inputs": "After wait_playable, H drew the rifle, W 1200 ms/A 400 ms/W 1000 ms reached the hostile target, and normal left mouse fire was held in bounded 4.5-4.8-second intervals. R reloads and three further W holds of 1800/1300/1300 ms were scripted. The input sequence is in run-six-thrax-clear-controlled-09-20260924.py, SHA-256 193f45fb97fec079c6599016248d455672c0e6c40e520fb5eb5fc72ec0259547."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "game.log 21:16:57.183; after-first-kill.png; copied char.db",
+      "finding": "Gunner placement 198688 landed the final hit on Thrax 198665 (health 1 to 0) after the recruit and all three companions had hit it. No XP or credits appeared for the copied recruit at this first death. This is the tested emulator's killer-credit rule, not an established final-live shared-credit rule."
+    },
+    {
+      "tier": "observed",
+      "source_location": "game.log 21:17:13.501; middle-fire-2.png; copied char.db",
+      "finding": "Alden landed the final 48-damage hit on Thrax 198661 (health 42 to 0). The native client showed 71 XP and 10 credits; the copied database changed from 3571 XP/310 credits to 3642 XP/320 credits. Those were the only persisted kill rewards in this run."
+    },
+    {
+      "tier": "observed",
+      "source_location": "game.log 21:17:14.364-21:18:00.949; late-fire-3.png; end.png",
+      "finding": "The recruit hit Thrax 198662 three times after the second death. Later scripted shots repeatedly resolved against entity 0 while the client target panel showed the friendly Forean Shaman Initiate. W presses left Alden at (309.2,120.0,78.7), 32.7 m horizontally from cave area 198602's center, so objective 2 remained active. This run did not verify the other four Thrax or cave entry."
+    },
+    {
+      "tier": "observed",
+      "source_location": "game.log 21:17:34.866 and 21:18:00.650-21:18:01.549",
+      "finding": "Gunner placement 198688 died after Thrax 198660, 198662 and 198663 attacked him; the final logged hit was by 198662 (health 8 to 0). Archer 198689 and Shaman 198690 continued hitting 198662, whose last logged health was 46. No further Thrax death occurred before the harness stopped."
+    }
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-clear-09/game.log", "sha256": "f78a801d344af3ab7f6be3d411e413df1bf11bdf0a56e455653a09cafd6e3f75"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-clear-09/after-first-kill.png", "sha256": "bb27de4c2378933225a3325e43dfef09008e2525932340123bb723a65daa2491"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-clear-09/middle-fire-2.png", "sha256": "59f005e9f3afd9cffdbf28876720f1fcb66458fdfdd8e716ec4d8407fd448a98"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-clear-09/late-fire-3.png", "sha256": "5be63f051eeec7b101e105fe6964c19aedff9d20c60c628ff0fa89eac50f7772"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-clear-09/end.png", "sha256": "c345692e7e238ebfb5f22821d3a16d11a8df36c8a88151dd0529298d166440b3"}
+  ],
+  "assessment": "The exact deployed-derived binary permits normal combat and two Thrax deaths with all six staged, but this fixed-input checkpoint trial does not clear the encounter or enter the cave. The first companion kill and second player kill expose the emulator's current killer-only XP/credit rule; original final-live shared-kill credit remains unverified. The post-kill target and sandbag obstruction are concrete limits of this scripted route, not evidence for changing retail combat values. Original footage shows three player reward events by 401.533 seconds, but does not identify the killer of each Thrax or the number that had spawned simultaneously.",
+  "next_verification": "Use adaptive native-client aiming and a route around the sandbags, then complete the cave objective with all six Thrax and companions. Separately look for final-live evidence of XP/credit attribution when an ally delivers the killing blow."
+}

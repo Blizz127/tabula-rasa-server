@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Tizzik Gi 143-XP / 50-credit cut and TaRapedia monster-type XP multiplier",
+  "sources": [
+    {
+      "tier": "observed",
+      "source": "Original final-week recording 7Lrst9SG3pk, Tabula Rasa Creating Character 1of8.mp4",
+      "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+      "exact_location": "docs/evidence/bootcamp-d11-footage-events.json A5-27 and A5-28 at 551.467 seconds; the video cuts between the active boss objective and the Youngblood objective",
+      "finding": "The first frame after the cut has objective 3 active and chat lines 143 XP, 50 credits, 71 XP and 10 credits. The boss kill and at least one other kill occurred during omitted footage; no frame identifies which kill produced each pair."
+    },
+    {
+      "tier": "observed",
+      "source": "TaRapedia Experience page, last pre-shutdown revision 34776 at 2008-10-06T14:43:33Z",
+      "url": "https://tabularasa.fandom.com/wiki/Experience?oldid=34776",
+      "archive_path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Experience__20081006T144333ZZ.wiki",
+      "sha256": "94fd2c3efd3ad75add3680b3aa7bb312b3e2c54bf6bef10b275c952a70688ad1",
+      "exact_location": "Monster Experience section, paragraphs 1-2",
+      "finding": "The contemporary community account says monster XP depends on level, specific creature type and player level, and that each type has a hidden multiplier. It says a player at or below the monster level receives full XP, with decay when the player exceeds it. This is historical secondary evidence, not a server formula or boss-specific value."
+    },
+    {
+      "tier": "measured",
+      "source": "docs/evidence/kill-rewards.json xp.base fit from direct final-week observations and original-client BASE_KILL_XP 62.5",
+      "exact_location": "rules xp.base; observed level 1-9 values; extrapolated level-10 base",
+      "finding": "The fitted model has level-10 pre-truncation base 124.5 and integer base 124. It is not directly measured for a level-10 Tizzik Gi kill."
+    }
+  ],
+  "candidate": {
+    "tier": "inferred",
+    "calculation": "floor(124.5 * 1.15) = 143. The multiplier interval that gives 143 with this order is [143/124.5, 144/124.5), approximately [1.1486, 1.1566).",
+    "interpretation": "If the 143-XP / 50-credit pair belongs to the boss, a type-specific multiplier near 1.15 explains the XP without a level-difference bonus. The level-10 attribution itself comes from applying the observed 5-credits-per-level rule to 50 credits, and the boss is never visible during the cut.",
+    "confidence": "low for the pair-to-boss attribution and exact multiplier; medium that monster-type multipliers existed historically"
+  },
+  "alternatives": [
+    "The 143 XP and 50 credits could belong to separate kills or rewards inside the edit; the 71 XP / 10-credit pair shows another level-2 kill occurred there.",
+    "A different boss base XP or reward rule could produce 143 without a 1.15 type multiplier; the fitted base is extrapolated from other levels and creatures.",
+    "The wiki's general rule might have changed between October 2008 and shutdown; no final-live Tizzik-specific multiplier or server capture is available."
+  ],
+  "decision": "Keep the deployed level-10 boss and its current 124-XP emulator payout explicitly unverified. Do not seed a 1.15 multiplier or claim a level-difference bonus from this cut. Seek a direct boss kill capture, an original creature-type XP table, or final-live server evidence before changing payout."
+}

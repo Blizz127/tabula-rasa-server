@@ -13,10 +13,11 @@ namespace Rasa.Migrations.BootcampData
     /// and V07 rows require levels 22, 15 and 49). The seeded 13096 was the common row - 234, "Body Armor: 23" -
     /// and requires level 15 by the client's own requirement data; the seeded boots, 13066, require level 30.
     ///
-    /// No tooltip of the boots, legs or vest is shown. They are taken from the same uncommon band as the gloves,
-    /// the level-1 row without a level requirement: boots 12209 (V06), legs 26879 (V05) and vest 12208 (V05) - V06
-    /// legs and vest require levels 8 and 34. That band is inferred from the gloves; the maker names (Astra,
-    /// Teleract, Hellstrom) are module prefixes the client composes at run time and do not select a template.
+    /// The original seed inferred boots 12209 (V06), legs 26879 (V05) and vest 12208 (V05) from the gloves.
+    /// Reinspection on 2026-09-22 recovered their own retained tooltip crops: A3-035/040/046 show armour 42/70/84
+    /// and regen 1/2/2, matching the selected client classes. Multiple original templates share those classes,
+    /// so the template identities remain inferred. See docs/bootcamp-equip-audit.md; maker/module names are
+    /// runtime-composed and do not uniquely select a template. No values changed in this evidence refinement.
     /// </summary>
     public static class BootcampCrateUncommonGearRows
     {

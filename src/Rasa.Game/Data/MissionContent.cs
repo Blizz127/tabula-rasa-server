@@ -59,7 +59,13 @@ namespace Rasa.Data
         /// objectives ("Take Milpas to Apirka", "Escort Milpas to Divide entrance") depend on it, and an area
         /// objective on that mission only completes once this creature is inside the area too.
         /// </summary>
-        Escort = 3
+        Escort = 3,
+
+        /// <summary>
+        /// Mission companion that follows and fights with the player. It carries the same overhead escort marker,
+        /// but is not required to enter an area before the player's objective completes.
+        /// </summary>
+        CombatCompanion = 4
     }
 
     public enum ContentConditionKind : byte

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Recovered-client companion follow and combat on the exact deployed Game binary",
+  "provenance_tier": "observed",
+  "setup": {
+    "isolation": "Bubblewrap network namespace with copied Auth and Game processes, copied character and world databases and the recovered 1.16.5.0 original client; production services and databases were untouched.",
+    "game_image": "sha256:2a4551cf4b4cfa4e2fe4fd5770843e3210bc9cf3de2fc992470ffdbdff678c3f",
+    "game_dll": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-live-companions-20260924/game/Rasa.Game.dll",
+    "game_dll_sha256": "258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32",
+    "database_copy_manifest": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-live-companions-20260924/copy-manifest.json",
+    "trace_flags": ["RASA_TRACE_COMBAT_COMPANIONS=1", "RASA_TRACE_CREATURE_HITS=1"]
+  },
+  "continuous_client_route": {
+    "run": "live-companions-replay-01",
+    "initial_position": [383.94, 119.5, 153.83],
+    "observation": "Client rendered all three companions at camp with mission 1994 objective 2 active. An ordinary movement sequence crossed the upper gap and reached the courtyard sandbags at about (301.4,119.8,77.8). The screenshots show the recruited allies at camp and later on the edge of the courtyard. Alden remained idle for inspection and died at 20:27:15.913 local. Default logging did not attribute the visible damage numbers to an attacker.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-replay-01/game.log",
+    "game_log_sha256": "4ca36e9f8db67e0619a4b4e12da98e17ef5b1fd2bcafe0b9442cdc98bf9e2784",
+    "camp_screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-replay-01/camp-playable.png",
+    "camp_screenshot_sha256": "dbb871e992688c54c5ae1f255cd8badd048b946ee7b1d9237ba5dad7cb59a2e1",
+    "sandbag_screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-replay-01/camp-courtyard-sandbags.png",
+    "sandbag_screenshot_sha256": "34bf963af67a86148d80188d78948f061c2522acf6dfa7ca890663be84313bac"
+  },
+  "trace_repeat": {
+    "run": "live-companions-traced-02",
+    "observation": "The repeated input sequence took a different route. The recruit and three companions reached (319.84,116.0,78.93) on the lower level; no Creature hit was logged. This run cannot measure the upper courtyard fight or prove the route stable.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-traced-02/game.log",
+    "game_log_sha256": "61d9141468eb7f932a1f71a5536043c8eb67095da1fe13e31faee1bd000a082d"
+  },
+  "controlled_combat": {
+    "run": "live-companions-controlled-03",
+    "diagnostic_setup": "The copied character started at the previously client-reached sandbag coordinate (301.2,119.8,77.9). Five of six courtyard Thrax placements were removed from the copied world, leaving placement 198665; no production row was changed. Exact setup hashes: /home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-controlled-03-setup.json.",
+    "observations": [
+      "MapLoaded was 20:32:53.717 local. The three companions began at their camp placements and each reached within 5 m of the recruit by 20:33:07.689, about 14 seconds later.",
+      "After the recruit walked forward to (295.9,120.5,71.2), the hit trace attributes 20 damaging hits from Gunner placement 198688, 21 from Archer 198689, and 20 from Shaman 198690 to Thrax placement 198665. The Thrax also logged 21 hits against Archer 198689.",
+      "The first attributed ally hit was at 20:34:16.095. The last logged hit left the Thrax at 89 health at 20:35:10.088. Alden died at 20:34:48.799 while the client was idle for inspection; companions continued fighting after his death. The target was still alive when the harness stopped."
+    ],
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-controlled-03/game.log",
+    "game_log_sha256": "7cf3dd9a9edfa169041d34ace0c6733c78dea5b1d315c476e1967859683f74c3",
+    "screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-controlled-03/three-companions-fighting.png",
+    "screenshot_sha256": "566c8be346aa65a82f5df68399bb56bced84ea38ab8b49b49a4825a833ef2e63"
+  },
+  "limits": "This verifies the exact deployed binary's companion spawn, follow and damage behavior in isolated client runs. The controlled fight removed five enemies and began at a checkpoint; it is not a normal six-Thrax encounter, final-live timing, or balance proof. The uninterrupted original footage cuts over the camp-to-courtyard travel, and this replay does not establish original pathing or activation. A stable, fully equipped normal client playthrough through the fight and cave remains open."
+}

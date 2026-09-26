@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "scope": "Disposable recovered-client route diagnostic for the staged three Forean camp companions; emulator observation, not evidence of original final-live pathing",
+  "setup": {
+    "client": "Recovered 1.16.5.0 under Wine/Xvfb :110 in an isolated Docker network namespace",
+    "server": "Copied authentication, character and world SQLite databases; staged Gunner 198688, Archer 198689 and Shaman 198690; no live service or database changes",
+    "checkpoint": "Alden, level 2, Capture the Flag mission 1994 objective 2 active, copied camp position (400.1211,120,144.7813)",
+    "diagnostic_change": "Copied character yaw set to 0.86 radians to face the route; original checkpoint yaw was 2.50384. No combat placement or stat overrides were made.",
+    "player_input": "Ordinary native-client movement keys W/A/D/S and one Space jump; .where chat command for position readings"
+  },
+  "observations": [
+    {
+      "position": [368.3828,124.1055,145.2656],
+      "screenshot": "where16.png",
+      "sha256": "c488fc0a6d621fa4d6be16f3871a3b648c3caff0d4ef064bfdab688cfa9691a9",
+      "result": "Player reached the top of the camp staircase; all three orange-marked companions visible following on the stairs."
+    },
+    {
+      "position": [383.5742,124.5,140.8906],
+      "screenshot": "where18.png",
+      "sha256": "9dec417a215bdd861c3fa42d6fe1ab5d20a9c2888ea51b361259fdb051176a90",
+      "result": "Player crossed the raised metal walkway; all three companions remained close behind."
+    },
+    {
+      "position": [391.6172,124.5,141.1602],
+      "screenshot": "where20.png",
+      "sha256": "e3cbfa0b8e5a177ae8fe2bbc270c38acb46f27f3da415e49390f01284cd2327f",
+      "result": "All three companions had caught up on the walkway."
+    },
+    {
+      "position": [380.2148,122.6797,134.8547],
+      "screenshot": "where22.png",
+      "sha256": "a17912b6764d6312a5f526c4bdb12cd5d14d5b6cc432537087ae1dbcaef2f43d",
+      "result": "After a player jump toward the rock descent, all three companion markers remained in range; this jump was a diagnostic route choice, not established original choreography."
+    },
+    {
+      "position": [371.8477,120.7969,124.7813],
+      "screenshot": "where24.png",
+      "sha256": "b17ce4b738d486025636e988db6c2e2624e2e9d835bf8e4d7f4f0cc6e74e5736",
+      "result": "All three companion markers and Forean bodies visible together on the rocky descent."
+    },
+    {
+      "position": [360.0703,121.2031,114.6406],
+      "screenshot": "where26.png",
+      "sha256": "7f4b77cacc65e580626f50f04caa23ae215263ac08854b53410f0fb560201d36",
+      "result": "Reached the second route waypoint with companions immediately behind; mission tracker still says Find a way out of the cave."
+    }
+  ],
+  "screenshot_directory": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route",
+  "post_run": {
+    "copied_character_position": [360.0703125,121.203125,114.640625],
+    "copied_experience": 3571,
+    "mission_1994_objective_2_status": 1,
+    "creature_hit_trace_count": 0,
+    "reason_stopped": "Xvfb display connection ended before the courtyard approach; the server-side copied character checkpoint was retained."
+  },
+  "provenance": {
+    "tier": "observed",
+    "source": "Native recovered-client screenshots and copied-server SQLite/log from this diagnostic; exact files and image SHA-256 values above",
+    "confidence": "high for displayed companion following and player positions; low for any inference about final-live route, survival or combat",
+    "unverified": "Whether the final-live player used this walkway or jump, exact companion following ranges and choreography, courtyard target acquisition, ally survival, cave objective transition"
+  }
+}

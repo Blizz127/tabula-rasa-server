@@ -6,7 +6,8 @@ namespace Rasa.Structures.World
     /// <summary>
     /// A fixed creature or usable object placed by reconstructed content. kind: 1 creature, 2 usable.
     /// usable_kind: 1 container, 2 destroyable, 3 bomb, 4 generic use, 5 structure. behavior: 1 stationary,
-    /// 2 creature AI. Zero in an id column means "none" unless the column comment says otherwise.
+    /// 2 creature AI, 3 required escort, 4 combat companion. Zero in an id column means "none"
+    /// unless the column comment says otherwise.
     /// </summary>
     [Table(TableName)]
     public class ContentPlacementEntry
@@ -65,8 +66,8 @@ namespace Rasa.Structures.World
         public byte Behavior { get; set; }
 
         /// <summary>
-        /// For a placement whose behavior is Escort: the mission the creature walks with the player on. 0 means the
-        /// placement is not an escort.
+        /// For Escort and CombatCompanion behaviors: the mission the creature walks with the player on.
+        /// Zero means the placement is not an escort or combat companion.
         /// </summary>
         [Column("escort_mission_id")]
         public uint EscortMissionId { get; set; }

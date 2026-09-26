@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Sustained recovered-client courtyard combat and cave push from a copied checkpoint",
+  "provenance_tier": "observed",
+  "confidence": "High for emulator hits, rewards, reload, movement and death captured here; no inference about final-live enemy balance or encounter timing.",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and private bubblewrap namespaces; tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with current rebuilt Rasa.Game.dll SHA-256 20813af0cd2d66a2c2723fbc24a37240c608b42c57c7c2ba2a80d8dccc43d659, all six staged Thrax and three camp companions under normal attacks; production service and databases untouched",
+    "character": "Copied level-2 Alden placed before login at previously client-reached (316.13,120.28,85.93), yaw 0.859892129898071, mission 1994 objective 2 active. Crate rifle item 11/template 13713 restored to the observed issued 20 loaded rounds. This is an isolated combat checkpoint, not a continuous run from character creation or camp.",
+    "input": "Native-client W 1200 ms, A 400 ms, W 1000 ms aligned the reticle on a Thrax. Five 4800 ms primary-fire holds followed. A tapped R between holds did not produce a server reload request; after a pause, a 500 ms held R did, followed by a 2 s wait. One further 4200 ms fire hold landed no player hits. A final W+Space 3000 ms attempted the cave approach. The harness was stopped normally after death; copied database and game DLL were restored."
+  },
+  "observations": [
+    "MapLoaded occurred at 16:55:53.777. The only staged Warrior placement 198691 died at 16:56:00.840, before a staged Thrax died; see docs/evidence/bootcamp-courtyard-warrior-sequence-audit.json for the original-footage conflict.",
+    "The player landed seven 106-damage rifle hits on Thrax 198665 and killed it at 16:56:26.747, then seven hits on Thrax 198661 and killed it at 16:56:51.713. The client showed two 71 XP and 10-credit reward pairs. The game log also recorded two player WeaponAttack attempts against entity 0 that did not hit a creature.",
+    "All three companions continued attacking. The log contains 16 outgoing hits each from companion placements 198688, 198689 and 198690 over the full captured run, including hits after the player died. Only two staged Thrax had reached zero health before Alden died.",
+    "The held R produced RequestWeaponReload at 16:57:53.269. The client then displayed 20/984 rounds, confirming a successful reload from the original 1000-round reserve in this copied character state. The earlier tap during repeated firing had not produced RequestWeaponReload.",
+    "Alden reached (296.4,120.5,67.6) during the cave push. Area 198602 was 17.5 m from his position, 7.5 m outside its 10 m radius. Thrax placement 198662 killed him there at 16:59:10.584. Mission 1994 objective 2 did not complete. The Shaman killed another Thrax after Alden's death at 16:59:24.970."
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/game.log", "sha256": "da9bb9d0f5e4c37ecd67d1a3eefed655e5cb7fc7e7db0673dd567a374985e4d3"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/ready.png", "sha256": "34ec55e1d7959e30f3d0a9d6dbe9a0dd98dc3ea2aaf5978b0956ff4685a33d61"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/after-two-volleys.png", "sha256": "c3381ab97a8ce81b3af6bd651eebc13f6f7db6ab5b0bc406cb612e1c6309b2c6"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/after-reload.png", "sha256": "959804345740bcc91562f12e68f39d172f98622b4abc198b26d32ba7e8ab9453"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/after-fourth-fifth.png", "sha256": "9861073f509e0034228bebc6f860b89ca4a0703cfb4efdc7fe8174e583a430f8"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/reload-retry.png", "sha256": "b38dbcfff7e63b48ee071bb016cab0d3e2be3f9a27bfc3efcb70e087256ee8af"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/after-reload-fire.png", "sha256": "a3b9ad7e830071aca86db6c25d66721b114f80bafb2a19ec4d2ade3190b4a763"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-sustained-fire-09/cave-advance1.png", "sha256": "83804d409947bfb5b9435f91b392eab40a7a60ee83117743cc52dc8c4e20a981"}
+  ],
+  "interpretation": "The present emulator supports native-client player kills, companion attacks and reload in one normal-attack run. It still did not complete the courtyard or cave objective. The test began at a copied checkpoint and included pauses for inspection; its death and kill cadence cannot establish retail damage, hostile count or spawn timing.",
+  "verification_needed": "Acquire the remaining hostile targets and complete the normal encounter, then cross the cave area through ordinary client movement. Compare actor staging and Warrior sequence with direct final-week evidence before revising estimated rows."
+}

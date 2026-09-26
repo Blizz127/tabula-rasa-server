@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Wilderness copied-client load timing after S6 Alia Das transfer",
+  "setup": "Isolated copied 1.16.5.0 client, Wine prefix, Auth/Game server and databases from the checkpoint used by bootcamp-s6-rogers-ordinary-route-20260924.json. This run increased only the harness HUD wait ceiling from 120 to 300 seconds and requested a 240-second probe; no live Docker/DIT use or game source change.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "s6-rogers-load-diagnostic-22/auth.log lines 17-24; game.log lines 59 and 97",
+      "finding": "The client authenticated at 01:32:31.452 local, connected to Game at 01:32:32.380, and requested character switch at 01:32:35.318. Thus it did open the game-server connection before the Wilderness loading screen."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s6-rogers-load-diagnostic-22/game.log lines 97 and 194",
+      "uncertainty": "Timestamps are the copied server log clock, with millisecond print precision; client event may precede log receipt by network scheduling.",
+      "finding": "MapLoaded arrived at 01:36:26.688, 231.370 seconds after RequestSwitchToCharacterInSlot. No Game Error/Failed log line was present in this run."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s6-rogers-load-diagnostic-22/playable-probe.png and 1790231546311698687.result.json; run-s6-rogers-load-diagnostic-22-20260924.py",
+      "finding": "At the 240-second HUD probe limit the image still showed the Wilderness Entering Battle screen and the fixed HUD pixel was white. The harness stopped the client afterward. It did not observe a playable HUD."
+    }
+  ],
+  "assessment": "The prior 60/110-second HUD timeouts occurred while the client was still loading or near its MapLoaded event. This longer copied run establishes a variable 231-second switch-to-MapLoaded delay and still does not establish whether the HUD would appear shortly afterward. Game authentication and character switching worked. No concrete server fault was identified; a server implementation change is unsupported by this evidence. The remaining test boundary is a copied-client run that continues for at least 30 seconds after MapLoaded, ideally with packet/send tracing and client CPU profiling if the HUD remains absent.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s6-rogers-load-diagnostic-22-20260924.py",
+      "sha256": "f1f4db812aae582770fa5f4a48ada5f6c8900a9abc85eeafe1768d11a2b6690d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-rogers-diagnostic-isolated-20260924.py",
+      "sha256": "0510903ece4eb2c921f2e3453327b70dba4d0631b7732dbd0aa814dcf92a6437"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-harness-rogers-longwait.py",
+      "sha256": "2c47faecb7591f2e591b593868249d61b9d8de7790c8b260be5d8af81be6a764"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/auth.log",
+      "sha256": "5b798b4e3f3f3a709abcd6294e7f00e2f3170ede75680b61d4dc0dd5244458b9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/game.log",
+      "sha256": "cc2ac7ad82c62cd5cc2b6ea19c33323b1eabbe8a59f2c9cbdeff30c0788069da"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/client.log",
+      "sha256": "88af1852cb0ec690975020e9db4fb76face5c3d939adf4a78ea47d7fba2fe969"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/playable-probe.png",
+      "sha256": "d9082abfee2f208989b9ba9d866bfdd27611e58c1a2e7f596a7c3854499f0300"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/status.json",
+      "sha256": "1b1ce3ed8a0a216bcd23dd7011ed07a4eb52d262b0d2aebbda9b23f9231b50c0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s6-rogers-load-diagnostic-22/1790231546311698687.result.json",
+      "sha256": "c8a6bd385d4ba4eb3d0ac498acb8d8ad4637becd0701be5a89e83eebbbdc45d2"
+    }
+  ]
+}

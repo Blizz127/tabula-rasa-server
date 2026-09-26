@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Original-client ordinary movement from S5 bomb detonation to Van Valkenberg and S6 Alia Das transfer",
+  "setup": "Isolated copied 1.16.5.0 client/server. Started from the copied post-bomb mission-1995 DB documented in bootcamp-s5-bomb-acquisition-from-route-20260924.json. The bomb-use run's ordinary-reached coordinate and then this run's ordinary-reached coordinate were manually restored in the copied character DB between harness sessions because forced shutdown did not persist movement. No GM teleport or world/content edit. This remains a checkpointed diagnostic continuation of the stitched corpse-to-wreck route, not one uninterrupted ten-minute run. No live Docker/DIT change.",
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "s5-postbomb-valkenberg-agent-13/step1-back-700ms.png and run-s5-postbomb-valkenberg-agent-13-20260924.py",
+      "uncertainty": "Original client .where display about 0.01 m; held-key duration subject to frame rate.",
+      "finding": "From ordinary-reached bomb-use point (-220.633,101.051,-69.164), ordinary S-key movement for 700 ms reached (-215.855,100.293,-66.527), alive and on the dropship pad. The client showed 'Press [Mouse Button 2] to talk' with the reinforcement group visible."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-postbomb-valkenberg-agent-13/step2-turn-right-100.png and step3-after-click.png; s5-postbomb-valkenberg-agent-14/step1-aim-valkenberg.png and step2-dialogue.png",
+      "finding": "A +100-pixel relative camera turn and right-click opened Corporal Van Valkenberg's objective-completion conversation from that ordinary-reached pad coordinate in two copied sessions. The client text directed the player to stand on the dropship pad to transport to Alia Das, then report to Commander Rogers. No GM movement was used."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-postbomb-valkenberg-agent-14/step3-after-continue.png, step4-after-transfer.png, objective-after-transfer.json and char-after-transfer.db",
+      "finding": "Clicking Continue at screen (75,617) completed objective 4 and started Wilderness loading. The copied DB persisted context 1220 at (884.11,305.8,347.81), all mission 1995 objectives status 2, and account can_skip_bootcamp=1. Mission 1995 itself remained active pending Rogers turn-in."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-postbomb-arrival-agent-15/step1-alia-das-arrival.png and step2-arrival-stable.png",
+      "finding": "A fresh original-client login rendered Alia Das with the landed dropship, 'Calling for Reinforcements (complete)' in the tracker, and Headquarters' Training Day mission offer. The displayed .where coordinate was approximately (884.109,306.011,347.809), map 1220."
+    }
+  ],
+  "assessment": "The copied compatibility client can traverse from a bomb-complete checkpoint to Van Valkenberg by ordinary movement, complete the conversation, trigger the inferred pad exit, and render Alia Das. Existing placement, dialogue and transfer rules worked in this diagnostic. Exact final-live pad trigger geometry, original timer value, and full uninterrupted S5 route remain evidence gaps.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/char-after-use.db",
+      "sha256": "c4a79743b68d40faf07457a8403de1e154f59f032641a539a1306f6b09e6155e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-postbomb-valkenberg-agent-13-20260924.py",
+      "sha256": "8e1cf44856d996e5a6d05ebb0f477b29b5c73cb000d3029a8c4b3393c92904ba"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-13/game.log",
+      "sha256": "a3e6da012e0f9e0ad7ea791b4319831929a511df5dbdde7409d12ac1911e1445"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-13/step1-back-700ms.png",
+      "sha256": "f91dcba8c9ffd278668fd5b3a6fc25ece8f6aa34f155b045c991fef052b4d7e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-13/step2-turn-right-100.png",
+      "sha256": "75c3412030a447064dfdeea0b3306c11cf044a03a1893316d35da2f315007bbf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-13/step3-after-click.png",
+      "sha256": "12120533cdf9f09aa2b832fdf6f509a1d8c82a7ad73a0363f6db4f4ee8bc2a8f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-postbomb-valkenberg-agent-14-20260924.py",
+      "sha256": "9f46d53391851d6b28e4a168ed41e48443d0de80bf49fd3a6ce00dd0542a11a6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/game.log",
+      "sha256": "375b8667561f62b7f8097162661342af617e84add9828ac089c7a377a0fdd315"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/step1-aim-valkenberg.png",
+      "sha256": "1188e1c2024730bcb37d56ba478e01f67052849bdd5af413650cd6d35e044ec9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/step2-dialogue.png",
+      "sha256": "cda3dcf3f648597185045faa5527026a91554a98fe1c88abf605a235fd7df938"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/step3-after-continue.png",
+      "sha256": "ae023d2392721be68422ab24b01119b1949a21c39fe273a85627da421e7e5518"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/step4-after-transfer.png",
+      "sha256": "40dcecdc26b115e9fa7b73c6f58f9da636dbd4a8178f777697dcc47cf5545799"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/char-after-transfer.db",
+      "sha256": "ea3a24650fcbfafd73f791d4d185f0c972d43e4ce9295735898af117d49db210"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/objective-after-transfer.json",
+      "sha256": "004dc94a6023285ef77c7fd53a12eceb18183f599ca25beaa16a6199ef1049c8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-postbomb-arrival-agent-15-20260924.py",
+      "sha256": "50b4945cd85dcebdfd4a6c867dd49a63a83f7e7fb7b9aee1af9d3e78f5da54df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-arrival-agent-15/game.log",
+      "sha256": "bc06fde87980bd007fbdfaafe57465f83b0344f9de2abbc5a9adf2920706b276"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-arrival-agent-15/step1-alia-das-arrival.png",
+      "sha256": "603c2c860750a926f9e146a6b411e8c97ecbacebf0fbf7b0a8033ecaa582822d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-arrival-agent-15/step2-arrival-stable.png",
+      "sha256": "abc7add155107f4f6f06116f5259c9611d457ab5977c24d4af91f28ab88aa648"
+    }
+  ]
+}

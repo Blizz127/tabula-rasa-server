@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Checkpointed original-client movement from completed S5 wounded-soldier objective toward inferred Conrad corpse placement",
+  "provenance_tier": "measured",
+  "setup": "Isolated original compatibility client 1.16.5.0 with deployed-derived normal-hostile Game/world copy. Copied character has mission 1995 objective 2 completed and objective 3 active after run 66. Its copied DB login coordinates were explicitly edited to the measured run-66 dialogue position (-102.39844,86.68221,73.4375). Runs 67-72 use ordinary client movement from that diagnostic checkpoint. No live service or database was changed.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "run 67 at-soldier-checkpoint.png; copied character_mission_objective after run 66",
+      "finding": "Original client restored tracker Remove the bomb from Conrad\u2019s corpse; position at login was about (-102.395,86.89,73.438). Objective 3 was active."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 67 toward-corpse.png and run 68 toward-corpse.png; read-only .where",
+      "uncertainty": "Client display precision about 0.01 m. Route began from edited diagnostic checkpoint.",
+      "finding": "Left strafe from the soldier checkpoint reached approximately (-98.64,85.77,70.25) after 1.0 s and (-98.75,85.77,70.07) after 1.5 s. Further leftward input barely moved; nearby scenery occluded the view toward the inferred corpse placement (-98,85.39,67.2). A right click did not send RequestUseObject or advance objective 3."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 71 toward-corpse.png and run 72 east-of-corpse.png, toward-corpse.png; read-only .where",
+      "uncertainty": "Client display precision about 0.01 m; input timing and collision may vary.",
+      "finding": "Alternative diagonal inputs reached (-98.16,86.02,72.45) and (-98.47,85.65,71.29); follow-up movement turned west to (-101.34,85.66,69.94). These probes did not reach the corpse object or resolve the correct around-prop path."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "docs/evidence/conrad-navprobe-results.txt path:wounded_to_corrected",
+      "finding": "The emulator navmesh returns a complete path via (-96.0,86.11,70.8), (-95.6,85.91,69.2), (-96.0,85.91,67.2), then (-98.0,85.81,67.2). This is a candidate route around the scenery; client collision has not verified those corners."
+    }
+  ],
+  "assessment": "The checkpointed original client confirms objective 3 presentation after the soldier interaction and can move to the corpse vicinity. The tested straight and diagonal input sequences stop or divert near original scenery and have not generated a corpse use request. Prior isolated teleport-based evidence verified the implemented corpse use, but ordinary approach remains unverified. The corpse coordinate is inferred, not a recovered original server location.",
+  "next_verification": "Steer the original client around the east side of the obstacle toward the navmesh corner near (-96,70.8), then south to (-96,67.2) and west toward the reconstructed corpse; verify RequestUseObject, objective 3 completion and timer. Recheck the inferred placement if ordinary client collision cannot reach it.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-67-20260924.py",
+      "sha256": "ef5b123862e4f09305ad5ae433d1b331dba85f630249dac84a3211170b267a35"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-68-20260924.py",
+      "sha256": "f74099b1deaca0510bc0c8885a3a800965d95635448d11376498479013da57ae"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-69-20260924.py",
+      "sha256": "2aa60d9194ad7b830afe77b3baa7578bbbad9cae16a111f419963d64be484de3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-70-20260924.py",
+      "sha256": "ab844998d83e777bcd041d4df30d963e9e064b6d68a4ada3600837a18dfae2f4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-71-20260924.py",
+      "sha256": "a4d8527bc35df9870d3e1e4e04ec8540abdb552af28e5a68f0e46beb0a4d6a76"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-controlled-72-20260924.py",
+      "sha256": "0eca90d479a0073e5720353626a91303a62aacc63021c20b98905db65d806a32"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-67/at-soldier-checkpoint.png",
+      "sha256": "398cf9a0b83609cc447a8cfcd4fa67bee2a3187f26ba2aa53d75cb84bef7c7c5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-67/toward-corpse.png",
+      "sha256": "a3d03e8204099ca8c2e4ad8ca428d5908c4d4adb68287948e6e1ff81f3b74973"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-68/toward-corpse.png",
+      "sha256": "96820600f1628f17b0bba6956e9e7e25ab3f0148572a2504c950cf778037205b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-68/corpse-rightclick.png",
+      "sha256": "ee643109ca7f21175a178bb3d81312bd068b6201aa9aca131132ce1acd4a93e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-71/toward-corpse.png",
+      "sha256": "7d19b7dccdca1a454ecaf80de2696234d0c70922f5332c35be614f1b54479b98"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-72/east-of-corpse.png",
+      "sha256": "7e62f438a95cd0f983f730b48338c03edc0e1d2b7930e3aa48c9d1fdd16aeecc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-72/toward-corpse.png",
+      "sha256": "94a92336294a3deea0241da4c55e3d82ae0d1b87d1f878e46b1f11feac288dad"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-probe-68/game.log",
+      "sha256": "631a0a29b6b4d087cc7157e6ece2917ead17634bab10f06681c891e0d57aa01d"
+    },
+    {
+      "path": "docs/evidence/conrad-navprobe-results.txt",
+      "sha256": "f00d658830ee9cca1a6268fcfac9548b7ccbb48e0691a4d4f8f67a07bbebf696"
+    }
+  ],
+  "follow_up": "docs/evidence/bootcamp-s5-corpse-use-20260924.json records a reachable client use prompt and a checkpointed successful use; no placement move is supported by the follow-up."
+}

@@ -1,0 +1,765 @@
+{
+  "schema": "rasa.bootcamp-shinobi-rifle.v1",
+  "recorded_at_utc": "2026-09-22T21:07:49.681135+00:00",
+  "status": "Read-only research; no gameplay, schema, runtime or deployment changes",
+  "client_version": "1.16.5.0 compatibility artifact, generated February 9, 2009; exact shutdown revision not established",
+  "observation": {
+    "tier": "observed",
+    "video_id": "7Lrst9SG3pk",
+    "url": "https://www.youtube.com/watch?v=7Lrst9SG3pk&t=304s",
+    "timestamp_seconds": 304.733,
+    "capture_id": "A3-018",
+    "crop_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/tt_rifle_loot.png",
+    "crop_sha256": "cee0440a8efa1f3d2cb0139cbebd3269e49aaf15849ff00a3367d06324bc4706",
+    "name": "Shinobi Rifle",
+    "primary_damage": 106,
+    "range_meters": 60,
+    "alternate_melee_damage": 82,
+    "loaded_ammo": 20,
+    "clip_capacity": 20,
+    "condition_percent": 100,
+    "not_tradeable": true,
+    "not_sellable": true,
+    "modules": [
+      {
+        "strength": 4,
+        "label": "Armor Piercing",
+        "displayed_bonus": 8,
+        "unit": "percent"
+      },
+      {
+        "strength": 2,
+        "label": "Resist: Laser",
+        "displayed_bonus": 12,
+        "unit": "Trailing unit not confidently legible in the low-resolution crop; compatibility client tooltip 489 includes a percent sign"
+      }
+    ]
+  },
+  "conditional_reconstruction": {
+    "tier": "inferred",
+    "confidence": "High for the two module IDs conditional on the selected rifle class; base template identity and universality of crate rolls remain unverified",
+    "base_template_id": 13713,
+    "base_template_status": "Existing inferred counterpart, not recovered from the original filmed item",
+    "class_id": 27220,
+    "ordered_loot_module_ids": [
+      900178,
+      900312
+    ],
+    "has_sellable_flag": false,
+    "not_tradable": true,
+    "flags_scope": "Observed filmed instance; not established for all instances of template 13713",
+    "no_inference_for": [
+      "boundToCharacter",
+      "notPlaceableInLockbox",
+      "classModuleIds",
+      "crafterName"
+    ],
+    "module_binding": [
+      {
+        "module_id": 900178,
+        "extracted_item_template_id": 123146,
+        "variant_id": 18,
+        "strength": 4,
+        "class_set_id": 1212,
+        "base_bonus": 8,
+        "name_prefix": "Shinobi",
+        "priority": 0
+      },
+      {
+        "module_id": 900312,
+        "extracted_item_template_id": 123234,
+        "variant_id": 41,
+        "strength": 2,
+        "class_set_id": 1212,
+        "base_bonus": 12,
+        "name_prefix": "Luminar",
+        "priority": 0
+      }
+    ],
+    "order_basis": "Original GetItemName uses the first module on equal naming priority. Both modules have priority 0; Shinobi therefore requires the armor-piercing module before the Luminar module for this two-module reconstruction.",
+    "excluded_candidates": [
+      {
+        "module_id": 900419,
+        "reason": "Armor-only class set 212 excludes rifle class 27220; strength 4 base bonus is 4 rather than 8."
+      },
+      {
+        "module_id": 100029,
+        "reason": "Armor-only class set 212 excludes rifle class 27220; strength 2 base bonus is 6 rather than 12."
+      },
+      {
+        "module_id": 900489,
+        "reason": "Tool-only class set 1273 excludes rifle class 27220, although strength and base bonus match."
+      }
+    ],
+    "same_class_template_ids": [
+      13713,
+      17384,
+      17443,
+      17496,
+      97340,
+      130284
+    ],
+    "alternate_damage_status": "Observed 82; original alternate-action/base damage binding still unresolved. Modules identified here do not establish a melee multiplier."
+  },
+  "original_sources": [
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/shared/crafting.pyo",
+      "member_sha256": "f6984159a4e1037bda8b2664e4c1c67bd8204b3680337160221861bc061e1594",
+      "compiled_timestamp": 1234238177,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_shared_crafting.pyo.json.gz",
+      "decoded_sha256": "c6530f961fed2afadd5a7edcc8ee9c0cce3596db672ada2ab25ec0eea095c144"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/modulevariant.pyo",
+      "member_sha256": "a344702c568fc5b8e80f5440d76a31c21790cd018d2805a8db99ade9308998d3",
+      "compiled_timestamp": 1234238136,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_modulevariant.pyo.json",
+      "decoded_sha256": "a263eeeac8fd67d46217a91f1616e847fa735f883a86bbe143de1640850a0bcd"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/moduleclasspriority.pyo",
+      "member_sha256": "1faf94b22858822e792901dce0754bde179d57ee53612cebd6bd313c82d8006c",
+      "compiled_timestamp": 1234238136,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_moduleclasspriority.pyo.json",
+      "decoded_sha256": "99d89fc6fef4a7b1d480dc7c6118dc1ae828fd7dc9574585ea7708da886466ba"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/language/english/modulenamelanguage.pyo",
+      "member_sha256": "7723e2dd1972af16a8d21dac6ee1dc534b253cd8a28d062e4536a76bec2ec25b",
+      "compiled_timestamp": 1234238145,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_language_english_modulenamelanguage.pyo.json",
+      "decoded_sha256": "b220858dbb395a952642d379b69fb57cf74249930e1aadf700287fe1019cab00"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/language/english/tooltiplanguage.pyo",
+      "member_sha256": "c2b14d1adcd397e1627292bbae39a9cf9f77e9b9468cffc01c2f73335822d2ea",
+      "compiled_timestamp": 1234238147,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_language_english_tooltiplanguage.pyo.json.gz",
+      "decoded_sha256": "d5bb1224e790f4381002ed3932620d674ccab74c4193c39a44172afe48d378fa"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/gameeffectdata.pyo",
+      "member_sha256": "f2078f832ca5c1735d3fbd8f4ce3a0114083d9cc9d43db6aed412412c1461eb3",
+      "compiled_timestamp": 1234238134,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_gameeffectdata.pyo.json.gz",
+      "decoded_sha256": "392fdbd41ed89101ab16e3fe9a86bed2f02bb865d7d19678e84e049f79d2e2e6"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/itemclass.pyo",
+      "member_sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+      "compiled_timestamp": 1234238135,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_itemclass.pyo.json.gz",
+      "decoded_sha256": "3938f5fce3618c26e85c6a3076130a3ceba36bb775dbd2946508cd5f756858b3"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/game.zip",
+      "member": "generated/client/quality.pyo",
+      "member_sha256": "735f7a2e03c908cdc7298d93594a692bc21aed7f2c2a13155771e670a54d6c26",
+      "compiled_timestamp": 1234238136,
+      "decoded_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_quality.pyo.json",
+      "decoded_sha256": "135f63bcd8b9b79db757a9e682fe8bca35c27710ebcc5e7cdc1d71ebb5a7e4eb"
+    }
+  ],
+  "original_code_sources": [
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "shared/craftingnew.pyo",
+      "member_sha256": "492780d036a9bb6654d2088de6910c98df74cce602c0d9f9c03c1595a86a2a3f",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-shared-craftingnew.pyo.dis",
+      "disassembly_sha256": "3f15a4dc0a1ffa98eb377be334e7996f9181af41d2e06a34c9abecf2e8f97f51"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/gameuiutil.pyo",
+      "member_sha256": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameuiutil.pyo.dis",
+      "disassembly_sha256": "40391b13fd5ccdd81b7bd286b0217957d1c79bcb294579a67d46918f67a5a4c5"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/gameui.pyo",
+      "member_sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameui.pyo.dis",
+      "disassembly_sha256": "c74eee9d2f991d8dd44c3ba858c36fbfd85eaae8909752d9c9310359be2cf4a3"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/augmentations/item.pyo",
+      "member_sha256": "1b5995e918b08c7ca2872d07c80ce55686f4f9057da94af636db4c6f27eb8691",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-item.pyo.dis",
+      "disassembly_sha256": "5b5a1164e14aad066ddc46c5334a7b853391a58825bb3bd5e017c3d88b48926a"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/ui/tooltipwindow.pyo",
+      "member_sha256": "8817f44925dac632f5b9d4167e45c003d62b68fe9ac41348d4222dbb576b2ec4",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-tooltipwindow.pyo.dis",
+      "disassembly_sha256": "4e4b1cbf65b6c654975892bacfd98f76da6b0a5617566f6dcc5063e7efe522ff"
+    }
+  ],
+  "crafting_assignments": [
+    {
+      "offset": 233025,
+      "container": [
+        "moduleClassTable"
+      ],
+      "key": 900419,
+      "value": {
+        "__record__": "ModuleClass",
+        "fields": {
+          "ModuleClassId": 900419,
+          "ModuleItemTemplateId": 122956,
+          "ModuleItemEntityClassId": 29879,
+          "ModuleVariantId": 47,
+          "ModuleNameTooltipId": 2499,
+          "ClassSetId": 212,
+          "MimeogelCostToExtract": 4,
+          "MimeogelCostToIntegrate": 4,
+          "MimeogelGainFromSalvage": 8,
+          "MimeogelCostToUpgrade": 100,
+          "UpgradeModuleClassId": 900420
+        }
+      }
+    },
+    {
+      "offset": 236843,
+      "container": [
+        "moduleClassTable"
+      ],
+      "key": 100029,
+      "value": {
+        "__record__": "ModuleClass",
+        "fields": {
+          "ModuleClassId": 100029,
+          "ModuleItemTemplateId": 123039,
+          "ModuleItemEntityClassId": 29879,
+          "ModuleVariantId": 12,
+          "ModuleNameTooltipId": 2582,
+          "ClassSetId": 212,
+          "MimeogelCostToExtract": 2,
+          "MimeogelCostToIntegrate": 2,
+          "MimeogelGainFromSalvage": 4,
+          "MimeogelCostToUpgrade": 5,
+          "UpgradeModuleClassId": 100030
+        }
+      }
+    },
+    {
+      "offset": 240523,
+      "container": [
+        "moduleClassTable"
+      ],
+      "key": 900489,
+      "value": {
+        "__record__": "ModuleClass",
+        "fields": {
+          "ModuleClassId": 900489,
+          "ModuleItemTemplateId": 123119,
+          "ModuleItemEntityClassId": 29879,
+          "ModuleVariantId": 41,
+          "ModuleNameTooltipId": 2761,
+          "ClassSetId": 1273,
+          "MimeogelCostToExtract": 2,
+          "MimeogelCostToIntegrate": 2,
+          "MimeogelGainFromSalvage": 4,
+          "MimeogelCostToUpgrade": 5,
+          "UpgradeModuleClassId": 900490
+        }
+      }
+    },
+    {
+      "offset": 241765,
+      "container": [
+        "moduleClassTable"
+      ],
+      "key": 900178,
+      "value": {
+        "__record__": "ModuleClass",
+        "fields": {
+          "ModuleClassId": 900178,
+          "ModuleItemTemplateId": 123146,
+          "ModuleItemEntityClassId": 29879,
+          "ModuleVariantId": 18,
+          "ModuleNameTooltipId": 2789,
+          "ClassSetId": 1212,
+          "MimeogelCostToExtract": 4,
+          "MimeogelCostToIntegrate": 4,
+          "MimeogelGainFromSalvage": 8,
+          "MimeogelCostToUpgrade": 100,
+          "UpgradeModuleClassId": 900179
+        }
+      }
+    },
+    {
+      "offset": 245813,
+      "container": [
+        "moduleClassTable"
+      ],
+      "key": 900312,
+      "value": {
+        "__record__": "ModuleClass",
+        "fields": {
+          "ModuleClassId": 900312,
+          "ModuleItemTemplateId": 123234,
+          "ModuleItemEntityClassId": 29879,
+          "ModuleVariantId": 41,
+          "ModuleNameTooltipId": 2877,
+          "ClassSetId": 1212,
+          "MimeogelCostToExtract": 2,
+          "MimeogelCostToIntegrate": 2,
+          "MimeogelGainFromSalvage": 4,
+          "MimeogelCostToUpgrade": 5,
+          "UpgradeModuleClassId": 900313
+        }
+      }
+    },
+    {
+      "offset": 418386,
+      "container": [
+        "moduleItemTemplateTable"
+      ],
+      "key": 123146,
+      "value": {
+        "__record__": "ModuleItemTemplate",
+        "fields": {
+          "ModuleItemTemplateId": 123146,
+          "ModuleClassId": 900178,
+          "ModuleDescTooltipId": 2359,
+          "ModuleStrengthTypeId": 4,
+          "ModuleItemIconId": 50345
+        }
+      }
+    },
+    {
+      "offset": 420850,
+      "container": [
+        "moduleItemTemplateTable"
+      ],
+      "key": 123234,
+      "value": {
+        "__record__": "ModuleItemTemplate",
+        "fields": {
+          "ModuleItemTemplateId": 123234,
+          "ModuleClassId": 900312,
+          "ModuleDescTooltipId": 2447,
+          "ModuleStrengthTypeId": 2,
+          "ModuleItemIconId": 50491
+        }
+      }
+    }
+  ],
+  "class_set_membership_assignments": [
+    {
+      "offset": 480500,
+      "record": [
+        "entityClassSetTable",
+        1212
+      ],
+      "attribute": "ClassSetMembers",
+      "member_count": 2256,
+      "contains_class_27220": true
+    },
+    {
+      "offset": 522494,
+      "record": [
+        "entityClassSetTable",
+        212
+      ],
+      "attribute": "ClassSetMembers",
+      "member_count": 2541,
+      "contains_class_27220": false
+    },
+    {
+      "offset": 566052,
+      "record": [
+        "entityClassSetTable",
+        1273
+      ],
+      "attribute": "ClassSetMembers",
+      "member_count": 160,
+      "contains_class_27220": false
+    }
+  ],
+  "selected_original_assignments": [
+    {
+      "member": "generated/client/moduleclasspriority.pyo",
+      "assignments": [
+        {
+          "offset": 1658,
+          "container": [
+            "lookup"
+          ],
+          "key": 900178,
+          "value": 0
+        },
+        {
+          "offset": 2864,
+          "container": [
+            "lookup"
+          ],
+          "key": 900312,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "member": "generated/client/language/english/modulenamelanguage.pyo",
+      "assignments": [
+        {
+          "offset": 1658,
+          "container": [
+            "lookup"
+          ],
+          "key": 900178,
+          "value": "Shinobi %(ClassName)s"
+        },
+        {
+          "offset": 2864,
+          "container": [
+            "lookup"
+          ],
+          "key": 900312,
+          "value": "Luminar %(ClassName)s"
+        }
+      ]
+    },
+    {
+      "member": "generated/client/language/english/tooltiplanguage.pyo",
+      "assignments": [
+        {
+          "offset": 4088,
+          "container": [
+            "lookup"
+          ],
+          "key": 489,
+          "value": "Resist: Laser %(amount)s%%"
+        },
+        {
+          "offset": 10883,
+          "container": [
+            "lookup"
+          ],
+          "key": 1736,
+          "value": "Armor Piercing"
+        },
+        {
+          "offset": 16346,
+          "container": [
+            "lookup"
+          ],
+          "key": 2359,
+          "value": "\r\nWhen integrated into a weapon at a crafting station, this module grants an improvement to the weapon's ability to penetrate enemy armor.\r\n\r\nBase Bonus: 8"
+        },
+        {
+          "offset": 17138,
+          "container": [
+            "lookup"
+          ],
+          "key": 2447,
+          "value": "\r\nWhen integrated into a weapon at a crafting station, this module grants a bonus to the user's resistance to Photonic damage.\r\n\r\nBase Bonus: 12"
+        },
+        {
+          "offset": 20216,
+          "container": [
+            "lookup"
+          ],
+          "key": 2789,
+          "value": "Weapon Module: \r\nArmor Piercing [4]"
+        },
+        {
+          "offset": 21008,
+          "container": [
+            "lookup"
+          ],
+          "key": 2877,
+          "value": "Weapon Module: \r\nResist Photonic [2]"
+        },
+        {
+          "offset": 22331,
+          "container": [
+            "lookup"
+          ],
+          "key": 10000022,
+          "value": "Armor Piercing: %(amount)s%%"
+        }
+      ]
+    },
+    {
+      "member": "generated/client/gameeffectdata.pyo",
+      "assignments": [
+        {
+          "offset": 19310,
+          "container": [
+            "tooltip"
+          ],
+          "key": 188,
+          "value": 489
+        },
+        {
+          "offset": 22064,
+          "container": [
+            "tooltip"
+          ],
+          "key": 10000052,
+          "value": 10000022
+        }
+      ]
+    },
+    {
+      "member": "generated/client/itemclass.pyo",
+      "assignments": [
+        {
+          "offset": 416576,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 13713,
+          "value": 27220
+        },
+        {
+          "offset": 423218,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 17384,
+          "value": 27220
+        },
+        {
+          "offset": 423335,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 17443,
+          "value": 27220
+        },
+        {
+          "offset": 423434,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 17496,
+          "value": 27220
+        },
+        {
+          "offset": 554213,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 97340,
+          "value": 27220
+        },
+        {
+          "offset": 656840,
+          "container": [
+            "itemTemplateItemClass"
+          ],
+          "key": 130284,
+          "value": 27220
+        }
+      ]
+    }
+  ],
+  "code_locations": [
+    {
+      "member": "shared/craftingnew.pyo",
+      "function": "GetModuleStrengthByModuleId",
+      "source_lines": [
+        438,
+        442
+      ],
+      "bytecode_offsets": [
+        0,
+        51
+      ],
+      "meaning": "Module class resolves its extracted item template, then ModuleStrengthTypeId; missing template yields 0, so legacy modules without item templates cannot produce [4]."
+    },
+    {
+      "member": "client/gameuiutil.pyo",
+      "function": "GetItemName",
+      "source_lines": [
+        373,
+        402
+      ],
+      "bytecode_offsets": [
+        87,
+        244
+      ],
+      "meaning": "Name prefix chosen from ordered loot modules, strict greater-than priority comparison at offset 169."
+    },
+    {
+      "member": "client/ui/tooltipwindow.pyo",
+      "function": "tooltipwindow._AddModuleEffects",
+      "source_lines": [
+        2219,
+        2273
+      ],
+      "bytecode_offsets": [
+        309,
+        638
+      ],
+      "meaning": "Iterates moduleInfo and unpacks each nine-field effect row; bracketed strength from crafting table; amount is ceil(flat + linear*itemLevel + exp*2^((itemLevel-1)/8))."
+    },
+    {
+      "member": "client/augmentations/item.pyo",
+      "function": "Item.Recv_ItemInfo",
+      "source_lines": [
+        187,
+        206
+      ],
+      "bytecode_offsets": [
+        45,
+        125
+      ],
+      "meaning": "Receives instance sellable flag, class/loot module lists, quality, bound flag and inverse notTradable flag."
+    },
+    {
+      "member": "client/ui/tooltipwindow.pyo",
+      "function": "tooltipwindow._ShowItemFlags",
+      "source_lines": [
+        1092,
+        1113
+      ],
+      "bytecode_offsets": [
+        27,
+        225
+      ],
+      "meaning": "Displays Not Tradeable and Not Sellable directly from corresponding item flags."
+    },
+    {
+      "member": "client/gameui.pyo",
+      "function": "Recv_ModuleTooltipInfo",
+      "source_lines": [
+        1605,
+        1615
+      ],
+      "bytecode_offsets": [
+        16,
+        62
+      ],
+      "meaning": "Stores and publishes module info without inventing effect coefficients."
+    }
+  ],
+  "potential_tooltip_records": {
+    "tier": "inferred",
+    "status": "Revised inferred candidates, not recovered server tuples. Module resistance uses final MODULE_RESIST_EFFECT 413 and Laser arg1=6; legacy effect 188 candidate is retained only as superseded history.",
+    "module_900178": [
+      10000052,
+      0,
+      8,
+      0,
+      0,
+      null,
+      null,
+      null,
+      null
+    ],
+    "module_900312": [
+      413,
+      0,
+      12,
+      0,
+      0,
+      6,
+      null,
+      null,
+      null
+    ],
+    "field_order": [
+      "effectId",
+      "setLevel",
+      "flatValue",
+      "linearValue",
+      "expValue",
+      "arg1",
+      "arg2",
+      "arg3",
+      "arg4"
+    ],
+    "warning": "Final rank-two weapon resistance is 12 rating after Deployment 14.8; effect 413 displays this without a percent sign. Flat-only coefficients and unused argument values/types remain inferred, and original combat activation/order is unverified. Do not apply 12 as percentage mitigation.",
+    "superseded_module_900312_candidate": [
+      188,
+      0,
+      12,
+      0,
+      0,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "implementation_audit": {
+    "item_modules": "Item and ItemEntry have no module persistence; ItemInfoPacket writes two empty lists.",
+    "tooltip_response": "RequestTooltipForModuleId is unimplemented; ModuleTooltipInfoPacket writes placeholder values and a bare tuple rather than a collection of effect rows.",
+    "constructor_defects": "ItemModule assigns ModuleLevel to itself; ModuleInfo assigns Arg4 to itself. Other ModuleInfo constructor parameters are assigned correctly.",
+    "scope_boundary": "Attach a persisted item-instance customization only when the rifle is created by crate placement 198651/itemset 19858; do not mutate global ItemTemplate or infer modules from a player owning template 13713.",
+    "remaining_work": [
+      "Persistent ordered modules and nullable per-instance restrictions; creation/reconnect/transfer parity.",
+      "Correct original tooltip request/response nesting and values; original-client verification.",
+      "Enforce effective instance sale/trade restrictions on server paths, not just display them.",
+      "Apply module effects only in their original scope; do not add resistance to body armor or treat Armor Piercing as flat damage.",
+      "Resolve original combat effect semantics and alternate melee 82 before claiming full rifle fidelity."
+    ]
+  },
+  "verification": "Original table member hashes verified directly against data/game.zip; code member bytes verified against trpython.zip; JSON parsed successfully. No .NET builds or runtime actions performed.",
+  "final_live_semantics_review": {
+    "recorded_at_utc": "2026-09-22T21:47:58.095745+00:00",
+    "status": "Original live patch chronology and final client tooltip reconciliation; no gameplay activation",
+    "details": "docs/bootcamp-shinobi-module-semantics.md",
+    "manifest": "docs/evidence/bootcamp-shinobi-module-semantics.json",
+    "resistance_unit": "Resistance rating, not percentage mitigation",
+    "live_revision_sequence": [
+      {
+        "revision": "Deployment 14",
+        "weapon_tool_rank_values": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "status": "Superseded by Deployment 14.8"
+      },
+      {
+        "revision": "Deployment 14.8 on Live",
+        "weapon_tool_rank_values": [
+          6,
+          12,
+          18,
+          24,
+          30
+        ],
+        "status": "Matches final compatibility client rank-two base bonus of 12"
+      }
+    ],
+    "effect_correction": {
+      "superseded_candidate": 188,
+      "preferred_candidate": 413,
+      "name": "MODULE_RESIST_EFFECT",
+      "tooltip_id": 2127,
+      "damage_type_arg1": 6,
+      "confidence": "Strong inferred mapping: original module-specific effect and rating-format tooltip; no original server module row recovered"
+    },
+    "scope_and_order": "Active weapon rather than carried inventory is the bounded inference, supported indirectly by official weapon-switch modifier fixes; exact resistance activation, additive stacking, rounding and damage-order rules remain unverified."
+  }
+}

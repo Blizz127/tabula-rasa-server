@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Original-client movement around Luna Cavern sandbags to mission 1994 cave trigger",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered original compatibility client 1.16.5.0 under Wine/Xvfb and isolated bubblewrap network",
+    "game_dll_sha256": "258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32",
+    "world_db_sha256": "c0dfa152576469b947c5b9fa57381b412d6226ca055d4fd591e0d195acbd49af",
+    "world": "Copy of deployed world with six courtyard Thrax 198660-198665 and three camp companions 198688-198690; no staged courtyard Warrior. Ordinary enemy attacks remained enabled. Live databases and containers were not altered.",
+    "character": "Copied level-2 Alden started at previously native-client-reached upper checkpoint (316.13,120.28,85.93), yaw 0.859892129898071, mission 1994 objective 2 active. The checkpoint bypasses continuous camp travel and is an emulator route diagnostic.",
+    "navmesh": "Original client boot-camp navmesh adv_bootcamp.nav SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; NavProbe from the prior sandbag position (309.24,120,78.68) to the cave center (279.05,120.5,66.07) returned a complete route through (308.40,121.11,80.00), (295.60,120.11,77.20), (293.60,120.31,76.40), (292.40,120.31,75.20), (287.60,120.71,69.60). This is map path evidence, not proof that final-live players followed those exact points."
+  },
+  "trials": [
+    {
+      "id": "live-companions-sandbag-route-10",
+      "tier": "observed",
+      "inputs": "After playable HUD: H, W 1200 ms, A 400 ms, W 1000 ms, then W+A 2000 ms, W 2000 ms, W 1500 ms.",
+      "result": "The initial movement reached (309.4,119.9,78.5). W+A and following W did not advance past the barrier; area 198602 stayed 32.8 m away. The client screenshot shows the recruit at the sandbags. This disproved the initial directional assumption for that camera angle."
+    },
+    {
+      "id": "live-companions-sandbag-route-11",
+      "tier": "observed",
+      "inputs": "From a fresh copied checkpoint after playable HUD: H, W 1200 ms, A 400 ms, W 1000 ms, then W+D 2000 ms, W 2000 ms, W 1500 ms. No GM teleport or attack suppression occurred after login. Script run-sandbag-route-controlled-11-20260924.py SHA-256 3d7c60cdd19b755314965f2cb5dc3300a082c7a95e5f31e24d302b015512452b.",
+      "result": "The native-client movement left the blocked sandbag point, passed (301.9,119.8,81.3), (297.7,120.0,77.7), (292.1,120.0,74.3), (289.0,120.5,71.6), and reached (284.6,120.5,67.8). The first area 198602 entered-true probe occurred at 21:27:11.112 local, 5.8 m from its center. The original client displayed Objective Completed: Capture the Flag / Find a way out of the cave and advanced the tracker to the boss. The copied char.db has mission 1994 objectives 4=2, 2=2 and 1=1; SQLite integrity_check returned ok. The final screenshot still showed Alden standing while taking visible -11 to -15 hits. No Thrax died or player reward was recorded in this brief route probe."
+    }
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/sandbag-route-navmesh-20260924.out", "sha256": "3ace56936f4af0bf5234fb58c9607952fef420a77f66aa2bf7230fee3047d36d"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-sandbag-route-10/game.log", "sha256": "e1edeb175ff9e133e8d8eaa41911397703d06a2e529875081fa96489d24cd53e"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-sandbag-route-11/game.log", "sha256": "d12b920fbe3365e529ab0098f4cc7fd70fe81fa96f9f4681bc5eeece9adf21f4"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-sandbag-route-11/west-of-sandbags.png", "sha256": "e58710056f9c86459b74256faa5a09cb4e8811a5409267485511937ae02e3569"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-sandbag-route-11/toward-cave-2.png", "sha256": "f4f9989370f1b9c99c5dc199ca6764c8bfb4b3cf5350677ae317da183ace75a5"}
+  ],
+  "assessment": "This verifies that the deployed-derived binary and recovered client can route around the sandbags and advance mission 1994's cave objective under the current six-Thrax attack setup. It does not establish the final-live route, encounter spawn sequence, survival over a full fight, or boss completion. The path can now be combined with adaptive target acquisition in a continuous camp-to-cave replay."
+}

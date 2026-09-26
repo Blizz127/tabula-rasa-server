@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated original-client tooltip verification, copied-live-database migration dry run, and game-container deployment for boot camp rifle alternate melee",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/10-medical.png",
+      "sha256": "854907a10f4c7700a5383dc1dc53ab23964c1b4d23f815ceb3fe3a7e9f27e267",
+      "bytes": 630847
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/13-rifle-tooltip.png",
+      "sha256": "7faadbc62c4b252060a322eb645552d7045db1f44525072e9d779f837e2674b5",
+      "bytes": 701407
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/14-after-alt.png",
+      "sha256": "a22db1c0be78b5f5f5e04411f183e00149e1fb4be1dc5dab72a1765ab58ec8e7",
+      "bytes": 778933
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/game.log",
+      "sha256": "3821d5cccebd88515c29ee50394c2afffeda75670c3cb21922707742a9ce140f",
+      "bytes": 16572
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/status.json",
+      "sha256": "c4288ba7f8f853aec6c66ccae5687dec19f4d60247f392e321431a7aa3653870",
+      "bytes": 208
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "dd22dfce910b7f5ed5eabe1ee94f0cc5a8e22e52b8596795428c12b771960e6e",
+      "bytes": 1625088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.DBL.dll",
+      "sha256": "194e7dd47c081e122f43afa63c7a50b01edc379418d57a75ff4c775a769e5835",
+      "bytes": 20083200
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/migration-dry-run/game.log",
+      "sha256": "40791109edb50b0cdea760a3cefb037a886f95de78136ee223f0a356d0bf930c",
+      "bytes": 4237
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/migration-dry-run/status.json",
+      "sha256": "7bcca732f85a3923d56037b74df2777a2281f9e54335c3b9acaa778fcdcfa5cf",
+      "bytes": 169
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260922-rifle-melee/rasaworld-before.db",
+      "sha256": "9beb47914f60350ec7b48e83bd3f59a42f198624152e532d23808d1f0bd0d3db",
+      "bytes": 4247552
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260922-rifle-melee/rasachar-before.db",
+      "sha256": "0a51f90918400060ec64ac1bca39d9a59a8763f3048d456e96b78b50ce3fb763",
+      "bytes": 204800
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-18/13-rifle-tooltip.png",
+      "finding": "Recovered 1.16.5.0 client showed equipped Rifle tooltip with 106 Physical Damage primary and 82 Physical Melee Damage alt."
+    },
+    {
+      "tier": "measured",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/databases/world.db",
+      "finding": "After BootcampRifleMelee migration, itemtemplate_weapon 13713 held alt_action_id=174, alt_action_arg_id=5, alt_max_damage=82, alt_range=4."
+    },
+    {
+      "tier": "measured",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/migration-dry-run/game.log",
+      "finding": "Build migrated a separate snapshot of mounted live databases and reached Server ready!; copied rifle row was 174,5,82,4."
+    },
+    {
+      "tier": "measured",
+      "source": "live rasaworld.db and docker logs, 2026-09-22 after image rasa-dit-test:20260922b deployment",
+      "finding": "Live migration 20260922235000_BootcampRifleMelee present, rifle row 174,5,82,4, game container running and Server ready!"
+    }
+  ],
+  "limits": [
+    "The template identity is inferred; original filmed server template ID was not recovered.",
+    "An untargeted alternate click in the medical tent produced no attack request in the server trace. Original-client targeted alternate animation, packet, damage and ammo behavior remain unverified.",
+    "82 is the observed tooltip maximum; original minimum/base damage and scaling remain unknown."
+  ]
+}

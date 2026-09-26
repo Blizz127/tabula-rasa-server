@@ -1,0 +1,632 @@
+{
+  "schema": "rasa.client-opening-playthrough.v1",
+  "recorded_at_utc": "2026-09-22T19:41:26.897758+00:00",
+  "evidence_kind": "observed original-client integration against isolated emulator, not original-live service capture",
+  "original_live_fidelity_proof": false,
+  "research_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough",
+  "client": {
+    "compatibility_version": "1.16.5.0",
+    "shutdown_revision_independently_verified": false,
+    "archive_url": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
+    "archive_sha256": "1ee00dc439d92a9717b9ae925ff827e345063fa4200dd202f0ccf2d22bd14f3e",
+    "original_and_launched_executable_hashes_equal": true
+  },
+  "isolation": {
+    "runner": "run-playthrough.py",
+    "namespace_flags": [
+      "--unshare-all",
+      "--die-with-parent"
+    ],
+    "writable_paths": "copied research client, Wine prefix/home, isolated server/databases and run capture directory",
+    "read_only_repository_mount": "navmesh",
+    "network": "loopback within private namespace",
+    "display": "Xvfb :107,1280x1024x24",
+    "audio_enabled": false,
+    "audio_source": "run-client/client.cfg:23 Client.Audio.Enabled=False",
+    "production_mutations": false,
+    "credentials": "synthetic account; password intentionally omitted"
+  },
+  "character": {
+    "name": "Alden",
+    "family_name": "Vanguard",
+    "character_id": 1,
+    "account_id": 2,
+    "race": {
+      "id": 1,
+      "name": "Human"
+    },
+    "class": {
+      "id": 1,
+      "name": "Recruit"
+    },
+    "initial_level": 1,
+    "initial_experience": 0,
+    "initial_context": 1985
+  },
+  "events": [
+    {
+      "id": "creation",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-01/06-created.png",
+        "playthrough-01/initial-character-state.json"
+      ],
+      "result": "Original UI creates and renders Alden Vanguard Human Recruit"
+    },
+    {
+      "id": "starter_hud",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-01/09-initiation-walk.png",
+        "playthrough-01/initial-character-state.json"
+      ],
+      "result": {
+        "pistol_hud": "20/1000",
+        "pistol_template": 122875,
+        "loaded_ammo": 20,
+        "reserve_ammo_template": 28,
+        "reserve_stack": 1000,
+        "equipped_templates_by_slot": {
+          "2": 122854,
+          "16": 122855,
+          "15": 122856
+        },
+        "abilities_by_slot": {
+          "0": 194,
+          "1": 401
+        },
+        "skill_ids_at_rank1": [
+          1,
+          8,
+          19,
+          49,
+          165
+        ]
+      }
+    },
+    {
+      "id": "initiation_acceptance",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-01/09-initiation-walk.png"
+      ],
+      "result": "Chat Mission Accepted: Initiation; tracker Approach the Eloh Hologram",
+      "caveat": "initial-character-state.json predates acceptance and has empty mission tables"
+    },
+    {
+      "id": "first_eloh_trigger",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-02/07-first-hologram.png",
+        "playthrough-02/game.log",
+        "database_observations[0]"
+      ],
+      "result": "Area198600 entered; Ancient Eloh dialogue and Lightning highlight; Logos23 persists,1990/1 completed and1990/2 incomplete",
+      "caveat": "No original-live grant timing inferred from this run"
+    },
+    {
+      "id": "cli_auto_admission",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-03/commands/1790105812357786441.json",
+        "playthrough-03/game.log:97-99",
+        "playthrough-03/02-world-pi-before-input.png"
+      ],
+      "argument_names": [
+        "/user",
+        "/password",
+        "/server",
+        "/character"
+      ],
+      "result": "Automatic existing-character selection and MapLoaded, world renders without manual admission",
+      "caveat": "Credentials omitted; diagnostics include isolated yaw/position setup"
+    },
+    {
+      "id": "second_eloh_trigger",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-03/06-second-hologram-approach.png",
+        "database_observations[1]"
+      ],
+      "result": "Giant Eloh projection visibly renders with second Ancient Eloh dialogue;1990/1 and1990/2 both persisted status2",
+      "caveat": "Does not establish original-live first projection timing or exact placement"
+    },
+    {
+      "id": "normal_jump_to_mcallister",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-03/commands/1790106146427853253.json",
+        "playthrough-03/game.log",
+        "playthrough-03/logout-persisted-state.json"
+      ],
+      "result": "Ordinary forward input plus Space jump passes ledge nearZ39.9 and reachesNPC atZ49.1171875",
+      "caveat": "No GM teleport in this traversal segment; initial yaw/position diagnostic remains explicitly separate"
+    },
+    {
+      "id": "initiation_turnin",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-03/11-mcallister-dialogue.png",
+        "playthrough-03/12-initiation-completed.png",
+        "playthrough-03/logout-persisted-state.json"
+      ],
+      "result": {
+        "displayed_credit_reward": 100,
+        "experience_gained": 1250,
+        "completed_mission": 1990,
+        "next_offer": 1992
+      },
+      "caveat": "Configured emulator values verified, not independent evidence of original-live reward rates;1992 offer is not acceptance"
+    },
+    {
+      "id": "normal_logout_persistence",
+      "tier": "observed",
+      "scope": "emulator integration",
+      "sources": [
+        "playthrough-03/15-logout.png",
+        "playthrough-03/16-character-selection.png",
+        "playthrough-03/game.log:976",
+        "playthrough-03/logout-persisted-state.json"
+      ],
+      "result": "Esc-menu logout countdown then character selection; mission/rewards/Logos/coordinates persist"
+    },
+    {
+      "id": "clean_harness_stop",
+      "tier": "observed",
+      "scope": "isolated harness",
+      "sources": [
+        "playthrough-03/launcher.log"
+      ],
+      "result": "Harness stopped; namespace cleanup follows."
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "non_armor_stat_logs",
+      "sources": [
+        "playthrough-01/game.log:101-103",
+        "playthrough-02/game.log:100-102",
+        "playthrough-03/game.log:100-102"
+      ],
+      "observation": "Three UpdateStatsValues non_armor messages at map entry",
+      "unverified": "Messages omit item IDs; association with three worn Recruit clothing pieces requires code investigation"
+    },
+    {
+      "id": "tuple_type_error",
+      "sources": [
+        "run-client/tabula_rasa.log:7"
+      ],
+      "observation": "TypeError: argument list must be a tuple during startup/map entry",
+      "unverified": "No traceback for this error; exact cause not established"
+    },
+    {
+      "id": "other_client_initialization_errors",
+      "sources": [
+        "run-client/tabula_rasa.log:27-47"
+      ],
+      "observation": "Weapon drawer GetArmedWeaponDrawerSlot on None and three LoadElementalIconForItemTemplate iteration-over-non-sequence errors",
+      "unverified": "Cause unestablished; admission still renders world"
+    },
+    {
+      "id": "hologram_visibility",
+      "sources": [
+        "playthrough-02/07-first-hologram.png",
+        "playthrough-03/06-second-hologram-approach.png"
+      ],
+      "observation": "First camera frame lacks identifiable actor; later second-approach frame clearly renders Eloh projection",
+      "unverified": "Exact first projection timing/presentation versus original footage; a general missing-hologram defect is not established"
+    },
+    {
+      "id": "remaining_validation",
+      "observation": "Audio disabled; no completed crate/combat/remaining bootcamp/exit/skip validation in this record"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "acquisition.json",
+      "bytes": 577,
+      "sha256": "78633e58f9fa131382fca63d24dd3c98b881ae769c133560f61f5d295791c967",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "run-playthrough.py",
+      "bytes": 1453,
+      "sha256": "df872dfdbef95189c3e3d90bca95bcf01349dcdff940e735a7437e90c00e8ebb",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-harness.py",
+      "bytes": 4889,
+      "sha256": "960709b56d567c04f47fb660cd2191fae0888a2892b98a919011496fabd0192b",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "run-client/client.cfg",
+      "bytes": 9085,
+      "sha256": "b268a74cf64ad5e9bbea3509d23e93a52bc78dcd11de208b5bee7c5d35613112",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "run-client/version.ini",
+      "bytes": 34,
+      "sha256": "59604ffcfd6994e2aac42e416e3e65bae3dc37e6af4c0d93f1dce9c8d093c6b7",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "bytes": 9719808,
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "run-client/tabula_rasa.exe",
+      "bytes": 9719808,
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "server-playthrough/game/Rasa.Game.dll",
+      "bytes": 1617408,
+      "sha256": "673320f360922bd945602a74c1fb638d9da6af6d001ec4fcea32519e6be52f41",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "server-playthrough/auth/Rasa.Auth.dll",
+      "bytes": 55808,
+      "sha256": "fd7837cd4ed133a1ac713c82e8d68398a37173722dfc7d89620d054b2f0f0334",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-01/06-created.png",
+      "bytes": 924113,
+      "sha256": "c5848bf096254b0675d68e5bf6538189a088f332c2e08f0d0d3787f9e22a8fd1",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-01/09-initiation-walk.png",
+      "bytes": 859641,
+      "sha256": "fbb8dd276ede4dbc64230dd9225d81cbf12a1252ba1d166bb2ac6d689d8fbfec",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-01/initial-character-state.json",
+      "bytes": 4464,
+      "sha256": "141abaf7bfc8a416ba0811aabe182f9754d8cbd2dc6344a35a136381e51e2849",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-02/07-first-hologram.png",
+      "bytes": 627337,
+      "sha256": "564d2c94e218db34995ca2774927cf94a3d80c4c242deb860f4888558de30fb9",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-03/01-auto-admission.png",
+      "bytes": 594494,
+      "sha256": "4713785aa715b7d872b22d89bfd8cd4246c10793d6d9b1b5ddef9706a54a4011",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-03/02-world-pi-before-input.png",
+      "bytes": 483262,
+      "sha256": "d2bf65d2e04010e54a8c680e1c92f19ac9f89e16c81e7257d54ddf120844c482",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-03/commands/1790105812357786441.json",
+      "bytes": 120,
+      "sha256": "92a3bc2707adadec06750bc2810011942b53e94785a31219196471125c761ce0",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+    },
+    {
+      "path": "playthrough-01/game.log",
+      "bytes": 34519,
+      "sha256": "6e15e5bd293bbc305764cc13c5fa240f9aeb7d064a693dbefb6b2ce0f4d4cdc7",
+      "hash_scope": "whole file after playthrough03 harness stopped; shared run-client log may be replaced by future runs",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00",
+      "previous_observation": {
+        "bytes": 34519,
+        "sha256": "6e15e5bd293bbc305764cc13c5fa240f9aeb7d064a693dbefb6b2ce0f4d4cdc7",
+        "hash_scope": "prefix of exactly bytes recorded; file may grow or be replaced by subsequent run",
+        "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+      }
+    },
+    {
+      "path": "playthrough-02/game.log",
+      "bytes": 133255,
+      "sha256": "6aa6275407cef5b042b85d02feb6d86592ae698adbe3b336c783adce1aba8b16",
+      "hash_scope": "whole file after playthrough03 harness stopped; shared run-client log may be replaced by future runs",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00",
+      "previous_observation": {
+        "bytes": 133255,
+        "sha256": "6aa6275407cef5b042b85d02feb6d86592ae698adbe3b336c783adce1aba8b16",
+        "hash_scope": "prefix of exactly bytes recorded; file may grow or be replaced by subsequent run",
+        "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+      }
+    },
+    {
+      "path": "playthrough-03/game.log",
+      "bytes": 137756,
+      "sha256": "feac1f10958add536cfd811e61b3f17e5a89e898346faf416ad7bdd9bf969a6b",
+      "hash_scope": "whole file after playthrough03 harness stopped; shared run-client log may be replaced by future runs",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00",
+      "previous_observation": {
+        "bytes": 68629,
+        "sha256": "f24595ed9c27cfe3c428d48c3f404f67e678bc1f69dc2f23161bb346d0e64c83",
+        "hash_scope": "prefix of exactly bytes recorded; file may grow or be replaced by subsequent run",
+        "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+      }
+    },
+    {
+      "path": "run-client/tabula_rasa.log",
+      "bytes": 658,
+      "sha256": "bd81f7e86593428dff5c3623361441041eed9330ad17e586ffac935bc47584d2",
+      "hash_scope": "whole file after playthrough03 harness stopped; shared run-client log may be replaced by future runs",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00",
+      "previous_observation": {
+        "bytes": 7460,
+        "sha256": "96c1013a390b39128f518c81ac0be3b0ded93552326d6bb26a897e9ca833c38c",
+        "hash_scope": "prefix of exactly bytes recorded; file may grow or be replaced by subsequent run",
+        "observed_at_utc": "2026-09-22T19:41:26.897758+00:00"
+      }
+    },
+    {
+      "path": "playthrough-03/06-second-hologram-approach.png",
+      "bytes": 579518,
+      "sha256": "184111eff9d0884f4a972f0258bfc297d1493bda0f5f263957361b6c6afd1b98",
+      "hash_scope": "whole file at observation time",
+      "observed_at_utc": "2026-09-22T19:42:14.805442+00:00"
+    },
+    {
+      "path": "playthrough-03/11-mcallister-dialogue.png",
+      "bytes": 771658,
+      "sha256": "00c099e1e0a6c630248d90aca8f6bcca765e1d9c3dc843164180033a7826f924",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/12-initiation-completed.png",
+      "bytes": 778799,
+      "sha256": "bd954ea3760e5d7505fddf0da14b15f5f73011314e38a4b82c59e11cbfe015db",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/15-logout.png",
+      "bytes": 622084,
+      "sha256": "3f2cb31f7014edcc1c2ab6f7c7f5dacc7cc3c023927850d1d73afa7a956e39ff",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/16-character-selection.png",
+      "bytes": 927914,
+      "sha256": "36795a90bdff69218a8bdefe9f341de54aca8839761ace7c20496e99b495a29b",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/logout-persisted-state.json",
+      "bytes": 1448,
+      "sha256": "53ba0046707d3a7469dd596d15740378583f5564991be668d866f4372ede5571",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/commands/1790106146427853253.json",
+      "bytes": 89,
+      "sha256": "32e0da836cbaa4fee94e3f3d105617ab257296e58bfa06ce42ba84e0daeef415",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    },
+    {
+      "path": "playthrough-03/launcher.log",
+      "bytes": 66,
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a",
+      "hash_scope": "whole file at observation time after harness stopped",
+      "observed_at_utc": "2026-09-22T19:48:27.194683+00:00"
+    }
+  ],
+  "database_observations": [
+    {
+      "source": "server-playthrough/databases/char.db",
+      "mode": "SQLite URI mode=ro",
+      "observed_at_utc": "2026-09-22T19:41:26.897758+00:00",
+      "queries": [
+        {
+          "sql": "SELECT * FROM character_logos WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "logos_id": 23
+            }
+          ]
+        },
+        {
+          "sql": "SELECT * FROM character_mission WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "mission_state": 0,
+              "change_time": 1790106043
+            }
+          ]
+        },
+        {
+          "sql": "SELECT * FROM character_mission_objective WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "objective_id": 1,
+              "status": 2,
+              "timer_anchor_ms": null,
+              "timer_disarmed": 0,
+              "timer_remaining_ms": null
+            },
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "objective_id": 2,
+              "status": 2,
+              "timer_anchor_ms": null,
+              "timer_disarmed": 0,
+              "timer_remaining_ms": null
+            }
+          ]
+        }
+      ],
+      "hash_policy": "Selected query rows embedded; no misleading live database whole-file hash"
+    },
+    {
+      "source": "server-playthrough/databases/char.db",
+      "mode": "SQLite URI mode=ro",
+      "observed_at_utc": "2026-09-22T19:42:14.805442+00:00",
+      "queries": [
+        {
+          "sql": "SELECT * FROM character_logos WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "logos_id": 23
+            }
+          ]
+        },
+        {
+          "sql": "SELECT * FROM character_mission WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "mission_state": 0,
+              "change_time": 1790106043
+            }
+          ]
+        },
+        {
+          "sql": "SELECT * FROM character_mission_objective WHERE character_id = 1",
+          "rows": [
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "objective_id": 1,
+              "status": 2,
+              "timer_anchor_ms": null,
+              "timer_disarmed": 0,
+              "timer_remaining_ms": null
+            },
+            {
+              "character_id": 1,
+              "mission_id": 1990,
+              "objective_id": 2,
+              "status": 2,
+              "timer_anchor_ms": null,
+              "timer_disarmed": 0,
+              "timer_remaining_ms": null
+            }
+          ]
+        }
+      ],
+      "hash_policy": "Selected query rows embedded; no live database whole-file hash"
+    }
+  ],
+  "last_updated_at_utc": "2026-09-22T19:48:27.194683+00:00",
+  "logout_persisted_state": {
+    "source": "playthrough-03/logout-persisted-state.json",
+    "state": {
+      "character": [
+        {
+          "id": 1,
+          "account_id": 2,
+          "slot": 1,
+          "name": "Alden",
+          "race": 1,
+          "class": 1,
+          "gender": 0,
+          "scale": 1.0,
+          "experience": 1250,
+          "level": 1,
+          "body": 0,
+          "mind": 0,
+          "spirit": 0,
+          "clone_credits": 0,
+          "map_context_id": 1985,
+          "coord_x": 387.19921875,
+          "coord_y": 125.03125,
+          "coord_z": 49.1171875,
+          "rotation": 3.1415927410125732,
+          "num_logins": 3,
+          "last_login": "2026-09-22 19:46:31.9174874",
+          "total_time_played": 9,
+          "created_at": "2026-09-22 19:18:25",
+          "run_state": 1,
+          "crouch_state": 0,
+          "active_weapon": 0,
+          "credit": 100,
+          "last_pvp_clan": "0001-01-01 00:00:00",
+          "prestige": 0
+        }
+      ],
+      "character_mission": [
+        {
+          "character_id": 1,
+          "mission_id": 1990,
+          "mission_state": 4,
+          "change_time": 1790106239
+        }
+      ],
+      "character_mission_objective": [
+        {
+          "character_id": 1,
+          "mission_id": 1990,
+          "objective_id": 1,
+          "status": 2,
+          "timer_anchor_ms": null,
+          "timer_disarmed": 0,
+          "timer_remaining_ms": null
+        },
+        {
+          "character_id": 1,
+          "mission_id": 1990,
+          "objective_id": 2,
+          "status": 2,
+          "timer_anchor_ms": null,
+          "timer_disarmed": 0,
+          "timer_remaining_ms": null
+        }
+      ],
+      "character_logos": [
+        {
+          "character_id": 1,
+          "logos_id": 23
+        }
+      ]
+    }
+  },
+  "validation_boundary": "Captured server assemblies are hashed; subsequent tooltip/source fixes were not run during playthrough01-03."
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated recovered-client timer expiry, Youngblood retry offer, and retry bomb detonation for Calling for Reinforcements",
+  "client": "Recovered 1.16.5.0 client; compatibility build, not proven final shutdown revision",
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-43/01-timer-near-expiry.png; playthrough-43/char-after.db",
+      "finding": "After diagnostic advancement of objective-1 timer, the client displayed 00:00:09. The saved database then recorded mission 1995 state 2 (failed) and objective 1 status 3 (failed). Dropship facts were cleared. The harness terminated before a post-expiry screenshot."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-44/04-retry-offer.png; playthrough-44/char-after.db",
+      "finding": "Youngblood offered the original-client retry briefing about another bomb and ten minutes. Acceptance created mission 2005 active, objective 1 active with a 600000 ms timer, while 1995 remained failed."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-45/04-retry-bomb.png; playthrough-45/game.log: RequestUseObject at 22:03:50; playthrough-45/06-retry-after.png; playthrough-45/char-after.db",
+      "finding": "With corrected inferred bomb position (-221.95,102.3,-70.5), the client showed the use prompt. Right click sent RequestUseObject, removed the wreck and advanced mission 2005 objective 1 to complete and objective 4 (Van Valkenberg) to active. The dropship_destroyed fact became 1."
+    }
+  ],
+  "diagnostic_inputs": [
+    "Run 43 copied an objective-1-active character database; moved the character near Youngblood and set timer_anchor_ms to current time minus 520000 ms to reach expiry quickly.",
+    "Run 44 copied the failed run-43 character database and used Youngblood conversation; no live database was changed.",
+    "Run 45 copied the retry-active run-44 character database, reset the timer anchor to current time and teleported the character near the wreck. The isolated world copy moved bomb placement 198677 X/Z to (-221.95,-70.5); the isolated world was restored to the seed after the run."
+  ],
+  "limitations": [
+    "Timer expiry and retry were observed in a copied database after a diagnostic timer edit and teleports; normal walking progression and full retail presentation remain unverified.",
+    "The 600-second timer and corrected bomb coordinate are labelled analogue/inferred reconstructions, not proven final-live values.",
+    "No original final-live server capture of failure state was found; this confirms emulator behavior in the compatible recovered client."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-43/01-timer-near-expiry.png",
+      "sha256": "0c26f44c9b6d966f4d007282c09662239281682b1eb497039fa7ea36bf92cb2f",
+      "bytes": 478237
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-43/game.log",
+      "sha256": "8bb8816802c21a0f80b78c0835c4a096a874902b69dd563f2028803c3ec63e8f",
+      "bytes": 12744
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-43/char-after.db",
+      "sha256": "ba6604c190a1c087a219bf25522ff46ea92563ee684e1fb2ab9e5d130c341b7b",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-44/04-retry-offer.png",
+      "sha256": "66b19194cf2103db29ea2ceb0abdc3e31d9aff1726645257062bb6c0b7e5aca2",
+      "bytes": 467437
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-44/game.log",
+      "sha256": "62df9dc5b8bc83d4b41250deb73a0dcc031c1dd8bc5fe8bc0bef78834b557c1a",
+      "bytes": 22630
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-44/char-after.db",
+      "sha256": "fb49b4488fd6072db3c4a322d648310ebd5c552acfc115e44f0cf13fa02225e5",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-45/04-retry-bomb.png",
+      "sha256": "896a5b6bdb0a5be8b956ea468554273b981ef44159fc607ff627892e27bb66f2",
+      "bytes": 709148
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-45/06-retry-after.png",
+      "sha256": "76e2bf7bbb21597b80af38e20ede9d580b6febb23e8604f8887f2ee5e82d1ebf",
+      "bytes": 641799
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-45/game.log",
+      "sha256": "bbb619e309dcf544909ef7718ccdfc6ba57e117622518b40adaecf5d107d6e86",
+      "bytes": 13444
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-45/char-after.db",
+      "sha256": "1ff95ad83f0e18483cd35ffea8293c0829d4d40229e051dcc4f551dd1d8307ae",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    }
+  ]
+}

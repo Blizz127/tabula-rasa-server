@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Forean Warrior visibility after three courtyard kill rewards versus the emulator's immediate six-Thrax opening",
+  "confidence": "High for the recorded final-week frame order and emulator hit order; low for original actor identity, allegiance, spawn condition and number of Warriors.",
+  "original_sequence": {
+    "tier": "observed",
+    "video": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+    "video_id": "7Lrst9SG3pk",
+    "video_sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "continuity": "docs/evidence/bootcamp-d11-footage-events.json A3-076 identifies the edit at 384.933-385.0 seconds and verifies that the short effects at 387.067-387.2 and 395.4-395.6 are in-game effects with persistent chat, radar and tracker, not intervening cuts.",
+    "frames": [
+      {"second": 385.467, "finding": "First frame after the edit from the camp: the player is already in the courtyard; exact travel and map-load time are hidden.", "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00385.467.png", "sha256": "9d2e574e7797f92cb96b7de1735bda844d4a7104fde793b93797ce5149761267"},
+      {"second": 391.533, "finding": "First visible courtyard reward pair, 71 XP and 10 credits; source event A3-081 in docs/evidence/bootcamp-d11-footage-events.json.", "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00391.533.png", "sha256": "0c8d856a2f5ec79b127d0fcb7a24c0d3d9708b47ac2d4ec5c95a0cfa4141b5c3"},
+      {"second": 396.467, "finding": "Second visible 71 XP and 10-credit reward pair is present; source event A3-084 puts its first appearance at 396.133 seconds.", "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00396.467.png", "sha256": "c248954fbf7831a7cbd70084fe4300d400163fcc5585b4de44e9f6f702ed89f5"},
+      {"second": 401.9, "finding": "A level-2 Forean Warrior target plate is visible amid the ongoing Thrax fight after a third kill reward at 401.533 seconds: 143 XP with the max-kill-streak bonus and 10 credits (source event A4-10). The frame does not establish whether this actor was present at 385.467, spawned later, belonged to the recruit's faction or matches the emulator's only staged Warrior.", "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/courtyard-count/401.9.png", "sha256": "b12a30a50ef0d12c056473100d7cb53415b5f46c8d9701a43816ae70043229f2"}
+    ]
+  },
+  "other_footage_boundary": {
+    "tier": "observed",
+    "source": "docs/evidence/bootcamp-d11-footage-events.json, video 8VXeKzGUv0c segment B1 events B1-001 at 0.000 seconds, B1-009 at 4.267 seconds and B1-027 at 46.467 seconds",
+    "finding": "The second archived recording continues the same player's session. Its tracker begins at mission 1994 objective 3, advances to mission 1995 objective 2, and only then shows a level-2 Forean Warrior. That later Warrior is in the Denzil's Caldera encounter and cannot corroborate the identity, activation or survival of the mission-1994 courtyard Warrior in video 7Lrst9SG3pk.",
+    "limit": "The older independent tutorial recording Ycxm8Pa1-v4 ends before the courtyard; no independent original courtyard actor count is established by the three locally archived videos."
+  },
+  "emulator_sequence": {
+    "tier": "observed",
+    "staging": "The current disposable world has one inferred Forean Warrior placement 198691 and six Thrax placements 198660-198665. Creature-hit tracing shows all six attack that Warrior on MapLoaded; its health reaches zero before any staged Thrax dies in the runs below. The Warrior's field-level provenance is docs/evidence/bootcamp-courtyard-forean-warrior.json.",
+    "runs": [
+      {"id": "camp-to-courtyard-sidejump-continuous-04", "map_loaded": "16:23:36.011", "warrior_zero_health": "16:23:43.926", "first_thrax_zero_health": null, "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/game.log", "game_log_sha256": "7525dc1f7a4ddace6b4172cac29338c7968fe886b56394816f108790724402ae"},
+      {"id": "camp-to-courtyard-companion-positions-06", "map_loaded": "16:33:30.344", "warrior_zero_health": "16:33:37.443", "first_thrax_zero_health": "16:35:03.125", "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/game.log", "game_log_sha256": "195e427d9c13773a098bb012c8fb05e0846ff4fcf60c35afba5cef08062fd8af"},
+      {"id": "camp-to-courtyard-combat-07", "map_loaded": "16:39:46.952", "warrior_zero_health": "16:39:54.972", "first_thrax_zero_health": "16:40:55.326", "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/game.log", "game_log_sha256": "8548246a25af974ce43060b0b480c21f4d774b78398929e4fc209c3582470eef"},
+      {"id": "courtyard-checkpoint-clear-attempt-08", "map_loaded": "16:45:48.502", "warrior_zero_health": "16:45:56.386", "first_thrax_zero_health": "16:46:46.100", "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/game.log", "game_log_sha256": "6607f48fc077b2be24eac3f50125fc49bedb17ff4907c52e880e1633526b6162"}
+    ]
+  },
+  "assessment": {
+    "tier": "inferred",
+    "finding": "In four current emulator runs, the only staged Warrior dies before the first staged Thrax. The final-week recording instead shows a targetable Forean Warrior after three kill reward events in the visible courtyard fight (391.533, 396.133 and 401.533 seconds). This establishes a sequence conflict for the tested runs, not an impossibility proof for every player action. The footage does not identify whether the original actor was the same Warrior from the start, a later arrival or a different faction. The exact live map-load time is hidden by the camp-to-courtyard edit, so the 7-8 second emulator survival time cannot be compared directly with the 16.4 seconds of visible courtyard footage.",
+    "action": "Keep the mismatch and source limits explicit. Do not invent a timer, extra defender, altered damage value or Warrior replacement from this comparison alone. Seek direct final-live footage or original server data for activation and actor count; continue independently verified boot-camp work."
+  }
+}

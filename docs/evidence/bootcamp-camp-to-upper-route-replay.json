@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client movement from the staged Capture the Flag camp to the upper courtyard approach",
+  "provenance_tier": "observed",
+  "source_context": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and private bubblewrap namespaces; /home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with six staged Thrax, three camp companions, and one staged Warrior; no deployed service or production database changed",
+    "character_setup": "Copied level-2 Alden with mission 1994 objective 2 active, rifle item 11 restored to its observed 20 loaded rounds, placed at inferred camp point (383.94,119.5,153.83), orientation -0.18 before each login. This bypasses normal quest acceptance but uses ordinary client movement after login. No player fire occurred.",
+    "original_limit": "Final-week video 7Lrst9SG3pk cuts from camp at 384.467 seconds to courtyard at 385.467 seconds. It does not show this travel route or establish original escort movement; see docs/evidence/bootcamp-courtyard-cave-approach-replay.json."
+  },
+  "navmesh": {
+    "tier": "original",
+    "source": "/home/blizz/servers/rasa-net/navmesh/adv_bootcamp.nav, SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; NavProbe FindPath using /home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/tools/navprobe/NavProbe/Program.cs",
+    "path_result": "From (383.94,119.5,153.83) to (360.0703,121.2031,114.6406), complete=True through (386.00,119.71,142.40), (385.60,119.71,133.20), (385.20,119.91,132.40), (360.07,121.77,114.64). Full path to (306.52,120.5,66.12) is also complete but does not by itself prove the visible upper path is walkable without jumps.",
+    "result_file": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-navmesh-waypoints-01/navmesh-route.txt",
+    "result_file_sha256": "fce2141d70aabbbf12fb3d8ebfc223a2549121ef1d422607af5baad01dd7544a"
+  },
+  "runs": [
+    {
+      "id": "camp-navmesh-waypoints-01",
+      "input": "W 2200 ms, A 900 ms, W 1400 ms, D 1400 ms, W+D 3000 ms, D 2200 ms. Later D 2500 ms, W+A 2200 ms and W 1600 ms attempted the upper path.",
+      "observation": "The client moved from the camp gate to (386.41016,119.52734,140.25), then (392.89844,119.62891,131.82422), (384.26562,119.78125,130.2539), (375.5039,121.046875,115.578125), and (361.03906,121.54297,112.94531) by on-screen .where readouts. All three orange companion markers remained near the recruit and companions were visibly following. The later W input left the visible upper corridor near (350.13,121.74,98.90); no courtyard encounter was completed.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-navmesh-waypoints-01/game.log",
+      "game_log_sha256": "4c112e4e4ff1a6888d2143fb80d597522f3326ffc3be791d1d80cfb77569b378",
+      "screenshots": [
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-navmesh-waypoints-01/camp-start.png", "sha256": "80c0e58139043e800ecb88722b7965cad8283495ce08b876be1def4c4837e6ca"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-navmesh-waypoints-01/camp-rock-checkpoint.png", "sha256": "69b2638561c5bcfd9ae6c29b210240662e91952455a0c206ab3d1e4cc0f85626"}
+      ]
+    },
+    {
+      "id": "camp-to-courtyard-continuous-02",
+      "input": "The six successful camp-to-rocky-descent holds above, then W 3100 ms, W 1800 ms and W+A 1450 ms from the camp-facing orientation.",
+      "observation": "The client again reached (361.9414,121.453125,113.15234) with companions by ordinary movement. Reusing the rocky-descent forward sequence from a different initial orientation left the upper route and reached the lower caldera floor. No cave-area completion or player combat occurred.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-continuous-02/game.log",
+      "game_log_sha256": "12abf2c4ee5c50f26adb907a05b387757d5400803c5549649dc88eb73012e133",
+      "screenshot": {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-continuous-02/continuous-rock-where.png", "sha256": "85449c361a9aa1f913ecb455b82779db1c9f2bf12f458a0f15a65f7ea245f42d"}
+    },
+    {
+      "id": "camp-upper-navmesh-gap-03",
+      "input": "The six successful camp-to-rocky-descent holds, D 2500 ms to the upper pillar, D 2500 ms toward the gap, W+A 1200 ms to the edge, W+Space 1600 ms and W+D 1400 ms.",
+      "observation": "The client reached (327.14844,121.10547,105.78516) on the upper approach and (333.82812,121.69531,101.16016) at the visible edge. Three orange companion markers and companion figures remained with the recruit. The attempted jump went to (335.5316,120.44531,91.79297) in the air and then (330.71484,116,81.7612) beneath the raised bridge. The navmesh has a lower floor 116.11 at (335.5,91.7); the client screenshot showed the bridge underside. This is a failed upper crossing, not a verified route into the filmed courtyard.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-upper-navmesh-gap-03/game.log",
+      "game_log_sha256": "8a9a7357d141b7b3fe1e3d1d70ec6ac84287806940d913646a1130dc8bbc08dc",
+      "screenshots": [
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-upper-navmesh-gap-03/camp-upper-x329.png", "sha256": "6531b8846cfbdbc0dea853bd1785267631d5fbcb59d6da3c102ba533b3c4bea4"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-upper-navmesh-gap-03/camp-upper-jump-setup.png", "sha256": "ab77a035a01947a381b9eaf9efe9e7138dc1b0712ce29d4f48752e969445ad05"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-upper-navmesh-gap-03/camp-upper-jump-result.png", "sha256": "ed74536b611c3f11772bf0ddef0ac5a89a88a562e664e18ed522693161b36289"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-upper-navmesh-gap-03/camp-lower-route.png", "sha256": "18244cc7eb831b1ddeda51d5049000b676ab1ec7df27de96049e0a9b92c49ac5"}
+      ]
+    }
+  ],
+  "interpretation": "Ordinary client movement can traverse the current camp gate and rocky descent with all three staged companions following. The upper-gap crossing remains unverified in one uninterrupted camp-to-courtyard replay. Prior successful jumps began from a different copied checkpoint and orientation; the camp-facing route cannot reuse those forward inputs without realignment.",
+  "verification_needed": "Find a continuous client-controlled upper-gap crossing from the camp point, retain three companions through the courtyard fight, and compare the full encounter with final-week footage. Do not infer original travel timing from the edited recording."
+}

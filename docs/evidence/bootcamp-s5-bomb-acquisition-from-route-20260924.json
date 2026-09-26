@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Mission 1995 bomb acquisition and detonation after ordinary movement to the recovered wreck",
+  "prior_route_evidence": "docs/evidence/bootcamp-s5-higher-bank-wreck-approach-20260924.json",
+  "prior_placement_evidence": "docs/evidence/client-reinforcements-bomb-correction.json",
+  "setup": "Isolated copied 1.16.5.0 client, server and character DB. Restored the copied post-Conrad-use mission-1995 character from s5-corpse-agent-09/char-after-use.db, set only the copied character position to the prior run's ordinary-reached wreck point (-222.0625,101.05078,-69.953125), and reset objective 1's timer anchor to current wall clock for a diagnostic continuation. No world/content placement edits, GM movement, live Docker, or DIT changes. The earlier route had been stitched across explicit position and timer restorations, so this is not an uninterrupted timed run from Conrad.",
+  "comparison": {
+    "prior_success_source": "rifle-melee-playthrough/playthrough-40/01-tight-bomb.png, 02-tight-bomb-use.png, char-after.db; docs/evidence/client-reinforcements-bomb-correction.json",
+    "prior_success_character": {
+      "pos_x": -220.4,
+      "pos_y": 100.8,
+      "pos_z": -69.4,
+      "rotation": 0.7853982
+    },
+    "route_arrival_character": {
+      "pos_x": -222.0625,
+      "pos_y": 101.05078,
+      "pos_z": -69.953125,
+      "rotation": 1.0669295
+    },
+    "source_location": "s5-high-bank-agent-11/step1-hover-center.png through step4-after-low-click.png and game.log",
+    "assessment": "The failed route-arrival clicks were made about 1.7 m west and 0.55 m south of the earlier successful character point. Two chosen aim points gave no use prompt or RequestUseObject despite proximity to the bomb. This suggested an acquisition/view geometry difference and did not establish a placement-height defect."
+  },
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "s5-bomb-approach-agent-12/step1-back-400ms.png; run-s5-bomb-approach-agent-12-20260924.py",
+      "uncertainty": "Original client .where coordinate display approximately 0.01 m; 400 ms held-key duration subject to frame-rate variation.",
+      "finding": "One ordinary S-key hold of 400 ms moved the character from (-222.063,101.051,-69.953) to (-220.633,101.051,-69.164), about 0.33 m horizontally from the prior successful player point. The client immediately displayed 'Press [Mouse Button 2] to use' against the wreck. No world or bomb Y change was made."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-bomb-approach-agent-12/step2-hover-center.png, step3-after-click.png, game.log line 129, objective-after-use.json, char-after-use.db",
+      "finding": "With the pointer at screen (512,385), right-click sent RequestUseObject. After eight seconds the client displayed the bomb explosion, 'Objective Completed', and tracker 'Check in with Corporal Van Valkenberg.' The copied DB has mission 1995 objective 1 status 2, objective 4 status 1, and a cleared timer anchor."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "comparison of run 11 failed aim points with run 12 successful S-key approach and unchanged copied world placement",
+      "finding": "The prior acquisition failure was position/view dependent. The current inferred bomb Y at 102.3 is sufficient for this client interaction from the successful approach; no height correction is justified by these observations. Exact final-live bomb placement and approach behavior remain unverified."
+    }
+  ],
+  "assessment": "The current inferred bomb placement is reachable and usable from a dry, ordinary-movement approach near the prior successful player viewpoint. The recovered client completes objective 1995/1, starts objective 4 and clears the timer. The copied diagnostic resets prevent a claim that a single uninterrupted soldier-to-bomb run completed inside the original timer, and current compatibility-client behavior alone does not prove final-live fidelity.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/01-tight-bomb.png",
+      "sha256": "fa96ef0fc73d4475b76f293a0a89b17e465068df8fafbda47392bbc8e1b2982f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/02-tight-bomb-use.png",
+      "sha256": "257d8763f1ca8a683aa82d8e0f3b8aca217c2666ebccbd80f0c28ca40a7e19b2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/char-after.db",
+      "sha256": "b783517d75801040951454233bc4722dcd0d1081bfd01f7480629fad2acf4e5f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step1-hover-center.png",
+      "sha256": "f9f116902876893efd12a1526b2eb7219ee589c69005acf2e8833f52fe4561a5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step4-after-low-click.png",
+      "sha256": "66d081447c20ef9d90b4607976f40441eda5aca9c051ad9c1ac7e8d3b615773f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/game.log",
+      "sha256": "8471f4fbf199c188cc3ce1c1b20c28bfb2242727eedef0c41bf34b7c9f16bdc8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-bomb-approach-agent-12-20260924.py",
+      "sha256": "8ca8115fd476cc051e202a2c1a3d8c880ca3b28b6940650c47d7bd77ad3d886a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/step1-back-400ms.png",
+      "sha256": "3f6bd1273f93a06b53cc27e9fa2e202882bfefabf81d96fffeab223c0477cc4c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/step2-hover-center.png",
+      "sha256": "6414df1c34ef48702e78a118c01e7eb7cb0af22477ced48dc0dd62dfc933a775"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/step3-after-click.png",
+      "sha256": "bb5a2d9995b8610c2d99419e5f0312b2b9df8882072ceb83c4caea4050424c22"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/game.log",
+      "sha256": "44aa84587d37a1c0fa3dd445b0d5c88192249b9aebcf5246fa54ae5f0e278f14"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/objective-after-use.json",
+      "sha256": "d2c1ed8e6bcde3db5853b2d58ff47a28ce486045aa84875b6551a7c5ba1523fa"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bomb-approach-agent-12/char-after-use.db",
+      "sha256": "c4a79743b68d40faf07457a8403de1e154f59f032641a539a1306f6b09e6155e"
+    }
+  ]
+}

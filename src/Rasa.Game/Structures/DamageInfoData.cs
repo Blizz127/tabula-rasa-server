@@ -17,7 +17,7 @@ namespace Rasa.Structures
         public long FinalAmount { get; }
         public int IsCritical { get; }
         public int DeathBlow { get; }
-        public uint CoverModifier { get; }
+        public double CoverModifier { get; }
         public int WasImmune { get; }
         // Despite their original names, AnnounceGameEffectAttach consumes type IDs.
         public IReadOnlyList<uint> TargetEffectIds { get; }
@@ -57,7 +57,13 @@ namespace Rasa.Structures
             writer.WriteLong(FinalAmount);
             writer.WriteInt(IsCritical);
             writer.WriteInt(DeathBlow);
-            writer.WriteUInt(CoverModifier);
+            // shared/damageinfo.py initializes this field to integer 0. A measured
+            // cover factor is a float; keep the original zero shape for hits with
+            // no cover calculation (including existing ability effects).
+            if (CoverModifier == 0)
+                writer.WriteUInt(0);
+            else
+                writer.WriteDouble(CoverModifier);
             writer.WriteInt(WasImmune);
             writer.WriteList(TargetEffectIds.Count);
             foreach (var typeId in TargetEffectIds)

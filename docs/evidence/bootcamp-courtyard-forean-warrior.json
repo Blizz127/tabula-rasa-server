@@ -1,0 +1,62 @@
+{
+  "schema": "rasa-reconstruction-manifest/1",
+  "date": "2026-09-23",
+  "migration": "20260923060000_BootcampCourtyardForeanWarrior",
+  "client_compatibility_version": "1.16.5.0; exact shutdown build unverified",
+  "sources": {
+    "footage": "Original final-week video 7Lrst9SG3pk, SHA-256 c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632, 401.8-402.067 seconds; docs/evidence/bootcamp-d11-footage-events.json A4-05 and frame /home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/courtyard-count/401.9.png. A level-2 Forean Warrior plate appears during the Thrax fight; the Warrior's allegiance, exact position and attack are not directly shown.",
+    "client_classes": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/map/client-tables/generated-client-entityclass.pyo.json names.lookup 6043 Redshirt_Forean_Spearman (mesh 16729, augmentations [1,59]) and 6138 FIXME_NPC_Forean_Warrior (same mesh, augmentations [1,52]); generated-client-language-english-physicalentityclassnamelanguage.pyo.json names.lookup 6043 and 6138 both Forean Warrior. src/Rasa.Game/Data/AugmentationType.cs identifies 59 as Harvestable and 52 as NPC, making 6043 the stronger combatant counterpart. /home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-creature.pyo.dis lines 390-449 GetCreatureName uses the physical entity class name as fallback when CreatureInfo name ID is None. Exact original actor class unverified.",
+    "client_weapon": "Original client weapon class 10532, src/Rasa.DBL/Services/Preloader/WeaponClassPreloader.cs:417, action (174,11); existing emulator creature 50 has class 7034, weapon 10532 and actions 17, 6, 5 in CreaturePreloader.cs:69 and CreatureAppearancePreloader.cs:190. Damage, cooldown and attack selection are emulator authored.",
+    "radar": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl t=401.467: player XZ=(300.17,67.28), radar-matched with approximately 2 m player uncertainty. The Warrior is projected ahead of the player in the video; no unique world coordinate can be measured from this frame.",
+    "condition": "src/Rasa.DBL/Migrations/BootcampData/BootcampCampGunnerCompanionRows.cs content_condition 198914: mission 1994 objective 2 or 1 incomplete. Warrior is observed only during objective 2; persistence into objective 1 is inferred from the adjacent fight and the existing condition.",
+    "navmesh": "Original boot-camp navmesh /home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav, SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; NavProbe at /home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/tools/navprobe/NavProbe/Program.cs. Probe on 2026-09-23: (294,67) has only floor 116.11, while (294,65) has upper walkable floor 120.71 and lower floor 116.11. The navmesh-to-client floor offset is about 0.42 m in docs/evidence/bootcamp-d11-positions.json; choose client Y 120.5 with roughly 0.5 m uncertainty."
+  },
+  "rows": [
+    {
+      "table": "creature",
+      "key": { "id": 198519 },
+      "fields": {
+        "class_id": { "value": 6043, "tier": "inferred", "source": "client_classes", "reasoning": "Both original classes are named Forean Warrior and share a mesh, but 6043 carries Harvestable where 6138 carries NPC. A fighting generic Warrior is better represented by 6043; exact captured class ID remains unverified." },
+        "faction": { "value": 1, "tier": "inferred", "source": "footage", "reasoning": "Shown fighting among marked Forean allies; direct allegiance flag not visible." },
+        "level": { "value": 2, "tier": "observed", "source": "footage" },
+        "max_hp": { "value": 500, "tier": "analogue", "source": "client_weapon", "counterpart": "Existing emulator Forean Spearman creature 50; no original Warrior HP captured." },
+        "name_id": { "value": 0, "tier": "inferred", "source": "client_classes", "reasoning": "No exact Forean Warrior creature-name row; send None in CreatureInfo and use the client's original GetCreatureName class-name fallback. A diagnostic native-client run now confirms the displayed level-2 Forean Warrior plate, but cannot establish whether final retail used a name ID or this fallback." },
+        "run_speed": { "value": 9.0, "tier": "analogue", "source": "client_weapon", "counterpart": "Existing emulator Forean Spearman creature 50." },
+        "walk_speed": { "value": 5.0, "tier": "analogue", "source": "client_weapon", "counterpart": "Existing emulator Forean Spearman creature 50." },
+        "action1": { "value": 5, "tier": "analogue", "source": "client_weapon", "counterpart": "Existing emulator Forean Spearman melee attack; pair (174,11) is in original client weapon 10532. Damage, range and cadence are emulator values." },
+        "action2": { "value": 0, "tier": "inferred", "source": "client_weapon", "reasoning": "Omit the optional emulator-authored lightning action: the later B1 Warrior's purple beam does not establish this courtyard actor's action pair." },
+        "action3": { "value": 0, "tier": "inferred", "source": "client_weapon", "reasoning": "Omit emulator creature 50 action 17 (1,305), which is not the original client weapon 10532 attack pair and has no direct Warrior observation." }
+      }
+    },
+    {
+      "table": "creature_appearance",
+      "key": { "id": 198519, "slot_id": 13 },
+      "fields": {
+        "Class_id": { "value": 10532, "tier": "analogue", "source": "client_weapon", "reasoning": "Original client weapon class already used by the closest emulator Forean Spearman; exact filmed weapon class unverified." },
+        "color": { "value": 1, "tier": "analogue", "source": "client_weapon", "reasoning": "Existing emulator Forean Spearman appearance color; filmed body and equipment tint not recovered." }
+      }
+    },
+    {
+      "table": "content_placement",
+      "key": { "id": 198691 },
+      "fields": {
+        "map_context_id": { "value": 1985, "tier": "original", "source": "footage", "reasoning": "Luna Cavern boot camp map; client context 1985 is documented in docs/evidence/bootcamp-d11-reconstruction-manifest.json." },
+        "kind": { "value": 1, "tier": "inferred", "source": "footage", "reasoning": "A living combat creature." },
+        "creature_id": { "value": 198519, "tier": "inferred", "source": "footage", "reasoning": "Local reconstruction key." },
+        "pos_x": { "value": 294.0, "tier": "inferred", "source": "radar", "uncertainty": "approximately ±5 m; projected ahead of player, not a measured world point" },
+        "pos_y": { "value": 120.5, "tier": "measured", "source": "navmesh", "uncertainty": "approximately ±0.5 m, including calibrated navmesh-to-client floor offset" },
+        "pos_z": { "value": 65.0, "tier": "inferred", "source": "radar, navmesh", "uncertainty": "approximately ±5 m; projected ahead of player, adjusted 2 m north of the initial estimate to the upper walkable polygon" },
+        "rotation": { "value": 0.0, "tier": "inferred", "source": "footage", "reasoning": "Neutral seed heading; original facing unknown." },
+        "behavior": { "value": 2, "tier": "inferred", "source": "footage", "reasoning": "Defends the courtyard and engages Thrax; exact original path is unknown." },
+        "present_condition_id": { "value": 198914, "tier": "inferred", "source": "condition", "reasoning": "Reuses the 1994 cave-fight condition; whether the Warrior persisted for the whole condition is unknown." }
+      }
+    }
+  ],
+  "verification": {
+    "name_resolution": "src/Rasa.Game/Packets/MapChannel/Server/CreatureInfoPacket.cs:27-30 serializes zero name ID as Python None. Recovered client bytecode trpython-client-augmentations-creature.pyo.dis lines 388-450 falls back from unset Actor.__name and None creature name ID to GetEntityClassName. trpython-client-clientlanguagemanager.pyo.dis lines 1221-1228 uses physicalentityclassnamelanguage, whose row 6043 is Forean Warrior. The isolated 2026-09-23 original-client diagnostic renders a level-2 Forean Warrior target and overhead plate; see docs/evidence/bootcamp-courtyard-warrior-client-probe.json. Its moved test placement is not original placement evidence.",
+    "sequence_audit": "docs/evidence/bootcamp-courtyard-warrior-sequence-audit.json: the final-week footage shows a targetable Warrior after three courtyard kill reward events, whereas the current one-Warrior staging dies before the first Thrax death in four traced emulator runs. Actor identity, activation and any later arrival remain unverified.",
+    "seed_parity": "BootcampCourtyardWarriorProvenanceTests.EverySeededWarriorValueMatchesItsEvidenceRecord passed under .NET 5; compares all nonzero seeded gameplay fields against this manifest and checks tiers, source keys and measured uncertainty.",
+    "migration": "BootcampWorldDataMigrationsHaveProviderParity and BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables passed under .NET 5 after the staged migration."
+  },
+  "verification_needed": "Replay the complete fight through ordinary movement and combat with all enemies. Resolve the sequence conflict in docs/evidence/bootcamp-courtyard-warrior-sequence-audit.json from direct original evidence before changing activation or actor count. The later Forean Warrior in video 8VXeKzGUv0c is shown after mission 1994 has advanced to mission 1995 objective 2; it cannot establish that the courtyard actor survived or used the same attack. The isolated client confirms native name rendering and a fourth Forean-shaped actor on the upper floor, but does not prove its exact original class, original position, allegiance or encounter balance."
+}

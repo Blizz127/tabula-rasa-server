@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client upper courtyard route and cave approach with six staged Thrax",
+  "provenance_tier": "observed",
+  "scope": "Disposable emulator/client playthrough evidence. The character was placed at saved upper-path checkpoints before login, so these runs do not establish continuous camp-to-cave play or original final-live combat balance.",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and bubblewrap private namespaces; /home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Staged /home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-courtyard-full-20260923/game/Rasa.Game.dll SHA-256 4326c4e21754eccab8fb1d2e6c008a34ed9f98d3ac0dcfd2954727813516caea with copied databases; all six Thrax placements 198660-198665, three camp companions 198688-198690, and staged Warrior 198691; creature-hit trace enabled; live service unchanged",
+    "character": "Level-2 Alden with mission 1994 objective 2 active; baseline 3571 XP and 310 credits",
+    "source_of_route": "The navmesh at navmesh/adv_bootcamp.nav, generated from the original map, was probed with NavProbe: (360.07,121.20,114.64) to (343.20,122.11,108.80) to (321.60,120.71,90.80); then (308.40,121.11,80.00) and the courtyard. Navmesh waypoints guide diagnostic movement but do not by themselves prove client collision traversal."
+  },
+  "descent_run": {
+    "start": "Copied character placed at (360.0703,121.2031,114.6406) with diagnostic yaw 1.24 before login. Ordinary W and W+A movement reached (327.59,120.63,96.11) on the upper path with escorts following. The next unjumped movement fell to the lower floor at (325.49,116.51,91.81).",
+    "finding": "The upper approach is traversable to the narrow gap; a simple diagonal step at that gap is insufficient in this client run.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-upper-yaw-01/game.log",
+    "game_log_sha256": "55fe07f010632c44594be40905c336d67603fbef0b6a12ee3348f09a609139de",
+    "screenshots": [
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-upper-yaw-01/upper-diagonal1.png", "sha256": "0450a4f519a48cd8dda06b06861a130a54b87f3a44742492c271682cc87801e0" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-upper-yaw-01/upper-waypoint2.png", "sha256": "8a74effdc6ac1f0b7402e3b4200b01f675130d9b7df4f9847957cd7c188225a5" }
+    ]
+  },
+  "crossing_run": {
+    "start": "Fresh copied character placed at the previously reached (327.59375,120.66,96.11328) upper-path point with diagnostic yaw 0.85 before login. No GM teleports or direct combat-state changes occurred after login.",
+    "movement": [
+      { "time": "13:59:08-13:59:09", "input": "W+Space held for 1150 ms, then released", "result": "Character crossed the gap from (327.6,120.6,96.1), was seen airborne at (323.93,122.66,92.89), and landed at (322.73,120.38,91.84)." },
+      { "time": "14:01:18-14:01:19", "input": "W for 1250 ms", "result": "Reached (317.85,120.28,87.55) on the upper route." },
+      { "time": "14:02:02-14:02:03", "input": "W for 1100 ms", "result": "Reached (312.96,119.84,83.26) near the courtyard rock and sandbag line." },
+      { "time": "14:02:36-14:02:39", "input": "W+Space held for 1030 ms", "result": "Cleared the next obstruction and reached approximately (306.86,120.3,77.9)." },
+      { "time": "14:03:32-14:04:10", "input": "Two bounded W+A holds", "result": "Reached (306.54,120.53,67.16), with surviving Thrax visible beyond the sandbags; objective 2 was still active." }
+    ],
+    "combat": "Before player movement, all six Thrax attacked the staged Warrior; Thrax 198664 killed him at 13:58:49.058. The three camp companions damaged Thrax 198665, which Shaman 198690 killed at 13:59:40.654. The Archer, Shaman and Gunner were killed at 14:03:55.806, 14:03:55.806 and 14:04:41.500 respectively. The player did not fire. Thrax 198662 killed Alden at 14:04:53.809 from (291.3,120.5,61.7) while Alden was at (306.5,120.5,67.2).",
+    "saved_state": "The copied database still has 3571 XP, 310 credits and mission 1994 objective 2 active; area probe measured 27.5 m horizontal separation from the 10 m cave trigger at death. Hospital Selection appeared in the client.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-crossing-jump-01/game.log",
+    "game_log_sha256": "ccfb87347f2c89a39ff9760f6337618a465819d347543d869cad907da5ff40d5",
+    "screenshots": [
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-crossing-jump-01/jump-crossing1.png", "sha256": "832f0dec88f6bb3c842105b95d94f2b5266adb6b14b5e1ad0339e00a6640abf5" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-crossing-jump-01/jump-landed.png", "sha256": "ceb7fc99bd20e864b79fe4badf881e262e95e7822a2b84177ed1dd2973e271de" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-crossing-jump-01/courtyard-filmed-view.png", "sha256": "f138332fd950a1711ed4a2759d62530f8b611af294be54c6d473cf8ceb4b81ab" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-crossing-jump-01/courtyard-west1.png", "sha256": "aab497a186be3150f7bf161b63c8f7aa852352af726beec81272f10136b7f6c7" }
+    ]
+  },
+  "limits": "This verifies staged-client movement and two ordinary jump crossings from separate diagnostic login checkpoints. It does not prove a single uninterrupted camp-to-cave route, the original player's exact path or jumps, survivability under authentic final-live enemy timing/stats, or completion of the six-Thrax encounter. Long pauses between inputs make combat pacing incomparable with original footage. The staged hostile and allied combat values remain labelled reconstructions in their source manifests."
+}

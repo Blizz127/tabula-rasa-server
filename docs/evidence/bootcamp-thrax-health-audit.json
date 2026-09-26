@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Deployment-11 boot camp level-2 Thrax Infantry Initiate health",
+  "source": {
+    "tier": "observed",
+    "video_id": "7Lrst9SG3pk",
+    "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+    "sample_seconds": [395.0, 397.5, 398.5, 399.5, 400.5, 401.2],
+    "event_records": "docs/evidence/bootcamp-d11-footage-events.json A4-05, A4-08, A4-10"
+  },
+  "observation": "The target panel identifies a level-2 Thrax Infantry Initiate and displays a health bar, but no numeric maximum health. Several allies attack while indistinguishable Initiates can become the target. The footage therefore does not establish a unique damage total for a single enemy.",
+  "result": {
+    "max_hp": 555,
+    "tier": "analogue",
+    "provenance": "docs/evidence/bootcamp-d11-reconstruction-manifest.json creature 198507 max_hp; emulator mobile-creature default, not a value measured from original gameplay",
+    "confidence_as_retail_value": "low",
+    "decision": "Retain the explicitly labelled functional estimate; this video does not justify replacing it with another number."
+  },
+  "remaining_verification": "Find an original final-live server stat/capture or footage that ties a complete, readable damage sequence and health bar to one unambiguous Initiate. Exact original maximum health remains unknown."
+}

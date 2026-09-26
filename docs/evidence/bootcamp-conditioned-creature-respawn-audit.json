@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Zero-respawn, owner-conditioned boot-camp creature placements",
+  "status": "The runtime contract is deployed in rasa_net_game:creature-health-respawn-20260923; the specific companion and Warrior placement rows discussed here are not in the live world seed yet. See docs/evidence/live-creature-health-respawn-20260923.json.",
+  "scope": "Mission-conditioned creatures such as courtyard Warrior 198691 and camp companions 198688-198690. The six always-present courtyard Thrax 198660-198665 are not refreshed by this path.",
+  "sources": {
+    "seed": "src/Rasa.DBL/Migrations/BootcampData/BootcampCourtyardForeanWarriorRows.cs placement 198691 and BootcampCampGunnerCompanionRows.cs placement 198688: present_condition_id 198914 and respawn_ms 0; BootcampCampArcherShamanCompanionsRows.cs placements 198689-198690 same.",
+    "runtime": "src/Rasa.Game/Managers/CreatureManager.cs HandleCreatureKill schedules respawn only when respawn_ms is nonzero; src/Rasa.Game/Managers/ContentMaterializer.cs RefreshPresence can materialize a conditioned placement on any committed mission reaction after its corpse is removed; src/Rasa.Game/Managers/MissionContentRuntime.cs Apply calls RefreshPresence after every committed change.",
+    "original": "Original final-week video 7Lrst9SG3pk 385-430 seconds shows allied fighters and repeated Thrax kills, but does not establish allied death/respawn behavior or any precise respawn delay."
+  },
+  "defect": "A killed conditional creature with respawn_ms 0 could return in the same private map after its corpse was cleared and any later mission state refresh occurred. A conditional creature waiting on a nonzero respawn delay could also return early through RefreshPresence after corpse cleanup.",
+  "rule": {
+    "tier": "inferred",
+    "source": "seed, runtime",
+    "implementation": "Record zero-respawn kills in the owning MapChannel until that instance is destroyed. RefreshPresence excludes those placements, and also excludes placements with an outstanding timed respawn. A rebuilt MapChannel starts with no defeated-placement record.",
+    "confidence": "high for enforcing the seed's respawn_ms contract; final-live allied respawn behavior remains unknown"
+  },
+  "verification": "ContentPlacementRespawnTests passes under .NET 5 for zero-respawn instance lifetime and for a timed placement not returning before its due entry is removed. Rasa.Test builds.",
+  "kill_credit_check": "BootcampOpeningTests.AllyFinishingTheFlagBossCreditsThePrivateMapOwnerBeforeOneShotDespawn passed under .NET 5. A creature killer of Tizzik Gi 198659 completes the private instance owner's 1994/1 boss counter and objective once, while the owner receives no player kill XP; the zero-respawn placement is recorded as defeated. This verifies emulator logic, not final-live NPC kill-credit rules.",
+  "remaining": "Native-client encounter replay, original ally death behavior, original NPC-assisted boss kill credit and original enemy spawn pacing are unverified."
+}

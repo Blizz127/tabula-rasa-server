@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Original-client six-Thrax courtyard combat from a copied upper-path checkpoint",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb in bubblewrap private network and process namespaces; current staged game binary; live service and databases untouched",
+    "copied_character": "Level-2 Alden, mission 1994 objective 2 active, placed at (316.13,120.28,85.93) before login; baseline 3571 XP and 310 credits",
+    "copied_world": "All six Thrax placements 198660-198665, three conditioned camp companions 198688-198690, and staged Warrior 198691 at (294,120.5,65) with behavior 2. The current six-Thrax health and armor are analogue values, and the Warrior class, health, position and attacks are labelled reconstructions.",
+    "trace": "RASA_TRACE_CREATURE_HITS=1 in the isolated game process. Bounded xdotool holds were used for movement and later rifle fire; no GM teleport or direct combat-state edits occurred after login. The initial character checkpoint itself bypassed the camp-to-checkpoint walk."
+  },
+  "artifacts": {
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-full-trace-01/game.log",
+    "game_log_sha256": "4f5899e7da3484b44bae1aebb3e6bcedcad23dde6c4c7d989742b24f21e96ef0",
+    "screenshots": [
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-full-trace-01/trace-approach.png", "sha256": "8ba9268b0f5e660f1796b026d9d49848cec0db9760274834b1c9e6175012f683" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-full-trace-01/solo-fire.png", "sha256": "54f4d5825027cae7478d6728f744b2efe49bd766c84ef345b27e953e269d71d9" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-full-trace-01/solo-fire-empty.png", "sha256": "f434b31db07e2c293907c0f1aab87976c62c7da6d54997f22cd76053635f98f0" }
+    ]
+  },
+  "timeline": [
+    { "time": "13:29:44", "event": "Client is still at the copied checkpoint (316.1,120.3,85.9). First Warrior and Thrax hit traces begin by 13:29:45, before the first player movement input at 13:30:12." },
+    { "time": "13:29:51.629", "event": "Thrax 198660 kills staged Warrior 198691 after 49 incoming traced hits. The Warrior landed 3 traced hits on 198660." },
+    { "time": "13:30:12-13:30:15", "event": "Bounded ordinary movement takes the player to approximately (312.7,119.8,78.7); a later short push leaves the player at (311.1,119.8,79.6). The rock/sandbag line prevents a further straight advance. This does not reproduce the uninterrupted filmed approach." },
+    { "time": "13:30:23.732", "event": "Shaman 198690 kills Thrax 198665. The Gunner, Archer and Shaman dealt 10, 11 and 11 hits respectively to that Thrax; the player did not fire and received no kill XP or credits at this point." },
+    { "time": "13:32:01.929-13:32:23.830", "event": "Thrax kill the Archer, Shaman and Gunner. Across the run those companions dealt 18, 20 and 25 outgoing traced hits against Thrax; the Warrior dealt 3. One Thrax had been killed by allies." },
+    { "time": "13:33:43.180", "event": "Alden's rifle hit for 106 kills Thrax 198661 from 2 to 0 HP. The client shows 71 XP and 10 credits. The next 106-damage hit consumes 100 armor and reduces Thrax 198662 from 555 to 549 HP." },
+    { "time": "13:34:29.905", "event": "Alden dies at (311.1,119.8,79.6), killed by Thrax 198662. Hospital Selection opens; rifle display is 0/1000 after the final input." }
+  ],
+  "saved_state": "Stopped copied character database: 3642 XP, 320 credits, mission 1994 objective 2 still active and objective 4 complete; no 1994 objective counter row. The increase is 71 XP and 10 credits from the one player killing blow. Original 3571/310 baseline was checked against the untouched checkpoint copy.",
+  "interpretation": "The staged follow/leash fix permits all three companions to hit a Thrax with all six hostile placements present, and the copied client can award a player kill from this checkpoint. It does not establish retail ally damage, original simultaneous hostile count, spawn timing, Warrior lifespan, or a playable full encounter. The long pauses between inputs make elapsed fight time incomparable with the final-week video. All four seeded allies die and four Thrax remain when the player dies in this run.",
+  "verification_needed": "A continuous camp-to-courtyard approach and a completed six-Thrax fight using only normal client movement, firing, reload and cover; then compare original video reward intervals and actor formation before retuning any estimated seed value."
+}

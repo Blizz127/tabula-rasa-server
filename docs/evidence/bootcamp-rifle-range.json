@@ -1,0 +1,361 @@
+{
+  "schema": "rasa.bootcamp-rifle-range.v1",
+  "recorded_at_utc": "2026-09-22T20:39:29.184252+00:00",
+  "client_version": "1.16.5.0 compatibility artifact; exact shutdown revision unverified",
+  "correction": {
+    "table": "itemtemplate_weapon",
+    "key_column": "id",
+    "template_id": 13713,
+    "column": "range",
+    "previous_range_meters": 80,
+    "range_meters": 60,
+    "tier": "original",
+    "basis": "The original selected template class primary action specifies 60 m; the final-week crate tooltip independently shows 60 m.",
+    "migration": "20260922230000_BootcampCrateRifleRange",
+    "providers": [
+      "SqliteWorld",
+      "MySqlWorld"
+    ],
+    "rollback_range_meters": 80,
+    "scope": "One existing template range field only; no snapshot/schema/alternate action/module/trade-flag changes"
+  },
+  "original_sources": [
+    {
+      "tier": "original",
+      "member": "generated/client/itemclass.pyo",
+      "member_sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+      "compiled_timestamp": 1234238135,
+      "assignment": {
+        "offset": 416576,
+        "container": [
+          "itemTemplateItemClass"
+        ],
+        "key": 13713,
+        "value": 27220
+      },
+      "decoded_artifact": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_itemclass.pyo.json.gz",
+      "decoded_sha256": "3938f5fce3618c26e85c6a3076130a3ceba36bb775dbd2946508cd5f756858b3"
+    },
+    {
+      "tier": "original",
+      "member": "generated/client/weaponclass.pyo",
+      "member_sha256": "49e514546f8e30ee906b9e63c04e2c541af98bc681b8005e3a9f4f225f943591",
+      "compiled_timestamp": 1234238141,
+      "assignment": {
+        "offset": 104576,
+        "container": [
+          "lookup"
+        ],
+        "key": 27220,
+        "value": {
+          "__tuple__": [
+            2,
+            1,
+            134,
+            2,
+            2,
+            2,
+            3147,
+            20,
+            106,
+            106,
+            1,
+            null,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        }
+      },
+      "decoded_artifact": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_weaponclass.pyo.json.gz",
+      "decoded_sha256": "fe3b25163c9cce27aa9dcab84f93a3e43ee238e8694db6c7a6510b3132e9439a"
+    },
+    {
+      "tier": "original",
+      "member": "generated/client/actiondata.pyo",
+      "member_sha256": "9520744380868987a093be20bdbca7de26cd7899e07c50c23f00ae3d764c1ecb",
+      "compiled_timestamp": 1234238127,
+      "assignment": {
+        "offset": 43925,
+        "container": [
+          "actionArguments"
+        ],
+        "key": {
+          "__tuple__": [
+            1,
+            134
+          ]
+        },
+        "value": {
+          "__tuple__": [
+            0,
+            null,
+            500,
+            502,
+            60,
+            250,
+            0,
+            1
+          ]
+        }
+      },
+      "decoded_artifact": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_actiondata.pyo.json.gz",
+      "decoded_sha256": "1624aa814fedd31e966287dc2df455a747a5f3e5cce7206a8d81cc3fb05f2173"
+    }
+  ],
+  "observed_comparison": {
+    "original": {
+      "tier": "observed",
+      "video_id": "7Lrst9SG3pk",
+      "event": "A3-018",
+      "seconds": 304.733,
+      "name": "Shinobi Rifle",
+      "primary_damage": 106,
+      "range_meters": 60,
+      "alternate_melee_damage": 82,
+      "clip": [
+        20,
+        20
+      ],
+      "modules": [
+        "[4] Armor Piercing +8%",
+        "[2] Resist: Laser +12"
+      ],
+      "restrictions": [
+        "Not Tradeable",
+        "Not Sellable"
+      ]
+    },
+    "emulator_before": {
+      "tier": "observed",
+      "capture": "playthrough-06/32-rifle-tooltip.png",
+      "name": "Rifle",
+      "primary_damage": 106,
+      "range_meters": 80,
+      "alternate_melee_damage": 25,
+      "clip": [
+        20,
+        20
+      ],
+      "scope": "Original client against isolated emulator; not original-live proof"
+    },
+    "emulator_after": {
+      "tier": "observed",
+      "scope": "Original client against isolated emulator; confirms rendering/integration, not original-live fidelity certification",
+      "capture": "playthrough-07/05-rifle-range-tooltip.png",
+      "record": "playthrough-07/tooltip-retest.json",
+      "name": "Rifle",
+      "equipped": true,
+      "primary_damage": 106,
+      "range_meters": 60,
+      "alternate_melee_damage": 25,
+      "clip": [
+        17,
+        20
+      ],
+      "migration": "20260922230000_BootcampCrateRifleRange",
+      "recorded_isolated_db_row": {
+        "id": 13713,
+        "range": 60,
+        "alt_max_damage": 25
+      },
+      "frozen_log_prefix": {
+        "file": "tooltip-retest-client-prefix.log",
+        "sha256": "cddab068fa7ef4e28685304bf79679b5b077f90ed1ff08b013d1a65eb1fd5677",
+        "lines": 63,
+        "unpack_non_sequence": 0,
+        "iteration_non_sequence": 0,
+        "startup_tuple": 1,
+        "zero_size_projection": 30
+      }
+    }
+  },
+  "calculation_trace": {
+    "server": "ItemTemplateTooltipInfoPacket.Write writes WeaponInfo.Range at weapon tuple index 10 and WeaponAltInfo.AltMaxDamage at nested index 13/0 without skill or module scaling. The WeaponInfo constructor copies itemtemplate_weapon fields.",
+    "client": "client/gameuiutil.GetWeaponRange returns index 10 directly; GetWeaponAltFireInfo returns the nested alternate tuple fields. TooltipWindow._AddWeaponRange passes range unchanged to OPTIMAL_RANGE text; _AddWeaponMeleeDamage passes maxDamage unchanged.",
+    "current_template_row": {
+      "id": 13713,
+      "range": 80,
+      "alt_action_id": 1,
+      "alt_action_arg_id": 133,
+      "alt_max_damage": 25,
+      "alt_range": 80
+    },
+    "current_class": {
+      "class_id": 27220,
+      "attack_action_id": 1,
+      "attack_action_arg_id": 134,
+      "min_damage": 106,
+      "max_damage": 106,
+      "clip_size": 20
+    },
+    "server_runtime_limit": "WeaponAttackData holds MaxRange = 60 for action (1, 134), but WeaponAttackManager and WeaponAttackExecution use timing only for the action lifecycle and do not enforce MaxRange during target selection or hit resolution. This correction does not change distance enforcement."
+  },
+  "remaining_gaps": [
+    "Template 13713 is an inferred counterpart to the filmed Shinobi Rifle; the original unique template and module binding remain unrecovered.",
+    "Observed melee damage 82 is not changed: the original selected template base alternate damage and action binding are unverified.",
+    "Runtime rejects IsAltAction; changing a tooltip value would not implement original alternate attack.",
+    "Armor-piercing/laser-resistance modules, manufacturer naming and original crate trade/sell restrictions remain separate gaps.",
+    "Server maximum-range enforcement and original hit/falloff behavior need separate evidence and implementation."
+  ],
+  "validation": {
+    "tests": [
+      "BootcampRifleRangeTests.OriginalRifleClassActionAndObservedRangeAgree",
+      "BootcampRifleRangeTests.BothProviderMigrationsDescribeOnlyRifleRangeUpAndDown",
+      "BootcampRifleRangeTests.MigratedRifleTooltipWritesSixtyMetresWithoutChangingMeleeDamage",
+      "ContentSchemaMigrationTests.RifleRangeMigrationChangesOneFieldAndExactlyRollsBackThroughSqliteMigrator"
+    ],
+    "execution_status": "Passed in the combined isolated .NET 5 suite: 1,251 of 1,251 tests, none skipped; total duration 6.2316 minutes.",
+    "frozen_models": "Copied preceding BootcampFirstLoginYaw target model unchanged except migration identity; shared snapshots unchanged",
+    "sqlite_provider_execution": "Passed actual IMigrator regression at yaw \u2192 rifle range \u2192 yaw, comparing every weapon row and field after accounting for the sole range change; log-reported duration 29 s.",
+    "mysql_validation_scope": "Operation and frozen-model parity only; no claim of MySQL provider execution.",
+    "tooltip_shape": "The ItemTemplateTooltipInfo Weapon tuple has 16 fields, indices 0\u201315, with the genuine seed ammo class 3147 and magazine capacity 20. WeaponInfo is a separate method with 17 fields. The packet regression consumes the entire stream.",
+    "original_client_runtime": "Passed isolated playthrough 07: equipped rifle tooltip visibly shows 60 m, primary damage 106, alternate melee damage 25 and ammunition 17/20. The frozen retest record confirms isolated template 13713 range 60 and migration identity. The combined automated suite subsequently passed.",
+    "combined_suite": {
+      "total": 1251,
+      "passed": 1251,
+      "skipped": 0,
+      "duration_minutes": 6.2316,
+      "log": "/tmp/rasa-retail-20260922-gearing-verified.log",
+      "log_sha256": "ea2037d8e7cb20beae9a390a8316924ed2050d5f68ffedfaca3a15886d038ac2",
+      "source_snapshot": "/tmp/rasa-retail-20260922-gearing-snapshot.json",
+      "source_snapshot_sha256": "8c505bd1afb4f9862e09862f5ffc2d2e69b6d7a26d2deddebbe0a53c1707e819",
+      "matching_source_files": 2056,
+      "source_mismatches": [],
+      "rifle_test_results": [
+        {
+          "test": "OriginalRifleClassActionAndObservedRangeAgree",
+          "result": "Passed",
+          "log_duration": "3 s",
+          "log_line": 94
+        },
+        {
+          "test": "BothProviderMigrationsDescribeOnlyRifleRangeUpAndDown",
+          "result": "Passed",
+          "log_duration": "130 ms",
+          "log_line": 95
+        },
+        {
+          "test": "MigratedRifleTooltipWritesSixtyMetresWithoutChangingMeleeDamage",
+          "result": "Passed",
+          "log_duration": "2 s",
+          "log_line": 96
+        },
+        {
+          "test": "RifleRangeMigrationChangesOneFieldAndExactlyRollsBackThroughSqliteMigrator",
+          "result": "Passed",
+          "log_duration": "29 s",
+          "log_line": 259
+        }
+      ],
+      "limits": "Log durations are reported at test-runner display precision. Automated passes establish implementation behavior, not original-live fidelity. MySQL validation remains operation/model parity, not provider execution."
+    }
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/tt_rifle_loot.png",
+      "bytes": 167162,
+      "sha256": "cee0440a8efa1f3d2cb0139cbebd3269e49aaf15849ff00a3367d06324bc4706"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/32-rifle-tooltip.png",
+      "bytes": 799252,
+      "sha256": "e39d335ecd8db18029a7e385fe5e02677fa7ba484d6c0e82129a6c992320de0e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameuiutil.pyo.dis",
+      "bytes": 322083,
+      "sha256": "40391b13fd5ccdd81b7bd286b0217957d1c79bcb294579a67d46918f67a5a4c5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-tooltipwindow.pyo.dis",
+      "bytes": 406753,
+      "sha256": "4e4b1cbf65b6c654975892bacfd98f76da6b0a5617566f6dcc5063e7efe522ff"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-weapon.pyo.dis",
+      "bytes": 46127,
+      "sha256": "831fcc04872b4e6ce3c4a910057d307673da20fa88bfc1200a66978a8160d9df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/05-rifle-range-tooltip.png",
+      "bytes": 621206,
+      "sha256": "e6e60d0b34b189f18d8bf2c17756326f74e5672cc7eb82260afc5fc8c5789842"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest.json",
+      "bytes": 731,
+      "sha256": "9fb9c03ab1ff687a0db5fe6c062158d63ddaf8fd2ec2492850e6386c84c5927f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest-client-prefix.log",
+      "bytes": 8468,
+      "sha256": "cddab068fa7ef4e28685304bf79679b5b077f90ed1ff08b013d1a65eb1fd5677"
+    }
+  ],
+  "alternate_action_followup": {
+    "tier": "original",
+    "scope": "Read-only audit bounded to template 13713 and class 27220; no new runtime or source changes.",
+    "consumer_member": "client/augmentations/weapon.pyo",
+    "consumer_member_sha256": "38357c191fd8214e1b911ed51cb4b03989105f8b6b71eac54f253558a8f02594",
+    "constructor_evidence": {
+      "function": "Weapon.__init__",
+      "source_lines": [
+        79,
+        80,
+        81
+      ],
+      "bytecode_offsets": [
+        434,
+        440,
+        443,
+        449,
+        452,
+        458
+      ],
+      "finding": "Alternate action ID, argument and cached action info initialize to None; they are not recovered from the class 27220 primary-action tuple."
+    },
+    "server_method_evidence": {
+      "function": "Weapon.Recv_WeaponInfo",
+      "source_lines": [
+        281,
+        282,
+        292,
+        293
+      ],
+      "bytecode_offsets": [
+        54,
+        60,
+        63,
+        69,
+        144,
+        163,
+        166,
+        169,
+        175
+      ],
+      "finding": "The method stores server-supplied altActionId and altActionArg and uses those values to obtain action info."
+    },
+    "secondary_dump_search": {
+      "tier": "analogue",
+      "files": [
+        "20260913-source-sweep/github/downloads/gameserver-sql/gentili__sql_gameserver_dev_Full.sql",
+        "20260913-source-sweep/github/downloads/gameserver-sql/allen266__sql_gameserver_dev_Full.sql",
+        "20260913-source-sweep/github/downloads/gameserver-sql/damuras__sql_ir_gameserver.sql"
+      ],
+      "finding": "Matches for 13713 occur in equipment rows; class 27220 occurs on template 17384 item metadata. These matches provide no alternate action or base damage value. Emulator dumps are not proof of final-live values."
+    },
+    "conclusion": "No independent original binding for the selected template alternate action or base damage was recovered. The filmed tooltip value 82 remains observed, but cannot yet be assigned as an original base value for template 13713. No alternate damage or action correction made."
+  }
+}

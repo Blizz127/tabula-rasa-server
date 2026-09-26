@@ -504,6 +504,16 @@ namespace Rasa.Structures.Content
                         case ContentPlacementKind.Creature:
                             used.Add("creature_id");
                             used.Add("npc_package_id");
+                            if ((ContentPlacementBehavior)placement.Behavior == ContentPlacementBehavior.CombatCompanion ||
+                                (ContentPlacementBehavior)placement.Behavior == ContentPlacementBehavior.Escort)
+                            {
+                                used.Add("escort_mission_id");
+                                if (placement.EscortMissionId == 0 || !_references.MissionExists(placement.EscortMissionId))
+                                    gap("companion/escort requires a known escort_mission_id");
+                                if ((ContentPlacementBehavior)placement.Behavior == ContentPlacementBehavior.CombatCompanion &&
+                                    _c.InstancingFor(placement.MapContextId) != MapInstancing.PerCharacter)
+                                    gap("combat companion requires a per-character context");
+                            }
                             if (!_references.CreatureExists(placement.CreatureId))
                                 gap("unknown creature");
                             if (placement.NpcPackageId != 0 && !_can.NpcPackageOverride)
@@ -597,6 +607,7 @@ namespace Rasa.Structures.Content
 
                     CheckUnused(gap, used,
                         ("creature_id", placement.CreatureId != 0), ("npc_package_id", placement.NpcPackageId != 0),
+                        ("escort_mission_id", placement.EscortMissionId != 0),
                         ("entity_class_id", placement.EntityClassId != 0), ("usable_kind", placement.UsableKind != 0),
                         ("initial_state", placement.InitialState != 0), ("alternate_state", placement.AlternateState != 0),
                         ("alternate_state_condition_id", placement.AlternateStateConditionId != 0), ("windup_ms", placement.WindupMs != 0),

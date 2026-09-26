@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Checkpointed original-client ordinary movement from Conrad usable toward crashed dropship under mission 1995 timer",
+  "setup": "Isolated copied client/server/character DB after S5 objective 3 completion in run 09. Normal hostile behavior and original 1.16.5.0 compatibility client. The 600-second wall-clock timer was preserved; no GM travel or timer reset. Because movement was not saved on forced harness shutdown, each subsequent copied login coordinate was explicitly edited to the prior run’s ordinary-reached .where coordinate. No live Docker/DIT edits.",
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "run 10 step1-south.png through step4-southwest.png; read-only original-client .where",
+      "uncertainty": "Client .where precision about 0.01 m; held-key duration variable with frame rate/collision.",
+      "finding": "Starting from the run-09 interaction checkpoint (-94.730,84.996,65.641), ordinary movement A+W 2.0s and 1.3s, W 2.2s twice reached (-112.480,83.485,41.419), alive. The tracker showed 00:06:54 and the wreck objective."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 11 step1-west.png through step4-south.png; read-only original-client .where",
+      "uncertainty": "Client .where precision about 0.01 m.",
+      "finding": "From manually restored run-10 reached coordinate, W 3.9s reached (-128.680,83.520,34.492), A+W 2.4s (-131.801,84.891,23.711), W 4.9s (-141.227,79.824,16.043), A+W 2.4s (-142.582,79.270,11.359). Last position was alive but in water beneath a bridge; timer 00:04:35. The path had dropped below the higher navmesh bank toward the wreck."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 12 step1-water-east.png through step5-southwest.png; read-only original-client .where",
+      "uncertainty": "Client .where precision about 0.01 m.",
+      "finding": "From manually restored run-11 water coordinate, ordinary movement around the water edge reached (-152.148,79.273,9.367), still at water elevation. The candidate bank recovery did not climb."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 13 step5-southwest.png; char-after-expiry.db; objective-expiry-snapshot.json",
+      "finding": "From manually restored run-12 water coordinate, ordinary movement reached (-150.035,79.270,3.438), still beneath the bridge. The client no longer displayed the S5 tracker. Copied DB mission 1995 mission_state=2 and objective 1 status=3, with objective 2/3 status=2 and timer anchor cleared. The run-09 timer anchor was 1790227161182 ms; this is consistent with expiration after 600 seconds of wall clock. No wreck use request or damage was observed."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "navprobe-courtyard/s5-corpse-to-wreck-output.txt and s5-wreck-agent11/12-input.txt",
+      "finding": "The navmesh can path from the corpse to the wreck via (-127.6,83.71,36.0) and (-194.8,95.51,-33.2), but the client-run route veered below the bank after (-131.8,84.89,23.71). From the water it suggests a loop back up near (-135,84,15). These are route hypotheses and do not verify original client traversal."
+    }
+  ],
+  "assessment": "The objective-3-to-wreck timer and ordinary movement to the southwest route were verified in the isolated client. This attempt missed the higher bank, consumed the wall-clock timer, and failed mission 1995. It does not prove a wreck placement, usability, combat, or timer defect. The next replay should keep the route on the higher bank after (-131.8,84.9,23.7), then approach the inferred wreck before the timer expires.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-wreck-agent-10-20260924.py",
+      "sha256": "19092a6c54463bdefcd19e947a97a4061330893115482e0293882b1cfe8f6446"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-10/game.log",
+      "sha256": "94851e81bd23744444943c4a42754f6a2cb9286a0ac313d2eb767257adda1f0f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-wreck-agent-11-20260924.py",
+      "sha256": "c0ab1ff954161f2cd896434dff64ae91a0ba22a1b831af27ed0d3f58ca7f0fc3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-11/game.log",
+      "sha256": "bfdd1321f450f72fdde2bb254613a37fb6feaf5efb988e0f6e797b1aec35abee"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-wreck-agent-12-20260924.py",
+      "sha256": "8ffeee03706b6af9e29befa014fb549f3cc7498dc7a831392e0b560635653b5c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-12/game.log",
+      "sha256": "2f40977b63220c70472de82e7210a6262f2154be80c55513bfb55a61382f657b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-wreck-agent-13-20260924.py",
+      "sha256": "b61b4882a202bc7c6811cf4f0af90aab1920ba03607ad1ebb22db1def1013645"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-13/game.log",
+      "sha256": "1f26570630284da214270d9f75a3a6686e185fa525693c8b70b439b22a9d8d24"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-10/step4-southwest.png",
+      "sha256": "b38626c5d1490cf3063af3884120abb0a40af68f7daf75968035fc5598686325"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-11/step4-south.png",
+      "sha256": "af987e08d466ba6bb5e0d304e98cb49efa6575d2fca52464b4eb3a22a7a0d662"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-12/step5-southwest.png",
+      "sha256": "cf6619230c7c2a6976a62a75d99699b1a369be672b4d9726d39dc2f82ce833f7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-13/step5-southwest.png",
+      "sha256": "9025ba73b9608f4c703208497090949cc7add08986f2adb95d870a5ca7afff1e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-13/char-after-expiry.db",
+      "sha256": "c16bdaf5d83f72fdab460788fb5d1d3a90d8083383c991bd62adfb7559f2117d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-wreck-agent-13/objective-expiry-snapshot.json",
+      "sha256": "53df629fc6b2b796a67db99aad504c6bfb634f0535b487d5804a0f8c8cbb364e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-corpse-to-wreck-output.txt",
+      "sha256": "6efd40a61fa4b97bcfd409614df1a249acc111ddd4ddcc24a22c45fba49f89be"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-wreck-agent11-input.txt",
+      "sha256": "44c48a6dd99d2fc1a597b994f5c92492489fb3d982c3d16120f892acbb184f81"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-wreck-agent12-input.txt",
+      "sha256": "dff43dbd4af870087e4a9273c64c198a10931ee6c43d5b86af68e95577dd1f1c"
+    }
+  ]
+}

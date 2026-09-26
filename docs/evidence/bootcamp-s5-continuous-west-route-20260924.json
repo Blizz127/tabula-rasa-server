@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Continuous original-client movement from Youngblood through the S5 west gate toward the missing soldiers",
+  "provenance_tier": "observed",
+  "setup": "Four disposable copies of the same post-1994, mission-1995-active level-2 character, recovered compatibility client 1.16.5.0 and deployed-derived normal-hostile Game/world data. No teleport, GM movement, combat stat change or live database edit was used in runs 36-39. All position readings are from the original client's read-only .where command. The earlier boss-to-Youngblood chain began at a diagnostic boss checkpoint, so this does not establish a complete new-character route.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "run-s5-route-controlled-37-20260924.py; s5-route-probe-37/past-gate-position.png, turn-position.png, lower-corridor.png",
+      "finding": "From Youngblood, two -200-pixel camera turns and ten seconds of normal forward movement passed the west gate to (28.445,105.609,143.168). A further -200-pixel turn and two seconds forward reached (1.737,103.602,139.477), facing a large rock. A -500-pixel turn and four seconds forward ended at (12.457,106.527,124.480) near metal structures. The client remained alive and Calling for Reinforcements objective 2 remained active."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run-s5-route-controlled-38-20260924.py; s5-route-probe-38/after-south-corridor.png",
+      "finding": "Repeating the first route and continuing forward another five seconds from (12.363,106.527,124.5) left the client at the same displayed position. Visible metal geometry lies ahead. The route did not reach the wounded soldier; this is a local obstruction for this input sequence, not proof that no route exists."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run-s5-route-controlled-39-20260924.py; s5-route-probe-39/bend-to-rock.png, west-of-rock.png, descent.png",
+      "finding": "A more southerly turn after the gate reached (18.109,102.773,136.289), then (9.566,101.695,133.879), then (8.223,101.328,129.652). The last capture shows the character against a metal panel, still alive with the mission tracker active. This second attempted line also stopped short of the lower path."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "navprobe-courtyard/s5-rock-route-input.txt and s5-rock-route-output.txt; deployed-derived adv_bootcamp.nav",
+      "finding": "The emulator navmesh returns a complete path from (12.36,106.53,124.5) to the reconstructed soldier, with initial corners back north at (12.8,104.51,130), (11.2,103.91,130.8), (5.2,101.11,131.2), then west toward (-16.4,98.11,124.4). The navmesh path does not itself prove that the original client can walk these corners, because the observed movement hit rock and metal geometry nearby. The soldier location is still inferred."
+    }
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-36-20260924.py", "sha256": "1c442eb84b78dbae01386ee047722de3c38825b1d70c9ee082415fd3aee25e30"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-37-20260924.py", "sha256": "a43c0c97c9993d2689292c31891a0cc482751ad31a78e1041dc040f8ef40f707"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-38-20260924.py", "sha256": "1b2633c6147d19b8602b317f944ae3f93ca24968cef8440e0fbf0144724cafd8"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-39-20260924.py", "sha256": "f7671d9fc9d5ada053008561597db9bc47c69c6b1b5ece71b47cbe2172aa4ee5"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-37/past-gate-position.png", "sha256": "ecc0db69b28608028763ef3270ba378b405567e86b51cfe68f4c6ed88266cc97"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-37/turn-position.png", "sha256": "ba45375ad286926711294bb4d894d90a6159b4d4d280ef5f3e5c6bb154e205db"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-37/lower-corridor.png", "sha256": "a0729e2f953f7bc562fb3ffa1df8e7e77fdebdd4c32665c9beb3afcc1dab2663"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-38/after-south-corridor.png", "sha256": "f340db636cfbbba02f1687ff7a23462322fc181d4b59f93f1215bf0ff93ef539"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-39/bend-to-rock.png", "sha256": "83b62bd9924d8749953d40128f54c6d3b10c5852295f1af4c8c68b255ccbd149"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-39/west-of-rock.png", "sha256": "2d332fab547154e7bb99376cee5de569a5e86217250f7eaaed54572a3b81c54f"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-39/descent.png", "sha256": "d0839ef27fe92dacaaa615550c81945f14a9654dd7210d927a1850ff0fffb874"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-rock-route-input.txt", "sha256": "865b3f4657a0c5810d943113354d32d1c9ad48704b3c39daf1b1119e69932363"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-rock-route-output.txt", "sha256": "33533ad2ae16fa4847d736d76a8f9863bf296c844ccec522d368237adfe66f05"}
+  ],
+  "assessment": "The original compatibility client can move continuously from Youngblood through the west gate while enemies attack, but these two attempted downhill lines stopped against map geometry before objective 2. The navmesh's complete path has not yet been shown traversable by the client. This is emulator functionality evidence and does not establish the original final-live route or combat balance.",
+  "next_verification": "Inspect original map collision and route footage around the x5,z131 to x-16,z124 bend, then steer a continuous client run around the structures; diagnose and correct navmesh/geometry disagreement if confirmed. Keep the S5 soldier position and rewards explicitly estimated until original evidence resolves them.",
+  "follow_up": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json records a successful ordinary-client bypass of the fence and a later stop near original corpses and sandbags at the inferred soldier doorway."
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "Final-week original-footage combat support in Capture the Flag, compared with current boot-camp implementation",
+  "source": {
+    "video_id": "7Lrst9SG3pk",
+    "title": "Tabula Rasa Creating Character 1of8",
+    "url": "https://www.youtube.com/watch?v=7Lrst9SG3pk",
+    "date_context": "Player chat dates the recording to the final week before live shutdown, as reconciled in bootcamp-client-evidence.md",
+    "client_compatibility": "Current emulator uses recovered client 1.16.5.0; exact shutdown-client revision unverified"
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "7Lrst9SG3pk @ 362.7 s, A-362.7.png; existing event A3-067",
+      "finding": "A level-3 Forean Gunner Initiate is targetable at the opening camp pylon after Capture the Flag is accepted. Other Forean soldiers stand nearby."
+    },
+    {
+      "tier": "observed",
+      "source": "7Lrst9SG3pk @ 386.5-391.5 s, A-386.5.png, A-388.5.png, A-391.5.png; existing events A3-079..A3-081",
+      "finding": "Multiple allied figures with orange two-person overhead emblems fight Thrax Infantry Initiates in the paved Luna Cavern courtyard alongside the level-2 player. At least one ally stands between the player and the enemy and another on the player right."
+    },
+    {
+      "tier": "observed",
+      "source": "7Lrst9SG3pk @ 395.5-401.5 s, A-395.5.png, A-401.5.png; existing events A4-05..A4-10",
+      "finding": "Allied figures remain engaged through the courtyard firefight; the player survives multiple Thrax kills and the mission tracker remains on Find a way out of the cave."
+    },
+    {
+      "tier": "observed",
+      "source": "7Lrst9SG3pk @ 501.5 s, A-501.5.png; existing events A5-15..A5-18",
+      "finding": "A level-3 Forean Archer Initiate target frame is visible near the sandbags in a later Denzil Caldera fight; a Forean Shaman Initiate is separately named in the verified A5 events."
+    },
+    {
+      "tier": "original",
+      "source": "Recovered client mission text 21237, cited in bootcamp-d11-reconstruction-manifest.json pending gap entry",
+      "finding": "The dialogue states, \u201cI\u2019m sending some of our top soldiers along with you,\u201d supporting escort rather than purely stationary scenery."
+    },
+    {
+      "tier": "observed",
+      "source": "src/Rasa.DBL/Migrations/BootcampData/BootcampS4CaptureTheFlagRows.cs; src/Rasa.Game/Managers/MissionContentRuntime.cs:1371",
+      "finding": "Current S4 seed contains hostile Initiates and Tizzik Gi but no Forean combat companions. Existing escort follow routine is invoked only while testing arrival in an area objective, so it does not currently follow a player across the boot-camp route."
+    }
+  ],
+  "inferences": [
+    {
+      "tier": "inferred",
+      "source": "Combined direct footage 362.7, 386.5-401.5 and original mission text 21237",
+      "finding": "The named Forean Initiates are intended to accompany and support the player through at least the courtyard fight. Exact composition, spawn coordinates, path, respawn, attack stats and persistence are unrecovered."
+    }
+  ],
+  "limits": [
+    "The frames prove allied presence and combat, not their damage, HP, acquisition range or exact AI script.",
+    "A stationary placement at the courtyard would not reproduce the observed soldiers in the opening camp and later fights.",
+    "The emulator character died in an unopposed courtyard approach, but this alone does not quantify how much missing allies explain the difference from footage.",
+    "The original source video is locally archived; online search found no stronger final-week primary capture for this particular fight in this audit."
+  ],
+  "implementation_gap": "Recover or estimate per-field Forean classes, names, positions and attacks with source tiers; implement mission-scoped combat following without gating the cave area objective on all allies; verify original-client appearance and survivable encounter pacing against the footage.",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+      "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+      "bytes": 34860979
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-362.7.png",
+      "sha256": "b5f67a981a2362989eae675389d5cc46c74db2aea075ea5b98638968fa69a199",
+      "bytes": 293019
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-386.5.png",
+      "sha256": "2b271be906fc28d1a850a356f92eac5654ba18314ffb8ecc19c8d111c15e64d5",
+      "bytes": 244624
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-388.5.png",
+      "sha256": "ed03ed3a7130390592a6d20c19eb7009bf229fefca1aa59df39a205d5cbb221f",
+      "bytes": 280854
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-391.5.png",
+      "sha256": "6576fdcc5737b2024aa95f9f314b6b67354458422ddb5cebd1bb340c23723fed",
+      "bytes": 298778
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-395.5.png",
+      "sha256": "c84927f50f241c26c67360653dc5b054b6c617edea9da83b69a8bbea093c5639",
+      "bytes": 349387
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-401.5.png",
+      "sha256": "1cacdec8a449e20bf26f95f4fba02d5b4e4ff50fe806a244732a33e03145dbff",
+      "bytes": 326994
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-501.5.png",
+      "sha256": "f365b3ef39a5ff1905c801d8c8200f69138e666514b92b2594614eae6728a835",
+      "bytes": 373922
+    }
+  ]
+}

@@ -43,7 +43,7 @@ namespace Rasa.Test
     /// </summary>
     [TestClass]
     [DoNotParallelize]
-    public class DestroyablePlacementTests
+    public partial class DestroyablePlacementTests
     {
         private const uint MissionId = 7004;
         private const uint PlacementId = 900660;

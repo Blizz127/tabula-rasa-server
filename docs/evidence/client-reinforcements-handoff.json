@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Recovered-client continuation after mission 1995 bomb detonation through Alia Das transfer, Training Day offer, and Rogers turn-in",
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-41/09-valkenberg-dialogue.png",
+      "finding": "Van Valkenberg objective-completion dialogue appeared, using original client text sending the recruit to the dropship pad and then to Commander Rogers."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-41/10-valkenberg-continued.png; playthrough-41/11-after-transfer.png; playthrough-41/char-after.db",
+      "finding": "Continue completed objective 4 while the recruit stood on the damaged pad. The exit trigger transferred to Alia Das context 1220 at (884.11,305.8,347.81) and set account can_skip_bootcamp=1. Mission 1995 remained active with all objectives complete, shown as (complete) in tracker."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-41/11-after-transfer.png; playthrough-42/01-arrival-relogin.png",
+      "finding": "Headquarters automatically offered Training Day mission 1526 on arrival and again on relog while still unaccepted."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-42/02-offer-dismissed.png; playthrough-42/char-after.db",
+      "finding": "Pressing Escape while the Training Day offer was open accepted mission 1526; objective 1 Report to a Class Trainer became active. This is a diagnostic input result and does not establish intended decline behavior."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-42/06-rogers-dialogue.png",
+      "finding": "Rogers at the inferred command-tent placement opened conversation, but the generic screen displayed ERROR: ? No greeting. The Calling for Reinforcements topic was available."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-42/07-rogers-turnin.png; playthrough-42/08-rogers-complete.png; playthrough-42/char-after.db",
+      "finding": "Rogers Mission Completion text used original client text. Complete Mission changed mission 1995 state to 4 completed and removed it from tracker. Level 2 and XP 8124 remained unchanged; mission rewards remain an explicit evidence gap."
+    }
+  ],
+  "method": "Isolated recovered client 1.16.5.0 and copied databases. Run 41 began from playthrough-40 bomb-complete checkpoint with no world edits. Run 42 began from saved Alia Das checkpoint; GM teleport within shared context 1220 skipped walking to Rogers. The live service and world database were not changed.",
+  "limits": [
+    "Normal walking route from the arrival pad to Rogers remains unverified.",
+    "Rogers greeting is absent in emulator; no original greeting mapping has been established.",
+    "Mission 1995 rewards are unseeded because final-live amounts remain unknown.",
+    "Training Day accept-on-Escape behavior may be a client default and needs normal UI review.",
+    "The client is the documented 1.16.5.0 compatibility build, not confirmed exact shutdown build."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/char-after.db",
+      "sha256": "b783517d75801040951454233bc4722dcd0d1081bfd01f7480629fad2acf4e5f",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-41/09-valkenberg-dialogue.png",
+      "sha256": "bd3337a1dae5df56d6dd75679908bb436c5bc86038e986da647bf5b93dc1b07e",
+      "bytes": 620767
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-41/10-valkenberg-continued.png",
+      "sha256": "d6c3b2fcfe1811fb1b7cd200b7c766cf4a1e62996cf8860bb7692cfe72c9f995",
+      "bytes": 749695
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-41/11-after-transfer.png",
+      "sha256": "b3776eb101feae4099aecb245e6e5fbdf09db801639049b09e0a9a443a267011",
+      "bytes": 963840
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-41/game.log",
+      "sha256": "74c29b0af48c9bb09546684ce69d1111b385c92ba789d7cc00c01f7a8730a188",
+      "bytes": 32179
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-41/char-after.db",
+      "sha256": "d159c0f5567c21e282d34aa48cc5d6c2cb105fca7352009a47afcd1bd6e03bc1",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/01-arrival-relogin.png",
+      "sha256": "dead0ef558f2e41ec77181c5c74c52cee37a9d53d43a4b43e4d86d1205405133",
+      "bytes": 950798
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/02-offer-dismissed.png",
+      "sha256": "f13f0e895617c45ea8599461e103afcd7318486d313d71afd7fdbf7ebe9e54b3",
+      "bytes": 1084626
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/03-rogers-approach.png",
+      "sha256": "b1b612fce4834f30665046c9cb42664f069766f5d7f65b4f2cd9322f5dde0e1d",
+      "bytes": 855531
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/06-rogers-dialogue.png",
+      "sha256": "f33ec86ebc698122ff5cb46fd0d5b66274cc0ebbd946ecf362ce71d9c7745431",
+      "bytes": 867812
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/07-rogers-turnin.png",
+      "sha256": "d3bb3e9cad75f48d138efdad93cca882e5f2b4324639bb7d7b7ca8b01e590e9f",
+      "bytes": 862209
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/08-rogers-complete.png",
+      "sha256": "1d7d3169c56841626fe4ee18e9ad719f7edd10bb482661aeb411e68c30bc4b4d",
+      "bytes": 1022939
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/game.log",
+      "sha256": "f20f8e9d9a2fdcab99f4faec77dd10268e39a80b9b0ba1112e616fc5dbe8475d",
+      "bytes": 28525
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/char-after.db",
+      "sha256": "a2a9a2fc4ad2f23308ba2ed9c965c00ed5ee6f137697a075e6beca72dc2a946d",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    }
+  ]
+}

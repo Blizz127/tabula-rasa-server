@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Single original-client session from Conrad's corpse use toward the crashed dropship under the unreset 600-second mission 1995 timer",
+  "setup": "Isolated copied 1.16.5.0 client, Wine prefix, Auth/Game server and SQLite character DB in a bubblewrap namespace; normal hostiles. A copied objective-3-active soldier-checkpoint character was placed at (-94.73047,84.99609,65.640625), a coordinate previously reached by ordinary movement in s5-corpse-agent-04. This explicit diagnostic login coordinate edit preceded client launch. After login, the corpse interaction, all movement, and timer ran in one client/server session. No timer reset, teleport, GM movement, world/content edit, live Docker or DIT edit occurred during that session. Every harness action is retained with SHA-256 in command-ledger.json.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "s5-adaptive-corpse-to-bomb-20260924/00-corpse-checkpoint.png, 01-corpse-use-after.png, game.log line 133, objective-after-expiry.json",
+      "finding": "The copied client displayed the use prompt at the inferred Conrad corpse. Right-click sent RequestUseObject, completed objective 3, and started objective 1's unreset 10-minute countdown. At run end, objective 3 persisted complete. The corpse is seeded analogue class 21961; this tests emulator behavior, not the lost final-live corpse model or placement."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-adaptive-corpse-to-bomb-20260924/02-back.png through 25-chat.png; command-ledger.json",
+      "uncertainty": "Original-client .where coordinates are rounded to displayed precision; movement duration and path vary with client frame rate/collision. Individual snapshots show endpoints, not a continuous sampled trace.",
+      "finding": "Ordinary movement went from the corpse vicinity through (-126.629,83.520,35.305), (-159.258,84.820,7.270), (-181.465,91.632,-21.969), (-200.539,100.527,-60.027), and (-205.871,102.355,-71.824) while the timer remained active. The last coordinate was about 16.1 m horizontally from the inferred bomb (-221.95,102.3,-70.5); the client showed 00:00:54 remaining. This is the first evidenced single-session timer-preserving approach to the near wreck area, not a completed wreck use."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-adaptive-corpse-to-bomb-20260924/26-wreck-near.png, 27-wreck-near.png, 28-expired.png, game.log, objective-after-expiry.json",
+      "finding": "Near the wreck the .where helper left the client in UI Mode with the chat input active; subsequent held movement keys appeared as chat text. No second RequestUseObject was logged. The timer reached zero, and copied SQLite persisted mission 1995 state 2, objective 1 status 3, objectives 2 and 3 status 2; integrity_check returned ok. Thus this attempt did not acquire, plant or detonate the bomb. The UI focus error and remaining distance prevent attributing the failure to wreck geometry or mission timing alone."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-uninterrupted-corpse-bomb-20260924/01-corpse-approach.png, 04-southwest-from-corpse.png; s5-uninterrupted-corpse-bomb-v2-20260924/01-corpse-approach.png; s5-uninterrupted-escape-20260924/07-west.png",
+      "finding": "Two fixed-duration full-route replays from the same soldier checkpoint diverged materially. One used the corpse and then stayed against nearby structure at (-94.734,85.008,65.813); a later escape probe reached (-100.746,84.984,56.184) by backing away and steering. Another replay's identical initial S/A/W key durations overshot the corpse to (-94.167,84.813,41.870), never starting the timer. Fixed held-key timing is insufficient to replay this route reliably; short segments with live position/visual feedback are required."
+    }
+  ],
+  "assessment": "The compatibility client and current emulator can start mission 1995's timer through ordinary corpse use and preserve it across a substantial dry, single-session approach toward the inferred wreck. This attempt expired with no bomb interaction after a diagnostic UI focus problem near the objective. A completed uninterrupted ten-minute corpse-to-bomb route remains unverified, as does final-live route fidelity. No content change is justified by these results.",
+  "next_verification": "Use a client controller that explicitly confirms gameplay focus after each .where and does not use chat-wheel scrolling, then steer short segments from the known dry-bank points through the final approximately 16 m to the existing bomb use prompt. Record bomb RequestUseObject, objective 1 completion and remaining timer in one unreset session; separately verify the full Youngblood-to-soldier-to-corpse route without a diagnostic login coordinate edit.",
+  "sources": [
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-s5-route-probe29-20260924/databases/char.db","sha256":"8c7af102e0abbccdcc8808d3fedddbbe9cde34c50edffd86956636db39e6dffd"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-20260924.py","sha256":"ed4018b50c38d775fbb51465b19b2cc95bec78a6a4a3d0d727aab01ef7906e44"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-harness-courtyard-traced.py","sha256":"57ef400780262f8c8caa9790680f69b89477844713671bddb8b60d21fa5ed07e"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-command-20260924.py","sha256":"249442a9ac2bb6e94367447302785cd712359a5d350432e3257d81ad6c69bf75"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/command-ledger.json","sha256":"5258bfa68538326163384c02992efac574612f14e141a5bbca9829cf3952f53c"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/game.log","sha256":"4de83774ec21b2b5169316829e79d94bbd98f657a3e531ca139c4d452266d4b3"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/char-after-expiry.db","sha256":"6710130f758e7b2460a116e4159680cc16a2a64908dead6a8b9b24fec721f840"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/objective-after-expiry.json","sha256":"82778f26c8624762e45a0872154512bf6f58c12926aca4d19ee2e34f3dbfb87e"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/00-corpse-checkpoint.png","sha256":"72d6d948f3459f0f0d03d592171965ec42f654f15097ea39e3363652ce1049d4"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/01-corpse-use-after.png","sha256":"fdd36965970e55e51be382b302173ad4856b2cd10b704fada6ff1646db882995"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/02-back.png","sha256":"dda36b05de7de281cd2cc65df9f893f193f6381759fb26ace2e821768058aa20"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/12-bank.png","sha256":"3ce9d9343a76201cb7ae5bc88fe746571da439265d3efbb70f5da64907c69ac1"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/19-downhill.png","sha256":"73df830400e91e5a4d042893b44d25ffe07ba3e42df44fdc7e964a302c36f980"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/24-chat.png","sha256":"dd479cfb5bbba01dc88c52a7feb0bb5caebdc3fef2dbfcf9cf5912f2653bc869"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/25-chat.png","sha256":"daa0e0c0503e21c6adca7dd675707892cc641657ae16c537615db8be1168bd17"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/27-wreck-near.png","sha256":"a1b90b63ecd70655d98f89ae6b57c65a4274dee2732f4d6c55c8db37061ed935"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-20260924/28-expired.png","sha256":"e1ed2c582858b817ec6310983937bd0f52fcea8dec31587746cb260fb4e5d3f8"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-uninterrupted-corpse-bomb-20260924.py","sha256":"a943e198b7fb6ea6179f81b8c0f31c9801152126ae0f6ea878523f41d03a0fe0"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-uninterrupted-corpse-bomb-v2-20260924.py","sha256":"d4629d50618a730e6c49903b1393f7c65e15d88fdf3e6ce2cdd3ccc05568cd55"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-uninterrupted-escape-20260924.py","sha256":"785601073a93dfaf98237bedde55ff3ea66e2a3dd5518cdc6255f1e74f45b89b"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-uninterrupted-corpse-bomb-20260924/01-corpse-approach.png","sha256":"b0454c28fdb7759b5fd7c267cc925b5acd5aa96f8ae3e2cb9a43854e8b6497d4"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-uninterrupted-corpse-bomb-20260924/04-southwest-from-corpse.png","sha256":"08a93ff28c2a5d3e7be972c1dc50b4ae0a047e217c41229e53b3b9c23951d024"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-uninterrupted-corpse-bomb-v2-20260924/01-corpse-approach.png","sha256":"b509ebb218a44905e5b984d77ad45c0e54f2a873edccb29badd3b654ae907fbe"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-uninterrupted-escape-20260924/07-west.png","sha256":"38a7441969690589aca8809db83a46b88e222f0e769a4f5a2b90b0ac74d16150"}
+  ]
+}

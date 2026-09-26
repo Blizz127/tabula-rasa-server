@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Original-client cover modifier in hit recovery and cover UI",
+  "status": "Deployed in rasa_net_game:feedback-readiness-20260923. Packet tests pass and copied original-client replay shows the expected low-cover hit indicator; live owner-account cover feedback and final-live server multiplier remain unverified. See docs/evidence/live-auth-server-list-wait-20260923.json.",
+  "field_provenance": [
+    {
+      "field": "DamageInfo.ClientInfo tuple field 9",
+      "tier": "original",
+      "source": "recovered shared/damageinfo.pyo disassembly lines 85-89 and 98: ClientInfo emits coverModifier in the 12-field tuple; Init reads it, while constructor line 52 defaults to integer zero"
+    },
+    {
+      "field": "weapon hit UI use",
+      "tier": "original",
+      "source": "recovered client/actions/weapons/baseweaponattack.pyo disassembly lines 216-221: received info.coverModifier is passed to UI_MANIFESTATION_ATTACKED for player hits and UI_UPDATE_OVERHEADCON_COVER for other hits"
+    },
+    {
+      "field": "directional hit thresholds",
+      "tier": "original",
+      "source": "recovered client/ui/directionalhitwindow.pyo disassembly lines 123-130: >=0.8 normal, >=0.6 medium, >=0.2 low, below 0.2 miss indicator"
+    },
+    {
+      "field": "overhead cover thresholds",
+      "tier": "original",
+      "source": "recovered client/ui/overheadwindow.pyo disassembly lines 1924-1932: >=0.8 none, >=0.5 half, below 0.5 full cover texture"
+    },
+    {
+      "field": "server hit.coverModifier value for direct ranged WeaponAttack",
+      "tier": "inferred",
+      "source": "docs/evidence/bootcamp-cover-reconstruction.json original client cover lookup plus estimated nine-sample geometry; send that damage factor as the hit recovery cover modifier. Final-live server assignment and float precision are unobserved."
+    },
+    {
+      "field": "zero-valued no-cover-calculation encoding",
+      "tier": "inferred",
+      "source": "shared/damageinfo.pyo constructor line 52 uses integer zero, so unchanged ability and melee hits retain an integer zero field; computed direct ranged hits use Python float encoding."
+    },
+    {
+      "field": "cover reduces ranged weapon damage when a target is partly visible",
+      "tier": "secondary",
+      "source": "TaRapedia Weapon revision 34028, 2008-09-24, https://tabularasa.fandom.com/wiki/Weapon?oldid=34028, Usage wikitext line 20; it states damage is reduced when a target is partially visible behind cover. Snapshot SHA-256 0a7767736c34d2b17197f3bcf514cf703171b5f0d36a1879955172e072300b52. The wiki does not provide final-live server sampling or an exact multiplier; see docs/evidence/tarapedia-bootcamp-source-boundary-20260923.json."
+    },
+    {
+      "field": "cover indicator player message",
+      "tier": "original",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/game-generated-client-language-english-playermessagelanguage.pyo.dis disassembly lines 16961-16969, message id 1171; Orange and yellow damage indicators near the targeting reticule mean incoming damage was reduced by partial or full cover."
+    },
+    {
+      "field": "cover and crouch NPC greeting",
+      "tier": "original",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/game-generated-client-language-english-npcgreetinglanguage.pyo.dis disassembly lines 9651-9663, greeting id 574; The original client text names walls and sandbags as cover and describes red as exposed and orange/yellow/green as increasing cover."
+    }
+  ],
+  "implementation": "CoverGeometryManager now returns its damage factor along with scaled damage. MissileManager stores the factor in HitData for direct ranged WeaponAttack hits against players and creatures. DamageInfoData and legacy PerformRecoveryPacket emit nonzero factors as Python float, retaining integer zero for hits with no cover calculation.",
+  "verification": "Focused .NET 5 tests passed 16/16: BootcampCoverGeometryTests checks full/partial/clear factors from original sandbag meshes; CombatDamageTests checks a 0.5 factor in weapon recovery; LightningEffectTests checks nonzero float factors and original zero shape in twelve-field DamageInfo. The first no-Warrior replay was invalid: RequestSwitchToCharacterInSlot arrived at 18:54:14.818 before content rules finished loading at 18:54:17.561; no private instance was created, so there were no placed Thrax. In the corrected copied-client replay, content rules loaded at 19:03:39.129 before the client started and private instance 2 of context 1985 was created for character 1 at 19:04:11.959. With only staged Warrior 198691 omitted, six Thrax placements fired at Alden behind the sandbags. The server logged 192 Cover trace events, all blocked 9/9, using the inferred 0.25 factor. Original-client screenshot covered-hit-1.png shows red -3/-4 damage numbers and a yellow directional arc; the recovered directionalhitwindow.pyo selects DirectionalHitIndicator_Low for a factor from 0.2 through below 0.6. This verifies that the client accepts and displays the copied-server low-cover feedback. It does not establish the final-live server multiplier, exact geometry algorithm or encounter pacing. Recovered client player message 1171 explicitly describes orange/yellow damage indicators near the targeting reticule when incoming damage is reduced by cover; greeting 574 names walls and sandbags. This supports identifying the screenshot yellow arc as cover feedback rather than an unrelated hit effect.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-shared-damageinfo.pyo.dis",
+      "sha256": "3ca0e0c852650b9e2a7d7e7d7417893c4ae22dc1715944fba710e46b37b7ea1c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-actions-weapons-baseweaponattack.pyo.dis",
+      "sha256": "477fed3b0ce9c325690c13c08e9551a306e2c05acab5f4496b85b4a7ce730e56"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-directionalhitwindow.pyo.dis",
+      "sha256": "613e770c34263b22f6dd4f24e64a74f146f4bf17a51f6c99ef4c41e2923115d6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-overheadwindow.pyo.dis",
+      "sha256": "239cae2fdfc011937568f5ce1e4541a7679b48f2d246575a519db788ae53de37"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/game.log",
+      "sha256": "8a7104b9288468f42bd59f495d6f8c2e96f1e9d8a7718f3d3c2484f8d6ac0e64"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/first-playable.png",
+      "sha256": "51254f1c09ffe0081a5b219db7053df7d6c9196ce07348c04a8088552ee72d92"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/cover-player-2.png",
+      "sha256": "3f37143472fbb118bc56a1fffc1a36e32e17015e892d160dad951f8f764e8d90"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/after-move.png",
+      "sha256": "0e7d3b4a366f712361238537a1d873dc88fb0512004326709839d04ba1f8daed"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/world.db.before-no-warrior",
+      "sha256": "e4830415d03951d337374060b68cd74aa7071da96dedec82dd677c4e66d2c8cd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-22/game.log",
+      "sha256": "06ae8326332453b6169acc45ccf5d54c1af86e0d7337ed5e04f1be1b1373b4ac"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-22/first-playable.png",
+      "sha256": "dde2c2b12f770ad5f4e79e74a7625cbdefcafe5315ffc55bf8d5ff3748bfc418"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-22/covered-hit-1.png",
+      "sha256": "834c7814704e3405f088fba4690752db8522f53a5c7efb4051b02a2175529c4e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-22/world.db.before-no-warrior",
+      "sha256": "e4830415d03951d337374060b68cd74aa7071da96dedec82dd677c4e66d2c8cd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/game-generated-client-language-english-playermessagelanguage.pyo.dis",
+      "sha256": "249a77026514213681cc515d859f6d6905023061c8c148685ddbcedf2ef57dbe"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/game-generated-client-language-english-npcgreetinglanguage.pyo.dis",
+      "sha256": "3ba17c6b7ca52a4d2557feaf0f4062076f801469c4feb8b98570510d4102b5ab"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-tarapedia-revisions/weapon-34028.wikitext",
+      "sha256": "0a7767736c34d2b17197f3bcf514cf703171b5f0d36a1879955172e072300b52"
+    }
+  ],
+  "unverified": "Final-live server sample locations, damage/cover factor and rounding; cover feedback on abilities and melee; sustained UI behavior outside the staged sandbag diagnostic. The copied-world diagnostic omits the staged Warrior only to expose incoming player hits and is not a reconstruction of the retail encounter."
+}

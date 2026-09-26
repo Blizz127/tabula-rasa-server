@@ -41,11 +41,11 @@ namespace Rasa.Structures.World
 
         [Column("run_speed")]
         [Required]
-        public uint RunSpeed { get; set; }
+        public double RunSpeed { get; set; }
 
         [Column("walk_speed")]
         [Required]
-        public uint WalkSpeed { get; set; }
+        public double WalkSpeed { get; set; }
 
         [Column("action1")]
         [Required]

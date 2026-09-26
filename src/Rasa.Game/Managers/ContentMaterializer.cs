@@ -46,7 +46,8 @@ namespace Rasa.Managers
                 return;
 
             creature.ContentPlacementId = placement.Id;
-            creature.IsEscort = placement.Behavior == (byte)ContentPlacementBehavior.Escort;
+            creature.IsEscort = placement.Behavior == (byte)ContentPlacementBehavior.Escort ||
+                                placement.Behavior == (byte)ContentPlacementBehavior.CombatCompanion;
             CellManager.Instance.AddToWorld(mapChannel, creature);
         }
 
@@ -76,7 +77,10 @@ namespace Rasa.Managers
                 var existing = creatures.FirstOrDefault(creature => creature.ContentPlacementId == placement.Id);
                 var present = Present(placement);
 
-                if (present && existing == null)
+                // A condition refresh is not a respawn. Once the corpse has been
+                // cleared, a zero-respawn placement stays defeated in this instance;
+                // timed placements wait for their scheduled tick instead.
+                if (present && existing == null && channel.CanMaterializeContentPlacement(placement.Id))
                     SpawnCreature(channel, placement);
                 else if (!present && existing != null && existing.State != CharacterState.Dead)
                     CellManager.Instance.RemoveCreatureFromWorld(channel, existing);

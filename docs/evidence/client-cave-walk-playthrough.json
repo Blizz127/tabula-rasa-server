@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "Isolated recovered-client mission 1994 walking approaches and cave area transition",
+  "client": "Recovered 1.16.5.0 compatibility client; exact final shutdown revision unverified",
+  "provenance_note": "Observed entries are observations of the emulator with the recovered client, not direct proof of final-live behavior. Route marker and map landmarks are separately grounded in the original-client map data and footage in client-capture-the-flag-audit.json.",
+  "setup": {
+    "character": "Alden level 2 copied from playthrough-22 after objective 4; objective 2 pending",
+    "normal_run": "Run 80 used unmodified isolated world content. Walked from the seeded DeSimone position, then used one diagnostic GM teleport back to the reached junction after a steering fall. No cave trigger reached; ambient Initiates killed Alden.",
+    "diagnostic_run": "Run 81 restored the same character checkpoint. Isolated creature 198507 action1 changed 33 to 0 to suppress ambient Initiate attacks. A GM teleport was used to restart from the junction after an unsuccessful initial approach. From there movement to the cave trigger used ordinary client controls.",
+    "isolation": "No live world or character database was changed. The isolated world database was restored after run 81; creature 198507 action1 is 33 again."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/21-strafe-result.png",
+      "finding": "After ordinary left strafe from the junction, client .where read approximately (347.67,121.70,65.39), with Capture the Flag objective 2 active."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/23-near-cave-settled.png",
+      "finding": "Unmodified encounter approach reached approximately (303.95,120.53,68.99); multiple incoming damage numbers were visible and objective 2 remained active."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/25-cave-trigger-settled.png",
+      "finding": "Hospital Selection opened after death before cave trigger; quest tracker still said Find a way out of the cave."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/20-cave-entry-settled.png",
+      "finding": "Diagnostic attack-suppressed approach reached approximately (285.95,119.80,54.06), with objective 2 still active."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/22-trigger-walk-settled.png",
+      "finding": "Ordinary movement entered cave area near (282.35,120.53,59.05); tracker displayed Eliminate the Tizzik G and Boss Eliminated 0/1."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/char-after.db",
+      "finding": "Copied character_mission_objective rows for mission 1994: objective 4 status 2, objective 2 status 2, objective 1 status 1."
+    }
+  ],
+  "limits": [
+    "Run 80 does not demonstrate a combat balance defect or final-live difficulty; the character did not fight the hostile group.",
+    "Run 81 disabled ambient enemy attacks solely to isolate movement and mission-area behavior. This setting was never deployed.",
+    "Both runs used a diagnostic GM teleport at the reached junction after steering attempts. Neither is a single uninterrupted DeSimone-to-cave playthrough.",
+    "The client-driven transition verifies emulator behavior with a compatible original client, not the original final-live cave-in script or exact trigger radius.",
+    "The boss fight, allied support and final-live enemy combat values remain unverified."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "8093d28583d430bed28cde7e3944c1ca0c0cc832ab324f6660aa49d8b57b6abb",
+      "bytes": 1641984
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/06-junction.png",
+      "sha256": "c40df5e70d3741240370bf9bf8b33df1444d61dbe041c074b262c8da23f1ce8b",
+      "bytes": 684396
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/21-strafe-result.png",
+      "sha256": "7583780b03962c14e7d180a9d63c8c4d9188307e46e17ea3676f46b61131f7a4",
+      "bytes": 654123
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/23-near-cave-settled.png",
+      "sha256": "dde10e0e9133f8518812c0839b2cde4c672395434fe955f0beead8a6f2075711",
+      "bytes": 605312
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/25-cave-trigger-settled.png",
+      "sha256": "b4ba649674cf9b201e98c0f213ee0196ea0cceab889b76227d2ac30bb1d2306f",
+      "bytes": 498464
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/char-after.db",
+      "sha256": "5fdf8f6425be2aa86a42da90d333439352428a01529a7b8e7fe1d6b44ef5401e",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/game.log",
+      "sha256": "2befc43f63fb1378f9bccdb7d96733f3e0329817a61bf24eff2f60ef5a616e7d",
+      "bytes": 140086
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-80-bootcamp-normal-cave/status.json",
+      "sha256": "9558950e4f55958acd43422d0208d98693d80e9cb4d93da6822c6e92abe659e6",
+      "bytes": 209
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-route/world-before-diagnostic.db",
+      "sha256": "08080785e8a3b83c8e282c7a72a960678a0d0a784b1935cfb0f376fd70c5b89d",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/world-diagnostic.db",
+      "sha256": "0e2199b74c6ee2be0b456a103837ec2bf60cc6d85d101ac32695c7c4b9c20f42",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/14-junction-ready.png",
+      "sha256": "91740f307aa05016ee556d0b9ccbc277df5560bd3da084c522ddc68a4848a022",
+      "bytes": 669711
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/16-crossed-settled.png",
+      "sha256": "cc00748fffa2ad78b91cacb7d4810bc88301d5c60ed60ad8ec2986b08169af8f",
+      "bytes": 666655
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/18-sandbags-settled.png",
+      "sha256": "c19e055b9bb23943766943c1659a5a551ef6a22d9bf0e979fe2ab84dbcc5b232",
+      "bytes": 765893
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/20-cave-entry-settled.png",
+      "sha256": "f9ac8ca63331cec504b305c6fff0b412a40147adaef6576475012605c5980e44",
+      "bytes": 693690
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/22-trigger-walk-settled.png",
+      "sha256": "ef3665e4acf6139709c9a05633d6c9de5c4acd4b7706b4076f8ac51c97075445",
+      "bytes": 757898
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/char-after.db",
+      "sha256": "6166cd23bfb12d2976b76f2322939806616bcd6e5e46b60b64dbfac6677b1343",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/game.log",
+      "sha256": "903e65c91b132d778706e0f477eb5bb56f77938c5a3cfe71bb812065024c422b",
+      "bytes": 67754
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-81-bootcamp-cave-walk-diagnostic/status.json",
+      "sha256": "ee8c2bfd78270cf2f8a6740d37cf25f3c24b7e0ee248187305e7b9606cf337eb",
+      "bytes": 209
+    }
+  ]
+}

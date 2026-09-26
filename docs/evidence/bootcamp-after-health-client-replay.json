@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client courtyard diagnostic after creature health fallback deployment",
+  "provenance_tier": "observed",
+  "setup": "Isolated namespace with copied auth/game binaries, world and character databases; production was untouched. Game DLL was extracted from deployed rasa_net_game:creature-health-respawn-20260923. The copied world has the six staged courtyard Thrax 198660-198665, three staged camp companions 198688-198690 and one Forean Warrior 198691; it loads 410 content rows with three unrelated incomplete mission-definition gaps, versus 404 rows and zero gaps live. Alden starts at the previously client-reached (316.13,120.28,85.93), level 2, with mission 1994 objective 2 active. Recovered original client is compatibility build 1.16.5.0.",
+  "run": "creature-health-combat-03",
+  "observations": [
+    "Client logged in and Game created private instance 2 of context 1985 at 20:00:05.221 local; MapLoaded arrived at 20:00:18.334. The harness detected a playable HUD after 36.497 seconds and saved playable.png. The game loaded 110 sandbag cover triangles.",
+    "Ordinary W movement for four seconds advanced Alden to (308.7,120.1,79.2). The approach screenshot shows a targetable level-2 Thrax Infantry Initiate ahead and a visually filled recruit health bar. The cave area 198602 probe was 32.5 m from center versus its 10 m diagnostic radius.",
+    "A three-second rifle auto-fire command at a manually placed reticle spent two rounds (3/1000 to 1/1000 in screenshots). A red -48 appears near the fight, but the trace does not identify who caused that number or quantify target HP. No Thrax kill or cave objective completion was observed.",
+    "Long inspection pauses left Alden standing at (308.7,120.1,79.2). Game logged his death at 20:02:50.238, 151.904 seconds after MapLoaded, caused by Thrax entity 2750 (placement 198665). The recovered client displayed the Refugee Base Medic hospital selection. This duration includes pauses and is not a comparable encounter-survival measurement.",
+    "The earlier prequeued creature-health-combat-02 run reached the same copied checkpoint, but its initial fire resolved against entity 0 because the reticle had no live target. The first attempt ended when its non-PTY harness was terminated during a blocking wait; it gives no combat result."
+  ],
+  "limits": "This confirms startup, private-instance creation, movement, firing, cover asset loading and death/hospital presentation on the deployed-derived binary in a staged copied world. It does not independently measure the creature's internal HP, validate the 555 analogue, complete the natural courtyard encounter, establish final-live aggro or balance, or compare directly with uninterrupted final-week footage. The staged Warrior/companion placements are absent from the live world database. The deployed-derived game image also lacks some worktree companion follow/assist changes (ContentMaterializer, BehaviorManager and MissionContentRuntime differ), so this replay cannot verify the complete staged ally implementation.",
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-creature-health-combat-20260923/game/Rasa.Game.dll", "sha256": "c2a8e1d37fef6851690e07fb0642033e9fce2af141202554da264374ae437244"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-creature-health-combat-20260923/databases/world.db", "sha256": "e4830415d03951d337374060b68cd74aa7071da96dedec82dd677c4e66d2c8cd"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/game-run.log", "sha256": "e8c9636972a52964ab8198a8a32609f2bf5337d9d1e43bb0b5bd2cdf7d0b7dfd"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/auth-run.log", "sha256": "0dc57372f13106aadb9a807bd2cc303a4713f8ddf605d27c645043f128d0138e"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/playable.png", "sha256": "c0efa906dadb057f330b889e3880724ff022e61c1562ef6e000e52947659ef40"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/approach-4s.png", "sha256": "64305377b10174408b7c07a99570be14bfc50649e9df1732cec6cd5b9644eae6"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/fired-at-thrax.png", "sha256": "57055bf65a5681d54292fcdcdb73cbade358c12e1d44a6828c574d3616578a2b"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/creature-health-combat-03/after-locked-fire.png", "sha256": "2c29a44e635b551ee42656fb58ba04bb760df44c6d099999271b64f620b46d5f"}
+  ],
+  "next_action": "Run an uninterrupted client-controlled courtyard encounter with target and hit tracing, using the original footage's visible route as the comparison. Keep the seeded max_hp and attacker behavior labelled until their final-live values are evidenced."
+}

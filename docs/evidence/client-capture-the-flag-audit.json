@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Mission1994 following ordinary1992 completion; source/content audit plus bounded kill-counter transaction and legacy recovery correction. No native playthrough proof.",
+  "retail_proof": false,
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/selected-world-rows.json",
+      "sha256": "7fb093e131fb7601ff40463c683dca144aaba2854720b9ec10e536438154d291",
+      "bytes": 11315
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/footage-events-s4.json",
+      "sha256": "79a796e04136cf2b1f0645305013be1c64a31d79649b9e8b4a96fd135764fb7e",
+      "bytes": 45269
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/positions-s4.json",
+      "sha256": "dbda1f0e4e06abd2c60b2707d9a37dec15685d369ddee2ce0b459f7119fd39e3",
+      "bytes": 54940
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/navpath-output.tsv",
+      "sha256": "ae80754afb385ce687b7440ceef5a4ab0350e56e55732f83ef166eac04826823",
+      "bytes": 643
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/navprobe-output.tsv",
+      "sha256": "aeea166b629b5a28f0b752e8f51ebe4759ead1c951eb0ac5101b4bb38ac3556a",
+      "bytes": 8920
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_objectiveconversation.pyo.json",
+      "sha256": "6c05f83cd054255c48f5302144d07c454e33776a43f72a9b4c938b887a76f5e1",
+      "bytes": 269389
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/rasa-retail-20260922-boss-before.log",
+      "sha256": "6c0a03f73522060c5e99313e25c6e5f4a876265e9158e4a5c6970644aa851641",
+      "bytes": 8827
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/boss-before.trx",
+      "sha256": "c0a4edd82f3432d9cde7cac0519bba918a63eff3a3f6e2deadc913961bdfeda0",
+      "bytes": 15609
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/rasa-retail-20260922-modules-full.log",
+      "sha256": "6f3842e44ef5d84495f4aa50f12fd79f543f3ac0ba9a68f3ca347c0b3088df83",
+      "bytes": 107397
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/modules-full.trx",
+      "sha256": "430a5cf7e2b9a0374539ccc1ed73d31e18940519cd16e7d77671a97046e2cd9a",
+      "bytes": 1441193
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/desimone-cave-route-input.txt",
+      "sha256": "32efa49356928dc96fdcf8477250c668ed75a6a7d46fb4d0c9aa4542367476ef",
+      "bytes": 237
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/capture-the-flag-audit/desimone-cave-route-output.tsv",
+      "sha256": "3b75718fa37cdaeffe5d4f2a1b8d439ee449730e80262887955732d58313f97d",
+      "bytes": 412
+    }
+  ],
+  "ordered_objectives": [
+    4,
+    2,
+    1,
+    3
+  ],
+  "original_conversations": [
+    {
+      "objective": 4,
+      "npc_package": 2562,
+      "text": 21694
+    },
+    {
+      "objective": 3,
+      "npc_package": 2561,
+      "text": 21617
+    }
+  ],
+  "footage": [
+    {
+      "video": "7Lrst9SG3pk",
+      "event": "A3-066",
+      "t": 362.133,
+      "observed": "1992 completion1250XP,1994 acceptance,500XP,level2; intervening conversations hidden by edit"
+    },
+    {
+      "video": "7Lrst9SG3pk",
+      "event": "A4-20/21/24",
+      "t": [
+        430.533,
+        432.667
+      ],
+      "observed": "Cave objective completed and boss objective0/1 revealed; trigger crossed inside edit"
+    },
+    {
+      "video": "7Lrst9SG3pk",
+      "event": "A5-25/26",
+      "t": [
+        541.4,
+        547.6
+      ],
+      "observed": "Base Center map marker95.1,150.8"
+    },
+    {
+      "video": "7Lrst9SG3pk",
+      "event": "A5-27/28",
+      "t": 551.467,
+      "observed": "Youngblood objective after edit;143XP50credits in chat, boss identity/kill not directly shown"
+    },
+    {
+      "video": "8VXeKzGUv0c",
+      "event": "B1-008",
+      "t": 4.267,
+      "observed": "5000XP,1994 completed,1995 accepted"
+    }
+  ],
+  "normal_progression_blocker": "None newly demonstrated by this read-only audit; original-client traversal/combat pending",
+  "recovery_candidate": {
+    "source": "MissionContentRuntime.OnKillBinding / MissionManager.CompleteBoundObjective / ReconcilePlayerMissions",
+    "finding": "Counter and completed objective use separate commits. Failure after counter commit can leave a dead nonrespawning boss and incomplete objective with1/1 persisted; admission loads counter but does not reconcile satisfied target.",
+    "status": "Both intended old-production failures reproduced; all three corrected seeded cases pass in full1300-test combined suite"
+  },
+  "gaps": [
+    "DeSimone position inferred, not observed; actual turn-in route requires backtracking to387.2/40",
+    "Original cave-in interaction absent from footage; area-onlycompletion inferred",
+    "Boss exact identity/class,HP,level,damage andspawn position remain estimates",
+    "Friendly Forean/AFS support,arrival visuals andappearance incomplete",
+    "Original cave-to-base traversal has cuts; retained navmesh trench-to-perimeter route is incomplete, not proof native player path blocked",
+    "Credits/items for1994 payout unobserved and omitted",
+    "Old progression status describes stale5m sphere; actual migrated trigger cylinder radius10 halfheight25"
+  ],
+  "recovery_correction": {
+    "atomicity": "Final kill counter is staged in the existing objective/reveal/content-reaction unit of work, then memory and packets update only after its commit",
+    "client_order": [
+      "UpdateObjectiveCounter",
+      "ObjectiveCompleted",
+      "ObjectiveRevealed"
+    ],
+    "legacy_admission": "An active mission incomplete Kill-bound objective with explicitly saved counters all at or beyond targets completes via the existing objective path; no additional kill counted",
+    "preserved": "Mission1994 remains active with objective3 pending; no automatic Youngblood conversation or5000XP payout. Placement conditions observe only committed progress.",
+    "tests": "src/Rasa.Test/BootcampOpeningTests.KillRecovery.cs",
+    "cases": 3,
+    "limits": "Injected persistence failure is emulator recovery evidence, not original-live behavior. New atomic rollback leaves counter unchanged; a dead boss may require instance rebuild to attempt again if storage remains unavailable. Native mission traversal still pending."
+  },
+  "baseline_verification": {
+    "tests": 3,
+    "passed": 1,
+    "failed": 2,
+    "duration_seconds": 38.1185,
+    "success_control": "Existing normal kill completes with expected packet order",
+    "injected_failure": "Expected persisted counter0 after failed objective commit; actual1",
+    "legacy_reconnect": "Expected objectiveCompleted after loading counter1/1; actualIncomplete",
+    "fixture_failure": false
+  },
+  "final_verification": {
+    "tests": 1300,
+    "passed": 1300,
+    "failed": 0,
+    "duration_minutes": 5.965,
+    "seeded_cases": [
+      {
+        "test": "SeededFlagBossCounterAndObjectiveCommitTogether (False)",
+        "outcome": "Passed"
+      },
+      {
+        "test": "SeededFlagBossCounterAndObjectiveCommitTogether (True)",
+        "outcome": "Passed"
+      },
+      {
+        "test": "SeededFlagBossSatisfiedCounterRecoversOnReconnectExactlyOnce",
+        "outcome": "Passed"
+      }
+    ],
+    "native_1994_completion_verified": false
+  },
+  "de_simone_route_probe": {
+    "method": "Existing prebuilt NavProbe only; no builds or server/runtime mutation",
+    "native_collision_traversal_verified": false,
+    "start": [
+      387.2,
+      127.3,
+      40.1
+    ],
+    "complete": true,
+    "corners": [
+      [
+        384,
+        125.31,
+        50.4
+      ],
+      [
+        372,
+        125.31,
+        63.2
+      ],
+      [
+        365.6,
+        124.71,
+        63.6
+      ],
+      [
+        297.6,
+        120.71,
+        64.4
+      ],
+      [
+        279.05,
+        120.71,
+        66.07
+      ]
+    ],
+    "landmarks": [
+      {
+        "map_index": 781,
+        "class": 20814,
+        "name": "ArchForeanElohTempleStairStraight8mV02",
+        "position": [
+          369.5,
+          121,
+          65
+        ]
+      },
+      {
+        "map_index": 564,
+        "class": 11053,
+        "name": "ArchForeanBridgeCeremonialV01",
+        "position": [
+          337,
+          120,
+          65
+        ]
+      },
+      {
+        "map_index": 1053,
+        "class": 11285,
+        "name": "ArchHumGenObjSandbags01V14",
+        "position": [
+          297.3697,
+          120.4109,
+          66.3088
+        ]
+      }
+    ],
+    "route_advice": "Head +Z and slightly west to X384/Z50, then west through the Eloh stairs around369.5/65 and ceremonial bridge337/65; continue the courtyard to297.6/64.4 and cave279.05/66.07. Avoid continuing north to the gear deck.",
+    "limitations": "Navigation is derived from original map/collision but simplified; exact native player traversal is pending. Do not use polygon Y as an authoritative native foot height."
+  }
+}

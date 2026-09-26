@@ -28,7 +28,7 @@ namespace Rasa.Structures
         public long FinalAmt { get; set; }
         public int IsCritical { get; set; }
         public int DeathBlow { get; set; }
-        public uint CoverModifier { get; set; }
+        public double CoverModifier { get; set; }
         public int WasImune { get; set; }
         public List<uint> TargetEffectIds { get; set; } // ToDo
         public List<uint> SourceEffectIds { get; set; } // ToDo

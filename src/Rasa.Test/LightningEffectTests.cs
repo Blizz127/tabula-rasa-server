@@ -193,7 +193,7 @@ namespace Rasa.Test
         {
             DamageType = type, Reflected = (uint)(10 + seed), Filtered = (uint)(20 + seed),
             Absorbed = (uint)(30 + seed), Resisted = (uint)(40 + seed), FinalAmt = 0x100000000L + seed,
-            IsCritical = 1, DeathBlow = 0, CoverModifier = (uint)(50 + seed), WasImune = 1,
+            IsCritical = 1, DeathBlow = 0, CoverModifier = seed / 10.0, WasImune = 1,
             TargetEffectIds = new List<uint> { (uint)(100 + seed), (uint)(200 + seed) },
             SourceEffectIds = new List<uint> { (uint)(300 + seed) }
         };
@@ -216,7 +216,7 @@ namespace Rasa.Test
             Assert.AreEqual(0x100000000L + seed, reader.ReadLong());
             Assert.AreEqual(1, reader.ReadInt());
             Assert.AreEqual(0, reader.ReadInt());
-            Assert.AreEqual((uint)(50 + seed), reader.ReadUInt());
+            Assert.AreEqual(seed / 10.0, reader.ReadDouble(), 0.000001);
             Assert.AreEqual(1, reader.ReadInt());
             Assert.AreEqual(2, reader.ReadList());
             Assert.AreEqual((uint)(100 + seed), reader.ReadUInt());

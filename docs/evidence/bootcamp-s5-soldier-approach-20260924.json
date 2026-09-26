@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Original-client S5 west-fence bypass and lower-trench approach to inferred wounded soldier",
+  "provenance_tier": "observed",
+  "setup": "Recovered original compatibility client 1.16.5.0, deployed-derived normal-hostile Game/world copies and post-mission-1994 character with mission 1995 objective 2 active. Runs 40 and 44 moved continuously from Youngblood without GM travel; runs 46-66 used explicitly edited copied-login checkpoints at previously measured corridor positions. No live service or database was changed. Earlier mission-1994 boss-to-Youngblood chain began at a diagnostic checkpoint, so this is not a complete new-character playthrough.",
+  "observations": [
+    {
+      "tier": "original",
+      "source_location": "adv_bootcamp-entities-joined.csv indices 1165-1166, 1207-1208, 1262, 746 and 18",
+      "finding": "The original compatibility map places paired outpost fence endcaps at x8-8.5,z128 with vertical bounds reaching about y109.37, explaining the client stop near (8.2,101.3,129.7). Near the soldier approach it places Forean corpses at (-97.57,85.83,70.44) and (-99.85,85.85,71.33), sandbags at (-98.58,84.91,68.85) and (-102.27,85.8,68.64), and a trench bunker centred (-112,86,70). These are map placements, not reconstructed NPC positions."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 40 west-of-endcap.png; read-only original-client .where",
+      "uncertainty": "Client display precision about 0.01 m; no intermediate path trace.",
+      "finding": "Ordinary movement from Youngblood around the north side of the fence reached (-20.343,98.421,124.625) alive with Calling for Reinforcements objective 2 still active. This verifies the earlier fence stop was an input-route obstruction rather than an impassable map."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 44 diagonal-descent.png; read-only original-client .where",
+      "uncertainty": "Client display precision about 0.01 m; no intermediate path trace.",
+      "finding": "Continuing ordinary movement from the same Youngblood start, a combined forward and left strafe descended to (-15.910,94.613,104.355) alive, with objective 2 still active."
+    },
+    {
+      "tier": "measured",
+      "source_location": "runs 46 and 47 lower-trench.png, soldier-approach.png and soldier-corridor.png; read-only original-client .where",
+      "uncertainty": "Checkpointed runs start from an edited copy at the run-40 coordinate; client login settled about 1.4 m below the seed Y. They do not independently prove continuous travel from Youngblood.",
+      "finding": "From the measured bend checkpoint, ordinary client movement reached (-39.070,89.273,83.176) and then (-67.343,87.269,75.242), alive and with the S5 tracker active. Copied character DB retained 8695 XP, 360 credits and objective 2 active."
+    },
+    {
+      "tier": "measured",
+      "source_location": "runs 49-51 soldier-doorway.png, soldier-interaction-range.png and at-soldier.png; read-only original-client .where",
+      "uncertainty": "Checkpointed from the run-47 measured corridor location; exact reset Y differs slightly from in-motion Y.",
+      "finding": "From the measured corridor checkpoint, ordinary forward movement reached (-89.645,85.970,74.191), then (-95.578,85.668,71.699). A yellow mission marker and a figure were visible at the bunker doorway. Further forward input left the displayed position unchanged; objective 2 stayed active. The inferred soldier seed is (-102.4,86.09,70), about 7 m from this stop."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 53 around-obstruction.png and copied character_mission_objective after stop",
+      "finding": "A 1.2-second forward-plus-left input followed by 1.2 seconds forward did not change the displayed position at (-95.578,85.668,71.699). A right click from this point did not open the wounded-soldier dialogue, and objective 2 remained active. This input sequence does not prove the NPC inaccessible by another path."
+    },
+    {
+      "tier": "measured",
+      "source_location": "runs 55-56 north-of-corpses.png and soldier-north-approach.png; read-only original-client .where",
+      "uncertainty": "Checkpointed from run-50 measured location; input and position are observed but no continuous Youngblood-to-soldier trace.",
+      "finding": "A one-second right strafe bypassed the corpse/sandbag stop. A further 1.8-second forward input reached (-104.520,86.765,72.079), alive; this is roughly 3 m from the inferred soldier seed. The first apparent blockage was a local approach obstacle, not an impassable bunker."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 58 human-target.png, human-rightclick.png, game.log; runs 60-61 soldier-north-approach.png and soldier-conversation-late.png",
+      "finding": "From the bypass route the client displayed a Human target and the prompt Press [Mouse Button 2] to talk. The Game log received RequestNPCConverse. A second approach reached (-101.422,86.497,74.203), about 4.3 m from the inferred soldier seed. Right click did not open conversation or advance objective 2 in these captures. The reticle was not over the soldier in the latter captures; these attempts do not isolate the cause."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 63 soldier-first-click.png; run 66 soldier-attempt-1.png, soldier-continued.png, mission-state-after-continue.csv and game.log",
+      "finding": "On the same deployed-derived build, a closer north approach opened the original client Objective Completion dialogue for Calling for Reinforcements objective 2. The client displayed the package-2584 text about Conrad and an EMP hit. Clicking Continue sent CompleteNPCObjective, displayed Objective Completed, changed the tracker to Remove the bomb from Conrad\u2019s corpse, and persisted objective 2 as status 2 (completed) and objective 3 as status 1 (active) in the copied character database. This verifies the implemented interaction; it does not establish the original soldier coordinate or a continuous route from Youngblood."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "navprobe-courtyard/s5-soldier-approach-output.txt; deployed-derived adv_bootcamp.nav",
+      "finding": "The emulator navmesh returns a complete direct path from (-95.574,85.673,71.699) to the inferred soldier at (-102.4,86.09,70), despite the client movement stop. The original corpse/sandbag placements provide a concrete geometry candidate for the mismatch. The soldier placement itself is inferred from the original footage marker, not an original server coordinate."
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/map/decoded/adv_bootcamp-entities-joined.csv",
+      "sha256": "062f293ea7c64df55c922885eb98c741b726139493dfb014815518237baea9a5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-40-20260924.py",
+      "sha256": "f12b2bbc88e8140fcfc3493eae9129daa85f8992da8f309bee0d9e0f4bcf9ac2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-44-20260924.py",
+      "sha256": "f8db2f5860466f24a6fedcb7d7f0f1f2e9deff6e6a32c00520cd6afaecc20603"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-46-20260924.py",
+      "sha256": "618167bef087e5084eb508f4b1ddbd2c6294180b59a076d08d02cf78b856ccc0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-47-20260924.py",
+      "sha256": "e24a82f780b92d959e409e7d39b4d8e9baea53f0de2a91d4353264a0817dc113"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-49-20260924.py",
+      "sha256": "376dc4784a6e938993ec4eab10bf544f1047eca6c0673046b8a7c5386daa793c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-50-20260924.py",
+      "sha256": "3c6d3a72d249b5833288aa5abf6d76fbfe5019b3df1b49dd70727c3e44e490e4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-51-20260924.py",
+      "sha256": "96532315372c179db3fb1a2685bd3bac4aeed3d1c0e838c2a4d49c30a4f17521"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-53-20260924.py",
+      "sha256": "923f3e478c9f58d2ee76e81373b110c14b1764a643b979d6444df78639219fa6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-40/west-of-endcap.png",
+      "sha256": "6b9dc99dc89f5503f5a3a486de561e5ebe64568ef09f2f8e9f7e2005d1aac819"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-44/diagonal-descent.png",
+      "sha256": "1ea8a955159a6f826f8e68ad7869b84f867d08a65bdbd25843c41b9e864d64f2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-46/lower-trench.png",
+      "sha256": "b78362b2331981b5c2ea588ab2cbd9fbdcde15aab53cd0b86ab8376b05ed2382"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-46/soldier-approach.png",
+      "sha256": "4a2615eaaccbfc15dc1c7ebc580edb9fff081e8ba76312510d17e9a4abffc0ed"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-47/soldier-corridor.png",
+      "sha256": "0ade883271cd9af8db6086c0df90396315ce775c5a6a2a7a3360a57d205dc4d3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-49/soldier-doorway.png",
+      "sha256": "e36086b43c8e958672bc03369b52ee873f85c9c52c3362171c2e33c8a8a216e9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-50/soldier-interaction-range.png",
+      "sha256": "f2a3f064a78f7853196c65e3b9ef0bb4d0c6a0713c79377e1ce2143df9620df1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-51/at-soldier.png",
+      "sha256": "913ebbf490fea0bffb9cc1b6211e50d6f3719a7b1b846be456bcd87298da7123"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-53/around-obstruction.png",
+      "sha256": "cf7ab8affe21c206ae6a08a126f587083f31e0c0b56bf721b079fd2ed505ad41"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-soldier-approach-input.txt",
+      "sha256": "c529a2984d8aa517443ed8ae900244b2f662c6d11741b1dcd2170d178d405244"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-soldier-approach-output.txt",
+      "sha256": "265a4cba22795146c2a98fa49df39ba7efcc8d869d566e4d0ff57c36e9b87270"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-55-20260924.py",
+      "sha256": "8c774e1a12883195b53cc9f82d147165d48785a4290cc26ce7f752aa3551377f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-56-20260924.py",
+      "sha256": "2117bbc0614301f90897f11fc8e0b020c068b2fa13d01e9e18829331a0e7af18"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-58-20260924.py",
+      "sha256": "0382b6b2473869d801d3612d707491c7169839e9a98f7b113e1cd5b800ba67d3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-60-20260924.py",
+      "sha256": "603456e6f663c9370f86acc69e42e45b9c1bd56eca3f81b743b635bd501ddeba"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-61-20260924.py",
+      "sha256": "07dad1a0a61dcdb365a64e381b7145a0bdf5f899be21a6533964d3c1e9a4f167"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-55/north-of-corpses.png",
+      "sha256": "015ea4b06cdcda8afcb9a19c569eaf200aa77d1eaaeed896ca587a2be07d34e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-56/soldier-north-approach.png",
+      "sha256": "a9cc3074fa83ac9f0344732b4aca84d18fa95292361370a87cbd0a47ba57ce96"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-58/human-target.png",
+      "sha256": "854691ff7dd9331ff91bd968943c407020e7321bdf936b7975d5b4f8dacf2561"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-58/human-rightclick.png",
+      "sha256": "01dfaa824823c118b5d338674fd6cc00daea68a312f13b477406ec61c121ba94"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-60/soldier-north-approach.png",
+      "sha256": "8dadddccfe0f3f47c0285e306a715b1eefe1f9e059c0a9822dd5a5cf20e6cd52"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-60/soldier-conversation-late.png",
+      "sha256": "2fb596f54a506ebd7d8edfd10a6e7c436bdeec6d61f5c1ef35f28d6eccdd1209"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-61/soldier-aimed.png",
+      "sha256": "a556bc8fca2c60c17233bbec56f4380475b5ee49776829594b54ee54e5d66d76"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-61/soldier-conversation-late.png",
+      "sha256": "414eda583142e073265d3d202ccd573f22e7e90c663ad100a15fe78030ea24e8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-58/game.log",
+      "sha256": "747e6cca4e41420cb904d1a6da17897792aa677879a395f313ec54053f21b940"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-63-20260924.py",
+      "sha256": "2ac09b6989935c4ea2b4aab40b30c66b89f4c13e480e8129a036fc784f3f2fff"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-66-20260924.py",
+      "sha256": "1d64bb6c3b731d9eddcdc5ec47a5654755eccc4e8c8a1952c2058fd1469b45f3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-63/soldier-first-click.png",
+      "sha256": "e34e6c044bc0c8b7f542bc0dabc247cf5c582fc7b2be0c27e499025c48297ece"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-66/soldier-attempt-1.png",
+      "sha256": "276bf5d348c161a3453037a83ad330f9e9cc6d8cdecbeb677e48577bac2f06e8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-66/soldier-continued.png",
+      "sha256": "eb5fb7a579c39ba72396c5cb1ccecfa42815b7b57cf3fa433c273195ecc0a7aa"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-66/mission-state-after-continue.csv",
+      "sha256": "66f1222aef945c862a3562c621ecf5b5d69db85b17206552e1f5e6cf101c58c1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-66/game.log",
+      "sha256": "9d123d94bbbaef7de7e690ac3c8923c823c691c011f7c27d5b070d897b55a7d8"
+    }
+  ],
+  "assessment": "The original client can bypass the west fence, descend the lower trench and move around the corpse/sandbag obstacle to the reconstructed wounded soldier. In a checkpointed ordinary-movement continuation, its Objective Completion dialogue opened, Continue completed objective 2, revealed objective 3 and persisted both states. The soldier placement remains inferred. A continuous Youngblood-to-dialogue run and the remaining S5/S6 route have not been verified. No gameplay values or live server content were changed.",
+  "next_verification": "Run continuously from Youngblood to the wounded-soldier dialogue; then use Conrad\u2019s corpse, place and detonate the bomb, check in with Van Valkenberg, exit to Alia Das and verify mission reward and state persistence in the original client. Preserve the NPC coordinate/name/appearance evidence gaps.",
+  "source_boundary": "docs/evidence/bootcamp-s5-wounded-soldier-source-boundary-20260923.md"
+}

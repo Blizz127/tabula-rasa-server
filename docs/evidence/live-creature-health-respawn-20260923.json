@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Creature row health fallback and conditioned placement respawn contract deployed",
+  "scope": "Runtime correction for creatures without creature_stat and for mission-conditioned creature placement refresh. No world rows or game balance values were changed.",
+  "findings": [
+    {
+      "field": "creature health when creature_stat is absent",
+      "tier": "inferred",
+      "source": "src/Rasa.Game/Managers/CreatureManager.cs CreateFromTemplate, creature.max_hp in live rasaworld.db; original live image used hardcoded 100 HP in the no-stat branch",
+      "observation": "Of 922 live creature templates, 769 lack creature_stat; all 769 have max_hp between 500 and 1500. Boot-camp Thrax template 198507 has max_hp 555 and no stat row. Hardcoded 100 ignored the only health field available for those rows.",
+      "implementation": "Use creature.MaxHitPoints, capped at Int32.MaxValue, as the health fallback. Explicit creature_stat.health continues to take precedence.",
+      "fidelity_limit": "The seeded max_hp values are emulator data; this corrects their application, not their unverified final-live magnitudes. Many boot-camp max_hp values are labelled analogues in docs/evidence/bootcamp-d11-reconstruction-manifest.json."
+    },
+    {
+      "field": "conditioned creature placement respawn",
+      "tier": "inferred",
+      "source": "src/Rasa.Game/Managers/ContentMaterializer.cs RefreshPresence, CreatureManager.cs HandleCreatureKill, MapChannel.cs; docs/evidence/bootcamp-conditioned-creature-respawn-audit.json",
+      "observation": "A mission-state refresh could recreate a killed conditioned placement after its corpse was removed, even with respawn_ms 0 or before its timed respawn was due.",
+      "implementation": "Record zero-respawn kills for the lifetime of the map channel; prevent condition refresh while that record or a timed respawn entry exists. A new private channel starts fresh.",
+      "fidelity_limit": "Exact final-live ally and boss respawn rules remain unknown. This enforces the seeded placement's explicit respawn_ms contract."
+    }
+  ],
+  "verification": {
+    "candidate_image": "rasa_net_game:creature-health-respawn-20260923",
+    "image_id": "sha256:7e5c62cc27910309921a884252c6d71e544b29d6a3c7b9efbb0a95e31df577e5",
+    "previous_image_tag": "rasa_net_game:pre-creature-health-respawn-20260923",
+    "build": "Derived from the immediately preceding live game image, overlaying only three source files with the health fallback and respawn contract. dotnet build --no-restore succeeded with three existing warnings and zero errors.",
+    "tests": "Focused .NET 5 ContentPlacementRespawnTests and AllyFinishingTheFlagBossCreditsThePrivateMapOwnerBeforeOneShotDespawn passed 3/3 in the worktree. The health fallback is additionally evidenced by earlier copied-client combat traces with the worktree implementation; no new live in-world combat was run after deployment.",
+    "deployment": "SQLite backup API copies of auth, char and world passed integrity_check. Tagged old image, moved the candidate to latest, recreated only game with docker compose up --no-build -d game. At 00:46:33 UTC game loaded 17 content rules/404 rows/0 gaps, opened its world listener and authenticated with Auth. Auth and Game stayed running with zero restarts; all three live databases passed integrity_check.",
+    "client": "Recovered 1.16.5.0 client logged in through VPS Tailscale 100.104.53.1:2116 with the public test account, sent Login, ServerListExt and AboutToPlay, and displayed Character Select. The owner MacBook and in-world HP presentation were not checked after this deployment."
+  },
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-creature-health-respawn/source-manifest.json",
+      "sha256": "141a0d2fcbfa5525ee61fd3b3ffa1e9a7ff40a07f5065cf54b4c101986ed255e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-creature-health-respawn/game-startup.selected.log",
+      "sha256": "71a7935e617cae55966c5013690cde43a1c6b6ef59421d5dac0efa1b5db73e57"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-creature-health-respawn/auth-startup.selected.log",
+      "sha256": "adbd26a026abe562914bbb25b66eb2bef7a2486092cac562ffadeaae1c0f2813"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-creature-health-20260923/login-after-35s.png",
+      "sha256": "609ee15053f31c0da0b6a4b333a4d8fff42383371ffdf471f17c9f13064ad0cc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-creature-health-respawn/database-backups.json",
+      "sha256": "6da570d0cb36ad814cae3dfc0f76b5225b2b5e582d90a434173a31083e6c6ed5"
+    }
+  ],
+  "remaining": "A copied original-client replay after deployment entered a private boot-camp instance, approached the courtyard and fired, then died during inspection pauses before reaching the cave; see docs/evidence/bootcamp-after-health-client-replay.json. It did not measure internal creature HP or complete a normal fight. Health magnitudes, actor activation/target selection and original respawn behavior still require stronger final-live evidence."
+}

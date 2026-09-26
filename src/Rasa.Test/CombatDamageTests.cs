@@ -126,7 +126,7 @@ namespace Rasa.Test
                 EntityId = targetId, DamageType = DamageType.Sonic,
                 Reflected = 11, Filtered = 12, Absorbed = 13, Resisted = 14,
                 FinalAmt = 0x100000002L, IsCritical = 1, DeathBlow = 1,
-                CoverModifier = 2, WasImune = 0,
+                CoverModifier = 0.5, WasImune = 0,
                 TargetEffectIds = new List<uint> { 86, 100 }, SourceEffectIds = new List<uint> { 95 }
             };
             var missile = new Missile { ActionId = ActionId.WeaponAttack, ActionArgId = 78, DamageA = 999 };
@@ -166,7 +166,7 @@ namespace Rasa.Test
             Assert.AreEqual(0x100000002L, reader.ReadLong());
             Assert.AreEqual(1, reader.ReadInt());
             Assert.AreEqual(1, reader.ReadInt());
-            Assert.AreEqual(2U, reader.ReadUInt());
+            Assert.AreEqual(0.5, reader.ReadDouble());
             Assert.AreEqual(0, reader.ReadInt());
             Assert.AreEqual(2, reader.ReadList());
             Assert.AreEqual(86U, reader.ReadUInt());

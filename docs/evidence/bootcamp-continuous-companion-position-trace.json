@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Boot-camp camp-to-courtyard companion follow and attack trace",
+  "provenance_tier": "observed",
+  "scope": "Emulator diagnostic with the recovered 1.16.5.0 client and original boot-camp navmesh; not final-live footage or proof of original encounter balance",
+  "confidence": "High for the logged movement and hits in these disposable runs; low for whether their path, speed or fight matches final live.",
+  "setup": {
+    "server": "Disposable server-courtyard-full-20260923 copy with the current worktree Rasa.Game.dll rebuilt in Debug and RASA_TRACE_COMBAT_COMPANIONS=1; the game binary used in the earlier continuous replay was different. The live server and production databases were untouched. The disposable character database and game binary were restored after these runs.",
+    "test_game_binary_sha256": "20813af0cd2d66a2c2723fbc24a37240c608b42c57c7c2ba2a80d8dccc43d659",
+    "earlier_game_binary_sha256": "4326c4e21754eccab8fb1d2e6c008a34ed9f98d3ac0dcfd2954727813516caea",
+    "character": "Copied level-2 Alden with mission 1994 objective 2 active. Normal staged six-Thrax attacks, three camp companions and the staged Warrior remained active. No player fire was sent."
+  },
+  "navmesh_probe": {
+    "tier": "original",
+    "source": "/home/blizz/servers/rasa-net/navmesh/adv_bootcamp.nav SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+    "result": "Detour reports a complete path from the camp (383.94,119.5,153.83) to courtyard sandbags (301.2,119.8,77.9), and complete gap-to-landing and gap-to-courtyard paths. The camp-to-courtyard straight-path corners jump from (343.20,122.11,108.80) to the destination; the query does not describe the physical jump animation or prove the route is retail accurate.",
+    "input": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/navprobe-input.txt",
+    "input_sha256": "db0e451c857b99c8e61c5ffd9ed7eeeabb1baab21445feff09eff14607260c9c",
+    "output": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/navprobe-output.txt",
+    "output_sha256": "d512882327b1c4abaec7ee422d71aade1a297fd10ce2f52652a2acf232d399ee"
+  },
+  "stationary_checkpoint_diagnostic": {
+    "tier": "observed",
+    "id": "camp-to-courtyard-companion-positions-05",
+    "setup": "The copied character database initially placed Alden at (316.13,120.28,85.93), rather than the intended camp point. He remained stationary; this is a checkpoint diagnostic, not a continuous run.",
+    "result": "All three companions began at their camp placements and reached within about 3 m of the player by 16:31:59.033, about 19.5 s after MapLoaded. The trace shows they can follow across the upper gap in the present server geometry when the player waits. They did not reach courtyard attack range in this run.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-05/game.log",
+    "game_log_sha256": "d14f525dd0db6b307745f7cb77dae1d416cee21e0a230c68bafad3512ba514a0"
+  },
+  "continuous_run": {
+    "tier": "observed",
+    "id": "camp-to-courtyard-companion-positions-06",
+    "setup": "The disposable character was reset before login to the staged camp point (383.94,119.5,153.83), yaw -0.18. The same native-client movement and screenshot command sequence as camp-to-courtyard-sidejump-continuous-04 was replayed without a post-login movement edit.",
+    "result": "MapLoaded occurred at 16:33:30.344. All three companions were logged following along the rocky descent and upper gap; at 16:34:35.699 all three were at the player's sandbag position (301.26172,119.90234,77.54297). The first companion hits landed at 16:34:36.402. Before Alden died at 16:34:58.610, companions 198688, 198689 and 198690 each logged nine hits on Thrax 198665. They continued attacking after his death and killed that Thrax at 16:35:03.125. The recruit made no attacks and never entered the cave trigger.",
+    "comparison_limit": "The earlier continuous replay logged no companion outgoing hits and used a different game binary. The present capture proves follow and attacks in this rebuilt disposable run, but the precise cause of the difference is unresolved. Inspection and command pauses make the death and pacing unsuitable as retail balance evidence.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/game.log",
+    "game_log_sha256": "195e427d9c13773a098bb012c8fb05e0846ff4fcf60c35afba5cef08062fd8af",
+    "screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/camp-courtyard-sandbags.png",
+    "screenshot_sha256": "7afc447d3d2c4c1aaca29bb296a2841cae400d78e8d565ce9580c05a8b38d2bf"
+  },
+  "original_video_limit": "Archived final-week gameplay video 7Lrst9SG3pk cuts from camp at 384.467 seconds to the player already in the courtyard at 385.467 seconds; exact frame hashes are recorded in docs/evidence/bootcamp-courtyard-cave-approach-replay.json. The cut cannot establish companion routing or enemy activation during travel.",
+  "verification_needed": "Compare the two game binaries or repeat with only the trace added to the earlier binary to isolate the difference. Complete a continuous fight and cave entry with normal player combat."
+}

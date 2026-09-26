@@ -135,9 +135,8 @@ namespace Rasa.Managers
             if (creature.ContentPlacementId != 0)
             {
                 var placements = MissionManager.Instance.Content?.Content?.Catalog?.Placements;
-                if (placements != null && placements.TryGetValue(creature.ContentPlacementId, out var placement)
-                    && placement.RespawnMs != 0)
-                    mapChannel.ContentRespawns[placement.Id] = Environment.TickCount64 + placement.RespawnMs;
+                if (placements != null && placements.TryGetValue(creature.ContentPlacementId, out var placement))
+                    mapChannel.RecordContentPlacementDeath(placement.Id, placement.RespawnMs, Environment.TickCount64);
             }
 
             // tell spawnpool if set
@@ -348,7 +347,11 @@ namespace Rasa.Managers
                 creature.Attributes.Add(Attributes.Body, new ActorAttributes(Attributes.Body, 15, 15, 15, 5, 1000));
                 creature.Attributes.Add(Attributes.Mind, new ActorAttributes(Attributes.Mind, 15, 15, 15, 5, 1000));
                 creature.Attributes.Add(Attributes.Spirit, new ActorAttributes(Attributes.Spirit, 15, 15, 15, 5, 1000));
-                creature.Attributes.Add(Attributes.Health, new ActorAttributes(Attributes.Health, 100, 100, 100, 10, 1000));
+                // The creature row is the only HP source when no creature_stat override exists.
+                // Using a fixed 100 here ignored max_hp for most content creatures, including
+                // the boot-camp Initiates and their reconstructed Forean companions.
+                var hitPoints = (int)Math.Min(creature.MaxHitPoints, (uint)int.MaxValue);
+                creature.Attributes.Add(Attributes.Health, new ActorAttributes(Attributes.Health, hitPoints, hitPoints, hitPoints, 10, 1000));
                 creature.Attributes.Add(Attributes.Chi, new ActorAttributes(Attributes.Chi, 0, 0, 0, 0, 0));
                 creature.Attributes.Add(Attributes.Power, new ActorAttributes(Attributes.Power, 0, 0, 0, 0, 0));
                 creature.Attributes.Add(Attributes.Aware, new ActorAttributes(Attributes.Aware, 0, 0, 0, 0, 0));
@@ -413,16 +416,12 @@ namespace Rasa.Managers
             if (creature == null)
                 return;
 
-            // random colors for now
-            var hue = Color.RandomColor();
-            var hue2 = Color.RandomColor();
-
             var entityData = new List<PythonPacket>
             {
                 // PhysicalEntity
                 new IsTargetablePacket(EntityClassManager.Instance.GetClassInfo(EntityManager.Instance.GetEntityClassId(creature.EntityId)).TargetFlag),
                 new WorldLocationDescriptorPacket(creature.Position, creature.Rotation),
-                new BodyAttributesPacket(creature.Scale, hue, 0, 0, hue2),
+                new BodyAttributesPacket(creature.Scale, creature.BodyHue, 0, 0, creature.BodyHue2),
                 // Creature augmentation
                 new CreatureInfoPacket(creature.NameId, false, CreatureFlagsOf(creature)),
                 // Actor augmentation

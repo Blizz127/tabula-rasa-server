@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-24",
+  "scope": "Mission 2005 retry reinforcement walk-off after the bomb destroys the boot-camp wreck",
+  "finding": "The existing scripted walk-off is triggered only by mission 1995 objective 1. Mission 2005 objective 1 destroys the same wreck and reveals the same three placed reinforcements, but lacked the move trigger. They consequently remained stationary on retry.",
+  "evidence": [
+    {
+      "tier": "observed",
+      "source": "original final-week footage 8VXeKzGUv0c, S5P-05 / B2-012, 87.4-98.333 s; docs/evidence/bootcamp-d11-footage-events.json",
+      "finding": "After the 1995 bomb detonation, reinforcements beam onto the pad and walk north-east off it. Their exact destination and path are unseen."
+    },
+    {
+      "tier": "original",
+      "source": "Tabula Rasa 1.16.5.0 generated/client/missionobjective.pyo @108737 (2005,1); generated/client/language/english/missiontextlanguage.pyo @565436 text 21566",
+      "finding": "The retry has the same destroy-the-dropship bomb objective and supplies another bomb."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "docs/evidence/client-reinforcements-retry.json playthrough-45/04-retry-bomb.png and 06-retry-after.png; character DB",
+      "finding": "The compatible recovered client completed 2005 objective 1, removed the wreck and revealed Van Valkenberg. This confirms the retry uses the reconstructed destroyed-wreck sequence; it does not establish original retry movement."
+    }
+  ],
+  "correction": {
+    "migration": "20260924090000_BootcampRetryReinforcementWalk",
+    "rule_id": 1985017,
+    "event": "mission 2005 objective 1 completed",
+    "actions": [
+      { "sequence": 0, "placement_id": 198681, "location_id": 19854 },
+      { "sequence": 1, "placement_id": 198682, "location_id": 19854 },
+      { "sequence": 2, "placement_id": 198680, "location_id": 19854 }
+    ],
+    "tier": "inferred",
+    "reasoning": "The retry detonates the same bomb, opens the same wreck and reveals the same squad, so it reuses the observed 1995 walk-off. Location 19854 is already an inferred endpoint 15 m north-east of the pad with +/-5 m uncertainty. The rule introduces no new endpoint or NPC."
+  },
+  "limits": [
+    "No original capture of the 2005 walk-off was found; the retry motion is inferred, not observed final-live behavior.",
+    "The exact reinforcement path, endpoint and beam-in timing remain unverified."
+  ]
+}

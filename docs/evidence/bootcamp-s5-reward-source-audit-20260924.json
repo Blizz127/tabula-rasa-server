@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-24",
+  "scope": "Final-live Calling for Reinforcements missions 1995 and 2005: rewards and retry timer/failure source boundary",
+  "finding": "No inspected original or contemporary source establishes the final-live XP, credit, item, or prestige reward for either mission. Keep GAP-S5-MISSION-REWARDS open and seed no numeric reward from the obsolete boot-camp guides. The 2005 opening dialogue explicitly grants another bomb and says ten minutes, but it does not reveal an authoritative server timer value, expiry state transition, or retry payout.",
+  "sources": [
+    {
+      "tier": "original",
+      "version": "recovered compatibility client 1.16.5.0; exact shutdown revision unproven",
+      "path": "docs/evidence/bootcamp-client-catalog.json",
+      "sha256": "2d785955863695f78e2eda15d46c35649e239b853e43b6b4a89272862e4d21c9",
+      "location": "missions[1995] and missions[2005], mission_text_bindings, objectives and server_definition_complete=false",
+      "result": "Client supplies dialogue/objective text bindings, including 2005 text 21566 ('another bomb', 'ten minutes'), but no reward amount or server timer. Neither mission binds reward text type 5."
+    },
+    {
+      "tier": "observed",
+      "version": "retained original gameplay footage, segment B1/B2, recorded before 2009-02-28; exact client revision unproven",
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s5/footage-events-s5.json",
+      "sha256": "87ee68cf3c1bc83cda2a87685b94a40f86239b6ba9967c0b44eb3ac3879c11f1",
+      "location": "B1-050/B1-051 (1995 objective 1 completion), B2-022 at 98.400 s (1995 shown complete after edited transition to Alia Das), B3-020 Rogers encounter",
+      "result": "The edit omits Van Valkenberg conversation, transfer, and 1995 reward turn-in. No 2005 playthrough or reward window appears. The 1995 complete tracker is not a reward receipt."
+    },
+    {
+      "tier": "observed",
+      "version": "TaRapedia pre-shutdown revision 32488 at 2008-08-29T06:24:19Z",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Bootcamp__20080829T062419ZZ.wiki",
+      "sha256": "144fb215c67e881944f759e4888efc82efe9ef3b6a0f4fe123591361b7c8c47d",
+      "location": "opening {{old|...}} warning; Portals section; Missions section",
+      "result": "Page explicitly warns that boot camp changed and the article needs updating. It describes older Evac Pilot Constant / Moving Up to the Big League exit, so its mission/reward information cannot be carried into the rebuilt 1995/2005 content."
+    },
+    {
+      "tier": "observed",
+      "version": "TaRapedia pre-shutdown revision 32411 at 2008-08-28T09:53:52Z",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Bootcamp_mission_list__20080828T095352ZZ.wiki",
+      "sha256": "da662c495a5c0abe9b84f2677b69d387456ade51b420222cc4a35bcbd356de0b",
+      "location": "whole 689-byte transclusion-only page",
+      "result": "This page holds no reward rows; it only transcludes Denzil's Caldera and Destination Outpost lists."
+    },
+    {
+      "tier": "observed",
+      "version": "DaOpa/Ellatha fan database; source build date unverified",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/guides/ellatha-missions-structured.json",
+      "sha256": "c311300a41162408b9889aa25414b9ed3636c5cbb4b1518ec29b011bb3a60af9",
+      "location": "all 98 mission entries, title search for Calling for Reinforcements",
+      "result": "No mission under this title; its old boot-camp rewards do not identify final-live missions 1995 or 2005."
+    },
+    {
+      "tier": "original",
+      "version": "Deployment 13.4 live notes, 2008-10-15; archived 2008-10-17",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/web/raw/www_rgtr_com_80_news_patch_notes_deployment_134_10152008_html-20081017160137.txt",
+      "sha256": "577c9059eed6b755d57ea5333971c7ad260e748b87c4c312ccae30870fb39b42",
+      "location": "line 126, Bootcamp known issue",
+      "result": "The published workaround says a player stuck by abandoning the final mission after clearing the dropship pad can get the mission again and fail it normally. It documents a live quirk, but names no reward, retry ID, timer duration, or precise failure trigger."
+    }
+  ],
+  "external_searches": [
+    "Web search: quoted Calling for Reinforcements with Tabula Rasa, reward, credits, XP, Bootcamp, Youngblood and Rogers; no matching final-live mission payout returned.",
+    "Direct tabularasa.fandom.com/wiki access was blocked by robots; the archived pre-shutdown history above was inspected instead."
+  ],
+  "confidence": "High that the specified inspected sources do not establish reward values; no claim that all possible original captures have been exhausted.",
+  "remaining_unverified": [
+    "1995 and 2005 XP, credits, prestige, item choices, and whether the retry pays the same reward",
+    "Original 2005 server timer duration, exact start and disarm points, expiry handling, and repeat-retry rule",
+    "Whether final-live 1995/2005 reward or failure presentation differed from the compatible recovered client"
+  ],
+  "next_evidence": "An authentic post-rebuild 1995/2005 mission offer or turn-in screen with readable rewards, a final-live server capture, or original footage showing a complete 2005 retry and timer expiry."
+}

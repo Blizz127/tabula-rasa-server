@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Gearing Up for Battle (1992), first weapon attacks against destroyable practice targets",
+  "client_version": "1.16.5.0 compatibility artifact; exact final shutdown revision unverified",
+  "sources": {
+    "base_weapon_attack": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/combat-damage-selected/client-actions-weapons-baseweaponattack.pyo",
+      "sha256": "c138c223eceec99a6ba8982c9a07071c806bdc445ea2d72440045586dbe54b8b",
+      "location": "BaseWeaponAttack.DoHits source188, bytecode12-141; selected-raw-dis.txt",
+      "confidence": "high"
+    },
+    "usable": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-augmentations-usable.pyo",
+      "sha256": "8568d81d76ce8176c24435d16a40169d5ae84bcb5614b219b2b0b4ea33b0afaf",
+      "location": "Usable.AnnounceDamage source1081, bytecode0-57",
+      "confidence": "high"
+    },
+    "targeted_action": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-actions-targetedaction.pyo",
+      "sha256": "b9c96045f3d3d3d670550c81c7216644cb38e3b84adcfae35ab496636bcc56d4",
+      "location": "TargetedAction.Windup source259, bytecode131-193",
+      "confidence": "high"
+    },
+    "inert_destroyable": {
+      "tier": "original",
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-augmentations-inertdestroyable.pyo",
+      "sha256": "da5329a7e2ea918f766085a66216c122c4e02778035da6162b8f8a5c50ac4874",
+      "location": "InertDestroyable._UpdateTargetableSetting source55, bytecode33-65",
+      "confidence": "high"
+    },
+    "practice_footage": {
+      "tier": "observed",
+      "video_id": "7Lrst9SG3pk",
+      "seconds": [
+        347.133333,
+        350.933333,
+        355.266667,
+        357.733333,
+        360.333333
+      ],
+      "capture": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/all-reset-boundaries.png",
+      "observation": "Five single-round rifle shots each precede destruction; third displayed damage is 84. Native-frame remeasurement supersedes the earlier four-cycle selection.",
+      "confidence": "high"
+    }
+  },
+  "rules": [
+    {
+      "id": "weapon_destroyable_hit_feedback",
+      "tier": "original",
+      "sources": [
+        "base_weapon_attack",
+        "usable"
+      ],
+      "corroboration": [
+        "practice_footage"
+      ],
+      "rule": "Each resolved weapon hit on a living destroyable target includes its existing damage record in recovery hitdata, allowing OnHit and UI_FLOAT_DAMAGE.",
+      "implementation": "src/Rasa.Game/Managers/MissileManager.cs:MissileTrigger",
+      "confidence": "high",
+      "unverified": "The original server damage formula and dummy resistance are not recovered by this protocol correction."
+    },
+    {
+      "id": "weapon_destroyable_windup_target",
+      "tier": "original",
+      "sources": [
+        "targeted_action"
+      ],
+      "rule": "A valid destroyable object remains the target in PerformWindup; it must not become None solely because it is not an Actor.",
+      "implementation": "src/Rasa.Game/Managers/WeaponAttackManager.cs:TryStart",
+      "confidence": "high",
+      "unverified": "No original server packet capture retained for this particular mission."
+    },
+    {
+      "id": "destroyed_dummy_no_hit",
+      "tier": "inferred",
+      "sources": [
+        "inert_destroyable",
+        "practice_footage"
+      ],
+      "rule": "An already-destroyed placement reports no successful weapon hit until restored, matching existing server target eligibility and original client targetability.",
+      "implementation": "src/Rasa.Game/Managers/MissileManager.cs:MissileTrigger",
+      "confidence": "high",
+      "unverified": "Original behavior of an in-flight projectile arriving during the unavailable interval is not directly captured."
+    }
+  ],
+  "tests": [
+    "DestroyablePlacementTests.WeaponHitOnPracticeDummyIncludesOriginalDamageFeedback",
+    "DestroyablePlacementTests.ShotAtDestroyedDummyHasNoHitUntilItsRestoreDeadline",
+    "WeaponAttackLifecycleTests.PracticeDummyIsTheWindupTargetForServerAutofire",
+    "DestroyablePlacementTests.SeededPracticeDummyFallsToOnePositiveHitAndRestores"
+  ],
+  "current_estimates": [
+    {
+      "field": "content_placement[198652].hit_points",
+      "value": 1,
+      "tier": "inferred",
+      "source": "docs/evidence/bootcamp-practice-dummy-observations.json; BootcampPracticeDummyHealthRows.cs",
+      "confidence": "medium for single-hit behavior, low for original exact HP",
+      "unverified": "Minimal positive HP reconstruction, not recovered original HP. Low HP versus forced server destruction is unresolved. Only placement 198652 changed; 198653 retains 100 HP."
+    },
+    {
+      "field": "content_placement[198652].restore_ms",
+      "value": 930,
+      "tier": "measured",
+      "uncertainty_ms": 270,
+      "source": "7Lrst9SG3pk 347.133333–348.066667, 350.933333–351.666667, 355.266667–356.266667, 357.733333–358.866667, 360.333333–361.200000; docs/evidence/bootcamp-practice-dummy-observations.json",
+      "confidence": "medium",
+      "observed_range_ms": [
+        733,
+        1133
+      ],
+      "frame_quantization_ms": 67,
+      "unverified": "Visible intervals average 933 ms. Nominal 930 ms remains reconstructed; original server timer not established."
+    },
+    {
+      "field": "npc_mission_objective_binding[1992,8].destroying_hit_only",
+      "value": true,
+      "tier": "inferred",
+      "source": "Practice objective analogue within the same rebuilt bootcamp; Lightning scene omitted by7Lrst9SG3pk362.067-362.133cut",
+      "confidence": "low"
+    }
+  ]
+}

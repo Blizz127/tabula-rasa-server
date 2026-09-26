@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Normal-attack native-client cave approaches after the courtyard checkpoint",
+  "provenance_tier": "observed",
+  "confidence": "High for logged emulator movement, death and area-probe results; no conclusion about final-live combat balance, route or trigger behavior.",
+  "setup": "Recovered 1.16.5.0 client and a disposable server copy with six staged Thrax and three Forean companions. Mission 1994 objective 2 was active. Runs 10 and 11 began at the previously client-reached (303.4,120.5,68.9); run 12 began at (295.8,120.5,67.8), reached by the client during run 11. Run 13 began at (299.5429,120.53125,60.304688), a point reached during the earlier attack-suppressed client run documented in client-cave-walk-playthrough.json. Checkpoint positions and rotation were written to the copied character database before login. All four runs used normal enemy attacks; production service and data were untouched. The disposable character database and game DLL were restored after the trials.",
+  "observations": [
+    "Run 10: MapLoaded at 17:06:04.375. A delayed movement command did not begin before Alden died at (303.4,120.5,68.9) at 17:06:23.114. The area probe remained 24.5 m from center versus a 10 m radius.",
+    "Run 11: movement commands were queued immediately when MapLoaded appeared at 17:08:16.917. Alden reached (295.8,120.5,67.8) and died there at 17:08:33.864, 16.8 m from area 198602's center and 6.8 m outside its 10 m radius.",
+    "Run 12: from the client-reached (295.8,120.5,67.8) checkpoint, W+Space 2000 ms and W 1000 ms raised Y to 121.3 but left horizontal coordinates unchanged; Alden died at 17:10:35.927. The capture shows a sandbag barricade in front of the character. This route was physically blocked; it cannot test cave-trigger activation.",
+    "Run 13: an A 4000 ms then W 3000 ms input from the saved run-81 position and rotation moved Alden to (296.5,120.1,73.9), toward the outer sandbags rather than run 81's cave-entry point. He died at 17:17:35.771, 19.1 m from area 198602's center. The saved rotation alone did not reproduce the earlier camera-relative route; this replay is not a normal-combat test of that route.",
+    "No normal-attack run logged entry into area 198602 or completion of mission 1994 objective 2. An earlier attack-suppressed native-client run entered it and advanced the objective; see client-cave-walk-playthrough.json. A controlled camera-relative normal-combat route and a cleared encounter remain untested."
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-checkpoint-10/game.log", "sha256": "aedf85c23cd2e50af9f332e96596db63289ea56847c3426f94531b7fea43ac22"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-checkpoint-10/normal-trigger-result.png", "sha256": "879038f26f167d1ebc2c5e6b97c6305a1f26a339239efc37b4b4c5201df44cc4"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-auto-11/game.log", "sha256": "39db1cb461bf5a2c17b88560514dbc0f541cb9c927489f7b97defe2542e7a649"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-auto-11/normal-trigger-result.png", "sha256": "1838acef4c604d3241eae2c6535613b5b73ef0c42c8fd4585a57e9cad0ec2a6a"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-near-12/game.log", "sha256": "ba9f0259ed164cdae475b86fbf274eec3305f24c226a4cc4d302abcc0ba7f627"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-trigger-near-12/trigger-result.png", "sha256": "c569ab154d2db4e83eb109e291498fa9d3e8371bd1abf169c6facabe2a64bd5b"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-side-route-13/game.log", "sha256": "b106470006fa97ed7d456c5e1dedab21ead1a803d1e1c3e20a0b6d37b19b45c9"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-normal-side-route-13/side-route-result.png", "sha256": "0108bece7aaaee8d279f89a4a166de5ee59feda261096d888a9637787b1c0f95"}
+  ],
+  "verification_needed": "Control both camera and character facing from a continuous client route, then move around the sandbags under normal attacks and complete the staged encounter. The attack-suppressed client run already shows the cave trigger advancing the objective. Compare route and actor timing against direct final-live footage if it becomes available."
+}

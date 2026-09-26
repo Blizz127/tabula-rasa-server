@@ -34,6 +34,10 @@ namespace Rasa.Managers
         private Dictionary<uint, List<ContentRuleEntry>> _rulesByContext = new();
         private Dictionary<(uint MissionId, uint ObjectiveId), List<ContentAreaEntry>> _areaBindings = new();
         private HashSet<uint> _contextsWithAreas = new();
+        private Dictionary<uint, List<ContentPlacementEntry>> _combatCompanionsByContext = new();
+        private static readonly bool TraceCombatCompanions =
+            Environment.GetEnvironmentVariable("RASA_TRACE_COMBAT_COMPANIONS") == "1";
+        private readonly Dictionary<ulong, long> _lastCombatCompanionTrace = new();
 
         // Area probe: entity id -> the tick it was last logged, so a player standing near a trigger leaves one line
         // a second rather than one a tick. A trigger that does not fire while the player is clearly in the place is
@@ -57,6 +61,11 @@ namespace Rasa.Managers
 
         private void BuildRuntime(IReadOnlyDictionary<uint, Mission> missions)
         {
+            _combatCompanionsByContext = Content.LivePlacements
+                .Where(placement => placement.Behavior == (byte)ContentPlacementBehavior.CombatCompanion)
+                .GroupBy(placement => placement.MapContextId)
+                .ToDictionary(group => group.Key, group => group.OrderBy(placement => placement.Id).ToList());
+
             _rulesByContext = Content.LiveRules
                 .GroupBy(rule => rule.MapContextId)
                 .ToDictionary(group => group.Key, group => group.OrderBy(rule => rule.Id).ToList());
@@ -447,7 +456,7 @@ namespace Rasa.Managers
         {
             public ulong ObjectId;
             public uint PlacementId;
-            public uint WindupMs;
+            public ActionData Action;
         }
 
         private readonly Dictionary<ulong, PendingUse> _pendingUses = new();
@@ -480,17 +489,34 @@ namespace Rasa.Managers
             if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Bomb && (uint)obj.StateId != BombDisarmed)
                 return;
 
+            // One actor has one content-use windup. A second request must not replace
+            // the first: its earlier recovery would otherwise finish the later use.
+            if (_pendingUses.ContainsKey(player.EntityId))
+                return;
+
             obj.ActivateMission = missionActivated;
             obj.WindupTime = placement.WindupMs;
 
             client.CallMethod(player.EntityId, new PerformWindupPacket(PerformType.TwoArgs, packet.ActionId, packet.ActionArgId));
-            client.CallMethod(packet.EntityId, new UsePacket(player.EntityId, obj.StateId, (int)placement.WindupMs));
+            // Recv_Use transitions to this state. TreasureDispenser supports 200->201 and
+            // 201->201, not 200->200; echoing the closed state never opens the crate lid.
+            var useState = (ContentUsableKind)placement.UsableKind == ContentUsableKind.Container &&
+                (obj.StateId == UseObjectState.TdStateClosed || obj.StateId == UseObjectState.TdStateOpened)
+                ? UseObjectState.TdStateOpened : obj.StateId;
+            client.CallMethod(packet.EntityId, new UsePacket(player.EntityId, useState, (int)placement.WindupMs));
 
             var actionData = new ActionData(player, packet.ActionId, packet.ActionArgId, placement.WindupMs) { SourceId = obj.EntityId };
             mapChannel.PerformRecovery.Add(actionData);
             obj.TriggeredByPlayers.Add(client);
 
-            _pendingUses[player.EntityId] = new PendingUse { ObjectId = obj.EntityId, PlacementId = placementId, WindupMs = placement.WindupMs };
+            _pendingUses[player.EntityId] = new PendingUse { ObjectId = obj.EntityId, PlacementId = placementId, Action = actionData };
+        }
+
+        /// <summary>Forget exactly the interrupted content-use windup.</summary>
+        public void CancelContentUsableUse(ActionData action)
+        {
+            if (_pendingUses.TryGetValue(action.Actor.EntityId, out var pending) && ReferenceEquals(pending.Action, action))
+                _pendingUses.Remove(action.Actor.EntityId);
         }
 
         /// <summary>
@@ -499,7 +525,8 @@ namespace Rasa.Managers
         /// </summary>
         public void ContentUsableRecovery(MapChannel mapChannel, ActionData action)
         {
-            if (!_pendingUses.TryGetValue(action.Actor.EntityId, out var pending) || pending.ObjectId != action.SourceId)
+            if (!_pendingUses.TryGetValue(action.Actor.EntityId, out var pending) ||
+                !ReferenceEquals(pending.Action, action) || pending.ObjectId != action.SourceId)
                 return;
 
             _pendingUses.Remove(action.Actor.EntityId);
@@ -524,6 +551,8 @@ namespace Rasa.Managers
             // A container's use opens its loot window; the objective completes on Loot All.
             if ((ContentUsableKind)placement.UsableKind == ContentUsableKind.Container)
             {
+                if (obj.StateId == UseObjectState.TdStateClosed)
+                    obj.StateId = UseObjectState.TdStateOpened;
                 OpenContentContainer(owner, placement, obj);
                 return;
             }
@@ -687,19 +716,29 @@ namespace Rasa.Managers
                     Owner = client.Player.EntityId
                 };
 
+                var missionGear = BindingsOfKind(ObjectiveBindingKind.LootAll)
+                    .Any(binding => binding.PlacementId == placement.Id);
                 if (Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var entries))
                     foreach (var entry in entries)
                     {
-                        var item = ItemManager.Instance.CreateFromTemplateId(entry.ItemTemplateId, entry.Quantity);
+                        // Rebuilding a private instance loses its dispenser, not the gear already saved
+                        // in the character's inventory. Match settlement's ownership recovery for these
+                        // single-piece mission rewards rather than creating another copy on reconnect.
+                        // Stack/consumable replenishment and ordinary containers retain their own rows.
+                        if (missionGear && entry.Quantity == 1 && PlayerHolds(client.Player, entry.ItemTemplateId))
+                            continue;
+
+                        var item = ItemManager.Instance.CreateFromTemplateId(entry.ItemTemplateId, entry.Quantity, initialAmmo: entry.InitialAmmo);
 
                         if (item != null)
                             loot.LootItems.Add(new LootItem(item, client.Player.EntityId, 0));
                         else
-                            // A row whose item cannot be built is not added at all. If it were, the window
-                            // would list an item the player can never take, and the container would never
-                            // read as empty.
+                        {
+                            // Do not expose an unresolvable row or silently count it as collected.
+                            _invalidContainerDispensers.Add(loot.EntityId);
                             Logger.WriteLog(LogType.Error,
-                                $"Content container {placement.Id}: item template {entry.ItemTemplateId} could not be built, so its row is omitted.");
+                                $"Content container {placement.Id}: item template {entry.ItemTemplateId} could not be built; objective settlement is blocked.");
+                        }
                     }
 
                 mapChannel.LootDispensers[loot.EntityId] = loot;
@@ -730,6 +769,13 @@ namespace Rasa.Managers
             // And this is what opens it. lootdispenser.Recv_LootCorpse is the only place the client posts
             // UI_SHOW_CORPSELOOT; Recv_LootInfo and Recv_CanLootItems only update a window already on screen.
             client.CallMethod(loot.EntityId, new LootCorpsePacket(client.Player.EntityId, remaining));
+
+            // A reconnect may occur after the last item persisted but before objective completion.
+            // There is no remaining row to click in that case. Verify ownership of the whole set
+            // before recovering, so an item-construction failure cannot satisfy this empty window.
+            if (remaining.Count == 0 && Content.Catalog.ItemSets.TryGetValue(placement.LootItemSetId, out var required) &&
+                required.Count > 0 && required.All(entry => entry.Quantity == 1 && PlayerHolds(client.Player, entry.ItemTemplateId)))
+                SettleContainerDispenser(client, loot.EntityId);
         }
 
         /// <summary>(player, placement) -> the dispenser opened for them, so a second use reopens one window.</summary>
@@ -737,6 +783,8 @@ namespace Rasa.Managers
 
         /// <summary>A content container's dispenser -> the placement whose objective its emptying completes.</summary>
         private readonly Dictionary<ulong, uint> _dispenserPlacements = new();
+
+        private readonly HashSet<ulong> _invalidContainerDispensers = new();
 
         /// <summary>
         /// Called after the loot manager has served a take or a Loot All. Does nothing unless the entity is a
@@ -746,7 +794,8 @@ namespace Rasa.Managers
         public void SettleContainerDispenser(Client client, ulong lootEntityId)
         {
             var mapChannel = client?.Player?.MapChannel;
-            if (mapChannel == null || !_dispenserPlacements.TryGetValue(lootEntityId, out var placementId) ||
+            if (mapChannel == null || _invalidContainerDispensers.Contains(lootEntityId) ||
+                !_dispenserPlacements.TryGetValue(lootEntityId, out var placementId) ||
                 !mapChannel.LootDispensers.TryGetValue(lootEntityId, out var loot) ||
                 loot.Owner != client.Player.EntityId)
                 return;
@@ -777,7 +826,7 @@ namespace Rasa.Managers
             if (player == null || itemTemplateId == 0)
                 return false;
 
-            foreach (var inventory in new[] { player.Inventory.PersonalInventory, player.Inventory.EquippedInventory })
+            foreach (var inventory in new[] { player.Inventory.PersonalInventory, player.Inventory.EquippedInventory, player.Inventory.WeaponDrawer })
                 foreach (var entityId in inventory ?? new List<ulong>())
                 {
                     var item = EntityManager.Instance.GetItem(entityId);
@@ -830,6 +879,8 @@ namespace Rasa.Managers
                     obj.StateId = (UseObjectState)threshold;
                     CellManager.Instance.CellCallMethod(obj, new ForceStatePacket((UseObjectState)threshold, 0));
                 }
+                if (sourceClient != null && obj.HitPoints < before)
+                    OnContentUsableHit(sourceClient, placementId, actionId, false);
                 return null;
             }
 
@@ -1133,7 +1184,15 @@ namespace Rasa.Managers
         {
             var contextId = mapChannel.MapInfo?.MapContextId ?? 0;
 
-            if (!_contextsWithAreas.Contains(contextId))
+            var hasAreas = _contextsWithAreas.Contains(contextId);
+            var hasCompanions = _combatCompanionsByContext.ContainsKey(contextId);
+            if (!hasAreas && !hasCompanions)
+                return;
+
+            if (hasCompanions)
+                WorkCombatCompanions(mapChannel, contextId);
+
+            if (!hasAreas)
                 return;
 
             foreach (var client in mapChannel.ClientList.ToList())
@@ -1185,6 +1244,57 @@ namespace Rasa.Managers
                         Missions.CompleteBoundObjective(client, missionId, objectiveId, ObjectiveBindingKind.AreaEntered);
                         break;
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Attach mission combat companions to the owner of their private map. The creature AI handles
+        /// navigation and hostile acquisition; after a fight ends it returns to following on this tick.
+        /// Their escort marker is presentation only and does not gate area objectives.
+        /// </summary>
+        private void WorkCombatCompanions(MapChannel mapChannel, uint contextId)
+        {
+            if (!mapChannel.IsPrivateInstance)
+                return;
+
+            var owner = mapChannel.ClientList.FirstOrDefault(client =>
+                client?.Player?.Id == mapChannel.OwnerCharacterId && MissionManager.IsInWorld(client));
+            var player = owner?.Player;
+            if (player == null)
+                return;
+
+            var companions = _combatCompanionsByContext[contextId];
+            var creatures = mapChannel.MapCellInfo.Cells.Values.SelectMany(cell => cell.CreatureList).ToList();
+            var now = Environment.TickCount64;
+
+            foreach (var placement in companions)
+            {
+                if (placement.EscortMissionId == 0 ||
+                    !player.Missions.TryGetValue(placement.EscortMissionId, out var mission) ||
+                    mission.State != MissionState.Active)
+                    continue;
+
+                var creature = creatures.FirstOrDefault(candidate =>
+                    candidate.ContentPlacementId == placement.Id && candidate.State != CharacterState.Dead);
+                if (creature == null || creature.Controller.CurrentAction == BehaviorManager.BehaviorActionFighting)
+                    continue;
+
+                if (creature.Controller.CurrentAction != BehaviorManager.BehaviorActionFollow ||
+                    creature.Controller.ActionFollow.FollowTargetId != player.EntityId)
+                    BehaviorManager.Instance.SetActionFollow(creature, player.EntityId);
+
+                // These mission soldiers have no minion-command UI. Give their follow AI the
+                // same assisted target as a subordinate on Assist Me, so they can join a fight
+                // the recruit has selected before their shorter autonomous scan reaches it.
+                creature.Controller.ActionFollow.AssistTargetId = player.EntityId;
+
+                if (TraceCombatCompanions &&
+                    (!_lastCombatCompanionTrace.TryGetValue(creature.EntityId, out var lastTrace) || now - lastTrace >= 1000))
+                {
+                    _lastCombatCompanionTrace[creature.EntityId] = now;
+                    Logger.WriteLog(LogType.Debug,
+                        $"Combat companion trace: placement={placement.Id}, position={creature.Position}, player={player.Position}, action={creature.Controller.CurrentAction}, pathIndex={creature.Controller.PathIndex}, pathCount={creature.Controller.Path.Count}");
                 }
             }
         }

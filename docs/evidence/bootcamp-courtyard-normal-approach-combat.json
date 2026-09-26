@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Copied-client approach from the Luna Cavern upper path into the six-Thrax courtyard with three staged Forean companions",
+  "provenance_tier": "observed",
+  "source": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb :110; copied auth, character and world SQLite databases; live service untouched",
+    "checkpoint": "Disposable level-2 Alden placed at (360.0703,121.2031,114.6406) after an earlier native walk from the camp; mission 1994 objective 2 active, XP 3571",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/game.log",
+    "screenshots": [
+      { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/replay-contact.png", "sha256": "5e00a904ebadf03cadb9502bf25a9867396aacc43b4c3a4c13a9d783c25a453b" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/replay-after-combat.png", "sha256": "437ab36de3bd24966f7a4a91e2de4c574fc343ea5060e85478e317fcdb8f45c8" }
+    ]
+  },
+  "observation": {
+    "route": "The player walked from the copied checkpoint around the upper-path rock and down toward the courtyard. All three orange-marked companions remained with the player at the courtyard edge. No player weapon attacks were made during this diagnostic.",
+    "contact": "At (297.2,120.2,73.4), five of the six placed Thrax (198660-198663 and 198665) attacked. Cave area 198602 was 19.5 m away horizontally and was not entered.",
+    "player_death": "Game log at 10:18:39.780 records Alden's death at (297.2,120.2,73.4), killed by creature 2746 / Thrax placement 198662.",
+    "companion_incoming_hit_counts": { "198688 Gunner": 52, "198689 Archer": 55, "198690 Shaman": 54 },
+    "companion_death_times": { "198688 Gunner": "10:19:17.874", "198689 Archer": "10:19:03.778", "198690 Shaman": "10:18:58.679" },
+    "companion_outgoing_hit_trace_count": 0,
+    "hospital_dialog": "The client opened Hospital Selection after the player's death."
+  },
+  "interpretation": "This copied encounter fails a no-player-attack approach. The player died about four seconds before the first logged hit on a companion. The absence of companion hit traces here does not show whether they would attack while the player is alive and shooting; the earlier isolated one-Thrax test recorded hits from each companion. Exact final-live damage, AI engagement and survival remain unverified. The six-Thrax combat encounter is not validated.",
+  "confidence": "high for copied-client route outcome and logged hit counts; no claim of final-live fidelity",
+  "unverified": [
+    "Original final-live companion AI trigger, attack range and combat values",
+    "Original hostile placements, timing and grouping in this courtyard",
+    "Outcome when the player attacks along the filmed route",
+    "Whether the filmed player's route crosses area 198602 before this encounter ends"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Original-client cave trigger reached under the staged six-Thrax encounter",
+  "provenance_tier": "observed",
+  "confidence": "High for the copied-client movement, server area probe and copied character objective state; low for final-live encounter timing, values and placements.",
+  "setup": "Recovered 1.16.5.0 client under Wine/Xvfb, disposable server-courtyard-full-20260923 world and character database, copied level-2 Alden checkpoint at (295.8,120.5,67.8) yaw 2.8498487 with mission 1994 objective 2 active, all six staged Thrax using their normal inferred attack values, three staged camp companions, and the current worktree Game DLL SHA-256 6a617b283b969e661cb09af69c9fad41684e6b730753a14521be070f9128f1e9. The client-rendered red HUD health-bar pixel at (100,674) was used to wait until the world was playable before movement.",
+  "observations": [
+    "Trial 16 confirmed a wait for the rendered HUD; because movement was queued manually afterward, Alden died at the checkpoint at 18:00:18.729 before input. It is a timing control, not route evidence.",
+    "Trial 17 queued movement immediately after the playable frame. Right strafe for 2 seconds followed by forward movement for 3 seconds moved Alden away from the cave to (305.9,120.6,86.7), 33.8 m from the trigger center. A later left strafe moved him to (286.9,119,77), 13.4 m from center; he died there before entering.",
+    "Trial 18 reset the same checkpoint and queued a 3.5-second left strafe immediately after the playable frame. MapLoaded was logged at 18:04:49.600. The first area-198602 entered-true probe was at 18:05:01.176, position (273.2,122.1,62.2), 7 m from the original-map trigger center (279.05,120.5,66.07) and within its 10 m radius.",
+    "At the first entered-true probe, companion traces placed the three camp escorts around (306-308,121,88-89), roughly 40 m behind Alden. The checkpoint skipped their natural travel from camp, so the death after the trigger is not a controlled comparison of final-live ally formation or encounter survival.",
+    "The resulting copied character database has mission 1994 objective rows 1=1, 2=2 and 4=2; status 2 is complete. The client screenshot shows the tracker advanced to 'Find a way out of the cave'. Alden subsequently died at (273.2,122.1,62.2) at 18:05:16.185, killed by staged creature 2745. The complete natural fight and survival remain unverified."
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-left-route-18/game.log", "sha256": "54f61f6d81105d0081dc58f90cc2bc2e1b1466bb84ae5bf6ae04afc61eeabe42"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-left-route-18/after-a-toward-cave.png", "sha256": "b4ec711ef176ff7e544a675aa2be3d630e98cca8c87670364a177cfced2ccfa8"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-left-route-18/char-after.db", "sha256": "8cc687bffa7314cb762ed5223be89e012ae8bed8a7c5071bc1db2f70503b1383"}
+  ],
+  "isolation": "All three trials used only the disposable copied server. The test ended, and the disposable Game DLL and character database were restored from their pretrial copies; the copied cover asset was removed. SQLite integrity_check returned ok. Production was not changed.",
+  "unverified": "Whether the original final-live player could survive this exact route; original hostile spawn timing, health, damage and placements; complete courtyard combat with allies in the filmed formation; continued cave and boss combat under normal values."
+}

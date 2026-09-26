@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Officer apparent grounding investigation plus bounded end-of-WalkTo stop/facing correction; grounding and placement remain unchanged",
+  "retail_proof": false,
+  "source_fixes": true,
+  "builds_run": "Root-owned serial regression builds; no independent builds by audit agent",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-mcallister-stop-audit.md",
+      "sha256": "6201af8d32e85352e8d096bbc48d408e057df9d3f2d7514022866eaec3921997",
+      "bytes": 3781
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-mcallister-stop-probe.txt",
+      "sha256": "59a3d30e66640d0b45de171bad5cb0608530b33966a49c0ec2205fd309832145",
+      "bytes": 834
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-mcallister-stop-probe.tsv",
+      "sha256": "ce7a0a1f54ae83c3048a5fbfdab905cff49d7dae52159cbdd9ac4924217402e1",
+      "bytes": 2472
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "bytes": 3010108
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/positions-s1/work/terrain/H_be16.npy",
+      "sha256": "b1730f13237c032ec8bcfe924cd7cea7ae709438904c47ab61ed2e76d9c67219",
+      "bytes": 2654336
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/tools/navprobe/NavProbe/bin/Release/net5.0/NavProbe.dll",
+      "sha256": "c8428870f5e5148eba285565c83a08fae84d2d679cbbe4eba010e76e96f320eb",
+      "bytes": 7680
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/37-hartmann-approach.png",
+      "sha256": "1bf24dc6da5e29218bc4c4343d6396012e6518325e0e267e49269fa672858321",
+      "bytes": 690265
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/42-practice-fire.png",
+      "sha256": "cd10eddef741c150ea3494edca4d72014a8079e96fd7b13b02c9db36ee39d40a",
+      "bytes": 806837
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/45-hartmann-return-talk.png",
+      "sha256": "addeb2a2d54db27b3cd86ba1616bf55a27bd2d3dd070b9477a822f87d5107cff",
+      "bytes": 669829
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/game.log",
+      "sha256": "254f880ac943092c62cf18b2e15093d6de658a302c0d218c75d96e7c464434a3",
+      "bytes": 167309
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/probe-collision.py",
+      "sha256": "2955ecf120cc7553ede24680105c19b2a55416f8cd58ea799cc82642d352f481",
+      "bytes": 4401
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/collision-endpoint.json",
+      "sha256": "8170150e480bbd38383e6e647254935be8c4b37e8683934406c9f0112a63c379",
+      "bytes": 5443
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/pair304_305.png",
+      "sha256": "b0f0495ec2fa16c60101c10fa87b00db9a78eff386bd2ee1179855eb0094a62a",
+      "bytes": 614585
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/verification.json",
+      "sha256": "6ddbb0ff89f88a7f9ce343476b3255151a07333e319c0e6b78b4bc9d6fb31767",
+      "bytes": 26000
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/maps/adv_bootcamp/adv_bootcamp.map",
+      "sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3",
+      "bytes": 127212
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-retail-20260922-tracking-targeted.log",
+      "sha256": "0d49880372e9e8010e8121ff70b9517d45a4db56944bbf267372e3a7fa54e5eb",
+      "bytes": 17224
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/tracking-targeted.trx",
+      "sha256": "97b5c7143f33f862e750161236da8ce44bff8b43a6712c572ab6abe3c99433c2",
+      "bytes": 219268
+    }
+  ],
+  "observation": {
+    "captures": [
+      37,
+      42,
+      45
+    ],
+    "identity": "Operator identifies McAllister; screenshot alone does not establish entity identity or position",
+    "exact_runtime_position": "Not captured"
+  },
+  "path_probe": {
+    "start": [
+      387.2,
+      125.57,
+      53.3
+    ],
+    "destination": [
+      390,
+      120.75,
+      172
+    ],
+    "complete": true,
+    "corners": [
+      [
+        386,
+        126.31,
+        54.8
+      ],
+      [
+        382.8,
+        128.91,
+        62
+      ],
+      [
+        382.4,
+        121.71,
+        100.4
+      ],
+      [
+        390,
+        120.75,
+        172
+      ]
+    ],
+    "destination_polygon_contains_xz": true,
+    "endpoint_is_original_live_coordinate": false
+  },
+  "height_comparison": {
+    "coordinate_xz": [
+      390,
+      172
+    ],
+    "navmesh_y": 120.75,
+    "retained_original_terrain_decode_y": 120,
+    "difference_m": 0.75,
+    "terrain_decode_formula": "(uint16 >> 4) / 4; bilinear XZ interpolation from retained H_be16.npy",
+    "limitation": "Derived terrain is not a native collision read at the actual final creature coordinate. Nearby static geometry and navmesh simplification can affect the correct supporting surface."
+  },
+  "candidates": [
+    {
+      "kind": "grounding",
+      "source": "src/Rasa.Game/Managers/NavMeshManager.cs:SnapToGround",
+      "finding": "Uses nearest navigation polygon height for visible feet, with 3 m vertical tolerance. This can preserve a simplified surface above rendered terrain. Merely lowering destination Y would be resnapped.",
+      "causal_status": "Plausible; exact client/server position comparison required"
+    },
+    {
+      "kind": "terminal_movement",
+      "source": "src/Rasa.Game/Managers/BehaviorManager.cs:FollowPath, one-shot path completion, SetActionWander",
+      "finding": "Path ends within 0.8 m; no zero-speed Movement is broadcast at completion. Last moving update advertises 2.5 m/s, and run speed 0 prevents later wandering.",
+      "causal_status": "Concrete source omission; screenshot causality unproven"
+    },
+    {
+      "kind": "partial_path",
+      "source": "src/Rasa.Game/Managers/NavMeshManager.cs:FindPath",
+      "finding": "Drops complete flag generally, but this specific path probe returned complete.",
+      "causal_status": "Not demonstrated as cause here"
+    }
+  ],
+  "test_strategy": [
+    "Run actual seeded McAllister to one-shot completion in 250 ms ticks; capture authoritative positions and every outgoing Movement. Assert terminal velocity 0 and stable server position for 60 seconds.",
+    "Repeat observer introduction after arrival to distinguish stale advertised velocity from static height.",
+    "Compare final server/native client coordinate with exact original collision surface, retaining bridge/deck layer. Do not infer exact final position from endpoint or screenshot.",
+    "Existing BootcampOpeningTests advance only 20 ticks after acceptance and verify distance decreased; extend separately to full completion.",
+    "A disconnected mesh test for partial paths is separate from this observed complete-route case."
+  ],
+  "preservation_constraint": "Do not replace the estimated destination with an invented placement. Stop signaling and exact grounding should be investigated independently.",
+  "original_movement_contract": {
+    "status": "Original Python consumer evidence; native network decoder not fully traced",
+    "sources": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-augmentations-actor.pyo",
+        "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+        "bytes": 98904
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-actor.pyo.dis",
+        "sha256": "1e5fe90ad4aa6a18d8c3758ce085e6ed9a4ca43b55c8b6a3b2131684306db628",
+        "bytes": 462182
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-playermovementmgr.pyo",
+        "sha256": "edeece9a54a99c4cdce54d36a386877a900c0737b5b5a2ce222b3f1f9a91ed33",
+        "bytes": 20406
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-playermovementmgr.pyo.dis",
+        "sha256": "de1df57b5d2fb90b4f6f5ab27096bb89857319839e199cef12f093f55e1cb78a",
+        "bytes": 119226
+      }
+    ],
+    "consumers": [
+      {
+        "function": "Actor.Recv_ActorInfo",
+        "source_lines": [
+          2383,
+          2384
+        ],
+        "bytecode_offsets": [
+          0,
+          28
+        ],
+        "behavior": "Supplied yaw is applied through body.SetYaw and SyncFacingToYaw; late introduction must therefore receive the current authoritative heading."
+      },
+      {
+        "function": "PlayerMovementMgr.UpdateGaitInfo",
+        "source_lines": [
+          279,
+          282,
+          285
+        ],
+        "bytecode_offsets": [
+          0,
+          54
+        ],
+        "behavior": "Reads body.GetMoveSpeed, initializes stopped gait, and chooses moving gait only above0.01."
+      }
+    ],
+    "runtime_packet_contract": "ProtocolBufferWriter.WriteMovementData encodes Movement.Velocity at scale1024 and yaw separately; Client.MoveObject uses movement channel1. This is implementation evidence, not an original live packet capture.",
+    "limitation": "This source alone does not prove that the observed suspended officer resulted from stale speed or establish the exact native interpolation/extrapolation algorithm."
+  },
+  "pending_regressions": {
+    "file": "src/Rasa.Test/BootcampOpeningTests.WalkArrival.cs",
+    "cases": 2,
+    "status": "Corrected old-production baseline fails both intended assertions; both fixed candidate cases pass in root-owned 174-test targeted suite. Full suite pending.",
+    "checks": [
+      "Actual migrated creature/placement/destination and original-map-derived navmesh reach terminal state",
+      "Authoritative final position printed, stable60seconds",
+      "Final movement velocity0",
+      "Actual late-observer ActorInfo heading matches last walking heading"
+    ],
+    "limitations": "Does not measure height against exact original collision or prove screenshot cause."
+  },
+  "initial_baseline": {
+    "artifact": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-retail-20260922-walk-arrival-before.log",
+    "sha256": "25909520d2947052cab8e59006834102ab0a820319cc6e0d65c7959657bb6684",
+    "test_count": 2,
+    "failed": 2,
+    "duration_seconds": 35.0756,
+    "stop_case": "Target assertion failed: expected terminal velocity 0, actual 2.5",
+    "late_observer_case": "Invalid baseline for yaw assertion: fixture lacked AppearanceData dictionary, so introduction threw first. Fixture corrected before baseline rerun.",
+    "arrival_ticks_250ms": 195,
+    "authoritative_position": [
+      390,
+      120.75312,
+      172
+    ],
+    "last_velocity": 2.5,
+    "last_yaw": -3.0358331,
+    "stored_yaw": 0,
+    "movement_packets": 195,
+    "limitation": "Server route reproduction does not establish original client rendering or exact collision height."
+  },
+  "corrected_baseline": {
+    "artifact": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/mcallister-grounding/rasa-retail-20260922-walk-arrival-before2.log",
+    "sha256": "21131ca3b7dfd3f317d3766ba2e27de24f9af1954da28e3b3dd762df4233b9ee",
+    "test_count": 2,
+    "failed": 2,
+    "duration_seconds": 29.9349,
+    "stop_case": "Expected terminal velocity 0, actual 2.5",
+    "late_observer_case": "Expected ActorInfo yaw -3.0358331203460693 within 0.0001, actual 0",
+    "arrival_ticks_250ms": 195,
+    "authoritative_position": [
+      390,
+      120.75312,
+      172
+    ],
+    "movement_packets": 195,
+    "position_stable_for_seconds": 60,
+    "interpretation": "Both now fail their intended regression assertions, with no fixture exception. Native visual height causality remains unproven."
+  },
+  "endpoint_collision_probe": {
+    "provenance": "Original 1.16.5.0 static meshes decoded with a read-only Python port of existing GeoMesh/MapGeometry logic, with retained decoded map placements",
+    "coordinate_xz": [
+      390,
+      172
+    ],
+    "authoritative_final_y": 120.75312,
+    "terrain_y": 120,
+    "difference_m": 0.75312,
+    "candidate_entities": 11,
+    "nearby_static_triangle_support_found": false,
+    "lowest_static_triangle_intersection_y": 172.395707,
+    "raw_map_matches_previous_decoded_source": true,
+    "map_sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3",
+    "mesh_artifacts": "Extracted .geo hashes and archive byte offsets recorded in collision-endpoint.json beside the retained meshes",
+    "limitation": "This is the emulator geometry decoder, not native collision. Candidate selection uses transformed original render bounds; malformed/outlying bounds could omit geometry. Retained CSV coordinates/quaternions have rounded decimal precision. Dynamic collision and exact run 06 native actor position are not measured.",
+    "interpretation": "No decoded nearby static support accounts for the 0.75312 m gap. Simplified navigation surface height remains a separate plausible visual-grounding cause; no endpoint or grounding correction authorized by this observation alone."
+  },
+  "footage_arrival_gap": {
+    "video": "7Lrst9SG3pk",
+    "timestamps_seconds": [
+      304.667,
+      304.733
+    ],
+    "observation": "Directly reinspected pair304_305.png: McAllister/player are still approaching the stone arch before a hard cut to the crate loot window on the raised deck. Tracker and chat also change across the cut.",
+    "interpretation": "Original McAllister arrival, exact endpoint and final ground contact are not visible, so this source cannot validate the reconstructed arrival height."
+  },
+  "fixed_targeted_verification": {
+    "total_tests": 174,
+    "passed": 174,
+    "failed": 0,
+    "duration_seconds": 40.2117,
+    "mcallister_cases_passed": 2,
+    "trx_start_utc": "2026-09-22T21:15:18.4310675+00:00",
+    "trx_end_utc": "2026-09-22T21:15:19.0768953+00:00",
+    "arrival_ticks_250ms": 195,
+    "authoritative_position": [
+      390,
+      120.75312,
+      172
+    ],
+    "last_velocity": 0,
+    "last_yaw": -3.0358331,
+    "stored_yaw": -3.0358331203460693,
+    "movement_packets": 196,
+    "additional_stop_packets": 1,
+    "stationary_seconds_tested": 60,
+    "late_observer_actor_info_yaw_matches": true,
+    "same_position_repeat_finite_and_stationary": true,
+    "original_visual_height_verified": false,
+    "interpretation": "Arrival coordinate and duration are unchanged. One terminal stop packet now cancels advertised movement; stored and later-introduction yaw match the last moving heading. No conclusion about exact native collision height or screenshot cause."
+  },
+  "final_verification": {
+    "tests_passed": 1281,
+    "tests_skipped": 0,
+    "minutes": 6.8934,
+    "targeted_passed": 179,
+    "targeted_seconds": 50.8846,
+    "source_entries_matched": 2061,
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-full.log",
+        "sha256": "1ab90e5697f96129bfc6672ea71b3725119d754cb1fce2fdb5eccdc211c7ec8d",
+        "bytes": 105608
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-targeted.log",
+        "sha256": "49287df92cbec187b4287b4fd0aaa6193225bb91b54c665f54aee1c88e541602",
+        "bytes": 18440
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-option-snapshot.json",
+        "sha256": "8c15a57d45bb364031e5672b6c5a9a9a6a890f88a1cedb4d43c63550f5026ed4",
+        "bytes": 312390
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-full.trx",
+        "sha256": "b537cd2513af3ec1993b6329e7e9307969c0ea67876194cbad639b98635ddd40",
+        "bytes": 1408531
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-targeted.trx",
+        "sha256": "846272c80354fc3f799264a6e5dbbfbd1a7c49af9c341929c1780dcde073ed54",
+        "bytes": 228364
+      }
+    ]
+  }
+}

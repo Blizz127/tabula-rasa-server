@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Frozen original-client run 13 against the isolated emulator: final Hartmann dialogue, mission 1992 turn-in, mission 1994 promotion and ordinary logout.",
+  "retail_proof": false,
+  "runtime": {
+    "run": "playthrough-13",
+    "movement": "Ordinary movement and interactions; no GM teleport in this run (operator report and retained route captures).",
+    "binary_validation_generation": 1281,
+    "uses_subsequent_1300_test_build": false,
+    "generation_source": "Parent operator run provenance; exact input hashes below. Later module and boss-counter recovery changes are not attributed to this run.",
+    "core_game_binary_inputs": [
+      {
+        "path": "server-playthrough/game/Rasa.DBL.dll",
+        "sha256": "2ef0f0ce838d0c9053a4f4e8bf9299981e524e784bf7603abbaeaf925eff0cab"
+      },
+      {
+        "path": "server-playthrough/game/Rasa.Shared.dll",
+        "sha256": "0c8d7be887b19ccf2a9f00004c1ddac486272776f94de4c096f8adf02ee2821e"
+      },
+      {
+        "path": "server-playthrough/game/Rasa.Navigation.dll",
+        "sha256": "5398cf9863c2b1381474aacbe1ec25f293656ea0849ab026e07de3a91c1529fc"
+      },
+      {
+        "path": "server-playthrough/game/Rasa.Game.dll",
+        "sha256": "a5f9b71dc878cb984d248871ff2e8594f385316a8149be3860482d562df0ec8c"
+      }
+    ],
+    "terminal_status": {
+      "time": 1790115092.1010587,
+      "terminal": true,
+      "processes": {
+        "xvfb": {
+          "pid": 3,
+          "exit_code": 0
+        },
+        "auth": {
+          "pid": 8,
+          "exit_code": 0
+        },
+        "game": {
+          "pid": 9,
+          "exit_code": 0
+        },
+        "client": {
+          "pid": 52,
+          "exit_code": -15
+        }
+      }
+    },
+    "client_exit_interpretation": "Harness terminated client with -15 after ordinary logout to character selection; not a natural zero exit."
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/01-handoff-arrival.png",
+      "sha256": "259a9a2c99168a8712bd4762b89645be5f6c77884e89a3841ac3b5ffae195037",
+      "bytes": 769815
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/02-hartmann-approach.png",
+      "sha256": "9355d81b1f7a700132a2727a31663c3ea1e7cc85db981067fd822893db27f3b5",
+      "bytes": 700395
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/03-hartmann-facing.png",
+      "sha256": "c4964a44cebfde1ad6afc79e5e4b895c4e8e9363bea63273596fbc009defa165",
+      "bytes": 711322
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/04-hartmann-interact.png",
+      "sha256": "facee25104a279d92f3aaf746fd93a4475bf27ca94e65bd19bbc1bb32a30ba5c",
+      "bytes": 682147
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/05-hartmann-objective-complete.png",
+      "sha256": "00753ac278e702639000ecd22459675ea0118af3e25d595a696e286c29c15bd2",
+      "bytes": 748862
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/06-return-route.png",
+      "sha256": "164742896dcee7fdbc60e3d5fa14ab636a8466a7dd097142ac401962e339015a",
+      "bytes": 746728
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/07-return-gate.png",
+      "sha256": "4ff9970d2c96e0cf425f54f08a0673be59c83fa8536f0695654fc7d33a5605f5",
+      "bytes": 754670
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/08-return-causeway.png",
+      "sha256": "1d8064e1e50a2afdb2d1d26b85ffe47b556590aa68cba6e9f707679edba88ab4",
+      "bytes": 570515
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/09-desimone-approach.png",
+      "sha256": "7622bf011960736f7cc6056b625a8ece7c52bf04bf3f0e3df4805482fc27fcb7",
+      "bytes": 792035
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/10-return-around-obelisk.png",
+      "sha256": "8bc39aaaa3c1664d3438409893350b7ca7fcaba5c37a7d9921400500d4ad06e3",
+      "bytes": 787213
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/11-upper-causeway.png",
+      "sha256": "f7e0c8add8eae392d80d7fd7bed696412aac71fac3624250cec7156efde0179b",
+      "bytes": 761503
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/12-obelisk-route-check.png",
+      "sha256": "c255cc5d31923316eec18cafbc292b7f70ad351ac6a3c4c835c1dc1ea387579c",
+      "bytes": 669814
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/13-desimone-nearby.png",
+      "sha256": "bebca6bba8ddfab5861709a3a70b6a752f9031144d508614b894e0cee164309d",
+      "bytes": 812994
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/14-desimone-range.png",
+      "sha256": "837fad77e6ba7a6ccbdf90c2f07f96d8ad3f55daa3bcaf1ba64c4ee05c5c5c02",
+      "bytes": 823412
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/15-desimone-interaction.png",
+      "sha256": "7fdc421053f0f898ae971dc1d2acf3eadd057320e68e4203fb3ce8dc256f3fc3",
+      "bytes": 602808
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/16-gearing-rewarded.png",
+      "sha256": "3af98b9e86e2a4a243f298d630a7ae02b34243a828f41011a5f66c77d434431d",
+      "bytes": 652728
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/17-capture-flag-offer.png",
+      "sha256": "2c871fe99ee77317b5025437d9dcf1d39577db9ed427c1d454c8385732be1351",
+      "bytes": 612284
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/18-promotion-dialogue.png",
+      "sha256": "b57e1c7df05c29318d7e323777988b81b9b2d3e30f22c45ff6e324df6f5ce7c6",
+      "bytes": 601699
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/19-promotion-result.png",
+      "sha256": "959eaefc9c86a38db1f4bd4fcab70689dc9442abd4cb8534935224c94f94ed70",
+      "bytes": 780112
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/20-level2-skills.png",
+      "sha256": "6395057c2cb54c970b94f47c395f45d9cfcb443c19ab637ea21da91879a35989",
+      "bytes": 670514
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/21-level2-logout.png",
+      "sha256": "1a13b0d8d6ca25d3d953f2d4e656aa71683bd398d731ffb471b40ed380598840",
+      "bytes": 543498
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/22-level2-character-selection.png",
+      "sha256": "0269fa18d80a1f91d7db373cb870e112c84332595476f20b0a5a04bacecc60fa",
+      "bytes": 936244
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/hartmann-objective-state.json",
+      "sha256": "543f427635d9a7893be9f9e9ad60e072991c9521f73fbe7ab78adb72b0a73f7e",
+      "bytes": 1840
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/gearing-reward-state.json",
+      "sha256": "56e0f9dbb61298946d40f45c9d6f7e5602eaf21b61f25309ce4371aaace149f0",
+      "bytes": 389
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/promotion-state.json",
+      "sha256": "88b55016f37c72a9c5a4cf53ad7ab2ee6c4d42dad82e307e4e384b135cf7a812",
+      "bytes": 593
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/logout-persisted-state.json",
+      "sha256": "755016ea65ca9946524eff9563f3b87e84dfe972a95d8e1fe8a538bd0b2d47e7",
+      "bytes": 7360
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/client-final.log",
+      "sha256": "eb73f41c99de40cbf31dfe662ef83c99ced8198bff976043bf0233e98487943a",
+      "bytes": 6461
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/game.log",
+      "sha256": "673d28a166dd7a98bd76eb3087fdb9c7f570ebd891a7135f47c9d24a890b4114",
+      "bytes": 224575
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13/status.json",
+      "sha256": "dfb17b456c28ef0118282fb7a19ac6c1408c95d4804f0b95d96f1288be280977",
+      "bytes": 210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13-binary-inputs.json",
+      "sha256": "2703e1124f3a32c74115cc5974f33bf3eee461f5c9692916a070776f09f5ae2f",
+      "bytes": 21806
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13-before-state.json",
+      "sha256": "e61c70b76802d9edccf9ca97b998b20e4642cfc064f70bc31f236e3f7be28188",
+      "bytes": 2996
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-13-owner.json",
+      "sha256": "9328fbec98fdf74da40a26d107a610fecf271a7a96712d6b8315703a6f36c410",
+      "bytes": 134
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_objectiveconversation.pyo.json",
+      "sha256": "6c05f83cd054255c48f5302144d07c454e33776a43f72a9b4c938b887a76f5e1",
+      "bytes": 269389
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A2/verification.json",
+      "sha256": "5e2224c14ead67ca2714eade6a01d9233e4ec21f0035e66445334da426a3141a",
+      "bytes": 26083
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/verification.json",
+      "sha256": "6ddbb0ff89f88a7f9ce343476b3255151a07333e319c0e6b78b4bc9d6fb31767",
+      "bytes": 26000
+    }
+  ],
+  "snapshots": [
+    {
+      "file": "hartmann-objective-state.json",
+      "time_unix": 1790113691.6452188,
+      "time_utc": "2026-09-22T21:48:11.645219+00:00"
+    },
+    {
+      "file": "gearing-reward-state.json",
+      "time_unix": 1790114564.679301,
+      "time_utc": "2026-09-22T22:02:44.679301+00:00"
+    },
+    {
+      "file": "promotion-state.json",
+      "time_unix": 1790114715.0704367,
+      "time_utc": "2026-09-22T22:05:15.070437+00:00"
+    },
+    {
+      "file": "logout-persisted-state.json",
+      "time_unix": 1790115082.0087712,
+      "time_utc": "2026-09-22T22:11:22.008771+00:00"
+    }
+  ],
+  "stages": [
+    {
+      "captures": [
+        "04-hartmann-interact.png",
+        "05-hartmann-objective-complete.png"
+      ],
+      "mission_id": 1992,
+      "completed_objective": 7,
+      "result": "All nine objectives completed; payout still pending.",
+      "snapshot": "hartmann-objective-state.json"
+    },
+    {
+      "captures": [
+        "15-desimone-interaction.png",
+        "16-gearing-rewarded.png"
+      ],
+      "mission_id": 1992,
+      "result": "Mission completed and reward paid.",
+      "experience_award": 1250,
+      "credits_award": 200,
+      "resulting_experience": 2500,
+      "resulting_credits": 300,
+      "resulting_level": 1,
+      "snapshot": "gearing-reward-state.json"
+    },
+    {
+      "captures": [
+        "17-capture-flag-offer.png",
+        "18-promotion-dialogue.png",
+        "19-promotion-result.png",
+        "20-level2-skills.png"
+      ],
+      "mission_id": 1994,
+      "completed_objective": 4,
+      "pending_objective": 2,
+      "experience_award": 500,
+      "resulting_experience": 3000,
+      "resulting_level": 2,
+      "displayed_attribute_points": 3,
+      "displayed_training_points": 2,
+      "points_spent": false,
+      "snapshot": "promotion-state.json"
+    },
+    {
+      "captures": [
+        "21-level2-logout.png",
+        "22-level2-character-selection.png"
+      ],
+      "result": "Ordinary logout to character selection. Mission 1994 remains active with cave objective pending.",
+      "snapshot": "logout-persisted-state.json"
+    }
+  ],
+  "persisted_checkpoint": {
+    "character_id": 1,
+    "level": 2,
+    "experience": 3000,
+    "credits": 300,
+    "attribute_allocations": {
+      "body": 0,
+      "mind": 0,
+      "spirit": 0
+    },
+    "skills": [
+      {
+        "character_id": 1,
+        "skill_id": 1,
+        "ability_id": -1,
+        "skill_level": 1
+      },
+      {
+        "character_id": 1,
+        "skill_id": 8,
+        "ability_id": -1,
+        "skill_level": 1
+      },
+      {
+        "character_id": 1,
+        "skill_id": 19,
+        "ability_id": -1,
+        "skill_level": 1
+      },
+      {
+        "character_id": 1,
+        "skill_id": 49,
+        "ability_id": 194,
+        "skill_level": 1
+      },
+      {
+        "character_id": 1,
+        "skill_id": 165,
+        "ability_id": 401,
+        "skill_level": 1
+      }
+    ],
+    "completed_missions": [
+      1990,
+      1992
+    ],
+    "active_mission": 1994,
+    "completed_objective": 4,
+    "incomplete_objective": 2,
+    "map_context_id": 1985,
+    "position": [
+      387.24609375,
+      127.27734375,
+      40.13671875
+    ],
+    "yaw": 0.33421608805656433,
+    "option_55": "1,994",
+    "rifle_ammo": 17,
+    "reserve_cartridges": 1000
+  },
+  "client_log": {
+    "line_count": 34,
+    "error_lines": [
+      {
+        "line": 7,
+        "text": "ERROR: TypeError: argument list must be a tuple"
+      }
+    ],
+    "warning_line_count": 33,
+    "skill_tooltip_traceback_present": false,
+    "elemental_icon_traceback_present": false,
+    "limits": "Absence limited to this run and interactions; unresolved tuple error remains."
+  },
+  "original_comparison": {
+    "client_table_metadata": {
+      "member": "generated/client/objectiveconversation.pyo",
+      "size": 60612,
+      "crc32": "9cd7639e",
+      "sha256": "55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12",
+      "pyc_timestamp": 1234238136,
+      "bytecode_version": [
+        2,
+        4
+      ],
+      "code_filename": "data/game/generated/client\\objectiveconversation.py",
+      "zip_mtime": [
+        2009,
+        2,
+        9,
+        21,
+        56,
+        38
+      ]
+    },
+    "conversations": [
+      {
+        "offset": 40826,
+        "container": [
+          "lookup"
+        ],
+        "key": {
+          "__tuple__": [
+            1992,
+            7,
+            2563,
+            1,
+            1
+          ]
+        },
+        "value": [
+          21494
+        ]
+      },
+      {
+        "offset": 41771,
+        "container": [
+          "lookup"
+        ],
+        "key": {
+          "__tuple__": [
+            1994,
+            4,
+            2562,
+            1,
+            1
+          ]
+        },
+        "value": [
+          21694
+        ]
+      }
+    ],
+    "video": "7Lrst9SG3pk",
+    "observations": [
+      {
+        "event": "A2-050",
+        "time_seconds": 289.8,
+        "tier": "observed",
+        "claim": "Gearing Up offer displays 200 credits."
+      },
+      {
+        "event": "A3-066",
+        "time_seconds": 362.133,
+        "tier": "observed",
+        "claim": "Chat shows 1250 XP, Gearing Up completion, Capture the Flag acceptance, 500 XP and level 2."
+      }
+    ],
+    "cut_seconds": [
+      362.067,
+      362.133
+    ],
+    "cut_limit": "The final Hartmann and DeSimone handoff and promotion interactions are hidden by the cut. Current continuous playthrough is emulator integration evidence, not original-live timing or placement evidence."
+  },
+  "gaps": [
+    "DeSimone placement and exact return route are reconstructed, not established by original footage.",
+    "The final live unchanged status of all values remains subject to version reconciliation.",
+    "Skill and attribute spending are not exercised; points remain unspent.",
+    "Run 13 ends at character selection; later reconnect and cave traversal are separate evidence.",
+    "Mission 1994 cave objective, boss combat and Youngblood remain pending."
+  ],
+  "related_docs": [
+    "docs/client-gearing-playthrough.md",
+    "docs/client-capture-the-flag-audit.md",
+    "docs/evidence/bootcamp-d11-reconstruction-manifest.json"
+  ]
+}

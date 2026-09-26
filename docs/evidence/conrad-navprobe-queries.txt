@@ -1,0 +1,5 @@
+original -102.4 66.8 80 95
+corrected -98 67.2 80 95
+wounded -102.4 70 80 95
+path:wounded_to_original -102.4 86.51 70 -102.4 86.11 66.8
+path:wounded_to_corrected -102.4 86.51 70 -98 85.81 67.2

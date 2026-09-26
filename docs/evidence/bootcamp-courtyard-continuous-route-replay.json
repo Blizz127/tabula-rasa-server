@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Timed recovered-client route from rocky descent to staged six-Thrax courtyard",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and bubblewrap private namespaces; /home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Staged /home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-courtyard-full-20260923/game/Rasa.Game.dll SHA-256 4326c4e21754eccab8fb1d2e6c008a34ed9f98d3ac0dcfd2954727813516caea and copied databases with all six courtyard Thrax placements 198660-198665, three camp companions 198688-198690 and staged Warrior 198691; no live service changes",
+    "character": "Copied level-2 Alden with mission 1994 objective 2 active, 3571 XP and 310 credits; placed at previously client-reached rocky-descent point (360.0703,121.2031,114.6406) with diagnostic yaw 1.24 before each login",
+    "ammunition": "In each disposable character database, crate rifle item 11/template 13713 was restored from 3 to the observed issued 20 loaded rounds before login; item 2/template 28 retained 1000 reserve rounds. This compensates for shots used before the saved checkpoint and is a test setup change, not a seeded data change. No player fire occurred in these runs.",
+    "movement": "Bounded ordinary native-client W, W+A, W+Space and final W or W+D inputs. The common first nine holds were 3100 ms W, 1800 ms W, 1450 ms W+A, 1200 ms W+Space, 400 ms W, 1050 ms W+A, 1200 ms W+A, 820 ms W+Space, 1450 ms W+A. No GM teleports or combat-state edits occurred after login."
+  },
+  "runs": [
+    {
+      "id": "courtyard-timed-descent-01",
+      "final_input": "2400 ms W after the common nine holds",
+      "route": "Area probes show (327.6,120.6,101.1) at 14:18:58, (320.2,123.4,93.2) at 14:19:00 over the upper gap, (308.6,120.1,79.4) at 14:19:03, (300.5,120.5,67.6) at 14:19:07, and (290,120.5,64) at 14:19:10.",
+      "result": "Thrax 198663 killed Alden at (290,120.5,64) at 14:19:13.286. The cave trigger centered at (279.05,120.5,66.07) with 10 m radius had not been entered; the last position is approximately 11.1 m from its center.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-descent-01/game.log",
+      "game_log_sha256": "021026248e1005ac21b41581428f04ab0e02e05aa2b07ce6c6209c62fafd9bdf",
+      "screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-descent-01/timed-route-end.png",
+      "screenshot_sha256": "6a28270709409a7be3e3a8832dbfcee2b34f89a711b59b6a512aeda30ae1a334"
+    },
+    {
+      "id": "courtyard-timed-trigger-01",
+      "final_input": "1850 ms W then 900 ms W+D after the common nine holds",
+      "result": "Area probes show (301,120.5,72.1) at 14:22:12, (298.1,120.5,71.1) at 14:22:14 and (295.6,120.5,72.5) at 14:22:15. Thrax 198664 killed Alden at the latter point at 14:22:18.806, 17.8 m from the cave trigger.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-trigger-01/game.log",
+      "game_log_sha256": "6bd654109516b3f8eb8be196154b46e01dac2f2c28d9c77717fa8eceaf0464fa",
+      "screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-trigger-01/trigger-route-end.png",
+      "screenshot_sha256": "dccb657d57a31895015e272e54f0dcd0f42b045a2bd199910e9dfcac31418599"
+    },
+    {
+      "id": "courtyard-timed-no-pause-01",
+      "final_input": "1800 ms W+Space, 900 ms W and 450 ms D after the common nine holds, without an inspection pause",
+      "result": "Area probes show (300.4,120,76) at 14:28:22 and (296,120,74.1) at 14:28:24. Thrax 198665 killed Alden at the latter point at 14:28:29.229, 18.8 m from the cave trigger.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-no-pause-01/game.log",
+      "game_log_sha256": "f8904597b9a0be1e22b03f9ab061a3e02da3754c6bcb5009a74e0644d0e0ab6f",
+      "screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-timed-no-pause-01/no-pause-route-end.png",
+      "screenshot_sha256": "24b8f7dda8b2e250f479f588ca97ed4d13d1ba34e3f891ec63c89adb5765a45c"
+    }
+  ],
+  "persistent_state": "After the last stopped disposable run, character XP remained 3571, credits 310, rifle item 11 retained 20 loaded rounds, and mission 1994 objective 2 was active while objective 4 was complete. The character's saved position remained the pre-login checkpoint because no normal logout occurred.",
+  "interpretation": "The original client can move continuously from the rocky descent across the staged upper gap and into the courtyard using ordinary movement and jumps. The fastest observed replay reached within about 1.1 m of the cave trigger boundary before death. Final approach outcomes vary with collision and hostile positions. These runs used a straight sprint without player fire, cover tactics, reloading or ability use; they do not measure retail survivability or justify retuning estimated hostile stats or spawn timing. They also begin at a copied rocky-descent checkpoint, not at character creation or the camp.",
+  "verification_needed": "A successful cave-trigger crossing and staged six-Thrax encounter using ordinary combat with the observed rifle load, ideally in one uninterrupted camp-to-cave run; then compare actor count, damage, rewards and timing with final-week footage before revising any estimated combat value."
+}

@@ -1,0 +1,126 @@
+{
+  "audit_date": "2026-09-22",
+  "scope": "Independent native-frame remeasurement supporting a labelled Practice Dummy health reconstruction",
+  "source": {
+    "video_id": "7Lrst9SG3pk",
+    "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+    "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "fps": 15,
+    "dimensions": [
+      640,
+      480
+    ],
+    "version_limit": "Original live footage; exact client revision not established."
+  },
+  "method": {
+    "frames": "frames.json",
+    "extraction_log": "frames.log",
+    "native_frames": "native/",
+    "interval": "343.0–362.066667 s, continuous section of original retained video",
+    "measurement": "First native frame with target mesh/nameplate absent to first native frame with mesh/nameplate present. Health overlay becoming fully bright is not the return boundary.",
+    "timestamp_uncertainty": "Each transition lies between its recorded frame and the preceding frame (66.6667 ms). Interval difference has ±66.6667 ms quantization uncertainty. These are visible intervals, not recovered server timers.",
+    "images": "Crops resized for inspection; nearest-neighbor montages explicitly named. No generated enhancement."
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "first_absent_seconds": 347.133333,
+      "first_present_seconds": 348.066667,
+      "visible_interval_ms": 933.334,
+      "magazine_before": 20,
+      "magazine_after": 19
+    },
+    {
+      "cycle": 2,
+      "first_absent_seconds": 350.933333,
+      "first_present_seconds": 351.666667,
+      "visible_interval_ms": 733.334,
+      "magazine_before": 19,
+      "magazine_after": 18
+    },
+    {
+      "cycle": 3,
+      "first_absent_seconds": 355.266667,
+      "first_present_seconds": 356.266667,
+      "visible_interval_ms": 1000.0,
+      "magazine_before": 18,
+      "magazine_after": 17
+    },
+    {
+      "cycle": 4,
+      "first_absent_seconds": 357.733333,
+      "first_present_seconds": 358.866667,
+      "visible_interval_ms": 1133.334,
+      "magazine_before": 17,
+      "magazine_after": 16
+    },
+    {
+      "cycle": 5,
+      "first_absent_seconds": 360.333333,
+      "first_present_seconds": 361.2,
+      "visible_interval_ms": 866.667,
+      "magazine_before": 16,
+      "magazine_after": 15
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "value": "Five single-round magazine decrements, 20→19→18→17→16→15, accompany five dummy disappearances; reserve remains 989.",
+      "confidence": "high"
+    },
+    {
+      "tier": "observed",
+      "value": "Third hit red damage number reads 84 at 355.266667–355.466667; it is followed by disappearance after one spent rifle round.",
+      "confidence": "high"
+    },
+    {
+      "tier": "observed",
+      "value": "Last hit appears 68; fourth appears 71. Compression makes these readings less certain, so neither is used as an exact HP bound.",
+      "confidence": "medium"
+    },
+    {
+      "tier": "inferred",
+      "value": "The previous 100 HP analogue is poorly supported by repeated one-shot disappearance including the 84-damage cycle; footage does not distinguish a small fixed HP pool from scripted destruction on successful hit.",
+      "confidence": "medium",
+      "unverified": "No maxHP packet; no weapon of independently proven lower damage attacking this dummy; no original server script."
+    }
+  ],
+  "timing_summary": {
+    "tier": "measured",
+    "mean_ms": 933.3336,
+    "range_ms": [
+      733.334,
+      1133.334
+    ],
+    "sample_count": 5,
+    "prior_correction": "Previous audit missed 357.733333→358.866667 and used fully bright 351.8 instead of first visible 351.666667. The nominal 930 ms remains compatible as a rounded center; ±70 ms does not cover the visible sample variation.",
+    "unverified": "Whether animation/network/server tick timing explains variable visible intervals; original nominal restore period."
+  },
+  "alternative_videos": [
+    {
+      "id": "8VXeKzGUv0c",
+      "result": "Retained Advancing 2of8 begins at Calling for Reinforcements, mission 1995, after the dummy lesson; no added evidence for mission 1992."
+    },
+    {
+      "id": "Ycxm8Pa1-v4",
+      "result": "Retained Tutorial gameplay covers mission 1995/2 combat around Denzil’s Caldera; no added evidence for mission 1992."
+    }
+  ],
+  "lightning_limit": {
+    "value": "Original objectiveconversation (1992,9,2563,1,1), assignment 40853, cites text 21665: target the dummy and fire a lightning bolt. It does not explicitly require a destroying hit. The existing 362.067→362.133 cut omits this action.",
+    "tier": "original",
+    "interpretation": "Destroying-hit-only credit and reused reset timing remain inferences; no stronger observation recovered."
+  },
+  "implementation": {
+    "migration": "20260922210000_BootcampPracticeDummyHealth",
+    "field": "content_placement[198652].hit_points",
+    "old": 100,
+    "value": 1,
+    "tier": "inferred",
+    "reasoning": "Minimal positive integer HP reproduces repeated single-hit destruction through the existing damage system. Exact original HP is unknown. Assuming normal damage-driven destruction with no concurrent damage or forced script, the clear 84-damage cycle would bound the then-current health at 84, not identify maximum HP. The seeded 1 HP is not an original recovered value.",
+    "unchanged": "Target Dummy 198653 retains 100 HP; its Lightning scene is absent. Nominal 930 ms is retained for both; no custom destroy-on-hit mechanism is introduced."
+  },
+  "schema_version": 1,
+  "artifact_root": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement"
+}

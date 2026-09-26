@@ -57,6 +57,10 @@ namespace Rasa.Structures
         //sint32** aggrotable; //stores enemydamage
         //sint32 aggrocount;
         public double Scale = 1.0d;
+        // A creature's body tint belongs to that world entity, not to each client
+        // introduction. Exact final-live tint values are not yet recovered.
+        public Color BodyHue { get; } = Color.RandomColor();
+        public Color BodyHue2 { get; } = Color.RandomColor();
         // origin
         public SpawnPool SpawnPool { get; set; }    // the spawnpool that initiated the creation of this creature
         // behavior controller
@@ -104,8 +108,8 @@ namespace Rasa.Structures
             Level = data.Level;
             MaxHitPoints = data.MaxHitPoints;
             NameId = data.NameId;
-            RunSpeed = data.RunSpeed;
-            WalkSpeed = data.WalkSpeed;
+            RunSpeed = (float)data.RunSpeed;
+            WalkSpeed = (float)data.WalkSpeed;
         }
 
         /// <summary>Who may harvest this corpse: the player whose kill it was.</summary>

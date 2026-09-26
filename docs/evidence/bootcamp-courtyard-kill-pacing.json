@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Final-week courtyard Thrax kill timing, not spawn timing",
+  "source": {
+    "tier": "observed",
+    "video_id": "7Lrst9SG3pk",
+    "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "event_file": "docs/evidence/bootcamp-d11-footage-events.json",
+    "event_ids": ["A3-081", "A4-08", "A4-10", "A4-14", "A4-16", "A4-18"]
+  },
+  "reward_events": [
+    { "second": 391.533, "event": "A3-081" },
+    { "second": 396.133, "event": "A4-08" },
+    { "second": 401.533, "event": "A4-10" },
+    { "second": 406.2, "event": "A4-14" },
+    { "second": 415.2, "event": "A4-16" },
+    { "second": 427.733, "event": "A4-18" }
+  ],
+  "derived": {
+    "tier": "measured",
+    "first_to_sixth_seconds": 36.2,
+    "successive_intervals_seconds": [4.6, 5.4, 4.667, 9.0, 12.533],
+    "uncertainty": "Event timestamps are decoded-frame times; reward display can lag actual death by at least a frame, so intervals are approximately ±0.1 s."
+  },
+  "interpretation": "These are six player-visible XP-and-credit reward events during sustained fighting. The six currently seeded Thrax placements were derived from target positions at different times; neither the rewards nor the sampled frames prove that six Thrax spawned together, that each reward came from a different spawn point, or that a wave/respawn timer existed.",
+  "pre_fight_edit": "The same recording cuts from the camp at 384.467 seconds to the player already in the courtyard at 385.467 seconds (docs/evidence/bootcamp-courtyard-cave-approach-replay.json encounter_timing_observation.original_frames). The first visible reward at 391.533 seconds therefore cannot be timed from encounter activation or travel start.",
+  "implementation_decision": "Keep the current enemy count and timing explicitly unverified until a normal native-client encounter can be compared with these six reward times and simultaneous on-screen enemies. Do not retune from this timing alone."
+}

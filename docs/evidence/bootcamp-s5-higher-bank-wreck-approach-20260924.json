@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Original-client ordinary movement on higher bank from S5 corpse route to crashed dropship",
+  "setup": "Isolated copied 1.16.5.0 client, server, and character DB. Restored the copied post-corpse-use mission-1995 character DB from s5-corpse-agent-09/char-after-use.db. Each run began from the previous run's ordinary-reached client .where coordinate manually written into the copied character DB because harness shutdown did not persist movement. The objective-1 timer anchor was manually reset to current wall clock at every run to keep this route diagnostic playable; no claim is made that the stitched run traversed the full route within one uninterrupted ten-minute mission timer. No live Docker or DIT state was changed.",
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "s5-high-bank-agent-01/step1-west-1p5.png through step4-southwest-1p5.png; run-s5-high-bank-agent-01-20260924.py",
+      "uncertainty": "Client .where display precision about 0.01 m; held-key timing varies with frame rate and collision.",
+      "finding": "From ordinary-reached earlier dry checkpoint (-128.680,83.520,34.492), W in 1.5-second segments reached (-135.742,84.769,30.594), (-140.012,84.770,28.238), and (-144.281,85.016,25.687); A+W 1.5s reached (-145.039,84.828,22.246). The character was alive above water beside the bridge rail."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-high-bank-agent-02/step1-west-2.png and step2-west-4.png; s5-high-bank-agent-04/step1-west-2p5.png through step3-west-7p5.png",
+      "uncertainty": "Client .where display precision about 0.01 m. Run 02 ended by process termination after two screenshots; run 03 reached character selection but failed the harness fixed 60-second HUD timeout without a movement result.",
+      "finding": "Continued W along dry bridge edge from (-145.039,84.828,22.246) to (-147.879,84.820,20.870), (-149.371,84.820,18.848), then from that copied checkpoint to (-152.733,84.820,14.879), (-158.375,84.820,8.808), and (-160.25,84.820,6.352)."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-high-bank-agent-05/step1-west-3.png through step3-southwest-2.png; s5-high-bank-agent-06/step1-southwest-3.png through step3-west-3.png",
+      "uncertainty": "Client .where display precision about 0.01 m.",
+      "finding": "At (-160.25,84.820,6.352), W 6s was blocked by terrain; A+W 2s climbed to (-162.746,85.727,1.848). From that ordinary-reached checkpoint, A+W 3s reached (-165.086,89.695,-15.418), A+W 3s reached (-169.727,95.113,-22.375), then W 3s reached (-180.004,92.568,-26.121), alive."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-high-bank-agent-07/step1-west-3.png through step3-southwest-3.png; s5-high-bank-agent-08/step1-southwest-3.png and step2-west-2.png",
+      "uncertainty": "Client .where display precision about 0.01 m.",
+      "finding": "From (-180.004,92.568,-26.121), W 3s reached (-185.25,93.516,-35.088), W 3s reached (-202.070,95.773,-35.988), and A+W 3s reached (-206.891,98.414,-52.660) with the burning dropship visible ahead. From that copied checkpoint A+W 3s reached (-207.203,100.223,-61.695); subsequent W 2s was blocked by hull or terrain."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-high-bank-agent-09/step1-southwest-2.png through step3-west-1p5.png; s5-high-bank-agent-10/step1-west-2.png through step3-southwest-1p5.png",
+      "uncertainty": "Client .where display precision about 0.01 m; source cannot separate terrain collision from an entity model collision.",
+      "finding": "From (-207.203,100.223,-61.695), A+W 4s was blocked; W 1.5s reached (-208.965,100.266,-60.203). From that copied checkpoint, W 2s reached (-219.375,100.773,-64.047), W 2s reached (-222.063,101.051,-69.953), and A+W 1.5s did not move farther. The final point is about 0.56 m horizontally from the inferred bomb placement (-221.95,101.26,-70.5). The wreck and active objective marker rendered; the timer showed 08:48."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-high-bank-agent-11/step1-hover-center.png through step4-after-low-click.png; game.log; objective-after-clicks.json",
+      "finding": "At copied checkpoint (-222.063,101.051,-69.953) with the diagnostic timer reset, moving the pointer to screen pixels (512,385) and (486,430) and right-clicking each produced no visible use prompt or objective completion. The server log contains no RequestUseObject for this run; the copied DB retained mission 1995 active and objective 1 status 1. This demonstrates that those two specific aim points did not acquire the bomb; it does not establish that the bomb is universally unusable."
+    }
+  ],
+  "assessment": "The high-bank ordinary-movement route reaches the inferred wreck placement without the prior water drop. The final bomb interaction remains unverified, with two aimed clicks failing to send a use request. Possible geometry occlusion or unsuitable aim points require a separate targeted investigation. The stitched diagnostic timer resets and coordinate restores limit this result to route reachability, not an uninterrupted timed S5 completion or final-live placement accuracy.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/char-after-use.db",
+      "sha256": "0dfc685b6de058b5bcaf4ea0e734ade57282d8505e9e58a69bb9fe938cee078f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-pre-reset-char-20260924.db",
+      "sha256": "c16bdaf5d83f72fdab460788fb5d1d3a90d8083383c991bd62adfb7559f2117d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-01-20260924.py",
+      "sha256": "541390124b746a2cea21ec023b04bd8396d17b80292c3c0a268ddd328ae9d4a7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-01/game.log",
+      "sha256": "ad812ccc5935c1f6fa422deae6f72004072641bfbbe73fa4e125b4e825583d4b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-01/step1-west-1p5.png",
+      "sha256": "d108a0870089e787e9902dead01d7dc5cf7a52f578127a1911b5399e25dc2743"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-01/step2-west-3p0.png",
+      "sha256": "1b8b06383da0ee7578c82a3f9b5d9d18d078bada243e7b44a07eb7ad82509594"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-01/step3-west-4p5.png",
+      "sha256": "bfba67100e48248d6e35e138cfb47be0943b5f06e5589fae7e5f4c02deb1ae39"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-01/step4-southwest-1p5.png",
+      "sha256": "c4812b8776cc135514093ebb2eb9363c1d7588b402d08ae1136a6ddd112a4c52"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-02-20260924.py",
+      "sha256": "14952acde166e29a8423f3f2eac7b6113c94b88f761db3d5359b6986095d592a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-02/game.log",
+      "sha256": "8789c6b4a571fcca0834e71d7a00c1fff8257b8ff1cedb52a913c0b78d957c68"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-02/step1-west-2.png",
+      "sha256": "0f4b06804b5a41e1f303b59b40f654a1aa2eb55ed1736dafae845c3404d2b0da"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-02/step2-west-4.png",
+      "sha256": "69310f843f2b0b75468357594e3daa5c05ec50ec0e17b2bb6040c1017ce36caf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-03-20260924.py",
+      "sha256": "aea5316e607798c1bfdbe47685e6c869f816eecc4261edf8b95426e0d5026ed3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-03/game.log",
+      "sha256": "f722dde0a58e4d77f46cca81692f4ed4c077b03a5d0f83fae901105017e7bf20"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-04-20260924.py",
+      "sha256": "d6e5d6b68d4e67a674164cc9c1585d571635d31dc25c6fe6c0766e21c2279a65"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-04/game.log",
+      "sha256": "d202e6fb7c13dc7f245382e3f5b117fed8ae541380f4a1bd1b9046970745e4a6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-04/step1-west-2p5.png",
+      "sha256": "b45da3c02557aa0efb872f1e6ed58b07c4fc4278d329ca4b8a124a49d66d674e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-04/step2-west-5.png",
+      "sha256": "10b7f5def24ef6c57f49b805961fab186a89fe8e9ad700ab51c03f022851667b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-04/step3-west-7p5.png",
+      "sha256": "27a2eb0eaddd7f2429bf5f90775bb51633f50fbac1b89ab1150851845f14fcca"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-05-20260924.py",
+      "sha256": "96810956da520cff6f64bacddd8d8c12fa6e04b05330aaf278d2d40b47585686"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-05/game.log",
+      "sha256": "067c6587334717ceb702d991440d5067eb57d6bc6b47629f942f0b6de0536c1f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-05/step1-west-3.png",
+      "sha256": "047edbda058394986617a9505ed8dfeb51cd4a1d3506e3744edb169644cf4b9b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-05/step2-west-6.png",
+      "sha256": "dcdaee77ed9a8ca6fefa6c933c2c47190f1a6c94e14fe60cd19f3690a71a7008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-05/step3-southwest-2.png",
+      "sha256": "9f6d25cfc742284e967c38713fd0658a54766514b02579bb7b829d349c7b8a3d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-06-20260924.py",
+      "sha256": "55837e24e9036236e7f03d7b551e25b1db2c10209af045bc6d985d5e2ac9274d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-06/game.log",
+      "sha256": "8b45a4225a1e37b41158e02f7e1361ad66ad227d86e424db0707b34e936bc5dc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-06/step1-southwest-3.png",
+      "sha256": "797aa8311eec728f344875808daa9095576ca2d7a10ed504fa3a268c6a66733c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-06/step2-southwest-6.png",
+      "sha256": "680f08b3cecdc7b43054020e8524fe551df0738856c29d4bfb42448a468316ba"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-06/step3-west-3.png",
+      "sha256": "dcdf281a2d8f3101c8fa3abc1136fa89ab315010bdcfddf8b1caf6363eb771c1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-07-20260924.py",
+      "sha256": "997c708098467cdb73ec195cee5a1e549811dea7df9629772bf0d825956d8392"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-07/game.log",
+      "sha256": "3247ec201e15ea30a9e07a2b0bd67bd96bb40a44af108d1b37d5d161ae8c0732"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-07/step1-west-3.png",
+      "sha256": "3ee11f3d4508ab6177919c412232dc01268cc5b66d3694c1002f5ac2dd5f8455"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-07/step2-west-6.png",
+      "sha256": "cef57a25fb2bcfc444d4a185cb64aecdbf04c14bd3be60c786e9bb96556c2f1a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-07/step3-southwest-3.png",
+      "sha256": "e086b4a257e4791c6cc04660bba7a1f65229876b6a3152b36c665bd67cb0f716"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-08-20260924.py",
+      "sha256": "2f4a6e2fc551197c23451bcd1ea46042acc2075f17e2d7efb500e917000cbcf7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-08/game.log",
+      "sha256": "b532b07a1ee2cd635cfe337d1149d7b81c9c7c256a1adffa9ffd9f74a202b2ad"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-08/step1-southwest-3.png",
+      "sha256": "b6b6611207a711b90d1b2f636e49ec458c932258d565ccd09cfdee71e29e68b9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-08/step2-west-2.png",
+      "sha256": "75dcecbc59d1d613d8eddc70206cba6f9149851c2fa2a5c87a6167e9db70dad2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-08/step3-observe.png",
+      "sha256": "cb6f9f3b658fa39600d8cf75ad81488021a0599caa851a9e6739e3789294525f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-09-20260924.py",
+      "sha256": "8d188d50acec349f7f3497528cc3e39959014bbe7a01759783d2d639429ff96d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-09/game.log",
+      "sha256": "98f7284f2d68308696a1e4f23e6a2e82e5d05672b05137c5a96587400794df49"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-09/step1-southwest-2.png",
+      "sha256": "990721b7cd7cc08385dce8798a234ed8217b001aff932180817ae8dc3f0e0f11"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-09/step2-southwest-4.png",
+      "sha256": "2f44ed440613492f56e42e0ad53bb5df9a76de8141e2d25411c5daa14e197533"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-09/step3-west-1p5.png",
+      "sha256": "a70838d057ac3903bd0605dfae799f57ef82fd33a66e4c0f643a67df4e9fcf04"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-10-20260924.py",
+      "sha256": "54604db3df28a7a770fb0ce5a599da54bf2fdf194ccd0cc9074fd87ee4fa3f3c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-10/game.log",
+      "sha256": "c04ac21d7d26cd58af9200deb5974ffaf0e75c275f9a67192fd0aa1fb66b333e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-10/step1-west-2.png",
+      "sha256": "f556e7f023bbe14b8dd8245488e8e5bf588d089fbb5b3a240230f58753e11e50"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-10/step2-west-4.png",
+      "sha256": "cf6dc7c3db9eeacb44d85bfe4e4afcc2010e919eb8adc3216454c49644b19ec1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-10/step3-southwest-1p5.png",
+      "sha256": "46b3fabe826f5a3badab335db09a44fdc3dbba1244c37c7f1e759e9d6e2329e1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-high-bank-agent-11-20260924.py",
+      "sha256": "9142f9273cd1edb3e5dd8e817e0f2e5190437227c722ce2ceb45852814632c64"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/game.log",
+      "sha256": "8471f4fbf199c188cc3ce1c1b20c28bfb2242727eedef0c41bf34b7c9f16bdc8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step1-hover-center.png",
+      "sha256": "f9f116902876893efd12a1526b2eb7219ee589c69005acf2e8833f52fe4561a5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step2-after-click.png",
+      "sha256": "ae03769da5def6c1bcd901a945b072c308b086ef45522ec06dd100b3c86e4359"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step3-hover-low.png",
+      "sha256": "830cf3951d459c5ea4f40ac775d6d9668b5a1708fe6a898b6030dd89c0e0d8cf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/step4-after-low-click.png",
+      "sha256": "66d081447c20ef9d90b4607976f40441eda5aca9c051ad9c1ac7e8d3b615773f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-high-bank-agent-11/objective-after-clicks.json",
+      "sha256": "64c1a857fea0371b2c67a1491a45f8c953eb005e02b51a1d1829d9f0a8d10c43"
+    }
+  ]
+}

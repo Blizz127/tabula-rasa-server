@@ -19,6 +19,11 @@ namespace Rasa.Structures.World
         [Required]
         public uint ItemTemplateId { get; set; }
 
+        /// <summary>Magazine rounds when this item is created; zero preserves ordinary empty-magazine grants.</summary>
+        [Column("initial_ammo")]
+        [Required]
+        public uint InitialAmmo { get; set; }
+
         [Column("quantity")]
         [Required]
         public uint Quantity { get; set; }

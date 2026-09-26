@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "research_date": "2026-09-23",
+  "subject": "TaRapedia revision boundary for rebuilt boot camp and supporting cover rule",
+  "method": "Read the named revision wikitext using the TaRapedia MediaWiki API action=parse oldid endpoint; archived exact wikitext snapshots outside Git. Revision timestamps came from action=query prop=revisions.",
+  "findings": [
+    {
+      "page": "Bootcamp",
+      "revision_id": 32488,
+      "revision_date_utc": "2008-08-29T06:24:19Z",
+      "url": "https://tabularasa.fandom.com/wiki/Bootcamp?oldid=32488",
+      "tier": "secondary",
+      "source_location": "wikitext line 9 and subsequent Portals/Missions sections",
+      "finding": "The page itself warns that the camp had changed and its contents need updating. Its Elvers/Burba/Constant route must not seed the final-live rebuilt tutorial.",
+      "archive_path": "/home/blizz/backups/rasa-net/research/20260923-tarapedia-revisions/bootcamp-32488.wikitext",
+      "sha256": "2451d114f16c8ee453206338881574aa81c94df7a59cf591a319c0ccd5e75a59"
+    },
+    {
+      "page": "Basic Training 101",
+      "revision_id": 27744,
+      "revision_date_utc": "2008-01-26T01:35:20Z",
+      "url": "https://tabularasa.fandom.com/wiki/Basic_Training_101?oldid=27744",
+      "tier": "obsolete",
+      "source_location": "wikitext lines 1-10",
+      "finding": "The last recorded revision predates the August 2008 tutorial rebuild and identifies Commander Elvers as giver. Do not treat its mission text, rewards or objective order as final-live tutorial data.",
+      "archive_path": "/home/blizz/backups/rasa-net/research/20260923-tarapedia-revisions/basic-training-101-27744.wikitext",
+      "sha256": "b5a9f8665e59388a53b86a4cebbca4a26fc35d0bee65739df7f56f7c470706bc"
+    },
+    {
+      "page": "Bootcamp Bypass",
+      "revision_id": 29338,
+      "revision_date_utc": "2008-02-28T17:26:15Z",
+      "url": "https://tabularasa.fandom.com/wiki/Bootcamp_Bypass?oldid=29338",
+      "tier": "obsolete",
+      "source_location": "wikitext lines 1-10 and Overview/Dialogue",
+      "finding": "The Captain Burba level-four bypass belongs to the earlier camp. The final-live client has its own skip prompt; this old mission cannot establish rebuilt-camp skip rewards or routing.",
+      "archive_path": "/home/blizz/backups/rasa-net/research/20260923-tarapedia-revisions/bootcamp-bypass-29338.wikitext",
+      "sha256": "54d5c90009b7830e789e1d3121e589507782e38800643f84b9ea90361b404fef"
+    },
+    {
+      "page": "Weapon",
+      "revision_id": 34028,
+      "revision_date_utc": "2008-09-24T11:16:39Z",
+      "url": "https://tabularasa.fandom.com/wiki/Weapon?oldid=34028",
+      "tier": "secondary",
+      "source_location": "wikitext line 20, Usage section",
+      "finding": "The post-rebuild page describes reduced weapon damage against a partially covered target. It supports the presence of cover damage reduction but gives no final-live sampling algorithm, multiplier or packet semantics.",
+      "archive_path": "/home/blizz/backups/rasa-net/research/20260923-tarapedia-revisions/weapon-34028.wikitext",
+      "sha256": "0a7767736c34d2b17197f3bcf514cf703171b5f0d36a1879955172e072300b52"
+    }
+  ],
+  "limits": "Wiki revision date does not prove the described gameplay remained unchanged through shutdown. Original client data and final-week footage remain stronger evidence. The four snapshots above are research sources, not gameplay server captures."
+}

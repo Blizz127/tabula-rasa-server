@@ -173,6 +173,7 @@ namespace Rasa.Managers
         {
             if (action.ActionId != ActionId.UseObject)
                 return;
+            MissionManager.Instance.Content.CancelContentUsableUse(action);
             void RemoveTrigger(DynamicObject obj)
             {
                 if (action.SourceId == 0 || action.SourceId == obj.EntityId)

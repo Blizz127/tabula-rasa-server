@@ -30,7 +30,7 @@ namespace Rasa.Test
 {
     [TestClass]
     [DoNotParallelize]
-    public class WeaponAttackLifecycleTests
+    public partial class WeaponAttackLifecycleTests
     {
         private sealed class Factory : IGameUnitOfWorkFactory
         {
@@ -253,6 +253,79 @@ namespace Rasa.Test
             Assert.IsFalse(Start());
             Advance(11);
             Assert.IsTrue(Start());
+        }
+
+        [TestMethod]
+        public void RifleAlternateMeleeUsesDeclaredActionAndConsumesNoAmmo()
+        {
+            _weapon.ItemTemplate.WeaponInfo = new WeaponInfo(new ItemTemplateWeaponEntry
+            {
+                AmmoPerShot = 2, AltActionId = 174, AltActionArgId = 5,
+                AltMaxDamage = 82, AltDamageType = 1, AltRange = 4
+            });
+            var request = new RequestWeaponAttackPacket
+                { ActionId = ActionId.WeaponMelee, ActionArgId = 5, TargetId = _target.EntityId, IsAltAction = true };
+
+            Assert.IsTrue(_attacks.TryStart(_client, request));
+            Advance(199);
+            Assert.AreEqual(10000, Health);
+            Advance(200);
+            Assert.IsTrue(Health < 10000);
+            Assert.AreEqual(5u, _weapon.CurrentAmmo);
+            Assert.AreEqual(5u, StoredAmmo);
+        }
+
+        [TestMethod]
+        public void RifleAlternateMeleeCannotDamageBeyondOriginalFourMeterRange()
+        {
+            _weapon.ItemTemplate.WeaponInfo = new WeaponInfo(new ItemTemplateWeaponEntry
+            {
+                AmmoPerShot = 2, AltActionId = 174, AltActionArgId = 5,
+                AltMaxDamage = 82, AltDamageType = 1, AltRange = 4
+            });
+            _target.Position = new Vector3(5, 0, 0);
+            var request = new RequestWeaponAttackPacket
+                { ActionId = ActionId.WeaponMelee, ActionArgId = 5, TargetId = _target.EntityId, IsAltAction = true };
+
+            Assert.IsTrue(_attacks.TryStart(_client, request));
+            Advance(200);
+            Assert.AreEqual(10000, Health);
+            Assert.AreEqual(5u, StoredAmmo);
+        }
+
+        [DataTestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void RifleAlternateMeleeWorksWithoutAUsableMagazine(bool jammed)
+        {
+            _weapon.ItemTemplate.WeaponInfo = new WeaponInfo(new ItemTemplateWeaponEntry
+            {
+                AmmoPerShot = 2, AltActionId = 174, AltActionArgId = 5,
+                AltMaxDamage = 82, AltDamageType = 1, AltRange = 4
+            });
+            _weapon.CurrentAmmo = 0;
+            _weapon.IsJammed = jammed;
+            var request = new RequestWeaponAttackPacket
+                { ActionId = ActionId.WeaponMelee, ActionArgId = 5, TargetId = _target.EntityId, IsAltAction = true };
+
+            Assert.IsTrue(_attacks.TryStart(_client, request));
+            Advance(200);
+            Assert.IsTrue(Health < 10000);
+            Assert.AreEqual(0u, _weapon.CurrentAmmo);
+            Assert.AreEqual(5u, StoredAmmo);
+        }
+
+        [TestMethod]
+        public void PrimaryMeleeAlsoRespectsItsOriginalActionRange()
+        {
+            Info.WeaponAttackActionId = ActionId.WeaponMelee;
+            Info.WeaponAttackArgId = 5;
+            _target.Position = new Vector3(5, 0, 0);
+
+            Assert.IsTrue(Start());
+            Advance(200);
+            Assert.AreEqual(10000, Health);
+            Assert.AreEqual(5u, StoredAmmo);
         }
 
         [DataTestMethod]

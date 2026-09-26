@@ -1,0 +1,312 @@
+{
+  "schema": "rasa.bootcamp-shinobi-module-semantics.v1",
+  "recorded_at_utc": "2026-09-22T21:47:58.097996+00:00",
+  "status": "Read-only original-source research; no code, builds or runtime changes",
+  "compatibility_client": "1.16.5.0; not automatic proof of exact shutdown revision",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_148_on_live_1.html@@20081220224823.html.txt",
+      "sha256": "5dc6091b88e0087efef08188ee68fab7be48aece205fa0c2e2c9d1a4d89d1b58"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_14_11112008.html@@20081115092604.html.txt",
+      "sha256": "3a7df45e70f0afe394afb7bf4147ad0bf53c4fa2b47c68d4a3a30d55ff62eec1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_96_6262008.html@@20080908074718.html.txt",
+      "sha256": "fd4c9220c628ec2265660e798b7a959e8136e60d286ab842b2e048046b5af76f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/module-effect-selected.json",
+      "sha256": "cb4a7fca2c34aa8397d14d3dcc5034af147b08e98d2b286b95114a716e387176"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/official-source-manifest.json",
+      "sha256": "6622b9c4c9f92dd6f50ea06a2e2e4a8e237f302a9bf5867ac55ea12bb1dafb52"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/patch_notes_4082008.html@@20080514131237.html.txt",
+      "sha256": "fb5195339212929669d6930aed45f8bfa744ee90acde49d679fa8c90116f3783"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/patch_notes_and_known_issues_3262008.html@@20080401083847.html.txt",
+      "sha256": "5f4cf2bf8f53f6c2aab4a1be86b5ba689a3c69a8d318b816bd9416e09cf18cf2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/python-source-manifest.json",
+      "sha256": "a8d0cafe268d6f3c5c850a0cc8917e6c0f0fedf6556027a9bedb8d4f328fb364"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/resistance-tooltip-crosscheck.json",
+      "sha256": "11697150abcff06549ec5c24846d6892ef804ff5fc8980affd6143c92a3ff465"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-clientlanguagemanager.pyo.selected.dis",
+      "sha256": "4ecde0dadbcd572a8adc78efae5832cea87a639a07d919cb8e48f762d052a602"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-gameuiutil.pyo.selected.dis",
+      "sha256": "af1e3d8f032005718caac93c059f5f4fd571c7a52425978b4a5d512c4915dc8f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-ui-tooltipwindow.pyo.selected.dis",
+      "sha256": "f7dd6cbaca027aab081e69589b178445024b9b809e2fa8f93b187a8e39df5f7a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-shared-damageresistance.pyo.selected.dis",
+      "sha256": "53e8281f41c6fa3f2a001dc5d2aec25ca113fdeca22a84611f98c08f614a817d"
+    }
+  ],
+  "official_sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_148_on_live_1.html@@20081220224823.html",
+      "sha256": "38911906da9db94ff1964c878f61ff1356e401492afa540313b660d56af45b15",
+      "text_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_148_on_live_1.html@@20081220224823.html.txt",
+      "text_sha256": "5dc6091b88e0087efef08188ee68fab7be48aece205fa0c2e2c9d1a4d89d1b58"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_14_11112008.html@@20081115092604.html",
+      "sha256": "fcb56c2b39aa8543513d28a6979d4911357f4594f9dc5684d9115009950e58f7",
+      "text_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_14_11112008.html@@20081115092604.html.txt",
+      "text_sha256": "3a7df45e70f0afe394afb7bf4147ad0bf53c4fa2b47c68d4a3a30d55ff62eec1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/patch_notes_4082008.html@@20080514131237.html",
+      "sha256": "359fddf921fbd532c274d06989880cc5390270790554d5691bdb6910a0023962",
+      "text_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/patch_notes_4082008.html@@20080514131237.html.txt",
+      "text_sha256": "fb5195339212929669d6930aed45f8bfa744ee90acde49d679fa8c90116f3783"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/patch_notes_and_known_issues_3262008.html@@20080401083847.html",
+      "sha256": "1ea1b09ba633db5399ff7b731c0c52b526d7b6f331c7acbb8bfb0d61645741b0",
+      "text_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/patch_notes_and_known_issues_3262008.html@@20080401083847.html.txt",
+      "text_sha256": "5f4cf2bf8f53f6c2aab4a1be86b5ba689a3c69a8d318b816bd9416e09cf18cf2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_96_6262008.html@@20080908074718.html",
+      "sha256": "be732f8b1d02d51422307717ab9a4f551808f141ba7d6fb6827ae8c134910f8c",
+      "text_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/deployment_96_6262008.html@@20080908074718.html.txt",
+      "text_sha256": "fd4c9220c628ec2265660e798b7a959e8136e60d286ab842b2e048046b5af76f"
+    }
+  ],
+  "python_sources": [
+    {
+      "member": "client/ui/tooltipwindow.pyo",
+      "sha256": "8817f44925dac632f5b9d4167e45c003d62b68fe9ac41348d4222dbb576b2ec4",
+      "full_disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-tooltipwindow.pyo.dis",
+      "selected_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-ui-tooltipwindow.pyo.selected.dis",
+      "selected_sha256": "f7dd6cbaca027aab081e69589b178445024b9b809e2fa8f93b187a8e39df5f7a"
+    },
+    {
+      "member": "client/gameuiutil.pyo",
+      "sha256": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
+      "full_disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameuiutil.pyo.dis",
+      "selected_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-gameuiutil.pyo.selected.dis",
+      "selected_sha256": "af1e3d8f032005718caac93c059f5f4fd571c7a52425978b4a5d512c4915dc8f"
+    },
+    {
+      "member": "client/clientlanguagemanager.pyo",
+      "sha256": "5973adcebed50145b3a114dcb085a394459cd35cbbcd5e53f23cb9d76fff5e3b",
+      "full_disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-clientlanguagemanager.pyo.dis",
+      "selected_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-clientlanguagemanager.pyo.selected.dis",
+      "selected_sha256": "4ecde0dadbcd572a8adc78efae5832cea87a639a07d919cb8e48f762d052a602"
+    },
+    {
+      "member": "shared/damageresistance.pyo",
+      "sha256": "18518f0c74c8f80dfbb7359ab5ceafe4944af7679e8553db5dbc3f54b5a76410",
+      "full_disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-shared-damageresistance.pyo.dis",
+      "selected_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-shared-damageresistance.pyo.selected.dis",
+      "selected_sha256": "53e8281f41c6fa3f2a001dc5d2aec25ca113fdeca22a84611f98c08f614a817d"
+    }
+  ],
+  "findings": [
+    {
+      "tier": "original",
+      "claim": "Deployment 14 introduces rating-based diminishing resistance returns; initial weapon/tool rank-two rating 20 is superseded by Deployment 14.8 rank-two rating 12.",
+      "sources": [
+        "deployment_14_11112008.html@@20081115092604.html.txt:39",
+        "deployment_148_on_live_1.html@@20081220224823.html.txt:12-16"
+      ]
+    },
+    {
+      "tier": "original",
+      "claim": "Final client MODULE_RESIST_EFFECT 413 selects tooltip 2127 with no percentage suffix; legacy SERVER_LIGHT_RESIST188 selects percentage tooltip489.",
+      "source": "module-effect-selected.json",
+      "locations": {
+        "effect_name_store": 1605,
+        "effect_class_assignment": 13133,
+        "effect_tooltip_assignment": 21047,
+        "english_tooltip_assignment": 14258
+      }
+    },
+    {
+      "tier": "inferred",
+      "claim": "Module900312 should use effect413 with arg1 Laser6 and 12 rating; no original server module-effect row recovered.",
+      "supersedes": "Earlier effect188 proposal in bootcamp-shinobi-rifle.json"
+    },
+    {
+      "tier": "original",
+      "claim": "Module display evaluates int(ceil(flatValue + linearValue * itemLevel + expValue * 2**((itemLevel-1)/8.0))). itemLevel is the item required level, not wearer level or module strength.",
+      "source": "client/ui/tooltipwindow.pyo",
+      "source_lines": [
+        870,
+        874,
+        2248,
+        2260,
+        2261,
+        2262
+      ],
+      "bytecode_locations": {
+        "item_required_level": [
+          2100,
+          2109
+        ],
+        "module_call": [
+          2129,
+          2147
+        ],
+        "nine_field_unpack": [
+          312,
+          346
+        ],
+        "scaling": [
+          487,
+          550
+        ]
+      }
+    },
+    {
+      "tier": "original",
+      "claim": "Visible square-bracket module strength derives from crafting lookup; the received ModuleTooltipInfo moduleLevel field is cached but GetModuleLevel ignores that cache.",
+      "source": "client/gameuiutil.pyo",
+      "source_lines": [
+        192,
+        203,
+        210,
+        214
+      ]
+    },
+    {
+      "tier": "inferred",
+      "claim": "A weapon resistance module should not count merely because it is carried. Active-weapon scope is strongly suggested by official weapon-switch regen-mod fixes, but specific resistance activation and stowed-versus-drawn boundaries are not established.",
+      "source": "deployment_14_11112008.html@@20081115092604.html.txt:88"
+    },
+    {
+      "tier": "original",
+      "claim": "Live patch1.6.6.1 removes equipped TSR/injector armor piercing from ability damage. This forbids blindly applying every equipped weapon piercing bonus to all ability damage.",
+      "source": "patch_notes_4082008.html@@20080514131237.html.txt:10"
+    },
+    {
+      "tier": "original",
+      "claim": "Live Deployment9.6 ignores armor-piercing modifiers for EMP damage against biological targets.",
+      "source": "deployment_96_6262008.html@@20080908074718.html.txt:36"
+    }
+  ],
+  "resistance_formula": {
+    "positive_rating": "damage_multiplier = 100 / (100 + 2*rating)",
+    "negative_rating": "damage_multiplier = (100-rating)/100",
+    "rating12_multiplier": 0.8064516129032258,
+    "rating12_mitigation_percent": 19.354838709677423,
+    "application_order": "Not established by the conversion function"
+  },
+  "remaining_gaps": [
+    "Original server effect coefficient rows, including unused argument null/zero representations",
+    "Exact armor-piercing combination, rounding, armor depletion and damage-modifier order",
+    "Specific weapon-module activation boundaries: active drawer versus drawn weapon, switching and in-flight attack snapshot",
+    "Base template and universality of the filmed crate module roll",
+    "No original-client emulator rendering validation of effect413 yet",
+    "Exact shutdown client revision and surviving final hotfix completeness"
+  ],
+  "validation": "Table and Python member bytes verified against full original client archives. Selected evidence JSON parses. No .NET builds or runtime probes.",
+  "implementation_followup": {
+    "status": "Generic wire implementation verified by the parent serial full suite; module definitions, combat activation and original-client module rendering remain unimplemented or unverified",
+    "scope": "Generic module-tooltip representation and wire framing only; no seeded module definitions, item assignment or combat activation",
+    "sources": [
+      "src/Rasa.Game/Structures/ItemModule.cs",
+      "src/Rasa.Game/Structures/ModuleInfo.cs",
+      "src/Rasa.Game/Packets/MapChannel/Server/ModuleTooltipInfoPacket.cs",
+      "src/Rasa.Game/Packets/MapChannel/Client/RequestTooltipForModuleIdPacket.cs",
+      "src/Rasa.Game/Managers/InventoryManager.cs:RequestTooltipForModuleId",
+      "src/Rasa.Test/ModuleTooltipPacketTests.cs"
+    ],
+    "consumer": {
+      "original_member": "client/gameui.pyo",
+      "original_sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0",
+      "selected_disassembly_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/shinobi-module-semantics/trpython-client-gameui.pyo.module-tooltip.dis",
+      "selected_disassembly_sha256": "e8db04ce706a7ad2aab1584a6b80fc853e7b0bdf49b6fefb19aba27df336d31a",
+      "request_source_lines": [
+        1596,
+        1602
+      ],
+      "request_tuple_offsets": [
+        101,
+        116
+      ],
+      "response_source_lines": [
+        1610,
+        1615
+      ],
+      "response_cache_and_event_offsets": [
+        16,
+        62
+      ]
+    },
+    "behavior": [
+      "Response is (moduleId, moduleLevel, [nine-field effect tuples]); supplied values replace hardcoded placeholders.",
+      "ItemModule copies an immutable collection of immutable effect rows; ModuleLevel and Arg4 constructor self-assignment defects are removed.",
+      "Numeric coefficients can be fractional. Integral values retain integer wire encoding; nullable integer arguments and level distinguish None from zero. Other future argument types require evidence before extending this representation.",
+      "Request framing is exactly one Python integer argument as sent by the recovered original consumer.",
+      "No runtime definition provider is populated. Unsupported handler requests log the requested module ID and do not send a false empty definition that the original client would cache."
+    ],
+    "tests": {
+      "file": "src/Rasa.Test/ModuleTooltipPacketTests.cs",
+      "cases": 7,
+      "status": "All seven module-tooltip cases passed within 1300/1300 full-suite tests; no tests skipped"
+    },
+    "remaining_gap": "Correct serialization does not establish original server coefficients or a working runtime module effect.",
+    "full_suite": {
+      "passed": 1300,
+      "total": 1300,
+      "skipped": 0,
+      "duration_minutes": 5.965,
+      "log_path": "/tmp/rasa-retail-20260922-modules-full.log",
+      "log_sha256": "6f3842e44ef5d84495f4aa50f12fd79f543f3ac0ba9a68f3ca347c0b3088df83",
+      "snapshot_path": "/tmp/rasa-retail-20260922-modules-snapshot.json",
+      "snapshot_sha256": "08877596c65c761244d9e3062b54b96c2b1632c659300d85e56f4d2ebde7d6cb",
+      "snapshot_file_count": 2111,
+      "source_integrity_checked_at_utc": "2026-09-22T22:10:59.683317+00:00",
+      "source_integrity": [
+        {
+          "path": "src/Rasa.Game/Structures/ItemModule.cs",
+          "sha256": "d42095319d26dc456c3d39b8afe35a12e181e3737021845cbfa54c39d0d1e6d7",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Game/Structures/ModuleInfo.cs",
+          "sha256": "dbf5010ea99d265f862ec704fb2266ef33610873b2d446ccf06501b08f637540",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Game/Packets/MapChannel/Server/ModuleTooltipInfoPacket.cs",
+          "sha256": "97631e69aa2115e97488d333e749b16030dff82df7cf874e1b9a7f3b984fb442",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Game/Packets/MapChannel/Client/RequestTooltipForModuleIdPacket.cs",
+          "sha256": "2820d873d668aa5609f951bfe8761b271710c3cf00ca9f9fb45903482403bd42",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Game/Managers/InventoryManager.cs",
+          "sha256": "a9b8f3201fdf888f5d1c0ae94c891f0b777d6cae6fb86372e61a574cbc86ee79",
+          "matches_tested_snapshot": true
+        },
+        {
+          "path": "src/Rasa.Test/ModuleTooltipPacketTests.cs",
+          "sha256": "26737d74715539e65b2adaebcc547ac730e73ad7dcac1aa620f7521624b32fbb",
+          "matches_tested_snapshot": true
+        }
+      ]
+    }
+  }
+}

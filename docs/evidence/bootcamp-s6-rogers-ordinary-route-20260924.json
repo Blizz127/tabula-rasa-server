@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Original-client ordinary Alia Das arrival route toward Rogers after S6 transfer",
+  "setup": "Isolated copied 1.16.5.0 client/server/DB from the S6 transfer in bootcamp-s5-postbomb-ordinary-exit-20260924.json. No GM travel, live Docker or DIT change. Movement after run 17 was not persisted by harness shutdown; for continuation-only runs 18-21, the copied character coordinate was explicitly edited to the ordinary-reached run-17 point. Those continuation runs produced no playable HUD/movement result.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "s5-rogers-route-agent-17/step0-training-day-offer.png and step1-training-day-accepted.png; char-after-movement.db",
+      "finding": "The client rendered Headquarters' Training Day offer at Alia Das arrival. Clicking its Accept Mission button accepted mission 1526; the copied DB records mission 1526 active while Calling for Reinforcements 1995 remains active with its objectives complete."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-rogers-route-agent-17/step2-southwest-3.png through step4-southwest-9.png; run-s5-rogers-route-agent-17-20260924.py",
+      "uncertainty": "Client .where display precision about 0.01 m; held-key duration varies with frame rate and terrain.",
+      "finding": "From arrival (+884.109,306.011,+347.809), ordinary S-key movement for three 3-second segments reached approximately (+875.504,299.563,+357.363), (+863.230,295.179,+368.773), and (+853.625,294.016,+378.868), alive. The last screenshot shows a HEADQUARTERS sign; inferred seeded Rogers (+855.84,294.14,+387.4) is about 8.8 m away horizontally."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-rogers-route-agent-18/19/21 game.log and playable-probe.png; run-s5-rogers-route-agent-21-20260924.py",
+      "finding": "After manually restoring only the ordinary-reached run-17 coordinate in the copied character DB, runs 18 and 19 timed out at the harness's 60-second HUD check. A copied long-wait harness in run 21 still showed Wilderness entering-battle loading at 110 seconds; the server received MapLoaded near the end of that window. Run 20 stopped when its orchestrator's 80-second command wait expired before its 110-second HUD wait. No further ordinary movement, Rogers conversation or mission turn-in was observed in these continuation attempts."
+    }
+  ],
+  "assessment": "The original client normally accepted Training Day and traversed from the Alia Das arrival to near Rogers' command tent by ordinary movement. The final 8.8 m, conversation and 1995 turn-in remain unverified by this route because later copied-client logins did not render playable HUD within the tested wait. Earlier separate diagnostic evidence in docs/evidence/client-reinforcements-handoff.json validates a GM-assisted Rogers turn-in, but it does not establish this ordinary route completion. The HUD timeout may reflect heavy client loading; this evidence does not identify a server defect.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-postbomb-valkenberg-agent-14/char-after-transfer.db",
+      "sha256": "ea3a24650fcbfafd73f791d4d185f0c972d43e4ce9295735898af117d49db210"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-harness-courtyard-longwait.py",
+      "sha256": "812966c4a469105b2d3fd08150c6a9b6eee82b8d5f1b909f5acc8351499f3cd9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-longwait-20260924.py",
+      "sha256": "128d75336ea8ee910ac4591411cf2aa69265796a7afec4a5b9cb8e3724f82aa0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-16-20260924.py",
+      "sha256": "3778b54b4163eaeb5fa48749c39fbe51ebc47766cab575d07c3b8bf74bdc1110"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-16/game.log",
+      "sha256": "e41a875bde138e225fd581313f6433829e93a30f6aa534785907d12d525eca0b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-17-20260924.py",
+      "sha256": "e448f401e91ed29c5ea40219069fb8091837086cbb9ad0df671e0e7a6f675df9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/game.log",
+      "sha256": "7230155e7bbb6d66b59229ab98fcff0301a990f7dda5339dbc4dcc2de3c31724"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/step0-training-day-offer.png",
+      "sha256": "bd7c98cc3c4d41a7ac32c01868967ef65bce54f99762b45433442b136ffb7d5a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/step1-training-day-accepted.png",
+      "sha256": "ec28ab8ddcd91ab6201e103d48f47ee70b80b22b86f109be3e07f438b5423565"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/step2-southwest-3.png",
+      "sha256": "025f1d945530bcacd3ab846eb0d6287694b62cf73e64def2de846e07b1d4a27a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/step3-southwest-6.png",
+      "sha256": "8defd524d99f9194ac1db50f73492aa4dbb2b8e4796f7b126fe16c640fed0517"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/step4-southwest-9.png",
+      "sha256": "896f80b65ecfca0da40367e48ec520c0b2366d0ed73da24bc5e11de494d9cef7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-17/char-after-movement.db",
+      "sha256": "695ea646a5da82634e8b16bb9a2d7e45e789b24a490eddd80bc410ce074a1920"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-18-20260924.py",
+      "sha256": "26622544342631d406d5bc091572c55382f951fb5bce46e65497749f0f94910c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-18/game.log",
+      "sha256": "25f5ebac8af56191a26b438a38b99658971fe7d2e6d89f4143804e2e38529a90"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-18/playable-probe.png",
+      "sha256": "30c2c5fae43b6b1e0f850ac8dcbc02cea6dd8be249642f2c4620dada29b9518d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-19-20260924.py",
+      "sha256": "2aa392a694e091a7893db8c4ea46089945dc716634f47d8b23b08ee68b592a76"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-19/game.log",
+      "sha256": "15e8d907d826947ddf1428698e4c87dbea4fbbaac02981eac3ac541c3920bb14"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-19/playable-probe.png",
+      "sha256": "13ec7cf90ffa3c792df0f1ae8cba6ae70b44ba6de199db8ca16fcfbf37e30b75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-20-20260924.py",
+      "sha256": "d73ddfd047cc6342702a1f22f817b2f33f6113e92610c3b4c6279caca98f454c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-20/game.log",
+      "sha256": "2954e3f403a9b030303dbd9a384e8fdfc053b085a38c9bfe83f015f0f17933c6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-rogers-route-agent-21-20260924.py",
+      "sha256": "caa3cad2e3289b7838fb0314bdec691704b6a3c3cbbd4c33d4fa54cb7a9fa1cf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-21/game.log",
+      "sha256": "8ed2d9a678d13e975acf52ef231941087dee7ca81a4dd3d3b90e6dddf929fff6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-21/playable-probe.png",
+      "sha256": "39d00ff930de69b1ec933cf73b8636ce7f61c7324b28fd1453d6cd626a40c154"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-rogers-route-agent-21/char-rogers-checkpoint.db",
+      "sha256": "2d8acdfe6e26e89272a86ffdad05a1ba4b48e00fbb5f33d38836d2822d5320ff"
+    }
+  ]
+}

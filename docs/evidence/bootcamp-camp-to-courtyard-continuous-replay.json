@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Continuous recovered-client movement from staged boot-camp ally camp through the upper gap to the courtyard",
+  "provenance_tier": "observed",
+  "source_scope": "Emulator diagnostic using the original 1.16.5.0 client; this is not a recording of final-live gameplay.",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and private bubblewrap namespaces; tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy, with normal staged six-Thrax attacks, three camp companions and the staged courtyard Warrior; no production service or database changed",
+    "character": "Copied level-2 Alden at staged camp checkpoint (383.94,119.5,153.83), yaw -0.18, mission 1994 objective 2 active, rifle item 11 with 20 loaded rounds; no movement teleport or server position edit after login"
+  },
+  "run": {
+    "id": "camp-to-courtyard-sidejump-continuous-04",
+    "inputs": "Native client holds in sequence: W 2200 ms, A 900 ms, W 1400 ms, D 1400 ms, W+D 3000 ms, D 2200 ms, D 2500 ms, D 2500 ms, W 1000 ms, D+Space 1200 ms, W+A 350 ms, W+D 2200 ms, W+D 1800 ms, D 1000 ms, D+Space 1500 ms. Screenshots were taken between groups of holds; no player fire was sent.",
+    "route_result": "In one login and without a movement edit, the recruit went from the camp through the rocky descent, crossed the upper gap by side jump and reached the courtyard sandbags at (301.2,119.8,77.9). The upper-gap landing and courtyard line are visible in captures. This confirms a playable player route in the present emulator geometry.",
+    "encounter_result": "MapLoaded was logged at 16:23:36.011. All six staged Thrax attacked the single Warrior immediately; the final hit reduced his health 2->0 at 16:23:43.926, before the recruit reached the courtyard. No companion placement 198688, 198689 or 198690 logged a Creature hit in this run. The courtyard-line radar shows allied markers behind the player, but their exact positions and ability to cross the gap are not established by these captures. With no player fire, Alden died at (301.2,119.8,77.9) at 16:24:49.134, killed by placement 198665. Long inspection pauses preclude a survival or encounter-pacing comparison.",
+    "mission_result": "Area 198602 did not fire: the final player position was 25.1 m from the center, outside its 10 m radius. Cave entry and encounter completion remain unverified in a normal continuous fight.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/game.log",
+    "game_log_sha256": "7525dc1f7a4ddace6b4172cac29338c7968fe886b56394816f108790724402ae",
+    "client_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/client.log",
+    "client_log_sha256": "8d1899aa52a5077a1bdc803810d343b6d70761c2b1a38368f3902d3bf0ca1691",
+    "screenshots": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-rocky-descent.png", "sha256": "07e8806681972604f061a6506a656c934250fe9d49d7dabe1452ae1493edd614"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-upper-gap-edge.png", "sha256": "465dc3298edbe77363002086fd910bb79d82c2868577df0eb4ef225475718a1f"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-upper-gap-start.png", "sha256": "3aa84f06aabbacabaecb455f9d3c1059873f5ee60f9b00a57f6abfe6eb9fcf08"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-upper-gap-landed.png", "sha256": "d24b4dcd46cc6d47e8e79aec4d8580a120dd09bb4b9590367fcdacbe0c925d50"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-courtyard-line.png", "sha256": "ada17aa4ff76651ecc1520e3b7628eaf515f05345bd8763bbf5b5a39e16cd2a1"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-sidejump-continuous-04/camp-courtyard-sandbags.png", "sha256": "b5da984184971c0e309ba7b56eaa4eb4b7cba8b3ef0ecb6994b3e84990a62484"}
+    ]
+  },
+  "retail_comparison": "Original final-week video 7Lrst9SG3pk cuts directly from camp at 384.467 seconds to a player already in the courtyard at 385.467 seconds; frame hashes are recorded in docs/evidence/bootcamp-courtyard-cave-approach-replay.json. It cannot verify the exact travel route, jump, companion positions or enemy activation schedule. The staged six-Thrax opening therefore remains an evidence gap, and no combat value or spawn was altered from this diagnostic.",
+  "verification_needed": "Track companion positions across the gap and perform a normal continuous courtyard fight and cave entry with client controls, then compare the encounter against direct final-live evidence where available."
+}

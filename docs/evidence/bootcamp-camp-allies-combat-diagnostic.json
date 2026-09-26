@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "scope": "Disposable recovered-client combat diagnostics for staged level-3 Forean camp companions in Capture the Flag, not an original route observation",
+  "setup": {
+    "client": "Recovered 1.16.5.0 under Wine/Xvfb :109 inside isolated Docker network namespace; copied auth/char/world SQLite databases",
+    "source_checkpoint": "Alden level 2, mission 1994 objective 2 incomplete, no player attacks",
+    "copied_player_position": [
+      302,
+      120.7,
+      69
+    ],
+    "copied_companion_positions": {
+      "198688 Gunner": [
+        299,
+        120.5,
+        70
+      ],
+      "198689 Archer": [
+        296,
+        120.5,
+        73
+      ],
+      "198690 Shaman": [
+        299,
+        120.5,
+        66
+      ]
+    },
+    "position_tier": "inferred diagnostic positions only; not proposed as retail placements",
+    "live_state": "No live database or service changes"
+  },
+  "six_enemy_stress": {
+    "enemy_placements": [
+      198660,
+      198661,
+      198662,
+      198663,
+      198664,
+      198665
+    ],
+    "observation": "All three marked allies and the player were present. Companions fell in the first several seconds; Alden died without attacking. Server log records death by Thrax class 29769 at (286.5,120.5,62.5). No entity-id damage trace was enabled in this pass.",
+    "screenshots": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/fight-13.png",
+        "sha256": "5b0b6c5fdffc81330cd8474fc682ef79ff6cdf465a5acf7e241cd9f60dfc4f33"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/fight-15.png",
+        "sha256": "ccfb07323c34807cd89e69587f08553e149a3faa4f5ce5eb5e2168e60035ba83"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/fight-18.png",
+        "sha256": "677f1e6db87636054b7518988ddc78d10962bd1d5e83e60ec946a9d753a7af88"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/fight-21.png",
+        "sha256": "dc1fce0e79bd867fc3cfc5103024eaba763549687ea7ee37fc28479a33fc2d12"
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/fight-24.png",
+        "sha256": "5752ecd6a6ffc755d1511669a6b8285db3fbd3922fb4beefde3542daddd2bb11"
+      }
+    ],
+    "limits": "Forced simultaneous proximity to six enemies, not the normal camp-to-cave approach. Does not establish final-live balance or which ally fell in each image."
+  },
+  "one_enemy_trace": {
+    "enemy_placements": [
+      198660
+    ],
+    "other_courtyard_enemy_placements_removed_from_copy": [
+      198661,
+      198662,
+      198663,
+      198664,
+      198665
+    ],
+    "trace_enable": "RASA_TRACE_CREATURE_HITS=1 on copied game server; source/target placement IDs, damage, armor and health in game.log",
+    "results": {
+      "Gunner_198688": {
+        "hits_on_198660": 11,
+        "raw_damage_sum": 256,
+        "killing_hit": "08:38:28.163, 25 damage, enemy health 8->0"
+      },
+      "Archer_198689": {
+        "hits_on_198660": 10,
+        "raw_damage_sum": 202
+      },
+      "Shaman_198690": {
+        "hits_on_198660": 10,
+        "raw_damage_sum": 214
+      },
+      "Thrax_198660": {
+        "hits_on_Archer_198689": 33,
+        "raw_damage_sum": 402,
+        "last_Archer_health": 253
+      },
+      "player_experience_before_after": [
+        3571,
+        3571
+      ],
+      "mission_1994_objective_2_status": "incomplete (1), expected area objective; no kill counter"
+    },
+    "server_log": {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/game.log",
+      "sha256": "0fbee750a5bb115bbeeb76bfff5841503fc86393b13df0e09e800e8dd73f254c"
+    },
+    "screenshots": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-combat/trace-after-kill.png",
+        "sha256": "69f52b461cb868f1b60a66fb0a9a0e9e3d4e325ce0701031709b77d3c108af39"
+      }
+    ],
+    "limits": "This proves all three staged actions inflict creature damage and the Gunner can land the kill in the isolated copy. It does not prove retail attack values, client-visible death timing, companion recovery after combat, or full route behavior."
+  },
+  "source_code": "src/Rasa.Game/Managers/MissileManager.cs opt-in RASA_TRACE_CREATURE_HITS diagnostic; default disabled",
+  "remaining_unverified": [
+    "Unmodified camp-to-cave travel with three companions and player combat, including normal six-enemy acquisition and objective transition.",
+    "Comparison of filmed encounter timing, combat values, ally survival and player reward rules against original footage.",
+    "Global impact of the staged creature.max_hp fallback fix on creatures without creature_stat rows."
+  ]
+}

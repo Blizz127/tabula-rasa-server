@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "scope": "Deploy three evidence-labelled camp Forean companions for Capture the Flag, mission 1994",
+  "source_manifests": [
+    "docs/evidence/bootcamp-camp-gunner-companion.json",
+    "docs/evidence/bootcamp-camp-archer-shaman-companions.json"
+  ],
+  "build": {
+    "source_manifest": "/home/blizz/backups/rasa-net/deployments/20260923-camp-companion-candidate/source-manifest.json",
+    "base_image": "sha256:7e5c62cc27910309921a884252c6d71e544b29d6a3c7b9efbb0a95e31df577e5",
+    "deployed_image": "sha256:2a4551cf4b4cfa4e2fe4fd5770843e3210bc9cf3de2fc992470ffdbdff678c3f",
+    "method": "Derived only the companion runtime source, capability declaration, two migration pairs and their data-row files from the previously deployed Game image; dotnet build --no-restore succeeded with six pre-existing warnings and zero errors. Auth image unchanged."
+  },
+  "isolated_verification": {
+    "database": "SQLite backup API copies of the three live databases; source hashes in /home/blizz/backups/rasa-net/deployments/20260923-camp-companion-candidate/isolated/copy-manifest.json",
+    "migration_ids": [
+      "20260923040000_BootcampCampGunnerCompanion",
+      "20260923050000_BootcampCampArcherShamanCompanions"
+    ],
+    "result": "Both migrations applied; creature 198516-198518 and placement 198688-198690 rows present; world integrity_check=ok. First candidate boot exposed a missing CombatCompanion capability declaration and withheld the three placements. Corrected derived image boot loaded 409 content rows with zero gaps and no companion-withheld warning.",
+    "focused_tests": "Four PlacedCreatureBehaviorTests passed under the .NET 5 SDK container: guard post, guard aggro, companion leash near player, and companion assist against an enemy without targeting a player. Host test runner failed for missing libssl; container run succeeded."
+  },
+  "deployment": {
+    "backup": "/home/blizz/backups/rasa-net/deployments/20260923-camp-companion-candidate/live-before/manifest.json",
+    "rollback_image_tag": "rasa_net_game:pre-camp-companion-20260923",
+    "game_recreate": "docker compose up -d --no-deps --force-recreate --no-build game",
+    "live_world_integrity": "ok",
+    "live_migrations": "Both companion migrations recorded in __EFMigrationsHistory",
+    "live_placements": [198688, 198689, 198690],
+    "startup": "Game loaded 17 content rules, 409 content rows, zero gaps; boot camp entry AllowListedAccounts; listened on port 8102, connected and authenticated to Auth at 2026-09-24 01:19:31 UTC. Game and Auth restart counts zero immediately after deployment.",
+    "startup_log": "/home/blizz/backups/rasa-net/deployments/20260923-camp-companion-candidate/game-startup.selected.log",
+    "startup_log_sha256": "168b30ff016520459a3a1436832109d1977240be233877a022c16809f5d7bafb"
+  },
+  "limits": [
+    "The original final-week video identifies these ally types, but their individual camp positions, health, speed, attacks and precise activation remain estimates recorded field by field in the source manifests.",
+    "A later isolated original-client replay on the exact deployed Game binary shows the three companions rendered at camp, following across the upper gap in one run and each damaging a Thrax in a controlled one-enemy run; see docs/evidence/bootcamp-live-companion-binary-client-replay.json. A normal six-Thrax completion remains unverified.",
+    "The separate level-2 courtyard Forean Warrior was deliberately excluded. The staged one-Warrior encounter contradicts the recorded fight sequence; see docs/evidence/bootcamp-courtyard-warrior-sequence-audit.json.",
+    "Normal complete camp-to-courtyard combat, cave entry after combat, and original encounter balance remain unverified."
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated targeted rifle alternate melee through recovered original 1.16.5.0 client and emulator",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/01-medical.png",
+      "sha256": "ce438db08a2b024caa40bb1f67b0b90b92eb0a238c371b85a900f769c6cc26a0",
+      "bytes": 628746
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/03-creature.png",
+      "sha256": "0129a3496368b3d2e130fb516764e46ad039ed409446ee8facb16eda833f2f29",
+      "bytes": 666484
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/04-after-melee.png",
+      "sha256": "3c082466352c8103c70af879bdc6731e4ae4075111416b249b1cb18665d8336d",
+      "bytes": 665535
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/05-melee-hit.png",
+      "sha256": "3e26cd5a2321ae23efd3635f6a1f8e341b885935461b2b3994e170ad51e367ef",
+      "bytes": 665394
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/07-after-three.png",
+      "sha256": "ab7865ac9a436508f8b99b610f4e0f648c19b1425d6a599da3b713bbf63099d2",
+      "bytes": 645070
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/game.log",
+      "sha256": "faa7f4694ee5c4c75858272513acd61d174808da4960e84bd1ec992b50d48584",
+      "bytes": 22839
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/status.json",
+      "sha256": "2cea808fec707e0c7291399ad09da803973d8827bfaf131a59788f75a874fbbb",
+      "bytes": 210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/char-after.db",
+      "sha256": "a5f4107ac70ccbdc7c6b9b803b225fa3a25a6b2d1fa1ce08eef0141ce96c7f6d",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "dd22dfce910b7f5ed5eabe1ee94f0cc5a8e22e52b8596795428c12b771960e6e",
+      "bytes": 1625088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16-char-after.db",
+      "sha256": "e148d23286a9ad4eb585d6df2e9210a4fb7967f7ef00108cd2bb3537d490ef5e",
+      "bytes": 204800
+    }
+  ],
+  "setup": {
+    "client": "Recovered compatibility client 1.16.5.0, revision not independently established as exact shutdown client",
+    "server_binary": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+    "character_source": "Saved level-2 Alden after boot camp promotion; original saved database copied for this run",
+    "diagnostic_changes": "Only isolated character account level raised to 5, then .creature 198507 spawned a Thrax Infantry Initiate at Alden in the medical tent. No seeded or live placement was changed. Isolated game DLL predates the later empty-magazine/jam-guard fix.",
+    "input": "F key; first press drew the holstered rifle, then three presses generated RequestWeaponAttack calls. A contemporary TaRapedia Weapon/Beginners Guide page lists F for melee; the observed client/server calls are the direct check."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/03-creature.png",
+      "finding": "GM spawned Thrax Infantry Initiate entity 2776 directly beside Alden; target nameplate displayed."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/game.log",
+      "locator": "lines 233, 285, 300",
+      "finding": "Three RequestWeaponAttack client calls followed F input after RequestWeaponDraw."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/07-after-three.png",
+      "finding": "Thrax body down; client chat displays 71 experience points and 10 credits; rifle HUD still 15/1000."
+    },
+    {
+      "tier": "measured",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-22/char-after.db",
+      "finding": "Alden XP 3071, credits 310, rifle item 11 template 13713 ammo_count 15; saved source had XP 3000, credits 300, ammo_count 15."
+    }
+  ],
+  "limits": [
+    "This was a diagnostic GM-spawned encounter in an isolated emulator, not direct evidence of final-live server damage formula, hit chance, creature HP or progression rewards.",
+    "The game trace records the method name, not packet arguments; the client bytecode and F input link the calls to alternate melee, but this run does not independently record isAltAction or the numeric damage of each hit.",
+    "The isolated DLL is the prior rifle-melee build (sha256 dd22df...), not live image 20260922c. Empty-magazine and jam behavior are verified by focused tests against the new DLL, not by this client run.",
+    "The exact shutdown client revision remains unverified; 1.16.5.0 is the current compatibility requirement."
+  ]
+}

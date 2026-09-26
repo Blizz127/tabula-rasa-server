@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Rasa.Data;
 using Rasa.Game;
 using Rasa.Packets.MapChannel.Client;
@@ -66,9 +67,20 @@ namespace Rasa.Managers
 
             var weapon = WeaponActionManager.CurrentWeapon(client);
             var info = WeaponActionManager.ClassInfo(weapon);
-            if (!WeaponActionManager.CanAct(client) || info == null || !player.WeaponReady || weapon.IsJammed ||
-                request.ActionArgId < 0 || request.IsAltAction || request.TargetLocation.HasValue ||
-                request.ActionId != info.WeaponAttackActionId || (uint)request.ActionArgId != info.WeaponAttackArgId ||
+            var altInfo = weapon?.ItemTemplate?.WeaponInfo;
+            // The recovered rifle alternate is a weapon melee action. Other alternate
+            // families need their own targeting and damage rules before admission.
+            var validAlternate = request.IsAltAction && request.ActionId == ActionId.WeaponMelee &&
+                altInfo?.WeaponAltInfo?.AltMaxDamage > 0 &&
+                altInfo.AltActionId == (uint)request.ActionId &&
+                altInfo.AltActionArgId == (uint)request.ActionArgId;
+            var validPrimary = !request.IsAltAction && info != null &&
+                request.ActionId == info.WeaponAttackActionId &&
+                (uint)request.ActionArgId == info.WeaponAttackArgId;
+            if (!WeaponActionManager.CanAct(client) || info == null || !player.WeaponReady ||
+                (!request.IsAltAction && weapon.IsJammed) ||
+                request.ActionArgId < 0 || request.TargetLocation.HasValue ||
+                !(validPrimary || validAlternate) ||
                 !WeaponAttackData.TryGet(request.ActionId, (uint)request.ActionArgId, out var timing) ||
                 current != null || player.CurrentAbility != null || player.CurrentAction != 0 ||
                 player.CurrentWeaponAction != null && (!clientRequested || player.CurrentWeaponAction.ActionId != ActionId.WeaponReload) ||
@@ -82,7 +94,8 @@ namespace Rasa.Managers
             // ammunition class also have no magazine debit.
             var ammoCost = request.ActionId == ActionId.WeaponMelee || (uint)info.AmmoClassId == 0
                 ? 0 : weapon.ItemTemplate.WeaponInfo.AmmoPerShot;
-            if ((uint)info.AmmoClassId != 0 && weapon.CurrentAmmo == 0 || ammoCost > weapon.CurrentAmmo)
+            if ((!request.IsAltAction && (uint)info.AmmoClassId != 0 && weapon.CurrentAmmo == 0) ||
+                ammoCost > weapon.CurrentAmmo)
             {
                 Reject(client, request, clientRequested, now);
                 return false;
@@ -92,12 +105,18 @@ namespace Rasa.Managers
             // The content-usable branch beside the creature check: a destroyable
             // placement is a valid weapon target even though it is not a Creature.
             var contentTarget = target == null ? GetEligibleContentTarget(player, request.TargetId ?? 0) : null;
+            if (request.IsAltAction && contentTarget != null)
+            {
+                Reject(client, request, clientRequested, now);
+                return false;
+            }
             WeaponActionManager.Instance.InterruptForAbility(client);
             var execution = new WeaponAttackExecution(request.ActionId, (uint)request.ActionArgId,
-                weapon, player.MapChannel, target, ammoCost, now, timing, clientRequested, contentTarget);
+                weapon, player.MapChannel, target, ammoCost, now, timing, clientRequested, contentTarget,
+                request.IsAltAction);
             player.CurrentWeaponAttack = execution;
             var packet = new PerformWindupPacket(PerformType.ThreeArgs, execution.ActionId,
-                execution.ArgumentId, target?.EntityId ?? 0);
+                execution.ArgumentId, target?.EntityId ?? contentTarget?.EntityId ?? 0);
             if (clientRequested)
                 client.CellIgnoreSelfCallMethod(client, packet);
             else
@@ -167,10 +186,17 @@ namespace Rasa.Managers
             if (current == null)
                 return;
             var info = WeaponActionManager.ClassInfo(current.Weapon);
+            var weaponInfo = current.Weapon.ItemTemplate?.WeaponInfo;
+            var actionMatches = current.IsAltAction
+                ? weaponInfo?.AltActionId == (uint)current.ActionId &&
+                  weaponInfo.AltActionArgId == current.ArgumentId &&
+                  weaponInfo.WeaponAltInfo?.AltMaxDamage > 0
+                : info?.WeaponAttackActionId == current.ActionId &&
+                  info.WeaponAttackArgId == current.ArgumentId;
             if (!WeaponActionManager.CanAct(client) || !ReferenceEquals(player.MapChannel, current.Map) ||
                 !ReferenceEquals(WeaponActionManager.CurrentWeapon(client), current.Weapon) ||
-                !player.WeaponReady || current.Weapon.IsJammed || info == null ||
-                info.WeaponAttackActionId != current.ActionId || info.WeaponAttackArgId != current.ArgumentId)
+                !player.WeaponReady || (!current.IsAltAction && current.Weapon.IsJammed) ||
+                info == null || !actionMatches)
             {
                 Cancel(client, false, now);
                 return;
@@ -190,9 +216,15 @@ namespace Rasa.Managers
                 var target = current.Target != null &&
                     ReferenceEquals(GetEligibleTarget(player, current.Target.EntityId), current.Target)
                         ? current.Target : null;
+                if (current.ActionId == ActionId.WeaponMelee && current.MaxRange > 0 && target != null &&
+                    Vector3.Distance(player.Position, target.Position) > current.MaxRange)
+                    target = null;
                 // The existing damage amount model is retained; original modifier,
                 // hit-chance and impact/flight timing remain separate reconstruction.
-                var damage = info.MinDamage + _random.Next(0, info.MaxDamage - info.MinDamage + 1);
+                var damage = current.IsAltAction ? (int)weaponInfo.WeaponAltInfo.AltMaxDamage :
+                    info.MinDamage + _random.Next(0, info.MaxDamage - info.MinDamage + 1);
+                var damageType = current.IsAltAction ? (DamageType)weaponInfo.WeaponAltInfo.AltDamageType :
+                    (DamageType)info.DamageType;
                 if (current.ContentTarget != null)
                 {
                     // The content placement is re-checked at impact: it may have been
@@ -203,7 +235,7 @@ namespace Rasa.Managers
                     {
                         Source = player, ActionId = current.ActionId, ActionArgId = current.ArgumentId,
                         TargetEntityId = contentTarget?.EntityId ?? 0,
-                        DamageA = damage, DamageType = (DamageType)info.DamageType
+                        DamageA = damage, DamageType = damageType
                     });
                 }
                 else
@@ -211,7 +243,7 @@ namespace Rasa.Managers
                     {
                         Source = player, ActionId = current.ActionId, ActionArgId = current.ArgumentId,
                         TargetActor = target, TargetEntityId = current.Target?.EntityId ?? 0,
-                        DamageA = damage, DamageType = (DamageType)info.DamageType
+                        DamageA = damage, DamageType = damageType
                     });
                 SendReuse(client, current.ActionId, now);
             }

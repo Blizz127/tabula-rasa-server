@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client cave approach with diagnostic attack suppression and normal staged attacks",
+  "provenance_tier": "observed",
+  "scope": "Observations of the current emulator through the recovered 1.16.5.0 client; these do not verify final-live encounter balance or objective geometry against retail.",
+  "source_context": {
+    "original_gameplay": "Final-week video 7Lrst9SG3pk, Tabula Rasa Creating Character 1of8.mp4, courtyard combat at 391.533-427.733 seconds; six visible reward events, first two 71 XP and later four 143 XP with kill streak bonus. The footage does not establish the exact concurrent hostile count or a spawn schedule.",
+    "client": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe; SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable copied auth/game and databases under /home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-courtyard-full-20260923/; no production service or database changes"
+  },
+  "runs": [
+    {
+      "id": "courtyard-geometry-west-checkpoint-01",
+      "setup": "Copied Alden placed at previously client-reached (303.4,120.5,68.9), yaw 0.859892, mission 1994 objective 2 active. In the copied world database only, creature 198507 action1 changed from 33 to 0, suppressing six staged Thrax attacks. This was a diagnostic geometry check, not normal combat.",
+      "input": "Native-client W+D 2000 ms, D 2000 ms, W 3000 ms, without a teleport after login.",
+      "observation": "The route moved from (303.4,120.5,68.9) through (295,121.2,70) and (292.5,120.1,74.4). The first area-198602 entered-true probe was (286.4,120.5,69.2) at 15:29:46.585, 8 m from the trigger center (279.05,120.5,66.07), radius 10 m. It ended at (277.6,120.5,62.1), 4.2 m from center. The client displayed Objective Completed / Find a way out of the cave, and mission 1994 objective 2 completed with the Tizzik boss objective active.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-geometry-west-checkpoint-01/game.log",
+      "game_log_sha256": "41181bc358e29526bd3e6e8a8ed00111320e3657d792416e4180d09ff00f9798",
+      "screenshots": [
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-geometry-west-checkpoint-01/west-start.png", "sha256": "506694a185a14b888609e756175dda83c3bf1228ec966723a326e9528aa4ab42"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-geometry-west-checkpoint-01/west-diagonal.png", "sha256": "107348d2fc2a2e0c85ea861e151b849e16da2edc1780273ef15554f7e4b9dc4c"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-geometry-west-checkpoint-01/west-around-bags.png", "sha256": "0e13b98ceb0e2394ad4f1cf16b5a0b689dc1887f65bfda38e569db4ba456bf5b"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-geometry-west-checkpoint-01/west-cave-approach.png", "sha256": "62741cf1190edfe59ad330b2e21c0b62ef539dfc7df602a1f5b23cf9c54c49e5"}
+      ]
+    },
+    {
+      "id": "courtyard-continuous-trigger-normal-01",
+      "setup": "Copied level-2 Alden with mission 1994 objective 2 active and 20 loaded rifle rounds, placed at the previously client-reached rocky-descent checkpoint (360.0703,121.2031,114.6406), yaw 1.24. The copied world database had creature 198507 action1 restored to 33, so staged Thrax attacks operated normally. No player fire or combat-state edits occurred after login.",
+      "input": "Nine previously recorded W/W+A/W+Space holds, then W 3200 ms; W 600 ms and W+Space 1200 ms across the upper gap; W 1700 ms and W+Space 900 ms into the courtyard; W+A 3000 ms; W+Space 2000 ms; final W 1700 ms after death.",
+      "observation": "The client crossed the upper gap and reached (302.9,120,78), then (290.5,120.1,73.7), 13.8 m from area-198602 center and 3.8 m outside its radius. Hostile hits were visible. Alden died there at 15:35:20.252; the client opened Hospital Selection. The final W input occurred after death and did not move the character. The cave objective did not complete.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-continuous-trigger-normal-01/game.log",
+      "game_log_sha256": "7dd78021f6329b4a24b09e1e4016e224901173e962e79aab3315ae618e7f7565",
+      "screenshots": [
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-continuous-trigger-normal-01/continuous-courtyard-lower.png", "sha256": "8498996b7ccb1ae3324e3742c9b067deb09bf8d7c7151c894e14d6ab8088cd31"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-continuous-trigger-normal-01/continuous-cave-trigger.png", "sha256": "e54bc81b532fc9304f7b1033e74483e6eab600f18b72d9fda6885f8dcd68b7a9"}
+      ]
+    }
+  ],
+  "encounter_timing_observation": {
+    "tier": "observed",
+    "emulator_source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-continuous-trigger-normal-01/game.log, 15:31:44.494-15:32:13.197",
+    "emulator_result": "Alden sent MapLoaded at 15:31:44.494. All six seeded Thrax placements 198660-198665 hit the single staged Warrior 198691 between 15:31:45.393 and 15:31:45.398. His health reached zero at 15:31:52.569, 8.075 seconds after MapLoaded. The first cave-area position probe placed Alden at (329.1,120.5,98.8) at 15:32:13.197, over 20 seconds after the Warrior died. The replay included inspection pauses and therefore does not measure a minimum travel time.",
+    "original_source": "Final-week video 7Lrst9SG3pk cuts between frame 384.467 seconds (player at the camp with three Forean Initiates) and frame 385.467 seconds (player already in the courtyard with allied figures and Thrax ahead). Radar-derived player XZ changes from approximately (383.94,153.83) to (306.52,66.12) across that edit; see /home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl. At 401.8-402.067 seconds a level-2 Forean Warrior is targetable (docs/evidence/bootcamp-courtyard-forean-warrior.json).",
+    "original_frames": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00384.467.png", "sha256": "0707d430d3756b2ab51aba68ffa628b1e064ad736205007a82955792c86cadaa"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00385.467.png", "sha256": "9d2e574e7797f92cb96b7de1735bda844d4a7104fde793b93797ce5149761267"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/courtyard-count/401.9.png", "sha256": "b12a30a50ef0d12c056473100d7cb53415b5f46c8d9701a43816ae70043229f2"}
+    ],
+    "assessment": "The current six-against-one opening concentrates all damage on the Warrior and removes him before the player arrives in this replay. A Forean Warrior is targetable 16.3 seconds after the edited courtyard segment begins, but the cut hides travel, prior combat and possible actor spawning. Exact enemy activation time, simultaneous count, allied defender count and aggro selection remain unverified, so this comparison does not justify a spawn timer or stat change."
+  },
+  "interpretation": "The current cave-area mission transition is reachable by ordinary client movement when staged attacks are suppressed. Normal staged attacks still prevent this no-fire sprint from reaching the trigger. Neither run proves whether the final-live recruit could sprint through the courtyard, nor whether the staged attackers' damage, placement or timing matches retail.",
+  "verification_needed": "Complete the six-Thrax courtyard fight with normal attacks and ordinary recruit equipment, then cross the cave trigger in one continued native-client session. Compare actor count, damage, movement and objective transition with original final-week footage before changing estimated values."
+}

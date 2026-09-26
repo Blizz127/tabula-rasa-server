@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Original-client mission 1995 acceptance, reconnect, and first gate fight after mission 1994 turn-in",
+  "provenance_tier": "observed",
+  "setup": "Isolated copies of the saved level-2 character after an ordinary normal-health Tizzik Gi kill and mission 1994 turn-in. Recovered original compatibility client 1.16.5.0, deployed-derived Game DLL and world copy, normal hostile stats and attacks. The earlier boss checkpoint bypassed camp-to-cave combat. Live services and databases were untouched.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "run-normal-chain-s5-controlled-25-20260924.py; normal-chain-s5-25/game.log; copied char.db after stop",
+      "finding": "Normal movement, aiming and right-click interaction with Youngblood offered and accepted Calling for Reinforcements (1995). The saved character had mission 1994 state 4, 1995 state 0 and objective 2 active; experience and credits remained 8695 and 360."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run-normal-chain-s5-controlled-26-20260924.py; normal-chain-s5-26/reinforcements-reconnect.png",
+      "finding": "After a fresh original-client login, the mission tracker still showed Calling for Reinforcements / Locate the missing AFS soldiers. No countdown was visible at this stage."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run-s5-route-controlled-30-20260924.py; s5-route-probe-30/position-after-w5.png; original-client .where output",
+      "uncertainty": "Client position is rounded to the displayed coordinate precision; input displacement depends on camera heading and collision.",
+      "finding": "From approximately (93.199,109.035,137.5), two -200-pixel camera turns and five seconds of ordinary forward movement reached (65.691,109.027,139.906) at the west gate. A Thrax Infantry Initiate attacked the player there."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run-s5-route-controlled-32-20260924.py; s5-route-probe-32/game.log 22:34:59-22:35:05; gate-after-fire-2.png; copied char.db after stop",
+      "finding": "A fresh copied mission-1995 character drew the rifle, waited before reloading, reached the gate through ordinary movement, then aimed and fired through the original client. Seven logged player hits of 106 damage killed hostile placement 198674, whose deployed-derived stats were 555 health and 100 armor. The client showed 71 XP and 10 credits. The copied character saved level 2, 8766 XP and 370 credits; mission 1995 objective 2 remained active and SQLite integrity_check returned ok. The player survived with reduced protection."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "navprobe-courtyard/s5-route-input.txt and the deployed-derived adv_bootcamp.nav mesh",
+      "finding": "The emulator navmesh finds a complete path from the Youngblood base toward the reconstructed wounded soldier at approximately (-102.4,86.09,70). This establishes only map connectivity in this build; the soldier position and final-live route remain unverified."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run-s5-route-controlled-34-20260924.py; s5-route-probe-34/after-westward-w5.png; original-client .where output",
+      "uncertainty": "Position is rounded to the original client's displayed precision; the controller did not measure a path trace between snapshots.",
+      "finding": "A separate fresh copied run moved west for five seconds after passing the gate and reached approximately (4.414,106.730,141.793) alive, with Calling for Reinforcements still tracked. Its two firing holds never acquired the moving enemy: the server logged every shot at entity 0, and the copied character remained at 8695 XP / 360 credits with objective 2 active. This run supports gate traversal only, not a second kill or full route completion."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run-s5-route-controlled-35-20260924.py; s5-route-probe-35/checkpoint-loaded.png",
+      "finding": "A diagnostic copy manually seeded the prior displayed position (4.414,106.730,141.793) as a login checkpoint. The original client loaded near (4.410,101.004,141.793), about 5.7 m lower, so the moving snapshot was not a stable restart point at that elevation. This run ended with process exit 143 before its next movement capture; it cannot establish the cause of the height change or whether the later route is playable."
+    }
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-normal-chain-s5-controlled-25-20260924.py", "sha256": "3e245e9313146fc0a26a4c89c2e79e3c1a0565735a7089bc1be6a8ee13d8feb6"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-normal-chain-s5-controlled-26-20260924.py", "sha256": "535296b49451c4aa48b9968c60370dc4f26d4fe3d05b228cd023441f0fc28eea"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-30-20260924.py", "sha256": "f148b6553dfb9c7fc455155c49fca6b942ee6b0893757505f4da6165fcda9972"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-32-20260924.py", "sha256": "0c5d85cf8c618f39788e07ffc6ff4390cc14dcc6dd749ad56db8e91e5f0f0010"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/normal-chain-s5-25/game.log", "sha256": "b873237dfe9a85116c329300d1ed60e40e5cd2ec41ddc207c389c64093b3e964"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/normal-chain-s5-26/reinforcements-reconnect.png", "sha256": "fd06f593dcb3ef3ff5b02b7e41f3953254df36b1ca53b4db3e690f71841f7d02"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-30/position-after-w5.png", "sha256": "17048088110b59ca3d951d18d75c765b531d40f2f13dc57b3405ae1220a39163"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-32/game.log", "sha256": "d96694a01828dedbaa2b621289e87b16e643e2ee5d452191ea6e45d7997bd5a1"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-32/gate-after-fire-2.png", "sha256": "7f81cd20e0707b7183d7e33a36dae9d0dd009340fca480b000588cd12edbfb3f"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-s5-route-probe3-20260924/databases/char.db", "sha256": "c3f518ed69ea93f4d1119fbce158bed5e258ef7d6be1ad630b3f77b12d69fa23"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-34-20260924.py", "sha256": "23e6d6bff2e935a2d93e32cd40e40941604044295b0757c9ed1d1537ba2edb3c"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-34/game.log", "sha256": "c08c6897316e8040274f8ee16de8c1cace21eecb5c892fcb7332218fd5c4b715"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-34/after-westward-w5.png", "sha256": "b301394ba28321d8cf566979defdb85c77d017fe0c55d126118763eaf466439b"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-s5-route-probe5-20260924/databases/char.db", "sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-route-controlled-35-20260924.py", "sha256": "55e779444d1f4ba2b2b4b0e4f69914a0291690c071bc942c8fd74183585b0cd7"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-route-probe-35/checkpoint-loaded.png", "sha256": "d136f0a0d51d7ff53aa87bfc6f012667c835e815b56853b62b2f2710381bfbbb"}
+  ],
+  "assessment": "The original compatibility client and deployed-derived server permit the 1994-to-1995 handoff, preserve the new tracker across reconnect, and support the first ordinary gate fight. These are emulator functionality observations. The gate enemy stats and reward, reconstructed soldier location, travel combat balance, and original final-live mission timing are not verified by this probe.",
+  "next_verification": "Continue the complete ordinary route to the wounded soldier, corpse, dropship and exit with normal hostile behavior; compare each step with dated original footage and original-client data."
+}

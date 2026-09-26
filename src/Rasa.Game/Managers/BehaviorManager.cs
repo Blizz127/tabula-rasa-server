@@ -345,9 +345,22 @@ namespace Rasa.Managers
 
                     if (assisted != null && assisted.Target != 0 && assisted.Target != creature.EntityId)
                     {
-                        creature.Target = assisted.Target;
-                        SetActionFighting(creature, assisted.Target);
-                        return;
+                        // Selecting a friendly creature is not an order to attack it. Players
+                        // remain eligible here for PvP minions, but mission escorts are AFS
+                        // allies and cannot attack another player. Creature targets must belong
+                        // to the opposite faction, as in the autonomous enemy scan above.
+                        var targetType = EntityManager.Instance.GetEntityType(assisted.Target);
+                        var targetCreature = targetType == EntityType.Creature
+                            ? EntityManager.Instance.GetCreature(assisted.Target)
+                            : null;
+                        if ((targetType == EntityType.Character && !creature.IsEscort) ||
+                            (targetCreature != null && targetCreature.Faction != creature.Faction &&
+                             targetCreature.Attributes[Attributes.Health].Current > 0))
+                        {
+                            creature.Target = assisted.Target;
+                            SetActionFighting(creature, assisted.Target);
+                            return;
+                        }
                     }
                 }
 
@@ -442,6 +455,9 @@ namespace Rasa.Managers
                         {
                             // no more path
                             // reset path and enter wander mode
+                            // Cancel the velocity previously advertised to observers. Do this only
+                            // at the end of the one-shot route, not at intermediate/cyclic corners.
+                            SendStoppedMovement(mapChannel, creature);
                             creature.Controller.AiPathFollowing.GeneralPath = null;
                             creature.Controller.AiPathFollowing.GeneralPathCurrentNodeIndex = 0;
                             SetActionWander(creature);
@@ -518,8 +534,18 @@ namespace Rasa.Managers
                 var targetDistSqr = (targetDistX * targetDistX + targetDistY * targetDistY + targetDistZ * targetDistZ);
                 // stop tracking target after target exceeds a certain distance to home pos
                 // Note: For patrolling creatures the homePos is the last arrived path node 
-                var homeLocDistX = (creature.HomePos.Position.X - targetPosition.X);
-                var homeLocDistZ = (creature.HomePos.Position.Z - targetPosition.Z);
+                // A mission escort may be many metres from its original camp after following
+                // the recruit. Keep its fight near the followed actor; leashing to the spawn
+                // point made it abandon every courtyard target after the camp-to-cave walk.
+                var leashCentre = creature.HomePos.Position;
+                if (creature.IsEscort && creature.Controller.ActionFollow.FollowTargetId != 0)
+                {
+                    var followed = EntityManager.Instance.GetActor(creature.Controller.ActionFollow.FollowTargetId);
+                    if (followed != null)
+                        leashCentre = followed.Position;
+                }
+                var homeLocDistX = (leashCentre.X - targetPosition.X);
+                var homeLocDistZ = (leashCentre.Z - targetPosition.Z);
                 var homeLocDist = homeLocDistX * homeLocDistX + homeLocDistZ * homeLocDistZ;
 
                 if (homeLocDist >= 60.0f * 60.0f)
@@ -960,11 +986,20 @@ namespace Rasa.Managers
         float UpdateEntityMovement(double difX, double difY, double difZ, Creature creature, MapChannel mapChannel, float speed, bool isMoved, long elapsedMs)
         {
             var remaining = Math.Sqrt(difX * difX + difY * difY + difZ * difZ);
+            if (remaining <= double.Epsilon)
+            {
+                // There is no new direction when actor and destination coincide. Preserve
+                // the last facing instead of normalizing a zero vector into NaN.
+                SendStoppedMovement(mapChannel, creature);
+                return 0f;
+            }
             var length = 1.0d / remaining;
             difX *= length;
             difY *= length;
             difZ *= length;
             var vX = (float)Math.Atan2(-difX, -difZ);
+            // ActorInfo and WorldLocationDescriptor use this value for later observers.
+            creature.Rotation = vX;
 
             var velocity = isMoved ? speed : 0.0f;
 
@@ -989,6 +1024,12 @@ namespace Rasa.Managers
             CellManager.Instance.CellMoveObject(creature, movement);
 
             return step;
+        }
+
+        private static void SendStoppedMovement(MapChannel mapChannel, Creature creature)
+        {
+            CellManager.Instance.CellMoveObject(creature,
+                new Movement(creature.Position, 0f, 0x08, new Vector2((float)creature.Rotation, 0f)));
         }
     }
 }

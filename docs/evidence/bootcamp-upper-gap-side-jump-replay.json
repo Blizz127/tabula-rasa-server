@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client upper-gap crossing by side jump from a copied boot-camp checkpoint",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and private bubblewrap namespaces; /home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with normal staged six-Thrax attacks, three camp companions and courtyard Warrior; no deployed service or production database changes",
+    "character": "Copied level-2 Alden, mission 1994 objective 2 active, rifle item 11 restored to 20 loaded rounds. Placed before login at previously client-reached upper-gap point (327.14844,121.10547,98.2), yaw -0.18. This bypasses the camp-to-gap leg and is a geometry diagnostic, not a complete playthrough. No player fire occurred."
+  },
+  "mouse_turn_diagnostic": {
+    "id": "upper-gap-mouse-turn-calibration-01",
+    "tier": "observed",
+    "finding": "The client accepted native xdotool mouse inputs, but yaw and next movement were not reliably predictable from a single large drag near the screen edge. The attempted W+Space 1200 ms after drag traveled east to about (335.5,120.3,94.9) and did not cross the upper route. No server movement edit occurred after login.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-mouse-turn-calibration-01/game.log",
+    "game_log_sha256": "7ee1cb7e9809c11a9c44fb25cb6cc57efba79fc8473093754d6db4eadd9a31f7"
+  },
+  "side_jump_run": {
+    "id": "upper-gap-side-jump-02",
+    "input": "Native-client D+Space 1200 ms from the copied point, W 400 ms, W+A 350 ms, W+D 2200 ms, W+D 1800 ms, D 1000 ms, W+D 1400 ms, D 500 ms, D+Space 1500 ms. A later D+Space 1900 ms and W 1200 ms occurred after the player had died.",
+    "route": "The first side jump reached (319.82422,121.5625,96.86719) in the air. W+A then landed at (320.38672,120.875,93.7734) on the upper floor. W+D advanced to (316.8086,120.01172,81.125), and further movement reached (308.9,120,78.9). A second D+Space crossed the sandbags to (301.1,119.8,78) with all three companion markers still visible during the approach.",
+    "result": "The copied client reached the upper courtyard from the upper-gap checkpoint with normal staged attacks. Alden made no attacks and died at (301.1,119.8,78) at 16:19:07.223, killed by Thrax placement 198665. The cave trigger did not fire. Long inspection pauses make this unsuitable for a survival or encounter-pacing comparison with retail.",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/game.log",
+    "game_log_sha256": "94dab840b98746d36e39aeb62bc7eb19afc0fd8d2414cb54f2fcc1c504a34abe",
+    "screenshots": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-start.png", "sha256": "47f7d22b15c6dbde13dfb84a4db432f1f7e3810e900a6996334c8322fb8a7faf"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-result.png", "sha256": "5b0c268e1e6753e677317aaa7767b31126b47428643300778935144e9f521253"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-realign.png", "sha256": "d5f030130bef368f6561c6884f9f6e4582f798ebedf255a8950afa00c0f8635f"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-courtyard-approach.png", "sha256": "b2e4722e110a2630da2449261654af16144e9fe68b3c65938fafeab240ce964b"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-sandbags-cross.png", "sha256": "86ad0d229b1fee79fc69e9685f288f62c7697bdac7dd2a60313c34255b34cde4"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/side-jump-cave-attempt.png", "sha256": "33a316631a1178529da8a2e3340b2d77887cdffe0a959d5deec3b5f03927768c"}
+    ]
+  },
+  "navmesh_check": {
+    "tier": "measured",
+    "source": "/home/blizz/servers/rasa-net/navmesh/adv_bootcamp.nav SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; NavProbe FindPath and floor at (320.39,93.77)",
+    "finding": "Original navmesh reports upper floor 121.24 at (320.39,93.77) and a complete path from that point to the filmed courtyard (306.52,120.5,66.12). The client landing Y 120.875 is consistent with the previously measured roughly 0.42 m navmesh-to-client floor offset.",
+    "result_file": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/upper-gap-side-jump-02/upper-landing-navprobe.txt",
+    "result_file_sha256": "c7c32e4c56c1c2251170730e16b70da0f629d7d9ddf02725b16d89eeeb3c8d93"
+  },
+  "interpretation": "The current upper-gap geometry permits a client-controlled side jump from the verified approach point while retaining the three camp companions. This is an emulator route observation; the original final-week video edits over travel. The uninterrupted camp-to-courtyard route and a normal completed fight remain unverified.",
+  "verification_needed": "Repeat the successful side-jump inputs after ordinary camp-to-gap travel in a single client session, then complete the courtyard encounter with normal recruit combat and compare it with the original final-week footage."
+}

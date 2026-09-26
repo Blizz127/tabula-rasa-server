@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated original-client check of mission 1995 offer, acceptance, wounded-soldier conversation and transition to Conrad",
+  "setup": {
+    "client": "Recovered compatibility client 1.16.5.0; exact final shutdown revision unverified",
+    "checkpoint": "Saved playthrough-26 Alden, level 2, mission 1994 complete, XP 8124, credits 350",
+    "diagnostic_world_change": "Only isolated creature 198507 and 198513 action1 was set to 0 to disable nearby attacks; all other world rows retained their pre-run values.",
+    "teleports": [
+      "GM move from the Youngblood base to (96.2,115,137.5) for an unobstructed interaction",
+      "GM move to (-102.4,91,66), then (-100,86.09,70) near the wounded soldier"
+    ],
+    "cleanup": "The isolated game and client stopped orderly; world DB restored to the pre-run SHA-256 in the artifacts list. Live services and databases were untouched."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/08-reinforcements-offer.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/09-reinforcements-active.png"
+      ],
+      "finding": "Youngblood offered Calling for Reinforcements after mission 1994. Accept Mission displayed mission accepted and objective 2 Locate the missing AFS soldiers, without a countdown."
+    },
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/13-wounded-marker-aim.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/14-wounded-dialogue.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/15-conrad-objective.png"
+      ],
+      "finding": "The wounded soldier showed an objective marker and right-click talk prompt. Its Objective Completion dialogue was headed Human and used original client text 21558. Continue revealed objective 3 Remove the bomb from Conrad’s corpse."
+    },
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/char-after.db"
+      ],
+      "finding": "Saved mission 1995 state 0 active, objective 2 status 2 complete, objective 3 status 1 incomplete; level 2, XP 8124 and credits 350 unchanged."
+    }
+  ],
+  "limits": [
+    "The GM teleports and disabled isolated hostile attacks do not verify normal route or encounter survival.",
+    "The wounded soldier is at inferred placement 198675 (-102.4,86.09,70); the marker appears low beside the ramp in this view. Dialogue was reachable, but physical access from a normal route and exact retail position remain unverified.",
+    "Conrad corpse use, bomb pickup, timer, failure/retry, detonation, reinforcements, Van Valkenberg and exit remain open.",
+    "The soldier’s exact final-live name and entity class remain unverified; the client renders the dialogue speaker as Human."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/char-after.db",
+      "sha256": "d61b6a3194305ae4d3da33681ef7ead0b1542fa311133dbb82b51e3adcc74236",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "dd22dfce910b7f5ed5eabe1ee94f0cc5a8e22e52b8596795428c12b771960e6e",
+      "bytes": 1625088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/08-reinforcements-offer.png",
+      "sha256": "044425321bd7d4c91f14ea10244268f3ada1c64265f49806feeb7f2278211535",
+      "bytes": 474330
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/09-reinforcements-active.png",
+      "sha256": "b9f7190906ca5a6dfe4f92915c6b284b12eb0ca799da29a6ea172b7d8e756e32",
+      "bytes": 479836
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/10-wounded-arrival.png",
+      "sha256": "db4247b80171eb1beacd5f698971001fe8aa7c5c5aea9bd2ae30a8192785bf52",
+      "bytes": 626899
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/13-wounded-marker-aim.png",
+      "sha256": "8b32edb72439c0bc47e924c632134274c3a1150b82b5fbae69ec6878abc0085a",
+      "bytes": 606389
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/14-wounded-dialogue.png",
+      "sha256": "5cfc2a8e0044883182331a6a8dd702d65f05ce50698e1af5613d0fd4eecdc394",
+      "bytes": 566683
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/15-conrad-objective.png",
+      "sha256": "01314ccfda2c98a8ec24f9339942c8947cf5ba2099f98074d6bdfbedc90e2c62",
+      "bytes": 606310
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/game.log",
+      "sha256": "20d401c872cc119471f9f7ee0487c3a801a04ef63913a068df4b4f691f11073d",
+      "bytes": 35911
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/status.json",
+      "sha256": "75b0dd0676eb9ec3f0498fd0e72c10b0c688d6ecbad19715001edde46320ad80",
+      "bytes": 209
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/char-after.db",
+      "sha256": "c8b51ad4ee51061d69ba92a0c012821b3a0bdf1ef315295e29d9951a999fe2e5",
+      "bytes": 204800
+    }
+  ]
+}

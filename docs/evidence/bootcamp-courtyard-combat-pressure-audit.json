@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Final-week courtyard health and defender visibility against staged six-Thrax opening pressure",
+  "confidence": "High for frame order, visible HUD fill and emulator hit timing; low for original unseen attackers, exact defender identity and final-live damage/health values.",
+  "original_observations": {
+    "tier": "observed",
+    "video_id": "7Lrst9SG3pk",
+    "video_date_context": "Player chat in the verified footage places the session in the final week before 2009-02-28 shutdown; see docs/bootcamp-client-evidence.md and docs/evidence/bootcamp-d11-footage-events.json.",
+    "frames": [
+      {
+        "second": 385.467,
+        "finding": "First visible courtyard frame after an edit hides the preceding travel and activation. The recruit HUD health bar appears filled across its red interior.",
+        "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/frames/7Lrst9SG3pk/t00385.467.png",
+        "sha256": "9d2e574e7797f92cb96b7de1735bda844d4a7104fde793b93797ce5149761267"
+      },
+      {
+        "second": 401.9,
+        "finding": "After three visible XP/10-credit reward pairs (at 391.533, 396.133 and 401.533 seconds), a level-2 Forean Warrior remains targetable; the recruit HUD health bar still appears filled. Warrior identity and whether he was present at the edit remain unknown.",
+        "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/courtyard-count/401.9.png",
+        "sha256": "b12a30a50ef0d12c056473100d7cb53415b5f46c8d9701a43816ae70043229f2"
+      },
+      {
+        "second": 428.0,
+        "finding": "After the six documented XP-and-credit rewards, the recruit HUD health bar still appears filled while ranged fire continues. This is an image reading, not a recovered numeric health value.",
+        "path": "/home/blizz/backups/rasa-net/research/20260923-courtyard-video-audit/frame-428.png",
+        "sha256": "29d6d25480832feacbab21b1d172107f32b9ce955426586c821612b05d49a0e4"
+      }
+    ],
+    "hud_probe": "On the 640x480 source frames, simple RGB red-pixel counts across x=15..122 at y=438/440/442 are 107/108/108 at both 385.467 and 401.9 seconds and again at 428.0 seconds. This supports a visually full HUD bar; compression and HUD rendering prevent converting it to exact hit points.",
+    "kill_timeline": "Six reward pairs appear between 391.533 and 427.733 seconds; see docs/evidence/bootcamp-courtyard-kill-pacing.json. The edit before 385.467 means this is not a timed spawn sequence."
+  },
+  "emulator_observations": {
+    "tier": "observed",
+    "run": "camp-to-courtyard-companion-positions-06, disposable copied server with normal staged attacks",
+    "map_loaded": "2026-09-23 16:33:30.344",
+    "first_six_hit_burst": "At 16:33:31.156-16:33:31.160, all six courtyard Thrax placements 198660-198665 hit the only staged Forean Warrior placement 198691. They all hit him repeatedly; 48 logged hits from those six sources reduced armor from 100 to zero and health from 500 to zero by 16:33:37.443.",
+    "warrior_death_after_map_loaded_seconds": 7.099,
+    "source": {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-companion-positions-06/game.log",
+      "sha256": "195e427d9c13773a098bb012c8fb05e0846ff4fcf60c35afba5cef08062fd8af",
+      "locations": "MapLoaded line, Creature hit trace lines 112-188; see docs/evidence/bootcamp-courtyard-warrior-sequence-audit.json for three additional runs."
+    }
+  },
+  "current_implementation_cause": {
+    "tier": "emulator",
+    "source": "src/Rasa.Game/Managers/BehaviorManager.cs lines 100-163 (CheckForAttackableEntityInRange) and lines 475-585 (fighting action)",
+    "finding": "Aggro scanning picks the nearest eligible opposite-faction actor inside a distance radius, with no occlusion, target-cap or threat-spreading check. Once six nearby Thrax choose the staged Warrior, the fighting loop fires each available ranged action as soon as its range and cooldown permit. This explains the synchronized observed burst in the emulator; it is not evidence of final-live target-selection rules."
+  },
+  "original_source_boundary": {
+    "footage": "The cut at 384.933-385.0 seconds (bootcamp-d11-footage-events.json A3-076) hides travel and any earlier activation. A targetable level-2 Forean Warrior is directly visible at 401.9 seconds after the third reward, but no continuous same-actor track from the cut or original attack log survives. The rewards count visible kills, not spawn activations.",
+    "map": "Recovered 1.16.5.0 data/maps/adv_bootcamp/adv_bootcamp.map is 127212 bytes, SHA-256 2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3. The decoded format contains static props and collision, but no NPC spawn, activation or AI records (docs/bootcamp-client-evidence.md, 'The static map carries no gameplay actors').",
+    "client_classes": "Recovered entityclass table SHA-256 38eea8bae56a1dd84e1dff5286257d9cc9f6bccbab69a3f24843234a7e587f04 and English physical class name table SHA-256 2d4abcc57b11c3dbe617f87c8a16a16d6f6abe309aacbafe6e9f709c54849c46 contain Forean Warrior name/class candidates 6043 and 6138 (docs/evidence/bootcamp-courtyard-forean-warrior.json), but cannot identify the server-selected courtyard actor or its activation rule."
+  },
+  "assessment": "The staged model concentrates six attackers on one 500-health/100-armor analogue defender immediately after map load, then leaves the recruit and three escorts facing those enemies. In the final-week visible sequence a Warrior is still targetable after three rewards, and the recruit's HUD bar stays visually full through the six-kill interval. The observations contradict treating the staged opening as validated final-live combat pressure. They do not identify whether the discrepancy comes from enemy activation timing, simultaneous count, targeting, defender count/stats, player damage rules, or the hidden pre-edit interval. No concrete placement, activation, health or damage correction follows from the inspected original sources.",
+  "next_action": "Compare attack target changes, NPC presence and visible enemy count against more direct footage or original data. A new native-client normal encounter should log target selection and activation without changing analogue damage or health solely to make the route survivable.",
+  "unverified": "Final-live server attack cadence, active enemy count, spawn triggers, defender count and identity, Warrior health/armor, target selection, player health values and exact map-load timing."
+}

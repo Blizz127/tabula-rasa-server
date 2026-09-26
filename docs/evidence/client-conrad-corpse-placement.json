@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Mission 1995 objective 3 Conrad corpse placement correction; isolated recovered client 1.16.5.0",
+  "correction": {
+    "migration": "20260922235500_BootcampConradCorpsePlacement",
+    "placement_id": 198676,
+    "previous": {
+      "pos_x": -102.4,
+      "pos_y": 85.69,
+      "pos_z": 66.8
+    },
+    "effective": {
+      "pos_x": -98.0,
+      "pos_y": 85.39,
+      "pos_z": 67.2
+    },
+    "fields": {
+      "pos_x": {
+        "value": -98.0,
+        "tier": "inferred",
+        "source": "client playthrough-31 07-object-interaction.png and char-after.db; navprobe results path:wounded_to_corrected",
+        "uncertainty": "Original corpse location unseen; 30 m horizontal uncertainty from earlier reconstruction remains."
+      },
+      "pos_y": {
+        "value": 85.39,
+        "tier": "inferred",
+        "source": "navmesh/adv_bootcamp.nav floor 85.81 at (-98,67.2), less 0.42 m actor/object placement bias; playthrough-31 use succeeded",
+        "uncertainty": "2 m vertical uncertainty for original placement; 0.42 m offset is a compatibility calibration, not an original coordinate."
+      },
+      "pos_z": {
+        "value": 67.2,
+        "tier": "inferred",
+        "source": "client playthrough-31 07-object-interaction.png and char-after.db; navprobe results path:wounded_to_corrected",
+        "uncertainty": "Original corpse location unseen; 30 m horizontal uncertainty from earlier reconstruction remains."
+      }
+    }
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-32/01-original-corpse-exact.png; playthrough-32/game.log",
+      "finding": "At the previous seeded coordinates the client camera was inside a ramp support. Right click produced no RequestUseObject and objective 3 remained on the tracker. This is a diagnostic teleport; it alone does not prove all normal approaches fail."
+    },
+    {
+      "tier": "measured",
+      "source": "docs/evidence/conrad-navprobe-results.txt, original and path:wounded_to_original",
+      "finding": "The original XZ has no floor polygon within probe tolerance; the path from wounded soldier to that point is incomplete. Nearest point is approximately (-102.4,87.11,68.8)."
+    },
+    {
+      "tier": "measured",
+      "source": "docs/evidence/conrad-navprobe-results.txt, corrected and path:wounded_to_corrected",
+      "finding": "The corrected XZ has a navmesh floor at Y=85.81 and a complete path from the wounded-soldier area."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-31/07-object-interaction.png; playthrough-31/game.log line 326; playthrough-31/char-after.db",
+      "finding": "At corrected placement, a right click sent RequestUseObject. Client completed objective 3 and revealed objective 1, with a 00:09:59 countdown. Saved objective 3 status 2; objective 1 status 1 and 600000 ms duration."
+    }
+  ],
+  "method": "Copied mission-1995 objective-3 checkpoint from playthrough-27. Changed only isolated world placement coordinates and disabled isolated Thrax 198513 attacks. Recovered 1.16.5.0 client tested the interaction. Stopped harness orderly and restored world DB to recorded original SHA-256. Live database was untouched.",
+  "limits": [
+    "Exact final-live corpse coordinates and entity class remain unknown; current entity class 21961 is an explicitly labelled analogue.",
+    "Candidate position is reachable and functional but appears near sandbags/ramp, so precise visual placement remains unverified.",
+    "Normal walking route and bomb/wreck/reinforcements sequence remain to be checked.",
+    "The client is the documented 1.16.5.0 compatibility build, not proven exact shutdown build."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-27/char-after.db",
+      "sha256": "c8b51ad4ee51061d69ba92a0c012821b3a0bdf1ef315295e29d9951a999fe2e5",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-31/02-open-ground-candidate.png",
+      "sha256": "d2d40272b2a5bc42c5fe3223f7fad76b843f804f4ac2ec108780842fab659091",
+      "bytes": 552109
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-31/06-on-candidate-loaded.png",
+      "sha256": "aeb33157de0e850ee78b80445420e60b0d6639864a1a68eb16eddbc1275eb68d",
+      "bytes": 645919
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-31/07-object-interaction.png",
+      "sha256": "6e5492d8e1a780f777dc9585631cd2fa344fd3e980b7e93760843d1eebd8acff",
+      "bytes": 649180
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-31/game.log",
+      "sha256": "209e2f08752c0c42589b644b4bee820dca907c780a4da33c04f753acc495c254",
+      "bytes": 24210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-31/char-after.db",
+      "sha256": "20ae1f0d0e5f27de95f8b727435619d2b0d1e435346ed625955c22710cea094f",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-32/01-original-corpse-exact.png",
+      "sha256": "b7b03956dda7b3363df99dc042fcda8d5119c191ebb3e42a8bec4dad19ee2b21",
+      "bytes": 556580
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-32/02-original-corpse-click.png",
+      "sha256": "ef0e1be7dc93870e8f6a8963165b02236ba9122b499ed1a7737dba4366c816e3",
+      "bytes": 553195
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-32/game.log",
+      "sha256": "465712e8089fd7db5b5ab4703d8e801cc0e076fef652e111f3caa895da115d6d",
+      "bytes": 13245
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    },
+    {
+      "path": "navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "bytes": 3010108
+    },
+    {
+      "path": "docs/evidence/conrad-navprobe-queries.txt",
+      "sha256": "df46568ca7080403706729d40e64194263f77a3d8d29d9adcae4678803710e09",
+      "bytes": 192
+    },
+    {
+      "path": "docs/evidence/conrad-navprobe-results.txt",
+      "sha256": "f00d658830ee9cca1a6268fcfac9548b7ccbb48e0691a4d4f8f67a07bbebf696",
+      "bytes": 490
+    }
+  ]
+}

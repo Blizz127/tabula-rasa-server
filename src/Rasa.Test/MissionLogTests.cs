@@ -75,6 +75,7 @@ namespace Rasa.Test
                 switch (method.Name)
                 {
                     case "get_Characters": return new CharacterRepository(Context);
+                    case "get_GameAccounts": return new Rasa.Repositories.Char.GameAccount.GameAccountRepository(Context);
                     case "get_CharacterMissions": return new CharacterMissionRepository(Context);
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
@@ -1111,9 +1112,24 @@ namespace Rasa.Test
             EntityManager.Instance.RegisterItem(_equippedItem.EntityId, _equippedItem);
             _client.Player.Inventory.EquippedInventory[1] = _equippedItem.EntityId;
 
+            Drain();
+            // The owner's early admission snapshot is read-only; equip reactions
+            // remain in the normal, post-controller reconciliation exactly once.
+            for (var i = 0; i < 2; i++)
+            {
+                var initial = _missions.CreateMissionStatusSnapshot(_client);
+                Assert.AreEqual((uint)MissionObjectiveState.Incomplete,
+                    initial.MissionStatusDict[EquipMissionId].ObjectivesList.Single().ObjectiveStatus);
+            }
+            Assert.AreEqual(0, Drain().Count);
+            Assert.AreEqual((uint)MissionObjectiveState.Incomplete, SavedObjective(EquipMissionId, 2).Status);
+
             _missions.SendMissionStatusInfo(_client);
 
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[EquipMissionId].Objectives[2]);
+            Assert.AreEqual(1, Drain().OfType<ObjectiveCompletedPacket>().Count());
+            _missions.CreateMissionStatusSnapshot(_client);
+            Assert.AreEqual(0, Drain().Count, "A later read-only snapshot cannot replay objective effects.");
         }
 
         private const uint CrateMissionId = 7003;
@@ -1139,7 +1155,7 @@ namespace Rasa.Test
         private ItemManager _realItemManager;
         private object _realInventoryManager;
 
-        private MissionContentManager LoadCrateContent()
+        private MissionContentManager LoadCrateContent(uint initialAmmo = 0)
         {
             // Item creation must write to this test's char database; the swap must
             // happen before RegisterTemplate so the templates land in the swapped manager.
@@ -1156,7 +1172,13 @@ namespace Rasa.Test
             typeof(Client).GetProperty("AccountEntry").SetValue(_client,
                 new GameAccountEntry { Id = AccountId, Name = "Fixture", FamilyName = "Fixture", Email = "fixture@example.invalid" });
             RegisterTemplate(CrateTemplateA, (EntityClasses)900701);
-            RegisterTemplate(CrateTemplateB, (EntityClasses)900702);
+            var rifle = RegisterTemplate(CrateTemplateB, (EntityClasses)900702);
+            if (initialAmmo > 0)
+            {
+                rifle.WeaponInfo = new WeaponInfo(new ItemTemplateWeaponEntry { Id = CrateTemplateB, AmmoPerShot = 1 });
+                EntityClassManager.Instance.LoadedEntityClasses[rifle.Class].WeaponClassInfo =
+                    new WeaponClassInfo(new WeaponClassEntry { ClipSize = 20 });
+            }
             using (var context = WorldContext(_worldConnection))
             {
                 context.Database.EnsureCreated();
@@ -1169,7 +1191,7 @@ namespace Rasa.Test
                     Behavior = (byte)ContentPlacementBehavior.Stationary, InitialState = 200, LootItemSetId = 900500
                 });
                 context.ContentItemSetEntries.Add(new ContentItemSetEntry { ItemSetId = 900500, ItemTemplateId = CrateTemplateA, Quantity = 1 });
-                context.ContentItemSetEntries.Add(new ContentItemSetEntry { ItemSetId = 900500, ItemTemplateId = CrateTemplateB, Quantity = 1 });
+                context.ContentItemSetEntries.Add(new ContentItemSetEntry { ItemSetId = 900500, ItemTemplateId = CrateTemplateB, Quantity = 1, InitialAmmo = initialAmmo });
                 context.SaveChanges();
             }
 
@@ -1351,6 +1373,88 @@ namespace Rasa.Test
             Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
         }
 
+        [DataTestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void CrateWeaponMagazinePersistsForIndividualTakeAndLootAll(bool takeAll)
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent(initialAmmo: 20);
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rifle = CrateLootItems().Single(row => row.Item.ItemTemplateId == CrateTemplateB).Item;
+            Assert.AreEqual(20u, rifle.CurrentAmmo, "the rifle is loaded while still in the crate");
+            using (var saved = WeaponReloadPersistenceTests.Context(_connection))
+                Assert.AreEqual(20u, saved.ItemEntries.Single(row => row.ItemId == rifle.Id).AmmoCount);
+            if (takeAll) LootAllFromCrate(content);
+            else TakeFromCrate(content, rifle.EntityId);
+            Assert.AreEqual(20u, rifle.CurrentAmmo);
+            using var reconnected = WeaponReloadPersistenceTests.Context(_connection);
+            Assert.AreEqual(20u, reconnected.ItemEntries.Single(row => row.ItemId == rifle.Id).AmmoCount,
+                "the same persisted instance is loaded on reconnect; reserve ammunition is not spent");
+        }
+
+        [TestMethod]
+        public void InvalidInitialMagazineCannotCreateTheWeaponOrCompleteTheCrate()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent(initialAmmo: 21); // Original class capacity is 20.
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            Assert.AreEqual(1, CrateLootItems().Count);
+            LootAllFromCrate(content);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            using var context = WeaponReloadPersistenceTests.Context(_connection);
+            Assert.IsFalse(context.ItemEntries.Any(row => row.ItemTemplateId == CrateTemplateB));
+            Assert.IsNull(ItemManager.Instance.CreateFromTemplateId(CrateTemplateA, 1, initialAmmo: 1),
+                "a nonweapon cannot receive magazine rounds");
+        }
+
+        [TestMethod]
+        public void RecreatedMissionCrateOnlyOffersGearNotAlreadyHeld()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var first = CrateLootItems()[0];
+            TakeFromCrate(content, first.EntityId);
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+
+            // A destroyed private map loses the dispenser while character inventory persists.
+            _map.LootDispensers.Clear();
+            UseCrate(content, usable);
+            var remaining = CrateLootItems();
+            Assert.AreEqual(1, remaining.Count);
+            Assert.AreNotEqual(first.Item.ItemTemplateId, remaining.Single().Item.ItemTemplateId);
+            LootAllFromCrate(content);
+            Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+        }
+
+        [TestMethod]
+        public void RecreatedCrateRecoversCompletionAfterAllGearPersisted()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            CrateLootItems(); // Consume the first window's packet before rebuilding it.
+            // Simulate the disconnect between durable item receipt and mission settlement.
+            LootDispenserManager.Instance.RequestLootAllFromCorpse(_client,
+                new RequestLootAllFromCorpsePacket { EntityId = CrateDispenserId(), AutoLootOnly = false });
+            Assert.AreEqual(MissionObjectiveState.Incomplete, _client.Player.Missions[CrateMissionId].Objectives[1]);
+            _map.LootDispensers.Clear();
+            UseCrate(content, usable);
+            Assert.AreEqual(0, CrateLootItems().Count);
+            Assert.AreEqual(2, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
+            Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+        }
+
         [TestMethod]
         public void SecondLootAllIsRefused()
         {
@@ -1369,6 +1473,37 @@ namespace Rasa.Test
             Assert.AreEqual(afterFirst, _client.Player.Inventory.PersonalInventory.Count(slot => slot != 0));
         }
 
+        [TestMethod]
+        public void CrateSettlementCountsGearAlreadyInTheWeaponDrawer()
+        {
+            _missions.LoadedMissions[CrateMissionId] = CrateDefinition();
+            var content = LoadCrateContent();
+            var usable = CrateObject(content);
+            Accept(missionId: CrateMissionId);
+            UseCrate(content, usable);
+            var rows = CrateLootItems();
+
+            TakeFromCrate(content, rows[0].EntityId);
+            var weapon = ItemManager.Instance.CreateFromTemplateId(rows[1].Item.ItemTemplateId, 1);
+            Assert.IsNotNull(weapon);
+            try
+            {
+                _client.Player.Inventory.WeaponDrawer.Add(weapon.EntityId);
+                // A fresh crate after reconnect still has this row, but its matching weapon is equipped.
+                content.SettleContainerDispenser(_client, CrateDispenserId());
+                Assert.AreEqual(MissionObjectiveState.Completed, _client.Player.Missions[CrateMissionId].Objectives[1]);
+                Assert.AreEqual(1, _map.LootDispensers[CrateDispenserId()].Remaining().Count,
+                    "settlement must recognize ownership without granting a duplicate");
+                using var context = WeaponReloadPersistenceTests.Context(_connection);
+                Assert.AreEqual((uint)MissionObjectiveState.Completed,
+                    context.CharacterMissionObjectiveEntries.Single(row => row.MissionId == CrateMissionId && row.ObjectiveId == 1).Status);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterItem(weapon.EntityId);
+            }
+        }
+
         // corpselootwindow draws a row only when GetEntity(itemId) resolves, so every row must be a
         // real item the client was told about before the window opened. The live supply crate of
         // 2026-09-16 listed template ids with no item behind them and showed nothing.
@@ -1383,6 +1518,11 @@ namespace Rasa.Test
             UseCrate(content, usable);
 
             var packets = DrainAddressed();
+            Assert.AreEqual(UseObjectState.TdStateOpened,
+                packets.Select(entry => entry.Packet).OfType<UsePacket>().Single().CurState,
+                "the client transitions to the packet state; closed->closed has no transition");
+            Assert.AreEqual(UseObjectState.TdStateOpened, usable.StateId,
+                "later introductions must retain the opened state");
             var lootInfoIndex = packets.FindIndex(entry => entry.Packet is LootInfoPacket);
             Assert.IsTrue(lootInfoIndex >= 0, "the rows were never sent");
             var rows = ((LootInfoPacket)packets[lootInfoIndex].Packet).LootItems;

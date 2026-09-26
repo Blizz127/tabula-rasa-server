@@ -399,6 +399,9 @@ namespace Rasa.Test
             var offer = Drain().OfType<DispenseRadioMissionPacket>().Single();
             Assert.AreEqual((TrainingDay, true), (offer.MissionId, offer.Forced));
             CollectionAssert.AreEqual(new uint[] { 116929, 116930 }, offer.MissionInfo.MissionConstantData.RewardInfo.SelectableReward.Select(item => item.ItemTemplateId).ToArray());
+            CollectionAssert.AreEqual(new[] { 900221, 900256 },
+                offer.MissionInfo.MissionConstantData.RewardInfo.SelectableReward.Select(item => item.ModuleIds.Single()).ToArray(),
+                "the original client builds both Vextronics reward names from module ids");
             Assert.IsTrue(_client.Player.PendingRadioOffers.Contains(TrainingDay));
         }
 
@@ -440,6 +443,8 @@ namespace Rasa.Test
             Assert.AreEqual(1, packets.OfType<MissionCompletedPacket>().Count());
             var pistol = EntityManager.Instance.GetItem(_client.Player.Inventory.PersonalInventory[0]);
             Assert.AreEqual((expectedTemplate, 1u), (pistol.ItemTemplateId, pistol.StackSize));
+            var expectedModule = expectedTemplate == 116929 ? 900221 : 900256;
+            CollectionAssert.AreEqual(new[] { new ItemLootModule(expectedModule, null) }, pistol.LootModules.ToArray());
             Assert.IsNotNull(pistol.ItemTemplate.WeaponInfo);
 
             using (var context = CharContext(_charConnection))
@@ -448,6 +453,8 @@ namespace Rasa.Test
                 Assert.AreEqual(credits + 120, context.CharacterEntries.Single(c => c.Id == CharacterId).Credit);
                 var row = context.CharacterInventoryEntries.Single(entry => entry.CharacterId == CharacterId);
                 Assert.AreEqual((0u, expectedTemplate), (row.SlotId, context.ItemEntries.Single(item => item.ItemId == row.ItemId).ItemTemplateId));
+                CollectionAssert.AreEqual(new[] { new ItemLootModule(expectedModule, null) },
+                    ItemLootModules.Deserialize(context.ItemEntries.Single(item => item.ItemId == row.ItemId).LootModulesJson).ToArray());
             }
 
             _content.OnPlayerEnteredMap(_client);
@@ -463,7 +470,11 @@ namespace Rasa.Test
             Assert.IsNotNull(obj, $"placement {placementId} is not present");
             _client.Player.Position = obj.Position;
             _content.RequestUseContentUsable(_client, new RequestUseObjectPacket { ActionId = ActionId.UseObject, ActionArgId = 0, EntityId = obj.EntityId }, obj);
-            _content.ContentUsableRecovery(_instance, new ActionData(_client.Player, ActionId.UseObject, 0, 0) { SourceId = obj.EntityId });
+            var action = _instance.PerformRecovery.LastOrDefault(pending => pending.SourceId == obj.EntityId && pending.Actor == _client.Player);
+            if (action == null)
+                return;
+            _instance.PerformRecovery.Remove(action);
+            _content.ContentUsableRecovery(_instance, action);
         }
 
         private void TalkTo(Creature npc, uint missionId, uint objectiveId)

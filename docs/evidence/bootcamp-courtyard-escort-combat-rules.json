@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Capture the Flag courtyard escort combat and original radar formation",
+  "original_observation": {
+    "tier": "observed",
+    "source": "Archived final-week gameplay video 7Lrst9SG3pk, 385.467-389.467 seconds; event records docs/evidence/bootcamp-d11-footage-events.json A3-077 and A3-079",
+    "finding": "An orange escort icon appears east of the recruit on the radar while multiple allied soldiers fight in the courtyard. The video cuts over the approach from the camp. The icon does not identify all visible soldiers."
+  },
+  "radar_measurements": {
+    "tier": "measured",
+    "source": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl, original video 7Lrst9SG3pk",
+    "uncertainty": "Approximately 2 m for the icon and player positions, from docs/bootcamp-client-evidence.md; one reliably traced icon, not every companion",
+    "samples": [
+      { "second": 385.467, "player_xz": [306.52, 66.12], "orange_icon_xz": [321.54, 65.97], "distance_m": 15.02 },
+      { "second": 386.467, "player_xz": [306.27, 66.08], "orange_icon_xz": [319.33, 66.15], "distance_m": 13.06 },
+      { "second": 389.467, "player_xz": [303.19, 66.82], "orange_icon_xz": [308.21, 66.25], "distance_m": 5.05 }
+    ]
+  },
+  "rules": [
+    {
+      "field": "Escort fighting leash centre",
+      "tier": "inferred",
+      "source": "src/Rasa.Game/Managers/BehaviorManager.cs, fighting-mode 60 m spawn leash; docs/evidence/bootcamp-courtyard-normal-approach-combat.json zero ally hits with camp-spawned companions; docs/evidence/bootcamp-courtyard-formation-diagnostic.json all three attack when forced near enemy",
+      "implementation": "For an escort with a live FollowTargetId, use the followed actor's current position as its combat leash centre. Retain the existing 60 m threshold pending direct original measurement.",
+      "confidence": "high that the old spawn leash blocked courtyard combat; low that 60 m exactly matches original escort range",
+      "unverified": "Original combat leash distance and continuous camp-to-courtyard ally-hit replay"
+    },
+    {
+      "field": "Mission companion assisted target",
+      "tier": "inferred",
+      "source": "Archived final-week video 7Lrst9SG3pk, 386.5-404 seconds shows allied combat; existing assist behavior documented in src/Rasa.Game/Managers/BehaviorManager.cs",
+      "implementation": "Link mission combat companions' AssistTargetId to the private-map owner and accept selected living enemy creatures with a different faction. Do not copy selected player targets for mission escorts; other minions retain their existing player-target path.",
+      "confidence": "low for exact original assisted-target semantics",
+      "unverified": "Whether selecting a target before firing ordered these particular allies to attack in final live"
+    },
+    {
+      "field": "Friendly selected target guard",
+      "tier": "inferred",
+      "source": "src/Rasa.Game/Managers/BehaviorManager.cs autonomous enemy scan checks hostile faction; a recruit can select allied NPCs",
+      "implementation": "The follow assist branch ignores selected creature targets of the same faction or zero health, and mission escorts ignore selected player targets.",
+      "confidence": "medium",
+      "unverified": "Original explicit attack orders and PvP subordinate rules"
+    }
+  ],
+  "verification": {
+    "build": "dotnet build src/Rasa.Test/Rasa.Test.csproj -c Debug --no-restore -v:q passed with existing warnings",
+    "focused_test": "All four PlacedCreatureBehaviorTests passed in the .NET 5 SDK container. EscortCanKeepFightingBesideItsPlayerFarFromItsCampSpawn keeps an escort fighting a nearby enemy 130 m from its spawn, then verifies a clean return to wandering after the followed player's actor is removed. EscortAssistsAgainstSelectedEnemyButNeverASelectedPlayer verifies that a selected friendly player does not redirect the escort while a selected enemy 25 m away (outside the 18 m autonomous scan) does.",
+    "earlier_copied_client": "Isolated world with only Thrax 198660 active; three companions at their staged camp coordinates. The player stalled at a stone wall near (332.0664,122.3398,107.9375); a later detour fell below the walkable corridor near (354.0547,116,85.64453). That route did not reach combat.",
+    "courtyard_checkpoint_client": {
+      "tier": "observed",
+      "setup": "Recovered compatibility client 1.16.5.0 and copied databases in an isolated network namespace; player loaded at the previously verified walkable checkpoint (316.13,120.28,85.93). Three companions retained their staged camp placements 198688-198690 at x382.5-386.9, z149.7-153.2. Only courtyard Thrax placement 198660 remained; placements 198661-198665 were removed from this disposable world copy. No live service data changed.",
+      "movement": "All three companions appeared beside the player after map load. The player walked to (308.72656,120.09766,79.17969), then used diagnostic same-map .tele commands to reach (306.5,120.53906,66.09766) and (295,121.6,68). This bypasses the remaining rocky/courtyard route and is not evidence of natural arrival.",
+      "combat": "With no StartAutoFire during 11:43-11:44, Gunner 198688, Archer 198689 and Shaman 198690 each recorded 11 outgoing hits against Thrax 198660. First hit 2026-09-23 11:43:43.960; final hit 11:44:11.238 lowered the Thrax from 18 to 0 health. The copied enemy began with 100 armor and 555 health, both explicitly analogue values in docs/evidence/bootcamp-d11-reconstruction-manifest.json.",
+      "limits": "This verifies native-client login, companion following after a long camp-to-checkpoint path, and three-way combat far from the camp spawn. It does not verify the complete player route, six-Thrax timing/balance, original ally stats, or final-live assist/leash distances.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/game.log",
+      "game_log_sha256": "3a64499a08df8590ab225533cfc6363af918dd4046771f6c0af870e50b8e506f",
+      "game_assembly_sha256": "1442ea1649a1f7b3aad935c2c908cbecd203355b78923e08ec5f31a9f95332b6",
+      "screenshots": [
+        { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/escort-checkpoint-fight.png", "sha256": "d127686093f652c0883061a15d906dd5aca04f2cca1879b4ca00132415535906" },
+        { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/escort-checkpoint-afterfight.png", "sha256": "c525a731c8688988f34dc2509c0e367c326c05433859e5ef7203fc652d347f46" }
+      ]
+    },
+    "full_six_checkpoint_client": {
+      "tier": "observed",
+      "record": "docs/evidence/bootcamp-courtyard-six-thrax-checkpoint-replay.json",
+      "finding": "With all six staged Thrax placement rows, the three camp companions landed 25, 18 and 20 hits, the Warrior landed 3, and the Shaman killed one Thrax. The copied recruit killed another for 71 XP and 10 credits, then died before objective 2 completed.",
+      "limit": "Combat started on login at a copied upper-path checkpoint before movement. This does not verify continuous camp-to-courtyard play, final-live balance, or original hostile timing."
+    },
+    "copied_log": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/game.log",
+    "live_service": "Unchanged"
+  }
+}

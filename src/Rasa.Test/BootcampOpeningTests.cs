@@ -50,7 +50,7 @@ namespace Rasa.Test
     /// </summary>
     [TestClass]
     [DoNotParallelize]
-    public class BootcampOpeningTests
+    public partial class BootcampOpeningTests
     {
         private const uint CharacterId = 101;
         private const uint AccountId = 10;
@@ -73,6 +73,7 @@ namespace Rasa.Test
         public class CharProxy : DispatchProxy
         {
             public SqliteCharContext Context;
+            public Func<SqliteCharContext, bool> FailComplete;
             protected override object Invoke(MethodInfo method, object[] args)
             {
                 switch (method.Name)
@@ -86,7 +87,10 @@ namespace Rasa.Test
                     case "get_Items": return new ItemRepository(Context);
                     case "get_CharacterInventories": return new CharacterInventoryRepository(Context);
                     case "BeginTransaction": return Context.Database.BeginTransaction();
-                    case "Complete": Context.SaveChanges(); return null;
+                    case "Complete":
+                        if (FailComplete?.Invoke(Context) == true)
+                            throw new InvalidOperationException("injected mission save failure");
+                        Context.SaveChanges(); return null;
                     case "Dispose": Context.Dispose(); return null;
                     default: throw new NotSupportedException(method.Name);
                 }
@@ -112,6 +116,7 @@ namespace Rasa.Test
 
         private sealed class Factory : IGameUnitOfWorkFactory
         {
+            public Func<SqliteCharContext, bool> FailComplete;
             private readonly SqliteConnection _char;
             private readonly SqliteConnection _world;
             public Factory(SqliteConnection charConnection, SqliteConnection worldConnection)
@@ -123,6 +128,7 @@ namespace Rasa.Test
             {
                 var unit = DispatchProxy.Create<ICharUnitOfWork, CharProxy>();
                 ((CharProxy)(object)unit).Context = CharContext(_char);
+                ((CharProxy)(object)unit).FailComplete = context => FailComplete?.Invoke(context) == true;
                 return unit;
             }
             public IWorldUnitOfWork CreateWorld()
@@ -373,18 +379,101 @@ namespace Rasa.Test
             _missions.CompleteNpcMission(_client, _mcallister.EntityId, Initiation, null);
             Assert.AreEqual(MissionState.Completed, _client.Player.Missions[Initiation].State);
 
+            // The original remains within talking range while the 1992 offer is read.
+            // Moving at 1990 turn-in would carry him away before its acceptance.
+            var standingPosition = _mcallister.Position;
+            for (var tick = 0; tick < 24; tick++)
+                BehaviorManager.Instance.MapChannelThink(_instance, 250);
+            Assert.AreEqual(standingPosition, _mcallister.Position);
+            Assert.AreEqual(BehaviorManager.BehaviorActionIdle, _mcallister.Controller.CurrentAction);
+
+            _missions.AssignNpcMission(_client, _mcallister.EntityId, 1992);
+            Assert.AreEqual(MissionState.Active, _client.Player.Missions[1992].State);
+
             Assert.AreEqual(BehaviorManager.BehaviorActionFollowingPath, _mcallister.Controller.CurrentAction);
             var node = _mcallister.Controller.AiPathFollowing.GeneralPath.PathNodeList.Single().Pos;
             Assert.AreEqual((float)walk.PosX, node[0], 0.001);
             Assert.AreEqual((float)walk.PosY, node[1], 0.001);
             Assert.AreEqual((float)walk.PosZ, node[2], 0.001);
+
+            // A queued route alone is insufficient: the old seed gave him a zero walking speed.
+            Assert.AreEqual(2.5f, _mcallister.WalkSpeed);
+            var destination = new Vector3(node[0], node[1], node[2]);
+            var before = Vector3.Distance(_mcallister.Position, destination);
+            for (var tick = 0; tick < 20; tick++)
+                BehaviorManager.Instance.MapChannelThink(_instance, 250);
+            Assert.IsTrue(Vector3.Distance(_mcallister.Position, destination) < before - 1f,
+                "McAllister must actually advance toward the camp after accepting 1992");
+            Assert.AreEqual(2.5f, _mcallister.WalkSpeed, "fractional pace must survive loading from the migrated world");
+        }
+
+        [TestMethod]
+        public void GearingUpRequiresCrateGearInsteadOfCreditingTheStarterOutfit()
+        {
+            _instance = new MapChannel
+            {
+                MapInfo = new MapInfo(Camp, "adv_bootcamp", MapVersion, 4),
+                OwnerCharacterId = CharacterId, InstanceId = 7, ClientList = new List<Client>()
+            };
+            _client = new Client(_factory, new ClientPacketHandler()) { State = ClientState.Ingame };
+            _client.Player = new Manifestation
+            {
+                Id = CharacterId, Level = 2, MapContextId = Camp, MapChannel = _instance
+            };
+            _instance.ClientList.Add(_client);
+            var mission = new PlayerMission { MissionId = 1992, State = MissionState.Active };
+            mission.Objectives[4] = MissionObjectiveState.Completed;
+            mission.Objectives[1] = MissionObjectiveState.Incomplete;
+            _client.Player.Missions[1992] = mission;
+            using (var context = CharContext(_charConnection))
+            {
+                new CharacterMissionRepository(context).Add(
+                    new CharacterMissionEntry(CharacterId, 1992, (uint)MissionState.Active, 0),
+                    mission.Objectives.Select(entry => new CharacterMissionObjectiveEntry
+                    {
+                        CharacterId = CharacterId, MissionId = 1992, ObjectiveId = entry.Key, Status = (uint)entry.Value
+                    }));
+                context.SaveChanges();
+            }
+
+            var starter = new Item { ItemTemplateId = 145 };
+            var boots = new Item { ItemTemplateId = 12209 };
+            EntityManager.Instance.RegisterItem(starter.EntityId, starter);
+            EntityManager.Instance.RegisterItem(boots.EntityId, boots);
+            try
+            {
+                _client.Player.Inventory.EquippedInventory.Add(starter.EntityId);
+                _missions.CompleteBoundObjective(_client, 1992, 1, ObjectiveBindingKind.LootAll);
+                Assert.AreEqual(MissionObjectiveState.Incomplete, mission.Objectives[2],
+                    "A3-027 keeps the equip objective open despite the already worn Recruit outfit");
+                Assert.IsFalse(mission.Objectives.ContainsKey(5));
+                Drain(_client);
+
+                _client.Player.Inventory.EquippedInventory[0] = boots.EntityId;
+                _content.OnEquipCommitted(_client);
+                Assert.AreEqual(MissionObjectiveState.Completed, mission.Objectives[2]);
+                Assert.AreEqual(MissionObjectiveState.Incomplete, mission.Objectives[5]);
+                Assert.AreEqual(1, Drain(_client).OfType<ObjectiveCompletedPacket>().Count(packet => packet.ObjectiveId == 2));
+                _content.OnEquipCommitted(_client);
+                Assert.IsFalse(Drain(_client).OfType<ObjectiveCompletedPacket>().Any());
+                using var context = CharContext(_charConnection);
+                Assert.AreEqual((uint)MissionObjectiveState.Completed,
+                    context.CharacterMissionObjectiveEntries.Single(row => row.MissionId == 1992 && row.ObjectiveId == 2).Status);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterItem(starter.EntityId);
+                EntityManager.Instance.UnregisterItem(boots.EntityId);
+            }
         }
 
         private Creature PlaceMcAllister(MapChannel channel)
         {
             var placement = _content.Content.Catalog.Placements[McAllisterPlacement];
             Assert.AreEqual(McAllisterCreature, placement.CreatureId);
-            var creature = new Creature
+            using var context = WorldContext(_worldConnection);
+            var template = context.CreatureEntries.Single(entry => entry.Id == McAllisterCreature);
+            var creature = new Creature(template)
             {
                 DbId = McAllisterCreature,
                 ContentPlacementId = McAllisterPlacement,
@@ -395,6 +484,7 @@ namespace Rasa.Test
                 State = CharacterState.Idle,
                 Npc = new Npc()
             };
+            creature.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 1000, 1000, 1000, 0, 0);
             CellManager.Instance.AddToWorld(channel, creature);
             _npcs.Add(creature);
             return creature;

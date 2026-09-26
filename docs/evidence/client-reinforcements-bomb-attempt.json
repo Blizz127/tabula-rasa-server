@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Mission 1995 bomb placement first native-client check",
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-33/04-bomb-loaded.png and game.log .near output",
+      "finding": "After objective 3, a GM teleport to (-222.5,100.8,-72.34) displayed the burning wreck and a countdown at 00:09:14. The game server loaded bomb entity class 7870 at (-223.95,102.3,-72.34) and wreck class 24586 at (-225.35,100.81,-70.52)."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-33/05-bomb-click.png; playthrough-34/02-bomb-exact-click.png; playthrough-34/05-south-bomb.png; corresponding game.logs",
+      "finding": "Right clicks from the first approach, exact bomb coordinate, and south approach produced no RequestUseObject. Objective 1 stayed incomplete while the countdown continued. The precise reason remains unverified; the bomb may be occluded by wreck geometry, too low, or require another client interaction."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-34/01-bomb-exact-resume.png and playthrough-33/char-after.db",
+      "finding": "A saved active timer resumed on login with approximately 5:30 remaining, consistent with wall-clock persistence."
+    },
+    {
+      "tier": "observed",
+      "source": "20260913-bootcamp/footage/analysis/B1/crops/plant.png, 8VXeKzGUv0c 80.600\u201381.933",
+      "finding": "Original footage shows the player using an upright orange-lit panel on the wreck. This visual anchor should guide a placement correction; current seeded bomb location is not yet validated."
+    }
+  ],
+  "method": "Disposable world contained corrected inferred corpse placement and passive creature 198513. Runs 33 and 34 used recovered 1.16.5.0 client; GM teleports bypassed travel. Run 33 harness ended unexpectedly with exit 143; run 34 stopped orderly. Saved char DBs and restored world DB to recorded seed hash. No live DB change.",
+  "limits": [
+    "No bomb placement correction was applied because a candidate position has not been verified.",
+    "GM teleports do not establish normal access.",
+    "Detonation, reinforcements and turn-in remain unverified."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-33/04-bomb-loaded.png",
+      "sha256": "b9d8a3dc51423525c576b871247e0d9d527cb59d9c8f825e49d12e50adc80069",
+      "bytes": 660795
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-33/05-bomb-click.png",
+      "sha256": "067c449ac25808729f6cca2567b47a20e8f133cc61a740d05c1f23fc84c18992",
+      "bytes": 671765
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-33/game.log",
+      "sha256": "7637879e3664d6dafdb7997e633c78bffa61dffe505bd3dfce329d4d1f6590ab",
+      "bytes": 20668
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-33/char-after.db",
+      "sha256": "d056348c51024db339ffad98e57f97d09870473f78eed0dd5c425069c1b5cb13",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-34/01-bomb-exact-resume.png",
+      "sha256": "3d7567f03a1aa93a987960ea480e0e0788238ad9805b1af8893fa8266e77b370",
+      "bytes": 654152
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-34/02-bomb-exact-click.png",
+      "sha256": "b02548f46e78f6402f5854b21fac02cfc404cd19aa69dc9b9219d418abc9d629",
+      "bytes": 648066
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-34/05-south-bomb.png",
+      "sha256": "4877a6b32b56ccb124f239b46cd024cff85945a74383c913fc2e23a75e91d665",
+      "bytes": 713593
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-34/game.log",
+      "sha256": "e8bacc88a1fe9a6651d6f298b8699d1f0cb7035240fd4b5fb0220304613eb1f8",
+      "bytes": 19857
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-34/char-after.db",
+      "sha256": "afb0b6436467507f9d19d5a2afe3d4f701d9585837cf4b972b71e3bc8d9e8e91",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/B1/crops/plant.png",
+      "sha256": "4ce49b96228b6a68dbc110746ab595c53f7ab8ca9b5a1fac54ee9a079d935b84",
+      "bytes": 288173
+    }
+  ]
+}

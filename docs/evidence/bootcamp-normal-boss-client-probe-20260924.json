@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Recovered-client normal-health Tizzik Gi rifle kill and mission transition",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered original compatibility client 1.16.5.0 under Wine/Xvfb in an isolated bubblewrap namespace; executable SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Copied deployed-derived Game DLL SHA-256 258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32 and world.db SHA-256 c0dfa152576469b947c5b9fa57381b412d6226ca055d4fd591e0d195acbd49af. Boss placement 198659 retained its deployed analogue 1000 health, 100 armor and normal attacks. Live services and databases were not modified.",
+    "character": "Copied level-2 Alden was positioned at (93.2,115.0,137.5), yaw 2.4529311656951904, with mission 1994 cave objective 2 complete and boss objective 1 active. This is a diagnostic checkpoint, not normal camp-to-boss travel.",
+    "harness": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-normal-boss-controlled-16-20260924.py, SHA-256 dbce6eadbbb42d6b9327454b6d131d78bd96b9bfa9c882972a4d7ea48f7056a7; wrapper run-live-companions-normal-boss5-20260924.py, SHA-256 354bb42ec6af373f5df0a6e511719ca3dfc86c15ffbcc78c1e9e9cc3bec5f5da",
+    "inputs": "The original client loaded normally; H drew the crate rifle. Relative mouse movement of 200, 200 and 160 pixels turned the camera until the Tizzik Gi target panel appeared. Normal left-mouse fire was held 1200 ms immediately after the last turn. No GM attack or health edit was used."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "run 16 game/log-game.txt 21:45:41.103 and 21:45:43.025-21:45:44.308; boss-after-fire.png",
+      "finding": "The client selected Tizzik Gi, sent StartAutoFire, consumed two rifle rounds (20/980 to 18/980), and displayed a 106-damage number. The server logged two player hits against boss placement 198659, each 106 damage: first armor 100->0 and health 1000->994, second health 994->888. The boss remained alive, and the objective tracker still showed Boss Eliminated 0/1."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 15 boss-mouse-right-560.png and game/log-game.txt 21:43:56.069-21:44:04.084",
+      "finding": "The earlier 560-pixel aim selected Tizzik Gi, but the client cleared its target before a later 4.8-second firing hold. All seven shots were sent at entity 0. This was a moving-target and input-timing miss, not evidence that the boss cannot be damaged."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 16 copied char.db after stop",
+      "finding": "Mission 1994 objective 1 remained active, objective 2 complete, and the copied SQLite database passed integrity_check. This probe did not complete the boss encounter or test reward and turn-in on normal stats."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 17 game/log-game.txt 21:50:48.777-21:50:56.801; boss-fire-step-4.png and boss-fire-step-8.png",
+      "finding": "A fresh copied normal-stat checkpoint used one continuous original-client mouse-down and eight 80-pixel left camera turns while Tizzik moved. Eleven consecutive player rifle hits, each logged as 106 damage, killed placement 198659: armor 100->0 on the first hit, then health 1000->0. The native client displayed 124 XP and 50 credits and changed the tracker to Report in to Captain Youngblood. It continued firing into entity 0 after the kill until mouse-up, ending with 2/980 visible rounds."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 17 copied char.db after stop",
+      "finding": "The saved character changed from 3571 XP/310 credits to 3695 XP/360 credits. Mission 1994 objective 1 is complete, objective 3 active, objectives 2 and 4 complete, and the copied database passes integrity_check. The client remained alive in the final capture. Youngblood conversation and mission turn-in were not exercised in this run."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 24 youngblood-second-click.png, capture-flag-complete.png, and copied char.db after process stop",
+      "finding": "From the run-17 post-kill saved character, a fresh normal client login showed Youngblood's objective marker. A short sideways step and normal mouse aiming exposed the interact prompt, and the second right-click opened his original-client Objective Completion dialogue. Continuing and completing the mission saved 1994 as state 4 with all four objectives complete, 8695 XP and 360 credits. The delta since boss kill was 5000 XP and zero credits; SQLite integrity_check returned ok. This continuation did not alter boss or ambient combat stats."
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-live-companions-normal-boss5-20260924/game/log-game.txt",
+      "sha256": "f7ae3f3dc7282053f4afe1a055ce0e0ed72d4f4e22db86db59917fa84b2daed3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-16/boss-after-fire.png",
+      "sha256": "2cec3819cbd0db6140508aafc6ebeea6717a2873de646ca25f75676bc28fca1d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-15/boss-mouse-right-560.png",
+      "sha256": "9aada437a99e5dfa8dbec7873b790c4a3126f13ecdb6ae366057acdb965e83f3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-normal-boss-controlled-17-20260924.py",
+      "sha256": "4e27b8ab7f11f1d6d06024740e39d0bd84a569e81b2286250b98f7f2a193064e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-17/game.log",
+      "sha256": "a0db8fced9c51e2fc5e39754e40011f2ef0a54464bc3fb3526381ce2619b0196"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-17/boss-fire-step-8.png",
+      "sha256": "a6f56b7c4f02e5ffaebe58c9b2a89f849de3d3f9435d9150f1bae2a210c7630c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-normal-boss-controlled-24-20260924.py",
+      "sha256": "b67ecc87cf24070f9464c4a94c92203949352f19bb1d4dd5fbba6ccf1d81312e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-24/youngblood-second-click.png",
+      "sha256": "0dcdc7e9924b7eaecc6b245b14dd970af1c4281b8e0cf0d9e5d2246303cf6082"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-24/capture-flag-complete.png",
+      "sha256": "966b4e4c537ab137856ad9e5039a572efd17379b8ce8b0446492f3a59d0c15f7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-live-companions-normal-boss12-20260924/databases/char.db",
+      "sha256": "9dc4b72702d462482e2f69fc046032c9774bda6cf7b6319d0be5500d0d3449df"
+    }
+  ],
+  "assessment": "The deployed-derived server and original compatibility client support an ordinary rifle kill of the normal-health boss, persist the 1994/1->1994/3 transition, and reconnect for Youngblood's conversation and mission 1994 turn-in. This verifies emulator functionality only. The boss's health, armor, damage, level, spawn location and AI values remain reconstructed analogues or inferences; the original final-live fight and kill reward are unverified.",
+  "next_verification": "Continue from a normal camp-to-cave route and compare boss behavior, survivability, allied participation and rewards with additional original final-live footage or captures. Do not infer retail boss statistics from this emulator-only fight."
+}

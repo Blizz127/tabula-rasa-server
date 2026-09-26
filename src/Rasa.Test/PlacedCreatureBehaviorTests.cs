@@ -99,5 +99,104 @@ namespace Rasa.Test
                 EntityManager.Instance.UnregisterEntity(client.Player.EntityId);
             }
         }
+
+        [TestMethod]
+        public void EscortCanKeepFightingBesideItsPlayerFarFromItsCampSpawn()
+        {
+            var courtyard = Post + new Vector3(130f, 0f, 0f);
+            var escort = Place(ContentPlacementBehavior.CombatCompanion, courtyard);
+            escort.Faction = Factions.AFS;
+            escort.IsEscort = true;
+            var enemy = Place(ContentPlacementBehavior.Stationary, courtyard + new Vector3(5f, 0f, 0f));
+
+            var player = new Manifestation
+            {
+                Position = courtyard,
+                MapContextId = 1985,
+                MapChannel = _map
+            };
+            player.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 100, 100, 100, 0, 0);
+            EntityManager.Instance.RegisterEntity(player.EntityId, EntityType.Character);
+            EntityManager.Instance.RegisterActor(player.EntityId, player);
+            EntityManager.Instance.RegisterPlayer(player.EntityId, player);
+            EntityManager.Instance.RegisterEntity(enemy.EntityId, EntityType.Creature);
+            EntityManager.Instance.RegisterActor(enemy.EntityId, enemy);
+            EntityManager.Instance.RegisterCreature(enemy);
+
+            try
+            {
+                BehaviorManager.Instance.SetActionFollow(escort, player.EntityId);
+                BehaviorManager.Instance.SetActionFighting(escort, enemy.EntityId);
+                Think(1);
+
+                Assert.AreEqual(BehaviorManager.BehaviorActionFighting, escort.Controller.CurrentAction,
+                    "A camp-spawned escort should not abandon a courtyard target beside its player.");
+                Assert.AreEqual(enemy.EntityId, escort.Controller.ActionFighting.TargetEntityId);
+
+                // The map owner may disconnect mid-fight. Its entity has then been removed;
+                // the escort should lose the fight against a target far from camp cleanly.
+                EntityManager.Instance.UnregisterActor(player.EntityId);
+                BehaviorManager.Instance.MapChannelThink(_map, 250);
+                Assert.AreEqual(BehaviorManager.BehaviorActionWander, escort.Controller.CurrentAction);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterCreature(enemy.EntityId);
+                EntityManager.Instance.UnregisterActor(enemy.EntityId);
+                EntityManager.Instance.UnregisterEntity(enemy.EntityId);
+                EntityManager.Instance.UnregisterPlayer(player.EntityId);
+                EntityManager.Instance.UnregisterActor(player.EntityId);
+                EntityManager.Instance.UnregisterEntity(player.EntityId);
+            }
+        }
+
+        [TestMethod]
+        public void EscortAssistsAgainstSelectedEnemyButNeverASelectedPlayer()
+        {
+            var escort = Place(ContentPlacementBehavior.CombatCompanion, Post);
+            escort.Faction = Factions.AFS;
+            escort.IsEscort = true;
+            var enemy = Place(ContentPlacementBehavior.Stationary, Post + new Vector3(25f, 0f, 0f));
+
+            var player = new Manifestation { Position = Post, MapContextId = 1985, MapChannel = _map };
+            var friendly = new Manifestation { Position = Post + new Vector3(2f, 0f, 0f), MapContextId = 1985, MapChannel = _map };
+            foreach (var actor in new[] { player, friendly })
+            {
+                actor.Attributes[Attributes.Health] = new ActorAttributes(Attributes.Health, 100, 100, 100, 0, 0);
+                EntityManager.Instance.RegisterEntity(actor.EntityId, EntityType.Character);
+                EntityManager.Instance.RegisterActor(actor.EntityId, actor);
+                EntityManager.Instance.RegisterPlayer(actor.EntityId, actor);
+            }
+            EntityManager.Instance.RegisterEntity(enemy.EntityId, EntityType.Creature);
+            EntityManager.Instance.RegisterActor(enemy.EntityId, enemy);
+            EntityManager.Instance.RegisterCreature(enemy);
+
+            try
+            {
+                BehaviorManager.Instance.SetActionFollow(escort, player.EntityId);
+                escort.Controller.ActionFollow.AssistTargetId = player.EntityId;
+                player.Target = friendly.EntityId;
+                Think(1);
+                Assert.AreEqual(BehaviorManager.BehaviorActionFollow, escort.Controller.CurrentAction);
+
+                // At 25 m the enemy is outside this creature's 18 m autonomous scan.
+                player.Target = enemy.EntityId;
+                Think(1);
+                Assert.AreEqual(BehaviorManager.BehaviorActionFighting, escort.Controller.CurrentAction);
+                Assert.AreEqual(enemy.EntityId, escort.Controller.ActionFighting.TargetEntityId);
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterCreature(enemy.EntityId);
+                EntityManager.Instance.UnregisterActor(enemy.EntityId);
+                EntityManager.Instance.UnregisterEntity(enemy.EntityId);
+                foreach (var actor in new[] { player, friendly })
+                {
+                    EntityManager.Instance.UnregisterPlayer(actor.EntityId);
+                    EntityManager.Instance.UnregisterActor(actor.EntityId);
+                    EntityManager.Instance.UnregisterEntity(actor.EntityId);
+                }
+            }
+        }
     }
 }

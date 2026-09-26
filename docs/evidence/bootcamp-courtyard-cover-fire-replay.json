@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client player fire and reload at the staged six-Thrax boot-camp courtyard",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and bubblewrap private namespaces; /home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with staged Rasa.Game.dll SHA-256 4326c4e21754eccab8fb1d2e6c008a34ed9f98d3ac0dcfd2954727813516caea, six hostile placements 198660-198665, companions 198688-198690 and Warrior 198691; deployed server unchanged",
+    "character": "Copied level-2 Alden at (316.13,120.28,85.93), mission 1994 objective 2 active, 3571 XP and 310 credits before login; this is a checkpoint, not a camp-to-cave playthrough",
+    "ammunition": "The disposable character's spent crate-rifle item 11/template 13713 was reset to the observed issued 20 loaded rounds before login; reserve item 2/template 28 had 1000 rounds. No seed or live database was changed.",
+    "movement": "Native-client W/A/D/Space and primary-fire inputs, plus R reload; after cover fire the recruit attempted ordinary W+Space movement toward the cave. Long inspection pauses occurred, so this is not a pacing comparison with original footage."
+  },
+  "source": {
+    "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-fire-01/game.log",
+    "game_log_sha256": "b88b6d488aa347a08eef76781e34ecbd7f3d5deeaf786bc3dfd3e3cf25bb9aaa",
+    "screenshots": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-fire-01/cover-fire2.png", "sha256": "41f63fe5baa95d7b4a81062c3ca027d0fe493c199b7d4ed1b31ca841668e1698"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-fire-01/cover-after-reload.png", "sha256": "4cc329266d4e7904297dba2297987c4db71629ba43286a8a6bfce8029d733d86"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-fire-01/cover-fire5.png", "sha256": "f8abf8bff334c2bae3b92fbf92649f65ff5021ad929307277565fd926e7d1c15"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-fire-01/cover-cave-strafe.png", "sha256": "7872a8c3da928ff37d1cbee76331c6a476563510f97f43c9e26aecdc576f12fb"}
+    ]
+  },
+  "observations": [
+    "The staged Warrior 198691 died at 14:34:46.771. Archer 198689 killed Thrax 198665 at 14:36:12.870, then died at 14:36:34.808. At 14:36:37.437 the player's rifle hit Thrax 198662 for 106, leaving 29 HP; Gunner 198688 dealt the final 22 damage at 14:36:37.540. Gunner died at 14:36:51.310.",
+    "The player's three 106-damage hits on Thrax 198661 at 14:37:20.833, 14:37:21.628 and 14:37:22.424 produced the player's first killing blow. The original client's chat showed 71 experience points and 10 credits. Shaman 198690 was still alive at this time; it died at 14:40:01.972.",
+    "With the weapon drawn, pressing R sent RequestWeaponReload at 14:42:34.732. The client display changed from 5/1000 to 20/985 loaded/reserve rounds after the reload completed.",
+    "The player hit Thrax 198664 through 75 armor and then health at 14:43:46-14:43:59, delivering the killing blow at 14:43:59.134. The client showed a second 71 XP and 10-credit reward. The stopped disposable database recorded 3713 XP and 330 credits, up from 3571 and 310.",
+    "After an attempted W+Space advance, area probes stopped at (295.8,120.5,70.6), 17.4 m from cave area 198602's center with a 10 m radius. Thrax 198663 killed the recruit there at 14:45:11.547. The client displayed the hospital selection dialog; mission tracker still read Capture the Flag / Find a way out of the cave."
+  ],
+  "limits": "These are observations of the reconstructed emulator through the original client, not direct final-live proof for enemy health, armor, damage, allied survivability, rewards or combat pacing. The start was a copied checkpoint, the player paused frequently, and the cave objective was not entered. The remaining enemies and a complete normal-route fight still require verification against final-live evidence."
+}

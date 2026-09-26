@@ -1,0 +1,584 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-09-22",
+  "run": "playthrough-14",
+  "evidence_kind": "emulator_integration_observation",
+  "retail_fidelity_proof": false,
+  "scope": "Recovered original client against isolated synthetic-account emulator; no production mutation. No source changes or builds performed for this evidence record.",
+  "freeze": "Operator confirmed all harness processes terminal before artifact hashing. pre-stop-persisted-state.json predates termination and does not prove normal logout.",
+  "candidate": {
+    "tested_source_manifest": "/tmp/rasa-retail-20260922-modules-snapshot.json",
+    "tested_source_manifest_sha256": "08877596c65c761244d9e3062b54b96c2b1632c659300d85e56f4d2ebde7d6cb",
+    "binary_count": 137,
+    "all_binaries_match_tested_build": true,
+    "full_tests_passed": 1300,
+    "scope": "DLLs, PDBs, native .so, deps and runtimeconfig files; server settings remain isolated-harness configuration"
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/01-fresh-selection.png",
+      "bytes": 628932,
+      "sha256": "925f36b48719f9693d0eb0eb345a01464d9f0151c99e96e427a2f87468038985"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/02-level2-reconnected.png",
+      "bytes": 679104,
+      "sha256": "86b94cdeaae283defad015ed7888f273ee5767a6c8c8587c96517ed7f7e46aa4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/03-cave-route-start.png",
+      "bytes": 714947,
+      "sha256": "02012f260fbbb644de10fc1946021aee569ad1cebc7e38b4aa2ed8816a6f3be5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/04-junction-approach.png",
+      "bytes": 768794,
+      "sha256": "0396e2e8291e020499e8489ac9c953f6a573e5af8d31f67c632147d0d8c57136"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/05-route-heading.png",
+      "bytes": 725511,
+      "sha256": "71fbe92466f3539f9669fa42f2f19e75ff7823297cf6864e8b551aaa81a0e6b0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/06-stair-junction.png",
+      "bytes": 740497,
+      "sha256": "af1790c31bb9d58625f4a4bf54142bd290ee358ef9a45e1460cfb8236bf249bf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/07-heading-check.png",
+      "bytes": 538628,
+      "sha256": "786693aa60fb31ecc750dc77f153e3df35e614b33c906f5144f2bed16421c0ba"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/08-eloh-bridge-approach.png",
+      "bytes": 429019,
+      "sha256": "682a2095527452f6b14e3eacf8b96b0a6e36859a0f6001743ba39ceadae0bd29"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/09-ceremonial-bridge.png",
+      "bytes": 406912,
+      "sha256": "ca71bf69966c4626c166de5e7dc5df1b7d154ae2eee8c2280df61dc1675c5ba1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/10-cave-trigger-approach.png",
+      "bytes": 759618,
+      "sha256": "2ee0d8a87679c2016168acd90e7cc0a2c34911afe4965ea6ab5728cd1fe6836f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/11-cave-objective.png",
+      "bytes": 585874,
+      "sha256": "ed22ea6bca226b8c55c64aa34139d2b289a66e7f79c72836f134f102da5ced4c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/12-hospital-respawn.png",
+      "bytes": 633314,
+      "sha256": "0f481b283510e906867fb0c408f3536c0e6e271f3329e6e9f3265b74aed38042"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/13-training-before.png",
+      "bytes": 617333,
+      "sha256": "dee27ce7c287dabc2f52178894a39525226bd376d5fe03db3e31a9d3a5043636"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/14-firearms-preview.png",
+      "bytes": 620297,
+      "sha256": "d1522d083710fe464e03f489fa19498cf74db25ffaf821e3a18d008bfa9b860c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/15-firearms-accepted.png",
+      "bytes": 617821,
+      "sha256": "68cfab17d1486b1405a18c6c16804750f10144d48e20329e0833e4f2b2999c51"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/16-attributes-before.png",
+      "bytes": 644001,
+      "sha256": "e76164de7056616baea7f4f5059539162a00a70fc62c635f47b0a704e6822f28"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/17-attributes-preview.png",
+      "bytes": 651731,
+      "sha256": "2abceeb56b28170ba4525d267cc79da5b9c054306a4bcdf8f26b2b0cc298e681"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/18-attributes-accepted.png",
+      "bytes": 650224,
+      "sha256": "a0a0d343a19b8fff97818264537e1e4a3926c0fe709062f173c5bacb45a23734"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/19-trained-character-selection.png",
+      "bytes": 634060,
+      "sha256": "8874979b3b725b672c008cb86849fe52dd8e2a75f45131a3d5a028e8a57bb5e3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/runtime-verification.json",
+      "bytes": 402,
+      "sha256": "1fbb0b20ef54acb3794aeebbf93c27f46f2acab9552eb64dcb1372c5623e2e84"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/metadata-upgrade-state.json",
+      "bytes": 1840,
+      "sha256": "7f3e93bc4238243697085ecc3bd94732afd3ec5ae8aeaf3792ed7d0323cb3988"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/reconnect-persisted-state.json",
+      "bytes": 7030,
+      "sha256": "632e8fc2f2e5627402cd40893cf40458e6c14c45aea214e67b7fc09c0a3e040a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/cave-trigger-state.json",
+      "bytes": 468,
+      "sha256": "78422b425b806a07af2fb9409b6dbed630db1bd41e23df43d20b7ccf3cd64a82"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/training-preview-state.json",
+      "bytes": 587,
+      "sha256": "b85421d6db0ef12ce6ffa467196e95077a76e697a14f644d4633169b493de3b1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/training-accepted-state.json",
+      "bytes": 587,
+      "sha256": "43472cbd4a716ee129366b866a1196511ef0fea5b7f66d91dcf863743244c271"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/attribute-preview-state.json",
+      "bytes": 172,
+      "sha256": "0c9063e16e0bbad8a7596e2b508e5fbafce458f041ae07c0000790383ee2ef6a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/attribute-accepted-state.json",
+      "bytes": 172,
+      "sha256": "aaa0818eb37fe2101a4d9d66c88179ffe963c8100bfab7e7866763dd9e15fb9d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/pre-stop-persisted-state.json",
+      "bytes": 8317,
+      "sha256": "78815421e847de96549fff25c79f2d0149c5ec83b64168711e5c617bf687445e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/status.json",
+      "bytes": 210,
+      "sha256": "da452688d7b0c6efa665dc9f890ae3269ab11a0b0adfd8772e142adeeb2f7b1a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/client-final.log",
+      "bytes": 8036,
+      "sha256": "e7b828c6f4206651543e9f50614b043ececc8e4f553923b10ff6c2576fdf7654"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/game.log",
+      "bytes": 117146,
+      "sha256": "b3a3adc2701bd07141f37d0e70013021aef8a7e4f28955df1be0ac7619ffe6da"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/auth.log",
+      "bytes": 2256,
+      "sha256": "9349d86177db13d12ec526b5ba8bfcfd9d6a6c3fa5263555a48e763a88257897"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/client.log",
+      "bytes": 24765,
+      "sha256": "8c4707a5e2f61ab163ad497119d714001170492ccc3abbeeb8c042c72a681cb7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/launcher.log",
+      "bytes": 66,
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14/xvfb.log",
+      "bytes": 81,
+      "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14-binary-inputs.json",
+      "bytes": 20318,
+      "sha256": "42c712b1a64b10f7e4d9b02dfcef590d1d706914be86b942f9b509088139fee5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-14-char-after.db",
+      "bytes": 204800,
+      "sha256": "6d79c0137cba9d8d9e31f2cf2f018cf4c360167e5844440cd26b0daf77c6f4ab"
+    }
+  ],
+  "observations": [
+    {
+      "id": "reconnect",
+      "sources": [
+        "02-level2-reconnected.png",
+        "reconnect-persisted-state.json"
+      ],
+      "level": 2,
+      "experience": 3000,
+      "credits": 300,
+      "completed_missions": [
+        1990,
+        1992
+      ],
+      "active_mission": 1994,
+      "incomplete_objective": 2,
+      "completed_objective": 4,
+      "rifle_loaded": 17,
+      "reserve": 1000
+    },
+    {
+      "id": "cave-approach",
+      "sources": [
+        "03-cave-route-start.png",
+        "09-ceremonial-bridge.png",
+        "10-cave-trigger-approach.png"
+      ],
+      "operator_report": "Ordinary westward movement over the ceremonial bridge without fighting during the approach.",
+      "visible_hostile": "Level 2 Thrax Infantry Initiate",
+      "limits": "Incoming damage and death without return fire do not establish a balance defect or original live combat rates."
+    },
+    {
+      "id": "death-and-respawn",
+      "sources": [
+        "11-cave-objective.png",
+        "12-hospital-respawn.png",
+        "cave-trigger-state.json",
+        "game.log:670-706"
+      ],
+      "death_hud_position": [
+        289.3,
+        120.5,
+        62.7
+      ],
+      "area_id": 198602,
+      "logged_horizontal_distance_m": 10.8,
+      "configured_radius_m": 10,
+      "configured_vertical_half_height_m": 25,
+      "entered": false,
+      "mission_1994_objective_2_status": 1,
+      "hospital": "Refugee Base Medic",
+      "hospital_runtime_id": 20000001,
+      "respawn_hud_position": [
+        357.9,
+        120.4,
+        156.5
+      ],
+      "limits": "Configured geometry is reconstructed emulator data; this run neither proves its original dimensions nor completes the cave objective."
+    },
+    {
+      "id": "skill-training",
+      "sources": [
+        "13-training-before.png",
+        "14-firearms-preview.png",
+        "15-firearms-accepted.png",
+        "training-preview-state.json",
+        "training-accepted-state.json",
+        "game.log:778"
+      ],
+      "skill_id": 1,
+      "skill_name": "Firearms",
+      "rank_before": 1,
+      "rank_preview": 2,
+      "database_rank_during_preview": 1,
+      "rank_after_accept": 2,
+      "displayed_points_before": 2,
+      "displayed_points_after_preview_and_accept": 0
+    },
+    {
+      "id": "attribute-training",
+      "sources": [
+        "16-attributes-before.png",
+        "17-attributes-preview.png",
+        "18-attributes-accepted.png",
+        "attribute-preview-state.json",
+        "attribute-accepted-state.json",
+        "game.log:856"
+      ],
+      "display_before": [
+        12,
+        12,
+        12
+      ],
+      "display_preview_and_after_accept": [
+        13,
+        13,
+        13
+      ],
+      "database_spent_during_preview": [
+        0,
+        0,
+        0
+      ],
+      "database_spent_after_accept": [
+        1,
+        1,
+        1
+      ],
+      "displayed_points_before": 3,
+      "displayed_points_preview": 0,
+      "incorrect_displayed_points_after_accept": 3,
+      "status": "Confirmed display defect in this candidate; subsequent correction and fresh reconnect are outside this run."
+    },
+    {
+      "id": "item-migration",
+      "sources": [
+        "metadata-upgrade-state.json",
+        "reconnect-persisted-state.json"
+      ],
+      "database_item_rows_before": 15,
+      "database_item_rows_after": 15,
+      "all_legacy_fields_preserved": true,
+      "all_new_metadata_fields_null": true,
+      "character_scoped_inventory_count": 10,
+      "limits": "No populated module instance, module tooltip or module combat effects validated."
+    },
+    {
+      "id": "failed-logout-and-termination",
+      "sources": [
+        "19-trained-character-selection.png",
+        "pre-stop-persisted-state.json",
+        "status.json"
+      ],
+      "normal_logout_verified": false,
+      "operator_report": "Attempted logout clicks occurred in-world and fired two rounds after training; the harness then terminated the client.",
+      "rifle_loaded_at_final_capture_and_snapshot": 15,
+      "database_spent_attributes": [
+        1,
+        1,
+        1
+      ],
+      "database_firearms_rank": 2,
+      "database_position": [
+        357.9005432128906,
+        120.32544708251953,
+        156.51882934570312
+      ],
+      "limits": "Pre-stop persistence and frozen database are not normal logout or subsequent reconnect proof."
+    },
+    {
+      "id": "remaining-client-log-errors",
+      "sources": [
+        "client-final.log:7",
+        "client-final.log:26-49"
+      ],
+      "startup_tuple_errors": 1,
+      "zero_size_projection_warnings": 24,
+      "limits": "No causal attribution to the attribute display defect or Wine."
+    }
+  ],
+  "misleading_capture_filenames": {
+    "01-fresh-selection.png": "Loading screen, not character selection.",
+    "11-cave-objective.png": "Death and Hospital Selection, not cave completion.",
+    "19-trained-character-selection.png": "Still in-world, not character selection."
+  },
+  "remaining_verification": [
+    "Fresh reconnect after accepted training",
+    "Correct remaining attribute points after Accept",
+    "Cave objective entry and completion",
+    "Boss encounter and remaining Capture the Flag progression",
+    "Original live encounter geometry and combat balance",
+    "Normal logout for this run"
+  ],
+  "frozen_database_readback": {
+    "items": [
+      15,
+      15
+    ],
+    "character": [
+      1,
+      2,
+      3000,
+      300,
+      1,
+      1,
+      1
+    ],
+    "firearms": [
+      2
+    ],
+    "cave_objective": [
+      1
+    ]
+  },
+  "followups": [
+    {
+      "run": "playthrough-16",
+      "evidence_kind": "emulator_integration_observation",
+      "retail_fidelity_proof": false,
+      "freeze": "Operator confirmed terminal processes before hashing. Normal character logout is shown in capture 04 before harness termination.",
+      "candidate": {
+        "full_tests_passed": 1302,
+        "full_tests_skipped": 0,
+        "full_suite_duration_minutes": 5.7901,
+        "tested_source_manifest_sha256": "c9b679ff7c7b3e01d286e1e972f74cc7a0276c20e3b0a5890b7ceab78f559d07",
+        "binary_count": 137,
+        "runtime_binary_hashes_rechecked": true,
+        "all_binaries_match_tested_build": true,
+        "tested_build_match_source": "Operator verification, corroborated by archived binary-input identities and current runtime hash comparison."
+      },
+      "continuity": "Run 15 replayed allocations in a separate diagnostic database; the continuing character was unchanged. Run 16 reconnects to the allocations accepted in run 14.",
+      "artifacts": [
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/01-trained-reconnect-panel.png",
+          "bytes": 599360,
+          "sha256": "c64d38c93ec0c8429b635d82b93930d72b37aaa7d44fbcebe266acf3f09103b8"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/02-trained-attributes-reconnected.png",
+          "bytes": 633343,
+          "sha256": "582693ec441d376676dd4fb93d3c3a70265b1ea2454faf2f9e58b38dd600b479"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/03-logout-countdown.png",
+          "bytes": 448277,
+          "sha256": "0b6e2b63666db1f7a7cca1e27a131958088388fe0951d95ee768db5b8cf7de60"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/04-trained-character-selection.png",
+          "bytes": 933004,
+          "sha256": "99425a6b9862173838502c13b6c2bdb0ab64ae88510a4e27a98473eaeb8d88ac"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/logout-persisted-state.json",
+          "bytes": 8192,
+          "sha256": "8c34b23230e2d6f4b6bdd349d45dd9b512980c6c0005f990dd8290a3ba92add8"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/status.json",
+          "bytes": 209,
+          "sha256": "e7c98481844d8e1570aade26f3074b5f4c48f374f9703338731f790fdfe910e7"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/client-final.log",
+          "bytes": 6461,
+          "sha256": "eb73f41c99de40cbf31dfe662ef83c99ced8198bff976043bf0233e98487943a"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/game.log",
+          "bytes": 17384,
+          "sha256": "9f62d66b293f6e11adfecff2d550ee682f93c9d05d554967004e9a4c13e68c9c"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/auth.log",
+          "bytes": 2256,
+          "sha256": "05fc427f1d3c079d622f7eff64305d7415f7a0c9b920dc0986a79579ec1f82cd"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/client.log",
+          "bytes": 24765,
+          "sha256": "0b0eff44c989f046aaef87b1adc0e877fba4c1f1ee83c5e391051acdabe83913"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/launcher.log",
+          "bytes": 66,
+          "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16/xvfb.log",
+          "bytes": 81,
+          "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16-binary-inputs.json",
+          "bytes": 20318,
+          "sha256": "8505476119cfdfc2758a65a8fb5b2a21deb20e5753c0263324d816a068d1eb73"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16-char-after.db",
+          "bytes": 204800,
+          "sha256": "e148d23286a9ad4eb585d6df2e9210a4fb7967f7ef00108cd2bb3537d490ef5e"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-snapshot.json",
+          "bytes": 314541,
+          "sha256": "c9b679ff7c7b3e01d286e1e972f74cc7a0276c20e3b0a5890b7ceab78f559d07"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/rasa-retail-20260922-attribute-full.log",
+          "bytes": 107672,
+          "sha256": "a9314fdae1cac084b3e850330f5628484f4d5877d518f9cd43ebb68a77a9390c"
+        },
+        {
+          "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-attribute-final/attribute-full.trx",
+          "bytes": 1443747,
+          "sha256": "db0d4b260885fa386939c719c8d9c0284bc4716f5b7a5880c9901854be1450b4"
+        }
+      ],
+      "observations": [
+        {
+          "sources": [
+            "01-trained-reconnect-panel.png"
+          ],
+          "firearms_rank": 2,
+          "training_points": 0,
+          "rifle_loaded": 15,
+          "reserve": 1000,
+          "pending_objective": "Find a way out of the cave"
+        },
+        {
+          "sources": [
+            "02-trained-attributes-reconnected.png"
+          ],
+          "primary_attributes": [
+            13,
+            13,
+            13
+          ],
+          "remaining_attribute_points": 0,
+          "scope": "Reconnect presentation; the post-Accept callback correction was separately verified in diagnostic run 15."
+        },
+        {
+          "sources": [
+            "03-logout-countdown.png",
+            "04-trained-character-selection.png"
+          ],
+          "normal_character_logout_verified": true,
+          "visible_countdown_seconds": 10
+        },
+        {
+          "sources": [
+            "logout-persisted-state.json"
+          ],
+          "experience": 3000,
+          "credits": 300,
+          "spent_attributes": [
+            1,
+            1,
+            1
+          ],
+          "firearms_rank": 2,
+          "rifle_loaded": 15,
+          "position": [
+            357.8984375,
+            120.359375,
+            156.515625
+          ],
+          "yaw": 1.5216131210327148,
+          "mission_1994_objective_2_status": 1
+        }
+      ],
+      "limits": [
+        "Historical run 14 defect and failed logout remain recorded unchanged.",
+        "No cave objective completion or subsequent encounter verified.",
+        "No original live combat balance established."
+      ],
+      "frozen_database_readback": {
+        "character": [
+          1,
+          2,
+          3000,
+          300,
+          1,
+          1,
+          1,
+          357.8984375,
+          120.359375,
+          156.515625,
+          1.5216131210327148
+        ],
+        "firearms": [
+          2
+        ],
+        "cave_objective": [
+          1
+        ]
+      }
+    }
+  ],
+  "remaining_verification_scope": "The preceding remaining_verification list records the run 14 boundary. Run 16 verifies subsequent reconnect presentation and its own normal logout; post-Accept correction is recorded separately in client-attribute-allocation-reply.json. Cave and encounter gaps remain."
+}

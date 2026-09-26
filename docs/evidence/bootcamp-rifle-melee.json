@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Original action/animation/damage and live-patch audit; deployed rifle-melee reconstruction and alternate-ammo client rule",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/rifle-alternate/rifle-alternate-selected.json",
+      "sha256": "885f3d49d3d5deb93472c20b16bd57e3950cb6cd2dd2ed8f8eb272f4fb8d735b",
+      "bytes": 14178
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/rifle-alternate/later-patch-scan.json",
+      "sha256": "4aa5ce4f01b832b99b4e3f19e5463f493b4c037edc0bd76f397737e1b64a9fe6",
+      "bytes": 22005
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/tt_rifle_loot.png",
+      "sha256": "cee0440a8efa1f3d2cb0139cbebd3269e49aaf15849ff00a3367d06324bc4706",
+      "bytes": 167162
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Rifle__20080919T151918ZZ.wiki",
+      "sha256": "df41a99d3255940df62f2397518e4208e8d6b2e118b247beacd4de2be35a57eb",
+      "bytes": 4794
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/tarapedia-pre-shutdown/Rarity__20081119T021306ZZ.wiki",
+      "sha256": "3729048b268e6c642f0b0cbbcc6e412387ef47289727b29feb38951c7d5e06b7",
+      "bytes": 1733
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_148_on_live_1.html@@20081220224823.html",
+      "sha256": "38911906da9db94ff1964c878f61ff1356e401492afa540313b660d56af45b15",
+      "bytes": 4613
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/archive/wayback/rgtr.com/news/patch_notes/deployment_14_11112008.html@@20081115092604.html",
+      "sha256": "fcb56c2b39aa8543513d28a6979d4911357f4594f9dc5684d9115009950e58f7",
+      "bytes": 12178
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameuiutil.pyo.dis",
+      "sha256": "40391b13fd5ccdd81b7bd286b0217957d1c79bcb294579a67d46918f67a5a4c5",
+      "bytes": 322083
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-tooltipwindow.pyo.dis",
+      "sha256": "4e4b1cbf65b6c654975892bacfd98f76da6b0a5617566f6dcc5063e7efe522ff",
+      "bytes": 406753
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-weapon.pyo.dis",
+      "sha256": "831fcc04872b4e6ce3c4a910057d307673da20fa88bfc1200a66978a8160d9df",
+      "bytes": 46127
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/weapon-actions/client-actions-weapons-baseweaponattack.pyo-BaseWeaponAttack.CheckAction.raw-dis.txt",
+      "sha256": "0662610bd1f46e9bcb0d65b074745c662a2e4a11fab0afe3be2cd11f1c76622b",
+      "bytes": 3496
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/weapon-actions/client-augmentations-actor.pyo-Actor.PerformAltWeaponAttack.raw-dis.txt",
+      "sha256": "65b327b86c72263fde1908e2213a1cb6aa7333b0b5ae5effcb63afb38013c0a6",
+      "bytes": 3391
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/weapon-attack/client-actions-weapons-meleeattackmovement.pyo-MeleeAttackMovement.raw-dis.txt",
+      "sha256": "0d8c3cccf9efd116eeef05a3fabb7281fdc37035290f96a838981984e4ae31ae",
+      "bytes": 550
+    }
+  ],
+  "observation": {
+    "video": "7Lrst9SG3pk",
+    "event": "A3-018",
+    "t": 304.733,
+    "primary_damage": 106,
+    "alternate_melee_damage": 82,
+    "original_server_template_id": "unknown",
+    "emulator_counterpart": 13713,
+    "counterpart_binding_tier": "inferred"
+  },
+  "current_alternate": {
+    "action": 1,
+    "argument": 133,
+    "tooltip_damage": 25,
+    "tooltip_range": 80,
+    "status": "Previous unsupported emulator placeholder, replaced by BootcampRifleMelee candidate migration"
+  },
+  "original_rifle_melee": {
+    "action": 174,
+    "argument": 5,
+    "argument_name": "WEAPON_ATTACK_MELEE_RIFLES",
+    "argument_name_store": 16155,
+    "action_arguments_assignment": 67832,
+    "tuple": [
+      200,
+      994,
+      133,
+      986,
+      4,
+      250,
+      0,
+      1
+    ],
+    "animation_names": {
+      "994": "WEAPON_MELEE_RIFLES_WINDUP",
+      "986": "WEAPON_MELEE_RIFLES_RESOLVE"
+    },
+    "fx_family_assignment": 148613,
+    "fx_families": [
+      606,
+      607
+    ],
+    "tier": "original named action; per-template binding inferred, not recovered",
+    "damage_value_in_row": false
+  },
+  "placeholder_counterexample": {
+    "pair": [
+      1,
+      133
+    ],
+    "assignment": 43886,
+    "range": 20,
+    "recovery_family": 490,
+    "recovery_family_name": "WEAPON_PISTOL_RESOLVE"
+  },
+  "training": {
+    "skill": 8,
+    "rank_melee_bonus_percent": [
+      0,
+      10,
+      20,
+      30,
+      40
+    ],
+    "skill_level_assignment_offsets": [
+      4769,
+      4793,
+      4817,
+      4841,
+      4865
+    ],
+    "english_description_assignment_offsets": [
+      88004,
+      88040,
+      88076,
+      88112,
+      88148
+    ],
+    "tier": "original final compatibility-client descriptions",
+    "limitation": "Does not independently recover server damage stacking or rounding"
+  },
+  "base_hypothesis": {
+    "base": 68,
+    "modified_multiplier": 1.2,
+    "product": 81.6,
+    "possible_display": 82,
+    "tier": "inferred from contemporaneous community data, not original server rows",
+    "limitation": "Primary damage in the same community table differs from the later client; exact final-live base and rounding remain unverified"
+  },
+  "official_patch_review": {
+    "D14_live": "Resistance ratings and passive-description updates; no recovered rifle-melee base replacement",
+    "D14_8_live": "Resistance-module strengths only, does not explain melee25/82",
+    "later_retained_files_surveyed": 62,
+    "limitation": "No matching change is not proof against undocumented changes; PTS files not promoted to live evidence",
+    "web_replay": "Unavailable this session; retained original official HTML used"
+  },
+  "decision": "Deploy inferred rifle alternate (174,5) and the observed 82 Physical tooltip on template 13713, with explicit identity/base-damage gaps. The recovered client exempts alternate attacks from normal empty-magazine and jam checks; apply that rule to the declared melee alternate.",
+  "reconstruction": {
+    "migration": "BootcampRifleMelee",
+    "row": "itemtemplate_weapon/13713",
+    "fields": {
+      "alt_action_id": {
+        "value": 174,
+        "tier": "inferred",
+        "source_location": "1.16.5.0 client action module assignment 37877 and actionArguments assignment 67832",
+        "confidence": "high for rifle action; server per-template binding unverified"
+      },
+      "alt_action_arg_id": {
+        "value": 5,
+        "tier": "inferred",
+        "source_location": "1.16.5.0 client constant store 16155 and actionArguments assignment 67832",
+        "confidence": "high for rifle argument; server per-template binding unverified"
+      },
+      "alt_max_damage": {
+        "value": 82,
+        "tier": "observed",
+        "source_location": "7Lrst9SG3pk A3-018 at 304.733 s; lootable Shinobi Rifle tooltip",
+        "confidence": "high for filmed tooltip; low for template 13713 identity and damage minimum"
+      },
+      "alt_damage_type": {
+        "value": 1,
+        "tier": "observed",
+        "source_location": "7Lrst9SG3pk A3-018 at 304.733 s; tooltip labels melee damage Physical",
+        "confidence": "high for filmed tooltip; template binding unverified"
+      },
+      "alt_range": {
+        "value": 4,
+        "tier": "inferred",
+        "source_location": "1.16.5.0 client actionArguments (174,5) assignment 67832, fifth tuple field",
+        "confidence": "high for action range; exact server target-radius calculation unverified"
+      }
+    },
+    "unverified": "Exact final-live item template, alternate minimum/base damage, hit chance, skill/rarity scaling, and exact shutdown-client revision"
+  },
+  "candidate_verification": {
+    "dotnet_runtime": "5.0.17",
+    "weapon_attack_lifecycle": "33 passed, 0 failed under .NET 5, including empty-magazine and jammed alternate melee",
+    "rifle_melee_migration": "changes only template 13713 alternate fields and rolls back exactly",
+    "original_client": "Recovered 1.16.5.0 client displayed 106 primary and 82 Physical melee tooltip in isolated playthrough-18; later isolated playthrough-22 sent three F-key RequestWeaponAttack calls against a GM-spawned Thrax, killed it and retained 15 rifle rounds.",
+    "content_schema_migrations": "6 passed, 0 failed under .NET 5",
+    "live_deployment": "rasa-dit-test:20260922c; game reached Server ready!; live world row 13713 has alternate 174,5,82,4"
+  },
+  "client_alternate_resource_rule": {
+    "tier": "original client behavior; inferred server parity",
+    "check_action": "client/actions/weapons/baseweaponattack.pyo BaseWeaponAttack.CheckAction source lines 143-155: jam and zero-ammo rejection occur only when isAltAction is false",
+    "perform_alt": "client/augmentations/actor.pyo Actor.PerformAltWeaponAttack source lines 578-584: reload on empty only if action.useAmmoInAction is true",
+    "rifle_melee_action": "client/actions/weapons/meleeattackmovement.pyo MeleeAttackMovement source lines 5-9: useAmmoInAction=0",
+    "implementation": "WeaponAttackManager.TryStart and Update exempt declared alternate melee from primary jam/empty-magazine guards; no ammo is spent",
+    "limitation": "Recovered client rules do not independently prove every lost final-live server edge case; empty-magazine and jammed alternate behavior remain untested in an original-client playthrough."
+  },
+  "targeted_client_verification": {
+    "manifest": "docs/evidence/bootcamp-rifle-melee-targeted-client.json",
+    "tier": "observed emulator/client exchange, not original final-live server behavior",
+    "finding": "Three F-key RequestWeaponAttack calls, Thrax kill, 15/1000 rifle ammo unchanged, XP 3000 to 3071, credits 300 to 310",
+    "limitations": "Method arguments and individual hit amounts were not logged; GM-spawned diagnostic creature; empty/jammed cases only unit tested"
+  }
+}

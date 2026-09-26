@@ -17,11 +17,13 @@ namespace Rasa.Structures
         public long ReuseEndsAt { get; }
         public bool StartsReuse { get; }
         public bool ClientRequested { get; }
+        public bool IsAltAction { get; }
+        public int MaxRange { get; }
         public bool Resolved { get; set; }
 
         public WeaponAttackExecution(ActionId actionId, uint argumentId, Item weapon, MapChannel map,
             Actor target, uint ammoCost, long now, WeaponActionTiming timing, bool clientRequested,
-            DynamicObject contentTarget = null)
+            DynamicObject contentTarget = null, bool isAltAction = false)
         {
             ActionId = actionId;
             ArgumentId = argumentId;
@@ -35,6 +37,8 @@ namespace Rasa.Structures
             ReuseEndsAt = RecoveryEndsAt + timing.ReuseMilliseconds;
             StartsReuse = timing.StartReuseTimerOnPerform;
             ClientRequested = clientRequested;
+            IsAltAction = isAltAction;
+            MaxRange = timing.MaxRange;
         }
     }
 }

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Recovered-client first courtyard kill with all six staged Thrax and the three deployed companions",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered original compatibility client 1.16.5.0 under Wine/Xvfb and an isolated bubblewrap namespace; original client executable SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Exact deployed-derived Game DLL SHA-256 258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32, copied world.db SHA-256 c0dfa152576469b947c5b9fa57381b412d6226ca055d4fd591e0d195acbd49af; the copied world has Thrax placements 198660-198665 and companions 198688-198690, with no courtyard Warrior 198691. Live containers and databases were not altered.",
+    "character": "Copied level-2 Alden at the earlier native-client-reached upper checkpoint (316.13,120.28,85.93), yaw 0.859892129898071 from docs/evidence/bootcamp-current-build-targeting-checkpoint.json; mission 1994 objective 2 active; crate rifle item 11/template 13713 had 20/980 rounds. This bypasses continuous camp travel and is a combat checkpoint, not a retail route.",
+    "harness": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-six-thrax-fire-controlled-08-20260924.py, SHA-256 0703d1018da789b04bcc10cb4d6223eed79ec8522977687708e69dd328bbee4e; launch wrapper run-live-companions-six-fire2-20260924.py, SHA-256 4b56b036f9e4e51b04be2dc5bff14e90f78645c25609e3d25cd0739f2e86f442",
+    "inputs": "wait_playable succeeded; H drew the rifle; W 1200 ms, A 400 ms, W 1000 ms reached a visible level-2 Thrax target; normal left mouse fire was held 4800 ms and 4500 ms with an intervening capture. No GM attack or combat-state edit was used."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "run 08 game.log 21:11:32.269, 21:11:44.484 through 21:11:53.899",
+      "finding": "MapLoaded occurred at 21:11:32.269. Archer placement 198689 first hit Thrax 198665 at 21:11:44.484, before the client's StartAutoFire at 21:11:45.141. Gunner 198688, Archer 198689 and Shaman 198690 each landed four logged hits on 198665. Alden landed nine logged 48-damage hits on the same enemy; the ninth reduced its health from 40 to 0 at 21:11:53.899. Initial enemy armor and health were the explicitly analogue emulator values 100 and 555."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 08 target-after-second-fire.png and copied char.db after process stop",
+      "finding": "The recovered client displayed You gained 71 experience points and You received 10 credits. The copied database's character experience rose from 3571 to 3642 and credits from 310 to 320; rifle ammunition fell from 20 to 8, with 980 reserve. SQLite integrity_check returned ok."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 08 game.log 21:11:56.379 through 21:11:57.262 and target-after-second-fire.png",
+      "finding": "After the first kill, a player hit and one hit from each companion landed on Thrax 198662. The client's top target panel then named a friendly Forean Shaman Initiate. The player did not clear the other five Thrax in this run."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 07 target-before-fire.png, target-after-fire.png and target-after-second-fire.png",
+      "finding": "An earlier disposable retry used the copied character's saved yaw 6.103 and moved into a rock wall. The rifle remained at 20/980 and no combat occurred; that run cannot measure the encounter."
+    }
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-fire-08/game.log", "sha256": "0bda76b2c118ffc3920128c45f2a5a2132d0ffe23318e570ad075776c0d487a7"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-fire-08/target-before-fire.png", "sha256": "623428022b7b46e19ba844ec6dd3ae8a1d1f7ed034382409e83837ea4e385147"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-fire-08/target-after-fire.png", "sha256": "a77fab4eb9bb36d3fdb0ea5808fb51516b2bc9b4c7915e8f1f906ceaf55d4fc1"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-fire-08/target-after-second-fire.png", "sha256": "4e67f24886dc3a52c7670ef64b192923c1f9c13f92b7a2a96b5ed26448af214b"}
+  ],
+  "assessment": "This narrows the earlier unopposed checkpoint observation: with the recruit in the verified upper-lane position and firing, the exact deployed binary can render a hostile target, engage all three companions and award the first kill under all six staged placements. It does not establish final-live damage, health, enemy count, spawn timing, route or full encounter survivability. The final-week video 7Lrst9SG3pk contains three kill rewards before its visible Warrior plate; the current staging lacks that Warrior because its activation and survival still conflict with the recorded sequence.",
+  "next_verification": "Use ordinary aiming and movement to clear the remaining enemies and enter cave area 198602 from a continuous camp route on the deployed binary. Compare the resulting timing and ally survival with the final-week video before changing encounter values."
+}

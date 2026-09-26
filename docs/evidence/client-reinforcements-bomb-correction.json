@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Mission 1995 bomb hull placement correction in isolated recovered 1.16.5.0 client",
+  "prior_evidence": "docs/evidence/bootcamp-d11-positions.json object.bomb_site, 8VXeKzGUv0c 80.600-86.600; docs/evidence/client-reinforcements-bomb-attempt.json",
+  "correction": {
+    "migration": "20260922235600_BootcampBombHullPlacement",
+    "placement_id": 198677,
+    "previous": {
+      "pos_x": -223.95,
+      "pos_y": 102.3,
+      "pos_z": -72.34
+    },
+    "effective": {
+      "pos_x": -221.95,
+      "pos_y": 102.3,
+      "pos_z": -70.5
+    },
+    "fields": {
+      "pos_x": {
+        "value": -221.95,
+        "tier": "inferred",
+        "source": "playthrough-40/01-tight-bomb.png; playthrough-40/02-tight-bomb-use.png; original 8VXeKzGUv0c 80.600-86.600 measurement in object.bomb_site",
+        "reasoning": "Shifted exactly +2.00 m toward the visible near face, at the original measured X uncertainty bound. Original client use prompt and completion validated. This is a compatible placement correction, not an observed retail coordinate."
+      },
+      "pos_z": {
+        "value": -70.5,
+        "tier": "inferred",
+        "source": "playthrough-40/01-tight-bomb.png; playthrough-40/02-tight-bomb-use.png; original 8VXeKzGUv0c 80.600-86.600 measurement in object.bomb_site",
+        "reasoning": "Shifted +1.84 m toward the visible near face, inside original measured Z uncertainty. Original client use prompt and completion validated. This is a compatible placement correction, not an observed retail coordinate."
+      }
+    }
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-35/01-filmed-approach.png, playthrough-35/game.log",
+      "finding": "The original seed at (-223.95,102.3,-72.34) remained untargetable from the approximate filmed northeast approach."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-36/01-bomb-plus1m.png, playthrough-36/game.log",
+      "finding": "Raising only the bomb Y to 103.3 did not expose a use prompt."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-37/01-bomb-outward.png, playthrough-37/game.log",
+      "finding": "Moving to (-222.5,102.3,-70.9) still gave no use prompt from the northeast approach."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-38/01-bomb-open-ground.png, playthrough-38/02-bomb-open-use.png, playthrough-38/game.log line 158",
+      "finding": "Moving the same class to open ground exposed a use prompt; right click sent RequestUseObject, bomb detonated and objective 1 completed. This isolates the issue to spatial placement or wreck obstruction, not a general bomb packet failure."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-39/01-near-wreck-face.png, playthrough-39/02-near-wreck-use.png, playthrough-39/game.log line 162",
+      "finding": "A near-face candidate at (-221.5,102.3,-70.5) showed a use prompt; right click completed objective 1, removed the wreck, spawned reinforcements and revealed objective 4."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-40/01-tight-bomb.png, playthrough-40/02-tight-bomb-use.png, playthrough-40/game.log line 156; playthrough-40/char-after.db",
+      "finding": "Tightened candidate (-221.95,102.3,-70.5) also showed the use prompt. Right click sent RequestUseObject, objective 1 completed, wreck removed, reinforcements spawned and Van Valkenberg objective 4 revealed."
+    }
+  ],
+  "method": "All world/character edits were disposable diagnostics. Timer anchor was reset to a fresh 600 seconds and player position/yaw set near the wreck to avoid repeated route travel; no retail timing or route conclusion is drawn from these edits. The world DB was restored after each run. Live database remained untouched.",
+  "limits": [
+    "Exact final-live bomb and wreck positions, rotation and model remain unverified. The corrected X,Z are inferred, not measured originals.",
+    "The client tests use GM/DB positioning and passive nearby Thrax; normal traversal and combat remain unverified.",
+    "The detonation and NPC presentation work in the recovered compatibility client but need fidelity comparison with original footage; the original final build revision remains unverified.",
+    "Van Valkenberg conversation, timer failure/retry, and exit remain open."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-33/char-after.db",
+      "sha256": "d056348c51024db339ffad98e57f97d09870473f78eed0dd5c425069c1b5cb13",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-35/01-filmed-approach.png",
+      "sha256": "f1f3cb520fc8be06e716923f2b648a5fb2d71297800cd8e2b05879df2a460966",
+      "bytes": 734862
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-35/game.log",
+      "sha256": "79781c737f0ec808f165dde25161a7eeaa3dae82ae2f71883587e1c2a0fd0680",
+      "bytes": 16340
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-36/01-bomb-plus1m.png",
+      "sha256": "543cc6d4212509896d739e9b78c08d0067e58eb33bce38877eeef4a42518e851",
+      "bytes": 745303
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-36/game.log",
+      "sha256": "966cb8db83edde99397afa38ca8a0019320415d23d8cc1086a4708f5d362df26",
+      "bytes": 14948
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-37/01-bomb-outward.png",
+      "sha256": "0b1b1edb392e605a08a372fec73ce5c53d04e136d6ca06df761b3f9426160bb8",
+      "bytes": 717493
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-37/game.log",
+      "sha256": "a94f36003f1dac2ae09cdc02e441f3b9334faf9cdf2fd0313022fc8b060d0743",
+      "bytes": 13266
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-38/01-bomb-open-ground.png",
+      "sha256": "5128d819795615c64f2263fdaa1a3601bae648a37ff6e8687aade3d1a8f932b1",
+      "bytes": 705238
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-38/02-bomb-open-use.png",
+      "sha256": "fb10ecd8a185e0e90157515f84b72955dd4185d94031ecbf2f369842000a0fd4",
+      "bytes": 773956
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-38/03-after-bomb.png",
+      "sha256": "315f27f55c866a0626da177f3237655444ac158c7a05f6d8bacc150e7532c72f",
+      "bytes": 658583
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-38/game.log",
+      "sha256": "f11834cdd6f7cf14b03f50913bd502637f0a47d24a3185509ae581c0eae5324b",
+      "bytes": 15594
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-38/char-after.db",
+      "sha256": "f4981f622538d676e5ebdb1e09b115f3a26daaad1698c13f885ffc921a25a077",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-39/01-near-wreck-face.png",
+      "sha256": "d96dbc5a096fb5b7a6b896464f8d49df78b1286d7c5cf47794493fa5df4a1454",
+      "bytes": 714793
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-39/02-near-wreck-use.png",
+      "sha256": "2651a9084957b8cf25d68336207f08febca15312f5795bfae1dca6a461d33acd",
+      "bytes": 648977
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-39/game.log",
+      "sha256": "38e3b714fb1cc44abd26e4f93de720c9964d9ffd1ffb2d004c6ac7912ed25b43",
+      "bytes": 14316
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/01-tight-bomb.png",
+      "sha256": "fa96ef0fc73d4475b76f293a0a89b17e465068df8fafbda47392bbc8e1b2982f",
+      "bytes": 702557
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/02-tight-bomb-use.png",
+      "sha256": "257d8763f1ca8a683aa82d8e0f3b8aca217c2666ebccbd80f0c28ca40a7e19b2",
+      "bytes": 661453
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/game.log",
+      "sha256": "34315db9cd920c0be72524bc764110a6991bc8082a4ea3cce3d0c01f8834d1a3",
+      "bytes": 14376
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-40/char-after.db",
+      "sha256": "b783517d75801040951454233bc4722dcd0d1081bfd01f7480629fad2acf4e5f",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    }
+  ]
+}

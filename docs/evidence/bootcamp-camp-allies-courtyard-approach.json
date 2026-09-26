@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "scope": "Isolated native-client continuation of staged camp companions toward the Capture the Flag courtyard; emulator diagnostic only",
+  "client": "Recovered 1.16.5.0 under Wine/Xvfb :110, copied auth/character/world SQLite, isolated Docker network namespace",
+  "source_directory": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route",
+  "runs": [
+    {
+      "start": "Copied character checkpoint (360.0703,121.2031,114.6406), after prior native movement from the camp; companion placements remained at their staged camp coordinates",
+      "observations": [
+        {
+          "position": [341.5195,121.8242,107.7891],
+          "file": "courtyard5.png",
+          "sha256": "b7e891db126bf5ce106586334eb67de709651bb1d113d1acde33e4ab96d59867",
+          "finding": "Three orange-marked Forean companions are close behind the player at the second rocky corner."
+        },
+        {
+          "position": [316.1328,120.2813,85.9258],
+          "file": "courtyard7.png",
+          "sha256": "891bed083dea8ed95f6cd365ceea85cdcf1e44f841b3e0029f0497c3e11a9862",
+          "finding": "Three orange-marked companions remain with the player on the courtyard approach."
+        },
+        {
+          "position": [308.7266,120.0977,79.2109],
+          "file": "courtyard8.png",
+          "sha256": "9524c1a6b00350fdc906c9390563afb662e26ca11c3472fa00111a3229ab4895",
+          "finding": "A level-2 Thrax Infantry Initiate is targetable ahead while companions enter the visible courtyard approach; the player remains outside the cave area trigger."
+        }
+      ],
+      "limit": "The Xvfb terminal session ended before the player reached hostile attack range. No creature-hit trace occurred; this does not test the fight."
+    },
+    {
+      "start": "Disposable character position manually rewound to (397.7344,120,148.8398) after saving a separate copy of the (308.7266,120.0977,79.2109) checkpoint; companion rows unchanged",
+      "observations": [
+        {
+          "position": [359.1133,122.0703,111.7148],
+          "file": "continuous-rocks3.png",
+          "sha256": "18e47b7dea05e05b2fedd478e6c41452a3626d76d33936651855d0c80d89e3c1",
+          "finding": "All three marked companions followed from the camp via the metal stairs and rocky descent."
+        },
+        {
+          "position": [323.5117,118.4258,89.3828],
+          "file": "continuous-approach.png",
+          "sha256": "e8d66acf10a9c78d8145b48104928f067ba7befc6800f62d7d035c081b251920",
+          "finding": "Player movement cut below the navmesh route; the original-map path probe expects approximately 120 m elevation near the next corner. Companion markers remain nearby."
+        },
+        {
+          "position": [319.9609,116,79.9805],
+          "file": "continuous-low.png",
+          "sha256": "d5ef169f92708e9d00d5a8eebc6b128a0a569acb834c500f92149b9442741fb1",
+          "finding": "Player and all three companions are below a steep rock bank and cannot continue the intended route by holding forward."
+        },
+        {
+          "position": [342.9961,116,98.7305],
+          "file": "continuous-backtrack.png",
+          "sha256": "5aa4cdbfdeb2b1280c4812c4a2a517fed271a69570cad5d17cd051f9dd96dd44",
+          "finding": "Backtracking remains under the walkable route."
+        }
+      ],
+      "limit": "The player left the intended navmesh corridor because of the diagnostic movement line. This does not establish a game or companion pathing defect and cannot settle courtyard combat or cave transition."
+    }
+  ],
+  "log": {
+    "path": "game.log",
+    "trace_setting": "RASA_TRACE_CREATURE_HITS=1",
+    "creature_hit_entries_in_these_runs": 0,
+    "mission_1994_objective_2": "active throughout",
+    "player_xp": "3571 throughout observed runs"
+  },
+  "provenance": {
+    "tier": "observed",
+    "source": "Native recovered-client screenshots, copied-server log and disposable character database above",
+    "confidence": "high for rendered following and displayed positions; no support for final-live attack timing or survival",
+    "unverified": "Exact original route line, target acquisition range, normal six-Thrax combat, ally survival, cave trigger with the companions"
+  }
+}

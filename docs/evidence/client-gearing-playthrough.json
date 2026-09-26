@@ -1,0 +1,743 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Original client against isolated emulator: Gearing Up for Battle 1992, Delessio through equipment, Practice Dummy completion, Lightning objective and ordinary logout",
+  "evidence_kind": "emulator_integration_observation",
+  "retail_certification": false,
+  "run": "playthrough-06",
+  "character": "Alden Vanguard",
+  "character_id": 1,
+  "environment": {
+    "client_compatibility_version": "1.16.5.0; exact final shutdown revision unverified",
+    "movement": "Normal client movement and interactions throughout this run; no GM teleport, according to playthrough operator",
+    "persistence": "Resumed character from prior opening lesson; not a new-character run",
+    "deployed_database_modified": false
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/25-delessio-first-talk.png",
+      "sha256": "89a4b4a56d3698b683962da9105d754409f71e4c6fc8262058120b8b5fc1cbd5",
+      "bytes": 807271
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/26-delessio-continued.png",
+      "sha256": "2441f1f786936a822a607c960e62767fefd46fbd3352ae34cc8bcfdadc39eb72",
+      "bytes": 885301
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/27-crate-open.png",
+      "sha256": "775f028fee59b84ca3b3c0b4968e66fc4babf3fe4e544fdeaa512ac898308fbb",
+      "bytes": 880427
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/28-crate-use.png",
+      "sha256": "75039306edc5708b669a58ed9e122b7513254c5bb1c4153b73aa5dc4a406bf6a",
+      "bytes": 857134
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/29-crate-loot-all.png",
+      "sha256": "8c94a08b52cc7369675035464eae675f05668183739d6347b130bf4fd89dca31",
+      "bytes": 898980
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/30-crate-backpack.png",
+      "sha256": "fe257dc0f56a83430dbbd81725fa04322641f25d4650365fc01cd285df8c539b",
+      "bytes": 857175
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/31-first-crate-boots-equipped.png",
+      "sha256": "2721e9c04c29f1f474872182e5d16ce15e6bf905c7b27fb5171676a23ac52fd5",
+      "bytes": 865452
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/32-rifle-tooltip.png",
+      "sha256": "e39d335ecd8db18029a7e385fe5e02677fa7ba484d6c0e82129a6c992320de0e",
+      "bytes": 799252
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/33-all-crate-equipment.png",
+      "sha256": "4a6ef6cb48d9d6ef1d3bb2de5378b0e22462f6e7616f93eb9f3ff12be1d74609",
+      "bytes": 860377
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/34-delessio-second-talk.png",
+      "sha256": "15ece34718a233bffbd51869cbaf7b522a233e7270f61cfd066e2f07c313bdbc",
+      "bytes": 810543
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/35-hartmann-objective.png",
+      "sha256": "e04158e41550193e74dd105c9953ef97eb680e8418b7cb1c7782b96345dcf4d0",
+      "bytes": 887010
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/37-hartmann-approach.png",
+      "sha256": "1bf24dc6da5e29218bc4c4343d6396012e6518325e0e267e49269fa672858321",
+      "bytes": 690265
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/crate-open-state.json",
+      "sha256": "87b22d4de2a8af6db0e2f81aa7b6cde98c44a865ab5a4b3e79e2ab41d6fa5ffe",
+      "bytes": 902
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/crate-looted-state.json",
+      "sha256": "73c722ae412634f66b3fb424526ab09a07ad2cf565417a14fce8ff9893cd6c7f",
+      "bytes": 4725
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/first-boots-equipped-state.json",
+      "sha256": "ce5445448b137f6187ab0e61f63c6eaad5857e7aa176e9a109109a2782ae44ff",
+      "bytes": 4213
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/equipment-lesson-state.json",
+      "sha256": "2b5a36ae3d7b276891d52969ef0c9e8dce888afbe38b33de6b5edb1374f99aec",
+      "bytes": 4404
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/38-hartmann-first-talk.png",
+      "sha256": "41efb835f4bfa32216a4d33a8d0375e53bf68d3b69e6acdc9f0fe004c518ee54",
+      "bytes": 660660
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/39-firing-line.png",
+      "sha256": "c562db955a909b70275b7a2b504950367e29b90fe30e45133e4524237601336a",
+      "bytes": 717892
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/42-practice-fire.png",
+      "sha256": "cd10eddef741c150ea3494edca4d72014a8079e96fd7b13b02c9db36ee39d40a",
+      "bytes": 806837
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/45-hartmann-return-talk.png",
+      "sha256": "addeb2a2d54db27b3cd86ba1616bf55a27bd2d3dd070b9477a822f87d5107cff",
+      "bytes": 669829
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/46-lightning-checkpoint-menu.png",
+      "sha256": "fca044f51fa22bb7f9a21438efe135a250d19bfd44c8e2692bc6e1159f9c62d2",
+      "bytes": 527505
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/49-character-selection.png",
+      "sha256": "d13273587e2690403f3ec4dfbc4a4d443eb85c6827c41fc6637ed1f67094c9fe",
+      "bytes": 934793
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/practice-completed-state.json",
+      "sha256": "3bcb7ba351af457904f1c68b4a5c1af20fc6112043f3a63fe818a5ef9eb218a7",
+      "bytes": 4796
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/logout-persisted-state.json",
+      "sha256": "e3e21f5eee692d416d41583dfe6f9e661f783ff7785c440192c78564a36618fc",
+      "bytes": 6850
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/client-final.log",
+      "sha256": "2b5aaeefd53a4eaffe4044867c10a5fd21982d207cc6211894b016cb5965e516",
+      "bytes": 8713
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/game.log",
+      "sha256": "254f880ac943092c62cf18b2e15093d6de658a302c0d218c75d96e7c464434a3",
+      "bytes": 167309
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/runtime-binaries.json",
+      "sha256": "62576c520dda0a698f06cd4a46da970d836214bc5f6e4f7708381451580ad255",
+      "bytes": 563
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-06/status.json",
+      "sha256": "14a6630858b4efebe8ecc3fe8d8f83459fa44a0d2830bc63ef511aebbfd0b23a",
+      "bytes": 210
+    }
+  ],
+  "state_convention": {
+    "1": "Incomplete",
+    "2": "Completed"
+  },
+  "state_snapshots": [
+    {
+      "file": "crate-open-state.json",
+      "capture": "28-crate-use.png",
+      "captured_at_utc": "2026-09-22T20:27:02.604122+00:00",
+      "objectives_1992": {
+        "1": 1,
+        "4": 2
+      }
+    },
+    {
+      "file": "crate-looted-state.json",
+      "capture": "29-crate-loot-all.png",
+      "captured_at_utc": "2026-09-22T20:27:25.251189+00:00",
+      "objectives_1992": {
+        "1": 2,
+        "2": 1,
+        "4": 2
+      }
+    },
+    {
+      "file": "first-boots-equipped-state.json",
+      "capture": "31-first-crate-boots-equipped.png",
+      "captured_at_utc": "2026-09-22T20:28:19.737816+00:00",
+      "objectives_1992": {
+        "1": 2,
+        "2": 2,
+        "4": 2,
+        "5": 1
+      }
+    },
+    {
+      "file": "equipment-lesson-state.json",
+      "capture": "35-hartmann-objective.png",
+      "captured_at_utc": "2026-09-22T20:30:32.427300+00:00",
+      "objectives_1992": {
+        "1": 2,
+        "2": 2,
+        "4": 2,
+        "5": 2,
+        "6": 1
+      }
+    },
+    {
+      "file": "practice-completed-state.json",
+      "capture": "42-practice-fire.png",
+      "captured_at_utc": "2026-09-22T20:34:47.248366+00:00",
+      "objectives_1992": {
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "9": 1
+      },
+      "rifle_ammo": 17,
+      "reserve": 1000,
+      "timing_note": "Snapshot follows capture 42; capture HUD still shows 18/1000, while subsequent persisted snapshot contains 17. Do not claim capture and snapshot are simultaneous."
+    },
+    {
+      "file": "logout-persisted-state.json",
+      "captured_at_utc": "2026-09-22T20:39:05.302076+00:00",
+      "objectives_1992": {
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "8": 1,
+        "9": 2
+      },
+      "mission_state_1992": 0,
+      "mission_state_interpretation": "Active",
+      "position": {
+        "map_context_id": 1985,
+        "coord_x": 385.91796875,
+        "coord_y": 119.52734375,
+        "coord_z": 163.27734375,
+        "rotation": 3.1054482460021973
+      },
+      "rifle_ammo": 17,
+      "reserve": 1000,
+      "credits": 100,
+      "experience": 1250,
+      "mission_1992_completion_reward_claimed": false
+    }
+  ],
+  "observations": [
+    {
+      "captures": [
+        25,
+        26
+      ],
+      "result": "Delessio first dialogue renders original text21484; Continue completes1992/4 and reveals1992/1."
+    },
+    {
+      "captures": [
+        27,
+        28
+      ],
+      "result": "Capture 27 filename is misleading: no loot window visible. Capture 28 is actual opened loot window and crate-open-state.json references 28. Objective 1 remains incomplete after opening."
+    },
+    {
+      "captures": [
+        28,
+        29,
+        30
+      ],
+      "result": "LootAll supplies five items and completes objective1, reveals objective2. Backpack shows five items; starter outfit/pistol do not auto-complete equip objective."
+    },
+    {
+      "captures": [
+        31
+      ],
+      "result": "First issued boots alone complete objective 2 and reveal objective 5. DB:template 12209 inventory 8 slot 2; displaced RecruitBoots 122854 inventory 1 slot 1. Rifle 13713, gloves 15803, legs 26879, vest 12208 still in backpack."
+    },
+    {
+      "captures": [
+        32,
+        33
+      ],
+      "result": "Rifle tooltip magazine20/20; all issued armor equipped and rifle moved to weapon drawer0. HUD20/1000; reserve remained1000. Original starter outfit and pistol remain owned."
+    },
+    {
+      "captures": [
+        34,
+        35
+      ],
+      "result": "Second Delessio dialogue renders text 21487. Continue completes objective 5 and reveals objective 6, Speak to Corporal Hartmann by the Firing Range."
+    },
+    {
+      "captures": [
+        37
+      ],
+      "result": "An officer appears suspended above terrain beside the range. Operator identifies McAllister; still image alone does not prove identity, exact height or cause. Unresolved movement/grounding observation; no fix claimed."
+    },
+    {
+      "captures": [
+        38,
+        39
+      ],
+      "result": "Hartmann first dialogue renders shooting instructions, text 21491. Continue completes objective 6 and reveals objective 3, Shoot the Practice Dummy."
+    },
+    {
+      "captures": [
+        42
+      ],
+      "result": "Practice objective completion banner and return-to-Hartmann tracker visible, with red -106 damage, HUD 18/1000 and restored target visible. Snapshot shortly afterward has objective 3 complete, objective 9 incomplete, rifle 17 and reserve 1000. These stills do not measure single-hit destruction or the reset interval."
+    },
+    {
+      "captures": [
+        45,
+        46
+      ],
+      "result": "Hartmann return dialogue presents Lightning instruction, text 21665. Continue completes objective 9 and reveals objective 8. No Lightning completion was attempted or established by this run."
+    },
+    {
+      "captures": [
+        49
+      ],
+      "result": "Ordinary logout returns to character selection. Mission 1992 remains active with objective 8 incomplete; position, equipped issued gear and rifle 17/reserve 1000 persist."
+    }
+  ],
+  "original_comparison": {
+    "video_id": "7Lrst9SG3pk",
+    "video_sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "reference_checklist": {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-dummy-measurement/gearing-up-runtime-checklist.md",
+      "sha256": "3c330ca40b2f5786e5c5d06687f42802ded9509f0dc14424324cba6eb74bf1ce",
+      "bytes": 7493
+    },
+    "rifle_crop": {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A3/work/tt_rifle_loot.png",
+      "sha256": "cee0440a8efa1f3d2cb0139cbebd3269e49aaf15849ff00a3367d06324bc4706",
+      "bytes": 167162
+    },
+    "rifle_crop_locator": "A3-018,304.733s, issued rifle still in crate loot",
+    "rifle_fields": [
+      {
+        "field": "name",
+        "original": "Shinobi Rifle",
+        "emulator": "Rifle",
+        "match": false
+      },
+      {
+        "field": "primary_physical_damage",
+        "original": 106,
+        "emulator": 106,
+        "match": true
+      },
+      {
+        "field": "optimal_range_m",
+        "original": 60,
+        "emulator": 80,
+        "match": false
+      },
+      {
+        "field": "alternate_physical_melee_damage",
+        "original": 82,
+        "emulator": 25,
+        "match": false
+      },
+      {
+        "field": "magazine",
+        "original": "20/20",
+        "emulator": "20/20",
+        "match": true
+      },
+      {
+        "field": "trade_restriction_lines",
+        "original": [
+          "Not Tradeable",
+          "Not Sellable"
+        ],
+        "emulator": [],
+        "match": false
+      },
+      {
+        "field": "module_lines",
+        "original": [
+          "[4] Armor Piercing +8%",
+          "[2] Resist: Laser +12"
+        ],
+        "emulator": [],
+        "match": false
+      }
+    ],
+    "sequence_matches": [
+      {
+        "locator": "A3-023/024/027,308.067\u2013308.533s",
+        "fact": "Five receipts, crate completion, equip objective remains active in starter outfit"
+      },
+      {
+        "locator": "A3-036/037 and322.400s,321.667\u2013322.400s",
+        "fact": "First issued boots complete equip step and reveal second Delessio talk"
+      },
+      {
+        "locator": "A3-048,335.467s",
+        "fact": "Rifle equipped with 20 rounds; original reserve 994 reflects that recording and is not forced on fresh unused reserve 1000"
+      }
+    ],
+    "dialogue_bindings": [
+      {
+        "mission_id": 1992,
+        "objective_id": 4,
+        "npc_package_id": 2560,
+        "player_flag_id": 1,
+        "conversation_type": 1,
+        "text_id": 21484
+      },
+      {
+        "mission_id": 1992,
+        "objective_id": 5,
+        "npc_package_id": 2560,
+        "player_flag_id": 1,
+        "conversation_type": 1,
+        "text_id": 21487
+      },
+      {
+        "mission_id": 1992,
+        "objective_id": 6,
+        "npc_package_id": 2563,
+        "player_flag_id": 1,
+        "conversation_type": 1,
+        "text_id": 21491
+      },
+      {
+        "mission_id": 1992,
+        "objective_id": 9,
+        "npc_package_id": 2563,
+        "player_flag_id": 1,
+        "conversation_type": 1,
+        "text_id": 21665
+      }
+    ],
+    "cut_limits": [
+      "304.667\u2192304.733s hides full approach, first Delessio talk and initial crate opening",
+      "343.400\u2192343.467s hides second Delessio talk and first Hartmann talk"
+    ]
+  },
+  "limitations": [
+    "Screenshot and database state establish emulator behavior, not original live server behavior.",
+    "Source-level tooltip causes remain under separate investigation; neither matching primary damage nor successful equip establishes retail combat accuracy.",
+    "Exact maker/module/template identities remain unresolved; the missing original module and restriction lines are visible mismatches.",
+    "Exact tutorial notification triggers remain unidentified; pending icon alone is insufficient.",
+    "Individual loot, partial-loot reconnect and all-held recovery were not exercised in this run.",
+    "crate-looted-state.json items is an unfiltered item-table snapshot including another character starter rows; use character-scoped inventory in later snapshots for ownership.",
+    "This run predates the later rifle range 80\u219260 data correction and recruit tooltip absent-skill pair correction. Their later source or test success is not a claim that run 06 used them.",
+    "Mission 1992 is not complete. Lightning objective 8, final Hartmann talk and mission turn-in remain unverified in this run.",
+    "The -106 damage still is an emulator observation; it neither establishes retail damage accuracy nor a measured destruction/reset interval."
+  ],
+  "run_status": "Stopped after ordinary character logout; mission 1992 active and incomplete; Lightning objective 8 pending",
+  "stop_status": {
+    "time": 1790109546.5062175,
+    "terminal": true,
+    "processes": {
+      "xvfb": {
+        "pid": 3,
+        "exit_code": 0
+      },
+      "auth": {
+        "pid": 8,
+        "exit_code": 0
+      },
+      "game": {
+        "pid": 9,
+        "exit_code": 0
+      },
+      "client": {
+        "pid": 52,
+        "exit_code": -15
+      }
+    },
+    "time_utc": "2026-09-22T20:39:06.506217+00:00",
+    "interpretation": "All owned processes exited. Client exit code -15 is harness termination after successful character logout; do not interpret every process as a natural zero exit."
+  },
+  "runtime_binaries": [
+    {
+      "path": "server-playthrough/game/Rasa.Game.dll",
+      "sha256": "2a63efd3c36d552c2395c99a627378d7366d3cf6904450525f43a0632467eb4e"
+    },
+    {
+      "path": "server-playthrough/game/Rasa.DBL.dll",
+      "sha256": "e919b2bdd72dcbb6e2d5064a8568732e3e9c02c21103233fa5b60a2e8721f6e4"
+    },
+    {
+      "path": "server-playthrough/auth/Rasa.Auth.dll",
+      "sha256": "fd7837cd4ed133a1ac713c82e8d68398a37173722dfc7d89620d054b2f0f0334"
+    },
+    {
+      "path": "run-client/tabula_rasa.exe",
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    }
+  ],
+  "log_observations": {
+    "client_file": "client-final.log",
+    "client_lines": 81,
+    "client_error_prefixed_lines": 55,
+    "client_error_line_accounting": "27 projection lines + 1 startup TypeError line + 3 nine-line item-tooltip tracebacks =55; not 55 independent exceptions.",
+    "startup_tuple_error": {
+      "count": 1,
+      "line": 7,
+      "text": "TypeError: argument list must be a tuple",
+      "followup": "docs/client-startup-tuple-error.md"
+    },
+    "zero_dimension_projection": {
+      "count": 27,
+      "first_line": 26,
+      "last_line": 52,
+      "followup": "docs/client-projection-warning.md"
+    },
+    "item_tooltip_skill_pair_error": {
+      "count": 3,
+      "traceback_line_ranges": [
+        [
+          53,
+          61
+        ],
+        [
+          62,
+          70
+        ],
+        [
+          71,
+          79
+        ]
+      ],
+      "consumer": "tooltipwindow._AddSkillSlot source line 1564",
+      "text": "TypeError: unpack non-sequence",
+      "followup": "docs/recruit-clothing-audit.md",
+      "fix_in_this_run": false
+    },
+    "locked_action_warning": {
+      "count": 1,
+      "line": 80,
+      "text": "Action <BaseWeaponAttack actorId=2736 actionId/argId=1/134> detected as locked, canceled it.",
+      "cause": "Unresolved; successful practice completion does not establish absence of action lifecycle defects."
+    },
+    "elemental_icon_exception_count": 0,
+    "server_file": "game.log",
+    "server_lines": 1806,
+    "server_Error_tag_count": 0,
+    "server_Warning_tag_count": 0,
+    "server_character_logout": "2026-09-22 15:38:11.161 America/Chicago",
+    "server_instance_destroyed": "2026-09-22 15:38:11.854 America/Chicago"
+  },
+  "followup_run_07": {
+    "scope": "Observed original-client integration with isolated emulator; not original-live certification",
+    "recorded_at_utc": "2026-09-22T20:56:58.159006+00:00",
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/02-recruit-boots-tooltip.png",
+        "sha256": "1e5f9c9bbd3add0b26204b1ce67afa404dfb620fdb04e5908abf9a75e277f3e1",
+        "bytes": 639625
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/03-recruit-legs-tooltip.png",
+        "sha256": "a26dbc0991466f5d5f37754d32bf29892bf6ec7a5632d119410c976e6360b8bf",
+        "bytes": 639468
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/04-recruit-vest-tooltip.png",
+        "sha256": "3943451eff33f005ca8e3dcdbddec85a1effcb0361d61326dc17fdd856673a97",
+        "bytes": 636414
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/05-rifle-range-tooltip.png",
+        "sha256": "e6e60d0b34b189f18d8bf2c17756326f74e5672cc7eb82260afc5fc8c5789842",
+        "bytes": 621206
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/06-mission-journal-reconnect.png",
+        "sha256": "41d346723786243dd0a48196fb697163faffb3cd634245de50f0fc47c201263c",
+        "bytes": 649308
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/07-tracking-selected.png",
+        "sha256": "f85575922a2b3924ae099a860a5cadedb6211e263b19fc5fdda91cfd1749ccd7",
+        "bytes": 643567
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/09-lightning-first-cast.png",
+        "sha256": "c8b2caf235877a85f346225a5be2f470e6b0c9fb2429acdf123bce934dbbb740",
+        "bytes": 793608
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/12-selection-settled.png",
+        "sha256": "50707dff01a98863ebfc5455f8034835649aa693dfa9769cae841a325edb07cd",
+        "bytes": 933856
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest.json",
+        "sha256": "9fb9c03ab1ff687a0db5fe6c062158d63ddaf8fd2ec2492850e6386c84c5927f",
+        "bytes": 731
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/tooltip-retest-client-prefix.log",
+        "sha256": "cddab068fa7ef4e28685304bf79679b5b077f90ed1ff08b013d1a65eb1fd5677",
+        "bytes": 8468
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/reconnect-mission-state.json",
+        "sha256": "aa96116bd39caeeecd773eb0c08946e5a376cc6c894b222c228fc7c08514732f",
+        "bytes": 2520
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/lightning-completed-state.json",
+        "sha256": "e4910cee21b43b6572eb5a3ab86f27247f90e7609647cdcc62fdab3f378736c4",
+        "bytes": 5183
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/logout-persisted-state.json",
+        "sha256": "da7c4163d88d54cd38013824a740c2e854d76854b7a825b4e02d7e3edcdbdc28",
+        "bytes": 7155
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/status.json",
+        "sha256": "cac1e3eeb64d71828ea04278080098742ed5e5bbaf85fc643150f2fb562d3c4e",
+        "bytes": 210
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/client-final.log",
+        "sha256": "5f34dd1c81ab2461be4e74f75eb6a4597147abf47d967ec2eb691092e29ba2ec",
+        "bytes": 8621
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/game.log",
+        "sha256": "07608d31f99870d30ea4030422f79a6b4b44ec475143408e5d00362d755d4b84",
+        "bytes": 36687
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07-binary-inputs.json",
+        "sha256": "8e79136874851b6a7916ad90c7a6aaae1578a73bfd9826eb0143fd395b13dd78",
+        "bytes": 24470
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-gearing/artifacts.json",
+        "sha256": "43ec7c0caa0914af3d6d49065ad09868492a5a05daa8158a5a2cbcf3cc2e1590",
+        "bytes": 978
+      }
+    ],
+    "stop_status": {
+      "time": 1790110544.0956378,
+      "terminal": true,
+      "processes": {
+        "xvfb": {
+          "pid": 3,
+          "exit_code": 0
+        },
+        "auth": {
+          "pid": 8,
+          "exit_code": 0
+        },
+        "game": {
+          "pid": 9,
+          "exit_code": 0
+        },
+        "client": {
+          "pid": 53,
+          "exit_code": -15
+        }
+      }
+    },
+    "source_snapshot": {
+      "path": "/tmp/rasa-retail-20260922-gearing-snapshot.json",
+      "sha256": "8c505bd1afb4f9862e09862f5ffc2d2e69b6d7a26d2deddebbe0a53c1707e819",
+      "preserved_copy": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-gearing/rasa-retail-20260922-gearing-snapshot.json"
+    },
+    "verification": {
+      "tests": 1251,
+      "passed": 1251,
+      "skipped": 0,
+      "minutes": 6.2316
+    },
+    "tooltip_results": {
+      "recorded_at_utc": "2026-09-22T20:49:41.707108+00:00",
+      "scope": "Original-client integration, not original-live fidelity certification",
+      "captures": [
+        "02-recruit-boots-tooltip.png",
+        "03-recruit-legs-tooltip.png",
+        "04-recruit-vest-tooltip.png",
+        "05-rifle-range-tooltip.png"
+      ],
+      "client_log_prefix": {
+        "file": "tooltip-retest-client-prefix.log",
+        "sha256": "cddab068fa7ef4e28685304bf79679b5b077f90ed1ff08b013d1a65eb1fd5677",
+        "lines": 63,
+        "unpack_non_sequence": 0,
+        "iteration_non_sequence": 0,
+        "startup_tuple": 1,
+        "zero_size_projection": 30
+      },
+      "rifle_template_row": [
+        [
+          13713,
+          60,
+          25
+        ]
+      ],
+      "migration": "20260922230000_BootcampCrateRifleRange"
+    },
+    "mission_results": {
+      "1992_state": "active",
+      "completed_objectives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "pending_objective": 7,
+      "pending_text": "Speak to Corporal Hartmann",
+      "capture09_damage_number": 184,
+      "displayed_target_name": "Practice Dummy",
+      "limitation": "This verifies the current Lightning objective and feedback; the separate target placement/name and exact original HP remain reconstruction questions."
+    },
+    "logout_character": {
+      "coord_x": 380.69140625,
+      "coord_y": 119.59375,
+      "coord_z": 172.84375,
+      "rotation": 3.042555093765259,
+      "num_logins": 6,
+      "experience": 1250,
+      "credit": 100
+    },
+    "rifle_loaded_ammo": 17,
+    "reserve_ammo": 1000,
+    "client_log": {
+      "lines": 64,
+      "unpack_non_sequence": 0,
+      "iteration_non_sequence": 0,
+      "startup_tuple": 1,
+      "zero_size_projection": 30
+    },
+    "tracker_audit": "client-mission-tracker-reconnect.json"
+  }
+}

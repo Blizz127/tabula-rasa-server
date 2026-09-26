@@ -15,6 +15,10 @@ namespace Rasa.Managers
 
     public class MissileManager
     {
+        // Diagnostic only: opt in for a copied-server encounter replay to identify
+        // which creature hit which target and how armour/health changed.
+        private static readonly bool TraceCreatureHits =
+            Environment.GetEnvironmentVariable("RASA_TRACE_CREATURE_HITS") == "1";
         private readonly Random _critRandom = new Random();
         private static MissileManager _instance;
         private static readonly object InstanceLock = new object();
@@ -92,6 +96,9 @@ namespace Rasa.Managers
             if (creature.State == CharacterState.Dead)
                 return;
 
+            var armorBefore = creature.Attributes[Attributes.Armor].Current;
+            var healthBefore = creature.Attributes[Attributes.Health].Current;
+
             // Shooting something is being in a fight, as much as being shot.
             ManifestationManager.Instance.EnterCombat(missile.Source);
 
@@ -99,6 +106,12 @@ namespace Rasa.Managers
             // makes the creature vulnerable to its type.
             AbilityEffects.OnCreatureHit(mapChannel, missile, creature, hit);
             missile.DamageA = DamageModifiers.AgainstCreature(creature, missile.DamageA, missile.DamageType);
+            if (missile.ActionId == ActionId.WeaponAttack && !missile.IsAbility)
+            {
+                missile.DamageA = CoverGeometryManager.Instance.ScaleRangedWeaponDamage(mapChannel,
+                    missile.Source.Position, creature.Position, missile.DamageA, out var coverModifier);
+                hit.CoverModifier = coverModifier;
+            }
 
             // decrease armor first - less the part Paint Target's pierce sends past it
             var pierced = missile.DamageA * Math.Min(100, creature.ActiveEffects.Values.Sum(e => e.ArmorPiercePercent)) / 100;
@@ -115,6 +128,12 @@ namespace Rasa.Managers
             var healthDecrease = Math.Min(missile.DamageA - armorDecrease, creature.Attributes[Attributes.Health].Current);
             creature.Attributes[Attributes.Health].Current -= healthDecrease;
             CellManager.Instance.CellCallMethod(mapChannel, creature, new UpdateHealthPacket(creature.Attributes[Attributes.Health], creature.EntityId));
+            if (TraceCreatureHits)
+                Logger.WriteLog(LogType.Debug,
+                    $"Creature hit: source={missile.Source.EntityId} placement={(missile.Source as Creature)?.ContentPlacementId ?? 0}, " +
+                    $"target={creature.EntityId} placement={creature.ContentPlacementId}, " +
+                    $"damage={missile.DamageA}, armor={armorBefore}->{creature.Attributes[Attributes.Armor].Current}, " +
+                    $"health={healthBefore}->{creature.Attributes[Attributes.Health].Current}");
             
             if (creature.Attributes[Attributes.Health].Current <= 0)
             {
@@ -160,6 +179,12 @@ namespace Rasa.Managers
                 var resistance = DamageResistance.ResistanceFor(target.ResistanceData, missile.DamageType) + DamageModifiers.ResistRating(target);
                 if (resistance > 0)
                     damage = DamageResistance.ScaleDamage(damage, resistance);
+            }
+            if (missile.ActionId == ActionId.WeaponAttack && !missile.IsAbility)
+            {
+                damage = CoverGeometryManager.Instance.ScaleRangedWeaponDamage(mapChannel,
+                    missile.Source.Position, actor.Position, damage, out var coverModifier);
+                hit.CoverModifier = coverModifier;
             }
 
             // decrease armor first
@@ -441,13 +466,23 @@ namespace Rasa.Managers
                     $"{shooter.Name} fired action {missile.ActionId} at entity {missile.TargetEntityId}, " +
                     $"which is neither a live actor nor a content usable on map {mapChannel.MapInfo?.MapContextId}.");
             }
-            else if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId))
+            else if (MissionManager.Instance.Content.IsContentUsableSource(mapChannel, missile.TargetEntityId) &&
+                     mapChannel.DynamicObjects.Any(obj => obj.EntityId == missile.TargetEntityId && obj.HitPoints > 0))
             {
-                // A destroyable content placement takes the damage; no HitData goes
-                // into the recovery, the client learns the result from UpdateHitPoints.
+                // BaseWeaponAttack.DoHits iterates hitdata, including non-actor targets:
+                // Usable.AnnounceDamage needs the damage record to show combat feedback.
+                // UpdateHitPoints alone only updates the object's health.
                 var attacker = mapChannel.ClientList.FirstOrDefault(client => client?.Player == missile.Source);
-                var destroyed = MissionManager.Instance.Content.DamageContentUsable(mapChannel, missile.TargetEntityId, missile.DamageA, attacker, (uint)missile.ActionId);
+                MissionManager.Instance.Content.DamageContentUsable(mapChannel, missile.TargetEntityId, missile.DamageA, attacker, (uint)missile.ActionId);
                 missile.Args.HitEntities.Add(missile.TargetEntityId);
+                missile.Args.HitData.Add(new HitData
+                {
+                    EntityId = missile.TargetEntityId,
+                    DamageType = missile.DamageType ??
+                        (missile.ActionId == ActionId.AaRecruitLightning ? DamageType.Electrical : DamageType.Physical),
+                    FinalAmt = missile.DamageA,
+                    IsCritical = missile.IsCritical ? 1 : 0
+                });
             }
 
             switch (missile.ActionId)

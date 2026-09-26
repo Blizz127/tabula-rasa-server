@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Navmesh-only candidate route from inferred Conrad corpse to inferred S5 bomb and damaged pad",
+  "provenance_tier": "inferred",
+  "setup": "Read-only NavProbe on adv_bootcamp.nav with the current reconstructed corpse (-98,85.39,67.2), bomb (-221.95,102.3,-70.5) and damaged pad (-225.35,100.81,-70.52). No original-client movement or live database was changed.",
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "s5-corpse-to-wreck-input.txt line 1 and output line 1",
+      "uncertainty": "Navmesh resolution and path simplification; no client-collision or hostile-survival confidence. Targets are inferred placements.",
+      "finding": "The emulator navmesh reports a complete path from inferred corpse to inferred bomb via (-100.0,84.91,48.4), (-127.6,83.71,36.0), (-194.8,95.51,-33.2), (-218.8,101.11,-64.8), then (-221.95,101.26,-70.5). The target floor is about 1.04 m lower than the reconstructed bomb placement Y."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-corpse-to-wreck-input.txt line 2 and output line 2",
+      "uncertainty": "Same navmesh and inferred target limits.",
+      "finding": "A complete path to the inferred damaged-pad center uses the same first three corners and ends (-225.35,101.23,-70.52). This is a route hypothesis for later client checks, not evidence of final-live traversal."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-corpse-to-wreck-input.txt line 3 and output line 3",
+      "uncertainty": "Navmesh/collision mismatch already observed near the bunker.",
+      "finding": "The candidate wounded-soldier-to-corpse route goes east of the prop cluster through (-96.0,86.11,70.8), (-95.6,85.91,69.2), (-96.0,85.91,67.2), then west to (-98.0,85.81,67.2)."
+    }
+  ],
+  "assessment": "All routes are geometry planning data only. They do not validate original-client collision, combat, timer sufficiency or original retail placement.",
+  "next_verification": "After ordinary client use of the corpse, attempt this corridor with normal hostile behavior, then compare the client movement trace with original footage and record any collisions or detours.",
+  "sources": [
+    {
+      "path": "/home/blizz/servers/rasa-net/navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s4/tools/navprobe/NavProbe/Program.cs",
+      "sha256": "059a37786704031ac94fbab0979ca78d5d0293d00b0917e24ad6e83dddf5e279"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-corpse-to-wreck-input.txt",
+      "sha256": "dee93d46d09b89f83ee1284635ac0e0f5397b5693cf8702a4a31417036134226"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/navprobe-courtyard/s5-corpse-to-wreck-output.txt",
+      "sha256": "6efd40a61fa4b97bcfd409614df1a249acc111ddd4ddcc24a22c45fba49f89be"
+    }
+  ]
+}

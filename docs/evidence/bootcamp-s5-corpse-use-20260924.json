@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Original-client S5 Conrad usable approach and checkpointed use",
+  "setup": "Isolated copied Game/world/character DB and Wine prefix in a bubblewrap network namespace. Compatibility client 1.16.5.0; normal hostiles. No live Docker/DIT files or services were changed. The source character had mission 1995 objective 2 completed and objective 3 active. Only read-only .where was used during ordinary movement.",
+  "observations": [
+    {
+      "tier": "measured",
+      "source_location": "run 03 step1-east-north.png through step5-west-south.png; run-s5-corpse-agent-03-20260924.py",
+      "uncertainty": "Client .where display precision ~0.01 m; held-key durations are wall clock and collision/FPS make endpoint variable.",
+      "finding": "From the copied soldier checkpoint (-102.39453,86.890625,73.4375), ordinary key holds S 1000 ms, A 1000 ms, A 650 ms and W 850 ms reached about (-94.695,85.031,66.063) around the east side of the local obstacle. The client displayed Salvagable Materials and Press [Mouse Button 2] to use. This is the seeded analogue class 21961 at inferred (-98.0,85.39,67.2), not an original recovered corpse model."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 04 step4-west.png; run-s5-corpse-agent-04-20260924.py",
+      "uncertainty": "Client .where display precision ~0.01 m.",
+      "finding": "A second ordinary movement run (S 1000 ms, A 1650 ms, W 850 ms) reached (-94.73047,84.99609,65.640625). The same usable prompt appeared. W+D 450 ms from there left the player at exactly the same displayed coordinate, indicating a local collision stop; entering the seeded object coordinate is unnecessary for interaction."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 09 step1-hover.png, step2-after-rightclick.png and game.log line 123; run-s5-corpse-agent-09-20260924.py",
+      "finding": "The copied character DB login coordinate was explicitly edited to the ordinary-reached run 04 coordinate, then the original client rendered the usable prompt. Right-click at screen pixel (740,386) sent RequestUseObject. The client showed Objective Completed / Remove the bomb from Conrad’s corpse; the tracker switched to Destroy the crashed dropship before the bomb timer expires and displayed 00:09:59."
+    },
+    {
+      "tier": "observed",
+      "source_location": "run 09 char-after-use.db and objective-snapshot.json",
+      "finding": "Copied character DB persisted mission 1995 objective 3 status 2, objective 2 status 2, objective 1 status 1 with timer_anchor_ms=1790227161182 and timer_remaining_ms=600000. The objective-1 record carries the mission timer even while the visible tracker shows the wreck objective."
+    },
+    {
+      "tier": "measured",
+      "source_location": "run 08 step5-after-use.png and script",
+      "uncertainty": "Held-key wall-clock timings vary with collision and client frame rate.",
+      "finding": "A single-run replay of the run-03 movement and click reached (-95.957,84.77,63.01), missed the usable prompt, and objective 3 remained active. Therefore no same-run soldier-to-corpse-use result is claimed."
+    },
+    {
+      "tier": "original",
+      "source_location": "adv_bootcamp-entities-joined.csv indices 18, 746, 1207, 1208, 1262; client map decoded from 1.16.5.0",
+      "finding": "The original trench bunker (index 18) has broad bounds x[-125.43,-82.57], z[48.58,91.44]; sandbag index 1262 bounds x[-100.74,-96.41], z[68.01,69.76]; sandbag index 746 bounds x[-104.42,-100.13], z[67.87,69.48]; Forean corpse indices 1207 and 1208 occupy x[-98.75,-96.45], z[69.53,71.75] and x[-100.94,-98.94], z[70.06,72.49]. Their local collision and the bunker geometry explain why direct line input stopped. Bounds are broad mesh bounds, not exact collision hulls."
+    }
+  ],
+  "assessment": "Ordinary original-client movement can reach the interaction prompt, and checkpointed use of that reached floor coordinate completes objective 3 and starts the 600-second timer. Current inferred seeded coordinate is usable; no reposition is warranted by this evidence. The analogue appearance remains a fidelity gap. The exact final-live corpse position, model, and same-run soldier-to-use path remain unverified.",
+  "next_verification": "Repeat the soldier-to-corpse route and use in one continuous run, then reach and destroy the crashed dropship through ordinary movement while the timer remains active.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-20260924.py",
+      "sha256": "ed4018b50c38d775fbb51465b19b2cc95bec78a6a4a3d0d727aab01ef7906e44"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-03-20260924.py",
+      "sha256": "2175c99ec39303c2b4c2153180dc0cd636ad51dd4e36a0091a425d3e84c8a786"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-04-20260924.py",
+      "sha256": "601ec739e4ec93ff79186efc99ba5eb4df2e9204ee952a2c7e4e4b04dcb812a1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-07-20260924.py",
+      "sha256": "abade9ddb3a87bfb34bad22e171a0fc30625d88bf468de3c77a0bc2bfbcc84b4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-08-20260924.py",
+      "sha256": "3792b19436d31512fbbe0118982ab2ce8e83b6491c2510239db37bb0774145d0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-corpse-agent-09-20260924.py",
+      "sha256": "17737621f3a11990388818d6bf2b665743273d081d58c3b6e78e1164c2ff345e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-03/step1-east-north.png",
+      "sha256": "befaf723ef97015c83b225bf015ebd79fff31174db57a43318fa8ed9fc1e75cf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-03/step2-east-south.png",
+      "sha256": "2e5968372dd91f6a3db24842006b7110a4dd87e8f74dd850fdf6b4b405c26234"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-03/step3-east-south.png",
+      "sha256": "60973358da88f40f360164b0a3dba0181279607e721a44596cb7cdca67b09479"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-03/step4-west-south.png",
+      "sha256": "48e3396d1ca5080136acbd97162f7ea79f486f4a9762e512966192d191833a4e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-03/step5-west-south.png",
+      "sha256": "7beaaaa9d985c73c37f26b8c498c765eb9e644244d40486ec68ec28b021e073f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-04/step4-west.png",
+      "sha256": "3f1a3aa29d757121958e47e1eba34e46d3c2ed72884c951bc1d1d05962bf9794"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/step1-hover.png",
+      "sha256": "ca8cb363d34d6ff82b164b25b455e6b3dfc644e2d230d4075df807a60a545bd1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/step2-after-rightclick.png",
+      "sha256": "92fe3784eed14cbee09d556fedb666afbab45229ef381cecee214ae8915279ee"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/step3-after-use-where.png",
+      "sha256": "c9e8657fa6c5c5e64c95685456487467d60d2802e4d574e98868b9eb24c78ac6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/game.log",
+      "sha256": "0fdb5f1cba0022cf1fc0ff11f7df88e4f672aa91d3d8fa0c398af777c34a59ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/char-after-use.db",
+      "sha256": "0dfc685b6de058b5bcaf4ea0e734ade57282d8505e9e58a69bb9fe938cee078f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/objective-snapshot.json",
+      "sha256": "3f74531beca08e0000c942531e8c6c15c7852959ff12ac4d159333e6c2004068"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/map/decoded/adv_bootcamp-entities-joined.csv",
+      "sha256": "062f293ea7c64df55c922885eb98c741b726139493dfb014815518237baea9a5"
+    }
+  ]
+}

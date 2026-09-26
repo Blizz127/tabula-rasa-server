@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "subject": "Mission 1992 receiver / 1994 giver DeSimone placement 198657 in boot-camp map 1985",
+  "compatibility_client": "Recovered 1.16.5.0; shutdown-client exact revision unverified",
+  "previous": {
+    "position": [
+      387.2,
+      127.7,
+      40.0
+    ],
+    "tier": "inferred",
+    "source": "docs/evidence/bootcamp-d11-positions.json previous npc.desimone row; src/Rasa.DBL/Migrations/BootcampData/BootcampPlacementGroundSnapRows.cs placement 198657",
+    "limitation": "No original frame placed DeSimone at this southern position."
+  },
+  "replacement": {
+    "position": [
+      390.5,
+      119.55,
+      156.0
+    ],
+    "fields": {
+      "pos_x": {
+        "tier": "inferred",
+        "value": 390.5,
+        "source": "7Lrst9SG3pk 362.133-362.7 s: post-edit player at about (389,155), and docs/evidence/bootcamp-d11-positions.json ally.forean_initiates.camp measured (385.2,152.3)",
+        "uncertainty_m": 5.0
+      },
+      "pos_z": {
+        "tier": "inferred",
+        "value": 156.0,
+        "source": "7Lrst9SG3pk 362.133-362.7 s: same post-edit player and camp group; DeSimone himself unseen",
+        "uncertainty_m": 5.0
+      },
+      "pos_y": {
+        "tier": "measured",
+        "value": 119.55,
+        "source": "adv_bootcamp.nav floor 119.97 m at (390.5,156) in desimone-probe.txt output; map/navmesh bias +0.42 m established in bootcamp-d11-positions.json",
+        "uncertainty_m": 0.5
+      }
+    }
+  },
+  "reasoning": "The 362.067 to 362.133 edit hides the actual DeSimone conversation, so the NPC coordinate remains an estimate. The first visible post-handoff player is at the north camp with the Forean Initiates, and the north-camp-to-cave navmesh route is complete. The old south placement required an unsupported 115 m return trip from that camp. Positioning DeSimone near the post-edit player better fits the observed sequence and the original mission text naming him as receiver/giver.",
+  "route_probe": {
+    "source": "desimone-probe.txt path:camp_to_cave",
+    "result": "complete: (385.60,119.71,133.20), (385.20,119.91,132.40), (359.60,121.91,114.80), (343.20,122.11,108.80), (302.00,120.11,81.20), (293.60,120.31,76.40), (292.40,120.31,75.20), (287.60,120.71,69.60), (279.05,120.71,66.07)",
+    "limit": "Navmesh path is simplified navigation, not a native-client walk or proof of original NPC location."
+  },
+  "implementation": {
+    "migration": "20260923030000_BootcampDeSimoneCampPlacement",
+    "placement_id": 198657,
+    "changes": [
+      "pos_x",
+      "pos_y",
+      "pos_z"
+    ],
+    "rollback": "restores (387.2,127.7,40.0)"
+  },
+  "remaining_unverified": [
+    "DeSimone is not visible during the edited original conversation; exact final-live position and orientation remain unknown.",
+    "The native client opened and completed the objective at the revised emulator position, but a continuous original-style Hartmann to DeSimone to cave playthrough remains unverified.",
+    "Forean companions are still absent from the emulator; this placement alone does not restore original encounter support."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+      "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+      "bytes": 34860979
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-362.05.png",
+      "sha256": "4195d3c07ee22cd1cf67d23a3f193929ab1a71673e5bf77f36a76a58eef2c2cb",
+      "bytes": 299044
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/A-362.7.png",
+      "sha256": "b5f67a981a2362989eae675389d5cc46c74db2aea075ea5b98638968fa69a199",
+      "bytes": 293019
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/desimone-probe.txt",
+      "sha256": "69741366b989ccb7740187054e889212704d8a90a1e857f3002b834ac5ac5196",
+      "bytes": 179
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/navmesh-8b65ca7/navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "bytes": 3010108
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/desimone-up.sql",
+      "sha256": "a6697221de781fb3a9683df01271b2a5cb9db50c2155ed77723ca06b45139051",
+      "bytes": 292
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/desimone-down.sql",
+      "sha256": "9d0b40e6331c227c830723563b3e1a0213c4c7be1badeae82522a42bc4bbe9c7",
+      "bytes": 273
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/03-camp-ready.png",
+      "sha256": "eea985d0382b8e46bdcc58387c98263949302433ad179af91d10c28016a61719",
+      "bytes": 694617
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/05-back-from-desimone.png",
+      "sha256": "b4b793ec75969a59e355d6b3aab38ee1b261e9026d50dc2393091c7363394ca4",
+      "bytes": 710794
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/07-dialogue-settled.png",
+      "sha256": "59ad5c606e6d0a1d5e8b03ee8cfa70b2c3680b0eb9933e6f854bd9296cc85823",
+      "bytes": 674296
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/09-objective-advanced.png",
+      "sha256": "09a98536373dab510d51e8ba7da4af47f5fbf6e13bd217cc588288c74d73cb33",
+      "bytes": 709200
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/char-after.db",
+      "sha256": "4b27df228269353260a264abd315e1d43c43e09351047302641aec21cfb75a54",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/world-diagnostic.db",
+      "sha256": "21094e6d9cf7e9a0e1c9cc13c3a82f4cf6fbc702214a886d3add46cbd639f015",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/game.log",
+      "sha256": "be15573e3d4922509f41812308cabecac978ee15b92350f79eb43ffa665823fe",
+      "bytes": 17472
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/status.json",
+      "sha256": "f3c8bdad905b7943cba6f97f78dd6089998269500eaa8ad43f9ad10f2cbe2f8a",
+      "bytes": 209
+    }
+  ],
+  "isolated_client_check": {
+    "setup": "Recovered 1.16.5.0 client against disposable world copy with placement 198657 at replacement coordinate; copied level-2 Alden checkpoint with objective 1994/4 set incomplete and player near the NPC. The test character was injected into this state; it does not reproduce prior mission 1992 travel.",
+    "observations": [
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/03-camp-ready.png",
+        "finding": "At the revised camp position the client showed the yellow objective marker over DeSimone and Capture the Flag objective 4 in the tracker."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/05-back-from-desimone.png",
+        "finding": "After a short ordinary movement away from the NPC, the native talk prompt appeared."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/07-dialogue-settled.png",
+        "finding": "Right-click opened Corporal DeSimone Objective Completion and the original client promotion text."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/09-objective-advanced.png",
+        "finding": "Continue awarded 500 XP and changed the tracker to Find a way out of the cave."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-82-desimone-camp-check/char-after.db",
+        "finding": "Copied saved mission 1994 has objective 4 status 2 complete and objective 2 status 1 incomplete."
+      }
+    ],
+    "limits": [
+      "This validates emulator reachability and the mission conversation at the revised coordinate, not the exact location on the final live server.",
+      "The isolated world database was restored to its pre-check DeSimone row after the run; live world state was not changed by this check."
+    ]
+  },
+  "sql_validation": {
+    "generated_up": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/desimone-up.sql",
+    "generated_down": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/desimone-down.sql",
+    "result": "Generated SQLite migration changed only pos_x/pos_y/pos_z of placement 198657 and inserted migration history. Down restored the full placement row byte-for-byte at the value level, removed history and SQLite integrity_check returned ok.",
+    "tests": "ContentSchemaMigrationTests.WorldUpgradeAddsEmptyContentTablesAndRollbackKeepsExistingRows passed under .NET 5; one existing RifleRangeMigrationChangesOneFieldAndExactlyRollsBackThroughSqliteMigrator control passed under .NET 5. A prior .NET 8 roll-forward attempt produced EF 5 compatibility failures and is not used as a product result."
+  },
+  "live_deployment": {
+    "date": "2026-09-23",
+    "compose_file": "docker-compose.dit.yml",
+    "image": "rasa-dit-test:20260923g",
+    "image_id": "sha256:259535eb07f1d313a86265e359aa6d5d1ab5605dbc065916c54d8b2441ba299d",
+    "backup_dir": "/home/blizz/backups/rasa-net/deployments/20260923-desimone-camp",
+    "backup_sha256": {
+      "rasaauth.db": "ac6fe9d10dd879d0548fefb32f97505b354fdd22f4e4cf62aaa5bf9fd13a5526",
+      "rasachar.db": "0fb4e7c77915d3225520c32cdb98788fe713081feafb6cbc338514406a59536e",
+      "rasaworld.db": "08080785e8a3b83c8e282c7a72a960678a0d0a784b1935cfb0f376fd70c5b89d"
+    },
+    "verification": "Game container started on new image and logged Server ready at 2026-09-23 12:01:47 server log time. Live SQLite integrity_check ok. Row comparison with backup found only content_placement 198657 pos_x/pos_y/pos_z changed, from (387.2,127.7,40.0) to (390.5,119.55,156.0), and one __EFMigrationsHistory entry 20260923030000_BootcampDeSimoneCampPlacement. All other world table rows matched the backup.",
+    "limit": "The isolated native-client check was performed before deployment against a disposable copy; no new live-client traversal was done after deployment."
+  }
+}

@@ -1,0 +1,5 @@
+original	-102.40	66.80	floors=[]	polys=4	nearest=(-102.40,86.11,66.80) (-102.80,90.11,66.78)
+corrected	-98.00	67.20	floors=[85.81]	polys=2	nearest=(-98.00,85.81,67.20)
+wounded	-102.40	70.00	floors=[]	polys=5	nearest=(-102.40,86.51,70.00) (-102.40,86.89,70.00) (-102.80,90.11,66.80)
+path:wounded_to_original	complete=False	(-102.40,87.11,68.80)
+path:wounded_to_corrected	complete=True	(-101.60,86.71,71.20) (-96.00,86.11,70.80) (-95.60,85.91,69.20) (-96.00,85.91,67.20) (-98.00,85.81,67.20)

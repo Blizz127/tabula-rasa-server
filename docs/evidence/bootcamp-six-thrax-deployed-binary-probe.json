@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Equipped-recruit six-Thrax approach with deployed companion binary",
+  "provenance_tier": "observed",
+  "setup": {
+    "client": "Recovered original client 1.16.5.0 under Wine/Xvfb in an isolated bubblewrap network namespace",
+    "game_image": "sha256:2a4551cf4b4cfa4e2fe4fd5770843e3210bc9cf3de2fc992470ffdbdff678c3f",
+    "game_dll_sha256": "258a1991da18d0fc835d6bdccc839d16ae90139fff4c3e751d04e347b78a3b32",
+    "world": "SQLite copy of the deployed 409-row world: six courtyard Thrax placements 198660-198665, three camp companions 198688-198690, no staged Warrior 198691; copy hash and character start recorded in /home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-six-thrax-04-setup.json",
+    "character": "Copied level-2 Alden, mission 1994 objective 2 active, crate Shinobi rifle item 11/template 13713 initially empty, compatible ammunition item 2/template 28 with 1000 rounds. No production character was changed.",
+    "trace_flags": ["RASA_TRACE_COMBAT_COMPANIONS=1", "RASA_TRACE_CREATURE_HITS=1"]
+  },
+  "reloading_check": {
+    "run": "live-companions-reload-diagnostic-05",
+    "observation": "R while the weapon was holstered left the displayed magazine at 0/1000. H drew the rifle and R then sent RequestWeaponReload at 20:47:41.844; the original client displayed 20/980. The copied database later held 20 in the rifle and 980 in the ammunition stack. This agrees with the indexed TaRapedia Key bindings page (H holster toggle, R reload), but the client action and database are the direct evidence for this emulator run.",
+    "wiki": "https://tabularasa.fandom.com/wiki/Key_bindings",
+    "draw_screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-reload-diagnostic-05/after-draw.png",
+    "draw_screenshot_sha256": "bb6fb9dd1af653aa5c40e52bf2b4ea0d13ca9e7acce85454ff5175b48dbb8f0b",
+    "reload_screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-reload-diagnostic-05/after-draw-reload.png",
+    "reload_screenshot_sha256": "fed69e44d8a48c72e205acab86b0d85fac5df043b309be11c961d912d35bd7c5"
+  },
+  "route_trials": [
+    {
+      "run": "live-companions-six-thrax-04",
+      "observation": "The first replay started at camp but the repeated jump sequence dropped the recruit to the lower level at (320.9,116.0,82.3); it did not enter the upper courtyard. R while holstered left 0/1000 displayed. No encounter result can be inferred."
+    },
+    {
+      "run": "live-companions-reload-diagnostic-05",
+      "observation": "After drawing and reloading, the same repeated movement also dropped to the lower level. A GM teleport within the disposable instance reset the client to the previously reached upper checkpoint (316.13,120.28,85.93), so subsequent movement is a checkpoint diagnostic, not continuous camp travel. W and D brought Alden to (307.6,120.5,60.8) with all six Thrax still seeded. At 20:52:58.816 a Thrax at (291.3,120.5,61.7) killed him; he had not fired. The three companion traces show each following 2-4 m behind him at death, with no attributed companion hit in this run. This demonstrates an engagement gap for this route and timing, not a final-live damage or aggro measurement.",
+      "game_log": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-reload-diagnostic-05/game.log",
+      "game_log_sha256": "79a626ae3daf95ad9317ab884c02f2eec03bd1a1457a4877ced6527c2db0eb58",
+      "checkpoint_screenshot": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-reload-diagnostic-05/six-thrax-approach.png",
+      "checkpoint_screenshot_sha256": "cf7a078543eeda0d46e15239f1caef3e8d3b78158101d0307a2f8935a3273163"
+    }
+  ],
+  "assessment": "The earlier one-Thrax copied-world test proves the companions can deal damage when close. In the six-Thrax checkpoint route here, the recruit reached hostile attack range and died while the companions remained on Follow and logged no hits. The original final-week footage shows allied defenders fighting ahead of a recruit whose HUD remains visually full through several kills. This is evidence that current encounter presentation and engagement order still need reconstruction, but it cannot identify whether the missing original factor is defender placement/count, activation timing, line of sight, aggro rules, or combat values.",
+  "next_verification": "Use the original map geometry and additional direct footage to resolve defender positions, sight lines and hostile activation. Then repeat a continuous camp-to-cave attempt with normal player fire on the deployed-derived binary. Do not retune health or damage solely to make this unopposed checkpoint survive."
+}

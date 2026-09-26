@@ -1,0 +1,41 @@
+{
+  "schema": "rasa-client-probe/1",
+  "date": "2026-09-23",
+  "scope": "Staged courtyard Forean Warrior in recovered client 1.16.5.0",
+  "isolation": "Bubblewrap private process, network, mount and Xvfb namespaces; copied auth, character and world databases under /home/blizz/backups/rasa-net/research/20260922-client-playthrough/server-warrior-validation. The live service and its databases were not used.",
+  "setup": {
+    "world_migrations": "Copied 20260922230000_BootcampCrateRifleRange world database, then applied the generated SQLite migration script through 20260923060000_BootcampCourtyardForeanWarrior to the copy; PRAGMA integrity_check = ok. The copied row is placement 198691 at (294,120.5,65), creature 198519 class 6043, name_id 0.",
+    "character": "Copied level-2 Alden with mission 1994 active and placed at (299,120.5,65) before client login. This is a diagnostic start, not normal travel.",
+    "client": "Recovered 1.16.5.0 executable and assets described in docs/client-artifacts.md; Wine 10.0 WoW64 with native d3dx9_33. Current staged game binary from 2026-09-23."
+  },
+  "observations": [
+    {
+      "run": "warrior-validation-04",
+      "conditions": "All six staged Thrax placements 198660-198665 present. Character starts beside the fight and does not fire before capture.",
+      "capture": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/warrior-validation-04/warrior-arrival.png",
+      "capture_sha256": "f3dfd7cccb0cddd411526bac5a8f322566444546edafe06f3cbb0c568099cc9f",
+      "finding": "The original client renders the active fight on the upper courtyard floor. The level-2 character takes multiple hits and shortly reaches Hospital Selection while idle. The capture does not isolate the Warrior name or prove original fight balance."
+    },
+    {
+      "run": "warrior-validation-05",
+      "conditions": "Only in this disposable copy, six Thrax placement rows 198660-198665 were deleted so the ally could be inspected without the fight. The Warrior row and three conditioned companions remained.",
+      "capture": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/warrior-validation-05/warrior-unopposed.png",
+      "capture_sha256": "094d4775f2e2689880bc57ab975f0f7b7c5f82f768c5fa4193966a584d2faca0",
+      "finding": "A fourth Forean-shaped figure stands beyond the player's three nearby companions on the upper courtyard. This is consistent with the staged Warrior placement. The actor's nameplate was not captured; visual identification alone cannot establish class 6043 or the client's class-name fallback at runtime."
+    },
+    {
+      "run": "warrior-validation-08",
+      "conditions": "Rendering diagnostic only: the six Thrax and three companion placements were removed from the copied world, and Warrior placement 198691 was moved to (296.5,120.5,62.5) with stationary behavior 1 to put it under the reticle. The copied character stayed at (299,120.5,65). The world database was restored afterward to the pre-name-probe copy, retaining the staged Warrior at (294,120.5,65) with behavior 2 and all three companions.",
+      "capture": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/warrior-validation-08/warrior-centered.png",
+      "capture_sha256": "64fe2ca1537ca9132a17b69196ca3f91138132326d4474dc06abc47d75884eb7",
+      "finding": "The recovered original client displays a target plate reading level 2 Forean Warrior, with a matching overhead plate on the visible spear-bearing actor. This verifies the staged class-name fallback and client rendering. The test position and stationary behavior are diagnostic substitutes, not retail evidence."
+    }
+  ],
+  "name_path_trace": {
+    "server_packet": "src/Rasa.Game/Managers/CreatureManager.cs:426 passes creature.NameId to CreatureInfoPacket; src/Rasa.Game/Packets/MapChannel/Server/CreatureInfoPacket.cs:27-30 writes Python None for zero. No ActorNamePacket is sent on creature creation.",
+    "client_decode": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-creature.pyo.dis lines 205-208 stores the CreatureInfo name ID; lines 388-450 call Actor.GetName, then GetEntityClassName when that value is empty and the creature name ID is None. trpython-client-augmentations-actor.pyo.dis lines 1566-1580 initializes Actor.__name to None. trpython-client-clientlanguagemanager.pyo.dis lines 1221-1228 resolves GetEntityClassName from physicalentityclassnamelanguage.",
+    "client_table": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/map/client-tables/generated-client-language-english-physicalentityclassnamelanguage.pyo.json names.lookup row 6043 = Forean Warrior. The copied world entityclass row 6043 has target_flag 1. The diagnostic run warrior-validation-08 independently confirms the rendered plate."
+  },
+  "verification": "Native client rendering, displayed level-2 Forean Warrior name and upper-floor presence are supported by the isolated screenshots. Exact retail placement and class, original combat parameters, and the full encounter outcome remain unverified. Runs without Thrax are rendering diagnostics only.",
+  "next": "Complete the encounter through ordinary movement and combat with an unmodified six-Thrax copy. Compare timing and rewards with docs/evidence/bootcamp-courtyard-kill-pacing.json."
+}

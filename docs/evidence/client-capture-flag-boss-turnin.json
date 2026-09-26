@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated recovered-client mission 1994 boss binding, Youngblood conversation and turn-in",
+  "setup": {
+    "client": "Recovered 1.16.5.0 compatibility client; exact final shutdown revision unverified",
+    "input_checkpoint": "playthrough-23 copied level-2 Alden with mission 1994 objective 2 complete and boss objective 1 incomplete",
+    "diagnostic_authority": "Only the isolated account had GM level 5. No live database or service was changed.",
+    "first_diagnostic_world_changes": [
+      "creature 198506 (Tizzik Gi): action1 33 -> 0 and max_hp 1000 -> 1",
+      "creature 198507 (ambient Initiate): action1 33 -> 0 and max_hp 555 -> 1"
+    ],
+    "second_diagnostic_world_changes": [
+      "restored original isolated world DB",
+      "creature 198507 (ambient Initiate): action1 33 -> 0"
+    ],
+    "cleanup": "Both diagnostic client runs ended; the isolated world DB was restored to the pre-run SHA-256 recorded among artifacts.",
+    "server_dll": "Rifle-melee build before the later empty-magazine/jam fix; boss mission logic is unaffected"
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/15-aim.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/18-youngblood-objective.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/char-after.db"
+      ],
+      "finding": "Recovered client targeted a rendered level-10 Tizzik Gi; a successful attack completed objective 1, saved counter 1/1, revealed objective 3, and awarded 124 XP and 50 credits in the isolated encounter."
+    },
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/03-separated.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/06-youngblood-dialogue.png"
+      ],
+      "finding": "Youngblood was present after reconnect, showed an objective marker, and opened the original-client Objective Completion dialogue by right-click."
+    },
+    {
+      "tier": "observed",
+      "sources": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/08-turnin-offer.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/09-capture-complete.png",
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/char-after.db"
+      ],
+      "finding": "After objective completion, Youngblood opened Mission Completion; accepting it displayed 5000 XP and Mission Completed: Capture the Flag. Saved mission 1994 is state 4, all four objectives status 2, XP 8124, credits 350."
+    }
+  ],
+  "limits": [
+    "The boss and ambient combat values were changed in disposable copied world data for diagnostics. This run verifies client/server progression transitions, not retail encounter difficulty or survival.",
+    "GM teleports bypassed the normal cave-to-base route. Route, original spawn Y positions, aggro pacing, friendly support and encounter balance remain open.",
+    "The 124 XP and 50 credits are emulator kill rewards observed here, not independently established final-live boss payout.",
+    "The first boss client harness terminated after the save and before an orderly stop; the copied character database was frozen with SQLite backup. The Youngblood/turn-in run stopped cleanly.",
+    "Youngblood appearance and placement are reconstructed values; his exact final-live presentation remains unverified."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/char-after.db",
+      "sha256": "aa97b0d95d32aaf716a688d2bd8ce5d40af71ff3dc29e5dd5006db80c625c542",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "dd22dfce910b7f5ed5eabe1ee94f0cc5a8e22e52b8596795428c12b771960e6e",
+      "bytes": 1625088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/06-base-visible.png",
+      "sha256": "7226920a4ae64d734ed1b76592f043ab4c418183f2278964ed0d17ff3896c709",
+      "bytes": 492879
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/15-aim.png",
+      "sha256": "70b7987a4a49d4599901485a70097e3e995e974338dab23bf56583052144fa8a",
+      "bytes": 570715
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/18-youngblood-objective.png",
+      "sha256": "c75c1d666129bfad6896bba1b43357e1a8050046cd671fbb13055c6edce85321",
+      "bytes": 563269
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/game.log",
+      "sha256": "6d963a3f6be71325198a8dd0f6afcd8f3e63e7ab93540f63154e5b7e3179b609",
+      "bytes": 41805
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-25/char-after.db",
+      "sha256": "8effab749261b609a19a205eadf69c6815cd912f4b0235b693c9d3a317e0a6ef",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/03-separated.png",
+      "sha256": "3adc32697148477defe00c32723b4d5bcd7cf8b22e58e08b26572b0a275a11b0",
+      "bytes": 478575
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/06-youngblood-dialogue.png",
+      "sha256": "aafdad949a5300860ee3957a2e9ba9041ab09080b2c8c637bb97919731d1638e",
+      "bytes": 480103
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/08-turnin-offer.png",
+      "sha256": "aea312795c031d26627297e7fd0223d48e477daf1c595efc7c354f70a56419f5",
+      "bytes": 475051
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/09-capture-complete.png",
+      "sha256": "d3663683e41f36a7af204d914bbdc8a0835e967ad84ef01a5e2e427195992118",
+      "bytes": 500570
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/game.log",
+      "sha256": "5f76ddec3408736d2dc0a0f517d2aeb96a747b43a3958db36ccca09a923455f6",
+      "bytes": 26866
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/status.json",
+      "sha256": "17af7346183e06c254cd44b2d0733a5214794f89792b1c6827c4967f66bbac4c",
+      "bytes": 210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-26/char-after.db",
+      "sha256": "d61b6a3194305ae4d3da33681ef7ead0b1542fa311133dbb82b51e3adcc74236",
+      "bytes": 204800
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Bounded boot-camp ranged cover reconstruction from original collision meshes and client lookup",
+  "status": "Implemented in the worktree, verified on a disposable server, and deployed as a cover-only derived game image on 2026-09-23. Final-live cover sampling and balance remain unverified.",
+  "scope": "Only the six original sandbag statics at decoded adv_bootcamp indices 1040, 1041, 1042, 1045, 1053 and 1056 have exported cover geometry. Only direct ranged WeaponAttack damage uses the cover factor. Other cover meshes, abilities, melee, target cover UI, and final-live line-of-sight rules remain open.",
+  "field_provenance": [
+    {"field": "map static positions, rotations, scales and class IDs", "tier": "original", "source": "adv_bootcamp.map SHA-256 2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3, decoded indices 1040/1041/1042/1045/1053/1056; docs/evidence/bootcamp-cover-mechanics-gap.json"},
+    {"field": "sandbag collision triangles", "tier": "original", "source": "mesh06.glm SHA-256 bd5d20ea31f97e11fd41319f3d6d2ae52f20f1b3896663e7772a4057b04d71be, geo archive offsets 55644160/55668736/55685120/55719936/56030208; src/Rasa.ClientData/GeoMesh.cs parser; exported asset has 110 world-space triangles"},
+    {"field": "cover fraction knots and damage multipliers", "tier": "original", "source": "recovered shared/gameconstants.pyo disassembly source line 59, offsets 170-218, SHA-256 b152df9e387ad853dbf2cd59b14ec1564feb47fc13e4722addf789ade90a485d; fractions [0,.2,.4,.6,.8,1], multipliers [1,1,.7,.5,.35,.25] with a repeated trailing .25 guard"},
+    {"field": "nine ray samples in a 3x3 target grid", "tier": "inferred", "source": "2015-03-07 firsthand but unverified recollection by Redlynne at https://cityoftitans.com/comment/84099, corroborated only generally by original client cover data; no original server source or packet capture"},
+    {"field": "sample offsets", "tier": "analogue", "source": "human-sized diagnostic approximation: source Y+1.2 m, target Y+0.4/1.1/1.8 m, horizontal half-width 0.3 m; no original hitbox grid dimensions recovered"},
+    {"field": "interpolation between client lookup knots", "tier": "inferred", "source": "linear interpolation chosen to connect the recovered knots; original server interpolation or discretization unknown"},
+    {"field": "weapon scope", "tier": "inferred", "source": "current boot-camp Bane pistol and recruit rifle are direct ranged WeaponAttack actions; applying cover to abilities or melee is not supported by this evidence"}
+  ],
+  "artifacts": [
+    {"path": "src/Rasa.Game/Content/Cover/adv_bootcamp.cover.json", "sha256": "1be28d488483faec2c23cc82844594a0fd4a6059ce66b288f92191aa1d4aa7d7", "note": "Six map statics, 110 original collision triangles transformed into world coordinates"},
+    {"path": "tools/BootcampCoverExport/Program.cs", "sha256": "1078663b902ae28a5fbdb6cf24eb86a63d4f122be598a5a206e4c0e78fe563f6", "note": "Reproducible export; rejects map or mesh archive hashes that differ from the recovered client"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-reconstruction-14/game.log", "sha256": "0bdb008a4f13d3e88f5089f22c0e7f19597f46260ac52db665628b015abd44c9"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-reconstruction-14/cover-20s.png", "sha256": "613a9406494e3c6a0df40de4f5329a48ecedf8c6d1c5c9502fd60fd0c084381f"}
+  ],
+  "isolated_client_trial": {
+    "setup": "Recovered 1.16.5.0 client, disposable copy of current server with rebuilt Rasa.Game.dll SHA-256 4ef2c0cdce4559dbf72d9dfeff1861505fb80773097af75156d80a20e89a47f7 and copied level-2 Alden placed at previously client-reached (296.5,120.1,73.9), mission 1994 objective 2 active, all six staged Thrax with normal attacks. Production was untouched; disposable DLL and character database were restored after the run.",
+    "observations": [
+      "MapLoaded at 17:38:51.912; 110 cover triangles loaded for adv_bootcamp at 17:38:52.701.",
+      "The game log contains 183 cover traces against stationary Alden. Each tested 3x3 grid was 9/9 occluded; representative direct ranged damage 10-15 became 3-4 after the recovered client table's 0.25 multiplier and rounding.",
+      "Alden died at 17:39:29.285, 37.373 seconds after MapLoaded, at the checkpoint. Mission 1994 objective 2 remained active. This confirms the emulator applies the staged reconstruction through the compatible client, not that original retail would produce this duration or damage."
+    ]
+  },
+  "followup_route_trial": {
+    "setup": "Disposable cover build, normal attacks, copied Alden at the previously client-reached (295.8,120.5,67.8), mission 1994 objective 2 active. Host queued D for 2 seconds, a capture, W for 3 seconds and a capture as soon as the server logged MapLoaded.",
+    "observation": "MapLoaded was logged at 17:53:26.416, but the capture after D still showed the client's Entering Battle loading screen. D therefore did not establish a southward move. The later W input moved Alden north beside the rock to (293.3,119,81.5), where he died at 17:53:55.135, still outside cave area 198602. The trial does not test a correctly routed cave approach; the next harness must wait for the playable client frame before movement.",
+    "sources": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-south-route-15/game.log", "sha256": "f8329248157bca2fd5b918d51d33c3cc58d46003f26731d70a50ebd36f21f19b"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-south-route-15/after-d-south.png", "sha256": "602ec700f6bfd04ef7c77d103929d34798106bb21329bec0bc75f8bc9e0f93f5"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-south-route-15/after-w-west.png", "sha256": "e758412a1c9bd3fffec0de8583babeae0619ff183963d32eab2f49daf608da84"}
+    ],
+    "isolation": "The disposable game DLL, cover asset and character database were restored; SQLite integrity_check returned ok. Production was untouched by this trial."
+  },
+  "deployment": {
+    "method": "Derived rasa_net_game:cover-20260923 from the previously deployed rasa_net_game image, copying only CoverGeometryManager.cs, MissileManager.cs (cover calls plus an opt-in diagnostic trace), Rasa.Game.csproj and the cover JSON. The derived image built successfully, was started under the normal Compose mounts, then tagged rasa_net_game:latest; the previous image is retained as rasa_net_game:pre-cover-20260923. A plain docker compose up --no-build game recreated the service from the new default tag.",
+    "image_id": "sha256:3d7dd3782b22f87b500f553ef34455f12e2ba182685f146fc695ae1dcc160f1b",
+    "previous_image_id": "sha256:9bac4fa0b7f5e688653bdb92e628aa011535ec8189cb2ff2899d76978f467b76",
+    "backup": [
+      {"path": "/home/blizz/backups/rasa-net/deployments/20260923-cover-reconstruction/rasachar.db", "sha256": "f2e020c9ef579886ec1e8c94f1675b96bf163e8a3ecf49b26ff99ffcc18caf97"},
+      {"path": "/home/blizz/backups/rasa-net/deployments/20260923-cover-reconstruction/rasaworld.db", "sha256": "7ddfb163e445525818bce75bce437a7e1d66bebd4b80803cc960446f214dfb90"}
+    ],
+    "verification": "After the default Compose recreation, auth logged server 234 authenticated at 22:47:02.758 UTC, game logged successful auth at 22:47:02.765, Server ready at 22:47:05.611, 76/78 navmeshes at 22:47:10.936 and 17 content rules / 404 rows / 0 gaps at 22:47:11.625. Game restart count was zero. Both live SQLite files passed integrity_check after deployment. A recovered-client public test account reached Character Select afterward; see live-auth-after-cover-20260923.json. The owner's own login remains unobserved.",
+    "logs": [
+      {"path": "/home/blizz/backups/rasa-net/deployments/20260923-cover-reconstruction/game-startup.selected.log", "sha256": "773a59ad38fe432282dd01df57a80d7711338651cce47952f8f0384efe5ce948"},
+      {"path": "/home/blizz/backups/rasa-net/deployments/20260923-cover-reconstruction/auth-registration.selected.log", "sha256": "3da81f5ceea83f82f9109ede0c78fd759bc72e8f269498ddfe83aa28c1e7c91f"}
+    ]
+  },
+  "verification": "dotnet build src/Rasa.Game/Rasa.Game.csproj --no-restore succeeded; two focused BootcampCoverGeometryTests passed with the local .NET 5 libssl compatibility path. The disposable client trial confirmed asset loading and scaled incoming hits. The derived production image built, reauthenticated with auth and loaded world content after deployment.",
+  "unverified": "Original server sample points, cover fraction aggregation, lookup interpolation, ability and melee behavior, correct final-live sandbag cover values, player overhead cover UI packets, collision geometry outside these six statics, and a normal complete courtyard fight.",
+  "replacement_rule": "Replace each inferred or analogue field as soon as original final-live server behavior, packet captures or stronger direct footage becomes available."
+}

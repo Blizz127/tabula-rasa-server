@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Recovered-client hostile targeting and rifle kill from a boot-camp courtyard checkpoint on the current game build",
+  "provenance_tier": "observed",
+  "confidence": "High for the client UI target, player attack log and one kill in this emulator run; no claim about final-live combat values or full mission completion.",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb and private bubblewrap namespaces; tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with current rebuilt game DLL SHA-256 20813af0cd2d66a2c2723fbc24a37240c608b42c57c7c2ba2a80d8dccc43d659, all six staged Thrax, Warrior and three camp companions, normal attacks. No production change. Disposable character database and binary restored after the run.",
+    "character": "Copied level-2 Alden placed before login at previously client-reached (316.13,120.28,85.93), yaw 0.859892129898071, mission 1994 objective 2 active, crate rifle item 11/template 13713 restored to the observed issued 20 loaded rounds. This bypasses camp travel and is explicitly a combat checkpoint.",
+    "inputs": "After MapLoaded, native W 1200 ms, A 400 ms and W 1000 ms matched the earlier successful cover-fire alignment. The client UI then showed a level-2 Thrax Infantry Initiate under the reticle. Primary mouse fire was held for 4800 ms, then 4500 ms; R was pressed afterward. No post-login teleport or combat-state edit occurred."
+  },
+  "result": {
+    "map_loaded": "16:45:48.502",
+    "target": "checkpoint-target.png shows the hostile Thrax Infantry Initiate in the client target frame; this differs from the previous camp-to-courtyard trial where Tab selected a friendly Archer.",
+    "hits": "Seven player-sourced Creature hit lines at 16:46:38.705 through 16:46:46.100 each show 106 damage against Thrax placement 198665. The seventh reduced its health 19->0. Four other WeaponAttack actions in the same fire holds resolved against entity 0 and did not log a hit.",
+    "reward": "checkpoint-fire2.png shows the native client reporting 71 XP and 10 credits after the kill. The screenshot shows 10/1000 rounds remaining, compared with the prepared 20/1000 load.",
+    "reload_and_stop": "The server received RequestWeaponReload at 16:46:49.220. The game log ends at 16:46:50.616 while Alden was alive at (309.4,119.9,78.5), 32.8 m from cave area 198602's center. The isolated harness process later returned exit code 143, with no final capture or confirmed reload completion; the later queued target captures were not produced. No cave transition was observed.",
+    "limit": "There were long screenshot/inspection pauses before firing. This is a functional client combat check, not retail encounter timing or survivability evidence. The run did not clear the remaining Thrax or enter the cave."
+  },
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/game.log", "sha256": "6607f48fc077b2be24eac3f50125fc49bedb17ff4907c52e880e1633526b6162"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/checkpoint-login.png", "sha256": "385025cab1c52646e8222370a182d4a867792bccec1054a6c80e68c6ae0d6ff2"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/checkpoint-target.png", "sha256": "ef5438a7537e9f49be0d434b4b2ccb3cced5acb1d5933fc0854afb05e11200bf"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/checkpoint-fire1.png", "sha256": "0e1bb5a95617c7c3c8ee5657c7d52699c69432733b9341710a5303779a59b9c8"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/checkpoint-fire2.png", "sha256": "046401d288e18b7f0590b59e55ae981de25bbe72c4b20f8c343b0b5585652f3d"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-checkpoint-clear-attempt-08/checkpoint-reload1.png", "sha256": "6a8ec7711f43c4ed0a25a8a992b936c88adc527fe00ccec76c1a9a7281b4ea1b"}
+  ],
+  "verification_needed": "Continue from a labelled checkpoint or camp without long inspection pauses, acquire the next hostile after each kill, clear the encounter and enter cave area 198602 with ordinary client inputs. Compare the resulting encounter with original final-week footage before using it to set balance or spawn rules."
+}

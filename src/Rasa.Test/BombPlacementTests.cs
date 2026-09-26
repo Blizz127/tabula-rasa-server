@@ -276,7 +276,37 @@ namespace Rasa.Test
         private void Use(DynamicObject obj)
         {
             _content.RequestUseContentUsable(_client, new RequestUseObjectPacket { ActionId = ActionId.UseObject, ActionArgId = 0, EntityId = obj.EntityId }, obj);
-            _content.ContentUsableRecovery(_map, new ActionData(_client.Player, ActionId.UseObject, 0, 0) { SourceId = obj.EntityId });
+            var action = _map.PerformRecovery.LastOrDefault(pending => pending.SourceId == obj.EntityId && pending.Actor == _client.Player);
+            if (action == null)
+                return;
+            _map.PerformRecovery.Remove(action);
+            _content.ContentUsableRecovery(_map, action);
+        }
+
+        [TestMethod]
+        public void DuplicateOrInterruptedUseCannotCompleteAContentWindupEarly()
+        {
+            Use(_corpse);
+            var packet = new RequestUseObjectPacket { ActionId = ActionId.UseObject, ActionArgId = 0, EntityId = _bomb.EntityId };
+            _content.RequestUseContentUsable(_client, packet, _bomb);
+            var first = _map.PerformRecovery.Single(action => action.SourceId == _bomb.EntityId);
+
+            _content.RequestUseContentUsable(_client, packet, _bomb);
+            Assert.AreEqual(1, _map.PerformRecovery.Count(action => action.SourceId == _bomb.EntityId));
+
+            _content.CancelContentUsableUse(first);
+            _map.PerformRecovery.Remove(first);
+            _content.RequestUseContentUsable(_client, packet, _bomb);
+            var second = _map.PerformRecovery.Single(action => action.SourceId == _bomb.EntityId);
+            Assert.AreNotSame(first, second);
+
+            _content.ContentUsableRecovery(_map, first);
+            Assert.AreEqual((UseObjectState)113, _bomb.StateId);
+            Assert.IsFalse(Progress.Timers[1].Disarmed);
+
+            _content.ContentUsableRecovery(_map, second);
+            Assert.AreEqual((UseObjectState)114, _bomb.StateId);
+            Assert.IsTrue(Progress.Timers[1].Disarmed);
         }
 
         private PlayerMission Progress => _client.Player.Missions[MissionId];

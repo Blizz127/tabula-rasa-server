@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "First Capture the Flag combat companion, placement 198688 and creature 198516",
+  "client_compatibility": "Recovered 1.16.5.0; shutdown-client exact revision unverified",
+  "original_recording": {
+    "id": "7Lrst9SG3pk",
+    "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+    "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "times_s": [
+      362.7,
+      386.5,
+      388.5,
+      391.5
+    ]
+  },
+  "field_provenance": {
+    "creature.id": {
+      "tier": "inferred",
+      "value": 198516,
+      "source": "Unused local content key after boot-camp creature 198515; implementation identifier only"
+    },
+    "creature.class_id": {
+      "tier": "analogue",
+      "value": 6239,
+      "source": "generated/client/entityclass.pyo @27095 Redshirt_Forean_Gunner; same class used by later original-footage Forean Gunner Initiate reconstruction in BootcampS5ReinforcementsRows, but the filmed camp figure's exact class ID is not recoverable"
+    },
+    "creature.faction": {
+      "tier": "inferred",
+      "value": 1,
+      "source": "7Lrst9SG3pk 386.5-391.5 s Forean soldiers visibly fight Thrax beside the player; faction number 1 is emulator AFS mapping"
+    },
+    "creature.level": {
+      "tier": "observed",
+      "value": 3,
+      "source": "7Lrst9SG3pk 362.7 s target frame: level 3 Forean Gunner Initiate"
+    },
+    "creature.max_hp": {
+      "tier": "analogue",
+      "value": 555,
+      "source": "BootcampS5ReinforcementsRows creature 198512 uses 555 for the same named level-3 Gunner; original HP unobserved"
+    },
+    "creature.name_id": {
+      "tier": "original",
+      "value": 7938,
+      "source": "generated/client/language/english/creaturenamelanguage.pyo @12593: 7938 Forean Gunner Initiate"
+    },
+    "creature.run_speed": {
+      "tier": "analogue",
+      "value": 9,
+      "source": "emulator world creature 51 NPC_Forean_Gunner, action movement defaults; original speed unobserved"
+    },
+    "creature.walk_speed": {
+      "tier": "analogue",
+      "value": 5,
+      "source": "emulator world creature 51 NPC_Forean_Gunner; original speed unobserved"
+    },
+    "creature.action1": {
+      "tier": "analogue",
+      "value": 27,
+      "source": "emulator world creature 51 NPC_Forean_Gunner uses action 27 (attack 1/116, range 1-20, 2500 ms cooldown, damage 15-28); original camp Gunner action and damage unobserved"
+    },
+    "placement.map_context_id": {
+      "tier": "original",
+      "value": 1985,
+      "source": "original client adv_bootcamp map context; 7Lrst9SG3pk 362.7 s"
+    },
+    "placement.pos_x": {
+      "tier": "inferred",
+      "value": 385.2,
+      "uncertainty_m": 4.0,
+      "source": "docs/evidence/bootcamp-d11-positions.json ally.forean_initiates.camp measured group center +/-2.5 m; assigning its center to this individual is an inference"
+    },
+    "placement.pos_y": {
+      "tier": "measured",
+      "value": 119.5,
+      "uncertainty_m": 0.5,
+      "source": "docs/evidence/bootcamp-d11-positions.json ally.forean_initiates.camp; original navmesh floor minus calibrated map bias"
+    },
+    "placement.pos_z": {
+      "tier": "inferred",
+      "value": 152.3,
+      "uncertainty_m": 4.0,
+      "source": "docs/evidence/bootcamp-d11-positions.json ally.forean_initiates.camp measured group center +/-2.5 m; individual coordinate unobserved"
+    },
+    "placement.rotation": {
+      "tier": "inferred",
+      "value": 0,
+      "source": "Neutral facing placeholder; original facing unobserved"
+    },
+    "placement.behavior": {
+      "tier": "inferred",
+      "value": 4,
+      "source": "client mission text 21237 sends soldiers along; video 362.7 s camp then 386.5-391.5 s courtyard allied combat; ContentPlacementBehavior.CombatCompanion follows and attacks"
+    },
+    "placement.escort_mission_id": {
+      "tier": "inferred",
+      "value": 1994,
+      "source": "original text 21237 belongs to Capture the Flag 1994; assignment of this Gunner to its mission is inferred"
+    },
+    "placement.present_condition_id": {
+      "tier": "inferred",
+      "value": 198914,
+      "source": "objective 1994/2 incomplete or objective 1994/1 incomplete; the visible footage spans the cave route and caldera fight, but exact appearance/despawn triggers are unobserved"
+    },
+    "placement.respawn_ms": {
+      "tier": "inferred",
+      "value": 0,
+      "source": "No original respawn timing observed; no automatic respawn configured"
+    },
+    "placement.id": {
+      "tier": "inferred",
+      "value": 198688,
+      "source": "Unused local boot-camp placement key after 198687; implementation identifier only"
+    },
+    "placement.kind": {
+      "tier": "inferred",
+      "value": 1,
+      "source": "Emulator content_placement kind 1 means creature, required for the filmed living Forean"
+    },
+    "placement.creature_id": {
+      "tier": "inferred",
+      "value": 198516,
+      "source": "Local linkage to the new Gunner creature row"
+    },
+    "condition.198914": {
+      "tier": "inferred",
+      "value": "1994/2 incomplete OR 1994/1 incomplete",
+      "source": "7Lrst9SG3pk 362.7-503.8 s shows allied Foreans during the cave route and caldera fight; exact start/end stage unobserved"
+    },
+    "appearance.slot_id": {
+      "tier": "analogue",
+      "value": 13,
+      "source": "Existing emulator creature_appearance row for world creature 51 NPC_Forean_Gunner: slot 13; exact original camp equipment slot unverified"
+    },
+    "appearance.Class_id": {
+      "tier": "analogue",
+      "value": 6238,
+      "source": "Existing emulator world creature 51 appearance weapon class 6238 Weapon_Creature_Forean_GooGun, defined by original client entityclass; original camp Gunner weapon class unverified"
+    },
+    "appearance.color": {
+      "tier": "analogue",
+      "value": 1,
+      "source": "Existing emulator world creature 51 appearance color 1; original camp hue unverified"
+    }
+  },
+  "implementation": {
+    "migration": "20260923040000_BootcampCampGunnerCompanion",
+    "behavior": "CombatCompanion follows private-map owner while mission 1994 is active, uses existing cross-faction AI, displays original-style escort marker, and is excluded from EscortInside area completion gate",
+    "rollback": "Delete placement 198688, condition 198914, appearance 198516/13 and creature 198516"
+  },
+  "remaining_unverified": [
+    "Camp Gunner individual coordinate, visual class and colour, weapon appearance/action, damage, health, speeds, facing and exact appearance timing are estimates.",
+    "The later courtyard figures are not individually tracked through the video cut, so this Gunner’s original presence there is inferred.",
+    "Archer and Shaman Initiates visible later are not seeded by this first companion row.",
+    "Copied-client trace confirms this staged Gunner damages and kills one Thrax. Full camp-to-cave path, encounter pacing/survival with all observed companions, and the global HP fallback effect relative to original footage remain unverified before live deployment."
+  ],
+  "zero_or_unset_fields": {
+    "tier": "inferred",
+    "source": "No original evidence for these optional effects or settings; leave neutral rather than inventing them",
+    "creature": [
+      "action2",
+      "action3",
+      "action4",
+      "action5",
+      "action6",
+      "action7",
+      "action8"
+    ],
+    "placement": [
+      "npc_package_id",
+      "entity_class_id",
+      "usable_kind",
+      "initial_state",
+      "alternate_state",
+      "alternate_state_condition_id",
+      "windup_ms",
+      "name_override_id",
+      "hit_points",
+      "restore_ms",
+      "fuse_ms",
+      "loot_item_set_id",
+      "usable_condition_id"
+    ]
+  },
+  "runtime_hp_defect": {
+    "finding": "CreateFromTemplate used fixed 100 HP for creatures without creature_stat, ignoring creature.max_hp; the new Gunner and existing Thrax Initiates have no creature_stat rows. The MaxHitPoints fallback is now deployed; see docs/evidence/live-creature-health-respawn-20260923.json. The Gunner's creature/placement rows remain staged, not live.",
+    "source": "src/Rasa.Game/Managers/CreatureManager.cs CreateFromTemplate; rasaworld.db creature rows 198507 and 198516, creature_stat lookup",
+    "scope": "All creature templates lacking creature_stat; live encounter effects after this runtime deployment remain unverified."
+  },
+  "validation": {
+    "sqlite_migration_up": {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/gunner-up.sql",
+      "sha256": "653edf09e4da0c712435d5bc541b9be1cd38bd79a52f8bb61033f8ca91f351f2",
+      "result": "Applied to an isolated live-world copy; creature 198516, appearance 198516/13, two condition 198914 terms and placement 198688 present; integrity_check ok."
+    },
+    "sqlite_migration_down": {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/gunner-down.sql",
+      "sha256": "0d03a8f22b76ac089efae280fdb4596970551a6d510711d9dffac282093e1c04",
+      "result": "Rolled back isolated copy; every world table row matched the source database and integrity_check returned ok."
+    },
+    "isolated_server": {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/game.stdout.log",
+      "sha256": "081aced6a3ef90d8a2930d70fa584dd4bf61b55e6038a1a51563d1b0d3b7861b",
+      "result": "Copied databases and staged game build on separate ports 12106/12107/18001/18102. Game connected to copied auth, reported Server ready and 407 content rows / 0 gaps. Both isolated processes were stopped; live Docker game stayed on 20260923g.",
+      "limit": "The redirected-stdin command worker logged Console.KeyAvailable InvalidOperationException after server readiness; listeners remained open during the check. This was a harness console limitation, not a content gap."
+    },
+    "dotnet_tests": {
+      "runtime": ".NET 5.0.17 with local compatibility libraries",
+      "result": "MissionContentLoadingTests plus targeted world migration test: 28 passed after behavior addition and HP fallback. Targeted world migration test passed again after the appearance row was added."
+    },
+    "deployment": "Staged in worktree; live service remains on rasa-dit-test:20260923g without companion row or HP fallback change."
+  },
+  "isolated_client_replay": {
+    "setup": "Recovered 1.16.5.0 native client under Wine/Xvfb against copied auth, char and world databases. The copied character is the level-2 Alden checkpoint after DeSimone 1994/4 completion, starting at (390.5,119.55,160). A Docker-held network namespace gave the client and copied servers their own loopback and required queue port 8001 while the live service stayed on its existing ports. Auth account 2 password was reset only in the copied auth database.",
+    "observations": [
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/client-ns-07.png",
+        "sha256": "91a85cf673c81ec19097aaa7190908839f46da3299a52a5c328b6c66695b4e0b",
+        "finding": "Forean-like purple/green combatant appears near the camp player with orange companion overhead marker; the copy is still on objective 1994/2."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/client-ns-11.png",
+        "sha256": "67f36d3f7daa4835be2d254fa6e6459f81ba9a538829b58027e41a8645e22b96",
+        "finding": "After ordinary forward movement into Hartmann sandbags, the marked companion is visible behind and to the left of the player."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/client-ns-13.png",
+        "sha256": "2bd0538f079abc91968c606225a1c3e25e22b9ad723b10b9d42e7cb2863237fb",
+        "finding": "After further player movement into the sandbag lanes, the marked companion has followed into the same lane, not stayed at the camp spawn."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/client-ns-14.png",
+        "sha256": "c913c458a8b8cd99d9582ab2e5e198e11188ae99aacee7ed41f6ecde4060b55c",
+        "finding": "The native target frame reads level 3 Forean Gunner Initiate with full health while the companion stands near the moving player."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/client-ns-15.png",
+        "sha256": "7f5ce74cd60812dcd5fd9c6ff6d7c4e51a5b5017a5fdb35d71c58bc6dc66b59f",
+        "finding": "After the player backtracks farther across the platform, the marked Gunner is again adjacent to the player with its weapon model visible."
+      }
+    ],
+    "server_log": {
+      "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/game.log",
+      "sha256": "62af72741fba21117f86106d7d501f1d3932c758798d8a5c3dbeefa7eba48217",
+      "finding": "Isolated server loaded 407 content rows with zero gaps and accepted the copied client on the private boot-camp map."
+    },
+    "limits": [
+      "The Xvfb display ended before the player reached the courtyard. No companion attack, damage amount, survival comparison or cave trigger completion was observed in this replay.",
+      "The player took a diagnostic detour through Hartmann sandbags and back across the camp platform, not the filmed camp-to-cave route.",
+      "The body colour uses the emulator’s random creature colour packet; its visual hue is not established as final-live accurate.",
+      "This replay used a copied checkpoint after objective 4, so it does not verify mission acceptance or earlier travel."
+    ],
+    "cleanup": "The Wine client, copied auth/game servers, Xvfb and temporary network-namespace holder were stopped. The live Docker game remained on rasa-dit-test:20260923g and its databases were untouched by the replay."
+  },
+  "isolated_combat_diagnostic": {
+    "setup": "Disposable copies only: recovered 1.16.5.0 client and staged server in a separate network namespace. Copied level-2 Alden mission 1994/2 incomplete placed at (302.0,120.7,69.0); only in the diagnostic world copy, Gunner placement 198688 moved from its inferred camp spawn to (297.0,120.7,69.0), near six S4 Thrax courtyard placements. The player gave no combat input.",
+    "observations": [
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/combat-03.png",
+        "sha256": "3a4f6225a15738bd7f1d3a018eb366544f600d2eb4d08a35765c9f4e8630a340",
+        "finding": "At the paved courtyard the client shows incoming damage numbers and a fallen vivid-purple Forean-shaped body near the player; the body visually matches the new Gunner, but no entity-id kill record was captured to prove corpse identity."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/combat-04.png",
+        "sha256": "a5a6297a4142369ab74015b545ad32dd5da6753ba6ab37a79aef9dfa7aa5c398",
+        "finding": "The native client opened Hospital Selection after the player died without attacking."
+      },
+      {
+        "tier": "observed",
+        "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/server-check/game.log",
+        "sha256": "eefefb6f01dfd2e89e44aa9b1ac7b1d300336f6b8e88223502c034bd985fddd9",
+        "finding": "Server logged Alden died on map 1985 at (302,120.5,69), killed by Thrax class 29769 at (291.8,120.5,63.8); server had loaded 407 content rows with zero gaps."
+      }
+    ],
+    "limits": [
+      "The Gunner was moved close to the enemy only in the disposable world copy. This does not test its original camp-to-courtyard path.",
+      "Player inactivity under immediate six-enemy pressure is a diagnostic worst case, not original footage pacing or player behavior.",
+      "The screenshot suggests the Gunner fell, but logs do not identify the companion corpse or confirm that it fired action 27.",
+      "The result shows one companion is insufficient in this setup; it does not determine original ally count, HP or damage."
+    ],
+    "cleanup": "The copied client, servers, Xvfb and temporary network namespace were stopped. Live world database and image remain without this migration."
+  },
+  "combat_diagnostic": "docs/evidence/bootcamp-camp-allies-combat-diagnostic.json"
+}

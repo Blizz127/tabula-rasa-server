@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Continuous camp-to-courtyard native-client combat trial with normal staged attacks",
+  "provenance_tier": "observed",
+  "confidence": "High for emulator movement, selected target, attack packets and death recorded here; none of these outcomes verifies final-live encounter balance.",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client in Wine/Xvfb and private bubblewrap namespaces; tabula_rasa.exe SHA-256 73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "server": "Disposable server-courtyard-full-20260923 copy with the rebuilt trace-enabled Rasa.Game.dll SHA-256 20813af0cd2d66a2c2723fbc24a37240c608b42c57c7c2ba2a80d8dccc43d659; normal six-Thrax attack staging and all three camp companions; no production service or database change",
+    "character": "Copied level-2 Alden placed before login at staged camp (383.94,119.5,153.83), yaw -0.18, mission 1994 objective 2 active. The copied crate rifle item 11/template 13713 was reset to the observed issued 20 loaded rounds; the disposable database was restored afterward.",
+    "input": "After one MapLoaded, the native client repeated the successful camp-to-courtyard movement holds recorded in docs/evidence/bootcamp-camp-to-courtyard-continuous-replay.json. At the sandbags, one Tab press, 4800 ms held primary mouse button and R were queued. No movement edit or teleport occurred after login."
+  },
+  "observations": [
+    "MapLoaded occurred at 16:39:46.952. The recruit crossed the upper gap and reached (301.0,119.8,77.8), 24.9 m from the cave trigger center and outside its 10 m radius.",
+    "The first Tab selected a friendly level-3 Forean Archer Initiate in the client UI. The screenshot after the primary-fire hold shows 16/1000 rounds, down from the prepared 20 loaded rounds.",
+    "The game log records four Alden WeaponAttack events at 16:40:49.314 through 16:40:51.747, each against entity 0. There was no logged player hit on a hostile; the selected ally did not become an attack target. The R command was sent after the death and cannot verify a live reload.",
+    "Before Alden died, companions 198688, 198689 and 198690 each logged eight hits. Alden died at (301.0,119.8,77.8) at 16:40:52.333, killed by Thrax placement 198663. The cave objective did not complete."
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/game.log", "sha256": "8548246a25af974ce43060b0b480c21f4d774b78398929e4fc209c3582470eef"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/camp-upper-gap-landed.png", "sha256": "e135bf4a062096f8eb94730bc5331648597963d0e924d5e84a77cad67f7b88bd"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/camp-courtyard-sandbags.png", "sha256": "8525fbcb25f34718aaf6e2280a6387c6e73a2bdf4080d6b52b6808056902d4c0"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/courtyard-fire-first.png", "sha256": "24739e6c784a577cb51bfb574e228850b3f144c77cc3d6d5e670b8a10189fcd6"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/courtyard-after-reload.png", "sha256": "aa824b39ee9f51f820ef9b90bcc83fdb68ed6d118674d80f5a5893f64cd877e7"}
+  ],
+  "binary_comparison": {
+    "method": "The old disposable game PDB and the newly built PDB were read as portable PDB metadata; Document.Hash provides SHA-256 checksums of compiled source files.",
+    "finding": "BehaviorManager.cs has the same source checksum EE1E2EFA997A37765DFD577EC7F84E92EA0FE5875C3AFFBF09C8EB3207E3CBD2 in both binaries. MissionContentRuntime.cs differs: old 27C1D9AAB6B326D05F727A256AB9C6BE06158E7603076BB00C9809B9376667FF, new B79DC44CF81D42C0C8636F281CE073959E23385F8BD9067C6945A1DA1DFDD66E. This narrows, but does not isolate, why the earlier continuous run logged no companion hits.",
+    "output": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/camp-to-courtyard-combat-07/pdb-source-hashes.txt",
+    "output_sha256": "4c6cfca513a36a111044d4342faccd8a40bfccb20db19667c791e022511edaf3"
+  },
+  "interpretation": "This trial verifies a continuous route and companion attacks with player fire sent through the original client, but the chosen UI target was friendly and all four player attacks resolved to entity 0. The death does not test a normal fight with hostile hits and should not be used to adjust enemy health, damage or timing.",
+  "verification_needed": "Repeat from the camp or an explicitly labelled checkpoint with a hostile selected or directly aimed before firing, then finish the fight and enter cave area 198602. Compare encounter behavior with original final-week footage and retain estimated staging labels."
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Original cover combat evidence and current courtyard implementation gap",
+  "findings": [
+    {
+      "tier": "original",
+      "confidence": "high for the client constants, low for their final-live server use",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-shared-gameconstants.pyo.dis",
+      "location": "source Python line 59, bytecode offsets 170-218",
+      "sha256": "b152df9e387ad853dbf2cd59b14ec1564feb47fc13e4722addf789ade90a485d",
+      "finding": "The recovered 1.16.5.0 client defines COVER_DAMAGE_MODIFIER_LOOKUP as two lists: [0.0,0.2,0.4,0.6,0.8,1.0] and [1.0,1.0,0.7,0.5,0.35,0.25,0.25]. The decompiled Python text contains incorrect numeric placeholders here; bytecode disassembly is authoritative for these values.",
+      "unverified": "The indexing, interpolation, cover measurement and whether final-live server damage used this exact table are not recovered."
+    },
+    {
+      "tier": "original",
+      "confidence": "high for the client UI behavior",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-overheadwindow.pyo.dis",
+      "location": "source Python lines 1910-1932, bytecode offsets 44-310",
+      "sha256": "239cae2fdfc011937568f5ce1e4541a7679b48f2d246575a519db788ae53de37",
+      "finding": "The recovered client receives a coverDamageModifier UI event and displays None at values >=0.8, Half at >=0.5, and a stronger cover icon below 0.5.",
+      "unverified": "No original server packet capture establishes what value was sent for the boot-camp sandbags."
+    },
+    {
+      "tier": "original",
+      "confidence": "high for static map placements, low for cover eligibility",
+      "source": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/map/decoded/adv_bootcamp-entities-joined.json",
+      "sha256": "9f3113dbaafa9a29e598bb88846c73fd863e7bb66b38818944b91d4b4f94a642",
+      "location": "original adv_bootcamp map records at file offsets 91560, 91648, 91736, 92000, 92704 and 92968; decoded indices 1040, 1041, 1042, 1045, 1053 and 1056",
+      "finding": "Six original sandbag statics cluster around the blocked route at X 293.95-297.37, Y 119.39-120.41, Z 66.31-75.22. Each resolves to an ArchHumGenObjSandbags01 variant with classCollisionRole 1. The positions align with the client screenshot of the blocked approach.",
+      "unverified": "The static records do not supply the precise mesh triangles, ballistic ray test, dynamic cover fraction or final-live damage result. Collision role 1 alone does not establish cover protection."
+    },
+    {
+      "tier": "measured",
+      "confidence": "high for the client collision triangles and stated diagnostic rays; low for the original server cover result",
+      "source": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-cover/sandbag-ray-probe.txt",
+      "sha256": "0deedc4a55510ebdfb821a2dd601a0a3d92f9e604dc1f660ba6de1489df492da",
+      "inputs": [
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/maps/adv_bootcamp/adv_bootcamp.map", "sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-cover/meshprobe/Program.cs", "sha256": "b819bbe0cc9d6d2a882e18c85be9bcbc65fe59e29bcbc47fc5975dc8a5b117a4"},
+        {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/data/mesh06.glm", "sha256": "bd5d20ea31f97e11fd41319f3d6d2ae52f20f1b3896663e7772a4057b04d71be", "entries": {"prop_hum_sandbags01V05.geo": 55644160, "prop_hum_sandbags01V06.geo": 55668736, "prop_hum_sandbags01V07.geo": 55685120, "prop_hum_sandbags01V08.geo": 55719936, "prop_hum_sandbags01V14.geo": 56030208}}
+      ],
+      "finding": "The repository's GeoMesh parser extracted collision triangles for the five sandbag mesh variants. The six nearby statics contain 10-28 triangles each. In a diagnostic segment-triangle test, rays from all six staged Thrax spawn coordinates at Y+1.2 to Alden's logged death coordinate (296.5,120.1,73.9) at Y+0.4, +1.1 and +1.8 all intersect sandbag static 1040. The actual killing attacker was staged Thrax 198665 at approximately (291.8,120.5,63.8), corresponding to the sixth tested origin.",
+      "uncertainty": "Rays use estimated source and target body offsets rather than recovered original hitbox points. Enemy positions can drift during combat. The probe includes only six nearby sandbag statics, not all world geometry; it tests intersection, not the original cover or line-of-sight algorithm.",
+      "unverified": "Whether original combat would fully block or merely reduce damage at this position, and how the server sampled target hitboxes, remain unknown."
+    },
+    {
+      "tier": "observed",
+      "confidence": "high for developer intent stated before launch, indirect for the exact shutdown build",
+      "source": "Richard Garriott interview, GameSpot, 2007-05-10, https://www.gamespot.com/articles/tabula-rasa-qanda-alien-races-setting-and-combat-details/1100-6170340/ , paragraph beginning 'We really wanted' and following paragraph",
+      "finding": "The creative director describes cover reducing damage taken and enemies pursuing a player around cover.",
+      "unverified": "This interview predates launch and does not specify final-live cover values or geometry."
+    },
+    {
+      "tier": "observed",
+      "confidence": "high for current emulator code",
+      "source": "src/Rasa.Game/Managers/BehaviorManager.cs CheckForAttackableEntityInRange and CreatureThink fight action; src/Rasa.Game/Managers/MissileManager.cs DoDamageToCreature and player damage path; src/Rasa.Game/Structures/MissileArgs.Cs HitData.CoverModifier",
+      "finding": "Creature aggro and attack range are distance checks. Missile damage is applied without querying cover geometry or scaling damage by a cover factor. HitData has a CoverModifier field but current combat does not populate it from a cover system.",
+      "unverified": "The effect of this missing system on normal boot-camp courtyard survival time cannot be quantified from the existing runs, and the sandbags' original cover result is unknown."
+    }
+  ],
+  "decision": "A bounded, explicitly labelled reconstruction now uses these six original sandbag collision statics and the original client damage lookup for direct ranged WeaponAttack hits. The nine sample points, their dimensions and lookup interpolation remain estimates; see bootcamp-cover-reconstruction.json. Navmesh walkability is not used as ballistic cover.",
+  "next_verification": "Reconcile the client's minimum lookup value of 0.25 with any separate full-occlusion line-of-sight rule, inspect any original packet trace for cover UI updates, and compare attacks behind and outside the barricade in final-live footage if obtainable. Replace inferred sampling and expand original collision geometry as evidence permits."
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Isolated original-client checkpoint for mission 1994 cave area and first boss approach",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-16-char-after.db",
+      "sha256": "e148d23286a9ad4eb585d6df2e9210a4fb7967f7ef00108cd2bb3537d490ef5e",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/server-playthrough/game/Rasa.Game.dll",
+      "sha256": "dd22dfce910b7f5ed5eabe1ee94f0cc5a8e22e52b8596795428c12b771960e6e",
+      "bytes": 1625088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/01-medical-checkpoint.png",
+      "sha256": "d5db05536dd18485bf0e58fd5ac583a7769169864a5e57d6a06c558a08859044",
+      "bytes": 629378
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/03-cave-trigger.png",
+      "sha256": "5900644bae15fb07e8ee3d42c4771a9e4b31208d0237106221258ae97fa91cdb",
+      "bytes": 574063
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/04-respawn.png",
+      "sha256": "acbedcd1c5d85a8b891320e5c1835295278f86e0d1f5bee97d14212c59724af5",
+      "bytes": 641109
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/06-boss-approach.png",
+      "sha256": "17faa368ea77bd2e37c4569214cff9d87d8880ea301a2fc33fba9da78085ad01",
+      "bytes": 534384
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/07-boss-near.png",
+      "sha256": "e89ced025a28d79be24609294c24f9c37123112b465335d65abe47d6433b2049",
+      "bytes": 551348
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/game.log",
+      "sha256": "7b2068cc9459150385e649f5f2e778a120bbed7ed6c4723495f715c0f8aa48c3",
+      "bytes": 39894
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/status.json",
+      "sha256": "0f9cc58b8e0408cf5b0a1d50e53c96986889450bb16cd4eb1e3a20d904116c4d",
+      "bytes": 210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/char-after.db",
+      "sha256": "aa97b0d95d32aaf716a688d2bd8ce5d40af71ff3dc29e5dd5006db80c625c542",
+      "bytes": 204800
+    }
+  ],
+  "setup": {
+    "client": "Recovered 1.16.5.0 compatibility client; exact final shutdown revision unverified",
+    "character": "Alden, level 2, copied saved checkpoint from playthrough-16; mission 1994 objective 2 incomplete and objective 4 complete",
+    "diagnostic_authority": "Only the isolated character account level was raised to 5 for GM teleport. The live and continuing saved databases were not modified.",
+    "commands": [
+      ".teleport 279.05 120.5 66.07 1985 into area 198602",
+      ".teleport 95.1 109.25 138 1985 near the inferred boss/base marker after medical respawn"
+    ],
+    "world_area": "content_area/198602, map 1985, vertical cylinder center (279.05,120.5,66.07), radius 10 m, half-height 25 m"
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/03-cave-trigger.png",
+      "finding": "After map load inside area 198602, tracker showed Eliminate the Tizzik G and Boss Eliminated 0/1; character died amid nearby cave hostiles and Hospital Selection opened."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/char-after.db",
+      "finding": "Mission 1994 objective 2 status changed from 1 incomplete to 2 complete; objective 1 exists at status 1 incomplete; objective 4 remains 2 complete. XP stayed 3000 and credits 300."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/04-respawn.png",
+      "finding": "Refugee Base Medic respawn returned Alden to the medical tent, preserving the boss tracker."
+    },
+    {
+      "tier": "observed",
+      "source": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-23/06-boss-approach.png",
+      "finding": "After separate GM teleport near the base at (95.1,109.25,138), HUD showed incoming -10 and -15 damage; the character died before boss identification or combat."
+    }
+  ],
+  "limits": [
+    "GM teleport into the cave trigger and to the base does not reproduce a normal walking route, enemy aggro timing or intended encounter pacing.",
+    "The two deaths from diagnostic arrival points cannot establish a final-live balance defect or boss difficulty.",
+    "The boss was not visually identified or killed. Objective 1, Youngblood conversation and mission 1994 turn-in remain unverified.",
+    "Map load and persistence verify the emulator area rule, not the original final-live crossing script or exact trigger geometry.",
+    "The isolated game DLL is the rifle-melee build predating the later empty-magazine/jam fix; that code change is unrelated to this area check."
+  ]
+}

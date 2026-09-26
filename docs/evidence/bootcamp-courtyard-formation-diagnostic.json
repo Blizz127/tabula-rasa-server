@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Original courtyard formation and copied-client companion engagement diagnostics",
+  "original_source": {
+    "tier": "observed",
+    "video": "7Lrst9SG3pk, 380-404 seconds; archived final-week recording at /home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/videos/7Lrst9SG3pk/Tabula Rasa Creating Character 1of8.mp4",
+    "contact_sheet": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/frames/courtyard-380-404-contact.png",
+    "contact_sheet_sha256": "d26b6fcc5b09fd98bca819104ac7ed1c85f007dafa640c4255b5d992b86a95dc",
+    "observations": [
+      "The recording cuts from the camp to the paved courtyard around 385 seconds; the companions' travel through that interval is not shown.",
+      "By 386.5 seconds, allied figures are in the paved courtyard ahead of the recruit; one orange escort icon on the original radar trails the recruit. The figures ahead are not identified as the three camp companions. The recruit shoots level-2 Thrax from about 388.5 seconds onward.",
+      "The six seeded courtyard enemy coordinates are measured combat positions from 386.6, 395, 401.5, 406.2, 415.2 and 427.7 seconds (docs/evidence/bootcamp-d11-positions.json). Those observations do not establish six simultaneous spawns."
+    ]
+  },
+  "copied_client_source": {
+    "tier": "observed",
+    "client": "Recovered 1.16.5.0 under Wine/Xvfb :110; copied world/character/auth databases; live service untouched",
+    "game_log": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/game.log",
+    "setup_tier": "inferred diagnostic placement only, not a proposed original spawn or new seed value"
+  },
+  "attacking_trailing_approach": {
+    "setup": "Level-2 Alden and three staged camp companions walked from copied (360.0703,121.2031,114.6406) checkpoint; player fired the rifle near the courtyard edge while companions trailed.",
+    "log": "Alden sent StartAutoFire at 10:29:40.082 and 10:30:00.981. He died at (295.8,120.5,72.7) at 10:30:05.984, killed by Thrax placement 198663. No companion outgoing Creature hit was logged in this run.",
+    "screenshot": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/attack-replay-fire2.png",
+    "screenshot_sha256": "9915c5a8752f85b33af06cbc5ea5538af79a9aee6c023726012fe8020e82870a"
+  },
+  "forced_forward_formation": {
+    "setup": "Copied player placed at (307.72,120.5,66.1), the measured first courtyard viewpoint; copied companion placement positions changed to Gunner (299,120.5,67), Archer (302,120.5,63), Shaman (304,120.5,71). Six existing Thrax rows remained present. Player did not attack in this pass.",
+    "outgoing_companion_hit_counts": { "198688 Gunner": 2, "198689 Archer": 8, "198690 Shaman": 17 },
+    "first_companion_hit": "10:37:15.941, all three damaged Thrax placement 198665",
+    "companion_deaths": { "198688 Gunner": "10:37:20.440", "198689 Archer": "10:37:35.139", "198690 Shaman": "10:38:01.240" },
+    "player_death": "10:38:26.447 at (307.7,120.5,66.1), killed by Thrax placement 198665",
+    "screenshots": [
+      { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/formation-start.png", "sha256": "2563ebcdd26a3eaa6f1ecb59ff086d8973c4cecabd59130cc5850d726b7cfb69" },
+      { "path": "/home/blizz/backups/rasa-net/research/20260923-bootcamp-allies/three-allies-route/formation-fight.png", "sha256": "1d63af47d4e9fc37a7bae8b691ded865748e7893efd5561275ac42ddc8fb479d" }
+    ]
+  },
+  "late_player_fire_limit": "Another forced-forward run recorded all three companion attacks starting 10:46:23.976. The client sent StartAutoFire only at 10:47:07.578, after approximately 44 seconds of ally combat while loading and aiming; Alden died at 10:47:30.691. This does not test the recruit firing from the start of the filmed fight. The copied screen showed 9 to 6 rifle rounds and the server logged StartAutoFire.",
+  "interpretation": "The companion attack actions and autonomous acquisition work when the three camp companions are artificially placed ahead and within range. Original radar measurements show at least one escort icon trailing the recruit (docs/evidence/bootcamp-courtyard-escort-combat-rules.json); the forward placement is only a diagnostic. Original movement through the cut remains unobserved. Current six-Thrax simultaneity, encounter pacing and faithful survivor count remain unverified, so this diagnostic does not authorize an unlabelled balance or spawn change.",
+  "confidence": "high for copied-client trace and original frame order; low for any inferred original escort path or enemy spawn timing"
+}

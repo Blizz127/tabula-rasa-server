@@ -63,6 +63,30 @@ namespace Rasa.Structures
         /// </summary>
         public Dictionary<uint, long> ContentRespawns = new Dictionary<uint, long>();
 
+        /// <summary>
+        /// Creature placements killed without a respawn delay. Refreshing a mission's
+        /// presence condition must not recreate one after its corpse is removed; a
+        /// rebuilt map channel starts with a fresh set.
+        /// </summary>
+        public HashSet<uint> DefeatedContentPlacements = new HashSet<uint>();
+
+        public void RecordContentPlacementDeath(uint placementId, uint respawnMs, long now)
+        {
+            if (respawnMs == 0)
+            {
+                ContentRespawns.Remove(placementId);
+                DefeatedContentPlacements.Add(placementId);
+            }
+            else
+            {
+                DefeatedContentPlacements.Remove(placementId);
+                ContentRespawns[placementId] = now + respawnMs;
+            }
+        }
+
+        public bool CanMaterializeContentPlacement(uint placementId) =>
+            !DefeatedContentPlacements.Contains(placementId) && !ContentRespawns.ContainsKey(placementId);
+
         /// <summary>Crafting stations by kraftwerks row id; see KraftwerksManager.</summary>
         public Dictionary<uint, DynamicObject> Kraftwerks = new Dictionary<uint, DynamicObject>();
 
