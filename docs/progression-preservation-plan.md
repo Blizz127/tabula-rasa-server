@@ -1049,6 +1049,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
   needs `MissingMissionGivers` for a conversable class. Open: GAP-LIAISON-LOGOS-REWARD-ERA, -REWARDS-MISSING,
   -SPEAKER, -POWER-D11, -UNSEEDED (907/908/909/911/912/921 are seedable the same way) and GAP-LOGOS-SKIP-POWER.
   Details: `docs/evidence/liaison-logos-missions.json`.
+- **Clone credits (2026-09-26, `CloneCreditNotTradable` and server rules)**: the Clone Credit item works. Its
+  right-click `RequestUseCloneCredit` (706) spends one token from the backpack for one clone credit, answered with
+  `CloneCredits` (client PM 955), per the client's `clonecredit.pyo` and TaRapedia's Clone Credit page. Tokens in the
+  footlocker or clan lockbox are ignored (OD-115). The token is not tradable (observed). The selection screen already
+  showed each pod's credits. The copy list was reconciled, not changed: completed missions carry, open ones do not,
+  the clone arrives where its source stood, and a clone made past the gate earns no tier credit (now tested). The only
+  sources besides the tier gate are unseeded missions: Wilderness Targets of Opportunity 1449, the Divide, Palisades
+  and Plains ToOs and the hybrid missions. Their rewards go in with them (OD-116). Open:
+  `GAP-WILDERNESS-TOO-CLONE-CREDIT`, `GAP-CLONE-TOKEN-LATER-SOURCES`, `-LOCKBOX-USE`, `-FLAGS`,
+  `GAP-CLONE-TOO-AUTOCOMPLETE`, `GAP-CLONE-SOCIAL-STATE`, `GAP-CLONE-CREDIT-VENDOR`. Details: `docs/retail-accuracy.md`,
+  "2026-09-26 — Clone credits".
 
   - **2026-09-22 to 2026-09-24 (recovered from a lost checkout; documentation reconstructed 2026-09-26,
     commit `4aa50b3`)**: Alia Das missions given by Alia Das/Warrior Apirka were seeded or corrected in
@@ -1296,6 +1307,8 @@ its evidence tier.
 | OD-95 Class trainers after D12 (2026-09-26, agent, pending owner review) | The 38 pre-D12 per-class trainer pools (501001-501038) stop drawing. A hub's single trainer is placed only where a post-D12 source names him, on the client's own TRAINER marker: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). His body (Kincaid's), level 8, 1000 hp and facing 0 are analogues with Kincaid as counterpart, and he is recognised by creature id because his package is unrecovered. Twin Pillars, Foreas Base and New Cumbria stay empty with named gaps; the client's unassigned "Training Officer" names are not used |
 | OD-96 Economy data of emulator lineage (2026-09-26, agent, pending owner review) | `gameserver_dev_Full.sql` is InfiniteRasa's emulator dump (source kind `emulator_db`). The seven loot rows (creature_loot 1-21), every `Regenerate_item_template` price and the vendors' stock stay, because loot and vendors need values and no original survives, but they are analogues, not original. Open for the owner: whether the emulator-authored loot rows, which are optional content, should be removed instead |
 | OD-97 The Alia Das "Test Vendor" NPCs (2026-09-26, agent, pending owner review) | Pools 21-29 have drawn nothing since the 2023 seed and stay as they are. Pool 36 ("Test Vendor 5", weapons package 10) stands 0.15 m from the client's "Weapons Vendor: Alia Das" marker and is kept as Alia Das' weapons vendor; its name, body and stock are a gap. The hospital pools 31-35 are left to the hospitals batch |
+| OD-115 Where a Clone Credit token can be used (2026-09-26, agent, pending owner review) | Only from the using character's own backpack, where TaRapedia locates it. The client's footlocker and clan-lockbox windows can send the same request; it is ignored without a reply until a source shows the live server honoured it (`GAP-CLONE-TOKEN-LOCKBOX-USE`). Alternative for the owner: accept the account footlocker as well |
+| OD-116 Clone Credit rewards of unseeded missions (2026-09-26, agent, pending owner review) | No reward row ahead of its mission: the Targets of Opportunity and hybrid missions that paid a Clone Credit are unseeded, and a reward row for an undefined mission is dangling content. Each reward's evidence is kept in `docs/evidence/class-trainer-evidence.json` (`clone_credit_sources`) for when its mission is seeded |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

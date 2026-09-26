@@ -356,6 +356,20 @@
    "era": "final_live",
    "member": "docs/evidence/class-trainer-evidence.json",
    "note": "The class-trainer evidence decoded from the 1.16.5.0 client (markers, names, dialogue, rules) and the Rasa.NavMesh --path probe at marker 987 (repo navmesh built from the 1.16.5.0 maps; research/20260926-trainers-economy/work/probe.out)."
+  },
+  "community_db:tarapedia-clone-credits-20260926": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-clone-credits/work/tarapedia/pages/*.json (MediaWiki API, full revision histories with content, fetched 2026-09-26; sha256 in work/SHA256SUMS)",
+   "note": "Clone Credit (16 revisions, 2007-11-06 to 2008-10-16), Cloning (to 2007-11-28), Beginners Guide (to 2008-10-23), Targets of Opportunity and the Wilderness, Divide, Palisades and Plains Targets of Opportunity pages (to 2008-10-26), the three hybrid missions (to 2008-11-18), Prestige vendor and the respec tokens. Era is per revision: each citation names its revision and date."
+  },
+  "community_db:rgtr-your-clone-and-you": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://web.archive.org/web/20090109184831id_/http://www.rgtr.com:80/community/player_guides/your_clone_and_you_a_guide_to.html",
+   "locator": "research/20260926-clone-credits/work/wayback/your-clone-and-you-*.html (captures 2007-12-11, 2008-09-29, 2008-12-01, 2009-01-09; sha256 in work/SHA256SUMS)",
+   "note": "A player's guide (Shaon94, 'Courtesy of Planet TR') republished on the official rgtr.com Player Guides page. The text is the same in every capture from 2007-12-11 to 2009-01-09, so it predates the 1.4 notes of 2008-01-29 and is observed evidence, not official."
   }
  },
  "scope": [
@@ -77204,6 +77218,97 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-WILDERNESS-TOO-CLONE-CREDIT",
+   "summary": "Mission 1449 Wilderness Targets of Opportunity (Lieutenant Colonel Cimoch, Alia Das) paid a Clone Credit item (template 111219) with the title Master of Wilderness: TaRapedia rev 35297 (2008-10-21) carries the reward, as every revision since 11803 (2007-10-26) did, and the official site's 'Your Clone and You' (to 2009-01-09) names the Wilderness ToO. It is Wilderness' only clone-credit source besides the tier gate. The mission is not seeded - its 26 client objectives count waypoints, Logos, Thrax, Xanx, Shield Drone and Miasma kills, six named officers, operations and story missions (held by the collection-missions batch as 'the targets-of-opportunity system') - so the reward row is not seeded either: a reward row for a mission the server does not define would be dangling content (OD-116). When 1449 is seeded its reward carries one 111219 at observed tier from this revision. Also open for it: the 20,000 XP TaRapedia gives and Cimoch himself (TaRapedia 2007-11-12: level 12, Alia Das 820, 290, 390; not placed).",
+   "evidence": [
+    "research/20260926-clone-credits/work/tarapedia/pages/Wilderness_Targets_of_Opportunity.json rev 35297",
+    "research/20260926-clone-credits/work/wayback/your-clone-and-you-a-guide-to-20090109.html",
+    "research/20260926-mission-catalog/mission-catalog.json mission 1449",
+    "docs/evidence/class-trainer-evidence.json clone_credit_sources"
+   ],
+   "closes_with": "seeding mission 1449 (objective counters, Cimoch's placement) with its Clone Credit reward",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLONE-CREDIT-SOURCES)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-TOKEN-LATER-SOURCES",
+   "summary": "The later clone-credit sources are all unseeded missions: the Divide (1582, TaRapedia rev 34567, 2008-10-02), Palisades (1630/1809, rev 35441, 2008-10-26; 1810 'Targets of Opportunity Reward.' is an objective-less client follow-up whose finishing text reads 'I totally forgot to give this to you') and Plains (1619/1829, rev 32005, 2008-08-23) Targets of Opportunity, the other eleven zones' ToOs (only TaRapedia's 2007-12-25 overview says every map's ToO pays one; their final pages are unchecked), and the three hybrid missions 1861 Traitor on the Run (rev 28192, 2008-02-01), 1851 Remedy (rev 34555, 2008-09-30) and 1899 Genome Sweet Genome (rev 35706, 2008-11-18), which pay a Clone Credit besides the hybrid unlock. Each reward goes in with its mission (OD-116).",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json clone_credit_sources",
+    "research/20260926-clone-credits/work/tarapedia/pages/",
+    "research/20260926-missing-npcs/work/tth/node20435.txt, node25965.txt"
+   ],
+   "closes_with": "seeding each mission with its Clone Credit reward; for the eleven unchecked ToOs, their final-era TaRapedia revision",
+   "surfaced_by": [
+    "clone-credits batch 2026-09-26"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-TOKEN-LOCKBOX-USE",
+   "summary": "The client's footlocker and clan-lockbox windows call an item's InventoryUse on right-click when the backpack is closed (lockboxwindow.pyo line 671, clanlockboxwindow.pyo line 911), so a Clone Credit token in either sends RequestUseCloneCredit too. No source shows whether the live server honoured it; TaRapedia locates the token 'in the last tab of your backpack'. The server accepts only a token in the character's own backpack and ignores the rest without a reply (OD-115).",
+   "evidence": [
+    "research/20260926-clone-credits/work/dis/lockboxwindow.txt, clanlockboxwindow.txt, inventorywindow.txt",
+    "TaRapedia Clone Credit rev 31080"
+   ],
+   "closes_with": "footage or a dated account of a token used from the footlocker or clan lockbox",
+   "surfaced_by": [
+    "clone-credits batch 2026-09-26"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-TOKEN-FLAGS",
+   "summary": "Of the Clone Credit template's flags only not_tradable_flag has a source (TaRapedia, CloneCreditNotTradable). has_sellable_flag 1, not_placable_in_lockbox_flag 0, bound_to_character_flag 0, the quality 2 and the 1-credit prices are Regenerate_item_template placeholders; no tooltip of the token survives. The Clone Credit Management tips (keep a ToO open so a clone can earn its own token) neither confirm nor rule out moving tokens through the footlocker.",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json clone_credit_sources.item",
+    "src/Rasa.DBL/Services/Preloader/ItemTemplateRegeneratedPreloader.cs (uniform flags)"
+   ],
+   "closes_with": "a final-era tooltip or account of the Clone Credit item",
+   "surfaced_by": [
+    "clone-credits batch 2026-09-26"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-TOO-AUTOCOMPLETE",
+   "summary": "The official 1.4 notes (2008-01-29) make a clone's Targets of Opportunity auto-complete 'mission related and other non-repeatable objectives' its source had completed before cloning (Wilderness, Crucible, Plateau, Abyss; later fixes for Mires, Howling Maw, Plateau's 'Become a Penumbra Agent'), while kill counts start over (TaRapedia Cloning rev 16906). No ToO is seeded, so there is nothing to auto-complete yet; the clone already carries the completed missions the rule reads.",
+   "evidence": [
+    "research/20260926-reward-items/work/rgtr-patch-1.4-20080129.txt lines 262, 284-288, 303",
+    "TaRapedia Cloning rev 16906"
+   ],
+   "closes_with": "implementing the ToO objectives with this rule when the ToO missions are seeded",
+   "surfaced_by": [
+    "clone-credits batch 2026-09-26"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-SOCIAL-STATE",
+   "summary": "What a clone keeps of its source's social state is unsettled. 'Your Clone and You' (2007-12, republished unchanged to 2009-01) resets the friends list '(for now at least)' and clan affiliation; IGN (pre-1.6) also the ignore list. The emulator keeps friends and ignores per account (so a clone shares them, as TaRapedia's 2008-10 Beginners Guide describes friends by global username) and gives a clone no clan and no titles. No final-era source settles friends, ignores, clan or titles.",
+   "evidence": [
+    "research/20260926-clone-credits/work/wayback/your-clone-and-you-a-guide-to-20090109.html",
+    "docs/source-sweep-2026-09-13.md 7.7 (IGN)",
+    "TaRapedia Beginners Guide rev 35313"
+   ],
+   "closes_with": "a final-era account or footage of a clone's friends list, clan and titles",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (SEG3-CLONE-COPY-RULES)"
+   ]
+  },
+  {
+   "id": "GAP-CLONE-CREDIT-VENDOR",
+   "summary": "No final-era source shows clone credits sold by any vendor. The only mention is a 2007 promise ('eventually, according to Cuppa Jo, there will be a vendor where you can purchase a cloning point', 'Your Clone and You'); the Prestige vendors of late 2008 sell Attribute and Skill Respec Tokens (600 prestige) and Experience Boosters (100), not clone credits (TaRapedia Prestige vendor rev 35127, 2008-10-16). None is seeded.",
+   "evidence": [
+    "research/20260926-clone-credits/work/tarapedia/pages/Prestige_vendor.json",
+    "research/20260926-clone-credits/work/wayback/your-clone-and-you-a-guide-to-20090109.html"
+   ],
+   "closes_with": "a final-era vendor list naming a clone credit, or confirmation that none existed",
+   "surfaced_by": [
+    "clone-credits batch 2026-09-26"
+   ]
   }
  ],
  "non_content_settings": [
@@ -81574,6 +81679,29 @@
      "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "CloneCreditNotTradable",
+   "table": "itemtemplate",
+   "key": {
+    "id": 111219
+   },
+   "field": "not_tradable_flag",
+   "old": 0,
+   "new": 1,
+   "tier": "observed",
+   "reason": "The Clone Credit token cannot be traded. TaRapedia's Clone Credit page says so from rev 31080 (2008-06-03) to its final rev 35135 (2008-10-16, an image-format edit that left the text), and no archived live note of D9-D15.7 makes the token tradable. The old 0 was Regenerate_item_template's uniform placeholder, not a reading (every template got the same flags). Only this flag changes; selling, the footlocker and binding stay placeholders (GAP-CLONE-TOKEN-FLAGS).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-clone-credits-20260926",
+     "locator": "Clone_Credit.json rev 31080 (2008-06-03), section 'Clone Credit Token': 'They are, at the moment, not able to be traded. This is an option slated to be added to the game, but no time-frame has been announced.'; rev 35135 (2008-10-16) same text"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111219 -> 26491; itemclass 26491 (icon 46013, loot value 1, stack 10); entityclass 26491 ItemCloneCredit augmentations 6, 70 (clonecredit)"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -82224,6 +82352,26 @@
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
    "choice": "Pools 21-29 ('Test Vendor 1-9') have drawn nothing since the 2023 seed and are left as they are. Pool 36 ('Test Vendor 5', weapons package 10) stands on the final client's 'Weapons Vendor: Alia Das' marker and is Alia Das' only weapons vendor, so it is kept; its missing name, test body and seed stock are recorded in GAP-ALIA-DAS-WEAPONS-VENDOR rather than removed. The hospital 'Test Vendor 3' pools 31-35 are left to the batch that owns hospitals (GAP-WILDERNESS-HOSPITAL-TEST-VENDORS).",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-115",
+   "decision": "Where a Clone Credit token can be used",
+   "default": "Only from the character's own backpack",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "RequestUseCloneCredit spends a token only when it stands in the using character's backpack, where TaRapedia locates it. The client can send the request for a token in the footlocker or clan lockbox too; that request is ignored without a reply until a source shows the live server honoured it (GAP-CLONE-TOKEN-LOCKBOX-USE). Alternative for the owner: accept the account footlocker as well.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-116",
+   "decision": "Clone Credit rewards of unseeded missions",
+   "default": "Seed each reward with its mission, not ahead of it",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The Targets of Opportunity and hybrid missions that paid a Clone Credit are not seeded, so no npc_mission_reward row is written for them now: a reward row for a mission the server does not define is dangling content. The evidence for each reward is kept ready in docs/evidence/class-trainer-evidence.json clone_credit_sources and GAP-WILDERNESS-TOO-CLONE-CREDIT / GAP-CLONE-TOKEN-LATER-SOURCES.",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }

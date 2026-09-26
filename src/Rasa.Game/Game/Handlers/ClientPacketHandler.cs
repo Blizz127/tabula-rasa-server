@@ -242,6 +242,12 @@ namespace Rasa.Game.Handlers
             ManifestationManager.Instance.SelectNewCharacterClass(Client, packet.ClassId);
         }
 
+        [PacketHandler(GameOpcode.RequestUseCloneCredit)]
+        private void RequestUseCloneCredit(RequestUseCloneCreditPacket packet)
+        {
+            ManifestationManager.Instance.RequestUseCloneCredit(Client, packet.EntityId);
+        }
+
         [PacketHandler(GameOpcode.LevelSkills)]
         private void LevelSkills(LevelSkillsPacket packet)
         {

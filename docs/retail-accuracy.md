@@ -2314,3 +2314,62 @@ shows what the skip granted (`GAP-LOGOS-SKIP-POWER`). Nothing is granted in its 
 Provenance: the manifest rows with migration `LiaisonLogosMissions` (43 rows, 11 changes, 6 new gaps, OD-100) and
 `docs/evidence/liaison-logos-missions.json`. The research is in `research/20260926-logos-missions`: TaRapedia and
 Ellatha fetches, the static client decode, and the world check.
+
+## 2026-09-26 — Clone credits: the token's use, where credits come from, and what a clone keeps
+
+The segment-3 audit (`research/20260926-segment3-audit`, SEG3-CLONE-CREDIT-SOURCES and SEG3-CLONE-COPY-RULES) found
+the Clone Credit item inert and the clone's copy list partly contradicted. Evidence: the 1.16.5.0 client decoded
+statically, TaRapedia's revision histories and four Wayback captures of the official site, all in
+`research/20260926-clone-credits` (hashes in `work/SHA256SUMS`). The rules are in
+`docs/evidence/class-trainer-evidence.json` (`CT-CLONE`, `CT-CLONE-GATE-CREDIT`, `CT-CLONE-POSITION`,
+`CT-CLONE-TOKEN`, `CT-CLONE-SELECTION`, and `clone_credit_sources`). Migration `20260926220000_CloneCreditNotTradable`.
+Decisions OD-115 and OD-116, agent-approved and pending owner review.
+
+- **Using a Clone Credit (opcode 706).** `clonecredit.pyo` gives the item a right-click Use that sends
+  `RequestUseCloneCredit(entityId)`. Nothing handled it. The client expects only the new count back:
+  `manifestation.Recv_CloneCredits` shows PM 955 "Your cloning credits have increased." and the Clone Credit
+  tutorial when the count rises. TaRapedia's Clone Credit page (rev 31080, 2008-06-03, text unchanged at its last
+  revision, 2008-10-16) says one token gives one credit: "Right-click on the clone credit token ... to enable a clone
+  credit on your character." `ManifestationManager.RequestUseCloneCredit` now checks the item's class carries the
+  clonecredit augmentation (70). It spends one token from the character's backpack through the atomic stack
+  consumption, adds the credit, saves it and sends `CloneCredits`. The client's footlocker and clan-lockbox windows
+  can send the same request. No source shows the live server accepting that, so it is ignored (OD-115,
+  `GAP-CLONE-TOKEN-LOCKBOX-USE`). The client has no failure message, so a refused request gets no reply.
+- **The token cannot be traded.** The same TaRapedia text: "They are, at the moment, not able to be traded." Template
+  111219's `not_tradable_flag` was `Regenerate_item_template`'s uniform 0. It is now 1 (observed). Its other flags and
+  prices remain placeholders (`GAP-CLONE-TOKEN-FLAGS`). Name, stack of 10 and class come from the client's tables.
+- **The selection screen already shows credits.** The pod reads `CharacterData[8]` and enables Clone only with
+  credits above zero and a free pod (`characterselectionwindow.pyo` lines 597, 614). The server already sends
+  that field, and after a clone it re-sends both pods. Unknown: whether live used `CloneCreditsChanged` (705) for
+  the source pod instead; both set the same field.
+- **Where credits come from.** The tier gate (one at 4, 14 and 29) is live. Every other dated source is a mission
+  reward. Wilderness Targets of Opportunity 1449 (Lt. Col. Cimoch, Alia Das) pays a Clone Credit with the title
+  Master of Wilderness (TaRapedia rev 35297, 2008-10-21, unchanged since 2007-10-26). The same is true of the
+  Divide, Palisades and Plains ToOs and of the three hybrid missions 1861, 1851 and 1899. None of these missions is
+  seeded. A reward row for a mission the server does not define would be dangling, so none is written (OD-116). Each
+  reward is recorded for when its mission is seeded (`GAP-WILDERNESS-TOO-CLONE-CREDIT`,
+  `GAP-CLONE-TOKEN-LATER-SOURCES`). No final-era vendor sold clone credits. A 2007 promise of one never shows up
+  again, and the late-2008 Prestige vendors sell respec tokens and boosters (`GAP-CLONE-CREDIT-VENDOR`). The
+  2008-01-31 grant to every character was a one-off compensation and is not final state.
+- **What a clone keeps: the conflict dissolves.** The audit set the "2009-01-25 Beginners Guide" (completed missions
+  carry) against IGN ("wipes the quest log"). Every source that separates the two agrees: a clone keeps its source's
+  completed missions and loses the open ones in its log. TaRapedia's Cloning page says so (rev 16906, 2007-11-28:
+  "no active missions in the mission log"). So does its Beginners Guide (rev 35313, 2008-10-23: "Quests completed"
+  persist). This is the page the 2009-01-25 citation meant; its last revision before shutdown is 2008-10-23. The
+  official 1.4 notes (2008-01-29) have a clone's Targets of Opportunity auto-complete "non-repeatable objectives"
+  its source had completed, which needs the clone to know those missions. The official site's "Your Clone and You"
+  lists "Missions" as reset, but also says to finish missions "you do not want to repeat" before cloning. Its text
+  is the same from 2007-12-11 to 2009-01-09, which also explains its stale "Attributes" not reset. The
+  implementation already copies completed missions and not active ones, so nothing changed.
+- **Arrival and the clone's own credit.** The same guide keeps "Location upon cloning" ("if you clone in a hostile area
+  that is where your naked clone is created"). The clone already starts at its source's position (observed,
+  `CT-CLONE-POSITION`). A clone has no credit of its own. It earns the gate's credit only if it was made before its
+  source reached the gate ("clone at level 14.9, not at 14.9999999", TaRapedia Cloning; Beginners Guide 2008-10-23).
+  `ApplyLevelUps` already grants the credit only when the experience crosses the threshold, and a test now pins
+  that (`CT-CLONE-GATE-CREDIT`).
+- Open: `GAP-CLONE-TOO-AUTOCOMPLETE` (the 1.4 ToO rule waits for the ToOs) and `GAP-CLONE-SOCIAL-STATE` (friends and
+  ignores are account-wide here; early sources reset them "for now"; clan and titles unsourced).
+- Tests: `CloneCreditUseTests` (decode through the registered handler, one token per credit, the last token leaves
+  the backpack, footlocker, foreign and non-token items refused, the evidence and manifest checks),
+  `ClassTrainerTests.AClonesOwnTierCreditDependsOnWhetherItWasMadeBeforeTheGate`, `ContentSchemaMigrationTests`
+  (forward, rollback, re-apply) and `SeedMigrationParityTests`.

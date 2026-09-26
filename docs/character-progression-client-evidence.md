@@ -279,7 +279,8 @@ specification). From character selection, with the recovered request shape
   least one clone credit on the source (`NotEnoughCloneCredits` otherwise);
 - creates the clone where the source stands, with the source's class, level, experience, Logos, completed
   missions (and their objective rows) and discovered waypoints and hospitals. Carrying completed missions
-  follows the dated 2009-01-25 Beginners Guide; an undated fan guide says missions reset;
+  follows the Beginners Guide (TaRapedia rev 35313, 2008-10-23; reconciled with the "missions reset" guides on
+  2026-09-26, see below);
 - resets what the official live notes of 2008-01-29 reset: attribute and skill points (Recruit skills at rank 1,
   nothing spent), gives the starter gear and no money, and marks the clone as played before so it is never
   offered the boot camp;
@@ -288,3 +289,14 @@ specification). From character selection, with the recovered request shape
 Active missions are not copied. Content facts, clan membership and titles are not copied either; none of them
 is evidenced. `NewCharacterTests.CloningSpendsACreditAndKeepsProgressionButResetsPointsGearAndMoney` covers
 refusals, the copied and reset state, and the spent credit.
+
+### Clone credits, 2026-09-26
+
+The Clone Credit item's right-click (`clonecredit.pyo` InventoryUse → `RequestUseCloneCredit(entityId)`, method
+706) is handled by `ManifestationManager.RequestUseCloneCredit`: one token from the backpack for one credit,
+answered with `CloneCredits` (704), which the client turns into PM 955 and the Clone Credit tutorial. The
+selection pod reads each character's credits from `CharacterData[8]` and enables Clone above zero. The copy list's
+supposed conflict is reconciled: completed missions carry and open ones are lost in every source that separates
+them. The clone's arrival at its source's position and its lack of a tier credit when cloned past the gate are
+both observed. Rules `CT-CLONE*` in `docs/evidence/class-trainer-evidence.json`; details in
+`docs/retail-accuracy.md`, "2026-09-26 — Clone credits".

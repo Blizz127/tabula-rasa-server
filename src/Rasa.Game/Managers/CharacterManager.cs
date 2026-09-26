@@ -110,10 +110,14 @@ namespace Rasa.Managers
         /// Clones a character into an empty pod for one of its clone credits (CT-CLONE in
         /// docs/evidence/class-trainer-evidence.json; R5.1 of the lost research/20260914-class-trainer spec).
         /// The clone keeps level, class, experience, Logos, completed missions and discovered waypoints and
-        /// hospitals, and stands where the source stands. It starts with the starter gear, no money, Recruit skills
-        /// at rank 1 and unspent attribute and skill points: since the live patch of 2008-01-29 cloning resets both.
-        /// Carrying completed missions follows the dated 2009-01-25 Beginners Guide; an undated fan guide
-        /// disagrees. Name, gender, height, race and appearance come from the creation screen.
+        /// hospitals, and stands where the source stands. It starts with the starter gear, no money, no clone credit,
+        /// Recruit skills at rank 1 and unspent attribute and skill points: since the live patch of 2008-01-29 cloning
+        /// resets both. Active missions are not carried. The sources agree once "missions reset" is read as the mission
+        /// log: completed missions carry (TaRapedia Cloning rev 16906 and Beginners Guide rev 35313, 2008-10-23; the
+        /// official 1.4 notes of 2008-01-29 auto-complete a clone's Targets of Opportunity objectives from missions its
+        /// source completed), while the log's open missions are lost (IGN's "wipes the quest log", the official site's
+        /// "Your Clone and You", captured 2007-12-11 to 2009-01-09). The arrival position is that guide's "Location upon
+        /// cloning" (observed, CT-CLONE-POSITION). Name, gender, height, race and appearance come from the creation screen.
         /// </summary>
         public void RequestCloneCharacterToSlot(Client client, RequestCloneCharacterToSlotPacket packet)
         {
