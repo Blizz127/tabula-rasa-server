@@ -4605,3 +4605,57 @@ per-context client markers and verdicts in `instances.json`). Migrations `Instan
   the preloader's kinds, radii and yaw rule; `MapLinkManager.Contains`; loaded maps and ground at every arrival),
   `PlayerDeathLifecycleTests` (the new hospitals gained and offered; the Eloh Temples section rule), the migration
   block in `ContentSchemaMigrationTests` (rows, rollbacks) and provider parity. Full suite 1494/1494.
+
+## 2026-09-27 — Crater Lake Research Facility: what the navmesh reaches, and what it holds
+
+The Crater Lake section of the wilderness instance dossiers (`research/20260926-instance-dossiers-wilderness`,
+`README.md` and `dossiers.json`), seeded where the evidence and the navmesh allow. Migration
+`WildernessCraterLakeResearchFacility` (20260927030000); evidence `docs/evidence/crater-lake-research-facility.json`
+(every navmesh probe, the seeded and held sets); decisions OD-140 to OD-144, agent-approved and pending owner review.
+D11 reworked parts of the instance (Predators removed, three unnamed bosses, more ore canisters and treasure crates)
+and no post-D11 footage exists, so pre-D11 guides are used only for what D11 did not name, at inferred tier.
+
+- **Every position was re-probed from the instance entrance** (the arrival of map_link 15) and the hospital marker
+  (teleporter 588) with this tree's `Rasa.NavMesh --path`; a seeded height is the surface minus 0.276 m (measured).
+  Two of the dossier's four terminal readings are not reachable. Ten Ton Hammer (2007-10-01) puts the Processing
+  Center terminal "into the destroyed building upper floor" (124.3, -27.3): the navmesh has the HQ's second floor
+  (103.95, the level of its folding table and cabinet) and its roof (117.88), and neither is joined; every probe ends on
+  the joined ground floor (99.64). The Biological Lab terminal (102.3, -89.6) is inside the client's
+  `ArchCormanGreenhouseV01`, whose floor and roof are islands too. This is the interior defect the Pravus batch is
+  investigating (`GAP-CLRF-INTERIOR-NAVMESH`). The dossier's "no navmesh" for the Observation Center reading
+  (-118.4, -76.0) came from probing only y 90-180: there is floor at 71.25 with a complete path, but it is valley floor
+  with no building within 30 m, against the guide's own "trail leading up" from the GPS beacon at y 141
+  (`GAP-CLRF-DT3-POSITION`).
+- **Seeded.** Captain Velns (199061, already placed) carries client package 23, the only completion line of 450/4
+  "Speak to Velns." (missiontext 5982). **450 The Dead Live**: Dr. Franja Corman (107) to Velns, one objective,
+  900 credits (TaRapedia in all 17 revisions, Ellatha) and no experience row, because no source records one
+  (`GAP-CLRF-450-XP`); no prerequisite, because TaRapedia says "None" throughout and Ten Ton Hammer's starter "Hoping for
+  the Best" is not a mission of the final client (OD-144). **Lt. Casper**: spawnpool 520012 stops drawing (0/0, Down
+  restores 1/1) and his existing creature row stands at Ellatha's /loc as placement 1721100, guarding his spot, one per
+  squad copy, not respawned in a copy (OD-142); the D11 test-server notes still name "his encampment".
+  **Overseer Tyryd**: creature 1721001 (client name 7002, class 10502 for Ellatha's "Thrax Technician", level 9) at
+  TaRapedia's supply-pen-key /loc (placement 1721101); health, attack and speed are analogues (OD-141,
+  `GAP-CLRF-TYRYD`). **960 Logos: Movement, Around, Chaos**: Standley (134) gives and takes it back; objectives 4/5/6
+  bind by LogosRecovered to the world's logos rows 50, 45 and 4 (the client's logosstone constants, all on 1721 and all
+  reached from the entrance); 18,000 experience and 1,500 credits (TaRapedia, Ellatha). Levels are the givers' (10,
+  OD-140). Around and Chaos stood behind the supply-pen force field that 1056/4 lowered; neither is modelled, so they are
+  ungated (OD-143, `GAP-CLRF-PEN-FORCEFIELD`). Every amount is a pre-1.4 reading, labelled (`GAP-REWARD-ERA-CLRF`); the
+  pre-1.4 item lists are not seeded.
+- **Held.** 1055 Destroying the Evidence: three of its four speakers are unplaceable (above), so the reachable Bane
+  CommLink terminal is held with it; the terminals would also need a body, because the client's
+  `UsableNPCHumMonitorV01`/`UsableNPCBaneKeyboard` carry only the NPC augmentation and a usable placement cannot carry a
+  package (`GAP-CLRF-TERMINAL-BODY`). 1065 Bending the Rules and its exit area: the loader rejects its prerequisite 1056,
+  which is unseeded, and dropping it would offer the escort ungated (`GAP-CLRF-1056-CHAIN`). The radar dish is a
+  TwoStateSwitch (augmentation 9), a state machine the content layer does not have, and 1054 is held
+  (`GAP-CLRF-RADAR-DISH-TWOSTATE`; the client's creature name 6757 "Thrax ECM Jamming Terminal" is a likely name for
+  1054's jammer, `GAP-CLRF-JAMMER`). 489, the ambient population, the three D11 bosses and the D11 crates, as the
+  dossier (`GAP-CLRF-CRYSTAL-CONTAINER-CLASS`, `GAP-CLRF-POPULATION`, `GAP-CLRF-D11-BOSSES`,
+  `GAP-CLRF-D11-TREASURE-CRATES`). Daniel Corman (199062) stands on reachable floor in the pen already.
+- **Squad copies carry the shrines.** The dossier's open question (`GAP-LOGOS-IN-SQUAD-INSTANCE`) is answered by the
+  instancing code: a copy clones its context's Logos shrines under the same ids (`DynamicObjectManager.CopyStaticObjects`),
+  so 960's bindings fire in every copy.
+- Tests: `CraterLakeResearchFacilityTests` (the seeded set against an independent list, store types, every row against
+  its manifest row, every position on floor with a complete path from the entrance and the held floors without one,
+  each squad copy's own shrines, rollback, the deployed world's rows and free ids), the Crater Lake block of
+  `MissionContentLoadingTests` (450 and 960 offerable, the four placements every copy materializes) and of
+  `ContentSchemaMigrationTests` (rows, rollback), and provider parity.

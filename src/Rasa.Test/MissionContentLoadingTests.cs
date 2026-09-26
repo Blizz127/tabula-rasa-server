@@ -1098,6 +1098,41 @@ namespace Rasa.Test
                         logosMission.Prerequisites.Select(prerequisite => prerequisite.RequiredMissionId).ToArray(), $"mission {missionId}");
                 }
 
+                // WildernessCraterLakeResearchFacility (2026-09-27): The Dead Live and Logos: Movement, Around, Chaos load offerable.
+                // 450 completes by speaking to Captain Velns (client package 23, carried by his npc_package row) and pays 900
+                // credits only; 960 waits on Crater Lake's three shrines and returns to Standley.
+                var deadLive = missions.LoadedMissions[450];
+                Assert.IsFalse(validation.MissionGaps.ContainsKey(450), string.Join(" | ", validation.MissionGaps.GetValueOrDefault(450u) ?? Array.Empty<string>()));
+                CollectionAssert.AreEqual(Array.Empty<string>(), deadLive.DefinitionGaps());
+                Assert.IsTrue(deadLive.IsDispensable);
+                Assert.AreEqual((107u, 199061u), (deadLive.MissionGiver, deadLive.MissionReciver));
+                Assert.IsTrue(deadLive.HasObjectiveConversation(4, 23, 1));
+                Assert.AreEqual(0, deadLive.Bindings.Count);
+                Assert.AreEqual((0L, 900L), ((long)deadLive.RewardExperience, (long)deadLive.RewardCredits));
+                Assert.AreEqual(0, deadLive.Prerequisites.Count);
+                var craterLogos = missions.LoadedMissions[960];
+                Assert.IsFalse(validation.MissionGaps.ContainsKey(960), string.Join(" | ", validation.MissionGaps.GetValueOrDefault(960u) ?? Array.Empty<string>()));
+                CollectionAssert.AreEqual(Array.Empty<string>(), craterLogos.DefinitionGaps());
+                Assert.IsTrue(craterLogos.IsDispensable);
+                Assert.AreEqual((134u, 134u), (craterLogos.MissionGiver, craterLogos.MissionReciver));
+                CollectionAssert.AreEquivalent(new[] { (4u, ObjectiveBindingKind.LogosRecovered, 50u), (5u, ObjectiveBindingKind.LogosRecovered, 45u), (6u, ObjectiveBindingKind.LogosRecovered, 4u) },
+                    craterLogos.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId)).ToArray());
+                Assert.AreEqual((18000L, 1500L), ((long)craterLogos.RewardExperience, (long)craterLogos.RewardCredits));
+                Assert.AreEqual(0, craterLogos.OfferedSelectableRewards.Count + craterLogos.OfferedFixedItems.Count);
+                Assert.AreEqual(0, craterLogos.ObjectiveConversations.Count);
+                // Held with their evidence gaps: 1055 (navmesh islands), 1065 (unseeded 1056), 489, 1054.
+                foreach (var held in new uint[] { 1055, 1065, 489, 1054 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(held), $"mission {held} is held");
+                // Every squad copy of Crater Lake materializes the same four creature placements: Velns and Daniel Corman
+                // (TarapediaMissingNpcBatch), Lt. Casper and Overseer Tyryd guarding their spots, none respawning in a copy.
+                Assert.AreEqual(MapInstancing.PerSquad, validation.Catalog.InstancingFor(1721));
+                Assert.IsFalse(validation.WithheldContexts.Contains(1721u));
+                var craterLake = ContentMaterializer.PlacementsToSpawn(validation, 1721).ToDictionary(placement => placement.Id);
+                CollectionAssert.AreEquivalent(new uint[] { 199061, 199062, 1721100, 1721101 }, craterLake.Keys.ToArray());
+                Assert.AreEqual((520012u, (byte)ContentPlacementBehavior.CreatureAi, 0u, 0u), (craterLake[1721100].CreatureId, craterLake[1721100].Behavior, craterLake[1721100].RespawnMs, craterLake[1721100].PresentConditionId));
+                Assert.AreEqual((1721001u, (byte)ContentPlacementBehavior.CreatureAi, 0u, 0u), (craterLake[1721101].CreatureId, craterLake[1721101].Behavior, craterLake[1721101].RespawnMs, craterLake[1721101].PresentConditionId));
+                Assert.AreEqual(0, ContentMaterializer.UsablesToSpawn(validation, 1721).Count);
+
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];
                 CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.Kill), (2u, ObjectiveBindingKind.AreaEntered) },

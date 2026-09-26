@@ -449,6 +449,46 @@
    "era": "unknown",
    "locator": "research/20260926-instances/work/tarapedia/pages/*.json (MediaWiki API, latest revision before 2009-03-01 per page; revision ids cited per use)",
    "note": "TaRapedia instance pages. Bodies are pre-D11 everywhere (research/20260926-instances tarapedia_instances.json content_assessment); cited with revision and date."
+  },
+  "community_db:tarapedia-clrf-20260926": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-instance-dossiers-wilderness/work/tarapedia/{pages,npcs}/*.json (MediaWiki API, full revision histories with content, fetched 2026-09-26 by tools/fetch_tarapedia.py)",
+   "note": "Community transcription. Each citation names the revision id and date it reads; every Crater Lake value used here was first written before Update 1.4 (2008-01-29) and before D11 (2008-08-15)."
+  },
+  "community_db:ellatha-clrf-20260926": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://www.ellatha.com/tr/",
+   "locator": "research/20260926-instances/work/guides/ell_boss_044.html (sha256 a09f4a5c891e4191...), ell_boss_045.html (6aaa5e8660972e04...), ell_missionsview_The_Dead_Live.html (3b3e639568dfc755...), ell_missionsview_Logos_3A_Movement_2C_Around_2C_Chaos.html; parsed in ell_boss_parsed.json and ell_instance_npc_mission_parsed.json",
+   "note": "DaOpa's boss and mission database (early-2008 content). A community transcription of the live game, not original server data."
+  },
+  "community_db:tentonhammer-clrf-12625": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://www.tentonhammer.com/node/12625",
+   "locator": "research/20260926-instances/work/guides/tth_node_12625.txt (sha256 3cd34abd01d485aa2094e841c68b7fe8c86d10ba5275d21be29ac4b85ed188ed)",
+   "note": "Ten Ton Hammer's Crater Lake Research Facility walkthrough, published 2007-10-01, with /loc x,z readings taken in game. Pre-D11: D11 reworked parts of the instance."
+  },
+  "official_notes:d11-pts-20080731": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "locator": "research/20260926-notes-audit/sources/wayback-pts/deployment_11_7312008.html (Deployment 11 test-server notes, 2008-07-31, Known Issues)",
+   "note": "Official notes of the D11 build on the public test server, two weeks before D11 went live (2008-08-15). Test-server notes: supporting evidence only."
+  },
+  "measurement:crater-lake-navmesh-20260927": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/crater-lake-research-facility.json",
+   "note": "Rasa.NavMesh --path probes on navmesh/adv_foreas_concordia_wilderness_clrf.nav (built from the 1.16.5.0 client map; sha256 d527c13b3ecad26c09e36b3e21fa15ea905c94e6bd3060d4686bff8254d7f416) from the instance hospital marker (teleporter 588) and from the arrival of map_link 15, the instance entrance; floor = surface - 0.276 m."
+  },
+  "client_map:adv_foreas_concordia_wilderness_clrf": {
+   "kind": "client_map",
+   "era": "final_live",
+   "sha256": "4479226debe5c3f478d1987c33d5e2c3effc3be171c6380072216c23c13a1a67",
+   "member": "Tabula Rasa 1.16.5.0/data/maps/adv_foreas_concordia_wilderness_clrf/adv_foreas_concordia_wilderness_clrf.map",
+   "locator": "research/20260926-instance-dossiers-wilderness/work/map_clrf.json (536 static entities, tools/mapents.py: a Python port of Rasa.ClientData/MapFile.cs)"
   }
  },
  "scope": [
@@ -692,6 +732,26 @@
     }
    },
    "note": "InstanceTravelLinks (2026-09-27): the instance-travel batch's block."
+  },
+  {
+   "table": "creature",
+   "key_ranges": {
+    "id": {
+     "min": 1721001,
+     "max": 1721099
+    }
+   },
+   "note": "WildernessCraterLakeResearchFacility (2026-09-27): the dossier-reserved Crater Lake creature block; 1721001 Overseer Tyryd."
+  },
+  {
+   "table": "content_placement",
+   "key_ranges": {
+    "id": {
+     "min": 1721100,
+     "max": 1721499
+    }
+   },
+   "note": "WildernessCraterLakeResearchFacility (2026-09-27): the dossier-reserved Crater Lake placement block; 1721100 Lt. Casper, 1721101 Overseer Tyryd."
   }
  ],
  "rows": [
@@ -78584,6 +78644,1859 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 1721001
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "name_id": {
+     "value": 7002,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 7002 'Overseer Tyryd' (research/20260926-trainers-economy/work/creaturenamelanguage.json)"
+      }
+     ],
+     "reasoning": "the client's own creature name for the boss Ellatha lists"
+    },
+    "class_id": {
+     "value": 10502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo 10502 Bane_Thrax_Technician_Boss (mesh 18368, augmentations [1,59])"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "Ellatha types Overseer Tyryd a Thrax Technician boss; Bane_Thrax_Technician_Boss is the client's class for that, and the class the world seed's Thrax Technician boss (creature 48) stands on. Which technician boss model he used is not recorded."
+    },
+    "faction": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a Bane boss the player must kill for the key; the world gives hostile Bane creatures faction 0."
+    },
+    "level": {
+     "value": 9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "Ellatha's boss list, pre-D11 (D11 added three unnamed bosses; whether Tyryd's level changed is unrecorded, GAP-CLRF-TYRYD)."
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed creatures 82-84 and 90, Bane Thrax Overseer bosses of levels 6-10, max_hp 1000"
+      }
+     ],
+     "counterpart": "the world seed's Thrax Overseer bosses of level 6-10 (creatures 82, 83, 84, 90: 1000 hp)",
+     "required_because": "creature.max_hp is required and no source gives any Crater Lake creature's health",
+     "decision": "OD-141"
+    },
+    "action1": {
+     "value": 29,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed creature 48 'Bane Thrax Technician Boss' (class 10502) action1 29; creature_action 29 'Bane_Thrax_Technician_Boss' (action 1, arg 1, 0.5-30 m, 800 ms, 10-15 damage)"
+      }
+     ],
+     "counterpart": "creature_action 29, the attack the world seed gives its only other Bane_Thrax_Technician_Boss row (48)",
+     "required_because": "a boss that fights needs an attack and his is unrecorded",
+     "decision": "OD-141"
+    },
+    "run_speed": {
+     "value": 9.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed Thrax boss rows 82-84 (run 9, walk 0) and the S4 Tizzik Gi (198506, run 9, walk 0)"
+      }
+     ],
+     "counterpart": "the Thrax boss rows 82-84 and Tizzik Gi 198506 (run 9)",
+     "required_because": "creature.run_speed is NOT NULL; a guarding boss must close on and return from its target",
+     "decision": "OD-141"
+    },
+    "walk_speed": {
+     "value": 0.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed Thrax boss rows 82-84 (run 9, walk 0) and the S4 Tizzik Gi (198506, run 9, walk 0)"
+      }
+     ],
+     "counterpart": "as run_speed (walk 0)",
+     "required_because": "creature.walk_speed is NOT NULL; he never strolls (creature-AI placements hold their spot)",
+     "decision": "OD-141"
+    },
+    "action2": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action3": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action4": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action5": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action6": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action7": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    },
+    "action8": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "no second attack is recorded; 0 is none."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Overseer Tyryd (Crater Lake Research Facility)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 1721100
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 520012,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "the existing creature row 520012 (BossCreaturePreloader: name 6739 'Hominis Machina Lt. Casper' original, class 21474 Bane_Hominis_Machina_Boss, level 9 = Ellatha), unchanged."
+    },
+    "pos_x": {
+     "value": -272.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Lieutenant Casper' (pageid 6712) rev 14460 (2007-11-12): -270.0, 170.0, -60.0, 'This location is not exact. Lieutenant Casper is outside this location gaurding the entrance.'"
+      }
+     ],
+     "reasoning": "Ellatha's /loc for the boss (-272, 168, -54); TaRapedia's approximate -270, -60 and 'outside ... gaurding the entrance' agree within 6 m. Pre-D11; the D11 test-server notes still name his encampment.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 10
+     }
+    },
+    "pos_y": {
+     "value": 168.763,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:crater-lake-navmesh-20260927",
+       "locator": "probes[casper_1721100] from the instance entrance (map_link 15 arrival) and the hospital marker"
+      }
+     ],
+     "reasoning": "navmesh surface 169.03906 under x,z minus 0.276 m; complete path 717.4 m from the instance entrance and 728.9 m from the hospital marker.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": -54.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Lieutenant Casper' (pageid 6712) rev 14460 (2007-11-12): -270.0, 170.0, -60.0, 'This location is not exact. Lieutenant Casper is outside this location gaurding the entrance.'"
+      }
+     ],
+     "reasoning": "Ellatha's /loc for the boss (-272, 168, -54); TaRapedia's approximate -270, -60 and 'outside ... gaurding the entrance' agree within 6 m. Pre-D11; the D11 test-server notes still name his encampment.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 10
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "BossSpawnpoolPreloader spawnpool 520012 rotation 0"
+      }
+     ],
+     "counterpart": "the retired spawnpool 520012's rotation (0)",
+     "required_because": "content_placement.rotation is required and his facing is unobserved",
+     "decision": "OD-142"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      },
+      {
+       "source": "community_db:tentonhammer-clrf-12625",
+       "locator": "tth_node_12625.txt: 'A little further west you'll locate a small Bane fortification with a dozen or so occupants ... One of the occupants is Caspar, only he's Machina now ... so kill him'"
+      },
+      {
+       "source": "official_notes:d11-pts-20080731",
+       "locator": "Known Issues: 'Mission: Crater Lake Research Facility: Ghost in the Machine: Does not update for all squad members if Casper is killed before everyone has entered his encampment.'"
+      }
+     ],
+     "reasoning": "a boss among 'a dozen or so occupants' that fights the squad at his fortification; creature-AI placements guard their spot and fight (CreatureManager.ApplyPlacementBehavior), as the retired spawnpool's creature did."
+    },
+    "npc_package_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a hostile boss has no conversation package."
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "not an escort or companion."
+    },
+    "alternate_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "alternate_state_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "windup_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "name_override_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "restore_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "fuse_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "present_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "usable_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "respawn_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+      }
+     ],
+     "reasoning": "no respawn inside a squad copy: the copy is populated once and discarded after its linger (OD-126); the original in-copy respawn is unrecorded (GAP-INSTANCE-RESET-TIMER, OD-142)."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1721,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Hominis Machina Lt. Casper (per squad copy)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 1721101
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 1721001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "instantiates the creature row 1721001 of this migration."
+    },
+    "pos_x": {
+     "value": -160.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Reclaiming What's Ours' rev 29896 (2008-03-21): 'you must kill the Crater Lake Bane Overseer to get a supply pen key'"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "TaRapedia's only location for the overseer is where his supply pen key is found (-160, 90, -10); Ellatha has no /loc ('Located inside the base!'). Pre-D11, and the key drops on his death, so it marks where he fell, not where he stood (GAP-CLRF-TYRYD).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 10
+     }
+    },
+    "pos_y": {
+     "value": 93.18,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:crater-lake-navmesh-20260927",
+       "locator": "probes[tyryd_1721101] from the instance entrance (map_link 15 arrival) and the hospital marker"
+      }
+     ],
+     "reasoning": "navmesh surface 93.45639 under x,z minus 0.276 m; complete path 556.7 m from the instance entrance and 568.3 m from the hospital marker.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": -10.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Reclaiming What's Ours' rev 29896 (2008-03-21): 'you must kill the Crater Lake Bane Overseer to get a supply pen key'"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "TaRapedia's only location for the overseer is where his supply pen key is found (-160, 90, -10); Ellatha has no /loc ('Located inside the base!'). Pre-D11, and the key drops on his death, so it marks where he fell, not where he stood (GAP-CLRF-TYRYD).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 10
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's stationary placements and spawnpools face 0"
+      }
+     ],
+     "counterpart": "the facing every Crater Lake row carries (Velns, Daniel Corman, spawnpool 520012: 0)",
+     "required_because": "content_placement.rotation is required and his facing is unobserved",
+     "decision": "OD-141"
+    },
+    "behavior": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_boss_045.html: 'Overseer Tyryd', Level 9, Type Thrax Technician, Loc Unavailable, Zone Crater Lake Research, Notes 'Located inside the base!', needed for Reclaiming What's Ours"
+      }
+     ],
+     "reasoning": "a boss the player kills inside the Bane base; he guards his spot and fights."
+    },
+    "npc_package_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a hostile boss has no conversation package."
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "a creature placement takes its class, health and loot from its creature row; the usable columns do not apply."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "not an escort or companion."
+    },
+    "alternate_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "alternate_state_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "windup_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "name_override_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "restore_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "fuse_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "present_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "usable_condition_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "none: an unconditioned creature placement (usable-only and condition columns)."
+    },
+    "respawn_ms": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Supply pen key' (pageid 6730) rev 14505 (2007-11-12): 'found on the Crater Lake Bane Overseer. Once you kill him you retrieve it automatically.', location -160.0, 90.0, -10.0"
+      }
+     ],
+     "reasoning": "no respawn inside a squad copy: the copy is populated once and discarded after its linger (OD-126); the original in-copy respawn is unrecorded (GAP-INSTANCE-RESET-TIMER, OD-142)."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1721,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Overseer Tyryd (supply pen key /loc)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199061
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "package_id": {
+     "value": 23,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      },
+      {
+       "source": "community_db:tentonhammer-clrf-12625",
+       "locator": "tth_node_12625.txt: 'The starter mission for the Dead Live is in Twin Pillars and called Hoping for the Best'; 'Velns will update The Dead Live ... She'll also give you the main mission called Destroying the Evidence'; Velns at 32.3, 198.8"
+      },
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Captain Velns' (pageid 6707) rev 14545 (2007-11-12); placement 199061 (TarapediaMissingNpcBatch) at (30, 139.163, 200) on 1721"
+      }
+     ],
+     "reasoning": "Package 23 is the client's only completion package for 450/4 'Speak to Velns.' (original), and no creature carries it; that Captain Velns (199061) speaks it follows from the objective, the log text and the guide (inferred). The placement keeps npc_package_id 0, so the creature's row supplies the package."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Captain Velns (client package 23)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 450
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "giver_id": {
+     "value": 107,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      },
+      {
+       "source": "community_db:tentonhammer-clrf-12625",
+       "locator": "tth_node_12625.txt: 'The starter mission for the Dead Live is in Twin Pillars and called Hoping for the Best'; 'Velns will update The Dead Live ... She'll also give you the main mission called Destroying the Evidence'; Velns at 32.3, 198.8"
+      }
+     ],
+     "reasoning": "Dr. Franja Corman (world-seed creature 107, spawnpool 185 at Ranja Gorge, map 1220; client class 6340 carries the NPC augmentation): TaRapedia's MissionGiver in every revision; her opening text is Casper's partner's plea. The client records no giver."
+    },
+    "reciver_id": {
+     "value": 199061,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      },
+      {
+       "source": "community_db:tentonhammer-clrf-12625",
+       "locator": "tth_node_12625.txt: 'The starter mission for the Dead Live is in Twin Pillars and called Hoping for the Best'; 'Velns will update The Dead Live ... She'll also give you the main mission called Destroying the Evidence'; Velns at 32.3, 198.8"
+      }
+     ],
+     "reasoning": "Captain Velns: the objective and log name him and the completion package 23 is his (npc_package row of this migration). Stands in Crater Lake 1721 (per-squad copies), reached through map_link 15."
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed creature 107 Dr. Fanja Corman, level 10"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100 applied to the Liaison Logos missions (Dr. Franja Corman 107: 10)",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-140"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      }
+     ],
+     "reasoning": "the Wilderness general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "The Dead Live (Crater Lake)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 960
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "giver_id": {
+     "value": 134,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "Receptive Liaison Standley (world-seed 134, Twin Pillars): TaRapedia's MissionGiver and RewardGiver through the latest revision."
+    },
+    "reciver_id": {
+     "value": 134,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client log says 'then return to Receptive Liaison Standley'; the Liaison who gives a Logos mission takes it back, as in SeedLogosMissions and LiaisonLogosMissions."
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "world seed creature 134 Receptive Liason Standley, level 10"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100 applied to Standley's own 1634 and 1635 (10)",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-140"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "the Wilderness general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Logos: Movement, Around, Chaos (Crater Lake)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 450,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "comment": {
+     "value": "Speak to Velns.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      }
+     ],
+     "reasoning": "the sole objective; a mission completes on its required objectives."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+      }
+     ],
+     "reasoning": "the sole objective; nothing else could reveal it."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "comment": {
+     "value": "Retrieve Logos Information: Movement",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's objective order (4, 5, 6) as ordinals 1-3; no source orders the shrines."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "each names one of the three Logos the mission asks for; all three are needed to return to Standley."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the mission names all three Logos and nothing orders the shrines, so all are revealed on acceptance (the SeedLogosMissions rule for 1750)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 5
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "comment": {
+     "value": "Retrieve Logos Information: Around",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's objective order (4, 5, 6) as ordinals 1-3; no source orders the shrines."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "each names one of the three Logos the mission asks for; all three are needed to return to Standley."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the mission names all three Logos and nothing orders the shrines, so all are revealed on acceptance (the SeedLogosMissions rule for 1750)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "comment": {
+     "value": "Retrieve Logos Information: Chaos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the client's objective order (4, 5, 6) as ordinals 1-3; no source orders the shrines."
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "each names one of the three Logos the mission asks for; all three are needed to return to Standley."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      }
+     ],
+     "reasoning": "the mission names all three Logos and nothing orders the shrines, so all are revealed on acceptance (the SeedLogosMissions rule for 1750)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 4,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: 'Retrieve Logos Information: Movement' is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 50,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness_clrf",
+       "locator": "world logos rows 50 'Movement' (0.93, 90.93, 115.21), 45 'Around' (24.07, 74.85, -9.0), 4 'Chaos' (23.98, 74.83, -20.12), all map 1721; each on a client ArchElohLogosDispenserBase entity, (0.92, 88.18, 115.16), (24.0, 72.10, -9.0), (24.0, 72.10, -20.0) (work/map_clrf.json)"
+      }
+     ],
+     "reasoning": "the `logos` row of the Movement shrine: the id is the client's logosstone constant, the row's name is the objective's word and it stands on 1721, reached by a complete navmesh path from the instance entrance (docs/evidence/crater-lake-research-facility.json). Squad copies carry their own copy of each shrine with the same id (DynamicObjectManager.CopyStaticObjects)."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "960/4 the Movement shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 5,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: 'Retrieve Logos Information: Around' is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 45,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness_clrf",
+       "locator": "world logos rows 50 'Movement' (0.93, 90.93, 115.21), 45 'Around' (24.07, 74.85, -9.0), 4 'Chaos' (23.98, 74.83, -20.12), all map 1721; each on a client ArchElohLogosDispenserBase entity, (0.92, 88.18, 115.16), (24.0, 72.10, -9.0), (24.0, 72.10, -20.0) (work/map_clrf.json)"
+      }
+     ],
+     "reasoning": "the `logos` row of the Around shrine: the id is the client's logosstone constant, the row's name is the objective's word and it stands on 1721, reached by a complete navmesh path from the instance entrance (docs/evidence/crater-lake-research-facility.json). Squad copies carry their own copy of each shrine with the same id (DynamicObjectManager.CopyStaticObjects)."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "960/5 the Around shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 6,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: 'Retrieve Logos Information: Chaos' is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_wilderness_clrf",
+       "locator": "world logos rows 50 'Movement' (0.93, 90.93, 115.21), 45 'Around' (24.07, 74.85, -9.0), 4 'Chaos' (23.98, 74.83, -20.12), all map 1721; each on a client ArchElohLogosDispenserBase entity, (0.92, 88.18, 115.16), (24.0, 72.10, -9.0), (24.0, 72.10, -20.0) (work/map_clrf.json)"
+      }
+     ],
+     "reasoning": "the `logos` row of the Chaos shrine: the id is the client's logosstone constant, the row's name is the objective's word and it stands on 1721, reached by a complete navmesh path from the instance entrance (docs/evidence/crater-lake-research-facility.json). Squad copies carry their own copy of each shrine with the same id (DynamicObjectManager.CopyStaticObjects)."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo (sha256 08a6d29c5dcd9697...): CHAOS = 4, AROUND = 45, MOVEMENT = 50 (research/20260926-instance-dossiers-wilderness/work/logosstone.json)"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "960/6 the Chaos shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 450,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "credits": {
+     "value": 900,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_missionsview_The_Dead_Live.html: Quest Rewards List '900' 'Credits' (and a pre-1.4 Class I Standard Med Pack, not seeded)"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits=900 in every revision (first rev 14229, 2007-11-10; latest 24854, 2008-01-01) and Ellatha's 900 agree. No source records experience, so no experience row is seeded (GAP-CLRF-450-XP). ERA: pre-Update-1.4 reading (GAP-REWARD-ERA-CLRF). Seeded as the earlier W3 batches seeded TaRapedia amounts, labelled so it is not read as final-state evidence.",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'The Dead Live' (pageid 6661), every revision from 14229 (2007-11-10, Swmacrae) to 24854 (2008-01-01, Dashiva, latest): MissionGiver=Dr. Franja Corman ('Fanja' until rev 14492), Requirement=None, RewardXP empty, RewardCredits=900; https://tabularasa.fandom.com/wiki/The_Dead_Live?oldid=24854; local work/tarapedia/pages/The_Dead_Live.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 960,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "credits": {
+     "value": 18000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=18000 (the amount is stored in the credits column for either type), first written in rev 14536 (2007-11-12) and carried unchanged by the post-D11 revisions 33252, 34248 and 35783, editorial passes that did not re-read it. Ellatha lists credits only. ERA: pre-Update-1.4 reading (GAP-REWARD-ERA-CLRF). Seeded as the earlier W3 batches seeded TaRapedia amounts, labelled so it is not read as final-state evidence.",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 960,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "fields": {
+    "credits": {
+     "value": 1500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      },
+      {
+       "source": "community_db:ellatha-clrf-20260926",
+       "locator": "ell_missionsview_Logos_3A_Movement_2C_Around_2C_Chaos.html: Quest Rewards List '1500' 'Credits'"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits 1,500 since rev 11984 (2007-10-30), carried unchanged to rev 35783 (2008-12-22), and Ellatha's 1500 agree. ERA: pre-Update-1.4 reading (GAP-REWARD-ERA-CLRF). Seeded as the earlier W3 batches seeded TaRapedia amounts, labelled so it is not read as final-state evidence.",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-clrf-20260926",
+       "locator": "page 'Logos: Movement, Around, Chaos' (pageid 2435): MissionGiver=Receptive Liaison Standley since rev 11984 (2007-10-30); RewardCredits 1,500 since rev 11984 and RewardXP=18000 since rev 14536 (2007-11-12, Thirdpoliceman), both carried unchanged through revs 30946 (2008-05-14), 33252 (2008-09-15), 34248 (2008-09-25, RewardGiver=Receptive Liaison Standley) and 35783 (2008-12-22, latest); Requirement=None; https://tabularasa.fandom.com/wiki/Logos:_Movement,_Around,_Chaos?oldid=35783; local work/tarapedia/pages/Logos:_Movement,_Around,_Chaos.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
   }
  ],
  "omitted": [
@@ -78991,6 +80904,48 @@
    "what": "340, 833, 841, 842 and 848",
    "reason": "340/1905 escort split unresolved; 833/841 and 842/848 are the two arms of 827, which cannot be gated while 831/840 are unseeded",
    "gap": "GAP-827-BRANCH-ARMS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1055 Destroying the Evidence and its terminal placements (1721110-1721113)",
+   "reason": "three of its four completion speakers stand on navmesh islands or at a contradicted reading, so the mission could not be finished; the reachable Bane CommLink terminal is held with it",
+   "gap": "GAP-CLRF-INTERIOR-NAVMESH",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1065 Bending the Rules and its exit area (content_area 1721500)",
+   "reason": "its prerequisite 1056 is unseeded and the content loader rejects the row; dropping it would offer the escort ungated",
+   "gap": "GAP-CLRF-1056-CHAIN",
+   "slice": "W3"
+  },
+  {
+   "table": "content_placement",
+   "what": "the 1054/2 radar dish (1721120)",
+   "reason": "a TwoStateSwitch usable the content layer cannot drive; 1054 is held",
+   "gap": "GAP-CLRF-RADAR-DISH-TWOSTATE",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "489 Centrifuge Fuel and its crystal crates (1721130-1721132)",
+   "reason": "container class unknown and the set changed at D11",
+   "gap": "GAP-CLRF-CRYSTAL-CONTAINER-CLASS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1054 We Be Jammin'",
+   "reason": "the transmitter is unplaced",
+   "gap": "GAP-CLRF-JAMMER",
+   "slice": "W3"
+  },
+  {
+   "table": "spawnpool",
+   "what": "Crater Lake's ambient population, the three D11 bosses and the D11 treasure crates",
+   "reason": "no counts, levels or positions survive for the post-D11 instance",
+   "gap": "GAP-CLRF-POPULATION",
    "slice": "W3"
   }
  ],
@@ -82472,7 +84427,7 @@
    "slices": [
     "W3"
    ],
-   "summary": "The Liaison Logos missions still unseeded after LiaisonLogosMissions. Single-shrine and on the giver's own map, seedable the same way: Langerman's 907 Damage (logos 6), 909 Time (28), 911 Mind (56) and 921 Projectile (24), and Standley's 908 Enemy (9) and 912 Self (38), all on the Wilderness; TaRapedia names their givers in revisions up to 2008-09-15/25, and 907/908/909/921 carry the same Receptive Reception requirement. Multi-shrine, on other maps: Standley's 923 Feeling/Trap/Heal (Caves of Donn, 1506), 924 Communication/Control/Machine (Pravus Research Facility, 1430) and 960 Movement/Around/Chaos (Crater Lake, 1721). 1812 True and 1813 Through were not examined. The segment-3 audit's statement that all eleven of this batch were Langerman's was a list error: TaRapedia and the shrines' maps give Langerman four, Standley two, Noonan four and Arizpe one.",
+   "summary": "The Liaison Logos missions still unseeded after LiaisonLogosMissions. Single-shrine and on the giver's own map, seedable the same way: Langerman's 907 Damage (logos 6), 909 Time (28), 911 Mind (56) and 921 Projectile (24), and Standley's 908 Enemy (9) and 912 Self (38), all on the Wilderness; TaRapedia names their givers in revisions up to 2008-09-15/25, and 907/908/909/921 carry the same Receptive Reception requirement. Multi-shrine, on other maps: Standley's 923 Feeling/Trap/Heal (Caves of Donn, 1506), 924 Communication/Control/Machine (Pravus Research Facility, 1430) and 960 Movement/Around/Chaos (Crater Lake, 1721; seeded 2026-09-27 by WildernessCraterLakeResearchFacility). 1812 True and 1813 Through were not examined. The segment-3 audit's statement that all eleven of this batch were Langerman's was a list error: TaRapedia and the shrines' maps give Langerman four, Standley two, Noonan four and Arizpe one.",
    "evidence": [
     "research/20260926-logos-missions/work/tarapedia-fields.json",
     "research/20260926-logos-missions/work/client-rows.json",
@@ -83154,6 +85109,241 @@
    ],
    "closes_with": "the Edmund Range PvP batch",
    "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-CLRF-INTERIOR-NAVMESH",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The repo navmesh does not join Crater Lake's building interiors to the rest of the instance. Ten Ton Hammer puts the Processing Center data terminal on the destroyed Corman HQ's upper floor (124.3, -27.3): the navmesh has surfaces there at 103.95 (second floor, the level of the HQ's folding table and cabinet) and 117.88, and neither is reached - every probe from the entrance or the hospital ends PARTIAL on the ground floor at 99.64, which is joined. The Biological Lab terminal (102.3, -89.6) is inside the client's ArchCormanGreenhouseV01 (104.2, 118.5, -95.5): its floor 118.94 and roof 129.24 are islands too. The same defect the Pravus batch is investigating (GAP-PRAVUS-INTERIOR-NAVMESH). Nothing is placed on an island; 1055 is held.",
+   "evidence": [
+    "docs/evidence/crater-lake-research-facility.json probes dt1_*, dt2_*, hq_second_floor",
+    "research/20260926-instance-dossiers-wilderness/work/map_clrf.json (HQ at (118.5, 98.5, -36.0), greenhouse at (104.2, 118.5, -95.5))"
+   ],
+   "closes_with": "a navmesh build that joins the building floors (Pravus navmesh-tooling batch), then re-probe and seed 1055/1-2",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-DT3-POSITION",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Ten Ton Hammer's Observation Center terminal (-118.4, -76.0) is not a navmesh hole, as the dossier recorded after probing only y 90-180: the navmesh has floor at 71.25 there (complete path, 518 m from the hospital, 507 m from the entrance). But that spot is valley floor beside a Bane outpost wall with no building within 30 m in the client map, and the same guide reaches the terminal by 'a trail leading up to more destroyed buildings' from the GPS beacon at y 141. The nearest destroyed building on that route is ArchCormanHousingDestroyedV01 (-129.7, 153.8, -180.5), 105 m away, whose floors 154.0 and 158.8 are reachable. No source places the terminal there, so it is held.",
+   "evidence": [
+    "docs/evidence/crater-lake-research-facility.json probes dt3_*",
+    "tth_node_12625.txt paragraph 17"
+   ],
+   "closes_with": "a second dated reading of the Observation Center terminal, or footage",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-TERMINAL-BODY",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The three data terminals and the Bane CommLink terminal speak their 1055 completion lines through client packages 603, 604, 649 and 1121. The client's own classes for them are usable NPCs - UsableNPCHumMonitorV01 11143 and UsableNPCBaneKeyboard 10519 carry the NPC augmentation (52) only - and the server builds a conversation partner only from a creature with the Creature augmentation, while a usable placement cannot carry a package (MissionPropSpeakersRows). Seeding them would take the talking-machine analogue (NPC_Hominis_Machina 10642, OD-45). Not needed while 1055 is held.",
+   "evidence": [
+    "entityclass.pyo 11143 and 10519 aug [52]",
+    "src/Rasa.DBL/Migrations/WildernessData/MissionPropSpeakersRows.cs"
+   ],
+   "closes_with": "server support for usable-NPC conversation partners, or an owner decision to use the talking-machine analogue",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-RADAR-DISH-TWOSTATE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The radar dish of 1054/2 is the client's UsableTwoStateCormanGenObjRadarDishV01 (6273), a TwoStateSwitch (augmentation 9). Content usables implement no two-state machine (MissionContentRules.UsableStateTransitions has 8, 10, 41, 42 and 64), so it cannot be placed in its own state; and 1054 is held (GAP-CLRF-JAMMER). Its position (-169.5, 141, -109.5) is on reachable floor (complete path, 596 m from the entrance).",
+   "evidence": [
+    "entityclass.pyo 6273 aug [9]",
+    "docs/evidence/crater-lake-research-facility.json probe radar_dish_tth"
+   ],
+   "closes_with": "the TwoStateSwitch state machine from usabledata.pyo, and 1054's jammer",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-1056-CHAIN",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "1056 Reclaiming What's Ours (weapons-cache bombs, the generator at -253.8, -102.5, Overseer Tyryd's supply pen key, the pen panel (static terminal -84.1, 75.3, 7.6), the pen force field and the second generator) and 711 Return to Sender / 1059 Ghost in the Machine are unseeded. 1065 Bending the Rules requires 1056 (TaRapedia rev 21408, 2007-12-16) and excludes 711; the content loader rejects a prerequisite on an unseeded mission, and seeding 1065 without it would offer the escort ungated, so 1065 and its exit area are held. Daniel Corman (199062) stands in the pen at (20, 72.04, -10) on reachable floor (454.8 m).",
+   "evidence": [
+    "research/20260926-instance-dossiers-wilderness/dossiers.json missions 1065",
+    "MissionContentCatalog.Validate prerequisites: unknown required mission"
+   ],
+   "closes_with": "a batch seeding 1056, 711 and 1059 on the same evidence standard",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-PEN-FORCEFIELD",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "In the original, Around (logos 45) and Chaos (logos 4) stood in the Bane supply pen behind a force field that 1056/4 'Use panel to open supply pen forcefield' lowered; 1056/1-2 gather the same two Logos. Neither the field nor 1056 is modelled, so 960's Around and Chaos shrines are reachable without it (OD-143).",
+   "evidence": [
+    "TaRapedia 'Reclaiming What's Ours' rev 29896 (2008-03-21)",
+    "client missionobjective 1056/1-4"
+   ],
+   "closes_with": "the pen force field and 1056 (GAP-CLRF-1056-CHAIN)",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-450-XP",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The Dead Live pays 900 credits (TaRapedia, every revision; Ellatha) but no source records its experience: TaRapedia's RewardXP is empty in all 17 revisions (2007-11-10 to 2008-01-01). No experience row is seeded.",
+   "evidence": [
+    "research/20260926-instance-dossiers-wilderness/work/tarapedia/pages/The_Dead_Live.json"
+   ],
+   "closes_with": "a capture, footage of the completion window or a dated reading of 450's experience",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-REWARD-ERA-CLRF",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Every amount this migration seeds - 900 credits (450), 18,000 experience and 1,500 credits (960) - is a TaRapedia reading first written before Update 1.4 (2008-01-29); later revisions of 960 (2008-05-14 to 2008-12-22) carried it without re-reading. The 1.4 notes replaced item rewards; whether an XP or credit amount changed then or later is unverified. No pre-1.4 item list is seeded (450's Class I Standard Med Pack).",
+   "evidence": [
+    "TaRapedia revision histories (community_db:tarapedia-clrf-20260926)",
+    "official_notes:1.4"
+   ],
+   "closes_with": "a post-1.4 reading of each amount",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-TYRYD",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Overseer Tyryd's position is TaRapedia's supply-pen-key /loc (-160, 90, -10, 2007-11-12), which is where the key drops when he dies, not a reading of where he stood; Ellatha records only 'Located inside the base!'. His health, attack and speed are analogues (OD-141). Whether he survived D11 unchanged is unrecorded: D11 added three unnamed bosses (GAP-CLRF-D11-BOSSES). His key and its loot rows belong to 1056 and are not seeded.",
+   "evidence": [
+    "community_db:tarapedia-clrf-20260926 Supply pen key rev 14505",
+    "community_db:ellatha-clrf-20260926 ell_boss_045.html"
+   ],
+   "closes_with": "post-D11 footage of the base, or a dated reading of his position",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-CASPER-ENCAMPMENT",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Lt. Casper stood among 'a dozen or so occupants' of a small Bane fortification (TTH 12625); their types, levels and positions are unrecorded, so only Casper is placed. His in-copy respawn is unrecorded (placement respawn 0, OD-142).",
+   "evidence": [
+    "tth_node_12625.txt paragraph 18"
+   ],
+   "closes_with": "footage of the fortification",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-D11-BOSSES",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "D11 (2008-08-15): 'Three new bosses have been added to this instance'. None is named in any source; none is seeded.",
+   "evidence": [
+    "research/20260926-instance-dossiers-wilderness/README.md"
+   ],
+   "closes_with": "post-D11 footage or a named source",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-D11-TREASURE-CRATES",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "D11 added treasure crates to Crater Lake; their number, class and positions are unknown. None is seeded.",
+   "evidence": [
+    "research/20260926-instance-dossiers-wilderness/README.md"
+   ],
+   "closes_with": "post-D11 footage",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-POPULATION",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Pre-D11 guides name Thrax patrols, Bane cannons and mortars, Lightbenders, Hunters beaming into the base and Casper's occupants, but give no counts, levels or positions, and D11 partly reworked the instance (Predators removed, bosses and crates added). The ambient population is held; Predators must never be seeded.",
+   "evidence": [
+    "research/20260926-instance-dossiers-wilderness/dossiers.json gaps GAP-CLRF-POPULATION"
+   ],
+   "closes_with": "post-D11 footage of the instance",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-JAMMER",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "1054 We Be Jammin' objective 1 destroys a Bane transmitter in 'a clearing with a large transmitter' (TTH); its position is unrecorded. The client's creature name table has 6757 'Thrax ECM Jamming Terminal', a likely name for it (not yet tied to 1054). 1054 is held.",
+   "evidence": [
+    "creaturenamelanguage.pyo 6757",
+    "tth_node_12625.txt paragraph 16"
+   ],
+   "closes_with": "a position for the transmitter and its class",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
+  },
+  {
+   "id": "GAP-CLRF-CRYSTAL-CONTAINER-CLASS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "489 Centrifuge Fuel's crystal crates ('small green crates', TTH) have no recorded class, and D11 'added more canisters containing Ore', so the pre-D11 positions are not the final set; two of the three TaRapedia box positions are also inside the greenhouse island (GAP-CLRF-INTERIOR-NAVMESH). 489 is held.",
+   "evidence": [
+    "TaRapedia Centrifuge Crystal rev 14489",
+    "official_notes:d11"
+   ],
+   "closes_with": "the container class and the post-D11 set",
+   "surfaced_by": [
+    "WildernessCraterLakeResearchFacility 2026-09-27 (research/20260926-instance-dossiers-wilderness)"
+   ]
   }
  ],
  "non_content_settings": [
@@ -87933,6 +90123,143 @@
      "locator": "==10.5==: 'Map: Eloh Temples - Players will now only be able to access the Hospital point for the section of Eloh Temples they are currently in.'"
     }
    ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "table": "spawnpool",
+   "key": {
+    "id": 520012
+   },
+   "field": "creature_1_min_count, creature_1_max_count",
+   "old": [
+    1,
+    1
+   ],
+   "new": [
+    0,
+    0
+   ],
+   "tier": "inferred",
+   "reason": "Lt. Casper's emulator-lineage spawnpool (BossSpawnpoolPreloader, respawn 500, y snapped by WorldFloorSweep) stops drawing; his creature row stands at the same position as content placement 1721100, materialized in each squad copy of 1721 as the objective-bound bosses of the other operations are. The pool row and creature row stay; rolling back restores 1/1 (OD-142).",
+   "citations": [
+    {
+     "source": "community_db:ellatha-clrf-20260926",
+     "locator": "ell_boss_044.html: 'Hominis Machina Lt. Casper', Level 9, Type Machina, Loc -272,168,-54, Zone Crater Lake Research, needed for Ghost in the Machine"
+    },
+    {
+     "source": "measurement:crater-lake-navmesh-20260927",
+     "locator": "probes[casper_1721100] from the instance entrance (map_link 15 arrival) and the hospital marker"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 450,
+    "objective_id": 4
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (450,4) name 4748 'Speak to Velns.', body 6764 'Speak with Captain Velns, the officer in charge at Crater Lake Research Facility.'; objectiveconversation (450,4,23,1,1) -> missiontext 5982 'Casper? Let me look him up in the computer.'; missionconversation log 826 'Report to Crater Lake Research Facility and speak with Captain Velns concerning Lieutenant Casper.' (research/20260926-mission-catalog/mission-catalog.json, sha256 1a47dd8855f838db...)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 4
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 5
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    2,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "WildernessCraterLakeResearchFacility",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 960,
+    "objective_id": 6
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    3,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (960,4) 5226 'Retrieve Logos Information: Movement', (960,5) 5227 'Retrieve Logos Information: Around', (960,6) 5228 'Retrieve Logos Information: Chaos'; no objectiveconversation row; missionconversation log 5218 '... then return to Receptive Liaison Standley', finishing 5220 'Nice work. Reports from Velns say you are a soldier with promise.' (mission-catalog.json)"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -88815,6 +91142,56 @@
    "choice": "As the default: the exits are the client's own markers; the arrival is inferred. Alternative for the owner: leave them out until the shutdown-event batch recovers the Last Stand's access route.",
    "approved_on": "2026-09-27",
    "record": "docs/progression-preservation-plan.md#instance-travel-status"
+  },
+  {
+   "id": "OD-140",
+   "decision": "Mission level for The Dead Live (450) and Logos: Movement, Around, Chaos (960)",
+   "default": "The giver's level, the rule OD-100 applied to the Liaison Logos missions: 450 Dr. Franja Corman's 10, 960 Standley's 10",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default, an analogue under GAP-MISSION-LEVEL; nothing on the server gates on the value. Alternative: the Crater Lake band minimum 7.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#crater-lake-status"
+  },
+  {
+   "id": "OD-141",
+   "decision": "Overseer Tyryd's health, attack, movement and facing",
+   "default": "1000 hp (the world seed's level 6-10 Thrax Overseer bosses), attack 29 (the world seed's Bane_Thrax_Technician_Boss row 48), run 9 / walk 0 (the Thrax boss rows 82-84 and Tizzik Gi), facing 0",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: every value is an analogue; name, class, level and faction are sourced. Alternative: hold Tyryd until 1056 is seeded, since his only recorded role is the supply pen key.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#crater-lake-status"
+  },
+  {
+   "id": "OD-142",
+   "decision": "Lt. Casper: from the shared spawnpool to a per-copy placement",
+   "default": "Retire spawnpool 520012 (counts 0/0, restored on rollback) and place creature 520012 at Ellatha's /loc as content placement 1721100 with creature AI, no respawn inside a copy, facing 0 (the pool's)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default, the batch lead's instruction: objective-bound bosses are placements in their instance. The emulator's 500-unit pool respawn is not evidence and is not carried over.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#crater-lake-status"
+  },
+  {
+   "id": "OD-143",
+   "decision": "960's Around and Chaos shrines without the supply pen force field",
+   "default": "Seed 960 with all three shrines reachable; the pen force field (1056/4) is not modelled",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default (GAP-CLRF-PEN-FORCEFIELD). Alternative: hold 960 until 1056 and the force field are seeded.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#crater-lake-status"
+  },
+  {
+   "id": "OD-144",
+   "decision": "The Dead Live's prerequisite",
+   "default": "No prerequisite: TaRapedia records Requirement=None in all 17 revisions, and the starter Ten Ton Hammer names ('Hoping for the Best', 2007-10-01) is not a mission of the 1.16.5.0 client",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#crater-lake-status"
   }
  ]
 }

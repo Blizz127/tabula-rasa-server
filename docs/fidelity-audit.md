@@ -1037,3 +1037,19 @@ the manifest rows of `InstanceTravelLinks`, OD-130 to OD-134 and `docs/evidence/
 | instance hospitals | 105 on 42 maps; instances revive in place | 127 on 55 maps (OD-132) | graveyardlanguage, waypointlanguage, uimapmarker, world seed rows, navmesh | inferred joins |
 | Eloh Temples hospitals | every gained one | the current section's only | D10.5 live notes | rule original; section inferred |
 | retired rows | test maps 1991/2233/1737 loaded; 2361 spawn pools | removed (OD-133) | gamecontext; D16.3 | original |
+
+## Crater Lake Research Facility (2026-09-27)
+
+The Crater Lake section of the wilderness instance dossiers, checked against the 1.16.5.0 client and the repo navmesh.
+Tiers and gaps: the manifest rows of `WildernessCraterLakeResearchFacility`, OD-140 to OD-144 and
+`docs/evidence/crater-lake-research-facility.json`. Account: `docs/retail-accuracy.md`, "Crater Lake Research Facility".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Captain Velns' package | none (package 23 carried by nobody) | 23 | objectiveconversation (450,4,23) | original package; speaker inferred |
+| 450 The Dead Live | unseeded | 107 -> Velns, 900 credits, no XP (OD-140, OD-144) | client tables; TaRapedia; Ellatha | inferred, pre-1.4 amount |
+| Lt. Casper | shared spawnpool, 500 respawn | per-copy placement 1721100, no in-copy respawn (OD-142) | Ellatha /loc; TTH; D11 PTS notes | inferred; height measured |
+| Overseer Tyryd | absent | creature 1721001 at the key-drop /loc (OD-141) | client name 7002; Ellatha; TaRapedia | inferred; stats analogue |
+| 960 Logos: Movement, Around, Chaos | unseeded | shrines 50/45/4, 18,000 XP, 1,500 credits, ungated pen (OD-143) | logosstone; TaRapedia; Ellatha | inferred, pre-1.4 amounts |
+| 1055 terminals | proposed | held: HQ and greenhouse floors are navmesh islands, DT3 reading contradicted | navmesh probes; client map | gap |
+| 1065 escort, radar dish, 489, 1054, population, D11 bosses/crates | proposed or unrecorded | held | loader rule; entityclass 6273 aug 9; D11 notes | gap |

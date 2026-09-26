@@ -219,7 +219,10 @@ namespace Rasa.Test.Reconstruction
                 "creature:id:199950-199999",
                 "content_placement:id:199950-199999",
                 // InstanceTravelLinks (2026-09-27): the instance-travel batch's map_link block.
-                "map_link:id:199250-199299"
+                "map_link:id:199250-199299",
+                // WildernessCraterLakeResearchFacility (2026-09-27): the dossier-reserved Crater Lake creature and placement blocks.
+                "creature:id:1721001-1721099",
+                "content_placement:id:1721100-1721499"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

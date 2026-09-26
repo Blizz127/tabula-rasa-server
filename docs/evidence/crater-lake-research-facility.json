@@ -1,0 +1,1213 @@
+{
+ "schema": "rasa-crater-lake-research-facility/1",
+ "date": "2026-09-27",
+ "migration": "20260927030000_WildernessCraterLakeResearchFacility",
+ "context": {
+  "map_context_id": 1721,
+  "name": "Crater Lake Research Facility",
+  "instancing": "per-squad (MissionContextSquadInstancing)",
+  "entrance": "map_link 15 (Wilderness 1220 -> 1721) arrives at (8.5096, 139.9557, 158.2927), the client exit marker; map_link 55 leads back",
+  "hospital": "teleporter 588 at (26.03509, 142.2759, 182.66224)"
+ },
+ "dossier": "research/20260926-instance-dossiers-wilderness (README.md, dossiers.json Crater Lake section)",
+ "navmesh": {
+  "file": "navmesh/adv_foreas_concordia_wilderness_clrf.nav",
+  "sha256": "d527c13b3ecad26c09e36b3e21fa15ea905c94e6bd3060d4686bff8254d7f416",
+  "tool": "src/Rasa.NavMesh --path (built from this worktree, Release, net5.0)",
+  "floor_rule": "placement y = navmesh surface - 0.276 m",
+  "extra_probes": {
+   "hq_second_floor": {
+    "query": [
+     123.4,
+     104.6,
+     -30.9
+    ],
+    "end_on_mesh": [
+     124.47341,
+     104.40237,
+     -31.222023
+    ],
+    "result": "PARTIAL",
+    "length_m": 301.0,
+    "from": "hospital"
+   },
+   "dt1_y105": {
+    "query": [
+     124.3,
+     105,
+     -27.3
+    ],
+    "surface": 103.95157,
+    "result": "PARTIAL",
+    "from": "hospital"
+   },
+   "dt3_y70": {
+    "query": [
+     -118.4,
+     70,
+     -76.0
+    ],
+    "surface": 71.25125,
+    "result": "complete",
+    "length_m": 518.2,
+    "from": "hospital"
+   },
+   "dt3_grid_y140": "no mesh within 20 m of (-118.4, -76.0) at y 140 (25 probes)",
+   "housing_destroyed_floor": {
+    "query": [
+     -129.7,
+     150,
+     -180.5
+    ],
+    "surface": 154.03906,
+    "result": "complete",
+    "length_m": 660.2,
+    "from": "hospital"
+   },
+   "housing_destroyed_upper": {
+    "query": [
+     -129.7,
+     160,
+     -180.5
+    ],
+    "surface": 158.83907,
+    "result": "complete",
+    "length_m": 687.4,
+    "from": "hospital"
+   },
+   "dt1_upper_grid": "every probe in a 16 m grid round (124.3, 118, -27.3) is PARTIAL (25 probes)"
+  },
+  "probes": [
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "velns_199061",
+    "query": [
+     30.0,
+     139.163,
+     200.0
+    ],
+    "end_on_mesh": [
+     29.927994,
+     139.43907,
+     200.50403
+    ],
+    "surface": 139.43907,
+    "result": "complete",
+    "corners": 3,
+    "length_m": 21.2,
+    "floor": 139.163
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "daniel_199062",
+    "query": [
+     20.0,
+     72.038,
+     -10.0
+    ],
+    "end_on_mesh": [
+     20.0,
+     72.31359,
+     -10.0
+    ],
+    "surface": 72.31359,
+    "result": "complete",
+    "corners": 37,
+    "length_m": 454.8,
+    "floor": 72.038
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "casper_1721100",
+    "query": [
+     -272.0,
+     168.763,
+     -54.0
+    ],
+    "end_on_mesh": [
+     -272.0,
+     169.03906,
+     -54.0
+    ],
+    "surface": 169.03906,
+    "result": "complete",
+    "corners": 40,
+    "length_m": 728.9,
+    "floor": 168.763
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "tyryd_1721101",
+    "query": [
+     -160.0,
+     93.18,
+     -10.0
+    ],
+    "end_on_mesh": [
+     -160.0,
+     93.45639,
+     -10.0
+    ],
+    "surface": 93.45639,
+    "result": "complete",
+    "corners": 39,
+    "length_m": 568.3,
+    "floor": 93.18
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "logos50_movement",
+    "query": [
+     0.93359375,
+     90.92969,
+     115.21094
+    ],
+    "end_on_mesh": [
+     0.93359375,
+     88.97023,
+     115.21094
+    ],
+    "surface": 88.97023,
+    "result": "complete",
+    "corners": 34,
+    "length_m": 476.8,
+    "floor": 88.694
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "logos45_around",
+    "query": [
+     24.070312,
+     74.84766,
+     -9.0
+    ],
+    "end_on_mesh": [
+     24.070312,
+     72.81801,
+     -9.0
+    ],
+    "surface": 72.81801,
+    "result": "complete",
+    "corners": 37,
+    "length_m": 459.0,
+    "floor": 72.542
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "logos4_chaos",
+    "query": [
+     23.980469,
+     74.828125,
+     -20.121094
+    ],
+    "end_on_mesh": [
+     23.980469,
+     72.76126,
+     -20.121094
+    ],
+    "surface": 72.76126,
+    "result": "complete",
+    "corners": 37,
+    "length_m": 460.5,
+    "floor": 72.485
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "commlink_static_terminal",
+    "query": [
+     -270.2,
+     169.4,
+     -47.2
+    ],
+    "end_on_mesh": [
+     -271.6944,
+     169.03906,
+     -49.590996
+    ],
+    "surface": 169.03906,
+    "result": "complete",
+    "corners": 40,
+    "length_m": 732.4,
+    "floor": 168.763
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt1_tth_upper",
+    "query": [
+     124.3,
+     118.0,
+     -27.3
+    ],
+    "end_on_mesh": [
+     124.3,
+     117.87575,
+     -27.3
+    ],
+    "surface": 117.87575,
+    "result": "PARTIAL",
+    "corners": 30,
+    "length_m": 302.1,
+    "floor": 117.6
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt1_tth_ground",
+    "query": [
+     124.3,
+     100.0,
+     -27.3
+    ],
+    "end_on_mesh": [
+     124.280014,
+     99.63905,
+     -27.339975
+    ],
+    "surface": 99.63905,
+    "result": "complete",
+    "corners": 30,
+    "length_m": 302.1,
+    "floor": 99.363
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt2_tth_118",
+    "query": [
+     102.3,
+     118.9,
+     -89.6
+    ],
+    "end_on_mesh": [
+     102.3,
+     118.94089,
+     -89.6
+    ],
+    "surface": 118.94089,
+    "result": "PARTIAL",
+    "corners": 26,
+    "length_m": 330.3,
+    "floor": 118.665
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt2_tth_129",
+    "query": [
+     102.3,
+     129.2,
+     -89.6
+    ],
+    "end_on_mesh": [
+     102.15001,
+     129.23906,
+     -89.74999
+    ],
+    "surface": 129.23906,
+    "result": "PARTIAL",
+    "corners": 26,
+    "length_m": 314.8,
+    "floor": 128.963
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "radar_dish_tth",
+    "query": [
+     -169.5,
+     141.0,
+     -109.5
+    ],
+    "end_on_mesh": [
+     -169.5,
+     141.25148,
+     -109.5
+    ],
+    "surface": 141.25148,
+    "result": "complete",
+    "corners": 37,
+    "length_m": 607.1,
+    "floor": 140.975
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "exit_marker",
+    "query": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "end_on_mesh": [
+     8.5,
+     140.14078,
+     158.3
+    ],
+    "surface": 140.14078,
+    "result": "complete",
+    "corners": 9,
+    "length_m": 58.6,
+    "floor": 139.865
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y90",
+    "query": [
+     -118.4,
+     90.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y100",
+    "query": [
+     -118.4,
+     100.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y110",
+    "query": [
+     -118.4,
+     110.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y120",
+    "query": [
+     -118.4,
+     120.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y130",
+    "query": [
+     -118.4,
+     130.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y140",
+    "query": [
+     -118.4,
+     140.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y150",
+    "query": [
+     -118.4,
+     150.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y160",
+    "query": [
+     -118.4,
+     160.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y170",
+    "query": [
+     -118.4,
+     170.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "hospital",
+    "from_pos": [
+     26.03509,
+     142.2759,
+     182.66224
+    ],
+    "probe": "dt3_tth_y180",
+    "query": [
+     -118.4,
+     180.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "velns_199061",
+    "query": [
+     30.0,
+     139.163,
+     200.0
+    ],
+    "end_on_mesh": [
+     29.927994,
+     139.43907,
+     200.50403
+    ],
+    "surface": 139.43907,
+    "result": "complete",
+    "corners": 8,
+    "length_m": 66.4,
+    "floor": 139.163
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "daniel_199062",
+    "query": [
+     20.0,
+     72.038,
+     -10.0
+    ],
+    "end_on_mesh": [
+     20.0,
+     72.31359,
+     -10.0
+    ],
+    "surface": 72.31359,
+    "result": "complete",
+    "corners": 31,
+    "length_m": 443.3,
+    "floor": 72.038
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "casper_1721100",
+    "query": [
+     -272.0,
+     168.763,
+     -54.0
+    ],
+    "end_on_mesh": [
+     -272.0,
+     169.03906,
+     -54.0
+    ],
+    "surface": 169.03906,
+    "result": "complete",
+    "corners": 34,
+    "length_m": 717.4,
+    "floor": 168.763
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "tyryd_1721101",
+    "query": [
+     -160.0,
+     93.18,
+     -10.0
+    ],
+    "end_on_mesh": [
+     -160.0,
+     93.45639,
+     -10.0
+    ],
+    "surface": 93.45639,
+    "result": "complete",
+    "corners": 33,
+    "length_m": 556.7,
+    "floor": 93.18
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "logos50_movement",
+    "query": [
+     0.93359375,
+     90.92969,
+     115.21094
+    ],
+    "end_on_mesh": [
+     0.93359375,
+     88.97023,
+     115.21094
+    ],
+    "surface": 88.97023,
+    "result": "complete",
+    "corners": 28,
+    "length_m": 465.3,
+    "floor": 88.694
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "logos45_around",
+    "query": [
+     24.070312,
+     74.84766,
+     -9.0
+    ],
+    "end_on_mesh": [
+     24.070312,
+     72.81801,
+     -9.0
+    ],
+    "surface": 72.81801,
+    "result": "complete",
+    "corners": 31,
+    "length_m": 447.5,
+    "floor": 72.542
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "logos4_chaos",
+    "query": [
+     23.980469,
+     74.828125,
+     -20.121094
+    ],
+    "end_on_mesh": [
+     23.980469,
+     72.76126,
+     -20.121094
+    ],
+    "surface": 72.76126,
+    "result": "complete",
+    "corners": 31,
+    "length_m": 448.9,
+    "floor": 72.485
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "commlink_static_terminal",
+    "query": [
+     -270.2,
+     169.4,
+     -47.2
+    ],
+    "end_on_mesh": [
+     -271.6944,
+     169.03906,
+     -49.590996
+    ],
+    "surface": 169.03906,
+    "result": "complete",
+    "corners": 34,
+    "length_m": 720.9,
+    "floor": 168.763
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt1_tth_upper",
+    "query": [
+     124.3,
+     118.0,
+     -27.3
+    ],
+    "end_on_mesh": [
+     124.3,
+     117.87575,
+     -27.3
+    ],
+    "surface": 117.87575,
+    "result": "PARTIAL",
+    "corners": 24,
+    "length_m": 290.5,
+    "floor": 117.6
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt1_tth_ground",
+    "query": [
+     124.3,
+     100.0,
+     -27.3
+    ],
+    "end_on_mesh": [
+     124.280014,
+     99.63905,
+     -27.339975
+    ],
+    "surface": 99.63905,
+    "result": "complete",
+    "corners": 24,
+    "length_m": 290.5,
+    "floor": 99.363
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt2_tth_118",
+    "query": [
+     102.3,
+     118.9,
+     -89.6
+    ],
+    "end_on_mesh": [
+     102.3,
+     118.94089,
+     -89.6
+    ],
+    "surface": 118.94089,
+    "result": "PARTIAL",
+    "corners": 20,
+    "length_m": 318.8,
+    "floor": 118.665
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt2_tth_129",
+    "query": [
+     102.3,
+     129.2,
+     -89.6
+    ],
+    "end_on_mesh": [
+     102.15001,
+     129.23906,
+     -89.74999
+    ],
+    "surface": 129.23906,
+    "result": "PARTIAL",
+    "corners": 20,
+    "length_m": 303.3,
+    "floor": 128.963
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "radar_dish_tth",
+    "query": [
+     -169.5,
+     141.0,
+     -109.5
+    ],
+    "end_on_mesh": [
+     -169.5,
+     141.25148,
+     -109.5
+    ],
+    "surface": 141.25148,
+    "result": "complete",
+    "corners": 31,
+    "length_m": 595.6,
+    "floor": 140.975
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "exit_marker",
+    "query": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "end_on_mesh": [
+     8.5,
+     140.14078,
+     158.3
+    ],
+    "surface": 140.14078,
+    "result": "complete",
+    "corners": 1,
+    "length_m": 0.1,
+    "floor": 139.865
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y90",
+    "query": [
+     -118.4,
+     90.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y100",
+    "query": [
+     -118.4,
+     100.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y110",
+    "query": [
+     -118.4,
+     110.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y120",
+    "query": [
+     -118.4,
+     120.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y130",
+    "query": [
+     -118.4,
+     130.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y140",
+    "query": [
+     -118.4,
+     140.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y150",
+    "query": [
+     -118.4,
+     150.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y160",
+    "query": [
+     -118.4,
+     160.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y170",
+    "query": [
+     -118.4,
+     170.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   },
+   {
+    "from": "exit_marker",
+    "from_pos": [
+     8.5,
+     140.0,
+     158.3
+    ],
+    "probe": "dt3_tth_y180",
+    "query": [
+     -118.4,
+     180.0,
+     -76.0
+    ],
+    "end_on_mesh": null,
+    "surface": null,
+    "result": "no path",
+    "corners": 0,
+    "length_m": null
+   }
+  ]
+ },
+ "seeded": [
+  {
+   "what": "npc_package 199061 -> 23 (Captain Velns)",
+   "probe": "velns_199061"
+  },
+  {
+   "what": "npc_mission 450 The Dead Live (107 -> 199061), objective 4, 900 credits"
+  },
+  {
+   "what": "spawnpool 520012 retired (0/0); content_placement 1721100 Lt. Casper",
+   "probe": "casper_1721100"
+  },
+  {
+   "what": "creature 1721001 and content_placement 1721101 Overseer Tyryd",
+   "probe": "tyryd_1721101"
+  },
+  {
+   "what": "npc_mission 960 (134 -> 134), objectives 4/5/6 on logos 50/45/4, 18,000 experience and 1,500 credits",
+   "probe": [
+    "logos50_movement",
+    "logos45_around",
+    "logos4_chaos"
+   ]
+  }
+ ],
+ "verified_unchanged": [
+  {
+   "what": "content_placement 199062 Daniel Corman (TarapediaMissingNpcBatch)",
+   "probe": "daniel_199062"
+  }
+ ],
+ "held": [
+  {
+   "what": "1055 Destroying the Evidence and terminals 1721110-1721113",
+   "why": "DT1 and DT2 on navmesh islands; DT3 reading contradicted; 1121 (Bane CommLink, reachable) held with its mission; terminal bodies need usable-NPC support",
+   "gaps": [
+    "GAP-CLRF-INTERIOR-NAVMESH",
+    "GAP-CLRF-DT3-POSITION",
+    "GAP-CLRF-TERMINAL-BODY"
+   ]
+  },
+  {
+   "what": "1065 Bending the Rules and content_area 1721500",
+   "why": "the loader rejects its unseeded 1056 prerequisite",
+   "gaps": [
+    "GAP-CLRF-1056-CHAIN"
+   ]
+  },
+  {
+   "what": "radar dish 1721120",
+   "why": "TwoStateSwitch usable unsupported; 1054 held",
+   "gaps": [
+    "GAP-CLRF-RADAR-DISH-TWOSTATE",
+    "GAP-CLRF-JAMMER"
+   ]
+  },
+  {
+   "what": "489 Centrifuge Fuel, 1054 We Be Jammin'",
+   "gaps": [
+    "GAP-CLRF-CRYSTAL-CONTAINER-CLASS",
+    "GAP-CLRF-JAMMER"
+   ]
+  },
+  {
+   "what": "ambient population, the three D11 bosses, the D11 treasure crates",
+   "gaps": [
+    "GAP-CLRF-POPULATION",
+    "GAP-CLRF-D11-BOSSES",
+    "GAP-CLRF-D11-TREASURE-CRATES"
+   ]
+  }
+ ],
+ "resolved": [
+  {
+   "gap": "GAP-LOGOS-IN-SQUAD-INSTANCE (dossier)",
+   "finding": "Squad copies clone the primary channel's Logos shrines with their ids (DynamicObjectManager.CopyStaticObjects, SquadInstanceTests.ACopyIsGivenItsOwnCopyOfEverythingItsContextWasLoadedWith), so a LogosRecovered binding fires in every copy; CraterLakeResearchFacilityTests asserts it for 1721's three shrines."
+  }
+ ]
+}

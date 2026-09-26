@@ -486,6 +486,21 @@ Built on 2026-09-27 as batch 2 of the instance inventory (`research/20260926-ins
   (`GAP-HOSPITAL-UNRESOLVED-GRAVEYARD`), emulator waypoint ids and Edmund's team gating. Owner client check (enter and
   leave each new door, die in Warnet and the Eloh Temples) is still to do.
 
+## Crater Lake status
+
+Seeded on 2026-09-27 from the wilderness instance dossiers (`research/20260926-instance-dossiers-wilderness`). Account:
+`docs/retail-accuracy.md`, 2026-09-27 "Crater Lake Research Facility".
+
+- **Built:** Captain Velns' package 23; 450 The Dead Live (107 -> Velns, 900 credits); Lt. Casper as a per-copy
+  placement (spawnpool 520012 retired); Overseer Tyryd; 960 Logos: Movement, Around, Chaos on shrines 50/45/4
+  (`WildernessCraterLakeResearchFacility`, creature 1721001, placements 1721100-1721101; OD-140 to OD-144). Every
+  position is on navmesh floor with a complete path from the instance entrance.
+- **Open:** 1055 (the HQ upper floors and the greenhouse are navmesh islands, `GAP-CLRF-INTERIOR-NAVMESH`, with the
+  Pravus tooling batch; the Observation Center reading is contradicted; the terminals need a body), 1056/711/1059 and
+  so 1065, the radar dish (TwoStateSwitch usables), 489, 1054, the ambient population, the D11 bosses and crates, 450's
+  experience and post-1.4 amounts. Owner client check (enter a copy, speak to Velns for 450, draw the three Logos,
+  kill Casper and Tyryd) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
