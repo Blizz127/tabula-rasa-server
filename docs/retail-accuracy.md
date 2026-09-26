@@ -4333,3 +4333,27 @@ agent-approved and pending owner review.
 Provenance: manifest rows with migration `CreatureLootFootage` (19 rows, 4 changes, 10 new gaps, `GAP-CREATURE-LOOT`
 narrowed). `CreatureLootFootageTests` recomputes every seeded rate and stack range from the ledger's own drops and
 kill windows.
+
+## 2026-09-26 UTC — Deploy: development dae1a33 on banshee-ax41
+
+The live server moved from the OVH VPS to banshee-ax41 (65.109.31.181) on 2026-09-25. Its checkout
+(`~/servers/rasa-net`, at 095fc45 plus 595 uncommitted changes) was reconciled into development first (commits
+0123ee2..dae1a33), then replaced by development dae1a33 at 16:43 UTC.
+
+- **Backups** (on ax41, `~/backups/rasa-net/predeploy-20260926T160619Z/`): the three SQLite databases, both compose
+  files and appsettings, a tarball of the whole previous working tree, the git bundle deployed, and the DIT overlay.
+  Previous images are tagged `rasa_net_game:rollback-20260926` (726f4dd2c684) and `rasa_net_auth:rollback-20260926`
+  (92958edb3445). Rollback = restore the three databases, re-pin `docker-compose.dit.yml` to the rollback tag, and
+  bring auth and game back up.
+- **Images**: `rasa_net_auth` 94b28b5aa862 and the base `rasa_net_game:latest` c9ae30deeebd were built from the tree
+  without DIT; `rasa_net_game:dit-20260926` 58fc6f122287 from the same tree with the uncommitted DIT overlay (the
+  `Dit/` directory, `DitBotTests.cs` and `dit-overlay.patch`, kept outside the repository), as the AGENTS.md DIT
+  section requires. `docker-compose.dit.yml` now pins `dit-20260926`; Game was relaunched with both compose files.
+- **Startup**: the world database applied everything through `20260926220000_CloneCreditNotTradable` (150
+  migrations; the char database 16, through `ItemInstanceMetadata`); 131 `npc_mission` rows; 16 content rules, 430
+  rows, 0 gaps; navmeshes for 76 of 78 maps; Game authenticated with Auth advertising 65.109.31.181; ports 2106, 2116,
+  8102 and 8001 listening; `dit/status.json` enabled and fresh, `/app/dit` mounted.
+- **Logged at load, not new to this deploy's evidence**: missions 321 (objective flags unknown), 955 and 969 ("required
+  objective … is never revealed") are withheld as incomplete. 955/969 are Mires missions seeded before 2026-09-22; why
+  their required objective is never revealed is open.
+- **Not yet verified**: no client has logged in to the new build.
