@@ -66795,7 +66795,7 @@
   },
   {
    "id": "GAP-HOSPITAL-COVERAGE",
-   "summary": "Closed 2026-09-17 for 41 maps. Player death shipped on 2026-09-14 with a catalogue of seven hand-built hospitals on two maps, so a player who died anywhere else met the revive-in-place fallback - which is what a live report of 'it respawns in place' describes. The same recipe, run over every map the server loads, reproduces all seven exactly and resolves 102 hospitals on 41 maps, every one of them with walkable ground under it. What is left is GAP-HOSPITAL-UNRESOLVED-GRAVEYARD: 66 markers, mostly on instances and the wargame maps, whose name no graveyardlanguage entry reads, so the id Hospital Selection would show is unrecovered.",
+   "summary": "Closed 2026-09-17 for 41 maps. Player death shipped on 2026-09-14 with a catalogue of seven hand-built hospitals on two maps, so a player who died anywhere else met the revive-in-place fallback - which is what a live report of 'it respawns in place' describes. The same recipe, run over every map the server loads, reproduces all seven exactly and resolves 102 hospitals on 41 maps, every one of them with walkable ground under it. What is left is GAP-HOSPITAL-UNRESOLVED-GRAVEYARD: 66 markers, mostly on instances and the wargame maps, whose name no graveyardlanguage entry reads, so the id Hospital Selection would show is unrecovered. 2026-09-26 (client defects): 105 hospitals on 42 maps - Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins, and the Palisades control-point hospital re-identified as Fort Dew (221/226), no longer sharing the Wilderness LZ's waypoint 216.",
    "evidence": [
     "docs/evidence/hospital-catalog.json",
     "research/20260917-hospital-coverage/tools/02_resolve.py",
@@ -68062,6 +68062,96 @@
    "closes_with": "final-era footage or captures of these rewards, or complete notes for D9, D14 and D15.x",
    "surfaced_by": [
     "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOCAL-TELEPORTER-IDS",
+   "summary": "The 37 world-seed local teleporter pads (ids 537-574) carry emulator ids: the final client's waypointlanguage has no entry for any of them (its original keys stop at 533), so the gain line and the local travel window show the client's missing-translation text in place of a name. The original local-waypoint ids, and whether pads such as the paired 'Penumbra Section N A/B' or 'Atta Teleporter' rows were linked pairs rather than a list, are unrecovered. Only magma caverns' 488-490 ('Rebel/Penumbra Teleporter') are original local-teleporter ids, and the seed places them nowhere.",
+   "evidence": [
+    "research/20260926-segment3-audit/gaps.json SEG3-LOCAL-TELEPORTERS",
+    "generated/client/language/english/waypointlanguage.pyo",
+    "generated/client/uimapmarker.pyo LOCAL_TELEPORTER markers"
+   ],
+   "closes_with": "a final-era capture of a local teleporter's gain line or window, or the original server's waypoint table",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOCAL-TELEPORTER-RADIUS",
+   "summary": "Local teleporter pads are gained and opened within 2 m (IsNear2m), the radius the server already used for map waypoints. No client table or capture gives the original trigger radius for either kind; the value is inferred.",
+   "evidence": [
+    "src/Rasa.Game/Extensions/HasPositionExtensions.cs IsNear2m",
+    "research/20260926-segment3-audit/gaps.json SEG3-WAYPOINT-PROVENANCE"
+   ],
+   "closes_with": "footage of a pad trigger with a measurable distance, or a client-side trigger radius",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOCAL-TELEPORTER-TYPES",
+   "summary": "Three type-1 rows are not local teleporters by the client's map but were left unchanged: 491/492 'Blue/Red Team's Base' on the wargame map 2374 stand 0.3 m from HOSPITAL markers 'Hospital: Blue/Red Team' yet have waypointlanguage names; 64 'Waypoint: Treeback Ridge' on Treeback Camp (1397) has no marker, and its id sits in the Palisades map-waypoint block (62 Cumbria, 63 Walk of Giants, 65 Hightower), so it may have been a map waypoint (type 2). With type-1 gaining on, walking onto 64 announces a local waypoint 'Treeback Ridge'. 595/597 were re-typed (LocalTeleporterGraveyards).",
+   "evidence": [
+    "generated/client/uimapmarker.pyo templates 1554 and 2377",
+    "generated/client/language/english/waypointlanguage.pyo lookup[64], [491], [492]"
+   ],
+   "closes_with": "a final-era reading of Treeback Camp's waypoint or of the wargame map",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-DROPSHIP-HOVER",
+   "summary": "The final client's help text (uielementlanguage 5697) gains a dropship pad 'by walking across the pad when a Dropship is hovering with its transporter beam activated'. No dropship hovers on this server's overworld pads; a pad is gained whenever the player walks onto it.",
+   "evidence": [
+    "generated/client/language/english/uielementlanguage.pyo lookup[(5697, 1)]"
+   ],
+   "closes_with": "the original dropship schedule or footage of a pad without a dropship",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-DROPSHIP-GAIN-MESSAGE",
+   "summary": "A gained dropship pad is persisted without a message: manifestation.Recv_WaypointGained has lines for types 1-3 only and the client's waypoint types have no dropship value, so whatever the original server told the player (if anything) is unrecovered. The EnteredWaypoint type sent for the dropship window stays the server's 4, which is not a client type and which the window does not branch on.",
+   "evidence": [
+    "client/augmentations/manifestation.pyo Recv_WaypointGained",
+    "generated/client/constant/waypointtype.pyo"
+   ],
+   "closes_with": "final-era footage of a first visit to a dropship pad",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-WILDERNESS-LZ-HOSPITAL-MARKER",
+   "summary": "The map_marker row for the Wilderness Landing Zone hospital marker (133079561962699) binds it to teleporter 104 'Hospital: Wilderness LZ', while HospitalCatalog gains and announces waypoint 216, so that marker's Acquired state never lights. Not changed in this batch: which id the final server used there (104, the seed's pre-control-point row at 2.4 m, or 216, the waypoint name matching the marker) is itself the open question; the Palisades marker's map_marker row already names 226 and now agrees with the catalogue.",
+   "evidence": [
+    "rasaworld.db map_marker (133079561962699, 1220) object_id 104",
+    "docs/evidence/hospital-catalog.json Wilderness LZ record"
+   ],
+   "closes_with": "final-era footage of the Wilderness LZ hospital gain line",
+   "surfaced_by": [
+    "client-defects batch, 2026-09-26"
    ],
    "slices": [
     "W3"
@@ -71547,6 +71637,138 @@
      "locator": "reinforcements remain grouped on the pad through 98.333 s, 11.533 s after 1995 objective 1"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "LocalTeleporterGraveyards",
+   "table": "teleporter",
+   "key": {
+    "id": [
+     595,
+     597
+    ]
+   },
+   "field": "type",
+   "old": 1,
+   "new": 5,
+   "tier": "inferred",
+   "reason": "Type-1 pads are gained by walking onto them since this date (DynamicObjectProximityWorker). These two world-seed rows, both named 'MIS_INDRACAVERNS_GRAVEYARD', stand 0.0 m from the client's HOSPITAL markers 'AFS Field Medic' on maps 1823 and 1977 - the hospitals HospitalCatalog already offers there - and from no LOCAL_TELEPORTER marker, and waypointlanguage has no entry 595 or 597. Left at type 1, walking through either hospital would gain a local waypoint the client can only name with its missing-translation text. The seed's hospital type makes the row inert; ids and positions are unchanged. 491/492 and 64 are left as they are (GAP-LOCAL-TELEPORTER-TYPES).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] 134419591467905 and [1977] 134419591467275, type 3 HOSPITAL, text 693 'AFS Field Medic'; no type 9 marker within 5 m"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/language/english/waypointlanguage.pyo lookup: no key 595 or 597 (original keys end at 533, then 10000003-10000019 and 20000007)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "none (server rule Rasa.Managers.DynamicObjectManager.DynamicObjectProximityWorker)",
+   "table": "teleporter (runtime)",
+   "key": {
+    "type": 1,
+    "rows": 42
+   },
+   "field": "proximity gain",
+   "old": "type-1 local teleporter pads fell to the default case: never gained, never usable",
+   "new": "gained within the map-waypoint radius (2 m, IsNear2m) like a map waypoint; WaypointGained(id, 1), EnteredWaypoint(type 1) listing this map's gained local pads; SelectWaypoint teleports within the map with LOCAL_TELEPORTER",
+   "tier": "original",
+   "reason": "The client has a separate local-waypoint type with its own gain line and window, so the pads are gained and used the way map waypoints are. The 2 m radius is the existing waypoint radius and is inferred (no client value; GAP-LOCAL-TELEPORTER-RADIUS). The ids 537-574 are emulator ids the final client cannot name (GAP-LOCAL-TELEPORTER-IDS, OD-90).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/constant/waypointtype.pyo: LOCALWAYPOINT 1, MAPWAYPOINT 2, WORMHOLE 3"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/augmentations/manifestation.pyo Recv_WaypointGained (line 1687) offsets 52-112: LOCALWAYPOINT posts PM_GAINED_WAYPOINT"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/clientmethod.pyo Recv_EnteredWaypoint (line 402); client/ui/waypointwindow.pyo ShowWaypoints (line 234)"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/uimapmarker.pyo LOCAL_TELEPORTER 9 markers on templates 1551, 1611, 1734, 1773, 1911, 2028 at 0.2-13.8 m of the 37 seed local pads 537-574"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "none (server rule Rasa.Managers.DynamicObjectManager.CreateListOfDropships, GainDropship)",
+   "table": "teleporter (runtime)",
+   "key": {
+    "type": 4
+   },
+   "field": "dropship list, gain and window position",
+   "old": "every dropship pad of every map listed from level 1; each map's first pad drawn at (-225.353, 99.597, -70.5246)",
+   "new": "a pad is gained by walking onto it (persisted silently as type 4); the list holds the gained pads, each at its own row's position; SelectWaypoint requires the pad gained",
+   "tier": "original",
+   "reason": "The final client's help text states the rule: dropship access is gained by walking across the pad, and the menu lists the available ones after the player has travelled to another map and gained its pad. The literal position was the world seed's Denzil's Caldera Outpost Hospital on the boot-camp map; waypointwindow places each location at the position sent with it. The hovering-dropship condition and a gain message are not modelled (GAP-DROPSHIP-HOVER, GAP-DROPSHIP-GAIN-MESSAGE).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/language/english/uielementlanguage.pyo lookup[(5697, 1)] 'Waypoints/Dropships' help text"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/ui/waypointwindow.pyo SetupWaypointLocationRows (line 301) offsets 23-110: MapLocationRow(name, id, pos, ...)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "none (server rule Rasa.Data.VendorPriceRules, ItemManager.LoadItemTemplates, NpcManager.Repairable)",
+   "table": "itemtemplate (runtime)",
+   "key": {
+    "scope": "all templates"
+   },
+   "field": "ItemInfo.BuyBackPrice; repair charge",
+   "old": "BuyBackPrice never set (0): no sale price shown, every repair shown at 1 credit; repair charged round((max - cur) * sell_price / 100)",
+   "new": "BuyBackPrice = max(sell_price, 0); repair charged max(int(int(buyback * (100 - condition) * 0.01) * REPAIR_GLOBAL_MODIFIER), 1), condition = 100 * cur // max",
+   "tier": "original",
+   "reason": "The client uses the item-info buyback price as the per-unit sale price it shows while a vendor is open and as the base of its repair price; the server already pays sell_price per unit on a sale, so the two now agree, and the repair charge is the price the client's repair tab displays. The sell_price values themselves keep their own provenance (Regenerate_item_template, GAP-W1-ITEM-PRICES).",
+   "citations": [
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/ui/inventorywindow.pyo OnSlotEntered (line 518): Sell cursor with eTooltipAdd_Price; client/ui/tooltipwindow.pyo line 908 price = count * GetItemBuybackPrice(classInfo)"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/ui/vendorwindow.pyo _GetRepairPrice (line 1081) offsets 0-73; _LoadVendorItems line 816 skips condition >= 100; client/augmentations/item.pyo GetCondition (line 254)"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "shared/gameconstants.pyo store 1541-1544 REPAIR_GLOBAL_MODIFIER = 1.0"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "none (code table Rasa.Data.HospitalCatalog; docs/evidence/hospital-catalog.json)",
+   "table": "HospitalCatalog",
+   "key": {
+    "map_context_id": 1244,
+    "marker_entity_id": 133182640964490
+   },
+   "field": "graveyard_id, waypoint_id",
+   "old": "136, 216 (the Wilderness Landing Zone hospital's ids)",
+   "new": "221, 226 (Hospital: Fort Dew (Control Point))",
+   "tier": "inferred",
+   "reason": "Gained waypoints are keyed by id alone, so sharing 216 made gaining the Wilderness LZ hospital gain the Palisades one too and skipped the Palisades zone-entry gain. The Palisades marker reuses the Wilderness text 303; every other marker of that control point names it Fort Dew, and waypoint 226 / graveyard 221 read 'Hospital: Fort Dew (Control Point)'. The same pass added Divide's Foreas Base (202/93), Palisades' Cumbria (219/112) and Devil's Den (41/388) on inferred joins; field-level provenance is in hospital-catalog.json.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/uimapmarker.pyo factionedmarkers[1402] 133182640964479 'Control Point: Fort Dew', 133182640964488 'Waypoint: Fort Dew (Control Point)', 133182640964490 text 303; staticmarkers[1402] 133182640964495 'Medical Vendor: Fort Dew (Control Point)'"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/language/english/waypointlanguage.pyo lookup[225], lookup[226]; graveyardlanguage.pyo lookup[221]"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -72121,6 +72343,14 @@
    "choice": "1326 Spoils of War and 1330 Retread Planning Part II take level 20, the value PlateauConversationNpc gave 1068 and 1541 - the only seeded missions that turn in at Pools NPCs - labelled analogue under GAP-MISSION-LEVEL. Approved by the batch lead on 2026-09-26 under the AGENTS.md evidence-bounded reconstruction policy (a value is required for the mission to load); no owner choice of this exact level is claimed. Pending owner review: TaRapedia gives the preceding Smash and Grab Level=35 (rev 31925, 2008-08-22) and the Class VII rewards require levels 31-35, both pointing higher than 20.",
    "approved_on": "2026-09-26",
    "record": "docs/retail-accuracy.md (2026-09-26 Torden conversation missions)"
+  },
+  {
+   "id": "OD-90",
+   "decision": "Local teleporter pads whose waypoint ids the final client cannot name",
+   "default": "Pads are gained and used under the seed's emulator ids 537-574; the client shows its missing-translation text for their names (GAP-LOCAL-TELEPORTER-IDS)",
+   "status": "open",
+   "review_status": "pending owner review",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }
  ]
 }

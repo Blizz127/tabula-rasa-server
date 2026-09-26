@@ -402,6 +402,82 @@
       }
     },
     {
+      "name": "Hospital: Foreas Base",
+      "graveyard_id": {
+        "value": 202,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[202] = 'Foreas Base Hospital'",
+          "graveyard ids 200/201/202/203 are Foxtrot Outpost, Delta Outpost, Foreas Base and Thoria Das Hospital: the Divide's hospitals, of which 200, 201 and 203 are already catalogued on the Divide's own markers"
+        ],
+        "reasoning": "the marker reads 'Hospital: Foreas Base', the graveyard 'Foreas Base Hospital': the same reordering the catalogued Divide rows 200/201/203 show against their markers (2026-09-26 client-defects)"
+      },
+      "waypoint_id": {
+        "value": 93,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[93] = 'Foreas Base Hospital' (block 93-97: Foreas Base, Delta Outpost, Hydro Plant, Foxtrot Outpost, Thoria Das hospitals; 94, 96 and 97 are the catalogued Divide rows' waypoints)",
+          "world seed teleporter 93 (type 5) is named exactly 'Hospital: Foreas Base', the marker's text, but stands 149 m west of the marker at (-138.3, 125.0, 525.0); the marker, not the seed row, gives the position"
+        ],
+        "reasoning": "name join through waypointlanguage 93 = graveyardlanguage 202 (2026-09-26 client-defects)"
+      },
+      "map_context_id": {
+        "value": 1148,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1148] = adv_foreas_concordia_divide, template 1306"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 132770324754371,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1306] marker 132770324754371 (type 19, name text 96); uimapmarkertextlanguage 96 = 'Hospital: Foreas Base'"
+        ]
+      },
+      "position": {
+        "value": [
+          10.864720344543457,
+          116.8848648071289,
+          532.4190673828125
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1306] marker 132770324754371 (type 19, name text 96); uimapmarkertextlanguage 96 = 'Hospital: Foreas Base'",
+          "calibration V2"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "marker type 19 SAFE_ZONE",
+          "uielementlanguage 5194 'PvP Safe Region' is the safe tooltip"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "the name 'Hospital: Foreas Base' has no '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
       "name": "Alia Das Hospital",
       "graveyard_id": {
         "value": 3,
@@ -796,23 +872,26 @@
       }
     },
     {
-      "name": "Hospital: Landing Zone (Control Point)",
+      "name": "Hospital: Fort Dew (Control Point)",
       "graveyard_id": {
-        "value": 136,
-        "tier": "original",
+        "value": 221,
+        "tier": "inferred",
         "citations": [
-          "graveyardlanguage lookup[136] = 'Hospital: Landing Zone (Control Point)'",
-          "ids [136, 183] all read the same text; the lowest is taken, as for graveyard 136"
+          "graveyardlanguage lookup[221] = 'Hospital: Fort Dew (Control Point)'",
+          "uimapmarker factionedmarkers[1402]: 133182640964479 (type 1) 'Control Point: Fort Dew', 133182640964488 (type 2) 'Waypoint: Fort Dew (Control Point)' 33 m from this marker; staticmarkers[1402] 133182640964495 (type 15) 'Medical Vendor: Fort Dew (Control Point)' 5.0 m from it, plus Fort Dew prestige vendor and token banker",
+          "uimapmarkertextlanguage 303 = 'Hospital: Landing Zone (Control Point)' is the text of the Wilderness LZ hospital marker (factionedmarkers[1378] 133079561962699) and of markers on templates 1759 (a VENDOR marker) and 1839: a reused text id, not this control point's name"
         ],
-        "reasoning": "graveyardlanguage name match"
+        "reasoning": "every other Fort Dew marker on the Palisades map names the control point Fort Dew; only the hospital marker carries the reused Landing Zone text. Supersedes graveyard 136 (the Wilderness LZ's), which gave the two maps one hospital identity (2026-09-26 client-defects)"
       },
       "waypoint_id": {
-        "value": 216,
-        "tier": "original",
+        "value": 226,
+        "tier": "inferred",
         "citations": [
-          "waypointlanguage lookup[216] = 'Hospital: Landing Zone (Control Point)'"
+          "waypointlanguage lookup[226] = 'Hospital: Fort Dew (Control Point)', paired with 225 'Fort Dew (Control Point)' exactly as 215/216 (Landing Zone), 217/218, 219/220, 221/222 and 223/224 pair each control point's waypoint and hospital",
+          "world seed teleporter 226 (type 5, 'Hospital: Fort Dew (Control Point)', map 1244) stands 8.5 m from the marker; world seed teleporter 216 has no map",
+          "map_marker row (133182640964490, 1244) already binds this marker to teleporter 226"
         ],
-        "reasoning": "waypointlanguage name match"
+        "reasoning": "supersedes waypoint 216, which the Wilderness LZ hospital also carries: the character store keys gained waypoints by id alone (PK character_id, waypointId), so the shared id gained both hospitals at once and skipped the Palisades zone-entry gain (2026-09-26 client-defects)"
       },
       "map_context_id": {
         "value": 1244,
@@ -857,7 +936,7 @@
         "value": true,
         "tier": "original",
         "citations": [
-          "the name 'Hospital: Landing Zone (Control Point)' carries '(Control Point)'"
+          "graveyardlanguage 221 and waypointlanguage 226 carry '(Control Point)'"
         ]
       },
       "known_without_discovery": {
@@ -1006,6 +1085,82 @@
         "tier": "original",
         "citations": [
           "the name 'Hospital: River-base Krimm (Control Point)' carries '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Cumbria Research Facility Hospital",
+      "graveyard_id": {
+        "value": 219,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[219] = 'Cumbria Hospital', the only graveyard naming Cumbria",
+          "graveyard ids 217-223 hold the Palisades' hospitals (217 Staging Point, 219 Cumbria, 220 River-base Krymm, 221 Fort Dew, 223 Treeback Ridge)"
+        ],
+        "reasoning": "the one Cumbria graveyard for the one Cumbria hospital marker; the texts differ ('Cumbria Hospital' / 'Cumbria Research Facility Hospital'), so the join is inferred (2026-09-26 client-defects)"
+      },
+      "waypoint_id": {
+        "value": 112,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[112] = 'Cumbria Research Hospital'",
+          "world seed teleporter 112 (type 5, 'Hospital: Cumbria Research') stands 1.0 m from the marker horizontally; map_marker (133182640965828, 1244) binds the marker to 112"
+        ],
+        "reasoning": "world-seed type-5 teleporter row at the marker (2026-09-26 client-defects)"
+      },
+      "map_context_id": {
+        "value": 1244,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1244] = adv_foreas_concordia_palisades, template 1402"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133182640965828,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1402] marker 133182640965828 (type 19, name text 952); uimapmarkertextlanguage 952 = 'Cumbria Research Facility Hospital'"
+        ]
+      },
+      "position": {
+        "value": [
+          -744.3609619140625,
+          149.29685974121094,
+          721.9459228515625
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1402] marker 133182640965828 (type 19, name text 952); uimapmarkertextlanguage 952 = 'Cumbria Research Facility Hospital'",
+          "calibration V2"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the world seed row 112 stands 10.8 m lower (y 138.5) and the navmesh check decides between them",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "marker type 19 SAFE_ZONE",
+          "uielementlanguage 5194 'PvP Safe Region' is the safe tooltip"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "the name 'Cumbria Research Facility Hospital' has no '(Control Point)'"
         ]
       },
       "known_without_discovery": {
@@ -1298,6 +1453,81 @@
         "tier": "inferred",
         "citations": [
           "the name 'Minos Caverns Field Medic' has no '(Control Point)'"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Devil's Den",
+      "graveyard_id": {
+        "value": 41,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[41] = \"Devil's Den Entrance\", the only graveyard naming Devil's Den",
+          "instance hospitals elsewhere in the catalogue carry an 'X Entrance' graveyard (151 Quasso Station Entrance, 164 Chaukas Entrance, 210 Fault Lever Entrance)"
+        ],
+        "reasoning": "the one Devil's Den graveyard for the instance's one hospital marker; the texts differ, so the join is inferred (2026-09-26 client-defects)"
+      },
+      "waypoint_id": {
+        "value": 388,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[388] = \"Hospital: Devil's Den\", the marker's exact text",
+          "map_marker (133822591019657, 1394) binds the marker to teleporter 388"
+        ],
+        "reasoning": "waypointlanguage name match (2026-09-26 client-defects)"
+      },
+      "map_context_id": {
+        "value": 1394,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1394] = adv_foreas_concordia_palisades_devilsden, template 1551"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133822591019657,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1551] marker 133822591019657 (type 3, name text 1065); uimapmarkertextlanguage 1065 = 'Hospital: Devil's Den'"
+        ]
+      },
+      "position": {
+        "value": [
+          14.628096580505371,
+          106.990234375,
+          -376.5403137207031
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1551] marker 133822591019657 (type 3, name text 1065); uimapmarkertextlanguage 1065 = 'Hospital: Devil's Den'",
+          "calibration V2"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "the name 'Hospital: Devil's Den' has no '(Control Point)'"
         ]
       },
       "known_without_discovery": {
@@ -7555,7 +7785,7 @@
     },
     {
       "id": "GAP-NO-HOSPITAL",
-      "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Only contexts 1985 and 1220 are catalogued."
+      "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Since 2026-09-17 every map whose hospital markers resolve is catalogued (105 hospitals on 42 maps after 2026-09-26); the fallback remains for the maps under GAP-HOSPITAL-UNRESOLVED-GRAVEYARD."
     },
     {
       "id": "GAP-HOSPITAL-FACING",
@@ -7567,26 +7797,8 @@
     },
     {
       "id": "GAP-HOSPITAL-UNRESOLVED-GRAVEYARD",
-      "summary": "66 client hospital markers on 42 maps have no graveyardlanguage entry reading their name, so the id the client would show in Hospital Selection is unrecovered and they are not offered. Most read close but not identically to a graveyard entry (marker 'Hospital: Foreas Base' against graveyard 202 'Foreas Base Hospital'), and the original server's own graveyard table, which held the mapping, is lost.",
+      "summary": "63 client hospital markers have no graveyardlanguage entry reading their name, so the id the client would show in Hospital Selection is unrecovered and they are not offered. Most read close but not identically to a graveyard entry (marker 'Hospital: Foreas Base' against graveyard 202 'Foreas Base Hospital'), and the original server's own graveyard table, which held the mapping, is lost. 2026-09-26 (client-defects): Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins (see their records); Palisades' Hightower Outpost First Aid Station and Viands Village Hospital stay open - no graveyardlanguage or waypointlanguage entry names either.",
       "rows": [
-        {
-          "map_context_id": 1148,
-          "map": "adv_foreas_concordia_divide",
-          "name": "Hospital: Foreas Base",
-          "marker_entity_id": 132770324754371,
-          "waypoint_id": null,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Foreas Base'"
-        },
-        {
-          "map_context_id": 1244,
-          "map": "adv_foreas_concordia_palisades",
-          "name": "Cumbria Research Facility Hospital",
-          "marker_entity_id": 133182640965828,
-          "waypoint_id": 112,
-          "waypoint_name": "Cumbria Research Hospital",
-          "why": "no graveyardlanguage entry reads exactly 'Cumbria Research Facility Hospital' or 'Cumbria Research Hospital'"
-        },
         {
           "map_context_id": 1244,
           "map": "adv_foreas_concordia_palisades",
@@ -7685,15 +7897,6 @@
           "waypoint_id": null,
           "waypoint_name": null,
           "why": "no graveyardlanguage entry reads exactly 'First Aid Station'"
-        },
-        {
-          "map_context_id": 1394,
-          "map": "adv_foreas_concordia_palisades_devilsden",
-          "name": "Hospital: Devil's Den",
-          "marker_entity_id": 133822591019657,
-          "waypoint_id": 388,
-          "waypoint_name": "Hospital: Devil's Den",
-          "why": "no graveyardlanguage entry reads exactly \"Hospital: Devil's Den\" or \"Hospital: Devil's Den\""
         },
         {
           "map_context_id": 1429,
@@ -8165,12 +8368,16 @@
         }
       ],
       "closes_with": "a capture of Hospital Selection on one of these maps, or the original graveyard table"
+    },
+    {
+      "id": "GAP-HOSPITAL-SHARED-WAYPOINT",
+      "summary": "Waypoint 120 'AFS Field Medic' (graveyard 36) is the catalogue's waypoint for the entrance hospital of five instance maps (1823, 1977, 1988, 2055, 2111), a consequence of the name join taking the lowest of several identically named ids. The character store keys a gained waypoint by id alone (character_teleporter PK character_id, waypointId), so gaining it on one of those maps counts on all five and the zone-entry gain line is not repeated. Harmless to the offer (each map has that one hospital) but unverified; which of the 'AFS Field Medic' waypoint ids each map carried is unrecovered. The 2327/2375 Manhattan rows share their ids by design: 2375 is the shared-instance copy of the same map and markers."
     }
   ],
   "coverage": {
-    "hospitals": 102,
-    "maps": 41,
+    "hospitals": 105,
+    "maps": 42,
     "recipe": "research/20260917-hospital-coverage/tools/02_resolve.py",
-    "note": "Every client HOSPITAL (3) and SAFE_ZONE (19) map marker on a loaded map, resolved by the recipe the seven 2026-09-14 rows were built with. That pass reached two maps; this one reaches every map whose marker names resolve. The rows it cannot resolve are listed under gaps, and their maps keep the revive-in-place fallback."
+    "note": "Every client HOSPITAL (3) and SAFE_ZONE (19) map marker on a loaded map, resolved by the recipe the seven 2026-09-14 rows were built with. That pass reached two maps; this one reaches every map whose marker names resolve. The rows it cannot resolve are listed under gaps, and their maps keep the revive-in-place fallback. 2026-09-26: three more resolved by inferred joins and the Palisades control-point hospital re-identified as Fort Dew (docs/retail-accuracy.md, 2026-09-26 client defects)."
   }
 }

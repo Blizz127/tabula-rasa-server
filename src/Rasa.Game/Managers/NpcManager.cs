@@ -700,7 +700,10 @@ namespace Rasa.Managers
             if (item.CurrentHitPoints >= maxHitPoints)
                 return false;
 
-            cost = (int)Math.Round((double)(maxHitPoints - item.CurrentHitPoints) * item.ItemTemplate.SellPrice / 100);
+            // The price the client's repair tab showed for it (vendorwindow._GetRepairPrice): the item-info buyback
+            // price scaled by the missing condition, never below one credit. The old charge,
+            // round((max - cur) * sellPrice / 100), scaled by hit points rather than condition and could be 0.
+            cost = VendorPriceRules.RepairPrice(item.ItemTemplate.ItemInfo.BuyBackPrice, item.CurrentHitPoints, maxHitPoints);
 
             return true;
         }

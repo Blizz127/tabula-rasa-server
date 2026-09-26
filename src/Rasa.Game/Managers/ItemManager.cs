@@ -276,6 +276,9 @@ namespace Rasa.Managers
                 LoadedItemTemplates[template.Id].ItemInfo.Tradable = template.NotTradableFlag == 0;
                 LoadedItemTemplates[template.Id].QualityId = template.QualityId;
                 LoadedItemTemplates[template.Id].SellPrice = template.SellPrice;
+                // The client's item-info buyback price is the sale price it shows and the base of its repair price;
+                // it used to stay 0, so no item showed a sale price and every repair showed one credit.
+                LoadedItemTemplates[template.Id].ItemInfo.BuyBackPrice = VendorPriceRules.BuybackPrice(template.SellPrice);
             }
             
             Logger.WriteLog(LogType.Initialize, $"Loaded {itemTemplatesData.Count} ItemTemplates.");

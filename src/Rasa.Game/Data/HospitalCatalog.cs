@@ -58,6 +58,15 @@ namespace Rasa.Data
     /// positions - and resolves 102 hospitals on 41 maps. The markers it cannot resolve, because no
     /// graveyardlanguage entry reads their name, are listed as GAP-HOSPITAL-UNRESOLVED-GRAVEYARD;
     /// their maps keep the revive-in-place fallback.
+    ///
+    /// 2026-09-26 (client defects): three of those markers resolve on inferred joins - Divide's
+    /// "Hospital: Foreas Base" (graveyard 202 and waypoint 93, both "Foreas Base Hospital"), Palisades'
+    /// Cumbria Research Facility Hospital (219, the only Cumbria graveyard, and waypoint 112 at the
+    /// marker) and Devil's Den (41, the only Devil's Den graveyard, and waypoint 388 "Hospital: Devil's
+    /// Den"). The Palisades control-point hospital, whose marker reuses the Wilderness Landing Zone's
+    /// text 303, is Fort Dew's (graveyard 221, waypoint 226), as every other Fort Dew marker on that map
+    /// says; it had carried the Wilderness hospital's waypoint 216, and the character store keys gained
+    /// waypoints by id alone, so gaining one gained both. 105 hospitals on 42 maps.
     /// </summary>
     public static class HospitalCatalog
     {
@@ -82,6 +91,8 @@ namespace Rasa.Data
                 new Vector3(-285.3243408203125f, 57.07631301879883f, 14.20481014251709f), false, true, false),   // Hospital: Hydro Plant (Control Point)
             new HospitalData(241, 222, 1148, 132770324755168UL,
                 new Vector3(-683.0f, 121.93602752685547f, -664.5f), false, true, false),   // Hospital: Purgas (Control Point)
+            new HospitalData(202, 93, 1148, 132770324754371UL,
+                new Vector3(10.864720344543457f, 116.8848648071289f, 532.4190673828125f), true, false, false),   // Hospital: Foreas Base
 
             // adv_foreas_concordia_wilderness (context 1220, map template 1378).
             new HospitalData(3, 103, 1220, 133079561961146UL,
@@ -98,12 +109,14 @@ namespace Rasa.Data
                 new Vector3(156.02780151367188f, 163.0747833251953f, -86.59078979492188f), false, true, false),   // Hospital: Landing Zone (Control Point)
 
             // adv_foreas_concordia_palisades (context 1244, map template 1402).
-            new HospitalData(136, 216, 1244, 133182640964490UL,
-                new Vector3(-143.5533447265625f, 172.3076934814453f, -752.7608642578125f), false, true, false),   // Hospital: Landing Zone (Control Point)
+            new HospitalData(221, 226, 1244, 133182640964490UL,
+                new Vector3(-143.5533447265625f, 172.3076934814453f, -752.7608642578125f), false, true, false),   // Hospital: Fort Dew (Control Point); the marker reuses text 303
             new HospitalData(217, 114, 1244, 133182640965835UL,
                 new Vector3(868.220947265625f, 126.30036926269531f, -220.63720703125f), false, false, false),   // Staging Point First Aid Station
             new HospitalData(220, 224, 1244, 133182640964388UL,
                 new Vector3(219.139404296875f, 108.71795654296875f, 290.06982421875f), false, true, false),   // Hospital: River-base Krimm (Control Point)
+            new HospitalData(219, 112, 1244, 133182640965828UL,
+                new Vector3(-744.3609619140625f, 149.29685974121094f, 721.9459228515625f), true, false, false),   // Cumbria Research Facility Hospital
 
             // adv_foreas_valverde_pools (context 1304, map template 1461).
             new HospitalData(148, 290, 1304, 133436044038302UL,
@@ -116,6 +129,10 @@ namespace Rasa.Data
             // adv_foreas_concordia_divide_minoscaverns (context 1347, map template 1504).
             new HospitalData(39, 460, 1347, 133620727551304UL,
                 new Vector3(-0.9948493242263794f, 30.71072769165039f, 112.28780364990234f), false, false, false),   // Minos Caverns Field Medic
+
+            // adv_foreas_concordia_palisades_devilsden (context 1394, map template 1551).
+            new HospitalData(41, 388, 1394, 133822591019657UL,
+                new Vector3(14.628096580505371f, 106.990234375f, -376.5403137207031f), false, false, false),   // Hospital: Devil's Den
 
             // adv_foreas_concordia_palisades_treebackcamp (context 1397, map template 1554).
             new HospitalData(223, 115, 1397, 133835475920611UL,

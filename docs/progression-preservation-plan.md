@@ -1056,6 +1056,18 @@ character picks up in Alia Das once Training Day and the class choice are behind
   `GAP-NORTON-POSITION`, `GAP-TORDEN-MARKER-POSITIONS`). Clark is probably unreachable where he stands, which blocks
   seeding 936 until the owner decides. Details: `docs/fidelity-audit.md`, "World-data defects (2026-09-26)".
 
+- **Client-contract defects (2026-09-26, `LocalTeleporterGraveyards` and server rules)**: four segment-3 travel and
+  economy systems now follow the 1.16.5.0 client. The 42 local teleporter pads can be gained and used (LOCALWAYPOINT 1,
+  its own gain line and window); 595/597, which are hospital points, are re-typed. The dropship window lists only
+  gained pads (help text 5697: a pad is gained by walking across it), each drawn at its own position instead of a
+  boot-camp literal. The Palisades control-point hospital is Fort Dew's (221/226), so it no longer shares the
+  Wilderness LZ's waypoint 216. Divide's Foreas Base, Palisades' Cumbria and Devil's Den hospitals are offered on
+  inferred joins, which gives 105 hospitals on 42 maps. Items carry their sell price as the client's buyback price, and
+  repairs charge the client's `_GetRepairPrice`. Open: the local pads' emulator ids have no client names
+  (`GAP-LOCAL-TELEPORTER-IDS`, OD-90), plus `GAP-LOCAL-TELEPORTER-RADIUS`, `-TYPES`, `GAP-DROPSHIP-HOVER`,
+  `-GAIN-MESSAGE`, `GAP-HOSPITAL-SHARED-WAYPOINT` and `GAP-WILDERNESS-LZ-HOSPITAL-MARKER`, and Hightower and Viands
+  Village hospitals remain unresolved. Details: `docs/retail-accuracy.md`, "2026-09-26 — Client-contract defects".
+
 - **Mission reward items (2026-09-26, `MissionRewardItems`)**: seven seeded missions now offer their reward items:
   1541 and 1040 on the Plateau, 1673 in the Marshes, 983 in the Mires, and the consumable bundles of 970, 1068 and
   1863. Each is one choice at `inferred` tier from TaRapedia's post-1.4 list. The templates come from the client's
@@ -1150,6 +1162,7 @@ its evidence tier.
 | OD-63 Moawi's dialogue class (2026-09-24, agent, pending owner review) | `MoawiDialogueClassRows` reassigns creature 38 (Council Elder Moawi) from world-seed class Redshirt_Forean_Elder (6163, augmentation 1,59: creature/harvestable, unable to converse) to original client class 28415, chosen only because it shares the Forean elder mesh, class flags and NPC augmentation 52 needed to hold dialogue package 113. The migration's own comment calls this "an explicit class analogue; Moawi's final-live entity class has not been recovered" |
 | OD-64 Solis identity and placement (2026-09-24, agent, pending owner review) | `SolisCavernsPlacementRows` moves named spawnpool 184 (Council Elder Solis) onto disabled pool 92's original X/Z/rotation and a probed navmesh floor (786.8711, 287.32, 581.46875, rotation 3.0), because pool 184's dated position is obstructed by Moawi's hut geometry in the compatibility client and pool 92 already places an unnamed Forean shaman 2.2 m from the dated report at the same elevation. The migration's own comment calls this binding "inferred... not a recovered final-live server placement." Full provenance and remaining uncertainty in `docs/evidence/solis-caverns-placement.json` |
 | OD-65 Account-authentication 20-second wait (2026-09-22, agent, pending owner review) | `Auth.Client` defers only its first empty `ServerListExt` response for up to 20 seconds (`InitialServerListWaitMs`) so the existing game-registration broadcast can satisfy it, instead of showing a persistent "No servers found" dialog; later refreshes are immediate. `docs/evidence/live-auth-server-list-wait-20260923.json` states plainly this is "an emulator availability fix, not a proven final-live auth timeout," not a recovered original duration |
+| OD-90 Local teleporter pads the final client cannot name (2026-09-26, agent, open, pending owner review) | The 37 seed local pads (ids 537-574) are gained and used under their emulator ids, and the client shows its missing-translation text for their names. The alternative is to leave them unusable until original local-waypoint ids are found. The client's `waypointlanguage` holds no local-teleporter ids apart from magma caverns' 488-490, which the seed does not place (`GAP-LOCAL-TELEPORTER-IDS`) |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

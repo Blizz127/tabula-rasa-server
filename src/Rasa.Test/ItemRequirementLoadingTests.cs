@@ -150,6 +150,41 @@ namespace Rasa.Test
         public void MissingTemplateFlagRowKeepsTheExistingNegativeWireDefault()
             => AssertLoadedTradeFlag(null);
 
+        /// <summary>
+        /// The template's sell price is the item-info buyback price the client is told (kItemIdx_BuybackPrice, third
+        /// field of the ITEM augmentation tuple): the sale price inventorywindow shows while a vendor is open and the
+        /// base of vendorwindow._GetRepairPrice. It used to stay 0.
+        /// </summary>
+        [TestMethod]
+        public void LoadedSellPriceIsTheBuybackPriceTheTooltipCarries()
+        {
+            _records.ItemTemplates.Add(new ItemTemplateEntry { Id = 145, SellPrice = 26, BuyPrice = 101 });
+            _records.ItemTemplates.Add(new ItemTemplateEntry { Id = 500001, SellPrice = -3 });
+            _manager.LoadItemTemplates();
+            var template = _manager.GetItemTemplateById(145);
+            Assert.AreEqual(26, template.ItemInfo.BuyBackPrice);
+            Assert.AreEqual(0, _manager.GetItemTemplateById(500001).ItemInfo.BuyBackPrice);
+            Assert.AreEqual(0, _manager.GetItemTemplateById(6048).ItemInfo.BuyBackPrice);
+
+            var entityClass = EntityClassManager.Instance.LoadedEntityClasses[(EntityClasses)6048];
+            entityClass.ItemClassInfo = new ItemClassInfo(new ItemClassEntry { MaxHitPoints = 160 });
+            entityClass.Augmentations.Add(AugmentationType.Item);
+            using var stream = new MemoryStream();
+            using var writer = new PythonWriter(new BinaryWriter(stream));
+            new ItemTemplateTooltipInfoPacket(template, entityClass).Write(writer);
+            stream.Position = 0;
+            using var reader = new PythonReader(new BinaryReader(stream));
+            Assert.AreEqual(3, reader.ReadTuple());
+            reader.ReadUInt();
+            reader.ReadUInt();
+            Assert.AreEqual(1, reader.ReadDictionary());
+            Assert.AreEqual((int)AugmentationType.Item, reader.ReadInt());
+            Assert.AreEqual(6, reader.ReadTuple());
+            reader.ReadBool();
+            Assert.AreEqual(160, reader.ReadInt());
+            Assert.AreEqual(26, reader.ReadInt());
+        }
+
         private void AssertLoadedTradeFlag(byte? storedFlag)
         {
             if (storedFlag.HasValue)
