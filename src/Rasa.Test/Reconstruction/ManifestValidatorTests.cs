@@ -295,7 +295,7 @@ namespace Rasa.Test.Reconstruction
             // An attack needs its damage (WildernessMortarFire): creature_action's columns are all required.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature_action", "min_damage"));
             // npc_mission is registered since TordenConversationMissions: every column is required, so the Pools level
-            // may carry a labelled analogue (OD-59); an unregistered table still classifies as Unknown.
+            // may carry a labelled analogue (OD-60); an unregistered table still classifies as Unknown.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("npc_mission", "level"));
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
             Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission_reward", "credits"));

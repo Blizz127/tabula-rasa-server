@@ -1827,8 +1827,8 @@ NPCs the world already places. No NPC, placement or package is created or moved.
 | 1014 Blue Flu | Parkman 199069 → Norton 510187, Provost first | 20 (Plateau) | none (beta-only XP left out) |
 | 1064 Incriminating Delivery | Liu 199510 → Franks 510084, after 1063 | 35 (Plains) | 50,000 / 5,000, pre-1.4 |
 | 1070 Go to Incline, Young Soldier | Franks 510084 → Obahmi 510067 | 35 (Plains) | 12,500 / 2,500, pre-1.4 |
-| 1326 Spoils of War | Chester 510198 → Snake 199203 | 20 (analogue, OD-59) | 32,500 / 3,600 and one of four Class VII stacks, post-1.4 |
-| 1330 Retread Planning Part II | Hermit 199075 → Amee Corman 199204 | 20 (analogue, OD-59) | 30,000 / 3,500 and one of four Class VII stacks, post-1.4 |
+| 1326 Spoils of War | Chester 510198 → Snake 199203 | 20 (analogue, OD-60) | 32,500 / 3,600 and one of four Class VII stacks, post-1.4 |
+| 1330 Retread Planning Part II | Hermit 199075 → Amee Corman 199204 | 20 (analogue, OD-60) | 30,000 / 3,500 and one of four Class VII stacks, post-1.4 |
 
 - **Evidence.** Objective texts are original (missionobjective). Givers and receivers are inferred from the client's
   texts and dated TaRapedia revisions. The objective flags, 1014's order (CID HQ, then the warehouse, revealed by
@@ -1847,7 +1847,7 @@ NPCs the world already places. No NPC, placement or package is created or moved.
 - **Gaps opened.** Unseeded or unknown gates for 526 (804), 648, 1326 (1324) and 1330 (563). Items handed over at
   accept are not granted (526, 802, 1064). Also open: 1014's rewards, 1064's scripted ambush, Norton's unconscious
   pose, and the marker-stacked NPC positions these missions use (GAP-TORDEN-NPC-POSITIONS).
-- **Pools level.** The Pools has no band. 1326/1330 take 20 from 1068/1541 as an analogue under OD-59, which is
+- **Pools level.** The Pools has no band. 1326/1330 take 20 from 1068/1541 as an analogue under OD-60, which is
   pending owner review: Smash and Grab records Level=35 and the rewards require 31–35. `ProvenanceRegistry` now
   lists `npc_mission`, with every column required, so a level can carry that label.
 - **Not verified in-game.** None of the nine has been played with the original client.

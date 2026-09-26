@@ -60233,10 +60233,10 @@
        "locator": "mission 1326: objective and conversation rows carry no level"
       }
      ],
-     "reasoning": "GAP-MISSION-LEVEL. No Pools band exists in the repo. The only precedent: PlateauConversationNpcRows seeded 1068 and 1541, which turn in at the Pools NPCs Snake and Amee, at the Plateau band 20. Contrary data: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22) and these rewards are Class VII consumables. Owner decision; not a finding. [also: repo: PlateauConversationNpcRows.cs 1068/1541 level 20] Contrary data kept beside the value: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22), and the Class VII consumable rewards carry client level requirements of 31-35 (research/20260926-reward-items/REVIEW.md, 1863 row). Pending owner review (OD-59).",
+     "reasoning": "GAP-MISSION-LEVEL. No Pools band exists in the repo. The only precedent: PlateauConversationNpcRows seeded 1068 and 1541, which turn in at the Pools NPCs Snake and Amee, at the Plateau band 20. Contrary data: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22) and these rewards are Class VII consumables. Owner decision; not a finding. [also: repo: PlateauConversationNpcRows.cs 1068/1541 level 20] Contrary data kept beside the value: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22), and the Class VII consumable rewards carry client level requirements of 31-35 (research/20260926-reward-items/REVIEW.md, 1863 row). Pending owner review (OD-60).",
      "counterpart": "level 20 of 1068 South Of The Border and 1541 New Orders From The General (PlateauConversationNpc), the only seeded missions that turn in at Pools NPCs (Snake 199203, Amee Corman 199204)",
      "required_because": "npc_mission.level is NOT NULL and sent in MissionConstantData; the mission cannot be loaded or offered without one, the client carries none and no source states a level for this mission",
-     "decision": "OD-59"
+     "decision": "OD-60"
     },
     "group_type": {
      "value": 1,
@@ -61000,10 +61000,10 @@
        "locator": "mission 1330: objective and conversation rows carry no level"
       }
      ],
-     "reasoning": "GAP-MISSION-LEVEL. No Pools band exists in the repo. The only precedent: PlateauConversationNpcRows seeded 1068 and 1541, which turn in at the Pools NPCs Snake and Amee, at the Plateau band 20. Contrary data: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22) and these rewards are Class VII consumables. Owner decision; not a finding. [also: repo: PlateauConversationNpcRows.cs 1068/1541 level 20] Contrary data kept beside the value: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22), and the Class VII consumable rewards carry client level requirements of 31-35 (research/20260926-reward-items/REVIEW.md, 1863 row). Pending owner review (OD-59).",
+     "reasoning": "GAP-MISSION-LEVEL. No Pools band exists in the repo. The only precedent: PlateauConversationNpcRows seeded 1068 and 1541, which turn in at the Pools NPCs Snake and Amee, at the Plateau band 20. Contrary data: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22) and these rewards are Class VII consumables. Owner decision; not a finding. [also: repo: PlateauConversationNpcRows.cs 1068/1541 level 20] Contrary data kept beside the value: TaRapedia gives the preceding Smash and Grab \"Level=35\" (rev 31925, 2008-08-22), and the Class VII consumable rewards carry client level requirements of 31-35 (research/20260926-reward-items/REVIEW.md, 1863 row). Pending owner review (OD-60).",
      "counterpart": "level 20 of 1068 South Of The Border and 1541 New Orders From The General (PlateauConversationNpc), the only seeded missions that turn in at Pools NPCs (Snake 199203, Amee Corman 199204)",
      "required_because": "npc_mission.level is NOT NULL and sent in MissionConstantData; the mission cannot be loaded or offered without one, the client carries none and no source states a level for this mission",
-     "decision": "OD-59"
+     "decision": "OD-60"
     },
     "group_type": {
      "value": 1,
@@ -64171,7 +64171,7 @@
    "evidence": [
     "client tables searched for a mission level field: none exists",
     "TaRapedia: 126 of 926 mission pages state a level",
-    "TordenConversationMissions (2026-09-26): 1745 at the Palisades band 15, 526/802 at the Incline band 35, 648/1064/1070 at the Plains band 35, 1014 at the Plateau band 20 (all inferred conventions); 1326/1330 in the Pools, which has no band, at 20 from 1068/1541 as an analogue under OD-59 (pending owner review)"
+    "TordenConversationMissions (2026-09-26): 1745 at the Palisades band 15, 526/802 at the Incline band 35, 648/1064/1070 at the Plains band 35, 1014 at the Plateau band 20 (all inferred conventions); 1326/1330 in the Pools, which has no band, at 20 from 1068/1541 as an analogue under OD-60 (pending owner review)"
    ],
    "closes_with": "an owner decision on the level policy, or a source that gives mission levels",
    "surfaced_by": [
@@ -67939,7 +67939,7 @@
    "record": "docs/bootcamp-combat-feedback-audit.md"
   },
   {
-   "id": "OD-59",
+   "id": "OD-60",
    "decision": "Mission level for Pools missions (no zone band exists)",
    "default": "The value of the nearest seeded Pools-turn-in precedent, as a labelled analogue",
    "status": "approved",

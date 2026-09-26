@@ -610,7 +610,7 @@ Rewards are TaRapedia's amounts, each labelled with its era: six missions have o
 earlier W3 batches seeded the same way (GAP-TORDEN-REWARD-ERA); 1014's only figure is a closed-beta XP and is left
 out. No pre-1.4 item list is seeded. 1326 and 1330 carry their post-1.4 Class VII consumables as choose-one rows,
 inferred in structure and quantity (GAP-TORDEN-1326-1330-ITEM-CHOICE). Their level, 20, is the one analogue: the
-Pools has no band, and the value is 1068/1541's under OD-59, pending owner review. To allow that label the provenance
+Pools has no band, and the value is 1068/1541's under OD-60, pending owner review. To allow that label the provenance
 registry now classifies `npc_mission`, whose columns are all required.
 
 ## The parallel audit, and what it shipped (2026-09-21)

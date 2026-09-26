@@ -120,7 +120,7 @@ namespace Rasa.Test
                 var level = evidence.Single(row => row.GetProperty("table").GetString() == "npc_mission" &&
                     row.GetProperty("key").GetProperty("id").GetInt32() == mission).GetProperty("fields").GetProperty("level");
                 Assert.AreEqual("analogue", level.GetProperty("tier").GetString());
-                Assert.AreEqual("OD-59", level.GetProperty("decision").GetString());
+                Assert.AreEqual("OD-60", level.GetProperty("decision").GetString());
             }
         }
 

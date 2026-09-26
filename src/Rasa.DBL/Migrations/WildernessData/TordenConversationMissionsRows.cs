@@ -27,7 +27,7 @@ namespace Rasa.Migrations.WildernessData
     /// XP value (GAP-TORDEN-1014-REWARDS). Item lists recorded only before 1.4 are never seeded
     /// (GAP-TORDEN-REWARD-ITEMS); 1326 and 1330 carry their post-1.4 consumables as choose-one rows whose templates,
     /// quantities and choice structure are inferred. Levels are the zone band (GAP-MISSION-LEVEL); the Pools has no
-    /// band, so 1326 and 1330 take the 1068/1541 value 20 as an analogue under OD-59. Prerequisites on unseeded
+    /// band, so 1326 and 1330 take the 1068/1541 value 20 as an analogue under OD-60. Prerequisites on unseeded
     /// missions (804, 1324, 563) and 648's unknown gate are left out, and items handed over at accept (526, 802, 1064)
     /// are not granted; each is a GAP entry.
     /// </summary>
@@ -64,7 +64,7 @@ namespace Rasa.Migrations.WildernessData
             (1014u, 199069u, 510187u, 20u, "Blue Flu (Plateau)"),
             (1064u, 199510u, 510084u, 35u, "Incriminating Delivery (Plains)"),
             (1070u, 510084u, 510067u, 35u, "Go to Incline, Young Soldier (Plains)"),
-            // Pools: no zone band exists; 20 is the 1068/1541 value, an analogue under OD-59 (GAP-MISSION-LEVEL).
+            // Pools: no zone band exists; 20 is the 1068/1541 value, an analogue under OD-60 (GAP-MISSION-LEVEL).
             (1326u, 510198u, 199203u, 20u, "Spoils of War (Pools)"),
             (1330u, 199075u, 199204u, 20u, "Retread Planning Part II (Pools)")
         };
