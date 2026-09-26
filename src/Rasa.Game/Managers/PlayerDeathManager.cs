@@ -63,16 +63,31 @@ namespace Rasa.Managers
         /// <summary>
         /// The hospitals a player on this map may respawn at: known (gained, or known without
         /// discovery) and, for control-point hospitals, AFS-held. No control-point state exists
-        /// on this server, so control points are treated as held (GAP-CONTROL-POINTS).
+        /// on this server, so control points are treated as held (GAP-CONTROL-POINTS). On a
+        /// section-only map (Eloh Temples, D10.5) it is just the current section's hospital.
         /// </summary>
         public static List<HospitalData> OfferedHospitals(Manifestation player)
         {
             if (player?.MapChannel?.MapInfo == null)
                 return new List<HospitalData>();
 
-            return HospitalCatalog.ForMap(player.MapChannel.MapInfo.MapContextId)
-                .Where(hospital => hospital.KnownWithoutDiscovery || HasGained(player, hospital))
-                .ToList();
+            var mapContextId = player.MapChannel.MapInfo.MapContextId;
+            var hospitals = HospitalCatalog.ForMap(mapContextId).ToList();
+            var known = hospitals.Where(hospital => hospital.KnownWithoutDiscovery || HasGained(player, hospital)).ToList();
+
+            if (!HospitalCatalog.SectionOnlyMaps.Contains(mapContextId) || hospitals.Count == 0)
+                return known;
+
+            // D10.5: only the hospital of the section the player is in, and only once it is gained.
+            var section = hospitals.OrderBy(hospital => HorizontalDistanceSquared(hospital.Position, player.Position)).First();
+            return known.Where(hospital => hospital == section).ToList();
+        }
+
+        private static float HorizontalDistanceSquared(Vector3 a, Vector3 b)
+        {
+            var dx = a.X - b.X;
+            var dz = a.Z - b.Z;
+            return dx * dx + dz * dz;
         }
 
         private static bool HasGained(Manifestation player, HospitalData hospital)

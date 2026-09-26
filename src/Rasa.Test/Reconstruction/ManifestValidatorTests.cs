@@ -217,7 +217,9 @@ namespace Rasa.Test.Reconstruction
                 "npc_mission:id:332-2016",
                 // MissingMissionGivers (W3, 2026-09-26): the four mission givers Ten Ton Hammer places and their placements.
                 "creature:id:199950-199999",
-                "content_placement:id:199950-199999"
+                "content_placement:id:199950-199999",
+                // InstanceTravelLinks (2026-09-27): the instance-travel batch's map_link block.
+                "map_link:id:199250-199299"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()
@@ -283,7 +285,7 @@ namespace Rasa.Test.Reconstruction
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
                 "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot", "creature_action",
-                "spawnpool"
+                "spawnpool", "map_link"
             }, ProvenanceRegistry.Default.Tables.Select(t => t.Table).ToList());
 
             foreach (var table in ProvenanceRegistry.Default.Tables)
@@ -315,6 +317,9 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate", "sell_price"));
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("itemtemplate_weapon", "range"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate_weapon", "reuse_override"));
+            // map_link (InstanceTravelLinks): a link cannot work without any of its columns; the comment is storage.
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("map_link", "dest_pos_x"));
+            Assert.AreEqual(ColumnRole.Storage, ProvenanceRegistry.Default.RoleOf("map_link", "comment"));
         }
 
         [TestMethod]
@@ -330,7 +335,8 @@ namespace Rasa.Test.Reconstruction
                 typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
                 typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),
-                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry), typeof(CreatureActionEntry), typeof(SpawnPoolEntry)
+                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry), typeof(CreatureActionEntry), typeof(SpawnPoolEntry),
+                typeof(MapLinkEntry)
             };
 
             foreach (var entity in entities)

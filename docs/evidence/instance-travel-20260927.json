@@ -1,0 +1,560 @@
+{
+  "schema": "rasa-instance-travel/1",
+  "date": "2026-09-27",
+  "purpose": "Evidence and measurements behind InstanceTravelLinks, InstanceTravelRetiredRows and the 2026-09-27 hospital resolutions (research/20260926-instances batch 2 'instance travel and death').",
+  "client": "1.16.5.0; tables decoded statically (research/20260926-instances/work/*.json, strict literal-only decoder)",
+  "sources": {
+    "uimapmarker": {
+      "path": "research/20260926-instances/work/uimapmarker.json",
+      "decoded_from": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/final-client-selected/Tabula Rasa 1.16.5.0/game/generated/client/uimapmarker.pyo",
+      "sha256_pyo": "c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1"
+    },
+    "gamecontextuimapinfo": {
+      "path": "research/20260926-instances/work/gamecontextuimapinfo.json",
+      "sha256_pyo": "2eee4d16f1411dd6de5dc6aaba567016d9e04f68b62fcfbf726026002d0a6457"
+    },
+    "graveyardlanguage": {
+      "sha256_pyo": "01fc4eefb67abb699bf4cc202abb7c7fe91723cec35385616049bd99eb39b919"
+    },
+    "waypointlanguage": {
+      "sha256_pyo": "60ff87cbfae31478d8244eaf06d08f05b62680f8351ea6044f71e83b62c293ef"
+    },
+    "navprobe": {
+      "tool": "~/dev/trs-instance-travel-out/navprobe (copy of research/20260926-missing-npcs/tools/navprobe against src/Rasa.Navigation: NavMeshQuery.GroundHeight, Nearest, FindPath)",
+      "inputs": [
+        "navprobe/in.txt",
+        "navprobe/hosp.txt"
+      ],
+      "navmesh": "repo navmesh/*.nav built from the 1.16.5.0 client maps"
+    }
+  },
+  "yaw_rule": {
+    "rule": "dest_rotation = atan2(x - cx, z - cz), (cx, cz) = gamecontextuimapinfo[destination][1:3]",
+    "verified_against_preloader_rows": {
+      "5 (1347)": [
+        -0.7466,
+        -0.74657
+      ],
+      "9 (1148)": [
+        -0.2226,
+        -0.22259
+      ],
+      "1 (1220)": [
+        2.6548,
+        2.65482
+      ],
+      "13 (1430)": [
+        -2.4402,
+        -2.44017
+      ]
+    },
+    "tier": "inferred"
+  },
+  "links": [
+    {
+      "id": 199250,
+      "map": 1244,
+      "trigger": [
+        769.5072,
+        154.9576,
+        797.6298
+      ],
+      "radius": 6.0,
+      "dest_map": 1384,
+      "arrival": [
+        -120.2371,
+        97.1975,
+        45.1418
+      ],
+      "dest_rotation": -0.9443,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 1244,
+        "entity": 133182640964138,
+        "table": "maplinkmarkers",
+        "template": "1402"
+      },
+      "arrival_marker": {
+        "context": 1384,
+        "entity": 133779641346010,
+        "table": "factionedmarkers",
+        "template": "1541"
+      }
+    },
+    {
+      "id": 199251,
+      "map": 1384,
+      "trigger": [
+        -120.2371,
+        97.1975,
+        45.1418
+      ],
+      "radius": 6.0,
+      "dest_map": 1244,
+      "arrival": [
+        769.5072,
+        154.9576,
+        797.6298
+      ],
+      "dest_rotation": 0.7189,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 1384,
+        "entity": 133779641346010,
+        "table": "factionedmarkers",
+        "template": "1541"
+      },
+      "arrival_marker": {
+        "context": 1244,
+        "entity": 133182640964138,
+        "table": "maplinkmarkers",
+        "template": "1402"
+      }
+    },
+    {
+      "id": 199252,
+      "map": 1497,
+      "trigger": [
+        361.1624,
+        433.7641,
+        -556.0029
+      ],
+      "radius": 6.0,
+      "dest_map": 1502,
+      "arrival": [
+        356.0609,
+        169.2913,
+        0.8273
+      ],
+      "dest_rotation": 1.6167,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 1497,
+        "entity": 134269267734139,
+        "table": "maplinkmarkers",
+        "template": "1654"
+      },
+      "arrival_marker": {
+        "context": 1502,
+        "entity": 134290742448949,
+        "table": "factionedmarkers",
+        "template": "1659"
+      }
+    },
+    {
+      "id": 199253,
+      "map": 1502,
+      "trigger": [
+        356.0609,
+        169.2913,
+        0.8273
+      ],
+      "radius": 6.0,
+      "dest_map": 1497,
+      "arrival": [
+        361.1624,
+        433.7641,
+        -556.0029
+      ],
+      "dest_rotation": 2.553,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 1502,
+        "entity": 134290742448949,
+        "table": "factionedmarkers",
+        "template": "1659"
+      },
+      "arrival_marker": {
+        "context": 1497,
+        "entity": 134269267734139,
+        "table": "maplinkmarkers",
+        "template": "1654"
+      }
+    },
+    {
+      "id": 199254,
+      "map": 2047,
+      "trigger": [
+        -570.3525,
+        629.9304,
+        718.3977
+      ],
+      "radius": 6.0,
+      "dest_map": 1823,
+      "arrival": [
+        358.1881,
+        212.8376,
+        -134.2409
+      ],
+      "dest_rotation": 2.428,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 2047,
+        "entity": 134419591472545,
+        "table": "maplinkmarkers",
+        "template": "2047"
+      },
+      "arrival_marker": {
+        "context": 1823,
+        "entity": 134419591467905,
+        "table": "factionedmarkers",
+        "template": "1823"
+      }
+    },
+    {
+      "id": 199255,
+      "map": 1823,
+      "trigger": [
+        358.1881,
+        212.8376,
+        -134.2409
+      ],
+      "radius": 6.0,
+      "dest_map": 2047,
+      "arrival": [
+        -570.3525,
+        629.9304,
+        718.3977
+      ],
+      "dest_rotation": -0.671,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 1823,
+        "entity": 134419591467905,
+        "table": "factionedmarkers",
+        "template": "1823"
+      },
+      "arrival_marker": {
+        "context": 2047,
+        "entity": 134419591472545,
+        "table": "maplinkmarkers",
+        "template": "2047"
+      }
+    },
+    {
+      "id": 199256,
+      "map": 2047,
+      "trigger": [
+        251.4895,
+        146.2857,
+        224.7548
+      ],
+      "radius": 6.0,
+      "dest_map": 2156,
+      "arrival": [
+        -23.7891,
+        10.9411,
+        56.0241
+      ],
+      "dest_rotation": 1.2426,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 2047,
+        "entity": 134419591466163,
+        "table": "maplinkmarkers",
+        "template": "2047"
+      },
+      "arrival_marker": {
+        "context": 2156,
+        "entity": 134419591464201,
+        "table": "factionedmarkers",
+        "template": "2156"
+      }
+    },
+    {
+      "id": 199257,
+      "map": 2156,
+      "trigger": [
+        -23.7891,
+        10.9411,
+        56.0241
+      ],
+      "radius": 6.0,
+      "dest_map": 2047,
+      "arrival": [
+        251.4895,
+        146.2857,
+        224.7548
+      ],
+      "dest_rotation": 0.8415,
+      "kind": 1,
+      "trigger_marker": {
+        "context": 2156,
+        "entity": 134419591464201,
+        "table": "factionedmarkers",
+        "template": "2156"
+      },
+      "arrival_marker": {
+        "context": 2047,
+        "entity": 134419591466163,
+        "table": "maplinkmarkers",
+        "template": "2047"
+      }
+    },
+    {
+      "id": 199258,
+      "map": 2375,
+      "trigger": [
+        -285.7884,
+        208.9081,
+        -706.0602
+      ],
+      "radius": 6.0,
+      "dest_map": 20000009,
+      "arrival": [
+        -0.1481,
+        36.5,
+        -19.8979
+      ],
+      "dest_rotation": -0.0037,
+      "kind": 0,
+      "trigger_marker": {
+        "context": 2375,
+        "entity": 134419591466020,
+        "table": "maplinkmarkers",
+        "template": "2378"
+      },
+      "arrival_marker": {
+        "context": 20000009,
+        "entity": 134419591463417,
+        "table": "maplinkmarkers",
+        "template": "2232"
+      }
+    },
+    {
+      "id": 199259,
+      "map": 2375,
+      "trigger": [
+        -1.9697,
+        193.9143,
+        486.6048
+      ],
+      "radius": 6.0,
+      "dest_map": 20000009,
+      "arrival": [
+        -0.1481,
+        36.5,
+        -19.8979
+      ],
+      "dest_rotation": -0.0037,
+      "kind": 0,
+      "trigger_marker": {
+        "context": 2375,
+        "entity": 134419591466021,
+        "table": "maplinkmarkers",
+        "template": "2378"
+      },
+      "arrival_marker": {
+        "context": 20000009,
+        "entity": 134419591463417,
+        "table": "maplinkmarkers",
+        "template": "2232"
+      }
+    },
+    {
+      "id": 199260,
+      "map": 20000009,
+      "trigger": [
+        9.2683,
+        40.5004,
+        136.06
+      ],
+      "radius": 4.0,
+      "dest_map": 2374,
+      "arrival": [
+        -64.0,
+        359.5212,
+        -365.75
+      ],
+      "dest_rotation": 3.1159,
+      "kind": 0,
+      "trigger_marker": {
+        "context": 20000009,
+        "entity": 134419591463502,
+        "table": "maplinkmarkers",
+        "template": "2232"
+      },
+      "arrival_marker": {
+        "context": 2374,
+        "entity": 134419591466233,
+        "table": "staticmarkers",
+        "template": "2377"
+      }
+    },
+    {
+      "id": 199261,
+      "map": 2374,
+      "trigger": [
+        -64.0,
+        359.5212,
+        -365.75
+      ],
+      "radius": 4.0,
+      "dest_map": 20000009,
+      "arrival": [
+        9.2683,
+        40.5004,
+        136.06
+      ],
+      "dest_rotation": 0.0472,
+      "kind": 0,
+      "trigger_marker": {
+        "context": 2374,
+        "entity": 134419591466233,
+        "table": "staticmarkers",
+        "template": "2377"
+      },
+      "arrival_marker": {
+        "context": 20000009,
+        "entity": 134419591463502,
+        "table": "maplinkmarkers",
+        "template": "2232"
+      }
+    }
+  ],
+  "navprobe": {
+    "w.010": "surface=97.518|floor=97.242|nearest=(-120.24,97.52,45.14) d=0.32|levels=[72.15,97.52]|underground=False|path=",
+    "w.009": "surface=98.163|floor=97.887|nearest=(33.25,98.16,-83.60) d=0.24|levels=[94.55,98.16,147.75,148.27]|underground=False|path=PARTIAL len=5.0 end=(-115.6,97.15,43.2) endGap=195.5",
+    "w.tp130": "surface=null|floor=null|nearest=null|levels=[30.77,30.85,137.15]|underground=False|path=NOPATH",
+    "w.lake": "surface=0.746|floor=0.470|nearest=(275.00,0.75,334.00) d=0.25|levels=[0.55,0.75]|underground=False|path=PARTIAL len=5.7 end=(-116.0,95.95,48.8) endGap=493.2",
+    "w.lake9": "surface=0.746|floor=0.470|nearest=(275.00,0.75,334.00) d=0.25|levels=[0.55,0.75]|underground=False|path=PARTIAL len=398.4 end=(178.0,60.75,160.4) endGap=207.7",
+    "w.crate19": "surface=97.946|floor=97.670|nearest=(19.00,97.95,-86.00) d=0.95|levels=[97.95,150.15,162.55]|underground=False|path=PARTIAL len=5.0 end=(-115.6,97.15,43.2) endGap=186.6",
+    "u.hosp": "surface=169.400|floor=169.124|nearest=(356.06,169.40,0.83) d=0.11|levels=[169.4,188.8]|underground=False|path=",
+    "u.bridge": "surface=168.800|floor=168.524|nearest=(-154.36,168.80,3.09) d=0.19|levels=[168.8,197.35]|underground=False|path=complete len=565.1 end=(-154.4,168.80,3.1) endGap=0.0",
+    "u.bravo": "surface=157.800|floor=157.524|nearest=(153.44,157.80,-194.06) d=0.92|levels=[157.8,157.93,188.67]|underground=False|path=PARTIAL len=651.6 end=(153.4,188.60,-190.4) endGap=31.0",
+    "s.hosp": "surface=212.893|floor=212.617|nearest=(358.19,212.89,-134.24) d=0.05|levels=[206.68,212.89,247.94,250.53]|underground=False|path=",
+    "s.label": "surface=null|floor=null|nearest=null|levels=[229.93,232.13,233.21]|underground=False|path=NOPATH",
+    "s.excav": "surface=161.400|floor=161.124|nearest=(117.40,161.40,-66.20) d=0.40|levels=[161.4,163.8]|underground=False|path=PARTIAL len=262.2 end=(242.0,183.73,-84.8) endGap=127.9",
+    "r.hosp": "surface=11.155|floor=10.879|nearest=(-23.79,11.15,56.02) d=0.21|levels=[0.15,11.15]|underground=False|path=",
+    "r.vendor": "surface=1.549|floor=1.273|nearest=(-190.52,1.55,143.33) d=2.49|levels=[1.55,13.37,13.75]|underground=False|path=PARTIAL len=17.3 end=(-39.2,11.15,63.1) endGap=171.5",
+    "e.staging": "surface=359.600|floor=359.324|nearest=(-64.00,359.60,-365.75) d=0.08|levels=[359.6,421.6]|underground=False|path=",
+    "e.trainer": "surface=363.600|floor=363.324|nearest=(-86.80,363.60,-389.50) d=0.10|levels=[359.8,363.6,376,384.2,421.6]|underground=False|path=complete len=39.9 end=(-86.8,363.60,-389.5) endGap=0.0",
+    "e.vendor": "surface=363.600|floor=363.324|nearest=(-34.17,363.60,-397.48) d=0.40|levels=[360.64,363.6,376,421.6]|underground=False|path=complete len=51.5 end=(-34.2,363.60,-397.5) endGap=0.3",
+    "e.blue": "surface=420.600|floor=420.324|nearest=(-402.00,420.60,46.00) d=0.10|levels=[420.6,428.6]|underground=False|path=PARTIAL len=54.2 end=(-94.0,367.60,-335.6) endGap=493.2",
+    "e.red": "surface=420.600|floor=420.324|nearest=(282.00,420.60,34.00) d=0.10|levels=[409.67,420.6,428.6]|underground=False|path=PARTIAL len=58.2 end=(-30.0,367.60,-335.6) endGap=486.6",
+    "e.whiskey": "surface=421.200|floor=420.924|nearest=(-310.96,421.20,-124.10) d=0.03|levels=[421.2,426.49,426.99]|underground=False|path=PARTIAL len=54.2 end=(-94.0,367.60,-335.6) endGap=307.7",
+    "e.echo": "surface=421.200|floor=420.924|nearest=(192.00,421.20,205.00) d=0.03|levels=[421.2,426.95]|underground=False|path=PARTIAL len=58.2 end=(-30.0,367.60,-335.6) endGap=586.9",
+    "c.null": "surface=36.566|floor=36.290|nearest=(-0.15,36.57,-19.90) d=0.07|levels=[36.57,42.17]|underground=False|path=",
+    "c.north": "surface=40.566|floor=40.290|nearest=(9.27,40.57,136.06) d=0.07|levels=[40.57]|underground=False|path=",
+    "c.medic": "surface=40.166|floor=39.890|nearest=(24.90,40.17,114.79) d=0.17|levels=[32.17,40.17,48.17]|underground=False|path=",
+    "p.warnet": "surface=155.215|floor=154.939|nearest=(769.51,155.21,797.63) d=0.26|levels=[155.21]|underground=False|path=",
+    "pl.ustor": "surface=433.878|floor=433.602|nearest=(361.16,433.88,-556.00) d=0.11|levels=[433.88,460.48]|underground=False|path=",
+    "d.refuge": "surface=146.592|floor=146.316|nearest=(251.49,146.59,224.75) d=0.31|levels=[146.59]|underground=False|path=",
+    "d.sanctus": "surface=630.200|floor=629.924|nearest=(-570.35,630.20,718.40) d=0.27|levels=[630.2,677.4]|underground=False|path=",
+    "l.exit1": "surface=209.166|floor=208.890|nearest=(-285.79,209.17,-706.06) d=0.26|levels=[209.17,254.8]|underground=False|path=",
+    "l.exit2": "surface=196.000|floor=195.724|nearest=(-1.97,196.00,488.85) d=3.06|levels=[188.75,196]|underground=False|path=",
+    "h.1349.43": "surface=13.672|floor=13.396|nearest=(-272.59,13.67,310.55) d=3.23|levels=[13.67,29.47,32.07,35.19,36.67,48.87,53.75]|underground=False|path=",
+    "h.1384.49": "surface=98.163|floor=97.887|nearest=(33.25,98.16,-83.60) d=0.24|levels=[94.55,98.16,147.75,148.27]|underground=False|path=",
+    "h.1384.48": "surface=97.516|floor=97.240|nearest=(-120.24,97.52,45.14) d=0.32|levels=[72.15,97.52]|underground=False|path=",
+    "h.1429.232": "surface=107.509|floor=107.233|nearest=(-203.52,107.51,-242.63) d=0.16|levels=[107.51,113.23,151.09,153.09,154.49]|underground=False|path=",
+    "h.1694.114": "surface=62.852|floor=62.576|nearest=(-50.81,62.85,-179.02) d=0.09|levels=[62.85,117.65]|underground=False|path=",
+    "h.1763.153": "surface=185.802|floor=185.526|nearest=(-143.01,185.80,-313.80) d=0.19|levels=[185.8]|underground=False|path=",
+    "h.1763.154": "surface=152.002|floor=151.726|nearest=(14.43,152.00,-317.58) d=0.03|levels=[152]|underground=False|path=",
+    "h.1773.125": "surface=313.734|floor=313.458|nearest=(-12.91,313.73,181.33) d=0.27|levels=[313.73]|underground=False|path=",
+    "h.1803.81": "surface=24.137|floor=23.861|nearest=(-530.78,24.14,-209.79) d=3.52|levels=[24.14]|underground=False|path=",
+    "h.1803.80": "surface=24.196|floor=23.920|nearest=(-760.20,24.20,-272.45) d=3.01|levels=[24.2]|underground=False|path=",
+    "h.1803.82": "surface=24.137|floor=23.861|nearest=(-1012.22,24.14,-251.06) d=3.26|levels=[24.14]|underground=False|path=",
+    "h.2029.86": "surface=248.200|floor=247.924|nearest=(0.33,248.20,-21.42) d=0.26|levels=[205.85,248.2]|underground=False|path=",
+    "h.2034.87": "surface=-7.349|floor=-7.625|nearest=(-8.88,-7.35,12.92) d=0.15|levels=[-47.3,-7.35]|underground=False|path=",
+    "h.2138.130": "surface=242.067|floor=241.791|nearest=(-0.92,242.07,-312.00) d=0.26|levels=[242.07]|underground=False|path=",
+    "h.2162.135": "surface=204.928|floor=204.652|nearest=(64.00,204.93,-531.50) d=0.13|levels=[202.91,204.93]|underground=False|path=",
+    "h.2162.134": "surface=165.707|floor=165.431|nearest=(23.00,165.71,-511.50) d=0.33|levels=[165.71,202.91,213.59,219.11,226]|underground=False|path=",
+    "h.2368.281": "surface=24.153|floor=23.877|nearest=(-275.58,24.15,-348.94) d=0.27|levels=[24.15,41.85,44.89,47.26,47.85]|underground=False|path=",
+    "h.2374.273": "surface=421.200|floor=420.924|nearest=(-310.96,421.20,-124.10) d=0.03|levels=[421.2,426.49,426.99]|underground=False|path=",
+    "h.2374.274": "surface=421.200|floor=420.924|nearest=(192.00,421.20,205.00) d=0.03|levels=[421.2,426.95]|underground=False|path=",
+    "h.2374.275": "surface=420.600|floor=420.324|nearest=(282.00,420.60,34.00) d=0.10|levels=[409.67,420.6,428.6]|underground=False|path=",
+    "h.2374.276": "surface=420.600|floor=420.324|nearest=(-402.00,420.60,46.00) d=0.10|levels=[420.6,428.6]|underground=False|path=",
+    "h.20000009.243": "surface=40.166|floor=39.890|nearest=(24.90,40.17,114.79) d=0.17|levels=[32.17,40.17,48.17]|underground=False|path="
+  },
+  "navprobe_rings": {
+    "method": "eight points 30 m around the candidate, each probed for ground and a path back; a dead end has ground on one side only",
+    "results": {
+      "ring.w010.0": "surface=91.263|floor=90.987|nearest=(-90.24,91.26,45.14) d=5.94|levels=[72.15,91.26,92.09]|underground=False|path=PARTIAL len=5.1 end=(-115.2,96.55,45.6) endGap=25.5",
+      "ring.w010.45": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w010.90": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w010.135": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w010.180": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w010.225": "surface=98.545|floor=98.269|nearest=(-141.45,98.54,23.93) d=1.34|levels=[72.15,98.15,98.54]|underground=False|path=complete len=34.9 end=(-141.5,98.54,23.9) endGap=0.0",
+      "ring.w010.270": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w010.315": "surface=null|floor=null|nearest=null|levels=[72.15]|underground=False|path=NOPATH",
+      "ring.w009.0": "surface=98.146|floor=97.870|nearest=(63.25,98.15,-83.60) d=0.23|levels=[88.95,94.55,98.15,150.25,150.35]|underground=False|path=complete len=30.0 end=(63.2,98.15,-83.6) endGap=0.0",
+      "ring.w009.45": "surface=null|floor=null|nearest=null|levels=[77.46,82.95]|underground=False|path=NOPATH",
+      "ring.w009.90": "surface=null|floor=null|nearest=null|levels=[82.95,86.52]|underground=False|path=NOPATH",
+      "ring.w009.135": "surface=88.730|floor=88.454|nearest=(12.91,88.73,-62.30) d=9.23|levels=[88.35,88.73]|underground=False|path=complete len=190.5 end=(12.9,88.73,-62.3) endGap=0.9",
+      "ring.w009.180": "surface=100.146|floor=99.870|nearest=(7.20,100.15,-80.80) d=5.33|levels=[100.15,113.35,114.15,161.07]|underground=False|path=complete len=31.8 end=(7.2,100.15,-80.8) endGap=4.8",
+      "ring.w009.225": "surface=100.146|floor=99.870|nearest=(14.80,100.15,-101.20) d=5.06|levels=[100.15,115.95,116.75,166.6]|underground=False|path=PARTIAL len=28.2 end=(13.6,98.35,-91.6) endGap=13.4",
+      "ring.w009.270": "surface=96.746|floor=96.470|nearest=(32.80,96.75,-111.60) d=2.36|levels=[94.55,96.75,112.55,114.15,147.74,149.95]|underground=False|path=PARTIAL len=69.6 end=(31.7,94.55,-110.3) endGap=4.3",
+      "ring.w009.315": "surface=94.546|floor=94.270|nearest=(54.46,94.55,-104.81) d=3.37|levels=[89.15,94.55,98.75]|underground=False|path=complete len=51.4 end=(54.5,94.55,-104.8) endGap=0.0",
+      "ring.rh.0": "surface=11.158|floor=10.882|nearest=(6.21,11.16,56.02) d=0.22|levels=[0.15,11.16]|underground=False|path=complete len=30.0 end=(6.2,11.16,56.0) endGap=0.0",
+      "ring.rh.45": "surface=11.355|floor=11.079|nearest=(-2.64,11.35,77.12) d=0.43|levels=[0.15,11.35]|underground=False|path=complete len=32.6 end=(-2.6,11.35,77.1) endGap=0.1",
+      "ring.rh.90": "surface=null|floor=null|nearest=null|levels=[0.15]|underground=False|path=NOPATH",
+      "ring.rh.135": "surface=null|floor=null|nearest=null|levels=[0.15]|underground=False|path=NOPATH",
+      "ring.rh.180": "surface=null|floor=null|nearest=null|levels=[0.15]|underground=False|path=NOPATH",
+      "ring.rh.225": "surface=null|floor=null|nearest=null|levels=[0.15]|underground=False|path=NOPATH",
+      "ring.rh.270": "surface=null|floor=null|nearest=null|levels=[0.15]|underground=False|path=NOPATH",
+      "ring.rh.315": "surface=11.183|floor=10.907|nearest=(-2.73,11.18,35.27) d=0.55|levels=[0.15,11.18]|underground=False|path=complete len=32.5 end=(-2.7,11.18,35.3) endGap=0.5",
+      "ring.rv.0": "surface=3.155|floor=2.879|nearest=(-158.04,3.15,145.50) d=3.41|levels=[0.74,3.15,4.49]|underground=False|path=complete len=32.9 end=(-160.9,0.74,144.3) endGap=2.6",
+      "ring.rv.45": "surface=5.257|floor=4.981|nearest=(-169.31,5.26,164.54) d=1.22|levels=[0.35,5.26]|underground=False|path=complete len=34.4 end=(-169.3,5.26,164.5) endGap=0.0",
+      "ring.rv.90": "surface=0.355|floor=0.079|nearest=(-190.52,0.35,173.33) d=3.69|levels=[0.35,8.49]|underground=False|path=PARTIAL len=37.9 end=(-191.3,7.92,172.9) endGap=7.6",
+      "ring.rv.135": "surface=6.755|floor=6.479|nearest=(-212.11,6.76,164.50) d=2.74|levels=[6.15,6.76,8.35,22.37,31.57,32.26]|underground=False|path=PARTIAL len=27.1 end=(-203.2,1.95,164.5) endGap=9.8",
+      "ring.rv.180": "surface=null|floor=null|nearest=null|levels=[21.6,28.83,38.2,39.54]|underground=False|path=NOPATH",
+      "ring.rv.225": "surface=null|floor=null|nearest=null|levels=[17.95,20.53,22.95]|underground=False|path=NOPATH",
+      "ring.rv.270": "surface=0.371|floor=0.095|nearest=(-190.52,0.37,113.33) d=3.67|levels=[0.37,33.73]|underground=False|path=PARTIAL len=33.4 end=(-182.9,0.55,111.0) endGap=8.0",
+      "ring.rv.315": "surface=0.555|floor=0.279|nearest=(-169.31,0.55,122.12) d=3.49|levels=[0.55,33.95,35.77]|underground=False|path=PARTIAL len=27.3 end=(-172.4,0.55,123.2) endGap=3.3",
+      "ring.uh.0": "surface=171.901|floor=171.625|nearest=(386.30,171.90,0.10) d=2.72|levels=[171.9,172.08,172.2,191.27,197.88,199.2]|underground=False|path=PARTIAL len=34.7 end=(389.2,169.80,-4.0) endGap=6.1",
+      "ring.uh.45": "surface=null|floor=null|nearest=null|levels=[191.19,191.2,193.44,198,201.06]|underground=False|path=NOPATH",
+      "ring.uh.90": "surface=null|floor=null|nearest=null|levels=[183,184.4,185.68,187.68]|underground=False|path=NOPATH",
+      "ring.uh.135": "surface=178.229|floor=177.953|nearest=(334.85,178.23,22.04) d=8.94|levels=[178.23]|underground=False|path=complete len=36.4 end=(334.8,178.23,22.0) endGap=0.0",
+      "ring.uh.180": "surface=171.656|floor=171.380|nearest=(326.06,171.66,0.83) d=2.37|levels=[166.8,171.66,171.91]|underground=False|path=PARTIAL len=35.3 end=(323.6,169.40,-2.0) endGap=4.4",
+      "ring.uh.225": "surface=166.800|floor=166.524|nearest=(334.85,166.80,-21.20) d=2.62|levels=[166.8,170.8]|underground=False|path=PARTIAL len=35.7 end=(332.0,168.80,-19.2) endGap=3.7",
+      "ring.uh.270": "surface=null|floor=null|nearest=null|levels=[184.4,186.85]|underground=False|path=NOPATH",
+      "ring.uh.315": "surface=170.942|floor=170.666|nearest=(377.11,170.94,-24.19) d=4.15|levels=[170.94,171.8,172.2,186.2,191.2,192.5,198.27,198.74]|underground=False|path=PARTIAL len=28.2 end=(377.2,171.80,-16.0) endGap=4.5",
+      "ring.sh.0": "surface=214.028|floor=213.752|nearest=(388.19,214.03,-134.24) d=1.19|levels=[213.89,214.03,217.46,218.33]|underground=False|path=PARTIAL len=31.8 end=(388.6,217.46,-134.4) endGap=3.5",
+      "ring.sh.45": "surface=217.333|floor=217.057|nearest=(382.80,217.33,-116.80) d=6.78|levels=[217.33,220.82,224.28,255.62]|underground=False|path=PARTIAL len=19.0 end=(375.6,213.53,-130.8) endGap=18.6",
+      "ring.sh.90": "surface=null|floor=null|nearest=null|levels=[235.69,235.73,236.53,242.73,242.93,245.13]|underground=False|path=NOPATH",
+      "ring.sh.135": "surface=224.933|floor=224.657|nearest=(336.80,224.93,-111.60) d=12.18|levels=[224.33,224.93,226.7,269.13]|underground=False|path=PARTIAL len=12.6 end=(350.8,213.13,-126.0) endGap=22.3",
+      "ring.sh.180": "surface=217.701|floor=217.425|nearest=(324.43,217.70,-132.73) d=6.33|levels=[205.73,217.7,276.13]|underground=False|path=PARTIAL len=29.6 end=(336.0,204.33,-130.8) endGap=15.9",
+      "ring.sh.225": "surface=202.025|floor=201.749|nearest=(336.98,202.02,-153.60) d=10.97|levels=[199.13,201.96,202.02,271.85]|underground=False|path=complete len=37.2 end=(337.0,201.96,-155.5) endGap=0.1",
+      "ring.sh.270": "surface=null|floor=null|nearest=null|levels=[199.34,229.73,281.73]|underground=False|path=NOPATH",
+      "ring.sh.315": "surface=223.733|floor=223.457|nearest=(376.80,223.73,-154.40) d=11.25|levels=[223.73,239.81,273.93,276.75]|underground=False|path=PARTIAL len=19.2 end=(376.0,213.33,-141.2) endGap=18.0"
+    }
+  },
+  "findings": [
+    {
+      "id": "warnet-entrance",
+      "text": "Warnet Caverns has two 'First Aid Station' hospital markers. The world seed's hospital row 131 'Warnet Caverns Research Area' stands 0.2 m from marker 133779641346009 (33.25, 97.92, -83.60); row 130 'Warnet Caverns Entrance' is at (120.0, 100.0, 45.0), marker 133779641346010's |x| and z with x negated, where the navmesh has no floor (navprobe w.tp130). graveyardlanguage 48 'Warnet Caverns Entrance' / 49 'Research Area'. Marker ...010 sits in a pocket of the navmesh open to the south-west only (rings w010) - the tunnel end. Arrival: marker ...010, inferred."
+    },
+    {
+      "id": "ustor-entrance",
+      "text": "Ten Ton Hammer 'Guide to Ustor Yard' (Taea, 2008-03-21): 'head south up a hill to the Ustor entrance at 373,433,-555' (the client marker is 361.2, 433.8, -556.0, 11.9 m away) and 'Upon entering the instance you'll find a local waypoint generator and a Field Medic'. TaRapedia: 'The eastern exit is also the entrance; the western exit leads to bridge containing a waypoint and leading to the entrance of another instance, Maligo Base.' The Field Medic marker is the map's easternmost marker (x 356). Arrival: that marker, inferred. The western exit has no client marker and no position (GAP-USTOR-WEST-EXIT)."
+    },
+    {
+      "id": "sanctus-entrance",
+      "text": "Massively dev journal (Eli Shayotovich / Tom Potter, 2008-02-28): 'make the instance end near the entrance - basically create a large circular flow'. One hospital marker, 'AFS Field Medic' (358.19, 212.84, -134.24), the entrance medic every other 'AFS Field Medic' instance hospital is. TaRapedia rev (2008-03-02) puts the entrance on Descent at '-567, 863'; the client marker is (-570.35, 629.93, 718.40) - the x agrees, the second number does not match z (client marker used). Arrival: the hospital marker, inferred."
+    },
+    {
+      "id": "refuge-entrance",
+      "text": "The Refuge has one hospital marker, 'Eloh Sanctuary' (-23.79, 10.94, 56.02), at a navmesh dead end open to the east only (rings rh), and one 'AFS Field Medic' vendor marker (-190.52, 4.04, 143.33) on the lake floor 190 m away with open ground on most sides (rings rv). No guide describes the way in. Arrival: the hospital marker, inferred, low confidence (OD-130)."
+    },
+    {
+      "id": "last-stand-exits",
+      "text": "2375 (template 2378) has two type-8 markers to the CELLAR (template 2232); the CELLAR has no marker naming 2378. Its one link marker with no destination, 134419591463417 at (-0.15, 36.50, -19.90), is the centre of the ring of six zone pads (x -18.8..27.6, z -4.4..-28.9) and is the only unpaired one. The exits arrive there, inferred (OD-134). The entry into 2375 is not built (GAP-LAST-STAND-ENTRY)."
+    },
+    {
+      "id": "edmund",
+      "text": "The CELLAR's north-end marker 134419591463502 names template 2365 = context 2361 'Edmund Range OLD'. D15.7 (live 2008-12-13): 'CELLAR Arena: Location has been expanded, with an entrance to the Edmund Range wargame map at the north end'; 'The loosing team will be transported to the staging area.' D16/D16.4 (live 2009-02-09): 'Edmund Range Training Grounds has been enlarged'; D16.3: 'Characters who last logged off while in the D15 Edmund Range map will no longer be blackholed logging in to the new version'. 2374 has no link marker; its 'Staging Area' region label (-64.0, 359.52, -365.75) is where the class trainer and vendor markers stand (navprobe e.trainer/e.vendor: complete paths of 39.9 and 51.5 m) and is disconnected from the battlefield on the navmesh (e.blue/e.red/e.whiskey/e.echo: partial). Arrival: the label, inferred; the way back stands on it (analogue, OD-131)."
+    },
+    {
+      "id": "eloh-vale",
+      "text": "Eloh Vale 2084 has one client link marker, a type-8 exit to Palisades at (-48.5, 172.5, -470.75), and no entrance on Palisades. TaRapedia 'Eloh Vale' (rev 32028, 2008-08-23): 'accessed via the mission Eloh Vale Transport near the Palisades dropship pad, to the west of the Cumbria Research Facility' and 'There is no zone portal at the beginning of the instance, but you can activate a black computer terminal among some barrels right by the red smoke flare at the beginning, to trigger a dropship to appear and take you back to Palisades'. Final-client missions 1198 'Dropship Teleport' ('Go to Eloh Vale'), 1199 'Eloh Vale Transport', 1429 'Invade Eloh Vale'. D8: 'The AFS have deployed a Portable Waypoint at the entrance to Eloh Vale.' The content layer can move a player between maps (ContentRuleAction.TransferToLocation, used by the boot camp's dropship), but none of these missions is seeded and neither the Palisades trigger nor the terminal is placed, so nothing is built (GAP-ELOH-VALE-DROPSHIP-ENTRY). Its exit is a terminal-called dropship, not a walk-in link, so the exit marker is not made a link either; inside a squad copy 'Leave current adventure' (OD-129) is the way out."
+    },
+    {
+      "id": "portable-waypoints",
+      "text": "1.4 (live 2008-01-29): '38 Instances now have a Portable Waypoint at the beginning of them, making it easier for players with Portable Waypoints to go back to the beginning of the instance.' 1.5: 'Two-Way Personal Portable Waypoints now correctly persist with indefinite duration on Operations maps'. 1.6 (2008-03-26): 'Fixed portable at beginning of Minos Caverns map' and 'Added working portable wormhole waypoints to Crater Lake Research Facility, Pravus Research Facility, Avernus Outpost, Warnet Caverns, Outpost Inferno, Live Target Pens, Refuge'. D8: one at the entrance to Eloh Vale. The client has the entity class (entityclass 28474 UsableTwoStateHumPersonalWormholeV01) and names 'Portable Waypoint'/'Entrance Teleporter' waypoints 417-476 with no map; its map markers place a portable waypoint in three contexts only (2203 Omega Labs, 2136 Velon Hollow, 2327/2375 Empire Sector), of which the world seed carries the Omega Labs (467), Velon Hollow (607) and Last Stand (520, on 2375 only) rows. The mechanism behind them - using a Portable Waypoint consumable (ActionId.ConsumablePortableWaypoint 487) to travel back to an instance start - is not implemented on this server, and neither the 38 instances nor their positions are recorded. Nothing built (GAP-INSTANCE-PORTABLE-WAYPOINTS)."
+    },
+    {
+      "id": "dead-rows",
+      "text": "map_info 1991 'test_lridout_outpostcombat' (no gamecontext row; gamecontextlanguage 'CP Wargame'), 2233 'test_pvpcontrolpoint' and 1737 'test_nexus2' (client 'Default for map [...]' test rows): no link in, no location, removed. 2361's six ServiceNpc spawn pools (500320-500325) removed; its map_info row kept (GAP-EDMUND-OLD-RELOCATION). map_marker rows of 2265 (3) and 2373 (4) bind kraftwerks rows on contexts with no map_info row; MapMarkerManager.PlayerEnteredMap sends only the current map's markers, so they are never served and stay."
+    }
+  ]
+}

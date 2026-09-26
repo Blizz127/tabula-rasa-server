@@ -4541,3 +4541,67 @@ notes before anything was built. Migration `MissionContextSquadInstancing`; code
   coordinates, population from the whole context, the linger and destruction with creatures, disbanding, the return
   on leaving the squad, "Leave current adventure", the chooser flow, and the byte shapes of ChooseInstanceList,
   SelectInstance, EnteredWaypoint with None waypoints and SquadMemberList's flag. It also checks the manifest rows.
+
+## 2026-09-27 — Instance travel and death: the doors the client draws, the instance hospitals, the retired rows
+
+Batch 2 of the instance inventory (`research/20260926-instances/README.md`, "Batch 2: instance travel and death";
+per-context client markers and verdicts in `instances.json`). Migrations `InstanceTravelLinks` and
+`InstanceTravelRetiredRows`; code in `HospitalCatalog` and `PlayerDeathManager.OfferedHospitals`; evidence
+`docs/evidence/instance-travel-20260927.json` (decoded markers, navmesh probes, findings) and
+`docs/evidence/hospital-catalog.json`; decisions OD-130 to OD-134, agent-approved and pending owner review.
+
+- **Four operations could not be entered.** `MapLinkPreloader` built a door only where the client has a marker at both
+  ends: the entrance (`uimapmarker.maplinkmarkers` type 7) on the parent map and the exit (type 8) inside, which is
+  also where the door arrives. Warnet Caverns 1384, Ustor Yard 1502, Sanctus Grotto 1823 and The Refuge 2156 have the
+  entrance and no exit, so they had no link either way. Each now has a door in (trigger: the client's own marker,
+  original) and out (map_link 199250-199257). The arrival is the instance's entrance hospital marker (inferred,
+  OD-130): Ten Ton Hammer's Warnet guide (2008-01-24) "As you enter Warnet Caverns, you'll first see the Field Medic",
+  its Ustor Yard guide (2008-03-21) "Upon entering the instance you'll find a local waypoint generator and a Field
+  Medic", and the Sanctus Grotto dev journal (Massively 2008-02-28) ends the map "near the entrance". Warnet has two
+  "First Aid Station" markers; the world seed's hospital rows 130 "Warnet Caverns Entrance" and 131 "Research Area"
+  tell them apart (131 stands on one marker; 130 is the other's position with x negated, where the navmesh has no
+  floor). The Refuge's arrival is low confidence: one hospital marker at a navmesh dead end and no source on its way
+  in. The exits stand on the arrival and return onto the entrance marker, as for all 48 doors the preloader built;
+  arrival yaws follow the preloader's rule (atan2 about the destination's `gamecontextuimapinfo` centre), which
+  reproduces its rows. Players arriving are inside the exit and must step out first (`MapLinkManager`, unchanged).
+- **The Last Stand and Edmund Range.** 2375's two exit markers now lead to the CELLAR (199258/199259), arriving on the
+  CELLAR's one link marker with no destination, the centre of the zone-pad ring (inferred, OD-134); the way into 2375
+  stays unbuilt (`GAP-SHUTDOWN-LAST-STAND`). The CELLAR's north-end marker names the D15 map 2361 "Edmund Range OLD";
+  D15.7 (live 2008-12-13) put "an entrance to the Edmund Range wargame map at the north end" and D16/D16.4 (live
+  2009-02-09) replaced that map ("the D15 Edmund Range map ... the new version"), so the link goes to 2374 (199260),
+  arriving at its "Staging Area" label where the map's trainer and vendors stand. 2374 has no link marker at all, so
+  its way back stands on the arrival point, labelled analogue (199261, OD-131, `GAP-EDMUND-EXIT`).
+- **Not built, recorded.** Ustor Yard's western exit to the Maligo bridge has no marker or position
+  (`GAP-USTOR-WEST-EXIT`). Eloh Vale 2084 has no door: it is entered by dropship through missions 1198/1199/1429 near
+  the Palisades pad and left from a terminal that calls a dropship (TaRapedia rev 32028). The content layer can move a
+  player between maps (`TransferToLocation`), but the missions, the trigger and the terminal are not seeded
+  (`GAP-ELOH-VALE-DROPSHIP-ENTRY`); inside a squad copy "Leave current adventure" is the way out. The 1.4 start
+  portable waypoints (38 instances) and the 1.6 portable wormholes (seven named instances): the client has the entity
+  class (28474) but marks only three contexts, and the Portable Waypoint consumable (ActionId 487) that uses them is
+  not implemented (`GAP-INSTANCE-PORTABLE-WAYPOINTS`).
+- **22 instance hospitals.** 63 hospital markers had no graveyardlanguage entry reading their name, so those maps
+  revived their dead in place. Joined the way the client-defects batch joined Foreas Base and Cumbria - one graveyard
+  naming the place, the waypoint by waypointlanguage name or the world seed's hospital row at the marker (OD-132):
+  Warnet's Entrance (48/130) and Research Area (49/131), the three Eloh Temples (81/342, 80/176, 82/175), Live Target
+  Pens' Entrance (153/351) and Guard Station (154/591), Cuthah Base's Entrance (135/274) and Rat Hole (134/273),
+  Edmund Range's West/East Control Point (273/524, 274/525) and Red/Blue Base (275/522, 276/523), the CELLAR (243/480),
+  Torcastra's AFS Medical Officer (43/119), Turpis (232/579), Retread Caves (114/586), Kardash (125/383), Temporal
+  Chamber (86/387), Phanin (87/382), Staal Junkyard (130/271) and the Epic Caves of Donn (281/529). 127 hospitals on 55
+  maps, each with navmesh ground under it. Torcastra's inner medic, Timora Mines and Bane Fluxite Mines (graveyard 38
+  fits one by id order and the other by text), Lamna, Ustor, Caves of Donn, Logos, Crater Lake, Purgas' Control Room,
+  Indra's second medic, Comm Tower, Brann, Energy Weapon Center, Rivasa, Incurables Ward and The Refuge (no waypoint)
+  stay open, each with its reason; Quasso's "Hospital Vendor" is the vendor's marker. Four hospitals carry a waypoint
+  id only the world seed knows (`GAP-HOSPITAL-EMULATOR-WAYPOINT`); Edmund Range's are ungated by team
+  (`GAP-EDMUND-TEAM-HOSPITALS`).
+- **Eloh Temples offers only the current section's hospital.** D10.5: "Players will now only be able to access the
+  Hospital point for the section of Eloh Temples they are currently in." The client draws no section boundaries; each
+  temple's hospital stands at its own entrance, 238-253 m from the next, so the section is the one whose hospital is
+  nearest the body (inferred).
+- **Retired rows.** map_info 1991 (no client gamecontext row), 2233 and 1737 (the client's "Default for map
+  [test_...]" test rows) are removed, and so are Edmund Range OLD's six service spawn pools (500320-500325); 2361's
+  map_info stays so a character saved there loads (`GAP-EDMUND-OLD-RELOCATION`). The map_marker rows of the unshipped
+  wargame copies 2265/2373 are never served (no map_info, and markers go only to a player on that map) and stay.
+- Tests: `InstanceTravelLinksTests` (rows against the client markers, the evidence file and the manifest; door pairing;
+  the preloader's kinds, radii and yaw rule; `MapLinkManager.Contains`; loaded maps and ground at every arrival),
+  `PlayerDeathLifecycleTests` (the new hospitals gained and offered; the Eloh Temples section rule), the migration
+  block in `ContentSchemaMigrationTests` (rows, rollbacks) and provider parity. Full suite 1494/1494.

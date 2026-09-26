@@ -1020,3 +1020,20 @@ gaps: the manifest rows of `MissionContextSquadInstancing` and OD-125 to OD-129.
 | instance chooser | unimplemented (685/687/688 unused) | built; copies open only at a configured capacity, none set (OD-127) | clientmethod 488/495/502, waypointwindow.ShowInstances; live 2007-07-24, 2007-08-21 | original contract; capacity gap |
 | copy number | 1 or the private id | lowest free per context; boot camp unchanged (OD-128) | loading screen and map window "Name(n)"; "Earth 1"-"Earth 5" chat | original display; rule inferred |
 | waypoint window rows | one identical row per waypoint | one row per copy | waypointwindow.ShowWaypoints line 265 | original |
+
+## Instance travel and death (2026-09-27)
+
+Batch 2 of the instance inventory, checked against the 1.16.5.0 client's link and hospital markers. Tiers and gaps:
+the manifest rows of `InstanceTravelLinks`, OD-130 to OD-134 and `docs/evidence/hospital-catalog.json`. Account:
+`docs/retail-accuracy.md`, "Instance travel and death".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Warnet, Ustor Yard, Sanctus Grotto, Refuge doors | no link (no client exit marker) | door each way on the client's entrance marker; arrival on the entrance hospital (OD-130) | `maplinkmarkers` type 7; TTH 2008-01-24/2008-03-21; Massively 2008-02-28; world seed 130/131 | trigger original; arrival inferred (Refuge low) |
+| Last Stand exits | no link | to the CELLAR's unpaired centre marker (OD-134) | `maplinkmarkers[2378]`, `[2232]` | trigger original; arrival inferred |
+| CELLAR north end | no link (client names 2361) | to Edmund Range 2374's Staging Area; way back analogue (OD-131) | D15.7, D16/D16.4, D16.3 | trigger original; destination inferred |
+| Eloh Vale entry | none | unchanged (`GAP-ELOH-VALE-DROPSHIP-ENTRY`) | missions 1198/1199/1429; TaRapedia rev 32028 | gap |
+| instance start portable waypoints | none | unchanged (`GAP-INSTANCE-PORTABLE-WAYPOINTS`) | notes 1.4, 1.6, D8; entityclass 28474 | gap |
+| instance hospitals | 105 on 42 maps; instances revive in place | 127 on 55 maps (OD-132) | graveyardlanguage, waypointlanguage, uimapmarker, world seed rows, navmesh | inferred joins |
+| Eloh Temples hospitals | every gained one | the current section's only | D10.5 live notes | rule original; section inferred |
+| retired rows | test maps 1991/2233/1737 loaded; 2361 spawn pools | removed (OD-133) | gamecontext; D16.3 | original |

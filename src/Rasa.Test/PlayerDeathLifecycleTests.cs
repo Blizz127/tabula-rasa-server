@@ -427,6 +427,71 @@ namespace Rasa.Test
             Assert.IsTrue(PlayerDeathManager.OfferedHospitals(_owner.Player).Any(entry => entry.GraveyardId == graveyardId));
         }
 
+        /// <summary>
+        /// 2026-09-27 (instance travel): instance and battlefield hospitals the maps revived their dead in place without
+        /// are gained within the discovery radius and offered, one row per map (docs/evidence/hospital-catalog.json).
+        /// </summary>
+        [DataTestMethod]
+        [DataRow(1349u, 43, 119u)]      // Torcastra Prison AFS Medical Officer
+        [DataRow(1384u, 48, 130u)]      // Warnet Caverns Entrance
+        [DataRow(1384u, 49, 131u)]      // Warnet Caverns Research Area
+        [DataRow(1429u, 232, 579u)]     // Turpis Forward Medical Unit (emulator waypoint id)
+        [DataRow(1694u, 114, 586u)]     // Retread Medical Area
+        [DataRow(1763u, 153, 351u)]     // Live Target Pens Entrance
+        [DataRow(1763u, 154, 591u)]     // Live Target Pens Guard Station
+        [DataRow(1773u, 125, 383u)]     // Kardash Atta Colony
+        [DataRow(2029u, 86, 387u)]      // Temporal Chamber
+        [DataRow(2034u, 87, 382u)]      // Phanin Research Facility
+        [DataRow(2138u, 130, 271u)]     // Staal Junkyard
+        [DataRow(2162u, 134, 273u)]     // AFS Rat Hole
+        [DataRow(2162u, 135, 274u)]     // Cuthah Base Entrance
+        [DataRow(2368u, 281, 529u)]     // Epic Caves of Donn Entrance
+        [DataRow(2374u, 273, 524u)]     // Edmund Range West Control Point
+        [DataRow(2374u, 276, 523u)]     // Edmund Range Blue Base
+        [DataRow(20000009u, 243, 480u)] // CELLAR Arena Medic
+        public void TheInstanceHospitalsAreGainedAndOffered(uint map, int graveyardId, uint waypointId)
+        {
+            Arrange(map);
+            var hospital = HospitalCatalog.ForMap(map).Single(entry => entry.GraveyardId == graveyardId);
+            Assert.AreEqual(waypointId, hospital.WaypointId);
+            _owner.Player.Position = hospital.Position + new Vector3(3f, 0f, 3f);
+            _deaths.DiscoverHospitals(_map);
+            Assert.IsTrue(_persisted.Select(entry => entry.Value).OfType<CharacterTeleporterEntry>().Any(entry => entry.WaypointId == waypointId));
+            Assert.IsTrue(PlayerDeathManager.OfferedHospitals(_owner.Player).Any(entry => entry.GraveyardId == graveyardId));
+        }
+
+        /// <summary>
+        /// D10.5: "Players will now only be able to access the Hospital point for the section of Eloh Temples they are currently
+        /// in." With all three temple hospitals gained, a player who dies in the Proud Patriarch's temple is offered its
+        /// hospital alone; one who has not gained the current section's hospital is offered none, not another temple's.
+        /// </summary>
+        [TestMethod]
+        public void ElohTemplesOffersOnlyTheCurrentSectionsHospital()
+        {
+            Arrange(1803);
+            var temples = HospitalCatalog.ForMap(1803).ToList();
+            CollectionAssert.AreEquivalent(new[] { 80, 81, 82 }, temples.Select(entry => entry.GraveyardId).ToArray());
+            foreach (var temple in temples)
+                _owner.Player.GainedWaypoints.Add(new CharacterTeleporterEntry(101, temple.WaypointId, (byte)WaypointType.Hospital));
+
+            var proud = temples.Single(entry => entry.GraveyardId == 80);
+            _owner.Player.Position = proud.Position + new Vector3(40f, 0f, -30f);
+            CollectionAssert.AreEqual(new[] { 80 }, PlayerDeathManager.OfferedHospitals(_owner.Player).Select(h => h.GraveyardId).ToArray());
+
+            var bowed = temples.Single(entry => entry.GraveyardId == 82);
+            _owner.Player.Position = bowed.Position + new Vector3(-20f, 0f, 20f);
+            CollectionAssert.AreEqual(new[] { 82 }, PlayerDeathManager.OfferedHospitals(_owner.Player).Select(h => h.GraveyardId).ToArray());
+
+            _owner.Player.GainedWaypoints.RemoveAll(entry => entry.WaypointId == bowed.WaypointId);
+            Assert.AreEqual(0, PlayerDeathManager.OfferedHospitals(_owner.Player).Count);
+
+            // Elsewhere every gained hospital is still offered.
+            Arrange(2374);
+            foreach (var hospital in HospitalCatalog.ForMap(2374))
+                _owner.Player.GainedWaypoints.Add(new CharacterTeleporterEntry(101, hospital.WaypointId, (byte)WaypointType.Hospital));
+            Assert.AreEqual(4, PlayerDeathManager.OfferedHospitals(_owner.Player).Count);
+        }
+
         private Missile Shot(int damage) => new Missile
         {
             Source = _source, ActionId = ActionId.WeaponAttack, ActionArgId = 1,

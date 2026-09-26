@@ -402,6 +402,53 @@
    "member": "Tabula Rasa 1.16.5.0/trpython (clientmethod, ui/waypointwindow, ui/wonkavatorwindow, inputstate/wonkavator, ui/mapwindow, party) and game/generated (gamecontext, gamecontexttype, gamecontextlanguage, playermessage, methodid, shared/gameconstants)",
    "locator": "research/20260926-instancing-mechanics/work/mine/*.dis (static xdis disassembly, sha256 in work/SHA256SUMS)",
    "note": "Decoded statically; module path + function + source line or bytecode offset."
+  },
+  "measurement:instance-travel-20260927": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/instance-travel-20260927.json",
+   "note": "Navmesh probes (repo navmesh built from the 1.16.5.0 client maps; NavMeshQuery.GroundHeight/Nearest/FindPath and 30 m rings for dead ends) and the decoded client link, hospital and label markers behind InstanceTravelLinks and the 2026-09-27 hospital joins; also the arrival-yaw rule checked against MapLinkPreloader's rows."
+  },
+  "official_notes:d15.7": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_157_12132008.html (Deployment 15.7 live notes, 2008-12-13: Maps and Missions; PVP CP's)",
+   "sha256": "97cfa082a0b9dcc27209abc088060000b125510351154512fb6199536e4b4230",
+   "note": "Official playtr.com live patch notes, Wayback capture."
+  },
+  "official_notes:d16.4": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_164_02092009.html (Deployment 16/16.4 live notes, 2009-02-09, with the D16.3 section)",
+   "sha256": "a0b93d01dac797d3b9f8091c5d9ad2179d2622c87ec4efc963b98527cc5b06f4",
+   "note": "Official playtr.com live patch notes, Wayback capture; the last deployment before the shutdown notes."
+  },
+  "official_notes:d10": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_10_7232008.html (Deployment 10 live notes, 2008-07-23, with the 10.x sections)",
+   "sha256": "25820a7509559f67a853fa01d928f214c5c1dd164a21a2ed899d96717f975f55",
+   "note": "Official playtr.com live patch notes, Wayback capture. D10.5's Eloh Temples hospital rule is not changed by any later note."
+  },
+  "community_db:tentonhammer-instances-20260926": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://www.tentonhammer.com/guides",
+   "locator": "research/20260926-instances/work/guides/tth_node_21212.html 'Guide to Warnet Caverns' (Taea, 2008-01-24, sha256 e0bf2e91c121688c5cffeefb83e545fb047a2d3ea2e2e4ab431746ba74b91ea2); tth_node_29172.html 'Guide to Ustor Yard' (Taea, 2008-03-21, sha256 ead9c5460cc6a261def5dc1091badeb8bc15797276949759102a3a9e5c257777)",
+   "note": "Ten Ton Hammer instance guides, dated by schema.org datePublished. Contemporary community guides, pre-D11: support inferred values only, never an analogue."
+  },
+  "community_db:massively-sanctus-20080228": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://web.archive.org/web/20080404002859/http://www.massively.com/2008/02/28/tabula-rasa-dev-journal-sanctus-grotto/",
+   "locator": "research/20260926-instances/work/guides/wb_massively_2008_02_28_tabula-rasa-dev-journal-sanctus-grotto_20080404002859.html (sha256 9871626ad0a832d10d2d7551504d737a235b45b765576c0a76791baa85112cf2)",
+   "note": "Massively 'Tabula Rasa dev journal: Sanctus Grotto' (2008-02-28), a developer's account of the map's layout, reposted by the site. Pre-D11 secondary source."
+  },
+  "community_db:tarapedia-instances-20260926": {
+   "kind": "community_db",
+   "era": "unknown",
+   "locator": "research/20260926-instances/work/tarapedia/pages/*.json (MediaWiki API, latest revision before 2009-03-01 per page; revision ids cited per use)",
+   "note": "TaRapedia instance pages. Bodies are pre-D11 everywhere (research/20260926-instances tarapedia_instances.json content_assessment); cited with revision and date."
   }
  },
  "scope": [
@@ -635,6 +682,16 @@
     "comment"
    ],
    "note": "MissionContextSquadInstancing (2026-09-27): the loaded contexts the final client types MISSIONCONTEXT become per-squad instances."
+  },
+  {
+   "table": "map_link",
+   "key_ranges": {
+    "id": {
+     "min": 199250,
+     "max": 199299
+    }
+   },
+   "note": "InstanceTravelLinks (2026-09-27): the instance-travel batch's block."
   }
  ],
  "rows": [
@@ -76587,6 +76644,1946 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199250
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 1244,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244): the marker is on template 1402, context 1244"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 769.5072,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 154.9576,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 797.6298,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 1384,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244): type 7 INSTANCE_ENTRANCE to template 1541 = context 1384"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": -120.2371,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_21212 'Guide to Warnet Caverns' (2008-01-24): 'As you enter Warnet Caverns, you'll first see the Field Medic for the instance.'"
+      }
+     ],
+     "reasoning": "the entrance 'First Aid Station' marker: the guide puts the medic at the way in, and the world seed's hospital rows name marker ...009 the Research Area and ...010 the Entrance (130's x negated; no floor at 130's own point)"
+    },
+    "dest_pos_y": {
+     "value": 97.1975,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_21212 'Guide to Warnet Caverns' (2008-01-24): 'As you enter Warnet Caverns, you'll first see the Field Medic for the instance.'"
+      }
+     ],
+     "reasoning": "the entrance 'First Aid Station' marker: the guide puts the medic at the way in, and the world seed's hospital rows name marker ...009 the Research Area and ...010 the Entrance (130's x negated; no floor at 130's own point)"
+    },
+    "dest_pos_z": {
+     "value": 45.1418,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_21212 'Guide to Warnet Caverns' (2008-01-24): 'As you enter Warnet Caverns, you'll first see the Field Medic for the instance.'"
+      }
+     ],
+     "reasoning": "the entrance 'First Aid Station' marker: the guide puts the medic at the way in, and the world seed's hospital rows name marker ...009 the Research Area and ...010 the Entrance (130's x negated; no floor at 130's own point)"
+    },
+    "dest_rotation": {
+     "value": -0.9443,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[1384]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "palisades -> palisades_warnetcaverns",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199251
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 1384,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup[1384] type 5 MISSIONCONTEXT; the exit of the door above"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": -120.2371,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_y": {
+     "value": 97.1975,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_z": {
+     "value": 45.1418,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 1244,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextlocation.pyo lookup[1384]: parent zone 1244"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": 769.5072,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_y": {
+     "value": 154.9576,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_z": {
+     "value": 797.6298,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402] marker 133182640964138 (context 1244) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_rotation": {
+     "value": 0.7189,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[1244]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1541] marker 133779641346010 (context 1384)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "palisades_warnetcaverns -> palisades",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199252
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 1497,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497): the marker is on template 1654, context 1497"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 361.1624,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 433.7641,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": -556.0029,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 1502,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497): type 7 INSTANCE_ENTRANCE to template 1659 = context 1502"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": 356.0609,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_29172 'Guide to Ustor Yard' (2008-03-21): 'Upon entering the instance you'll find a local waypoint generator and a Field Medic'; 'the Ustor entrance at 373,433,-555'"
+      }
+     ],
+     "reasoning": "the 'Ustor Yard Field Medic' marker, the map's easternmost: the guide finds the Field Medic on entering, and TaRapedia makes the eastern exit the entrance"
+    },
+    "dest_pos_y": {
+     "value": 169.2913,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_29172 'Guide to Ustor Yard' (2008-03-21): 'Upon entering the instance you'll find a local waypoint generator and a Field Medic'; 'the Ustor entrance at 373,433,-555'"
+      }
+     ],
+     "reasoning": "the 'Ustor Yard Field Medic' marker, the map's easternmost: the guide finds the Field Medic on entering, and TaRapedia makes the eastern exit the entrance"
+    },
+    "dest_pos_z": {
+     "value": 0.8273,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502) (hospital marker)"
+      },
+      {
+       "source": "community_db:tentonhammer-instances-20260926",
+       "locator": "tth_node_29172 'Guide to Ustor Yard' (2008-03-21): 'Upon entering the instance you'll find a local waypoint generator and a Field Medic'; 'the Ustor entrance at 373,433,-555'"
+      }
+     ],
+     "reasoning": "the 'Ustor Yard Field Medic' marker, the map's easternmost: the guide finds the Field Medic on entering, and TaRapedia makes the eastern exit the entrance"
+    },
+    "dest_rotation": {
+     "value": 1.6167,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[1502]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "plateau -> plateau_ustoryard",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199253
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 1502,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup[1502] type 5 MISSIONCONTEXT; the exit of the door above"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 356.0609,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_y": {
+     "value": 169.2913,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_z": {
+     "value": 0.8273,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 1497,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextlocation.pyo lookup[1502]: parent zone 1497"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": 361.1624,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_y": {
+     "value": 433.7641,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_z": {
+     "value": -556.0029,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1654] marker 134269267734139 (context 1497) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_rotation": {
+     "value": 2.553,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[1497]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1659] marker 134290742448949 (context 1502)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "plateau_ustoryard -> plateau",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199254
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2047,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047): the marker is on template 2047, context 2047"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": -570.3525,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 629.9304,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 718.3977,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 1823,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047): type 7 INSTANCE_ENTRANCE to template 1823 = context 1823"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": 358.1881,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823) (hospital marker)"
+      },
+      {
+       "source": "community_db:massively-sanctus-20080228",
+       "locator": "dev journal: 'make the instance end near the entrance - basically create a large circular flow'"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'AFS Field Medic', the entrance medic of every 'AFS Field Medic' instance; the dev journal ends the map near its entrance"
+    },
+    "dest_pos_y": {
+     "value": 212.8376,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823) (hospital marker)"
+      },
+      {
+       "source": "community_db:massively-sanctus-20080228",
+       "locator": "dev journal: 'make the instance end near the entrance - basically create a large circular flow'"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'AFS Field Medic', the entrance medic of every 'AFS Field Medic' instance; the dev journal ends the map near its entrance"
+    },
+    "dest_pos_z": {
+     "value": -134.2409,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823) (hospital marker)"
+      },
+      {
+       "source": "community_db:massively-sanctus-20080228",
+       "locator": "dev journal: 'make the instance end near the entrance - basically create a large circular flow'"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'AFS Field Medic', the entrance medic of every 'AFS Field Medic' instance; the dev journal ends the map near its entrance"
+    },
+    "dest_rotation": {
+     "value": 2.428,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[1823]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "descent -> plateau_sanctusgrotto",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199255
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 1823,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup[1823] type 5 MISSIONCONTEXT; the exit of the door above"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 358.1881,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_y": {
+     "value": 212.8376,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_z": {
+     "value": -134.2409,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 2047,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextlocation.pyo lookup[1823]: parent zone 2047"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": -570.3525,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_y": {
+     "value": 629.9304,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_z": {
+     "value": 718.3977,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591472545 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_rotation": {
+     "value": -0.671,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[2047]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[1823] marker 134419591467905 (context 1823)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "plateau_sanctusgrotto -> descent",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199256
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2047,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047): the marker is on template 2047, context 2047"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 251.4895,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 146.2857,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 224.7548,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 2156,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047): type 7 INSTANCE_ENTRANCE to template 2156 = context 2156"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": -23.7891,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156) (hospital marker)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings refuge-entrance; navprobe r.hosp and rings rh (dead end open to the east) vs rv"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'Eloh Sanctuary', at a navmesh dead end; low confidence, no source describes the way in (OD-130)"
+    },
+    "dest_pos_y": {
+     "value": 10.9411,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156) (hospital marker)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings refuge-entrance; navprobe r.hosp and rings rh (dead end open to the east) vs rv"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'Eloh Sanctuary', at a navmesh dead end; low confidence, no source describes the way in (OD-130)"
+    },
+    "dest_pos_z": {
+     "value": 56.0241,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156) (hospital marker)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings refuge-entrance; navprobe r.hosp and rings rh (dead end open to the east) vs rv"
+      }
+     ],
+     "reasoning": "the instance's one hospital marker 'Eloh Sanctuary', at a navmesh dead end; low confidence, no source describes the way in (OD-130)"
+    },
+    "dest_rotation": {
+     "value": 1.2426,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[2156]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "descent -> descent_therefuge",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199257
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2156,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup[2156] type 5 MISSIONCONTEXT; the exit of the door above"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": -23.7891,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_y": {
+     "value": 10.9411,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "pos_z": {
+     "value": 56.0241,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156)"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "links[] and findings"
+      }
+     ],
+     "reasoning": "the exit stands on the door's arrival point, where the client places the exit marker of every door MapLinkPreloader built (OD-130)"
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for instance doors"
+    },
+    "dest_map_context_id": {
+     "value": 2047,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextlocation.pyo lookup[2156]: parent zone 2047"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": 251.4895,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_y": {
+     "value": 146.2857,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_pos_z": {
+     "value": 224.7548,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2047] marker 134419591466163 (context 2047) (the entrance marker)"
+      }
+     ],
+     "reasoning": "back onto the parent's entrance marker, as every door MapLinkPreloader built arrives on its reciprocal marker"
+    },
+    "dest_rotation": {
+     "value": 0.8415,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[2047]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers[2156] marker 134419591464201 (context 2156)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "descent_therefuge -> descent",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199258
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2375,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375): the marker is on template 2378, context 2375"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": -285.7884,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 208.9081,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": -706.0602,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "the radius rows 132/133 give the same two markers on 2327"
+    },
+    "dest_map_context_id": {
+     "value": 20000009,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375): type 8 to template 2232 = context 20000009"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": -0.1481,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_pos_y": {
+     "value": 36.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_pos_z": {
+     "value": -19.8979,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_rotation": {
+     "value": -0.0037,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[20000009]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466020 (context 2375)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "manhattan_01_shared -> afs_arena",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199259
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2375,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375): the marker is on template 2378, context 2375"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": -1.9697,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 193.9143,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 486.6048,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 6.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "the radius rows 132/133 give the same two markers on 2327"
+    },
+    "dest_map_context_id": {
+     "value": 20000009,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375): type 8 to template 2232 = context 20000009"
+      }
+     ]
+    },
+    "dest_pos_x": {
+     "value": -0.1481,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_pos_y": {
+     "value": 36.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_pos_z": {
+     "value": -19.8979,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463417 (context 20000009): type 8 with no destination"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "findings last-stand-exits"
+      }
+     ],
+     "reasoning": "the CELLAR's one link marker without a pairing, at the centre of the zone-pad ring; no CELLAR marker names 2375 (OD-134)"
+    },
+    "dest_rotation": {
+     "value": -0.0037,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[20000009]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2378] marker 134419591466021 (context 2375)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "manhattan_01_shared -> afs_arena",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199260
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 20000009,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009): the marker is on template 2232, context 20000009"
+      }
+     ]
+    },
+    "pos_x": {
+     "value": 9.2683,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_y": {
+     "value": 40.5004,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "pos_z": {
+     "value": 136.06,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009) x, y, z (rounded to 0.1 mm as MapLinkPreloader)"
+      }
+     ]
+    },
+    "radius": {
+     "value": 4.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for the CELLAR hub pads, which stand ~15 m apart"
+    },
+    "dest_map_context_id": {
+     "value": 2374,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009): type 8 to template 2365 = context 2361 'Edmund Range OLD'"
+      },
+      {
+       "source": "official_notes:d15.7",
+       "locator": "Maps and Missions: 'CELLAR Arena: Location has been expanded, with an entrance to the Edmund Range wargame map at the north end'"
+      },
+      {
+       "source": "official_notes:d16.4",
+       "locator": "D16/D16.4 'Edmund Range Training Grounds has been enlarged'; D16.3 'the D15 Edmund Range map ... the new version'"
+      }
+     ],
+     "reasoning": "the client still names the D15 map, which D16 replaced with 2374 (adv_wargame_edmundrange2); the north end leads to the Edmund Range of the final game"
+    },
+    "dest_pos_x": {
+     "value": -64.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      },
+      {
+       "source": "official_notes:d15.7",
+       "locator": "PVP CP's: 'The loosing team will be transported to the staging area.'"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "navprobe e.staging, e.trainer, e.vendor"
+      }
+     ],
+     "reasoning": "the map's staging area, where its trainer and vendor markers stand, off the battlefield navmesh; 2374 has no link marker"
+    },
+    "dest_pos_y": {
+     "value": 359.5212,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      },
+      {
+       "source": "official_notes:d15.7",
+       "locator": "PVP CP's: 'The loosing team will be transported to the staging area.'"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "navprobe e.staging, e.trainer, e.vendor"
+      }
+     ],
+     "reasoning": "the map's staging area, where its trainer and vendor markers stand, off the battlefield navmesh; 2374 has no link marker"
+    },
+    "dest_pos_z": {
+     "value": -365.75,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      },
+      {
+       "source": "official_notes:d15.7",
+       "locator": "PVP CP's: 'The loosing team will be transported to the staging area.'"
+      },
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "navprobe e.staging, e.trainer, e.vendor"
+      }
+     ],
+     "reasoning": "the map's staging area, where its trainer and vendor markers stand, off the battlefield navmesh; 2374 has no link marker"
+    },
+    "dest_rotation": {
+     "value": 3.1159,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[2374]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009)"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "afs_arena -> wargame_edmundrange2",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "map_link",
+   "key": {
+    "id": 199261
+   },
+   "slice": "W3",
+   "migration": "InstanceTravelLinks",
+   "fields": {
+    "map_context_id": {
+     "value": 2374,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "official_notes:d15.7",
+       "locator": "Maps and Missions: 'an entrance to the Edmund Range wargame map at the north end'"
+      }
+     ],
+     "reasoning": "the way back from the map the CELLAR's north end leads to"
+    },
+    "pos_x": {
+     "value": -64.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      }
+     ],
+     "counterpart": "the exits MapLinkPreloader built stand on their doors' arrival points (48 instance doors, each exit marker at the arrival)",
+     "required_because": "2374 has no client link marker; without a way back a player who takes the CELLAR's north end cannot leave Edmund Range",
+     "decision": "OD-131"
+    },
+    "pos_y": {
+     "value": 359.5212,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      }
+     ],
+     "counterpart": "the exits MapLinkPreloader built stand on their doors' arrival points (48 instance doors, each exit marker at the arrival)",
+     "required_because": "2374 has no client link marker; without a way back a player who takes the CELLAR's north end cannot leave Edmund Range",
+     "decision": "OD-131"
+    },
+    "pos_z": {
+     "value": -365.75,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo staticmarkers[2377] marker 134419591466233 (context 2374) 'Staging Area' region label"
+      }
+     ],
+     "counterpart": "the exits MapLinkPreloader built stand on their doors' arrival points (48 instance doors, each exit marker at the arrival)",
+     "required_because": "2374 has no client link marker; without a way back a player who takes the CELLAR's north end cannot leave Edmund Range",
+     "decision": "OD-131"
+    },
+    "radius": {
+     "value": 4.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkPreloader summary: passes 8 m, instance doors 6 m, CELLAR hub pads 4 m"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's radius for the CELLAR hub pads, which stand ~15 m apart"
+    },
+    "dest_map_context_id": {
+     "value": 20000009,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "official_notes:d15.7",
+       "locator": "'Accessed via the CELLAR Arena'"
+      }
+     ],
+     "reasoning": "Edmund Range is reached from the CELLAR and returns there"
+    },
+    "dest_pos_x": {
+     "value": 9.2683,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009)"
+      }
+     ],
+     "reasoning": "back onto the CELLAR's north-end marker"
+    },
+    "dest_pos_y": {
+     "value": 40.5004,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009)"
+      }
+     ],
+     "reasoning": "back onto the CELLAR's north-end marker"
+    },
+    "dest_pos_z": {
+     "value": 136.06,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo maplinkmarkers[2232] marker 134419591463502 (context 20000009)"
+      }
+     ],
+     "reasoning": "back onto the CELLAR's north-end marker"
+    },
+    "dest_rotation": {
+     "value": 0.0472,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "yaw_rule"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontextuimapinfo.pyo lookup[20000009]"
+      }
+     ],
+     "reasoning": "dest_rotation = atan2(x - cx, z - cz) about the destination's gamecontextuimapinfo centre, the rule every MapLinkPreloader row follows (docs/evidence/instance-travel-20260927.json yaw_rule)"
+    },
+    "kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:instance-travel-20260927",
+       "locator": "MapLinkKind: 1 when either end is a mission-context map (gamecontext type 5), else 0"
+      }
+     ],
+     "reasoning": "MapLinkPreloader's convention"
+    },
+    "enabled": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "official_notes:d15.7",
+       "locator": "Edmund Range 'Accessed via the CELLAR Arena'"
+      }
+     ],
+     "reasoning": "the link exists in the final game"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "wargame_edmundrange2 -> afs_arena",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -78560,7 +80557,7 @@
   },
   {
    "id": "GAP-HOSPITAL-COVERAGE",
-   "summary": "Closed 2026-09-17 for 41 maps. Player death shipped on 2026-09-14 with a catalogue of seven hand-built hospitals on two maps, so a player who died anywhere else met the revive-in-place fallback - which is what a live report of 'it respawns in place' describes. The same recipe, run over every map the server loads, reproduces all seven exactly and resolves 102 hospitals on 41 maps, every one of them with walkable ground under it. What is left is GAP-HOSPITAL-UNRESOLVED-GRAVEYARD: 66 markers, mostly on instances and the wargame maps, whose name no graveyardlanguage entry reads, so the id Hospital Selection would show is unrecovered. 2026-09-26 (client defects): 105 hospitals on 42 maps - Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins, and the Palisades control-point hospital re-identified as Fort Dew (221/226), no longer sharing the Wilderness LZ's waypoint 216.",
+   "summary": "Closed 2026-09-17 for 41 maps. Player death shipped on 2026-09-14 with a catalogue of seven hand-built hospitals on two maps, so a player who died anywhere else met the revive-in-place fallback - which is what a live report of 'it respawns in place' describes. The same recipe, run over every map the server loads, reproduces all seven exactly and resolves 102 hospitals on 41 maps, every one of them with walkable ground under it. What is left is GAP-HOSPITAL-UNRESOLVED-GRAVEYARD: 66 markers, mostly on instances and the wargame maps, whose name no graveyardlanguage entry reads, so the id Hospital Selection would show is unrecovered. 2026-09-26 (client defects): 105 hospitals on 42 maps - Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins, and the Palisades control-point hospital re-identified as Fort Dew (221/226), no longer sharing the Wilderness LZ's waypoint 216. 2026-09-27 (instance travel): 127 hospitals on 55 maps - 22 instance and battlefield markers resolved on inferred joins (OD-132), 41 left under GAP-HOSPITAL-UNRESOLVED-GRAVEYARD with a reason each; Eloh Temples offers only the current section's hospital (D10.5).",
    "evidence": [
     "docs/evidence/hospital-catalog.json",
     "research/20260917-hospital-coverage/tools/02_resolve.py",
@@ -80977,7 +82974,7 @@
   },
   {
    "id": "GAP-SHUTDOWN-LAST-STAND",
-   "summary": "The final night's Earth 'Last Stand' in numbered Empire Sector instances ('Earth 1'-'Earth 5') is only in chat, the official 27 Feb 2009 transmission and secondary accounts. The client does ship context 2375 'Empire Sector: The Last Stand' (map adv_earth_unitedstates_manhattan_01_shared) and uielementlanguage 6121 'Staging Area: The Last Stand', but its spawns, encounter scripting, access route and rewards are not in any artifact read so far. Not built.",
+   "summary": "The final night's Earth 'Last Stand' in numbered Empire Sector instances ('Earth 1'-'Earth 5') is only in chat, the official 27 Feb 2009 transmission and secondary accounts. The client does ship context 2375 'Empire Sector: The Last Stand' (map adv_earth_unitedstates_manhattan_01_shared) and uielementlanguage 6121 'Staging Area: The Last Stand', but its spawns, encounter scripting, access route and rewards are not in any artifact read so far. Not built. 2026-09-27 (instance travel): the two exit markers now lead to the CELLAR (map_link 199258/199259, OD-134); the access route is still unrecovered.",
    "evidence": [
     "research/20260926-shutdown-event-grog/README.md section 5",
     "research/20260926-final-minutes/README.md item 7"
@@ -81072,6 +83069,91 @@
    ],
    "closes_with": "a capture of ChooseInstanceList",
    "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-INSTANCE-ARRIVAL-POINTS",
+   "summary": "The arrival points of Warnet Caverns, Ustor Yard, Sanctus Grotto and The Refuge are their entrance hospital markers (inferred, OD-130): the client has no exit marker in these maps and no footage or /loc reading records where a player appeared. The Refuge's is low confidence.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md"
+   ],
+   "closes_with": "footage or a /loc reading of a player entering one of these operations",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-USTOR-WEST-EXIT",
+   "summary": "Ustor Yard's western exit, which TaRapedia and Ten Ton Hammer (2008-03-21) send onto the bridge before Maligo Base ('As you exit Ustor Yard, you will find yourself on a high bridge at the perimeter of Maligo Base'), has no client marker and no recorded position at either end; it is not built.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md"
+   ],
+   "closes_with": "the exit's position (footage or a /loc reading) and the Plateau arrival on the Maligo bridge",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-ELOH-VALE-DROPSHIP-ENTRY",
+   "summary": "Eloh Vale 2084 is entered by dropship through missions 1198 'Dropship Teleport', 1199 'Eloh Vale Transport' and 1429 'Invade Eloh Vale' near the Palisades dropship pad, and left from a terminal that calls a dropship (TaRapedia rev 32028, 2008-08-23). The content layer can transfer a player (TransferToLocation), but none of the missions is seeded and neither the Palisades trigger nor the terminal is placed, so the map cannot be entered; its one client link marker (the exit to Palisades) is not made a walk-in link.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md",
+    "research/20260926-mission-catalog/mission-catalog.json (1198, 1199, 1429)"
+   ],
+   "closes_with": "the Palisades segment batch that seeds 1198/1199/1429 with the dropship trigger and the exit terminal",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-EDMUND-EXIT",
+   "summary": "Edmund Range 2374 has no client link marker; its way back to the CELLAR stands on the arrival point as an analogue (OD-131). D15.7 moves the teams to a victory area and a staging area at the end of a match; the real exit is unrecovered.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md",
+    "official_notes:d15.7"
+   ],
+   "closes_with": "footage of leaving Edmund Range, or the PvP batch's recovery of the map's exits",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-EDMUND-OLD-RELOCATION",
+   "summary": "D16.3 fixed characters 'who last logged off while in the D15 Edmund Range map' so they land in the new version; this server keeps 2361's map_info so such a character still loads, but does not move them to 2374.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md",
+    "official_notes:d16.4"
+   ],
+   "closes_with": "the login-time relocation from 2361 to 2374, with its arrival point",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-INSTANCE-PORTABLE-WAYPOINTS",
+   "summary": "1.4 put a Portable Waypoint at the beginning of 38 instances, 1.6 added portable wormhole waypoints to seven (Crater Lake, Pravus, Avernus Outpost, Warnet Caverns, Outpost Inferno, Live Target Pens, Refuge) and D8 one at Eloh Vale's entrance. The client has the entity class (28474 UsableTwoStateHumPersonalWormholeV01) but places a portable-waypoint marker in only three contexts; the server does not implement the Portable Waypoint consumable (ActionId 487) that uses them, and the 38 instances and their positions are not recorded. Nothing built.",
+   "evidence": [
+    "docs/evidence/instance-travel-20260927.json",
+    "research/20260926-instances/README.md",
+    "official_notes:1.4",
+    "official_notes:1.6",
+    "official_notes:d8"
+   ],
+   "closes_with": "the portable-waypoint item mechanism and per-instance positions (map entities or footage)",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-HOSPITAL-EMULATOR-WAYPOINT",
+   "summary": "Four catalogued hospitals (Tahrendra Base 606, Turpis Refinery 579, Retread Caves 586, Live Target Pens Guard Station 591) carry a waypoint id only the world seed knows; the client's gain line has no name for them.",
+   "evidence": [
+    "docs/evidence/hospital-catalog.json"
+   ],
+   "closes_with": "a capture of GraveyardGained on one of these maps, or the original waypoint table",
+   "surfaced_by": "instance-travel batch 2026-09-27"
+  },
+  {
+   "id": "GAP-EDMUND-TEAM-HOSPITALS",
+   "summary": "Edmund Range's four hospitals are offered to anyone who gained them: there are no Red/Blue teams or control-point owners on this server to gate them.",
+   "evidence": [
+    "docs/evidence/hospital-catalog.json",
+    "official_notes:d15.7"
+   ],
+   "closes_with": "the Edmund Range PvP batch",
+   "surfaced_by": "instance-travel batch 2026-09-27"
   }
  ],
  "non_content_settings": [
@@ -85740,6 +87822,117 @@
      "locator": "clientmethod.pyo Recv_ChooseInstanceList line 488, OnGotoInstance 495, OnGotoInstanceCancel 502, Recv_EnteredWaypoint 402; waypointwindow.pyo ShowInstances 452, ShowWaypoints 234; party.pyo Recv_SquadMemberList 306, OnLeaveParty 807"
     }
    ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "InstanceTravelLinks",
+   "table": "map_link",
+   "key": {
+    "id": "199250-199261"
+   },
+   "field": "(row)",
+   "old": "absent: Warnet Caverns, Ustor Yard, Sanctus Grotto and The Refuge had no door; 2375 no exit; the CELLAR's north end no link",
+   "new": "twelve rows: four doors in and out, the Last Stand's two exits to the CELLAR, the CELLAR's north end to Edmund Range 2374 and back",
+   "tier": "inferred",
+   "reason": "The client draws these entrances and exits; the preloader built only doors with markers at both ends. Triggers are the client's markers; arrivals are labelled per field in rows[].",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/uimapmarker.pyo maplinkmarkers[1402/1654/2047/2378/2232]"
+    },
+    {
+     "source": "measurement:instance-travel-20260927",
+     "locator": "links[]"
+    }
+   ],
+   "decision": "OD-130, OD-131, OD-134"
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "InstanceTravelRetiredRows",
+   "table": "map_info",
+   "key": {
+    "map_context_id": "1737, 1991, 2233"
+   },
+   "field": "(row)",
+   "old": "test_nexus2, test_lridout_outpostcombat, test_pvpcontrolpoint loaded as maps",
+   "new": "removed; Down restores MapInfoPreloader's rows",
+   "tier": "original",
+   "reason": "Retired or unshipped test maps: 1991 has no gamecontext row (gamecontextlanguage 'CP Wargame'), 2233 and 1737 are the client's 'Default for map [test_...]' rows; no link leads to any of them.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/gamecontext.pyo lookup[2233], lookup[1737]; no lookup[1991]; gamecontextlanguage.pyo lookup[1991] 'CP Wargame'"
+    },
+    {
+     "source": "measurement:instance-travel-20260927",
+     "locator": "findings dead-rows"
+    }
+   ],
+   "decision": "OD-133"
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "InstanceTravelRetiredRows",
+   "table": "spawnpool",
+   "key": {
+    "id": "500320-500325"
+   },
+   "field": "(row)",
+   "old": "six ServiceNpc pools on Edmund Range OLD 2361 (four hospital medics, a class trainer, a vendor)",
+   "new": "removed; Down restores them as the deployed world holds them",
+   "tier": "original",
+   "reason": "2361 is the D15 Edmund Range map, replaced by 2374 at D16 ('the D15 Edmund Range map', 'the new version').",
+   "citations": [
+    {
+     "source": "official_notes:d16.4",
+     "locator": "D16.3: 'Characters who last logged off while in the D15 Edmund Range map will no longer be blackholed logging in to the new version'"
+    }
+   ],
+   "decision": "OD-133"
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "(code) HospitalCatalog",
+   "table": "(none: code)",
+   "key": {
+    "code": "src/Rasa.Game/Data/HospitalCatalog.cs"
+   },
+   "field": "Entries",
+   "old": "105 hospitals on 42 maps",
+   "new": "127 hospitals on 55 maps: 22 instance and battlefield markers joined (docs/evidence/hospital-catalog.json records)",
+   "tier": "inferred",
+   "reason": "The instance maps revived their dead in place; each join is recorded with its tier and citations in the hospital catalog's evidence file.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/language/english/graveyardlanguage.pyo, waypointlanguage.pyo, uimapmarker.pyo factionedmarkers"
+    },
+    {
+     "source": "measurement:instance-travel-20260927",
+     "locator": "navprobe h.*"
+    }
+   ],
+   "decision": "OD-132"
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "(code) PlayerDeathManager",
+   "table": "(none: code)",
+   "key": {
+    "code": "src/Rasa.Game/Managers/PlayerDeathManager.cs OfferedHospitals, HospitalCatalog.SectionOnlyMaps"
+   },
+   "field": "behaviour",
+   "old": "every gained hospital of the map offered",
+   "new": "on Eloh Temples 1803 only the gained hospital of the section the body is in (the nearest temple hospital)",
+   "tier": "inferred",
+   "reason": "D10.5: 'Players will now only be able to access the Hospital point for the section of Eloh Temples they are currently in.'",
+   "citations": [
+    {
+     "source": "official_notes:d10",
+     "locator": "==10.5==: 'Map: Eloh Temples - Players will now only be able to access the Hospital point for the section of Eloh Temples they are currently in.'"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -86572,6 +88765,56 @@
    "choice": "As the default: PM 1058/945/946 and Recv_EnteredWaypoint's abort row are original; the exact arrival point is inferred.",
    "approved_on": "2026-09-27",
    "record": "docs/progression-preservation-plan.md#instancing-status"
+  },
+  {
+   "id": "OD-130",
+   "decision": "Where the four instance doors without a client exit marker arrive, and where their exits stand",
+   "default": "Arrive on the instance's entrance hospital marker (Warnet Caverns' Entrance First Aid Station, Ustor Yard Field Medic, Sanctus Grotto's AFS Field Medic, The Refuge's Eloh Sanctuary); the exit trigger stands on the arrival point and returns to the parent's entrance marker, as for every door the preloader built",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default. The trigger on the parent map is the client's own marker (original); the arrival is inferred from the guides and the world seed's hospital names, and The Refuge's is low confidence (no source describes its way in). Alternative for the owner: leave The Refuge closed until a source places its entrance.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instance-travel-status"
+  },
+  {
+   "id": "OD-131",
+   "decision": "The way back from Edmund Range",
+   "default": "A 4 m link on the Staging Area label (the arrival point) back to the CELLAR's north-end marker, labelled analogue: 2374 has no client link marker, and without it a player who takes the CELLAR's north end cannot leave",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default. Alternative for the owner: leave the CELLAR's north end unlinked until the Edmund Range PvP batch recovers the map's real exit (the D15.7 winners' victory area and losers' staging area).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instance-travel-status"
+  },
+  {
+   "id": "OD-132",
+   "decision": "How the remaining instance hospital markers are joined to Hospital Selection ids",
+   "default": "Join a marker to a graveyard only where one graveyardlanguage entry names its place (inferred); take the waypoint from waypointlanguage by name, else the world seed's hospital row at the marker even when its id is one the client cannot name (as Tahrendra's 606); leave a marker open where two readings conflict (graveyard 38 between Timora Mines and Bane Fluxite Mines) or generic names cannot be told apart",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: 22 markers resolved, 21 left open with a reason each (docs/evidence/hospital-catalog.json).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instance-travel-status"
+  },
+  {
+   "id": "OD-133",
+   "decision": "Retired and unshipped server rows",
+   "default": "Remove map_info 1991, 2233 and 1737 (test maps; no link in) and Edmund Range OLD 2361's six spawn pools; keep 2361's map_info so a character saved there still loads; keep the 2265/2373 map_marker rows, which are never served",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default. Alternative for the owner: also remove 2361's map_info once the D16.3 relocation of characters saved there is implemented.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instance-travel-status"
+  },
+  {
+   "id": "OD-134",
+   "decision": "Where the Last Stand's two exits arrive",
+   "default": "On the CELLAR's one link marker with no destination (134419591463417, the centre of the zone-pad ring); the way into 2375 stays unbuilt",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: the exits are the client's own markers; the arrival is inferred. Alternative for the owner: leave them out until the shutdown-event batch recovers the Last Stand's access route.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instance-travel-status"
   }
  ]
 }

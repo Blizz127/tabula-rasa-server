@@ -67,6 +67,12 @@ namespace Rasa.Data
     /// text 303, is Fort Dew's (graveyard 221, waypoint 226), as every other Fort Dew marker on that map
     /// says; it had carried the Wilderness hospital's waypoint 216, and the character store keys gained
     /// waypoints by id alone, so gaining one gained both. 105 hospitals on 42 maps.
+    ///
+    /// 2026-09-27 (instance travel): 22 markers on 13 instance and battlefield maps resolve on inferred joins -
+    /// Warnet Caverns' Entrance and Research Area, the three Eloh Temples, the two Live Target Pens stations, Cuthah
+    /// Base's two, Edmund Range's four, the CELLAR, Torcastra, Turpis, Retread Caves, Kardash, Temporal Chamber,
+    /// Phanin, Staal Junkyard and the Epic Caves of Donn. 127 hospitals on 55 maps. Eloh Temples offers only the
+    /// hospital of the section the player died in (<see cref="SectionOnlyMaps"/>).
     /// </summary>
     public static class HospitalCatalog
     {
@@ -77,6 +83,15 @@ namespace Rasa.Data
         /// unrecovered.
         /// </summary>
         public const float DiscoveryRadius = 100f;
+
+        /// <summary>
+        /// Maps whose dead are offered only the hospital of the section they are in. D10.5 (live 2008-07): "Map: Eloh
+        /// Temples - Players will now only be able to access the Hospital point for the section of Eloh Temples they are
+        /// currently in." The client does not draw the section boundaries; each temple's hospital stands at its own
+        /// entrance 238-253 m from the next, so the section is taken to be the one whose hospital is nearest the body
+        /// (inferred, docs/evidence/hospital-catalog.json rule death.eloh-temples-section).
+        /// </summary>
+        public static readonly IReadOnlyCollection<uint> SectionOnlyMaps = new HashSet<uint> { 1803u };
 
         public static IReadOnlyList<HospitalData> Entries { get; } = Array.AsReadOnly(new[]
         {
@@ -372,7 +387,82 @@ namespace Rasa.Data
             new HospitalData(271, 518, 2375, 134419591466017UL,
                 new Vector3(149.75335693359375f, 213.60877990722656f, -148.3151092529297f), false, false, false),   // Hospital: A.F.S. Outpost Lexington
             new HospitalData(272, 519, 2375, 134419591466025UL,
-                new Vector3(-50.418514251708984f, 208.88693237304688f, 280.3808288574219f), false, false, false)   // Field Medic: Empire Sector
+                new Vector3(-50.418514251708984f, 208.88693237304688f, 280.3808288574219f), false, false, false),   // Field Medic: Empire Sector
+
+            // 2026-09-27 (instance travel): 22 instance and battlefield hospitals resolved on inferred joins; every
+            // field's tier and citation is in docs/evidence/hospital-catalog.json.
+
+            // adv_foreas_concordia_divide_torcastraprison (context 1349, map template 1506).
+            new HospitalData(43, 119, 1349, 133629317512452UL,
+                new Vector3(-272.58966064453125f, 16.903974533081055f, 310.5496826171875f), false, false, false),   // Torcastra Prison AFS Medical Officer
+
+            // adv_foreas_concordia_palisades_warnetcaverns (context 1384, map template 1541).
+            new HospitalData(49, 131, 1384, 133779641346009UL,
+                new Vector3(33.2525749206543f, 97.92237091064453f, -83.6009521484375f), false, false, false),   // First Aid Station
+            new HospitalData(48, 130, 1384, 133779641346010UL,
+                new Vector3(-120.23707580566406f, 97.19750213623047f, 45.14179229736328f), false, false, false),   // First Aid Station
+
+            // adv_foreas_valverde_marshes_wetlandrefinery (context 1429, map template 1586).
+            new HospitalData(232, 579, 1429, 133977209840578UL,
+                new Vector3(-203.5238037109375f, 107.34732055664062f, -242.6298828125f), false, false, false),   // Turpis Forward Medical Unit
+
+            // adv_foreas_valverde_pools_retread_caves (context 1694, map template 1694).
+            new HospitalData(114, 586, 1694, 134419591471854UL,
+                new Vector3(-50.81201171875f, 62.75946807861328f, -179.01913452148438f), false, false, false),   // Retread Medical Area
+
+            // adv_foreas_valverde_pools_livetargetpensv2 (context 1763, map template 1763).
+            new HospitalData(153, 351, 1763, 134419591466841UL,
+                new Vector3(-143.00833129882812f, 185.60769653320312f, -313.7985534667969f), false, false, false),   // Guardstation
+            new HospitalData(154, 591, 1763, 134419591466840UL,
+                new Vector3(14.427145957946777f, 151.97531127929688f, -317.5772705078125f), false, false, false),   // Guardstation
+
+            // adv_arieki_torden_plains_attacolony (context 1773, map template 1773).
+            new HospitalData(125, 383, 1773, 134419591469570UL,
+                new Vector3(-12.910858154296875f, 313.4626770019531f, 181.33392333984375f), false, false, false),   // Hospital: Kardash Atta Colony
+
+            // adv_foreas_concordia_palisades_elohtemples (context 1803, map template 1803).
+            new HospitalData(81, 342, 1803, 134419591465940UL,
+                new Vector3(-530.7808227539062f, 27.66054916381836f, -209.78981018066406f), false, false, false),   // Temple of the Raging Patriarch Entrance
+            new HospitalData(80, 176, 1803, 134419591465942UL,
+                new Vector3(-760.1962890625f, 27.209321975708008f, -272.4482421875f), false, false, false),   // Temple of the Proud Patriarch Entrance
+            new HospitalData(82, 175, 1803, 134419591465943UL,
+                new Vector3(-1012.2150268554688f, 27.392887115478516f, -251.06350708007812f), false, false, false),   // Temple of the Bowed Patriarch Entrance
+
+            // adv_foreas_valverde_plateau_temporalchamber (context 2029, map template 2029).
+            new HospitalData(86, 387, 2029, 134419591465195UL,
+                new Vector3(0.32550039887428284f, 247.9410858154297f, -21.422836303710938f), false, false, false),   // Hospital: Temporal Chambers
+
+            // adv_arieki_torden_plains_penalresearch (context 2034, map template 2034).
+            new HospitalData(87, 382, 2034, 134419591467769UL,
+                new Vector3(-8.8782377243042f, -7.5f, 12.92476749420166f), false, false, false),   // Hospital: Phanin Research Facility
+
+            // adv_arieki_ligo_staaljunkyard (context 2138, map template 2138).
+            new HospitalData(130, 271, 2138, 134419591467064UL,
+                new Vector3(-0.9215084910392761f, 241.8090362548828f, -312.00079345703125f), false, false, false),   // Emergency First Aid Station
+
+            // adv_foreas_howlingmaw_cuthahbase (context 2162, map template 2162).
+            new HospitalData(135, 274, 2162, 134419591468777UL,
+                new Vector3(64.0f, 204.80001831054688f, -531.5f), false, false, false),   // Hospital: Cuthah Base Entrance
+            new HospitalData(134, 273, 2162, 134419591468778UL,
+                new Vector3(23.0f, 165.3804168701172f, -511.5f), false, false, false),   // Hospital: AFS Rat Hole
+
+            // adv_foreas_concordia_wilderness_cavesofdonn_epic (context 2368, map template 2371).
+            new HospitalData(281, 529, 2368, 134419591463263UL,
+                new Vector3(-275.5788879394531f, 23.885128021240234f, -348.9449462890625f), false, false, false),   // Caves of Donn Field Medic
+
+            // adv_wargame_edmundrange2 (context 2374, map template 2377).
+            new HospitalData(273, 524, 2374, 134419591466266UL,
+                new Vector3(-310.95916748046875f, 421.17266845703125f, -124.09892272949219f), false, true, false),   // Hospital: Whiskey
+            new HospitalData(274, 525, 2374, 134419591466270UL,
+                new Vector3(192.0f, 421.17266845703125f, 205.0f), false, true, false),   // Hospital: Echo
+            new HospitalData(275, 522, 2374, 134419591466271UL,
+                new Vector3(282.0f, 420.4999694824219f, 34.0f), false, false, false),   // Hospital: Red Team
+            new HospitalData(276, 523, 2374, 134419591466272UL,
+                new Vector3(-402.0f, 420.4999694824219f, 46.0f), false, false, false),   // Hospital: Blue Team
+
+            // adv_afs_arena (context 20000009, map template 2232).
+            new HospitalData(243, 480, 20000009, 134419591463366UL,
+                new Vector3(24.89940071105957f, 40.0f, 114.7931137084961f), false, false, false)   // CELLAR Arena Medic
         });
 
         public static IEnumerable<HospitalData> ForMap(uint mapContextId)

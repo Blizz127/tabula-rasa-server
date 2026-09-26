@@ -7684,6 +7684,1663 @@
         ],
         "reasoning": "the discovery rule of every hospital but the boot camp"
       }
+    },
+    {
+      "name": "Torcastra Prison AFS Medical Officer",
+      "graveyard_id": {
+        "value": 43,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[43] = 'AFS Medical Officer', the marker text's own suffix and the only graveyard reading it",
+          "graveyard ids 38-49 hold early Concordia/Valverde instance and outpost hospitals (39 Minos Caverns Field Medic, 41 Devil's Den Entrance, 48/49 Warnet Caverns)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 119,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[119] = 'AFS Medical Officer', the marker text's suffix",
+          "the world seed's row at the marker is 44, whose waypointlanguage text 'DEVELOPMENT - Torcastra Prison' belongs to the development block 42-45 (Minos, Timora, Torcastra, Purgas); the catalogued Minos hospital uses 460, not 42"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1349,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1349] = adv_foreas_concordia_divide_torcastraprison, template 1506"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133629317512452,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1506] marker 133629317512452 (type 3, name text 436); uimapmarkertextlanguage 436 = 'Torcastra Prison AFS Medical Officer'"
+        ]
+      },
+      "position": {
+        "value": [
+          -272.58966064453125,
+          16.903974533081055,
+          310.5496826171875
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1506] marker 133629317512452 (type 3, name text 436); uimapmarkertextlanguage 436 = 'Torcastra Prison AFS Medical Officer'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1349.43 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 43 'AFS Medical Officer' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "First Aid Station",
+      "graveyard_id": {
+        "value": 49,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[49] = 'Research Area', beside 48 'Warnet Caverns Entrance'",
+          "world seed teleporter 131 (type 5, 'Hospital: Warnet Caverns Research Area') stands 0.2 m from the marker; map_marker (133779641346009, 1384) binds it"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 131,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[131] = 'Warnet Caverns Research Area'",
+          "world seed teleporter 131 stands 0.2 m from the marker; map_marker (133779641346009, 1384) binds the marker to 131"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1384,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1384] = adv_foreas_concordia_palisades_warnetcaverns, template 1541"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133779641346009,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1541] marker 133779641346009 (type 3, name text 1160); uimapmarkertextlanguage 1160 = 'First Aid Station'"
+        ]
+      },
+      "position": {
+        "value": [
+          33.2525749206543,
+          97.92237091064453,
+          -83.6009521484375
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1541] marker 133779641346009 (type 3, name text 1160); uimapmarkertextlanguage 1160 = 'First Aid Station'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1384.49 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 49 'Research Area' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "First Aid Station",
+      "graveyard_id": {
+        "value": 48,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[48] = 'Warnet Caverns Entrance', beside 49 'Research Area'",
+          "the map's other First Aid Station is the Research Area's (world seed 131 at 0.2 m); world seed 130 'Hospital: Warnet Caverns Entrance' (120.0, 100.0, 45.0) is this marker's |x| and z with the sign of x flipped, and the navmesh has no floor at 130's own point"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 130,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[130] = 'Warnet Caverns Entrance'",
+          "world seed teleporter 130 names the entrance hospital; its x is this marker's negated (measurement:instance-travel-20260927 w.tp130: no walkable surface)"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1384,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1384] = adv_foreas_concordia_palisades_warnetcaverns, template 1541"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133779641346010,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1541] marker 133779641346010 (type 3, name text 1160); uimapmarkertextlanguage 1160 = 'First Aid Station'"
+        ]
+      },
+      "position": {
+        "value": [
+          -120.23707580566406,
+          97.19750213623047,
+          45.14179229736328
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1541] marker 133779641346010 (type 3, name text 1160); uimapmarkertextlanguage 1160 = 'First Aid Station'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1384.48 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 48 'Warnet Caverns Entrance' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Turpis Forward Medical Unit",
+      "graveyard_id": {
+        "value": 232,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[232] = 'Turpis Medical Tent', the only graveyard naming Turpis"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 579,
+        "tier": "inferred",
+        "citations": [
+          "world seed teleporter 579 (type 5, 'Hospital: Turpis Refinery') stands 0.0 m from the marker; map_marker (133977209840578, 1429) binds it",
+          "no waypointlanguage entry names Turpis: 579 is an emulator id the client cannot name (GAP-HOSPITAL-EMULATOR-WAYPOINT)"
+        ],
+        "reasoning": "world-seed type-5 teleporter row at the marker (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1429,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1429] = adv_foreas_valverde_marshes_wetlandrefinery, template 1586"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 133977209840578,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1586] marker 133977209840578 (type 3, name text 369); uimapmarkertextlanguage 369 = 'Turpis Forward Medical Unit'"
+        ]
+      },
+      "position": {
+        "value": [
+          -203.5238037109375,
+          107.34732055664062,
+          -242.6298828125
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1586] marker 133977209840578 (type 3, name text 369); uimapmarkertextlanguage 369 = 'Turpis Forward Medical Unit'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1429.232 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 232 'Turpis Medical Tent' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Retread Medical Area",
+      "graveyard_id": {
+        "value": 114,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[114] = 'Retread Medical', the marker 'Retread Medical Area' without its last word; the Pools' own Retread hospitals read 46 'Retread Camp Hospital' and 74 'Retread First Aid'"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 586,
+        "tier": "inferred",
+        "citations": [
+          "world seed teleporter 586 (type 5, 'Hospital: RETREAD_CAVES_HOSPITAL') stands 0.0 m from the marker; map_marker (134419591471854, 1694) binds it",
+          "no waypointlanguage entry names the Retread Caves hospital: 586 is an emulator id (GAP-HOSPITAL-EMULATOR-WAYPOINT)"
+        ],
+        "reasoning": "world-seed type-5 teleporter row at the marker (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1694,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1694] = adv_foreas_valverde_pools_retread_caves, template 1694"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591471854,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1694] marker 134419591471854 (type 3, name text 371); uimapmarkertextlanguage 371 = 'Retread Medical Area'"
+        ]
+      },
+      "position": {
+        "value": [
+          -50.81201171875,
+          62.75946807861328,
+          -179.01913452148438
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1694] marker 134419591471854 (type 3, name text 371); uimapmarkertextlanguage 371 = 'Retread Medical Area'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1694.114 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 114 'Retread Medical' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Guardstation",
+      "graveyard_id": {
+        "value": 153,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[153] = 'LIve Target Pens Entrance' (sic)",
+          "the marker stands 1.3 m from world seed teleporter 351 'Live Target Pens Entrance' and 15.8 m from the instance's exit link (-144.0, 185.5, -329.5)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 351,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[351] = 'Live Target Pens Entrance'",
+          "world seed teleporter 351 stands 1.3 m from the marker; map_marker (134419591466841, 1763) binds it"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1763,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1763] = adv_foreas_valverde_pools_livetargetpensv2, template 1763"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466841,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1763] marker 134419591466841 (type 3, name text 838); uimapmarkertextlanguage 838 = 'Guardstation'"
+        ]
+      },
+      "position": {
+        "value": [
+          -143.00833129882812,
+          185.60769653320312,
+          -313.7985534667969
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1763] marker 134419591466841 (type 3, name text 838); uimapmarkertextlanguage 838 = 'Guardstation'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1763.153 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 153 'LIve Target Pens Entrance' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Guardstation",
+      "graveyard_id": {
+        "value": 154,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[154] = 'Live Target Pens Guard Station', the marker's text 'Guardstation'",
+          "the map's other Guardstation marker is the entrance's (153)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 591,
+        "tier": "inferred",
+        "citations": [
+          "world seed teleporter 591 (type 5, 'Hospital: LTP_GUARDSTATION_HOSPITAL') stands 0.0 m from the marker; map_marker (134419591466840, 1763) binds it",
+          "waypointlanguage 352 'Guard station' is the world seed's Guardian Prominence hospital row (352 on 1416, catalogued), so it is not reused; 591 is an emulator id (GAP-HOSPITAL-EMULATOR-WAYPOINT)"
+        ],
+        "reasoning": "world-seed type-5 teleporter row at the marker (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1763,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1763] = adv_foreas_valverde_pools_livetargetpensv2, template 1763"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466840,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1763] marker 134419591466840 (type 3, name text 838); uimapmarkertextlanguage 838 = 'Guardstation'"
+        ]
+      },
+      "position": {
+        "value": [
+          14.427145957946777,
+          151.97531127929688,
+          -317.5772705078125
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1763] marker 134419591466840 (type 3, name text 838); uimapmarkertextlanguage 838 = 'Guardstation'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1763.154 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 154 'Live Target Pens Guard Station' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Kardash Atta Colony",
+      "graveyard_id": {
+        "value": 125,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[125] = 'Medical Station: Kardash Atta Colony', the only graveyard naming Kardash"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 383,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[383] = 'Hospital: Kardash Atta Colony', the marker's exact text",
+          "world seed teleporter 383 stands 0.0 m from the marker"
+        ],
+        "reasoning": "waypointlanguage name match (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1773,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1773] = adv_arieki_torden_plains_attacolony, template 1773"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591469570,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1773] marker 134419591469570 (type 3, name text 1058); uimapmarkertextlanguage 1058 = 'Hospital: Kardash Atta Colony'"
+        ]
+      },
+      "position": {
+        "value": [
+          -12.910858154296875,
+          313.4626770019531,
+          181.33392333984375
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1773] marker 134419591469570 (type 3, name text 1058); uimapmarkertextlanguage 1058 = 'Hospital: Kardash Atta Colony'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1773.125 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 125 'Medical Station: Kardash Atta Colony' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Temple of the Raging Patriarch Entrance",
+      "graveyard_id": {
+        "value": 81,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[81] = 'Temple of the Raging Patriarch'; the marker adds 'Entrance'"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 342,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[342] = 'Temple of the Raging Patriarch'",
+          "the world seed's row at the marker is 592 'Hospital: PALISADES_ELOHTEMPLES_HOSPITAL_01', an emulator id"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1803,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1803] = adv_foreas_concordia_palisades_elohtemples, template 1803"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591465940,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465940 (type 3, name text 438); uimapmarkertextlanguage 438 = 'Temple of the Raging Patriarch Entrance'"
+        ]
+      },
+      "position": {
+        "value": [
+          -530.7808227539062,
+          27.66054916381836,
+          -209.78981018066406
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465940 (type 3, name text 438); uimapmarkertextlanguage 438 = 'Temple of the Raging Patriarch Entrance'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1803.81 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 81 'Temple of the Raging Patriarch' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Temple of the Proud Patriarch Entrance",
+      "graveyard_id": {
+        "value": 80,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[80] = 'Temple of the Proud Patriarch'; the marker adds 'Entrance'"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 176,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[176] = 'Temple of the Proud Patriarch'",
+          "the world seed's row at the marker is 593, an emulator id"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1803,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1803] = adv_foreas_concordia_palisades_elohtemples, template 1803"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591465942,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465942 (type 3, name text 439); uimapmarkertextlanguage 439 = 'Temple of the Proud Patriarch Entrance'"
+        ]
+      },
+      "position": {
+        "value": [
+          -760.1962890625,
+          27.209321975708008,
+          -272.4482421875
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465942 (type 3, name text 439); uimapmarkertextlanguage 439 = 'Temple of the Proud Patriarch Entrance'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1803.80 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 80 'Temple of the Proud Patriarch' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Temple of the Bowed Patriarch Entrance",
+      "graveyard_id": {
+        "value": 82,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[82] = 'Temple of Bowed Patriarch'; the marker reads 'Temple of the Bowed Patriarch Entrance'"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 175,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[175] = 'Temple of the Bowed Patriarch'",
+          "the world seed's row at the marker is 594, an emulator id"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 1803,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[1803] = adv_foreas_concordia_palisades_elohtemples, template 1803"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591465943,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465943 (type 3, name text 440); uimapmarkertextlanguage 440 = 'Temple of the Bowed Patriarch Entrance'"
+        ]
+      },
+      "position": {
+        "value": [
+          -1012.2150268554688,
+          27.392887115478516,
+          -251.06350708007812
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[1803] marker 134419591465943 (type 3, name text 440); uimapmarkertextlanguage 440 = 'Temple of the Bowed Patriarch Entrance'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.1803.82 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 82 'Temple of Bowed Patriarch' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Temporal Chambers",
+      "graveyard_id": {
+        "value": 86,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[86] = 'Temporal Chamber', the only graveyard naming it"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 387,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[387] = 'Hospital: Temporal Chamber' (the marker reads 'Chambers')",
+          "world seed teleporter 387 stands 0.0 m from the marker; map_marker (134419591465195, 2029) binds it"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2029,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2029] = adv_foreas_valverde_plateau_temporalchamber, template 2029"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591465195,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2029] marker 134419591465195 (type 3, name text 1064); uimapmarkertextlanguage 1064 = 'Hospital: Temporal Chambers'"
+        ]
+      },
+      "position": {
+        "value": [
+          0.32550039887428284,
+          247.9410858154297,
+          -21.422836303710938
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2029] marker 134419591465195 (type 3, name text 1064); uimapmarkertextlanguage 1064 = 'Hospital: Temporal Chambers'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2029.86 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 86 'Temporal Chamber' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Phanin Research Facility",
+      "graveyard_id": {
+        "value": 87,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[87] = 'Phanin Entrance Barricades', the only graveyard naming Phanin"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 382,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[382] = 'Hospital: Phanin Research Facility', the marker's exact text",
+          "world seed teleporter 382 stands 0.0 m from the marker"
+        ],
+        "reasoning": "waypointlanguage name match (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2034,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2034] = adv_arieki_torden_plains_penalresearch, template 2034"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591467769,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2034] marker 134419591467769 (type 3, name text 1056); uimapmarkertextlanguage 1056 = 'Hospital: Phanin Research Facility'"
+        ]
+      },
+      "position": {
+        "value": [
+          -8.8782377243042,
+          -7.5,
+          12.92476749420166
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2034] marker 134419591467769 (type 3, name text 1056); uimapmarkertextlanguage 1056 = 'Hospital: Phanin Research Facility'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2034.87 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 87 'Phanin Entrance Barricades' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Emergency First Aid Station",
+      "graveyard_id": {
+        "value": 130,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[130] = 'Junkyard First Aid', the only graveyard naming the Junkyard"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 271,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[271] = 'Junkyard First Aid Station' (the marker reads 'Emergency First Aid Station')",
+          "world seed teleporter 271 stands 4.1 m from the marker; map_marker (134419591467064, 2138) binds it"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2138,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2138] = adv_arieki_ligo_staaljunkyard, template 2138"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591467064,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2138] marker 134419591467064 (type 3, name text 1072); uimapmarkertextlanguage 1072 = 'Emergency First Aid Station'"
+        ]
+      },
+      "position": {
+        "value": [
+          -0.9215084910392761,
+          241.8090362548828,
+          -312.00079345703125
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2138] marker 134419591467064 (type 3, name text 1072); uimapmarkertextlanguage 1072 = 'Emergency First Aid Station'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2138.130 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 130 'Junkyard First Aid' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Cuthah Base Entrance",
+      "graveyard_id": {
+        "value": 135,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[135] = 'Cuthah Base Entrance Field Medic' (the marker reads 'Hospital: Cuthah Base Entrance')"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 274,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[274] = 'Cuthah Base Entrance Field Medic'",
+          "the world seed's row at the marker is 610 'Hospital: CUTHAH_HOSPITAL_TOP', an emulator id"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2162,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2162] = adv_foreas_howlingmaw_cuthahbase, template 2162"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591468777,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2162] marker 134419591468777 (type 3, name text 1133); uimapmarkertextlanguage 1133 = 'Hospital: Cuthah Base Entrance'"
+        ]
+      },
+      "position": {
+        "value": [
+          64.0,
+          204.80001831054688,
+          -531.5
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2162] marker 134419591468777 (type 3, name text 1133); uimapmarkertextlanguage 1133 = 'Hospital: Cuthah Base Entrance'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2162.135 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 135 'Cuthah Base Entrance Field Medic' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: AFS Rat Hole",
+      "graveyard_id": {
+        "value": 134,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[134] = 'A.F.S. \"Rat Hole\" Medic Station' (the marker reads 'Hospital: AFS Rat Hole')"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 273,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[273] = 'AFS \"Rat Hole\" Medic Station'",
+          "the world seed's row at the marker is 609 'Hospital: CUTHAH_HOSPITAL_RATNEST', an emulator id"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2162,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2162] = adv_foreas_howlingmaw_cuthahbase, template 2162"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591468778,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2162] marker 134419591468778 (type 3, name text 1132); uimapmarkertextlanguage 1132 = 'Hospital: AFS Rat Hole'"
+        ]
+      },
+      "position": {
+        "value": [
+          23.0,
+          165.3804168701172,
+          -511.5
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2162] marker 134419591468778 (type 3, name text 1132); uimapmarkertextlanguage 1132 = 'Hospital: AFS Rat Hole'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2162.134 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 134 'A.F.S. \"Rat Hole\" Medic Station' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Caves of Donn Field Medic",
+      "graveyard_id": {
+        "value": 281,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[281] = 'Epic <6>CoD Entrance' (client colour codes around CoD), the only graveyard naming the Epic Caves of Donn"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 529,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[529] = 'Epic Caves of Donn Entrance'",
+          "world seed teleporter 529 stands 13.1 m from the marker; map_marker (134419591463263, 2368) binds it"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2368,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2368] = adv_foreas_concordia_wilderness_cavesofdonn_epic, template 2371"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591463263,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2371] marker 134419591463263 (type 3, name text 399); uimapmarkertextlanguage 399 = 'Caves of Donn Field Medic'"
+        ]
+      },
+      "position": {
+        "value": [
+          -275.5788879394531,
+          23.885128021240234,
+          -348.9449462890625
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2371] marker 134419591463263 (type 3, name text 399); uimapmarkertextlanguage 399 = 'Caves of Donn Field Medic'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2368.281 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 281 'Epic \u0001[6]CoD\u0002 Entrance' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Whiskey",
+      "graveyard_id": {
+        "value": 273,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[273] = 'West Control Point Hospital'; Hospital: Whiskey stands at x -311, the western control point (Echo is at x 192)",
+          "graveyard ids 273-276 are Edmund Range's set (West/East Control Point, Red/Blue Base)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 524,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[524] = 'West Control Point Hospital', in the block 522-525 of the same four names",
+          "the world seed's row at the marker is 533, whose waypointlanguage text is 'Waypoint: Control Point Whiskey'"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2374,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2374] = adv_wargame_edmundrange2, template 2377"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466266,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466266 (type 3, name text 1393); uimapmarkertextlanguage 1393 = 'Hospital: Whiskey'"
+        ]
+      },
+      "position": {
+        "value": [
+          -310.95916748046875,
+          421.17266845703125,
+          -124.09892272949219
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466266 (type 3, name text 1393); uimapmarkertextlanguage 1393 = 'Hospital: Whiskey'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2374.273 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 273 'West Control Point Hospital' names a control point (Edmund Range control point Whiskey); no control-point ownership exists (GAP-CONTROL-POINTS)"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Echo",
+      "graveyard_id": {
+        "value": 274,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[274] = 'East Control Point Hospital'; Hospital: Echo stands at x 192, the eastern control point",
+          "graveyard ids 273-276 are Edmund Range's set"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 525,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[525] = 'East Control Point Hospital'",
+          "the world seed's row at the marker is 526, whose waypointlanguage text is 'Waypoint: Control Point Echo'"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2374,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2374] = adv_wargame_edmundrange2, template 2377"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466270,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466270 (type 3, name text 1394); uimapmarkertextlanguage 1394 = 'Hospital: Echo'"
+        ]
+      },
+      "position": {
+        "value": [
+          192.0,
+          421.17266845703125,
+          205.0
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466270 (type 3, name text 1394); uimapmarkertextlanguage 1394 = 'Hospital: Echo'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2374.274 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": true,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 274 'East Control Point Hospital' names a control point (Edmund Range control point Echo); no control-point ownership exists (GAP-CONTROL-POINTS)"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Red Team",
+      "graveyard_id": {
+        "value": 275,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[275] = 'Red Base Hospital'; the marker reads 'Hospital: Red Team' and stands in the 'Red Team Base' region (label 134419591466232)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 522,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[522] = 'Red Base Hospital'",
+          "the world seed's row at the marker is 405 'Hospital for Team Red'; waypointlanguage 405 reads the same, but 481/484 'Red Hospital' and 522 show the team hospitals were renamed with the map, and 522-525 are the one block naming all four"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2374,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2374] = adv_wargame_edmundrange2, template 2377"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466271,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466271 (type 3, name text 1396); uimapmarkertextlanguage 1396 = 'Hospital: Red Team'"
+        ]
+      },
+      "position": {
+        "value": [
+          282.0,
+          420.4999694824219,
+          34.0
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466271 (type 3, name text 1396); uimapmarkertextlanguage 1396 = 'Hospital: Red Team'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2374.275 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 275 'Red Base Hospital' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "Hospital: Blue Team",
+      "graveyard_id": {
+        "value": 276,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[276] = 'Blue Base Hospital'; the marker reads 'Hospital: Blue Team' and stands in the 'Blue Team Base' region (label 134419591466231)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 523,
+        "tier": "inferred",
+        "citations": [
+          "waypointlanguage lookup[523] = 'Blue Base Hospital'",
+          "the world seed's row at the marker is 404 'Hospital for Team Blue'; 522-525 are the one block naming all four Edmund Range hospitals"
+        ],
+        "reasoning": "waypointlanguage name join (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 2374,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[2374] = adv_wargame_edmundrange2, template 2377"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591466272,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466272 (type 3, name text 1395); uimapmarkertextlanguage 1395 = 'Hospital: Blue Team'"
+        ]
+      },
+      "position": {
+        "value": [
+          -402.0,
+          420.4999694824219,
+          46.0
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2377] marker 134419591466272 (type 3, name text 1395); uimapmarkertextlanguage 1395 = 'Hospital: Blue Team'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.2374.276 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 276 'Blue Base Hospital' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
+    },
+    {
+      "name": "CELLAR Arena Medic",
+      "graveyard_id": {
+        "value": 243,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage lookup[243] = 'A.F.S. Challenge Arena Medic', the only arena graveyard; the CELLAR is the AFS arena (map adv_afs_arena)"
+        ],
+        "reasoning": "no graveyardlanguage entry reads the marker text exactly; the join is by name (2026-09-27 instance travel)"
+      },
+      "waypoint_id": {
+        "value": 480,
+        "tier": "original",
+        "citations": [
+          "waypointlanguage lookup[480] = 'CELLAR Arena Medic', the marker's exact text",
+          "world seed teleporter 480 stands 0.0 m from the marker"
+        ],
+        "reasoning": "waypointlanguage name match (2026-09-27 instance travel)"
+      },
+      "map_context_id": {
+        "value": 20000009,
+        "tier": "original",
+        "citations": [
+          "gamecontext lookup[20000009] = adv_afs_arena, template 2232"
+        ]
+      },
+      "marker_entity_id": {
+        "value": 134419591463366,
+        "tier": "original",
+        "citations": [
+          "uimapmarker factionedmarkers[2232] marker 134419591463366 (type 3, name text 1222); uimapmarkertextlanguage 1222 = 'CELLAR Arena Medic'"
+        ]
+      },
+      "position": {
+        "value": [
+          24.89940071105957,
+          40.0,
+          114.7931137084961
+        ],
+        "tier": "inferred",
+        "citations": [
+          "uimapmarker factionedmarkers[2232] marker 134419591463366 (type 3, name text 1222); uimapmarkertextlanguage 1222 = 'CELLAR Arena Medic'",
+          "calibration V2",
+          "measurement:instance-travel-20260927 navprobe h.20000009.243 (navmesh surface under the marker; see docs/evidence/instance-travel-20260927.json)"
+        ],
+        "reasoning": "the marker's own coordinates, used as the respawn point as for the Wilderness and boot-camp rows the measured respawn confirmed to 1.1 m; the navmesh has walkable ground under it",
+        "uncertainty": {
+          "unit": "m",
+          "horizontal_m": 1.5
+        }
+      },
+      "is_safe": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "marker type 3 HOSPITAL"
+        ],
+        "reasoning": "isSafe selects the client icon only; it does not gate the destination"
+      },
+      "is_control_point": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "graveyardlanguage 243 'A.F.S. Challenge Arena Medic' names no control point"
+        ]
+      },
+      "known_without_discovery": {
+        "value": false,
+        "tier": "inferred",
+        "citations": [
+          "no footage shows this hospital offered before it was gained; the boot camp is the one hospital known without a gain message"
+        ],
+        "reasoning": "the discovery rule of every hospital but the boot camp"
+      }
     }
   ],
   "rules": [
@@ -7764,6 +9421,16 @@
         "official D10.6 live notes (2008-07-23) 2/4/6 minutes, 20/40/60%"
       ],
       "reasoning": "the rules and values are original; applying them at level 5, the truncation and the choice of the three primary attributes are inferred"
+    },
+    {
+      "id": "death.eloh-temples-section",
+      "value": "On Eloh Temples (1803) the dead are offered only the hospital of the section they are in, once gained; the section is the one whose hospital is nearest the body.",
+      "tier": "inferred",
+      "citations": [
+        "official D10.5 live notes (TaRapedia Updates/2008-07-23 rev 35869, ==10.5==): 'Map: Eloh Temples - Players will now only be able to access the Hospital point for the section of Eloh Temples they are currently in.'",
+        "the three temple hospital markers stand 238-253 m apart at their temples' entrances (uimapmarker factionedmarkers[1803] 134419591465940/42/43)"
+      ],
+      "reasoning": "the rule is official; the client draws no section boundaries, so nearest hospital stands for the section (2026-09-27 instance travel)"
     }
   ],
   "gaps": [
@@ -7785,7 +9452,7 @@
     },
     {
       "id": "GAP-NO-HOSPITAL",
-      "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Since 2026-09-17 every map whose hospital markers resolve is catalogued (105 hospitals on 42 maps after 2026-09-26); the fallback remains for the maps under GAP-HOSPITAL-UNRESOLVED-GRAVEYARD."
+      "summary": "Maps without a catalogued hospital offer none; ReviveMe then revives in place (emulator fallback). Since 2026-09-17 every map whose hospital markers resolve is catalogued (105 hospitals on 42 maps after 2026-09-26, 127 on 55 after 2026-09-27); the fallback remains for the maps under GAP-HOSPITAL-UNRESOLVED-GRAVEYARD."
     },
     {
       "id": "GAP-HOSPITAL-FACING",
@@ -7797,7 +9464,7 @@
     },
     {
       "id": "GAP-HOSPITAL-UNRESOLVED-GRAVEYARD",
-      "summary": "63 client hospital markers have no graveyardlanguage entry reading their name, so the id the client would show in Hospital Selection is unrecovered and they are not offered. Most read close but not identically to a graveyard entry (marker 'Hospital: Foreas Base' against graveyard 202 'Foreas Base Hospital'), and the original server's own graveyard table, which held the mapping, is lost. 2026-09-26 (client-defects): Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins (see their records); Palisades' Hightower Outpost First Aid Station and Viands Village Hospital stay open - no graveyardlanguage or waypointlanguage entry names either.",
+      "summary": "41 client hospital markers have no graveyardlanguage entry reading their name, so the id the client would show in Hospital Selection is unrecovered and they are not offered. Most read close but not identically to a graveyard entry (marker 'Hospital: Foreas Base' against graveyard 202 'Foreas Base Hospital'), and the original server's own graveyard table, which held the mapping, is lost. 2026-09-26 (client-defects): Divide's Foreas Base, Palisades' Cumbria and Devil's Den resolved on inferred joins (see their records); Palisades' Hightower Outpost First Aid Station and Viands Village Hospital stay open - no graveyardlanguage or waypointlanguage entry names either. 2026-09-27 (instance travel): 22 instance and battlefield markers resolved on inferred joins (Warnet Caverns x2, Eloh Temples x3, Live Target Pens x2, Cuthah Base x2, Edmund Range x4, CELLAR, Torcastra's AFS Medical Officer, Turpis, Retread Caves, Kardash, Temporal Chamber, Phanin, Staal Junkyard, Epic Caves of Donn); the instance markers still open carry a note why.",
       "rows": [
         {
           "map_context_id": 1244,
@@ -7860,16 +9527,8 @@
           "marker_entity_id": 133625022546082,
           "waypoint_id": 397,
           "waypoint_name": "Field Hospital: Timora Mines",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Timora Mines' or 'Field Hospital: Timora Mines'"
-        },
-        {
-          "map_context_id": 1349,
-          "map": "adv_foreas_concordia_divide_torcastraprison",
-          "name": "Torcastra Prison AFS Medical Officer",
-          "marker_entity_id": 133629317512452,
-          "waypoint_id": 44,
-          "waypoint_name": "DEVELOPMENT - Torcastra Prison",
-          "why": "no graveyardlanguage entry reads exactly 'Torcastra Prison AFS Medical Officer' or 'DEVELOPMENT - Torcastra Prison'"
+          "why": "no graveyardlanguage entry reads exactly 'Hospital: Timora Mines' or 'Field Hospital: Timora Mines'",
+          "note": "graveyard 38 'Field Medic, Mine Entrance' fits Timora Mines by id order (38-49 are early Concordia instance hospitals: 39 Minos, 41 Devil's Den, 48/49 Warnet) and Bane Fluxite Mines 2115 by text ('Fluxite Mines Field Medic', waypoint 446 'Fluxite Mines Entrance'); the two readings conflict, so neither takes it (2026-09-27 instance travel). Waypoint 397 'Field Hospital: Timora Mines' is the world seed's row at the marker."
         },
         {
           "map_context_id": 1349,
@@ -7878,34 +9537,8 @@
           "marker_entity_id": 133629317512453,
           "waypoint_id": 578,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Torcastra Prison Field Medic'"
-        },
-        {
-          "map_context_id": 1384,
-          "map": "adv_foreas_concordia_palisades_warnetcaverns",
-          "name": "First Aid Station",
-          "marker_entity_id": 133779641346009,
-          "waypoint_id": 131,
-          "waypoint_name": "Warnet Caverns Research Area",
-          "why": "no graveyardlanguage entry reads exactly 'First Aid Station' or 'Warnet Caverns Research Area'"
-        },
-        {
-          "map_context_id": 1384,
-          "map": "adv_foreas_concordia_palisades_warnetcaverns",
-          "name": "First Aid Station",
-          "marker_entity_id": 133779641346010,
-          "waypoint_id": null,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'First Aid Station'"
-        },
-        {
-          "map_context_id": 1429,
-          "map": "adv_foreas_valverde_marshes_wetlandrefinery",
-          "name": "Turpis Forward Medical Unit",
-          "marker_entity_id": 133977209840578,
-          "waypoint_id": 579,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Turpis Forward Medical Unit'"
+          "why": "no graveyardlanguage entry reads exactly 'Torcastra Prison Field Medic'",
+          "note": "the prison's inner 'Torcastra Prison Field Medic'; no graveyard names Torcastra, and the generic 'Field Medic'/'Medic Station' graveyards (1, 53, 97, 100, 237) cannot be told apart (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 1454,
@@ -7942,15 +9575,6 @@
           "waypoint_id": 585,
           "waypoint_name": null,
           "why": "no graveyardlanguage entry reads exactly 'Caves of Donn Field Medic'"
-        },
-        {
-          "map_context_id": 1694,
-          "map": "adv_foreas_valverde_pools_retread_caves",
-          "name": "Retread Medical Area",
-          "marker_entity_id": 134419591471854,
-          "waypoint_id": 586,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Retread Medical Area'"
         },
         {
           "map_context_id": 1700,
@@ -8014,60 +9638,6 @@
           "waypoint_id": 590,
           "waypoint_name": null,
           "why": "no graveyardlanguage entry reads exactly 'Hospital: Plains Post'"
-        },
-        {
-          "map_context_id": 1763,
-          "map": "adv_foreas_valverde_pools_livetargetpensv2",
-          "name": "Guardstation",
-          "marker_entity_id": 134419591466840,
-          "waypoint_id": 591,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Guardstation'"
-        },
-        {
-          "map_context_id": 1763,
-          "map": "adv_foreas_valverde_pools_livetargetpensv2",
-          "name": "Guardstation",
-          "marker_entity_id": 134419591466841,
-          "waypoint_id": null,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Guardstation'"
-        },
-        {
-          "map_context_id": 1773,
-          "map": "adv_arieki_torden_plains_attacolony",
-          "name": "Hospital: Kardash Atta Colony",
-          "marker_entity_id": 134419591469570,
-          "waypoint_id": 383,
-          "waypoint_name": "Hospital: Kardash Atta Colony",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Kardash Atta Colony' or 'Hospital: Kardash Atta Colony'"
-        },
-        {
-          "map_context_id": 1803,
-          "map": "adv_foreas_concordia_palisades_elohtemples",
-          "name": "Temple of the Raging Patriarch Entrance",
-          "marker_entity_id": 134419591465940,
-          "waypoint_id": 592,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Temple of the Raging Patriarch Entrance'"
-        },
-        {
-          "map_context_id": 1803,
-          "map": "adv_foreas_concordia_palisades_elohtemples",
-          "name": "Temple of the Proud Patriarch Entrance",
-          "marker_entity_id": 134419591465942,
-          "waypoint_id": 593,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Temple of the Proud Patriarch Entrance'"
-        },
-        {
-          "map_context_id": 1803,
-          "map": "adv_foreas_concordia_palisades_elohtemples",
-          "name": "Temple of the Bowed Patriarch Entrance",
-          "marker_entity_id": 134419591465943,
-          "waypoint_id": 594,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Temple of the Bowed Patriarch Entrance'"
         },
         {
           "map_context_id": 1806,
@@ -8142,24 +9712,6 @@
           "why": "no graveyardlanguage entry reads exactly 'Tampeii Settlement Medical Station' or 'Tampeii Settlement Medical Station'"
         },
         {
-          "map_context_id": 2029,
-          "map": "adv_foreas_valverde_plateau_temporalchamber",
-          "name": "Hospital: Temporal Chambers",
-          "marker_entity_id": 134419591465195,
-          "waypoint_id": 387,
-          "waypoint_name": "Hospital: Temporal Chamber",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Temporal Chambers' or 'Hospital: Temporal Chamber'"
-        },
-        {
-          "map_context_id": 2034,
-          "map": "adv_arieki_torden_plains_penalresearch",
-          "name": "Hospital: Phanin Research Facility",
-          "marker_entity_id": 134419591467769,
-          "waypoint_id": 382,
-          "waypoint_name": "Hospital: Phanin Research Facility",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Phanin Research Facility' or 'Hospital: Phanin Research Facility'"
-        },
-        {
           "map_context_id": 2047,
           "map": "adv_foreas_valverde_descent",
           "name": "Fortuna Village Hospital",
@@ -8175,7 +9727,8 @@
           "marker_entity_id": 134419591468066,
           "waypoint_id": 120,
           "waypoint_name": null,
-          "why": "a second marker on this map resolves to graveyard 36, which the client already shows for 'AFS Field Medic'"
+          "why": "a second marker on this map resolves to graveyard 36, which the client already shows for 'AFS Field Medic'",
+          "note": "a second 'AFS Field Medic' (text 693) deep in Indra Caverns; ten graveyards (36, 42, 52, 95, 111, 132, 142, 195, 215, 236) and twelve waypoints read 'AFS Field Medic' and nothing ties one to this marker (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2085,
@@ -8202,7 +9755,8 @@
           "marker_entity_id": 134419591473892,
           "waypoint_id": 344,
           "waypoint_name": "Quasso Station Entrance",
-          "why": "a second marker on this map resolves to graveyard 151, which the client already shows for 'Quasso Station Entrance'"
+          "why": "a second marker on this map resolves to graveyard 151, which the client already shows for 'Quasso Station Entrance'",
+          "note": "not a separate hospital: 'Hospital Vendor' (text 389) stands 5.4 m from the catalogued Quasso Station Entrance hospital (graveyard 151, waypoint 344) and is the medical vendor's marker typed HOSPITAL; nothing to resolve (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2107,
@@ -8229,16 +9783,8 @@
           "marker_entity_id": 134419591464845,
           "waypoint_id": 446,
           "waypoint_name": "Fluxite Mines Entrance",
-          "why": "no graveyardlanguage entry reads exactly 'Fluxite Mines Field Medic' or 'Fluxite Mines Entrance'"
-        },
-        {
-          "map_context_id": 2138,
-          "map": "adv_arieki_ligo_staaljunkyard",
-          "name": "Emergency First Aid Station",
-          "marker_entity_id": 134419591467064,
-          "waypoint_id": null,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Emergency First Aid Station'"
+          "why": "no graveyardlanguage entry reads exactly 'Fluxite Mines Field Medic' or 'Fluxite Mines Entrance'",
+          "note": "graveyard 38 'Field Medic, Mine Entrance' fits by text but conflicts with Timora Mines 1348 by id order; left open (2026-09-27 instance travel). Waypoint 446 'Fluxite Mines Entrance' is the world seed's row at the marker."
         },
         {
           "map_context_id": 2141,
@@ -8256,25 +9802,8 @@
           "marker_entity_id": 134419591464201,
           "waypoint_id": null,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Eloh Sanctuary'"
-        },
-        {
-          "map_context_id": 2162,
-          "map": "adv_foreas_howlingmaw_cuthahbase",
-          "name": "Hospital: Cuthah Base Entrance",
-          "marker_entity_id": 134419591468777,
-          "waypoint_id": 610,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Cuthah Base Entrance'"
-        },
-        {
-          "map_context_id": 2162,
-          "map": "adv_foreas_howlingmaw_cuthahbase",
-          "name": "Hospital: AFS Rat Hole",
-          "marker_entity_id": 134419591468778,
-          "waypoint_id": 609,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: AFS Rat Hole'"
+          "why": "no graveyardlanguage entry reads exactly 'Eloh Sanctuary'",
+          "note": "graveyard 155 'Refuge Sanctuary' is the only graveyard naming the Refuge, but no waypointlanguage entry and no world-seed row names or stands at 'Eloh Sanctuary', so the id the gain line posts is unrecovered (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2361,
@@ -8283,7 +9812,8 @@
           "marker_entity_id": 134419591466266,
           "waypoint_id": null,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Whiskey'"
+          "why": "no graveyardlanguage entry reads exactly 'Hospital: Whiskey'",
+          "note": "Edmund Range OLD (D15 map, replaced at D16; verdict live_replaced): not final-live, not resolved; its map is no longer linked (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2361,
@@ -8292,7 +9822,8 @@
           "marker_entity_id": 134419591466270,
           "waypoint_id": null,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Echo'"
+          "why": "no graveyardlanguage entry reads exactly 'Hospital: Echo'",
+          "note": "Edmund Range OLD (D15 map, replaced at D16; verdict live_replaced): not final-live, not resolved; its map is no longer linked (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2361,
@@ -8301,7 +9832,8 @@
           "marker_entity_id": 134419591466271,
           "waypoint_id": null,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Red Team'"
+          "why": "no graveyardlanguage entry reads exactly 'Hospital: Red Team'",
+          "note": "Edmund Range OLD (D15 map, replaced at D16; verdict live_replaced): not final-live, not resolved; its map is no longer linked (2026-09-27 instance travel)."
         },
         {
           "map_context_id": 2361,
@@ -8310,61 +9842,8 @@
           "marker_entity_id": 134419591466272,
           "waypoint_id": null,
           "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Blue Team'"
-        },
-        {
-          "map_context_id": 2368,
-          "map": "adv_foreas_concordia_wilderness_cavesofdonn_epic",
-          "name": "Caves of Donn Field Medic",
-          "marker_entity_id": 134419591463263,
-          "waypoint_id": 529,
-          "waypoint_name": "Epic Caves of Donn Entrance",
-          "why": "no graveyardlanguage entry reads exactly 'Caves of Donn Field Medic' or 'Epic Caves of Donn Entrance'"
-        },
-        {
-          "map_context_id": 2374,
-          "map": "adv_wargame_edmundrange2",
-          "name": "Hospital: Whiskey",
-          "marker_entity_id": 134419591466266,
-          "waypoint_id": 533,
-          "waypoint_name": "Waypoint: Control Point Whiskey",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Whiskey' or 'Waypoint: Control Point Whiskey'"
-        },
-        {
-          "map_context_id": 2374,
-          "map": "adv_wargame_edmundrange2",
-          "name": "Hospital: Echo",
-          "marker_entity_id": 134419591466270,
-          "waypoint_id": 526,
-          "waypoint_name": "Waypoint: Control Point Echo",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Echo' or 'Waypoint: Control Point Echo'"
-        },
-        {
-          "map_context_id": 2374,
-          "map": "adv_wargame_edmundrange2",
-          "name": "Hospital: Red Team",
-          "marker_entity_id": 134419591466271,
-          "waypoint_id": 405,
-          "waypoint_name": "Hospital for Team Red",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Red Team' or 'Hospital for Team Red'"
-        },
-        {
-          "map_context_id": 2374,
-          "map": "adv_wargame_edmundrange2",
-          "name": "Hospital: Blue Team",
-          "marker_entity_id": 134419591466272,
-          "waypoint_id": 404,
-          "waypoint_name": "Hospital for Team Blue",
-          "why": "no graveyardlanguage entry reads exactly 'Hospital: Blue Team' or 'Hospital for Team Blue'"
-        },
-        {
-          "map_context_id": 20000009,
-          "map": "adv_afs_arena",
-          "name": "CELLAR Arena Medic",
-          "marker_entity_id": 134419591463366,
-          "waypoint_id": 480,
-          "waypoint_name": null,
-          "why": "no graveyardlanguage entry reads exactly 'CELLAR Arena Medic'"
+          "why": "no graveyardlanguage entry reads exactly 'Hospital: Blue Team'",
+          "note": "Edmund Range OLD (D15 map, replaced at D16; verdict live_replaced): not final-live, not resolved; its map is no longer linked (2026-09-27 instance travel)."
         }
       ],
       "closes_with": "a capture of Hospital Selection on one of these maps, or the original graveyard table"
@@ -8372,12 +9851,22 @@
     {
       "id": "GAP-HOSPITAL-SHARED-WAYPOINT",
       "summary": "Waypoint 120 'AFS Field Medic' (graveyard 36) is the catalogue's waypoint for the entrance hospital of five instance maps (1823, 1977, 1988, 2055, 2111), a consequence of the name join taking the lowest of several identically named ids. The character store keys a gained waypoint by id alone (character_teleporter PK character_id, waypointId), so gaining it on one of those maps counts on all five and the zone-entry gain line is not repeated. Harmless to the offer (each map has that one hospital) but unverified; which of the 'AFS Field Medic' waypoint ids each map carried is unrecovered. The 2327/2375 Manhattan rows share their ids by design: 2375 is the shared-instance copy of the same map and markers."
+    },
+    {
+      "id": "GAP-HOSPITAL-EMULATOR-WAYPOINT",
+      "summary": "Four catalogued hospitals carry a waypoint id only the world seed (an emulator artifact) knows: 606 Tahrendra Base, 579 Turpis Refinery, 586 Retread Caves, 591 Live Target Pens Guard Station. No waypointlanguage entry names them, so the client's gain line (Recv_GraveyardGained) has no name to post for them; the original waypoint ids are unrecovered.",
+      "closes_with": "a capture of GraveyardGained on one of these maps, or the original waypoint table"
+    },
+    {
+      "id": "GAP-EDMUND-TEAM-HOSPITALS",
+      "summary": "Edmund Range's four hospitals (Red/Blue Base, West/East Control Point) are offered to anyone who has gained them: no Red/Blue team assignment or control-point ownership exists on this server, so the team and control-point gating the map's PvP rules imply (D15.7 'both the Red and Blue team attempt to capture and hold three control points') is not applied.",
+      "closes_with": "the Edmund Range PvP batch (teams, control points, scoreboard)"
     }
   ],
   "coverage": {
-    "hospitals": 105,
-    "maps": 42,
+    "hospitals": 127,
+    "maps": 55,
     "recipe": "research/20260917-hospital-coverage/tools/02_resolve.py",
-    "note": "Every client HOSPITAL (3) and SAFE_ZONE (19) map marker on a loaded map, resolved by the recipe the seven 2026-09-14 rows were built with. That pass reached two maps; this one reaches every map whose marker names resolve. The rows it cannot resolve are listed under gaps, and their maps keep the revive-in-place fallback. 2026-09-26: three more resolved by inferred joins and the Palisades control-point hospital re-identified as Fort Dew (docs/retail-accuracy.md, 2026-09-26 client defects)."
+    "note": "Every client HOSPITAL (3) and SAFE_ZONE (19) map marker on a loaded map, resolved by the recipe the seven 2026-09-14 rows were built with. That pass reached two maps; this one reaches every map whose marker names resolve. The rows it cannot resolve are listed under gaps, and their maps keep the revive-in-place fallback. 2026-09-26: three more resolved by inferred joins and the Palisades control-point hospital re-identified as Fort Dew (docs/retail-accuracy.md, 2026-09-26 client defects). 2026-09-27 (instance travel): 22 more on inferred joins, 127 hospitals on 55 maps; Eloh Temples offers only the current section's hospital (rule death.eloh-temples-section)."
   }
 }

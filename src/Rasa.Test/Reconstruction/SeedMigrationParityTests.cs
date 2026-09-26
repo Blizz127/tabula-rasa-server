@@ -27,11 +27,11 @@ namespace Rasa.Test.Reconstruction
             // as does the cross-zone mission-area batch (MissionAreaLinks, 2026-09-17) and the 2026-09-26 batches: the ready
             // missions (EarlyReadyMissions), the Torden missions, the mission reward items, the world defect fixes, the
             // missing mission givers, the official-notes corrections, the local-teleporter graveyard rows, the single class
-            // trainers, the Liaison Logos missions, the footage creature loot and the clone credit's trade flag.
+            // trainers, the Liaison Logos missions, the footage creature loot, the clone credit's trade flag and the 2026-09-27 instance travel links and retired rows.
             foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix, "MissionAreaLinks",
                 "EarlyReadyMissions", "TordenConversationMissions", "MissionRewardItems", "WorldDefectsFix", "MissingMissionGivers",
                 "OfficialNotesCorrections", "LocalTeleporterGraveyards", "SingleClassTrainers", "LiaisonLogosMissions",
-                "CreatureLootFootage", "CloneCreditNotTradable" })
+                "CreatureLootFootage", "CloneCreditNotTradable", "InstanceTravel" })
             {
                 var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
                     SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, prefix);

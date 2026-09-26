@@ -187,6 +187,16 @@ namespace Rasa.Test.Reconstruction
                     "name_override_id", "restore_ms", "fuse_ms", "respawn_ms", "present_condition_id", "usable_condition_id"),
                 storage: Cols("map_context_id", "comment")),
 
+            // Existing table (MapLinkPreloader): a zone border or instance door. Every column is needed for the link to
+            // take anyone anywhere, so all are required; the way back from Edmund Range stands on its arrival point as a
+            // labelled analogue (InstanceTravelLinks, OD-131).
+            new TableProvenance("map_link",
+                keys: Cols("id"),
+                required: Cols("map_context_id", "pos_x", "pos_y", "pos_z", "radius", "dest_map_context_id", "dest_pos_x",
+                    "dest_pos_y", "dest_pos_z", "dest_rotation", "kind", "enabled"),
+                optional: Cols(),
+                storage: Cols("comment")),
+
             // Existing world-seed table (upstream's preloaders and the original seed): a spawn pool draws its creatures
             // at one point. The position is required - a pool cannot spawn without one, which is why the upstream
             // mission NPCs no source places keep their marker positions as labelled analogues (OD-59, WorldDefectsFix).

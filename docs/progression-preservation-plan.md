@@ -470,6 +470,22 @@ Built on 2026-09-27 because every later segment's operations need it. Account: `
   fail-on-leave missions, death expulsion and start groups. The boot camp's instances have no navmesh (recorded,
   unchanged). Owner client check (two squads in one operation, leave and disband inside) is still to do.
 
+## Instance travel status
+
+Built on 2026-09-27 as batch 2 of the instance inventory (`research/20260926-instances`). Account:
+`docs/retail-accuracy.md`, 2026-09-27 "Instance travel and death".
+
+- **Built:** doors into and out of Warnet Caverns, Ustor Yard, Sanctus Grotto and The Refuge on the client's entrance
+  markers, arriving on each instance's entrance hospital (`InstanceTravelLinks`, map_link 199250-199257, OD-130); the
+  Last Stand's two exits to the CELLAR (OD-134); the CELLAR's north end to Edmund Range 2374 per D15.7/D16, with an
+  analogue way back (OD-131). 22 instance and battlefield hospitals joined (127 on 55 maps, OD-132); Eloh Temples offers
+  only the current section's hospital (D10.5). Test maps 1991/2233/1737 and Edmund Range OLD's spawn pools removed
+  (`InstanceTravelRetiredRows`, OD-133).
+- **Open:** arrival points unobserved (`GAP-INSTANCE-ARRIVAL-POINTS`), Ustor Yard's west exit, Eloh Vale's dropship
+  entry, Edmund Range's real exit and the D16.3 relocation, start portable waypoints, 41 hospital markers
+  (`GAP-HOSPITAL-UNRESOLVED-GRAVEYARD`), emulator waypoint ids and Edmund's team gating. Owner client check (enter and
+  leave each new door, die in Warnet and the Eloh Temples) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
