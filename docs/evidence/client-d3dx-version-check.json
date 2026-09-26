@@ -1,0 +1,77 @@
+{
+  "recorded": "2026-09-22",
+  "tier": "original",
+  "scope": "Compatibility client 1.16.5.0 isolated Wine 10 launch and original-runtime remediation; no client binary modification",
+  "executable": {
+    "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+    "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "image_base": "0x400000"
+  },
+  "loaded_wine_dll": {
+    "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/prefix64/drive_c/windows/syswow64/d3dx9_33.dll",
+    "sha256": "1785f1a2b3f1dab0e5711048589870b60aa6fa9c5b91079eb20c7de6c1fd151d",
+    "machine": "PE32 x86",
+    "preferred_image_base": "0x10000000",
+    "export_rva": "0x203a0"
+  },
+  "check": {
+    "caller_va": "0x677cbc",
+    "caller_file_offset": "0x277cbc",
+    "arguments": [
+      "0x80000020",
+      "0x21"
+    ],
+    "api": "d3dx9_33.dll!D3DXCheckVersion",
+    "thunk_va": "0xa14794",
+    "import_slot_va": "0xb2bc10",
+    "predicate_va": "0x677cc8",
+    "false_branch_releases_device_va": "0x677cda",
+    "warning_reference_va": "0x677cdc",
+    "warning_string_va": "0xbf31b0",
+    "warning_string_file_offset": "0x7f31b0",
+    "warning": "Incompatible D3D Runtime Version Detected: D3D must be DX9.0b or later to run Palantir"
+  },
+  "wine_predicate": {
+    "rva_d3d_arg_comparison": "0x203a7",
+    "rva_d3dx_arg_comparison": "0x203b0",
+    "expression": "arg1 == 0x20 && arg2 == 0x21",
+    "result_for_original_client": "FALSE; 0x80000020 != 0x20",
+    "source_url": "https://github.com/wine-mirror/wine/blob/wine-10.0/dlls/d3dx9_36/main.c",
+    "source_expression": "return d3d_sdk_ver == D3D_SDK_VERSION && d3dx_sdk_ver == D3DX_SDK_VERSION;"
+  },
+  "next_check": {
+    "call_va": "0x677cf9",
+    "api": "D3DXGetDriverLevel",
+    "required_minimum": 900,
+    "comparison_va": "0x677cfe",
+    "status": "not reached after version-check FALSE"
+  },
+  "runtime_corroboration": {
+    "trace": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/capture-d3d/client.log",
+    "builtin_dll_loaded_line": 31,
+    "created_device_line": 4997,
+    "release_to_zero_line": 4998,
+    "summary": "Device creation succeeds; immediate release agrees exactly with original false-check branch."
+  },
+  "remediation_scope": "Native Microsoft D3DX9_33 removes the version-check failure and reaches account login. Server login and world playthrough remain unverified.",
+  "native_runtime_probe": {
+    "recorded": "2026-09-22",
+    "tier": "observed",
+    "official_page": "https://www.microsoft.com/en-us/download/details.aspx?id=8109",
+    "download_url": "https://download.microsoft.com/download/8/4/a/84a35bf1-dafe-4ae8-82af-ad2ae20b6b14/directx_Jun2010_redist.exe",
+    "redist_sha256": "053f76dcbb28802e23341b6a787e3b0791c0fa5c8d4d011b1044172dbf89c73b",
+    "cab": "APR2007_d3dx9_33_x86.cab",
+    "dll": "d3dx9_33.dll",
+    "dll_sha256": "c6b7b2ad7742dde5dd8d1a35fdc1c185e586e551ad9c74d3fb21759cd8ca4da8",
+    "installation": "Extracted DLL beside scratch executable; WINEDLLOVERRIDES=mscoree,mshtml=;d3dx9_33=n. No original asset or host Wine installation changed.",
+    "client_executable_sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "capture": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/capture-native-login/client-8.png",
+    "capture_sha256": "a4c0115d3c18d50b8716c38bd91e527121be53c2add7fb0cfb5b0a737d0e5b6a",
+    "result": "Original animated account login screen renders. No account entered; private network contains no server. Original-client authentication, creation and world playthrough remain unverified.",
+    "remaining_environment_limits": [
+      "No audio device exposed; DirectSound initialization fails",
+      "Client log contains TypeError: argument list must be a tuple and shader/texture warnings; neither prevented login-screen rendering",
+      "Software-rendered isolated Xvfb display, not original hardware"
+    ]
+  }
+}

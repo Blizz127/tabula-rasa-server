@@ -36,6 +36,9 @@ namespace Rasa.Auth
         public Timer Timer { get; }
 
         private PacketQueue _packetQueue = new();
+        private bool _serverListDelivered;
+        private bool _initialServerListWaitPending;
+        private const long InitialServerListWaitMs = 20000;
 
         /// <summary>
         /// Close() is reached from the socket completion threads (OnError, OnDrop, and OnReceive's
@@ -165,6 +168,8 @@ namespace Rasa.Auth
                 Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket.RemoteAddress);
 
                 Timer.Remove("timeout");
+                Timer.Remove("InitialServerListWait");
+                _initialServerListWaitPending = false;
 
                 // Written before anything else in here, so a handler still running on the other
                 // thread stops rather than carrying on against a socket that is about to go.
@@ -417,8 +422,45 @@ namespace Rasa.Auth
         private void MsgServerListExt(ServerListExtPacket packet)
         {
             State = ClientState.ServerList;
+            SendServerList(Server.GetServerListSnapshot());
+        }
 
-            SendPacket(new SendServerListExtPacket(Server.GetServerListSnapshot(), AccountEntry.LastServerId));
+        /// <summary>
+        /// A client may ask while the game server is still starting. Sending an empty
+        /// first list raises a persistent "No servers found" dialog, even if the
+        /// game registers moments later. Let the server's registration broadcast
+        /// satisfy that first request; after a bounded wait, show the real empty
+        /// result if no game server came online. Later refreshes stay immediate.
+        /// </summary>
+        public void SendServerList(System.Collections.Generic.List<ServerInfo> servers)
+        {
+            if (State != ClientState.ServerList || AccountEntry == null)
+                return;
+
+            if (servers.Count == 0 && !_serverListDelivered)
+            {
+                // Empty registration broadcasts during startup must not keep
+                // pushing the fallback deadline farther away.
+                if (_initialServerListWaitPending)
+                    return;
+
+                _initialServerListWaitPending = true;
+                Timer.Add("InitialServerListWait", InitialServerListWaitMs, false, () =>
+                {
+                    if (State != ClientState.ServerList || _serverListDelivered)
+                        return;
+
+                    _initialServerListWaitPending = false;
+                    _serverListDelivered = true;
+                    SendPacket(new SendServerListExtPacket(Server.GetServerListSnapshot(), AccountEntry.LastServerId));
+                });
+                return;
+            }
+
+            Timer.Remove("InitialServerListWait");
+            _initialServerListWaitPending = false;
+            _serverListDelivered = true;
+            SendPacket(new SendServerListExtPacket(servers, AccountEntry.LastServerId));
         }
 #pragma warning restore IDE0060 // Remove unused parameter
 

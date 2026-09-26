@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-22T21:31:52.106619+00:00",
+  "client_version": "Original compatibility artifact 1.16.5.0; exact shutdown revision unverified",
+  "scope": "SaveCharacterOptions complete non-default snapshot and intentional mission untracking persistence",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "bytes": 9719808,
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-character-option-export.dis",
+      "bytes": 9415,
+      "sha256": "1deb82f4deb9278e8ed7d316e6e180ffb93dbc7250b9f08312058794f960193c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-clientmethod.pyo",
+      "bytes": 33564,
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-clientmethod.pyo.dis",
+      "bytes": 151011,
+      "sha256": "d2bfd02e4c9f660f42b3472e85c0a90d9fc8d4e355aec848056b607eaa9bfdc4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-gameui.pyo",
+      "bytes": 58719,
+      "sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameui.pyo.dis",
+      "bytes": 244447,
+      "sha256": "c74eee9d2f991d8dd44c3ba858c36fbfd85eaae8909752d9c9310359be2cf4a3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/06-checkbox-untracked.png",
+      "bytes": 690088,
+      "sha256": "24383930ba7914e2a97a84504c84be6aaa1a9a903cacad0aa6b9424e743091b9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/07-verified-untracking-selection.png",
+      "bytes": 934689,
+      "sha256": "f1b528a7647a3af6fd5d602dcaedfaab893459ecfb07c5f7c6a5827be5b02dd6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/08-untracking-reentry-baseline.png",
+      "bytes": 769910,
+      "sha256": "9a2e3f6a6727f6403cbcbdccf363533c599c361248e4493760203b9ef2424afd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/verified-untracking-logout-state.json",
+      "bytes": 220,
+      "sha256": "5917fb5f6807f676edb71df364067490c6d82e724023a66ba6adc0d4ea28e465"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/02-tracked-loaded.png",
+      "sha256": "9cc2a64fca8476db3df8f6402b0d282ac7384c564fc2718212e7fbc945f3a732",
+      "bytes": 769898
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/03-verified-untracked.png",
+      "sha256": "d27bebac17869bd64f9267c5b94931a67d468a3b9515799651de41963942b37f",
+      "bytes": 690492
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/04-untracked-logout-selection.png",
+      "sha256": "0407b01e63289d5c048661b0488e3d3a3003e5b02d28e537df27ee2a9c398d52",
+      "bytes": 933816
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/untracked-logout-state.json",
+      "sha256": "0c953b5f3edf6b2774dff0a63187f03a8d4303250903eaec165836f89da042d5",
+      "bytes": 2895
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/client-final.log",
+      "sha256": "aac5d535441d2356c4984412584bb9b4d0ab12a99e764e3ad9e5c83262e03d75",
+      "bytes": 6461
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11/status.json",
+      "sha256": "660def73458ca49de5bd1d666491ef5011a1408dc6b31d06b198d01960f853ea",
+      "bytes": 210
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-11-binary-inputs.json",
+      "sha256": "2703e1124f3a32c74115cc5974f33bf3eee461f5c9692916a070776f09f5ae2f",
+      "bytes": 21806
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/02-fresh-untracked-loaded.png",
+      "sha256": "70f6e019adf73e715e36fff15f86326f242bb518710a94a720c22e064165da2d",
+      "bytes": 767074
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/03-fresh-journal-untracked.png",
+      "sha256": "2a533a681f0b8f589f4bcc7c74307c9ebae27adcf65af6b5fa01ccd6716bf94d",
+      "bytes": 697910
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/04-retracking-selected.png",
+      "sha256": "4b8d8f4748152aa12d8f17663da00428dca5f83b9d6e8e14ef51f78e175ca9c6",
+      "bytes": 692656
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/05-retracked-logout-selection.png",
+      "sha256": "70b14582844bb03c221111128d9d6e4d8736bb7fd761e363d96b5ebe06398b38",
+      "bytes": 933049
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/fresh-untracked-state.json",
+      "sha256": "8d32028cf0a0957b66d33a1252206d4f0ec8232bbc8d41fca0f577a78455f057",
+      "bytes": 2899
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/retracked-logout-state.json",
+      "sha256": "16c91ff07ec80fe9b9ed0a7c0e84147ab88b447bf41f107db478782044d6dca8",
+      "bytes": 2977
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/client-final.log",
+      "sha256": "eb73f41c99de40cbf31dfe662ef83c99ced8198bff976043bf0233e98487943a",
+      "bytes": 6461
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12/status.json",
+      "sha256": "ebac84d52193eeaa71d70c8a5be5f18e1c807931e2f4cc6f2f1cbf308f6a6e87",
+      "bytes": 209
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-12-binary-inputs.json",
+      "sha256": "2703e1124f3a32c74115cc5974f33bf3eee461f5c9692916a070776f09f5ae2f",
+      "bytes": 21806
+    }
+  ],
+  "runtime_baseline": {
+    "tier": "observed",
+    "scope": "Original-client emulator integration, recorded by parent; not original-live service proof",
+    "run": "playthrough-10",
+    "finding": "Checkbox was visibly unchecked and tracker empty in capture 06. Normal logout reached selection in 07, but saved option 55 remained 1,992. Reentry capture 08 restored the unwanted tracked mission.",
+    "limitation": "The exact incoming save packet payload was not separately retained in this baseline; the original sender establishes omission semantics."
+  },
+  "original_contract": [
+    {
+      "source": "gameui.SaveMissionTrackingData",
+      "location": "source lines 1809\u20131818, offsets 0\u2013113",
+      "finding": "Filters saved tracking, then sets all 30 native integer options, writing zero for unused slots."
+    },
+    {
+      "source": "clientmethod.SaveCharacterOptions",
+      "location": "source line 620 offsets 74\u201383; line 622 offsets 87\u2013105; lines 629\u2013633 offsets 118\u2013163",
+      "finding": "Builds a full list excluding options equal to their defaults, sorts it, compares the whole list with the prior cache, and sends the changed snapshot even when empty."
+    },
+    {
+      "source": "Native Export binding",
+      "location": "Export literal 0xbd8038; binding 0x493d73\u201378 to 0x495730; virtual export observer dispatch 0x49df50, slot +0x18",
+      "finding": "Options export calls observer Export. OptionObserverSerialize@TRasa vtable 0xbe0674 has slot +0x18 pointing to 0x5360c0; RTTI locator 0xc36e78, type descriptor 0xd2479c."
+    },
+    {
+      "source": "Native character option export scope",
+      "location": "0x536137 loads Character. literal at 0xbe051c; 0x53617c calls 0x561a60; tree walk 0x4efd40 recursively visits child nodes at 0x4efd60\u20136e",
+      "finding": "Enumerates the full Character. option subtree rather than a changed-options list."
+    },
+    {
+      "source": "Native exportable flag and Python callback",
+      "location": "0x561ad7\u2013aed tests option+0x54 and nonempty name; 0x561b43 calls Python SaveCharacterOptions with the collected list. AddOptionUnicode handler 0x494a60 calls 0x4941f0, whose 0x494229\u201330 stores its boolean argument in +0x54.",
+      "finding": "The filter is the exportable/persistent flag supplied when the option is registered. LoadDefaultCharacterOptions passes True for each character option (line 600 offsets 52\u201367). It is not a dirty-value filter."
+    }
+  ],
+  "implementation": {
+    "status": "Implemented; 179 focused tests pass; original-client runs11/12 verify intentional untracking across fresh reconnect and normal re-tracking save",
+    "files": [
+      "src/Rasa.Game/Managers/ManifestationManager.cs:SaveCharacterOptions",
+      "src/Rasa.DBL/Repositories/Char/CharacterOption/CharacterOptionRepository.cs:Replace",
+      "src/Rasa.DBL/Repositories/Char/CharacterOption/ICharacterOptionRepository.cs"
+    ],
+    "rule": "Treat the packet as the entire non-default snapshot. Update supplied rows, delete omitted rows for this character, and insert new rows in one SaveChanges call. An empty snapshot clears this character options. Publish an independent replacement cache only after successful persistence.",
+    "preserved": "Raw option text including canonical grouped IDs, other characters, and mission progress. No reset value is invented; absence lets the original client load its registered default.",
+    "prior_defect": "Empty saves returned without writing; nonempty saves only merged rows, retaining omitted default-valued options. Cache was changed before the database committed.",
+    "duplicate_ids": "The last supplied value wins before database staging, avoiding duplicate tracked row objects."
+  },
+  "tests": {
+    "status": "All four snapshot cases pass within 179/179 focused and 1281/1281 full tests; no tests skipped.",
+    "file": "src/Rasa.Test/MissionLogTests.OptionsSnapshot.cs",
+    "cases": [
+      "EmptyOriginalOptionSnapshotClearsDefaultsAndKeepsOtherCharacters",
+      "NonemptyOriginalSnapshotRemovesOmittedTrackingAndOtherDefaultOptions",
+      "OptionSnapshotRetainsRawGroupedTextAndPublishesAnIndependentCache",
+      "OptionSnapshotSaveFailureRollsBackRowsAndDoesNotPublishCache"
+    ],
+    "failure_injection": "SQLite BEFORE INSERT trigger aborts a mixed delete/update/insert save, asserting all old rows and the original cache remain."
+  },
+  "limitations": [
+    "Original-client emulator integration is not original-live server fidelity certification.",
+    "The existing startup tuple exception and actor visual grounding remain unrelated open gaps.",
+    "The earlier passing suite omitted full non-default snapshot semantics; its run10 failure is retained as baseline."
+  ],
+  "runtime_verification": {
+    "provenance_tier": "observed",
+    "run11": "Verified unchecked journal and empty tracker; normal logout removes option55 and leaves empty character-option snapshot.",
+    "run12": "Fresh original-client process retains empty tracker and unchecked journal before any tracking input. Rechecking then normal logout stores native grouped1,992.",
+    "mission_preservation": "All character_mission and character_mission_objective rows exactly match run10 pre-input snapshot.",
+    "binary_inputs": "playthrough-11-binary-inputs.json and identical playthrough-12-binary-inputs.json",
+    "client_errors": "Existing startup TypeError(argument list must be a tuple) remains; no new mission/admission error observed.",
+    "production_modified": false
+  },
+  "final_verification": {
+    "tests_passed": 1281,
+    "tests_skipped": 0,
+    "minutes": 6.8934,
+    "targeted_passed": 179,
+    "targeted_seconds": 50.8846,
+    "source_entries_matched": 2061,
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-full.log",
+        "sha256": "1ab90e5697f96129bfc6672ea71b3725119d754cb1fce2fdb5eccdc211c7ec8d",
+        "bytes": 105608
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-targeted.log",
+        "sha256": "49287df92cbec187b4287b4fd0aaa6193225bb91b54c665f54aee1c88e541602",
+        "bytes": 18440
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-option-snapshot.json",
+        "sha256": "8c15a57d45bb364031e5672b6c5a9a9a6a890f88a1cedb4d43c63550f5026ed4",
+        "bytes": 312390
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-full.trx",
+        "sha256": "b537cd2513af3ec1993b6329e7e9307969c0ea67876194cbad639b98635ddd40",
+        "bytes": 1408531
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-targeted.trx",
+        "sha256": "846272c80354fc3f799264a6e5dbbfbd1a7c49af9c341929c1780dcde073ed54",
+        "bytes": 228364
+      }
+    ]
+  }
+}

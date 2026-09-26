@@ -225,8 +225,6 @@ namespace Rasa.Game
 
             Loop.Start();
 
-            SetupCommunicator();
-
             try
             {
                 ListenerSocket = new LengthedSocket(SizeType.Dword, false);
@@ -246,10 +244,6 @@ namespace Rasa.Game
             LoginManager.OnLogin += OnLogin;
 
             QueueManager = new QueueManager(this);
-
-            ListenerSocket.AcceptAsync();
-
-            Logger.WriteLog(LogType.Network, "*** Listening for clients on port {0}", Config.GameConfig.Port);
 
             Timer.Add("SessionExpire", 10000, true, () =>
             {
@@ -305,6 +299,13 @@ namespace Rasa.Game
             MapMarkerManager.Instance.MapMarkerInit();
             RecipeManager.Instance.RecipeInit();
             ManifestationManager.Instance.LoadSkillClasses();
+
+            // Auth must not redirect a client while the content catalog is still
+            // loading. A fast character switch would otherwise enter the shared
+            // context before its per-character setting and placements existed.
+            ListenerSocket.AcceptAsync();
+            Logger.WriteLog(LogType.Network, "*** Listening for clients on port {0}", Config.GameConfig.Port);
+            SetupCommunicator();
 
             return true;
         }
@@ -402,55 +403,69 @@ namespace Rasa.Game
 
         public void ConnectCommunicator()
         {
-            if (AuthCommunicator?.Connected ?? false)
-                AuthCommunicator?.Close();
+            AuthCommunicator?.Close();
 
+            LengthedSocket communicator = null;
             try
             {
-                AuthCommunicator = new LengthedSocket(SizeType.Word);
-                AuthCommunicator.OnConnect += OnCommunicatorConnect;
-                AuthCommunicator.OnError += OnCommunicatorError;
-                AuthCommunicator.ConnectAsync(NetworkAddress.ResolveEndPoint(Config.CommunicatorConfig.Address, Config.CommunicatorConfig.Port));
+                communicator = new LengthedSocket(SizeType.Word);
+                AuthCommunicator = communicator;
+                communicator.OnConnect += args => OnCommunicatorConnect(communicator, args);
+                communicator.OnError += args => OnCommunicatorError(communicator, args);
+                communicator.ConnectAsync(NetworkAddress.ResolveEndPoint(Config.CommunicatorConfig.Address, Config.CommunicatorConfig.Port));
             }
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, "Unable to create or start listening on the Auth server socket! Retrying soon... Exception:");
                 Logger.WriteLog(LogType.Error, e);
+                if (communicator != null)
+                    OnCommunicatorError(communicator, null);
             }
 
             Logger.WriteLog(LogType.Network, $"*** Connecting to auth server! Address: {Config.CommunicatorConfig.Address}:{Config.CommunicatorConfig.Port}");
         }
 
-        private void OnCommunicatorError(SocketAsyncEventArgs args)
+        private void OnCommunicatorError(LengthedSocket communicator, SocketAsyncEventArgs args)
         {
+            communicator.Close();
+            if (!ReferenceEquals(AuthCommunicator, communicator))
+                return;
+
+            AuthCommunicator = null;
             Timer.Add("CommReconnect", 10000, false, () =>
             {
-                if (!AuthCommunicator?.Connected ?? true)
+                if (AuthCommunicator == null)
                     ConnectCommunicator();
             });
 
             Logger.WriteLog(LogType.Error, "Could not connect to the Auth server! Trying again in a few seconds...");
         }
 
-        private void OnCommunicatorConnect(SocketAsyncEventArgs args)
+        private void OnCommunicatorConnect(LengthedSocket communicator, SocketAsyncEventArgs args)
         {
+            if (!ReferenceEquals(AuthCommunicator, communicator))
+            {
+                communicator.Close();
+                return;
+            }
+
             if (args.SocketError != SocketError.Success)
             {
-                OnCommunicatorError(args);
+                OnCommunicatorError(communicator, args);
                 return;
             }
 
             Logger.WriteLog(LogType.Network, "*** Connected to the Auth Server!");
 
-            AuthCommunicator.OnReceive += OnCommunicatorReceive;
-            AuthCommunicator.Send(new LoginRequestPacket
+            communicator.OnReceive += OnCommunicatorReceive;
+            communicator.Send(new LoginRequestPacket
             {
                 ServerId = Config.ServerInfoConfig.Id,
                 Password = Config.ServerInfoConfig.Password,
                 PublicAddress = PublicAddress
             });
 
-            AuthCommunicator.ReceiveAsync();
+            communicator.ReceiveAsync();
         }
 
         /// <summary>

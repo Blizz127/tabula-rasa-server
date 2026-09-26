@@ -181,7 +181,7 @@ namespace Rasa.Managers
         // Actors
         public Actor GetActor(ulong entityId)
         {
-            return Actors[entityId];
+            return Actors.TryGetValue(entityId, out var actor) ? actor : null;
         }
 
         public void RegisterActor(ulong entityId, Actor actor)

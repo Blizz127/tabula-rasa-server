@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rasa.Data;
 using Rasa.Game;
@@ -67,6 +69,41 @@ namespace Rasa.Test
             Assert.AreSame(_maps.MapChannelArray[1220], wilderness);
             Assert.AreEqual(1u, wilderness.InstanceId);
             Assert.IsNull(_maps.ChannelForEntry(101, 4242));
+        }
+
+        [TestMethod]
+        public void ChannelSnapshotsRemainValidWhilePrivateInstancesAreCreatedAndDestroyed()
+        {
+            _maps.PopulateInstance = _ => { };
+            using var start = new Barrier(2);
+            var snapshots = 0;
+            var writer = Task.Run(() =>
+            {
+                start.SignalAndWait();
+                for (uint characterId = 1; characterId <= 500; characterId++)
+                {
+                    var instance = _maps.ChannelForEntry(characterId, 1985);
+                    _maps.ReleaseInstanceIfEmpty(instance);
+                    _maps.DestroyQueuedInstances();
+                    Thread.Yield();
+                }
+            });
+            var reader = Task.Run(() =>
+            {
+                start.SignalAndWait();
+                do
+                {
+                    var channels = _maps.Channels();
+                    Interlocked.Increment(ref snapshots);
+                    Assert.AreSame(_maps.MapChannelArray[1985], channels[0]);
+                    Assert.AreSame(_maps.MapChannelArray[1220], channels[1]);
+                    Assert.IsTrue(channels.Count <= 3);
+                } while (!writer.IsCompleted);
+            });
+
+            Task.WaitAll(writer, reader);
+            Assert.IsTrue(snapshots > 0, "the reader must take a registry snapshot");
+            Assert.AreEqual(2, _maps.Channels().Count);
         }
 
         [TestMethod]

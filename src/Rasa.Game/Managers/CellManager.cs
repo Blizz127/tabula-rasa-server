@@ -185,7 +185,7 @@ namespace Rasa.Managers
 
             }
 
-            ManifestationManager.Instance.CellIntroduceClientToSefl(client);
+            ManifestationManager.Instance.InitializePlayerControl(client);
             ManifestationManager.Instance.CellIntroduceClientToPlayers(client, ListOfClients);
             ManifestationManager.Instance.CellIntroducePlayersToClient(client, ListOfClients);
 

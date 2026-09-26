@@ -47,6 +47,15 @@ namespace Rasa.Hosting
 
         private async Task ProcessCommands(CancellationToken stoppingToken)
         {
+            // Servers also run with redirected stdin (for example under a service manager).
+            // Console.KeyAvailable throws in that case and tears down the host after the
+            // listeners have started, leaving client connections with disposed services.
+            if (Console.IsInputRedirected)
+            {
+                while (_rasaServer.Running && !stoppingToken.IsCancellationRequested)
+                    await Task.Delay(250, stoppingToken);
+                return;
+            }
 
             while (_rasaServer.Running && !stoppingToken.IsCancellationRequested)
             {

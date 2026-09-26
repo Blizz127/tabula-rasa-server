@@ -636,10 +636,13 @@ namespace Rasa.Managers
         #region Logos
         internal void LogosRecovery(MapChannel mapChannel, ActionData action)
         {
-            foreach (var obj in mapChannel.DynamicObjects)
+            // The player may have more than one pending usable trigger. Complete only the Logos
+            // entity that started this action, so another shrine or usable cannot consume it.
+            foreach (var obj in mapChannel.DynamicObjects.OfType<Logos>()
+                         .Where(logos => logos.EntityId == action.SourceId))
             {
-                foreach (var client in obj.TriggeredByPlayers)
-                    if (client.Player == action.Actor)
+                foreach (var client in obj.TriggeredByPlayers.ToList())
+                    if (client?.Player == action.Actor)
                     {
                         if (action.IsInrerrupted)
                         {
@@ -655,16 +658,7 @@ namespace Rasa.Managers
                         UnlockAfterUse(obj, action.Actor.EntityId, interrupted: false);
                         CellManager.Instance.CellCallMethod(obj, new UsableInfoPacket(true, obj.StateId, 0, 10000, 0));
 
-                        var logosId = 0u;
-                        foreach (var entry in mapChannel.DynamicObjects)
-                        {
-                            // Other usable objects share this list; only a logos stone matches.
-                            if (entry is Logos logos && action.SourceId == logos.EntityId)
-                            {
-                                logosId = logos.Id;
-                                break;
-                            }
-                        }
+                        var logosId = obj.Id;
 
                         var haveLogos = false;
                         foreach (var logos in client.Player.Logos)
@@ -682,8 +676,7 @@ namespace Rasa.Managers
                         // Activating the shrine is what mission objectives bound to it wait for (1069's
                         // "Locate the Logos shrine" and the Logos missions). The shrine is a Logos dynamic
                         // object, so the objective binds to the logos row id rather than a placement.
-                        if (logosId != 0)
-                            MissionManager.Instance.Content.CompleteLogosBoundObjectives(client, logosId);
+                        MissionManager.Instance.Content.CompleteLogosBoundObjectives(client, logosId);
 
                         break;
                     }

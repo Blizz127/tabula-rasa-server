@@ -19,6 +19,7 @@ namespace Rasa.Managers
     {
         private static MapChannelManager _instance;
         private static readonly object InstanceLock = new object();
+        private readonly object _channelRegistryLock = new object();
         private readonly int MapChannel_PlayerQueue = 32;
         public readonly Dictionary<uint, MapChannel> MapChannelArray = new Dictionary<uint, MapChannel>();           // list of loaded maps
         public readonly Timer Timer = new();
@@ -101,7 +102,8 @@ namespace Rasa.Managers
 
         public MapChannel FindByContextId(uint contextId)
         {
-            return MapChannelArray[contextId];
+            lock (_channelRegistryLock)
+                return MapChannelArray[contextId];
         }
 
         #region Private instances
@@ -121,8 +123,12 @@ namespace Rasa.Managers
         public Action<MapChannel> PopulateInstance { get; set; } = channel =>
             ContentMaterializer.Materialize(channel, MissionContentManager.Instance.Content);
 
-        /// <summary>Every live channel, shared contexts first; a snapshot, safe to change the registry while iterating.</summary>
-        public List<MapChannel> Channels() => MapChannelArray.Values.Concat(InstanceChannels.Values).ToList();
+        /// <summary>Every live channel, shared contexts first; a snapshot safe across instance creation and removal.</summary>
+        public List<MapChannel> Channels()
+        {
+            lock (_channelRegistryLock)
+                return MapChannelArray.Values.Concat(InstanceChannels.Values).ToList();
+        }
 
         /// <summary>The channel a creature is in, falling back to its context for creatures never added to a channel.</summary>
         public static MapChannel ChannelOf(Creature creature)
@@ -152,41 +158,47 @@ namespace Rasa.Managers
         /// </summary>
         public MapChannel ChannelForEntry(uint characterId, uint contextId)
         {
-            if (!MapChannelArray.TryGetValue(contextId, out var shared))
-                return null;
-
-            if (!IsPerCharacterContext(contextId))
-                return shared;
-
-            if (_characterInstances.TryGetValue(characterId, out var previous))
+            lock (_channelRegistryLock)
             {
-                _characterInstances.Remove(characterId);
-                ReleaseInstanceIfEmpty(previous);
+                if (!MapChannelArray.TryGetValue(contextId, out var shared))
+                    return null;
+
+                if (!IsPerCharacterContext(contextId))
+                    return shared;
+
+                if (_characterInstances.TryGetValue(characterId, out var previous))
+                {
+                    _characterInstances.Remove(characterId);
+                    ReleaseInstanceIfEmpty(previous);
+                }
+
+                var channel = new MapChannel
+                {
+                    MapInfo = shared.MapInfo,
+                    InstanceId = ++_lastInstanceId,
+                    OwnerCharacterId = characterId,
+                    PlayerLimit = 1,
+                    ClientList = new List<Client>()
+                };
+
+                InstanceChannels.Add(channel.InstanceId, channel);
+                _characterInstances[characterId] = channel;
+                PopulateInstance(channel);
+
+                Logger.WriteLog(LogType.Debug, $"Created instance {channel.InstanceId} of context {contextId} for character {characterId}");
+                return channel;
             }
-
-            var channel = new MapChannel
-            {
-                MapInfo = shared.MapInfo,
-                InstanceId = ++_lastInstanceId,
-                OwnerCharacterId = characterId,
-                PlayerLimit = 1,
-                ClientList = new List<Client>()
-            };
-
-            InstanceChannels.Add(channel.InstanceId, channel);
-            _characterInstances[characterId] = channel;
-            PopulateInstance(channel);
-
-            Logger.WriteLog(LogType.Debug, $"Created instance {channel.InstanceId} of context {contextId} for character {characterId}");
-            return channel;
         }
 
         /// <summary>Queues a private instance with nobody in or entering it for destruction after the tick.</summary>
         public void ReleaseInstanceIfEmpty(MapChannel channel)
         {
-            if (channel?.IsPrivateInstance == true && channel.ClientList.Count == 0 && channel.QueuedClients.Count == 0 &&
-                !_instancesToDestroy.Contains(channel))
-                _instancesToDestroy.Add(channel);
+            lock (_channelRegistryLock)
+            {
+                if (channel?.IsPrivateInstance == true && channel.ClientList.Count == 0 && channel.QueuedClients.Count == 0 &&
+                    !_instancesToDestroy.Contains(channel))
+                    _instancesToDestroy.Add(channel);
+            }
         }
 
         /// <summary>
@@ -196,49 +208,53 @@ namespace Rasa.Managers
         /// </summary>
         public void DestroyQueuedInstances()
         {
-            if (_instancesToDestroy.Count == 0)
-                return;
-
-            foreach (var channel in _instancesToDestroy.ToList())
+            lock (_channelRegistryLock)
             {
-                if (channel.ClientList.Count > 0 || channel.QueuedClients.Count > 0)
-                    continue;
+                if (_instancesToDestroy.Count == 0)
+                    return;
 
-                foreach (var cell in channel.MapCellInfo.Cells.Values)
-                    foreach (var creature in cell.CreatureList.ToList())
-                        CellManager.Instance.RemoveCreatureFromWorld(channel, creature);
-
-                foreach (var dynamicObject in channel.DynamicObjects.ToList())
+                foreach (var channel in _instancesToDestroy.ToList())
                 {
-                    EntityManager.Instance.UnregisterEntity(dynamicObject.EntityId);
-                    EntityManager.Instance.UnregisterDynamicObject(dynamicObject.EntityId);
-                    EntityManager.Instance.FreeEntity(dynamicObject.EntityId);
+                    if (channel.ClientList.Count > 0 || channel.QueuedClients.Count > 0)
+                        continue;
+
+                    foreach (var cell in channel.MapCellInfo.Cells.Values)
+                        foreach (var creature in cell.CreatureList.ToList())
+                            CellManager.Instance.RemoveCreatureFromWorld(channel, creature);
+
+                    foreach (var dynamicObject in channel.DynamicObjects.ToList())
+                    {
+                        EntityManager.Instance.UnregisterEntity(dynamicObject.EntityId);
+                        EntityManager.Instance.UnregisterDynamicObject(dynamicObject.EntityId);
+                        EntityManager.Instance.FreeEntity(dynamicObject.EntityId);
+                    }
+
+                    foreach (var loot in channel.LootDispensers.Keys.ToList())
+                        EntityManager.Instance.FreeEntity(loot);
+
+                    channel.DynamicObjects.Clear();
+                    channel.ContentUsables.Clear();
+                    channel.LootDispensers.Clear();
+                    channel.MapCellInfo.Cells.Clear();
+
+                    InstanceChannels.Remove(channel.InstanceId);
+                    if (channel.OwnerCharacterId is uint owner &&
+                        _characterInstances.TryGetValue(owner, out var current) && ReferenceEquals(current, channel))
+                        _characterInstances.Remove(owner);
+
+                    Logger.WriteLog(LogType.Debug, $"Destroyed instance {channel.InstanceId} of context {channel.MapInfo?.MapContextId}");
                 }
 
-                foreach (var loot in channel.LootDispensers.Keys.ToList())
-                    EntityManager.Instance.FreeEntity(loot);
-
-                channel.DynamicObjects.Clear();
-                channel.ContentUsables.Clear();
-                channel.LootDispensers.Clear();
-                channel.MapCellInfo.Cells.Clear();
-
-                InstanceChannels.Remove(channel.InstanceId);
-                if (channel.OwnerCharacterId is uint owner &&
-                    _characterInstances.TryGetValue(owner, out var current) && ReferenceEquals(current, channel))
-                    _characterInstances.Remove(owner);
-
-                Logger.WriteLog(LogType.Debug, $"Destroyed instance {channel.InstanceId} of context {channel.MapInfo?.MapContextId}");
+                _instancesToDestroy.Clear();
             }
-
-            _instancesToDestroy.Clear();
         }
 
         #endregion
 
         public bool TryFindByContextId(uint contextId, out MapChannel mapChannel)
         {
-            return MapChannelArray.TryGetValue(contextId, out mapChannel);
+            lock (_channelRegistryLock)
+                return MapChannelArray.TryGetValue(contextId, out mapChannel);
         }
 
         public Dictionary<int, AbilityDrawerData> GetPlayerAbilities(uint characterId)
@@ -291,7 +307,8 @@ namespace Rasa.Managers
                     ClientList = new List<Client>()
                 };
                 // register mapChannel
-                MapChannelArray.Add(mapInfo.Id, newMapChannel);
+                lock (_channelRegistryLock)
+                    MapChannelArray.Add(mapInfo.Id, newMapChannel);
             }
             Logger.WriteLog(LogType.Initialize, "");
             Logger.WriteLog(LogType.Initialize, "Server ready!");

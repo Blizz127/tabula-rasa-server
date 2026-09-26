@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Tailscale auth path after owner reported cannot connect",
+  "provenance_tier": "observed",
+  "confidence": "High for the tested VPS, Mac server and Alienware tailnet paths; the owner's actual launch command and client attempt remain unobserved.",
+  "setup": "The VPS Tailscale IP was 100.104.53.1. The recovered 1.16.5.0 client under Wine/Xvfb on the VPS used /AuthServer=100.104.53.1:2116 and the existing test account. Independent TCP greeting checks originated from macserver (100.72.127.15) and alienware-bazzite (100.111.220.11) over Tailscale to the same VPS address and port.",
+  "observations": [
+    "Both remote tailnet peers connected to TCP 2116 and received an 11-byte Tabula Rasa auth greeting. They also opened TCP connections to the public game queue (8001) and game port (8102) used after auth redirect; no remote original-client login was performed from either peer.",
+    "At 23:08:52 UTC the recovered client sent Login, ServerListExt and AboutToPlay through the VPS Tailscale address; auth redirected the test account to game server 234, and game accepted the client connection. The 35-second screenshot shows Character Select with empty test slots.",
+    "At the inspection time, macserver had no Tabula Rasa or Banshee Realm client process. The Alienware Bazzite peer had a Banshee Realm launcher process but no tabula_rasa.exe process. Matt's MacBook was offline in Tailscale status. These are point-in-time process observations, not evidence of which device the owner attempted to use earlier.",
+    "The Alienware user journal records a Banshee Realm launch through GE-Proton11-7 at 18:07:34 local time, naming /home/blizz/Games/tabula-rasa-1.16.5.0/tabula_rasa.exe. The auth log shows connections from that site's public IP at 23:07 UTC that closed without a Login opcode. This supports, but does not prove, that this is the reported failed attempt.",
+    "The Alienware executable is the same size as the recovered client but differs at 13 bytes: one earlier patched data byte and 12 bytes of branch changes added after its pre-autoconfig-skip backup. That exact patched executable, bind-mounted over the isolated recovered client on the VPS, sent Login/ServerListExt/AboutToPlay through 100.104.53.1:2116 and reached Character Select. The patch alone did not reproduce the failure; the Alienware runtime, launch arguments or device state remain candidates.",
+    "A separate fresh-prefix Wine 8 test on Alienware used Xvfb, the installed patched client and 100.104.53.1:2116. It exited code 5 before any auth connection; its 40-second capture was black and stdout only recorded prefix creation. This does not isolate GE Proton as the cause, because the fresh Wine environment also failed before login. The disposable 414 MB prefix was deleted after its logs and screenshot were copied.",
+    "The Alienware Banshee Realm settings file still had an empty tabulaRasa object; its checked-in launch plan defaults to tabularasa.bansheerealm.com:2116 when no override is set. This contradicts the presumed Tailscale target for the observed launcher attempt. After verifying the file hash, the setting was changed to serverHost 100.104.53.1 and authPort 2116 with a same-directory backup. The active launcher process was not restarted, so no post-change owner login has been verified.",
+    "The owner's precise source device, launch target and error text remain unknown.",
+    "At 23:49-23:53 UTC, macserver (Linux, tailnet 100.72.127.15) was reachable but had no Tabula Rasa, Wine, Proton or Banshee Realm client process; its installed 1.16.5.0 game executable had SHA-256 19d60e3845e202e09bdabd425a07b3d759e22efa41f0934fb133202a33b2f038. The bundled launchTabulaRasa.bat specified /AuthServer=localhost:2106. Its Banshee Realm integration had only the installRoot path. macserver opened VPS tailnet TCP 2116, 8001 and 8102 successfully.",
+    "In the same interval, matts-macbook (macOS, 100.76.146.20) was offline on Tailscale, last seen about 11 minutes earlier, and could not be inspected. Alienware had the Banshee Realm launcher open but no Tabula Rasa client process. Its integrations.tabulaRasa setting still contained 100.104.53.1:2116; an earlier top-level lookup was incorrect. The last 15 minutes of auth logs showed no external client login after excluding local isolated-test traffic.",
+    "At 2026-09-24 00:10:33 UTC, production Auth accepted a login from 107.135.99.150. The auth account table shows account id 4 last_login 00:10:33.7806107 and last_server_id 234. Auth received ServerListExt at 00:10:33.894, then the client disconnected at 00:10:34.016 without AboutToPlay. This is later than the isolated startup-readiness-23 client (which reached its own local Auth at 19:08 local/00:08 UTC); it is a distinct external attempt. The source device remains unproven. The macOS tailnet peer was offline when checked at 00:12 UTC, last seen roughly two minutes earlier; Alienware launcher remained running with no Tabula Rasa client process and its game log last changed at 18:27 local. The near-coincident MacBook tailnet activity makes it a candidate, not a confirmed attribution."
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/tailnet-peer-probes.txt",
+      "sha256": "f358623bc8de5dbd2791f593c6cd9884660c27a46294199d0a80e32faeb0e4dd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/tailnet-game-port-probes.txt",
+      "sha256": "c4bffbed54467ed7246d916a00f63fa1c318bdb0ee4e48f7e3b0ecf8fba06404"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-proton-1807.log",
+      "sha256": "7b4d17244e5c665c8efd9e16470467ee9a44a11fca2c7130fc54446dbf17b937"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-tabula_rasa.log",
+      "sha256": "8bd5c304ac5a882edd0324a1eb304d3682516a2037af35bd2c24d6400f2fcbad"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-tabula_rasa.exe",
+      "sha256": "e52d89bf39e4c631ddd3904196a2de0d9b209c3dac13836bcf575db7d2831dd8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-tabula_rasa.exe.bak-pre-autoconfig-skip",
+      "sha256": "190d2f690cd1031ef87ad48b17481a3fcf9d3e332c22d4a2b08970403a233026"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-wine-client.log",
+      "sha256": "e6f368bd37b5adf766c7de88f84d8f3d09fae4117f1b196975c9105883c78751"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-wine-screen-40s.png",
+      "sha256": "77f5aaa8cb211d336ff1fa899404e2ff580601f95289211aa25040bbbf65b12b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/alienware-launcher-setting-check.txt",
+      "sha256": "67ca68fe0cadea8086ce069d0d028ceeb5b58225da385468633eef3c2fa456be"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-alienware-binary-20260923/auth.log",
+      "sha256": "d7ebdd1102fbd3b700b75f49251ea930537841a20f16ae6abcaf21fee3e49126"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-alienware-binary-20260923/login-after-35s.png",
+      "sha256": "40e1bd7d4342fc5442db64c751101ebddd4fea9eed8a493a7c161d2f2b01b2a3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/auth.log",
+      "sha256": "4d71f83c02497add6eeefdd558eda331729af1c3f9b1c71765d4941b9f31f7a5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/game.log",
+      "sha256": "106a5f78e2bf09bfd5436fa8917e497a98e9bc08bd0539dafa4c497e75cd9ff8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/login-after-35s.png",
+      "sha256": "8e96a30c2be597d072e692db6980cd6e100832371a8d62433f5b001bbb6beb61"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-tailscale-20260923/account4-0010-auth.selected.log",
+      "sha256": "24fa690b9259ca982ef211d23248b39dcd6ae19f9555062b849e6ce4fbec2bea"
+    }
+  ],
+  "configuration_change": "Alienware /home/blizz/.config/BansheeRealm/settings.json changed from SHA-256 c82a6e536c463c590f8a1ff35882e761a4763a4bfaa6c3a11162c65b3f3652ce to cb5ca981816484c79e0d9937c5c76836d5b169479d003a82415600705376cdb1; backup /home/blizz/.config/BansheeRealm/settings.json.before-tr-tailscale-20260923 retains the exact prior bytes. The app was left running and may need restart to reload. macserver /home/blizz/.config/BansheeRealm/settings.json was backed up to settings.json.before-tr-tailscale-20260923 and integrations.tabulaRasa gained serverHost 100.104.53.1, authPort 2116 while retaining installRoot. Its SHA-256 changed cf1ce4da6b6bd389c43653bbab4c368bc648d142ffa137091bc207b7c3b5e12d to f79191ac0a52f474e66bd1475825769df5488631240a4e925ced875d75ae8c6d. No launcher process was running there, and no owner client attempt was made.",
+  "next_diagnostic": "The 00:10 UTC account-4 attempt passed Login and ServerListExt but did not send AboutToPlay. Obtain the exact client error/screenshot or inspect the macOS client log when the MacBook is online. Do not infer an auth or game port failure from this trace; check whether the client exits on server-list presentation or user selection."
+}

@@ -1,0 +1,740 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Mission tracker empty after run 07 reconnect, while journal and persisted mission remain intact",
+  "evidence_kind": "Original-client emulator integration observation and static original-client bytecode analysis",
+  "client_version": "Recovered compatibility artifact 1.16.5.0; exact shutdown revision unverified",
+  "source_changes": true,
+  "builds_run": true,
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/02-recruit-boots-tooltip.png",
+      "sha256": "1e5f9c9bbd3add0b26204b1ce67afa404dfb620fdb04e5908abf9a75e277f3e1",
+      "bytes": 639625
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/06-mission-journal-reconnect.png",
+      "sha256": "41d346723786243dd0a48196fb697163faffb3cd634245de50f0fc47c201263c",
+      "bytes": 649308
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/07-tracking-selected.png",
+      "sha256": "f85575922a2b3924ae099a860a5cadedb6211e263b19fc5fdda91cfd1749ccd7",
+      "bytes": 643567
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-07/reconnect-mission-state.json",
+      "sha256": "aa96116bd39caeeecd773eb0c08946e5a376cc6c894b222c228fc7c08514732f",
+      "bytes": 2520
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-gameui.pyo",
+      "sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0",
+      "bytes": 58719
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameui.pyo.dis",
+      "sha256": "c74eee9d2f991d8dd44c3ba858c36fbfd85eaae8909752d9c9310359be2cf4a3",
+      "bytes": 244447
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-missionlog.pyo",
+      "sha256": "5e43f82a7bab34c15971a0b74dca9585d5b878abcb332e4eeef1540760aeb375",
+      "bytes": 21628
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-missionlog.pyo.dis",
+      "sha256": "e3abd28476c9795f70e674083be7d7a5ae29a21ee1219b36df6c02d6a39c6924",
+      "bytes": 100682
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-currentmissionswindow.pyo",
+      "sha256": "f86095f9bf005c4d222d4ac14f090197ec32a8e8d920cb6707eb85b048efa111",
+      "bytes": 30218
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-currentmissionswindow.pyo.dis",
+      "sha256": "2bdf629ef93c7a410cc2aacd254a814cd12d4a92d89460ebd269e78e0c4fe910",
+      "bytes": 165671
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/ui-flow/client-clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "bytes": 33564
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/ui-flow/client-clientmethod.dis",
+      "sha256": "f81430b848ee5e4ce9c8edfe3b038f9dd2c7b0e765e529ab21add1f58209f30c",
+      "bytes": 161267
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-clientmethod.pyo",
+      "sha256": "61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78",
+      "bytes": 33564
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-clientmethod.pyo.dis",
+      "sha256": "d2bfd02e4c9f660f42b3472e85c0a90d9fc8d4e355aec848056b607eaa9bfdc4",
+      "bytes": 151011
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-entitymanager.pyo",
+      "sha256": "a2e659e4e36c91826638467b9a0ca96439a24e4cf1683d98c500bfe2e74f086f",
+      "bytes": 25062
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-entitymanager.pyo.dis",
+      "sha256": "0b16683a751f0d4186e2bb61001a7828f8c738250ea195914369e66fe0a6aa6b",
+      "bytes": 103638
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-physicalentity.pyo",
+      "sha256": "e897cbe3e96a7a238feacc6949811be96721dd036c581942eb7824252db75982",
+      "bytes": 27979
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-physicalentity.pyo.dis",
+      "sha256": "e3098cd07b6264a5960496b88849ba084a7edbcdb3fa5272237cbe10ee941a00",
+      "bytes": 119240
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-world.pyo",
+      "sha256": "d1ffdc4bf3dcce98094ef59a3b25162a1eca625599eba8bbd0bb046ad9cddcdb",
+      "bytes": 10834
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-world.pyo.dis",
+      "sha256": "99f1898f277e1405acaa5654f8c3a53a7bdafc1d23ea7221abe92e5cbaa1a4b6",
+      "bytes": 39898
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-uieventmanager.pyo",
+      "sha256": "b0d9801eaf96963eb57469b6863749fd610a4c04acabe6f94b88d0c7847f0418",
+      "bytes": 17436
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-uieventmanager.pyo.dis",
+      "sha256": "07933f4e848a079c0bc547e3ce8cdf45a9a9a32693401a267d7380e14499e1c2",
+      "bytes": 62347
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-missionlogwindow.pyo",
+      "sha256": "2c696b06d4c5ca4adc14f5efe2e37d747090599f968117048648572c7dedac1c",
+      "bytes": 4557
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-missionlogwindow.pyo.dis",
+      "sha256": "3299639d4aa6a7ed8d8413a102549701357f81a6ecb58b34c3001ef16d5257f2",
+      "bytes": 19023
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-missiontracker.pyo",
+      "sha256": "8b2749eec701959bdd4fa58f083fdeed864a601af81e7903d5df4d439605c7f3",
+      "bytes": 6978
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-missiontracker.pyo.dis",
+      "sha256": "fd591c0e2698aacc8a1eaf06ac65f9a2277836ee916a257eb29786fcc3d05b26",
+      "bytes": 31979
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-mapwindow.pyo",
+      "sha256": "3f1057145fe3def7ca808c068ad6a11f1a5a28d0a8ca6b6b3f9666792c5864af",
+      "bytes": 51468
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-mapwindow.pyo.dis",
+      "sha256": "4a8097e32aa5494a5d0e5c5864e35c67caa691bfd1c3391d89c3eb005917118f",
+      "bytes": 305530
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-radarwindow.pyo",
+      "sha256": "a364e916560cbeb9a39d7df309690eb232d673b493509e08c0257eade24edf9c",
+      "bytes": 49782
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-radarwindow.pyo.dis",
+      "sha256": "12b99801b738b0c4835e03e2be45f285d13fc30bbef95ecd1535d104f3f0c9f6",
+      "bytes": 286921
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-chatwindow.pyo",
+      "sha256": "86a3df2c99aa2f612746f19cec0a307f1ca5e82c9695c90448d9f53c1bfa048b",
+      "bytes": 79192
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-chatwindow.pyo.dis",
+      "sha256": "c7410ff228f832dcdc9c44b762e1cc424c10dcef100f2c362b684657218d3334",
+      "bytes": 429499
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-socialwindow.pyo",
+      "sha256": "297e31c47a6c07f6d597714e92520b54f6cceaa5676451f9316887e49cd54514",
+      "bytes": 61935
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-socialwindow.pyo.dis",
+      "sha256": "3a4a9e4a0210e5fe83faf5b6cd2de049a5693b260004bac5096667dd799b6303",
+      "bytes": 352209
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-clanlockboxwindow.pyo",
+      "sha256": "7619b8c9d648b131c64ef3dcdaddddb9f18fbfad83e0b9282e9e7f4c29212c7b",
+      "bytes": 53006
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-clanlockboxwindow.pyo.dis",
+      "sha256": "7c667f2af21489b0d6a6b775e5f1a0e1129f9ea402729a9994dcdb39c3b01894",
+      "bytes": 272972
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-08/01-plain-option-reconnect.png",
+      "sha256": "a8e3be477b45b910dc7056d29ed51c5ebbdb86bf6a38e3b1207e71f324718439",
+      "bytes": 770067
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-08/plain-option-reconnect-state.json",
+      "sha256": "f27d70a842bcf805bcbd11812e35dd87985023018b736a0c8e8af569bd8da503",
+      "bytes": 515
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-bindings.txt",
+      "sha256": "bee98455f0b567b766b1e32159b7a0d27440b25d68b55d8497e92fa7bbc29504",
+      "bytes": 4724
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-method-constructors.dis",
+      "sha256": "ac9098dd295866836c97f8b1b6d23950eead6812c3cb9e2a294b840bfc0363bd",
+      "bytes": 7638
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-getters.dis",
+      "sha256": "1b8059194641ed681a49173e50ae2eaf5110edb9706d8e509076ca39ecb0a798",
+      "bytes": 7677
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-conversion.dis",
+      "sha256": "cab2892058e7162d87d4a5ea94a4ae306d8c24b5869e25ad3808e85c7d22d67d",
+      "bytes": 11175
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-int-format.dis",
+      "sha256": "8fc8d1d86060f9662c9a575031e32d5d006033446977cd41302520d3ecbf6c65",
+      "bytes": 4176
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-imports.txt",
+      "sha256": "6eb1aab215b4a1a2e0d5a9f22e6d5682498aa6ddff0598fbc2f3220f4bfdaf93",
+      "bytes": 626
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+      "bytes": 9719808
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-08/client-final.log",
+      "sha256": "998d8c6456b54c3a9298243b28aa1f3cabe76f9dd07d3184559b37f294994515",
+      "bytes": 6461
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/02-plain-option-loaded.png",
+      "sha256": "6bfcc31718f71bbe43fbfbeac5c228c72266295fc56a995dd29fac5611c329b4",
+      "bytes": 780696
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/plain-option-reconnect-state.json",
+      "sha256": "4eead0cc1f00754e68d1b575a1e5a49979fd0a7ce51d344a59a1554b983a650b",
+      "bytes": 2990
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09/client-final.log",
+      "sha256": "eb73f41c99de40cbf31dfe662ef83c99ced8198bff976043bf0233e98487943a",
+      "bytes": 6461
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-09-binary-inputs.json",
+      "sha256": "56de183c328c39926f8b9abec59a80a091578d1bb4edc22ba30e21f087f206ce",
+      "bytes": 21806
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/02-grouped-option-loaded.png",
+      "sha256": "96ff727df0c81debd9d53abb36a6e565e935c3aa34545dc5866f010b03fdfdeb",
+      "bytes": 784063
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/grouped-option-reconnect-state.json",
+      "sha256": "d50a09b6b600e34f933780ab91e8295cfd758a3d9f9b2e5f80ab83ff5846ff74",
+      "bytes": 2993
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/03-grouped-mission-journal.png",
+      "sha256": "c95f8f20819bb42c2c11d9fc7fa911091b9fd4d54e08786ede3cfdc7cb8f0b6e",
+      "bytes": 700518
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10-binary-inputs.json",
+      "sha256": "56de183c328c39926f8b9abec59a80a091578d1bb4edc22ba30e21f087f206ce",
+      "bytes": 21806
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/candidate-grouped-option-setup.json",
+      "sha256": "b23d4f07804a52f8cb9680ab595b3062c45c84a801a6d9720f8e73efdb535511",
+      "bytes": 260
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/06-checkbox-untracked.png",
+      "sha256": "24383930ba7914e2a97a84504c84be6aaa1a9a903cacad0aa6b9424e743091b9",
+      "bytes": 690088
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/07-verified-untracking-selection.png",
+      "sha256": "f1b528a7647a3af6fd5d602dcaedfaab893459ecfb07c5f7c6a5827be5b02dd6",
+      "bytes": 934689
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/08-untracking-reentry-baseline.png",
+      "sha256": "9a2e3f6a6727f6403cbcbdccf363533c599c361248e4493760203b9ef2424afd",
+      "bytes": 769910
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/verified-untracking-logout-state.json",
+      "sha256": "5917fb5f6807f676edb71df364067490c6d82e724023a66ba6adc0d4ea28e465",
+      "bytes": 220
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-10/client-final.log",
+      "sha256": "5f3879be846e448815083a964433181abd0148843183cbdc59420841318efd0f",
+      "bytes": 18067
+    }
+  ],
+  "runtime_observations": {
+    "run": "playthrough-07",
+    "character": "Alden Vanguard",
+    "before_checkbox_snapshot_utc": "2026-09-22T20:50:59.888306+00:00",
+    "option_row": {
+      "character_id": 1,
+      "option_id": 55,
+      "value": "1,992"
+    },
+    "mission_1992_state": 0,
+    "pending_objective": 8,
+    "completed_objectives": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9
+    ],
+    "capture_02": "Empty top-right tracker after reconnect and backpack/hover inputs",
+    "capture_06": "Journal lists Gearing Up for Battle, completed steps, pending Lightning, unchecked Track checkbox; tracker remains empty",
+    "capture_07": "Selecting Track checkbox restores Gearing Up for Battle and Lightning objective in top-right tracker",
+    "mission_lost": false
+  },
+  "original_sources": [
+    {
+      "member": "client/gameui.pyo",
+      "function": "OnUserControllerAvailable",
+      "source_line": 1157,
+      "bytecode_offsets": [
+        122,
+        125
+      ],
+      "finding": "Calls LoadCharacterData when user controller becomes available"
+    },
+    {
+      "member": "client/gameui.pyo",
+      "function": "LoadCharacterData",
+      "source_line": 1653,
+      "bytecode_offsets": [
+        53,
+        56
+      ],
+      "finding": "Calls LoadMissionTrackingData"
+    },
+    {
+      "member": "client/gameui.pyo",
+      "function": "LoadMissionTrackingData",
+      "source_lines": [
+        1785,
+        1790,
+        1798
+      ],
+      "bytecode_offsets": [
+        [
+          0,
+          3
+        ],
+        [
+          53,
+          72
+        ],
+        [
+          139,
+          145
+        ]
+      ],
+      "finding": "Clears local list, reads MissionTrack slots with native GetOptionInt, then filters against avatar missions"
+    },
+    {
+      "member": "client/gameui.pyo",
+      "function": "FilterMissionTrackingData",
+      "source_lines": [
+        1765,
+        1770,
+        1774
+      ],
+      "bytecode_offsets": [
+        [
+          22,
+          31
+        ],
+        [
+          82,
+          103
+        ],
+        [
+          149,
+          152
+        ]
+      ],
+      "finding": "Retains only IDs present in GetCurrentMissionData and replaces local tracking list"
+    },
+    {
+      "member": "client/gameui.pyo",
+      "function": "UpdateMissionTrackingToAvatarMissions",
+      "source_lines": [
+        1853,
+        1858
+      ],
+      "bytecode_offsets": [
+        [
+          6,
+          52
+        ],
+        [
+          53,
+          82
+        ]
+      ],
+      "finding": "Only removes IDs absent from mission list; cannot restore a previously emptied list"
+    },
+    {
+      "member": "client/missionlog.pyo",
+      "function": "Recv_MissionStatusInfo",
+      "source_lines": [
+        161,
+        163
+      ],
+      "bytecode_offsets": [
+        [
+          0,
+          12
+        ],
+        [
+          15,
+          39
+        ]
+      ],
+      "finding": "Stores mission data, then removes invalid tracked IDs; does not reload tracking options"
+    },
+    {
+      "member": "client/ui/currentmissionswindow.pyo",
+      "function": "OnTrackingBtnToggled",
+      "source_lines": [
+        328,
+        331
+      ],
+      "bytecode_offsets": [
+        [
+          81,
+          93
+        ],
+        [
+          114,
+          126
+        ]
+      ],
+      "finding": "Checked adds mission tracking locally; unchecked removes it"
+    },
+    {
+      "member": "client/clientmethod.pyo",
+      "function": "Recv_CharacterOptions",
+      "source_lines": [
+        569,
+        574
+      ],
+      "bytecode_offsets": [
+        [
+          44,
+          53
+        ],
+        [
+          96,
+          111
+        ]
+      ],
+      "finding": "Strips trailing whitespace then passes supplied Unicode value to native SetOptionUnicode"
+    },
+    {
+      "member": "client/clientmethod.pyo",
+      "function": "SaveCharacterOptions",
+      "source_lines": [
+        619,
+        622,
+        632
+      ],
+      "bytecode_offsets": [
+        [
+          56,
+          71
+        ],
+        [
+          87,
+          105
+        ],
+        [
+          141,
+          159
+        ]
+      ],
+      "finding": "Reads native GetOptionUnicode and sends value unchanged in SaveCharacterOptions"
+    }
+  ],
+  "server_trace": {
+    "accept": "MissionTrackingRules.Track creates invariant decimal ID strings; MissionManager acceptance persists changed slots",
+    "save": "CharacterOptions.Read decodes Unicode without numeric formatting; SaveCharacterOptions and CharacterOptionRepository store value unchanged",
+    "load": "Candidate sends options and selects absent actor, then owner bundle with yaw and saved missions before its final location triggers controller creation.",
+    "mission_order": "Early read-only saved snapshot in owner bundle; normal late reconciliation and final snapshot remain at existing MapChannelManager call site.",
+    "grouped_parse": "MissionTrackingRules accepts canonical US comma grouping by exact invariant N0 round trip, in addition to the prior ungrouped parser. Raw strings remain unchanged on read, persistence and transport."
+  },
+  "hypotheses": [
+    {
+      "id": "grouped_value",
+      "status": "Original native US-locale formatter/parser recovered; grouped output is legitimate and is not the sole cause of empty reconnect tracking",
+      "finding": "Option 55 contains 1,992 because original integer options are formatted through a usa-locale stream; parser uses the same locale. Plain 1992 also reproduced empty tracking. Strict canonical grouped support now prevents the server from discarding valid saved IDs on its own read path."
+    },
+    {
+      "id": "admission_order",
+      "status": "Confirmed repair in original-client emulator runs09/10",
+      "finding": "Run08 plain1992 lost tracking under preceding admission; runs09/10 preserve plain1992 and grouped1,992 with saved mission state installed before deferred controller creation. Exact original-live server packet schedule is unknown."
+    }
+  ],
+  "next_reproduction": [
+    "Continue shared admission verification during later progression and travel; exact final-live packet scheduling remains unknown."
+  ],
+  "limitations": [
+    "Original-client integration uses an isolated emulator, not an original live-service server. Exact final-live packet order is not established.",
+    "Run07 retained snapshots predate subsequent checkbox/Lightning input; runs09/10 have separate before-input mission snapshots.",
+    "Native grouping for mission1992 is now observed on reconnect; malformed-input tolerance and all integer edge cases remain unverified.",
+    "The default-save defect found after initial admission repair is corrected and runtime-verified in separate client-character-options-snapshot evidence."
+  ],
+  "plain_option_baseline": {
+    "tier": "observed",
+    "run": "playthrough-08",
+    "finding": "Tracker remains empty after full map admission without movement or checkbox input. Persisted option 55 is exactly 1992 and mission 1992 remains active. The comma is not the sole cause.",
+    "limitations": "This isolates option grouping but does not instrument native callback timing."
+  },
+  "deferred_admission_candidate": {
+    "status": "1276-test checkpoint passed; original-client runs09/10 restore plain/grouped tracking before input; separate default-save defect found afterward",
+    "tier": "inferred",
+    "confidence": "Strong original callback and packet-consumer evidence; runtime candidate not yet verified",
+    "order": [
+      "CharacterOptions preserves stored strings",
+      "SetControlledActorId selects absent actor and subscribes to ENTITY_ADDED_TO_WORLD",
+      "CreatePhysicalEntity registers owner and applies existing owner data, ActorInfo and pure MissionStatusInfo",
+      "WorldLocationDescriptor LAST adds owner to world, triggering controller creation and saved tracking filter",
+      "Owner weapon drawer/equipment, then nearby actors",
+      "Normal post-controller mission reconciliation and final status snapshot at existing call site"
+    ],
+    "original_contract": [
+      {
+        "source": "clientmethod.Recv_SetControlledActorId",
+        "location": "source line 87 offsets 183\u2013195; line 90 offsets 215\u2013233; lines 93\u201396 offsets 238\u2013291",
+        "finding": "Selects native ID before creation; controller creation is deferred for absent actor."
+      },
+      {
+        "source": "entitymanager.CreateEntity",
+        "location": "source line 855 offsets 155\u2013167",
+        "finding": "Registers actor before Recv_CreatePhysicalEntity applies initial data."
+      },
+      {
+        "source": "physicalentity.Recv_WorldLocationDescriptor; world.AddToWorld",
+        "location": "source line 310 offsets 35\u201350; source line 62 offsets 79\u2013100",
+        "finding": "Location invokes world entry, which posts the deferred controller event."
+      },
+      {
+        "source": "uieventmanager.PostEvent; missionlogwindow.HandleUpdateCurrentMissions",
+        "location": "source lines 1465/1473 offsets 57\u201369/133\u2013145; source lines 90\u201391 offsets 0\u201324",
+        "finding": "Mission UI events are synchronous and journal callback dereferences avatar without a None guard. Standalone mission status before selecting the ID is unsafe."
+      },
+      {
+        "source": "clientmethod.Recv_CharacterOptions",
+        "location": "source lines 569\u2013578 offsets 44\u2013152",
+        "finding": "Sets/caches strings without invoking mission tracking reload."
+      }
+    ],
+    "archive_string_census": {
+      "UI_UPDATE_CURRENT_MISSIONS": [
+        "client/missionlog.pyo",
+        "client/ui/currentmissionswindow.pyo",
+        "client/ui/mapwindow.pyo",
+        "client/ui/missionlogwindow.pyo",
+        "client/ui/missiontracker.pyo",
+        "client/ui/radarwindow.pyo",
+        "client/ui/uieventmanager.pyo"
+      ],
+      "MANIFESTATION_ID_CHANGED": [
+        "client/clientevent.pyo",
+        "client/clientmethod.pyo",
+        "client/ui/chatwindow.pyo",
+        "client/ui/clanlockboxwindow.pyo",
+        "client/ui/socialwindow.pyo"
+      ]
+    },
+    "side_effects": "CreateMissionStatusSnapshot is read-only. Existing late reconciliation alone repairs definitions, expires timers and runs equip/content effects; the status receiver replaces state rather than replaying mission acceptance. Two status snapshots are intentional.",
+    "preserved": "Raw option strings including intentional zero/untracking; yaw before actual controller creation; owner/nearby equipment after controller; corpse bundle; shared dropship and normal admission path.",
+    "tests": [
+      "NewCharacterTests.WorldAdmission: seven existing yaw, dead/alive, normal/transfer and nearby-player cases updated",
+      "NewCharacterTests.ReconnectLoadsSavedMissionsBeforeDeferredControllerAndPreservesTrackingChoice: 1992, 0, and 1,992",
+      "MissionLogTests.EarlyAdmissionSnapshotDoesNotReconcileDefinitionsOrExpireSavedTimers",
+      "MissionLogTests.EquipBindingSurvivesReconnectThroughReconciliation: repeated early snapshots cannot complete or replay effects"
+    ]
+  },
+  "native_integer_options": {
+    "tier": "original",
+    "method": "Read-only original executable disassembly and decoded import symbols; no dynamic parser invocation",
+    "exe_preferred_base": "0x400000",
+    "exe_sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "artifacts": [
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-bindings.txt",
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-method-constructors.dis",
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-getters.dis",
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-conversion.dis",
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-int-format.dis",
+      "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/tracker-reconnect-audit/native-option-imports.txt"
+    ],
+    "locale_literal": {
+      "va": "0xbc81e0",
+      "value": "usa",
+      "category_mask": "0x3f"
+    },
+    "get_integer": {
+      "binding_va": "0x496ab9",
+      "handler_va": "0x495430",
+      "parser_va": "0x496fd0",
+      "locale_mask_push_va": "0x497003",
+      "locale_name_push_va": "0x497005",
+      "locale_constructor_call_va": "0x497019",
+      "imbue_call_va": "0x497038",
+      "integer_extraction_call_va": "0x497061",
+      "integer_extraction_iat": "0xb2b3d8",
+      "import": "MSVCP80.dll std::basic_istream::operator>>(int&)"
+    },
+    "set_integer": {
+      "handler_va": "0x494f90",
+      "formatter_va": "0x4040c0",
+      "formatter_call_va": "0x494fcd",
+      "locale_setup_range": "0x404120\u20130x40414a",
+      "integer_insertion_call_va": "0x404175",
+      "integer_insertion_iat": "0xb2b33c",
+      "integer_insertion_import": "MSVCP80.dll std::basic_ostream::operator<<(int)",
+      "string_result_call_va": "0x404184",
+      "string_result_iat": "0xb2b314",
+      "string_result_import": "MSVCP80.dll std::basic_stringstream::str() const"
+    },
+    "unicode_access": {
+      "get_chain": [
+        "0x4952e0",
+        "0x481780"
+      ],
+      "set_chain": [
+        "0x494f20",
+        "0x481670",
+        "0x494270"
+      ],
+      "finding": "Unicode getter converts the stored string; setter stores the supplied string rather than introducing numeric grouping."
+    },
+    "interpretation": {
+      "tier": "inferred",
+      "confidence": "high; explicit original native locale and stream operators corroborate the saved grouped value",
+      "finding": "Canonical comma grouping such as 1,992 is legitimate original-client US-locale integer formatting. The matching native integer parser also uses the US locale.",
+      "limits": "No direct runtime GetOptionInt result captured; malformed grouping tolerance and every MSVCP runtime variation are not established."
+    }
+  },
+  "canonical_grouped_server_reader": {
+    "status": "implemented; serial validation pending",
+    "implementation": "src/Rasa.Game/Data/MissionTrackingRules.cs:TryReadMissionId",
+    "rule": "Retain existing ungrouped NumberStyles.Integer parsing. Additionally accept AllowThousands only when the input exactly equals invariant N0 formatting of the parsed uint. Do not strip arbitrary punctuation or change stored/transported values.",
+    "tests": "Five canonical grouped values, thirteen malformed/overflow cases, and grouped/plain deduplication with intentional zero preservation during acceptance.",
+    "scope": "Compatibility reading only. Native malformed-input tolerance is not emulated or asserted."
+  },
+  "runtime_candidate_verification": {
+    "provenance_tier": "observed",
+    "source": "Original compatibility client connected to isolated emulator candidate; not live-service capture",
+    "run09": {
+      "saved_option_55": "1992",
+      "tracker_before_ui_input": "Gearing Up for Battle / Speak to Corporal Hartmann",
+      "mission_progress_unchanged": true
+    },
+    "run10": {
+      "saved_option_55": "1,992",
+      "tracker_before_ui_input": "Gearing Up for Battle / Speak to Corporal Hartmann",
+      "journal_tracking_checked": true
+    },
+    "interpretation": "Deferred admission repairs observed tracker loss; native GetOptionInt accepts 1,992 as mission 1992. Exact historical server packet order remains unknown.",
+    "intentional_untracking": {
+      "status": "failed on 1276-test candidate",
+      "ui": "06-checkbox-untracked.png verifies checkbox unchecked and tracker empty",
+      "logout": "07-verified-untracking-selection.png; verified-untracking-logout-state.json retains option55=1,992",
+      "reentry": "08-untracking-reentry-baseline.png shows erroneously restored tracking",
+      "source_supported_cause": "SaveCharacterOptions omits default values; server ignores empty list and merges remaining entries",
+      "next": "Verify complete snapshot scope, correct persistence and rerun original-client check"
+    }
+  },
+  "verification_checkpoint": {
+    "tests_passed": 1276,
+    "tests_skipped": 0,
+    "minutes": 6.0647,
+    "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-tracking-admission/artifacts.json",
+    "scope": "Admission/movement candidate before newly discovered option default-save correction"
+  },
+  "snapshot_correction": "See client-character-options-snapshot.json: runs11/12 verify omitted-default clearing, intentional untracking across fresh-client reconnect, and native grouped re-tracking save.",
+  "final_verification": {
+    "tests_passed": 1281,
+    "tests_skipped": 0,
+    "minutes": 6.8934,
+    "targeted_passed": 179,
+    "targeted_seconds": 50.8846,
+    "source_entries_matched": 2061,
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-full.log",
+        "sha256": "1ab90e5697f96129bfc6672ea71b3725119d754cb1fce2fdb5eccdc211c7ec8d",
+        "bytes": 105608
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-options-targeted.log",
+        "sha256": "49287df92cbec187b4287b4fd0aaa6193225bb91b54c665f54aee1c88e541602",
+        "bytes": 18440
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/rasa-retail-20260922-option-snapshot.json",
+        "sha256": "8c15a57d45bb364031e5672b6c5a9a9a6a890f88a1cedb4d43c63550f5026ed4",
+        "bytes": 312390
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-full.trx",
+        "sha256": "b537cd2513af3ec1993b6329e7e9307969c0ea67876194cbad639b98635ddd40",
+        "bytes": 1408531
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-options-final/options-targeted.trx",
+        "sha256": "846272c80354fc3f799264a6e5dbbfbd1a7c49af9c341929c1780dcde073ed54",
+        "bytes": 228364
+      }
+    ]
+  }
+}

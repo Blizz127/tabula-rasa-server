@@ -330,12 +330,17 @@ namespace Rasa.Managers
             // update DB
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Attributes, null);
 
-            // Send Data to client
-            client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
+            // AttributeInfo announces B/M/S changes synchronously; the original attributes
+            // window reloads its point counter from the avatar during those callbacks.
+            // Publish the committed remaining budget before triggering that reload.
             SendAvailableAllocationPoints(client);
+            client.CallMethod(client.Player.EntityId, new AttributeInfoPacket(client.Player.Attributes));
         }
 
-        public void AssignPlayer(Client client)
+        // Select the owner before creation: the original client defers its controller
+        // until ENTITY_ADDED_TO_WORLD, after the initial entity data has been applied.
+        // Equipment and nearby actors still follow that completed introduction.
+        public void InitializePlayerControl(Client client)
         {
             var player = client.Player;
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
@@ -352,15 +357,22 @@ namespace Rasa.Managers
 
             client.CallMethod(SysEntity.ClientMethodId, new SetControlledActorIdPacket(player.EntityId));
 
+            CellIntroduceClientToSefl(client);
+
             client.CallMethod(player.EntityId, new WeaponDrawerSlotPacket(player.ActiveWeapon, false));
+
+            client.CallMethod(player.EntityId, new EquipmentInfoPacket(player.Inventory.EquippedInventory));
+        }
+
+        public void AssignPlayer(Client client)
+        {
+            var player = client.Player;
 
             client.CallMethod(SysEntity.ClientGameMapId, new SetSkyTimePacket { RunningTime = 6666666 });   // ToDo add actual time how long map is running
 
             client.CallMethod(SysEntity.ClientMethodId, new SetCurrentContextIdPacket(client.Player.MapChannel.MapInfo.MapContextId));
 
             SocialManager.Instance.SetSocialContactList(client);
-
-            client.CallMethod(player.EntityId, new ActorInfoPacket(player));
 
             // The regions the player is standing in; re-sent by RegionManager.Worker as they move.
             RegionManager.Instance.PlayerEnteredMap(client);
@@ -478,7 +490,19 @@ namespace Rasa.Managers
 
         public void CellIntroduceClientToSefl(Client client)
         {
-            client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(client.Player.EntityId, client.Player.EntityClass, CreatePlayerEntityData(client)));
+            var data = CreatePlayerEntityData(client, includeEquipment: false);
+            var location = data.OfType<WorldLocationDescriptorPacket>().Single();
+            data.Remove(location);
+            // ActorInfo initializes facing independently of the location quaternion.
+            // Saved missions must exist before USER_CONTROLLER_AVAILABLE filters the
+            // saved tracking options. The actor is registered by CreateEntity before
+            // these methods run, so mission UI callbacks can resolve its selected ID.
+            data.Add(new ActorInfoPacket(client.Player));
+            data.Add(MissionManager.Instance.CreateMissionStatusSnapshot(client));
+            // WorldLocationDescriptor calls AddToWorld and releases the deferred
+            // controller callback. Keep it after all initial owner state.
+            data.Add(location);
+            client.CallMethod(SysEntity.ClientMethodId, new CreatePhysicalEntityPacket(client.Player.EntityId, client.Player.EntityClass, data));
         }
 
         public void CellIntroducePlayersToClient(Client client, List<Client> clientList)
@@ -498,7 +522,7 @@ namespace Rasa.Managers
             }
         }
 		
-		public List<PythonPacket> CreatePlayerEntityData(Client client)
+		public List<PythonPacket> CreatePlayerEntityData(Client client, bool includeEquipment = true)
         {
             var player = client.Player;
 
@@ -524,9 +548,13 @@ namespace Rasa.Managers
                 // so the value is unchanged - only the type now says what it means.
                 new TargetCategoryPacket(TargetCategory.Friendly),
                 new PlayerFlagsPacket(player.PlayerFlags),
-                new IsTrialAccountPacket(player.IsTrialAccount),
-                new EquipmentInfoPacket(client.Player.Inventory.EquippedInventory)
+                new IsTrialAccountPacket(player.IsTrialAccount)
             };
+
+            // EquipmentInfo posts a global UI_UPDATE_ARMED_WEAPON event even for
+            // other actors. Defer the owner's copy until controller assignment.
+            if (includeEquipment)
+                entityData.Add(new EquipmentInfoPacket(player.Inventory.EquippedInventory));
 
             // A player who died before this client could see them. Nothing above carries a state -
             // there is no ActorInfo on this path at all - so without this the body stands, keeps
@@ -1077,31 +1105,19 @@ namespace Rasa.Managers
 
         public void SaveCharacterOptions(Client client, SaveCharacterOptionsPacket packet)
         {
-            if (packet.OptionsList.Count == 0)
-                return;
-
-            // Merged, not replaced: the client saves the options it changed, and the stored rows are
-            // merged per option anyway. Replacing the list dropped every option the client left out
-            // of this save - including the MissionTrack slots the mission manager writes on accept,
-            // which the next accept reads back to decide what is already tracked.
-            foreach (var option in packet.OptionsList)
-            {
-                var existing = client.Player.CharacterOptions.FirstOrDefault(entry => entry.OptionId == option.OptionId);
-
-                if (existing != null)
-                    existing.Value = option.Value;
-                else
-                    client.Player.CharacterOptions.Add(option);
-            }
-
+            // Native Export enumerates all exportable Character options. The
+            // original Python sender omits defaults and sends the complete rest,
+            // including an empty list when everything returns to its default.
+            var values = packet.OptionsList.GroupBy(option => (uint)option.OptionId)
+                .ToDictionary(group => group.Key, group => group.Last().Value);
             using var unitOfWork = _gameUnitOfWorkFactory.CreateChar();
-
-            foreach (var option in packet.OptionsList)
-                unitOfWork.CharacterOptions.AddOrUpdate(client.Player.Id, (uint)option.OptionId, option.Value);
-
-            // AddOrUpdate only stages the rows; without this they were thrown away on dispose,
-            // and every option the client saved was back to its default at the next login.
+            unitOfWork.CharacterOptions.Replace(client.Player.Id, values);
             unitOfWork.Complete();
+
+            // Publish only after the atomic database save succeeds. Preserve the
+            // raw strings, including the original native numeric grouping.
+            client.Player.CharacterOptions = values.Select(value =>
+                new CharacterOptions((CharacterOption)value.Key, value.Value)).ToList();
         }
 
         // maybe move this to other manager becose it's account related
@@ -1439,8 +1455,10 @@ namespace Rasa.Managers
                 var classInfo = EntityClassManager.Instance.GetClassInfo(equipmentItem.ItemTemplate.Class);
                 if (classInfo?.ArmorClassInfo == null)
                 {
-                    // how can the player equip non-armor?
-                    Logger.WriteLog(LogType.Error, "UpdateStatsValues: Player try to equip non_armor item");
+                    // Recruit clothing is legitimately equipable without the Armor augmentation.
+                    // It contributes no armor; absent equipment metadata still indicates bad state.
+                    if (classInfo?.EquipableClassInfo == null)
+                        Logger.WriteLog(LogType.Error, "UpdateStatsValues: Equipped item has neither armor nor equipable class data");
                     continue;
                 }
                 armorMax += BodyArmor(equipmentItem);

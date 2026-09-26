@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Game startup admission waits for mission content readiness",
+  "provenance_tier": "observed",
+  "defect": "Before the change, Game.Server.Start called SetupCommunicator and accepted world clients before MissionContentManager.Load. In isolated replay courtyard-cover-feedback-21, RequestSwitchToCharacterInSlot occurred at 18:54:14.818 but content rules loaded at 18:54:17.561. No private instance was created, and the copied client reached a boot camp map without its placed companions or hostile Thrax. This was a server startup race, not a creature aggro finding.",
+  "implementation": "src/Rasa.Game/Game/Server.cs now starts accepting world clients and connects/advertises to Auth only after all startup managers, including MissionContentManager, finish loading. The listener remains bound during loading but has no pending AcceptAsync and Auth has no connected game server to redirect to it.",
+  "verification": "Immediate client launch in isolated startup-readiness-23 using worktree game DLL SHA-256 8b2e1ccd15c2fbddd287aed36bed4dab454d6f83a841060ae790f15d50af7f97: game log Loaded 17 content rules (410 rows, 0 gaps) at 19:08:20.122; Listening for clients at 19:08:20.249; Connected to Auth at 19:08:20.264; RequestSwitchToCharacterInSlot at 19:08:24.778; Created instance 2 of context 1985 for character 1 at 19:08:25.005; MapLoaded at 19:08:38.319. HUD screenshot first-playable.png captured. The isolated harness exited 0, and copied DB integrity checks passed after restoration. dotnet build Rasa.Game --no-restore succeeded with four pre-existing warnings.",
+  "status": "Deployed in rasa_net_game:feedback-readiness-20260923 together with the Auth first-server-list wait. Live startup showed 404 content rows and 0 gaps before world admission, and a recovered-client Tailscale login reached Character Select. See docs/evidence/live-auth-server-list-wait-20260923.json.",
+  "unverified": "The first isolated game-only replay reached a HUD but retained a No servers found modal; Auth's empty-list startup race was then fixed and isolated world entry retested without the modal. Concurrent multi-client admission and the owner's MacBook login after deployment remain unobserved. This does not validate final-live encounter timing or placement estimates.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/courtyard-cover-feedback-21/game.log",
+      "sha256": "8a7104b9288468f42bd59f495d6f8c2e96f1e9d8a7718f3d3c2484f8d6ac0e64"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/startup-readiness-23/game.log",
+      "sha256": "788990a6a5a1ae059d36df2d03d8ec92fde85d4ee3f8958ec0326e231966370b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/startup-readiness-23/auth.log",
+      "sha256": "92f7dc3fbe5acf6936c126b39e32e5137cd930ea65328334127fedc58c6a8545"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/startup-readiness-23/first-playable.png",
+      "sha256": "a70f26b8c951916a589752dbe966bea5eb1a12f1b9230b6c958c46be445fe971"
+    }
+  ]
+}

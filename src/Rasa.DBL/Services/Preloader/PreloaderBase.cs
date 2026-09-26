@@ -13,11 +13,22 @@ namespace Rasa.Services.Preloader
         protected void Insert(MigrationBuilder migrationBuilder, string tableName, Type entityType)
         {
             var columns = GetColumnNames(entityType);
-            var values = CreateValues();
-
-            migrationBuilder.InsertData(tableName,
-                columns,
-                values);
+            var rows = GetRows().ToList();
+            var innerLength = rows.First().Length;
+            // SQLite prepares each statement from the remaining command text. One
+            // 30,225-row operation causes repeated conversion of a huge SQL tail.
+            // Bound each command while retaining the migration's transaction,
+            // original row order, columns and values for both providers.
+            const int batchSize = 256;
+            for (var start = 0; start < rows.Count; start += batchSize)
+            {
+                var count = Math.Min(batchSize, rows.Count - start);
+                var values = new object[count, innerLength];
+                for (var row = 0; row < count; row++)
+                    for (var column = 0; column < innerLength; column++)
+                        values[row, column] = rows[start + row][column];
+                migrationBuilder.InsertData(tableName, columns, values);
+            }
         }
         private string[] GetColumnNames(Type entityType)
         {
@@ -26,24 +37,6 @@ namespace Rasa.Services.Preloader
             var columnNames = columns.Select(c => c.Name)
                 .Where(name => !string.IsNullOrEmpty(name));
             return columnNames.ToArray();
-        }
-
-        private object[,] CreateValues()
-        {
-            var rows = GetRows()
-                .ToList();
-
-            var innerLength = rows.First().Length;
-
-            var result = new object[rows.Count, innerLength];
-            for (var i = 0; i < rows.Count; i++)
-            {
-                for (int j = 0; j < innerLength; j++)
-                {
-                    result[i, j] = rows[i][j];
-                }
-            }
-            return result;
         }
 
         protected abstract IEnumerable<object[]> GetRows();

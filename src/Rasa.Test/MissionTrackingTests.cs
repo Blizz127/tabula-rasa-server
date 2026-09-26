@@ -107,5 +107,55 @@ namespace Rasa.Test
             CollectionAssert.AreEqual(full, Values(slots));
             Assert.IsFalse(slots.Any(slot => slot.Value == "7031"));
         }
+
+        [DataTestMethod]
+        [DataRow("1,992", 1992)]
+        [DataRow("12,345", 12345)]
+        [DataRow("123,456", 123456)]
+        [DataRow("1,234,567", 1234567)]
+        [DataRow("2,147,483,647", int.MaxValue)]
+        public void OriginalUsGroupedOptionReadsWithoutChangingItsStoredText(string value, int expected)
+        {
+            var option = new CharacterOptions(CharacterOption.MissionTrack0, value);
+            CollectionAssert.AreEqual(new[] { (uint)expected }, MissionTrackingRules.Tracked(new[] { option }).ToArray());
+            Assert.AreEqual(value, option.Value);
+        }
+
+        [DataTestMethod]
+        [DataRow("1,99")]
+        [DataRow("19,92")]
+        [DataRow("1992,")]
+        [DataRow(",1992")]
+        [DataRow("1,,992")]
+        [DataRow("01,992")]
+        [DataRow("0,000")]
+        [DataRow("1.992")]
+        [DataRow("1 992")]
+        [DataRow("1,992suffix")]
+        [DataRow("1,992 ")]
+        [DataRow("-1,992")]
+        [DataRow("4,294,967,296")]
+        public void GroupedMissionIdsRejectNoncanonicalSeparatorsAndOverflow(string value)
+        {
+            var option = new CharacterOptions(CharacterOption.MissionTrack0, value);
+            Assert.AreEqual(0, MissionTrackingRules.Tracked(new[] { option }).Count);
+            Assert.AreEqual(value, option.Value);
+        }
+
+        [TestMethod]
+        public void GroupedAndUngroupedOptionsDeduplicateWithoutRetrackingAnIntentionalZero()
+        {
+            var options = new[]
+            {
+                new CharacterOptions(CharacterOption.MissionTrack0, "1,992"),
+                new CharacterOptions(CharacterOption.MissionTrack1, "1992"),
+                new CharacterOptions(CharacterOption.MissionTrack2, "0")
+            };
+            CollectionAssert.AreEqual(new[] { 1992u }, MissionTrackingRules.Tracked(options).ToArray());
+            var updated = MissionTrackingRules.Track(options, _ => true, 1993);
+            CollectionAssert.AreEqual(new[] { 1992u, 1993u }, MissionTrackingRules.Tracked(updated).ToArray());
+            Assert.IsTrue(updated.Skip(2).All(option => option.Value == "0"));
+            CollectionAssert.AreEqual(new[] { "1,992", "1992", "0" }, options.Select(option => option.Value).ToArray());
+        }
     }
 }

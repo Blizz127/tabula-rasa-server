@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Production auth/game reconnection and recovered-client public login check",
+  "scope": "Emulator operations and login defect verification; no claim about original final-live authentication behavior",
+  "setup": {
+    "client": "Recovered 1.16.5.0 client in Wine/Xvfb with a separate filesystem namespace and shared network namespace; launched against 51.81.220.194:2116 using the existing production test account. No character was created or selected.",
+    "auth_image": "rasa_net_auth:latest sha256:5a51f252219e92d40e2b0cedfd6f562b16b7e645d8a0f66202c0efbbc83496ee",
+    "game_image": "rasa_net_game:latest sha256:9bac4fa0b7f5e688653bdb92e628aa011535ec8189cb2ff2899d76978f467b76",
+    "database_safety": "Production rasaauth.db, rasachar.db and rasaworld.db were copied with SQLite backup before deployment. All three passed PRAGMA integrity_check before and after deployment."
+  },
+  "observations": [
+    "Before the fix, the game container had restarted at 12:01 UTC while the long-running auth process lacked a new successful game-server registration. Restarting auth at 19:55 UTC restored server 234's registration as a temporary recovery.",
+    "Auth and game source builds passed. The auth image was deployed first. The old game process kept a CLOSE_WAIT connection to the previous auth container and needed a manual restart; this exposed the game-side reconnect defect.",
+    "After deploying the game reconnect image, recreating game registered server 234 with auth at 20:12:41 UTC without restarting auth. Restarting only auth then caused the game to reconnect and authenticate at 20:13:24 UTC, approximately 10 seconds after detecting the lost link.",
+    "At 20:20:52-20:20:53 UTC, the recovered client sent Login, ServerListExt and AboutToPlay through the public 2116 endpoint. Auth redirected the existing test account to server 234, and a screenshot 35 seconds after launch shows the client at Character Select."
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-check-test-20260923/rasa-net-auth-1.selected-log.txt",
+      "sha256": "1704dffc789e3846bfa2ee5a8fceaa06db32fa674a640310c78eccbea38a824e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-check-test-20260923/rasa-net-game-1.selected-log.txt",
+      "sha256": "7906ef8443493dd793ef4024edc2f7b4b66f950c77821dd7afa41caf779fa0dd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-check-test-20260923/login-after-35s.png",
+      "sha256": "5c4ac69304af09fd660164420283acdba363773eeabfe14742023b259cdf4cff"
+    }
+  ],
+  "remaining": "A login from the owner's own client remains unobserved after deployment. The test verifies the public server path with the recovered client and existing test account; it does not test the owner's local launcher configuration or account."
+}

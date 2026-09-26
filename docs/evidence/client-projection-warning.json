@@ -1,0 +1,79 @@
+{
+  "schema": "rasa.client-projection-warning.v1",
+  "recorded_at_utc": "2026-09-22T20:29:33.124057+00:00",
+  "method": "Read-only original PE disassembly and parent-owned emulator log inspection; no process attach, runtime changes, or builds.",
+  "tier": "observed",
+  "scope": "parent-owned isolated playthrough06 log read only",
+  "log_path": "run-client/tabula_rasa.log",
+  "warning_lines": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+  ],
+  "tuple_error_lines": [
+    7
+  ],
+  "native_facts": {
+    "tier": "original",
+    "string_va": "0xbe8350",
+    "single_string_reference_va": "0x5e79e7",
+    "function_va": "0x5e7360",
+    "source_path_va": "0xbe828c",
+    "source_path": ".\\graphics\\gfxView.cpp",
+    "source_line": 246,
+    "conditions": [
+      "DWORD[view+0x21c] == 0 at0x5e7435\u20135e7441",
+      "DWORD[view+0x220] == 0 at0x5e7447\u20135e7453"
+    ],
+    "direct_call_sites": [
+      "0x5e7a2a",
+      "0x5e7cbf",
+      "0x5e86cc",
+      "0x5e8f1a",
+      "0x7c8ee2",
+      "0x7c9446",
+      "0x7ca428",
+      "0x8086b6",
+      "0x85b041"
+    ],
+    "preferred_exe_base": "0x400000"
+  },
+  "assessment": {
+    "tier": "inferred",
+    "finding": "Native graphics view dimension guard, separate from Python tuple rejection. Which view was zero (main/UI/preview), its triggering lifecycle, and responsibility are unverified; no Wine or server-protocol cause claim."
+  },
+  "log_hash_status": "Unhashed mutable live log observation; line numbers apply to observed prefix only",
+  "original_client_version": "1.16.5.0 compatibility artifact; exact shutdown revision unverified",
+  "static_artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "bytes": 9719808,
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    }
+  ],
+  "patch_justified": false
+}

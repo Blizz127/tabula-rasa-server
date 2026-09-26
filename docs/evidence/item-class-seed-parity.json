@@ -1,0 +1,16 @@
+{
+  "rows": 30225,
+  "columns": 2,
+  "boxed_type": "System.Int32",
+  "encoding": "ordered little-endian signed Int32 pairs; no header",
+  "before_sha256": "53f5689cd904ded92245e319edf939be66c6a8577b8de066155468b2a65d605a",
+  "after_sha256": "53f5689cd904ded92245e319edf939be66c6a8577b8de066155468b2a65d605a",
+  "research_date": "2026-09-22",
+  "source_file": "src/Rasa.DBL/Services/Preloader/ItemTemplateItemClassPreloader.cs",
+  "original_repository_commit": "095fc4545ec6f9b06cb625a575813017efe6ef58",
+  "original_file_sha256": "e5549e96d59b1cc641b440960b35b5e0765900fe2205bb5bab151f50649f2c61",
+  "converted_file_sha256": "be6470338d372638446d9db598de64267d17bf27c9edde2f8d13684d96e65628",
+  "generator": "docs/evidence/verify-item-class-seed.py --convert; also reads either format without changing it",
+  "fidelity_change": "None: values, row ordering, column ordering and boxed System.Int32 types preserved. Representation only.",
+  "motivation": "Managed-stack capture of original mapping seed enumeration stalled in StarterLoadoutDataTests; equivalent huge iterator cost is documented in ItemTemplateRegeneratedPreloader."
+}

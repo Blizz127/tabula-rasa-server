@@ -1,0 +1,410 @@
+{
+  "schema": "rasa.client-startup-tuple-error.v1",
+  "recorded_at_utc": "2026-09-22T19:57:23.084905+00:00",
+  "research_root": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough",
+  "method": "Read-only PE section/import/export parsing and x86 disassembly; retained log inspection. No client process, debugger attach or binary patch.",
+  "client_version": "1.16.5.0 compatibility artifact; exact shutdown revision unverified",
+  "observation": {
+    "tier": "observed",
+    "scope": "isolated emulator integration, not original-live service",
+    "client_log_error_line": 7,
+    "error": "TypeError: argument list must be a tuple",
+    "ordering": "After InputStateRouter/technique warnings, before world art light-template warnings",
+    "server_selection_log": "playthrough-04/game.log:97 2026-09-22 14:48:19.273",
+    "server_maploaded_log": "playthrough-04/game.log:99 2026-09-22 14:48:44.414",
+    "timing_limit": "Client log lacks timestamps; no precise correlation to a packet established"
+  },
+  "native_facts": {
+    "tier": "original",
+    "exe_preferred_base": "0x400000",
+    "python_preferred_base": "0x1e000000",
+    "exe_iat_PyObject_CallObject": "0xb2c064",
+    "python_exports_rva": {
+      "PyObject_CallObject": "0x18ee0",
+      "PyEval_CallObjectWithKeywords": "0x25e80",
+      "PyTuple_Type": "0x1af408"
+    },
+    "tuple_rejection_rva": "0x25ebb",
+    "wrapper_return_rva": "0x18ef1",
+    "rejection_rule": "Non-null argument must be tuple or tuple subtype; NULL becomes empty tuple",
+    "candidate_calls": [
+      {
+        "preferred_va": "0x4cce7b",
+        "rva": "0xcce7b",
+        "argument_source": "stored [ecx+4]",
+        "classification": "opaque_candidate"
+      },
+      {
+        "preferred_va": "0x4e6ddc",
+        "rva": "0xe6ddc",
+        "argument_source": "stored [ecx+0xc]",
+        "classification": "original_startup_preload_none_candidate"
+      },
+      {
+        "preferred_va": "0x51f9b5",
+        "rva": "0x11f9b5",
+        "argument_source": "PyTuple_New(1)",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x51fa95",
+        "rva": "0x11fa95",
+        "argument_source": "Py_BuildValue((ssi))",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x5368bd",
+        "rva": "0x1368bd",
+        "argument_source": "Py_BuildValue((LsOi))",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x5369aa",
+        "rva": "0x1369aa",
+        "argument_source": "PyTuple_New(0)",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x536c4d",
+        "rva": "0x136c4d",
+        "argument_source": "Py_BuildValue((L))",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x8dc9f0",
+        "rva": "0x4dc9f0",
+        "argument_source": "NULL",
+        "classification": "legal_null"
+      },
+      {
+        "preferred_va": "0x8dcf44",
+        "rva": "0x4dcf44",
+        "argument_source": "PyTuple_New(1)",
+        "classification": "tuple"
+      },
+      {
+        "preferred_va": "0x8f86f1",
+        "rva": "0x4f86f1",
+        "argument_source": "8b7480 -> 8b8970(PyTuple_New2) /8b8a30(PyTuple_New1)",
+        "classification": "tuple"
+      }
+    ]
+  },
+  "candidate_ranking": {
+    "tier": "inferred",
+    "highest_static_priority": [
+      "0x4e6ddc"
+    ],
+    "reason": "Follow-up traces 0x4e6ddc to gameclient.PreloadAssets and original startup call passing None callback/arguments; see callback_followup.",
+    "limitations": [
+      "No dynamic caller evidence",
+      "Direct FF15 pattern scan is not exhaustive for all DLL/internal/indirect call paths",
+      "Proper tuple construction reduces suspicion but does not rule out unrelated memory corruption",
+      "No Wine-cause conclusion"
+    ]
+  },
+  "next_diagnostic": {
+    "status": "Attempted in independent harness; breakpoint accepted but no hit; see runtime_diagnostic",
+    "hardware_execute_breakpoint": "actual_python24_base+0x25ebb",
+    "capture": [
+      "ESI rejected PyObject*",
+      "argument type pointer [ESI+4], type-name pointer [type+0xc]",
+      "callable [ESP+8]",
+      "args [ESP+0xc]",
+      "keywords [ESP+0x10]",
+      "return [ESP+4]",
+      "if immediate return is actual_python24_base+0x18ef1, native return [ESP+0x14]",
+      "registers, stack/backtrace, synchronized log offsets",
+      "Compare callable and arguments against loaded _Py_NoneStruct; if native return is EXEbase+0xe6de2 and both are None, record native stack and asset/callback object state to test startup preload attribution."
+    ],
+    "no_debuggee_function_calls": true,
+    "debugger_compatibility_unverified": true
+  },
+  "artifacts": [
+    {
+      "path": "original/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "bytes": 9719808,
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    },
+    {
+      "path": "original/Tabula Rasa 1.16.5.0/python24.dll",
+      "bytes": 1871872,
+      "sha256": "0d450c5e2c35ae0b3295b60061dcfc25fbc77701301f05e3dd3dde43ec7d7e73"
+    },
+    {
+      "path": "ui-flow/python-tuple-error.dis",
+      "bytes": 838,
+      "sha256": "b6acf081c52eed2c4c48e33333bcd4878ad2b45333e459db42e2a042041677d8"
+    },
+    {
+      "path": "ui-flow/python-call-sites.py",
+      "bytes": 453,
+      "sha256": "df40e4a3f07c52c2e81b3c0368823a75b2155c7393bd6c7cc40c595359d8390f"
+    },
+    {
+      "path": "playthrough-04/tabula_rasa.log",
+      "bytes": 5882,
+      "sha256": "433a3830bc58b383d110cb3b74050ac0ed09f9cb39705083a4734706aeab673b"
+    },
+    {
+      "path": "playthrough-04/game.log",
+      "bytes": 42810,
+      "sha256": "31dbe70c420ca0ff1754ff5c00544d9ec03d3471be1682b3dd1fa6cfee8aa919"
+    },
+    {
+      "path": "playthrough-04/admission-retest.json",
+      "bytes": 599,
+      "sha256": "348783a1a7d3b615cacaae656b5b1a7deab2dcaf737f0dd0a9a6db09d3b14ef7"
+    },
+    {
+      "path": "original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "bytes": 7037841,
+      "sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6"
+    },
+    {
+      "path": "ui-flow/client-main.pyo",
+      "bytes": 6995,
+      "sha256": "569bbc43f74f5cbfd04ddfe08224d8e90004ba7128ff1d9f2a762bea20c64f08"
+    },
+    {
+      "path": "ui-flow/client-main.dis",
+      "bytes": 34512,
+      "sha256": "8ed5a81dabd42f3e98acbcd99baf5a101cfd2d823f2521e0188bdc6f53bf611a"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/result.json",
+      "bytes": 1865,
+      "sha256": "aa47ff4cc1d3798550b2e9f260e8401ae10c85c4317b46e6333a19ec6bfd8b16"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/ownership.json",
+      "bytes": 343,
+      "sha256": "77b3d6c512cbc67d70183e914ec3d099376818190eeea1065b69650c32d0e879"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/run.py",
+      "bytes": 1038,
+      "sha256": "b4c9c8f481296d9f86e02e2872af5008a5e7eb9b02e815e35a690c4eabd7f943"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/launch.sh",
+      "bytes": 816,
+      "sha256": "e7368d576be906b60950ac0c0f9078fde7a615edd0b4f851ca2c28d3a4ad2376"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/gdb.commands",
+      "bytes": 464,
+      "sha256": "ffa8712d1875d21b50e35fa8e126bc7d82aea7846d5a7b5476f3a4890f895a31"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/output/gdb.log",
+      "bytes": 6790,
+      "sha256": "dbb89fe67bdeb5831831ecba2886598e508f1d60ac4a9bca71b0eef1c202498a"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/output/winedbg.log",
+      "bytes": 5797,
+      "sha256": "cbaff6b997815b9871b1238022ad9644114da6678c6356ec7b9a66adfae91c79"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/output/launcher.log",
+      "bytes": 54,
+      "sha256": "ae6f2774a498c4eeb2949f76435f759b6a77a77811d7d0ea7db0d41e527a7b7e"
+    },
+    {
+      "path": "tuple-diagnostic-isolated/output/xvfb.log",
+      "bytes": 81,
+      "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+    }
+  ],
+  "callback_followup": {
+    "recorded_at_utc": "2026-09-22T20:09:54.026515+00:00",
+    "tier": "original",
+    "method": "Static disassembly and cross-references only; no process interaction or changes to original client/prefix.",
+    "python_callsite": {
+      "archive": "original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/main.pyo",
+      "function": "Initialize",
+      "source_line": 117,
+      "bytecode_offsets": [
+        54,
+        57,
+        60,
+        63,
+        66,
+        69
+      ],
+      "call": "gameclient.PreloadAssets(\"startup.cat\", None, None)",
+      "disassembly": "ui-flow/client-main.dis:353-360",
+      "member_bytes": 6995,
+      "member_sha256": "569bbc43f74f5cbfd04ddfe08224d8e90004ba7128ff1d9f2a762bea20c64f08"
+    },
+    "native_chain_preferred_va": [
+      {
+        "va": "0x4bc214",
+        "role": "Registers function pointer 0x4d86a0 in gameclient binding chain"
+      },
+      {
+        "va": "0x4bca94",
+        "role": "Calls binding builder 0x4bd890; builder uses PreloadAssets name at 0xbdaa54 via 0x4bd8d5"
+      },
+      {
+        "va": "0x4d86a0",
+        "role": "PreloadAssets implementation; callback Py_None explicitly accepted at 0x4d86c6, otherwise PyCallable_Check through IAT 0xb2be70"
+      },
+      {
+        "va": "0x4d8789",
+        "role": "Loads argument object and callable; stores unchanged pair before call 0x4e42f0 at 0x4d87c2"
+      },
+      {
+        "va": "0x4e42f0",
+        "role": "Wraps pair via 0x4e63e0 at 0x4e4341 and passes functor to asset backend 0x5a3400 at 0x4e4380"
+      },
+      {
+        "va": "0x4e63e0",
+        "role": "Allocates a 16-byte functor; constructor 0x4e6d70 called at 0x4e6444"
+      },
+      {
+        "va": "0x4e6d70",
+        "role": "Stores callable+8 and arguments+12 without tuple/None normalization; vtable 0xbdd030"
+      },
+      {
+        "va": "0x4e6e00",
+        "role": "Vtable+16 predicate returns false unconditionally"
+      },
+      {
+        "va": "0x5a3489",
+        "role": "One immediate-ready backend branch invokes vtable+12; another at 0x5a352a; pending branch queues functor"
+      },
+      {
+        "va": "0x4e6dd0",
+        "role": "Vtable+12 callback invocation tests callable pointer for NULL only; arguments passed unchanged to PyObject_CallObject at 0x4e6ddc"
+      }
+    ],
+    "rtti": {
+      "complete_object_locator": "0xc347a8",
+      "type_descriptor": "0xd20e98",
+      "name": ".?AV?$utlFuncObjCallable0@XVPythonCallback@@@utlFunctorPrivate@@"
+    },
+    "other_opaque_wrapper": {
+      "va": "0x4cce70",
+      "constructor_va": "0x4cce30",
+      "copy_constructor_va": "0x4cce50",
+      "finding": "Raw executable scan found no direct E8/E9 references or stored absolute pointers for these three addresses. Equivalent pair storage is inlined into reachable functor chain. This does not prove the helper unreachable through every indirect/computed route."
+    },
+    "inference": {
+      "tier": "inferred",
+      "confidence": "strong static candidate; actual logged-error attribution unverified",
+      "explanation": "The original startup call supplies Python None for arguments. When its preserved functor is invoked, None is a non-NULL non-tuple and PyObject_CallObject(None, None) reaches the exact tuple rejection before callable validation. Native API allows None callback but dispatch wrapper does not skip Python None.",
+      "limitations": [
+        "No dynamic evidence this callback dispatched in playthrough 04 at the logged error",
+        "No exact synchronized timing or stack captured",
+        "No claim that all other direct or indirect Python API paths are excluded",
+        "No claim about original-live occurrence or Wine causation",
+        "No server or client behavior changed"
+      ]
+    }
+  },
+  "runtime_diagnostic": {
+    "tier": "observed",
+    "scope": "independent copied client/prefix, isolated debugger attempt; not original-live proof",
+    "recorded_at_utc": "2026-09-22T20:15:09.575613+00:00",
+    "status": "inconclusive_debugger_attempt",
+    "hardware_breakpoint_accepted": "0x1e025ebb",
+    "breakpoint_hit": false,
+    "python24_loaded_base": "0x1e000000",
+    "exe_loaded_base": "0x400000",
+    "startup_client_log_created": false,
+    "server_started": false,
+    "network": "private bwrap unshare-all namespace; only localhost debugger proxy; no authentication server",
+    "termination": "SIGINT sent only to verified owned GDB PID 1912762; debugger fault then shell EXIT cleanup private wineserver and Xvfb; namespace exited",
+    "interrupt_observation": {
+      "wine_thread_entry": "0x00006fffffd3961c",
+      "gdb_eip": "0xffd3961c",
+      "gdb_signal": "SIGSEGV",
+      "gdb_esi": "0x0",
+      "interpretation": "Debugger-created thread observation; not tuple rejection. Does not diagnose original error."
+    },
+    "owned_process_ids_remaining": [],
+    "client_artifact_hashes": {
+      "tabula_rasa.exe": {
+        "scratch_sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+        "original_sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+      },
+      "python24.dll": {
+        "scratch_sha256": "0d450c5e2c35ae0b3295b60061dcfc25fbc77701301f05e3dd3dde43ec7d7e73",
+        "original_sha256": "0d450c5e2c35ae0b3295b60061dcfc25fbc77701301f05e3dd3dde43ec7d7e73"
+      },
+      "trpython.zip": {
+        "scratch_sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6",
+        "original_sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6"
+      }
+    },
+    "limitations": [
+      "Hardware breakpoint accepted but effective triggering unverified",
+      "No tuple/callback argument object captured",
+      "Original logged error remains unattributed",
+      "No conclusion that authentication is required",
+      "No claim Wine caused original error"
+    ],
+    "result_artifact": "tuple-diagnostic-isolated/result.json"
+  },
+  "post_load_replay_audit": {
+    "recorded_at_utc": "2026-09-22T20:28:45.646452+00:00",
+    "tier": "original",
+    "method": "Read-only archive string census and byte-matched retained disassembly, no runtime activity",
+    "matched_members": [
+      {
+        "member": "client/actions/abilities/portal.pyo",
+        "sha256": "5f1b9ca04d9d376b28a9e37aab0b288fcf623fa6920e39877d4a0a8e70a2c216",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-actions-abilities-portal.pyo.dis"
+      },
+      {
+        "member": "client/actions/baseactoraction.pyo",
+        "sha256": "e2c220c955e0b413797f1c89da4ea69787f49dba7bad4c9ac21b8e5618ea2522",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-actions-baseactoraction.pyo.dis"
+      },
+      {
+        "member": "client/augmentations/actor.pyo",
+        "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-actor.pyo.dis"
+      },
+      {
+        "member": "client/gameeffects/morpheffect.pyo",
+        "sha256": "ec9c78b17feda57c6262210a16f4acc83464580734f5412ec3917c0a31db9176",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameeffects-morpheffect.pyo.dis"
+      },
+      {
+        "member": "client/inputstate/characterselection.pyo",
+        "sha256": "15b0e3f85e095f213e09a1d50925faf3d3e51f5b777b5f7afdedf0197043c361",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-inputstate-characterselection.pyo.dis"
+      },
+      {
+        "member": "client/inventory.pyo",
+        "sha256": "fea5b3bc09103b261cdccd8b9396b0cef0e93c0b484fcb1039655da57990bd70",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-inventory.pyo.dis"
+      },
+      {
+        "member": "client/main.pyo",
+        "sha256": "569bbc43f74f5cbfd04ddfe08224d8e90004ba7128ff1d9f2a762bea20c64f08",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-main.pyo.dis"
+      },
+      {
+        "member": "client/ui/abilitydrawerwindow.pyo",
+        "sha256": "e205b89843dc664dc0c7fb22b98fb1811be8b8ce0a1c597015e3995d4a8eb60e",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-abilitydrawerwindow.pyo.dis"
+      },
+      {
+        "member": "client/world.pyo",
+        "sha256": "d1ffdc4bf3dcce98094ef59a3b25162a1eca625599eba8bbd0bb046ad9cddcdb",
+        "retained_disassembly": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-world.pyo.dis"
+      }
+    ],
+    "finding": "Only main.Initialize directly calls gameclient.PreloadAssets with None callback and None arguments. BaseActorAction.PreloadAssets (first source line 830) skips None callbacks; otherwise forwards callArgs. Actor action callers construct tuples. Other matches use PreloadAssetsForClassId or PreloadAssetsForAbility.",
+    "assessment": {
+      "tier": "inferred",
+      "post_load_replay": "No normal post-load UI action identified that recreates original startup misuse. Reinvoking Initialize would repeat manager/UI setup and is not a faithful replay.",
+      "software_breakpoint": "A software breakpoint changes scratch process instruction memory, not original on-disk artifacts. It alone does not resolve the observed resume/interrupt problem; no reliability claim or new attempt."
+    }
+  }
+}

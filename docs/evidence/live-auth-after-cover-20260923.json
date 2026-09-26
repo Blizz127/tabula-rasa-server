@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Public original-client login after deploying the boot-camp cover image",
+  "provenance_tier": "observed",
+  "confidence": "High for this recovered-client test account's public login path; no observation of the owner's own client or account.",
+  "setup": "Recovered 1.16.5.0 client under Wine/Xvfb in a bubblewrap namespace sharing the host network. It connected to 51.81.220.194:2116 using the existing test account. The live game container was image sha256:3d7dd3782b22f87b500f553ef34455f12e2ba182685f146fc695ae1dcc160f1b. No character was created or entered the world.",
+  "observations": [
+    "Auth logged Login at 22:50:20.112 UTC, ServerListExt at 22:50:20.354, AboutToPlay at 22:50:20.465, then redirected account test to game server 234 at 22:50:20.474.",
+    "Game logged the client's public connection at 22:50:21.040. The 35-second screenshot shows the Character Select screen with empty test-account slots. The client process was still running at the 50-second capture and was stopped by the test harness afterward.",
+    "This verifies the public login route after the cover deployment; it does not verify the owner's shortcut, account, local network, or a character's map entry."
+  ],
+  "sources": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-cover-20260923/auth.selected.log", "sha256": "a6d2b521cf2db3b4c2aca876a1f25dc785e3fb2223d4502a8516f599999c6516"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-cover-20260923/game.selected.log", "sha256": "f430d3525a6f44509cb19d8ab9347f4a967d3552ee4ddb11bfef2dede5bc8090"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-cover-20260923/login-after-35s.png", "sha256": "f00f548a862715f90785f7417d0ceb53fe62134d2a84667d304c33549384c39e"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-cover-20260923/login-after-50s.png", "sha256": "fdc254a42a154cbe03a149557c240fd6a35233f5bbbba35e35230b59841dfb3f"}
+  ]
+}

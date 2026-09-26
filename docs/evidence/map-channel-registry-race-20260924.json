@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-23 America/Chicago",
+  "subject": "Concurrent map-channel registry snapshot exception during isolated client startup",
+  "provenance_tier": "observed",
+  "observation": {
+    "source_location": "isolated run 18 game.log 2026-09-23 21:52:48.691, immediately after Server ready at 21:52:48.662",
+    "finding": "MapChannelWorker logged System.ArgumentException: Destination array is not long enough to copy all the items in the collection, from Dictionary.ValueCollection.CopyTo via MapChannelManager.Channels() line 125. The run's client did not reach a playable frame. This single log does not prove the exception caused that client failure; subsequent old-binary isolated logins reached playability.",
+    "source_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-companions-normal-boss-18/game.log",
+    "sha256": "162a70c7d639c9fbfb4b9926fb2ba0c435cb89db95b81eeca48d545fe0ae3d54"
+  },
+  "implementation": {
+    "tier": "inferred",
+    "source_location": "src/Rasa.Game/Managers/MapChannelManager.cs Channels, ChannelForEntry, ReleaseInstanceIfEmpty, DestroyQueuedInstances, and MapChannelInit",
+    "reasoning": "Channels enumerated the public shared-map dictionary and private-instance dictionary without a lock while private channels could be added or removed during login/logout. List materialization can size its destination from one dictionary count and copy values after that count changes. A per-manager registry lock now covers snapshots and production registry mutations, including instance creation and removal.",
+    "limits": "The exact concurrent writer at 21:52:48.691 was not captured. This fix targets the demonstrated unsafe enumeration and has not been deployed."
+  },
+  "verification": {
+    "source_location": "src/Rasa.Test/PrivateInstanceTests.cs ChannelSnapshotsRemainValidWhilePrivateInstancesAreCreatedAndDestroyed; .NET SDK 5.0 container on 2026-09-23",
+    "finding": "The Game and Test projects built with zero errors. The focused private-instance, disconnect and logout test filter passed 18/18, including concurrent create/destroy and snapshot reads. A candidate Game DLL built from the current source (SHA-256 3624028e9f3ca73c909f0513e7535898a2c1831e3725a520610071bbba4048cc) accepted two isolated original-client logins into private boot-camp instance 2. Both reached MapLoaded and a playable frame with no map-channel worker error. git diff --check passed for the changed code and accuracy log.",
+    "limits": "The candidate DLL includes other current worktree changes, so this is an integration smoke check rather than an isolated proof of the lock. Two logins cannot establish all production interleavings or final-live gameplay behavior."
+  },
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/registry-lock-candidate-01/game.log",
+      "sha256": "050d99a4ad5ec7162cb624ef69fd0acadb9d463012e394c3a506887012f8b1bc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/registry-lock-candidate-02/game.log",
+      "sha256": "d40134eaef7d643e08971888b0f2a34d4422c67d36e4001c077439fb49f46ed7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/registry-lock-candidate-02/playable-bootcamp.png",
+      "sha256": "44359abf27c1c810b122d1fbdeb1cd5c2fa65f9cafe61f424231e9779610d589"
+    }
+  ],
+  "next_verification": "Review the candidate's other source changes and run the normal deployment verification before placing this fix on the live service. The original final-live encounter and character-to-endgame work remain open."
+}

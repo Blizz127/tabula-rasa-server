@@ -387,14 +387,21 @@ namespace Rasa.Managers
             ReconcilePlayerMissions(client);
 
             // Wall-clock timers keep running while the character is offline (OD-5); one that ran
-            // out meanwhile fails before the log is sent, so the client never receives an already
-            // expired running timer. The client has no log to update yet, so nothing is announced.
+            // out meanwhile fails before the reconciled log is sent. Admission has only
+            // primed saved state; the replacement snapshot reflects expiry without replaying alerts.
             ExpireObjectiveTimers(client, false);
 
             // A player can log in already wearing what an equip-bound objective
             // needs; the level-triggered check covers that without any new equip.
             Content.OnEquipCommitted(client);
 
+            client.CallMethod(client.Player.EntityId, CreateMissionStatusSnapshot(client));
+        }
+
+        // Read-only admission snapshot. In particular, do not reconcile objectives,
+        // expire timers or run equip/content reactions before the client has control.
+        public MissionStatusInfoPacket CreateMissionStatusSnapshot(Client client)
+        {
             // Derived objective indicators are filtered to the player's own map: the client's indicator tuple
             // carries no map and the map window places it on whatever map is open (MissionMapIndicators).
             var missionStatus = new Dictionary<uint, MissionInfo>();
@@ -413,7 +420,7 @@ namespace Rasa.Managers
                     Logger.WriteLog(LogType.Error, $"Character {client.Player.Id}: saved mission {mission.MissionId} has no definition and is not sent");
             }
 
-            client.CallMethod(client.Player.EntityId, new MissionStatusInfoPacket(missionStatus));
+            return new MissionStatusInfoPacket(missionStatus);
         }
 
         #endregion

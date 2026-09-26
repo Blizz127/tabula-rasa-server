@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "subject": "Auth first server-list wait and game content-ready admission; cover feedback deployment",
+  "provenance_tier": "observed",
+  "defect": "The game server previously accepted/authenticated clients before MissionContentManager loaded; a fast switch entered boot camp without its private instance. Moving game admission after initialization exposed a second race: Auth could answer ServerListExt while no game server was registered. The recovered client showed a persistent No servers found modal, even after automatic world entry (isolated derived-feedback-readiness-24 screenshot).",
+  "implementation": "Game.Server.Start now accepts world clients and connects to Auth after all startup managers. Auth.Client defers only the first empty ServerListExt response for at most 20 seconds, allowing the existing game-registration broadcast to satisfy it; subsequent refreshes remain immediate. Empty broadcasts do not reset the deadline. After the bounded wait, Auth sends the current empty list if Game is still unavailable.",
+  "isolated_verification": "In auth-server-list-wait-25, client Login at 19:21:48.920 and ServerListExt at 19:21:49.852 preceded Game content readiness at 19:21:57.190 and Game auth registration at 19:21:57.291. Auth then received AboutToPlay at 19:21:57.486; Game created private instance 2 for character 1 at 19:22:01.874 and received MapLoaded at 19:22:14.593. Original-client world-after-entry.png has no No servers found modal. This diagnostic used a copied server/world with 410 content rows and 3 unrelated validation gaps; live world content has 404 rows and 0 gaps.",
+  "deployment": {
+    "auth_image_id": "sha256:92958edb3445b35116d306ede7acb2bfc7e5df9a05bccf7cb7aad4c32c44a5fe",
+    "game_image_id": "sha256:570c2181644423915c1efe5ad5ca61e771608dcd145fd420057fdf6000d64f19",
+    "previous_auth_tag": "rasa_net_auth:pre-server-list-wait-20260923",
+    "previous_game_tag": "rasa_net_game:pre-feedback-readiness-20260923",
+    "method": "Derived from immediately preceding live images, overlaying only Auth/Client.cs, Auth/Server.cs, Game/Server.cs and the five reviewed cover feedback source files. Built both images with dotnet build --no-restore. Backed up rasaauth.db, rasachar.db and rasaworld.db using SQLite backup API; each backup passed integrity_check. Tagged previous images, updated latest tags, and recreated only auth and game using docker compose up --no-build -d auth game.",
+    "database_backups": [
+      {
+        "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/rasaauth.db",
+        "sha256": "d282e46159203436c6ab65f4657b93ee3928e744a2d6c8c361fab7b7dd1200a7",
+        "bytes": 28672
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/rasachar.db",
+        "sha256": "7a89385c5dd3f94961a8e87694209072157ba10356d37867a4dce356e4a6fa0f",
+        "bytes": 212992
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/rasaworld.db",
+        "sha256": "7ddfb163e445525818bce75bce437a7e1d66bebd4b80803cc960446f214dfb90",
+        "bytes": 4308992
+      }
+    ],
+    "verification": "At 00:25:49.705 UTC live Game loaded 17 rules/404 rows/0 gaps, then opened the world listener at 00:25:49.758 and connected to Auth at 00:25:49.772; Auth authenticated server 234 at 00:25:49.793. Both containers remained running with zero restarts; all three live SQLite databases passed integrity_check after restart. The recovered 1.16.5.0 client logged into live Auth via VPS Tailscale 100.104.53.1:2116, sent ServerListExt and AboutToPlay, and displayed Character Select for the public test account at 00:26 UTC."
+  },
+  "status": "Deployed and tested with an isolated public test account; the owner MacBook login after deployment is unobserved.",
+  "limitations": "The 20-second startup wait is an emulator availability fix, not a proven final-live auth timeout. The server-side cover sample grid and factor assignment remain labelled inference. Live player cover feedback has not been observed from the owner account.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/derived-feedback-readiness-24/cover-hit.png",
+      "sha256": "dacdbd49e5cb795e3081000a0e5ec0cc65eec38d738c1d6daf393d102384cb78"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/derived-feedback-readiness-24/auth.log",
+      "sha256": "545e33ae9f7f91b64df963836e9e7f1d36ef309dc09ceb4dde4bc70ea818a1fe"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/auth-server-list-wait-25/world-after-entry.png",
+      "sha256": "84f2525feecd68498c78c52edbdb781294fa47b4f41f1b1d9e3a6895a2b56292"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/auth-server-list-wait-25/auth.log",
+      "sha256": "3313630cc4611a4ddb07271207777d24d38e13c8d340e232eb2d50124af72c8f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/auth-server-list-wait-25/game.log",
+      "sha256": "47ed8ba5fd9d606bbbd41cadfe1f1f274f441063d7c92923e247e14bfdb9eba9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-wait-20260923/login-after-35s.png",
+      "sha256": "9934494287a2b55451296ac1fa676ed907977ae3cd35a1b0f46b70eaf7201e5b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-login-after-wait-20260923/client.log",
+      "sha256": "0ed219c2ba4f6276d074298eb1ca519e3aca85c842bf96411eea873787a14820"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/game-startup.selected.log",
+      "sha256": "b385375c5eb56e8790c00094739b5e8a2c07bc673616ca5994aa5d6ae566917b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/auth-startup.selected.log",
+      "sha256": "1c770e4b943369f2bfe169a515dde5ec0213dc3f7158a99e81779714c99f848c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness/source-manifest.json",
+      "sha256": "7f4aed054757047055735c8a46590a73a0d9d2d5ad1ae88015f75b4baf78521d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/deployments/20260923-feedback-readiness-auth/source-manifest.json",
+      "sha256": "67e854227c3a6e2852ea5b55e66167528bf0458c5b462f8e9a463bc1a8c94b31"
+    }
+  ]
+}

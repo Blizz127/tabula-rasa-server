@@ -29,7 +29,7 @@ namespace Rasa.Data
     ///
     /// LoadMissionTrackingData empties g_MissionTrackingList before refilling it from the options,
     /// and the server re-sends CharacterOptions on every map change as well as at login
-    /// (ManifestationManager.AssignPlayer), so an accept the server never wrote into the slots is
+    /// (ManifestationManager.InitializePlayerControl), so an accept the server never wrote into the slots is
     /// back to untracked at the next zone. Defaulting the accept to tracked therefore means writing
     /// the slots; the server writes them only on accept, so a later SaveCharacterOptions from the
     /// client - the player clearing the checkbox - is stored as sent and the untrack sticks.
@@ -76,7 +76,7 @@ namespace Rasa.Data
                 if (!values.TryGetValue(slot, out var value))
                     continue;
 
-                if (!uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var missionId) || missionId == 0)
+                if (!TryReadMissionId(value, out var missionId) || missionId == 0)
                     continue;
 
                 if (!tracked.Contains(missionId))
@@ -84,6 +84,19 @@ namespace Rasa.Data
             }
 
             return tracked;
+        }
+
+        private static bool TryReadMissionId(string value, out uint missionId)
+        {
+            if (uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out missionId))
+                return true;
+
+            // Original native options use std::locale("usa") for integer input
+            // (0x496fd0) and output (0x4040c0), producing e.g. "1,992". Require
+            // canonical grouping: AllowThousands alone also accepts malformed
+            // separator placement. This reads the value without rewriting it.
+            return uint.TryParse(value, NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out missionId) &&
+                string.Equals(value, missionId.ToString("N0", CultureInfo.InvariantCulture), StringComparison.Ordinal);
         }
 
         /// <summary>

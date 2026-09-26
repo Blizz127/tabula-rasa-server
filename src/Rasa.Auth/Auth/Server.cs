@@ -253,15 +253,11 @@ namespace Rasa.Auth
             // under the lock and carried out after it.
             string rejection;
             LogType rejectionLogType;
+            CommunicatorClient replaced = null;
 
             lock (GameServers)
             {
-                if (GameServers.ContainsKey(packet.ServerId))
-                {
-                    rejection = "A server tried to connect to an already in use server slot!";
-                    rejectionLogType = LogType.Debug;
-                }
-                else if (!Config.Servers.ContainsKey(packet.ServerId.ToString()))
+                if (!Config.Servers.ContainsKey(packet.ServerId.ToString()))
                 {
                     rejection = "A server tried to connect to a non-defined server slot!";
                     rejectionLogType = LogType.Debug;
@@ -274,12 +270,37 @@ namespace Rasa.Auth
                 else
                 {
                     GameServerQueue.Remove(client);
-                    GameServers.Add(packet.ServerId, client);
+                    client.ServerId = packet.ServerId;
+                    client.PublicAddress = packet.PublicAddress;
+                    // A recreated game process can leave its former TCP connection registered
+                    // indefinitely (for example after a network namespace is removed). The
+                    // shared server secret authenticates the replacement. Never let the old
+                    // connection's later OnError remove the new registration.
+                    GameServers.TryGetValue(packet.ServerId, out replaced);
+                    GameServers[packet.ServerId] = client;
 
-                    Logger.WriteLog(LogType.Network, $"The Game server (Id: {packet.ServerId}, Address: {client.Socket.RemoteAddress}, Public Address: {packet.PublicAddress}) has authenticated! Requesting info...");
-
-                    return true;
+                    rejection = null;
+                    rejectionLogType = LogType.Debug;
                 }
+            }
+
+            if (rejection == null)
+            {
+                if (replaced != null && !ReferenceEquals(replaced, client))
+                {
+                    Logger.WriteLog(LogType.Network, $"Replacing the previous connection for Game server Id {packet.ServerId}.");
+                    try
+                    {
+                        replaced.Socket.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.WriteLog(LogType.Error, $"Could not close the replaced Game server connection: {e}");
+                    }
+                }
+
+                Logger.WriteLog(LogType.Network, $"The Game server (Id: {packet.ServerId}, Address: {client.Socket.RemoteAddress}, Public Address: {packet.PublicAddress}) has authenticated! Requesting info...");
+                return true;
             }
 
             DisconnectCommunicator(client);
@@ -290,12 +311,20 @@ namespace Rasa.Auth
 
         public void UpdateServerInfo(CommunicatorClient client, ServerInfoResponsePacket packet)
         {
+            lock (GameServers)
+                if (!GameServers.TryGetValue(client.ServerId, out var registered) || !ReferenceEquals(registered, client))
+                    return;
+
             GenerateServerList();
             BroadcastServerList();
         }
 
         public void RedirectResponse(CommunicatorClient client, RedirectResponsePacket packet)
         {
+            lock (GameServers)
+                if (!GameServers.TryGetValue(client.ServerId, out var registered) || !ReferenceEquals(registered, client))
+                    return;
+
             Client authClient;
             lock (Clients)
                 // AccountEntry is null on every connection still at the login screen, and this
@@ -322,11 +351,13 @@ namespace Rasa.Auth
             if (client == null)
                 return;
 
+            bool removedRegistered;
             lock (GameServers)
             {
                 GameServerQueue.Remove(client);
 
-                if (client.ServerId != 0)
+                removedRegistered = client.ServerId != 0 && GameServers.TryGetValue(client.ServerId, out var registered) && ReferenceEquals(registered, client);
+                if (removedRegistered)
                     GameServers.Remove(client.ServerId);
             }
 
@@ -334,7 +365,8 @@ namespace Rasa.Auth
             // GameServers, and calling it from inside GameServers inverted that order against
             // UpdateServerInfo, so one game server dropping while another reported its info
             // could deadlock both communicator threads for good.
-            GenerateServerList();
+            if (removedRegistered)
+                GenerateServerList();
 
             Timer.Add($"Disconnect-comm-{DateTime.Now.Ticks}", 1000, false, () =>
             {
@@ -465,7 +497,7 @@ namespace Rasa.Auth
             lock (Clients)
                 foreach (var c in Clients)
                     if (c.State == ClientState.ServerList)
-                        c.SendPacket(new SendServerListExtPacket(servers, c.AccountEntry.LastServerId));
+                        c.SendServerList(servers);
         }
 
         /// <summary>
