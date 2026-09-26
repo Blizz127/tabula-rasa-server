@@ -1049,6 +1049,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
   needs `MissingMissionGivers` for a conversable class. Open: GAP-LIAISON-LOGOS-REWARD-ERA, -REWARDS-MISSING,
   -SPEAKER, -POWER-D11, -UNSEEDED (907/908/909/911/912/921 are seedable the same way) and GAP-LOGOS-SKIP-POWER.
   Details: `docs/evidence/liaison-logos-missions.json`.
+- **Clone credits (2026-09-26, `CloneCreditNotTradable` and server rules)**: the Clone Credit item works. Its
+  right-click `RequestUseCloneCredit` (706) spends one token from the backpack for one clone credit, answered with
+  `CloneCredits` (client PM 955), per the client's `clonecredit.pyo` and TaRapedia's Clone Credit page. Tokens in the
+  footlocker or clan lockbox are ignored (OD-115). The token is not tradable (observed). The selection screen already
+  showed each pod's credits. The copy list was reconciled, not changed: completed missions carry, open ones do not,
+  the clone arrives where its source stood, and a clone made past the gate earns no tier credit (now tested). The only
+  sources besides the tier gate are unseeded missions: Wilderness Targets of Opportunity 1449, the Divide, Palisades
+  and Plains ToOs and the hybrid missions. Their rewards go in with them (OD-116). Open:
+  `GAP-WILDERNESS-TOO-CLONE-CREDIT`, `GAP-CLONE-TOKEN-LATER-SOURCES`, `-LOCKBOX-USE`, `-FLAGS`,
+  `GAP-CLONE-TOO-AUTOCOMPLETE`, `GAP-CLONE-SOCIAL-STATE`, `GAP-CLONE-CREDIT-VENDOR`. Details: `docs/retail-accuracy.md`,
+  "2026-09-26 — Clone credits".
 
   - **2026-09-22 to 2026-09-24 (recovered from a lost checkout; documentation reconstructed 2026-09-26,
     commit `4aa50b3`)**: Alia Das missions given by Alia Das/Warrior Apirka were seeded or corrected in
@@ -1316,6 +1327,9 @@ its evidence tier.
 | OD-105 Kill-experience danger penalty (2026-09-26, agent, pending owner review) | Applied, labelled inferred: full to 5 levels above the creature, 20% less per level to 20% at 9 above, nothing from 10 above. The constants (`DANGER_PENALTY_VALUE 0.2`, `_LEVELDIFF_MIN 5`, `_MAX 9`) are original and TaRapedia (2008-10-06) states the zero; only the linear ramp between them is reconstructed (`GAP-XP-DANGER-SHAPE`). The alternative was full experience at any level, which the live game did not give |
 | OD-106 Who shares a squad kill (2026-09-26, agent, pending owner review) | The killer's squadmates on the channel within 100 m (`MIN_DISTANCE_FOR_KILL_CREDIT`) of the creature, at the client's XP-bar share; the split counts every member in the world, as the client's tooltip does. Squadmates are paid without a streak (`GAP-XP-SQUAD-RANGE`, `GAP-XP-SQUAD-STREAK`) |
 | OD-107 Crit kills and partial credit (2026-09-26, agent, pending owner review) | The crit-kill reward is modelled from B1-028 but has no trigger until the crit-death finisher is built (`GAP-CRIT-DEATH-FINISH`). Damage-ranked partial credit is left out although the client's `KC_*_PLACE_MOD` fit four footage lines, because the ranking is not evidenced (`GAP-XP-PARTIAL`) |
+
+| OD-115 Where a Clone Credit token can be used (2026-09-26, agent, pending owner review) | Only from the using character's own backpack, where TaRapedia locates it. The client's footlocker and clan-lockbox windows can send the same request; it is ignored without a reply until a source shows the live server honoured it (`GAP-CLONE-TOKEN-LOCKBOX-USE`). Alternative for the owner: accept the account footlocker as well |
+| OD-116 Clone Credit rewards of unseeded missions (2026-09-26, agent, pending owner review) | No reward row ahead of its mission: the Targets of Opportunity and hybrid missions that paid a Clone Credit are unseeded, and a reward row for an undefined mission is dangling content. Each reward's evidence is kept in `docs/evidence/class-trainer-evidence.json` (`clone_credit_sources`) for when its mission is seeded |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

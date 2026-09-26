@@ -183,6 +183,27 @@ namespace Rasa.Test
             Assert.AreEqual(1u, _client.Player.CloneCredits);
         }
 
+        /// <summary>
+        /// A clone carries its source's experience and no credit (CT-CLONE). Made past the gate it earns no tier credit of
+        /// its own; made before the gate it earns one on reaching it (TaRapedia "Cloning" rev 16906, 2007-11-28: "clone at
+        /// level 14.9, not at 14.9999999"; Beginners Guide rev 35313, 2008-10-23; Clone Credit rev 31080, 2008-06-03).
+        /// </summary>
+        [DataTestMethod]
+        [DataRow(44_000u, 0u)]
+        [DataRow(42_000u, 1u)]
+        public void AClonesOwnTierCreditDependsOnWhetherItWasMadeBeforeTheGate(uint clonedExperience, uint expectedCredits)
+        {
+            _client.Player.Level = 4;
+            _client.Player.Experience = clonedExperience;
+            _client.Player.CloneCredits = 0;
+
+            Gain(2_000);
+
+            Assert.AreEqual(4, _client.Player.Level);
+            Assert.AreEqual(expectedCredits, _client.Player.CloneCredits);
+            Assert.AreEqual(expectedCredits, (uint)Drain().Select(entry => entry.Packet).OfType<CloneCreditsPacket>().Count());
+        }
+
         [TestMethod]
         public void TheTrainerOffersTrainingOnlyAtTheGate()
         {

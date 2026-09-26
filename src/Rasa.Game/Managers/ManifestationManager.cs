@@ -92,6 +92,7 @@ namespace Rasa.Managers
          *  - RequestArmWeapon          => implemented
          *  - RequestSetAbilitySlot     => implemented
          *  - RequestSwapAbilitySlots   => implemented
+         *  - RequestUseCloneCredit     => implemented
          *  - StartAutoFire             => implemented, but need more work on it
          *  - StopAutoFire              => implemented, but need more work on it
          */
@@ -710,6 +711,44 @@ namespace Rasa.Managers
 
             client.CallMethod(player.EntityId, new CloneCreditsPacket(player.CloneCredits));
             client.CallMethod(player.EntityId, new AvailableCharacterClassesPacket(pending, silent: true));
+        }
+
+        /// <summary>
+        /// RequestUseCloneCredit(entityId), the right-click "Use" of a Clone Credit item (client clonecredit.pyo
+        /// InventoryUse; CT-CLONE-TOKEN in docs/evidence/class-trainer-evidence.json). The token is spent and the
+        /// character gains one clone credit. TaRapedia's Clone Credit page (rev 31080, 2008-06-03, standing at its final
+        /// revision 35135, 2008-10-16): "Right-click on the clone credit token (it can be found in the last tab of your
+        /// backpack) to enable a clone credit on your character." The client asks nothing back but the new count:
+        /// manifestation.Recv_CloneCredits shows PM 955 "Your cloning credits have increased." and the Clone Credit
+        /// tutorial when the count rises, and the attributes window and the selection pod read it.
+        /// Only a token in the backpack is accepted (OD-115): the footlocker and clan lockbox windows can offer the same
+        /// right-click, but no source shows a credit taken from either (GAP-CLONE-TOKEN-LOCKBOX-USE). A refused request is
+        /// not answered; the client has no failure message for it.
+        /// </summary>
+        public void RequestUseCloneCredit(Client client, ulong entityId)
+        {
+            var player = client.Player;
+            if (client.State != ClientState.Ingame || player == null)
+                return;
+
+            var item = EntityManager.Instance.GetItem(entityId);
+            var augmentations = item?.ItemTemplate == null ? null : EntityClassManager.Instance.GetClassInfo(item.ItemTemplate.Class)?.Augmentations;
+            if (augmentations == null || !augmentations.Contains(AugmentationType.CloneCredit))
+            {
+                Logger.WriteLog(LogType.Security, $"RequestUseCloneCredit: character {player.Id} used entity {entityId}, which is no clone credit.");
+                return;
+            }
+
+            // Checks the item stands in this character's backpack and spends one of the stack in the database first.
+            if (!InventoryManager.Instance.ReduceStackCount(client, InventoryType.Personal, item, 1))
+            {
+                Logger.WriteLog(LogType.Security, $"RequestUseCloneCredit: character {player.Id} used clone credit {entityId} outside its backpack.");
+                return;
+            }
+
+            player.CloneCredits++;
+            CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.CloneCredits);
+            client.CallMethod(player.EntityId, new CloneCreditsPacket(player.CloneCredits));
         }
 
         /// <summary>

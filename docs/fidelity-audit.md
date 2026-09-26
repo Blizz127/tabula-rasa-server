@@ -940,3 +940,27 @@ withdrawn: its 40 credits belong to the previous kill, and the line fits the cli
 credit instead. Rules, tiers and gaps: `docs/evidence/kill-rewards.json`; account: `docs/retail-accuracy.md`, "Kill
 experience: squad share, danger penalty, crit kills".
 
+## Clone workflow (2026-09-26)
+
+The segment-3 audit (SEG3-CLONE-CREDIT-SOURCES, SEG3-CLONE-COPY-RULES) found the Clone Credit item inert and the copy
+list unverified. The client's clone contract was re-read from the 1.16.5.0 bytecode, and the copy list was checked
+against every dated source (`research/20260926-clone-credits`; rules in `docs/evidence/class-trainer-evidence.json`).
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| right-click Use of a Clone Credit (`RequestUseCloneCredit`, 706) | unhandled: the token did nothing | one token from the backpack spent, one credit added and saved, `CloneCredits` sent (client: PM 955 and tutorial) | `clonecredit.pyo` InventoryUse; `manifestation.Recv_CloneCredits`; TaRapedia Clone Credit rev 31080 (2008-06-03, unchanged to 2008-10-16) | original contract, observed effect |
+| token used from the footlocker or clan lockbox | unhandled | ignored (OD-115) | the lockbox windows can send it; no source shows it honoured (`GAP-CLONE-TOKEN-LOCKBOX-USE`) | gap |
+| template 111219 `not_tradable_flag` | 0, the uniform placeholder of `Regenerate_item_template` | 1 (`CloneCreditNotTradable`) | TaRapedia: "not able to be traded" | observed |
+| clone credit rewards of the ToO and hybrid missions | none | none; recorded for their missions (OD-116) | TaRapedia rewards for 1449 (2008-10-21), 1582, 1630, 1619, 1861, 1851, 1899; none of these missions is seeded | gap |
+| completed missions on a clone | carried | carried (unchanged) | TaRapedia Cloning (2007-11-28), Beginners Guide (2008-10-23), official 1.4 ToO clone rule | observed |
+| open missions on a clone | not carried | not carried (unchanged) | same, plus IGN "wipes the quest log" and the official site's guide | observed |
+| clone's arrival | the source's position | unchanged | "Your Clone and You": "Location upon cloning" not reset | observed |
+| clone's own tier credit | none if cloned at or past the gate | unchanged, now tested | TaRapedia Cloning: "clone at level 14.9, not at 14.9999999" | observed |
+
+The copy-list "conflict" was a reading of "missions reset" as the whole history. Every source that separates open
+and completed missions agrees with what the server already did. The code's "2009-01-25 Beginners Guide" is
+TaRapedia's Beginners Guide, whose last revision before shutdown is 35313 (2008-10-23). "Your Clone and You" is a
+player guide the official site republished. Its text did not change from 2007-12 to 2009-01, so its "Attributes"
+not reset predates the official 1.4 notes that reset them. Still open: the ToO auto-completion for clones
+(`GAP-CLONE-TOO-AUTOCOMPLETE`), friends, ignores, clan and titles (`GAP-CLONE-SOCIAL-STATE`), the token's other flags
+(`GAP-CLONE-TOKEN-FLAGS`) and any clone-credit vendor (`GAP-CLONE-CREDIT-VENDOR`, none found).

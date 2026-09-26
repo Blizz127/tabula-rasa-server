@@ -25,7 +25,17 @@
    "trpython/client/augmentations/npc.pyo": "d54178e21d838417110afd39b85a40c08b906082965864aed480233e745f3894",
    "trpython/client/augmentations/actor.pyo": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
    "trpython/client/gameuiutil.pyo": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
-   "trpython/shared/gameconstants.pyo": "e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40"
+   "trpython/shared/gameconstants.pyo": "e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40",
+   "trpython/client/augmentations/clonecredit.pyo": "f55ce8c83c2073568a97f44735db92bd0f54795c0572bb87a3570e6d570189b1",
+   "trpython/client/augmentations/manifestation.pyo": "724f68eb70e5a47338db82977c55abfa09f1b187f86a0b9a560c012a8588886d",
+   "trpython/client/augmentations/characterselectionpod.pyo": "9122ae91ed0b49333411a95135f6752e4b12e4e9af8664afb234c4382895ee42",
+   "trpython/client/ui/characterselectionwindow.pyo": "1846a19a9577aa91982600b9cd81eaa5ef3472a9edd48eeb354abcf7571992da",
+   "trpython/client/ui/inventorywindow.pyo": "dc0ec8d20babe216848b2b64c087d9a0a49e53ca2b0d0cf8dede5bb9abc17830",
+   "trpython/client/ui/lockboxwindow.pyo": "f4209434382cd297d70e2c31090ebff69869e3a99b56d65a41d188d35ce0e5ae",
+   "trpython/client/ui/clanlockboxwindow.pyo": "7619b8c9d648b131c64ef3dcdaddddb9f18fbfad83e0b9282e9e7f4c29212c7b",
+   "trpython/client/ui/attributeswindow.pyo": "23610f22dd8fafeab21f8b490f2897dd5b2a0186027a942e00d44f5a7166fde6",
+   "game/generated/client/methodid.pyo": "cc75aa76099de1bf4ea924bf68a4d8277fb3ac1e497ae5127b4e7ee7147412d8",
+   "game/generated/client/language/english/physicalentityclassnamelanguage.pyo": "7539a00ef1947e6fc3ec2df5612e8b9f681a6ea6839a7928272a3aa232359e46"
   }
  },
  "rules": [
@@ -188,19 +198,72 @@
   },
   {
    "id": "CT-CLONE",
-   "tier": "inferred",
-   "rule": "Cloning spends one credit from character selection into an empty pod; attributes and skills reset, Logos kept.",
+   "tier": "observed",
+   "rule": "Cloning spends one credit of the source from character selection into an empty pod. The clone keeps class, level, experience, Logos, waypoints and hospitals and the missions its source completed; it starts with no active missions, no money, the starter gear, no clone credit, and its attribute and skill points unspent.",
    "sources": [
-    "charactercreation.pyo OnCreateCharacter: RequestCloneCharacterToSlot(sourceSlot, destinationSlot, name, gender, height, appearanceData, raceId)",
-    "official live notes 2008-01-29/30 (attribute and skill reset)",
-    "official Wilderness walkthrough (Logos persist through cloning)",
-    "2009-01-25 Beginners Guide (completed missions carried; an undated fan guide disagrees)"
+    "client charactercreation.pyo OnCreateCharacter: RequestCloneCharacterToSlot(sourceSlot, destinationSlot, name, gender, height, appearanceData, raceId) (original)",
+    "official live notes 1.4, 2008-01-29 (research/20260926-reward-items/work/rgtr-patch-1.4-20080129.txt line 7): 'Cloning now resets your attribute points as well as your skill points.' (original)",
+    "official live notes 1.4, 2008-01-29 (same file, line 262): 'Wilderness, Crucible, Plateau and Abyss - Targets of Opportunity - Mission related and other non-repeatable objectives will now auto complete for cloned characters if they were already completed prior to cloning.' - a clone knows its source's completed missions (original, implicit)",
+    "official Wilderness walkthrough: 'Even future clones of your character have full use of the symbol.' (original; docs/source-sweep-2026-09-13.md 7.8)",
+    "TaRapedia 'Cloning' rev 16906 (2007-11-28): completed missions count as completed for the clone, which 'will have no active missions in the mission log'; no money and no weapons, level-1 armour (observed, pre-final)",
+    "TaRapedia 'Beginners Guide' rev 35313 (2008-10-23): 'You can't change / these will persist on the clone: Level and class, Logos symbols gained, Quests completed' (observed, final era)",
+    "rgtr.com player guide 'Your Clone and You' (Shaon94, captured 2007-12-11 to 2009-01-09, text unchanged): 'Items that ARE reset upon cloning are: Skills, Missions, Friends List (for now at least), Clan affiliation' - with 'Since missions are not carried over make sure to finish off any that you do not want to repeat', the mission log (observed; its 'Attributes' not reset predates the 1.4 notes and is superseded)",
+    "IGN Player_Compiled_Cloning_Tips (pre-1.6): cloning 'wipes the quest log' (observed, early 2008)"
    ],
    "implemented_by": "CharacterManager.RequestCloneCharacterToSlot",
+   "unverified": "friends and ignore lists (account-wide in the emulator; two early-2008 sources report them reset 'for now'), titles and clan membership (not copied; no final-era source), and the Targets of Opportunity auto-completion for clones, which waits for those missions (GAP-CLONE-SOCIAL-STATE, GAP-CLONE-TOO-AUTOCOMPLETE)",
+   "reconciliation": "The audit's conflict (completed missions kept, 2009 guide, vs quest log wiped, IGN) is not a conflict: every source that distinguishes the two says the mission log's open missions are lost and completed missions carry, and the official 1.4 notes build the clone's Targets of Opportunity credit on that. Implementation unchanged.",
    "legacy_ids": [
     "R5.1"
+   ]
+  },
+  {
+   "id": "CT-CLONE-GATE-CREDIT",
+   "tier": "observed",
+   "rule": "A clone brings no clone credit of its own. Made before its source reached the tier gate, it earns the gate's credit itself; made at or past the gate (experience already at the threshold, trained or not), it does not.",
+   "sources": [
+    "TaRapedia 'Cloning' rev 16906 (2007-11-28): 'If you clone before this point, then your new clone will also earn a clone credit upon completing the tier. If you clone after completing the tier, even if you have not yet trained in a new class, your clone will not be awarded the additional clone credit.'",
+    "TaRapedia 'Clone Credit' rev 31080 (2008-06-03), Clone Credit Management tip 2",
+    "TaRapedia 'Beginners Guide' rev 35313 (2008-10-23): 'clone your character before receiving the clone credit from the the next tier choice (for example: cloning at level 14.9, not 14.99999)'"
    ],
-   "unverified": "the complete copied-state list, arrival position, and whether a clone made at the gate gets its own tier credit"
+   "implemented_by": "CharacterManager.RequestCloneCharacterToSlot (clone_credits 0, experience copied) and ManifestationManager.ApplyLevelUps (credit only when experience crosses the threshold)",
+   "tested_by": "ClassTrainerTests.AClonesOwnTierCreditDependsOnWhetherItWasMadeBeforeTheGate"
+  },
+  {
+   "id": "CT-CLONE-POSITION",
+   "tier": "observed",
+   "rule": "The clone enters the world where its source stood when it was cloned.",
+   "sources": [
+    "rgtr.com player guide 'Your Clone and You' (captured 2007-12-11 to 2009-01-09, unchanged): not reset upon cloning: 'Location upon cloning. (aka if you clone in a hostile area that is where your naked clone is created upon logging in, So be careful.)'"
+   ],
+   "implemented_by": "CharacterManager.RequestCloneCharacterToSlot (map, position and rotation of the source)",
+   "unverified": "no final-era footage of a clone's first login; the guide's text dates from 2007-12 and was republished unchanged through 2009-01"
+  },
+  {
+   "id": "CT-CLONE-TOKEN",
+   "tier": "original",
+   "rule": "Right-clicking a Clone Credit item (class 26491, augmentations 6 item and 70 clonecredit) sends RequestUseCloneCredit(entityId) (method 706). The server spends one token and adds one clone credit, answered with CloneCredits(count) (704), on which the client shows PM 955 'Your cloning credits have increased.' and the Clone Credit tutorial.",
+   "sources": [
+    "trpython/client/augmentations/clonecredit.pyo CloneCredit.InventoryUse line 19: gameclient.SendCallActorMethod('RequestUseCloneCredit', (self.entityId,)); GetRightClickOption: eTooltipRightClick_Use (original)",
+    "game/generated/client/methodid.pyo: CloneCredits 704, CloneCreditsChanged 705, RequestUseCloneCredit 706 (original)",
+    "trpython/client/augmentations/manifestation.pyo Recv_CloneCredits line 1672: a count above a known count posts PM_CLONE_CREDITS_ADDED and tutorial CLONE_CREDIT_ADDED, then UI_UPDATE_CLONE_CREDITS (original)",
+    "playermessagelanguage.pyo 955: 'Your cloning credits have increased.' (original)",
+    "TaRapedia 'Clone Credit' rev 31080 (2008-06-03), unchanged at rev 35135 (2008-10-16): 'Right-click on the clone credit token (it can be found in the last tab of your backpack) to enable a clone credit on your character.' (observed: the effect, one token for one credit)"
+   ],
+   "implemented_by": "ManifestationManager.RequestUseCloneCredit",
+   "tested_by": "CloneCreditUseTests",
+   "unverified": "use from the footlocker or clan lockbox (the client's lockbox windows offer the same right-click when the backpack is closed; the server accepts only the backpack, OD-115, GAP-CLONE-TOKEN-LOCKBOX-USE); any refusal message (the client has none)"
+  },
+  {
+   "id": "CT-CLONE-SELECTION",
+   "tier": "original",
+   "rule": "The character selection screen shows each pod's clone credits from CharacterInfo's CharacterData (index 8) and enables Clone only for an occupied pod with a free pod and more than zero credits.",
+   "sources": [
+    "trpython/client/augmentations/characterselectionpod.pyo: kCharacterData_CloneCredits = 8; Recv_CharacterInfo stores characterData[8]; Recv_CloneCreditsChanged(cloneCredits) replaces it",
+    "trpython/client/ui/characterselectionwindow.pyo line 597: Stats.PlayStats.CloneCredits.SetText(u'%s' % cloneCredits); line 614: CloneBtn.Enable(not bIsEmpty and bIsAnyEmpty and cloneCredits > 0)"
+   ],
+   "implemented_by": "CharacterData (index 8) and CharacterManager.RequestCloneCharacterToSlot (re-sends both pods' CharacterInfo after a clone)",
+   "unverified": "whether the live server refreshed the source pod with CloneCreditsChanged (705) or a new CharacterInfo; both set the same field"
   },
   {
    "id": "CT-SINGLE",
@@ -1029,5 +1092,81 @@
   "spawnpools": "501001-501038 (counts 1/1 -> 0/0; creature, appearance and pool rows kept)",
   "origin": "Add_class_trainers (20260920070000, commit d717ed1, tools/gen_class_trainers.py in the InfiniteRasa data pass)",
   "why": "pre-D12 per-class model (CT-SINGLE); no npc_package, so they could neither converse nor train; six stood 3-6 m round Kincaid"
+ },
+ "clone_credit_sources": {
+  "note": "Where a character's clone credits come from in the final live game, with the evidence for each. Only the tier gate is live in the emulator; the rest wait for their missions. research_dir: /home/blizz/backups/rasa-net/research/20260926-clone-credits (TaRapedia revision histories in work/tarapedia/pages, Wayback captures in work/wayback, SHA256SUMS).",
+  "item": {
+   "item_template": 111219,
+   "entity_class": 26491,
+   "name": "Clone Credit",
+   "name_source": "physicalentityclassnamelanguage.pyo 26491 (original)",
+   "stack_size": 10,
+   "stack_size_source": "game/generated/client/itemclass.pyo: class 26491 (icon 46013, loot value 1, stack 10) and itemTemplateItemClass 111219 -> 26491 (original)",
+   "not_tradable": true,
+   "not_tradable_source": "TaRapedia 'Clone Credit' rev 31080 (2008-06-03), unchanged at rev 35135: 'They are, at the moment, not able to be traded.' (observed; migration CloneCreditNotTradable)"
+  },
+  "sources": [
+   {
+    "source": "tier gate at levels 4, 14 and 29 (one credit each)",
+    "status": "implemented",
+    "rule": "CT-CLONE-CREDIT"
+   },
+   {
+    "source": "mission 1449 Wilderness Targets of Opportunity (Lieutenant Colonel Cimoch, Alia Das)",
+    "reward": "Clone Credit item and the title Master of Wilderness",
+    "evidence": "TaRapedia 'Wilderness Targets of Opportunity' rev 35297 (2008-10-21) RewardItem '{{Icon|Clone Credit}} AND {{Icon|Title|Master of Wilderness}}', present since rev 11803 (2007-10-26); rgtr.com 'Your Clone and You' (to 2009-01-09): ToOs for Wilderness, Divide, Plains, Palisades",
+    "tier": "observed",
+    "status": "gap",
+    "gap": "GAP-WILDERNESS-TOO-CLONE-CREDIT"
+   },
+   {
+    "source": "mission 1582 Divide Targets of Opportunity (Agent Garrett, Foreas Base)",
+    "evidence": "TaRapedia rev 34567 (2008-10-02); Ten Ton Hammer guide node 20435 ('Youve earned yourself another clone credit')",
+    "tier": "observed",
+    "status": "gap",
+    "gap": "GAP-CLONE-TOKEN-LATER-SOURCES"
+   },
+   {
+    "source": "missions 1630/1809 Palisades Targets of Opportunity (Surveyor Savinelli, Cumbria Research Facility); 1810 'Targets of Opportunity Reward.' ('I totally forgot to give this to you') is a client-only follow-up with no objectives",
+    "evidence": "TaRapedia rev 35441 (2008-10-26)",
+    "tier": "observed",
+    "status": "gap",
+    "gap": "GAP-CLONE-TOKEN-LATER-SOURCES"
+   },
+   {
+    "source": "missions 1619/1829 Plains Targets of Opportunity (Sergeant Dekay, Irendas Penal Colony)",
+    "evidence": "TaRapedia rev 32005 (2008-08-23); Ten Ton Hammer guide node 25965 (2008-02-19)",
+    "tier": "observed",
+    "status": "gap",
+    "gap": "GAP-CLONE-TOKEN-LATER-SOURCES"
+   },
+   {
+    "source": "the other Targets of Opportunity missions (Crucible 1589, Thunderhead 1763, Ashen Desert 1580, Incline 1739, Mires 1585, Abyss 1593, Plateau 1586, Pools 1594, Marshes 1583, Descent 1631, Howling Maw 1752)",
+    "evidence": "TaRapedia 'Targets of Opportunity' rev 24071 (2007-12-25): 'Completing all ToO's on a Map will reward a Clone Credit' (pre-final; each page's final reward not yet checked)",
+    "tier": "inferred",
+    "status": "gap",
+    "gap": "GAP-CLONE-TOKEN-LATER-SOURCES"
+   },
+   {
+    "source": "hybrid missions 1861 Traitor on the Run, 1851 Remedy, 1899 Genome Sweet Genome",
+    "evidence": "TaRapedia rev 28192 (2008-02-01), 34555 (2008-09-30), 35706 (2008-11-18): RewardItem Clone Credit and the hybrid unlock; 'Clone Credit' rev 31080: 'you can obtain a clone credit by the Hybrid missions'",
+    "tier": "observed",
+    "status": "gap",
+    "gap": "GAP-CLONE-TOKEN-LATER-SOURCES"
+   },
+   {
+    "source": "a clone credit vendor",
+    "evidence": "'Your Clone and You' (2007-12): 'eventually, according to Cuppa Jo, there will be a vendor where you can purchase a cloning point'. No later source shows one; TaRapedia 'Prestige vendor' rev 35127 (2008-10-16) sells Attribute and Skill Respec Tokens and Experience Boosters only",
+    "tier": "-",
+    "status": "none",
+    "gap": "GAP-CLONE-CREDIT-VENDOR"
+   },
+   {
+    "source": "one-off grant to all characters, 2008-01-31",
+    "evidence": "rgtr.com community news 'XP Bonus, Clone Credit, and a Pants Allowance' (captured 2008-01-31): compensation for a rollback",
+    "tier": "original",
+    "status": "not final state; not implemented"
+   }
+  ]
  }
 }
