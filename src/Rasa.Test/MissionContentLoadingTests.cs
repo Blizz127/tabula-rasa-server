@@ -1070,6 +1070,30 @@ namespace Rasa.Test
                 Assert.AreEqual(0, content.RollMissionItemDrops(collector, new Creature { DbId = 3 }, () => 0.50).Count());
                 CollectionAssert.AreEqual(new uint[] { 2527 }, content.RollMissionItemDrops(collector, new Creature { DbId = 85 }, () => 0.49).ToArray());
                 Assert.AreEqual(0, content.RollMissionItemDrops(collector, new Creature { DbId = 85 }, () => 0.50).Count());
+                // LiaisonLogosMissions (2026-09-26): the eleven Liaison Logos missions load offerable, each one objective waiting
+                // on its shrine's logos row, with the reconciled currency rows only and 1639/1640 behind Receptive Reception.
+                var liaisonLogos = new (uint Mission, uint Giver, uint Objective, uint Shrine, long Experience, long Credits)[]
+                {
+                    (1633, 133, 3, 2, 4000, 0), (1638, 133, 2, 10, 2500, 0), (1639, 133, 6, 23, 2500, 0), (1640, 133, 4, 1, 3000, 0),
+                    (1634, 134, 4, 49, 4500, 0), (1635, 134, 2, 53, 4500, 900),
+                    (1643, 199004, 7, 3, 0, 0), (1644, 199004, 8, 7, 0, 0), (1646, 199004, 10, 15, 0, 0), (1647, 199004, 11, 18, 0, 0),
+                    (1652, 199085, 16, 46, 0, 1800)
+                };
+                foreach (var (missionId, giver, objectiveId, shrine, experience, credits) in liaisonLogos)
+                {
+                    var logosMission = missions.LoadedMissions[missionId];
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), logosMission.DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(logosMission.IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual((giver, giver), (logosMission.MissionGiver, logosMission.MissionReciver), $"mission {missionId}");
+                    Assert.AreEqual((objectiveId, ObjectiveBindingKind.LogosRecovered, shrine),
+                        logosMission.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId)).Single(), $"mission {missionId}");
+                    Assert.AreEqual((experience, credits), ((long)logosMission.RewardExperience, (long)logosMission.RewardCredits), $"mission {missionId}");
+                    Assert.AreEqual(0, logosMission.OfferedSelectableRewards.Count + logosMission.OfferedFixedItems.Count, $"mission {missionId} pays no item");
+                    Assert.AreEqual(0, logosMission.ObjectiveConversations.Count, $"mission {missionId} has no conversation route");
+                    CollectionAssert.AreEqual(missionId is 1639 or 1640 ? new uint[] { 1069 } : Array.Empty<uint>(),
+                        logosMission.Prerequisites.Select(prerequisite => prerequisite.RequiredMissionId).ToArray(), $"mission {missionId}");
+                }
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

@@ -1,0 +1,957 @@
+{
+ "migration": "LiaisonLogosMissions",
+ "date": "2026-09-26",
+ "compatibility_client": "1.16.5.0",
+ "scope": "Missions 1633, 1634, 1635, 1638, 1639, 1640, 1643, 1644, 1646, 1647 and 1652: single-objective Logos missions bound by LogosRecovered to shrines the world already places.",
+ "research": {
+  "dir": "/home/blizz/backups/rasa-net/research/20260926-logos-missions",
+  "tools": [
+   "tools/extract_client_rows.py (static decode; no .pyo imported)",
+   "tools/tarapedia_fields.py",
+   "tools/verify_world.py (rasaworld.db read-only)",
+   "tools/build_manifest.py"
+  ],
+  "client_rows": "work/client-rows.json",
+  "client_tables": {
+   "missionobjective.pyo": {
+    "sha256": "330f29153493c512a5a90074f4c0ae4ab45cb3f0d4dfc4b56764a0d95d232d5f",
+    "bytecode_ts": 1234238136
+   },
+   "missionconversation.pyo": {
+    "sha256": "085df01e239a86fec0f6c9d1017d2af60edf54e47f6a235e4204ee8e84c3713b",
+    "bytecode_ts": 1234238135
+   },
+   "objectiveconversation.pyo": {
+    "sha256": "55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12",
+    "bytecode_ts": 1234238136
+   },
+   "language/english/missiontextlanguage.pyo": {
+    "sha256": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d",
+    "bytecode_ts": 1234238145
+   },
+   "language/english/creaturenamelanguage.pyo": {
+    "sha256": "1fa1ec6c098f3ae2cda4aa37a13ef268f6657bb4fd32cc4e3f5af21ae5126e6c",
+    "bytecode_ts": 1234238142
+   },
+   "logosstone.pyo": {
+    "sha256": "08a6d29c5dcd96972ebd5e47b277707a780d28f99c48b62ceca32c48466c5235",
+    "bytecode_ts": 1234238135
+   },
+   "language/english/logosstonelanguage.pyo": {
+    "sha256": "c0599fc216d1001c168d55350f87a8b713ef3a770b95e1cbf30d5bc9e2c1c671",
+    "bytecode_ts": 1234238143
+   },
+   "client_dir": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/final-client-selected/Tabula Rasa 1.16.5.0/game/generated/client/",
+   "decoder": "20260926-ready-missions/tools/decode_literal_table_neg.py"
+  }
+ },
+ "list_correction": "The segment-3 audit (research/20260926-segment3-audit, SEG3-LOGOS-MISSIONS-AND-SKIP) listed the eleven as Langerman's. TaRapedia's mission and NPC pages give Langerman 1633/1638/1639/1640, Standley 1634/1635, Noonan 1643/1644/1646/1647 and Arizpe 1652, and each shrine stands on its giver's own map. Langerman's other four (907, 909, 911, 921) are GAP-LIAISON-LOGOS-UNSEEDED.",
+ "dependency": "Langerman (133) needs MissingMissionGivers (20260926150000) for a conversable class; this migration does not touch creature 133 (GAP-LIAISON-LOGOS-SPEAKER).",
+ "shrine_verification": [
+  {
+   "mission": 1633,
+   "objective": 3,
+   "objective_text": "Acquire Logos Information: Attack",
+   "objective_offset": 81116,
+   "objective_text_offset": 403040,
+   "shrine": {
+    "logos_id": 2,
+    "class_id": 9538,
+    "map_context_id": 1220,
+    "pos": [
+     41.0646,
+     191.485,
+     -332.566
+    ],
+    "name": "Attack"
+   },
+   "client_logosstone": {
+    "constant": "ATTACK",
+    "id": 2,
+    "lookup_offset": 9410,
+    "english": "Attack",
+    "english_offset": 20
+   },
+   "giver": {
+    "creature_id": 133,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10010,
+    "comment": "Receptive Liason Langermon",
+    "placed_by": "spawnpool 211",
+    "map_context_id": 1220,
+    "pos": [
+     870.95703,
+     294.21094,
+     385.3711
+    ]
+   },
+   "giver_to_shrine_m": 1097.3,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1638,
+   "objective": 2,
+   "objective_text": "Acquire Logos Information: Enhance",
+   "objective_offset": 81215,
+   "objective_text_offset": 404408,
+   "shrine": {
+    "logos_id": 10,
+    "class_id": 7364,
+    "map_context_id": 1220,
+    "pos": [
+     832.0,
+     161.838,
+     960.0
+    ],
+    "name": "Enhance"
+   },
+   "client_logosstone": {
+    "constant": "ENHANCE",
+    "id": 10,
+    "lookup_offset": 9554,
+    "english": "Enhance",
+    "english_offset": 92
+   },
+   "giver": {
+    "creature_id": 133,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10010,
+    "comment": "Receptive Liason Langermon",
+    "placed_by": "spawnpool 211",
+    "map_context_id": 1220,
+    "pos": [
+     870.95703,
+     294.21094,
+     385.3711
+    ]
+   },
+   "giver_to_shrine_m": 575.9,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1639,
+   "objective": 6,
+   "objective_text": "Acquire Logos Information: Power",
+   "objective_offset": 81248,
+   "objective_text_offset": 404696,
+   "shrine": {
+    "logos_id": 23,
+    "class_id": 7302,
+    "map_context_id": 1220,
+    "pos": [
+     493.078,
+     289.531,
+     319.682
+    ],
+    "name": "Power"
+   },
+   "client_logosstone": {
+    "constant": "POWER",
+    "id": 23,
+    "lookup_offset": 9770,
+    "english": "Power",
+    "english_offset": 200
+   },
+   "giver": {
+    "creature_id": 133,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10010,
+    "comment": "Receptive Liason Langermon",
+    "placed_by": "spawnpool 211",
+    "map_context_id": 1220,
+    "pos": [
+     870.95703,
+     294.21094,
+     385.3711
+    ]
+   },
+   "giver_to_shrine_m": 383.5,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1640,
+   "objective": 4,
+   "objective_text": "Acquire Logos Information: Area",
+   "objective_offset": 81281,
+   "objective_text_offset": 405128,
+   "shrine": {
+    "logos_id": 1,
+    "class_id": 7361,
+    "map_context_id": 1220,
+    "pos": [
+     363.872,
+     214.211,
+     619.304
+    ],
+    "name": "Area"
+   },
+   "client_logosstone": {
+    "constant": "AREA",
+    "id": 1,
+    "lookup_offset": 9392,
+    "english": "Area",
+    "english_offset": 11
+   },
+   "giver": {
+    "creature_id": 133,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10010,
+    "comment": "Receptive Liason Langermon",
+    "placed_by": "spawnpool 211",
+    "map_context_id": 1220,
+    "pos": [
+     870.95703,
+     294.21094,
+     385.3711
+    ]
+   },
+   "giver_to_shrine_m": 558.4,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1634,
+   "objective": 4,
+   "objective_text": "Acquire Logos Information: Target",
+   "objective_offset": 81149,
+   "objective_text_offset": 403328,
+   "shrine": {
+    "logos_id": 49,
+    "class_id": 12697,
+    "map_context_id": 1220,
+    "pos": [
+     -906.358,
+     190.186,
+     -649.29
+    ],
+    "name": "Target"
+   },
+   "client_logosstone": {
+    "constant": "TARGET",
+    "id": 49,
+    "lookup_offset": 10238,
+    "english": "Target",
+    "english_offset": 434
+   },
+   "giver": {
+    "creature_id": 134,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10011,
+    "comment": "Receptive Liason Standley",
+    "placed_by": "spawnpool 212",
+    "map_context_id": 1220,
+    "pos": [
+     -109.98828,
+     220.26953,
+     -494.30078
+    ]
+   },
+   "giver_to_shrine_m": 811.3,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1635,
+   "objective": 2,
+   "objective_text": "Acquire Logos Information: Here",
+   "objective_offset": 81182,
+   "objective_text_offset": 404084,
+   "shrine": {
+    "logos_id": 53,
+    "class_id": 12684,
+    "map_context_id": 1220,
+    "pos": [
+     -979.0,
+     286.096,
+     744.0
+    ],
+    "name": "Here"
+   },
+   "client_logosstone": {
+    "constant": "HERE",
+    "id": 53,
+    "lookup_offset": 10310,
+    "english": "Here",
+    "english_offset": 470
+   },
+   "giver": {
+    "creature_id": 134,
+    "class_id": 29423,
+    "level": 10,
+    "name_id": 10011,
+    "comment": "Receptive Liason Standley",
+    "placed_by": "spawnpool 212",
+    "map_context_id": 1220,
+    "pos": [
+     -109.98828,
+     220.26953,
+     -494.30078
+    ]
+   },
+   "giver_to_shrine_m": 1512.8,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1643,
+   "objective": 7,
+   "objective_text": "Acquire Logos Information: Backward",
+   "objective_offset": 81314,
+   "objective_text_offset": 406388,
+   "shrine": {
+    "logos_id": 3,
+    "class_id": 7289,
+    "map_context_id": 1148,
+    "pos": [
+     290.41016,
+     102.77344,
+     -504.83984
+    ],
+    "name": "Backward"
+   },
+   "client_logosstone": {
+    "constant": "BACKWARD",
+    "id": 3,
+    "lookup_offset": 9428,
+    "english": "Backward",
+    "english_offset": 29
+   },
+   "giver": {
+    "creature_id": 199004,
+    "class_id": 3846,
+    "level": 10,
+    "name_id": 10013,
+    "comment": "Receptive Liaison Noonan",
+    "placed_by": "content_placement 199004",
+    "map_context_id": 1148,
+    "pos": [
+     -42.0,
+     116.5,
+     479.0
+    ]
+   },
+   "giver_to_shrine_m": 1038.5,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1644,
+   "objective": 8,
+   "objective_text": "Acquire Logos Information: Defend",
+   "objective_offset": 81347,
+   "objective_text_offset": 406676,
+   "shrine": {
+    "logos_id": 7,
+    "class_id": 12677,
+    "map_context_id": 1148,
+    "pos": [
+     106.12109,
+     140.34766,
+     690.7461
+    ],
+    "name": "Defend"
+   },
+   "client_logosstone": {
+    "constant": "DEFEND",
+    "id": 7,
+    "lookup_offset": 9500,
+    "english": "Defend",
+    "english_offset": 65
+   },
+   "giver": {
+    "creature_id": 199004,
+    "class_id": 3846,
+    "level": 10,
+    "name_id": 10013,
+    "comment": "Receptive Liaison Noonan",
+    "placed_by": "content_placement 199004",
+    "map_context_id": 1148,
+    "pos": [
+     -42.0,
+     116.5,
+     479.0
+    ]
+   },
+   "giver_to_shrine_m": 258.4,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1646,
+   "objective": 10,
+   "objective_text": "Acquire Logos Information: Give",
+   "objective_offset": 81413,
+   "objective_text_offset": 407216,
+   "shrine": {
+    "logos_id": 15,
+    "class_id": 7296,
+    "map_context_id": 1148,
+    "pos": [
+     184.17969,
+     122.953125,
+     137.64453
+    ],
+    "name": "Give"
+   },
+   "client_logosstone": {
+    "constant": "GIVE",
+    "id": 15,
+    "lookup_offset": 9626,
+    "english": "Give",
+    "english_offset": 128
+   },
+   "giver": {
+    "creature_id": 199004,
+    "class_id": 3846,
+    "level": 10,
+    "name_id": 10013,
+    "comment": "Receptive Liaison Noonan",
+    "placed_by": "content_placement 199004",
+    "map_context_id": 1148,
+    "pos": [
+     -42.0,
+     116.5,
+     479.0
+    ]
+   },
+   "giver_to_shrine_m": 409.5,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1647,
+   "objective": 11,
+   "objective_text": "Acquire Logos Information: Increase",
+   "objective_offset": 81446,
+   "objective_text_offset": 407504,
+   "shrine": {
+    "logos_id": 18,
+    "class_id": 7298,
+    "map_context_id": 1148,
+    "pos": [
+     -961.53516,
+     130.17578,
+     -622.78516
+    ],
+    "name": "Increase"
+   },
+   "client_logosstone": {
+    "constant": "INCREASE",
+    "id": 18,
+    "lookup_offset": 9680,
+    "english": "Increase",
+    "english_offset": 155
+   },
+   "giver": {
+    "creature_id": 199004,
+    "class_id": 3846,
+    "level": 10,
+    "name_id": 10013,
+    "comment": "Receptive Liaison Noonan",
+    "placed_by": "content_placement 199004",
+    "map_context_id": 1148,
+    "pos": [
+     -42.0,
+     116.5,
+     479.0
+    ]
+   },
+   "giver_to_shrine_m": 1435.1,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  },
+  {
+   "mission": 1652,
+   "objective": 16,
+   "objective_text": "Acquire Logos Information: Ground",
+   "objective_offset": 81611,
+   "objective_text_offset": 408836,
+   "shrine": {
+    "logos_id": 46,
+    "class_id": 12683,
+    "map_context_id": 1244,
+    "pos": [
+     243.5,
+     147.8281,
+     783.6797
+    ],
+    "name": "Ground"
+   },
+   "client_logosstone": {
+    "constant": "GROUND",
+    "id": 46,
+    "lookup_offset": 10184,
+    "english": "Ground",
+    "english_offset": 407
+   },
+   "giver": {
+    "creature_id": 199085,
+    "class_id": 3846,
+    "level": 25,
+    "name_id": 9938,
+    "comment": "Receptive Liaison Arizpe (Cumbria Research Facility)",
+    "placed_by": "content_placement 199085",
+    "map_context_id": 1244,
+    "pos": [
+     -538.0,
+     142.095,
+     665.0
+    ]
+   },
+   "giver_to_shrine_m": 790.5,
+   "checks": {
+    "client_stone_id_equals_logos_row": true,
+    "client_stone_word_equals_shrine_name": true,
+    "objective_text_names_the_word": true,
+    "shrine_on_giver_map": true,
+    "no_objective_conversation_rows": true,
+    "world_has_no_mission_row_yet": true
+   }
+  }
+ ],
+ "reward_rule": "Experience: TaRapedia amount where recorded (single source, uncontradicted). Credits: TaRapedia amount only where no other source contradicts it and it is not a never-re-read creation value of the 2007-10 creation pass shown unreliable on the checkable pages. Every seeded amount is era pre-1.4 (GAP-LIAISON-LOGOS-REWARD-ERA).",
+ "reward_reconciliation": [
+  {
+   "mission": 1633,
+   "tarapedia": {
+    "title": "Logos: Attack",
+    "pageid": 5887,
+    "latest_revid": 34227,
+    "latest_timestamp": "2008-09-25T10:42:38Z",
+    "latest_post_d11": true,
+    "latest_comment": "Undoing change to icon",
+    "xp": {
+     "value": "4000",
+     "first_revid": 11616,
+     "first_timestamp": "2007-10-23T03:51:26Z",
+     "first_user": "RavensfireTR",
+     "at_creation": ""
+    },
+    "credits": {
+     "value": "100",
+     "first_revid": 11389,
+     "first_timestamp": "2007-10-18T05:08:28Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "100"
+    },
+    "giver": "Receptive Liaison Langerman",
+    "requirement": "None"
+   },
+   "ellatha_credits": 800,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Attack&id=23",
+   "seeded_experience": 4000,
+   "seeded_credits": null,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "left out: TaRapedia 100 contradicted by Ellatha 800"
+  },
+  {
+   "mission": 1638,
+   "tarapedia": {
+    "title": "Logos: Enhance",
+    "pageid": 5858,
+    "latest_revid": 27738,
+    "latest_timestamp": "2008-01-26T01:19:11Z",
+    "latest_post_d11": false,
+    "latest_comment": "Some fixes",
+    "xp": {
+     "value": "2,500",
+     "first_revid": 11324,
+     "first_timestamp": "2007-10-17T03:40:53Z",
+     "first_user": "RavensfireTR",
+     "at_creation": ""
+    },
+    "credits": {
+     "value": "1,500",
+     "first_revid": 11322,
+     "first_timestamp": "2007-10-17T02:50:18Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "1,500"
+    },
+    "giver": "Receptive Liaison Langerman",
+    "requirement": "None"
+   },
+   "ellatha_credits": 500,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Enhance&id=24",
+   "seeded_experience": 2500,
+   "seeded_credits": null,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "left out: TaRapedia 1,500 contradicted by Ellatha 500"
+  },
+  {
+   "mission": 1639,
+   "tarapedia": {
+    "title": "Logos: Power",
+    "pageid": 5882,
+    "latest_revid": 34251,
+    "latest_timestamp": "2008-09-25T12:38:55Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "2500",
+     "first_revid": 11366,
+     "first_timestamp": "2007-10-18T01:51:43Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "2,500"
+    },
+    "credits": {
+     "value": "600",
+     "first_revid": 11366,
+     "first_timestamp": "2007-10-18T01:51:43Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "600"
+    },
+    "giver": "Receptive Liaison Langerman",
+    "requirement": "[[Receptive Reception]]"
+   },
+   "ellatha_credits": 500,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Power&id=25",
+   "seeded_experience": 2500,
+   "seeded_credits": null,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "left out: TaRapedia 600 contradicted by Ellatha 500"
+  },
+  {
+   "mission": 1640,
+   "tarapedia": {
+    "title": "Logos: Area",
+    "pageid": 2009,
+    "latest_revid": 33255,
+    "latest_timestamp": "2008-09-16T00:05:43Z",
+    "latest_post_d11": true,
+    "latest_comment": "updated",
+    "xp": {
+     "value": "3,000",
+     "first_revid": 11386,
+     "first_timestamp": "2007-10-18T04:43:30Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "1,500",
+     "first_revid": 11365,
+     "first_timestamp": "2007-10-18T01:51:35Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "0"
+    },
+    "giver": "Receptive Liaison Langerman",
+    "requirement": "[[Receptive Reception]]"
+   },
+   "ellatha_credits": 600,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Area&id=26",
+   "seeded_experience": 3000,
+   "seeded_credits": null,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "left out: TaRapedia 1,500 contradicted by Ellatha 600"
+  },
+  {
+   "mission": 1634,
+   "tarapedia": {
+    "title": "Logos: Target",
+    "pageid": 6110,
+    "latest_revid": 34256,
+    "latest_timestamp": "2008-09-25T12:48:40Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "4500",
+     "first_revid": 16155,
+     "first_timestamp": "2007-11-24T19:18:38Z",
+     "first_user": "Swmacrae",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "800",
+     "first_revid": 16155,
+     "first_timestamp": "2007-11-24T19:18:38Z",
+     "first_user": "Swmacrae",
+     "at_creation": "100"
+    },
+    "giver": "Receptive Liaison Standley",
+    "requirement": "None"
+   },
+   "ellatha_credits": 900,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Target&id=54",
+   "seeded_experience": 4500,
+   "seeded_credits": null,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "left out: TaRapedia 800 contradicted by Ellatha 900"
+  },
+  {
+   "mission": 1635,
+   "tarapedia": {
+    "title": "Logos: Here",
+    "pageid": 6111,
+    "latest_revid": 34240,
+    "latest_timestamp": "2008-09-25T11:19:22Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "4500",
+     "first_revid": 14302,
+     "first_timestamp": "2007-11-11T05:33:37Z",
+     "first_user": "Swmacrae",
+     "at_creation": ""
+    },
+    "credits": {
+     "value": "900",
+     "first_revid": 14302,
+     "first_timestamp": "2007-11-11T05:33:37Z",
+     "first_user": "Swmacrae",
+     "at_creation": "1,500"
+    },
+    "giver": "Receptive Liaison Standley",
+    "requirement": "None"
+   },
+   "ellatha_credits": 900,
+   "ellatha_page": "https://www.ellatha.com/tr/missionsview.asp?key=Logos%3A+Here&id=55",
+   "seeded_experience": 4500,
+   "seeded_credits": 900,
+   "experience_decision": "seeded (single source, uncontradicted)",
+   "credit_decision": "seeded"
+  },
+  {
+   "mission": 1643,
+   "tarapedia": {
+    "title": "Logos: Backward",
+    "pageid": 6120,
+    "latest_revid": 34226,
+    "latest_timestamp": "2008-09-25T10:35:41Z",
+    "latest_post_d11": true,
+    "latest_comment": "Undoing change to icon",
+    "xp": {
+     "value": "?",
+     "first_revid": 12006,
+     "first_timestamp": "2007-10-30T03:26:24Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "200",
+     "first_revid": 12006,
+     "first_timestamp": "2007-10-30T03:26:24Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "200"
+    },
+    "giver": "Receptive Liaison Noonan",
+    "requirement": "None"
+   },
+   "ellatha_credits": null,
+   "ellatha_page": null,
+   "seeded_experience": null,
+   "seeded_credits": null,
+   "experience_decision": "left out: TaRapedia RewardXP=\"?\"",
+   "credit_decision": "left out: TaRapedia 200 was entered at page creation by RavensfireTR on 2007-10-30, whose creation-time credits on the six Liaison pages that can be checked were each corrected on TaRapedia or contradicted by Ellatha"
+  },
+  {
+   "mission": 1644,
+   "tarapedia": {
+    "title": "Logos: Defend",
+    "pageid": 6121,
+    "latest_revid": 34232,
+    "latest_timestamp": "2008-09-25T10:53:29Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "?",
+     "first_revid": 12007,
+     "first_timestamp": "2007-10-30T03:27:11Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "200",
+     "first_revid": 12007,
+     "first_timestamp": "2007-10-30T03:27:11Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "200"
+    },
+    "giver": "Receptive Liaison Noonan",
+    "requirement": "None"
+   },
+   "ellatha_credits": null,
+   "ellatha_page": null,
+   "seeded_experience": null,
+   "seeded_credits": null,
+   "experience_decision": "left out: TaRapedia RewardXP=\"?\"",
+   "credit_decision": "left out: TaRapedia 200 was entered at page creation by RavensfireTR on 2007-10-30, whose creation-time credits on the six Liaison pages that can be checked were each corrected on TaRapedia or contradicted by Ellatha"
+  },
+  {
+   "mission": 1646,
+   "tarapedia": {
+    "title": "Logos: Give",
+    "pageid": 6125,
+    "latest_revid": 34238,
+    "latest_timestamp": "2008-09-25T11:15:11Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "?",
+     "first_revid": 12013,
+     "first_timestamp": "2007-10-30T03:36:46Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "200",
+     "first_revid": 12013,
+     "first_timestamp": "2007-10-30T03:36:46Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "200"
+    },
+    "giver": "Receptive Liaison Noonan",
+    "requirement": "None"
+   },
+   "ellatha_credits": null,
+   "ellatha_page": null,
+   "seeded_experience": null,
+   "seeded_credits": null,
+   "experience_decision": "left out: TaRapedia RewardXP=\"?\"",
+   "credit_decision": "left out: TaRapedia 200 was entered at page creation by RavensfireTR on 2007-10-30, whose creation-time credits on the six Liaison pages that can be checked were each corrected on TaRapedia or contradicted by Ellatha"
+  },
+  {
+   "mission": 1647,
+   "tarapedia": {
+    "title": "Logos: Increase",
+    "pageid": 6124,
+    "latest_revid": 34242,
+    "latest_timestamp": "2008-09-25T11:23:43Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver and updated section headings",
+    "xp": {
+     "value": "?",
+     "first_revid": 12012,
+     "first_timestamp": "2007-10-30T03:36:16Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "?"
+    },
+    "credits": {
+     "value": "200",
+     "first_revid": 12012,
+     "first_timestamp": "2007-10-30T03:36:16Z",
+     "first_user": "RavensfireTR",
+     "at_creation": "200"
+    },
+    "giver": "Receptive Liaison Noonan",
+    "requirement": "None"
+   },
+   "ellatha_credits": null,
+   "ellatha_page": null,
+   "seeded_experience": null,
+   "seeded_credits": null,
+   "experience_decision": "left out: TaRapedia RewardXP=\"?\"",
+   "credit_decision": "left out: TaRapedia 200 was entered at page creation by RavensfireTR on 2007-10-30, whose creation-time credits on the six Liaison pages that can be checked were each corrected on TaRapedia or contradicted by Ellatha"
+  },
+  {
+   "mission": 1652,
+   "tarapedia": {
+    "title": "Logos: Ground",
+    "pageid": 7133,
+    "latest_revid": 34239,
+    "latest_timestamp": "2008-09-25T11:18:33Z",
+    "latest_post_d11": true,
+    "latest_comment": "Added reward giver info",
+    "xp": {
+     "value": "",
+     "first_revid": 16579,
+     "first_timestamp": "2007-11-26T13:39:54Z",
+     "first_user": "Celestine",
+     "at_creation": ""
+    },
+    "credits": {
+     "value": "1800",
+     "first_revid": 16579,
+     "first_timestamp": "2007-11-26T13:39:54Z",
+     "first_user": "Celestine",
+     "at_creation": "1,800"
+    },
+    "giver": "Receptive Liaison Arizpe",
+    "requirement": "None"
+   },
+   "ellatha_credits": null,
+   "ellatha_page": null,
+   "seeded_experience": null,
+   "seeded_credits": 1800,
+   "experience_decision": "left out: TaRapedia RewardXP=\"\"",
+   "credit_decision": "seeded"
+  }
+ ],
+ "redirect_rows": "None of the eleven has an objectiveconversation row in the final client, so no giver line can complete an objective (MissionRedirectConversations not needed).",
+ "gaps": [
+  "GAP-LIAISON-LOGOS-REWARD-ERA",
+  "GAP-LIAISON-LOGOS-REWARDS-MISSING",
+  "GAP-LIAISON-LOGOS-SPEAKER",
+  "GAP-LOGOS-SKIP-POWER",
+  "GAP-LIAISON-LOGOS-POWER-D11",
+  "GAP-LIAISON-LOGOS-UNSEEDED",
+  "GAP-MISSION-LEVEL",
+  "GAP-MISSION-REWARD-ITEMS"
+ ]
+}
