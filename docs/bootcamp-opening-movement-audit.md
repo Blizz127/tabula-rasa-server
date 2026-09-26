@@ -1,50 +1,45 @@
-# Boot camp opening: McAllister's walk to the gear
+# Initiation handoff: McAllister movement
 
-> **Reconstructed 2026-09-26.** `src/Rasa.DBL/Migrations/BootcampData/BootcampMcAllisterWalkRows.cs` has cited this
-> document since it was written on the deployed-but-uncommitted 2026-09-22..24 tree (commit `f30d9aa`, "The boot
-> camp as the final-week footage plays it..."). That tree's own narrative write-up was never committed and is lost;
-> there is no earlier version of this file to recover. What follows is reconstructed from the migration's own
-> doc-comment and `docs/evidence/client-mcallister-grounding.json` (2026-09-22, an emulator-integration
-> investigation, not a retail-fidelity certification). Nothing here goes beyond what those sources state.
+Audit date: 2026-09-22. Target: final-live rebuilt boot camp, mission 1990 through acceptance of 1992. This correction does not establish complete fidelity of the opening.
 
-## What changed and why
+## Defect and correction
 
-Footage (7Lrst9SG3pk, A2-056/057/060, 296.2/296.6/297-301 s) shows Corporal McAllister (creature 198500) remaining
-beside the recruit until mission 1992 ("Gearing Up for Battle") is accepted, and then walking away toward the gear.
-`BootcampMcAllisterWalkRows` retimes content rule 1985014 so it now fires on **1992 accepted** (event 2) instead of
-**1990 turned in** (event 6, the previous trigger), keeping the comment "1992 accepted -> McAllister walks to the
-gear". Rolling the migration back restores the 1990-turn-in trigger and its original comment.
+`BootcampScriptedMoves` queued a one-node path for McAllister at the 1990 turn-in. His creature row 198500 nevertheless had walk_speed 0; `BehaviorManager.FollowPath` uses that rate directly. The existing test checked only the queued path. Consequently he never departed. Making that path move also exposed its premature trigger: he would leave during the following mission offer.
 
-## The 2.5 m/s walk speed is an analogue, not a measured value
+`BootcampMcAllisterWalk` changes only creature 198500.walk_speed to 2.5 and content_rule 1985014 to MissionAccepted 1992. Its rollback restores the former zero speed and MissionTurnedIn 1990 rule. `CreatureFractionalMovementRates` changes both creature speed columns from unsigned integers to doubles, preserving every former uint exactly in storage as well as fractional rates. Loading explicitly converts to the existing float runtime type. It does not retune other creatures. Both providers have matching migrations and model snapshots. The data rollback precedes the schema rollback. Arbitrary fractional edits made after upgrading cannot survive rollback to integer columns; only this scoped correction restores its prior integer value automatically.
 
-The migration sets creature 198500's `walk_speed` to 2.5. This is explicitly an **analogue**: it is the animation
-reference walk rate of McAllister's reconstructed human class, not a speed measured from the lost original spawn.
-No footage frame-times McAllister's own walk over a known distance, so his actual original pace is unrecovered.
-Walk and run rates for this creature became independent doubles as part of this change (previously a single shared
-rate), so the analogue walk speed does not also force a matching run speed.
+## Original evidence and limits
 
-## Supporting investigation: the arrival grounding question
+Original gameplay video `7Lrst9SG3pk`, retained analysis A2 under `/home/blizz/backups/rasa-net/research/20260913-bootcamp/footage/analysis/A2/`:
 
-`docs/evidence/client-mcallister-grounding.json` records a 2026-09-22 investigation into a still image
-(playthrough-06, capture 37) that appears to show an officer suspended above the terrain near the firing range. It
-explicitly does **not** establish McAllister's exact runtime position, height, or the cause of the visual:
+- A2-044 at 285.333 s: turn-in dialogue says “Follow me over to the…”. Dialogue wording alone does not establish the move trigger.
+- A2-047/048/050 at 289.533–289.800 s: Initiation completes and the Gearing Up offer opens. McAllister remains beside the recruit while the offer is read.
+- A2-056 at 296.200 s: offer closes; A2-057 at 296.600 s: acceptance chat appears. `crops/s295_pf.png` directly shows the offer open through 296.133 s and NPC remaining in place.
+- A2-060 at 297–301 s: turn and departure. `crops/walk_297_299.png` shows turning/stationary frames around 297–298 s and walking away around 298.4–298.8 s. Reinspected directly on 2026-09-22. Movement after acceptance is observed; selecting MissionAccepted as the server callback is inferred. No artificial exact delay is added because the original callback and animation/network delay are unknown.
 
-- A path probe from (387.2, 125.57, 53.3) to the walk destination (390, 120.75, 172) completes and lands inside the
-  destination polygon, but the navmesh height (120.75) differs from the decoded original terrain height at the same
-  X/Z (120, from `H_be16.npy`) by 0.75 m. No nearby decoded static geometry closes that gap.
-- Source-level review found a concrete omission (not a proven cause): `BehaviorManager.FollowPath`'s one-shot
-  completion ended within 0.8 m of the destination without broadcasting a zero-speed `Movement` update, so a late
-  observer's client could keep rendering the last advertised 2.5 m/s heading. This was corrected (a terminal stop
-  packet is now sent, and a late-introduced observer's `ActorInfo` yaw matches the last walking heading) — a
-  regression fix (`BootcampOpeningTests.WalkArrival.cs`), not a change to McAllister's placement or footage-derived
-  destination.
-- The original footage itself (7Lrst9SG3pk, 304.667-304.733 s) cuts from McAllister's approach to the crate-loot
-  window before showing his arrival or exact footing, so **the source cannot validate the reconstructed arrival
-  height** either way.
+The decoded original `generated/client/entitymovementrate.pyo` has lookup[3846]=(0.0,2.5,6.5), assignment offset 110, SHA256 `a1afe0abd4d3504cda9d2542778b706e1af9adbcab12e3614bbbc67b3d825660`; ZIP member timestamp 2009-02-09. Its consumer `client/playermovementmgr.pyo`, PlayerMovementMgr.__init__, original line 124 / bytecode 172–203 names these stoppedRate, walkAnimRate and runAnimRate. These are animation reference rates: they do **not** recover McAllister's original server pace. Using 2.5 m/s is an explicitly labelled **analogue** of his already reconstructed generic human NPC class 3846 (OD-11), recorded as OD-57 under the user's standing authorization for closest supported estimates. It is not a separately approved exact owner selection and not a measured McAllister speed.
 
-## What remains unverified
+The destination remains the existing inferred approach `(390,120.75,172)`, horizontal uncertainty ±5 m. Its Y is the original-map navmesh surface established by `BootcampEscortDestinationGround`. Exact route, pace and stop position remain unverified. This patch does not claim that endpoint as observed.
 
-- McAllister's true original walk speed (2.5 m/s is an analogue, not a measurement).
-- The exact original arrival position and ground contact at the gear/firing-range destination.
-- Whether the visual "suspended officer" impression in playthrough-06 reflects a genuine original-terrain mismatch
-  or only the (now-fixed) missing terminal-stop packet.
+## Runtime checks and remaining opening gaps
+
+The opening test now loads the migrated creature row, drives 1990's two approach greetings and completion, advances AI ticks while the 1992 offer is pending, accepts 1992, then advances AI ticks again. It asserts actual movement toward the destination as well as retained fractional speed. This catches both zero-speed and premature-departure regressions. Migration checks assert only the intended two rows change, rollback values, provider parity, and seeded fractional persistence. Serial integrated validation is coordinated by the parent agent; no separate parallel build was started.
+
+The existing entry/radio offer and forced greetings 1634/1635 remain covered by the opening test. The original Power Logos grant timing is still inferred (OD-4): the first-vision footage does not expose a definitive server grant packet. Existing radius/height and location estimates retain their labels. No first-combat data was changed in this bounded correction.
+
+Private-instance reconstruction respawns McAllister at the initial placement on reconnect; the accepted event does not replay solely because a mission is loaded. This does not prevent reaching the crate or continuing 1992, but original reconnect placement/path behavior is unrecovered. Do not invent persistence or replay the full acceptance reward flow to disguise that gap. Live-client observation of the corrected walk, exact animation timing, route and reconnect remains outstanding.
+
+## Provider verification
+
+A disposable MariaDB 10.5.29 check executed equivalent column/data operations
+against synthetic creature/rule tables. DOUBLE preserved 4,294,967,295 and
+16,777,217 exactly, retained 2.5, and changed only the intended NPC and rule.
+Data rollback followed by schema rollback restored all original values and
+`INT UNSIGNED NOT NULL` columns. This tested equivalent SQL operations, not
+EF-generated SQL. The container had no network or exposed ports and was removed.
+The local log and reproducible SQL are `/tmp/rasa-mcallister-mariadb-audit.log`
+and `/tmp/rasa-mcallister-mariadb-audit.sql`.
+
+The final integrated .NET 5 run passed 1,202/1,202 tests with none skipped,
+including actual AI movement, SQLite migration rollback and evidence validation.
+Log: `/tmp/rasa-creation-final-20260922.log`.

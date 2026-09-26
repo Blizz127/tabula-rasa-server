@@ -83,7 +83,9 @@ gloves template on the server matches all three: **15803** `Armor_T1_MotorAssist
 (absorb 281, regen 1 — the tooltip's "Regen Rate: 1 per sec" too). The seeded 13096 was the common row (23) and,
 by the client's own requirement data, needs level 15; the seeded boots needed level 30. `BootcampCrateUncommonGear`
 gives the crate 15803 and the rest of the level-1 uncommon band without a level requirement — boots 12209, legs
-26879, vest 12208 (inferred from the gloves; OD-54, pending owner review).
+26879, vest 12208 (OD-54, pending owner review). Their own tooltips match the client classes; exact templates remain inferred because multiple
+templates share those classes. See the [2026-09-22 frame audit](bootcamp-equip-audit.md) for the observations,
+alternative templates and the limits of the earlier gloves-only reconstruction.
 
 `BODY_ARMOR_DIVISOR` (1.5) in `shared/gameconstants` is not that divisor: the client never uses it, and it
 matches the server's existing Body-to-armour bonus (Body ÷ 1.5 %).

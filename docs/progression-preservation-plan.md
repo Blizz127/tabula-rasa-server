@@ -35,6 +35,343 @@ the final-live rule.
 
 ## Current creation findings
 
+- **2026-09-22 boot-camp rifle melee reconstruction:** the original client action
+  `(174,5)` and 4 m range are now admitted by the alternate attack runtime;
+  the crate rifle's inferred template carries the 82 Physical melee tooltip
+  value observed in final-week footage. Thirty-three weapon attack tests and six
+  content migration tests pass under .NET 5, including range, no-ammo and exact
+  rollback checks. An isolated original client displays the 82 Physical melee
+  tooltip, and the live server now runs this migration. An isolated targeted
+  F-key attack killed a GM-spawned Thrax without spending ammunition; exact
+  template identity, minimum damage and scaling remain gaps. See
+  [rifle melee evidence](bootcamp-rifle-melee.md).
+  The recovered client additionally bypasses normal empty-magazine and jam
+  checks for the no-ammo melee alternate. That server fix is deployed in
+  `rasa-dit-test:20260922c` and covered by 33 lifecycle tests.
+
+- **2026-09-22 handoff and promotion:** the original client completes final
+  Hartmann → DeSimone turn-in → Capture the Flag acceptance → level-2 promotion,
+  then persists the result through normal logout. The combined 1300-test
+  candidate adds item-instance metadata, correct module-tooltip framing and
+  atomic kill-counter/objective completion with reconnect recovery. Final-live
+  Laser module values are resistance ratings; melee action/range are recovered,
+  while damage scaling remains open. The new candidate reconnect preserves all
+  existing item fields. A normal
+  cave approach ends in death before the trigger, followed by a successful
+  hospital respawn. Firearms training saves correctly; attribute spending saves
+  but exposed an available-point refresh defect. Reply ordering is now fixed
+  and independently verified in the original client on a copied checkpoint.
+  The final combined suite passes 1302/1302.
+  A fresh continuing-checkpoint client also restores Firearms 2, zero skill and
+  attribute points, and 13 in each primary attribute, then logs out normally.
+  A later client pass verifies F-key rifle melee against a Thrax with no ammo
+  loss. An isolated client teleport verifies the cave area trigger and its
+  persistence through hospital respawn. A further isolated client check killed
+  Tizzik Gi, completed Youngblood's conversation and turned in mission 1994;
+  those checks used copied world data with boss HP set to one and hostile
+  attacks disabled. A later [normal-health boss checkpoint](evidence/bootcamp-normal-boss-client-probe-20260924.json)
+  killed Tizzik Gi through ordinary original-client rifle fire with the
+  deployed-derived combat values and continued through Youngblood's dialogue
+  and mission 1994 turn-in after reconnect. A further
+  [S5 client continuation](evidence/bootcamp-s5-normal-chain-gate-20260924.json)
+  accepted mission 1995 from Youngblood, restored its tracker after reconnect,
+  and killed the first hostile Thrax at the west gate with ordinary movement,
+  aiming and rifle fire. A separate ordinary movement run passed the gate to
+  approximately (4.4,106.7,141.8), with objective 2 still active. Next: verify the uninterrupted
+  camp-to-cave route, full S5 travel and encounter combat, and following boot-camp missions
+  before closing this segment. See
+  [continuous S5 route probes](evidence/bootcamp-s5-continuous-west-route-20260924.json),
+  [soldier approach and original-map obstruction](evidence/bootcamp-s5-soldier-approach-20260924.json),
+  [handoff](client-gearing-handoff.md),
+  [item metadata](item-instance-metadata.md), [cave route and recovery](client-capture-the-flag-audit.md)
+  and [rifle melee](bootcamp-rifle-melee.md).
+  The 2026-09-23 [combat-companion audit](bootcamp-courtyard-allies.md) confirms
+  that final-week footage shows named Forean Initiates fighting alongside the
+  player from the courtyard into later fighting, while the S4 seed has none.
+  Three named camp companions now have live mission-scoped follow and combat
+  rows, with inferred placements and labelled stat estimates; the
+  [live deployment record](evidence/live-bootcamp-camp-companions-20260923.json)
+  reports 409 content rows and zero gaps. A copied-client
+  [combat trace](evidence/bootcamp-camp-allies-combat-diagnostic.json) confirms
+  all three damage one Thrax. A further copied-client
+  [route diagnostic](evidence/bootcamp-camp-allies-route-diagnostic.json)
+  shows all three following from the camp staircase through the raised walkway
+  and rocky descent to `(360.07,121.20,114.64)`. A subsequent
+  [courtyard approach](evidence/bootcamp-camp-allies-courtyard-approach.json)
+  shows them still following near `(316.13,120.28,85.93)`, with a Thrax
+  targetable ahead. The player then took a diagnostic line below the walkable
+  route. A later [normal-approach combat run](evidence/bootcamp-courtyard-normal-approach-combat.json)
+  kept all three allies at the courtyard edge but ended in Alden's death before
+  the cave trigger, followed by all three ally deaths. The trace recorded no
+  companion attacks in that run, unlike the isolated one-Thrax test. The
+  engagement trigger, filmed player-attacking route, and cave transition are
+  current-segment work. The observed unopposed death cannot by itself justify
+  retuning hostile damage.
+  A [forward-formation diagnostic](evidence/bootcamp-courtyard-formation-diagnostic.json)
+  confirms all three companions acquire and damage a Thrax when staged ahead
+  near the first filmed courtyard viewpoint. Original radar measurements in the
+  [escort combat rule record](evidence/bootcamp-courtyard-escort-combat-rules.json)
+  instead place one marked escort behind the player; the identities of visible
+  defenders ahead remain unknown. The fighting AI's spawn-based 60 m leash
+  obstructed camp escorts in the courtyard, so a followed-player leash centre
+  and inferred assisted-target link are now deployed with the three companions.
+  Focused .NET 5 checks confirm
+  combat 130 m from camp, clean retreat when the player disappears, and that
+  the escort assists a selected enemy without attacking a selected player.
+  The isolated route with those
+  changes stalled before combat, leaving its outcome unverified. The original
+  recording cuts away during escort travel, and its six measured hostile combat
+  positions do not
+  establish simultaneous spawns. Preserve both as unresolved reconstruction
+  questions before adjusting the encounter.
+  A later [copied-client checkpoint](evidence/bootcamp-courtyard-escort-combat-rules.json)
+  kept the three companions at camp while the recruit loaded at a verified
+  point near the courtyard. They followed him to that point and, after two
+  diagnostic same-map teleports, each dealt 11 hits to the only Thrax left in
+  the disposable world. The single enemy had analogue health/armor values;
+  natural-route movement and original six-enemy timing remain unverified.
+  The final-week recording also targets a separate level-2 Forean Warrior in
+  the courtyard. One [estimated defender](evidence/bootcamp-courtyard-forean-warrior.json)
+  is now staged on an original-map walkable point with original-client
+  class-name fallback; migration and provider-parity tests pass. His exact
+  placement, combat values and the number of other defenders remain open.
+  A later [six-Thrax checkpoint replay](evidence/bootcamp-courtyard-six-thrax-checkpoint-replay.json)
+  confirms all three camp companions can attack with every staged Thrax
+  placement present. Combat began on login at a copied upper-path checkpoint;
+  the Shaman killed one Thrax and the recruit killed another before the recruit
+  and all four seeded allies died. This does not complete the natural route or
+  establish the original encounter's balance.
+  The [exact deployed-binary client replay](evidence/bootcamp-live-companion-binary-client-replay.json)
+  subsequently rendered the three live companions at camp, reached the
+  courtyard sandbags in one ordinary route run, and traced 20/21/20 ally hits
+  in a separate one-Thrax copied-world diagnostic. A repeated route landed on
+  the lower level, so normal six-Thrax passage and balance remain unverified.
+  A [deployed-binary six-Thrax probe](evidence/bootcamp-six-thrax-deployed-binary-probe.json)
+  confirmed H then R draws and reloads the copied recruit's empty rifle to
+  20/980. Its two repeated camp routes fell below the upper path; after a
+  diagnostic teleport to a prior upper checkpoint, one Thrax killed the
+  unopposed recruit while all three companions still followed behind and
+  had logged no hits. Resolve the filmed defenders' placement and activation,
+  and repeat with ordinary player fire before treating encounter balance as
+  preserved.
+  A [client-ready leftward route trial](evidence/bootcamp-courtyard-client-ready-cave-route.json)
+  now reaches cave area 198602 from a copied courtyard checkpoint with all six
+  staged Thrax attacking; mission 1994's cave objective completes and the
+  original client advances to "Find a way out of the cave." The recruit dies
+  afterward. Its camp escorts were about 40 m behind at the trigger because
+  this checkpoint skipped natural travel. The cave route is verified for this
+  checkpoint, while normal ally formation, survival and encounter fidelity
+  remain open.
+  A [subsequent upper-route client replay](evidence/bootcamp-courtyard-upper-route-client-replay.json)
+  used ordinary movement to reach the upper gap from a rocky-descent checkpoint.
+  A separate login at that reached point crossed the gap and courtyard
+  obstruction with normal jumps, reaching the filmed courtyard line before
+  hostile fire killed the recruit. The cave objective stayed active. A single
+  uninterrupted camp-to-cave survival and encounter completion are still open.
+  [Timed continuous replays](evidence/bootcamp-courtyard-continuous-route-replay.json)
+  now cross both obstacles in one session from the rocky-descent checkpoint;
+  the closest no-fire sprint died about 1.1 m outside the cave trigger.
+  A [cover-fire checkpoint replay](evidence/bootcamp-courtyard-cover-fire-replay.json)
+  then produced two player Thrax kills, 142 XP and 20 credits, and a native-client
+  reload from 5/1000 to 20/985. The recruit later died 17.4 m from the cave
+  trigger center while trying to cross the courtyard obstacle. These are
+  emulator observations with estimated combat data and inspection pauses.
+  The [cover mechanics audit](evidence/bootcamp-cover-mechanics-gap.json)
+  finds recovered client cover damage values and UI states; before this
+  reconstruction, the emulator's distance-based creature attacks had no cover
+  calculation. Original
+  sandbag static positions and client collision triangles are recovered. A
+  diagnostic ray probe crosses those triangles on all three sampled body
+  heights at one normal-attack death point. The original server's sampling and
+  damage formula remain unknown; earlier runs cannot quantify its effect.
+  A bounded [cover reconstruction](evidence/bootcamp-cover-reconstruction.json)
+  now uses the original six sandbag collision meshes and client damage lookup
+  for direct ranged hits, with nine sample points and interpolation explicitly
+  estimated. In an isolated original-client run, 183 incoming hits at one fully
+  occluded checkpoint were scaled to a quarter of their pre-cover damage; the
+  recruit still died and the cave objective stayed active. The bounded
+  reconstruction is deployed in a cover-only derived game image; it does not
+  establish final-live balance.
+  A follow-up isolated route trial queued input on the server's MapLoaded event,
+  while the original client still displayed Entering Battle; its first strafe
+  did not move the character, and a later forward move led north to another
+  death outside the cave area. The next normal route replay must wait for a
+  playable client frame before sending movement.
+  The final fight and an uninterrupted camp-to-cave run remain unverified.
+  The [courtyard reward timeline](evidence/bootcamp-courtyard-kill-pacing.json)
+  records six kills over 36.2 seconds, without establishing simultaneous
+  spawns. A [conditional placement fix](evidence/bootcamp-conditioned-creature-respawn-audit.json)
+  now prevents zero-respawn allies/defenders from returning after corpse cleanup
+  merely because mission state refreshes; two focused state tests pass.
+  The filmed post-handoff player and camp allies also contradict the usefulness
+  of the old southern DeSimone estimate. The
+  [revised placement](evidence/bootcamp-desimone-camp-placement.json) is still
+  inferred. A copied original-client checkpoint completed his objective
+  conversation there; continuous Hartmann → DeSimone → cave travel remains open.
+  A [cave-approach replay](evidence/bootcamp-courtyard-cave-approach-replay.json)
+  confirms the current cave trigger advances mission 1994 using ordinary client
+  movement when staged attacks are diagnostically suppressed. A no-fire run
+  with normal attacks died 3.8 m outside the trigger. Its server trace shows
+  all six staged Thrax hitting the single Warrior at map load and killing him
+  before the recruit arrived in that replay. The final-week recording shows a
+  targetable Warrior during the fight, but cuts directly from camp to courtyard,
+  hiding travel and any earlier encounter activity. Enemy activation,
+  concurrent count and defender placement need direct evidence before revising
+  the encounter.
+  A [new copied-client route trace](evidence/bootcamp-camp-to-upper-route-replay.json)
+  walked from the staged camp point through the gate to the rocky descent using
+  ordinary inputs, with all three companions following. A third pass reached
+  `(327.1,121.1,105.8)` on the upper approach, but its jump fell beneath the
+  bridge. The original recording cuts over that travel.
+  A [separate upper-gap checkpoint replay](evidence/bootcamp-upper-gap-side-jump-replay.json)
+  found a native-client D+Space crossing and landed at `(320.4,120.9,93.8)`
+  on the original upper navmesh floor. It reached the courtyard at
+  `(301.1,119.8,78)` with companions present before the no-fire recruit died
+  under normal staged attacks. This resolves the checkpoint geometry route,
+  while a single uninterrupted camp-to-courtyard run and normal combat remained
+  open at that checkpoint.
+  A [continuous camp-to-courtyard replay](evidence/bootcamp-camp-to-courtyard-continuous-replay.json)
+  subsequently crossed the same upper gap and reached the courtyard sandbags
+  at `(301.2,119.8,77.9)` from the staged camp in one original-client login,
+  without movement edits after login. The recruit died without firing after
+  inspection pauses. Companion markers appeared behind him on the courtyard
+  radar, and none logged outgoing hits in this run; their route across the gap
+  remains unverified. The cave trigger and normal fight are still open.
+  A subsequent [position-traced continuous replay](evidence/bootcamp-continuous-companion-position-trace.json)
+  with a freshly built disposable game binary showed all three companions
+  following across the gap and reaching the courtyard sandbags. Each landed
+  nine hits before the no-fire recruit died. The earlier copy used a different
+  binary and logged no companion hits; the difference is not yet isolated.
+  This verifies present follow behavior, while final-live routing, encounter
+  pacing and a completed fight still require evidence.
+  A [continuous native-client combat trial](evidence/bootcamp-camp-to-courtyard-combat-trial.json)
+  started at camp with the issued 20-round rifle load. It reached the sandbags
+  with the three companions attacking, but the first Tab selected the friendly
+  Archer; four player shots resolved against entity 0 and the recruit died
+  before reaching the cave. This is a targeting failure in the trial, not
+  evidence for changing Thrax combat values. The old and rebuilt game PDBs
+  carry the same BehaviorManager source checksum, while the content runtime
+  checksum differs; the earlier zero-hit discrepancy remains unresolved.
+  A [current-build combat checkpoint](evidence/bootcamp-current-build-targeting-checkpoint.json)
+  then aligned the recovered-client reticle on a Thrax from the previously
+  reached `(316.13,120.28,85.93)` point. Seven player rifle hits killed one
+  staged Thrax and the client showed 71 XP and 10 credits. The isolated
+  harness exited before its next target capture, with Alden still alive;
+  encounter clearance and cave entry were not observed.
+  A [Warrior sequence audit](evidence/bootcamp-courtyard-warrior-sequence-audit.json)
+  compares the final-week footage with four traced emulator runs. Two reward
+  events precede a targetable Forean Warrior in the recorded courtyard fight;
+  the emulator's only staged Warrior dies before the first Thrax in every
+  tested run. The video edit hides map-load timing and whether that Warrior
+  was a later arrival, so no unsupported spawn or combat change was made.
+  A [sustained-fire checkpoint replay](evidence/bootcamp-courtyard-sustained-fire-checkpoint.json)
+  on the current build used the original client to kill two staged Thrax,
+  showed two 71 XP/10-credit pairs, and reloaded the crate rifle to 20/984.
+  All three companions attacked. A cave push ended in the recruit's death at
+  `(296.4,120.5,67.6)`, 7.5 m outside the trigger; four Thrax were still
+  alive when he died. This verifies the checkpoint combat path but leaves the
+  normal complete fight and cave transition open.
+  Three further [normal-attack cave approaches](evidence/bootcamp-courtyard-normal-cave-approach.json)
+  ended before area 198602: one before movement began, one at a client-reached
+  point 6.8 m outside its radius, and one at that point against a sandbag
+  barricade. The trigger itself was not reached or disproven.
+  A [courtyard pressure audit](evidence/bootcamp-courtyard-combat-pressure-audit.json)
+  compares final-week frames with a traced emulator opening. The original
+  recruit's health bar remains visually filled through the six-kill interval,
+  with a level-2 Forean Warrior targetable after three rewards. In the copied
+  emulator run all six seeded courtyard Thrax hit the only Warrior within four
+  milliseconds of one another and kill him 7.1 seconds after map load. This
+  narrows the next test to enemy activation and target selection, while the
+  original pre-fight edit and unknown defender count still prevent a supported
+  spawn-timer or damage adjustment.
+  The [2026-09-23 live runtime correction](evidence/live-creature-health-respawn-20260923.json)
+  now uses `creature.max_hp` for templates without `creature_stat` instead of
+  a hardcoded 100 HP. The live boot-camp Initiate row has 555 HP in the seeded
+  data, but that number is an emulator analogue, not a recovered final-live
+  value. The same image prevents mission-condition refresh from bypassing a
+  placement's zero or timed respawn setting. Focused tests pass 3/3; a live
+  recovered-client login reached Character Select, while combat after this
+  correction remains untested.
+  A [copied-client follow-up](evidence/bootcamp-after-health-client-replay.json)
+  reached the playable boot-camp HUD on the deployed-derived binary, moved
+  toward the courtyard and fired at a visible level-2 Thrax. Long inspection
+  pauses left Alden exposed; a staged Thrax killed him 32.5 m from the cave
+  area's center and the client displayed Refugee Base Medic. The replay
+  confirms the changed binary admits the instance and encounter; it does not
+  measure internal enemy HP or complete the normal fight. The live-derived
+  binary lacks some staged companion follow/assist changes, so this replay
+  also cannot verify the full ally reconstruction.
+  An earlier attack-suppressed [client cave walk](evidence/client-cave-walk-playthrough.json)
+  did enter the area and advanced the objective. A fourth normal-attack replay
+  from its saved position took a different camera-relative path and died outside
+  the area, so the normal encounter remains open.
+
+- **2026-09-22 tracking and movement checkpoint:** deferred owner admission
+  restores saved mission tracking; native grouped IDs are accepted; full
+  character-option snapshot replacement preserves intentional untracking across
+  a fresh original-client reconnect. McAllister's route now stops and retains
+  facing without changing its inferred endpoint. The combined suite passes
+  1281/1281, including seeded final Hartmann/DeSimone handoff and payout checks.
+  Next: perform that handoff in the original client, then continue the current
+  boot-camp segment. Rifle modules/melee and officer visual grounding remain
+  open. See [tracking](client-mission-tracker-reconnect.md),
+  [option saves](client-character-options-snapshot.md), and
+  [movement](client-mcallister-grounding.md).
+
+- **2026-09-22 equipment continuation:** the original client now executes
+  Delessio's two talks, crate collection, first-boots equip, Hartmann's firing
+  instruction, Practice Dummy and Lightning objectives on isolated servers. The
+  combined suite passes 1251/1251 after correcting the rifle range to the original
+  60 m and repairing unequipped clothing's skill-requirement tuple. Both repairs
+  render correctly in the original UI. Rifle melee/modules, mission-tracker
+  reconnect and officer grounding remain current-segment work, not grounds to
+  advance to Wilderness. See [equipment playthrough](client-gearing-playthrough.md)
+  and [selection audit](client-selection-deletion.md).
+
+- **2026-09-22 original-client playthrough:** creation, initial HUD, both Eloh
+  approaches, Initiation turn-in and normal logout persistence now execute on
+  isolated disposable servers. Saved yaw admission is corrected and verified;
+  clothing tooltip and weapon-drawer initialization defects found during this
+  run are corrected and verified by a second original-client admission plus the
+  1232-test suite. The spawn-heading convention is now calibrated; the measured
+  direction and supported skip grants still carry evidence gaps. See [playthrough](client-opening-playthrough.md) and the
+  latest [work-log entry](retail-accuracy.md). This does not certify the segment
+  complete or establish final-live parity.
+
+- **2026-09-22 next audit, pending deployment/playthrough:** recovered all five
+  appearance palettes and the native texel sampler; hybrid Beard/accessory
+  admission now follows the original disabled controls. Exact color admission
+  still needs runtime scaling and inherited clone-color verification. Crate lid
+  state, the observed 20-round issued rifle, partial-loot recovery and
+  practice-target damage feedback are corrected. See
+  [crate audit](bootcamp-crate-state-audit.md),
+  [combat feedback](bootcamp-combat-feedback-audit.md) and
+  [palette evidence](evidence/character-creation-palettes.json).
+  The complete compatibility client now renders its original login screen in
+  isolated Wine after supplying the native DirectX helper. The later isolated playthrough above verifies authentication, creation and
+  Initiation; the remaining boot-camp sequence still needs verification. See
+  [client acquisition](client-artifacts.md).
+- **2026-09-22 follow-up, pending deployment/client verification:** appearance
+  admission now follows the original 92-choice slot/race catalog, names follow
+  the original format messages with explicitly inferred uniqueness scope, and
+  first-admission count/skip entitlement survive interrupted world loading.
+  McAllister now actually walks after Gearing Up acceptance; his pace remains a
+  labelled analogue. See [appearance](character-creation-appearance-evidence.md),
+  [names](character-name-evidence.md), [first login](first-login-skip-research.md)
+  and [movement](bootcamp-opening-movement-audit.md). Exact color admission, name
+  collation/reservation policy, skip rewards and original-client comparison
+  remain incomplete.
+- **2026-09-22 correction, pending deployment/client verification:** creation now
+  persists the footage-backed Recruit outfit as worn inventory, a loaded pistol
+  in drawer slot 1 and 1,000 reserve rounds. Hybrid creation and cloning require
+  persistent account unlocks from the identified mission completions. Clone
+  packet framing and height validation are corrected. The boot-camp equip lesson
+  requires reconstructed crate gear instead of automatically crediting starter
+  equipment. See [loadout evidence](evidence/new-character-loadout.json),
+  [race eligibility](race-unlock-research.md),
+  [request validation](character-creation-validation-evidence.md) and
+  [equip-step audit](bootcamp-equip-audit.md). Estimates remain labelled; these
+  changes do not certify the creation/boot-camp segment as complete.
 - Dated post-rewrite evidence establishes all five Recruit skills at rank 1
   with zero initial unspent points. Creation now persists these ranks together
   with the character and items in one transaction, with failure rollback.
@@ -44,21 +381,23 @@ the final-live rule.
 - Fixed Recruit outfit colors match the original creation preview. Selection
   now checks the original two-field message, rejects overflowing slot values,
   and preserves session selection when ownership lookup or saving fails.
-- The full initial inventory/placement, race and appearance eligibility,
-  starting point, and first-login/skip state remain under reconstruction.
+- Initial inventory and race eligibility now have the corrections above; exact
+  inferred fields and original-client verification remain incomplete. Appearance,
+  naming and first-login/skip audits are recorded below as they are verified.
 - Deployment 11 rebuilt boot camp. The archived Bootcamp page marks its own
   mission list obsolete; recover the later sequence before importing missions.
 - The recovered later client identifies missions 1990, 1992, 1994, 1995 and
-  the retry 2005, 21 objectives and ten NPC dialogue bindings. The current
-  boot-camp map has no spawn-pool rows or mission definitions; start/reward/skip
+  the retry 2005, 21 objectives and ten NPC dialogue bindings. The original base
+  emulator lacked their spawn pools and mission definitions; the reconstructed
+  slices below now supply playable content. Original server start/reward/skip
   scripts remain unrecovered. See [the boot-camp audit](bootcamp-client-evidence.md).
 - A verified 2026-09-13 sweep established that the original static map holds
   no gameplay actors at all, so first-login position, NPC placements and
   objects must come from captures or observation, not client data.
 - The server now speaks the recovered mission-log and NPC objective
   conversation protocol with persistent per-character progress, which the
-  tutorial's conversation objectives require. No tutorial content is loaded;
-  incomplete definitions are withheld. See
+  tutorial's conversation objectives require. Reconstructed tutorial content is
+  seeded by the slices below; incomplete definitions are withheld. See
   [mission research](mission-research.md#mission-log-protocol-and-persistence--2026-09-13).
 
 - Three original recordings, the main one dated by player chat to the final week before shutdown,
@@ -67,19 +406,9 @@ the final-live rule.
   objects, and the observed rewards of the first missions. See
   [verified footage](bootcamp-client-evidence.md#2026-09-13-verified-footage-what-three-original-recordings-establish).
 - The server has the data layer for labelled reconstruction (S0 of the boot-camp build plan): content
-  rows are validated and withheld unless every mechanic they need exists, and a new-character entry
-  switch defaults to the Wilderness start. No boot-camp content is seeded yet; the owner decisions for the
-  first slice are recorded below.
-- **2026-09-22 to 2026-09-24 (recovered from a lost VPS checkout; documentation reconstructed 2026-09-26)**:
-  commit `234d703` implemented the original client's character-name rules (length 3-20, leading capital,
-  letters only, no run of three identical letters; `CharacterNameRules.cs`) and seeded the mission-gated
-  hybrid-race unlocks (Forean via mission 1861 "Traitor on the Run", Brann via 1851 "Remedy", Thrax via
-  1899 "Genome Sweet Genome"), each recorded per-account and surviving character deletion. See
-  `docs/character-name-evidence.md` (from `docs/evidence/character-names.json`) and
-  `docs/evidence/race-unlocks.json`. Commit `af0a9bb` added the creation admission-ordering and item-class
-  seed-parity scaffolding this work sits on. The full narrative for this checkout was never committed and
-  is lost; `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24" section reconstructs it from these
-  artifacts.
+  rows are validated and withheld unless every mechanic they need exists. The new-character entry
+  switch originally defaulted to the Wilderness start while S1 was being built;
+  the subsequent slice and deployment records below describe the reconstructed camp.
 
 ## S1 (Initiation) status
 
@@ -108,16 +437,6 @@ the final-live rule.
 - Remaining S1 verification: deploy the candidate, set `Bootcamp.EntryMode`, and run the owner client
   check against the footage; the planned `ReconstructionSeedTests`, `PositionFileTests`,
   `ReconstructionDefinitionTests` and `SliceReadinessReport` are not written yet.
-- **2026-09-22 to 2026-09-24 (recovered; documentation reconstructed 2026-09-26)**: mission 1992
-  "Gearing Up for Battle" (the S1/S2 boundary content, no dedicated status section of its own exists yet
-  — a pre-existing gap, not created here) was refined in commit `f30d9aa`. The supply crate's four armour
-  pieces (item set 19858) were swapped from the common to the uncommon Motor Assist row, and Corporal
-  McAllister's walk-away trigger was moved from mission 1990's turn-in to mission 1992's acceptance, both
-  against footage `7Lrst9SG3pk`. See `docs/bootcamp-equip-audit.md` and
-  `docs/bootcamp-opening-movement-audit.md` for the full reasoning, including McAllister's 2.5 m/s walk
-  speed being a labelled analogue rather than a measured value. Commit `9afd210`'s per-instance item
-  module/trade-flag support underlies this gear, though the crate's own pieces still lack module and
-  trade-restriction lines end-to-end per the equip audit.
 
 ## S3 (private instances) status
 
@@ -133,18 +452,14 @@ the final-live rule.
 - `PrivateInstanceTests` cover creation, isolation at identical coordinates, destruction after the owner
   leaves, replacement on re-entry and the instance id sent at login. Full suite 815/815. Owner client
   check (two recruits at once, relog) is still to do.
-- **2026-09-22 (recovered; documentation reconstructed 2026-09-26)**: commit `af0a9bb` added a lock
-  around the map-channel registry this section's `MapChannelManager.ChannelForEntry` describes, as
-  concurrency-safety scaffolding recovered without its original narrative. No channel-isolation behavior
-  changed; this is not a new reconstructed value.
 
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
   `BootcampData/BootcampS4CaptureTheFlagRows.cs`, parity-checked; 41 manifest rows). DeSimone gives it after 1992
   is completed; objective 4 (promotion conversation) is revealed on acceptance and a rule grants its 500 XP;
-  4 → 2 → 1 → 3 follows the footage. Objective 2 is an area trigger at the measured cave-in icon (radius 5 m
-  inferred); objective 1 is a kill of the Tizzik Gi placement with the "Boss Eliminated 0 / 1" counter; objective 3
+  4 → 2 → 1 → 3 follows the footage. Objective 2 is an area trigger at the measured cave-in icon (10 m
+  reconstructed radius under OD-44; the initial 5 m estimate was superseded); objective 1 is a kill of the Tizzik Gi placement with the "Boss Eliminated 0 / 1" counter; objective 3
   is Youngblood's conversation. Turn-in pays 5000 XP (observed). Indicators 437 (observed id) and 439 (inferred id)
   sit at measured positions.
 - Creatures: Captain Youngblood (class 3846 and level 10 analogues, stationary, package 2561), Tizzik Gi (class
@@ -167,12 +482,6 @@ the final-live rule.
   and checks that the seeded 1990/1992/1994 and context-1985 content has no content or definition gaps under
   `MissionContentRules.Implemented`. Full suite 839/839 under the .NET 5 SDK image. Owner client check (build plan S4
   steps 1–9) is still to do.
-- **2026-09-23/24 (recovered; documentation reconstructed 2026-09-26)**: commit `f30d9aa` seeded a
-  courtyard Forean Warrior (`BootcampCourtyardForeanWarrior`) and the camp's companion Initiates
-  (Gunner/Archer/Shaman) as part of the same footage-fidelity pass. Neither migration was found to have
-  its own `docs/evidence` manifest rows or `changes` entries in this documentation pass; see the
-  due-diligence note in `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24" section. This bullet
-  records that the content exists, not that its provenance has been re-verified here.
 
 ## S5 part 1–2 (facts, objective timers, failure and retry) status
 
@@ -220,12 +529,170 @@ the final-live rule.
 
 ## S5 (Calling for Reinforcements) seed status
 
+- A 2026-09-22 isolated client continuation accepted 1995 from Youngblood after
+  1994, displayed objective 2 without a countdown, completed the wounded
+  soldier conversation and revealed Conrad's corpse objective 3. The copied
+  database retains that state. A follow-up isolated client comparison found
+  the inferred corpse seed inside ramp geometry with an incomplete navmesh
+  route. `BootcampConradCorpsePlacement` moves it to inferred reachable floor
+  at (-98,85.39,67.2); a recovered-client right click completed objective 3
+  and began the 600-second objective-1 timer. Hostile attacks were disabled
+  only in the disposable world, and GM teleports bypassed that early route.
+  A later copied-client run reached the corpse through ordinary movement,
+  displayed its use prompt, and completed the objective with a right click;
+  the copied character database persisted the completion and 600-second timer.
+  At that checkpoint, the uninterrupted soldier-to-corpse sequence and full
+  timed bomb route were unverified. A later checkpointed high-bank route reached the wreck through
+  ordinary movement. Its first far-face clicks found no usable; a short move
+  to the near face exposed the prompt, and right-click completed the bomb
+  objective and revealed Van Valkenberg. Ordinary movement from the bomb then
+  opened his check-in dialogue; Continue on the reached pad transferred to
+  Alia Das, set the skip flag and displayed Training Day. Timer resets and
+  coordinate restores make this route reachability evidence, not a full timed
+  run. The first
+  bomb client checkpoint found the measured radar point obstructed by the
+  reconstructed wreck; a closer playable position on its near face
+  `(-221.95,102.3,-70.5)` is inferred within the original per-axis ±2 m
+  measurement bounds. `BootcampBombHullPlacement` applies it. In the recovered
+  client the bomb use and detonation completed objective 1, removed the wreck,
+  spawned reinforcements and revealed objective 4. A later recovered-client
+  check opened Van Valkenberg's completion dialogue, transferred from the pad
+  to Alia Das, offered Training Day, and completed 1995 with Rogers. Rogers'
+  generic screen displayed `ERROR: ? No greeting`, and exact 1995 rewards
+  remain unknown. A diagnostic timer-expiry check recorded 1995 failed in the
+  copied database; Youngblood offered retry 2005 with a fresh 600-second timer.
+  The recovered client used the corrected bomb in the retry, completed its
+  objective 1 and revealed Van Valkenberg. This verifies the emulator path
+  under diagnostic timer and position edits, not original final-live values.
+  Evidence:
+  [mission checkpoint](client-reinforcements-opening.md),
+  [corpse placement](evidence/client-conrad-corpse-placement.json),
+  [ordinary client corpse use](evidence/bootcamp-s5-corpse-use-20260924.json),
+  [navmesh route candidate](evidence/bootcamp-s5-wreck-route-candidate-20260924.json),
+  [timed client route attempt](evidence/bootcamp-s5-timed-wreck-route-20260924.json),
+  [higher-bank route](evidence/bootcamp-s5-higher-bank-wreck-approach-20260924.json),
+  [bomb acquisition from that route](evidence/bootcamp-s5-bomb-acquisition-from-route-20260924.json),
+  [ordinary check-in and exit](evidence/bootcamp-s5-postbomb-ordinary-exit-20260924.json),
+  [ordinary Alia Das route toward Rogers](evidence/bootcamp-s6-rogers-ordinary-route-20260924.json),
+  [bomb placement comparison](evidence/client-reinforcements-bomb-correction.json),
+  [Alia Das handoff](evidence/client-reinforcements-handoff.json), and
+  [failure/retry](evidence/client-reinforcements-retry.json).
+- Three later isolated single-session attempts used Conrad's corpse normally and
+  let the 600-second timer run without resets. None reached bomb use: the first
+  lost movement to chat focus near the wreck, the second met bridge rubble, and
+  the focus-guarded third followed a west/north bridge line away from the wreck.
+  The third confirms that focus recovery works but does not establish a timer
+  or mission-mechanics defect. The measured dry-bank route and its hazards are
+  in [the route analysis](evidence/bootcamp-s5-dry-route-analysis-20260924.md);
+  [the guarded timed run](evidence/bootcamp-s5-focus-guard-and-timed-repeat-20260924.md)
+  records the latest outcome. A separate
+  [detonation aftermath audit](evidence/bootcamp-s5-detonation-aftermath-audit-20260924.json)
+  confirms the current 21-damage, wreck, objective and reinforcement order
+  against surviving footage, while player recoil and exact beam-in timing remain
+  evidence gaps. The [hidden-XP audit](evidence/bootcamp-s5-hidden-xp-audit-20260924.json)
+  confirms a level-3-to-4 jump inside the original edit but cannot distinguish
+  a mission reward from unseen kills or locate its trigger; no provisional
+  grant is seeded. The [tier-gate follow-up](evidence/s5-s6-tier-gate-xp-followup-20260924.json)
+  notes that the first Alia Das frame also records a full XP bar and class
+  gate message; the earlier rough 10–11k estimate reaches only emulator level
+  4, not trainer eligibility. The [source-exclusion audit](evidence/s5-s6-xp-source-exclusion-20260924.json)
+  places the gain before ordinary 1995 and 1526 turn-ins but leaves its event
+  unknown. An uninterrupted S5 completion was still unverified at this
+  stage; V14 later verifies corpse-to-bomb through the Alia Das transfer.
+- A later [coordinate-guided client route](evidence/bootcamp-s5-loc-waypoint-route-20260924.md)
+  used the original client's `/loc` overlay to reach the inferred bomb-use
+  viewpoint by ordinary movement from the corpse checkpoint. A separate copied
+  diagnostic state showed the bomb prompt and completed objective 1 there.
+  Timed V2 stopped 8.7 m short under a conservative harness cutoff; V3 left
+  the dry bridge deck; V4 crossed the bridge but stopped when a resumed
+  controller used a stale coordinate. None proves one-session timed completion
+  or a mission-timer defect. The focus guard, bridge-height guard and safe
+  controller resumption now have five focused harness tests; the next bounded
+  check is one unreset client run using those corrections.
+- Two further copied-client timer runs remain inconclusive. V5 crossed the dry
+  bridge and reached `(-210.1,97.3,-41.6)` with 3:51 showing, but dark-hillside
+  `/loc` OCR stopped the harness before bomb use. A bounded OCR fallback now
+  reads that frame and keeps unreadable frames paused for review; the seven
+  focused harness tests pass. V6 was interrupted by an unexplained SIGTERM to
+  the outer isolated runner shortly after corpse use, while objective 1 was
+  still active. Neither run shows a mission or timer failure. The exact
+  artifacts are [V5](evidence/bootcamp-s5-timed-loc-v5-20260924.json) and
+  [V6](evidence/bootcamp-s5-timed-loc-v6-20260924.json); runner-lifecycle
+  reliability was the next prerequisite for another uninterrupted check.
+- A detached runner held the isolated client responsive during a separate
+  lifecycle check. Timed V7 then reached the wreck hull at
+  `(-225.0,101.1,-63.7)` with 1:12 remaining, but the bomb prompt was absent;
+  local movement probes did not recover it before the real 600 s timer expired.
+  An untimed probe from that exact position reached the bomb-use prompt at
+  `(-219.08594,101.05078,-69.39844)` using S700, A1000, then W+A400. Timed
+  V8 stopped while objective 1 was still active: a 1100 ms diagonal hold from
+  `(-142.4,84.8,29.8)` dropped below the dry bridge deck. A further untimed
+  probe crossed from that same safe position to `(-145.4,84.8,22.3)` in five
+  holds of at most 400 ms, all measured at Y=84.8. These runs establish route
+  controls and harness failure modes, not a timed corpse-to-bomb completion.
+  See [V7](evidence/bootcamp-s5-timed-loc-v7-20260924.json),
+  [hull recovery](evidence/bootcamp-s5-hull-untimed-recovery-20260924.json),
+  [V8](evidence/bootcamp-s5-timed-loc-v8-20260924.json), and
+  [bridge recovery](evidence/bootcamp-s5-bridge-untimed-recovery-20260924.json).
+- Timed V9 used the short bridge sequence and remained on the dry deck at
+  `(-144.3,84.8,23.7)` with objective 1 active. The controller stopped because
+  this position was 2.34 m ahead of one untimed sample, beyond a fixed 2 m
+  sample tolerance; it was about 1.8 m from the next bridge target. V9 did
+  not reach the bomb or demonstrate a timer failure. Its
+  [sealed trace](evidence/bootcamp-s5-timed-loc-v9-20260924.json) separates
+  this controller false divergence from the V8 bridge fall.
+- Timed V10 reached a different safe bridge approach, `(-141.8,84.8,28.3)`,
+  then a generic 350 ms diagonal hold ended at `(-144.7,84.0,26.3)` below the
+  Y≥84.5 deck guard. The controller stopped with objective 1 active and no
+  bomb use or timer expiry. This [trace](evidence/bootcamp-s5-timed-loc-v10-20260924.json)
+  shows the measured V8-start crossing does not cover every approach position.
+  A separate [untimed V10-start probe](evidence/bootcamp-s5-bridge-untimed-recovery-v2-20260924.json)
+  crossed from `(-141.8,84.8,28.3)` to `(-147.3,84.8,20.7)` using A300,
+  A300, W350, W300, W250; every `/loc` reading remained at Y=84.8. This is
+  local route evidence, not a continuous timed completion.
+- Timed V11 reached `(-147.9,84.8,23.4)` on the far bridge edge with 5:54
+  showing, but an unnecessary W400 moved to `(-151.9,79.4,23.2)` below the
+  deck; objective 1 was still active. An untimed copied-client probe from that
+  edge fell immediately on W+A200, so its momentary Y=84.8 reading was not a
+  safe continuation point. From the exact prior safe position
+  `(-143.1,84.8,25.7)`, a separate untimed probe used W+A200 twice to reach
+  `(-145.5,84.8,21.4)` on dry deck. These findings are in
+  [V11](evidence/bootcamp-s5-timed-loc-v11-20260924.json),
+  [edge probe](evidence/bootcamp-s5-bridge-postwa-edge-20260924.json), and
+  [short-step probe](evidence/bootcamp-s5-bridge-prewa-short-probe-20260924.json).
+  The short-step sequence had not yet been exercised by an unreset timed run.
+- Timed V12 crossed the dry bridge and reached the bomb viewpoint at
+  `(-219.6,101.1,-69.8)` with 1:30 on the client timer. The original client
+  visibly displayed the bomb-use prompt, but the controller's OCR crop missed
+  its left edge and withheld the click; objective 1 was still active. This
+  [sealed V12 trace](evidence/bootcamp-s5-timed-loc-v12-20260924.json) proves
+  timed route reachability to the prompt, not bomb use or mission completion.
+- Timed V13 used the corrected prompt detector but incurred three manual
+  `/loc` OCR reviews. At +589.6 s it was still approaching the upper wreck at
+  `(-214.8,99.8,-56.4)`; the next review frame showed the original client's
+  Objective Failed banner, and the copied database recorded objective 1 failed.
+  The game log contains a corpse use request but no bomb use request. This
+  [V13 trace](evidence/bootcamp-s5-timed-loc-v13-20260924.json) is a real
+  expiry during a slow client-harness route, not evidence that the mission
+  timer or bomb interaction is broken.
+- Timed V14 used the original 1.16.5.0 client in one unreset session from
+  Conrad's corpse through the wreck. With 0:22 on the client timer, the bomb
+  prompt was visible and an ordinary right-click completed objective 1 before
+  expiry. The client showed the detonation aftermath and Van Valkenberg's
+  objective-completion dialogue; Continue completed all four 1995 objectives
+  and transferred the same session to Alia Das, where Calling for
+  Reinforcements appeared complete and Training Day was offered. The copied
+  database and two use requests (corpse and bomb) corroborate the client
+  captures. See the [V14 evidence](evidence/bootcamp-s5-timed-loc-v14-20260924.json).
+  This verifies the reconstructed timed S5 interaction path; original encounter
+  combat, exact final-live route and rewards, and Rogers' turn-in still require
+  independent fidelity checks.
 - Missions 1995 and 2005 are seeded by `BootcampS5Reinforcements` (SQLite and MySQL, frozen rows in
   `BootcampData/BootcampS5ReinforcementsRows.cs`, parity-checked; 59 manifest rows). Youngblood gives 1995 after 1994
   is completed. Objective 2 (the unnamed wounded soldier, package 2584) is revealed on acceptance, then 2 → 3 (use
   Conrad's corpse) → 1 (the bomb reaching its detonated state 115) → 4 (Van Valkenberg, package 2564); 1 → 4 is
   observed (B1-050/051), the rest inferred. Objective 1 carries the 600 s timer (analogue, OD-6) that fails the
-  mission; the receiver is Rogers (creature 100, inferred; `GAP-ROGERS`). No reward is seeded (`GAP-S5-MISSION-REWARDS`).
+  mission; the receiver was initially Rogers (creature 100, inferred; superseded by the reserved Rogers below). No reward is seeded (`GAP-S5-MISSION-REWARDS`): the [bounded source audit](evidence/bootcamp-s5-reward-source-audit-20260924.json) found no final-live payout in the inspected original client, footage or contemporary records.
 - 2005 (level 3 inferred) has objectives 1 → 4 with the same bomb binding and a 600 s timer ("You've got ten minutes.",
   inferred); it is offered after a failed 1995 (no 2005 row) and again after its own failure.
 - Usables: the bomb (class 7870, inferred) with windup 1420 ms and fuse 4930 ms (both measured ±150 ms), usable once
@@ -238,29 +705,45 @@ the final-live rule.
 - Creatures: Van Valkenberg (name 10574; class 3846, level 10, 1000 hp analogues) at his measured radar position, the
   unnamed wounded soldier (class 3846 analogue) at an inferred bunker position, Infantryman L2 and L3 and the Forean
   Gunner Initiate L3 (analogue classes 21910/21900/6239; levels observed, the Infantryman levels from frame reading
-  S5P-01) at inferred pad positions. Van Valkenberg and the reinforcements are present once the dropship is destroyed
-  and stand still. One level-1 Thrax Infantry Initiate (the S4 template's analogues, `creature_action` 33) guards the
+  S5P-01) at inferred pad positions. Van Valkenberg and the reinforcements are present once the dropship is destroyed.
+  The corrected final-week frame ledger observes the group standing on the pad through 98.333 s, at least 11.533 s
+  after objective 1995/1 completes. The earlier immediate walk rules for 1995 and inferred retry 2005 contradicted
+  that observation and are removed by `BootcampReinforcementPadHold`; departure after the hard cut remains unknown
+  ([pad-hold correction](evidence/bootcamp-s5-reinforcement-pad-hold-20260924.json)).
+  The isolated correction was deployed with the DIT overlay on 2026-09-24;
+  the live world DB confirms both immediate walk rules absent and the three
+  reinforcement placements retained.
+  Their [beam-in timing](evidence/bootcamp-s5-reinforcement-beam-timing-20260924.json)
+  remains a separate gap: the emulator makes solid NPCs present immediately,
+  while the frame ledger first shows a Forean nameplate about 4.9 seconds after
+  objective completion and then a gradual visual arrival. The
+  [original-client beam binding audit](evidence/bootcamp-s5-reinforcement-beam-client-binding-20260924.json)
+  identifies two class state machines and their beam assets, but neither has
+  a static boot-camp placement or a verified S5 server binding.
+  A [reconnect-safe delay architecture](evidence/bootcamp-s5-delayed-presence-architecture-20260924.json)
+  is recorded without a gameplay change because nameplate timing does not
+  establish original spawn or targetability timing.
+  One level-1 Thrax Infantry Initiate (the S4 template's analogues, `creature_action` 33) guards the
   measured outpost engagement position. Indicators 435 (1995,2) and 432 (1995,1) use inferred ids at measured positions.
 - Conflicts with the build plan recorded in the manifest: C2-16 is a different, static wreck 250 m from the pad; the
   pad-centre radar icon is the (1995,4) indicator, not Van Valkenberg; the wounded soldier's position is inferred,
   not measured; the bomb lies south-west of the player (heading 230 deg), not north; the fuse is 4930 ms state to
   state, not 5300 ms; B2-012 names no reinforcement level.
 - 14 positions, 49 footage events (segments B2, B3, C1, C2 added) and sources `official_notes:d11` and
-  `client_table:launch-2007-11` (pre-D11, comparison only) were added. New gaps: `GAP-S5-WRECK-MECHANISM` (closed by
-  `fbd1539`), `GAP-S5-HIDDEN-XP`, `GAP-S5-WOUNDED-NAME`, `GAP-S5-CORPSE`, `GAP-S5-REINFORCEMENT-MOVE`,
+  `client_table:launch-2007-11` (pre-D11, comparison only) were added. Gaps identified at seed time included
+  `GAP-S5-WRECK-MECHANISM` (closed by `fbd1539`), `GAP-S5-HIDDEN-XP`, `GAP-S5-WOUNDED-NAME`, `GAP-S5-CORPSE`,
+  `GAP-S5-REINFORCEMENT-MOVE`,
   `GAP-S5-REINFORCEMENT-COUNT`, `GAP-S5-TIMER-START`, `GAP-S5-DETONATION-DAMAGE`, `GAP-S5-MISSION-REWARDS`,
   `GAP-S5-INDICATOR-PRESENTATION`, `GAP-S5-AMBIENT` and `GAP-BEAM-IN`; `GAP-BOMB-ITEM`, `GAP-D13.4`, `GAP-NPC-BODY`,
-  `GAP-S4-AMBIENT-LEVELS`, `GAP-ROGERS` and `GAP-NEXT-SEGMENT` were updated. Not seeded: rewards, the hidden
-  level-3-to-4 experience, a bomb item, detonation damage, unnamed reinforcements and their walk-off, the other
-  outpost creatures, flyovers and the beam-in.
-- **2026-09-23/24 (recovered; documentation reconstructed 2026-09-26)**: `BootcampReinforcementPadHoldRows`
-  (commit `f30d9aa`) removed the reinforcements' walk-off rules (1985015/1985017) and the unsupported
-  destination location 19854. Footage `8VXeKzGUv0c` (event B2-012, 95.4 s) shows the reinforcements still
-  standing on the pad 11.5 seconds after objective (1995,1) completed, which the earlier walk-off timing
-  cannot represent; whether they depart later is unverified. This documentation pass reopened
-  `GAP-S5-REINFORCEMENT-MOVE` (previously recorded above as closed by `30653f2`) and added the migration's
-  first `docs/evidence` manifest `changes` entry (tier `observed`), since it had none. No provenance tier
-  was changed, only the manifest's record of what this migration already did.
+  `GAP-S4-AMBIENT-LEVELS`, `GAP-ROGERS` and `GAP-NEXT-SEGMENT` were updated. Since that seed, the observed 21-point
+  detonation self-damage was added by `BootcampDetonationDamage`. A north-east reinforcement walk was then added for
+  1995 by `BootcampScriptedMoves` and inferred for retry 2005 by `BootcampRetryReinforcementWalk`. The corrected
+  frame ledger shows the group still standing on the pad through the last pre-cut frame, so
+  `BootcampReinforcementPadHold` removes both immediate walk rules
+  ([aftermath audit](evidence/bootcamp-s5-detonation-aftermath-audit-20260924.json),
+  [pad-hold correction](evidence/bootcamp-s5-reinforcement-pad-hold-20260924.json)). Their later departure and beam-in
+  presentation remain unverified, as does the player's blast knockback. Still unseeded: mission rewards, the hidden level-3-to-4
+  experience, a bomb inventory item, unnamed reinforcements, the other outpost creatures and flyovers.
 
 ## S6 (Exit to Alia Das) status
 
@@ -277,7 +760,261 @@ the final-live rule.
   talk to the wounded soldier, use the corpse, plant and detonate (wreck open, bomb gone, reinforcements present),
   check in with Van Valkenberg on the pad, transfer and account flag; and the failure path (D13.4 abandon, timer
   failure bringing the ship back, 2005 failing and retaken, then completed). Full suite 846/846 under the .NET 5 SDK
-  image. Owner client checks (build plan S5 steps 1–8, S6 steps 1–5) are still to do.
+  image. A [checkpointed original-client S5 probe](evidence/bootcamp-s5-soldier-approach-20260924.json)
+  reached the wounded soldier through ordinary movement, opened the objective-completion dialogue, and persisted
+  objective 2 complete and objective 3 active after Continue. A later [checkpointed original-client corpse use](evidence/bootcamp-s5-corpse-use-20260924.json)
+  completed objective 3 and started the 600-second timer after ordinary movement reached the prompt. The complete
+  Youngblood-to-soldier-to-corpse route in one run, bomb, check-in and exit still require client verification. A checkpointed ordinary-movement attempt toward the wreck dropped into water near the bridge; 1995 expired before wreck interaction. This does not establish a wreck defect. The remaining owner client checks
+  (build plan S5 steps 1–8, S6 steps 1–5) are not all complete.
+- [Accepted-1995 continuous-prefix probes](evidence/bootcamp-s5-accepted-prefix-normal-combat-20260924.json)
+  used normal hostile behavior and ordinary client movement from a copied Youngblood-area checkpoint. One run killed
+  gate placement 198674, continued along the outer fence to (-94.5,85.2,67.5) near the inferred soldier bunker,
+  then died to outpost placement 198683 before dialogue. A second run died at the gate after missing the moving
+  hostile. A [third visual-acquisition attempt](evidence/bootcamp-s5-gate-visual-acquisition-20260924.json) died
+  at the gate before firing while the hostile closed to melee. All isolated character databases were restored.
+  These are emulator route/combat checks, not final-live balance evidence. A single unbroken Youngblood acceptance
+  through wounded soldier and Conrad's corpse remains unverified.
+- A [fifth prefix attempt](evidence/bootcamp-s5-accepted-prefix-fifth-route-divergence-20260924.json) reproduced
+  the gate kill, but identical post-gate movement controls reached (-8.3,97.9,124.3) at the fence instead of the
+  prior (12.3,106.5,124.6). Replaying the lateral input from this different starting point entered an original
+  structure, and a bright lamp produced a false UI-mode reading in the research harness. The character stayed alive
+  with objective 2 active. The [focus guard](../tools/client_focus_guard.py) now requires the white UI MODE label,
+  verified on two surviving gameplay and two actual UI captures. The next route needs a /loc-driven fence branch;
+  no enemy-stat or content correction follows from this navigation result.
+- After the local research tree disappeared, the 1.16.5.0 compatibility ZIP and isolated harness were restored.
+  A [rebuilt-harness smoke and S5 gate record](evidence/bootcamp-s5-rebuilt-adaptive-gate-and-target-lock-20260924.json)
+  confirms copied Auth/Game login, playable HUD and `/loc`. The next bounded accepted-1995 attempt stopped at the gate:
+  after an ordinary 5-second walk and two rifle holds the moving hostile remained alive, with the recruit at
+  (70.4,109.0,139.5), 8695 XP and objective 2 active. No fence/soldier/corpse step was reached. Original client
+  bytecode maps Tab to locking the current reticle target, which can stabilize a target already acquired but does
+  not select a nearest hostile. Further continuous verification needs visual acquisition plus /loc-based routing;
+  these client-input results do not justify changing enemy statistics or the mission data.
+- [Subsequent bounded gate and route captures](evidence/bootcamp-s5-gate-nameplate-crop-20260924.json)
+  identified two research-controller errors: its initial OCR crop cut off a visible target nameplate, and repeated
+  `/loc` commands toggled the client's persistent coordinate overlay off. With direct gate input, the original
+  client acquired and Tab-locked the moving Thrax, killed it with ordinary rifle fire (+71 XP, +10 credits), and
+  reached the visual fence waypoint. The controller then toggled off `/loc` and stopped before the route branch.
+  A corrected one-toggle run kept coordinates visible but fixed serial aim corrections failed to acquire the
+  moving melee target. The uninterrupted accepted-1995 gate-to-soldier-to-corpse prefix is still unverified;
+  no enemy or mission data change follows from these input limits.
+- [Original-client W3 ranged probes](evidence/bootcamp-s5-w3-gate-range-probes-20260924.json)
+  found the target panel at range and confirmed the recovered client's
+  [auto-fire acquisition path](evidence/bootcamp-s5-original-client-autofire-targeting-20260924.md).
+  Holding ordinary fire while sweeping short camera turns killed the gate
+  Thrax from a three-second approach (+71 XP, +10 credits) and reached the
+  original fence at (0.8,99.5,128.7) in one session. The route stopped at a
+  strict test-controller branch guard before the soldier. A separate
+  [outpost comparison](evidence/bootcamp-s5-outpost-engagement-boundary-20260924.json)
+  shows the original filmed recruit was level 3 with a shotgun after an edit,
+  so the level-2 rifle route death cannot calibrate final-live combat values.
+- A [continuous gate-to-outpost run](evidence/bootcamp-s5-gate-to-outpost-corridor-20260924.json)
+  subsequently killed the gate Thrax, passed the original-map fence by a
+  measured 6.85 m forward probe, and reached the outpost corridor. The
+  original client visibly displayed (-61.8,87.9,75.3), but an OCR error
+  stopped the controller before the next fight. The accepted-1995 route to
+  the soldier and corpse, and same-session Youngblood acceptance, remain
+  unverified. The isolated SQLite reset now removes stale WAL sidecars before
+  restoring its baseline; no live DB was changed.
+- A further [outpost short probe](evidence/bootcamp-s5-outpost-short-probe-20260924.json)
+  reached (-87.8,85.9,75.4) in the same accepted-1995 client session after a
+  normal gate kill. The recruit remained alive under outpost fire and objective
+  2 stayed pending; the bounded probe stopped before the wounded soldier.
+  Ambiguous negative-X OCR is retained as untrusted. The next check must pass
+  the original sandbags and complete objective 2 without a checkpoint reset.
+- A [continuous accepted-1995 soldier run](evidence/bootcamp-s5-continuous-soldier-dialogue-boundary-20260924.json)
+  later killed the gate Thrax, crossed the sandbags by ordinary movement,
+  displayed the Human talk prompt and opened the Conrad/EMP Objective
+  Completion dialogue in one client session. Its Continue button was missed
+  by the controller, leaving objective 2 pending. Follow-up attempts exposed
+  variable north-branch starting positions and camera target offsets, not a
+  confirmed mission defect. The next bounded check needs accepted-Move-guided
+  short strafes, the visible talk prompt, a verified Continue click and a
+  copied-DB objective 2 → 3 check before attempting same-session corpse use.
+  One such attempt stopped at a short north strafe that advanced only 0.24 m;
+  the earlier successful run moved through almost the same waypoint, so its
+  cause remains open pending a bounded repeat probe.
+  A [staged yaw diagnostic](evidence/bootcamp-s5-sandbag-yaw-staged-diagnostic-20260924.json)
+  later crossed that area with an inferred northward heading, but a separate
+  inferred-heading retry received SIGTERM before input. The diagnostic also
+  exposed a delayed-Move sampling error in the private controller. Its staged
+  character position and rotation do not verify a continuous route, and the
+  earlier post-input no-movement row still needs explanation.
+  Four [post-hold timing retries](evidence/bootcamp-s5-post-hold-timing-retries-20260924.json)
+  validated the corrected private accepted-Move reader on a real north-band
+  client trace, but stopped at measured route guards before the soldier. The
+  variable corridor start requires feedback-guided short holds; objective 2
+  to 3 and same-session corpse use are still unverified.
+  Five [later accepted-1995 retries](evidence/bootcamp-s5-soldier-approach-retries-20260924.json)
+  reached one visible Human talk prompt before an outpost death and otherwise
+  stopped at route guards. The private diagnostic now uses separate north and
+  west fence checkpoints, post-hold telemetry at every movement checkpoint,
+  and shorter north strafes from already northward starts. Its latest version
+  still needs a complete client run through Continue and corpse use.
+  Six [corridor fast-probe retries](evidence/bootcamp-s5-corridor-fastprobe-retries-20260924.json)
+  subsequently reached new measured route points but stopped at private guards
+  or copied-client death before soldier Continue. The copied DB was restored
+  after each. There is still no same-session objective 2 → 3 and corpse-use
+  confirmation, and these trials justify no gameplay data change.
+  Five [later route variations](evidence/bootcamp-s5-controller-continuation-20260924.json)
+  ranged from an unreadable initial `/loc` to a far-east fence waypoint after
+  ordinary gate combat. They stopped at private controller bounds, with no new
+  mission transition. A position-feedback route is needed before another full
+  accepted-1995 attempt can distinguish steering failure from gameplay failure.
+  A [bounded feedback-route plan](evidence/bootcamp-s5-feedback-route-plan-20260924.json)
+  now specifies short accepted-Move probes from the observed x=3 and x=26 fence
+  branches, with explicit stop bounds. The x=26 normalization remains untested.
+  Its [first copied-client trial](evidence/bootcamp-s5-feedback-fence-collision-20260924.json)
+  normalized the gate position but stopped against a visible fence wall at
+  X 11.01 on fresh accepted Move packets. A guarded one-time north-side bypass
+  was prepared; the soldier and same-session corpse transitions remain unverified.
+  [One guarded wall-bypass trial](evidence/bootcamp-s5-feedback-wall-bypass-20260924.json)
+  then cleared the obstruction and reached accepted `(-16.72,97.67,125.46)`;
+  its private 55-second deadline expired before the soldier. Objective 2 stayed
+  active, so soldier Continue and same-session corpse use still need verification.
+  A [75-second retry](evidence/bootcamp-s5-feedback-75s-fence-variation-20260924.json)
+  exposed a different fence branch and stopped on a private steering guard;
+  objective 2 remained active.
+  A guarded follow-up on that upper X12 branch stopped at Z 127.48 before its
+  west probe; the same evidence record contains its archive and confirms no
+  objective transition.
+  The [upper-fence geometry audit](evidence/bootcamp-s5-upper-fence-route-geometry-20260924.json)
+  identifies a separate original-navmesh route toward higher Z before the
+  X12 wall; the exact collider and continuous client traversal remain open.
+  An [uninterrupted lower-branch run](evidence/bootcamp-s5-soldier-converse-request-no-dialogue-20260924.json)
+  reached the soldier talk prompt and sent `RequestNPCConverse` to Game, but
+  received no visible dialogue; objective 2 stayed active. The conversation
+  [comparison with prior success](evidence/bootcamp-s5-soldier-converse-no-dialogue-20260924.json)
+  leaves the requested entity and outgoing reply unobserved, so no gameplay
+  binding change is justified before a bounded retarget check.
+  The [client conversation path](evidence/bootcamp-s5-converse-client-protocol-20260924.json)
+  confirms current-usable targeting and a no-dialogue fallback for empty
+  replies; the failed run lacks the entity ID and reply needed to choose a cause.
+  That retarget retry stopped at another X12 fence entry before the soldier;
+  its archive is attached to the request record and the conversation remains
+  untested in this run.
+  A [checkpointed traced client request](evidence/bootcamp-s5-soldier-converse-traced-checkpoint-20260924.json)
+  resolved the wounded soldier, emitted objective topic `1995/2/1`, and opened
+  Objective Completion. It did not use Continue and does not explain the
+  earlier uninterrupted no-dialogue click.
+  A [second checkpoint run](evidence/bootcamp-s5-soldier-continue-corpse-guard-20260924.json)
+  clicked Continue and confirmed objective 2 complete and objective 3 active
+  in one session. The corpse approach stopped on a route guard without a use.
+  A [guarded follow-up](evidence/bootcamp-s5-soldier-corpse-same-session-20260924.json)
+  then completed both interactions in one original-client session from the
+  diagnostic soldier checkpoint. Objective 1 and its 600-second timer became
+  active; the post-use state is archived for a timed wreck continuation.
+  A [no-reset timer continuation](evidence/bootcamp-s5-timed-wreck-collision-stop-20260924.json)
+  advanced along the high bank and stopped on an early low-progress sample near
+  `(-105.45,83.77,43.03)` with `00:04:16` left. A later accepted Move to
+  `(-107.20,83.77,41.27)` disproves the claimed stall; no bomb interaction occurred.
+  The [timing recheck](evidence/bootcamp-s5-trench-delayed-move-audit-20260924.json)
+  calls for a fresh accepted-packet wait before treating a short zero-progress
+  sample as a collision.
+  A [copied timer-anchor-reset route diagnostic](evidence/bootcamp-s5-wreck-anchor-reset-diagnostic-20260924.json)
+  crossed the dry bank and reached the wreck approach, then stopped at a
+  [sandbag barrier](evidence/bootcamp-s5-wreck-sandbag-approach-audit-20260924.json)
+  near `(-182.48,95.30,-33.20)`. It had no bomb prompt and is not an
+  original-timer completion. The original navmesh suggests a north-then-west
+  bypass; ordinary-client passage on that route is still unverified. An older
+  [V14 record](evidence/bootcamp-s5-timed-loc-v14-20260924.json) reports
+  unreset bomb use and S6 arrival, with source captures now missing.
+  A [north-west copied-client detour](evidence/bootcamp-s5-sandbag-northwest-diagnostic-20260924.json)
+  passed the earlier stop but met a second visible sandbag line at
+  `(-185.65,94.31,-28.24)` and ended without a bomb prompt or use. It used a
+  copied timer reset and does not revise the V14 outcome.
+  A [subsequent copied probe](evidence/bootcamp-s5-second-sandbag-probe-interrupted-20260924.json)
+  stopped on an early dry-bank route guard; a later accepted Move from that
+  same input advanced toward the waypoint, so the intended second-sandbag
+  clearance test did not occur.
+  The [guard-corrected retry](evidence/bootcamp-s5-second-sandbag-retry-sigterm-20260924.json)
+  ended with SIGTERM during copied-client loading, before route input; its
+  restored archive adds no evidence about the second sandbag. The
+  [runner lifecycle audit](evidence/bootcamp-s5-isolated-sigterm-lifecycle-audit-20260924.json)
+  supports a bounded detached supervisor for the next attempt but cannot
+  identify the signal sender.
+  A [detached retry](evidence/bootcamp-s5-detached-second-sandbag-route11-20260924.json)
+  ran five minutes and crossed the earlier waypoint-4 guard, then stopped by
+  a steep rock slope at `(-168.09,91.41,-16.88)` after only 0.23 m target
+  progress. It did not reach the later sandbag or bomb.
+  An [earlier accepted client climb](evidence/bootcamp-s5-rock-slope-normal-client-bypass-candidate-20260924.json)
+  passes a point 0.46 m west of that stop, supplying a short guarded local
+  detour for the next route test.
+  A [bounded retry](evidence/bootcamp-s5-rock-slope-v2-route11-divergence-20260924.json)
+  reached the approach but diverged west when aiming at the nearby first
+  climb point. It stopped before the second sandbag. A prepared unrun controller
+  revision instead aims at the farther goal used in the earlier accepted
+  climb, with local divergence and timer guards.
+  The [v3 copied-client run](evidence/bootcamp-s5-rock-slope-v3-northwest-path-20260924.json)
+  reached `(-203.17,95.95,-36.54)` beyond the previous northwest stop with
+  about 4:30 on its reset timer, then stopped on an obsolete driver
+  postcondition. The visible sandbags ahead and bomb interaction remain open.
+  A [v4 continuation](evidence/bootcamp-s5-v4-northwest-progress-threshold-20260924.json)
+  stopped earlier because its northwest driver's 0.25 m target-progress
+  threshold rejected a 0.222 m improvement after accepted movement. A bounded
+  lower-threshold revision is prepared but unrun.
+  The [v5 retry](evidence/bootcamp-s5-v5-northwest-waypoint2-stop-20260924.json)
+  passed the earlier threshold, then a forward hold beside the next sandbag
+  line changed yaw without changing position at `(-187.58,95.16,-30.24)`.
+  A prior accepted route ran slightly north and lower there. Further route
+  work needs a guarded lateral move based on that trace, not the same heading.
+  A [staged local backtrack](evidence/bootcamp-s5-v6-local-backtrack-command-race-20260924.json)
+  reached the earlier successful approach with ordinary movement; a harness
+  command-file parse race interrupted its next short probe. The copied
+  position edit makes this geometry evidence only.
+  A [second staged local probe](evidence/bootcamp-s5-v7-local-northwest-point-reached-20260924.json)
+  set the earlier accepted heading at the backtrack point and reached the
+  next prior passage point by ordinary client movement. Its staged yaw and
+  timer still leave a continuous route from the v5 stop unverified.
+  An [integrated v8 attempt](evidence/bootcamp-s5-v8-slope-waypoint12-divergence-20260924.json)
+  stopped before reaching the northwest route after its accepted slope
+  movement diverged from the next wreck target. The fallback and bomb use
+  did not run; the next route adjustment needs a short verified heading
+  correction near the earlier v3 slope trace.
+  A [staged local slope probe](evidence/bootcamp-s5-v9-local-slope-point-reached-20260924.json)
+  used v8's accepted position and yaw and reached within 0.46 m of v3's
+  first wreck-approach point through three ordinary client moves. A
+  [continuous v10 attempt](evidence/bootcamp-s5-v10-continuous-slope-waypoint13-stop-20260924.json)
+  then crossed that slope without a copied-position edit, reaching the same
+  approach area with 5:50 left. Its next guarded 180 ms forward hold changed
+  yaw but sent no accepted movement; bomb use and S6 remain unverified in that run.
+  A [staged local v11 heading probe](evidence/bootcamp-s5-v11-local-waypoint13-heading-20260924.json)
+  started from the archived v10 stop. Two guarded holds at headings 0.94 and
+  1.08 radians moved through the rocky point to within 0.064 m horizontally
+  of v3's next accepted waypoint. This local correction still needs a
+  continuous timed route check. The [continuous v12 check](evidence/bootcamp-s5-v12-continuous-waypoint13-endpoint-20260924.json)
+  confirmed both heading holds produce accepted movement from a different
+  waypoint12 start, but the fixed two-hold controller stopped 0.907 m short
+  of its 0.70 m endpoint guard with 6:07 remaining. It did not reach the bomb;
+  the next controller should repeat short guarded holds until the target is
+  reached or a genuine movement stall is observed. A
+  [continuous v13 attempt](evidence/bootcamp-s5-v13-waypoint9-threshold-v14-prepared-20260924.json)
+  stopped earlier at waypoint9 despite a fresh accepted packet moving 0.262 m
+  and improving target distance by 0.225 m: the older 0.35 m progress guard
+  rejected that valid small step. An offline v14 controller now uses a 0.10 m
+  positive-progress guard there while retaining elevation, timer and bounded
+  movement checks. The [v14 continuous check](evidence/bootcamp-s5-v14-waypoint5-southern-stop-20260924.json)
+  stopped earlier at waypoint5 after a southern checkpoint4 trace approached
+  nearby cargo geometry. A fresh packet changed yaw without position change;
+  collision is unproven. Its next route check is a short guarded rejoin toward
+  the earlier northern track before another full timed attempt. The
+  [staged v15 local probe](evidence/bootcamp-s5-v15-local-waypoint5-north-rejoin-20260924.json)
+  found that rejoin: one 250 ms guarded hold at yaw 0.212 moved 1.625 m to
+  within 0.143 m of v13's accepted waypoint5 track. A continuous route with
+  that conditional correction remains unverified. The
+  [reusable packet guards](evidence/bootcamp-s5-packet-guard-v15-rejoin-20260924.json)
+  now encode the observed small-step threshold and narrow northward rejoin
+  region for the next isolated controller run; neither changes gameplay.
+  The [armed-bomb interaction audit](evidence/bootcamp-s5-armed-bomb-interaction-boundary-20260924.json)
+  identifies the original client's generic disarm transition and a prior
+  armed-state use prompt. The current server ignores a second use and resets
+  the fuse after an instance rebuild; original S5 outcomes for those cases
+  remain unverified.
+  The [original-client corpse-use audit](evidence/bootcamp-s5-corpse-original-client-use-protocol-20260924.json)
+  requires a selected usable with valid state, range to its model DAMAGE1
+  point, and native line of sight before `RequestUseObject` is sent. A visible
+  use prompt and accepted request are the next interaction checkpoints; the
+  current analogue's nominal 3 m use range does not establish Conrad's
+  final-live class or position.
 - OD-25..OD-34 were decided by the agent on the owner's behalf because the owner asked the work to continue without
   pausing; they are marked `review_status: approved-by-agent-pending-owner-review` in the manifest.
 - Rogers at Alia Das (`GAP-ROGERS` closed, 2026-09-14, OD-35): `BootcampFixRogersTurnIn` (SQLite and MySQL, frozen
@@ -291,12 +1028,37 @@ the final-live rule.
   marker, completion persisted). No appearance rows are seeded (`GAP-NPC-BODY`) and the turn-in pays nothing
   (`GAP-S5-MISSION-REWARDS`). The segment-3 arrival draft still names creature 100 and placement 122150 and must be
   rebased on 198514/198684. Full suite 846/846 under the .NET 5 SDK image.
-- No changes to the exit pad/trigger content itself in the 2026-09-22 to 2026-09-24 recovered window; the
-  missions Alia Das offers once the recruit arrives through this exit were extended in the same window
-  (Too Close For Comfort, Receptive Reception, Forming Alliances, Conscientious Objector) — see the W3
-  update below.
+- A [checkpointed ordinary Alia Das route](evidence/bootcamp-s6-rogers-ordinary-route-20260924.json) accepted Training
+  Day and walked to 8.8 m from seeded Rogers; later copied-client logins did not reach a playable HUD. In the
+  [longer loading diagnostic](evidence/bootcamp-s6-wilderness-loading-diagnostic-20260924.json), Game accepted the
+  connection and received `MapLoaded` 231.37 s after character switch, while the client still showed Wilderness
+  loading at the 240 s check. This did not establish a Game server fault or verify the final walk and 1995 turn-in.
+  A later [S6 continuation from V14's saved arrival](evidence/bootcamp-s6-after-v14-ordinary-rogers-20260924.json)
+  became playable after relog, accepted Training Day, walked by ordinary movement to Rogers at
+  `(854.3281,294.2227,388.6525)`, opened his 1995 completion panel and turned in Calling for Reinforcements.
+  The original client showed Mission Completed; the copied database persisted 1995 complete and 1526 active.
+  The relog boundary is explicit, so this verifies ordinary S6 arrival-to-Rogers completion from the saved
+  post-S5 state, not one uninterrupted corpse-to-Rogers client session. The original exit trigger and exact arrival remain
+  `GAP-S6-TRIGGER` and `GAP-S6-ARRIVAL` because the final-live footage cuts over the transition.
 
 ## W1 (Wilderness arrival: Training Day) status
+
+- A [preserved post-Rogers client continuation](evidence/s6-training-day-ordinary-route-kincaid-20260924.json)
+  walked to Kincaid without coordinate or level edits, completed objective
+  1526/1, and opened his mission reward panel with 120 credits and two pistol
+  choices. Its 900-second bound ended before reward selection; the saved
+  objective completion persisted, but timed shutdown left the character at
+  the original arrival position. A [second bounded continuation from that saved
+  state](evidence/s6-training-day-ordinary-route-reward-relog-20260924.json)
+  walked again from the arrival position, selected the Vextronics Pistol,
+  completed Training Day, and logged out and back in. Its copied database
+  persisted mission 1526 complete, credits 360→480, item template 116929 with
+  module 900221, and unchanged level 2 / 8695 XP. These are emulator results;
+  the 120-credit amount conflicts with a contemporary 180-credit listing; the
+  [source audit](evidence/training-day-credit-source-audit-20260924.json)
+  cannot resolve the final-live amount. The template and module IDs remain
+  reconstructed. The natural Recruit tier gate remains open
+  pending the [XP source](evidence/s5-s6-tier-gate-xp-followup-20260924.json).
 
 - `WildernessArrivalTrainingDay` (SQLite and MySQL, frozen rows in `WildernessData/WildernessArrivalTrainingDayRows.cs`;
   17 manifest rows, slice W1, recorded in the boot-camp manifest under OD-36) begins segment 3 at the boot-camp exit.
@@ -322,7 +1084,11 @@ the final-live rule.
     0/250/150 and 0/250/100, attack type 2. Labelled analogues (OD-38): Not Tradeable and Not Sellable from the equipped
     AccuMax Shotgun tooltip (B2-027), no Bound/BoE/Unique, lockbox placeable, and the emulator's uniform weapon
     placeholders for the remaining sent fields. Prices are stored as 0 (`GAP-W1-ITEM-PRICES`). The module ids
-    900221/900256 cannot be stored (`GAP-W1-REWARD-MODULES`).
+    900221/900256 are identified from the original client. They are now
+    included in the Training Day offer and persisted on the selected item;
+    tooltip definitions now reproduce the filmed −15 for 15 sec lines, while
+    combat effects remain open
+    (`GAP-W1-REWARD-MODULES`).
 - `ProvenanceRegistry` now lists `itemtemplate` and `itemtemplate_weapon`. Flags, quality, category and every weapon
   column the client is sent are required; `buy_price`, `sell_price` and the unsent `reuse_override` are optional. The
   slice vocabulary gains `W1`. The curated footage events add B2-026/027/029 (tooltips; verification.json has no
@@ -347,7 +1113,23 @@ the final-live rule.
   (`GAP-W1-KINCAID-PRESENTATION`, `GAP-NPC-BODY`); the template choice (`GAP-W1-REWARD-TEMPLATE-ID`); the weapon
   placeholders (`GAP-W1-WEAPON-PLACEHOLDERS`); and the emulator Major Bonham spawn beside the arrival, kept although the
   2009-01-06 player map still lists him (`GAP-W1-BONHAM`, OD-41). Missions 2010/2011 were closed by W2
-  (`GAP-W1-GEAR-MISSIONS`). Owner client checks are still to do.
+  (`GAP-W1-GEAR-MISSIONS`). An [isolated recovered-client check](evidence/client-training-day-turnin.json)
+  opened Kincaid's objective-completion conversation, completed the objective,
+  selected the physical pistol and turned in 1526. The copied database gained
+  120 credits and template 116929; both persisted after relog, while the
+  mission tracker disappeared. The client rendered the reward as generic
+  “Pistol” without the original footage's “Vextronics” prefix or Reduce Resist
+  module line. The subsequent
+  [reward module binding](evidence/training-day-reward-modules.json) sends the
+  original-client Vextronics module IDs in the offer and persists the chosen
+  ID on the item. A second isolated recovered-client run displayed both
+  Vextronics names in the offer and turn-in and persisted module 900221 on
+  the selected pistol. Original-client effect IDs 9/115 and the filmed
+  amount/duration now feed the module tooltip response. A further client run
+  displayed the original `[2] Reduce Resist` lines for both choices. Proc
+  chance and combat application remain a fidelity gap; an archived 2008
+  support reply says the debuff can trigger on each shot, affects subsequent
+  shots, refreshes duration and does not stack, without specifying the chance.
   Full suite 849/849 under the .NET 5 SDK image.
 
 ## W2 (class gear: missions 2010/2011 "Getting It In Gear") status
@@ -397,20 +1179,90 @@ the final-live rule.
   level 4 with 43,000 experience in Alia Das so the tier gate is open, and account 4 was raised to GM level 10 (Admin).
   Both are test scaffolding rather than recovered data and can be reverted; `.chg_class` bypasses the class_selected
   event, so only training at Kincaid exercises the gear offer.
-- Owner client checks are still to do for W2 as well. What to capture, in order: (1) the tier window and the level-5
-  release at Kincaid; (2) whether the forced "Getting It In Gear" offer appears immediately, on the next map entry or not
-  at all, its header and whether Decline is greyed; (3) the objective text in the mission tracker; (4) whether Caufield is
-  interactable at the supply tent (name plate, interaction cursor, dialogue) - he is the Redshirt body without an NPC
-  augmentation, so this is the open question; (5) the six granted pieces: names, icons, quality colour, tooltips, whether
-  they equip at level 5 and whether any XP or credits were paid; (6) that the offer does not repeat after the turn-in.
-  Full suite 853/853 under the .NET 5 SDK image.
+- Recovered-client check on 2026-09-22 (isolated run 50, compatible client 1.16.5.0): a copied Training Day-complete
+  character was diagnostically set to Recruit level 4 and 43,000 XP at Kincaid. His View Classes topic opened Tier
+  Advancement; selecting Soldier enabled Train and brought up the permanent-class/clone confirmation. Confirming raised
+  the character to level 5 (3 attribute and 4 skill points), then immediately opened the Headquarters "Getting It In
+  Gear: Soldier Class" offer. Its Decline control was grey, and accepting it put "Report to Quartermaster Caufield" in
+  the mission tracker. The copied character database records class 2, level 5 and mission 2010 active. This verifies the
+  emulator/client handoff and presentation, not final-live timing independently. Evidence: `docs/evidence/client-class-gear-handoff.json`.
+- Recovered-client check on 2026-09-22 (isolated run 53): Caufield is visible and talkable at his seeded supply-tent
+  spawn. His mission topic completes the objective; the subsequent completion screen lists all six Soldier pieces, and
+  Complete Mission grants them. The saved database records templates 122859/122860/122862/122863/122864/122865,
+  mission 2010 completed, and no XP or credit change. The helmet is red in the backpack until Reflective Armor 1:
+  Novice is trained. His generic conversation shows `ERROR: ?: No greeting`, an unresolved presentation defect
+  (`GAP-W2-CAUFIELD-GREETING`); an authentic greeting id/text has not been recovered.
+- Run 54 relogged the completed character: class gear 2010 stayed complete and its six items persisted. Caufield offered
+  the separate "Lurking In The Shadows" mission instead of repeating class gear.
+- Recovered-client checks on 2026-09-23 (isolated runs 55-57) also exercised Specialist: Kincaid's class choice released
+  level 5 and immediately offered mission 2011 with disabled Decline. Caufield completed it and granted Hazmat helmet,
+  vest, gloves, legs, boots and Repair-O-Matic (templates 122866-122871). One point in Hazmat Armor made the five armor
+  items usable; one in Tools made Repair-O-Matic usable. All six equipped and persisted with both skills after relog,
+  while mission 2011 stayed complete and Caufield instead offered "Lurking In The Shadows". The tool showed `0/0` ammo
+  and an Out Of Ammo tutorial. The emulator's client-derived weapon row points to ammo class 3807 and clip size 10, but
+  an original final-live ammo grant is not verified (`GAP-W2-REPAIR-TOOL-AMMO`). A [2007 firsthand Specialist account](https://www.engadget.com/2007-11-26-adventures-from-the-back-row-the-specialist-and-her-tools.html)
+  describes repair tools consuming Power Cells on damaged armor and Tools rank I permitting their use; its date and scope
+  do not establish the final-live mission reward's ammunition. Evidence, diagnostic inputs and hashes:
+  `docs/evidence/client-specialist-class-gear.json`. A later
+  [read-only vendor audit](evidence/w2-specialist-power-cell-vendor-audit-20260924.json)
+  found template 56, class 3807, stocked for 3 credits at the current Alia Das
+  ammo vendor. An [independent original-client audit](evidence/w2-specialist-power-cell-original-client-source-20260924.json)
+  confirms Repair-O-Matic template 122871 uses class 3807, and identifies template 56 as Standard Grade Power Cells.
+  The vendor stock and price trace only to the emulator seed; final-live stock and price remain
+  unverified. The prior isolated Specialist checkpoint was lost with `/home/blizz/backups`. A
+  [2026-09-24 isolated continuation](evidence/w2-specialist-vendor-isolated-client-diagnostic-20260924.json)
+  diagnostically staged the surviving S6 Recruit at the tier gate, trained Specialist through Kincaid and accepted 2011.
+  It reached the barracks tent wall before Caufield, so it did not acquire the tool or reach the vendor. Its archived
+  copied database is a Specialist level-5 checkpoint with 2011 active; the working harness was restored to its staged
+  Recruit baseline after the run. [Further isolated client diagnostics](evidence/w2-specialist-power-cell-isolated-purchase-reload-20260924.json)
+  staged copied positions near Caufield and the emulator vendor. Caufield's turn-in granted Repair-O-Matic; the client
+  shop displayed Standard Grade Power Cells at 3 credits, and a 120-cell purchase reduced copied credits from 480 to
+  120. After Tools rank I and equipping the tool, a reload moved 10 cells into its clip and the settled HUD read
+  `10/110`. The shop title said Armor Supplier Heffernan while the nearby minimap said Alia Das. A
+  [direct client name-table check](evidence/w2-heffernan-name-id-correction-20260924.json)
+  resolves creature name ID 10790 to that shop title, and the seed comment now identifies Heffernan at Alia Das.
+  This confirms the copied emulator/client flow, not final-live vendor placement, stock or price; use on damaged armor
+  remains untested.
+- Remaining W2 fidelity checks: final-live reward presentation, weapon/tool stats, prices, the generic Caufield greeting,
+  and whether either class-gear mission supplied ammo. The compatible-client paths for both classes now work through
+  skill training, equipment and relog.
 
 ## W3 (Alia Das hub: the first Wilderness missions) status
 
-Reconnaissance only as of 2026-09-15 (nothing seeded yet). This is the next segment after W2: the missions the
+The 2026-09-15 reconnaissance below preceded the seeded batches later in this section. W3 follows W2: the missions the
 character picks up in Alia Das once Training Day and the class choice are behind them. Evidence gathered in
 `/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk` (`work/client.json`, `work/tarapedia.json`,
 `work/npc_resolution.json`, `work/membership.json`, and the `tools/` extraction scripts).
+
+- Recovered-client entry check on 2026-09-23: after Specialist class gear 2011 stayed complete across relog, Caufield
+  presented "Lurking In The Shadows" with "Speak to Oliver" as the first tracker objective. The isolated run accepted
+  it and saved mission 427 active, with no class-gear reoffer (`docs/evidence/client-specialist-class-gear.json`). This
+  checks the current handoff only; the mission's full objective chain and final-live gating remain to be verified.
+- Isolated recovered-client run 58 moved that character to original world-seed Oliver spawnpool 180. Oliver showed the
+  objective marker and talk prompt; his Objective Completion dialogue directed the player toward Proctor Fulgor.
+  Continue advanced the visible tracker to "Kill Proctor Fulgor" and persisted objective 1 complete/objective 6 active
+  (`docs/evidence/client-wilderness-oliver-first-objective.json`). Normal travel and the remaining kill/return/reward
+  sequence remain to be checked.
+- A seeded .NET 5 scenario test on 2026-09-23 drove creature 76 through `MissionManager.OnCreatureKilled` from that
+  persisted objective state: objective 6 completed, objective 7 "Return to Caufield" became active, the mission stayed
+  active, and no reward paid early. A repeated kill notification emitted no second completion
+  (`src/Rasa.Test/BootcampOpeningTests.WildernessFulgor.cs`). This verifies server transition logic against the migrated
+  world seed; the recovered-client combat, Caufield return and payout remain open.
+- Run 63 diagnostically placed the same level-5 Specialist near the world-seed Fulgor spawn. The boss spawned at
+  (231,261.7,591.2) and killed the character at (237,266.6,591); objective 6 stayed active. The original navmesh has
+  walkable layers at about Y261.7 and Y266.2 there, while a [named fan-site boss record](https://www.ellatha.com/tr/bossnpcview.asp?key=Proctor+Fulgor)
+  places him at `/loc` (231,265,591), so his final-live platform and level remain unverified.
+- The historical progression gate is now seeded: the 2007 official Wilderness walkthrough orders Too Close For Comfort
+  → Receptive Reception → Forming Alliances, and a pre-shutdown TaRapedia revision lists Forming Alliances as mission
+  427's requirement. The earlier recovered-client run that offered 427 immediately after class gear predates the
+  `WildernessHubFormingAlliances` gate migration. A migrated-seed mission-manager test now confirms that 1069 requires
+  completed 1407, 479 requires completed 1069, and 427 remains unavailable until 479 is completed
+  (`src/Rasa.Test/BootcampOpeningTests.WildernessChainGate.cs`). The 479 Thrax Heart drop and vest counterpart remain
+  labelled estimates; this chain still needs a normal client playthrough. The original client identifies item class
+  10346, but two template rows map to it and neither is tied to the final-live server's drop table. The 2008
+  mission walkthrough also describes carrying the stolen ammo shipment and failing on death; the recovered client has
+  only the three visible talk/kill/return objectives and does not identify the item template or server failure rule.
+  See `docs/evidence/wilderness-lurking-chain-audit.json`; final-live gate/item applicability remains open.
 
 - **Givers, from the client's own texts** (`work/tarapedia.json` lists → zone Wilderness, area Alia Das, revision
   2008-03-06T13:23:08Z): Outpost Commander Rogers (River Recon, Miner Difficulties, Too Close For Comfort), Council Elder
@@ -422,12 +1274,18 @@ character picks up in Alia Das once Training Day and the class choice are behind
 - **Resolved client ids and the chain**, with TaRapedia's per-mission fields (giver, requirement, follow-up, XP, credits,
   reward items — each page carries `last_ts`/`revid` so the revision can be cited): Receptive Reception **1069** (Solis;
   objectives: locate the Logos shrine in Alia Caverns, return to Solis via package 168, speak to Apirka via package 112) →
-  Forming Alliances **479** (Apirka; one objective, "Collect twelve Thrax hearts") → Conscientious Objector **1390/1391**
+  Forming Alliances **479** (Apirka; one objective, "Collect twelve Thrax hearts") → Conscientious Objector **1390**
   (Apirka; 8 objectives, packages 112/1646; 2,000 XP / 400 credits) → Conscientious Objector – Part Two **1392/1393**
   (turned in to Rogers via package 116; 8,000 XP / 800 credits). Parallel from Forming Alliances: Lurking In The Shadows
   **427** (Caufield, 4,000 XP / 400 credits) and River Recon **429** (Rogers, 10,000 XP / 1,000 credits, follow-up
   Distress On The River). Separate line: Supplies On The Double **428** (Corman) → A Father's Goodbye **421** (Saviours
   gives it, Information Spec. Saviours pays it). The `Logos:` line (1638 and siblings) is the Logos training path.
+  Client mission **1391** is Bug Em at Quasso Station, not a Conscientious Objector branch. The 479 → 1390
+  gate is deployed. The original-client choice indexes, objective texts and
+  report variants now route 1390's release branch to 1393 and arrest branch
+  to 1392; image `rasa-dit-test:20260923e` is deployed, while recovered-client
+  path verification remains open. See `docs/evidence/wilderness-conscientious-gate.json`
+  and `docs/evidence/wilderness-conscientious-branches.json`.
 - **What the seed already has**: objective skeletons and objective-conversation rows for all of these (`MissionClientObjectiveSkeleton`),
   but **no `npc_mission` rows** (only 429 has one, and the loader reports it "not offered, definition incomplete"), no
   rewards, no placements and no indicators. Package 116 (Rogers) is the only one of these NPCs already bound to a
@@ -460,7 +1318,7 @@ character picks up in Alia Das once Training Day and the class choice are behind
   alongside Receptive Reception, and the other Logos missions unlock after it.
 - **Evidence gaps left before seeding**: the reward items' templates (the guide's credit and item values are pre-D11 and
   cannot be seeded as analogues), the Thrax / Boargar / Treelurker / miasma drop wiring and their item templates, the
-  Alia Caverns shrine volume and its usable, the timer for 428, and the branch conditions for 1390/1391. The owner's
+  Alia Caverns shrine volume and its usable, the timer for 428, and final-live verification of the 1390 branches. The owner's
   tracker video (Taildrop pending, inbox empty as of this writing) is expected to settle the drop/timer/branch mechanics,
   which have no client-visible signature.
 - **Mission detail source found on disk**: the 20260913 source sweep had already cached the **DaOpa/Ellatha
@@ -475,7 +1333,7 @@ character picks up in Alia Das once Training Day and the class choice are behind
   - **1069** is the shrine: the briefing says *"Near the waterfall is the entrance to Alia Caverns… activating the
     shrine should transmit the information directly into your mind"*; reward choice Titan or Prodigy Motor Assist
     Armor Boots (Body Armor 77, [3] Body/Mind +3, [2] Resist: Physical/Electric +4%, Min Level 3).
-  - **1390/1391** are the two branches of the Ethical Parable, spelled out: *"Tell him that Milpas is free to leave
+  - **1390** contains the two branches of the Ethical Parable, spelled out: *"Tell him that Milpas is free to leave
     Alia Das"* vs *"…you must do your duty and arrest Milpas"*, then *"Take Milpas to Apirka"* (escort) and
     *"Speak to Apirka"*; 1392/1393 is the report. 400 credits.
   - The rest of the hub's objective lists and reward items are in the digest (8/5/6 counters for Boargar/Treelurker/
@@ -500,8 +1358,37 @@ character picks up in Alia Das once Training Day and the class choice are behind
     migration's model, so that omission broke any rollback through it.
   - `0e251a5` seeded **1069 Receptive Reception** (Solis 42 → Apirka 43, objectives 1..3, the Enhance-shrine binding,
     XP 4,000 and 600 credits). Deployed; the loader reports 131 content rows with 0 gaps.
-  - **GAP-W3-1069-GATE**: TaRapedia gates 1069 on 1407 "Too Close For Comfort", but 1407 has no definition and the
-    loader rejects a prerequisite naming an unknown mission, so Solis offers 1069 directly until 1407's slice lands.
+  - **GAP-W3-1069-GATE closed (2026-09-23)**: 1407 now has a definition, and `WildernessHubReceptiveGate` adds the
+    historically recorded completion requirement to 1069. The 2007 TaRapedia revision supports the chain; final-live
+    server gating remains unverified. Blizz already completed 1407 and accepted 1069, so his absent Moawi marker is
+    expected at that saved state. See `docs/evidence/wilderness-receptive-gate.json`.
+  - **1407 displayed level correction (2026-09-24, source only)**: contemporary TaRapedia revision 8563 lists
+    Too Close For Comfort at level 4; the current level-5 seed was inferred. A SQLite/MySQL migration and
+    migrated-seed test now set 4, with provenance in
+    [the level record](evidence/too-close-for-comfort-level.json). The recovered
+    client has no numeric level for this mission, and final-live level remains
+    unverified. This field is mission information, not an offer gate; this
+    correction has not been deployed to the live Game container. The cited
+    local TaRapedia/client extraction paths became unavailable when the
+    `/home/blizz/backups` tree disappeared later on 2026-09-24; their SHA-256
+    values and exact field locations remain in the evidence record, but the
+    source files cannot currently be re-read from those paths.
+  - **1069 level and shrine recovery (2026-09-23)**: the 2008 TaRapedia revision lists level 4, correcting the
+    unsupported level-5 reconstruction. The world row and migration history are updated, and the server restarted.
+    A source-entity match in Logos recovery prevents another pending shrine from consuming the Enhance action;
+    migrated-seed tests verify objective 1 completing and objective 2 appearing. The actual recovered-client use
+    sequence in Alia Caverns remains to be checked. See `docs/evidence/wilderness-receptive-level.json` and
+    `docs/evidence/wilderness-receptive-shrine-recovery.json`.
+  - **Next playable chain gap**: 479 Forming Alliances is deployed around the original client objective skeleton. The client
+    identifies Thrax Heart class 10346 (12-stack) but maps it to templates 2285 and 16540, with no recovered server
+    selection. The original client mission log names Thrax Soldiers, and a 2007 guide says hearts drop randomly;
+    drop probability is unknown. The seed labels its chosen 50% chance, template 2285 and vest counterpart
+    13738; the original Luminar name and effects remain a gap. The 479 → 427 gate is deployed.
+    The recovered client uses a distinct item counter keyed by
+    item class; its opcode-566 update packet, pickup handler, saved mission item counter and active-objective
+    drop mechanism and atomic consumption of carried items at turn-in are deployed, but have not been tested with the live client yet. The consumption rule is inferred from the mission text. Per-field sources and estimates are in
+    `docs/evidence/wilderness-forming-alliances-reconstruction.json`. See
+    `docs/evidence/wilderness-forming-alliances-research.json`.
   - **Gap pass (owner chose "emulator mechanisms", 2026-09-15)**: `1234cd3` closed **GAP-GM** by verification (new
     accounts default to level 0; only the test account was raised). `30653f2` added the missing **scripted creature
     movement** - `ContentRuleAction.MoveCreatureToLocation` (placement -> `content_location` with purpose 3), a
@@ -525,10 +1412,11 @@ character picks up in Alia Das once Training Day and the class choice are behind
     client objectives and conversation bindings were already in the seed; what was seeded is the definition: giver,
     receiver, the objective ordering and flags, the branch transitions, Elder Quillas' and Moawi's dialogue packages
     (114->1646, 38->113) and 1390's 400 credits. Two findings worth keeping: the client only exports *conversation*
-    bindings, so 1390's escort steps (objectives 4, 8, 12) have none and are optional
-    (**GAP-W3-1390-ESCORT**), and the content loader now only requires a completion binding for a *required*
-    objective, since an optional one cannot strand a character. Rewards and the chain's gates are recorded as
-    **GAP-W3-HUB-REWARDS** and **GAP-W3-HUB-PREREQUISITES** rather than guessed.
+    bindings, so 1390's escort steps (objectives 4, 8, 12) initially had none and were flagged optional. The
+    2026-09-23 branch rule now requires objective 4 on arrest or 8 on release; objective 12 remains unresolved.
+    The content loader requires a completion binding for every fixed required objective. The later escort
+    implementation, historical reward records, and progression gates supersede this batch's original gaps;
+    exact final-live item rewards and recovered-client branch verification remain open.
   - **W3 batch 3-5 (2026-09-16)**: the Wilderness hub's conversation missions went in by rule (431, 442, 444, 549,
     836), then its first two real fights through the boot camp's existing kill binding (427 Proctor Fulgor, 682 the
     Xanx), then the **Divide**, which needed its givers created first: Lt. Sebastian, Shaman Horea, Field Dr. Dawson
@@ -1017,8 +1905,7 @@ character picks up in Alia Das once Training Day and the class choice are behind
     `ContentRuleAction.DamagePlayer` action (armour first then health, death announced if the bar empties) and a
     damage-21 action on the bomb rule - the value read straight off the footage's "-21" health line, so `observed`.
     **GAP-S5-DETONATION-DAMAGE closed** (the knock-back stays open). Deployed: 16 rules, 142 rows, 0 gaps.
-  - Remaining mechanism gaps, in the order the owner's choice implies: **GAP-S5-DETONATION-DAMAGE** (the footage shows
-    "-21" self-damage at the blast; needs a damage action and therefore a value column on `content_rule_action`),
+  - Remaining mechanism gaps after the damage correction include the unmeasured S5 player blast knockback,
     **GAP-S5-CORPSE** (a corpse object with a windup and loot), **GAP-S4-ALLY-ESCORT** (allies following the player,
     which the new walk action can be extended into), and **GAP-ITEM-REWARDS** (the item grant planner is wired into
     turn-in already; the reward items need the prefix-family resolution recorded in
@@ -1062,27 +1949,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
   `GAP-WILDERNESS-TOO-CLONE-CREDIT`, `GAP-CLONE-TOKEN-LATER-SOURCES`, `-LOCKBOX-USE`, `-FLAGS`,
   `GAP-CLONE-TOO-AUTOCOMPLETE`, `GAP-CLONE-SOCIAL-STATE`, `GAP-CLONE-CREDIT-VENDOR`. Details: `docs/retail-accuracy.md`,
   "2026-09-26 — Clone credits".
-
-  - **2026-09-22 to 2026-09-24 (recovered from a lost checkout; documentation reconstructed 2026-09-26,
-    commit `4aa50b3`)**: Alia Das missions given by Alia Das/Warrior Apirka were seeded or corrected in
-    their recorded order — Too Close For Comfort, Receptive Reception, Forming Alliances, then
-    Conscientious Objector's two endings. `TooCloseForComfortLevelRows` sets `npc_mission` 1407's level to
-    4 (`inferred`, TaRapedia's pre-shutdown mission page; the client mission tables carry no level for this
-    row) — this migration previously had no manifest coverage and now has one (see the manifest note
-    below). Dialogue-class assignments for Council Elder Moawi and other mission speakers were also seeded
-    from this pass; Moawi's assigned class was not independently confirmed against footage and is flagged
-    pending owner review (OD-63). Forming Alliances (mission 479)'s reward is explicitly unresolved:
-    `docs/evidence/wilderness-forming-alliances-research.json` calls the 50% drop chance, heart template
-    2285, mission level 5 and reward vest template 13738 "estimates, not recovered final-live server
-    data," and flags a naming/version conflict on template 13738 against a separate reward-items research
-    pass (OD-61). This migration batch's manifest coverage (`TooCloseForComfortLevel` `changes` entry) was
-    added in this documentation pass without changing any provenance tier; no manifest rows/changes were
-    found for `WildernessHubFormingAlliances`, `WildernessHubReceptiveGate`, `WildernessHubReceptiveLevel`,
-    `WildernessHubConscientiousGate`, `WildernessHubConscientiousBranches`, `MissionItemDropChance`,
-    `MoawiDialogueClass`, `MissionSpeakerDialogueClasses` or `SolisCavernsPlacement` — flagged here as a
-    due-diligence gap, not fixed in this pass. See `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24"
-    section for the full recovered-commit summary.
-- **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
+- **Manifest coverage of the 2026-09-22..24 W3 migrations (audit 2026-09-26)**: the manifest has no rows or
+  `changes` entries for `WildernessHubFormingAlliances`, `WildernessHubReceptiveGate`, `WildernessHubReceptiveLevel`,
+  `WildernessHubConscientiousGate`, `WildernessHubConscientiousBranches`, `MissionItemDropChance`, `MoawiDialogueClass`,
+  `MissionSpeakerDialogueClasses` or `SolisCavernsPlacement`; their evidence lives in their Rows files and
+  `docs/evidence/` JSON. Recorded as a due-diligence gap, not fixed. Their labelled estimates await owner review as
+  OD-61 (Forming Alliances' rewards, including the vest 13738 V04-vs-wiki naming conflict), OD-63 (Moawi's dialogue
+  class) and OD-64 (Solis's cavern placement).
+- **Order**: implement the chain in play order (1069 → 479 → 1390 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 - **World-data defects (2026-09-26, `WorldDefectsFix`)**: two audits of the deployed world corrected. Field Lt. Bagby and
   Lt. Galloway, receivers of the seeded 1788 and 1789, stood 1.3–1.6 km from the Treeback Camp entrance on the Palisades

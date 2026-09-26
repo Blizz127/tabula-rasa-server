@@ -1,11 +1,51 @@
-# Original client artifact acquisition — 2026-09-12
+# Original client artifact acquisition — 2026-09-12 and 2026-09-22
+
+## 2026-09-24 local source recovery
+
+During an isolated S5 validation run, `/home/blizz/backups` disappeared from
+the local filesystem. This removed the previous extracted client and research
+tree; no move destination has yet been identified. The S5 run captures and
+controller scripts from `/var/tmp` were copied to
+`/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924` with a
+[633-file hash index](evidence/bootcamp-s5-prefix-durable-mirror-20260924.json).
+The [September 24 Trash audit](evidence/backups-tree-trash-audit-20260924.json)
+found no copy in the inspected Trash locations. The new `/home/blizz/backups`
+contains only that day's deployment backup, not the former research tree;
+the disappearance mechanism remains unknown.
+
+The public ZIP named below was downloaded again into
+`/home/blizz/private-artifacts/rasa-client-1.16.5.0/` and extracted there.
+The ZIP has 3,091,698,303 bytes; its calculated SHA-1 is
+`03eba96d79edfbc9ba014b88699e526248bdbe1e` and MD5 is
+`42d00c1e1744607180d479ec0b260306`, matching the archive metadata in
+this record. The full [recovery manifest](evidence/client-11650-restored-20260924.json)
+also records the calculated SHA-256. `unzip -tq` found no compressed-data errors. The extracted
+`tabula_rasa.exe`, `trpython.zip` and `data/game.zip` SHA-256 hashes match
+the three values recorded below. This restores the 1.16.5.0 compatibility
+package, but the earlier research tree and its derived files remain
+unlocated. The missing local path must not be treated as proof that an
+original final-live source existed there.
+
+An isolated test copy was prepared under
+`/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness`.
+The native Microsoft `d3dx9_33.dll` used in the earlier Wine launch was
+reacquired from the official June 2010 DirectX package; both hashes match
+[the earlier runtime evidence](evidence/client-d3dx-version-check.json).
+Read-only OpenSSL 1.1 libraries from the existing Auth container were mounted
+only into disposable Auth/Game processes. A bounded smoke then authenticated
+through those copied servers, reached a playable HUD, displayed `/loc` and
+passed the [focus guard](../tools/client_focus_guard.py); the [run manifest](evidence/bootcamp-s5-rebuilt-adaptive-gate-and-target-lock-20260924.json)
+links its sealed capture and the following bounded S5 attempt. This establishes the
+restored client test environment's basic function, not any final-live route or
+mission fidelity.
 
 Target: the final live game immediately before shutdown, preserved 1:1 under
 `AGENTS.md`. This audit obtained a client executable whose **embedded file and
 product versions are both 1.16.5.0**, together with client Python and generated
 game tables. It also obtained a matching executable/symbol pair from an earlier
-2007 build. None of the downloaded executables or game Python modules was run
-or imported.
+2007 build. During the September 12 audit none of the downloaded executables or
+game Python modules was run or imported. The September 22 follow-up below
+records the first isolated execution attempt separately.
 
 The recovered final-version package is a community upload. Its version fields
 are direct binary observations; its identity as a byte-for-byte official final
@@ -188,8 +228,55 @@ outside the source repository for this preservation research.
 
 The highest-value next steps are to decode the recovered client tables and
 presentation logic statically, record member-level evidence for each rule, and
-compare with authentic final gameplay and server-side records. The full outer
-ZIP can later be downloaded and its archive-provided hashes independently
-checked if preserving every asset is needed. An independently sourced final
+compare with authentic final gameplay and server-side records. An independently sourced final
 official manifest or authenticated installation remains necessary for stronger
 whole-client authenticity and shutdown-state claims.
+
+## Full acquisition and isolated client launch — 2026-09-22
+
+The complete ZIP was downloaded from the same public retrieval URL. Its locally
+calculated MD5 and SHA-1 match the archive metadata above. Its local SHA-256 is
+`1ee00dc439d92a9717b9ae925ff827e345063fa4200dd202f0ccf2d22bd14f3e`.
+All 713 ZIP members were extracted with CRC verification, safe relative paths
+and no symlinks. The three previously acquired members retain exactly the
+SHA-256 values recorded above. This verifies consistency with that community
+archive; it does not provide independent official authentication.
+
+The acquisition record, untouched extracted assets, writable execution copy,
+Wine prefix, reproducible launcher, logs and screenshots are outside Git under
+`/home/blizz/backups/rasa-net/research/20260922-client-playthrough/`.
+`acquisition.json` records the retrieval and hashes. The complete assets also
+allow recovery of the original appearance palettes from `data/ui.glm`; see
+[palette evidence](evidence/character-creation-palettes.json).
+
+The scratch copy was launched using Wine 10.0's WoW64 support, a private Xvfb
+display and Mesa llvmpipe. Bubblewrap isolated its network, process, mount and
+display namespaces; only the scratch client, prefix, isolated home and capture
+directory were writable. It had no connection to the live emulator or databases.
+The original executable was not patched. The first 32-bit-prefix attempt was
+unsupported by this Wine installation, so subsequent probes used a 64-bit prefix
+to execute the original 32-bit client.
+
+The initial probe reached the original splash and fatal error dialog before
+login. Its log reports an incompatible Direct3D runtime and then `No device!`.
+The detailed `capture-d3d/client.log` shows successful `d3d9_CreateDevice` at
+line 4997 followed immediately by device release. This distinguishes an
+application-side compatibility check from a failure to create any graphics
+device. Static diagnosis found the exact mismatch: the original client calls
+`D3DXCheckVersion(0x80000020, 33)`, while Wine's loaded helper requires its first
+argument to equal `0x20`. The original false branch releases the device.
+[The native-call evidence](evidence/client-d3dx-version-check.json) records both
+binaries' hashes, exact offsets and trace lines.
+
+Microsoft's [legacy DirectX runtime package](https://www.microsoft.com/en-us/download/details.aspx?id=8109)
+contains `APR2007_d3dx9_33_x86.cab`. Its native DLL was extracted beside the
+scratch executable and selected with Wine's per-launch override. The original
+executable remains byte-identical. This removed the version failure and reached
+the original animated **account login screen**, captured at
+`capture-native-login/client-8.png`. Package, DLL and screenshot hashes are in
+the evidence record. No account was entered and no server was reachable inside
+the private network. Audio initialization fails without an exposed audio device;
+the log also records a Python tuple error and texture/shader warnings despite
+the rendered login screen. A later isolated run authenticated, created a Human Recruit, completed Initiation
+and verified normal logout persistence; see [the playthrough record](client-opening-playthrough.md).
+The remaining boot-camp sequence and original-live fidelity are not yet verified.

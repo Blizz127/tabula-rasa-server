@@ -1,5 +1,57 @@
 # Starter equipment and empty character skills — 2026-09-12
 
+## Final-week loadout correction — 2026-09-22
+
+Creation now saves the observed initial equipment arrangement: Recruit Boots
+122854, Legs 122855 and Vest 122856 already worn; boot-camp Pistol 122875 in
+weapon drawer slot 0, with 20 loaded cartridges and 1,000 reserve cartridges
+(template 28). The Equipment backpack starts empty. This replaces the emulator's
+loose common Motor Assist helmet/vest/legs, generic pistol 145 and 100 cartridges.
+The outfit uses the original preview's white tint. Existing character inventories
+are not rewritten.
+
+The retained final-week video `7Lrst9SG3pk` shows the first HUD at **224.800 s**
+(A2-011: Pistol 20/1000), the empty Equipment backpack at **304.733 s**
+(A3-019), and comparisons against the equipped Recruit boots, legs and vest at
+**321.467**, **324.467** and **332.467 s** (A3-035/040/046). The pistol comparison
+at **334.467 s** (A3-047) reads 88 physical damage, a 20-round magazine and
+Firearms 1. Original class 29803 matches those values; generic class 6048 deals
+55. Template 122875 maps to 29803 in the original `itemclass.itemTemplateItemClass`.
+The video identifies item names and stats, so this template selection remains
+an inference rather than an observed numeric template ID. All four comparison
+tooltips show Not Tradeable and Not Sellable. Paired world migrations
+`20260922110000_RecruitLoadoutFlags` correct those flags on the four templates.
+Fresh databases receive the same correction through migration history.
+
+These screenshots were inspected again directly from the retained video crops;
+the online YouTube page could not be fetched during this pass. Their hashes,
+original client table locations and all reconstructed fields are in
+[the machine-readable loadout manifest](evidence/new-character-loadout.json).
+The client class allows 50,000 cartridges per stack, so the 1,000 reserve fits;
+one stack in the first consumables slot is inferred because that tab was not
+shown. The denominator is confirmed to be reserve ammo: original
+`weapondrawerwindow._UpdateAmmoDisplay`, source lines 896–900, bytecode 219–316,
+formats current magazine / `GetCountPersonalInventoryItemsByClass(ammoClass)`.
+That inventory function (source 1423, offsets 9–26 and 93–106) counts matching
+stacks only in personal inventory; it does not include the loaded magazine.
+Full initial durability and pistol/ammunition tint also remain labelled
+estimates. The recording's final-week date is inferred from chat, and the exact
+shutdown executable revision remains unverified.
+
+`ItemEntry` does not copy `CurrentAmmo` when inserting an item. Creation therefore
+saves the loaded magazine explicitly through the existing ammo repository method
+inside its transaction. Tests compare persisted inventory slots, counts, ammo,
+durability and color against the manifest, and separately compare the granted
+templates with the real seeded client mappings, slot assignments, magazine size,
+durability and stack capacity. Trade-flag migration tests apply both providers'
+SQL to an isolated SQLite table and verify rollback and unaffected templates.
+
+Cloning already used the same initial inventory helper and reset Recruit skills.
+It now receives this kit and an initial Lightning/Sprint drawer. Applying the
+new-character kit and drawer to clones is explicitly **inferred**; no recovered
+clone arrival capture establishes the original cloned loadout. A complete
+original-client creation, reconnect and equipment-swap playthrough is still due.
+
 The final-live preservation target in `AGENTS.md` applies. This investigation
 identified a saved-character problem exposed by the equipment eligibility
 implementation. The historical repair below did not establish original grants;

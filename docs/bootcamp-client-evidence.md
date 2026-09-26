@@ -13,6 +13,11 @@ client records describe beginning with an Eloh vision, moving into a refugee
 cave, obtaining gear and practicing combat, reclaiming the AFS base, and
 escaping for reinforcements. Their identities and links differ from the earlier
 Basic Training 101 / Elvers / Vance walkthrough.
+The [revision audit](evidence/tarapedia-bootcamp-source-boundary-20260923.json)
+preserves the exact TaRapedia wikitext revisions: Bootcamp 32488 dated
+2008-08-29 carries the obsolete notice, while Basic Training 101 revision
+27744 and Bootcamp Bypass revision 29338 predate the rebuild. Their older
+mission rewards and Captain Burba skip path are not final-live seed data.
 
 The dated sources, archive hashes and revision-cutoff policy are in
 [new-character initialization](new-character-client-evidence.md). The
@@ -550,8 +555,9 @@ Tags: **observed** = seen on screen; **measured** = derived from frames with an 
   - **Measured:** Major McAllister (L10) stands at (387.2, 53.3) ±2.
   - **Observed:** his Mission Completion window shows text 21135 and reward 100; chat then shows
     "You gained 1250 experience points." before "Mission Completed: Initiation".
-  - **Inferred:** the reward is 100 credits, since the first backpack view shows Credit 100 and
-    starting credits were never seen.
+  - **Observed:** the window advertises 100 credits. The blue trident-shaped reward icon is
+    identified by the same icon labelled "Credit" in the backpack at 304.733 s (A3-019).
+    Starting credits and the actual payout delta remain unverified.
   - **Observed:** his offer for Gearing Up for Battle (1992) opens in the same frame.
 
 ### Gearing Up for Battle (1992) through the exit
@@ -564,8 +570,9 @@ Tags: **observed** = seen on screen; **measured** = derived from frames with an 
 - **Observed:** equipping the first item (boots) completes the equip objective while the gloves
   slot is still empty. The practice dummy despawns on the killing hit and respawns about 1 s
   later; its objective completes 0.2 s after the first despawn.
-- **Observed:** chat shows 1250 XP on completion. **Inferred:** the 200-credit reward fits the
-  later credit arithmetic.
+- **Observed:** the 1992 offer advertises 200 credits (A2-050, 289.8 s); its icon matches the
+  backpack's labelled Credit icon (A3-019, 304.733 s). Chat shows 1250 XP on completion.
+  The actual credit payout is not directly isolated in this footage.
 
 **Capture the Flag (1994)**
 - **Observed:** chat shows "Mission Accepted: Capture the Flag", then 500 XP and level 2 (3

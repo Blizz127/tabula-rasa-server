@@ -1,68 +1,66 @@
-# Character name validation: the original client's rules
+# Character naming — 2026-09-22
 
-> **Reconstructed 2026-09-26.** `src/Rasa.Game/Data/CharacterNameRules.cs` has cited this document since it was
-> written on the deployed-but-uncommitted 2026-09-22..24 tree (commit `234d703`, "A new character is made the way
-> the original creation screen makes one, and a hybrid race is earned."). That tree's own narrative write-up was
-> never committed and is lost; there is no earlier version of this file to recover. What follows is reconstructed
-> from `docs/evidence/character-names.json` (recorded 2026-09-22) and the current `CharacterNameRules.cs`
-> implementation it backs. Nothing here goes beyond what that evidence file states.
+Creation and cloning previously accepted `\w{3,20}`: digits, underscores,
+lowercase initials, triple repeated letters, and a trailing newline could pass.
+The original client's creation error text contradicts these formats. Both
+creation forms, cloning and the existing rename path now share one validator.
+No existing saved names are rewritten.
 
-Research date 2026-09-22. Compatibility client 1.16.5.0; the exact shutdown revision is unverified (see
-`docs/setup.md` and AGENTS.md).
+The recovered client's English `playermessagelanguage.pyo` has messages 133–135
+at assignment bytecode offsets 2936, 2972 and 3008: maximum 20 characters,
+minimum 3, capital initial, letters only, no more than two repeated letters in
+succession. `clientmethod.Recv_UserCreationFailed`, original first line 833,
+offsets 44–78, maps creation failures 2/3/4 to these messages. This ties the text
+to character creation rather than assuming that a generic rename rule applies.
+`charactercreationwindow._CreateCharacter`, original lines 708–711, offsets
+171–216, lowercases then capitalizes both supplied names before sending them.
+The server validates rather than silently rewriting a malformed request.
 
-## Sources
+The language table is compiled 2009-02-10; client provenance and the unverified
+exact shutdown revision remain those in [client artifacts](client-artifacts.md).
+Hashes and precise locations are in the [rule manifest](evidence/character-names.json).
+The Unicode letter/case implementation, case-insensitive repetition and lookup
+comparison remain inferred: original native server validation/collation was not
+recovered. Modern .NET Unicode categories and ordinal case folding may differ
+from the original at non-ASCII boundaries. The original reserved/profanity list is also missing;
+this change does not invent one.
 
-| Key | Kind | Location | Notes |
-| --- | --- | --- | --- |
-| `messages` | original client | `generated/client/language/english/playermessagelanguage.pyo`, sha256 `b9b27bed2053b422d29069e1a8e97e26bba636512ae328d684bef16eae63fba8`, compiled epoch 1234238147 | Creation error text strings |
-| `failure_mapping` | original client | `client/clientmethod.pyo`, sha256 `61539c55746134786400491c76ac428a684d2f9e55c0ec4a68d4d09915210e78`, `Recv_UserCreationFailed`, bytecode offsets 28-210 | Maps failure codes to messages |
-| `creation_ui` | original client | `client/ui/charactercreationwindow.pyo`, sha256 `5fdc95af80cc5c792550c3ad2354ecfd1a037b495d8d885cae65ba9b5deee502`, `_CreateCharacter`, original lines 708-711, offsets 171-216 | Name is lowercased/capitalized and matched against existing family before send |
-| `scope_report` | contemporary firsthand report | forums.mmorpg.com/discussion/157923/pegasus-server-problem, Rayx0r, 2007-12 | Surname uniqueness and a "John Aelric" example; release-era, final-live scope not independently captured, raw download returned 403 |
-| `last_name_revision` | contemporary secondary wiki | archive.org tabularasafandomcom wiki, "Last Name", revision 35315, 2008-10-23T03:42:45Z | "delete all characters to change family" |
+The creation transaction now refuses an already-used first name within the
+account. A new character in another family may use the same first name, and the
+rename query uses the same scope. This scope is **inferred** from a
+[contemporary firsthand explanation](https://forums.mmorpg.com/discussion/157923/pegasus-server-problem)
+by Rayx0r in December 2007 (the comment beginning “just gonna throw this out
+there”). It distinguishes account-family uniqueness from first-name uniqueness.
+An earlier participant's contrary assumption is corrected by that explanation
+and acknowledged by the original questioner. The late client retains separate
+first-name and family-name reservation messages but cannot prove their exact
+server lookup scope. Final-live scope therefore remains an explicit evidence
+gap. The reported release-era deleted-name reservation bug is not reconstructed:
+there is no evidence it survived to shutdown, nor its original lifetime.
 
-## Rules
+Family reservation now compares case-insensitively in managed code on both
+providers. SQLite's ASCII-only `lower()` cannot implement this check: even the
+exact spelling `Élodie` previously evaded a comparison against its .NET-lowercased
+form. The regression cases cover accented first and family names. Accent
+removal and Unicode normalization are not guessed here.
+Creation consults persisted family/character state inside its transaction;
+an empty stale account cache can no longer replace an existing family's name.
+The old ability to select another family after deleting all characters is
+retained. The archived TaRapedia `Last Name`, revision 35315 of
+2008-10-23T03:42:45Z, supports that behavior; its secondary status is recorded.
 
-Five fields are read directly from the shipped client text/bytecode (`original` tier, high confidence):
+The new packet-format regression cases were run against the preceding verified
+source snapshot: 8 of 20 failed, reproducing the permissive format defect.
+Integration tests cover duplicate create/clone refusal without spending credit,
+shared first names across families, case-insensitive surname reservation, and
+stale-cache family replacement. These tests verify implementation, not lost
+server rules. The existing single-process creation lock serializes creation;
+this work does not claim cross-process database uniqueness for historical names.
 
-| Field | Value | Source | Location |
-| --- | --- | --- | --- |
-| `minimum_length` | 3 | messages | message 134, assignment offset 2972 |
-| `maximum_length` | 20 | messages | message 133, assignment offset 2936 |
-| `capital_initial` | true | messages | message 135, assignment offset 3008 |
-| `letters_only` | true | messages | message 135, assignment offset 3008 |
-| `maximum_consecutive_equal_letters` | 2 | messages | message 135, assignment offset 3008 |
+Local analysis artifacts are retained in
+`/home/blizz/backups/rasa-net/research/20260922-character-names/`.
+The forum was read through the web tool on 2026-09-22; a separate raw HTML
+download returned HTTP 403, so no local raw-capture hash is claimed.
 
-Five further fields are `inferred` (logical reconstruction from the same client text plus dated contemporary
-sources), medium confidence, each with a stated gap:
-
-| Field | Value | Source | Unverified |
-| --- | --- | --- | --- |
-| `unicode_and_case_algorithm` | UTF-16 length, .NET uppercase/letter classification, invariant case-insensitive repetition | messages (encoding of message 132, format text of message 135) | Original native Unicode categories, normalization and supplementary characters |
-| `first_name_unique_scope` | account/family scope | scope_report | Final-live server lookup scope and deleted-name reservation |
-| `name_lookup_case_sensitive` | false | creation_ui (names lowercased and capitalized before send; existing family lookup) | Original locale/accent collation; the implementation uses provider-independent `OrdinalIgnoreCase` |
-| `family_change_requires_no_characters` | true | last_name_revision | Final-live server-only policy changes |
-| `duplicate_first_name_error` | failure code 7 | failure_mapping (offsets 104-114 map 7 to `PM_NAME_IN_USE`) | Exact original duplicate-request response among reserved/in-use errors |
-
-## What `CharacterNameRules.cs` implements
-
-`CharacterNameRules.Validate` (`src/Rasa.Game/Data/CharacterNameRules.cs`) checks, in order: non-null, length
-3-20 (`MinLength`/`MaxLength`), a leading capital letter, every character a letter, and no run of three (or more)
-case-insensitively-equal letters — matching the five `original`-tier rules above exactly (the "no letter three
-times" phrasing corresponds to `maximum_consecutive_equal_letters = 2`, i.e. two is the most that may repeat).
-First-name uniqueness, the case-insensitive lookup, and the family-change and duplicate-name error paths are
-implemented in `CharacterManager`/`CharacterRepository` per the `inferred` rules above.
-
-## Gaps
-
-The evidence file records these as unresolved:
-
-- Original reserved/profanity word list.
-- Final-live duplicate-name capture.
-- Original Unicode normalization/collation.
-- Original deleted-name reservation lifetime.
-
-## Implementation-only choices (not claimed as original)
-
-- Family state is read within the creation transaction.
-- Existing names are retained without being rewritten.
-- Uniqueness is enforced with a single-process creation lock; there is no cross-process uniqueness claim.
+Final integrated validation passed 1,202/1,202 tests with none skipped, including
+the naming and transaction cases above. Log: `/tmp/rasa-creation-final-20260922.log`.
