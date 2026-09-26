@@ -932,6 +932,10 @@ character picks up in Alia Das once Training Day and the class choice are behind
     mission's own sources place them in, under **OD-48**: class, name and the mission's numbers are original, positions
     and health are analogues. Three givers came with them through the OD-45 pipeline (Professor Long, Dr. Robertson,
     Colonel Li Hua), and missions 955, 956 and 976 are live.
+    *Note (2026-09-26, notes audit)*: the 1.6 live note "Killing any Bane Stalker on Mires will now give credit for
+    'Restraining Order'" shows 976's Stalkers lived across the Mires, not by Li Hua, and the same notes increased the
+    Lasher population; the clusters stand for map-wide populations they do not reproduce
+    (`GAP-NOTES-976-STALKER-DISTRIBUTION`). No spawns are invented; 976/1 binds the creature, so every Mires Stalker counts.
     Placement respawn became a real mechanic for this: `respawn_ms` was a field the validator withheld as
     unimplemented, so a dead content creature whose placement asks for one is now queued on the channel and
     materialized again by the tick (**GAP-PLACEMENT-RESPAWN** covers what a live check should confirm).
@@ -1066,6 +1070,27 @@ character picks up in Alia Das once Training Day and the class choice are behind
   the levels were not changed. Held: the 23 Logos missions, 1407 (recipes), 411/412/1390, pre-1.4-only lists and
   2-entry runs (`GAP-MISSION-REWARD-ITEMS`). 479's vest is recorded as contradicting the wiki's v6 and left for its
   own change.
+- **Official live notes checked (2026-09-26, `MissionSharedKillCredit`, `OfficialNotesCorrections`)**: every live note
+  from 1.4 (2008-01-29) to D16.5 (2009-02-17) was read against the 114 seeded missions
+  (`research/20260926-notes-audit`). Two seeded values contradicted a note and are corrected at `original` tier:
+  **2016 A Mystery Unearthed** takes the D14 notes' level 50 (it had the Plateau band, 20) and is labelled as given
+  at Twin Pillars in the Wilderness; **682 Childhood's End** credits the Xanx kill (objective 3) to every character on
+  the channel with the objective active, whoever kills it, as the 1.6 and D8 notes say. That is a new per-binding
+  flag, `npc_mission_objective_binding.shared_kill_credit`, set only on 682/3 because both notes name that mission
+  alone; every other kill binding keeps killer-only credit on shared maps. **976 Restraining Order** needed no data
+  change: its binding names the Stalker creature, so every Stalker on the Mires counts, as the 1.6 note requires,
+  but the note shows the Stalkers lived across the map, which the OD-48 cluster does not reproduce
+  (`GAP-NOTES-976-STALKER-DISTRIBUTION`). Recorded without a change, because no evidence postdates the change the
+  note describes: the D12 move of the Cumbria Research Facility NPCs into New Cumbria (1745's Arizpe, 243 m from
+  the New Cumbria waypoint, and 408's Jamison, 189 m; `GAP-NOTES-CRF-RELOCATION`), the 1.7 move of Info Specialist
+  Johnson beside Lt. Perkins (both at undated Ellatha readings 308 m apart; the note moves Johnson, not Perkins;
+  `GAP-NOTES-321-JOHNSON-PERKINS`), Elder Quillas' 1.7 move up the hillside (pool 192 matches a 2007-09-26 reading;
+  `GAP-NOTES-1390-QUILLAS-POSITION`), 1125's single keycard at accept (class 24724 / template 50310 is original, but no
+  accept-time grant exists; `GAP-NOTES-1125-KEYCARD`), the 983/1041 alternative courses (the notes do not say what
+  closes the other course; `GAP-NOTES-983-1041-ALTERNATIVE-COURSES`) and the shared credit's reach
+  (`GAP-NOTES-682-SHARED-CREDIT-REACH`). The never-seed list and the missing final-era missions are under
+  "Final-state mission roster from the official notes" below. Details: `docs/retail-accuracy.md`, "2026-09-26 —
+  Official live notes checked against the seeded missions".
 
 ## All-missions program (owner goal, 2026-09-15)
 
@@ -1101,6 +1126,54 @@ objectives in the client tables.
 level-banded Torden/Valverde zones → instances → the D15/D16 endgame zones (Empire Sector, Edmund Range). Each batch
 is seeded with frozen rows + paired migrations + a manifest slice + content-loading and scenario tests, and deployed
 with a DB backup.
+
+### Final-state mission roster from the official notes
+
+The notes audit of 2026-09-26 (`research/20260926-notes-audit/findings.json`, every live note from 1.4 to D16.5, PTS
+notes kept apart) sorts the client's missions by what the live notes say about them at shutdown. **The final client
+(1.16.5.0) still carries withdrawn and PTS-only missions, so presence in the client, or a "ready" verdict in the
+mission catalog, is not evidence that a mission was offered at shutdown.** Filter every catalog verdict through this
+list before seeding.
+
+**Never seed** (withdrawn by a live note, or never live):
+
+| Missions | Why | Note |
+| --- | --- | --- |
+| 751, 780 (767, the third, is seeded; its withdrawal is the collection-missions batch's) | Dr. Munson's sample missions "are no longer available" | D11 live, 2008-08-15 |
+| 769 Predatory | "permanently disabled"; the Predators were removed from the map | D11 live |
+| 691 Body Count | "permanently disabled"; its objectives moved into 692 What Evil Lurks | D11 live |
+| Soyuz Salvage 1999, 2006, 2007, 2008, 2009 | added D11; "the missions to retrieve those pieces have been removed" | D12 live, 2008-09-18 |
+| Welcome Tour | removed; "The Reformists" and "Crash Course" added at New Cumbria instead (absent from the final client) | D12 live |
+| Artificial Iniquity | "this mission and the associated encounter inside Raksha Robotics Factory have been removed" (absent from the final client) | D14 live, 2008-11-11 |
+| 2012 The Epic Gauntlet 1 (Rogers, Alia Das) | "PTS ONLY" section; no live note | D12.5 notes |
+| 1985 "Public Test Level Gate" | the D8.3 "NPC level gates were added to the Public Test server" | D8 notes |
+
+Also PTS only: the D15 1-credit Mimeomech vendor in Alia Das. 714 Clean Slate is superseded by 1983 (reworked as a
+spawned escort, D9.6), subject to client verification.
+
+**Evidence gap, not seeded:** 1998 Time Capsule (level 12, Foreas Base, added D11). D12 removed only the Soyuz
+missions and no later note says whether Time Capsule outlived the event (`GAP-NOTES-1998-TIME-CAPSULE`).
+
+**Missing final-era content** (live at shutdown per the notes, not yet seeded):
+
+- Palisades: 337 The Reformists and 2014 Crash Course at New Cumbria (D12; the catalog wrongly files 337 under Pools);
+  1988 A Spiritual Pilgrimage from Warden Brocail, the post-D10 Eloh Temples gate; flashpoint 1952 Inspection at
+  Skive Base (D8); the post-D12 Palisades ToO (1630/1809: New Cumbria waypoint, an extra boss, no Stalker objective).
+- Wilderness: 323 Pirate Radio (ungated since 1.7); 701 Orders From High Command (fixed D12.4); 1449 Wilderness ToO
+  (D13.6); the Caves of Donn D11 rework (693 from the new Elder Nekala inside the instance, the new 2004 Bugged to
+  Death); 506 Mama Miasma with 3 bosses (D11); the pre-order Companion Delivery radio mission at Alia Das (1.4, an
+  entitlement gap; which of 1475/1478/1479/1769 is not stated); the Empire Sector missions 2027/2024 after 2016 (D15).
+- Plains: 2015 Base Invaders (D13); D13 also rebuilt parts of Torden Plains, so the seeded Plains NPC readings need
+  a pre-D13 check. Instance: 1939 Bug Hugger in Kardash Atta Colony (1.6).
+- Pools instance: 1914 and 1778 in Live Target Pens (1.6; the audit files them with the Plains findings, but the Live
+  Target Pens map, 1763, is a Valverde Pools instance).
+- Plateau: 1825 All Along The Watchtowers (1.4); the Velon Hollow set 1981 and 1975-1979 from New Velon Village and
+  Wedge Rock Outpost (D9.6/D10).
+- Incline: 2028 War Machine, level 27 (D14); flashpoint 1911 Predator Hunt (1.6, reworked D8).
+- Mires: the ToO (1585) kills Defiler Jemmert instead of Deddarlink (D13.8). Marshes: 1.4 added 16 missions, only
+  some named.
+- Final seasonal event: the D15 holiday gear at every zone hub (Twin Pillars Outpost, Foreas Base, New Cumbria,
+  Irendas Colony, Plains Post, Baylor Base, Fort Defiance, Snake Pit, Paludos); its end date is not in the notes.
 
 ## Boot-camp owner decisions
 

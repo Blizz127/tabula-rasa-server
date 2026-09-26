@@ -135,11 +135,12 @@ namespace Rasa.Test.Reconstruction
                 optional: Cols(),
                 storage: Cols("comment")),
 
-            // placement_id: 0 = any placement of creature_id or class; counter_id: 255 = none.
+            // placement_id: 0 = any placement of creature_id or class; counter_id: 255 = none;
+            // shared_kill_credit: kill bindings the original credits to everyone with the objective (682/3).
             new TableProvenance("npc_mission_objective_binding",
                 keys: Cols("mission_id", "objective_id", "binding_id"),
                 required: Cols("kind", "area_id", "creature_id", "action_id", "destroying_hit_only", "equip_match",
-                    "item_template_id", "item_set_id", "target_state", "drop_chance"),
+                    "item_template_id", "item_set_id", "target_state", "drop_chance", "shared_kill_credit"),
                 optional: Cols("placement_id", "counter_id"),
                 storage: Cols("comment")),
 

@@ -159,22 +159,35 @@ namespace Rasa.Managers
                         break;
                     }
 
+            Client credited = null;
+
             if (client != null)
             {
                 // experience, credits and kill streak (docs/evidence/kill-rewards.json)
                 KillRewardManager.Instance.AwardKill(client, creature);
 
                 MissionManager.Instance.OnCreatureKilled(client, creature);
+                credited = client;
             }
             else
             {
                 // Per-character instancing (OD-16): the channel owner is credited for any
                 // kill of a kill-bound placement, whoever landed the blow — allies fight
-                // nearby in the original boot camp. Shared contexts keep killer-only credit.
+                // nearby in the original boot camp. Shared contexts keep killer-only credit
+                // unless the binding shares it (below).
                 var owner = mapChannel.ClientList?.FirstOrDefault(candidate => candidate?.Player != null);
                 if (owner != null && MissionManager.Instance.Content.Content.Catalog.InstancingFor(mapChannel.MapInfo?.MapContextId ?? 0) == MapInstancing.PerCharacter)
+                {
                     MissionManager.Instance.OnCreatureKilled(owner, creature);
+                    credited = owner;
+                }
             }
+
+            // A binding marked shared_kill_credit (682/3, the 1.6 and D8 live notes: "it no longer matters who
+            // kills the Xanx, just that they are killed") also credits everyone else on this channel with the
+            // objective active - another player's kill or an NPC's counts. Other bindings stay killer-only.
+            if (mapChannel.ClientList?.Count > 0)
+                MissionManager.Instance.OnSharedKillCredit(mapChannel, creature, credited);
 
             // Harvest claim: written on every kill so a spawn-pool reuse cannot keep a previous
             // owner's claim. A death with no player behind it leaves attempts at zero.

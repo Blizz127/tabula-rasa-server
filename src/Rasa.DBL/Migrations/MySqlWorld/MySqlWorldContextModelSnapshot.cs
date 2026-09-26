@@ -1690,6 +1690,10 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnType("int unsigned")
                         .HasColumnName("placement_id");
 
+                    b.Property<bool>("SharedKillCredit")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("shared_kill_credit");
+
                     b.Property<uint>("TargetState")
                         .HasColumnType("int unsigned")
                         .HasColumnName("target_state");

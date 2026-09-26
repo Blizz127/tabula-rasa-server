@@ -424,6 +424,10 @@ namespace Rasa.Structures.Content
                                     gap("needs a placement or a known creature");
                             }
 
+                            // Shared credit (682/3, the 1.6 and D8 live notes) is a property of a kill, not of a hit.
+                            if (kind == ObjectiveBindingKind.Kill)
+                                used.Add("shared_kill_credit");
+
                             if (kind == ObjectiveBindingKind.Hit)
                             {
                                 used.Add("action_id");
@@ -455,7 +459,8 @@ namespace Rasa.Structures.Content
                         ("area_id", binding.AreaId != 0), ("placement_id", binding.PlacementId != 0), ("creature_id", binding.CreatureId != 0),
                         ("action_id", binding.ActionId != 0), ("destroying_hit_only", binding.DestroyingHitOnly), ("equip_match", binding.EquipMatch != 0),
                         ("item_template_id", binding.ItemTemplateId != 0), ("drop_chance", binding.DropChance != 0),
-                        ("item_set_id", binding.ItemSetId != 0), ("target_state", binding.TargetState != 0));
+                        ("item_set_id", binding.ItemSetId != 0), ("target_state", binding.TargetState != 0),
+                        ("shared_kill_credit", binding.SharedKillCredit));
                 }
             }
 
