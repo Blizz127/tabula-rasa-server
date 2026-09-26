@@ -119,6 +119,16 @@ namespace Rasa.Test.Reconstruction
                 optional: Cols(),
                 storage: Cols("description")),
 
+            // Existing table (TordenConversationMissions, 2026-09-26). Every column is read by the loader and sent to the
+            // client in MissionConstantData, and none has a neutral value, so each is required: a mission cannot be
+            // offered without a level, which is why a level no source gives may carry a labelled analogue
+            // (GAP-MISSION-LEVEL, OD-60).
+            new TableProvenance("npc_mission",
+                keys: Cols("id"),
+                required: Cols("giver_id", "reciver_id", "level", "group_type", "category_id", "shareable", "radio_completeable"),
+                optional: Cols(),
+                storage: Cols("comment")),
+
             new TableProvenance("npc_mission_prerequisite",
                 keys: Cols("mission_id", "or_group", "required_mission_id"),
                 required: Cols("required_state"),

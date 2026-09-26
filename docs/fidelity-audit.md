@@ -612,6 +612,26 @@ accepted. They are kept out of completion by `MissionRedirectConversations`. The
 What the original did with these rows - an ambient reminder, which this server never sends, or nothing - is
 unrecorded. **GAP-READY-REDIRECT-COMPLETION** (open).
 
+### Torden conversation missions, re-checked before seeding (2026-09-26)
+
+The Torden dossiers (`research/20260926-torden-missions`) were built against the database before the recovered
+2026-09-22..24 migrations; every proposed row was checked again against the chain development now carries. Nothing
+had moved: the nine missions were still unseeded, their client skeleton rows still carried NULL flags, every
+giver and receiver still spawned, and every completion package was still carried. The prerequisites 887 and 1063
+exist, so 1014 and 1064 are gated; the other four recorded gates name missions that are not seeded or not known.
+
+Reachability was measured with the navmesh query the world audits use (`docs/evidence/torden-conversation-missions-navmesh.json`).
+Every NPC the nine missions use is reachable from its hub's waypoint or hospital. Science Officer Clark is not: he
+stands 7.6 m from the "Wedge Rock Outpost" map label he was placed from, on a surface no path from the outpost, its
+hospital or Fort Defiance reaches, so 936 is held rather than seeded onto a giver no one can talk to.
+
+Rewards are TaRapedia's amounts, each labelled with its era: six missions have only pre-1.4 records, which the
+earlier W3 batches seeded the same way (GAP-TORDEN-REWARD-ERA); 1014's only figure is a closed-beta XP and is left
+out. No pre-1.4 item list is seeded. 1326 and 1330 carry their post-1.4 Class VII consumables as choose-one rows,
+inferred in structure and quantity (GAP-TORDEN-1326-1330-ITEM-CHOICE). Their level, 20, is the one analogue: the
+Pools has no band, and the value is 1068/1541's under OD-60, pending owner review. To allow that label the provenance
+registry now classifies `npc_mission`, whose columns are all required.
+
 ## The parallel audit, and what it shipped (2026-09-21)
 
 Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and

@@ -272,7 +272,7 @@ namespace Rasa.Test.Reconstruction
         {
             CollectionAssert.AreEquivalent(new[]
             {
-                "map_info", "content_map_setting", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
+                "map_info", "content_map_setting", "creature", "npc_mission", "npc_mission_prerequisite", "npc_mission_objective_binding",
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
                 "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot", "creature_action",
@@ -299,6 +299,11 @@ namespace Rasa.Test.Reconstruction
             // A spawn pool's position is required (OD-59 keeps unsourced upstream positions as labelled analogues).
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("spawnpool", "pos_x"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("spawnpool", "creature_2_Id"));
+            // npc_mission is registered since TordenConversationMissions: every column is required, so the Pools level
+            // may carry a labelled analogue (OD-60); an unregistered table still classifies as Unknown.
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("npc_mission", "level"));
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
+            Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission_reward", "credits"));
             // Item templates (WildernessArrivalTrainingDay): sent flags are required, prices and the unsent reuse override optional.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("itemtemplate", "not_tradable_flag"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate", "sell_price"));
@@ -315,7 +320,7 @@ namespace Rasa.Test.Reconstruction
 
             var entities = new[]
             {
-                typeof(CreatureEntry), typeof(MapInfoEntry), typeof(ContentMapSettingEntry), typeof(NpcMissionPrerequisiteEntry),
+                typeof(CreatureEntry), typeof(MapInfoEntry), typeof(ContentMapSettingEntry), typeof(NpcMissionEntry), typeof(NpcMissionPrerequisiteEntry),
                 typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
                 typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),

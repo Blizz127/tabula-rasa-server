@@ -508,6 +508,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
     above the surface the client's navmesh has under her, so her placement takes the map's height and keeps the
     reading's X and Z (TordenNpcGroundSnap) - the audit measures every position against that same navmesh.
   - **W3 batch 12 (2026-09-16)**: the hub's kill missions (427 Proctor Fulgor, 682 the Xanx).
+  - **W3 Torden batch (2026-09-26)**: nine more Torden conversation missions on NPCs already standing -
+    1745 Report to Liaison Repp, 526 Aid Packages, 648 Speak to Colonel Franks and 1064 Incriminating Delivery (the
+    two the 2026-09-16 batch skipped: Franks exists as spawnpool 510084 with package 521), 802, 1014 Blue Flu, 1070,
+    1326 Spoils of War and 1330 Retread Planning Part II (`TordenConversationMissions`). **936 The Results Are In is
+    held**: Science Officer Clark stands on a surface the Plateau navmesh does not join to the Wedge Rock outpost
+    (GAP-TORDEN-936-CLARK-UNREACHABLE). Six more (555, 831/840, 842/848, 1862) stay held on a radio trigger, a branch
+    pair and two NPCs that do not exist. Open: four gates on unseeded or unknown missions, accept-time items, 1014's
+    rewards, 1064's ambush, the pre-1.4 reward era and the Pools level (OD-60, pending owner review).
   - **Systems pass, owner goal 2026-09-16 (five items, in order)**: (1) **creature loot** — done, the original
     table's shape with the seven surviving rows (commit `ddcc921`); (2) **escort** — done, `Escort` behavior +
     `escort_mission_id` + the arrival rule, first escort seeded for 1390 (commit `0c288b6`); (3) **mission sharing and

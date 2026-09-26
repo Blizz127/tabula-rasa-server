@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-26",
+  "tier": "measured",
+  "scope": "Reachability of the giver and receiver of every Torden conversation mission considered by migration TordenConversationMissions (research/20260926-torden-missions), and the hold of 936 The Results Are In",
+  "method": "Rasa.NavMesh --path <map>.nav x1 y1 z1 x2 y2 z2 (the same Detour FindPath query the server runs; docs/navmesh.md), run in mcr.microsoft.com/dotnet/sdk:5.0 against the repository's navmesh/ files. Start points are the client's own uimapmarker waypoint, hospital or map-label positions (research/20260926-torden-missions/work/markers.json, decoded from uimapmarker.pyo); end points are the NPC positions in the deployed rasaworld.db (sha256 f0142463b3f850772c3466955487af4fdac58048c87d19a6ac846dfeecf273b5), which the new migration does not move.",
+  "limits": "The navmesh is derived by Recast from the client's map geometry (climb 0.9 m, slope 50 degrees); it is the standard the world audits use (WorldPositionAuditTests), not a capture of what a final-live player could reach. A player can jump or slide where the mesh has no link, so 'unreachable' means 'not connected on the walkable surface the server and its audits model'.",
+  "navmesh": {
+    "navmesh/adv_foreas_valverde_plateau.nav": "8a89d3382bd15cbf4b3f7329836c47386699f779fdbf0fe1db067a9826c3305e",
+    "navmesh/adv_foreas_valverde_pools.nav": "040ed40dbbef4574f0d89deaf45ba4e0be3dd200f3654938c6057bf932d3a193",
+    "navmesh/adv_arieki_torden_plains.nav": "033b7c68a9dfd1476d855c9adbe74c9dd13404c430b567812ec3700fd208e41b",
+    "navmesh/adv_arieki_torden_incline.nav": "14ba6399defe9bddb1f2bca31e1978fc510d34f22e1de06c2dd43144146ddf34",
+    "navmesh/adv_foreas_concordia_palisades.nav": "a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f"
+  },
+  "clark_936": {
+    "npc": "Science Officer Clark, creature 510191, spawnpool 510191, map 1497 adv_foreas_valverde_plateau, (482.3, 424.083, 421.0)",
+    "surface_under_npc": "navmesh ground 424.36 at his X/Z - a polygon exists, so the floor audit passes him",
+    "paths": [
+      {"from": "Waypoint: Wedge Rock Outpost (330.69, 369.34, 304.38)", "result": "PARTIAL, 191.8 m"},
+      {"from": "Wedge Rock Hospital (362.83, 369.41, 373.97)", "result": "PARTIAL, 185.7 m"},
+      {"from": "Crafting Station: Wedge Rock Outpost (485.96, 378.41, 339.17)", "result": "PARTIAL, 84.9 m; every outpost path stops at (475.6, 392.9, 404.8), about 31 m below and 18 m short of him"},
+      {"from": "Special Agent Perdu, Fort Defiance (-182.5, 419.28, 865.7)", "result": "PARTIAL, 1014.2 m, stopping at the same corner (475.6, 392.9, 404.8)"},
+      {"from": "Clark to the Wedge Rock waypoint (reverse)", "result": "PARTIAL, 309.3 m along a ridge at y 425-432 that never descends to the outpost"},
+      {"from": "map label 'Wedge Rock Outpost' (476.18, 425.11, 425.46)", "result": "complete, 7.6 m - the label and Clark share the isolated upper surface"},
+      {"from": "Waypoint: Wedge Rock Outpost to TaRapedia's /loc (464, 378, 366), rev 34277 2008-09-25", "result": "complete, 161.6 m"}
+    ],
+    "conclusion": "Clark stands on a surface the Plateau navmesh does not connect to the outpost floor, next to the static map label he was placed from (7.6 m). 936 is held and Clark is not moved in this batch (world placement fixes belong to another batch); GAP-TORDEN-936-CLARK-UNREACHABLE."
+  },
+  "seeded_npcs": [
+    {"npc": "Receptive Liaison Arizpe 199085 (1745 giver)", "from": "Waypoint: Cumbria Research Facility", "result": "complete, 69.8 m"},
+    {"npc": "Receptive Liaison Repp 199505 (1745 receiver)", "from": "Waypoint: Irendas Penal Colony", "result": "complete, 36.4 m"},
+    {"npc": "Lieutenant Epp 510068 (526 giver and receiver)", "from": "Waypoint: Nyxroq Post", "result": "complete, 0.0 m (she stands on the waypoint marker)"},
+    {"npc": "Coordinator Maila 510064 (526 objective 1)", "from": "Waypoint: Nyxroq Post", "result": "complete, 214.5 m"},
+    {"npc": "Salvage Master Orto 510074 (526 objective 2)", "from": "Waypoint: Nyxroq Post", "result": "complete, 756.1 m"},
+    {"npc": "Xeniol 199045 (648 giver)", "from": "Hospital: Mt. Hellas Outpost", "result": "complete, 4.8 m"},
+    {"npc": "Colonel Franks 510084 (648/1064 receiver, 1070 giver)", "from": "Hospital: Mt. Hellas Outpost", "result": "complete, 121.8 m"},
+    {"npc": "Colonel Franks 510084", "from": "Lieutenant Liu 199510", "result": "complete, 1294.3 m"},
+    {"npc": "Gunnery Sergeant Obahmi 510067 (802 giver, 1070 receiver)", "from": "Waypoint: Plains Post", "result": "complete, 26.9 m"},
+    {"npc": "Field Commander Foletto 510066 (802 receiver)", "from": "Waypoint: Nyxroq Post", "result": "complete, 3.7 m"},
+    {"npc": "MP Lieutenant Parkman 199069 (1014 giver)", "from": "Waypoint: Fort Defiance", "result": "complete, 69.9 m"},
+    {"npc": "CID Commander Provost 510174 (1014 objective 2)", "from": "Waypoint: Fort Defiance", "result": "complete, 171.2 m"},
+    {"npc": "MP Sergeant Norton 510187 (1014 objective 1 and receiver)", "from": "Waypoint: Fort Defiance", "result": "complete, 188.3 m"},
+    {"npc": "Lieutenant Liu 199510 (1064 giver)", "from": "map label 'Eir Crater'", "result": "complete, 44.4 m"},
+    {"npc": "Lieutenant Chester 510198 (1326 giver)", "from": "East Listening Post Hospital", "result": "complete, 4.2 m"},
+    {"npc": "Colonel 'Snake' Washington 199203 (1326 receiver)", "from": "Waypoint: The Snakepit", "result": "complete, 60.6 m (from Chester directly: PARTIAL - the two hubs are not joined on the mesh, as for any separate Pools hub)"},
+    {"npc": "Hermit 199075 (1330 giver)", "from": "Waypoint: The Hermit", "result": "complete, 28.4 m"},
+    {"npc": "Amee Corman 199204 (1330 receiver)", "from": "Retread Camp First-Aid Station", "result": "complete, 26.6 m; from the Hermit, complete 645.9 m"}
+  ],
+  "unverified": "Whether the final-live Clark stood where TaRapedia's 2008-09-25 /loc puts him; whether the Chester-Snake gap on the Pools mesh is a real terrain break or a Recast artefact; the original positions of the marker-stacked NPCs (Epp, Foletto, Obahmi, Franks, Norton), which stay where the world seed has them."
+}
