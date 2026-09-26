@@ -68945,6 +68945,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo ATTACK = 2 (lookup[2] = [14311, 1, 23], offset 9410); logosstonelanguage[2] \"Attack\" (offset 20)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -69284,6 +69296,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo ENHANCE = 10 (lookup[10] = [14311, 9, 5], offset 9554); logosstonelanguage[10] \"Enhance\" (offset 92)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -69618,6 +69642,18 @@
       }
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo POWER = 23 (lookup[23] = [14311, 22, 17], offset 9770); logosstonelanguage[23] \"Power\" (offset 200)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
     },
     "item_set_id": {
      "value": 0,
@@ -69954,6 +69990,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo AREA = 1 (lookup[1] = [14311, 0, 0], offset 9392); logosstonelanguage[1] \"Area\" (offset 11)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -70287,6 +70335,18 @@
       }
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo TARGET = 49 (lookup[49] = [14311, 48, 365], offset 10238); logosstonelanguage[49] \"Target\" (offset 434)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
     },
     "item_set_id": {
      "value": 0,
@@ -70622,6 +70682,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo HERE = 53 (lookup[53] = [14311, 52, 84], offset 10310); logosstonelanguage[53] \"Here\" (offset 470)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -70955,6 +71027,18 @@
       }
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo BACKWARD = 3 (lookup[3] = [14311, 2, 1], offset 9428); logosstonelanguage[3] \"Backward\" (offset 29)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
     },
     "item_set_id": {
      "value": 0,
@@ -71290,6 +71374,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo DEFEND = 7 (lookup[7] = [14311, 6, 26], offset 9500); logosstonelanguage[7] \"Defend\" (offset 65)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -71623,6 +71719,18 @@
       }
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo GIVE = 15 (lookup[15] = [14311, 14, 9], offset 9626); logosstonelanguage[15] \"Give\" (offset 128)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
     },
     "item_set_id": {
      "value": 0,
@@ -71958,6 +72066,18 @@
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
     },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo INCREASE = 18 (lookup[18] = [14311, 17, 12], offset 9680); logosstonelanguage[18] \"Increase\" (offset 155)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
+    },
     "item_set_id": {
      "value": 0,
      "tier": "inferred",
@@ -72291,6 +72411,18 @@
       }
      ],
      "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, WildernessHubReceptiveReception)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "confidence": "high",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo GROUND = 46 (lookup[46] = [14311, 45, 334], offset 10184); logosstonelanguage[46] \"Ground\" (offset 407)"
+      }
+     ],
+     "reasoning": "drop_chance is read only by an item-collected (kind 9) binding; a LogosRecovered binding never rolls a drop, so it carries the neutral 0 every non-item binding seed writes (WildernessXenobiologySamples, 20260923012000_MissionItemDropChance)."
     },
     "item_set_id": {
      "value": 0,
