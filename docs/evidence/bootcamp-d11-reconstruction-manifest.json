@@ -28554,60 +28554,6 @@
    }
   },
   {
-   "table": "npc_mission",
-   "key": {
-    "id": 1407
-   },
-   "slice": "W3",
-   "migration": "WildernessHubConscientiousObjector",
-   "fields": {
-    "giver_id": {
-     "value": 198514,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "community_db:tarapedia",
-       "locator": "mission 1407 infobox, MissionGiver = Outpost Commander Rogers"
-      }
-     ],
-     "reasoning": "TaRapedia's infobox names Outpost Commander Rogers; the client's tables record no giver or receiver, and the NPC stands in the world."
-    },
-    "reciver_id": {
-     "value": 42,
-     "tier": "inferred",
-     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "mission objective texts"
-      }
-     ]
-    },
-    "level": {
-     "value": 5,
-     "tier": "inferred",
-     "reasoning": "no source records a per-mission level; the Wilderness hub band is used, as every other hub slice does.",
-     "citations": [
-      {
-       "source": "community_db:tarapedia",
-       "locator": "giver NPC page level"
-      }
-     ]
-    },
-    "category_id": {
-     "value": 10000001,
-     "tier": "inferred",
-     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "mission category table"
-      }
-     ]
-    }
-   }
-  },
-  {
    "table": "npc_mission_objective",
    "key": {
     "mission_id": 1407,
@@ -64908,6 +64854,60 @@
      "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 22963's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
     }
    }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1407
+   },
+   "slice": "W3",
+   "migration": "WildernessHubConscientiousObjector; TooCloseForComfortLevel",
+   "fields": {
+    "giver_id": {
+     "value": 198514,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "mission 1407 infobox, MissionGiver = Outpost Commander Rogers"
+      }
+     ],
+     "reasoning": "TaRapedia's infobox names Outpost Commander Rogers; the client's tables record no giver or receiver, and the NPC stands in the world."
+    },
+    "reciver_id": {
+     "value": 42,
+     "tier": "inferred",
+     "reasoning": "the NPC the last objective ends at: the client's own objective text names them (\"Return to ...\", \"Speak to ...\", \"Deliver ... to ...\").",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission objective texts"
+      }
+     ]
+    },
+    "level": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's pre-shutdown Too Close For Comfort mission page records level 4 (TooCloseForComfortLevelRows.cs, 2026-09-24); the client mission tables carry no per-mission level for 1407, so the final-live server's level stays unverified. Supersedes the earlier Wilderness-hub-band guess of 5, which this manifest previously carried with no per-mission source.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "Too Close For Comfort mission page, Level field, pre-shutdown revision"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "the Wilderness hub category the Training Day row uses (10000001).",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    }
+   }
   }
  ],
  "omitted": [
@@ -65754,19 +65754,22 @@
   },
   {
    "id": "GAP-S5-REINFORCEMENT-MOVE",
-   "summary": "Closed for the observed 1995 branch by BootcampScriptedMoves (2026-09-15), and for the inferred 2005 retry by BootcampRetryReinforcementWalk (2026-09-24): the three placed reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) walk to a point 15 m north-east of the dropship pad after the relevant bomb objective completes. Only the 1995 walk-off is observed in footage (S5P-05). The destination is inferred (+/-5 m); the pad is area 198603 at (-225.35, 99.6, -70.52).",
+   "summary": "Closed for the observed 1995 branch by BootcampScriptedMoves (2026-09-15) and for the inferred 2005 retry by BootcampRetryReinforcementWalk (2026-09-24); reopened the same day by BootcampReinforcementPadHold, which deletes both walk-off rules (1985015, 1985017) and their shared destination (location 19854). Rereading B2-012 found the three reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) still standing on the pad at 98.333 s, 11.533 s after 1995 objective 1 completed; since ObjectiveCompleted actions fire immediately, no rule keyed to objective completion can reproduce that hold. The destroyed-wreck condition and arrival placements are preserved, and the reinforcements now simply remain on the pad after beaming in. Whether they ever leave, and when, is unverified.",
    "evidence": [
-    "footage S5P-05 (reinforcements walk north-east off the pad at 98.0)",
-    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854)",
-    "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json: inferred retry rule 1985017 with the same three placements and destination"
+    "footage S5P-05 (reinforcements walk north-east off the pad at 98.0) - superseded, see below",
+    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854), removed 2026-09-24 by BootcampReinforcementPadHold",
+    "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json: the inferred retry rule 1985017 with the same three placements and destination, removed alongside the original",
+    "footage B2-012 (corrected): the reinforcement group stands on the pad through 98.333 s, 11.533 s after 1995 objective 1 completes"
    ],
-   "closes_with": "1995 branch: BootcampScriptedMoves 2026-09-15; 2005 retry: BootcampRetryReinforcementWalk 2026-09-24",
+   "closes_with": "Removed rather than closed: BootcampReinforcementPadHold, 2026-09-24. A later departure, if any, remains open pending direct footage of it.",
    "surfaced_by": [
-    "manifest"
+    "manifest",
+    "B2-012 re-review, 2026-09-24"
    ],
    "slices": [
     "S5"
-   ]
+   ],
+   "status": "open"
   },
   {
    "id": "GAP-S5-REINFORCEMENT-COUNT",
@@ -71498,6 +71501,50 @@
     {
      "source": "community_db:tarapedia-reward-history",
      "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "migration": "TooCloseForComfortLevel",
+   "table": "npc_mission",
+   "key": {
+    "id": 1407
+   },
+   "field": "level",
+   "old": 5,
+   "new": 4,
+   "tier": "inferred",
+   "reason": "TaRapedia's pre-shutdown Too Close For Comfort page records level 4. The client mission tables carry no level for 1407; the previous row used the Wilderness-hub band (5) as an unsupported inference. The final-live server's own level remains unverified.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "Too Close For Comfort mission page, Level field, pre-shutdown revision"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "migration": "BootcampReinforcementPadHold",
+   "table": "content_rule,content_rule_action,content_location",
+   "key": {
+    "rule_ids": [
+     1985015,
+     1985017
+    ],
+    "location_id": 19854
+   },
+   "field": "existence",
+   "old": "Two ObjectiveCompleted rules (1985015 on 1995 objective 1; 1985017 on 2005 objective 1), each with three MoveCreatureToLocation actions walking Infantryman L2 (198681), Infantryman L3 (198682) and the Forean Gunner Initiate (198680) to location 19854, 15 m north-east of the dropship pad.",
+   "new": null,
+   "tier": "observed",
+   "reason": "B2-012 shows the three reinforcements still standing on the pad at 98.333 s, 11.533 s after 1995 objective 1 completes. ObjectiveCompleted actions execute immediately, so a rule that walks the squad off at objective completion cannot represent an observed 11.5 s hold. Both the footage-supported 1995 walk-off (BootcampScriptedMoves, 2026-09-15) and its inferred 2005 retry copy (BootcampRetryReinforcementWalk, 2026-09-24) are removed rather than corrected, since no observed timing or destination supports any walk-off; a later departure, if any, is unverified. The destroyed-wreck present_condition and the reinforcements' arrival placements are unchanged.",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "event": "B2-012",
+     "t": 95.4,
+     "locator": "reinforcements remain grouped on the pad through 98.333 s, 11.533 s after 1995 objective 1"
     }
    ]
   }

@@ -70,6 +70,16 @@ the final-live rule.
   rows are validated and withheld unless every mechanic they need exists, and a new-character entry
   switch defaults to the Wilderness start. No boot-camp content is seeded yet; the owner decisions for the
   first slice are recorded below.
+- **2026-09-22 to 2026-09-24 (recovered from a lost VPS checkout; documentation reconstructed 2026-09-26)**:
+  commit `234d703` implemented the original client's character-name rules (length 3-20, leading capital,
+  letters only, no run of three identical letters; `CharacterNameRules.cs`) and seeded the mission-gated
+  hybrid-race unlocks (Forean via mission 1861 "Traitor on the Run", Brann via 1851 "Remedy", Thrax via
+  1899 "Genome Sweet Genome"), each recorded per-account and surviving character deletion. See
+  `docs/character-name-evidence.md` (from `docs/evidence/character-names.json`) and
+  `docs/evidence/race-unlocks.json`. Commit `af0a9bb` added the creation admission-ordering and item-class
+  seed-parity scaffolding this work sits on. The full narrative for this checkout was never committed and
+  is lost; `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24" section reconstructs it from these
+  artifacts.
 
 ## S1 (Initiation) status
 
@@ -98,6 +108,16 @@ the final-live rule.
 - Remaining S1 verification: deploy the candidate, set `Bootcamp.EntryMode`, and run the owner client
   check against the footage; the planned `ReconstructionSeedTests`, `PositionFileTests`,
   `ReconstructionDefinitionTests` and `SliceReadinessReport` are not written yet.
+- **2026-09-22 to 2026-09-24 (recovered; documentation reconstructed 2026-09-26)**: mission 1992
+  "Gearing Up for Battle" (the S1/S2 boundary content, no dedicated status section of its own exists yet
+  — a pre-existing gap, not created here) was refined in commit `f30d9aa`. The supply crate's four armour
+  pieces (item set 19858) were swapped from the common to the uncommon Motor Assist row, and Corporal
+  McAllister's walk-away trigger was moved from mission 1990's turn-in to mission 1992's acceptance, both
+  against footage `7Lrst9SG3pk`. See `docs/bootcamp-equip-audit.md` and
+  `docs/bootcamp-opening-movement-audit.md` for the full reasoning, including McAllister's 2.5 m/s walk
+  speed being a labelled analogue rather than a measured value. Commit `9afd210`'s per-instance item
+  module/trade-flag support underlies this gear, though the crate's own pieces still lack module and
+  trade-restriction lines end-to-end per the equip audit.
 
 ## S3 (private instances) status
 
@@ -113,6 +133,10 @@ the final-live rule.
 - `PrivateInstanceTests` cover creation, isolation at identical coordinates, destruction after the owner
   leaves, replacement on re-entry and the instance id sent at login. Full suite 815/815. Owner client
   check (two recruits at once, relog) is still to do.
+- **2026-09-22 (recovered; documentation reconstructed 2026-09-26)**: commit `af0a9bb` added a lock
+  around the map-channel registry this section's `MapChannelManager.ChannelForEntry` describes, as
+  concurrency-safety scaffolding recovered without its original narrative. No channel-isolation behavior
+  changed; this is not a new reconstructed value.
 
 ## S4 (Capture the Flag) status
 
@@ -143,6 +167,12 @@ the final-live rule.
   and checks that the seeded 1990/1992/1994 and context-1985 content has no content or definition gaps under
   `MissionContentRules.Implemented`. Full suite 839/839 under the .NET 5 SDK image. Owner client check (build plan S4
   steps 1–9) is still to do.
+- **2026-09-23/24 (recovered; documentation reconstructed 2026-09-26)**: commit `f30d9aa` seeded a
+  courtyard Forean Warrior (`BootcampCourtyardForeanWarrior`) and the camp's companion Initiates
+  (Gunner/Archer/Shaman) as part of the same footage-fidelity pass. Neither migration was found to have
+  its own `docs/evidence` manifest rows or `changes` entries in this documentation pass; see the
+  due-diligence note in `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24" section. This bullet
+  records that the content exists, not that its provenance has been re-verified here.
 
 ## S5 part 1–2 (facts, objective timers, failure and retry) status
 
@@ -166,6 +196,9 @@ the final-live rule.
   timer on a non-abandonable mission. `MissionLogTests.Timers` covers start, whole-second rounding, completion,
   failure order and persistence, once-only expiry, the retry and self-retry, offline expiry, and disarmed timers.
   Full suite 835/835 under the .NET 5 SDK image.
+- No mechanism changes in the 2026-09-22 to 2026-09-24 recovered window; the content-level change to this
+  segment's seeded rows (reinforcement walk-off removal) is recorded under "S5 (Calling for Reinforcements)
+  seed status" below.
 
 ## S5 part 3 (bomb, generic use, placement state) status
 
@@ -183,6 +216,7 @@ the final-live rule.
 - `BombPlacementTests` and `ABombPlantedBeforeTheInstanceWasRebuiltComesBackArmedWithAFreshFuse` cover this.
   Full suite 844/844. Deployed 2026-09-14 19:27Z together with the S4 seed and navmeshes. Detonation damage to
   the player (B1-049 "-21") is still a gap.
+- No mechanism changes in the 2026-09-22 to 2026-09-24 recovered window.
 
 ## S5 (Calling for Reinforcements) seed status
 
@@ -219,6 +253,14 @@ the final-live rule.
   `GAP-S4-AMBIENT-LEVELS`, `GAP-ROGERS` and `GAP-NEXT-SEGMENT` were updated. Not seeded: rewards, the hidden
   level-3-to-4 experience, a bomb item, detonation damage, unnamed reinforcements and their walk-off, the other
   outpost creatures, flyovers and the beam-in.
+- **2026-09-23/24 (recovered; documentation reconstructed 2026-09-26)**: `BootcampReinforcementPadHoldRows`
+  (commit `f30d9aa`) removed the reinforcements' walk-off rules (1985015/1985017) and the unsupported
+  destination location 19854. Footage `8VXeKzGUv0c` (event B2-012, 95.4 s) shows the reinforcements still
+  standing on the pad 11.5 seconds after objective (1995,1) completed, which the earlier walk-off timing
+  cannot represent; whether they depart later is unverified. This documentation pass reopened
+  `GAP-S5-REINFORCEMENT-MOVE` (previously recorded above as closed by `30653f2`) and added the migration's
+  first `docs/evidence` manifest `changes` entry (tier `observed`), since it had none. No provenance tier
+  was changed, only the manifest's record of what this migration already did.
 
 ## S6 (Exit to Alia Das) status
 
@@ -249,6 +291,10 @@ the final-live rule.
   marker, completion persisted). No appearance rows are seeded (`GAP-NPC-BODY`) and the turn-in pays nothing
   (`GAP-S5-MISSION-REWARDS`). The segment-3 arrival draft still names creature 100 and placement 122150 and must be
   rebased on 198514/198684. Full suite 846/846 under the .NET 5 SDK image.
+- No changes to the exit pad/trigger content itself in the 2026-09-22 to 2026-09-24 recovered window; the
+  missions Alia Das offers once the recruit arrives through this exit were extended in the same window
+  (Too Close For Comfort, Receptive Reception, Forming Alliances, Conscientious Objector) — see the W3
+  update below.
 
 ## W1 (Wilderness arrival: Training Day) status
 
@@ -976,6 +1022,26 @@ character picks up in Alia Das once Training Day and the class choice are behind
   406, the pre-1.4 reward items, the carried field report / data pack, Jorai's marker position, the zone-band levels
   (GAP-READY-434-GATE, -408-GATE, -REWARD-ITEMS, -MISSION-ITEM, -JORAI-POSITION, -SPEAKER-CLASS,
   -REDIRECT-COMPLETION, GAP-MISSION-LEVEL). Details: `docs/evidence/early-ready-missions.json`.
+
+  - **2026-09-22 to 2026-09-24 (recovered from a lost checkout; documentation reconstructed 2026-09-26,
+    commit `4aa50b3`)**: Alia Das missions given by Alia Das/Warrior Apirka were seeded or corrected in
+    their recorded order — Too Close For Comfort, Receptive Reception, Forming Alliances, then
+    Conscientious Objector's two endings. `TooCloseForComfortLevelRows` sets `npc_mission` 1407's level to
+    4 (`inferred`, TaRapedia's pre-shutdown mission page; the client mission tables carry no level for this
+    row) — this migration previously had no manifest coverage and now has one (see the manifest note
+    below). Dialogue-class assignments for Council Elder Moawi and other mission speakers were also seeded
+    from this pass; Moawi's assigned class was not independently confirmed against footage and is flagged
+    pending owner review (OD-63). Forming Alliances (mission 479)'s reward is explicitly unresolved:
+    `docs/evidence/wilderness-forming-alliances-research.json` calls the 50% drop chance, heart template
+    2285, mission level 5 and reward vest template 13738 "estimates, not recovered final-live server
+    data," and flags a naming/version conflict on template 13738 against a separate reward-items research
+    pass (OD-61). This migration batch's manifest coverage (`TooCloseForComfortLevel` `changes` entry) was
+    added in this documentation pass without changing any provenance tier; no manifest rows/changes were
+    found for `WildernessHubFormingAlliances`, `WildernessHubReceptiveGate`, `WildernessHubReceptiveLevel`,
+    `WildernessHubConscientiousGate`, `WildernessHubConscientiousBranches`, `MissionItemDropChance`,
+    `MoawiDialogueClass`, `MissionSpeakerDialogueClasses` or `SolisCavernsPlacement` — flagged here as a
+    due-diligence gap, not fixed in this pass. See `docs/retail-accuracy.md`'s "2026-09-22 to 2026-09-24"
+    section for the full recovered-commit summary.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 - **World-data defects (2026-09-26, `WorldDefectsFix`)**: two audits of the deployed world corrected. Field Lt. Bagby and
@@ -1076,6 +1142,14 @@ its evidence tier.
 | OD-42 Missions 2010/2011 (2026-09-14, agent, pending owner review) | Held (not seeded) until a class-chosen trigger exists. Superseded for the seeded parts by OD-43 |
 | OD-43 Class-gear missions 2010/2011 (2026-09-15, agent, pending owner review) | Seed 2010/2011 now that the `class_selected` trigger exists and the reward identities are evidenced from the final client (the D11 new-player item block 122859-122871 and its class-owned skills 21/22 and 30/14); keep the world seed's creature 132 as Quartermaster Caufield with dialogue package 133. Use the D11 block's uniform world-seed quality (2) and trade/binding flags, the neutral 0 prices and the world seed's machine-gun/tool `itemtemplate_weapon` family row as labelled analogues; the reward XP/credits, the item prices, the weapon fields, the offer presentation and Caufield's final position stay open (`GAP-W2-*`) |
 | OD-59 Mission NPCs with no positional source (2026-09-26, agent, pending owner review) | Upstream's map-marker spawn position stays, on the navmesh floor, labelled analogue with the marker as counterpart and a named gap; applied to Field Ranger Kearney (510118) and Warrior Mela (510117). A dated reading replaces it |
+
+| OD-61 Forming Alliances reward estimates (2026-09-24, agent, pending owner review) | Mission 479's reward is seeded as a labelled estimate, not recovered final-live data: 50% drop chance, heart template 2285, reward level 5, and vest counterpart 13738 — recorded in `docs/evidence/wilderness-forming-alliances-research.json`'s `implementation_gaps`/`reward_vest_gap`. The vest's own naming conflicts with the separate 2026-09-26 reward-items research (`research/20260926-reward-items/README.md`), which reads the wiki as v6 while the seeded template is V04; the two research passes were not reconciled before this seed shipped |
+| OD-58 (manifest: Practice Dummy single-hit behavior) Practice dummy hit points (2026-09-24, agent, pending owner review) | `BootcampPracticeDummyHealthRows` sets `content_placement` 198652's `hit_points` to 1, inferred from five single-hit destructions timed in 7Lrst9SG3pk (347.133-361.200 s) against one observed 84-damage hit; the comment states plainly that "low health and a server script forcing destruction remain indistinguishable" and that this is not recovered original HP. The unfilmed Lightning target keeps its prior (pre-existing) estimate, untouched by this change |
+| OD-62 Boot-camp companion (Initiate) stats (2026-09-24, agent, pending owner review) | The camp's three named companion Initiates (Forean Gunner 198516, Archer 198517, Shaman 198518) have estimated position, health and attack: `BootcampCampGunnerCompanionRows` calls its own position/health/attack estimates out in-comment ("Individual position, health and attack are estimates"), and `BootcampCampArcherShamanCompanionsRows` borrows the Shaman staff's range/cooldown/damage from "the closest same-rank Forean companion action, not retail data." Equipment classes (Bow 10529, Staff 10533, GooGun 6238) are analogue assignments to the closest surviving original-client NPC weapon rows. Full field-by-field detail in `docs/evidence/bootcamp-camp-gunner-companion.json` and `docs/evidence/bootcamp-camp-archer-shaman-companions.json` |
+| OD-57 (manifest: McAllister walking pace) McAllister's walk speed (2026-09-22, agent, pending owner review) | `BootcampMcAllisterWalkRows` sets creature 198500's `walk_speed` to 2.5 m/s as an explicit analogue — the animation reference walk rate of his reconstructed human class, not a speed measured from the lost original spawn; no footage frame-times his walk over a known distance. Detail and the related retrigger-condition change (1990 turn-in to 1992 accepted) in `docs/bootcamp-opening-movement-audit.md` |
+| OD-63 Moawi's dialogue class (2026-09-24, agent, pending owner review) | `MoawiDialogueClassRows` reassigns creature 38 (Council Elder Moawi) from world-seed class Redshirt_Forean_Elder (6163, augmentation 1,59: creature/harvestable, unable to converse) to original client class 28415, chosen only because it shares the Forean elder mesh, class flags and NPC augmentation 52 needed to hold dialogue package 113. The migration's own comment calls this "an explicit class analogue; Moawi's final-live entity class has not been recovered" |
+| OD-64 Solis identity and placement (2026-09-24, agent, pending owner review) | `SolisCavernsPlacementRows` moves named spawnpool 184 (Council Elder Solis) onto disabled pool 92's original X/Z/rotation and a probed navmesh floor (786.8711, 287.32, 581.46875, rotation 3.0), because pool 184's dated position is obstructed by Moawi's hut geometry in the compatibility client and pool 92 already places an unnamed Forean shaman 2.2 m from the dated report at the same elevation. The migration's own comment calls this binding "inferred... not a recovered final-live server placement." Full provenance and remaining uncertainty in `docs/evidence/solis-caverns-placement.json` |
+| OD-65 Account-authentication 20-second wait (2026-09-22, agent, pending owner review) | `Auth.Client` defers only its first empty `ServerListExt` response for up to 20 seconds (`InitialServerListWaitMs`) so the existing game-registration broadcast can satisfy it, instead of showing a persistent "No servers found" dialog; later refreshes are immediate. `docs/evidence/live-auth-server-list-wait-20260923.json` states plainly this is "an emulator availability fix, not a proven final-live auth timeout," not a recovered original duration |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),
