@@ -71,3 +71,29 @@ segment before prioritizing later content. Implement shared systems when the
 current segment needs them. Use original-client reverse engineering,
 contemporary websites and gameplay videos, and other emulator projects as
 evidence, with their respective provenance and limitations recorded.
+
+# DIT game-server overlay
+
+When launching or relaunching the live Game container, keep the DIT companion
+overlay (Mira Vey and Tavin Rook) mounted:
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.dit.yml up -d --no-deps --no-build game
+```
+
+Starting from `docker-compose.yml` alone drops `/app/dit` and silently disables
+the companions and neuronet reporting. After a relaunch, confirm that
+`dit/status.json` has `"enabled": true` and a fresh `checkedAtUtc`, and that
+`docker inspect rasa-net-game-1` lists `/app/dit` among its mounts.
+
+The overlay image is the current base Game image plus
+`src/Rasa.Game/Dit/DitBotManager.cs` and `src/Rasa.Test/DitBotTests.cs`. After
+building a new base image, rebuild the DIT image from that base with those two
+files copied in and `dotnet build src/Rasa.Game/Rasa.Game.csproj`; update the
+image tag in `docker-compose.dit.yml` before relaunching. Do not retag or
+rebuild `rasa_net_game:latest` for DIT. Leave `src/Rasa.Game/Dit/`, the
+`Dit.DitBotManager` hooks in `Server.cs`, `CommunicatorManager.cs`,
+`PartyManager.cs`, `Client.cs` and `ClientFactory.cs`, and the `./dit` runtime
+files alone unless doing deliberate DIT work. The hub reads and writes `./dit`.
+If XP rates or server events change, update `dit/server-status.json` to match.
+Operator details: `~/dev/dit-human-behavior-platform-DIT-Neuronetwork/docs/operators/TABULA_RASA_TWO_BOT_TEST.md`.
