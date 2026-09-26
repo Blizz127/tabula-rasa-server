@@ -48,6 +48,7 @@ namespace Rasa.Managers
         {
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
             _getMonotonicMilliseconds = getMonotonicMilliseconds ?? (() => Environment.TickCount64);
+            PopulateContextCopy = PopulateCopy;
         }
 
         /// <summary>
@@ -106,9 +107,9 @@ namespace Rasa.Managers
                 return MapChannelArray[contextId];
         }
 
-        #region Private instances
+        #region Instances
 
-        /// <summary>Private per-character instances by instance id (never 0 or 1).</summary>
+        /// <summary>Every instance channel (per-character, per-squad, shared copies) by instance id (never 0 or 1).</summary>
         public readonly Dictionary<uint, MapChannel> InstanceChannels = new();
 
         private readonly Dictionary<uint, MapChannel> _characterInstances = new();
@@ -119,9 +120,40 @@ namespace Rasa.Managers
         public Func<uint, bool> IsPerCharacterContext { get; set; } = contextId =>
             MissionContentManager.Instance.Content.Catalog.InstancingFor(contextId) == MapInstancing.PerCharacter;
 
-        /// <summary>Fills a new instance with its context's content placements.</summary>
+        /// <summary>
+        /// Whether a context gives each squad its own copy (content_map_setting instancing 2, the final client's
+        /// MISSIONCONTEXT maps; migration MissionContextSquadInstancing).
+        /// </summary>
+        public Func<uint, bool> IsSquadContext { get; set; } = contextId =>
+            MissionContentManager.Instance.Content.Catalog.InstancingFor(contextId) == MapInstancing.PerSquad;
+
+        /// <summary>Fills a new per-character instance with its context's content placements (S3).</summary>
         public Action<MapChannel> PopulateInstance { get; set; } = channel =>
             ContentMaterializer.Materialize(channel, MissionContentManager.Instance.Content);
+
+        /// <summary>
+        /// Fills a new squad instance or shared copy with everything its context's primary channel was given at
+        /// startup: spawn pools, Logos shrines, teleporters, lockboxes, map links, the navmesh and the content
+        /// placements. TaRapedia 'Operation' rev 32773 (2008-09-04): "the server creates an identical copy of the zone".
+        /// </summary>
+        public Action<MapChannel> PopulateContextCopy { get; set; }
+
+        /// <summary>
+        /// How long an emptied squad instance its squad (or solo owner) can still re-enter is kept before it is
+        /// destroyed (OD-126). Dated evidence says an empty instance is not reset at once - official notes 2007-11-29
+        /// "re-enters it before the instance resets", 2008-08-22 "leaves the instance (allowing it to reset)" - and
+        /// TaRapedia 'Operation' rev 32773 (2008-09-04, a player): "You need to be out of the instance for a set period
+        /// of time for it to fully reset. I've found that ten minutes works." 600 000 ms is that observed upper bound
+        /// (measured, 0-10 min); the original timer is unrecovered (GAP-INSTANCE-RESET-TIMER).
+        /// </summary>
+        public long SquadInstanceEmptyLingerMs { get; set; } = 600_000;
+
+        /// <summary>
+        /// Players one copy of a shared context holds before another numbered copy is opened (OD-127); null keeps a
+        /// context to its one primary channel. No client table or dated source gives the original capacity
+        /// (GAP-SHARED-COPY-CAPACITY), so no context is capped by default.
+        /// </summary>
+        public Func<uint, int?> SharedCopyCapacity { get; set; } = _ => null;
 
         /// <summary>Every live channel, shared contexts first; a snapshot safe across instance creation and removal.</summary>
         public List<MapChannel> Channels()
@@ -152,58 +184,204 @@ namespace Rasa.Managers
                 : dynamicObject.MapContextId == channel.MapInfo?.MapContextId);
 
         /// <summary>
-        /// The channel a character enters for a context: the shared channel, or for a per-character
-        /// context a new private instance (build plan S3, OD-2). A previous instance of the same
-        /// character is released, so one character never holds two. Null for an unknown context.
+        /// The channel a character enters for a context: the shared channel; for a per-character context a new
+        /// private instance (build plan S3, OD-2), releasing the character's previous one; for a per-squad context
+        /// the copy its squad already has, else a new one bound to that squad - or, outside a squad, to the
+        /// character. Null for an unknown context.
+        ///
+        /// A copy stays bound to whoever created it. A solo player who invites someone while inside keeps their own
+        /// copy, and the invitee who then enters gets the squad's copy; the leader reaches it only by leaving and
+        /// re-entering - the D10 and D13 live known issue ("after the squad leader exits and re-enters the
+        /// instance, he will be placed in the same instance as the invited character"), kept as documented (OD-125).
         /// </summary>
-        public MapChannel ChannelForEntry(uint characterId, uint contextId)
+        public MapChannel ChannelForEntry(uint characterId, uint contextId, uint partyId = 0)
         {
             lock (_channelRegistryLock)
             {
                 if (!MapChannelArray.TryGetValue(contextId, out var shared))
                     return null;
 
-                if (!IsPerCharacterContext(contextId))
-                    return shared;
+                if (IsPerCharacterContext(contextId))
+                    return PerCharacterInstance(characterId, shared);
 
-                if (_characterInstances.TryGetValue(characterId, out var previous))
-                {
-                    _characterInstances.Remove(characterId);
-                    ReleaseInstanceIfEmpty(previous);
-                }
+                if (IsSquadContext(contextId))
+                    return SquadInstance(characterId, partyId, shared);
+
+                return shared;
+            }
+        }
+
+        private MapChannel PerCharacterInstance(uint characterId, MapChannel shared)
+        {
+            if (_characterInstances.TryGetValue(characterId, out var previous))
+            {
+                _characterInstances.Remove(characterId);
+                ReleaseInstanceIfEmpty(previous);
+            }
+
+            var channel = new MapChannel
+            {
+                MapInfo = shared.MapInfo,
+                InstanceId = ++_lastInstanceId,
+                OwnerCharacterId = characterId,
+                PlayerLimit = 1,
+                ClientList = new List<Client>()
+            };
+
+            // OD-2 (approved 2026-09-14): monotonic instance ids, which Wonkavate has carried since S3.
+            channel.Ordinal = channel.InstanceId;
+
+            InstanceChannels.Add(channel.InstanceId, channel);
+            _characterInstances[characterId] = channel;
+            PopulateInstance(channel);
+
+            Logger.WriteLog(LogType.Debug, $"Created instance {channel.InstanceId} of context {shared.MapInfo.MapContextId} for character {characterId}");
+            return channel;
+        }
+
+        private MapChannel SquadInstance(uint characterId, uint partyId, MapChannel shared)
+        {
+            var contextId = shared.MapInfo.MapContextId;
+            var existing = InstanceChannels.Values.FirstOrDefault(channel =>
+                channel.IsSquadInstance && channel.MapInfo.MapContextId == contextId &&
+                (partyId != 0 ? channel.OwnerPartyId == partyId : channel.OwnerPartyId == null && channel.OwnerSoloCharacterId == characterId));
+
+            if (existing != null)
+            {
+                // Re-entered before it was reset: the same copy, with whatever was killed still dead.
+                _instancesToDestroy.Remove(existing);
+                existing.EmptySince = 0;
+                return existing;
+            }
+
+            var channel = new MapChannel
+            {
+                MapInfo = shared.MapInfo,
+                InstanceId = ++_lastInstanceId,
+                IsSquadInstance = true,
+                OwnerPartyId = partyId != 0 ? partyId : null,
+                OwnerSoloCharacterId = partyId == 0 ? characterId : null,
+                Ordinal = NextOrdinal(contextId),
+                // client shared/gameconstants.pyo MAX_PARTY_SIZE = 6: one squad.
+                PlayerLimit = 6,
+                ClientList = new List<Client>()
+            };
+
+            InstanceChannels.Add(channel.InstanceId, channel);
+            PopulateContextCopy(channel);
+
+            Logger.WriteLog(LogType.Debug, $"Created squad instance {channel.InstanceId} ({channel.Ordinal}) of context {contextId} for " +
+                (partyId != 0 ? $"squad {partyId}" : $"character {characterId}"));
+            return channel;
+        }
+
+        /// <summary>The lowest copy number no live channel of the context holds (a shared context's primary is 1).</summary>
+        private uint NextOrdinal(uint contextId)
+        {
+            var used = new HashSet<uint>(InstanceChannels.Values
+                .Where(channel => channel.MapInfo?.MapContextId == contextId && !channel.IsPrivateInstance)
+                .Select(channel => channel.Ordinal));
+
+            if (!IsSquadContext(contextId) && !IsPerCharacterContext(contextId))
+                used.Add(1);
+
+            uint ordinal = 1;
+            while (used.Contains(ordinal))
+                ordinal++;
+
+            return ordinal;
+        }
+
+        /// <summary>The primary channel and numbered copies of a shared context, lowest number first.</summary>
+        public List<MapChannel> CopiesOf(uint contextId)
+        {
+            lock (_channelRegistryLock)
+            {
+                var copies = new List<MapChannel>();
+
+                if (MapChannelArray.TryGetValue(contextId, out var primary))
+                    copies.Add(primary);
+
+                copies.AddRange(InstanceChannels.Values
+                    .Where(channel => channel.IsSharedCopy && channel.MapInfo?.MapContextId == contextId)
+                    .OrderBy(channel => channel.Ordinal));
+
+                return copies;
+            }
+        }
+
+        /// <summary>
+        /// Opens another numbered copy of a shared context (OD-127). The final client names such copies itself -
+        /// "Empire Sector: The Last Stand(1)" to "(5)" on the shutdown night, which players called "Earth 1".."Earth 5".
+        /// </summary>
+        public MapChannel OpenSharedCopy(uint contextId)
+        {
+            lock (_channelRegistryLock)
+            {
+                if (!MapChannelArray.TryGetValue(contextId, out var shared) || IsSquadContext(contextId) || IsPerCharacterContext(contextId))
+                    return null;
 
                 var channel = new MapChannel
                 {
                     MapInfo = shared.MapInfo,
                     InstanceId = ++_lastInstanceId,
-                    OwnerCharacterId = characterId,
-                    PlayerLimit = 1,
+                    IsSharedCopy = true,
+                    Ordinal = NextOrdinal(contextId),
+                    PlayerLimit = shared.PlayerLimit,
                     ClientList = new List<Client>()
                 };
 
                 InstanceChannels.Add(channel.InstanceId, channel);
-                _characterInstances[characterId] = channel;
-                PopulateInstance(channel);
+                PopulateContextCopy(channel);
 
-                Logger.WriteLog(LogType.Debug, $"Created instance {channel.InstanceId} of context {contextId} for character {characterId}");
+                Logger.WriteLog(LogType.Debug, $"Opened copy {channel.Ordinal} (instance {channel.InstanceId}) of shared context {contextId}");
                 return channel;
             }
         }
 
-        /// <summary>Queues a private instance with nobody in or entering it for destruction after the tick.</summary>
+        /// <summary>The channel for an id the client sent back (SelectWaypoint, SelectInstance); null when unknown.</summary>
+        public MapChannel ChannelByMapInstanceId(uint mapInstanceId)
+        {
+            lock (_channelRegistryLock)
+            {
+                if (mapInstanceId > MapChannel.InstanceMapIdBase)
+                    return InstanceChannels.TryGetValue(mapInstanceId - MapChannel.InstanceMapIdBase, out var instance) ? instance : null;
+
+                return MapChannelArray.TryGetValue(mapInstanceId, out var shared) ? shared : null;
+            }
+        }
+
+        /// <summary>
+        /// The population status the waypoint window and the instance chooser show beside a copy (client
+        /// shared/gameconstants.pyo POPULATION_LOW 1 .. POPULATION_FULL 4). Only FULL is derived, at a configured
+        /// capacity (OD-127); the original thresholds for MEDIUM and HIGH are unrecovered (GAP-SHARED-COPY-CAPACITY).
+        /// </summary>
+        public MapInstanceStatus StatusOf(MapChannel channel)
+        {
+            var capacity = channel?.MapInfo == null ? null : SharedCopyCapacity(channel.MapInfo.MapContextId);
+            return capacity is int limit && Occupancy(channel) >= limit ? MapInstanceStatus.Full : MapInstanceStatus.Low;
+        }
+
+        private static int Occupancy(MapChannel channel) => channel.ClientList.Count + channel.QueuedClients.Count;
+
+        /// <summary>Queues an instance with nobody in or entering it for destruction after the tick.</summary>
         public void ReleaseInstanceIfEmpty(MapChannel channel)
         {
             lock (_channelRegistryLock)
             {
-                if (channel?.IsPrivateInstance == true && channel.ClientList.Count == 0 && channel.QueuedClients.Count == 0 &&
+                if (channel?.IsInstance == true && channel.ClientList.Count == 0 && channel.QueuedClients.Count == 0 &&
                     !_instancesToDestroy.Contains(channel))
+                {
+                    channel.EmptySince = _getMonotonicMilliseconds();
                     _instancesToDestroy.Add(channel);
+                }
             }
         }
 
         /// <summary>
         /// Destroys the queued instances that are still empty: their creatures (with their corpses'
         /// loot) and objects leave the entity tables and free their ids, and the channel is dropped.
+        /// A squad instance its owner can still re-enter waits out <see cref="SquadInstanceEmptyLingerMs"/> first.
         /// Runs after the map worker, never while it iterates.
         /// </summary>
         public void DestroyQueuedInstances()
@@ -213,41 +391,253 @@ namespace Rasa.Managers
                 if (_instancesToDestroy.Count == 0)
                     return;
 
+                var now = _getMonotonicMilliseconds();
+                var waiting = new List<MapChannel>();
+
                 foreach (var channel in _instancesToDestroy.ToList())
                 {
                     if (channel.ClientList.Count > 0 || channel.QueuedClients.Count > 0)
-                        continue;
-
-                    foreach (var cell in channel.MapCellInfo.Cells.Values)
-                        foreach (var creature in cell.CreatureList.ToList())
-                            CellManager.Instance.RemoveCreatureFromWorld(channel, creature);
-
-                    foreach (var dynamicObject in channel.DynamicObjects.ToList())
                     {
-                        EntityManager.Instance.UnregisterEntity(dynamicObject.EntityId);
-                        EntityManager.Instance.UnregisterDynamicObject(dynamicObject.EntityId);
-                        EntityManager.Instance.FreeEntity(dynamicObject.EntityId);
+                        channel.EmptySince = 0;
+                        continue;
                     }
 
-                    foreach (var loot in channel.LootDispensers.Keys.ToList())
-                        EntityManager.Instance.FreeEntity(loot);
+                    var rejoinable = channel.IsSquadInstance && (channel.OwnerPartyId != null || channel.OwnerSoloCharacterId != null);
+                    if (rejoinable && now - channel.EmptySince < SquadInstanceEmptyLingerMs)
+                    {
+                        waiting.Add(channel);
+                        continue;
+                    }
 
-                    channel.DynamicObjects.Clear();
-                    channel.ContentUsables.Clear();
-                    channel.LootDispensers.Clear();
-                    channel.MapCellInfo.Cells.Clear();
-
-                    InstanceChannels.Remove(channel.InstanceId);
-                    if (channel.OwnerCharacterId is uint owner &&
-                        _characterInstances.TryGetValue(owner, out var current) && ReferenceEquals(current, channel))
-                        _characterInstances.Remove(owner);
-
-                    Logger.WriteLog(LogType.Debug, $"Destroyed instance {channel.InstanceId} of context {channel.MapInfo?.MapContextId}");
+                    Destroy(channel);
                 }
 
                 _instancesToDestroy.Clear();
+                _instancesToDestroy.AddRange(waiting);
             }
         }
+
+        private void Destroy(MapChannel channel)
+        {
+            foreach (var cell in channel.MapCellInfo.Cells.Values)
+                foreach (var creature in cell.CreatureList.ToList())
+                    CellManager.Instance.RemoveCreatureFromWorld(channel, creature);
+
+            var objects = channel.DynamicObjects
+                .Concat(channel.Teleporters.Values)
+                .Concat(channel.FootLockers.Values)
+                .Concat(channel.ControlPoints.Values)
+                .Distinct()
+                .ToList();
+
+            foreach (var dynamicObject in objects)
+            {
+                EntityManager.Instance.UnregisterEntity(dynamicObject.EntityId);
+                EntityManager.Instance.UnregisterDynamicObject(dynamicObject.EntityId);
+                EntityManager.Instance.FreeEntity(dynamicObject.EntityId);
+            }
+
+            foreach (var loot in channel.LootDispensers.Keys.ToList())
+                EntityManager.Instance.FreeEntity(loot);
+
+            // A Bane dropship still bringing an instance pool's creatures has nowhere to land.
+            DynamicObjectManager.Instance.DropChannelDropships(channel);
+
+            channel.DynamicObjects.Clear();
+            channel.Teleporters.Clear();
+            channel.FootLockers.Clear();
+            channel.ControlPoints.Clear();
+            channel.ContentUsables.Clear();
+            channel.LootDispensers.Clear();
+            channel.SpawnPools?.Clear();
+            channel.MapCellInfo.Cells.Clear();
+
+            InstanceChannels.Remove(channel.InstanceId);
+            if (channel.OwnerCharacterId is uint owner &&
+                _characterInstances.TryGetValue(owner, out var current) && ReferenceEquals(current, channel))
+                _characterInstances.Remove(owner);
+
+            Logger.WriteLog(LogType.Debug, $"Destroyed instance {channel.InstanceId} of context {channel.MapInfo?.MapContextId}");
+        }
+
+        private void PopulateCopy(MapChannel channel)
+        {
+            var contextId = channel.MapInfo.MapContextId;
+
+            if (TryFindByContextId(contextId, out var primary))
+            {
+                channel.NavMesh = primary.NavMesh;
+                DynamicObjectManager.Instance.CopyStaticObjects(primary, channel);
+            }
+
+            foreach (var link in MapLinkManager.Instance.Links.Where(link => link.MapContextId == contextId).ToList())
+                CellManager.Instance.AddToWorld(channel, link);
+
+            channel.SpawnPools = SpawnPoolManager.Instance.LoadedSpawnPools.Values
+                .Where(pool => pool.MapContextId == contextId)
+                .Select(pool => pool.CopyFor(channel))
+                .ToList();
+
+            ContentMaterializer.Materialize(channel, MissionContentManager.Instance.Content);
+        }
+
+        /// <summary>
+        /// Takes a player out of the squad instance they are in, back to the map they entered it from (see
+        /// <see cref="Manifestation.InstanceReturn"/>). With <paramref name="noLongerInSquad"/> the client is told
+        /// why (PM 1058 PM_BOOTED_FROM_MAP). False when they are not in a squad instance or have nowhere to go.
+        /// </summary>
+        public bool ReturnFromSquadInstance(Client client, bool noLongerInSquad)
+        {
+            var player = client?.Player;
+            var channel = player?.MapChannel;
+
+            if (channel?.IsSquadInstance != true || client.State != ClientState.Ingame)
+                return false;
+
+            var destination = ReturnPointFor(player, channel.MapInfo.MapContextId);
+
+            if (destination == null)
+            {
+                Logger.WriteLog(LogType.Error, $"{player.FamilyName} cannot leave instance {channel.InstanceId} of context {channel.MapInfo.MapContextId}: no return point");
+                return false;
+            }
+
+            var (mapContextId, position, rotation) = destination.Value;
+
+            if (!ChangeMap(client, mapContextId, position, rotation))
+                return false;
+
+            if (noLongerInSquad)
+                client.CallMethod(SysEntity.CommunicatorId, new Packets.Communicator.Server.DisplayClientMessagePacket(
+                    PlayerMessage.PmBootedFromMap, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+
+            return true;
+        }
+
+        /// <summary>
+        /// Where a player leaving an instance goes: the instance's own exit link to the map they came from (the
+        /// arrival point the link was built with), else the spot they left that map from, else - after a restart
+        /// lost it - the instance's first exit link. TaRapedia 'Operation': "you can only leave them towards the
+        /// same zone you entered from".
+        /// </summary>
+        private static (uint, Vector3, float)? ReturnPointFor(Manifestation player, uint instanceContextId)
+        {
+            var exits = MapLinkManager.Instance.Links
+                .Where(link => link.MapContextId == instanceContextId && link.Enabled && link.DestMapContextId != instanceContextId)
+                .OrderBy(link => link.Id)
+                .ToList();
+
+            if (player.InstanceReturn is { } previous)
+            {
+                var exit = exits.FirstOrDefault(link => link.DestMapContextId == previous.MapContextId);
+                return exit != null ? (exit.DestMapContextId, exit.DestPosition, exit.DestRotation) : previous;
+            }
+
+            var first = exits.FirstOrDefault();
+            return first != null ? (first.DestMapContextId, first.DestPosition, first.DestRotation) : null;
+        }
+
+        /// <summary>
+        /// A squad member has left or been kicked (PartyManager): out of the squad's instance with PM 1058. The
+        /// client warned them first (party.OnLeaveParty: PM 946 "You will have to leave the current map." while
+        /// SquadMemberList said partyExclusiveMap).
+        /// </summary>
+        public void SquadMemberRemoved(Client client, uint partyId)
+        {
+            var channel = client?.Player?.MapChannel;
+
+            if (channel?.IsSquadInstance == true && channel.OwnerPartyId == partyId)
+                ReturnFromSquadInstance(client, true);
+        }
+
+        /// <summary>
+        /// A squad has disbanded: its copies can no longer be joined (a recycled squad id must not find them), and
+        /// everyone inside is sent out - PM 945 "All squad members will be kicked out of the current map."
+        /// </summary>
+        public void SquadDisbanded(uint partyId, IEnumerable<Client> members)
+        {
+            var orphaned = new List<MapChannel>();
+
+            lock (_channelRegistryLock)
+                foreach (var channel in InstanceChannels.Values.Where(channel => channel.IsSquadInstance && channel.OwnerPartyId == partyId))
+                {
+                    channel.OwnerPartyId = null;
+                    orphaned.Add(channel);
+                }
+
+            foreach (var member in members)
+                if (orphaned.Contains(member?.Player?.MapChannel))
+                    ReturnFromSquadInstance(member, true);
+        }
+
+        /// <summary>A squad id that has gone out of use without its members leaving (a merge): its copies can no longer be joined.</summary>
+        public void SquadRetired(uint partyId)
+        {
+            lock (_channelRegistryLock)
+                foreach (var channel in InstanceChannels.Values.Where(channel => channel.IsSquadInstance && channel.OwnerPartyId == partyId))
+                    channel.OwnerPartyId = null;
+        }
+
+        #endregion
+
+        #region Shared copies: the instance chooser
+
+        /// <summary>
+        /// The copies of a shared context offered to a player entering it, with their status; a new copy is opened
+        /// first when every copy is at the configured capacity (OD-127). More than one means the client chooses;
+        /// a full one stays listed, and choosing it is answered with PM 934 "You cannot go to that map at this
+        /// time. Please select another map."
+        /// </summary>
+        public List<MapChannel> EntryCandidates(uint contextId)
+        {
+            var copies = CopiesOf(contextId);
+
+            if (copies.Count > 0 && copies.All(channel => StatusOf(channel) == MapInstanceStatus.Full) && OpenSharedCopy(contextId) is { } fresh)
+                copies.Add(fresh);
+
+            return copies;
+        }
+
+        /// <summary>
+        /// clientmethod.Recv_ChooseInstanceList ("display an instance list the user can choose from to go to a
+        /// shared map"): the zone change waits for SelectInstance or SelectInstanceCancel. Live notes 2007-07-24:
+        /// "Zoning into shared world maps will give you a choice of instances to go to if there's more than available."
+        /// </summary>
+        private void OfferInstanceChoice(Client client, uint contextId, Vector3 position, float rotation, List<MapChannel> candidates)
+        {
+            client.PendingInstanceChoice = (contextId, position, rotation);
+            client.CallMethod(SysEntity.ClientMethodId, new ChooseInstanceListPacket(candidates
+                .Select(channel => new ChooseInstanceListPacket.Entry(channel.Ordinal, channel.MapInstanceId, channel.MapInfo.MapContextId, StatusOf(channel)))
+                .ToList()));
+        }
+
+        /// <summary>clientmethod.OnGotoInstance: SelectInstance(mapId, startGroup) - "which instance they've chosen to go to".</summary>
+        public void SelectInstance(Client client, uint mapInstanceId)
+        {
+            if (client.PendingInstanceChoice is not { } pending || client.State != ClientState.Ingame)
+                return;
+
+            client.PendingInstanceChoice = null;
+            var target = ChannelByMapInstanceId(mapInstanceId);
+
+            if (target?.MapInfo?.MapContextId != pending.MapContextId || (target.IsInstance && !target.IsSharedCopy))
+            {
+                Logger.WriteLog(LogType.Debug, $"SelectInstance: {client.Player?.FamilyName} chose unknown copy {mapInstanceId} of context {pending.MapContextId}");
+                return;
+            }
+
+            if (StatusOf(target) == MapInstanceStatus.Full)
+            {
+                client.CallMethod(SysEntity.CommunicatorId, new Packets.Communicator.Server.DisplayClientMessagePacket(
+                    PlayerMessage.PmYouCannotGoToThatMapAtThisTimeRetry, new Dictionary<string, string>(), MsgFilterId.GeneralSystemMessages));
+                return;
+            }
+
+            ChangeMap(client, pending.MapContextId, pending.Position, pending.Rotation, target);
+        }
+
+        /// <summary>clientmethod.OnGotoInstanceCancel: "Tell the server we no longer want to zone out" - the player stays.</summary>
+        public void SelectInstanceCancel(Client client) => client.PendingInstanceChoice = null;
 
         #endregion
 
@@ -465,7 +855,7 @@ namespace Rasa.Managers
             if (client.State == ClientState.Teleporting)
             {
                 var dropship = new Dropship(Factions.AFS, DropshipType.Teleporter, client);
-                var mapChannel = ChannelForEntry(client.Player.Id, client.LoadingMap);
+                var mapChannel = ChannelForEntry(client.Player.Id, client.LoadingMap, PartyManager.Instance.PartyOf(client)?.Id ?? 0);
 
                 client.Player.MapChannel = mapChannel;
                 client.Player.MapContextId = dropship.Client.LoadingMap;
@@ -554,7 +944,7 @@ namespace Rasa.Managers
             client.CallMethod(SysEntity.CurrentInputStateId, new WonkavatePacket
                (
                    mapInstance.MapInfo.MapContextId,
-                   mapInstance.InstanceId,
+                   mapInstance.Ordinal,
                    mapInstance.MapInfo.MapVersion,
                     client.Player.Position,
                    (float)client.Player.Rotation
@@ -576,13 +966,40 @@ namespace Rasa.Managers
         /// threw KeyNotFoundException on the main loop.
         /// </summary>
         /// <returns>false when the map is not loaded or the player is not in a state to move.</returns>
-        public bool ChangeMap(Client client, uint mapContextId, Vector3 position, float orientation)
+        /// <param name="target">
+        /// A specific channel of the context (a chosen shared copy, a summoner's instance); null resolves it:
+        /// the squad's instance, a character's own instance, or - for a shared context with more than one copy -
+        /// the client's instance chooser, which holds the move until SelectInstance.
+        /// </param>
+        public bool ChangeMap(Client client, uint mapContextId, Vector3 position, float orientation, MapChannel target = null)
         {
             if (client.Player == null || client.State != ClientState.Ingame)
                 return false;
 
             if (!MapChannelArray.ContainsKey(mapContextId))
                 return false;
+
+            if (target != null && target.MapInfo?.MapContextId != mapContextId)
+                return false;
+
+            if (target == null && !IsSquadContext(mapContextId) && !IsPerCharacterContext(mapContextId))
+            {
+                var candidates = EntryCandidates(mapContextId);
+
+                if (candidates.Count > 1)
+                {
+                    OfferInstanceChoice(client, mapContextId, position, orientation, candidates);
+                    return true;
+                }
+
+                target = candidates.FirstOrDefault();
+            }
+
+            client.PendingInstanceChoice = null;
+
+            // Read before DetachFromMap, which clears the squad id until the player is back in the world.
+            var partyId = PartyManager.Instance.PartyOf(client)?.Id ?? 0;
+            var previous = client.Player.MapChannel;
 
             client.CallMethod(SysEntity.ClientMethodId, new PreWonkavatePacket());
             client.State = ClientState.Loading;
@@ -591,8 +1008,14 @@ namespace Rasa.Managers
             // managers that track it, and the old ClientList.
             DetachFromMap(client);
 
-            // The shared channel, or a fresh private instance for a per-character context.
-            var mapChannel = ChannelForEntry(client.Player.Id, mapContextId);
+            // The shared channel, or a fresh private instance for a per-character context, or the squad's copy.
+            var mapChannel = target ?? ChannelForEntry(client.Player.Id, mapContextId, partyId);
+
+            // Where leaving a squad instance goes back to: the map they entered it from.
+            if (!mapChannel.IsSquadInstance)
+                client.Player.InstanceReturn = null;
+            else if (previous?.IsSquadInstance != true && previous?.MapInfo != null)
+                client.Player.InstanceReturn = (previous.MapInfo.MapContextId, client.Player.Position, (float)client.Player.Rotation);
 
             // What MapLoaded reads back when the client is ready: the map channel it adds the
             // player to, and the position the cell matrix is built from.
@@ -604,7 +1027,7 @@ namespace Rasa.Managers
 
             var packet = new WonkavatePacket(
                 mapChannel.MapInfo.MapContextId,
-                mapChannel.InstanceId,
+                mapChannel.Ordinal,
                 mapChannel.MapInfo.MapVersion,
                 position,
                 orientation);
@@ -613,6 +1036,7 @@ namespace Rasa.Managers
             client.AwaitingMapLoaded = true;
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Position, packet);
             mapChannel.ClientList.Add(client);
+            mapChannel.EmptySince = 0;
 
             return true;
         }

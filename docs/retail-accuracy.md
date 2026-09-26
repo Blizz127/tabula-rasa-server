@@ -4464,3 +4464,80 @@ OD-120 to OD-124, agent-approved and pending owner review.
   the measured cadence tick by tick, disconnect of every client only at 37.1 s and once, cancel, the uniform
   variant and argument checks, an orderly end of stream on a real loopback socket, and the evidence file and
   manifest against the implementation.
+
+## 2026-09-27 — Instancing: squad copies of the mission maps, the instance chooser and the way out
+
+Before this, every map but the boot camp was one shared channel (segment-3 audit `SEG3-INSTANCING`): two squads in
+Pravus Research met each other and shared its creatures and mission objects. The final client was decoded
+statically (xdis; `research/20260926-instancing-mechanics/`, hashes in `work/SHA256SUMS`) and read against dated
+notes before anything was built. Migration `MissionContextSquadInstancing`; code in `MapChannelManager`,
+`DynamicObjectManager`, `PartyManager`; decisions OD-125 to OD-129, agent-approved and pending owner review.
+
+- **Which maps are instances comes from the client.** `gamecontext.pyo` gives every context a type;
+  `gamecontexttype.pyo` names 5 MISSIONCONTEXT and 4 BATTLEFIELDCONTEXT. The loading screen shows its "Instance"
+  widget for type 5 and "Persistent" for type 4 (`wonkavatorwindow` Init line 102), and entering a type-5 map other
+  than 1985 posts the INSTANCE_ENTERED tip (`wonkavator.OnExitState` lines 111-112). The 53 loaded type-5 contexts
+  (all but the boot camp) become per-squad (`content_map_setting` instancing 2): the Divide's Minos Caverns, Timora
+  Mines, Torcastra Prison and Purgas Station; the Wilderness's Pravus Research, Crater Lake Research Facility, Caves of
+  Donn, Guardian Prominence, The Empire Sector (2327) and Epic Caves of Donn; the Palisades' Warnet Caverns, Devil's
+  Den, Treeback Camp, Eloh Temples and Eloh Vale; and the Valverde, Torden and Ligo instances down to Omega Labs, The
+  Gauntlet and Dybukkar Garrison. The list, with each row's client offset, is in
+  `MissionContextSquadInstancingRows` and the manifest. TaRapedia's Category:Instances names 48 of them. The boot camp
+  stays per-character (OD-2). Context 2375 "Empire Sector: The Last Stand" is type 4, "Empire Sector shared map for
+  endgame event", so it stays shared.
+- **One copy per squad.** TaRapedia "Operation" rev 32773 (2008-09-04): "the server creates an identical copy of the
+  zone for each party that enters it". `ChannelForEntry` finds the squad's copy or makes one. A player outside a squad
+  gets their own. A copy is populated from everything the context's primary channel was loaded with: its own spawn
+  pools (fresh counters), Logos shrines, teleporter pads, lockboxes, map links, navmesh and content placements
+  (`PopulateContextCopy`). The primary channel of a per-squad context is only the template; nobody enters it.
+- **The live invite quirk is kept (OD-125).** D10 (2008-07-23) and D13 (2008-10-15) list, as a known issue:
+  "Inviting a player into your squad while you are in an instance will not initially allow the invited player to
+  join the same instance as the squad leader ... after the squad leader exits and re-enters the instance, he will be
+  placed in the same instance as the invited character." A copy is bound to whoever created it, the squad or a solo
+  character, and that binding reproduces the quirk. No later note says it was fixed
+  (`GAP-SQUAD-INVITE-QUIRK-FINAL-STATE`).
+- **Leaving the squad leaves the instance.** "/leave: ... This will also remove you from an instance" (TaRapedia
+  Beginners Guide rev 35313, 2008-10-23). The client warns first: `SquadMemberList`'s `partyExclusiveMap`, which was
+  always false and is now true inside a squad copy, makes `party.OnLeaveParty` ask PM 946 "You will have to leave the
+  current map". Disbanding uses PM 945, "All squad members will be kicked out of the current map". Leaving, being
+  kicked or the squad disbanding sends the player back with PM 1058, "You have been sent back to your previous map
+  because you are no longer in the squad." A disbanded squad's copies can no longer be joined, because squad ids are
+  recycled.
+- **The way out (OD-129).** `Recv_EnteredWaypoint` says: "if waypoints is None, user is on an adventure, and they can
+  only abort the mission". The client then lists PM 315 "Leave current adventure" as waypoint 0. Inside a squad copy
+  the map-waypoint list is now that one row, and `SelectWaypoint(mapId, 0)` from the pad returns the player. Local
+  teleporters inside instances are unchanged. The return point is the instance's own exit link to the map the player
+  came from, else the spot they left that map from, else, after a restart, its first exit link. This follows "you can
+  only leave them towards the same zone you entered from". Logging out inside still logs back in there (live
+  2007-08-07).
+- **An empty copy is not reset at once (OD-126).** The notes say "re-enters it before the instance resets" (live
+  2007-11-29) and "leaves the instance (allowing it to reset)" (2008-08-22). A player wrote "I've found that ten
+  minutes works". A copy its squad can re-enter is kept 600 s after it empties: measured, an upper bound 0-10 min
+  (`GAP-INSTANCE-RESET-TIMER`). A disbanded squad's copy goes at once. The boot camp keeps OD-2's immediate
+  destruction.
+- **Numbered copies and the chooser (OD-127).** `Recv_ChooseInstanceList(instances)` (method 685): "display an
+  instance list the user can choose from to go to a shared map". Each entry is `(ordinal, instanceId, mapTemplateId,
+  startGroup, overloadedStatus)` (`waypointwindow.ShowInstances` line 470). The client answers with
+  `SelectInstance(mapId, startGroup)` (687) or `SelectInstanceCancel()` (688, "we no longer want to zone out"). Live
+  notes 2007-07-24 say "Zoning into shared world maps will give you a choice of instances", and 2007-08-21 added a
+  "waypoint window that allows user to change between instances of the same map". Both are built. With more than one
+  copy of a shared map, entering waits on the chooser, which lists every copy with its status. Choosing a full one
+  gets PM 934 "Please select another map". The waypoint window lists one row per copy, where it used to send one
+  identical row per waypoint, and choosing another copy's waypoint moves the player there. The template id is the
+  client's (`ClientMapTemplates`, from `gamecontext.pyo` column 3). Copies open only at a configured per-context
+  capacity, and none is configured (`GAP-SHARED-COPY-CAPACITY`). The Last Stand's "Earth 1"-"Earth 5" are therefore
+  not opened, and its content remains a gap (`GAP-LAST-STAND-COPIES`).
+- **What a copy is called (OD-128).** The client prints Wonkavate's `instanceId` after the map name, "Name(n)", on
+  the loading screen (`wonkavatorwindow._UpdateLoadingScreen` line 408) and in the map window header
+  (`mapwindow._UpdateMapName` line 1772). The same "(n)" follows the ordinal in both instance lists. Players' "Earth 1"
+  to "Earth 5" fit small numbers per context. Wonkavate now carries the copy's number: the lowest free one, with 1 for
+  a shared primary. The boot camp keeps its approved monotonic id. The id the client echoes back is the context id
+  for a primary channel and 0x40000000 plus the instance id for a copy.
+- **Not built:** missions that fail or reset on leaving an instance (`GAP-INSTANCE-MISSION-RESET`), expulsion on
+  death in hospital-less instances (`GAP-INSTANCE-DEATH-EXIT`), start groups (`GAP-INSTANCE-START-GROUPS`, None is
+  sent), and any lockout: no dated source mentions one, so none exists. The boot camp's per-character instances have
+  never had a navmesh (only primary channels load one). This is recorded for review and not changed here.
+- `SquadInstanceTests` covers creation, squad joining, solo copies, the invite quirk, isolation at identical
+  coordinates, population from the whole context, the linger and destruction with creatures, disbanding, the return
+  on leaving the squad, "Leave current adventure", the chooser flow, and the byte shapes of ChooseInstanceList,
+  SelectInstance, EnteredWaypoint with None waypoints and SquadMemberList's flag. It also checks the manifest rows.

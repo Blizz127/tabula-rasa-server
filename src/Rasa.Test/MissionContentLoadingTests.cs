@@ -278,7 +278,7 @@ namespace Rasa.Test
                 ContentPlacementBehavior.Escort,
                 ContentPlacementBehavior.CombatCompanion }, implemented.PlacementBehaviors.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure }, implemented.UsableKinds.ToArray());
-            CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
+            CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter, MapInstancing.PerSquad }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
             Assert.IsTrue(implemented.Timers && implemented.Indicators);
             // Placement respawn became a real mechanic on 2026-09-16: the Mires species clusters are seeded with
@@ -942,6 +942,9 @@ namespace Rasa.Test
                     // 1148 is the Divide, where the four NPCs W3 batch 5 creates stand; 1244 Palisades, which the
                     // Liaison missions' receivers are in.
                     context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10), (1394, 'adv_foreas_concordia_palisades_devilsden', 327, 0), (1397, 'adv_foreas_concordia_palisades_treebackcamp', 286, 0), (1347, 'adv_foreas_concordia_divide_minoscaverns', 293, 4), (1773, 'adv_arieki_torden_plains_attacolony', 274, 0), (2034, 'adv_arieki_torden_plains_penalresearch', 230, 0), (1430, 'adv_foreas_concordia_wilderness_pravusresearch', 555, 0), (1506, 'adv_foreas_concordia_wilderness_cavesofdonn02', 535, 8), (1502, 'adv_foreas_valverde_plateau_ustoryard', 187, 9), (1721, 'adv_foreas_concordia_wilderness_clrf', 290, 0), (1734, 'adv_arieki_ligo_ashendesert', 373, 0), (1830, 'adv_foreas_valverde_plateau_maligobasev3', 144, 0), (1865, 'adv_arieki_torden_incline_ojasaattahive', 222, 0), (2028, 'adv_arieki_torden_abyss', 410, 0), (2051, 'adv_foreas_howlingmaw1', 421, 0), (2115, 'adv_arieki_torden_mires_banefluxitemines', 204, 0)");
+                    // The per-squad contexts MissionContextSquadInstancing sets (the world seed loads them all).
+                    foreach (var row in Rasa.Migrations.WildernessData.MissionContextSquadInstancingRows.Rows)
+                        context.Database.ExecuteSqlRaw("INSERT OR IGNORE INTO map_info (map_context_id, map_name, map_version, base_region) VALUES ({0}, 'squad context', 1, 0)", row.MapContextId);
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
                     // Mission 429 River Recon is a world-seed row, not a migrated one: MissionAreaLinks and
                     // WildernessPinholeNpc only correct it, so without the seed row this migrated world has the
@@ -1179,9 +1182,10 @@ namespace Rasa.Test
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));
                 Assert.AreEqual((855.84, 294.14, 387.4, 4.3633), (rogers.PosX, rogers.PosY, rogers.PosZ, rogers.Rotation));
 
-                // WorldDefectsFix: Field Lt. Bagby and Lt. Galloway stand in Treeback Camp (1397), a shared context the
-                // Palisades reaches through map link 21, and still receive 1788 and 1789 through their own packages.
-                Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1397));
+                // WorldDefectsFix: Field Lt. Bagby and Lt. Galloway stand in Treeback Camp (1397), which the Palisades
+                // reaches through map link 21, and still receive 1788 and 1789 through their own packages. Since
+                // MissionContextSquadInstancing the camp (client MISSIONCONTEXT) is per-squad: each copy spawns them.
+                Assert.AreEqual(MapInstancing.PerSquad, validation.Catalog.InstancingFor(1397));
                 Assert.IsFalse(validation.WithheldContexts.Contains(1397u));
                 var treeback = ContentMaterializer.PlacementsToSpawn(validation, 1397).ToDictionary(placement => placement.Id);
                 CollectionAssert.AreEquivalent(new uint[] { 199106, 199107 }, treeback.Keys.ToArray());

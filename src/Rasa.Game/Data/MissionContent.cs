@@ -7,7 +7,12 @@ namespace Rasa.Data
     public enum MapInstancing : byte
     {
         Shared = 0,
-        PerCharacter = 1
+        PerCharacter = 1,
+        /// <summary>
+        /// One copy per squad (or per character outside a squad): the final client's MISSIONCONTEXT maps
+        /// (gamecontexttype 5, drawn with the loading screen's "Instance" widget). MapChannelManager.ChannelForEntry.
+        /// </summary>
+        PerSquad = 2
     }
 
     public enum ObjectiveBindingKind : byte

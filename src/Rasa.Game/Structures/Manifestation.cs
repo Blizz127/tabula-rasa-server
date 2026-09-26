@@ -136,6 +136,13 @@ namespace Rasa.Structures
         internal HashSet<uint> InsideMapLinks = new();
 
         /// <summary>
+        /// The map and position a player left to enter a squad instance: where leaving the squad, the squad's
+        /// disbanding or "Leave current adventure" sends them back to (PM 1058 "You have been sent back to your
+        /// previous map because you are no longer in the squad."). Null outside an instance.
+        /// </summary>
+        internal (uint MapContextId, System.Numerics.Vector3 Position, float Rotation)? InstanceReturn { get; set; }
+
+        /// <summary>
         /// The region ids the client was last told the player is in (UpdateRegions), sorted, so
         /// RegionManager only sends again when the set changes. Null until the first send on a map.
         /// </summary>

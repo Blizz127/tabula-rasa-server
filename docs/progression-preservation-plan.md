@@ -453,6 +453,23 @@ the final-live rule.
   leaves, replacement on re-entry and the instance id sent at login. Full suite 815/815. Owner client
   check (two recruits at once, relog) is still to do.
 
+## Instancing status
+
+Built on 2026-09-27 because every later segment's operations need it. Account: `docs/retail-accuracy.md`,
+2026-09-27 "Instancing".
+
+- **Built:** the 53 loaded contexts the final client types MISSIONCONTEXT are per-squad (`MissionContextSquadInstancing`,
+  instancing 2). Each squad, or player outside a squad, gets one copy populated from the whole context. The D10/D13
+  invite quirk is kept (OD-125). A copy lingers 600 s once empty (OD-126). Leaving, being kicked or the squad
+  disbanding sends the player back with PM 1058, and `SquadMemberList` now carries `partyExclusiveMap`. "Leave current
+  adventure" is the way out (OD-129). Numbered copies of shared maps, `ChooseInstanceList`/`SelectInstance`/
+  `SelectInstanceCancel` and copy switching in the waypoint window exist, but no capacity is configured (OD-127).
+  Wonkavate carries the copy's number (OD-128).
+- **Open:** the reset timer (`GAP-INSTANCE-RESET-TIMER`), shared-copy capacity and population thresholds
+  (`GAP-SHARED-COPY-CAPACITY`), the quirk's final state, the Last Stand copies (`GAP-LAST-STAND-COPIES`),
+  fail-on-leave missions, death expulsion and start groups. The boot camp's instances have no navmesh (recorded,
+  unchanged). Owner client check (two squads in one operation, leave and disband inside) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in

@@ -19,6 +19,24 @@ namespace Rasa.Structures
         public short Mode { get; set; }     // automatic spawning, CP spawn, scripted spawn (manual trigger)
         public short AnimType { get; set; } // which effect is used to spawn creatures (bane dropship, no effect, human dropship)   // ToDo
         public uint MapContextId { get; set; }
+
+        /// <summary>The channel an instance's copy of the pool spawns into; null for the context's shared pool.</summary>
+        public MapChannel MapChannel { get; set; }
+
+        /// <summary>A fresh copy of the pool for one instance channel: the same row, its own counters, due to spawn at once.</summary>
+        public SpawnPool CopyFor(MapChannel mapChannel) => new SpawnPool
+        {
+            DbId = DbId,
+            Position = Position,
+            Rotation = Rotation,
+            SpawnSlot = SpawnSlot,
+            Mode = Mode,
+            AnimType = AnimType,
+            MapContextId = MapContextId,
+            RespawnTime = RespawnTime,
+            UpdateTimer = RespawnTime,
+            MapChannel = mapChannel
+        };
         // spawn runtime info
         public int DropshipQueue { get; set; } // number of dropships that are currently delivering units
         public int QueuedCreatures { get; set; } // number of creatures that are spawning right now (i.e. delivered via dropship)

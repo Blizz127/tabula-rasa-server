@@ -385,7 +385,10 @@ namespace Rasa.Managers
                 traveller,
                 destination.Player.MapContextId,
                 destination.Player.Position,
-                destination.Movement.ViewDirection.X);
+                destination.Movement.ViewDirection.X,
+                // Into the summoner's own copy of the map, whichever squad instance or numbered copy that is; a
+                // per-character instance is never shared (OD-2), so that still resolves to the traveller's own.
+                destination.Player.MapChannel is { IsPrivateInstance: false } channel ? channel : null);
         }
 
         private void Cancel(uint accountId)

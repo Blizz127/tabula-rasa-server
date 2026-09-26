@@ -42,6 +42,13 @@ namespace Rasa.Packets.MapChannel.Server
                                 foreach (var mapInstanceInfo in waypointInfo.MapInstanceList)
                                     pw.WriteStruct(mapInstanceInfo);
 
+                            // None: "user is on an adventure, and they can only abort the mission" (Recv_EnteredWaypoint).
+                            if (waypointInfo.Waypoints == null)
+                            {
+                                pw.WriteNoneStruct();
+                                continue;
+                            }
+
                             pw.WriteList(waypointInfo.Waypoints.Count);
                                 foreach (var waypoint in waypointInfo.Waypoints)
                                 {

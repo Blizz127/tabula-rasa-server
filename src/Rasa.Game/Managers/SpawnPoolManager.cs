@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Rasa.Managers
@@ -132,12 +133,13 @@ namespace Rasa.Managers
 
         public void SpawnPoolWorker(MapChannel mapChannel, long timePassed)
         {
-            foreach (var key in LoadedSpawnPools)
-            {
-                var spawnPool = key.Value;
+            // An instance runs its own copies of the context's pools (MapChannelManager.PopulateContextCopy);
+            // a shared primary channel runs the context's.
+            var pools = mapChannel.SpawnPools ?? LoadedSpawnPools.Values
+                .Where(pool => pool.MapContextId == mapChannel.MapInfo.MapContextId && pool.MapChannel == null);
 
-                if (spawnPool.MapContextId != mapChannel.MapInfo.MapContextId)
-                    continue; // spawnpool is not for this map
+            foreach (var spawnPool in pools.ToList())
+            {
 
                 var totalCreaturesActive = spawnPool.AliveCreatures + spawnPool.QueuedCreatures;
 
@@ -195,7 +197,7 @@ namespace Rasa.Managers
 
         internal void SpawnCreatures(SpawnPool spawnPool,List<Creature> creatureList)
         {
-            var mapChannel = MapChannelManager.Instance.FindByContextId(spawnPool.MapContextId);
+            var mapChannel = spawnPool.MapChannel ?? MapChannelManager.Instance.FindByContextId(spawnPool.MapContextId);
 
             foreach (var spawnSlot in creatureList)
             {
@@ -242,7 +244,7 @@ namespace Rasa.Managers
 
             // Spawn pools were placed by hand; on a slope the offset members would hang in the
             // air or start in the ground. With a navmesh they stand on it.
-            pos = NavMeshManager.SnapToGround(MapChannelManager.Instance.FindByContextId(creature.SpawnPool.MapContextId), pos);
+            pos = NavMeshManager.SnapToGround(creature.SpawnPool.MapChannel ?? MapChannelManager.Instance.FindByContextId(creature.SpawnPool.MapContextId), pos);
 
             CreatureManager.Instance.SetLocation(creature, pos, creature.SpawnPool.Rotation, creature.SpawnPool.MapContextId);
         }

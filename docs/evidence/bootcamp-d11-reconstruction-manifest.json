@@ -382,6 +382,26 @@
    "era": "final_live",
    "member": "docs/evidence/shutdown-broadcast.json",
    "note": "The client's admin-message and disconnect paths decoded statically from the 1.16.5.0 client (member hashes, source lines and offsets), and the shutdown countdown timed from two recordings of the EU server's last minute: fxAtDpxypSw (English client) and CommanderGrog's _gwh1__XecI (German client, the re-render of j_4B22Y8z28). Every value carries its tier, citations and uncertainty."
+  },
+  "community_db:tarapedia-instancing-20260926": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-instancing-mechanics/work/tarapedia/pages/*.json (MediaWiki API, full revision histories with content, fetched 2026-09-26; sha256 in work/SHA256SUMS)",
+   "note": "Operation (the Instance/Instances redirect target; rev 32773 of 2008-09-04 is the last before shutdown), Category:Instances (49 members), Squad, Beginners Guide, Local teleporter, Battlefield, User interface and the TaRapedia transcriptions of the live notes 2007-07-03 to 2008-12-20. Era is per revision."
+  },
+  "official_notes:instancing-20260926": {
+   "kind": "official_notes",
+   "era": "final_live",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_10_7232008.html (line 202 of the text), deployment_134_10152008.html (line 113), deployment_157_12132008.html, deployment_164_02092009.html",
+   "note": "Captured official playtr.com live notes: the D10 (2008-07-23) and D13 (2008-10-15) known issue on inviting a player while inside an instance; D15 'A new instance map, The Empire Sector'; D16.4 known issues (no instancing entry)."
+  },
+  "client_disassembly:instancing-20260926": {
+   "kind": "client_code",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/trpython (clientmethod, ui/waypointwindow, ui/wonkavatorwindow, inputstate/wonkavator, ui/mapwindow, party) and game/generated (gamecontext, gamecontexttype, gamecontextlanguage, playermessage, methodid, shared/gameconstants)",
+   "locator": "research/20260926-instancing-mechanics/work/mine/*.dis (static xdis disassembly, sha256 in work/SHA256SUMS)",
+   "note": "Decoded statically; module path + function + source line or bytecode offset."
   }
  },
  "scope": [
@@ -599,6 +619,22 @@
     "comment"
    ],
    "note": "CreatureLootFootage (2026-09-26): creature loot counted in docs/evidence/creature-loot-footage-ledger.json."
+  },
+  {
+   "table": "content_map_setting",
+   "key_ranges": {
+    "map_context_id": {
+     "min": 1347,
+     "max": 2368
+    }
+   },
+   "required": [
+    "instancing"
+   ],
+   "optional": [
+    "comment"
+   ],
+   "note": "MissionContextSquadInstancing (2026-09-27): the loaded contexts the final client types MISSIONCONTEXT become per-squad instances."
   }
  ],
  "rows": [
@@ -74696,6 +74732,1861 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1347
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1347 (code offset 778): ('adv_foreas_concordia_divide_minoscaverns', 5 MISSIONCONTEXT, ..., levels 11-13); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1347 'Minos Caverns' (code offset 88)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Minos Caverns'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Minos Caverns: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1348
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1348 (code offset 787): ('adv_foreas_concordia_divide_timoramines', 5 MISSIONCONTEXT, ..., levels 13-16); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1348 'Timora Mines' (code offset 97)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Timora Mines'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Timora Mines: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1349
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1349 (code offset 796): ('adv_foreas_concordia_divide_torcastraprison', 5 MISSIONCONTEXT, ..., levels 15-17); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1349 'Torcastra Prison' (code offset 106)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Torcastra Prison'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Torcastra Prison: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1384
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1384 (code offset 994): ('adv_foreas_concordia_palisades_warnetcaverns', 5 MISSIONCONTEXT, ..., levels 17-19); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1384 'Warnet Caverns' (code offset 115)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Warnet Caverns'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Warnet Caverns: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1394
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1394 (code offset 1048): ('adv_foreas_concordia_palisades_devilsden', 5 MISSIONCONTEXT, ..., levels 19-20); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1394 'Devil's Den' (code offset 124)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Devil's Den'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Devil's Den: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1397
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1397 (code offset 1066): ('adv_foreas_concordia_palisades_treebackcamp', 5 MISSIONCONTEXT, ..., levels 20-21); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1397 'Treeback Camp' (code offset 133)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Treeback Camp'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Treeback Camp: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1416
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1416 (code offset 1210): ('adv_foreas_concordia_wilderness_guardianprom', 5 MISSIONCONTEXT, ..., levels 36-38); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1416 'Guardian Prominence' (code offset 151)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Guardian Prominence'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Guardian Prominence: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1429
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1429 (code offset 1273): ('adv_foreas_valverde_marshes_wetlandrefinery', 5 MISSIONCONTEXT, ..., levels 33-37); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1429 'Turpis Refinery' (code offset 160)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Turpis Refinery'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Turpis Refinery: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1430
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1430 (code offset 1282): ('adv_foreas_concordia_wilderness_pravusresearch', 5 MISSIONCONTEXT, ..., levels 8-10); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1430 'Pravus Research' (code offset 169)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Pravus Research Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Pravus Research: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1451
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1451 (code offset 1399): ('adv_foreas_valverde_marshes_banesupplydepot', 5 MISSIONCONTEXT, ..., levels 37-38); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1451 'Bane Supply Depot' (code offset 178)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Bane Supply Depot'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Bane Supply Depot: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1465
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1465 (code offset 1471): ('adv_foreas_valverde_pools_test_weapons_center', 5 MISSIONCONTEXT, ..., levels 34-36); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1465 'Lamna Armory' (code offset 196)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Lamna Armory'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Lamna Armory: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1502
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1502 (code offset 1696): ('adv_foreas_valverde_plateau_ustoryard', 5 MISSIONCONTEXT, ..., levels 30-31); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1502 'Ustor Yard' (code offset 223)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Ustor Yard'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Ustor Yard: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1506
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1506 (code offset 1723): ('adv_foreas_concordia_wilderness_cavesofdonn02', 5 MISSIONCONTEXT, ..., levels 9-11); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1506 'Caves of Donn' (code offset 232)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Caves of Donn'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Caves of Donn: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1694
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1694 (code offset 1957): ('adv_foreas_valverde_pools_retread_caves', 5 MISSIONCONTEXT, ..., levels 32-35); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1694 'Retread Caves' (code offset 241)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Retread Caves'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Retread Caves: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1700
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1700 (code offset 2002): ('adv_foreas_valverde_marshes_logosresearchfacility', 5 MISSIONCONTEXT, ..., levels 36-38); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1700 'Logos Research Facility' (code offset 250)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Logos Research Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Logos Research Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1721
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1721 (code offset 2155): ('adv_foreas_concordia_wilderness_clrf', 5 MISSIONCONTEXT, ..., levels 7-10); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1721 'Crater Lake Research Facility' (code offset 268)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Crater Lake Research Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Crater Lake Research Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1743
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1743 (code offset 2299): ('adv_foreas_valverde_marshes_villageruins', 5 MISSIONCONTEXT, ..., levels 35-37); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1743 'P'reo Das' (code offset 295)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'P'reo Das'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "P'reo Das: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1763
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1763 (code offset 2407): ('adv_foreas_valverde_pools_livetargetpensv2', 5 MISSIONCONTEXT, ..., levels 48-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1763 'Live Target Pens' (code offset 331)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Live Target Pens'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Live Target Pens: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1773
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1773 (code offset 2443): ('adv_arieki_torden_plains_attacolony', 5 MISSIONCONTEXT, ..., levels 21-22); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1773 'Kardash Atta Colony' (code offset 358)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Kardash Atta Colony'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Kardash Atta Colony: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1803
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1803 (code offset 2695): ('adv_foreas_concordia_palisades_elohtemples', 5 MISSIONCONTEXT, ..., levels 18-22); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1803 'Eloh Temples' (code offset 367)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Eloh Temples'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Eloh Temples: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1806
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1806 (code offset 2722): ('adv_foreas_concordia_divide_purgasstation2', 5 MISSIONCONTEXT, ..., levels 39-41); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1806 'Purgas Station' (code offset 376)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Purgas Station'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Purgas Station: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1823
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1823 (code offset 2857): ('adv_foreas_valverde_plateau_sanctusgrotto', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1823 'Sanctus Grotto' (code offset 385)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Sanctus Grotto'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Sanctus Grotto: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1830
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1830 (code offset 2911): ('adv_foreas_valverde_plateau_maligobasev3', 5 MISSIONCONTEXT, ..., levels 32-34); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1830 'Maligo Base' (code offset 394)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Maligo Base'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Maligo Base: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1865
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1865 (code offset 3118): ('adv_arieki_torden_incline_ojasaattahive', 5 MISSIONCONTEXT, ..., levels 25-27); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1865 'Ojasa Atta Hive' (code offset 403)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Ojasa Atta Hive'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Ojasa Atta Hive: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1977
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1977 (code offset 3829): ('adv_arieki_ligo_burningsteps_magmacaverns', 5 MISSIONCONTEXT, ..., levels 45-46); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1977 'Magma Caverns' (code offset 439)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Magma Caverns'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Magma Caverns: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 1988
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 1988 (code offset 3865): ('adv_arieki_ligo_ashendesert_baneconscriptfacility', 5 MISSIONCONTEXT, ..., levels 42-43); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 1988 'Bane Conscription Facility' (code offset 457)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Bane Conscription Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Bane Conscription Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2029
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2029 (code offset 4099): ('adv_foreas_valverde_plateau_temporalchamber', 5 MISSIONCONTEXT, ..., levels 36-40); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2029 'Temporal Chamber' (code offset 493)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Temporal Chamber'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Temporal Chamber: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2034
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2034 (code offset 4135): ('adv_arieki_torden_plains_penalresearch', 5 MISSIONCONTEXT, ..., levels 23-25); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2034 'Phanin Research Facility' (code offset 502)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Phanin Research Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Phanin Research Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2055
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2055 (code offset 4270): ('adv_arieki_ligo_ashendesert_indracaverns', 5 MISSIONCONTEXT, ..., levels 42-44); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2055 'Indra Caverns' (code offset 529)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Indra Caverns'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Indra Caverns: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2084
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2084 (code offset 4477): ('adv_foreas_concordia_elohcommtower2', 5 MISSIONCONTEXT, ..., levels 20-22); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2084 'Eloh Vale' (code offset 538)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Eloh Vale'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Eloh Vale: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2085
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2085 (code offset 4486): ('adv_arieki_torden_incline_commtower', 5 MISSIONCONTEXT, ..., levels 25-28); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2085 'Comm Tower' (code offset 547)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Comm Tower'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Comm Tower: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2093
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2093 (code offset 4540): ('adv_arieki_torden_plains_brannwaterrefinery', 5 MISSIONCONTEXT, ..., levels 20-25); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2093 'Brann Water Refinery' (code offset 565)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Brann Water Refinery'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Brann Water Refinery: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2103
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2103 (code offset 4630): ('adv_arieki_ligo_thunderhead_faultlever', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2103 'Fault Lever' (code offset 583)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; not in Category:Instances"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Fault Lever: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2105
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2105 (code offset 4648): ('adv_arieki_ligo_thunderhead_quassostation', 5 MISSIONCONTEXT, ..., levels 44-46); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2105 'Quasso Station' (code offset 592)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Quasso Station'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Quasso Station: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2107
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2107 (code offset 4666): ('adv_arieki_torden_mires_energyweaponcenter', 5 MISSIONCONTEXT, ..., levels 29-31); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2107 'Energy Weapon Center' (code offset 601)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Energy Weapon Center'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Energy Weapon Center: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2110
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2110 (code offset 4693): ('adv_arieki_ligo_ashendesert_avernusoutpost', 5 MISSIONCONTEXT, ..., levels 41-44); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2110 'Avernus Outpost' (code offset 610)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Avernus Outpost'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Avernus Outpost: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2111
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2111 (code offset 4702): ('adv_arieki_torden_incline_wardenbotfactory', 5 MISSIONCONTEXT, ..., levels 25-27); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2111 'Raksha Robotic Facility' (code offset 619)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Raksha Robotic Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Raksha Robotic Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2112
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2112 (code offset 4711): ('adv_arieki_ligo_thunderhead_rivasaattacolony', 5 MISSIONCONTEXT, ..., levels 41-44); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2112 'Rivasa Atta Colony' (code offset 628)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Rivasa Atta Colony'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Rivasa Atta Colony: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2115
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2115 (code offset 4738): ('adv_arieki_torden_mires_banefluxitemines', 5 MISSIONCONTEXT, ..., levels 27-28); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2115 'Bane Fluxite Mines' (code offset 637)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Bane Fluxite Mines'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Bane Fluxite Mines: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2125
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2125 (code offset 4819): ('adv_arieki_torden_mires_tahrendrabase', 5 MISSIONCONTEXT, ..., levels 29-30); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2125 'Tahrendra Base' (code offset 646)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Tahrendra Base'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Tahrendra Base: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2136
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2136 (code offset 4900): ('adv_foreas_howlingmaw_deathburrow', 5 MISSIONCONTEXT, ..., levels 30-32); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2136 'Velon Hollow' (code offset 664)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Velon Hollow'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Velon Hollow: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2138
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2138 (code offset 4918): ('adv_arieki_ligo_staaljunkyard', 5 MISSIONCONTEXT, ..., levels 39-41); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2138 'Staal Junkyard' (code offset 673)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Staal Junkyard'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Staal Junkyard: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2141
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2141 (code offset 4945): ('adv_arieki_ligo_crucible_incurablesward', 5 MISSIONCONTEXT, ..., levels 38-40); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2141 'Incurables Ward' (code offset 682)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Incurables Ward'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Incurables Ward: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2146
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2146 (code offset 4981): ('adv_arieki_ligo_crucible_wbfacility', 5 MISSIONCONTEXT, ..., levels 39-41); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2146 'Chaukas Robotics Facility' (code offset 691)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Chaukas Robotics Facility'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Chaukas Robotics Facility: per-squad (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2155
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2155 (code offset 5062): ('adv_arieki_torden_abyss_tampei', 5 MISSIONCONTEXT, ..., levels 44-48); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2155 'Ruins of Tampeii' (code offset 709)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Ruins of Tampeii'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Ruins of Tampeii: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2156
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2156 (code offset 5071): ('adv_foreas_valverde_descent_therefuge', 5 MISSIONCONTEXT, ..., levels 47-48); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2156 'The Refuge' (code offset 718)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'The Refuge'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "The Refuge: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2162
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2162 (code offset 5125): ('adv_foreas_howlingmaw_cuthahbase', 5 MISSIONCONTEXT, ..., levels 48-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2162 'Cuthah Base' (code offset 727)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Cuthah Base'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Cuthah Base: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2163
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2163 (code offset 5134): ('adv_foreas_valverde_descent_inferno_outpost', 5 MISSIONCONTEXT, ..., levels 46-48); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2163 'Outpost Inferno' (code offset 736)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Outpost Inferno'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Outpost Inferno: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2190
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2190 (code offset 5359): ('adv_arieki_torden_abyss_dybukkar', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2190 'Dybukkar Garrison' (code offset 754)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; not in Category:Instances"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Dybukkar Garrison: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2203
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2203 (code offset 5467): ('adv_arieki_torden_abyss_omegalabs', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2203 'Section 5: Omega Labs' (code offset 772)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; Category:Instances lists 'Section 5: Omega Labs'"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Section 5: Omega Labs: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2278
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2278 (code offset 6070): ('adv_zepic_pve_arena', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2278 'The Gauntlet' (code offset 799)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; not in Category:Instances"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "The Gauntlet: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2327
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2327 (code offset 6511): ('adv_earth_unitedstates_manhattan_01', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2327 'The Empire Sector' (code offset 808)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; not in Category:Instances"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "The Empire Sector: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": 2368
+   },
+   "slice": "W3",
+   "migration": "MissionContextSquadInstancing",
+   "fields": {
+    "instancing": {
+     "value": 2,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/gamecontext.pyo lookup key 2368 (code offset 6844): ('adv_foreas_concordia_wilderness_cavesofdonn_epic', 5 MISSIONCONTEXT, ..., levels 50-50); gamecontexttype.pyo MISSIONCONTEXT = 5; gamecontextlanguage 2368 'Epic Caves of Donn' (code offset 835)"
+      },
+      {
+       "source": "client_disassembly:instancing-20260926",
+       "locator": "ui/wonkavatorwindow.pyo Init line 102: MISSIONCONTEXT shows the loading screen's 'Instance' widget, BATTLEFIELDCONTEXT 'Persistent'; inputstate/wonkavator.pyo OnExitState lines 111-112: entering a MISSIONCONTEXT other than 1985 posts tutorial INSTANCE_ENTERED"
+      },
+      {
+       "source": "community_db:tarapedia-instancing-20260926",
+       "locator": "Operation rev 32773 (2008-09-04): 'for an instanced zone the server creates an identical copy of the zone for each party that enters it'; not in Category:Instances"
+      }
+     ],
+     "reasoning": "The client itself classifies the context as a mission (instance) map; per-squad copying is the dated description of such maps. The per-squad value (2) is the server's encoding of that classification, not a client value."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Epic Caves of Donn: per-squad instance (type 5)",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -79111,6 +81002,76 @@
    ],
    "closes_with": "documentation or captures of the live GM tooling",
    "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-INSTANCE-RESET-TIMER",
+   "summary": "How long an empty instance survived before it reset is unrecovered. Official notes say it did not reset at once (2007-11-29 'before the instance resets', 2008-08-22 'allowing it to reset'); one player (TaRapedia Operation rev 32773, 2008-09-04) found 'ten minutes works'. 600 s is used as that observed upper bound (OD-126).",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "a capture or developer statement of the reset timer",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-SHARED-COPY-CAPACITY",
+   "summary": "No client table or dated source gives how many players one copy of a shared map held, when another numbered copy opened, how many copies could exist, or the thresholds behind POPULATION_MEDIUM/HIGH (shared/gameconstants.pyo 1-4). Copies open only at a configured capacity (none by default, OD-127); only FULL is derived.",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "server configuration, a capture of ChooseInstanceList or overloadedStatus values",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-SQUAD-INVITE-QUIRK-FINAL-STATE",
+   "summary": "The D10 (2008-07-23) and D13 (2008-10-15) known issue - an invitee does not join the leader's instance until the leader exits and re-enters - is not listed after D13, but later notes carry few known issues, so whether it was fixed by shutdown is unknown. Kept as documented (OD-125).",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "later known-issue lists or final-era footage of a squad invite inside an instance",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-LAST-STAND-COPIES",
+   "summary": "The shutdown-night 'Earth 1'-'Earth 5' copies of context 2375 (client type 4, 'Empire Sector shared map for endgame event') are known only from chat. Who opened them (population overflow or staff), how many there were and how players reached them are unrecovered; the copy mechanism exists (OD-127) but no copies of 2375 are opened and its content is not built.",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "staff tooling records or footage of the Last Stand entry",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-INSTANCE-MISSION-RESET",
+   "summary": "Leaving an instance reset or failed some of its missions (TaRapedia Operation: 'All the missions will reset'; many per-mission notes such as 2007-08-21 'Players will now fail this mission if leaving the instance'). Which missions fail on leaving is per-mission data not implemented.",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "per-mission fail-on-leave flags from client or notes",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-INSTANCE-DEATH-EXIT",
+   "summary": "TaRapedia Operation: instances without a hospital 'kick you out of the instance if you die'. Death in a squad instance still uses the generic hospital path.",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "hospital-less instance death captures",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
+  },
+  {
+   "id": "GAP-INSTANCE-START-GROUPS",
+   "summary": "ChooseInstanceList and SelectInstance carry a startGroup the server chose; no start groups are recovered, so None is sent.",
+   "evidence": [
+    "research/20260926-instancing-mechanics/README.md",
+    "docs/retail-accuracy.md#2026-09-27-instancing"
+   ],
+   "closes_with": "a capture of ChooseInstanceList",
+   "surfaced_by": "instancing-mechanics batch 2026-09-27"
   }
  ],
  "non_content_settings": [
@@ -83740,6 +85701,45 @@
      "locator": "fallback; statistics.ammo_types"
     }
    ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "MissionContextSquadInstancing",
+   "table": "content_map_setting",
+   "key": {
+    "map_context_id": "53 MISSIONCONTEXT contexts, see rows"
+   },
+   "field": "existence",
+   "old": null,
+   "new": "instancing 2 (per-squad)",
+   "tier": "original",
+   "reason": "Every map but the boot camp was one shared channel (SEG3-INSTANCING): squads met strangers and shared mission objects inside operations. The set comes from the client's context type, not from a list of names.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/gamecontext.pyo lookup[ctx][1] == 5"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "(code) MapChannelManager instancing",
+   "table": "(none: code)",
+   "key": {
+    "code": "src/Rasa.Game/Managers/MapChannelManager.cs ChannelForEntry/SquadInstance/OpenSharedCopy/ReturnFromSquadInstance, DynamicObjectManager.CreateListOfWaypoints/SelectWaypoint, PartyManager.RemoveMember/Disband, packets ChooseInstanceList/SelectInstance/SelectInstanceCancel"
+   },
+   "field": "behaviour",
+   "old": "one shared channel per context except the boot camp; ChooseInstanceList/SelectInstance/SelectInstanceCancel unimplemented; SquadMemberList partyExclusiveMap always false; one waypoint-window map row per waypoint",
+   "new": "per-squad copies populated from the whole context; solo copies; OD-125 invite quirk; linger OD-126; numbered shared copies and the chooser OD-127; ordinals OD-128; return point OD-129; 'Leave current adventure'; PM 1058 on leaving or disbanding",
+   "tier": "inferred",
+   "decision": "OD-125..OD-129",
+   "reason": "The client contract (argument shapes) is original; the server policies behind it are reconstructed from dated notes and labelled.",
+   "citations": [
+    {
+     "source": "client_disassembly:instancing-20260926",
+     "locator": "clientmethod.pyo Recv_ChooseInstanceList line 488, OnGotoInstance 495, OnGotoInstanceCancel 502, Recv_EnteredWaypoint 402; waypointwindow.pyo ShowInstances 452, ShowWaypoints 234; party.pyo Recv_SquadMemberList 306, OnLeaveParty 807"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -84522,6 +86522,56 @@
    "choice": "As the default: the footage only shows in-world chat windows, and a client outside the world has none to print into.",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
+  },
+  {
+   "id": "OD-125",
+   "decision": "Who a squad instance belongs to",
+   "default": "The squad that created it, or the character when created outside a squad; later arrivals of that squad join it; a solo creator who forms a squad keeps the solo copy (the invitee gets the squad's copy and the leader joins it on re-entry), as the D10/D13 known issue describes",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: the documented behaviour, not a fix (GAP-SQUAD-INVITE-QUIRK-FINAL-STATE).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instancing-status"
+  },
+  {
+   "id": "OD-126",
+   "decision": "How long an empty squad instance is kept",
+   "default": "600 000 ms (measured upper bound from a player's report); a disbanded squad's copy goes at once; the boot camp keeps OD-2's immediate destruction",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: official notes show re-entry before reset; the value is labelled measured (GAP-INSTANCE-RESET-TIMER).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instancing-status"
+  },
+  {
+   "id": "OD-127",
+   "decision": "Numbered copies of shared maps",
+   "default": "Copies open only when every copy of a context is at a configured per-context capacity; none is configured, so every shared map stays one channel; with more than one copy, entering sends ChooseInstanceList (all copies with status) and waits for SelectInstance/SelectInstanceCancel; a full choice gets PM 934; empty copies are destroyed at once",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: the client contract is original, the capacity is not (GAP-SHARED-COPY-CAPACITY).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instancing-status"
+  },
+  {
+   "id": "OD-128",
+   "decision": "The number a copy shows",
+   "default": "The lowest number no live copy of the context holds (a shared primary is 1), sent as Wonkavate's instanceId (shown 'Name(n)' on the loading screen and map window) and as ChooseInstanceList/waypoint ordinals; the boot camp keeps OD-2's monotonic id",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: players named the shutdown copies 'Earth 1'-'Earth 5', which fits small per-context numbers; the reuse rule is inferred.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instancing-status"
+  },
+  {
+   "id": "OD-129",
+   "decision": "Where leaving a squad instance goes",
+   "default": "The instance's own exit link to the map the player came from, else the spot they left it from, else (after a restart) its first exit link; 'Leave current adventure' is the only map-waypoint entry inside a squad instance (local teleporters unchanged); leaving, being kicked or the squad disbanding sends the player out with PM 1058",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: PM 1058/945/946 and Recv_EnteredWaypoint's abort row are original; the exact arrival point is inferred.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#instancing-status"
   }
  ]
 }

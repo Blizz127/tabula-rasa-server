@@ -201,6 +201,8 @@ namespace Rasa.Test.Reconstruction
                 "content_item_set:item_set_id:19851-19859",
                 "content_location:id:19851-19859",
                 "content_map_setting:map_context_id:1985-1985",
+                // MissionContextSquadInstancing (2026-09-27): the loaded MISSIONCONTEXT contexts, per-squad.
+                "content_map_setting:map_context_id:1347-2368",
                 // WildernessArrivalTrainingDay (OD-36, OD-38): the reward pistols' client template ids, not a reserved range.
                 "itemtemplate:id:116929-116930",
                 "itemtemplate_weapon:id:116929-116930",

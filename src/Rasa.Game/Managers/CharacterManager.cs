@@ -738,8 +738,11 @@ namespace Rasa.Managers
             client.AccountEntry.SelectedSlot = packet.SlotNum;
 
             client.Player = CreateCharacterManifestation(client, character);
-            // The shared channel, or this character's own instance of a per-character context.
-            client.Player.MapChannel = MapChannelManager.Instance.ChannelForEntry(character.Id, client.Player.MapContextId)
+            // The shared channel, this character's own instance of a per-character context, or its squad's copy
+            // of a per-squad one (live notes 2007-08-07: a player who logs out inside an instance is no longer sent
+            // to the hospital outside it on logging back in).
+            client.Player.MapChannel = MapChannelManager.Instance.ChannelForEntry(character.Id, client.Player.MapContextId,
+                    PartyManager.Instance.PartyIdOfAccount(client.AccountEntry.Id))
                 ?? MapChannelManager.Instance.FindByContextId(client.Player.MapContextId);
             client.LoadingMap = client.Player.MapContextId;
             MapChannelManager.Instance.PassClientToMapInstance(client);

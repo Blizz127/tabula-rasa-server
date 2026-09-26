@@ -40,6 +40,12 @@ namespace Rasa.Game
         public ClientCryptData Data { get; private set; }
         public GameAccountEntry AccountEntry { get; private set; }
         public uint LoadingMap { get; set; }
+
+        /// <summary>
+        /// A zone change held while the client's instance chooser is open (ChooseInstanceList): the shared context,
+        /// arrival position and rotation. SelectInstance completes it, SelectInstanceCancel drops it.
+        /// </summary>
+        public (uint MapContextId, System.Numerics.Vector3 Position, float Rotation)? PendingInstanceChoice { get; set; }
         /// <summary>Set by each Wonkavate; MapLoaded is accepted only while this is true.</summary>
         public bool AwaitingMapLoaded { get; set; }
         private volatile ClientState _state;

@@ -1003,3 +1003,20 @@ admin-message and disconnect paths before anything was built. Rules, tiers and g
 | shutdown countdown | none; `exit` only stopped the process | console `shutdown start`: "Server Shutting Down in 10...", 9…1, disconnect at 37.1 s, then stop (OD-121-123) | fxAtDpxypSw t=122-159.1, corroborated by _gwh1__XecI t=546-584.9 | observed text, measured cadence |
 | disconnect presentation | a socket close | unchanged: a close the client did not request is what draws its dialog; the countdown sends nothing before it | `exitgame.GameOnDisconnect` → `inputhandlers.OnDisconnect` (uielement 9), then `ClearChatInfo` | original |
 | zone-loss alert, Neph broadcast, Last Stand | none | none: gaps | only "ALERT: PLATEAU IS LOST!" observed; the rest is chat or off camera | gap |
+
+## Instancing (2026-09-27)
+
+The segment-3 audit's `SEG3-INSTANCING` was checked against the 1.16.5.0 client before anything was built. Tiers and
+gaps: the manifest rows of `MissionContextSquadInstancing` and OD-125 to OD-129. Account: `docs/retail-accuracy.md`,
+"Instancing".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| which maps are instances | only 1985 | the 53 loaded MISSIONCONTEXT (type 5) contexts per-squad; 2375 and battlefields shared | `gamecontext.pyo` type column; `wonkavatorwindow` Instance/Persistent widgets | original |
+| squad ownership | none | one copy per squad or solo player; invite quirk kept (OD-125) | TaRapedia Operation rev 32773; live D10/D13 known issue | observed/official; binding inferred |
+| leaving the squad | nothing | back to the previous map with PM 1058; `partyExclusiveMap` sent | party.pyo OnLeaveParty (PM 946), PM 945, PM 1058 | original contract |
+| way out | none (SelectWaypoint refused 0) | "Leave current adventure" (waypoint 0) from the pad (OD-129) | `Recv_EnteredWaypoint` None waypoints, PM 315 | original contract; arrival inferred |
+| empty instance | destroyed at once | kept 600 s for its squad (OD-126) | live 2007-11-29, 2008-08-22; TaRapedia "ten minutes" | measured upper bound |
+| instance chooser | unimplemented (685/687/688 unused) | built; copies open only at a configured capacity, none set (OD-127) | clientmethod 488/495/502, waypointwindow.ShowInstances; live 2007-07-24, 2007-08-21 | original contract; capacity gap |
+| copy number | 1 or the private id | lowest free per context; boot camp unchanged (OD-128) | loading screen and map window "Name(n)"; "Earth 1"-"Earth 5" chat | original display; rule inferred |
+| waypoint window rows | one identical row per waypoint | one row per copy | waypointwindow.ShowWaypoints line 265 | original |

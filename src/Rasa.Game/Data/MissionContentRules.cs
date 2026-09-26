@@ -98,7 +98,9 @@ namespace Rasa.Data
             Indicators = true,
             // S3: a per-character context gives each character its own MapChannel
             // (MapChannelManager.ChannelForEntry), populated from the context's placements.
-            Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter }
+            // 2026-09-27: a per-squad context gives each squad (or a character outside one) its own
+            // copy, populated from the whole context (MapChannelManager.PopulateInstance).
+            Instancing = new HashSet<MapInstancing> { MapInstancing.Shared, MapInstancing.PerCharacter, MapInstancing.PerSquad }
         };
 
         // The entry path (S1) exists; new characters may enter the boot camp once a live start location is

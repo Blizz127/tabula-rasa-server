@@ -17,5 +17,17 @@
             Position = logos.Position;
             DynamicObjectType = DynamicObjectType.Logos;
         }
+
+        /// <summary>The same shrine for another copy of its map (MapChannelManager.PopulateContextCopy).</summary>
+        public Logos(Logos template)
+        {
+            EntityClassId = template.EntityClassId;
+            Id = template.Id;
+            MapContextId = template.MapContextId;
+            Name = template.Name;
+            Position = template.Position;
+            Rotation = template.Rotation;
+            DynamicObjectType = DynamicObjectType.Logos;
+        }
     }
 }

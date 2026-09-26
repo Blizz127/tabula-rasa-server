@@ -577,6 +577,18 @@ namespace Rasa.Game.Handlers
             DynamicObjectManager.Instance.SelectWaypoint(Client, packet);
         }
 
+        [PacketHandler(GameOpcode.SelectInstance)]
+        private void SelectInstance(SelectInstancePacket packet)
+        {
+            MapChannelManager.Instance.SelectInstance(Client, packet.MapInstanceId);
+        }
+
+        [PacketHandler(GameOpcode.SelectInstanceCancel)]
+        private void SelectInstanceCancel(SelectInstanceCancelPacket packet)
+        {
+            MapChannelManager.Instance.SelectInstanceCancel(Client);
+        }
+
         [PacketHandler(GameOpcode.SetAutoLootThreshold)]
         private void SetAutoLootThreshold(SetAutoLootThresholdPacket packet)
         {

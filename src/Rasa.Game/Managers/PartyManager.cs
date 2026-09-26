@@ -941,6 +941,9 @@ namespace Rasa.Managers
             Parties.Remove(source.Id);
             FreePartyId(source.Id);
 
+            // The merged squad's instances stay with whoever is inside but can no longer be joined by its id.
+            MapChannelManager.Instance.SquadRetired(source.Id);
+
             foreach (var member in moving)
                 AddMemberEntry(party, member, existing);
 
@@ -1036,7 +1039,8 @@ namespace Rasa.Managers
             // After the list: SetPartyLeader resolves the id against it.
             client.CallMethod(SysEntity.ClientPartyManagerId, new SetPartyLeaderPacket(party.PartyLeaderId));
             client.CallMethod(SysEntity.ClientPartyManagerId, new SquadMemberListPacket(
-                others.Where(m => m.IsOnline).Select(m => (m.UserId, m.EntityId)).ToList()));
+                others.Where(m => m.IsOnline).Select(m => (m.UserId, m.EntityId)).ToList(),
+                client.Player?.MapChannel?.IsSquadInstance == true));
             // Said with the rest of the squad state, which is where the answer would have to go if
             // it were ever true: the client asks to join a voice channel the moment it hears yes.
             client.CallMethod(SysEntity.ClientPartyManagerId, new VoiceChatAvailablePacket(VoiceChatAvailable));
@@ -1057,6 +1061,10 @@ namespace Rasa.Managers
                 {
                     leaver.Player.PartyId = 0;
                     ResetClient(leaver, kicked);
+
+                    // "/leave: Leave your current squad. This will also remove you from an instance." (TaRapedia
+                    // Beginners Guide rev 35313, 2008-10-23); PM 1058 tells them why.
+                    MapChannelManager.Instance.SquadMemberRemoved(leaver, party.Id);
                 }
             }
 
@@ -1087,7 +1095,9 @@ namespace Rasa.Managers
 
         private void Disband(Party party)
         {
-            foreach (var member in OnlineClients(party))
+            var online = OnlineClients(party);
+
+            foreach (var member in online)
             {
                 member.Player.PartyId = 0;
                 member.CallMethod(SysEntity.ClientPartyManagerId, new PartyDisbandedPacket());
@@ -1098,6 +1108,10 @@ namespace Rasa.Managers
             party.Members.Clear();
             Parties.Remove(party.Id);
             FreePartyId(party.Id);
+
+            // PM 945: "All squad members will be kicked out of the current map." The squad's instances can no
+            // longer be joined, so a recycled squad id cannot find them.
+            MapChannelManager.Instance.SquadDisbanded(party.Id, online);
 
             AdsChanged(null, former);
         }
@@ -1302,6 +1316,9 @@ namespace Rasa.Managers
         }
 
         private Party FindPartyOfAccount(uint accountId) => Parties.Values.FirstOrDefault(p => p.Find(accountId) != null);
+
+        /// <summary>The squad an account belongs to (held spots included), or 0: which squad instance a login enters.</summary>
+        public uint PartyIdOfAccount(uint accountId) => FindPartyOfAccount(accountId)?.Id ?? 0;
 
         /// <summary>The caller's party if they lead it; otherwise tells them why not and returns null.</summary>
         private Party LedParty(Client client)

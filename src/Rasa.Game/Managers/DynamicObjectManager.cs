@@ -549,8 +549,9 @@ namespace Rasa.Managers
                         if (dropship.DropshipType == DropshipType.Spawner)
                             SpawnPoolManager.Instance.DecreaseQueueCount(dropship.SpawnPool);
 
-                        // remove object
-                        if (MapChannelManager.Instance.MapChannelArray.TryGetValue(dropship.MapContextId, out var dropshipMap))
+                        // remove object, from the channel it was added to (an instance's own, for its spawn pools)
+                        var dropshipMap = dropship.MapChannel;
+                        if (dropshipMap != null || MapChannelManager.Instance.MapChannelArray.TryGetValue(dropship.MapContextId, out dropshipMap))
                             CellManager.Instance.RemoveFromWorld(dropshipMap, dropship);
 
                         Dropships.Remove(dropship.EntityId);
@@ -562,6 +563,53 @@ namespace Rasa.Managers
             }
         }
         #endregion
+
+        /// <summary>
+        /// Gives an instance channel its own copy of every static object its context's primary channel was loaded
+        /// with: teleporter pads, lockboxes and Logos shrines (new entity ids, same rows). Control points, crafting
+        /// stations and dropship-pad triggers are not copied: no per-squad context has any in the world seed.
+        /// </summary>
+        internal void CopyStaticObjects(MapChannel primary, MapChannel copy)
+        {
+            foreach (var (id, teleporter) in primary.Teleporters)
+                copy.Teleporters.Add(id, new DynamicObject
+                {
+                    Position = teleporter.Position,
+                    Rotation = teleporter.Rotation,
+                    MapContextId = teleporter.MapContextId,
+                    EntityClassId = teleporter.EntityClassId,
+                    Comment = teleporter.Comment,
+                    ObjectData = teleporter.ObjectData,
+                    DynamicObjectType = teleporter.DynamicObjectType
+                });
+
+            foreach (var (id, footlocker) in primary.FootLockers)
+                copy.FootLockers.Add(id, new DynamicObject
+                {
+                    Position = footlocker.Position,
+                    Rotation = footlocker.Rotation,
+                    MapContextId = footlocker.MapContextId,
+                    EntityClassId = footlocker.EntityClassId,
+                    DynamicObjectType = footlocker.DynamicObjectType,
+                    StateId = LockboxStateFor(footlocker.EntityClassId),
+                    Comment = footlocker.Comment
+                });
+
+            foreach (var logos in primary.DynamicObjects.OfType<Logos>())
+                copy.DynamicObjects.Add(new Logos(logos));
+        }
+
+        /// <summary>Drops the dropships still flying for a channel that is being destroyed.</summary>
+        internal void DropChannelDropships(MapChannel channel)
+        {
+            foreach (var dropship in Dropships.Values.Where(dropship => ReferenceEquals(dropship.MapChannel, channel)).ToList())
+            {
+                Dropships.Remove(dropship.EntityId);
+                EntityManager.Instance.UnregisterEntity(dropship.EntityId);
+                EntityManager.Instance.UnregisterDynamicObject(dropship.EntityId);
+                EntityManager.Instance.FreeEntity(dropship.EntityId);
+            }
+        }
 
         #region Footlocker
 
@@ -767,9 +815,20 @@ namespace Rasa.Managers
         internal Dictionary<uint, MapWaypointInfoList> CreateListOfWaypoints(Client client, WaypointType waypointType)
         {
             var listOfWaypoints = new Dictionary<uint, MapWaypointInfoList>();
-            var listOfMapInstances = new List<MapInstanceInfo>();
             var waypointInfo = new List<WaypointInfo>();
             var mapChannel = client.Player.MapChannel;
+            var contextId = mapChannel.MapInfo.MapContextId;
+
+            // Inside a squad instance the map waypoint window only offers the way out: clientmethod.Recv_EnteredWaypoint
+            // (line 402) - "if waypoints is None, user is on an adventure, and they can only abort the mission" - lists
+            // PM 315 "Leave current adventure" as waypoint 0, which comes back as SelectWaypoint(mapId, 0).
+            if (mapChannel.IsSquadInstance && waypointType == WaypointType.Waypoint)
+            {
+                listOfWaypoints.Add(contextId, new MapWaypointInfoList(contextId,
+                    new List<MapInstanceInfo> { new MapInstanceInfo(mapChannel.Ordinal, mapChannel.MapInstanceId, MapChannelManager.Instance.StatusOf(mapChannel)) },
+                    null));
+                return listOfWaypoints;
+            }
 
             // create waypoint list for player
             foreach (var waypoint in client.Player.GainedWaypoints)
@@ -784,24 +843,31 @@ namespace Rasa.Managers
                 // (help text 5697: "a list of all available waypoints on your current map"; a local teleporter
                 // plays the LOCAL_TELEPORTER effect of a within-map move). SelectWaypoint would fly a player to
                 // another map for anything listed from one.
-                if (IsWithinMapType(teleporterData.WaypointType) && teleporter.MapContextId != mapChannel.MapInfo.MapContextId)
+                if (IsWithinMapType(teleporterData.WaypointType) && teleporter.MapContextId != contextId)
                     continue;
 
                 if (teleporterData.WaypointType != waypointType)
                     continue;
 
                 if (waypoint.WaypointId == teleporterData.WaypointId)
-                {
                     waypointInfo.Add(new WaypointInfo(teleporterData.WaypointId, teleporterData.Contested, teleporterData.WaypointType)
                     {
                         Position = teleporter.Position
                     });
-
-                    listOfMapInstances.Add(new MapInstanceInfo(1, mapChannel.MapInfo.MapContextId, MapInstanceStatus.Low)); // ToDo: send mapInstanceStatus based on map population
-                }
             }
 
-            listOfWaypoints.Add(mapChannel.MapInfo.MapContextId, new MapWaypointInfoList(mapChannel.MapInfo.MapContextId, listOfMapInstances, waypointInfo));
+            // One row per copy of the map, each listing the same waypoints (waypointwindow.ShowWaypoints line 265: a
+            // MapInstanceRow per (ordinal, mapId, overloadedStatus), its waypoints under it). Live notes 2007-08-21: "New
+            // waypoint window that allows user to change between instances of the same map". It used to send one
+            // identical row per waypoint.
+            var copies = mapChannel.IsInstance && !mapChannel.IsSharedCopy
+                ? new List<MapChannel> { mapChannel }
+                : MapChannelManager.Instance.CopiesOf(contextId);
+            var listOfMapInstances = copies
+                .Select(copy => new MapInstanceInfo(copy.Ordinal, copy.MapInstanceId, MapChannelManager.Instance.StatusOf(copy)))
+                .ToList();
+
+            listOfWaypoints.Add(contextId, new MapWaypointInfoList(contextId, listOfMapInstances, waypointInfo));
 
             return listOfWaypoints;
         }
@@ -817,17 +883,32 @@ namespace Rasa.Managers
             if (client.Player == null || client.State != ClientState.Ingame)
                 return;
 
-            // The client sends None for the map when it means the one it is on.
-            var mapContextId = packet.MapInstanceId != 0 ? packet.MapInstanceId : client.Player.MapContextId;
+            // The client sends None for the map when it means the one it is on; otherwise the mapId of the waypoint
+            // window row it chose - a context id for a shared primary channel, an instance's own id for a copy.
+            var targetMap = packet.MapInstanceId != 0
+                ? MapChannelManager.Instance.ChannelByMapInstanceId(packet.MapInstanceId)
+                : client.Player.MapChannel;
+            var mapContextId = targetMap?.MapInfo?.MapContextId ?? packet.MapInstanceId;
+
+            // "Leave current adventure" (waypoint 0, PM 315) from a squad instance's waypoint window.
+            if (packet.WaypointId == 0 && ReferenceEquals(targetMap, client.Player.MapChannel) && targetMap.IsSquadInstance)
+            {
+                if (IsAtWaypoint(client))
+                    MapChannelManager.Instance.ReturnFromSquadInstance(client, false);
+                else
+                    Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} asked to leave the adventure away from a waypoint");
+                return;
+            }
 
             // A private per-character context is entered through its own content (the boot camp's
-            // exit and entry), never by dropship.
-            if (MapChannelManager.Instance.IsPerCharacterContext(mapContextId)
-                || !MapChannelManager.Instance.MapChannelArray.TryGetValue(mapContextId, out var targetMap)
+            // exit and entry), never by dropship; nor is anyone else's squad instance.
+            if (targetMap == null
+                || MapChannelManager.Instance.IsPerCharacterContext(mapContextId)
+                || (targetMap.IsInstance && !targetMap.IsSharedCopy && !ReferenceEquals(targetMap, client.Player.MapChannel))
                 || !targetMap.Teleporters.TryGetValue(packet.WaypointId, out var teleporter)
                 || !(teleporter.ObjectData is WaypointInfo objData))
             {
-                Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} asked for unknown waypoint {packet.WaypointId} on map {mapContextId}");
+                Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} asked for unknown waypoint {packet.WaypointId} on map {packet.MapInstanceId}");
                 return;
             }
 
@@ -840,6 +921,14 @@ namespace Rasa.Managers
             if (!HasGained(client.Player, objData.WaypointId, objData.WaypointType))
             {
                 Logger.WriteLog(LogType.Debug, $"SelectWaypoint: {client.Player.Name} has not gained waypoint {objData.WaypointId}");
+                return;
+            }
+
+            // Another numbered copy of the map the player is on: over to it at the chosen waypoint.
+            if (mapContextId == client.Player.MapContextId && !ReferenceEquals(targetMap, client.Player.MapChannel))
+            {
+                MapChannelManager.Instance.ChangeMap(client, mapContextId,
+                    new Vector3(teleporter.Position.X, teleporter.Position.Y + 1, teleporter.Position.Z), (float)teleporter.Rotation, targetMap);
                 return;
             }
 
@@ -938,7 +1027,11 @@ namespace Rasa.Managers
         internal void PlayerEnterWaypoint(DynamicObject obj)
         {
             var cellSeed = CellManager.Instance.GetCellSeed(obj.Position);
-            var mapChannel = MapChannelManager.Instance.FindByContextId(obj.MapContextId);
+            // The pad's own channel: two copies of a map each have their own pads.
+            var mapChannel = MapChannelManager.ChannelOf(obj);
+
+            if (!mapChannel.MapCellInfo.Cells.ContainsKey(cellSeed))
+                return;
 
             foreach (var client in mapChannel.MapCellInfo.Cells[cellSeed].ClientList)
             {
@@ -963,7 +1056,8 @@ namespace Rasa.Managers
 
                 var waypointInfoList = CreateListOfWaypoints(client, objectData.WaypointType);
 
-                client.CallMethod(SysEntity.ClientMethodId, new EnteredWaypointPacket(obj.MapContextId, obj.MapContextId, waypointInfoList, objectData.WaypointType, objectData.WaypointId));
+                // currentMapId marks which map instance row is "(Current)" (waypointwindow.ShowWaypoints line 270).
+                client.CallMethod(SysEntity.ClientMethodId, new EnteredWaypointPacket(mapChannel.MapInstanceId, obj.MapContextId, waypointInfoList, objectData.WaypointType, objectData.WaypointId));
 
                 // check if we already added him to the waypoint
             }

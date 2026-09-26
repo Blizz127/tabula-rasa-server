@@ -16,6 +16,47 @@ namespace Rasa.Structures
         public uint? OwnerCharacterId { get; set; }
 
         public bool IsPrivateInstance => OwnerCharacterId.HasValue;
+
+        /// <summary>A copy of a per-squad context (a final-client MISSIONCONTEXT map).</summary>
+        public bool IsSquadInstance { get; set; }
+
+        /// <summary>
+        /// The squad a squad instance was created for, or null for one created by a character outside a squad
+        /// (<see cref="OwnerSoloCharacterId"/>) and for one whose squad has since disbanded, which nobody can join.
+        /// </summary>
+        public uint? OwnerPartyId { get; set; }
+
+        /// <summary>The character that created a squad instance while outside a squad.</summary>
+        public uint? OwnerSoloCharacterId { get; set; }
+
+        /// <summary>A further numbered copy of a shared context, beside the primary channel (OD-127).</summary>
+        public bool IsSharedCopy { get; set; }
+
+        /// <summary>Any channel other than a shared context's primary one; such a channel is destroyed once empty.</summary>
+        public bool IsInstance => IsPrivateInstance || IsSquadInstance || IsSharedCopy;
+
+        /// <summary>
+        /// The copy's number within its context, shown by the client after the map name ("Name(2)") on the loading
+        /// screen (wonkavatorwindow._UpdateLoadingScreen line 408, from Wonkavate's instanceId) and the map window
+        /// header (mapwindow._UpdateMapName line 1772), and sent as the ordinal of ChooseInstanceList and of the
+        /// waypoint window's map instance rows. 1 for a shared primary channel.
+        /// </summary>
+        public uint Ordinal { get; set; } = 1;
+
+        /// <summary>
+        /// The id the client echoes back in SelectWaypoint and SelectInstance: the context id for a shared primary
+        /// channel (the waypoint window's existing convention), otherwise <see cref="InstanceMapIdBase"/> plus the
+        /// instance id, so no instance can be mistaken for a context.
+        /// </summary>
+        public uint MapInstanceId => IsInstance ? InstanceMapIdBase + InstanceId : MapInfo?.MapContextId ?? 0;
+
+        public const uint InstanceMapIdBase = 0x40000000;
+
+        /// <summary>Monotonic milliseconds at which the instance last became empty; 0 while occupied.</summary>
+        public long EmptySince { get; set; }
+
+        /// <summary>This channel's own spawn pools (an instance's copies); null for a shared primary channel, which runs the context's.</summary>
+        public List<SpawnPool> SpawnPools { get; set; }
         // timers
         //public int TimerClientEffectUpdate { get; set; }
         //public int TimerMissileUpdate { get; set; }
