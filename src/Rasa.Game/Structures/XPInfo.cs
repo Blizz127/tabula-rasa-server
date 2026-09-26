@@ -7,7 +7,8 @@
         public uint Total = 0;
         public uint Gained = 0;
         public uint BaseGained = 0;
-        public int GroupMod = 1;
+        /// <summary>A float in the client: Recv_ExperienceChanged prints int(groupMod * 100) - 100 as the group bonus.</summary>
+        public double GroupMod = 1.0;
         public int StreakMod = 1;
         public int BoosterMod = 1;
         public bool WasCritKill = false;
@@ -34,7 +35,9 @@
             pw.WriteUInt(Total);
             pw.WriteUInt(Gained);
             pw.WriteUInt(BaseGained);
-            pw.WriteInt(GroupMod);
+            // Full precision: the client truncates groupMod * 100, and 2.52 or 3.04 narrowed to
+            // single precision would print one percent less.
+            pw.WriteExactDouble(GroupMod);
             pw.WriteInt(StreakMod);
             pw.WriteInt(BoosterMod);
             pw.WriteBool(WasCritKill);

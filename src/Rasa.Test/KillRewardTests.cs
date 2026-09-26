@@ -37,6 +37,14 @@ namespace Rasa.Test
                 var streakMod = observation.GetProperty("streak_mod").GetInt32();
                 var name = observation.GetProperty("event").GetString();
                 Assert.AreEqual(observation.GetProperty("xp").GetUInt32(), KillRewardRules.Experience(level, streakMod), name);
+                // Every clean kill was solo; where the footage shows the player's level, the danger penalty and
+                // the squad path leave it exactly as fitted.
+                if (observation.TryGetProperty("player_level", out var playerLevel))
+                {
+                    var reward = KillRewardRules.Experience(level, streakMod, 1, playerLevel.GetInt32());
+                    Assert.AreEqual(observation.GetProperty("xp").GetUInt32(), reward.Gained, name);
+                    Assert.AreEqual(1.0, reward.GroupMod, name);
+                }
                 Assert.AreEqual(observation.GetProperty("credits").GetInt32(), KillRewardRules.Credits(level), name);
                 if (observation.TryGetProperty("base", out var baseXp))
                     Assert.AreEqual(baseXp.GetUInt32(), KillRewardRules.BaseExperience(level), name);
@@ -161,7 +169,7 @@ namespace Rasa.Test
             var client = new Client(null, new ClientPacketHandler()) { State = ClientState.Ingame };
             client.Player.Level = playerLevel;
             var manager = new KillRewardManager(() => _now,
-                (_, experience, baseGained, streakMod) => _experience.Add((experience, baseGained, streakMod)),
+                (_, reward) => _experience.Add((reward.Gained, reward.BaseGained, reward.StreakMod)),
                 (_, update, value) => _updates.Add((update, value)));
             return (manager, client);
         }

@@ -146,7 +146,9 @@ namespace Rasa.Managers
                 SpawnPoolManager.Instance.IncreaseDeadCreatureCount(creature.SpawnPool);
             }
 
-            // todo: How were credits and experience calculated when multiple players attacked the same creature? Did only the player with the first strike get experience?
+            // Experience goes to the player who landed the killing blow and to their squadmates in range
+            // (KillRewardManager.SquadShare). Partial credit for damage dealt by others (the client's
+            // KC_*_PLACE_MOD constants) is not built: GAP-XP-PARTIAL.
 
             Client client = null;
 
@@ -164,7 +166,8 @@ namespace Rasa.Managers
             if (client != null)
             {
                 // experience, credits and kill streak (docs/evidence/kill-rewards.json)
-                KillRewardManager.Instance.AwardKill(client, creature);
+                var (squadSize, squadmates) = KillRewardManager.SquadShare(mapChannel, client, creature, PartyManager.Instance.PartyOf(client));
+                KillRewardManager.Instance.AwardKill(client, creature, squadmates, squadSize);
 
                 MissionManager.Instance.OnCreatureKilled(client, creature);
                 credited = client;

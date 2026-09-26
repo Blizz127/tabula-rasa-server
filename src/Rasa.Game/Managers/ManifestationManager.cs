@@ -581,15 +581,19 @@ namespace Rasa.Managers
         }
 
         internal void GainExperience(Client client, uint experience, uint? baseGained = null, int streakMod = 1)
+            => GainKillExperience(client, new KillExperience(experience, baseGained ?? experience, streakMod, 1.0));
+
+        /// <summary>A kill's experience with its xpinfo modifiers (KillRewardManager).</summary>
+        internal void GainKillExperience(Client client, KillExperience reward)
         {
             if (client.Player.Level >= MaxPlayerLevel)
                 return; // cannot gain xp over level 50
 
-            client.Player.Experience += experience;
+            client.Player.Experience += reward.Gained;
 
             CharacterManager.Instance.UpdateCharacter(client, CharacterUpdate.Expirience, client.Player.Experience);
 
-            NotifyExperienceGained(client, experience, baseGained, streakMod);
+            NotifyExperienceGained(client, reward);
         }
 
         /// <summary>
@@ -597,10 +601,20 @@ namespace Rasa.Managers
         /// is already persisted (mission rewards commit it with the mission state).
         /// </summary>
         internal void NotifyExperienceGained(Client client, uint experience, uint? baseGained = null, int streakMod = 1)
+            => NotifyExperienceGained(client, new KillExperience(experience, baseGained ?? experience, streakMod, 1.0));
+
+        private void NotifyExperienceGained(Client client, KillExperience reward)
         {
             var levelBefore = client.Player.Level;
-            // streakMod above 1 makes the client append "[base Base XP] [+N% Kill Streak Bonus]".
-            var xpInfo = new XPInfo(client.Player.Experience, experience, baseGained ?? experience) { StreakMod = streakMod };
+            var experience = reward.Gained;
+            // streakMod or groupMod above 1 makes the client append "[base Base XP]", then
+            // "(+N% Group Bonus)" and "[+N% Kill Streak Bonus]"; wasCritKill picks "... by Crit Killing."
+            var xpInfo = new XPInfo(client.Player.Experience, experience, reward.BaseGained)
+            {
+                StreakMod = reward.StreakMod,
+                GroupMod = reward.GroupMod,
+                WasCritKill = reward.WasCritKill
+            };
 
             client.CallMethod(client.Player.EntityId, new ExperienceChangedPacket(xpInfo));
 

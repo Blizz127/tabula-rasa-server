@@ -129,6 +129,17 @@ namespace Rasa.Memory
         }
 
         /// <summary>
+        /// A float sent at full precision, never narrowed to single precision as <see cref="WriteDouble"/>
+        /// does when the value is within 0.01 of one. For values the client scales and truncates, such as
+        /// xpinfo groupMod (int(groupMod * 100)): 2.52 narrowed is 2.5199999809, which prints 151, not 152.
+        /// </summary>
+        public void WriteExactDouble(double value)
+        {
+            Writer.Write((byte) 0x3E);
+            Writer.Write(value);
+        }
+
+        /// <summary>
         /// The length prefix counts bytes, not characters - ReadUtf8StringOn on the other side
         /// takes it straight to ReadBytes. string.Length counts UTF-16 code units, so every
         /// character outside ASCII used to be announced short: an accented letter is one char and

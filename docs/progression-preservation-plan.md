@@ -1155,6 +1155,23 @@ character picks up in Alia Das once Training Day and the class choice are behind
   now labelled analogues, not original (OD-96). The source is kind `emulator_db`, and `GAP-W1/W2-ITEM-PRICES` are
   reopened. Alia Das' unnamed weapons vendor (pool 36) stays, because it stands on the client's "Weapons Vendor: Alia
   Das" marker (OD-97, `GAP-ALIA-DAS-WEAPONS-VENDOR`). The other "Test Vendor" pools there have never spawned.
+- **Kill experience modifiers (2026-09-26, code only)**: the climb to 15 is mostly kill experience, and kills paid
+  the same whatever the player's level and only to the killer. Now:
+  - Squadmates on the channel within 100 m of the creature share every kill. Each gets `100 - 8(n-1)`% of the solo
+    experience, shown as "[split Base XP] (+84% Group Bonus)" for two. The share is the client's own XP-bar
+    arithmetic (`experiencebarwindow`, `XP_MOD_PER_PARTY_MEMBER 0.08`); the 100 m range
+    (`MIN_DISTANCE_FOR_KILL_CREDIT`) is inferred from its name (OD-106).
+  - A player more than 5 levels above the creature loses 20% per level: 80% at 6 above, 20% at 9, nothing from 10
+    (TaRapedia 2008-10-06). The constants are original; the ramp between them is inferred (OD-105,
+    `GAP-XP-DANGER-SHAPE`). Every recorded final-week kill is at most one level above, so the fit is untouched.
+  - A crit kill pays the observed "by Crit Killing" chunk before the plain kill (B1-028), but nothing raises one
+    until the crit-death finisher exists (OD-107, `GAP-CRIT-DEATH-FINISH`).
+  - B3-060 is no longer read as level-difference evidence: its 40 credits belong to the previous kill. It and the
+    half/quarter lines of B1 fit the client's damage-ranked `KC_*_PLACE_MOD` (1.0/0.5/0.25), which stays unbuilt
+    (`GAP-XP-PARTIAL`).
+  - Also open: `GAP-XP-SQUAD-RANGE`, `-SQUAD-STREAK`, `-MODIFIER-ORDER`, `GAP-KILL-CREDITS-MODIFIERS`.
+  - Details: `docs/retail-accuracy.md`, "Kill experience: squad share, danger penalty, crit kills";
+    `docs/evidence/kill-rewards.json`.
 
 ## All-missions program (owner goal, 2026-09-15)
 
@@ -1296,6 +1313,9 @@ its evidence tier.
 | OD-95 Class trainers after D12 (2026-09-26, agent, pending owner review) | The 38 pre-D12 per-class trainer pools (501001-501038) stop drawing. A hub's single trainer is placed only where a post-D12 source names him, on the client's own TRAINER marker: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). His body (Kincaid's), level 8, 1000 hp and facing 0 are analogues with Kincaid as counterpart, and he is recognised by creature id because his package is unrecovered. Twin Pillars, Foreas Base and New Cumbria stay empty with named gaps; the client's unassigned "Training Officer" names are not used |
 | OD-96 Economy data of emulator lineage (2026-09-26, agent, pending owner review) | `gameserver_dev_Full.sql` is InfiniteRasa's emulator dump (source kind `emulator_db`). The seven loot rows (creature_loot 1-21), every `Regenerate_item_template` price and the vendors' stock stay, because loot and vendors need values and no original survives, but they are analogues, not original. Open for the owner: whether the emulator-authored loot rows, which are optional content, should be removed instead |
 | OD-97 The Alia Das "Test Vendor" NPCs (2026-09-26, agent, pending owner review) | Pools 21-29 have drawn nothing since the 2023 seed and stay as they are. Pool 36 ("Test Vendor 5", weapons package 10) stands 0.15 m from the client's "Weapons Vendor: Alia Das" marker and is kept as Alia Das' weapons vendor; its name, body and stock are a gap. The hospital pools 31-35 are left to the hospitals batch |
+| OD-105 Kill-experience danger penalty (2026-09-26, agent, pending owner review) | Applied, labelled inferred: full to 5 levels above the creature, 20% less per level to 20% at 9 above, nothing from 10 above. The constants (`DANGER_PENALTY_VALUE 0.2`, `_LEVELDIFF_MIN 5`, `_MAX 9`) are original and TaRapedia (2008-10-06) states the zero; only the linear ramp between them is reconstructed (`GAP-XP-DANGER-SHAPE`). The alternative was full experience at any level, which the live game did not give |
+| OD-106 Who shares a squad kill (2026-09-26, agent, pending owner review) | The killer's squadmates on the channel within 100 m (`MIN_DISTANCE_FOR_KILL_CREDIT`) of the creature, at the client's XP-bar share; the split counts every member in the world, as the client's tooltip does. Squadmates are paid without a streak (`GAP-XP-SQUAD-RANGE`, `GAP-XP-SQUAD-STREAK`) |
+| OD-107 Crit kills and partial credit (2026-09-26, agent, pending owner review) | The crit-kill reward is modelled from B1-028 but has no trigger until the crit-death finisher is built (`GAP-CRIT-DEATH-FINISH`). Damage-ranked partial credit is left out although the client's `KC_*_PLACE_MOD` fit four footage lines, because the ranking is not evidenced (`GAP-XP-PARTIAL`) |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

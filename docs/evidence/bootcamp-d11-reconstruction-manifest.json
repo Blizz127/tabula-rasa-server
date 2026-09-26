@@ -73600,10 +73600,10 @@
   },
   {
    "id": "GAP-KILL-REWARDS",
-   "summary": "Kill experience, credits and the solo kill streak now follow the client constants and a fit to every clean final-week kill (71 XP / 10 credits for a level-2 Initiate, +100% streak with 1 prestige on the third kill). Still absent: level-difference, squad, partial-credit and crit-kill modifiers, and original loot tables.",
+   "summary": "Kill experience, credits and the solo kill streak follow the client constants and a fit to every clean final-week kill (71 XP / 10 credits for a level-2 Initiate, +100% streak with 1 prestige on the third kill). Since 2026-09-26 squadmates in range share a kill at the client's own experience-bar share (original), outlevelled kills lose experience on an inferred danger ramp, and a crit kill pays its observed second chunk (no trigger yet). Still absent: damage-ranked partial credit, a squad streak, team crit kills, the crit-death finisher itself and original loot tables; see GAP-XP-* and GAP-CRIT-DEATH-FINISH.",
    "evidence": [
     "docs/evidence/kill-rewards.json",
-    "footage A3-081, A4-10..A4-28, B1-018..B1-041"
+    "footage A3-081, A4-10..A4-28, B1-018..B1-041, B1-028, B3-047"
    ],
    "closes_with": "evidence for the remaining modifiers (kill-rewards.json gaps)",
    "surfaced_by": [
@@ -77200,6 +77200,111 @@
    "closes_with": "a review against the client's vendor markers and a post-D11 source for hospital medical vendors",
    "surfaced_by": [
     "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-XP-DANGER-SHAPE",
+   "summary": "The danger penalty's three constants (DANGER_PENALTY_VALUE 0.2, DANGER_PENALTY_LEVELDIFF_MIN 5, MAX 9; shared/gameconstants.pyo lines 116-118) are original, but the client never reads them. The ramp the server applies - full to 5 levels above, then 80/60/40/20% at 6-9 and nothing at 10+ - is inferred from the constants, the same module's LEVELDIFF_DAMAGEMOD ramp and TaRapedia's 'ten or more levels above ... no experience' (Experience rev 34776, 2008-10-06). No recorded final-era kill has the player five or more levels above the creature (OD-105).",
+   "evidence": [
+    "docs/evidence/kill-rewards.json xp.danger",
+    "shared/gameconstants.pyo lines 110-118",
+    "footage B3-047"
+   ],
+   "closes_with": "a final-era kill line with the player five or more levels above the creature, or the original server code",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-XP-SQUAD-RANGE",
+   "summary": "Who shares a squad kill is inferred: the killer's squadmates on the same channel within 100 m of the creature (MIN_DISTANCE_FOR_KILL_CREDIT, used from its name; TaRapedia 'so long as you are in range'), dead or alive, with the split counting every squad member in the world as the client's XP-bar tooltip does (OD-106).",
+   "evidence": [
+    "docs/evidence/kill-rewards.json xp.group.recipients",
+    "client/ui/experiencebarwindow.pyo OnXPEntered lines 220-223"
+   ],
+   "closes_with": "footage of a squad kill with a member out of range, or the original server code",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-XP-SQUAD-STREAK",
+   "summary": "STREAK_BASE_PER_PARTY_MEMBER 3 names a per-member streak step, which suggests a shared squad streak; the server keeps the killer's solo streak and pays squadmates their share without a streak (OD-106).",
+   "evidence": [
+    "shared/gameconstants.pyo line 121"
+   ],
+   "closes_with": "footage of a squad kill streak",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-XP-PARTIAL",
+   "summary": "Damage-ranked partial kill credit is not built. The client's KC_1ST/2ND/3RD_PLACE_MOD 1.0/0.5/0.25, KC_MINIMUM_PERCENTAGE_DONE 0.15 and KC_HEAL_FACTOR 1.75 (gameconstants lines 99-107) reproduce the plain half and quarter lines B1-025/032/033 (17, 33, 35 experience, no credits) and the halved streak line B3-060 (101 of a level-7 base at +100%); how the server ranked damage, whether allied NPCs and squads count, and what the other attackers' credits were are not in the client, and creatures keep no per-attacker damage. Only the killing blow and the killer's squad are credited (OD-107).",
+   "evidence": [
+    "docs/evidence/kill-rewards.json unexplained B1-025, B3-060",
+    "shared/gameconstants.pyo lines 99-107"
+   ],
+   "closes_with": "the original server's kill-credit ranking, or enough footage of shared kills to fit it",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-CRIT-DEATH-FINISH",
+   "summary": "The crit-kill reward (a 'by Crit Killing' chunk before the plain kill, B1-028) is modelled but nothing raises it: overkill, IsOverkillable/CRIT_PREDEATH_EFFECT, RequestCritDeathFinish (opcode 662, action 10000002) and CRIT_DEATH_EFFECT are not implemented, and team crit kills (wasTeamCritKill, PM 1135) are not paid (OD-107).",
+   "evidence": [
+    "client/actions/critdeathfinish.pyo",
+    "client/augmentations/manifestation.pyo Recv_ExperienceChanged",
+    "footage B1-028"
+   ],
+   "closes_with": "an implementation of the crit-death finisher from the client's critdeathfinish/critdeathdata and evidence for the overkill threshold",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-XP-MODIFIER-ORDER",
+   "summary": "Each kill-experience modifier truncates (xpinfo.ApplyModifier), but the order of the streak, group and danger modifiers is inferred beyond what the solo streak fit fixes; another order pays a few points more.",
+   "evidence": [
+    "docs/evidence/kill-rewards.json xp.modifier_order",
+    "shared/xpinfo.pyo ApplyModifier"
+   ],
+   "closes_with": "a final-era squad or outlevelled kill line",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-KILL-CREDITS-MODIFIERS",
+   "summary": "Kill credits stay 5 x creature level to the killer alone. Whether squadmates, the danger penalty or partial credit change them is unrecorded; the partial lines B1-025/032/033 show no credits.",
+   "evidence": [
+    "docs/evidence/kill-rewards.json credits"
+   ],
+   "closes_with": "footage of credits on a squad or outlevelled kill",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-KILL-XP-MODIFIERS)"
    ],
    "slices": [
     "W3"
@@ -81574,6 +81679,164 @@
      "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(code) KillRewardRules, KillRewardManager",
+   "table": "kill experience rules",
+   "key": {
+    "rule": "xp.group"
+   },
+   "field": "squadmates' experience; groupMod, baseGained",
+   "old": "none: only the killer gained experience, groupMod always 1",
+   "new": "the killer and every squadmate within range each gain share% = 100 - 8(n-1) of the solo experience; baseGained is the even split floor(base/n); groupMod = n x share% / 100 sent at full precision",
+   "tier": "original",
+   "reason": "The client computes this share itself for the XP-bar tooltip, and its chat line reads 'gained [base Base XP] (+N% Group Bonus)' only coherently with baseGained as the even split. TaRapedia's table agrees except its three-member +154%, two points above the client's 152.",
+   "citations": [
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/ui/experiencebarwindow.pyo (sha256 ac69bcf48d624b37a0c3595d3a7d4059f0df0bea3cb812946dd439f8a9d674ff) OnXPEntered, source lines 220-223, offsets 199-274"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "shared/gameconstants.pyo (sha256 e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40) <module> line 95, offset 329: XP_MOD_PER_PARTY_MEMBER 0.08"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/augmentations/manifestation.pyo (sha256 724f68eb70e5a47338db82977c55abfa09f1b187f86a0b9a560c012a8588886d) Recv_ExperienceChanged line 1098, offsets 81-105 and 277-395"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "Experience rev 34776, 2008-10-06T14:43:33Z (Avalyst), https://tabularasa.fandom.com/wiki/Experience?oldid=34776; wikitext read from vps-rescue-20260926 .../790308d2-caa0-424b-83f7-350e4ce16d2a/tool-results/b1gmowi1j.txt (sha256 c2483d9b59e210d9a50598fdbb268896b0dc51bdeb0be74a39cab09275125bce) lines 527-615"
+    },
+    {
+     "source": "measurement:kill-rewards",
+     "locator": "docs/evidence/kill-rewards.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(code) KillRewardRules, KillRewardManager",
+   "table": "kill experience rules",
+   "key": {
+    "rule": "xp.group.recipients"
+   },
+   "field": "who shares a kill",
+   "old": "the killer only",
+   "new": "the killer's squadmates on the channel within 100 m of the creature; n = squad members in the world",
+   "tier": "inferred",
+   "reason": "TaRapedia: squadmates 'in range when it is killed' share without dealing damage. The range is MIN_DISTANCE_FOR_KILL_CREDIT, which the client never reads (OD-106, GAP-XP-SQUAD-RANGE).",
+   "citations": [
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "shared/gameconstants.pyo <module> line 333, offset 1376: MIN_DISTANCE_FOR_KILL_CREDIT 100"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/party.pyo (sha256 a8c3d6474c0a0873a134ed4876a2f573ad0e71b17e4fa73e8493290450e78ee7) GetSquadMembers line 142, Recv_SquadMemberList line 306"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "Experience rev 34776, 2008-10-06T14:43:33Z (Avalyst), https://tabularasa.fandom.com/wiki/Experience?oldid=34776; wikitext read from vps-rescue-20260926 .../790308d2-caa0-424b-83f7-350e4ce16d2a/tool-results/b1gmowi1j.txt (sha256 c2483d9b59e210d9a50598fdbb268896b0dc51bdeb0be74a39cab09275125bce) lines 527-615"
+    },
+    {
+     "source": "measurement:kill-rewards",
+     "locator": "docs/evidence/kill-rewards.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(code) KillRewardRules, KillRewardManager",
+   "table": "kill experience rules",
+   "key": {
+    "rule": "xp.danger"
+   },
+   "field": "experience for an outlevelled kill",
+   "old": "full experience at any level difference",
+   "new": "kept% = 100 up to 5 levels above, 100 - 20(d - 5) for 6-9 above, 0 from 10 above, per recipient's own level",
+   "tier": "inferred",
+   "reason": "The constants are original and unread by the client; the linear ramp between them is the one reading that agrees with TaRapedia's zero at ten or more levels above and with B3-047's full experience one level above (OD-105, GAP-XP-DANGER-SHAPE).",
+   "citations": [
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "shared/gameconstants.pyo <module> lines 116-118, offsets 397/403/409: DANGER_PENALTY_VALUE 0.2, DANGER_PENALTY_LEVELDIFF_MIN 5, DANGER_PENALTY_LEVELDIFF_MAX 9"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "shared/gameconstants.pyo <module> lines 110-112, offsets 371-394: LEVELDIFF_DAMAGEMOD_LEVEL_MIN 9, _MAX 12, _MODIFIER 0.9 / (MAX - MIN)"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "Experience rev 34776, 2008-10-06T14:43:33Z (Avalyst), https://tabularasa.fandom.com/wiki/Experience?oldid=34776; wikitext read from vps-rescue-20260926 .../790308d2-caa0-424b-83f7-350e4ce16d2a/tool-results/b1gmowi1j.txt (sha256 c2483d9b59e210d9a50598fdbb268896b0dc51bdeb0be74a39cab09275125bce) lines 527-615"
+    },
+    {
+     "source": "video:8VXeKzGUv0c",
+     "locator": "B3-047, 315.6 s and 326.2 s: a level-8 player (HUD level from the B3-030 cut) gains 101 experience and 35 credits twice from a level-7 Forean Machina Mk II"
+    },
+    {
+     "source": "measurement:kill-rewards",
+     "locator": "docs/evidence/kill-rewards.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(code) KillRewardRules, KillRewardManager",
+   "table": "kill experience rules",
+   "key": {
+    "rule": "xp.crit"
+   },
+   "field": "crit-kill experience",
+   "old": "none",
+   "new": "a crit kill pays a wasCritKill chunk equal to a plain kill before the plain kill, each advancing the streak; one credit payment",
+   "tier": "observed",
+   "reason": "B1-028 shows the two equal lines and one credit line; TaRapedia says the crit kill counts as two kills in the chain. Nothing raises a crit kill yet (OD-107, GAP-CRIT-DEATH-FINISH).",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "locator": "B1-028, 47.2 s: 'You gained 66 experience points by Crit Killing. / You gained 66 experience points. / You received 5 credits.'"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/augmentations/manifestation.pyo Recv_ExperienceChanged offsets 221-252: wasCritKill selects PM_GAINED_EXPERIENCE_CRIT (1132)"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "Experience rev 34776, 2008-10-06T14:43:33Z (Avalyst), https://tabularasa.fandom.com/wiki/Experience?oldid=34776; wikitext read from vps-rescue-20260926 .../790308d2-caa0-424b-83f7-350e4ce16d2a/tool-results/b1gmowi1j.txt (sha256 c2483d9b59e210d9a50598fdbb268896b0dc51bdeb0be74a39cab09275125bce) lines 527-615"
+    },
+    {
+     "source": "measurement:kill-rewards",
+     "locator": "docs/evidence/kill-rewards.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(manifest)",
+   "table": "kill experience evidence",
+   "key": {
+    "event": "B3-060/B4-006"
+   },
+   "field": "interpretation",
+   "old": "player level 10, [101 Base XP] with 40 credits: a level-difference reduction of a level-8 base",
+   "new": "the 40 credits belong to the cut-off line above; the 101 line is a level-7 base halved after a +100% streak, consistent with KC_2ND_PLACE_MOD 0.5, not the danger penalty (3 levels above)",
+   "reason": "Every final-week reward prints its experience line before its credit line (A3-081, B1-018, B1-028), and three levels is below DANGER_PENALTY_LEVELDIFF_MIN 5. The segment-3 audit's reading of B3-060 as level-difference evidence is withdrawn.",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "locator": "B3-060/B4-006, 397.267 s: '...Streak Bonus] / You received 40 credits. / You gained 101 experience points. [101 Base XP] [+100% Kill Streak Bonus]'; HUD level 10 (B4-004)"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "shared/gameconstants.pyo <module> line 100, offset 347: KC_2ND_PLACE_MOD 0.5"
+    },
+    {
+     "source": "measurement:kill-rewards",
+     "locator": "docs/evidence/kill-rewards.json"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -82224,6 +82487,36 @@
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
    "choice": "Pools 21-29 ('Test Vendor 1-9') have drawn nothing since the 2023 seed and are left as they are. Pool 36 ('Test Vendor 5', weapons package 10) stands on the final client's 'Weapons Vendor: Alia Das' marker and is Alia Das' only weapons vendor, so it is kept; its missing name, test body and seed stock are recorded in GAP-ALIA-DAS-WEAPONS-VENDOR rather than removed. The hospital 'Test Vendor 3' pools 31-35 are left to the batch that owns hospitals (GAP-WILDERNESS-HOSPITAL-TEST-VENDORS).",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-105",
+   "decision": "The kill-experience danger penalty's shape",
+   "default": "Leave outlevelled kills at full experience until the curve is evidenced",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Apply the penalty, labelled inferred: full to 5 levels above, 20% less per level to 20% at 9 above, nothing from 10 above. The three constants are original client values and TaRapedia (2008-10-06) states the zero; leaving the penalty out would let a level-14 player farm level-1 creatures at full experience, which the live game did not allow. The linear ramp between the constants is the only reconstructed part (GAP-XP-DANGER-SHAPE); a final-era outlevelled kill line replaces it.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-106",
+   "decision": "Who shares a squad kill",
+   "default": "The killer only, until the recipients are evidenced",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The killer's squadmates on the same channel within 100 m (MIN_DISTANCE_FOR_KILL_CREDIT) of the creature share it at the client's own XP-bar share; the split counts every squad member in the world, as the tooltip does. Only the killer's streak applies; squadmates are paid without one (GAP-XP-SQUAD-RANGE, GAP-XP-SQUAD-STREAK). The share formula is original; the recipients and range are inferred.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-107",
+   "decision": "Crit kills and partial credit",
+   "default": "Model neither until their triggers exist",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The crit-kill reward is modelled from B1-028 (a wasCritKill chunk equal to the plain kill, first, both counting toward the streak) so the finisher only has to call it, but nothing raises it until overkill and RequestCritDeathFinish are built (GAP-CRIT-DEATH-FINISH). Damage-ranked partial credit is left out although KC_*_PLACE_MOD fit four footage lines, because the ranking itself is not evidenced and creatures keep no per-attacker damage (GAP-XP-PARTIAL).",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }

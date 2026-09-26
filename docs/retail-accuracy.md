@@ -2314,3 +2314,38 @@ shows what the skip granted (`GAP-LOGOS-SKIP-POWER`). Nothing is granted in its 
 Provenance: the manifest rows with migration `LiaisonLogosMissions` (43 rows, 11 changes, 6 new gaps, OD-100) and
 `docs/evidence/liaison-logos-missions.json`. The research is in `research/20260926-logos-missions`: TaRapedia and
 Ellatha fetches, the static client decode, and the world check.
+
+## 2026-09-26 — Kill experience: squad share, danger penalty, crit kills
+
+The segment-3 audit (`research/20260926-segment3-audit`, SEG3-KILL-XP-MODIFIERS) found kills paying the same at any
+player level and only to the killer. The 1.16.5.0 client was re-read statically for every use of the kill constants.
+`XP_MOD_PER_PARTY_MEMBER` is the only one it reads: `experiencebarwindow.OnXPEntered` (lines 220-223) computes the
+squad share for the XP-bar tooltip. The `DANGER_PENALTY_*`, `KC_*_PLACE_MOD` and `MIN_DISTANCE_FOR_KILL_CREDIT`
+constants appear nowhere but `gameconstants`, so how the server used them is not in the client. Code only; no
+migration. `KillRewardRules`, `KillRewardManager`, `XPInfo`:
+
+| rule | now | evidence | tier |
+| --- | --- | --- | --- |
+| squad share | each member gets `100 - 8(n-1)`% of the solo experience; baseGained is the even split, groupMod `n x share / 100` (sent at full precision, so the chat line reads +84/+152/+204/+240/+260% for 2-6) | the client's tooltip arithmetic; Recv_ExperienceChanged prints "[base Base XP] (+N% Group Bonus)"; TaRapedia Experience rev 34776 (2008-10-06) agrees except its three-member +154% | original |
+| who shares | the killer, and squadmates on the channel within 100 m of the creature; n counts every member in the world, as the tooltip does; squadmates get no streak | TaRapedia "so long as you are in range when it is killed"; `MIN_DISTANCE_FOR_KILL_CREDIT 100` used from its name (OD-106) | inferred |
+| danger penalty | full to 5 levels above the creature, then 80/60/40/20% at 6-9 above, nothing from 10; each recipient's own level; a 0 line is not sent | `DANGER_PENALTY_VALUE 0.2`, `_LEVELDIFF_MIN 5`, `_MAX 9` (original); ramp shaped like the same module's `LEVELDIFF_DAMAGEMOD`; TaRapedia's zero at 10+; B3-047 full at one level above (OD-105) | inferred |
+| crit kill | a wasCritKill chunk equal to the plain kill, then the plain kill, both counting toward the streak; one credit line | B1-028 (final week) "66 ... by Crit Killing / 66 / 5 credits"; TaRapedia "counts as two kills in a chain" (OD-107) | observed |
+
+Nothing raises a crit kill yet. Overkill, the pre-death effect and `RequestCritDeathFinish` are not built
+(`GAP-CRIT-DEATH-FINISH`). The modifiers truncate in the order streak, group, danger. The solo fit fixes only the first
+step (`GAP-XP-MODIFIER-ORDER`). Solo kills within five levels pay exactly as before: all nine footage observations still
+reproduce, and the five whose player level is on screen also pass through the new path.
+
+**B3-060 re-read.** The audit took "[101 Base XP]" with 40 credits at player level 10 as a level-difference reduction.
+Every final-week reward prints its experience line before its credit line (A3-081, B1-018, B1-028), so the 40 credits
+belong to the cut-off line above it. The 101 line is a level-7 base halved after a +100% streak
+(floor(1017 x 2 x 0.5 / 10) = 101), three levels below the danger minimum. Together with the plain 17/33/35 lines of B1
+(a quarter or a half of the level 1/2 base), it fits the client's damage-ranked `KC_1ST/2ND/3RD_PLACE_MOD`
+1.0/0.5/0.25. That partial credit stays unbuilt: the ranking is not in the client, and creatures keep no per-attacker
+damage (`GAP-XP-PARTIAL`).
+
+Also open: `GAP-XP-DANGER-SHAPE` (no final-era kill five or more levels above), `GAP-XP-SQUAD-RANGE`,
+`GAP-XP-SQUAD-STREAK` (`STREAK_BASE_PER_PARTY_MEMBER` suggests a squad streak) and `GAP-KILL-CREDITS-MODIFIERS` (credits
+stay the killer's). Provenance: `docs/evidence/kill-rewards.json` (rules `xp.group`, `xp.group.recipients`, `xp.danger`,
+`xp.crit`, `xp.modifier_order`, each with client file hash, source line and bytecode offset) and the manifest's changes,
+gaps and OD-105-107.

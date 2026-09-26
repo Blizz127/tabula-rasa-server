@@ -929,3 +929,14 @@ conventions (555 hp, run 9, walk 5). `WorldPlacementFloorSnap` and `WorldFloorSw
 from "the original server's own 217 creature spawn points". Those are spawn pools of emulator lineage (the world seed
 and the upstream passes), not the original server's. Both are emulator conventions rather than original data and
 deserve the same relabelling.
+
+## Kill experience modifiers (2026-09-26)
+
+SEG3-KILL-XP-MODIFIERS in the segment 3 audit, checked against the 1.16.5.0 client before anything changed. Squadmates
+in range now share a kill at the client's own XP-bar share (original). An outlevelled kill loses experience on a
+ramp built from the original `DANGER_PENALTY_*` constants and TaRapedia's zero at ten levels (inferred, OD-105). A crit
+kill pays its observed second chunk but has no trigger yet. The audit's level-difference reading of B3-060 is
+withdrawn: its 40 credits belong to the previous kill, and the line fits the client's unbuilt damage-ranked partial
+credit instead. Rules, tiers and gaps: `docs/evidence/kill-rewards.json`; account: `docs/retail-accuracy.md`, "Kill
+experience: squad share, danger penalty, crit kills".
+
