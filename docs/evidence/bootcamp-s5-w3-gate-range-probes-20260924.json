@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Original-client W3 ranged gate acquisition from copied accepted-1995 checkpoint",
+  "setup": "Restored compatibility client 1.16.5.0 with disposable deployed-derived Auth/Game and copied character, normal seeded hostile stats. Mission 1995 was already accepted; no same-session Youngblood handoff is claimed. The live Game/DIT service was untouched.",
+  "sources": [
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-range-w3-1/manifest.json",
+      "sha256": "0f8ae5c3ba004887db165aea811ae6c248dd024b9939c75dd5adbda54977ae4f",
+      "files_verified": "72/72"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-range-w3-panel1/manifest.json",
+      "sha256": "3730b48aad6ac6a945b144be93e32e57bdd0e4ad65c18b0269c8c67632a64dc5",
+      "files_verified": "72/72"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-fire-sweep-w3-1/manifest.json",
+      "sha256": "35f249ae2c491121f08f6dd9ca51ab9972ade99333ae9926f9607b01d0d65917",
+      "files_verified": "93/93"
+    },
+    {
+      "path": "docs/evidence/bootcamp-rifle-range.json",
+      "location": "original_client_runtime and capture playthrough-07/05-rifle-range-tooltip.png",
+      "finding": "Original compatibility client tooltip displays 60 m optimal range for the recruit rifle. This does not establish the server's actual maximum shot range."
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source_location": "s5-gate-range-w3-1/output/02-range-aim-0.png and output/02-range-aim-4.png",
+      "finding": "After three seconds of ordinary movement the client /loc showed (73.9,109.0,139.2). The Thrax was visible on the gate approach. By frame aim-4 the client displayed a top target panel naming 'Thrax Infantry Initiate', even though the local close-range nameplate crop was negative. The controller stopped without Tab/fire because it inspected only that local crop."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "s5-gate-range-w3-panel1/output/02-range-aim-0.png and run log",
+      "finding": "The next three-second walk landed at (79.7,109.0,144.6), a different heading/position from the preceding attempt. The moving Thrax appeared far left of the reticle and the bounded horizontal sweep showed no target panel or local label. It stopped before Tab/fire. No enemy, weapon, or mission data changed."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-gate-range-w3-1/output/02-range-aim-0.png and output/02-range-aim-4.png",
+      "finding": "At range the target panel appears around screenshot x410–595,y58–105, outside the controller's local nameplate crop x500–750,y335–445. Offline OCR of crop 240x70+400+50 reads 'Thrax Infantry Initiate' on aim-4 and stays empty on aim-0."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "s5-gate-fire-sweep-w3-1/drive-s5-gate-fire-sweep-w3.log; output/game.log lines 141 and 149; output/02-gate-after-sweep.png; manifest copied_state_after_stop",
+      "finding": "A third W3 attempt reached (73.9,109.0,139.2). Holding ordinary primary fire while sweeping the camera in short turns caused the original client to send SetTargetId; the gate Thrax died and the copied character gained 71 XP and 10 credits. After two seconds' further movement and the existing post-gate route, /loc displayed (0.8,99.5,128.7) at the fence. The controller stopped just outside its old x<=0 branch guard before soldier or corpse interaction. The copied databases were restored."
+    }
+  ],
+  "assessment": "Ordinary auto-fire and short camera turns can acquire and kill the moving gate Thrax from the W3 approach in the current emulator. Earlier serial aim failures were test-controller limits. This is an emulator functionality check, not proof of original final-live enemy balance. The uninterrupted route to wounded soldier and corpse remains unverified.",
+  "next_check": "Continue from the measured fence waypoint after confirmed normal gate combat; inspect short movement around its original sandbags before taking a branch toward the outpost Thrax and wounded soldier. Keep final-live combat values and exact route as evidence gaps."
+}

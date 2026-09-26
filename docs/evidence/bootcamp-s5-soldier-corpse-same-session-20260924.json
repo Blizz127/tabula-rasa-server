@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Original-client same-session S5 soldier Continue and Conrad corpse use",
+  "scope": "One isolated copied-client run on the ordinary copied Game DLL, starting from a diagnostic soldier checkpoint at a previously accepted position; no live or gameplay-rule change.",
+  "archive": {
+    "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-corpse-same-session-20260924/manifest.json",
+    "sha256": "217deff7871d51ef5af27c7c1d2a2a26736454fecbfb01d0c8831e0478514b83",
+    "file_count": 21,
+    "exact_locations": ["game.log lines 143, 148 and 323", "11-corpse-w250.png", "12-corpse-after-use.png", "char-after-use.db"]
+  },
+  "checkpoint": {
+    "tier": "diagnostic",
+    "basis": "Previously accepted original-client Move and visible soldier talk prompt at (-100.60547,86.1875,72.14453), yaw 0.7030426.",
+    "edit": "Copied character id 1 coordinates and rotation only before login; no mission/objective/timer edit after launch.",
+    "limit": "This run does not verify movement from Youngblood to the soldier in the same session."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The original client opened the soldier Objective Completion dialogue and clicked visible Continue. Copied Game logged RequestNPCConverse and CompleteNPCObjective; copied DB completed 1995/2 and activated 1995/3."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Guarded accepted movement after Continue was S1000 to (-96.69141,86.26953,76.75391), A500 to (-94.21094,85.953125,74.65234), A250 to (-93.00391,85.67969,73.62891), W250 to (-94.74219,85.49609,71.57422), W250 near a collision to (-94.95703,85.515625,71.42578), A250 to (-93.921875,85.26172,70.546875), A250 to (-92.68359,84.98047,69.49609), and W250 to (-94.26172,85.12891,67.63281)."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "At the final accepted viewpoint, the original client displayed Salvagable Materials and Press [Mouse Button 2] to use. One right-click sent RequestUseObject (Game log line 323), completed 1995/3, activated 1995/1, and displayed Objective Completed and 00:09:59. Prompt screenshot SHA-256 680c403a958f0950dcd4099f4af4262f87d02f5264ec0d0c12bf065cbd86c4e0; post-use screenshot SHA-256 3620f3a152f2cf5a82eb18d668d94fe2515deeab6c6bdf519153718310dbc3c4."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "After use and after server stop, copied mission 1995 was state 0; objectives 2 and 3 were status 2 (complete), objective 1 was status 1 (active), with timer_anchor_ms 1790277303806 and timer_remaining_ms 600000. The SQLite backup API copy char-after-use.db passes integrity_check and has SHA-256 745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The reconstructed soldier-to-corpse objective chain works through ordinary original-client conversation, movement and use in one isolated session. The corpse class and placement remain explicitly inferred or analogue data; this client success does not prove original final-live positioning."
+  },
+  "restoration": "All 21 archive file hashes verified. Copied character DB and private baseline restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; copied Game DLL SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6. Previous harness output restored, no WAL/SHM or copied processes; live services and DIT untouched.",
+  "status": "Same-session checkpointed objective 2 to 3 to 1 confirmed. Full new-character prefix and timed wreck interaction remain unverified."
+}

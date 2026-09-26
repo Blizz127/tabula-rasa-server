@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Reacquired Tabula Rasa 1.16.5.0 compatibility client after local research-tree loss",
+  "source_url": "https://archive.org/download/TabulaRasa1.16.5.0/Tabula%20Rasa%201.16.5.0.zip",
+  "archive_path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/Tabula Rasa 1.16.5.0.zip",
+  "archive_size_bytes": 3091698303,
+  "archive_sha256": "1ee00dc439d92a9717b9ae925ff827e345063fa4200dd202f0ccf2d22bd14f3e",
+  "archive_sha1": "03eba96d79edfbc9ba014b88699e526248bdbe1e",
+  "archive_md5": "42d00c1e1744607180d479ec0b260306",
+  "zip_integrity": "unzip -tq: no errors detected",
+  "extracted_root": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0",
+  "selected_members_sha256": {
+    "tabula_rasa.exe": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+    "trpython.zip": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6",
+    "data/game.zip": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6"
+  },
+  "provenance_tier": "original",
+  "limits": "The byte contents and embedded 1.16.5.0 version match the earlier inspected community package. No official final-live manifest establishes that this package is byte-for-byte the shutdown client. The deleted local research tree and derived captures were not restored by this download."
+}

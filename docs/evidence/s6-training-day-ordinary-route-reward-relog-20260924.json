@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "scope": "One isolated original-client continuation from the archived post-objective Training Day checkpoint through Kincaid reward selection, mission turn-in, logout and relog",
+  "result": "The compatible client walked from the saved Alia Das arrival position to Kincaid using ordinary movement controls, opened his Mission Completion panel, selected Vextronics Pistol, and completed Training Day. The copied character database persisted mission 1526 state 4, a 120-credit increase, and item template 116929 with module 900221. XP stayed 8695 and level stayed 2. Logout to Character Select and Enter Battle returned to Alia Das with the mission no longer tracked. This verifies the current emulator path; exact final-live reward values remain evidence gaps.",
+  "source_checkpoint": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s6-training-day-20260924/capture/detached-retry-20260924/post-run-databases/char.db",
+    "sha256": "4eb03590f2cd55a909157e104cd0a704a1d5a49adac3e1c86a480cb696737c27",
+    "character": {"id": 1, "level": 2, "experience": 8695, "credit": 360, "position": [884.1099853515625, 305.79998779296875, 347.80999755859375]},
+    "mission_1526": {"state": 0, "objective_1_status": 2}
+  },
+  "run": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s6-training-day-reward-20260924/capture/completed-run-20260924/manifest.json",
+    "archive_manifest_sha256": "deea1dfc168a005714815abf3cdb13a5ea9974150ade4500ee4b6951f46c7589",
+    "archived_file_count": 576,
+    "supervisor_pid": 3845401,
+    "supervisor_elapsed_seconds": 752.64,
+    "shutdown": "Explicit stop command within the 900-second inner and 1200-second outer caps. Copied Xvfb, Auth and Game exited 0; client was terminated -15 during bounded shutdown after relog, not during gameplay.",
+    "client_build": "1.16.5.0 per current emulator requirement; not independently established as the final shutdown build",
+    "ordinary_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "controls": "Mouse yaw, short W holds, one W+Space jump around a visible boulder, right-click Kincaid, ordinary reward and Logout UI clicks. Accepted Move trace in output/positions.tsv. No position, level, XP, packet or gameplay DB edit during the run.",
+    "locators": [
+      {"path": "output/route-1790282941586383198.png", "finding": "Ordinarily reached Kincaid at the barracks with the talk prompt and yellow marker visible."},
+      {"path": "output/kincaid-reward-open.png", "finding": "Mission Completion panel displays 120 credits and a choice of Vextronics Pistol or Vextronics Pulse Pistol."},
+      {"path": "output/pistol-selected.png", "finding": "Vextronics Pistol selected; Complete Mission button enabled."},
+      {"path": "output/kincaid-after-complete.png", "finding": "Reward panel closed after Complete Mission click."},
+      {"path": "output/logout-menu.png", "finding": "Client chat shows Mission Completed: Training Day and normal Logout control."},
+      {"path": "output/character-select-ready.png", "finding": "Logout returned to Character Select with Alden selected."},
+      {"path": "output/after-relog-playable.png", "finding": "Enter Battle loaded Alia Das and mission tracker had no Training Day entry."},
+      {"path": "output/game.log:556,594,627,629,631,632", "finding": "RequestNPCConverse, CompleteNPCMission, RequestLogout, CharacterLogout, RequestSwitchToCharacterInSlot and MapLoaded from this client path."},
+      {"path": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json", "finding": "Detached supervisor and copied process termination records."},
+      {"path": "output/commands/; output/*.result.json", "finding": "Private command and result records for client controls; do not publish isolated test credentials."},
+      {"path": "databases/char-before.db; databases/char-after.db", "finding": "SQLite integrity_check ok for both; before/after fields below are copied into the archive manifest."}
+    ]
+  },
+  "saved_state_delta": {
+    "mission_1526_state": [0, 4],
+    "objective_1_status": [2, 2],
+    "credit": [360, 480],
+    "experience": [8695, 8695],
+    "level": [2, 2],
+    "new_item": {"item_id": 16, "inventory_type": 1, "slot": 2, "template_id": 116929, "loot_module_id": 900221},
+    "after_char_db_sha256": "409cef3d641209a9b1f81aef4f62e7429e9b5781af9be9016334cd3ba3a4bc15"
+  },
+  "provenance_and_limits": {
+    "tier": "observed in compatible original client against an isolated copy of the current emulator; not independent final-live behavior",
+    "final_live_comparison": "The final-week route evidence names Kincaid and the barracks objective but cuts over the actual interaction. The current 120-credit reward conflicts with Ellatha/DaOpa's contemporary 180-credit mission listing; source version and exact final-live amount remain unresolved. The chosen template and module IDs are reconstructed values, not verified original final-live IDs.",
+    "open_gaps": [
+      "Resolve the 120-versus-180-credit source conflict with versioned direct final-live evidence before claiming fidelity.",
+      "The XP source needed for final-live level 3 or 4 training remains unknown. This natural checkpoint did not gain XP from Training Day."
+    ]
+  },
+  "cleanup": "The private copied character database was restored to source SHA-256 4eb03590f2cd55a909157e104cd0a704a1d5a49adac3e1c86a480cb696737c27; output command queue was cleared. No copied DB WAL/SHM or supervisor process remained. Live Game and DIT were untouched."
+}

@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Two isolated original-client normal-hostile S5 accepted-mission prefix runs",
+  "provenance_tier": "observed",
+  "setup": "Recovered compatibility client 1.16.5.0 with copied deployed-derived Game/world, copied accepted-1995 character at Youngblood-area login position (93.2,115.0,137.5), normal hostile stats/AI. Both starts have mission 1995 already accepted; no same-session Youngblood acceptance is claimed. No player coordinate, combat-stat, objective, or timer edits during either run. The live Game/DIT service and databases were untouched.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "output/01-start-loc.png; char-baseline.db; output/game.log",
+      "finding": "Run 1 entered playable client with Calling for Reinforcements objective 2 active, level 2, 8695 XP and 360 credits at the copied accepted-mission checkpoint."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output/02-west-gate-loc.png through 05-gate-after-fire-2.png; output/game.log around 06:38:34-06:38:38 America/Chicago",
+      "finding": "Normal client movement and rifle fire killed west-gate placement 198674 after seven logged 106-damage hits; copied character gained 71 XP and 10 credits, retaining objective 2 active."
+    },
+    {
+      "tier": "measured",
+      "source_location": "output/10-west-endcap-loc.png through 15-w3.png, original-client /loc overlay; output/command-trace.tar.gz",
+      "uncertainty": "Displayed position rounded to 0.1 m. Input heading and collision varied; no complete high-frequency movement trace.",
+      "finding": "In the same client session, ordinary movement went around the fence/panel and along the outer trench to (-94.5,85.2,67.5), within the inferred wounded-soldier bunker area. The character was alive with objective 2 active at the last location capture."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output/game.log line containing 06:47:46.108 America/Chicago death; output/16-d12.png; output/17-final-respawn.png; output/char-after-death.db",
+      "finding": "Before wounded-soldier dialogue, the player died at (-94.5,85.2,67.5), killed by creature 2760 class 29769 at (-85,86.3,91); the copied character respawned at hospital (357.9,120.3,156.5) with 8766 XP/370 credits, and objective 2 remained active. The controller spent time inspecting the route under fire, so this is not a calibrated survival or balance measurement."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "copied world.db creature 198513 and content_placement 198683",
+      "finding": "The killing creature is the currently seeded Thrax Infantry Initiate L1 (1995 outpost), class 29769, 555 health, at placement 198683 (-85,86.33,91.03). This identifies emulator rows, not proof of original final-live values."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output2/02-gate.png through 04-fence-panel.png; output2/game.log around 06:51:24 America/Chicago; output2/char-after-gate-death.db",
+      "finding": "Run 2 began from the restored same accepted-1995 baseline. The fixed gate firing angle missed the moving hostile (no XP/credits gained); that hostile pursued and killed the character at (0.3,99.3,130.8) before the lower route. The focus guard correctly withheld a later move on the death UI. No soldier interaction occurred."
+    },
+    {
+      "tier": "observed",
+      "source_location": "char-baseline.db and restored server/databases/char.db SHA-256",
+      "finding": "Both disposable runner namespaces exited 0. The isolated server character DB was restored byte-for-byte to the pre-run baseline hash c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; SQLite integrity_check was ok."
+    }
+  ],
+  "assessment": "The accepted-1995 checkpoint can continuously clear the first gate and traverse the reconstructed outer path to the wounded-soldier vicinity with normal hostile behavior. The first run died before objective 2 interaction; the second failed the first moving-target fight. Full gate-to-soldier dialogue, soldier-to-corpse use, and combined timed completion remain unverified. These are emulator functionality observations, not final-live enemy-stat or route fidelity proof.",
+  "next_verification": "Use dynamic visual target acquisition to kill placement 198683 before the bunker approach, then talk to the wounded soldier and use Conrad's corpse in one original-client session. Preserve normal deployed-derived combat and distinguish the preaccepted-1995 checkpoint from mission acceptance.",
+  "sources": [
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/char-baseline.db",
+      "sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/char-after-death.db",
+      "sha256": "26b73a0f0aa0a84e4f0f91400c495aa3c88843e99ec665dfb65f8db0afc15095"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/char-after-gate-death.db",
+      "sha256": "14d1143874aba2ecd6ce30049bf33eeafcd3fab90bbcc595a5dabd88a2f5c782"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/game.log",
+      "sha256": "0f3a6491624f7521cf5be601b055713651753db331a722ecddd6ef61696087ae"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/game.log",
+      "sha256": "0a125f28c8ff97c4f38fcdbaaa8fc13e190b57eb5a5d0ac7d6b9e4f62994afdd"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/command-trace.tar.gz",
+      "sha256": "e1c8cdf6e96bd77f87fbc17e44b9b65e9b9066056b6b59c9104e808ebc10e2df"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/command-trace.tar.gz",
+      "sha256": "36c5dad6047b648d01db547244297fd3e4ea084b44843e2126d30895e696fbf4"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive.py",
+      "sha256": "f9de9ba3b38deb89735770c9522da744cbebc575d2ed90e13193812a017fc68a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/launch.py",
+      "sha256": "05fb3e0e5f89464bb4a2db66d90fb6d1387c4ff4ffa093a75dd003c179e0e7d5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/server/databases/world.db",
+      "sha256": "c0dfa152576469b947c5b9fa57381b412d6226ca055d4fd591e0d195acbd49af"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-harness-courtyard-traced.py",
+      "sha256": "cc53743b03aba2fe33ea49ff64b50243f127e2dab2677735791ac89c41b4a0d3",
+      "current_status": "missing after /home/blizz/backups disappeared on 2026-09-24; this original traced harness was not byte-for-byte recovered"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+      "former_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-client/tabula_rasa.exe",
+      "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/00-playable.png",
+      "sha256": "2381747af06b503e96c060e1e2f11ca1e246e05e50d0132a77e414336ba5d453"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/01-start-loc.png",
+      "sha256": "bb01e9cb1831aa09e0bef808df1462ff22838b1507ba5cbb7e60ae4110a87384"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/02-west-gate-loc.png",
+      "sha256": "77ecc1a29a2e9dbf723f16a0e4e610757d78b1b980e81464edce294c06b1eb5a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/03-gate-aim.png",
+      "sha256": "43c988d9cf58708d99319c222bdd11234f3c73a3fcb3b27847ab838530e5fe30"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/04-gate-after-fire-1.png",
+      "sha256": "2e9364b5732e906c14f18ea4c48ad76915831d6eb6e4175084c495cf74ce38c0"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/05-gate-after-fire-2.png",
+      "sha256": "a252810d4f325610a5c2f42c4df66e1246138bb802f5c95676119102dbb4b49c"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/06-past-gate-loc.png",
+      "sha256": "14d0c4cc147a4f62d0a017ffe3320205a206cd67bf6282c00da4bb6cda8aa5c3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/07-bend-rock-loc.png",
+      "sha256": "151d3511dc9f0598d4a41df28cb67f467d0f7cab2e779bf797e71bdc4d32cc36"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/08-west-rock-loc.png",
+      "sha256": "02fd617860265f2c0d3db8b17b9dde9976f98bbdb4d75922c91af8f85874af1e"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/09-north-endcap-loc.png",
+      "sha256": "23e92e49e5db0d63bc5ef830103435c6d2f4e29410873a9150c20be5da3ede24"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/10-west-endcap-loc.png",
+      "sha256": "1bb0e3e5ebb321ec9615e3fdbe5fbf6feead0474d330f2155f30877837075c5c"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/10a-d2.png",
+      "sha256": "63accd02635a86165445167cd182fc3c44ee0245ba9a1f768d4664d6b831a911"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/10b-loc-on.png",
+      "sha256": "b5a59617bc1329bb1f0b26064714258ab899aafed61da66b6b0e9135f834f6df"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/10c-d16.png",
+      "sha256": "ba1a96bf0adfc82a80b070d45fab481f925b5d859096b031bc4fa76046665ec8"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/10d-w5.png",
+      "sha256": "f2cc2545f44337cb8006b14b95aff14c6f3466d829a5f61c04fcb9b20e7ba5bd"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/11-wa5.png",
+      "sha256": "c75d0c8dbb988d179902fb799f5b363616381f390d8d4a82a308c0d16f72e9b3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12-w5.png",
+      "sha256": "ae9e167909b45c1e65bfba8d50de39462f0bcac489808347000d00249526d952"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12a-d3.png",
+      "sha256": "59bbdb683576848cb719601de15fddb6dc8472aa8d1182ade3b654bede681eed"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12b-s300.png",
+      "sha256": "93ebd722ab8cba1a6d3996212e55f644d8e99a7a78ee258fb38e7dd39a051078"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12c-w2.png",
+      "sha256": "6ce5efc222848935ae7b934068dc4aa987d53d587e2e0b116b490fdfdadea7fe"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12d-turn.png",
+      "sha256": "a6db79c57c77a6822acd973ee396f57248457b71af33cc3b018cf078da8e9c4e"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12e-turn-w15.png",
+      "sha256": "f77f9d5036576a87ace2e10ee8a2914d5a6ea38e21edba86acce18a347ba3af0"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/12f-w3.png",
+      "sha256": "7d54aece6cfab6a95e4b1f5c06372a14f17a28f81383bb7b302026a550788d10"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/13-w5.png",
+      "sha256": "f9770b83905904a944deca438392aa43989879ce109f7e0d8b56635808f1961d"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/14-w5.png",
+      "sha256": "954d966967aa90079b2cb6d1c1c8d31670941d0976cc15ef8792031288a3d9b3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/15-w3.png",
+      "sha256": "60052ea5271089bed72773aec4722427a2b537db491b6bed2f1db6c1a8e801a1"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/16-d12.png",
+      "sha256": "6392e67f08b19defcb466f0c91c49e2ad20475ef855bc37814f637e6c97726f1"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/17-final-respawn.png",
+      "sha256": "fbdc38537d7806d5990476e0c2cc072d031db836dff4e06c105c9bcde64aae3e"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/00-playable.png",
+      "sha256": "1033629e56556ecc940b667593765d9ebd744aa1837dee45a881636fce62ba5f"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/01-start-loc.png",
+      "sha256": "38ea8407742df96d551edf567e65fbc3201722609b39d993b4f2b58d40fc6e19"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/02-gate.png",
+      "sha256": "9a1650af739d9978bd2e7f88859940d614a6dfcc8bf10ac0e4745e2f714004b8"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/03-gate-killed.png",
+      "sha256": "7408420b2453bb1054309ed9d1b241d5ce682efee6abda181a1adae88006940c"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/04-fence-panel.png",
+      "sha256": "ca7040080d0850733505c30379612b56cb794f3426a3b80c7d6271f7916f134c"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output2/05-gate-death.png",
+      "sha256": "9c3b8f53e5f8aeeb278032e422c3525e8aa79b7177387637b618520601eb64ae"
+    }
+  ]
+}

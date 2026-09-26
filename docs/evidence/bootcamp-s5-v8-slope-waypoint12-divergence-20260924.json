@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Integrated isolated S5 v8 route diverges on rocky slope before northwest fallback",
+  "scope": "One isolated original-client 1.16.5.0 copied-server run from the archived post-Conrad-corpse character. Only the copied mission 1995 objective 1 timer anchor was reset. Ordinary client controls were used; no live or DIT change occurred.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v8-slope-waypoint12-divergence-20260924/manifest.json",
+    "manifest_sha256": "6630dd1cd7a3175a198abee9a1c92799dd46d59eb36e05bd81184f383edc5c09",
+    "archived_files": 212,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "2f2b4002ff44b4193e9dd617b65e11976b44c28d48eefca83db219a775dddd83",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: final waypoint 11 entries through RuntimeError at waypoint 12",
+      "output/positions.tsv: final eight accepted rows",
+      "output/11-route.png, SHA-256 3efc263cf6babb24dbda72e8fca5d11e62f1f12273c32f8558bacc27f578059b",
+      "output/focus-second.png, SHA-256 c003b98ab729fbb9ac046e9ba4562ede2c09c12a29d4ab87016948aec15c6fed",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_pre_sandbag_v8.py: waypoint 12 progress guard"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The v8 client followed the ordinary bridge and rock-slope route through waypoint 11 to (-170.72266,94.46094,-21.707031), yaw 5.310066, with about 382.65 seconds remaining on the reset copied timer. Its next target was (-180.004,92.568,-26.121).",
+      "source_location": "output/driver-second-sandbag.log waypoint 11 checkpoint and waypoint 12 traceback; output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The next forward hold produced accepted (-169.9336,95.265625,-23.414062), then (-169.42578,95.82031,-24.023438), both yaw 0.61646855. The driver measured target-distance changes of -0.150 m and -0.507 m. It stopped at waypoint 12 under its eight-second positive-progress guard, before the northwest route, fallback, higher-bank segment, or bomb use.",
+      "source_location": "output/driver-second-sandbag.log final RuntimeError; output/positions.tsv final rows"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The last pre-hold focus screenshot shows the recruit on the rocky slope, with wreck terrain and sandbags visible farther ahead/right and 06:15 on the copied mission timer. It precedes the divergent accepted packets and does not establish a collider or original final-live route.",
+      "source_location": "output/focus-second.png"
+    },
+    {
+      "tier": "observed_emulator_comparison",
+      "finding": "The earlier v3 successful client route began the analogous wreck-approach step from (-170.27344,94.78125,-21.8125), yaw 6.186545, and accepted (-172.76172,92.99609,-20.703125) toward the wreck. V8 began within about 0.46 m horizontally but with yaw about 0.88 radians different, then moved east/south away from its target. This supports a heading-sensitive controller divergence, not a proven terrain block.",
+      "source_location": "docs/evidence/bootcamp-s5-rock-slope-v3-northwest-path-20260924.json; its private archive output/driver-second-sandbag.log move 12.0; this run output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied SQLite database passed integrity check. Mission 1995 and objective 1 remained active; objectives 2 and 3 were complete. No bomb interaction occurred.",
+      "source_location": "state-after-stop.json"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor ended after 233.41 seconds after driver exit 1; copied launcher exit 0 and status.json recorded terminal client, Auth, Game and display processes. The diagnostic's atomic command publication showed no JSON parsing race in this run.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The integrated northwest fallback was not exercised because the pre-sandbag controller stopped earlier. A grounded next local route test would use short, guarded heading corrections from the v8 slope point toward the v3 accepted first wreck-approach point (-172.76172,92.99609,-20.703125), checking fresh client Move, elevation and timer before resuming the far waypoint. It must be tested rather than assumed to reproduce v3."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Continuous traversal of the slope, northwest sandbag route, and bomb use in one client session",
+    "Whether the proposed heading correction reproduces the v3 passage",
+    "Original final-live route and mission timer sufficiency"
+  ]
+}

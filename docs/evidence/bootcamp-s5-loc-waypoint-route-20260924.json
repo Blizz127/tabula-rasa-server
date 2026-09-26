@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Original-client /loc route feedback, untimed corpse-to-wreck traversal, separate bomb-use diagnostic, and one unreset timed continuation",
+  "scope_note": "All runs used copied 1.16.5.0 client/server/character data in bubblewrap/Xvfb :107. No live Game/DIT or world placement changed. Coordinates are compatibility-client measurements of inferred emulator placements, not final-live coordinates.",
+  "untimed_route": {
+    "setup": "From s5-corpse-agent-09 post-corpse copied DB, objective 1 synthetic row set status 0/no timer and objective 3 set active before login. No corpse click; no countdown.",
+    "start": [
+      -94.7,
+      85.0,
+      65.6
+    ],
+    "end": [
+      -220.3,
+      101.1,
+      -69.1
+    ],
+    "logged_holds": 42,
+    "logged_hold_seconds": 40.7,
+    "all_holds": 45,
+    "all_hold_seconds": 43.5,
+    "movement_metres_logged": 197.635,
+    "first_to_last_hold_wall_seconds": 541.114,
+    "ocr_replay": "44 route screenshots read correctly by two-agreeing-treatment /loc OCR; zero mismatches; 26.3 s total after fast-pass change.",
+    "uncertainty": "0.1 m display rounding plus collision and frame timing; no claim of shortest or final-live route."
+  },
+  "prompt_diagnostic": {
+    "prelaunch_edit": "Copied diagnostic DB positioned Alden at ordinary-reached (-220.3,101.1,-69.1), objective 3 complete, objective 1 active, fresh 600000 ms timer anchor. This is not a single-session corpse-to-bomb completion.",
+    "observed": "Client use prompt, RequestUseObject, wreck explosion, objective 1 status 2, objective 4 status 1."
+  },
+  "timed_v1": {
+    "prelaunch_error": "Synthetic objective 1 status-0 row from untimed diagnostic was retained. Corpse click completed objective 3 but did not activate objective 1, so no timer started. Stopped before route; not evidence of normal mission behavior."
+  },
+  "timed_v2": {
+    "prelaunch_edit": "Fresh copy of untimed source DB with only synthetic objective 1 row deleted; objective 3 active. After corpse click no DB, position, mission, or timer edit.",
+    "corpse_result": "Objective 3 completed; objective 1 active with original 600000 ms timer anchor.",
+    "result": "Harness conservative cutoff at +549.8 s at (-217.3,100.0,-61.0); no bomb RequestUseObject. Objective 1 still active; no in-client timer-expiry observation.",
+    "steps": 68,
+    "held_seconds": 65.3,
+    "measured_movement_metres": 344.54,
+    "remaining_horizontal_metres_to_viewpoint": 8.7,
+    "limitation": "Slow route control and detours, not proof that 600 s retail mission timer is insufficient."
+  },
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-corpse-agent-09/char-after-use.db",
+      "sha256": "0dfc685b6de058b5bcaf4ea0e734ade57282d8505e9e58a69bb9fe938cee078f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/closed-loop.jsonl",
+      "sha256": "63084338e694a21f1360524d348d64e73defb2bd9524716c37dcd653659d620a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/command-ledger-redacted.json",
+      "sha256": "c84307d10692462d79c98784924996efd9c244acc55358df74287eb87ab44002"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/screenshot-hashes.json",
+      "sha256": "07cfb53cf20d6a0c1e5709582f4bdd07e0565d6e68a3d8b5007d05e32f767fc9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/waypoint-driver-final.py",
+      "sha256": "4aea6bcf7795906bc21887557fb704ba25abd98fd311632bb98b6124c454a118"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/closed-loop-044.png",
+      "sha256": "ed584e8eac91178815576af62c47d01e2cb1e62979bfb8dd7d89878a04cf0bac"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-untimed-20260924/bomb-viewpoint-s150.png",
+      "sha256": "685a940bb5b124a444a5db850469c54e4daff8049fac02a644b8f96b232fc302"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/command-ledger-redacted.json",
+      "sha256": "4d51d72ff3a51e0f45e4b2633e03108074f0900c585baa7a5011ded59d1d0fdb"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/screenshot-hashes.json",
+      "sha256": "dcd342987596738195cf3f96a7c6c959f24892d072d8279b7a7b33a1f6dbf9c4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/prompt-playable.png",
+      "sha256": "424e76384cb9e46ed5a2c1d40d9b7fe949d3e671f85c38b66743199accd50016"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/prompt-after-use.png",
+      "sha256": "c82695136d747be186a565db8168ef11026e0a3459261fc2047ebb10c18de57a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/objectives-after-use.json",
+      "sha256": "5aef00c0124dc7d30484f320b06051439644ef6022ca59cfe7f283061442d05e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-waypoint-prompt-diagnostic-20260924/game.log",
+      "sha256": "d3f931e4791e40c0c1f1775414db905cb5f5ca041b1e7e31964d59dde5cafc86"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-20260924/command-ledger-redacted.json",
+      "sha256": "ce152a7110a86b03fd7a20e9b2f764ba70fe44fcf41250132a606ca6f24799c0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-20260924/game.log",
+      "sha256": "8a21d7d453e1bea8e9679bd407752bb604205c9e4af953761f04957092b40e21"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/timed-route.jsonl",
+      "sha256": "45a5f0f407a30907f2583dac679a7443c0d0946468e462eab66faa183edc1684"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/command-ledger-redacted.json",
+      "sha256": "78fd5b6640c08370a1a8c8204b1937f626906b1b713beb32294fc903141c4829"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/screenshot-hashes.json",
+      "sha256": "55996ef79d17dc9432df15108ca4ca9f7f4fcf88aa60ebaab03ebfc26c74740a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/objectives-after-stop.json",
+      "sha256": "4be93b084b7c328c3057583fbeb90223d44d7c7f6d1083bc989a49d834cfa74c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/char-after-stop.db",
+      "sha256": "18fea640471d7eefa94c459d72bdbb611c2eb9eb0555cd95096ebc4036220130"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/game.log",
+      "sha256": "5fe8f3f71e721f9d443d20d3f8a0ab7bbadbfb31dc930ab112a5bd90ba6029d8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v2-20260924/route-067.png",
+      "sha256": "d787e648e90d746cda062b4a80aeb9054791d03028eb187a7be8a39bfe5c7b3c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v2-20260924.py",
+      "sha256": "594b3b847437a6809aed00ba987c56f9ac807695cc23680af2467cf380031f32"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v7-20260924/client_waypoint_steering-at-run.py",
+      "sha256": "ad40c67656cef5f9aa8d145bc3ec967d0afd928293ae9504d9e9286157d3e670"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/tools/client_focus_guard.py",
+      "sha256": "2d36a7e32e59cb0a13deb781c7895aeb960ca532bdee86e14d9a3041c51dd22c"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/tools/test_client_focus_guard.py",
+      "sha256": "b1c291e53a55fca559f50032eb01b7a089df383549359fdbfd54c51735848834"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-untimed-20260924/03-back-up-s600.png",
+      "sha256": "ba599ecb9b480cbea0e805cdd9cc3f69ce22c7d1fe5716638a89eefc1b7d9080"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/command-ledger-redacted.json",
+      "sha256": "07cfa6326367ca6f3d7e07082c7eebb3b732a0ea5e0dcd6c70633d281ec22ce6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/screenshot-hashes.json",
+      "sha256": "a511fa15ec1694ee80ca47fc84818118f57cf59e231850424fa3b3eaa29710e5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/03-s600.png",
+      "sha256": "2f9398990887c0eb3480950f62d999d17c10fe49ed820beeb967bb51ca8c4a93"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/04-a400.png",
+      "sha256": "23b51558ae749e1825eed5b4a77a8928e551364aa72ffef9c0bc3091f961491a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/05-wa400.png",
+      "sha256": "ee87a10ef338c97be124488f2ea86a920f0c7e64ef8d11ca7895fa45be25c9e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-recovery-v2-20260924/06-w400.png",
+      "sha256": "5cc0fab7ac9aae01d22e70c170a3f73105f0dee534cc239cdc5c7a0b65bf75a2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/timed-route.jsonl",
+      "sha256": "9180e40153d2e19baf749e0811a6c13c1d29349b620e14689d3dcc7744b3f867"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/command-ledger-redacted.json",
+      "sha256": "ef50e12d2dca563c1d0d1adf19d7aeecd4abce7a0c54dddb89d939f6b5d6acf4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/screenshot-hashes.json",
+      "sha256": "0d81faf7300d3442744da8e2a1c38f252939d367ec12e584ca4ead99a4e6a014"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/char-after-stop.db",
+      "sha256": "8a0925d4a23235b7def58723f9d1c2a46ddcbcea804ae664d851f368cbea1f7a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/objectives-after-stop.json",
+      "sha256": "fee6eb35413f9239b55e28b353a90916a0cebf801c6c33f36ccf493b8854885c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v3-20260924/route-015.png",
+      "sha256": "00b84ed65aeade2df8a2e2c552e3c5cf98a38a25c656d434b4315ee5bdea1312"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/timed-route.jsonl",
+      "sha256": "7cea89b235e3b57f79c0ba7bba5f52dd05718f07fecb51da507f52ea2dc6796e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/command-ledger-redacted.json",
+      "sha256": "af4a7c4ea1b5d36188ba2fdeac984fd1ff8b21798bac3a4fef8b7571568f01cd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/screenshot-hashes.json",
+      "sha256": "47201839163935dc25d3f311744b1601eeebd670ced9ddac4a976fe3ea1b57e2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/char-after-stop.db",
+      "sha256": "ea1eaa2e562d6200eda3620ba5c540980db70b1c315a9f526eb5620518c44c5c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/objectives-after-stop.json",
+      "sha256": "75aeb0894a9543d43589dcb3d81d845c4679739531a22a3abd2c77ed7df533a9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/route-025.png",
+      "sha256": "8dcf5f6425696f4529fba4e18afe11b10aab22ff873d651bbaed1d71c43023bd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v4-20260924/route-022-retry.png",
+      "sha256": "40d56560f22b96f98883eb4ef1494e7b26ae441977978680f61dadf65b3e1a83"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v4-20260924.py",
+      "sha256": "f683a3b487cf7563549cd80c8db13a902032f9dd1b77dc179ad9d680be48cb2d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v4-continuation-20260924.py",
+      "sha256": "22403bd242aeb6b1507095de8abc69d2c27446bce8fa54e92028dbb744b22e10"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v4-continuation2-20260924.py",
+      "sha256": "e91ee651a091847f23036d6fad2ab296da37f57ec567a23294d0fd2800c9f06f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v4-continuation3-20260924.py",
+      "sha256": "c93264ee9d8454b359b991e5bfc207058abda31f56167215086da27027ee064c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-resume-safe-20260924.py",
+      "sha256": "8d856458ec7a5a2ec06be52a70aa5616d9fd1552e434c80af45b0cd451188b32"
+    }
+  ],
+  "focus_guard_regression": {
+    "observation": "A copied bridge-recovery screenshot visibly showed UI MODE and chat text Local: s while the prior pixel-exact classifier returned gameplay. Header-first classification now returns ui_mode; 61 sealed ordinary-route screenshots remain gameplay. The earlier isolated runner exited with SIGTERM, exact cause unknown.",
+    "source": "s5-bridge-recovery-untimed-20260924/03-back-up-s600.png"
+  },
+  "bridge_recovery": {
+    "setup": "Untimed copied character DB positioned at measured v3 unsafe lip (-146.3,83.7,27.0) before login; no mission timer.",
+    "observations": [
+      {
+        "action": "S 600 ms",
+        "position": [
+          -142.6,
+          84.8,
+          29.0
+        ]
+      },
+      {
+        "action": "A 400 ms",
+        "position": [
+          -141.3,
+          84.8,
+          26.7
+        ]
+      },
+      {
+        "action": "W+A 400 ms",
+        "position": [
+          -141.5,
+          84.8,
+          23.0
+        ]
+      },
+      {
+        "action": "W 400 ms",
+        "position": [
+          -145.0,
+          84.8,
+          21.1
+        ]
+      }
+    ],
+    "result": "Recovered dry bridge deck without water. This is a compatibility-client controller diagnostic, not final-live route proof."
+  },
+  "timed_v3": {
+    "prelaunch": "Fresh copied corpse checkpoint with only synthetic objective-1 row deleted; no edits after corpse use.",
+    "result": "At +136.2 s, position (-146.8,80.7,23.7) under bridge. Guard stopped before timer expiry; objective 1 remained active. No bomb use.",
+    "cause": "Broad bridge target allowed x\u2248-146,z\u224827 at Y83.7 before another southward hold descended to Y80.7."
+  },
+  "timed_v4": {
+    "prelaunch": "Same copied corpse checkpoint procedure; objective-1 timer started at corpse use and was never reset.",
+    "result": "At +~311 s, isolated harness ended on controller OCR envelope error. Client screenshot showed (-172.7,93.1,-20.8), 04:49 remaining; objective 1 remained active. No bomb use or expiry.",
+    "controller_reattach": "Two controller processes were stopped without stopping the Game/client harness. The second attached from stale route-021 (-156.4,84.8,1.0) despite a newer committed route-025 (-169.3,88.0,-11.2). The next W+A hold moved approximately 10.2 m horizontally from that true prior point; the apparent 27 m jump was stale state. route-022.png was reused/overwritten. The isolated runner later stopped in the error handler.",
+    "limitation": "No per-movement server trace; coordinate evidence comes from sealed /loc screenshots and command timing. The run proves neither successful bomb use nor timer impossibility."
+  },
+  "controller_resume_fix": {
+    "implementation": "tools/client_waypoint_steering.py latest_committed_step selects latest event=step, ignoring a later stale controller-attached event; unique_capture_name uses a fresh UUID so route-022 cannot overwrite prior captures. A prepared isolated continuation script imports both helpers and was syntax-checked but not run against a timer.",
+    "regression": "tools/test_client_waypoint_steering.py reads sealed v4 ledger and returns step 25 at (-169.3,88.0,-11.2), not stale attachment (-156.4,84.8,1.0).",
+    "movement_envelope": "20 m per probe retained. The rejected v4 position was 10.2 m from the true newest step; no speed-rule inference from stale coordinates."
+  },
+  "source_snapshot_note": "Historical helper source now points to byte-identical V7 capture snapshot with the pre-existing SHA-256; current helper has later changes.",
+  "historical_unavailable_source": {
+    "path_at_capture": "/home/blizz/servers/rasa-net/tools/test_client_waypoint_steering.py",
+    "sha256_at_capture": "309d77baf23bd1fd77cf342e5335b3de8ddaa006f2b4336b7ef21fb2c3c78d46",
+    "reason": "The test file changed after this manifest was sealed; no byte-identical snapshot of this older test version remains. The stale current path was removed from verifiable sources rather than assigning its old hash to current code."
+  }
+}

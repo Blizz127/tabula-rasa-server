@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Continuous isolated original-client S5 v10 reaches the first wreck slope point, then stops before northwest sandbags",
+  "scope": "One copied-client 1.16.5.0 run from the post-Conrad checkpoint. Only copied mission 1995 objective 1 timer anchor was reset to 600000 ms. No character position staging occurred. Ordinary client controls and fresh accepted Move packets drove the route. No live Game or DIT change.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v10-continuous-slope-waypoint13-stop-20260924/manifest.json",
+    "manifest_sha256": "58dd1baa3858d2a7610ffeb25b0e26b676565b013cd5903b7e5682f5b8533bb7",
+    "archived_files": 246,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "5bd620355cf603a2e4175db943ec17e547eeae6cb38e3a2623b10ca932f05a98",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/driver-second-sandbag.log: start through waypoint 13 exception",
+      "output/positions.tsv: accepted client Move packets",
+      "output/12-route.png",
+      "output/13-no-progress.png",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "output/staging.json",
+      "char-after-stop.db",
+      "drive_pre_sandbag_v10.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The continuous route crossed the bridge and reached the v9-derived first slope point. At waypoint 12, accepted client movement arrived at (-172.63281,93.09766,-20.769531), yaw 2.0538087, within about 0.15 m horizontally of the target (-172.76172,92.99609,-20.703125). The route did not stage this position in SQLite.",
+      "source_location": "output/driver-second-sandbag.log; output/positions.tsv; output/12-route.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "At waypoint 13, target (-174.73828,91.984375,-20.265625), a bounded 180 ms W hold yielded one fresh accepted Move packet with unchanged x/y/z (-172.63281,93.09766,-20.769531) and yaw 1.8055913. The controller stopped on zero positive progress. The screenshot shows rocky terrain directly ahead and mission UI timer 00:05:50; it does not establish whether collision, slope, or steering caused the stationary packet.",
+      "source_location": "output/driver-second-sandbag.log: terminal exception; output/13-no-progress.png, SHA-256 56438cecd248594def5d5d4871566812ff0bb797695f37e3a056334cbdbb2f40"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Supervisor ended after 254.32 seconds with driver exit 1 and launcher exit 0. Post-run copied DB has mission 1995 state 0, objective 1 active, objectives 2 and 3 complete, no mission 1526 row, and character (-172.6328125,93.09765625,-20.76953125). Bomb objective and S6 did not complete.",
+      "source_location": "output/supervisor-state.json; output/status.json; char-after-stop.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v9 short-hold slope adaptation resolves the prior v8 first-slope divergence in a continuous timed run. A short local geometry probe from the newly reached point is needed before extending the controller through waypoint 13. One stationary accepted packet does not prove the segment impassable."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Continuous passage from first wreck slope point through northwest sandbags",
+    "Higher-bank approach and bomb prompt/use in this continuous attempt",
+    "S5 objective completion and S6 handoff in this continuous attempt",
+    "Original final-live route and geometry"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Copied-client S5 north-west sandbag detour stops at a second barrier line",
+  "scope": "One isolated original-client and copied-Game diagnostic resumed from the archived post-Conrad-corpse database. Only copied mission 1995 objective 1 timer_anchor_ms was reset to the current time; this is not uninterrupted original-timer evidence or final-live route proof.",
+  "source": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/manifest.json",
+    "manifest_sha256": "0747ecfc9c238c21ceef9254fd2dd7f2e82be34dc1d69b4ff6430145902ad833",
+    "exact_locations": [
+      "positions.tsv final 13 rows",
+      "driver-pre.log final 10 lines",
+      "driver-northwest.log full",
+      "nw-1-2.png",
+      "nw-stop.png",
+      "state-after-stop.json"
+    ],
+    "client": "original 1.16.5.0 client in isolated copied harness",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6"
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied client followed the measured dry-bank route to (-179.71875,91.66797,-24.792969), then short guarded inputs toward the navmesh north-west candidate yielded fresh accepted Move packets at (-181.1836,92.046875,-25.492188), (-182.03906,92.34375,-26.117188), (-183.64453,93.06641,-25.871094), and (-185.64844,94.3125,-28.242188).",
+      "source_location": "positions.tsv final 5 rows; driver-northwest.log lines 1-6"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "From (-185.64844,94.3125,-28.242188), a guarded 500 ms forward hold toward (-186.8,95.3,-29.6) produced no fresh accepted Move within 6.5 seconds. The preceding screenshot shows a sandbag line ahead. The diagnostic stopped without attempting a bomb interaction.",
+      "source_location": "driver-northwest.log final traceback; nw-1-2.png; nw-stop.png; positions.tsv final row"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The pre-stop HUD showed full health and 00:03:31, while the final nw-stop.png showed 00:02:55 on the reset diagnostic timer. The copied mission remained state 0 with objective 1 active and objectives 2 and 3 completed; SQLite integrity was ok. Game log has no RequestUseObject from this run.",
+      "source_location": "nw-1-2.png; nw-stop.png; state-after-stop.json; game.log"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The short north-west detour moved beyond the prior direct-line stop at (-182.48047,95.30078,-33.1953125), but this particular heading encountered another likely sandbag obstruction before the (-186.8,-29.6) candidate. No client-verified passable corridor was established, and absence of a fresh Move alone does not identify the collider. The prior navmesh path's ground snap and player-collision limitations remain relevant."
+  },
+  "prior_evidence": {
+    "record": "docs/evidence/bootcamp-s5-timed-loc-v14-20260924.json",
+    "qualification": "That record reports an earlier single-session corpse-to-bomb-to-Valkenberg-to-S6 success at about +587.4 s, but its original backup captures are currently missing. This run is independent revalidation, not the first claimed bomb exercise."
+  },
+  "restoration": {
+    "copied_baseline_and_character_db_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Exact collider and safe player path around the second sandbag line",
+    "Independent copied-client bomb use and later mission completion in this diagnostic",
+    "Original final-live sandbag route and timer behavior"
+  ]
+}

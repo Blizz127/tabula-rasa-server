@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "First accepted-1995 feedback-controller gate and fence trial",
+  "scope": "Original compatibility client against isolated copied Auth/Game/DB with normal gate combat; no live Game/DIT or gameplay-rule change.",
+  "sources": [
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-fence-x11-collision/manifest.json",
+      "sha256": "15d121891cbfcefe5091c142ff722c531383eedf3122a1fe38ac52f33f8adfc6",
+      "exact_location": "driver.log gate feedback, fence feedback, positions.tsv and screenshot listed below"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-fence-x11-collision/03-feedback-normalize-3-pre-focus.png",
+      "sha256": "3d1295410033d0215f26ccd7c1aa704278dd8bd95a8a53e77cdc640b1203e18b",
+      "exact_location": "HUD at the third fence normalization probe"
+    },
+    {
+      "path": "navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "exact_location": "path query near (11.01,104.05,129.58) toward lower corridor"
+    },
+    {
+      "path": "mapprops/adv_bootcamp.csv",
+      "sha256": "f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41",
+      "exact_location": "prop centers near fence wall"
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "Accepted gate start (78.75781,109.02734,138.76172) reached (67.78516,109.02734,140.8125) after three guarded W800 pulses and ordinary gate kill."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "At fence (12.03516,104.1875,129.83594), yaw 1.06113, the first W800 reached (11.01172,104.06641,129.57812); two later fresh accepted Move packets stayed at the same X/Z. The screenshot shows the character pressed against a tall ribbed metal wall. Mission 1995 objective 2 remained active."
+    },
+    {
+      "tier": "original",
+      "finding": "Original navmesh near that accepted point first routes toward (11.2,103.9,130.8), then (5.2,101.1,131.2) before the west/lower corridor. The nearest separate map prop center does not identify the visible wall collider."
+    }
+  ],
+  "private_controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_continue.py",
+    "sha256": "d4d99903ec20a9e598feabaccdebbd84553b10268fb98a0bde36e98a39326e35",
+    "result": "Stopped on two fresh low-progress W800 fence probes as designed."
+  },
+  "next_private_probe": {
+    "tier": "inferred",
+    "status": "untested",
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_wall_bypass.py",
+    "sha256": "b70746496f59a62a5d529dd8e4b6158c154de8e800d4232aeb7a80cfce93871f",
+    "method": "From the same narrow X 10\u201312/Y 103\u2013105/Z 129\u2013130.5/yaw .95\u20131.15 envelope, try one D400 accepted Move toward higher Z, then +100 camera pixels and one W600 westward probe. Stop if either guarded packet diverges, focus is lost, or the character dies. These controls are not final-live waypoints."
+  },
+  "restoration": "After the terminal run, copied char.db was restored to accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705; WAL/SHM removed.",
+  "status": "Feedback gate steering worked in one copied run; fence W-only approach hit visible original-map wall. No soldier Continue or same-session corpse use was attempted."
+}

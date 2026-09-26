@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 v3 client climb reaches the northwest wreck approach in one timed session",
+  "scope": "One copied original-client 1.16.5.0 run with the ordinary copied Game DLL and a post-Conrad-corpse character database. Only the copied mission 1995 objective 1 timer anchor was reset. No character position edit, live server change, or DIT change occurred.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-rock-slope-v3-northwest-path-20260924/manifest.json",
+    "manifest_sha256": "e5223fa56868fd1593f393d4693579840f611aa14cc59563f2cc460fbcdf9959",
+    "archived_files": 321,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "b76b82f41e816f619244df88cc86535e2c4d48b66332c959e0bfd9f83e73352c",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: move 11 through northwest_path_reached and final RuntimeError",
+      "output/positions.tsv: final accepted rows",
+      "output/11-route.png",
+      "output/12-pre-sandbag.png",
+      "output/02-second-stop.png",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_pre_sandbag_v3.py and drive_second_sandbag_probe_v3.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "A far climb goal at (-169.727,95.113,-22.375) reproduced the previous ordinary-client slope passage. The client reached (-170.27344,94.78125,-21.8125), then the wreck approach (-179.23438,91.52734,-24.101562) with about 347.5 seconds remaining on the reset copied timer.",
+      "source_location": "output/driver-second-sandbag.log waypoint 11 and 12 entries; output/11-route.png; output/12-pre-sandbag.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Ordinary movement continued past the earlier stop at approximately (-185.65,94.31,-28.24) and reached the northwest waypoint (-203.16797,95.953125,-36.54297) with about 270.1 seconds remaining. The screenshot still shows sandbags ahead, so this establishes passage beyond the earlier stop and approach to the wreck corridor, not completed passage through every sandbag line or bomb acquisition.",
+      "source_location": "output/driver-second-sandbag.log northwest_path_reached; output/positions.tsv final rows; output/02-second-stop.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The driver stopped at this new position because its next postcondition still required proximity to the old audited stop (-185.64844,94.3125,-28.242188). This was a diagnostic controller assumption; there was no collision, timer expiry, bomb interaction, or Game exception shown at the final position.",
+      "source_location": "output/driver-second-sandbag.log final RuntimeError; drive_second_sandbag_probe_v3.py"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor ended at 314.1 seconds after driver exit 1. It sent a stop command; status.json recorded terminal isolated client, Auth, Game, and display processes. The supervisor then sent SIGTERM to the launcher after status appeared but before launcher exit, leaving launcher exit -15. This is a cleanup race in the diagnostic supervisor, not a Game crash finding.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied character database remained SQLite-integrity ok with mission 1995 active, objective 1 active and objectives 2 and 3 complete. The saved character row retained the start checkpoint; accepted client positions are in positions.tsv.",
+      "source_location": "state-after-stop.json; output/positions.tsv"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The near-point steering divergence in v2 was a diagnostic-controller issue. The v3 far-goal route safely crossed that local slope and the old northwest stopping point in this copied-client session. From the new endpoint, the next guarded segment should use the separately measured higher-bank wreck approach instead of returning to the old sandbag detour. This remains emulator reachability evidence, not proof of an original final-live route."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Passage through the visible sandbag line ahead of the new endpoint",
+    "One uninterrupted mission-timer route from Conrad to bomb use",
+    "Exact final-live wreck route and bomb placement"
+  ]
+}

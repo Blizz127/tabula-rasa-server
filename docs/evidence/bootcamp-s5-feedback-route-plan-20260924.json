@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Position-feedback diagnostic route from S5 gate fence to lower corridor",
+  "scope": "Private copied-client steering design only; no gameplay placement, movement-rate, combat, live server or DIT change.",
+  "sources": [
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/fence-x3-gap/manifest.json",
+      "sha256": "20695e39496cfe7d9199bbb559f471a3b0c2e5681e62f5b097b7a04837107022",
+      "exact_location": "driver.log 03-fence accepted-Move row and positions.tsv"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/fence-x26-east-variation/manifest.json",
+      "sha256": "8f7029dbebd1ac09aaeb1fa96ed7366b071384c47b1e02655db48fab3f9886c4",
+      "exact_location": "driver.log 03-fence accepted-Move row and positions.tsv"
+    },
+    {
+      "path": "navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "exact_location": "original boot camp navmesh path query from (25.965,103.871,130.293) to lower corridor"
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The same post-gate control sequence produced accepted fence points (3.38281,100.04688,129.76953) and (25.96484,103.87109,130.29297), outside the fixed controller branches."
+    },
+    {
+      "tier": "original",
+      "finding": "Original boot camp navmesh path from the farther fence point passes approximately (5.2,101.1,131.2), (2.8,100.1,129.6), then (-6.8,98.3,120.0). This is walkability geometry, not a final-live NPC route or proof of player collision clearance."
+    }
+  ],
+  "proposed_diagnostic": {
+    "tier": "inferred",
+    "status": "untested",
+    "method": "At the accepted 03-fence packet, normalize toward X [-1,5], Z [125,134] with 400\u2013800 ms W or D pulses chosen from actual displacement. Use D only when Z trends low; prior D3.6 raised Z to about 145 and is too coarse. At X near 3 and Z near 130, use one bounded W800 probe, then W holds no longer than 3 s toward lower corridor. Continue only on new accepted Move packets.",
+    "bounds": "For each normalization pulse require X progress at least 1 m west, Y [97,108], Z [120,140], valid gameplay focus and alive client; stop after two consecutive low-progress pulses or on envelope escape. Limit pulse count and elapsed time. Lower-route handoff requires X [-27,-10], Y [94,101], Z [110,125].",
+    "uncertainty": "W/D 400\u2013800 ms behavior from X 26 has not been client-tested; navmesh corners do not establish safe combat timing or final-live movement."
+  },
+  "next_check": "Implement the bounded feedback controller in the private copied-client harness, test the X 26 and X 3 branches, then require original Human talk prompt, Continue and persisted 1995 objective 2\u21923 before same-session corpse use."
+}

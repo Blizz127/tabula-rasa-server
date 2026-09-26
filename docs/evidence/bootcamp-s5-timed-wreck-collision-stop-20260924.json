@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Unreset S5 post-corpse timer continuation stops on premature movement guard",
+  "scope": "One isolated original-client run resumed from the archived copied character DB immediately after same-session soldier Continue and corpse use. The 600-second objective timer was not reset. No live or gameplay-rule change.",
+  "source": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timed-wreck-collision-stop-20260924/manifest.json",
+    "sha256": "9b3ae39efc25de9e5d0a8f6383675ecbe1660c03c36b71fd5b590b6b303e52b0",
+    "file_count": 11,
+    "exact_locations": ["positions.tsv lines 17-19", "driver.log lines 8-14", "initial and stopped timer screenshots", "game.log", "post-stop SQLite backup"]
+  },
+  "input_state": {
+    "tier": "diagnostic_checkpoint",
+    "source": "bootcamp-s5-soldier-corpse-same-session-20260924.json char-after-use.db",
+    "sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "limit": "This is a fresh client login from a prior original-client post-use snapshot, not an uninterrupted new-character session; the original timer anchor was preserved."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The original client resumed with mission 1995 objective 1 active and 00:06:25 remaining on its unreset timer. Accepted movement began near (-94.25781,85.13672,67.63281) and reached (-105.44531,83.77344,43.03125) on the high-bank route."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The controller read one fresh accepted packet with unchanged X/Z at timestamp 1790277631190 and stopped under its low-progress guard. The archived trace then contains a later accepted Move at timestamp 1790277634593, (-107.19922,83.76953,41.265625), about 2.49 m closer to the waypoint. The screenshot shows a metal wall at the left of the view and an open corridor to the right, but does not prove a collision. Timer showed 00:04:16; no bomb prompt or RequestUseObject appeared, and mission 1995 remained state 0 with objective 1 active."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The post-stop SQLite backup passed integrity_check, SHA-256 dd7046da91ecba48bce1e8303ecc8ff5493482b4628ec1242b9b085865341c24. Its character row retained the login coordinate; accepted Move telemetry, not that row, proves the terminal position."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The private controller classified collision before delayed accepted movement arrived; see bootcamp-s5-trench-delayed-move-audit-20260924.json. The actual route progressed at least to (-107.19922,83.76953,41.265625); a wall collision at the stopped point is not established. A bounded wait for a later accepted packet is needed before redirecting the route. Original final-live player route and exact wall collider remain unverified."
+  },
+  "restoration": "All 11 archived file hashes verified. Copied baseline and character DB restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; copied Game DLL restored to SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6. Previous output restored, no WAL/SHM or copied processes; live services and DIT untouched.",
+  "status": "Unreset timer and partial high-bank route verified. Premature low-progress guard corrected in this evidence record. This run did not reach bomb use; an earlier V14 record reports corpse-to-bomb-to-S6 completion, but its source captures are currently unavailable for reinspection."
+}

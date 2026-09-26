@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 positive-progress retry terminated before route movement",
+  "scope": "One attempted copied-client retry after correcting the dry-bank packet guard. The ordinary copied Game DLL and archived post-corpse DB were used, with only copied objective 1995/1 timer anchor reset. Neither the second sandbag nor bomb was reached.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-retry-sigterm-20260924/manifest.json",
+    "manifest_sha256": "edb3c4dec6b1191aa8666a179bb52914af1729bad4ad5f7b3db87e0f31fb28f6",
+    "exact_locations": ["driver-second-sandbag.log", "client.log", "game.log", "00-playable.png", "state-after-stop.json", "drive_pre_sandbag.py corrected guard"],
+    "original_post_corpse_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "ordinary_copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6"
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The isolated Auth/Game and client launched and one gameplay-readiness screenshot was written, but the driver log remained empty. Both launcher and driver later returned exit code 143, consistent with SIGTERM. No isolated process remained; status.json was absent. The cause of termination was not established. The ephemeral command directory was not archived, so the exact command sequence cannot be re-inspected from this archive.",
+      "source_location": "private archive 00-playable.png, client.log, game.log and driver-second-sandbag.log; terminal exit-code and process observations before archive"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "No route movement input was issued. Character mission 1995 remained state 0, objective 1 active, objectives 2 and 3 complete; SQLite integrity was ok. The attempted retry supplies no evidence about second-sandbag clearance.",
+      "source_location": "driver-second-sandbag.log empty; state-after-stop.json; driver source code"
+    }
+  ],
+  "guard_revision": {
+    "tier": "tooling_change_only",
+    "finding": "The archived copied driver now polls all fresh accepted packets for up to 8 seconds and requires both spatial movement and positive progress toward the current target before concluding success. This addresses the delayed positive packet observed in bootcamp-s5-second-sandbag-probe-interrupted-20260924.json; it was not exercised in this terminated retry."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Reason both isolated session processes received SIGTERM",
+    "Corrected guard under client movement",
+    "Screen-right passage at the second sandbag stop",
+    "Original final-live route and bomb interaction"
+  ]
+}

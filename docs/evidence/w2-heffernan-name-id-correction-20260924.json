@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Alia Das vendor creature 73 name ID 10790 resolves to Armor Supplier Heffernan",
+  "original_client": {
+    "tier": "original",
+    "build_scope": "Compatible client 1.16.5.0; exact final shutdown build unverified",
+    "source_package": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/Tabula Rasa 1.16.5.0.zip, nested Tabula Rasa 1.16.5.0/data/game.zip",
+    "member": "generated/client/language/english/creaturenamelanguage.pyo",
+    "member_sha256": "1fa1ec6c098f3ae2cda4aa37a13ef268f6657bb4fd32cc4e3f5af21ae5126e6c",
+    "locator": "Raw member byte offset 148184: Python marshal integer marker 0x69 followed by little-endian 10790, then Unicode length 24 and text at byte offset 148194",
+    "name_id": 10790,
+    "text": "Armor Supplier Heffernan"
+  },
+  "client_observation": {
+    "tier": "observed_emulator",
+    "source": "docs/evidence/w2-specialist-power-cell-isolated-purchase-reload-20260924.json, vendor run output/vendor-conversation2.png",
+    "finding": "The compatible client shop window displayed Armor Supplier Heffernan at Alia Das. This corroborates the name table, but is an emulator interaction."
+  },
+  "emulator_seed": {
+    "source": "src/Rasa.DBL/Services/Preloader/CreaturePreloader.cs creature 73: class 20972, name_id 10790; src/Rasa.DBL/Services/Preloader/VendorItemPreloader.cs vendor 73 stock",
+    "previous_comment": "Ammo Supply Vendor Alia Das",
+    "updated_comment": "Armor Supplier Heffernan (Alia Das)",
+    "change_scope": "Comment column only; no creature ID, name ID, stock, price, placement or gameplay rule changed."
+  },
+  "limits": [
+    "This establishes the name string for compatible client name ID 10790, not whether final live placed this creature at Alia Das.",
+    "Final-live vendor stock and price remain unverified.",
+    "The visible Alia Das minimap text is a place name, not a conflicting NPC name."
+  ]
+}

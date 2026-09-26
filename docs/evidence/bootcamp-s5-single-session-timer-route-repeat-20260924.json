@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Bounded repeat of mission 1995 corpse-to-wreck unreset-timer route in the isolated original client",
+  "setup": "The same isolated recovered 1.16.5.0 client, Wine prefix and copied Auth/Game/SQLite world were used after the previous harness stopped. Before client launch, the copied objective-3-active soldier checkpoint was placed at (-94.73047,84.99609,65.640625), the previously ordinary-reached corpse-use floor coordinate. This is an explicit diagnostic login position edit. After login, no timer or position reset, teleport, GM movement, world/content edit, live Docker or DIT edit occurred. The 78 harness commands are sealed in command-ledger.json.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "s5-adaptive-corpse-to-bomb-repeat-20260924/00-corpse-use-after.png, game.log",
+      "finding": "Right-click at the corpse completed objective 3 in this single client session. The tracker switched to destroying the dropship with 00:09:58 remaining."
+    },
+    {
+      "tier": "measured",
+      "source_location": "s5-adaptive-corpse-to-bomb-repeat-20260924/01-corridor.png, 06-corner-bypass.png, 07-bank-start.png, 09-bank.png, 11-rail.png; command-ledger.json",
+      "uncertainty": "The original-client .where output rounds coordinates; held-key timing and collision vary with client frame rate. Screenshots sample endpoints, not a continuous path trace.",
+      "finding": "Ordinary movement reached (-100.734,84.770,57.645), (-109.168,83.770,39.281), (-124.855,83.520,38.473), (-137.496,84.270,37.824), and (-152.008,84.203,37.262) while objective 1's unreset countdown remained active. This was a more northerly line along bridge rubble than the prior dry-bank route via approximately (-134,84.77,29). It did not reach the wreck."
+    },
+    {
+      "tier": "observed",
+      "source_location": "s5-adaptive-corpse-to-bomb-repeat-20260924/11-rail.png, 13-strafe-south.png, 14-focus.png, 16-w.png, 17-alternate.png, 18-expired.png, game.log and objective-after-expiry.json",
+      "finding": "At the bridge rubble the .where helper again left chat in UI Mode, and an A hold appeared as typed chat text. After closing it and clicking the world, further ordinary movement remained locally obstructed near the metal geometry. No bomb-use prompt or second RequestUseObject occurred. The countdown expired; copied SQLite persisted mission 1995 state 2, objective 1 status 3, and objectives 2 and 3 status 2, with integrity_check ok. The harness focus fault and missed dry-bank turn prevent treating this as evidence that ten minutes are insufficient in normal gameplay."
+    }
+  ],
+  "assessment": "A second single-session timed route did not reach or use the bomb. It confirms the corpse interaction and persistent wall-clock failure path, and narrows the route-control issue to the bridge area around x[-138,-152], z[37,38] plus unreliable chat focus. It does not justify changing content or the 600-second analogue timer, and it does not establish final-live route fidelity.",
+  "next_verification": "Avoid the northerly bridge-rubble line: from the ordinary-reached (-124.855,83.520,38.473) steer toward the previously observed dry-bank (-134.2,84.77,29.35), then continue via (-159.3,84.82,7.27). Use a controller that asserts gameplay focus without relying on .where chat after each key hold; approach the final wreck through short visual segments and click only when its use prompt renders. A completed uninterrupted ten-minute corpse-to-bomb run is still missing.",
+  "sources": [
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-repeat-command-20260924.py","sha256":"8a33dcbd06777ccc5f997b4647a7dc84d1692b3b87ba3b2ac79e7817b34f77f7"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/command-ledger.json","sha256":"c128a31286daed29af66b5ea9d71c4927f49549f4254f71f129196c5e23ed6bb"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/game.log","sha256":"fb3efd66fcdc24e984e35fa7ac495b53f0454d6d6893c95efe4bc2d4b3df1032"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/char-after-expiry.db","sha256":"134b2831c054ad919fc6ce9c2edc348e588004c2fb20d4a95fb6ed5d5ffe0700"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/objective-after-expiry.json","sha256":"82778f26c8624762e45a0872154512bf6f58c12926aca4d19ee2e34f3dbfb87e"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/00-corpse-use-after.png","sha256":"335ef3aeaf34acbacf88526724dbdc4f3a5e356aac9849a8fd3a5ed63c63da44"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/01-corridor.png","sha256":"eb725465442d068c04633063925a7e943616845e9b77709b7b1ef3c16e97f9c4"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/06-corner-bypass.png","sha256":"45e3ed754f417528e4c751e36c516c61ffe6b91a84d5b8e50626bffb2499a995"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/07-bank-start.png","sha256":"6a22ffc78ff5cf1634c0a361545797dff93929323e272d6b3aac5161819ab052"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/09-bank.png","sha256":"ebfc0ab083b043132c86e2ce94258cf324788dcaa08f7364ed836d1a92821719"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/11-rail.png","sha256":"f40ee75903938ec95ac8ac1e49b985295a72c8d16252d8a3c040a3b4f053b1c9"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/13-strafe-south.png","sha256":"d7890a50e1fd9669ae95d214aa8d665deba9a54386b85d556d5deb0e9a5e639c"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/14-focus.png","sha256":"ea53896f7d2a52aebcaae8412466b100120d261da37d906c2cefedc2a1387aae"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/16-w.png","sha256":"04e3d3ca1cb91b9662514fd113979bdc53170d535ba6023dc1ce37ed1563657a"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/17-alternate.png","sha256":"fc528a4593b93f1c794763778a1d16ae16114b23f331bf44ca20fa8f1aee467b"},
+    {"path":"/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-adaptive-corpse-to-bomb-repeat-20260924/18-expired.png","sha256":"a7c8ad645f4b778ee92aa9840e7f81399c5b4c3124545db8cc79b83cfad2c5e7"}
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "question": "Does original client data identify Repair-O-Matic ammo, and does it establish the Alia Das vendor's template-56 stock or three-credit price?",
+  "result": "The compatible original client directly maps Repair-O-Matic reward template 122871 to weapon class 12797; that class uses ammo class 3807 and a 10-round clip. Client template 56 maps to class 3807, whose English display name is Standard Grade Power Cells. These are original client-side identities for this compatible build. No inspected original client table specifies creature 73's stock or template 56's sale price. The Alia Das stock and three-credit price remain current emulator data, not verified final-live values.",
+  "client_build_scope": "1.16.5.0 is the emulator compatibility build, not independently proven to be the exact shutdown build. Static client definitions cannot establish final-live server inventory, price or mission reward grants.",
+  "client_package": {
+    "path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/data/game.zip",
+    "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+    "method": "Read ZIP members and disassemble Python 2.4 code objects with xdis; offsets below are bytecode instruction offsets inside the named module, not ZIP byte positions."
+  },
+  "original_client_rows": [
+    {
+      "tier": "original",
+      "module": "generated/client/itemclass.pyo",
+      "member_sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+      "locator": "itemTemplateItemClass assignment at bytecode 631759-631766: 122871 -> 12797",
+      "finding": "Repair-O-Matic reward template uses weapon class 12797."
+    },
+    {
+      "tier": "original",
+      "module": "generated/client/weaponclass.pyo",
+      "member_sha256": "49e514546f8e30ee906b9e63c04e2c541af98bc681b8005e3a9f4f225f943591",
+      "locator": "lookup assignment at bytecode 55075-55160: key 12797, tuple fields include ammo class 3807 at 55096 and clip size 10 at 55099",
+      "finding": "Weapon class 12797 consumes ammo class 3807 and holds 10 rounds."
+    },
+    {
+      "tier": "original",
+      "module": "generated/client/itemclass.pyo",
+      "member_sha256": "cd0e4367ff60ede526ef5429e3fdbf73f99873a15bcb4c426fed28e7bbc13ed9",
+      "locator": "itemTemplateItemClass assignment at bytecode 396490-396497: 56 -> 3807",
+      "finding": "Item template 56 represents ammo class 3807 in this client."
+    },
+    {
+      "tier": "original",
+      "module": "generated/client/entityclass.pyo and generated/client/language/english/physicalentityclassnamelanguage.pyo",
+      "member_sha256": ["b4e99d0ca61b915487201b4bc75b09b8bed32a0f33127e855ea051883751a8ef", "7539a00ef1947e6fc3ec2df5612e8b9f681a6ea6839a7928272a3aa232359e46"],
+      "locator": "entityclass bytecode 8614-8620: class 3807 -> Ammo_Battery_1_Standard_Grade; English physicalentityclassnamelanguage bytecode 2749-2756: 3807 -> Standard Grade Power Cells",
+      "finding": "The ammo class has the client display name Standard Grade Power Cells."
+    },
+    {
+      "tier": "original, limited to vendor package presentation category",
+      "module": "generated/client/vendordata.pyo",
+      "member_sha256": "ed4ccbd481de009a7f5aa143651dcf3c5e1c5619af8e224a0cec4e3f06fc1fd7",
+      "locator": "vendorpackages assignment at bytecode 862-869: package 104 -> (2, None, 1); module constant 2 is GENERAL_GOODS",
+      "finding": "Client package 104 has a General Goods presentation category. The module does not enumerate package stock or item prices. The current emulator associates creature 73 with package 104, but that association is server data."
+    }
+  ],
+  "contemporary_play_evidence": {
+    "tier": "observed firsthand account, older than final live",
+    "source": "Michael Zenke, Adventures From the Back Row: the Specialist and her tools, 2007-11-26, https://www.engadget.com/2007-11-26-adventures-from-the-back-row-the-specialist-and-her-tools.html",
+    "exact_location": "Paragraph beginning 'The repair tool operates in much the same way'",
+    "finding": "Repair tools consume Power Cells when used on a target with damaged armor.",
+    "limit": "This confirms the ammo type in 2007 play, but names no Alia Das vendor, template ID, stock, price or final-live mission 2011 ammo grant."
+  },
+  "emulator_vendor_provenance": {
+    "tier": "emulator seed, unverified against final-live source",
+    "locators": [
+      "src/Rasa.DBL/Services/Preloader/VendorPreloader.cs:36: creature/vendor 73 -> package 104",
+      "src/Rasa.DBL/Services/Preloader/VendorItemPreloader.cs:87: vendor 73 stocks template 56",
+      "src/Rasa.DBL/Services/Preloader/ItemTemplatePreloader.cs:4959: template 56 seed",
+      "docs/evidence/w2-specialist-power-cell-vendor-audit-20260924.json current_world_database: current rasaworld.db price 3 credits"
+    ],
+    "source_history": "git commit 5fabca7 dated 2023-02-20 introduced vendor 73 -> 56 in a 'Draft ... re-populated vendors' change; the same commit message does not identify an original retail capture. ItemTemplatePreloader template 56 row blames to commit 564d4e3 dated 2023-02-14, which describes adding vendors 'as per the map'. This history does not establish retail stock or price.",
+    "finding": "The current three-credit Alia Das sale is an emulator behavior. Its final-live accuracy remains unverified."
+  },
+  "decision": "Treat template 56 as the original compatible-client identity for Standard Grade Power Cells and a plausible ordinary ammo source if actually stocked. Do not label Alia Das creature 73's template-56 stock or three-credit price original or observed final-live; keep both as evidence gaps. Do not add a class-gear ammo grant from this evidence."
+}

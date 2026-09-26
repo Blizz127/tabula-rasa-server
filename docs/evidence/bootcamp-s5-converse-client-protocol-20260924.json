@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Original 1.16.5.0 client NPC conversation request and reply path",
+  "scope": "Read-only disassembly of original compatibility-client Python bytecode. This establishes client behavior, not final-live server handling or the reconstructed soldier's identity.",
+  "findings": [
+    {
+      "tier": "original",
+      "exact_source": "trpython.zip:client/augmentations/npc.pyo NPC.__init__ source line 49 offsets 9-18; NPC._GetUseAction line 60 offsets 0-42; NPC.OnConverse line 69 offsets 0-49",
+      "finding": "An NPC starts with CONVO_STATUS_NONE. Its use action becomes CONVERSE only when its received convoStatus is not NONE. OnConverse retrieves the local manifestation and calls player.Converse(self.entityId). Thus the talk prompt indicates that the selected client NPC exposes the conversation use action; a separate yellow objective-location marker does not establish that fact.",
+      "limit": "The exact screen prompt text and native target-selection geometry are outside these Python methods. The prompt alone does not prove what entity ID a later click sent or that a response will display."
+    },
+    {
+      "tier": "original",
+      "exact_source": "trpython.zip:client/inputhandlers.pyo Use source line 238 offsets 0-225; client/gameui.pyo PerformUseAction line 1310 offsets 133-260; client/targeting.pyo GetCurrentUsable line 153 offsets 0-3 and SetCurrentUsable line 160 offsets 0-9",
+      "finding": "In FPS mode the use input executes on right-button press; in MMO mode it executes on release only if the use button was down and no use-drag/mouse-moved guard fired. PerformUseAction reads targeting.GetCurrentUsable(), resolves that entity, obtains its GetUseAction, and applies the returned action. The click path uses current usable rather than the yellow mission indicator or GetDirectTarget().",
+      "limit": "The native/UI code that chooses g_currentUsable and renders the exact 'Press [Mouse Button 2] to talk' string was not traced in this audit. Optional move-to-use and click-to-move modes add branches."
+    },
+    {
+      "tier": "original",
+      "exact_source": "trpython.zip:client/augmentations/actor.pyo Actor.Converse source line 1872 offsets 0-72 and Actor.IsInConversationRange line 878 offsets 0-45; client/actions/__init__.pyo CreateConverseAction line 157 offsets 0-30; client/actions/converse.pyo Converse.CheckAction line 48 offsets 0-156 and SendServerRequest line 76 offsets 0-47",
+      "finding": "Actor.Converse resolves the supplied npcId and creates a Converse action only if that entity exists. The action checks that the player is alive, the target exists and is an NPC, the NPC is within MAX_CONVERSATION_RANGE through body.InRadiusOf, and native _world.InLineOfSight(actor.body,npc.body) succeeds. A successful action sends SendCallActorMethod('RequestNPCConverse', (actionId, actionArgId, npc.entityId) + args). CreateConverseAction supplies the CONVERSE action and CONVERSE_1 argument constants; the normal NPC.OnConverse call supplies no extra args.",
+      "limit": "The recovered gameconstants table gives MAX_CONVERSATION_RANGE=5 m (docs/evidence/bootcamp-client-catalog.json). Native radius and line-of-sight geometry were not disassembled. The Python tuple layout alone does not establish original server acceptance rules."
+    },
+    {
+      "tier": "original",
+      "exact_source": "trpython.zip:client/augmentations/npc.pyo NPC.Recv_Converse source line 116 offsets 0-1643; objective-completion extraction 33-54 and dispatch 785-854; no-topic fallthrough 1520-1643",
+      "finding": "Recv_Converse stores the received conversation dictionary and takes objective-completion topics from CONVO_TYPE_OBJECTIVECOMPLETE, defaulting to an empty list. With a single objective triple (missionId, objectiveId, playerFlagId), it posts UI_SHOW_CONVERSATION_OBJECTIVE_COMPLETION for self.entityId. If no recognized nonempty topic, training, greeting, end-conversation, or other supported key matches, it logs 'Unknown conversation type received from server convoDataDict= %s' and posts no conversation-window event. An empty Converse dictionary can therefore be received successfully while no dialogue appears.",
+      "limit": "This is a client-side possible failure path, not proof that the failed copied-client soldier request received an empty dictionary. The archived Game log did not capture the request entity ID, outgoing Converse packet or topic dictionary."
+    }
+  ],
+  "diagnostic_consequence": "For the S5 soldier retry, record the RequestNPCConverse entity ID, resolved creature package and channel, and whether an outgoing Converse for that entity contains CONVO_TYPE_OBJECTIVECOMPLETE key 6 with (1995,2,1). If the request was received but no reply was sent, inspect entity/channel guards. If a reply was sent with an empty or mismatched topic dictionary, inspect mission binding and current objective state. If the correct triple was sent but no dialogue rendered, inspect client receive/UI events. These branches remain unproven for the archived failure.",
+  "sources": [
+    {"path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/trpython.zip", "sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6"},
+    {"path": "trpython.zip:client/actions/converse.pyo", "sha256": "11ad3f6af58416ec76f302821fb614994eb31e7385e171218ac345c0391bd17d"},
+    {"path": "trpython.zip:client/actions/__init__.pyo", "sha256": "f3cc8468a9991e641eaf390564ef1ae15e5a877095f19091cb65ba2b4e2413b4"},
+    {"path": "trpython.zip:client/augmentations/npc.pyo", "sha256": "d54178e21d838417110afd39b85a40c08b906082965864aed480233e745f3894"},
+    {"path": "trpython.zip:client/augmentations/actor.pyo", "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f"},
+    {"path": "trpython.zip:client/inputhandlers.pyo", "sha256": "586fc0ea303e60dcc7991bf79d6a787b560e186bd3c0b4d86d4cc42993e5c9be"},
+    {"path": "trpython.zip:client/gameui.pyo", "sha256": "451bb70f10faced1261c74ad6452057711f230dc0798faf924b25911257d84d0"},
+    {"path": "trpython.zip:client/targeting.pyo", "sha256": "4483127df8819e89f8cf4b778b7be45079cc74f17727f1f984573879dcbabdb7"}
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "One copied-client S5 fence wall bypass and lower-corridor approach",
+  "scope": "Private position-feedback controller against isolated copied Auth/Game/DB and the compatibility client; no live data or gameplay-rule change.",
+  "source": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-wall-bypass-lower-timeout/manifest.json",
+    "sha256": "adf5a804de3981d76612d0751f85bdd5c72d7327371eb033ba3e352a2573ef90",
+    "exact_locations": ["driver.log lines 43-82", "positions.tsv", "03-feedback-* screenshots", "04-feedback-lower-1-pre-focus.png"],
+    "file_count": 137
+  },
+  "controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_wall_bypass.py",
+    "sha256": "b70746496f59a62a5d529dd8e4b6158c154de8e800d4232aeb7a80cfce93871f",
+    "role": "Diagnostic client-input steering, not final-live route data."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "After ordinary gate combat, the accepted fence point was (10.8515625,103.80078,129.71875), yaw 1.0595973."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "A guarded D400 reached (10.058594,102.26953,131.13672); camera turn +100 pixels then W600 reached (8.0078125,101.15234,130.47266). This cleared the wall that stopped the preceding W-only trial."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Further accepted movement reached (5.085938,100.640625,130.3789), (1.144531,99.5,129.10547), (-2.988281,99.02734,127.76172), and (-16.722656,97.671875,125.45703)."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The private controller stopped on its 55-second fence-descent deadline at the last point. Copied mission 1995 remained state 0 with objective 2 active. No soldier dialogue or Continue was reached."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The first fence obstruction was route steering rather than proof of a mission defect. Extend the private descent deadline and continue from accepted Move feedback to test the soldier transition. These measured controller points do not establish original NPC or route positions."
+  },
+  "restoration": "The copied character DB was restored to accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705; copied WAL/SHM removed. Live services and DIT were untouched.",
+  "status": "Wall bypass verified in one copied-client run; soldier and same-session corpse use remain unverified."
+}

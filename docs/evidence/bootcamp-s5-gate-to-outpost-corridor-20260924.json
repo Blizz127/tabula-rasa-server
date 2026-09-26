@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Continuous accepted-1995 original-client route from gate combat to outpost corridor",
+  "provenance_tier": "observed_emulator",
+  "setup": "Restored 1.16.5.0 compatibility client with disposable deployed-derived Auth/Game and copied accepted-1995 character. Ordinary client movement and rifle combat, normal seeded hostile behavior, no in-run character or mission edits. No same-session Youngblood acceptance is claimed; live Game/DIT untouched.",
+  "source_manifest": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-fence-probe-stateaware1/manifest.json",
+    "sha256": "594f8a5b073a64fe68c52613042c1451281bb0fefeab4f0ab1cfb2310154c2d0",
+    "files_verified": "143/143"
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: drive-s5-fence-probe-after-sweep-stateaware.log, output/01-start-loc.png, output/02-range-stage-loc.png, output/02-gate-after-sweep.png",
+      "finding": "State-aware chat submission enabled persistent /loc. W3 reached (74.0,109.0,139.2); ordinary primary-fire sweep killed the moving gate Thrax, increasing copied XP 8695→8766 and credits 360→370 while objective 2 stayed active."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: output/03-fence-loc.png, 03a-forward-probe-loc.png, 04-lower-loc.png, 05-approach-loc.png and run log",
+      "finding": "The same client session reached original-map fence (-7.0,98.4,124.6). A short ordinary forward probe advanced 6.85 m to (-13.0,97.1,121.3), bypassing the fence without a lateral strafe. Continued movement reached the lower route (-25.9,95.8,114.1) and approach (-26.3,94.0,91.3)."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: output/06-near-outpost-loc.png and manual-outpost-loc-review.json",
+      "finding": "Near-outpost screenshot visibly displays /loc (-61.8,87.9,75.3) beside original wall and sandbags. OCR misread X as +41.8 while preserving Y/Z; the route guard rejected it and stopped before outpost engagement or soldier/corpse interaction. The screenshot is the source for X, with manual review recorded and hashed."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: copied_database_hashes_after_wal_safe_reset and diagnostic pre-reset artifact",
+      "finding": "A prior copied character DB baseline restoration was overwritten by residual SQLite WAL checkpoint activity. After preserving the changed copy, the isolated reset removed WAL/shm sidecars before copying the baseline and verified character (93.2,115.0,137.5), 8695 XP, 360 credits. The launcher now refuses residual character WAL sidecars. This concerns the disposable test harness, not the live database."
+    }
+  ],
+  "assessment": "A single accepted-1995 session now clears the gate and reaches the outpost corridor by ordinary original-client input. Outpost combat, wounded-soldier conversation, Conrad corpse use, and one-session Youngblood acceptance remain unverified. The route is an emulator functionality observation, not proof that its seeded positions or enemy values match final live.",
+  "next_check": "From this measured corridor, inspect line of sight and engage or evade the outpost Thrax before dwelling near the inferred soldier. Continue to the wounded soldier and corpse in one uninterrupted client session, preserving normal hostile behavior and recording objective state."
+}

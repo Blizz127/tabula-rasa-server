@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "scope": "Three bounded, reversible W2 original-compatible-client diagnostics on private copies after Specialist training",
+  "source_boundary": "These runs establish the current emulator and compatible 1.16.5.0 client behavior only. Neither this vendor inventory nor its prices are established as final-live data.",
+  "isolation": "Copied client, Wine prefix, Auth/Game and databases under /home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/harness, using bwrap private network/mount namespace and Auth 2106, interserver 2107, Queue 8001, Game 8102. Live Game and DIT were not changed.",
+  "runs": [
+    {
+      "purpose": "Repeat mission 2011 at the earlier successful diagnostic position",
+      "stage": "Copied class 3, level 5, 43000 XP, mission 2011 active from capture/specialist-training-route-stall/char-after.db and edited position only to (760.0,293.97,407.07), not earned travel.",
+      "archive_manifest": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/caufield-wall-diagnostic-20260924/manifest.json",
+      "manifest_sha256": "e4c23e64ea37b5b1cf01711ce7a7c020c6faebfeeb90ba4e71b1d0d024df6784",
+      "result": "The client loaded at (760.0,293.977,407.066), about 3.12 m east of emulator spawnpool 210 Caufield, but a tent wall and crates blocked line of sight and movement. Camera sweep, short backstep, Tab and ordinary right-click did not open his conversation. Archived and restored."
+    },
+    {
+      "purpose": "Mission 2011 turn-in and ordinary vendor travel",
+      "stage": "Copied the same active Specialist DB and edited position only to (754.0,293.97,405.0), west/south of Caufield; diagnostic position, not final-live travel.",
+      "archive_manifest": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/caufield-west-reward-vendor-route-block-20260924/manifest.json",
+      "manifest_sha256": "3e1b86d942cddca7b2c61fd36462057802b17b9e8effcebf62d20efd9d43c470",
+      "before_db_sha256": "71f5ee59faf824fbfb59dd5f940f7ad02eb93749872037949e7a23657a83dfb9",
+      "after_db_sha256": "ba1201587ab87dee77ed785174d01528ba97d04aa0641776b520a876bfd396ad",
+      "client_locators": ["output/caufield-ui-after-step.png: Caufield visible and ordinary talk prompt", "output/caufield-dialogue2.png: mission objective conversation", "output/caufield-reward-screen2.png: five Hazmat armor pieces and Repair-O-Matic reward panel", "output/caufield-completed.png: mission completion notification", "output/vendor-route-blocked.png: route stopped inside tent"],
+      "server_locators": "output/game.log:236 CompleteNPCObjective at 17:52:21; line 379 CompleteNPCMission at 17:54:43 local log time. output/positions.tsv records the route ending at (760.08984,293.96875,405.20312).",
+      "db_result": "mission 2011 state 4; reward items 17-22, templates 122866-122871; Repair-O-Matic item22 ammo_count 0. Ordinary travel toward vendor73 stopped on tent collision before contact. Archived and restored."
+    },
+    {
+      "purpose": "Vendor stock, template 56 purchase and Repair-O-Matic reload",
+      "stage": "Copied the archived post-turn-in DB and edited position only to (762.8,293.97,393.78), about 2 m east of emulator vendor73; diagnostic position, not final-live travel.",
+      "archive_manifest": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/vendor-power-cells-reload-20260924/manifest.json",
+      "manifest_sha256": "d06f45c919692c26e008e434742b396890c19089aef405fc1c68350510dfa693",
+      "before_db_sha256": "86957b24214954ba12e07b6faca177be03b04e4deb0961b5da0848f99b0611fb",
+      "after_db_sha256": "23864224df30f0cf91847debd74e464c833650d99f4e84f3de4282a0e796a2ac",
+      "client_locators": ["output/vendor-conversation2.png: shop title Armor Supplier Heffernan, minimap label Alia Das, Standard Grade Power Cells at 3 credits, 480 credits before purchase", "output/vendor-cell-icon-selected.png: selected original-client Standard Grade Power Cells name", "output/vendor-cell-purchase.png: quantity prompt, whose edit became 120; this was observed after confirmation rather than assumed from input", "output/vendor-purchased-one.png: chat explicitly says received 120 Standard Grade Power Cells, credits 120", "output/tools-confirm2.png: Tools skill trained and Repair-O-Matic icon became usable", "output/tool-cycle3.png: selected Repair-O-Matic, HUD 0/120", "output/tool-reloaded.png: immediate HUD frame 0/110 during reload animation", "output/tool-reload-settled.png: settled HUD 10/110"],
+      "server_locators": "output/game.log:188 RequestNPCConverse at 18:00:41; line 314 RequestVendorPurchase at 18:02:47; line 560 RequestWeaponReload at 18:07:14 local log time.",
+      "db_result": "Purchase saved item23 template56 stack120 and credits 480 to 120, consistent with 120 at 3 credits each. Character skill14 Tools level1 trained via client; Repair-O-Matic item22 equipped. Reload moved 10 Power Cells into item22 ammo_count10 and left item23 stack110. SQLite integrity ok. Archived and restored.",
+      "name_conflict": "The client shop title displayed Armor Supplier Heffernan while the nearby minimap displayed Alia Das. The copied emulator spawnpool116 creature73/vendor mapping and client name mapping are not reconciled; this run does not prove the final-live shopkeeper identity.",
+      "untested": "Repair-O-Matic use on damaged armor was not attempted because no suitable damaged armor target was available in this bounded run."
+    }
+  ],
+  "remaining_gaps": ["Final-live vendor73/Alia Das stock, price and name", "Normal earned progression and route to Caufield/vendor", "Repair-O-Matic use on damaged armor", "Whether the original final-live class-gear reward included Power Cells or a filled clip"],
+  "cleanup": "Each copied run reached terminal supervisor state, its output and before/after DB were archived with SHA-256 manifests, and its copied char.db was restored to its staged baseline. Private command files can contain test credentials and must not be published."
+}

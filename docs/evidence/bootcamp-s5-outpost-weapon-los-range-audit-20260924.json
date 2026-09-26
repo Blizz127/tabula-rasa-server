@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 outpost weapon range and line-of-sight fidelity boundary",
+  "scope": "Static original 1.16.5.0 client bytecode identity recheck against the existing disassembly, current server source, cover asset, and recorded final-week/copy-client outpost evidence; no client or live server run",
+  "findings": [
+    {
+      "tier": "original_client",
+      "exact_source": "trpython.zip:client/actions/weapons/baseweaponattack.pyo, BaseWeaponAttack attribute stores documented in docs/weapon-attack-client-evidence.md lines 99-116; client/actions/targetedaction.pyo, TargetedAction.CheckAction bytecode offsets 182-326, 607-903 documented at lines 190-216",
+      "finding": "The primary ranged BaseWeaponAttack has checkRange=0 and doBlindShots=1. TargetedAction applies its GetMaxRange/native body-distance rejection only when checkRange is enabled (the melee movement action enables it). Native line-of-sight and frontal checks can clear a target while retaining a blind shot. This establishes client-side request behavior, not original server hit validation or an always-visible shot ray.",
+      "confidence": "high for byte-identical original client modules and prior documented static analysis; unknown for historical server behavior"
+    },
+    {
+      "tier": "original_client_plus_observed_final_week",
+      "exact_source": "docs/bootcamp-rifle-range.md lines 1-16 and 47-51: generated/client/actiondata.pyo actionArguments[(1,134)] assignment offset 43925; final-week 7Lrst9SG3pk A3-018 at 304.733 s",
+      "finding": "The selected crate rifle's action row and filmed Shinobi Rifle tooltip show 60 m maximum/optimal range, but the client base ranged action disables its hard range check. Neither the tooltip nor this client path proves a server-side 60 m cutoff, damage falloff, or the historical handling of a manually supplied distant target.",
+      "confidence": "high for displayed/action-table value; unknown for server enforcement"
+    },
+    {
+      "tier": "emulator_code",
+      "exact_source": "src/Rasa.Game/Managers/WeaponAttackManager.cs lines 132-160 and 211-245; src/Rasa.Game/Managers/BehaviorManager.cs lines 100-160 and 560-585; src/Rasa.Game/Managers/CoverGeometryManager.cs lines 102-146; src/Rasa.Game/Content/Cover/adv_bootcamp.cover.json objects 1040,1041,1042,1045,1053,1056",
+      "finding": "Player ranged attacks revalidate entity identity but only melee uses MaxRange; creature acquisition and attack dispatch use distance without a geometry ray. Cover geometry scales damage and its six boot-camp sandbag objects lie at X=293..299, away from the outpost X around -85. These are definite emulator implementation limits, but not independently proven deviations from the original server's eligibility or damage rules.",
+      "confidence": "high for current source and asset; unknown for final-live comparison"
+    },
+    {
+      "tier": "observed_final_week_and_emulator",
+      "exact_source": "docs/evidence/bootcamp-s5-outpost-engagement-boundary-20260924.json observations 1-4; docs/evidence/bootcamp-s5-outpost-corridor-map-los-20260924.json geometry_and_combat and navmesh_queries",
+      "finding": "Original footage shows a level-3 shotgun engagement near the outpost; the copied level-2 rifle character received damage near a wall and later died. The records do not show a synchronized original target ID, server shot result, complete occlusion ray, or stationary hostile position. The walkable navmesh route and wall screenshot do not prove that any current hit crossed an original ballistic blocker.",
+      "confidence": "high for limits of the recorded evidence; low for any inferred final-live shot rule"
+    }
+  ],
+  "decision": "No ranged cutoff, geometry rejection, outpost cover addition, or creature LOS correction is justified yet. Preserve the explicit gap: current combat omits checks whose exact final-live rules are unknown. A hard occlusion reject could contradict the original client's intentional blind-shot path, and a hard 60 m reject would treat an optimal/action-table range as a verified historical server rule.",
+  "bounded_next_evidence": "Seek an uncut final-live shot sequence with distance, target selection, geometry, ammo and damage visible, or an original packet/server trace; independently map actual obstacle collision geometry before claiming a specific outpost through-wall hit. An isolated emulator client run can diagnose current behavior but cannot establish final-live server fidelity by itself.",
+  "sources": [
+    {"path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/trpython.zip", "sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6"},
+    {"path": "trpython.zip:client/actions/weapons/baseweaponattack.pyo", "sha256": "c138c223eceec99a6ba8982c9a07071c806bdc445ea2d72440045586dbe54b8b"},
+    {"path": "trpython.zip:client/actions/targetedaction.pyo", "sha256": "b9c96045f3d3d3d670550c81c7216644cb38e3b84adcfae35ab496636bcc56d4"},
+    {"path": "docs/weapon-attack-client-evidence.md", "sha256": "2f28d5b06e564f25544ed576a049d870acc54064f139ffbd9d8303fdae9b08d5"},
+    {"path": "docs/bootcamp-rifle-range.md", "sha256": "94dc449dbfb558d0bbc55f46c7188696bb4e86e7c4597f50eb8a705ddc8f83cc"},
+    {"path": "src/Rasa.Game/Managers/WeaponAttackManager.cs", "sha256": "0682c98c5d2c7f564624931bf93bcf4f13881f96b155bd12dd794c66bf59451c"},
+    {"path": "src/Rasa.Game/Managers/BehaviorManager.cs", "sha256": "ee1e2efa997a37765dfd577ec7f84e92ea0fe5875c3affbf09c8eb3207e3cbd2"},
+    {"path": "src/Rasa.Game/Managers/CoverGeometryManager.cs", "sha256": "f84c54a46fde112e16e1f3cb7bed394dd0ce16ac4dc7f4c868c5c76fd80bf86b"},
+    {"path": "src/Rasa.Game/Content/Cover/adv_bootcamp.cover.json", "sha256": "1be28d488483faec2c23cc82844594a0fd4a6059ce66b288f92191aa1d4aa7d7"},
+    {"path": "docs/evidence/bootcamp-s5-outpost-corridor-map-los-20260924.json", "sha256": "559efcc39719403dc2a93b5eba29911890a0ef723b9cc2c2bf480af9a755c715"}
+  ]
+}

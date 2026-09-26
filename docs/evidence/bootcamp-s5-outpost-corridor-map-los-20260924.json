@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 outpost corridor walkability and current cover/line-of-sight boundary",
+  "scope": "Read-only original-map navmesh queries and current emulator source/cover audit from a copied-client ordinary-reached corridor checkpoint; no client run or live service change",
+  "start": {
+    "xyz": [-61.8, 87.9, 75.3],
+    "tier": "observed_emulator",
+    "exact_source": "docs/evidence/bootcamp-s5-gate-to-outpost-corridor-20260924.json observation 3; source manifest s5-fence-probe-stateaware1/output/06-near-outpost-loc.png and manual-outpost-loc-review.json",
+    "limit": "This is a copied-client coordinate reached through ordinary input from an accepted-1995 checkpoint, not a final-live waypoint. The navmesh snaps the queried start 0.7 m in Z to (-61.8,88.09,76.0)."
+  },
+  "navmesh_queries": [
+    {
+      "command": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -61.8 87.9 75.3 -75.74 86.33 84.21",
+      "target": "original-footage player XZ at 8VXeKzGUv0c 32.4 s; supplied Y is a query hint only",
+      "result": "complete path, 1 corner, 16.6 m; endpoint (-75.7,87.1,84.2)",
+      "tier": "measured_from_original_client_map",
+      "limit": "A walkable navmesh segment does not prove a clear shot, safe exposure or an ordinary-client move to the endpoint."
+    },
+    {
+      "command": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -61.8 87.9 75.3 -85 86.33 91.03",
+      "target": "seeded outpost Thrax at its final-week measured engagement XZ, ±3.3 m; not an original spawn",
+      "result": "complete path, 2 corners, 28.6 m; (-82.8,86.9,87.2) then (-85.0,86.7,91.0)",
+      "tier": "measured_from_original_client_map",
+      "limit": "A bend in the walking route is consistent with nearby geometry but is not a ballistic occlusion measurement."
+    },
+    {
+      "command": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -61.8 87.9 75.3 -102.4 86.09 70",
+      "target": "current inferred wounded soldier",
+      "result": "complete path, 4 corners, 42.1 m; (-82.8,87.1,76.0), (-88.0,86.3,75.6), (-101.6,86.7,71.2), (-102.4,86.5,70.0)",
+      "tier": "measured_from_original_client_map",
+      "limit": "The first two corners pass the copied-client damage area near (-82.2,87.2,75.2); walkability alone does not establish survival. The soldier coordinate is inferred, ±5 m."
+    }
+  ],
+  "geometry_and_combat": [
+    {
+      "tier": "original_map_plus_emulator_audit",
+      "exact_source": "s5-fence-probe-stateaware1/output/06-near-outpost-loc.png; source adv_bootcamp.map; src/Rasa.Game/Content/Cover/adv_bootcamp.cover.json objects indices 1040,1041,1042,1045,1053,1056",
+      "finding": "The corridor screenshot shows the original wall and sandbags beside the player. The emulator's exported cover triangles are restricted to six courtyard statics around X=293..299, Z=65..76; none cover this outpost corridor, Thrax or bunker. This asset therefore yields zero sampled outpost cover even where original geometry is visible. It does not establish final-live ballistic line of sight."
+    },
+    {
+      "tier": "emulator_code",
+      "exact_source": "src/Rasa.Game/Managers/BehaviorManager.cs CheckForAttackableEntityInRange lines 100-160; CreatureThink fight action around 560-590; src/Rasa.Game/Managers/WeaponAttackManager.cs lines 216-245; src/Rasa.Game/Managers/CoverGeometryManager.cs lines 102-146",
+      "finding": "Current creature acquisition and attack eligibility are distance based, with no geometry ray in these paths. Direct ranged player attacks check target identity but only the melee branch enforces MaxRange; boot-camp cover sampling scales damage and has no outpost triangles. A copied-client hit or kill from behind a wall would therefore be emulator functionality, not proof of original line of sight."
+    }
+  ],
+  "bounded_approach": "The only newly ordinary-reached measured hold point is (-61.8,87.9,75.3), about 28.0 m horizontally from the seeded Thrax engagement point. Inspect target visibility and actual sightline there before advancing. The original recorded player engagement XZ (-75.74,84.21) is 16.6 m away by this navmesh and about 11.5 m from that target, but this route has not been ordinary-client traversed from the new checkpoint. Avoid calling either point safe until a client capture measures enemy acquisition, incoming damage and shot behavior.",
+  "decision": "No seed, cover or combat change is justified by navmesh and screenshots alone. The outpost cover/line-of-sight gap is concrete in current code, but final-live geometry sampling and attack rules must be recovered or tested before a faithful correction is chosen.",
+  "sources": [
+    {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"},
+    {"path": "src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll", "sha256": "361622893ebee7bd5c18b07b2ca6688b29c0228b6ff98e45ac870798ef44095d"},
+    {"path": "src/Rasa.Game/Content/Cover/adv_bootcamp.cover.json", "sha256": "1be28d488483faec2c23cc82844594a0fd4a6059ce66b288f92191aa1d4aa7d7"},
+    {"path": "src/Rasa.Game/Managers/CoverGeometryManager.cs", "sha256": "f84c54a46fde112e16e1f3cb7bed394dd0ce16ac4dc7f4c868c5c76fd80bf86b"},
+    {"path": "src/Rasa.Game/Managers/WeaponAttackManager.cs", "sha256": "0682c98c5d2c7f564624931bf93bcf4f13881f96b155bd12dd794c66bf59451c"},
+    {"path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/data/maps/adv_bootcamp/adv_bootcamp.map", "sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-fence-probe-stateaware1/output/06-near-outpost-loc.png", "sha256": "63314ceb3f8bffb7d5892d3656898d490f5ba9d341eb8ac7c3cb0e8fdcd7a121"},
+    {"path": "docs/evidence/bootcamp-s5-gate-to-outpost-corridor-20260924.json", "sha256": "a0c328eeff7c3e82a364a57a11dace8a5ad7fd62aa669c1152464365c331155a"},
+    {"path": "docs/evidence/bootcamp-d11-positions.json", "sha256": "2a7539fa3e4383531f390dbffd90583cf18aa38a39f4f7f78254b69e043ce8a8"},
+    {"path": "src/Rasa.Game/Managers/BehaviorManager.cs", "sha256": "ee1e2efa997a37765dfd577ec7f84e92ea0fe5875c3affbf09c8eb3207e3cbd2"}
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "scope": "First playable progression action after the isolated original-client Rogers turn-in for mission 1995",
+  "result": "The preserved Rogers checkpoint has Training Day (1526) active with its sole objective revealed. The next bounded action is to walk by ordinary controls from the saved Alia Das position to Training Officer Kincaid at the barracks, complete his objective conversation, choose one pistol reward and turn in 1526. Class advancement follows, but this checkpoint remains level 2 and does not establish the final-live XP step needed for level 4 training.",
+  "current_checkpoint": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s6-checkpoints-20260924/char-after-rogers-turnin.db",
+    "original_capture_path": "/var/tmp/rasa-s6-after-v14-capture-20260924/char-after-rogers-turnin.db",
+    "sha256": "9333c3dd8dcdb88d516b511080c29d74f139eb996d9cc70fdfcc140403c9f5f4",
+    "read_method": "SQLite read-only connection on 2026-09-24; original and private-artifact copy hashes matched docs/evidence/bootcamp-s6-after-v14-ordinary-rogers-20260924.json; private copy passed integrity_check in immutable read-only mode",
+    "character": {
+      "id": 1,
+      "map_context_id": 1220,
+      "position": [884.1099853515625, 305.79998779296875, 347.80999755859375],
+      "level": 2,
+      "experience": 8695
+    },
+    "mission_1995": {"state": 4, "objective_statuses": [2, 2, 2, 2]},
+    "mission_1526": {"state": 0, "objective_1_status": 1}
+  },
+  "evidence": [
+    {
+      "tier": "observed",
+      "source": "docs/evidence/bootcamp-d11-footage-events.json, B2-023 at 98.4 s and B2-033 at 109.8 s, final-week 8VXeKzGUv0c transcript",
+      "finding": "Headquarters offers Training Day on first Alia Das view, directs the recruit to Trainer Kincaid in front of the barracks tent, then the accepted objective appears in the tracker. The footage source frames recorded by the transcript are currently missing and could not be re-inspected in this audit."
+    },
+    {
+      "tier": "original",
+      "source": "generated/client/objectiveconversation.pyo @30512: (1526,1,2588,1,1) -> 21867; generated/client/language/english/missiontextlanguage.pyo @341660 text 13607 and @341696 text 13608; locators in docs/evidence/bootcamp-d11-reconstruction-manifest.json, mission 1526 / package 2588 rows",
+      "finding": "The client data identifies Kincaid's package 2588 as Training Day objective 1's conversation and names his barracks location."
+    },
+    {
+      "tier": "measured",
+      "source": "docs/evidence/bootcamp-d11-reconstruction-manifest.json, W1 Kincaid placement 198685; docs/progression-preservation-plan.md W1 status",
+      "finding": "Seeded Kincaid position is (765.4,294.12,386.05) in context 1220, measured from one final-week radar viewpoint with about 2 m positional uncertainty. Facing and body remain inferred/analogue."
+    },
+    {
+      "tier": "observed",
+      "source": "docs/evidence/client-training-day-turnin.json, isolated recovered-client runs 46-47; docs/evidence/training-day-reward-modules.json, subsequent isolated runs",
+      "finding": "A copied client completed Kincaid's objective and 1526 turn-in, granted a selected pistol and persisted the result. Those earlier runs diagnostically moved the character near Kincaid, so they do not verify the ordinary Rogers-to-Kincaid route."
+    }
+  ],
+  "implementation": {
+    "seed": "src/Rasa.DBL/Migrations/WildernessData/WildernessArrivalTrainingDayRows.cs: mission 1526, creature 198515, placement 198685, package 2588, offer rule 1985011",
+    "known_gaps": [
+      "The final-live level-3-to-4 XP grant and trigger are unresolved; this checkpoint is level 2 with 8695 XP, so a class trainer interaction cannot alone establish natural tier-2 eligibility.",
+      "The original footage cuts over the Kincaid interaction; exact final-live turn-in timing, 1526 XP, and pistol template ids remain unverified.",
+      "Kincaid's position is measured with about 2 m uncertainty; appearance, level and facing remain unverified.",
+      "The archived original frames in the disappeared /home/blizz/backups tree are unavailable; the checked-in curated transcript is secondary to those missing frames."
+    ]
+  },
+  "bounded_verification": "Copy the hashed post-Rogers char DB into a fresh isolated Game/Auth harness using ordinary copied server binaries and client 1.16.5.0. Preserve the source DB. Log in, walk without coordinate edits to Kincaid, capture his indicator, RequestNPCConverse/objective-completion and 1526 reward panels, complete 1526, then inspect copied character_mission, objective, credits, item template/module and XP; relog to verify persistence. Record any loading/relog boundary. Do not manipulate level or XP in this route; if level 4 is required for the subsequent class choice, document that as a separate reconstruction gap. Restore the isolated harness and leave live Game/DIT untouched."
+}

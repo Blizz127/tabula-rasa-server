@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T10:39:26.102237+00:00",
+  "subject": "Untimed local bridge crossing probe from V11 last safe pre-WA coordinate",
+  "setup": "First copied-client attempt stopped on transient focus guard before movement; second fresh copied baseline checkpoint placed at V11 observed /loc (-143.1,84.8,25.7), same rotation; objective timer not started.",
+  "result": "In second attempt, two W+A 200ms holds reached (-143.8,84.8,23.3) then (-145.5,84.8,21.4); both Y84.8 and the final point is 0.91m from the far-deck checkpoint (-145.4,84.8,22.3). No timer or live-game change.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-bridge-postw1-untimed-20260924.py",
+      "sha256": "6f1b306d459991ab8fd41f304cc167c13f2fd0e3f210e95177e39f50a21852f8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-driver-20260924.py",
+      "sha256": "8822717205ea1b29156df3d5bada9d8a8859e40963d04b7a9010b72d0ea6083b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1-untimed-launch.log",
+      "sha256": "51f624b5d4930e415757711f8cede8be37e184bc365206d153ebc660c6a4012a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1-untimed-controller.log",
+      "sha256": "a6446b7e21beba04899748365bdb6a4ad869eaa5efcf016cb21e87deca2c628e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1-untimed-launch.pid",
+      "sha256": "2d7997e080ae4617c8020f1e6b65db3dce8ddce1f4ecb2b74d7e6a07086baf51"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1-untimed-controller.pid",
+      "sha256": "1fb9d5ade1cfdb7cb08ae95efe5b2e189405221bd0e3fe3ab509af954a22ae28"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-bridge-postw1b-untimed-20260924.py",
+      "sha256": "ed85f7591fe13e430ac3ce55314c2ad83cd676514c7c3c9c0742f0aeec547615"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-driver-20260924.py",
+      "sha256": "30ba31c6b814762ad104e3964dc026104fb00cb00952e5200d4bb40a75272abc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1b-untimed-launch.log",
+      "sha256": "ae9bf7d3711f5af53e6c103c95ef135bc795c53279b054f43c57c8b9dce25c84"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1b-untimed-controller.log",
+      "sha256": "b2114e69a6071e642e9bf8c1d5e073a49a48302350ddade5c70017e27a292a44"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1b-untimed-launch.pid",
+      "sha256": "4e7fdd9bbb8048a8ccc65946212d5fcd4f36523deeb860fc5546844f30716528"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/postw1b-untimed-controller.pid",
+      "sha256": "081be8b60691b83d03d5b5241fd9c967b7bc56dff63d47b1b7e7126c30bb8d8f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/00-playable.png",
+      "sha256": "5bba841b27d5555d5bf3b5d4dba708065c77643b451451dd21da64117134289f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/01-start-loc.png",
+      "sha256": "c81c3938a56532ac3a2da4e069d4e95647eed240c0c7a3543005e561b8c1b2ee"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/01-start-loc.png.windows.txt",
+      "sha256": "9da54e0d15ffb9b6427c60d067556d864b19e10094bd1b2d1c4bbf8ace570dcf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/02-hold-0.png",
+      "sha256": "9fbde9f0740f1f2df07a004afa55b515c31bff32cc3e2fdbdde5db13861885f6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/02-hold-0.png.windows.txt",
+      "sha256": "9da54e0d15ffb9b6427c60d067556d864b19e10094bd1b2d1c4bbf8ace570dcf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/02-hold-1.png",
+      "sha256": "2987e0b894ae75bd3a4a29a00ebf59358bec241f55158fd4822124d17ccd310c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/02-hold-1.png.windows.txt",
+      "sha256": "9da54e0d15ffb9b6427c60d067556d864b19e10094bd1b2d1c4bbf8ace570dcf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246216873745846-start_client.result.json",
+      "sha256": "a1902111414f58b92fe7d1a60ad41111e81bfe651a9cc6b41682224dbae849e6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246216974241056-wait_playable.result.json",
+      "sha256": "c883029bfb7bede59d7e93aac7b673f9eb1280c9a408d96c8dd2a500bbc4160f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246242676008633-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246242879036618-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246243181307971-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246244382959156-check_focus.result.json",
+      "sha256": "005fcc85601ebe14972fc3901b652e62bc574166ba58c3f1e15ab7a118c70efc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246246186029913-recover_focus.result.json",
+      "sha256": "90a71ca357c742efb52cf62e0b5f4e073a91ff6f73b957ce7b302df32bbed4f9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246255047300402-check_focus.result.json",
+      "sha256": "75189dcd566113fcd1ddc851be2aa9bea7063d6c35534850bde0a03c4d1276b3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246256860202560-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246258797100264-hold.result.json",
+      "sha256": "01575eac4c63f7e34071de3e47d0a1ef5fbfaaa3c85a83fb5a7d1e3b9f52d942"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246262741683413-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246264997165590-hold.result.json",
+      "sha256": "0fa0e9a0ffd81edc781ccc65bcd8657e50b954c599b0711b62f3f9a9ca1bf123"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246268952752877-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/1790246273065179907-stop.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/auth.log",
+      "sha256": "4f67d6029d6ec3032579e455ba4a533cc9f320eff4fc16bb3a1c3cf166043908"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/client.log",
+      "sha256": "59e48b6c439479cece11d7a006ab8ae493e6ba6fbec1f4d1f4e6f636c1bf2090"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246216873745846-start_client.json",
+      "sha256": "92a3bc2707adadec06750bc2810011942b53e94785a31219196471125c761ce0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246216974241056-wait_playable.json",
+      "sha256": "da8536dfce4ebf7b69c755c38a88dd38b53c4a9e4182391224566e8993a22fb5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246242676008633-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246242879036618-input.json",
+      "sha256": "7543763762fbb50ce8b768ef40f0b7f024a787148ee1e51a4ab3b3077f2c6a84"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246243181307971-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246244382959156-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246246186029913-recover_focus.json",
+      "sha256": "29cd777b22de8857568ce95bbd26fa98ea558c6a3dff093f2496638bf048275e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246255047300402-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246256860202560-capture.json",
+      "sha256": "a4dcd51f97e070197599c2fd840827735524d14c3becb9ae76b463317be5cd40"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246258797100264-hold.json",
+      "sha256": "832c8f753d072c5dc430cf6880d2c731ce63c54ba411db0694f4cb641b0611b1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246262741683413-capture.json",
+      "sha256": "e74cb68b9b7014b8a5241f0e5c8eae107c769aed38c025ac3171367271a6d8f4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246264997165590-hold.json",
+      "sha256": "832c8f753d072c5dc430cf6880d2c731ce63c54ba411db0694f4cb641b0611b1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246268952752877-capture.json",
+      "sha256": "2e37ac637ffb7a8ebce4ad58205cc3c7b0c8e71af4ac82dde3e7c34039302def"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/commands/1790246273065179907-stop.json",
+      "sha256": "2bcc337a33841b5a2c00408b09d907a8ee77f6a65fc8dfde007d2d6bccc839dd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/focus-probe.png",
+      "sha256": "d7dee3d5bc12c7ec7d52ce4082c504951c6bad1c7bb9d57d978ff2c617d2a454"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/game.log",
+      "sha256": "6d194dc962ce79e9885996b01951e07f5dbf575db699e13eb79f7fc261bec212"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/probe.jsonl",
+      "sha256": "07e54ecaac58b2e36c6ff387e73c219ec34b12d4f27fbd4ec98d61e6f6c1efcb"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/setup.json",
+      "sha256": "cd8a6963e55f6a46023213df83f410b79158da29b6e0446b21dff81fc80c62ab"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/status.json",
+      "sha256": "ec77d362f2f2b00956defa64a9a163d1eab2579bc1e79dc5ce061ddd6aabaa43"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1b-untimed-20260924/xvfb.log",
+      "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/00-playable.png",
+      "sha256": "ee75dfc7350e6d1ba2826bf699ab66273f86056aa7fbfdd02272ebea99b56109"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246118851809824-start_client.result.json",
+      "sha256": "c8fb39265097ce73abf6348b362129e99ad39e28a6537e77821bcd39bfae02c5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246119052564898-wait_playable.result.json",
+      "sha256": "daf3d83e3d293bb75b5381111ede3e23ba28eddc68d68a8b1e917a76207afdb7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246142966266610-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246143168098472-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246143370764968-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246144678253305-check_focus.result.json",
+      "sha256": "3303aeb7e4c16db03d78eb30a8d9bf8aba4e434f752ac783205afa32932cfa4a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246146194574663-recover_focus.result.json",
+      "sha256": "48f00041029906a07197c6d53075fab7f4b2ce38fdb6d88025827a0e52deb114"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/1790246151247347755-stop.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/auth.log",
+      "sha256": "389e0e85e7bb5d507743acd5b9224c57548ae56a5e69ebc76e8fa392cd17b627"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/client.log",
+      "sha256": "2a7dda0eb437024db0767dde3ca2e453d0a5caa1f59a1b81894a71b864d8ca5f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246118851809824-start_client.json",
+      "sha256": "92a3bc2707adadec06750bc2810011942b53e94785a31219196471125c761ce0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246119052564898-wait_playable.json",
+      "sha256": "da8536dfce4ebf7b69c755c38a88dd38b53c4a9e4182391224566e8993a22fb5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246142966266610-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246143168098472-input.json",
+      "sha256": "7543763762fbb50ce8b768ef40f0b7f024a787148ee1e51a4ab3b3077f2c6a84"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246143370764968-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246144678253305-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246146194574663-recover_focus.json",
+      "sha256": "29cd777b22de8857568ce95bbd26fa98ea558c6a3dff093f2496638bf048275e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/commands/1790246151247347755-stop.json",
+      "sha256": "2bcc337a33841b5a2c00408b09d907a8ee77f6a65fc8dfde007d2d6bccc839dd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/focus-probe.png",
+      "sha256": "d33a5dbaa8551f9175c8f6703347631262567bc737e368f6591315e40fc289e0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/game.log",
+      "sha256": "8b9eacf2cfd86895b5575f5f253db6da08c2066a01775f29427daef3eb1bcf70"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/setup.json",
+      "sha256": "cd8a6963e55f6a46023213df83f410b79158da29b6e0446b21dff81fc80c62ab"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/status.json",
+      "sha256": "1e5503f5e9a2478dbfd67d6b3eb2f40155e855ce8cce55c9c6fdf2857cee5d06"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-bridge-postw1-untimed-20260924/xvfb.log",
+      "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+    }
+  ]
+}

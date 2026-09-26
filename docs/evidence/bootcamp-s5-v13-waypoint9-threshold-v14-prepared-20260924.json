@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Continuous copied-client S5 v13 stops at waypoint9 on a 0.35m progress threshold false negative; v14 prepared offline",
+  "scope": "One isolated original-client 1.16.5.0 continuous S5 attempt from post-Conrad checkpoint. Only copied mission 1995 objective1 timer anchor reset to 600000 ms. No copied position staging, live Game or DIT edits. V14 controller was prepared and syntax checked but not run.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v13-continuous-waypoint9-threshold-stop-20260924/manifest.json",
+    "manifest_sha256": "e6856a593550f198f7be70d1f666c919cca481b28c84576c166c3e766fe471c3",
+    "archived_files": 178,
+    "source_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_db_sha256": "67019d0ebd489d658ce2e0a61d1735b11e23a7e9533b98448fc52ec60dfe3f8d",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/staging.json",
+      "output/driver-second-sandbag.log: terminal waypoint9 exception",
+      "output/positions.tsv: final accepted Move packets",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "char-after-stop.db",
+      "drive_pre_sandbag_v13.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "At waypoint9 toward (-162.746,85.727,1.848), client accepted movement from (-159.87110,84.82031,6.171875) to (-159.88672,84.82031,5.9101562), yaw unchanged 0.5881858. This is about 0.262m spatial displacement and +0.225m progress toward target, with a fresh accepted Move packet. The old guard required >=0.35m displacement and progress, then exhausted its 8s wait and stopped.",
+      "source_location": "output/driver-second-sandbag.log: terminal exception; output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Supervisor stopped after 235.62s, driver exit1, launcher exit0. Copied DB persisted accepted stop coordinates. Mission1995 remained active, objective1 active and objectives2/3 complete; no S6 mission1526 row. Adaptive waypoint13 and bomb approach were not reached.",
+      "source_location": "output/supervisor-state.json; output/status.json; char-after-stop.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "This stop is a controller threshold false negative, not evidence of collision. The packet moved toward the target and stayed at expected elevation. The remaining copied timer was approximately 374s at the final packet."
+  },
+  "prepared_v14": {
+    "status": "prepared_not_run",
+    "directory": "/home/blizz/private-artifacts/rasa-net-s5-next-probe-20260924",
+    "script_sha256": {
+      "drive_pre_sandbag_v14.py": "fc68aeeeeace7b0c0a5ac722974b2c352b2f4bcd89f6921626bc3b14ce9ad97e",
+      "drive_second_sandbag_probe_v14.py": "20598c49a63468af4d4409c36f68d221037021513ea54dd1ec2bc545a482c94a",
+      "run_detached_second_sandbag_v14.py": "db9285077f5390e1378196bcc215f638d5edeff9ea8b88cc32ab2cf6228d8746",
+      "drive_northwest_v8.py": "ff5d37d947d9d7cbafb4ce802b45a0bdab98843bce6eb4596cc45330b33ee418"
+    },
+    "changes": [
+      "For pre-sandbag waypoints9,10,16, require fresh spatial displacement >=0.15m and positive target progress >=0.10m; waypoint9 v13 packet would pass.",
+      "For existing locally guarded waypoints11\u201315, retain >=0.10m displacement and progress.",
+      "For earlier waypoints0\u20138, retain >=0.35m displacement and progress.",
+      "Retain 8s fresh-packet wait, ten-attempt bound, mission timer, elevation checks, water-level checks, waypoint11\u201315 local envelopes and sustained-divergence stops. Capture a no-progress screenshot at every waypoint9\u201316.",
+      "Retain v13 adaptive waypoint13, northwest fallback and higher-bank bomb interaction guards."
+    ],
+    "preflight": "Python syntax compilation passed for all four scripts; internal main/supervisor references verified. No v14 client launched."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "v14 continuous passage through waypoint9 and adaptive waypoint13",
+    "Northwest fallback and higher-bank bomb use in v14",
+    "S5 completion and S6 handoff in uninterrupted copied-client run",
+    "Original final-live exact geometry"
+  ]
+}

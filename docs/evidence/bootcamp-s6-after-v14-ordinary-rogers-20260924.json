@@ -1,0 +1,483 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T11:31:24.380483+00:00",
+  "subject": "Separate isolated original-client S6 relog continuation from V14 preserved post-S5 snapshot to mission1995 Rogers turn-in",
+  "setup": "Copied preserved post-S5 S6 character database into a separate isolated server. Relaunched original client, waited for playable HUD, accepted Training Day, walked ordinary controls to Outpost Commander Rogers. No live Game/DIT change. The relog boundary is explicit and is not the same V14 client session.",
+  "result": "Original client rendered Alia Das and Training Day offer; accepted Training Day (mission1526 state0). Ordinary walk reached Rogers at map1220 (854.3281,294.2227,388.6525). Calling for Reinforcements topic showed Mission Completion and Complete Mission; click produced Mission Completed banner. Copied DB mission1995 state4, all four objectives status2; Training Day state0.",
+  "restoration": "Preserved post-turn-in snapshot char-after-rogers-turnin.db. Isolated runner exited0. Copied char.db restored from V14 post-S5 source (mission1995 state0, mission1526 absent); integrity ok.",
+  "limitations": "This continuation crossed a client relog boundary after V14 S6 arrival. It establishes persisted handoff/turn-in in an isolated session, not uninterrupted same-client completion. Client HUD appeared 4.3 seconds after actual MapLoaded; the 30-second grace period was not needed because HUD was playable. SQLite transient WAL/SHM sidecars are excluded because opening evidence DBs may mutate them.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s6-after-v14-20260924.py",
+      "sha256": "dddec5758d11736487dfd2af5e9dce6ffc09caece1b6236a16cb03be43aaa2e6"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-launch.log",
+      "sha256": "d966c4e40000db6bc86e6c679cf1c0c93e44b58e78b841c6b34891ff2d4f7df1"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249078775135695-start_client.result.json",
+      "sha256": "c8fb39265097ce73abf6348b362129e99ad39e28a6537e77821bcd39bfae02c5"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249088226905503-wait_playable.result.json",
+      "sha256": "cb82a3eb37f7f8ad27df23f6f5996e3aa89aff0a54491dada8c76e88a76e4b70"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249171339490941-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249173641533100-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249190754461756-hold.result.json",
+      "sha256": "00e84ce81c2e020c582727f8ee0d7e5e8e5fecd723eec308e270563a39bd3d9f"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249196502860715-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249196608190495-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249196912155717-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249198114242882-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249199025398714-hold.result.json",
+      "sha256": "c0236b2078e0b8005757f16a3b331ae1d2932bbd62f30a46030ec7c51fe34c7b"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249204561315997-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249204763092401-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249204966551972-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249206167873347-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249207275070233-hold.result.json",
+      "sha256": "e9de5803a2341fa2f2f74459e177e103fbef8e81a76537798483cf6b3150a85f"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249213549755787-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249213751511689-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249213952516498-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249215155457755-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249237843689649-hold.result.json",
+      "sha256": "e16041f9a9c89ba8c61d43df9dc8dae80070e851a3b5d35403226a6f85823d40"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249241467056686-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249241668275062-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249241870761531-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249243071549072-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249337031315059-hold.result.json",
+      "sha256": "83860816130099940f46db65ac54172249de14b98f1eaee59ca5a6531355e347"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249340249421801-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249340450271489-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249340653136573-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249341555666665-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249354324531450-hold.result.json",
+      "sha256": "3b4f4021680f4a61071fd1dd6235d7f4c44fe439713504cbad6c0de30ea2cf1f"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249357448489391-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249357649236440-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249357952544416-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249358855305307-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249377256059811-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249377360034433-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249379662146653-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249390609776158-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249392811255539-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249403333345809-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249406540869645-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/1790249429285897173-stop.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/auth.log",
+      "sha256": "ed38c49a6198b9db027cbf7988493a963c54cc0c48994878b8103c39a9d1f4cb"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/char-after-rogers-turnin.db",
+      "sha256": "9333c3dd8dcdb88d516b511080c29d74f139eb996d9cc70fdfcc140403c9f5f4"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/client.log",
+      "sha256": "7990e33cf581cd67d99435a75314c5cb350164da0c4ed1004854ff6683b2d4ef"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249078775135695-start_client.json",
+      "sha256": "92a3bc2707adadec06750bc2810011942b53e94785a31219196471125c761ce0"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249088226905503-wait_playable.json",
+      "sha256": "0c860ced6bebfb6e73440bfadcfaac2df099f30193dcac019017d74743b8015d"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249171339490941-input.json",
+      "sha256": "1e9daae078251293afbfebc61f9c64f2f9aaaa1ae87af8ac6f85bdf56cc4a822"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249173641533100-capture.json",
+      "sha256": "f0922e905ab2f108f6d7b7dd6c918c72ca14c54b6a79a239d858591249283f88"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249190754461756-hold.json",
+      "sha256": "200cbb660c7480d2948b434d54c58e1563edac5c012b4c0f533726ac2bd93657"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249196502860715-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249196608190495-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249196912155717-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249198114242882-capture.json",
+      "sha256": "476183ab4d077d6e0b06c707d4b56c2048f19cf1214ae81178c3f2879256aa0b"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249199025398714-hold.json",
+      "sha256": "200cbb660c7480d2948b434d54c58e1563edac5c012b4c0f533726ac2bd93657"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249204561315997-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249204763092401-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249204966551972-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249206167873347-capture.json",
+      "sha256": "e43f573617eafbefaac38bda1e688ad461c3d51945cc3527ffcad456d3863180"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249207275070233-hold.json",
+      "sha256": "200cbb660c7480d2948b434d54c58e1563edac5c012b4c0f533726ac2bd93657"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249213549755787-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249213751511689-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249213952516498-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249215155457755-capture.json",
+      "sha256": "f354604524740b699019a91f60c3f5f5c1efd39e754aa7f9ae3aee689d792dec"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249237843689649-hold.json",
+      "sha256": "2101c9f00e7c0cebec016aafbbd426773d4826f9eef49ea0c8373dcfd607b336"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249241467056686-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249241668275062-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249241870761531-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249243071549072-capture.json",
+      "sha256": "0eaba1523548b5d305e02d25f87ad797298e06df6954eacfe911d7bb8f9cd373"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249337031315059-hold.json",
+      "sha256": "fbb922b75010b20b2f406aa0d38294fab912d796488bca1eeff72aa9f6469181"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249340249421801-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249340450271489-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249340653136573-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249341555666665-capture.json",
+      "sha256": "2682d849bda0459d7ae2347340cf8d3aa4769c55f9a85cfd0f3f5b2caf3ed5d4"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249354324531450-hold.json",
+      "sha256": "f5a64fea458c2a81147a9d1cfd9f78ddad7b4f7ff6070defca2ef42351ae3999"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249357448489391-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249357649236440-input.json",
+      "sha256": "6cec2ddd80667b81f2d1c2f04e9844243ddc8bd553ab2787af232cf487c6aef8"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249357952544416-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249358855305307-capture.json",
+      "sha256": "0d13fe695da0fdd22c3601ad03c58c58642df1bc84cacc3daf612705c1c1c22c"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249377256059811-input.json",
+      "sha256": "5b92bbcf4f381c069b1d89bd9320fc42f883816a6a64db5aa1da04b471aa7c62"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249377360034433-input.json",
+      "sha256": "73c756f149cb64813076eafd344fd154661cd6b99a3f7c271b547fedc800f3fd"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249379662146653-capture.json",
+      "sha256": "68727e9a45678c83751f85cbba9cbfca1f105baca0384f0a56d4cf82df4cd6f5"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249390609776158-input.json",
+      "sha256": "2707a7940d574251d60fbba3ee0abef2ca2585ec8f3df788bb19438df5589fd5"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249392811255539-capture.json",
+      "sha256": "f1146f64179b87caa222a28dd9a50dd2500634ce50f843b3dbfcfa0214261d62"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249403333345809-input.json",
+      "sha256": "bd985dc43045ed8c756e3559a88a4a5af9b41e6f5d1ac92d4bdce398995a9955"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249406540869645-capture.json",
+      "sha256": "a97427b2e3f064baeb833626c74694fa7077d14d1bc8ef4b4b00d0cd373df42b"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/commands/1790249429285897173-stop.json",
+      "sha256": "2bcc337a33841b5a2c00408b09d907a8ee77f6a65fc8dfde007d2d6bccc839dd"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/focus-probe.png",
+      "sha256": "ba815b4b8f9c4c044d0c0a01a127fb9d07f45438141fde2b268eab7e52c4bf9c"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/game.log",
+      "sha256": "4f6e49969a724499623fc7e90c1ec4a737427827fa49ade9e43053453de602ce"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-relog-playable.png",
+      "sha256": "450338b7695ee4b60423feee8e48a0c46bc53320768eff461a3ec1713fa08fae"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-result.json",
+      "sha256": "ec42281947bc676200ae7b575ae140e85f4c06c5ddc39e1ec0e8a7f0bd5ca507"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-1995-complete.png",
+      "sha256": "d6fdca472a3dfb163fcf99d87662a53c72d91fe9fcb7ba78730237913573e36c"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-1995-complete.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-1995-topic.png",
+      "sha256": "18f650627a008cba4253ad58a4c9cffa639abf49f57efdc7bbbdafc2ec0ef94a"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-1995-topic.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-a350.png",
+      "sha256": "edf1bd27275981a947a706deb9eff212d1a90213819de8d9fd3b41a706852b02"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-a350.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-a500.png",
+      "sha256": "4c2d5b07a80c22d755d1dbda11d7129cc93df3c76d5f18976337f6d86f2e990f"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-a500.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-dialogue.png",
+      "sha256": "f9a351b0e01febfe14871c5eb4437bcf58652a89822619bc4766944bc58ef971"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-dialogue.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-w1000.png",
+      "sha256": "c50f7cd9b0acc219db900e67aa40ec89b6c7dceacfdd2db7d294fc2537426d5c"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-rogers-w1000.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s1-3s.png",
+      "sha256": "01574b193ea65fd778585b1b4c832b237bdb89642429ec3d684cedfb1892c645"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s1-3s.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s2-3s.png",
+      "sha256": "0f28ae9e86c397be61fa641f86ec2ce5ad88ab6849f6bd5aede2cbd949f23e8f"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s2-3s.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s3-3s.png",
+      "sha256": "184ecaa77beb9b376ad9a136fd030870f5961af438dec31dd402ab0c17dc7006"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-route-s3-3s.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-training-day-accepted.png",
+      "sha256": "de6219d6c2900334411ddf7f47ed2ac81d60946cb847d5c48ec2e2b67e277669"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/s6-training-day-accepted.png.windows.txt",
+      "sha256": "5a2dcf36d72a1d47903262de760dc9b5a14e543fe8af8de913ebce2e336487af"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/setup.json",
+      "sha256": "86fccfca968f0d0a7b613a8cd6fe33b979ed82240c1248a563b2abaf631ec94e"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/status.json",
+      "sha256": "726b441366c40ddfcd56656ac19ed52eab7df561eba4db23c65b369544b0ac97"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/wait-command-name.txt",
+      "sha256": "9217213507217342002398528d32dafa70859821c0fdd91df7162d91b3c50168"
+    },
+    {
+      "path": "/var/tmp/rasa-s6-after-v14-capture-20260924/xvfb.log",
+      "sha256": "e2861dbf17c9cb74d57668ceaa0ec8111c014cd26d10d2d0dffdf37188dac690"
+    }
+  ]
+}

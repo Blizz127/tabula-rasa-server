@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "scope": "Isolated original-client continuation from the preserved post-Rogers checkpoint to Training Officer Kincaid, using ordinary movement and interaction controls",
+  "result": "The client loaded, walked from the saved Alia Das arrival position to Kincaid without changing coordinates, level or XP, and displayed Training Day's objective and mission-completion conversations. Continue completed objective 1. The bounded harness shut down while the pistol reward choice was open, before reward selection or mission turn-in. This run verifies the ordinary route and dialogue path in the current emulator, not final-live fidelity of the reconstructed values.",
+  "source_checkpoint": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s6-checkpoints-20260924/char-after-rogers-turnin.db",
+    "sha256": "9333c3dd8dcdb88d516b511080c29d74f139eb996d9cc70fdfcc140403c9f5f4",
+    "character": {"id": 1, "level": 2, "experience": 8695, "position": [884.1099853515625, 305.79998779296875, 347.80999755859375]},
+    "mission_1526": {"state": 0, "objective_1_status": 1}
+  },
+  "run": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s6-training-day-20260924/capture/detached-retry-20260924/manifest.json",
+    "archive_manifest_sha256": "95f28283c89ed5fd32a3b114760a227b88aaf6c3efaa5db66df4b3beab3dbbf1",
+    "archived_file_count": 529,
+    "all_archived_hashes_verified": true,
+    "supervisor_pid": 3781761,
+    "started_at_utc": "2026-09-24T20:17:01.426438+00:00",
+    "ended_at_utc": "2026-09-24T20:32:02.990858+00:00",
+    "harness_elapsed_seconds": 901.58,
+    "shutdown": "Inner 900-second launcher timeout. Supervisor and launcher exited 0; bounded client terminated -15. It was not a gameplay crash.",
+    "client_build": "1.16.5.0 per current emulator requirement; not independently established as final shutdown build",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "ordinary_controls": "Mouse yaw, short W holds and one W+Space jump around landing scenery; accepted server Move trace in output/positions.tsv. No DB, XP, level, position or packet edits during play.",
+    "last_accepted_move": {"context_id": 1220, "position": [767.0117, 294.14062, 386.96875]},
+    "locators": [
+      {"path": "output/s6-wait-playable.png", "finding": "Client HUD loaded with Training Day active and Report to a Class Trainer objective."},
+      {"path": "output/route-1790281870304525862.png", "finding": "Yellow mission marker over Training Officer Kincaid and in-range Press [Mouse Button 2] to talk at the normally reached barracks."},
+      {"path": "output/kincaid-dialogue.png", "finding": "Objective Completion panel: Training Day, 'Are you ready to choose a class, soldier?', objective Report to a Class Trainer, Continue button."},
+      {"path": "output/kincaid-reward.png", "finding": "After Continue, client banner Objective Completed / Training Day / Report to a Class Trainer; tracker marks Training Day Complete."},
+      {"path": "output/kincaid-after-continue.png", "finding": "Second Kincaid interaction opens Mission Completion panel with attribute/pump-point training text, 120 credits, and choice between Vextronics Pistol and Vextronics Pulse Pistol. Complete Mission remained disabled because no choice was selected before timeout."},
+      {"path": "output/game.log:792,811,822", "finding": "RequestNPCConverse, CompleteNPCObjective and second RequestNPCConverse from this normal client path."},
+      {"path": "output/status.json; output/supervisor-events.jsonl", "finding": "Bounded shutdown at 900 seconds, no gameplay crash assertion."},
+      {"path": "post-run-databases/char.db", "finding": "SQLite integrity_check ok; mission 1526 state 0; objective (1526,1) status 2; mission 1995 state 4; character level 2 XP 8695."}
+    ]
+  },
+  "post_run_saved_state": {
+    "character_position": [884.1099853515625, 305.79998779296875, 347.80999755859375],
+    "mission_1526_state": 0,
+    "objective_1_status": 2,
+    "mission_1995_state": 4,
+    "level": 2,
+    "experience": 8695,
+    "interpretation": "Objective completion persisted. Timed SIGTERM did not persist the client's traveled position; a natural continuation from this saved DB starts back at the Rogers arrival position and must walk to Kincaid again. The reward/turn-in remains unverified by this run."
+  },
+  "provenance_and_limits": {
+    "tier": "observed in original client against an isolated copy of the current emulator; reconstructed Kincaid seed remains measured/inferred as recorded in docs/evidence/bootcamp-d11-reconstruction-manifest.json",
+    "independent_final_live_comparison": "Final-week footage names Kincaid and the barracks objective, but the surviving footage transcript cuts over the interaction. This run cannot establish exact final-live reward timing, amount, template IDs, marker artwork or wording.",
+    "open_gaps": [
+      "Reward selection, mission 1526 state 4, item grant and relog were not reached in this bounded run. Earlier isolated near-Kincaid runs cover those mechanics without an ordinary Rogers-to-Kincaid route.",
+      "The final-live level-3-to-4 XP grant and class training eligibility remain unresolved; this natural checkpoint is level 2 with 8695 XP."
+    ]
+  },
+  "cleanup": "The copied character database was restored from the untouched source checkpoint and verified SHA-256 9333c3dd8dcdb88d516b511080c29d74f139eb996d9cc70fdfcc140403c9f5f4. No WAL/SHM remained; supervisor and launcher PIDs were absent. Live Game and DIT were untouched."
+}

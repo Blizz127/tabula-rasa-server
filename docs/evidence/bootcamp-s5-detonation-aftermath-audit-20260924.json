@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "S5 dropship detonation aftermath: damage, knockback, reinforcement spawn and mission transition",
+  "provenance_tier": "observed",
+  "confidence": "High for visible final-week footage and inspected current source; medium for temporal packet ordering, which is not captured from original retail",
+  "original_observations": [
+    "Final-week footage 8VXeKzGUv0c B1-049, 86.600-87.200 s: wreck flashes, explodes with debris, recruit recoils with arms raised, and a floating red -21 appears at 87.000 s.",
+    "B1-050/051, 86.800 s: Calling for Reinforcements objective 1 completes, timer disappears, and objective 4 Check in with Corporal Van Valkenberg becomes active.",
+    "B2-009, 92.000-95.800 s: the beam cone appears 5.2 s after objective completion, ghost figures appear by 93.000, and the group looks solid by 95.4. B2-012, 95.4-98.333 s: the group stands on the pad through the last pre-cut frame, at least 11.533 s after completion. B2-015 is a hard cut to Alia Das; no walk-off is shown."
+  ],
+  "implementation_audit": [
+    "Bomb fuse sets state 115 and sends ForceState; mission objective binding credits 1995/1 or retry 2005/1 on state 115.",
+    "Rule 1985007 sets bootcamp.dropship_destroyed, clears bootcamp.bomb_planted, opens wreck to state 91 and applies DamagePlayer=21. DamagePlayer absorbs armour first, then health. The footage proves the displayed amount 21 but does not independently establish the armour/health split.",
+    "Historical pre-correction behavior: MissionManager.CommitObjectiveProgress applied the state-115 reaction before ObjectiveCompleted, then the latter immediately executed reinforcement WalkTo actions for 1995 and retry 2005. This contradicted B2-012. The forward BootcampReinforcementPadHold migration removes those walk rules while preserving the destroyed-wreck presence condition and placements.",
+    "The original recruit recoils at the blast. There is no S5 scripted player knockback. Existing AbilityEffects.Knockback moves Creature targets, so it cannot directly reproduce this player response. No reliable original displacement vector, distance, duration, effect packet or collision behavior was found in the inspected footage/client notes."
+  ],
+  "conclusion": "The earlier claim that the group walked north-east by 98.0 s was wrong against the corrected B2-012 frame ledger. BootcampReinforcementPadHold removes the unsupported immediate walk. Their departure after the 98.333 s hard cut, player blast knockback parameters, and exact beam-in presentation remain unverified. The cited original frame mosaics are currently unavailable locally, so the ledger is retained as a prior primary-frame transcription rather than a rechecked video capture.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s5/work/sheet_explosion_86_87.png",
+      "sha256": "db9e7f4c2e4d49975d969703e7807b23dc6c460e6120052fe3180426bf420916",
+      "exact_location": "frame mosaic 86.333-87.067 s, 8VXeKzGUv0c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s5/work/sheet_after_87_98.png",
+      "sha256": "db74b854a884ea13720e8f7ea57801866efde16410710ccf6f083b8d2aeb7cd8",
+      "exact_location": "post-detonation frames 87-98 s, 8VXeKzGUv0c"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/docs/evidence/bootcamp-d11-footage-events.json",
+      "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477",
+      "exact_location": "B1-049 through B1-051; B2-012"
+    }
+  ],
+  "implementation_locations": [
+    "src/Rasa.Game/Managers/MissionContentRuntime.cs:246-268, 326-349, 650-690, 1130-1160, 1193-1218",
+    "src/Rasa.Game/Managers/MissionManager.cs:932-1008",
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampS5ReinforcementsRows.cs:225-260",
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampDetonationDamageRows.cs:6-46",
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampScriptedMoveRows.cs:50-100",
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampRetryReinforcementWalkRows.cs",
+    "src/Rasa.Game/Managers/AbilityEffects.cs:1635-1650"
+  ],
+  "remaining_gaps": [
+    "Player blast knockback vector, distance, duration, packet/effect and collision handling",
+    "Reinforcement beam-in delay and presentation; whether and when the group departs after 98.333 s",
+    "Whether the displayed 21 blast damage was absorbed by armour or health in final live",
+    "Recovery or revalidation of the original footage/frame mosaics cited by this audit"
+  ],
+  "superseded_claim": "The prior B2-012/S5P-05 sentence in this audit said three reinforcements walked north-east before 98.333 s. Corrected B2-012 records them standing on the pad through that frame; see bootcamp-s5-reinforcement-pad-hold-20260924.json."
+}

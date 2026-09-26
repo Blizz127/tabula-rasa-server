@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T09:21:40.814777+00:00",
+  "subject": "V5 isolated original-client corpse-to-bomb timed attempt",
+  "setup": "Disposable copied pre-corpse checkpoint; prelaunch deletion of synthetic mission 1995 objective 1 status0 row only. No DB/position/timer edits after corpse use; no live Game/DIT change.",
+  "result": "Corpse use activated objective1 with 600000 ms timer; ordinary movement crossed bridge, reached last committed (-203.8,96.0,-36.2) at +355.8 s. Next 600 ms hold visibly reached (-210.1,97.3,-41.6), timer 03:51, but two screenshot OCR attempts failed to produce two agreeing readings. Driver fail-closed, stopped isolated harness. Bomb not used.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v5-20260924.py",
+      "sha256": "49c1ac89a70666575960d1fee7c862fbb3792e125b0abd2c6b449bb31e4b189e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-timed-loc-v5-20260924.py",
+      "sha256": "a895bfa9160d2720e03a3a3f662f54d09231d12a31a5ad0c542d0043e3ea1452"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/timed-route.jsonl",
+      "sha256": "e67d35250d831c2c4e76566d55478e8f631900014f4f490cdf4f18e2765327c0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/game.log",
+      "sha256": "fb9336cd398f38ee5a53d6b8a6ce69f6437b7d1f2a9bccf745210e1fd7ace1d4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/char-after-failure.db",
+      "sha256": "53b84bca9f5692a335695df0c90e27ff4856133b2cf4cfd76bd960bf2d688d24"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/objective-after-failure.json",
+      "sha256": "c54ddf3b409a172fc9f3a9040f87806a218baa6b3b2c90ce5f8c784acf537b44"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v7-20260924/client_waypoint_steering-at-run.py",
+      "sha256": "ad40c67656cef5f9aa8d145bc3ec967d0afd928293ae9504d9e9286157d3e670"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/tools/client_focus_guard.py",
+      "sha256": "2d36a7e32e59cb0a13deb781c7895aeb960ca532bdee86e14d9a3041c51dd22c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/00-playable.png",
+      "sha256": "b37e3807033e707dc56b8c72e0ab9ba865a90ec2e525d8b9f214dae9d0710b68"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/01-before-corpse.png",
+      "sha256": "dcc9a49ecee601a53702aab5a81e363f8564ab091cde6614afc31ffe5b4cefd0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/02-corpse-use.png",
+      "sha256": "260d8d5dfbb1d4d9aabc01e066ea1762c178492832fb60e46521cecbc602185b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/03-loc-start.png",
+      "sha256": "aaec7b432325be42797a6b564749569bbece28efff3ef9f86ec4797f73840be7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/focus-probe.png",
+      "sha256": "eb193316190f491109e2fe312d36e73210f07d4a09537dcb99b8a652a7873d82"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-000-554b3123129d466691b44f1e6f6bd9af.png",
+      "sha256": "8769ed6d339764104015f7c8585de5cfd894540cd08261c3c9551512818e6a70"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-001-e214c7bfad3a42209a18c25600aee012.png",
+      "sha256": "b27597aa06056cb8675fc914ebf01e279984bd9c5a583a0d75664171eb96fb6a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-002-3d2fcbccfbef42f595a23e829df7aa26.png",
+      "sha256": "d244ecd8397801d1482977afc089d2b213e1b65bb11b0e50d1839398074a5b7d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-003-e7ea24e9d40c4d5eb8823e88a712dca2.png",
+      "sha256": "5f633115b63fd921dd9592c09115e77f74393cb9a67ec1a8042f06c83b2ab6a5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-004-f52a8e738eb842c0ad44ffdf5384ff65.png",
+      "sha256": "f10fb9c19033b5b04e943950f8c6ff77b129322aab7a3503cd7411a1ab44fe78"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-005-05359780d3e24359aa828e4f55272630.png",
+      "sha256": "20b49484ffec4c31de307d49300fe8b7d383d3ace859070fd3f594fd9f4032d9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-006-f0ffc3e361d34df7aa0b28b4ef173954.png",
+      "sha256": "e37d2b6cba5e6958e5cd9f0ec669e6b4b5696dbde6511de47a6c7e1f535081d1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-007-294ec057daae4f8ab8b0a8acd670b47a.png",
+      "sha256": "c7a12740e3291c7ed90a6d3a635265e26ec4e926983f526be0320e3dadb8a8c1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-008-c47e4fd5ec3a48e2912cb6e6b01f67c8.png",
+      "sha256": "560e70f4bf9b70b30897655f9396ea27aad8f51c3f2f4869be735e2bd97cb87a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-009-9189d05cecf447f0a37eba6e378633a0.png",
+      "sha256": "56fdde3127af8127d18f429ab79bea94d7efc04c9435da1b7d412809cc5ec94c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-010-278e8533028c45258907ca26dc90be75.png",
+      "sha256": "f91f188f6067de6108ea06124a6279a307d1b9c858ca331a543d71d4fd256647"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-011-76fd13f2093c4ff3b70ca547cc62147e.png",
+      "sha256": "adb2ab745207fff6c2478989ba4fdfb81163036a8a43c2184c9ab04c0cdcb25c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-012-c64697e518604767a035cf8b5fcc1222.png",
+      "sha256": "00a2dc05f9252c6e7956e37d5b9b429d9930f00dee989a5ffc2be31086be54ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-013-b15f3d4a210b4f45a044004e38701e2f.png",
+      "sha256": "598617bd2271c9d5808b8231b226c3cf010ad73ca27218f5fca7913ab9ddea2e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-014-e49b0d7d5f4345feac6a43ebf35cb8ea.png",
+      "sha256": "4341d686088e62f25abc7c3cb1ce3b14cbda42391a61a34454a36ff1daa3a2ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-015-3ddecb24cc2249f5b64606b912a4e726.png",
+      "sha256": "c3431a0abb46ac12a5328b4d17d681f07460f17f89ca73f60e37c5d617819772"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-016-65f8bdbe44d3480eafccd25d8f2cda97.png",
+      "sha256": "7699bf3ca51b097048dfdc3a681017a8f71e8ea20bede859772f32d4b5e83c92"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-017-5c3ff2e7598b4788adccf3496d64cc34.png",
+      "sha256": "4690d74858c26daaa655bd535fea9a579258f81f02d3673bee995ff630ae34ed"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-018-af5d51624de94c3faad5565602761aa6.png",
+      "sha256": "35cb9640f0919204e81414c61d372b9108676657d00283b28c548a0ab4e43312"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-019-d546cb37e8dc4e1393494cc83d712661.png",
+      "sha256": "c99c39467f641ea8178d7d2ae535725046d01974f36dce9d02e52ddb13afe91d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-020-5f76ad6f5e1444beb0608717c44e2b79.png",
+      "sha256": "c3e72a3e50de4655a2450edd330a96fa29e4ae4a85eb7a4de5b83a87831ad7d3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-021-f6de9a8c881a4ac297a061dfea023995.png",
+      "sha256": "4cdd2d30e7acf03d54113202b0ee5f2e1cdfa8fb62cab8c2785f62bd02e796ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-022-4ca690d449154b3f9a89d8e5e8c8287a.png",
+      "sha256": "2fd5914218b91c7f7f301abbbb9e5911b7c4c88e6cc098fdf34f82591ea43bf6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-023-10c8222ec42c4de4bdbeb54dd046afd6.png",
+      "sha256": "cfb24fee8a6e09d70a93d3ef430ffd21b7139d7327aa74075d58fc7633a3855e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-024-57fb9806a55041818d6bc5a4c3178aed.png",
+      "sha256": "17af0173212154cdda97e10085303779c2c5433fc60587b6af6de530814f6923"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-025-c59b6dbd475743538a899b34f4388a7b.png",
+      "sha256": "75369dc66ab4abbf81ba3e19afac6f811f7859ebe8e03428e4eed9ceae1c9a66"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-026-0efe8ec885f54abc86eeca76d2be2eb1.png",
+      "sha256": "e4d83301315db0b2b1671a07f9ce6885a9617e3ed8ed038bb432b959302f9442"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-027-0073f80f4b2d43f5aabc6a0400dadec0.png",
+      "sha256": "8a1ca7841647006436ce0e9f4a0b444b2868b3b02a8bdf988fdf9520b3ea71bf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-028-d5c5042009144c5091ed91bce1850d18.png",
+      "sha256": "f2e40b6098f5cf7ed205bd8f6d35ee7b6106911dd9d4b05ffc79ea175b906bc9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-029-b4eb434af8d54a1bb3a20289ce5534f6.png",
+      "sha256": "dfdf0f8ea197b1a2db94af1c0f2722cb271bd53fbf267ee2e6c8d269746fb2ce"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-030-aff413b2ec7643fcac04ea26eba78862.png",
+      "sha256": "37444656403f4d80592c78f4aebde5eba3a74629509dc7b758d25528f62de151"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-031-6480d32686a94c94b6ca67440298eaf1.png",
+      "sha256": "5c1e901ff1444919460b1bb632db09368bfc2cac3f27f218ffc9d494791c1b09"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-032-7068533c9fd74739bc3911f5199a2e73.png",
+      "sha256": "fd08ff80f3c18b9b812ba067bcf005f70a9c74ff435122145d075c2e7913427e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-033-5a3939161c2b44418880724c5f6da8fd.png",
+      "sha256": "4451b28ceb18ecd1e13133a6c3a1679865e76214300974b7f6da141fb1d95345"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-034-d375454968db48a9aa136f227fbc5cba.png",
+      "sha256": "7c6431ee965c7c3062f1841dcf7a383dc023c6b3d831bd8165a9ef5e1239188f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-035-2fd4be5b16724971a95414c613ad924c-retry.png",
+      "sha256": "34ddd53e7267a3fd0363146eadc5b0c3234f850d8c0d6fbcc9776d41f021a6b8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v5-20260924/route-035-581d5f2ac5a246bda0c79032a10bdbf4.png",
+      "sha256": "a68ccd8f61731dcff545c276b096b88625bcc959fed8029d7198d02f8b0ce22b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-future-ocr-pause.py",
+      "sha256": "9bfb90390469d008f8e2c0c46b99a5ba3db705f457b77ebca25c84282b9a4738"
+    }
+  ],
+  "post_run_harness_diagnosis": {
+    "failure_frame": "s5-timed-loc-v5-20260924/route-035-581d5f2ac5a246bda0c79032a10bdbf4.png",
+    "retry_frame": "s5-timed-loc-v5-20260924/route-035-2fd4be5b16724971a95414c613ad924c-retry.png",
+    "retry_ocr_samples": [
+      "-710.1,97.3,-416",
+      "-210.1,97.3.-416",
+      "-2710.1,97.3,-41.6"
+    ],
+    "fix": "Bounded signed-last-coordinate lost-decimal OCR normalization, applied only with a prior-position envelope and two matching treatments. Retry resolves (-210.1,97.3,-41.6); initial frame still safely rejects. Future driver template pauses instead of stopping isolated runner on OCR failure. These changes were made after V5 and are not represented as part of its run.",
+    "regression": "7 focus/waypoint tests pass; all 35 previously committed V5 screenshots replay to the logged position under updated OCR."
+  },
+  "source_snapshot_note": "Historical helper source now points to byte-identical V7 capture snapshot with the pre-existing SHA-256; current helper has later changes."
+}

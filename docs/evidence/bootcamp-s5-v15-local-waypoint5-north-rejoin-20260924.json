@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Staged local original-client S5 v15 waypoint5 probe clears v14 stationary point with a northward rejoin",
+  "scope": "One isolated local geometry diagnostic from copied v14 accepted stop. Only copied mission1995 objective1 timer anchor was reset to 600000ms. One ordinary-client 250ms W hold used; no full S5 route, bomb interaction, live Game or DIT change. W2 original client was concurrently active only in a separate bwrap namespace whose mounts did not reference the S5 harness.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v15-local-waypoint5-north-rejoin-20260924/manifest.json",
+    "manifest_sha256": "5e634f3d6f7b3c48d5c75109aebf0191b30cb83b0e4126c828debcdb04cf812a",
+    "archived_files": 48,
+    "source_copied_db_sha256": "61485c1a969adcb405740937c8a19295f4b5107d0bbf7e99d4703151c98f85c3",
+    "staged_copied_db_sha256": "c40eeabf339eed2e49d6adcfed0f9672bf43cf6a744cc0d4bfc31341309fcddb",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/staging.json",
+      "output/driver-second-sandbag.log",
+      "output/positions.tsv",
+      "output/01-staged-v14-stop.png",
+      "output/0-after-hold.png",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "drive_s5_local_v15.py",
+      "char-after-probe.db"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The staged v14 stop loaded at (-137.04688,84.78125,29.988281), yaw 1.0373546. Steering to heading 0.212 rad and one ordinary 250ms W hold yielded a fresh accepted Move at (-137.38281,84.76953,28.398438), yaw 0.20958014. Spatial displacement was 1.625m and target progress 1.340m. Endpoint lies 0.143m horizontally from v13 accepted waypoint5 track (-137.35938,84.76953,28.539062).",
+      "source_location": "output/driver-second-sandbag.log: hold0; output/positions.tsv; output/0-after-hold.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Endpoint screenshot shows an open ground viewpoint with route ahead and the copied mission timer at about 08:45. It documents local movement, not full timer-route sufficiency.",
+      "source_location": "output/0-after-hold.png, SHA-256 5917d2410aa6c08e0d122c0c08594ca61a3301f77de2e083e1c004d01706ede4"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Driver and copied launcher exited 0 after 79.21s supervisor runtime. Copied DB retained the staged coordinates after session termination, so accepted movement is proved by packet trace and driver log rather than persisted DB position. Mission1995 objective1 remained active; objectives2/3 complete.",
+      "source_location": "output/supervisor-state.json; output/status.json; output/positions.tsv; char-after-probe.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v14 waypoint5 stop is locally escapable: steering north toward the measured v13 track succeeded from the exact archived stop with one short ordinary hold. A future continuous controller can conditionally steer toward this v13 track if it reaches the southward v14 corridor near (-137.05,29.99), with focus/fresh packet/elevation/local envelope guards. This staged result does not prove uninterrupted S5 completion or the northwest and bomb routes."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_s5_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Conditional northward rejoin during uninterrupted route",
+    "v14 lower waypoint9 threshold in uninterrupted run",
+    "Adaptive waypoint13, northwest fallback and bomb objective in uninterrupted run",
+    "Original final-live exact geometry"
+  ]
+}

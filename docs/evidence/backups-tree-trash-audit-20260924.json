@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-09-24T20:58:14Z",
+  "scope": "Read-only search for the disappeared prior /home/blizz/backups research tree",
+  "observations": [
+    {
+      "path": "/home/blizz/.local/share/Trash",
+      "method": "find to depth two for entries and find for regular files",
+      "result": "Only expunged/, files/ and info/ exist; zero regular files. No old backups entry."
+    },
+    {
+      "path": "/home, /mnt, /media",
+      "method": "find directories named Trash, .Trash or .Trash-*",
+      "result": "No other Trash directory was found in these trees."
+    },
+    {
+      "path": "/home/blizz/backups",
+      "method": "stat and find to depth three",
+      "result": "Current directory mtime 2026-09-24 13:13:52 -0500; contains only rasa-net/deploy-20260924-pad-hold with deployment databases, compose overlay and manifest. The previous research tree is absent."
+    },
+    {
+      "path": "/home",
+      "method": "findmnt",
+      "result": "Mounted from /dev/sdb1 as ext4. No filesystem snapshot was visible in the searched user directories."
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0",
+      "method": "find and prior recovery manifest",
+      "result": "Recovered 1.16.5.0 client ZIP and extracted copy exist here; see docs/evidence/client-11650-restored-20260924.json for integrity hashes."
+    }
+  ],
+  "conclusion": "The missing prior research tree was not found in the inspected Trash locations. These observations do not identify how it disappeared or prove it is unrecoverable. Earlier research captures in that tree remain unavailable for direct reinspection; only separately archived captures and derived records can be used until a copy is found.",
+  "limits": "Read-only path checks are not an ext4 deleted-inode recovery attempt or an exhaustive search of every mounted filesystem."
+}

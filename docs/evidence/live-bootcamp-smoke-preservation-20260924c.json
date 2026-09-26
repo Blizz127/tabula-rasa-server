@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Recovered-client live first-login boot camp admission and disposable-character deletion smoke on DIT c image",
+  "provenance_tier": "observed",
+  "confidence": "High for this recovered 1.16.5.0 client and existing test account; final-live fidelity and owner client path remain unverified.",
+  "setup": {
+    "game_image": "rasa_net_game:dit-preservation-20260924c",
+    "game_image_id": "sha256:f58c3b8ed122dbcc154504cbaa21e28bb37baf1ad69a31efa1d5de681b15eab8",
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb :109, cloned isolated prefix, /AuthServer=100.104.53.1:2116",
+    "account": "Existing empty test account id 1; owner account id 4 untouched",
+    "bootcamp_entry_mode": "AllNewCharacters"
+  },
+  "observations": [
+    "Before creation, test account id 1 had zero characters, empty family_name, selected_slot 0. Client created disposable Bootprobe Proofonly in slot 1; SQLite character id 13 had map_context_id 1985 (Luna Cavern/Bootcamp) and num_logins 0.",
+    "Enter Battle reached a playable level-1 boot camp HUD with Initiation mission offer, starter weapons and visible world; server recorded Bootprobe MapLoaded at 07:24:46.590 UTC and DB num_logins 1.",
+    "Harness command 16 clicked screen coordinate (338,274), intended for offer X, then command 17 sent Escape. The next screenshot showed Initiation tracked and weapon raised. Game trace recorded Bootprobe AssignRadioMission at 07:26:00.446 UTC followed by StartAutoFire/StopAutoFire. The client accepted during this input sequence; the screenshots and command files do not establish whether the X click or Escape/focus sequence triggered it. A second Escape opened the in-game menu.",
+    "Client Logout was requested at 07:27:22.978 UTC; CharacterLogout completed at 07:28:04.704 and Character Select returned. First delete dialog attempt remained open because typing had not fully settled before confirmation. The 600-second harness expired; one reconnect reached Character Select, cleared and retyped exact Bootprobe, waited for OK to enable, then confirmed. Server logged RequestDeleteCharacterInSlot at 07:34:03.877 UTC.",
+    "Client deletion removed character id 13, all 14 tables with character_id 13 rows, and its exclusively owned item ids 140\u2013144. After stopping client, a guarded transaction restored test account family_name empty and selected_slot 0. Final test account character count 0, owner account 4 count 3, SQLite integrity_check ok."
+  ],
+  "limits": [
+    "The second harness launch overwrote client.log and launcher.log in the temporary output directory; retained screenshots and command files span both runs, while retained client.log is from the reconnect.",
+    "This smoke verifies admission and deletion for one recovered client/test account, not complete boot camp or original final-live fidelity."
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/13-created.png",
+      "sha256": "7336589ebd8fecae240d5fff01a124e2c7e00561b48137c9b62b0766f01fc567"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/15-world-30s.png",
+      "sha256": "9587e1b993231d34fe58757f7ac14ddfe5e19caee792dcda68da3a6b51f00b61"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/18-menu.png",
+      "sha256": "6603a3c2c8d5cd552d4ecf664fb061a1863ce7e60b5677a7b13e0fc90919ed60"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/20-menu-after-esc.png",
+      "sha256": "20d0c4cb0a8566145213c7fb1a533b23c90e81b1a38ed387fb70c4deea0852a3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/22-logout-prompt.png",
+      "sha256": "f72dbb1c418f914048d1a2abb12aa05e7321a9b386df723f33c8c6e975ba6bf1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/24-after-logout.png",
+      "sha256": "56c63ce74d2886c07f07cb4e9c2500021aa3c6a1c39ecf2af1e0780d7544b309"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/27-name-ready.png",
+      "sha256": "8073d495b477a5ca1025edf186089a7f2486f0d807c274b7596e49ea42a61989"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/29-reconnect.png",
+      "sha256": "8cbbcf815c402ff3131631536541c88fd7b4068693f73474004e59f56e1d4d55"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/37-settled.png",
+      "sha256": "0af23c1dbe6e15a4e050f45eddc4484a81940cc45a75322c7b2a331b323bc90a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/38-confirm-exact.png",
+      "sha256": "b01422167d9a89810a6b9635cbbafea7bb29f8112178ea5c183e177ee0511a95"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/client.log",
+      "sha256": "d6dd5bc393e9e90b1d7551ee40acaf0cae7e8917ca7f246b951fdc740b5d6a82"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/01_select.done",
+      "sha256": "cd7b6df212f0542474abe27a132394218d33cd0866dd0053ab144422981c3f31"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/02_slot.done",
+      "sha256": "bcf29b45a98eebb66c7946ad3d37386f123ae996a2aa4025e2fc16caff2408df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/03_create.done",
+      "sha256": "16aeab5e50cd5fa32da295de5d781af674e17e6710f567e7b2dc6ae1c7058fbf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/04_creation_ui.done",
+      "sha256": "cb18a047a6e7a28d5910cc4bf4216bd17f27ea5cc0c2dd725e3ebfe5cb8176e3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/05_first_focus.done",
+      "sha256": "7c4e688167b00486f7aa41a7a9bc407fb7be734a6d508a6886be5bc2ec7c5ddb"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/06_first_type.done",
+      "sha256": "2b4d7186cb6defb19a8ae95321368cda51abf5b0085fa23d03cc3f0f82e52838"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/07_last_focus.done",
+      "sha256": "209f6b576a648a453c14b2226f892e423e784f3bec5fd4eb92dd31b0844fb469"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/08_last_type.done",
+      "sha256": "a96226dda312519863542ab2b83ed558c3b7f071adc25f5f1c7f89b3f5313a00"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/09_names.done",
+      "sha256": "f9610d9d91ee2cfb6a7f737ff3ddda9a6fb2334df323f6d94c93d8ce076d5964"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/10_create_submit.done",
+      "sha256": "84e5100678e57ab0e581ead40b1c69bcd5dd357ae83868e5e9a159da2d512194"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/11_confirm_prompt.done",
+      "sha256": "b322c922174a869b1255eb3658adf75afdffb3230ab9c09dbb29f06d0652cbe4"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/12_confirm_family.done",
+      "sha256": "27d42953700bad40f6bb829440aed97b90d10cce7bc7b2bd2c238327a661cf17"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/13_created.done",
+      "sha256": "859db00b37063931a4105aa7967487fac79757caf02d74c9736dbcd214567f85"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/14_enter_battle.done",
+      "sha256": "a922623fcbf8170d6880ca0f826f1c5822b49df159d6363ac05c4d2e35da47a0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/15_world_30s.done",
+      "sha256": "642a0fc8919154762a4dcd8445aa9056cd2eeea0186772c5312e644646461d7d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/16_close_offer.done",
+      "sha256": "a6615a38126b00e899de462064a5eb14c7d4ad7a5bdda85ce6b9afe28b8cd64d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/17_escape.done",
+      "sha256": "962406e739f2e2962973d5fb542e25783ac57a83dcc6a037fdefc246d2f72ae9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/18_menu.done",
+      "sha256": "74a61fae0c1d5890d27d5a7025b6c5068a43fdef54c99a37c1894ecd5ac43e91"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/19_escape_menu.done",
+      "sha256": "962406e739f2e2962973d5fb542e25783ac57a83dcc6a037fdefc246d2f72ae9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/20_menu_after_esc.done",
+      "sha256": "c4968497c6f3d7f8d9455ad95f5781e699ae527614ef35d9053528faa590ec81"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/21_logout.done",
+      "sha256": "0bafe7e1310a5a6cee4c538697c19d990eb0c01f5a8ec66b0681d3ca004fd8a3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/22_logout_prompt.done",
+      "sha256": "123d752c331d4abbb59b33e3426db7bbbc3324348b5c2ac9c306abf787e4805d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/23_logout_confirm.done",
+      "sha256": "d14fd23714066ee519ce941419e8d8fa2b9700a010b998474fe603ff67115739"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/24_after_logout.done",
+      "sha256": "b5c6feccee100f9d4cf26c9337db645b7b3fb2caf427f681bedace5d2333f117"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/25_delete.done",
+      "sha256": "472f4fa58d9a8a87c776a597b0c7dee96ce3491a6bb743028e9d42309e0d5d6b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/26_type_name.done",
+      "sha256": "2b4d7186cb6defb19a8ae95321368cda51abf5b0085fa23d03cc3f0f82e52838"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/27_name_ready.done",
+      "sha256": "384dc1a84d5ea1a8cdd0028bfc19f02a0acc23422d3dd604fe022d2cdaab87fc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/29_reconnect.done",
+      "sha256": "97d875c29c76fcb5702978bcbdeabbf1917dc2116c6129cab53e0f8d9bfac145"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/30_delete.done",
+      "sha256": "7d2cf8be88b0078e332b25f6be96b581f0609a7f6776f50f399114a34c5252fb"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/31_name.done",
+      "sha256": "1dafc484e984c940bdca526897762a341f25b9fb9a8ff7dfc38f4c89a539e916"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/32_finish_name.done",
+      "sha256": "583ecbbfe4a70ccb83f981c293b0701db64cedf2522ac2d6ba901de7066dbf97"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/33_confirm.done",
+      "sha256": "de1880071e6f6e32023c1e33ea51aee6c0c3f5385f92f61e1894ef61ddf07172"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/34_retype.done",
+      "sha256": "d833e49bca89fec7517fe4dec6a3b76e1512fe2c370897584e04e4c906624d19"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/35_clear.done",
+      "sha256": "9950a473581422726abc34d015abdd3710174281ef2dda101d33ad6579992002"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/36_exact_name.done",
+      "sha256": "701c90487572c7a187b83d2b8f93f81980ddb8adacc8fa1a785b0bd82bb78b1e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/37_settled.done",
+      "sha256": "d6d22cc69b9317e4bbca930567baba1d8590c4b611b6192dcd8400b79862ff7b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/38_confirm_exact.done",
+      "sha256": "0d018b10b77827963142c72cb0ff99ea0ec0f49f2188aa2586b1b575b040da82"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/db-after-delete.json",
+      "sha256": "4e527a56090b736c9d9c1446b82009063fec5bb59196f3aabb79f69ddd4ca4de"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/launcher.log",
+      "sha256": "089eb560d18dc78786efc77196ade9177cc1a7a3dc85bcfb1c4f8ecd28375a32"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/rasachar-postdelete-pre-family-reset.db",
+      "sha256": "5cf83640bc689a07ae7cfcaca33f3e1b4d2262470159a6ba4bd249d265177a96"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/server-events.log",
+      "sha256": "44a9432a072a6a7c28819bcf474f71d9fb7820413d269770b71436dfb4cd88d4"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.DBL/Repositories/Char/Character/CharacterRepository.cs",
+      "sha256": "3edaaae690a35061231d8971e7bf033b53ff1fa6b5af634304b91441e7433738"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Game/Managers/CharacterManager.cs",
+      "sha256": "11325575918fb7b1ac216098e8b41cdf4c8161107a41934734e2f4b5601fae6b"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Test/NewCharacterTests.Deletion.cs",
+      "sha256": "c03c0c86de94ddccfb27b5a8d5c9ffe924198e120f6ceac104486954add96c71"
+    }
+  ]
+}

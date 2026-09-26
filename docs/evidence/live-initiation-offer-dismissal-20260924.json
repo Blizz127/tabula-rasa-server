@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Initiation forced radio offer accepted when its conversation window is dismissed",
+  "provenance_tier": "original",
+  "confidence": "High for recovered client 1.16.5.0 behavior; exact ordering of the two live smoke inputs remains unlogged",
+  "finding": "The live smoke clicked (338,274), within the visible conversation window close control, then sent Escape. The recovered client registers Header.MinimizeBtn to OnMinimizeBtn, which calls Hide. HandleShowMissionAvailable sets __bCanDecline = not bForced. Hide invokes OnAcceptMissionBtn whenever __bCanDecline is false; for a radio offer OnAcceptMissionBtn sends AssignRadioMission. The seeded Initiation action sets forced=true, and the opening test asserts the resulting packet is forced. Thus the recorded AssignRadioMission is expected from dismissing the forced offer, most likely from the close-control click. Escape may have been the effective dismissal if the click missed; the retained records do not timestamp a screenshot or packet between those inputs. Both paths converge on Hide and acceptance. This is original-client behavior, not an emulator defect.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/pyo/trpython-client-ui-conversationwindow.pyo",
+      "sha256": "6e3f6ce004afef767fcbd25cacda453afaff70c6d8d0b5dd7d3fbc0ee3c5c9af",
+      "exact_location": "conversationwindow.Init Header.MinimizeBtn registration; OnMinimizeBtn; HandleShowMissionAvailable; Hide; OnAcceptMissionBtn"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/src/client-ui-conversationwindow.py",
+      "sha256": "b51c5c313a7184994b505c8d1678d27d4d9d11c07598ec37445169888f90625e",
+      "exact_location": "lines 73, 135-148, 400-445, 837-841, 871-888 (decompilation of original pyo)"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/15-world-30s.png",
+      "sha256": "9587e1b993231d34fe58757f7ac14ddfe5e19caee792dcda68da3a6b51f00b61",
+      "exact_location": "Initiation forced offer window, close control at approximately (338,275); Accept Mission at (30-155,617)"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/16_close_offer.done",
+      "sha256": "a6615a38126b00e899de462064a5eb14c7d4ad7a5bdda85ce6b9afe28b8cd64d",
+      "exact_location": "xdotool mousemove 338 274 click 1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/commands/17_escape.done",
+      "sha256": "962406e739f2e2962973d5fb542e25783ac57a83dcc6a037fdefc246d2f72ae9",
+      "exact_location": "xdotool key Escape"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-bootcamp-smoke-preservation-20260924c/server-events.log",
+      "sha256": "44a9432a072a6a7c28819bcf474f71d9fb7820413d269770b71436dfb4cd88d4",
+      "exact_location": "2026-09-24 07:26:00.446 UTC AssignRadioMission"
+    }
+  ],
+  "implementation_locations": [
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampS1InitiationRows.cs:117 (forced=true)",
+    "src/Rasa.Game/Managers/MissionManager.cs:554-580 (DispenseRadioMission and AssignRadioMission)",
+    "src/Rasa.Test/BootcampOpeningTests.cs:313-351 (forced packet assertion)"
+  ],
+  "remaining_gap": "The retained live smoke lacks a packet or screenshot between command 16 and command 17, so it does not prove which input first hid the offer."
+}

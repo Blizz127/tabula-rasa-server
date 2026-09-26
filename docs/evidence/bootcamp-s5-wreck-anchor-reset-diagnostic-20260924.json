@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Private timer-anchor-reset S5 corpse-to-wreck route diagnostic",
+  "scope": "One isolated copied original-client run on the ordinary copied Game DLL. The archived post-corpse character DB was copied and only objective 1995/1 timer_anchor_ms was changed to current time; this is a route and interaction diagnostic, not an uninterrupted original-timer completion.",
+  "source": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-wreck-anchor-reset-diagnostic-20260924/manifest.json",
+    "sha256": "e98c0cbc6bcd973d8a50d808c27c3f944bace56f93449d22d7ad1a333f8e52c3",
+    "file_count": 24,
+    "exact_locations": ["accepted Move trace and driver log", "13-wreck-approach-stop.png", "post-stop SQLite backup"]
+  },
+  "copied_db_edit": {
+    "tier": "diagnostic",
+    "source_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "field": "character_mission_objective 1995/1 timer_anchor_ms",
+    "before": 1790277303806,
+    "after": 1790277879886,
+    "timer_remaining_ms": 600000,
+    "staged_db_sha256": "106c806146f8e83806d662b74685fd6fbfcead3dfe14e689180dd43a52521d96",
+    "limit": "No mission/objective status or character position was edited, but the shifted timer makes this a diagnostic continuation only."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The original client displayed 00:08:58 at login with objective 1995/1 active. Corrected accepted-packet waiting passed the previously misclassified trench point, crossed the dry high bank and reached bridge edge (-159.99219,84.82031,6.63281) with 00:06:53 visible."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "After a guarded rock-climb adjustment, accepted movement reached wreck approach (-182.48047,95.30078,-33.19531). Subsequent W holds showed near-zero or backward waypoint progress and a later missing accepted packet; the original-client screenshot shows the character against a broad sandbag barrier with the burning wreck beyond. Timer showed 00:02:24 and health was full. No bomb prompt or click occurred."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Post-stop copied SQLite backup SHA-256 b756b1e0c5a3b4774cd94c284e0aad206873c045259188093a95af28183e67db. The exact sandbag analysis is recorded separately in bootcamp-s5-wreck-sandbag-approach-audit-20260924.json."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The route controller reached a real barrier near the wreck. An original-navmesh route and prior stitched checkpoint route do not yet establish a safe lateral bypass from the higher approach. This run makes no final-live position or bomb-mechanic claim."
+  },
+  "restoration": "All 24 archive file hashes verified. Copied baseline and character DB restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; copied Game DLL restored to SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6. Prior output restored, no WAL/SHM or copied processes; live services and DIT untouched.",
+  "status": "Diagnostic route reached wreck approach but did not reverify bomb interaction or original-timer completion. The earlier V14 evidence record reports both, but its source captures are currently unavailable for reinspection."
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 reset-anchor diagnostic stops at sandbag line before the crashed dropship",
+  "scope": "Read-only audit of one archived copied-client run and earlier measured high-bank route. The run deliberately reset only the copied SQLite objective timer anchor; it is diagnostic and does not prove an uninterrupted final-live route or timer sufficiency.",
+  "source": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-wreck-anchor-reset-diagnostic-20260924/manifest.json",
+    "manifest_sha256": "e98c0cbc6bcd973d8a50d808c27c3f944bace56f93449d22d7ad1a333f8e52c3",
+    "positions_sha256": "87106108f4dd9bfb200b5dfc4b8db74f46583bc51be393fd5652eb458146de9e",
+    "stop_screenshot_sha256": "ad3653b65260286a7c2b1b45b6321c35b4d75377d1fa9645dcb78a444e83df55",
+    "exact_locations": [
+      "driver-after-rock2.log lines 7-16",
+      "positions.tsv final 9 rows",
+      "13-wreck-approach-stop.png"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied client moved from (-179.03125,91.52734,-24.753906) toward the measured waypoint (-185.25,93.516,-35.088). Accepted Move packets reached (-183.39844,95.12891,-32.023438), then (-183.27344,95.140625,-32.253906), then (-182.48047,95.30078,-33.195312). The last two holds improved horizontal target distance by only 0.13 m and 0.10 m, with some westward backslide and elevation above the earlier measured waypoint."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "A further W hold produced an accepted Move at the identical X/Y/Z with yaw changing from 0.6086069 to 0.97148925. The next hold had no accepted Move after the controller's 4.5-second wait. Thus the earlier zero-progress packets are genuine client-state telemetry, whereas the final absence of a packet alone is not proof of collision."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The stopped screenshot shows the character immediately against a broad sandbag barrier, with the burning wreck beyond it. The tracker still says to destroy the crashed dropship and shows 00:02:24. No bomb prompt or RequestUseObject appears in this run."
+    },
+    {
+      "tier": "measured",
+      "finding": "Earlier stitched, timer-reset high-bank client captures traversed (-180.004,92.568,-26.121) to (-185.25,93.516,-35.088), then (-202.070,95.773,-35.988), and reached the inferred bomb at (-222.063,101.051,-69.953). These establish local client reachability by some trajectory, but their original screenshots are presently unavailable and the diagnostic did not reproduce the first leg."
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "A straight steering line from the current position to (-185.25,93.516,-35.088) meets the visible sandbag. The stopped behavior is consistent with a local prop/collider obstruction, but the exact collider is unverified. The old waypoint's Y=93.516 differs from the navmesh snap near that X/Z, Y=95.509, so its stitched capture cannot be treated as the same ground contour. Navmesh geometry routes around the north/west end when targeting the farther wreck corridor; this is a specific candidate, not client traversal proof."
+  },
+  "original_geometry_audit": {
+    "tier": "measured_from_client_derived_navmesh",
+    "sources": [
+      {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"},
+      {"path": "src/Rasa.NavMesh/bin/Release/net5.0/Rasa.NavMesh.dll", "sha256": "797342d059f3fc29f1d2beb5f1fd6f27c642e4058dd8ff3bc16f1f9242f96f08"},
+      {"path": "mapprops/adv_bootcamp.csv", "sha256": "f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41"}
+    ],
+    "method": "Ran the prebuilt Rasa.NavMesh --path query inside an isolated .NET 5 Game image (sha256:c12e37a10ea6c97e46cac21e134da630aa18a291379d4419b8eca4eed12e5054), with the repository bind-mounted read-only and no network. The .nav was built from original 1.16.5.0 map, terrain and mesh collision data, but uses an emulator Recast agent radius and is not a direct player-collision trace. mapprops CSV has no extracted placed-entity center within 30 m of the stop, so it does not independently identify the pictured sandbag class or bounds.",
+    "queries": [
+      {"start": [-182.48047,95.30078,-33.19531], "end": [-202.070,95.773,-35.988], "result": "complete 22.9 m path; start snapped to (-181.84256,95.40512,-32.55740); corners (-182.8,95.3,-31.6), (-186.8,95.3,-29.6), (-191.6,94.9,-30.4), (-202.1,96.2,-36.0). The first detour moves north (increasing Z) and then west (decreasing X), around the barrier's north/west end in map coordinates."},
+      {"start": [-182.48047,95.30078,-33.19531], "end": [-185.25,93.516,-35.088], "result": "complete 17.8 m path through (-178.4,96.5,-35.2), (-178.4,96.9,-38.4), (-183.6,95.9,-39.2), (-184.4,95.5,-38.4), (-185.4,95.5,-35.2); the old near waypoint selects a different, longer south/east detour and snaps to Y=95.509 at the endpoint."},
+      {"start": [-179.03125,91.52734,-24.753906], "end": [-202.070,95.773,-35.988], "result": "complete 26.2 m path through (-181.6,92.5,-25.2), (-191.6,94.9,-30.4), (-202.1,96.2,-36.0). The query snapped the start ground upward by 0.92 m, so terrain/collider correspondence is approximate."}
+    ],
+    "uncertainty": "Navmesh uses 0.6 m Recast agent radius, simplification and client-derived collision geometry. Client movement may still differ at the sandbag; no safe player envelope is proven solely by a complete path."
+  },
+  "guarded_candidate": {
+    "tier": "client_geometry_inferred_diagnostic_only",
+    "action": "From the archived stop in a fresh isolated copied-client diagnostic, aim first for a short northward step toward Z=-31.6, then west/northwest toward (-186.8,95.3,-29.6), then (-191.6,94.9,-30.4), bypassing the old (-185.25,93.516,-35.088) waypoint. Advance in short guarded holds; after each, require a fresh accepted Move with actual horizontal progress and a screenshot showing clearance. Abort on elevation divergence, health loss, timer expiry, or repeated stationary packets; only then continue toward (-202.07,95.77,-35.99).",
+    "limits": "The waypoints are navmesh geometry candidates, not a measured player-safe envelope. The first point lies 1.6 m north and the start snapped 0.9 m in X/Z, so approach conservatively and inspect client collision before longer holds. Do not alter mission or collision data based on this diagnostic."
+  },
+  "unverified": [
+    "Exact world-space sandbag collider and passable end",
+    "A continuous normal-timer post-corpse-to-wreck traversal",
+    "Original final-live route and bomb interaction"
+  ]
+}

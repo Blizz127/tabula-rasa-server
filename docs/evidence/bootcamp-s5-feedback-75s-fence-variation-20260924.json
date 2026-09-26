@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Copied-client S5 route variation with extended fence deadline",
+  "scope": "One private accepted-1995 client attempt against isolated copied Auth/Game/DB; no live or gameplay-rule changes.",
+  "source": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-75s-fence-x12-low-progress/manifest.json",
+    "sha256": "5db85e1916c1f7ad01fb409178f8377b3b029696f96cf864605c4af3855284b8",
+    "exact_location": "driver.log accepted Move and feedback guard lines; positions.tsv; 122 archived files"
+  },
+  "controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_wall_bypass_75s.py",
+    "sha256": "4581548b71da15c4f8250d9cceb405f68d3cb4dd0052950d11ad4d2509a68157",
+    "change_from_prior": "Private fence deadline 55 to 75 seconds; lower handoff threshold Z<=125 to Z<=126. No server change."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "Ordinary gate combat yielded XP 8766, credits 370 and level 2, then accepted gate handoff (67.60547,109.02734,140.8164)."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "This run reached a different fence point (16.785156,105.828125,127.28125), yaw 1.0595973. W800 reached (12.824219,106.52734,125.05859); a second W800 reached (12.359375,106.52734,124.53516), only 0.465 m farther west."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "W+D400 reached (12.394531,106.1875,127.48047), adding 2.945 m Z but no westward progress. The controller stopped on its two-low-west-progress guard. No soldier dialogue or mission transition occurred; mission 1995 remained state 0 with objective 2 active."
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The existing X11 bypass guard did not apply to the X12/Z124-128 branch. A guarded northward reposition should assess Z progress separately before a camera-adjusted west probe. The measured positions are diagnostic steering points, not original gameplay waypoints."
+  },
+  "guarded_upper_fence_followup": {
+    "tier": "observed_emulator",
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-upper-fence-d800-blocked/manifest.json",
+    "manifest_sha256": "702930ebbc2a8fb88ad5feb44709eb87bfb844651734177bcc0bd9c4ddd21504",
+    "file_count": 117,
+    "controller_path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_upper_reposition.py",
+    "controller_sha256": "f0f84d9f03be1c7257208450912717bba884ed0bdf02dfedb2b806d8e2310412",
+    "exact_location": "driver.log lines 43-74; accepted Move feedback and guard",
+    "finding": "Another ordinary gate run reached fence (17.390625,105.26172,128.01172). W800 twice reached (12.371094,106.52734,124.68359); W+D400 raised Z to 126.96094; guarded D800 reached only (12.34375,106.19922,127.48047), below the Z>=129 envelope. The controller stopped before camera turn/W600. Mission 1995 remained state 0 with objective 2 active; no soldier dialogue occurred.",
+    "restoration": "Archive hashes verified. Copied character DB restored to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705, no WAL/SHM. Live services and DIT untouched.",
+    "limit": "The upper X12 route geometry remains unresolved; this private guard stop does not establish a gameplay-rule defect."
+  },
+  "restoration": "All archive file hashes verified. Copied character DB restored to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705, with no WAL/SHM. Live services and DIT untouched.",
+  "status": "Extended deadline and one guarded upper-fence follow-up did not reach the soldier; upper X12 route geometry remains unresolved."
+}

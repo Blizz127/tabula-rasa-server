@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Continuous copied-client S5 v14 stops at waypoint5 after a southern route drift beside cargo structure",
+  "scope": "One isolated original-client 1.16.5.0 continuous S5 attempt from post-Conrad checkpoint. Only copied mission 1995 objective1 timer anchor reset to 600000 ms; no copied position staging, live Game or DIT edit. No further continuous run this turn.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v14-continuous-waypoint5-zero-motion-20260924/manifest.json",
+    "manifest_sha256": "898e1cdb7ee26be071ece83ef09f5a1d69f2f8ef2907ade96bc2b9351dc44c4d",
+    "archived_files": 166,
+    "source_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_db_sha256": "0520fc832423964b713e6c153135b1bee6944f8500d565853d8515d903c21de0",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/staging.json",
+      "output/driver-second-sandbag.log: waypoint4 and waypoint5 exception",
+      "output/positions.tsv: final accepted Move",
+      "output/04-route.png",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "char-after-stop.db",
+      "drive_pre_sandbag_v14.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "At waypoint4, v14 took a southerly variation and checkpointed at (-135.98828,84.76953,31.21875), yaw 5.407474. A waypoint5 hold toward (-140.012,84.77,28.238) accepted (-137.05078,84.76953,29.988281), yaw 0.71387637, +1.568m target progress. The next hold produced a fresh Move with unchanged x/y/z and yaw 1.0374504; the eight-second positive movement guard stopped.",
+      "source_location": "output/driver-second-sandbag.log: waypoint4\u20135; output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The last v14 screenshot was captured at checkpoint4, before the stationary packet. It shows the character beside large cargo/container geometry. It does not show the exact waypoint5 stop viewpoint and cannot prove collision.",
+      "source_location": "output/04-route.png, SHA-256 8a7a3371f2c984d2355471fc226be3ba61d86eb5e4211df688e7974fa4f71c83"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "V13 had used a more northerly successful waypoint5 track: checkpoint4 (-134.13281,84.76953,28.914062), then accepted (-135.74610,84.76953,28.722656) and (-137.35938,84.76953,28.539062). V14 stopped at z29.988281, about 1.45m south of v13\u2019s westward point near x=-137.",
+      "source_location": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v13-continuous-waypoint9-threshold-stop-20260924/output/driver-second-sandbag.log: checkpoint4 and move5; /home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v13-continuous-waypoint9-threshold-stop-20260924/output/04-route.png, SHA-256 9a0662c3adb15f2fe919c5d3d4c5bef562929766a259d6fd2ae32c5956c2441b"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Supervisor ended after 220.45s, driver exit1 and launcher exit0. Copied DB persisted stop coordinates. Mission1995 state0, objective1 active, objectives2/3 complete; no S6 mission1526 row. The waypoint9 lower threshold, adaptive waypoint13, NW fallback and bomb route were not reached.",
+      "source_location": "output/supervisor-state.json; output/status.json; char-after-stop.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v14 stop is consistent with a route that drifted south beside cargo geometry, but a yaw-only packet and the earlier checkpoint screenshot do not isolate hard collision from transient client movement or steering. The next concrete route revision is a conditional guarded rejoin toward v13\u2019s measured northern waypoint5 track when checkpoint4 is south of it, before continuing west. Validate that short local segment with accepted packets from the v14 stop or checkpoint before another full route."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Whether waypoint5 stop is persistent geometry collision",
+    "Conditional rejoin from southerly checkpoint4 to v13 track",
+    "V14 lower waypoint9 threshold in continuous run",
+    "Adaptive waypoint13, NW fallback, bomb objective and S6 completion"
+  ]
+}

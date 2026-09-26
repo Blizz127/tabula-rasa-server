@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 wounded-soldier and Conrad-corpse placement and approach recheck",
+  "scope": "Read-only comparison of existing original-footage measurements, original-client map geometry, navmesh probes and copied-client route records; no client run, gameplay seed or live service change",
+  "findings": [
+    {
+      "tier": "measured",
+      "confidence": "high for the objective indicator, low for the actor location",
+      "source_location": "docs/evidence/bootcamp-d11-positions.json indicator.1995.2.435 and npc.wounded_soldier_2584; Ycxm8Pa1-v4 C2-50 at 165.5 s; 8VXeKzGUv0c B1-044 at 80.533/80.600 s",
+      "finding": "The final-week footage constrains the objective-2 indicator to (-104.6,86.1,70.5) with ±1.5 m horizontal uncertainty. It does not expose the wounded actor or Conrad interaction: Ycxm8Pa1-v4 stops before a conversation, and 8VXeKzGUv0c cuts across both actions. The current soldier at (-102.4,86.09,70) is an inferred nearest walkable doorway point, not a measured NPC coordinate."
+    },
+    {
+      "tier": "original",
+      "confidence": "high for original map object bounds; low for their effective collision hulls",
+      "source_location": "mapprops/adv_bootcamp.csv rows 110, 254-255; docs/evidence/bootcamp-s5-soldier-approach-20260924.json original map observation; docs/evidence/bootcamp-s5-corpse-use-20260924.json original map observation",
+      "finding": "Original-map sandbags and Forean corpses occupy the approach around x=-103..-96,z=68..72, directly between the east approach and the bunker doorway. The map object's broad mesh bounds cannot determine a unique route or NPC position."
+    },
+    {
+      "tier": "measured",
+      "confidence": "high for the current client's local route and use; no final-live placement claim",
+      "source_location": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json runs 49-66 and docs/evidence/bootcamp-s5-corpse-use-20260924.json runs 03-09; docs/evidence/conrad-navprobe-results.txt corrected and path:wounded_to_corrected",
+      "finding": "A direct approach stopped at (-95.578,85.668,71.699), while moving around the north side reached (-104.520,86.765,72.079) and later opened the wounded-soldier objective dialogue. From a copied soldier checkpoint, ordinary movement around the east side of the obstacle reached a usable prompt for the current corpse at (-98.0,85.39,67.2); a checkpointed click completed objective 3. The corrected corpse point has navmesh floor 85.81 and a complete path, while the earlier (-102.4,85.69,66.8) seed had no floor and its path was incomplete."
+    },
+    {
+      "tier": "observed_emulator",
+      "confidence": "high for the copied-run death event, low for combat balance or final-live hostility",
+      "source_location": "docs/evidence/bootcamp-s5-accepted-prefix-normal-combat-20260924.json observation 4; /var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/game.log line 643; output/15-w3.png and 16-d12.png",
+      "finding": "A separate normal-hostile accepted-1995 run reached (-94.5,85.2,67.5) with objective 2 active, then died before dialogue. The server attributed the kill to the currently seeded Thrax Infantry Initiate at (-85,86.3,91), 25.35 m horizontally from the player; the player was 8.29 m horizontally from the inferred soldier. The screenshots show damage and hospital selection, but they do not prove the original NPC placement, enemy range, line of sight or balance."
+    }
+  ],
+  "decision": "No seeded soldier or corpse position correction is supported. The only located final-week marker is not the actor; the corpse pickup is hidden by an edit. The current inferred points are traversable and usable in checkpointed compatibility-client runs. Keep their existing inferred provenance and uncertainty (soldier ±5 m horizontal, corpse ±30 m horizontal).",
+  "next_check": "For a continuous accepted-1995 route, engage or evade the current outpost Thrax before dwelling near (-94.5,85.2,67.5), approach the soldier from the north of the corpse/sandbag stop, then use the corpse from its east-side prompt. Record same-session objective transitions. This is a test of the current reconstruction, not a proposed final-live route or combat tuning.",
+  "sources": [
+    {
+      "path": "docs/evidence/bootcamp-d11-positions.json",
+      "sha256": "2a7539fa3e4383531f390dbffd90583cf18aa38a39f4f7f78254b69e043ce8a8"
+    },
+    {
+      "path": "mapprops/adv_bootcamp.csv",
+      "sha256": "f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41"
+    },
+    {
+      "path": "docs/evidence/conrad-navprobe-results.txt",
+      "sha256": "f00d658830ee9cca1a6268fcfac9548b7ccbb48e0691a4d4f8f67a07bbebf696"
+    },
+    {
+      "path": "docs/evidence/bootcamp-s5-accepted-prefix-normal-combat-20260924.json",
+      "sha256": "eff93e69dc0478162f93107eac2df4c5f704a749987aee73962869c562dd15a5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/game.log",
+      "sha256": "0f3a6491624f7521cf5be601b055713651753db331a722ecddd6ef61696087ae"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/15-w3.png",
+      "sha256": "60052ea5271089bed72773aec4722427a2b537db491b6bed2f1db6c1a8e801a1"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/16-d12.png",
+      "sha256": "6392e67f08b19defcb466f0c91c49e2ad20475ef855bc37814f637e6c97726f1"
+    }
+  ],
+  "source_limit": "The historical /home/blizz/backups/rasa-net/research tree was absent during this recheck; its original video files and earlier screenshots could not be independently rehashed. The original-footage claims above rely on the cited, previously recorded frame analyses, with the client-derived positions retained as estimates."
+}

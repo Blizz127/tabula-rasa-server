@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "question": "Can the current Alia Das Specialist reach a supply of the Repair-O-Matic's required Power Cells without adding an unverified class-gear reward?",
+  "result": "The current emulator world database stocks item template 56, class 3807, at the Ammo Supply Vendor Alia Das (creature 73, spawnpool 116) for 3 credits each. The Repair-O-Matic reward template 122871 uses weapon class 12797, whose preloader row names ammo class 3807 and a 10-round clip. Vendor purchase and weapon reload code paths match stocked class-3807 ammo placed in personal inventory slots 50-99. This identifies a potential ordinary emulator path to usable ammo; it has not been exercised in the compatible client, and none of these emulator rows proves final-live vendor stock or mission ammo grants.",
+  "current_world_database": {
+    "path": "rasaworld.db",
+    "sha256": "9cb928131da1f2ade773e06040164555576253b7b68cf3b722c8e8cd47e3be6b",
+    "read_only_query": "SELECT c.id,c.comment,s.id,s.pos_x,s.pos_y,s.pos_z,vi.item_template_id,t.buy_price,t.sell_price,ic.itemClassId FROM creature c JOIN spawnpool s ON s.creature_1_Id=c.id JOIN vendor_item vi ON vi.id=c.id JOIN itemtemplate t ON t.id=vi.item_template_id JOIN itemtemplate_itemclass ic ON ic.itemTemplateId=t.id WHERE c.id=73 AND s.id=116 AND vi.item_template_id=56",
+    "row": {
+      "creature_id": 73,
+      "comment": "Ammo Supply Vendor Alia Das",
+      "spawnpool_id": 116,
+      "position": [760.71484, 293.96875, 393.78516],
+      "item_template_id": 56,
+      "buy_price": 3,
+      "sell_price": 1,
+      "item_class_id": 3807
+    }
+  },
+  "ordinary_training_day_checkpoint": {
+    "source": "/home/blizz/private-artifacts/rasa-net-s6-training-day-reward-20260924/capture/completed-run-20260924/databases/char-after.db",
+    "sha256": "409cef3d641209a9b1f81aef4f62e7429e9b5781af9be9016334cd3ba3a4bc15",
+    "read_only_query": "SELECT i.item_id,i.item_template_id,i.stack_size FROM items i JOIN character_inventory c ON c.item_id=i.item_id WHERE c.character_id=1 AND i.item_template_id=56",
+    "result": "No template-56 stack in the copied character after ordinary Training Day turn-in; credits are 480. This no-kill diagnostic route does not represent every original player's loot history."
+  },
+  "supporting_locations": [
+    "src/Rasa.DBL/Services/Preloader/CreaturePreloader.cs:92: creature 73",
+    "src/Rasa.DBL/Services/Preloader/VendorPreloader.cs:36: vendor 73/package 104",
+    "src/Rasa.DBL/Services/Preloader/VendorItemPreloader.cs:87: vendor 73 stocks template 56",
+    "src/Rasa.DBL/Services/Preloader/ItemTemplateItemClassPreloader.cs:26212: Repair-O-Matic template 122871 -> class 12797",
+    "src/Rasa.DBL/Services/Preloader/WeaponClassPreloader.cs:651: class 12797 -> ammo class 3807, clip 10",
+    "src/Rasa.Game/Managers/NpcManager.cs:391-440,511-610: vendor stock display and purchase handling",
+    "src/Rasa.Game/Managers/WeaponActionManager.cs:202-245: reload plan matches item class and slots 50-99, consumes the stack and fills the clip",
+    "docs/evidence/client-specialist-class-gear.json: Specialist reward equips with 0/0 ammo in a diagnostic compatible-client run"
+  ],
+  "contemporary_footage_context": "The surviving derived original-footage transcript docs/evidence/bootcamp-d11-footage-events.json A5-18 at 522.133 seconds and B1-028 at 47.2 seconds records Standard Grade Power Cells as loot across edit cuts. The original captures are currently missing, the template ID is not visible there, and those lines do not show mission 2011 granting ammo.",
+  "provenance": "Current emulator seed and source code, supported by a 2007 firsthand account cited in docs/evidence/client-specialist-class-gear.json. The preloader's upstream age/version and final-live vendor stock are not established.",
+  "remaining_verification": [
+    "Use the compatible client at Alia Das to buy template 56 from vendor 73, load or use it with Repair-O-Matic, and verify inventory and credit persistence in a copied database.",
+    "Find final-live evidence for whether mission 2011 supplied a filled clip, a separate Power Cell stack, or neither and for the final-live vendor's stock and price."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Conrad corpse use protocol and shortest evidenced post-soldier approach",
+  "scope": "Static disassembly of byte-identical original 1.16.5.0 client modules, original usable table, and retained copied-client checkpoints; no client/harness run or gameplay/live change",
+  "client_protocol": [
+    {
+      "tier": "original_client",
+      "exact_source": "trpython.zip:client/augmentations/usable.pyo Usable.OnGetUseAction line 305 offsets 0-15 and OnUse line 420 offsets 0-42; client/augmentations/actor.pyo Actor.PerformUseObject line 1855 offsets 0-132; client/inputhandlers.pyo Use lines 238-265 as audited in docs/evidence/bootcamp-s5-soldier-client-use-protocol-20260924.md",
+      "finding": "A usable's action invokes OnUse, which resolves the player and calls PerformUseObject for the selected entity. The actor creates a UseObject action, fills windupTimeMs from the usable, and performs it. In FPS mode the use input is the right-button press; in MMO mode it is release without a use drag. An actual object target and visible 'Press [Mouse Button 2] to use' prompt are more probative than proximity to a quest marker.",
+      "limit": "Input mode and aim must be observed in the particular run; the original client path does not establish the final-live corpse class or windup."
+    },
+    {
+      "tier": "original_client",
+      "exact_source": "trpython.zip:client/actions/useobject.pyo UseObject class line 22 offset 12; CheckAction line 66 offsets 0-244; _InUseRadiusOf line 108 offsets 0-174; SendServerRequest line 129 offsets 0-47",
+      "finding": "UseObject has checkRange=1. CheckAction rejects dead actor, missing/wrong usable, mismatched action argument, locked unusable, out-of-range target, and failed _world.InLineOfSight(actor.body,usable.body). Only after those checks does SendServerRequest call SendCallActorMethod('RequestUseObject', (actionId,actionArgId,usable.entityId)+useArgs). The range check uses 3D squared distance from actor.body.GetPosition() to usable.body.GetHPSWorldPosition(DAMAGE1), and compares it to max(actor.GetUseRange(),usable.GetUsableMaxRange()) squared.",
+      "limit": "Native InLineOfSight and DAMAGE1 geometry are not reconstructed by this Python bytecode. A missing RequestUseObject can result from acquisition, range, line of sight, state or input; it does not prove a server rejection."
+    },
+    {
+      "tier": "original_client_plus_current_analogue",
+      "exact_source": "trpython.zip:client/augmentations/actor.pyo Actor.__init__ line 256 bytecode offsets 308-314 initializes __useRange=3; generated/client/usabledata.pyo usableMaxRange assignment offsets 85167-85179 contains only class 26232=16; trpython.zip:client/augmentations/usable.pyo _GetUsableMaxRange line 123 and GetUsableMaxRange line 276",
+      "finding": "The base actor use range is 3 m. The original table has no override for current analogue class 21961, so GetUsableMaxRange returns its default zero and the nominal client action range for this class is 3 m, measured to the model's DAMAGE1 connection point. The actor's use range is mutable, and no runtime range modifier was measured in the copied character.",
+      "limit": "Class 21961 is an analogue; the lost final-live Conrad entity may have had another class, max range, model connection point or server-side rule."
+    }
+  ],
+  "shortest_evidenced_movement": {
+    "tier": "observed_emulator",
+    "source": "docs/evidence/bootcamp-s5-corpse-approach-20260924.json setup and run 67; docs/evidence/bootcamp-s5-corpse-use-20260924.json run 04 step4-west.png and run 09 step1-hover.png, step2-after-rightclick.png, game.log line 123",
+    "dialogue_coordinate_prior_run": [-102.39844, 86.68221, 73.4375],
+    "copied_login_after_objective_2_to_3": [-102.39453, 86.890625, 73.4375],
+    "ordinary_movement_from_login": "S 1000 ms, A 1650 ms, W 850 ms in run 04; endpoint (-94.73047,84.99609,65.640625). Run 03 used S 1000 ms, A 1000+650 ms, W 850 ms and reached (-94.695,85.031,66.063) with the same prompt. These are the shortest recorded successful ordinary movement sequences from the copied post-dialogue checkpoint, not guaranteed repeatable directions or durations.",
+    "usable_viewpoint": [-94.73047, 84.99609, 65.640625],
+    "viewpoint_to_current_seed_center_3d_m": 3.64,
+    "viewpoint_to_current_seed_center_horizontal_m": 3.62,
+    "viewpoint_limit": "The prompt at a center distance over 3 m is consistent with the client's DAMAGE1 connection-point calculation; it cannot identify the point's actual offset. The object is inferred class 21961 at (-98.0,85.39,67.2), with ±30 m final-live horizontal uncertainty. The run 04 endpoint was ordinary-reached, but the successful use was a separate run 09 after a copied login-coordinate edit to that reached point.",
+    "navmesh_comparison": "Read-only query from prior dialogue coordinate (-102.39844,86.68221,73.4375) to use viewpoint reports a complete 12.3 m path via (-96.0,86.1,70.8), (-95.6,85.9,69.2), (-94.7,85.4,65.6). The ordinary run supports an east-side bypass, while navmesh corners alone are not an exact client movement trace."
+  },
+  "observed_use_transition": "At the copied run-09 viewpoint the client showed 'Salvagable Materials' and 'Press [Mouse Button 2] to use'. A short right-click at screen pixel (740,386) sent RequestUseObject; the client showed objective 3 completed, switched to 'Destroy the crashed dropship before the bomb timer expires' with 00:09:59, and the copied database persisted objective 3 status 2 and objective 1 status 1 with timer_remaining_ms=600000. This verifies the current reconstruction, not original final-live pickup behavior.",
+  "negative_control": "Earlier left strafe from the same post-dialogue checkpoint stopped near (-98.75,85.77,70.07); a click sent no RequestUseObject and objective 3 stayed active (docs/evidence/bootcamp-s5-corpse-approach-20260924.json runs 67-68). Later identical fixed-duration movement replays diverged, one overshooting without use (docs/evidence/bootcamp-s5-single-session-timer-route-20260924.json observation 4). Use visual prompt/position feedback instead of assuming a timing macro is deterministic.",
+  "decision": "Use the east-side reached viewpoint and actual use prompt as the bounded next client checkpoint. Do not change corpse placement, interaction radius or LOS based on these emulator-only runs; final-live class, geometry, range and trigger remain evidence gaps.",
+  "sources": [
+    {"path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/trpython.zip", "sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6"},
+    {"path": "trpython.zip:client/actions/useobject.pyo", "sha256": "47e1df251f02553426b25dafbca4faf1f154bf0decffe1af7d67d8a6a970a898"},
+    {"path": "trpython.zip:client/augmentations/usable.pyo", "sha256": "8568d81d76ce8176c24435d16a40169d5ae84bcb5614b219b2b0b4ea33b0afaf"},
+    {"path": "trpython.zip:client/augmentations/actor.pyo", "sha256": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f"},
+    {"path": "trpython.zip:client/inputhandlers.pyo", "sha256": "586fc0ea303e60dcc7991bf79d6a787b560e186bd3c0b4d86d4cc42993e5c9be"},
+    {"path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/data/game.zip", "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6"},
+    {"path": "game.zip:generated/client/usabledata.pyo", "sha256": "f6bb6fd94c559bd1975ef0bd7cd7fa94eb13e1a499c21b94e1d609240a3304fd"},
+    {"path": "docs/evidence/bootcamp-s5-corpse-approach-20260924.json", "sha256": "081bb212785fd3a804285fa642073293bfbd64dc3d15c31116b9f792995fd66b"},
+    {"path": "docs/evidence/bootcamp-s5-corpse-use-20260924.json", "sha256": "729cb2d79e7e94abb9c7f12b640c3d01ddabe075a35499bb3c9c44282fe13635"},
+    {"path": "docs/evidence/bootcamp-s5-single-session-timer-route-20260924.json", "sha256": "fe9e411c4d9337b10c2271a5c891a3f1c0e6b164cbce606f01220e3678a0c72a"},
+    {"path": "docs/evidence/bootcamp-s5-soldier-client-use-protocol-20260924.md", "sha256": "e27ba497f199e415bc7c3611a23fe57ff6f1741d389140de53785c1f2d585ade"},
+    {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"}
+  ]
+}

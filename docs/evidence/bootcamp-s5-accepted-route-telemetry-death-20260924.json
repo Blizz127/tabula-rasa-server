@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Accepted-1995 original-client route to the outpost corpse/sandbag stop with isolated accepted-Move telemetry",
+  "scope": "One uninterrupted copied-client session from mission 1995 accepted at Youngblood's checkpoint; normal deployed-derived hostiles; no combat, position, stat or mission edits. Private copied Game DLL adds only accepted-Move logging, and live Game/DIT were untouched.",
+  "source_manifest": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-telemetry-death1/manifest.json",
+    "sha256": "15929956bce4c54c9c2a6009b6191a1160d539e39fe683ded24d1435d119f1db",
+    "file_count": 218
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest output/game.log, drive-s5-soldier-telemetry.log and output/positions.tsv",
+      "finding": "Ordinary rifle fire killed the first gate Thrax (+71 XP, +10 credits). Accepted Move telemetry traced the original-client fence bypass and lower route; it avoided prior OCR loss of negative signs and decimal points. The outpost approach reached (-93.65625,85.19531,70.109375), with objective 1995/2 still active."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest output/positions.tsv, output/07-short-outpost-probe-loc.png through output/10-soldier-doorway-loc.png",
+      "finding": "W1.8 slid from (-93.65625,85.19531,70.109375) to (-94.8125,85.07422,66.25391), against original bunker/corpse/sandbag scenery. Two more forward holds did not advance. D1 moved north to (-94.61719,85.53516,70.30859), but the next W1.8 slid south again to (-95.83984,84.76953,63.98828). No Human talk prompt or soldier conversation was reached."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest output/game.log line 293 and output/10-soldier-aim-1.png",
+      "finding": "Outpost creature 2760 at (-85,86.3,91) killed the recruit near (-95.8,84.8,64). The client displayed Hospital Selection; copied DB retained objective 1995/2 active."
+    }
+  ],
+  "instrumentation_limit": "The trace records positions accepted by the copied emulator Game process, not an original retail server trace. It proves this copied-client movement path and shows where OCR was wrong. The private DLL was built from the current repository snapshot and changed no normal combat rule; final-live route safety and enemy balance remain unverified.",
+  "next_check": "From the near-outpost checkpoint, move north toward z73–75 before further forward input; require accepted-Move X progress with Z remaining north of the local corpse/sandbag obstacle, then acquire the actual Human talk prompt before right-click. Do not tune hostile stats from this death."
+}

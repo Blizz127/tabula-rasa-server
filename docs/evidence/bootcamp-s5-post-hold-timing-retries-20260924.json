@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 accepted-1995 copied-client retries after correcting late accepted-Move attribution",
+  "scope": "Four bounded original 1.16.5.0 client runs against isolated copied Auth/Game/DB with the private movement-trace DLL; ordinary movement and gate combat, no gameplay source or live Game/DIT changes. The character was restored to the same accepted-1995 baseline between runs.",
+  "timing_control": {
+    "observed_failure_source": "docs/evidence/bootcamp-s5-sandbag-yaw-staged-diagnostic-20260924.json north_heading_trace",
+    "change": "Private route readers now require accepted Move timestamp strictly after the latest hold command start, then 0.8 seconds without a newer row within a 4-second deadline. A row near the deadline without the quiet interval is reported as unsettled. Corpse movement checkpoints 13-15 also use the post-hold reader.",
+    "verification": "Deterministic replay of recorded D1/D400 command and row timestamps passes stale, missing, unsettled, and corpse-loc cases. The north-band retry produced real post-hold rows with 1.02 s and 0.85 s quiescence. This verifies the private reader on these traces; it does not verify final-live movement or the unfinished soldier interaction.",
+    "private_test_path": "/home/blizz/private-artifacts/rasa-s5-position-trace-20260924/test_controller_packet_timing.py",
+    "private_test_sha256": "e614a93e466836a70f88deec489655347bccf227d28972f2f2bdc3d2064dce72",
+    "final_private_controller_path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_soldier_yaw_continue.py",
+    "controller_sha256_after_four_runs": "4066cf46727c26f6d2e05e8bada0778a024735ce657e98766c53c45b0dacc377",
+    "final_private_controller_sha256": "716830ec26d3177e72ff029791c0b3d9f38fb9ab182e2c98f06ab08da6ba59db",
+    "limit": "The private controller was revised between these runs; the final controller hash does not identify each earlier revision. The source manifests freeze command/result files, telemetry, screenshots and logs for each run.",
+    "hash_scope": "The final_private_controller_sha256 is historical at this record creation; see bootcamp-s5-corridor-fastprobe-retries-20260924.json for the later private controller hash."
+  },
+  "runs": [
+    {
+      "tier": "observed_emulator",
+      "name": "early_corridor_guard",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/early-corridor/manifest.json",
+      "manifest_sha256": "e2581b72df04ceaea077601156008c7868432fdaeb2451cfa30f4fca84b0d77e",
+      "exact_source": "driver.log lines near 'loc_accepted_move 06-near-outpost' and final RuntimeError; positions.tsv; 06-near-outpost-loc.png; state-06-near-outpost.json",
+      "finding": "Gate Thrax died by ordinary fire (copied XP 8766), and the accepted-1995 client reached (-65.28125,87.51953,75.33203) with near-full health. The controller's soldier branch required X -98..-88, so it stopped without soldier use. This earlier corridor point is close to the previously observed (-61.8,87.9,75.3); it does not demonstrate an interaction defect."
+    },
+    {
+      "tier": "observed_emulator",
+      "name": "north_band_guard",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-band/manifest.json",
+      "manifest_sha256": "45b62c04060bfad713458a14d97f38ce2877617d31f21038406ec47dc3b65ab8",
+      "exact_source": "driver.log lines 'loc_accepted_move 06-near-outpost', 'settled_accepted_move 07-north-strafe-1', 'settled_accepted_move 08-north-forward-probe', and final RuntimeError; positions.tsv; objective state files",
+      "finding": "From (-89.890625,85.22266,72.80859), ordinary D800 reached (-92.92969,86.26172,76.35156) and W1000 reached (-95.74609,85.76172,72.828125). Both samples were after their hold commands and quiet for at least 0.8 s. The controller stopped before soldier targeting because X remained greater than -99; objective 1995/2 remained pending. The endpoint is close to an earlier successful north-strafe intermediate, suggesting a bounded D/W continuation, not proving it."
+    },
+    {
+      "tier": "observed_emulator",
+      "name": "short_probe_guard",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/short-probe-stop/manifest.json",
+      "manifest_sha256": "87ed0ec43ec350392dcae5aaa84ca52f973686ac6b8d8307b7bb52f88bba88ea",
+      "exact_source": "driver.log lines 'loc_accepted_move 06-near-outpost', 'settled_accepted_move 06b-short-outpost-probe', and final RuntimeError; positions.tsv; 06b-short-outpost-probe-loc.png; objective state files",
+      "finding": "From (-78.51172,87.18359,75.35547), ordinary W1800 reached (-84.109375,86.90625,75.25391), advancing only 5.60 m in X. The next soldier approach branch had no measured starting envelope there, so the controller stopped. No talk prompt, Continue click, or corpse use was attempted; objective 1995/2 remained pending."
+    },
+    {
+      "tier": "observed_emulator",
+      "name": "north_fence_early_stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-fence-stop/manifest.json",
+      "manifest_sha256": "5067cadece72981d55e34ce7f4d54a313a3af628b52dbf26ea528eb8f64d7c2f",
+      "exact_source": "driver.log lines 'loc_accepted_move 03-fence', 'loc_accepted_move 04-lower', 'loc_accepted_move 06-near-outpost', 'settled_accepted_move 06b-short-outpost-probe', and final RuntimeError; positions.tsv; objective state files",
+      "finding": "The copied client took the measured north fence branch, but its lower checkpoint was (-5.4101562,98.921875,134.7539), outside the prior west/south lower X branch. The private controller had incorrectly treated this accepted-Move X like ambiguous OCR and continued under a broad Y/Z guard. It later reached (-65.984375,87.51953,75.30859) near the outpost and W1800 ended at (-71.90625,87.46094,75.234375), outside the soldier branch; it stopped before any soldier or corpse interaction. The private controller now fails closed at the earlier lower/approach X guards. These route variants are copied-client observations, not final-live positions."
+    }
+  ],
+  "corridor_route_basis": {
+    "tier": "observed_emulator_with_original_map_support",
+    "exact_source": "Prior successful continuous run manifest s5-soldier-north-dialogue1/output/positions.tsv SHA-256 2f5382b2a53db768fd832326f4a3b742d6fec3a9adb3085d388df87b4a473be1 final 20 rows; short-probe-stop/positions.tsv SHA-256 40ea2a2d531f9b4b71412124a06b7107be90030636bbf4452d5bfbdea10ab70c last 8 rows; original navmesh navmesh/adv_bootcamp.nav SHA-256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; original mapprops/adv_bootcamp.csv SHA-256 f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41 lines 110, 254, 255",
+    "finding": "The prior successful copied-client trace passed from approximately (-84,75) through (-88.551,73.914), (-92.074,70.891), (-94.715,68.625), then ordinary D movement to (-95.809,72.922) and (-97.484,76.359), followed by W to (-102.043,70.980) with the Human talk prompt. The map records nearby sandbags and Forean corpses, but their broad bounds and the navmesh cannot establish an exact collision-free client path.",
+    "limit": "This is a copied-emulator route and variable input timing, not final-live player movement. The fourth retry did not reach this corridor segment, so the added private W800 guards remain unexercised."
+  },
+  "restoration": "The copied harness Game and client stopped; copied char.db was restored from accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705 with SQLite WAL/SHM sidecars removed. Live Game still had /app/dit mounted and dit/status.json enabled at the post-run check.",
+  "next_check": "From a copied accepted-1995 session, distinguish the north and west fence branches by accepted-Move X/Y/Z before using the lower route. At the variable X -65..-95 outpost corridor, use feedback-guided short holds rather than a fixed W duration. Continue only within measured healthy bounds, require the visible Human talk prompt before right-click, click the verified Continue button, check copied DB objective 2 complete/objective 3 active, then follow the visible corpse-use prompt and check RequestUseObject plus objective/timer state."
+}

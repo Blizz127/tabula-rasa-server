@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Short north-side navmesh approach from accepted S5 outpost point to inferred wounded soldier",
+  "scope": "Read-only navmesh and original-map prop-bounds audit; no client, harness, gameplay, live or DIT change",
+  "start": {
+    "xyz": [-93.656, 85.195, 70.109],
+    "tier": "observed_emulator",
+    "source": "Accepted-Move copied-client checkpoint supplied by active route agent",
+    "navmesh_projection": [-93.656, 85.68445, 70.109],
+    "limit": "The point was ordinary-reached in a copied client, but its Y differs from the navmesh floor by 0.49 m. The navmesh route is a plan, not a client-traversed result."
+  },
+  "candidate_waypoints": [
+    {
+      "xyz_navmesh_floor": [-96.0, 86.27246, 74.0],
+      "query": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -93.656 85.195 70.109 -96 86 74",
+      "result": "Complete path, one corner, 4.7 m; endpoint projects exactly to XZ (-96,74).",
+      "tier": "measured_from_original_client_map"
+    },
+    {
+      "xyz_navmesh_floor": [-100.0, 86.67746, 74.0],
+      "query": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -93.656 85.195 70.109 -100 86 74",
+      "result": "Complete path, one corner, 7.6 m from start; intermediate visual checkpoint before the soldier.",
+      "tier": "measured_from_original_client_map"
+    },
+    {
+      "xyz_navmesh_floor": [-102.0, 86.90938, 74.0],
+      "query": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -96 86.27 74 -102 86.91 74",
+      "result": "Complete path, one corner, 6.0 m from the first waypoint; 4.02 m horizontally from inferred soldier seed (-102.4,86.09,70). Hold here and inspect the Human target/talk prompt before moving closer.",
+      "tier": "measured_from_original_client_map_plus_inferred_target"
+    },
+    {
+      "xyz_navmesh_floor": [-102.4, 86.98938, 73.2],
+      "query": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav -102 86.91 74 -102.4 86.9 73.2",
+      "result": "Optional 0.9 m one-corner nudge if the talk prompt is absent at (-102,74); 3.2 m horizontally from inferred soldier. Stop on a visible prompt and avoid assuming this point is collision-safe.",
+      "tier": "measured_from_original_client_map_plus_inferred_target"
+    }
+  ],
+  "geometry_check": {
+    "source": "mapprops/adv_bootcamp.csv rows 110, 254, 255; original map prop transforms/broad mesh bounds",
+    "finding": "The two mapped Forean corpses center at (-97.567,70.441) and (-99.851,71.331). The latter's broad z maximum is 72.488, giving a z=74 centerline about 1.51 m nominal clearance. A nearby sandbag centered (-102.272,68.644) has broad z maximum 69.485. These broad bounds make a z=74 north-side approach more plausible than the direct z=70-72 approach where a prior client run stopped.",
+    "limit": "Broad mesh AABBs are not exact collision hulls; this does not prove player-capsule clearance or visibility. The original bunker mesh, dynamic actors and hostile combat are not included in this three-prop clearance estimate."
+  },
+  "comparison": {
+    "known_ordinary_reached": [-104.52, 86.765, 72.079],
+    "source": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json runs 55-56",
+    "navmesh_projection_of_known_point": [-102.94182, 87.1221, 72.3218],
+    "finding": "A start-to-known-point query reports a complete 9.8 m path with corners (-96.0,86.1,70.8) and the projected endpoint, but snaps the known client's X by 1.58 m. This disagreement limits any claim that navmesh coordinates alone reproduce the ordinary-client route. The prior run nevertheless showed a north-side approach and later conversation after further aiming/approach."
+  },
+  "interaction_limit": "Original compatibility-client `Actor.IsInConversationRange` calls native body.InRadiusOf with MAX_CONVERSATION_RANGE=5 m (docs/evidence/bootcamp-s5-soldier-client-use-protocol-20260924.md). Center distance at (-102,74) is about 4.1 m including the inferred soldier's seeded Y, but native body radius and reticle acquisition govern the real prompt. The target seed is inferred with ±5 m horizontal uncertainty and is not a final-live NPC position.",
+  "decision": "Offer the z=74 waypoints as a short bounded copied-client steering experiment. Require the actual Human target and talk prompt, then Objective Completion/Continue and persisted 2→3 objective transition. No placement or collision correction is justified by navmesh alone.",
+  "sources": [
+    {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"},
+    {"path": "src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll", "sha256": "361622893ebee7bd5c18b07b2ca6688b29c0228b6ff98e45ac870798ef44095d"},
+    {"path": "mapprops/adv_bootcamp.csv", "sha256": "f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41"},
+    {"path": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json", "sha256": "b308ac054f6d68281a207a842351d62b555a0bbf7bf932f487ef1bcf1a17cbeb"},
+    {"path": "docs/evidence/bootcamp-s5-soldier-client-use-protocol-20260924.md", "sha256": "e27ba497f199e415bc7c3611a23fe57ff6f1741d389140de53785c1f2d585ade"}
+  ]
+}

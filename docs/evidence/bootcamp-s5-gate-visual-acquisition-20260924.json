@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Bounded isolated original-client S5 gate visual-acquisition attempt from accepted-1995 checkpoint",
+  "provenance_tier": "observed",
+  "setup": "Recovered compatibility client 1.16.5.0; disposable deployed-derived Game/world and accepted-1995 character copies under /var/tmp; normal hostile stats/AI. No player position, combat-stat, mission or timer edit. Live Game/DIT untouched. Starts after mission 1995 acceptance, not with same-session Youngblood dialogue.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "output3/01-start-loc.png, output3/char-after-gate-death.db",
+      "finding": "Mission 1995 objective 2 active at Youngblood-area copied checkpoint (93.2,115.0,137.5), level 2 and 8695 XP / 360 credits."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output3/02-gate-before-aim.png and output3/03-gate-aim.png through 04-gate-aim2.png",
+      "finding": "After ordinary five-second west-gate movement, moving Thrax Infantry Initiate was visible left of the original client centre reticle. The controller made bounded mouse-relative turns of -80 and -200 pixels and inspected rendered captures before firing. The target remained off-centre in the sampled frames; no rifle fire was issued."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output3/game.log 06:55:47.498 America/Chicago; output3/05-gate-aim3.png; output3/06-gate-death.png; output3/char-after-gate-death.db",
+      "finding": "The close-range gate hostile reached the character during the next attempted -500-pixel turn. Game log records death at (59.5,110.3,140.4), killed by creature 2758 class 29769 at (59.2,110.2,139.3), before any player rifle damage. Hospital respawn preserved objective 2 active and 8695 XP / 360 credits."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output3/command-trace.tar.gz, output3/launcher.log and restored copied char DB",
+      "finding": "Focus guard identified the death UI; the isolated runner stopped with exit 0. Copied char DB was restored byte-for-byte to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705."
+    }
+  ],
+  "assessment": "A stepwise screenshot-and-turn gate targeting method was too slow against this normally attacking nearby hostile. This run does not test the outpost enemy or the wounded-soldier interaction and does not establish final-live combat balance. Prior run 1 in bootcamp-s5-accepted-prefix-normal-combat-20260924.json remains the evidence for a normal gate kill and continuous travel near the soldier.",
+  "next_verification": "If another accepted-1995 normal-combat run is attempted, acquire and fire on the moving gate hostile immediately after it becomes visible, then inspect hit feedback while firing; later preemptively engage placement 198683 before entering the wounded-soldier bunker. Do not treat these emulator combat outcomes as original final-live enemy values.",
+  "sources": [
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive3.py",
+      "sha256": "ff39106f9fa38227cf98dcdedb16f8bb0dedd5fba513393ed602d00762d4da14"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/launch.py",
+      "sha256": "05fb3e0e5f89464bb4a2db66d90fb6d1387c4ff4ffa093a75dd003c179e0e7d5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/char-baseline.db",
+      "sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/char-after-gate-death.db",
+      "sha256": "44cfadaa7e6ea0c42a0f4416a734276864a8a39f369021ed18524e9afed0b8a6"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/game.log",
+      "sha256": "45e2e347cd1cd9c72829cc6aea273e545d5a40baa9f771649f8428dcf9318a3d"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/command-trace.tar.gz",
+      "sha256": "ba636d80aa0e1a2fc9ee720f5f1330c4be1150845849d5cd653c11f4b52565d3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/00-playable.png",
+      "sha256": "117dcd154108bdd4d24d9bac07806edf264d40845fae2904cc7147a23ea10eb5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/01-start-loc.png",
+      "sha256": "e8cc1f54168f319fee979a0e97697865afd8ef9b2eeaa65b02a37d8fbac6f8da"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/02-gate-before-aim.png",
+      "sha256": "df1f6c093c826dae0a236f4890838c0961e9288c37fa7ec9aa7c969e087d9a73"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/03-gate-aim.png",
+      "sha256": "fa3666137f7b4301f959aaefcd6e301e7bbb1e34f64466b208a130bb097c1a09"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/04-gate-aim2.png",
+      "sha256": "4db4929b78b44e40344626437234a43272ea49ff873e7bc60940d8715597977b"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/05-gate-aim3.png",
+      "sha256": "ddb5607f21346ef5b61186d9f96cf988a3d778fbdc2b881306c23414d876b44f"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output3/06-gate-death.png",
+      "sha256": "99dd7769bb1233950a40e1530edce0fdda98ebbf9509824b155c5d201ed6ecd1"
+    }
+  ]
+}

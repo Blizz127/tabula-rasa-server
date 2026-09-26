@@ -15636,7 +15636,7 @@
        "t": 95.4
       }
      ],
-     "reasoning": "a stationary placement; the group's walk-off at 98.0 needs a path mechanism (GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "a stationary placement; no departure is observed through 98.333 s (B2-012), and later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "walk_speed": {
      "value": 0,
@@ -15886,7 +15886,7 @@
        "t": 95.4
       }
      ],
-     "reasoning": "stationary placement; the observed walk-off at 98.0 has no path mechanism (GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "stationary placement; no departure is observed through 98.333 s (B2-012), and later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "walk_speed": {
      "value": 0,
@@ -16022,7 +16022,7 @@
        "locator": "frame reading S5P-01, frames 97.2-98.267 (2026-09-14 S5 evidence pass, static frame check; research/20260914-bootcamp-s5/footage-events-s5.json this_pass_checks, relates to B2-014 (unverified))"
       }
      ],
-     "reasoning": "stationary placement; the observed walk-off at 98.0 has no path mechanism (GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "stationary placement; no departure is observed through 98.333 s (B2-012), and later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "walk_speed": {
      "value": 0,
@@ -16144,7 +16144,7 @@
        "t": 91.667
       }
      ],
-     "reasoning": "stationary placement; the observed walk-off at 98.0 has no path mechanism (GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "stationary placement; no departure is observed through 98.333 s (B2-012), and later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "walk_speed": {
      "value": 0,
@@ -16781,7 +16781,7 @@
        "position_key": "pad.reinforcement.forean_gunner_initiate"
       }
      ],
-     "reasoning": "a stationary NPC; stationary per owner decision OD-29 (the walk-off has no mechanism, GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "a stationary NPC; corrected B2-012 shows no departure through 98.333 s; later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "initial_state": {
      "value": 0,
@@ -16950,7 +16950,7 @@
        "position_key": "pad.reinforcement.infantryman_l2"
       }
      ],
-     "reasoning": "a stationary NPC; stationary per owner decision OD-29 (the walk-off has no mechanism, GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "a stationary NPC; corrected B2-012 shows no departure through 98.333 s; later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "initial_state": {
      "value": 0,
@@ -17119,7 +17119,7 @@
        "position_key": "pad.reinforcement.infantryman_l3"
       }
      ],
-     "reasoning": "a stationary NPC; stationary per owner decision OD-29 (the walk-off has no mechanism, GAP-S5-REINFORCEMENT-MOVE)"
+     "reasoning": "a stationary NPC; corrected B2-012 shows no departure through 98.333 s; later movement remains GAP-S5-REINFORCEMENT-MOVE"
     },
     "initial_state": {
      "value": 0,
@@ -17462,13 +17462,14 @@
     },
     "initial_state": {
      "value": 44,
-     "tier": "original",
+     "tier": "inferred",
      "citations": [
       {
        "source": "client_table:game.zip",
        "locator": "generated/client/usabledata.pyo USE_SS_STATE_0 = 44 (store offset 57)"
       }
-     ]
+     ],
+     "reasoning": "The client confirms state 44 for a StatelessSwitch usable, but Conrad's original corpse class and state are not observed. State 44 follows the inferred generic-use reconstruction and analogue class 21961; it is not an original corpse state."
     },
     "hit_points": {
      "value": 0,
@@ -66707,11 +66708,11 @@
     "level": {
      "value": 4,
      "tier": "inferred",
-     "reasoning": "TaRapedia's pre-shutdown Too Close For Comfort mission page records level 4 (TooCloseForComfortLevelRows.cs, 2026-09-24); the client mission tables carry no per-mission level for 1407, so the final-live server's level stays unverified. Supersedes the earlier Wilderness-hub-band guess of 5, which this manifest previously carried with no per-mission source.",
+     "reasoning": "TaRapedia's Too Close For Comfort mission infobox recorded level 4 in revision 8563 (2007-09-02) and retained it through its last pre-shutdown revision (2008-02-28) (docs/evidence/too-close-for-comfort-level.json; TooCloseForComfortLevelRows.cs, 2026-09-24). The original client 1.16.5.0 mission text/objective tables carry no per-mission level, so the final-live server's level stays unverified. A community wiki is not footage, so the value is inferred rather than observed. Supersedes the earlier Wilderness-hub-band guess of 5, which this manifest previously carried with no per-mission source.",
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Too Close For Comfort mission page, Level field, pre-shutdown revision"
+       "locator": "missions[Too Close For Comfort].fields.Level: value 4, set_ts 2007-09-02T13:34:50Z, set_revid 8563; last_ts 2008-02-28T17:35:43Z"
       }
      ]
     },
@@ -74820,8 +74821,8 @@
   },
   {
    "table": "content_placement",
-   "what": "the reinforcements walking off the pad (movement after 98.0)",
-   "reason": "no path mechanism; the placements are stationary (OD-29)",
+   "what": "possible reinforcement movement after the 98.333 s hard cut",
+   "reason": "no original departure time or path is observed; the observed group remains on the pad through 98.333 s (B2-012)",
    "gap": "GAP-S5-REINFORCEMENT-MOVE",
    "slice": "S5"
   },
@@ -75626,14 +75627,13 @@
   },
   {
    "id": "GAP-S5-REINFORCEMENT-MOVE",
-   "summary": "Closed for the observed 1995 branch by BootcampScriptedMoves (2026-09-15) and for the inferred 2005 retry by BootcampRetryReinforcementWalk (2026-09-24); reopened the same day by BootcampReinforcementPadHold, which deletes both walk-off rules (1985015, 1985017) and their shared destination (location 19854). Rereading B2-012 found the three reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) still standing on the pad at 98.333 s, 11.533 s after 1995 objective 1 completed; since ObjectiveCompleted actions fire immediately, no rule keyed to objective completion can reproduce that hold. The destroyed-wreck condition and arrival placements are preserved, and the reinforcements now simply remain on the pad after beaming in. Whether they ever leave, and when, is unverified.",
+   "summary": "Open. Corrected B2-012 shows the three named reinforcements standing on the pad from 95.4 through 98.333 s, at least 11.533 s after objective 1995/1 completed. The earlier immediate walk-off inference for 1995 and its 2005 retry copy were removed by BootcampReinforcementPadHold (2026-09-24). Movement after the hard cut, including timing, path and endpoint, is unverified. Because ObjectiveCompleted actions fire immediately, no rule keyed to objective completion can reproduce that hold; the destroyed-wreck condition and the arrival placements are preserved, so the reinforcements now remain on the pad after beaming in.",
    "evidence": [
-    "footage S5P-05 (reinforcements walk north-east off the pad at 98.0) - superseded, see below",
-    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854), removed 2026-09-24 by BootcampReinforcementPadHold",
-    "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json: the inferred retry rule 1985017 with the same three placements and destination, removed alongside the original",
-    "footage B2-012 (corrected): the reinforcement group stands on the pad through 98.333 s, 11.533 s after 1995 objective 1 completes"
+    "footage S5P-05 B2-012 corrected (group standing on pad through 98.333 s)",
+    "BootcampReinforcementPadHold forward migration removes rule 1985015 and its three immediate actions",
+    "BootcampReinforcementPadHold removes inferred retry rule 1985017 and unsupported location 19854; see docs/evidence/bootcamp-s5-reinforcement-pad-hold-20260924.json"
    ],
-   "closes_with": "Removed rather than closed: BootcampReinforcementPadHold, 2026-09-24. A later departure, if any, remains open pending direct footage of it.",
+   "closes_with": "Original evidence of a later departure with timing and path, if one occurred",
    "surfaced_by": [
     "manifest",
     "B2-012 re-review, 2026-09-24"
@@ -81591,14 +81591,14 @@
    },
    "field": "new rule and three move actions",
    "old": null,
-   "new": "On completion of 2005 objective 1, the three reconstructed reinforcements walk to the existing inferred endpoint.",
+   "new": "Historical migration inserted an immediate retry walk; superseded by BootcampReinforcementPadHold, which removes both walk rules and the endpoint.",
    "tier": "inferred",
-   "reason": "The original final-week footage observes the squad walking after 1995 detonates the same wreck; the original client defines 2005 as the retry bomb objective. No original retry walk-off capture is known.",
+   "reason": "Historical inference was contradicted by corrected B2-012: the 1995 squad stands through 98.333 s. The original client defines 2005 as a retry, but no original retry movement capture is known.",
    "source": "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json",
    "citations": [
     {
      "source": "video:8VXeKzGUv0c",
-     "locator": "87.4-98.333 s S5P-05 / B2-012 1995 reinforcement walk-off; 2005 retry inferred"
+     "locator": "87.4-98.333 s S5P-05 / B2-012 corrected: group standing through the hard cut; 2005 retry motion unobserved"
     },
     {
      "source": "client_table:game.zip",
@@ -82497,13 +82497,14 @@
    "old": 5,
    "new": 4,
    "tier": "inferred",
-   "reason": "TaRapedia's pre-shutdown Too Close For Comfort page records level 4. The client mission tables carry no level for 1407; the previous row used the Wilderness-hub band (5) as an unsupported inference. The final-live server's own level remains unverified.",
+   "reason": "Correct earlier inferred level 5 to the contemporary pre-shutdown TaRapedia mission-page level (a community wiki, hence inferred rather than observed). The original client has no level field and final-live server level remains unverified.",
    "citations": [
     {
      "source": "community_db:tarapedia",
-     "locator": "Too Close For Comfort mission page, Level field, pre-shutdown revision"
+     "locator": "missions[Too Close For Comfort].fields.Level, revision 8563 set 2007-09-02; retained in last pre-shutdown revision 2008-02-28"
     }
-   ]
+   ],
+   "source": "docs/evidence/too-close-for-comfort-level.json"
   },
   {
    "date": "2026-09-24",

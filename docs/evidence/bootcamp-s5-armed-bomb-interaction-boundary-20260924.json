@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "S5 armed bomb second-use and reconnect boundary",
+  "scope": "Read-only comparison of the surviving 1.16.5.0 client tables, prior final-week frame ledger, current S5 seed and runtime. No gameplay or live service change.",
+  "findings": [
+    {
+      "tier": "original_client",
+      "confidence": "high for a generic client capability; S5-specific server behavior unverified",
+      "source": "data/game.zip:generated/client/usabledata.pyo, usableaugmentationstatetransition augmentation 42, store offset 4640; client entity class 7870 at generated/client/entityclass.pyo offset 58550",
+      "finding": "The Bomb state machine accepts 113→114 (arm), 114→113 (disarm), 114→115 (detonate), and 115→113 (reset). Class 7870 is a human Bomb-augmentation object. A supported client transition does not establish that the original S5 server permitted the player to disarm this specific bomb."
+    },
+    {
+      "tier": "observed_prior_frame_transcription",
+      "confidence": "medium because the original video and frame mosaic are currently unavailable for reinspection",
+      "source": "8VXeKzGUv0c, 80.600–86.000 s; docs/evidence/bootcamp-d11-footage-events.json event B1-045",
+      "finding": "The use bar finishes by about 81.267 s. The object changes to an armed-looking yellow-green state, and 'Press [Mouse Button 2] to use' remains visible from 81.667 through 85.600 s, disappearing by 86.000 s. No second click or disarm outcome is shown."
+    },
+    {
+      "tier": "observed_code",
+      "confidence": "high",
+      "source": "src/Rasa.Game/Managers/MissionContentRuntime.cs lines 482–499, 578–631; src/Rasa.Game/Data/MissionContentRules.cs lines 127–143",
+      "finding": "The server advertises 114→113 as a legal Bomb transition in its client-state validator, but RequestUseContentUsable returns without a reply for any Bomb state other than 113. The seeded S5 bomb is class 7870, usable kind Bomb, initially 113; after first use it enters 114 with a 4930 ms fuse. Thus a second RequestUseObject while state 114 cannot disarm it in the current emulator."
+    },
+    {
+      "tier": "observed_code",
+      "confidence": "high",
+      "source": "src/Rasa.Game/Managers/ContentMaterializer.cs lines 133–169; src/Rasa.Game/Managers/MissionContentRuntime.cs lines 625–630",
+      "finding": "If an armed S5 bomb is rebuilt after its private instance closes, the persisted planted fact restores state 114 with a fresh full FuseMs. The original due time is not persisted. This prevents an unwinnable armed object but extends the explosion relative to its first arm time; original disconnect behavior is unknown."
+    }
+  ],
+  "assessment": "This is a specific presentation/interaction gap at the armed bomb. The surviving data proves a generic disarm transition and the original footage shows an armed-state use prompt, but no original S5 second-use or relog result proves the mission's server rule. Keep the behavior explicitly unverified; do not infer that every prompted use disarmed the bomb or change S5's timer/fuse from this evidence alone.",
+  "next_evidence": "A contemporary final-live S5 capture showing a second click on the armed charge or reconnect during the fuse, or an authentic server packet trace, would resolve whether disarm and elapsed-fuse restoration belong in this mission. A copied-client second-click probe can characterize only the current emulator and is useful for reproducing its silent rejection.",
+  "sources": [
+    {
+      "path": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/data/game.zip",
+      "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+      "location": "generated/client/usabledata.pyo augmentation 42 transitions at store offset 4640; generated/client/entityclass.pyo class 7870 at offset 58550"
+    },
+    {
+      "path": "docs/evidence/bootcamp-d11-footage-events.json",
+      "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477",
+      "location": "B1-045"
+    },
+    {
+      "path": "src/Rasa.Game/Managers/MissionContentRuntime.cs",
+      "sha256": "e36baebd63d1d421d8eaf1f1f1969c25cf6f924591d08acaed8c8aae6cab7d93",
+      "location": "RequestUseContentUsable, PlantBomb, ArmBomb"
+    },
+    {
+      "path": "src/Rasa.Game/Managers/ContentMaterializer.cs",
+      "sha256": "9b98e0e9e9e893b74f565d661f3ce805cf91610211e1e9fe7ea9aed59906b78d",
+      "location": "SpawnUsable"
+    }
+  ]
+}

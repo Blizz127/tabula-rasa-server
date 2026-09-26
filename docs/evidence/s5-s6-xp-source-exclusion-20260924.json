@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Which mission turn-ins cannot explain the final-week Recruit tier-gate jump",
+  "finding": "The final-week edit's first Alia Das frame still tracks Calling for Reinforcements (1995) as complete and displays Training Day (1526) as an unaccepted offer. Therefore neither mission's ordinary completion reward can explain XP already credited at that frame. This narrows the hidden XP source to events before that frame: intervening combat, an objective/event payout, the Van Valkenberg check-in, or exit/arrival behavior. It does not establish that any such payout existed or give its amount.",
+  "evidence": [
+    {
+      "tier": "observed",
+      "version": "final-week video 8VXeKzGUv0c, exact client build unknown; surviving checked-in transcript, source frames currently missing",
+      "source": "docs/evidence/bootcamp-d11-footage-events.json",
+      "exact_location": "B2-015 at 98.333-98.400 s cut; B2-016 through B2-018 first Alia Das frame; B2-022 and B2-023 at 98.400 s",
+      "confidence": "high for recorded UI state; source frames not presently available for reinspection",
+      "detail": "The player is level 4 with the trainer-gate message already in chat. Mission 1995 remains in the tracker as '(complete)'. The Headquarters Training Day offer is open with an Accept Mission button."
+    },
+    {
+      "tier": "inferred",
+      "version": "mission lifecycle shared by compatible client and current emulator; final-week reward semantics not packet-captured",
+      "source": "docs/evidence/bootcamp-d11-footage-events.json B2-022/B2-023; docs/evidence/bootcamp-s6-after-v14-ordinary-rogers-20260924.json result; src/Rasa.Game/Managers/MissionManager.cs CompleteMissionReward",
+      "exact_location": "1995 is still completeable at first Alia Das view; copied-client continuation later opens Rogers' Mission Completion panel and calls CompleteNPCMission; Training Day has not yet been accepted",
+      "confidence": "high that ordinary 1995 and 1526 turn-in rewards had not been collected at the first frame; lower for any undocumented objective-side or arrival grants",
+      "detail": "Do not assign the already-observed XP jump to a 1995 or 1526 turn-in reward. A hypothetical 1995 objective reward is a separate possible mechanism and remains unverified."
+    }
+  ],
+  "provisional_reconstruction_boundary": {
+    "tier": "inferred or analogue only",
+    "option": "If class progression is blocked and no better source survives, an explicitly provisional fixed XP event before the first Alia Das view could make the Recruit eligible. The observed edit does not select Van Valkenberg, exit, arrival, or another event as the trigger; it does not establish a fixed amount. The emulator's 43,000 cumulative-XP gate and the filmed pre-cut quarter-bar estimate produce a rough 29,000-XP scenario delta, not a retail reward value. Avoid a per-character top-up because it changes the game economy by making missed combat XP irrelevant.",
+    "safer_current_action": "Preserve the existing no-grant seed while continuing independent S6 work and seeking a readable uncut final-live transition or server reward evidence. Natural combat can earn XP in the present emulator but has not been verified to match the filmed arrival state.",
+    "sources": "docs/evidence/s5-s6-tier-gate-xp-followup-20260924.json numeric_reconciliation_using_emulator_table_only; src/Rasa.Game/Structures/ClassAdvancement.cs IsAtGate; src/Rasa.Game/Data/ExpPerLevel.cs levels 4-5"
+  },
+  "remaining_unverified": [
+    "Final-live XP threshold and exact cumulative XP before and after the edit",
+    "Any hidden objective/event XP amount and its trigger",
+    "Whether unseen combat alone, an event grant, or both caused the tier-gate state",
+    "1995 and 1526 ordinary turn-in reward amounts, which are distinct from this pre-turn-in XP gap"
+  ]
+}

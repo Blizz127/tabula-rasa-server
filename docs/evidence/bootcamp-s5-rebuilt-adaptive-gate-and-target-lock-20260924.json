@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24",
+  "subject": "accepted-1995 rebuilt-harness smoke, adaptive gate attempt, original target lock control",
+  "target": "1:1 final live preservation; this is compatibility-client/emulator integration evidence only",
+  "setup": "Original compatibility client executable 1.16.5.0 in private Bubblewrap/Wine/Xvfb, copied Auth/Game/DB, native Microsoft d3dx9_33.dll and isolated .NET5/OpenSSL1.1 runtime; no live Game/DIT change",
+  "smoke4": {
+    "tier": "observed",
+    "result": "playable HUD and /loc/focus passed",
+    "start_loc": [
+      93.2,
+      115.0,
+      137.5
+    ],
+    "mission_id": 1995,
+    "objective_2_status": 1,
+    "manifest": {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/smoke4/manifest.json",
+      "sha256": "c8dd57352d6a9bbd91676557f894d58652e117e649b7db4a022b717a5528e86c"
+    }
+  },
+  "adaptive1": {
+    "tier": "observed",
+    "result": "stopped at gate; hostile remained alive after ordinary W 5000 ms and two rifle-fire holds of 4800 ms; no fence/soldier/corpse step reached",
+    "start_loc": [
+      93.2,
+      115.0,
+      137.5
+    ],
+    "post_gate_screenshot_loc": [
+      70.4,
+      109.0,
+      139.5
+    ],
+    "post_stop_db_loc": [
+      70.37109375,
+      109.02734375,
+      139.49609375
+    ],
+    "experience_before_after": 8695,
+    "objective_2_status_after": 1,
+    "manifest": {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-adaptive1/manifest.json",
+      "sha256": "603d046982a226b8ca0cc0b811287824936afc8815ee6f70ac41285226a69163"
+    },
+    "driver": {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-adaptive1/drive_s5_adaptive.py",
+      "sha256": "af1e684e0631459320a2d91ebaa1868a3bf0858ee290fe349bb55c8fef79c1df"
+    },
+    "comparison_limit": "prior successful fixed-aim run reached about x=61 after W5; cause of shorter current movement is not established"
+  },
+  "original_client_control": {
+    "tier": "original",
+    "client_version": "embedded 1.16.5.0; exact shutdown-client equivalence unverified",
+    "members": {
+      "data/game.zip:generated/client/keymapping.pyo": {
+        "sha256": "926623c37236857f814644a7b9470abb46e5f52003602cd1984681955db99ea0",
+        "archive_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/client-stage/data/game.zip",
+        "archive_sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+        "member": "generated/client/keymapping.pyo"
+      },
+      "trpython.zip:client/inputhandlers.pyo": {
+        "sha256": "586fc0ea303e60dcc7991bf79d6a787b560e186bd3c0b4d86d4cc42993e5c9be",
+        "archive_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/client-stage/trpython.zip",
+        "archive_sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6",
+        "member": "client/inputhandlers.pyo"
+      },
+      "trpython.zip:client/targeting.pyo": {
+        "sha256": "4483127df8819e89f8cf4b778b7be45079cc74f17727f1f984573879dcbabdb7",
+        "archive_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/client-stage/trpython.zip",
+        "archive_sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6",
+        "member": "client/targeting.pyo"
+      }
+    },
+    "decoded_locations": [
+      "keymapping.py bytecode offsets 420-428: mapped command 17 is LockTarget",
+      "keymapping.py bytecode offsets 3234-3359: command 17 maps to keyboard.tab for FPS/MMO and QWERTY/AZERTY/QWERTZ",
+      "inputhandlers.py line 230: LockTarget invokes targeting.ToggleLockTarget on key-down",
+      "targeting.py line 319: ToggleLockTarget describes locking onto current target",
+      "targeting.py line 984: direct target derives from current lock and reticle mouse-over",
+      "targeting.py line 1027: _UpdateLock clears lock when direct target absent"
+    ],
+    "interpretation": "Tab toggles lock on an already acquired direct target. No original keymapping command for next/nearest hostile was found. Tab does not by itself acquire a target outside the reticle.",
+    "safe_next_use": "After visual reticle acquisition and visible target confirmation, Tab can hold that target through movement; initial reticle acquisition is still required. Validate this in a future isolated run before relying on it for gate combat.",
+    "secondary_corroboration": {
+      "url": "https://tabularasa.fandom.com/wiki/Beginners_Guide",
+      "claim": "Tab - Lock-on Target",
+      "limit": "community page/search snippet, not original client or final-live proof"
+    }
+  },
+  "database_restoration": {
+    "copied_auth_char_world_restored": true,
+    "character_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"
+  },
+  "remaining_unverified": [
+    "rebuilt harness behavior beyond smoke",
+    "moving-hostile reticle acquisition and Tab lock under this emulator",
+    "fence route on current client timing",
+    "wounded soldier dialogue and Conrad use in one uninterrupted normal-hostile session"
+  ]
+}

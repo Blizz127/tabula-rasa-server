@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Bounded accepted-1995 normal-combat gate-to-fence original-client attempt",
+  "provenance_tier": "observed",
+  "setup": "Recovered compatibility client 1.16.5.0 and disposable deployed-derived Game/world copy. Character started with mission 1995 already accepted at (93.2,115.0,137.5). No same-session acceptance, teleport, player/stat/mission/timer edit or live Game/DIT change. The controller used the exact successful gate movement/aim/fire holds from the first prefix run without manual screenshot review.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "output5/01-start-loc.png; char-baseline.db",
+      "finding": "Client loaded level 2 with 8695 XP/360 credits and Calling for Reinforcements objective 2 active at the copied Youngblood-area checkpoint."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output5/game.log 07:09:28.341-07:09:33.119 America/Chicago; output5/02-gate-after-fire.png; output5/char-after-stuck.db",
+      "finding": "Seven normal rifle hits of 106 damage killed gate placement 198674. The copied character gained 71 XP and 10 credits, objective 2 remained active, and the client survived."
+    },
+    {
+      "tier": "measured",
+      "source_location": "output5/03-fence-panel.png, original-client /loc overlay",
+      "uncertainty": "Display rounded to 0.1 m; no intermediate movement trace.",
+      "finding": "After the post-gate turns and ordinary movement, client reached approximately (-8.3,97.9,124.3), already west of the fence. This differs from run 1 at the corresponding command-stage checkpoint (12.3,106.5,124.6). The movement/turn holds are identical, but run 1 interleaved read-only /loc chat toggles and captures."
+    },
+    {
+      "tier": "measured",
+      "source_location": "output5/04-north-endcap.png and 05-lower-path.png, original-client /loc overlay",
+      "uncertainty": "Display rounded to 0.1 m; input/path between screenshots unobserved.",
+      "finding": "Applying the run-1 D3.6s and W5s from the different fence starting point moved to (-20.1,97.9,145.4) and then (-43.6,98.5,132.1), inside an original map structure. Further W+A5s barely moved to (-43.4,98.5,131.9). The client was alive with objective 2 still active."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output5/06-barricade-approach.png; focus-probe.png; drive5-chain.log",
+      "finding": "The harness focus classifier returned ui_mode and withheld the next move, with health pixel (151,0,0) and 395 bright pixels in its top-label crop. The screenshot shows indoor geometry and an overhead orange lamp in that crop; no UI MODE header or wounded-soldier dialogue is visible. This is an indoor-lamp false positive in the research harness, not an emulator mission failure."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output5/launcher.log; output5/char-after-stuck.db; char-baseline.db",
+      "finding": "Runner exited 0 and the copied char DB was restored byte-for-byte to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705. Mission 1995 objective 2 was still active at stop."
+    }
+  ],
+  "assessment": "The normal gate fight was reproduced in one client session, but a position-dependent fence route diverged and the run stopped inside an original structure. No outpost engagement, wounded-soldier conversation or Conrad use occurred. The divergence and false positive are controller/harness findings; they do not prove a final-live gameplay defect.",
+  "next_verification": "At the fence, read /loc and branch on actual position before lateral holds. The known D3.6s move applies only near run-1 (12.3,106.5,124.6); when already west near (-8.3,97.9,124.3), stop that branch and measure a short safe way to the lower corridor. Improve the focus guard to identify actual UI MODE text rather than orange lamp brightness before another bounded client run.",
+  "sources": [
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive5.py",
+      "sha256": "4f898d359b163dc8ca5a2eecd838c9f0af7eb8ebffc9fe76dea0cd43c7790966"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/launch.py",
+      "sha256": "05fb3e0e5f89464bb4a2db66d90fb6d1387c4ff4ffa093a75dd003c179e0e7d5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/char-baseline.db",
+      "sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/char-after-stuck.db",
+      "sha256": "7e2d5230549e0356fc45e401273fe23fc1a88b73ce30542d919d8b541055d6ad"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/game.log",
+      "sha256": "4595c1a3a1d0d765a82f2eb9ce4fc92f245bdda983553eb1c97ee1695b8c5b20"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/command-trace.tar.gz",
+      "sha256": "9a748d9ba457fdf66225e6129563528b2a9f83004996294ae7d8d597a4c7e689"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive5-chain.log",
+      "sha256": "f63f2996a29d837608542e9f19cfdd1a9c8ada6d7ea00f679b8fb909585a0f2d"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive5-stop.log",
+      "sha256": "922a47a35212b6592346679e5188fa04a09e3b26a860f3a7e786a41bdc42b024"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/00-playable.png",
+      "sha256": "10dd44a33e74436de5ec59cfb08c4002a7ef6a089b812beea5b40829392ab60f"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/01-start-loc.png",
+      "sha256": "dc23691f9a4c80a1d2401fb83b0c54455b05e6a0bc87c7bedc28b30a073fd6a3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/02-gate-after-fire.png",
+      "sha256": "ba21e2f29cc3e96c775183093187e3ff6439f8b0a03a515feac83ae1a63c3bc4"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/03-fence-panel.png",
+      "sha256": "c5218a985beaef1b1a7229ae5c0ecdfc4e51552df8f35e5384bfbbb0e3db78d0"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/04-north-endcap.png",
+      "sha256": "ba8cfa4955ba8344fb600258851e102d955e9006fee2d6d0a82b44599c2d7c57"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/05-lower-path.png",
+      "sha256": "e11e8c1539cfa879cc202989c46cf36a2c41f357db8d23c581ef7785693efeb1"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/06-barricade-approach.png",
+      "sha256": "691922a7300681210ff6ed2f3a676620f063f6ef748a120e1497bacb43b901f9"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output5/07-final-stuck.png",
+      "sha256": "44821a4d21798f71761388a524082825115aee783c912ef10ce6b4f390a03913"
+    }
+  ]
+}

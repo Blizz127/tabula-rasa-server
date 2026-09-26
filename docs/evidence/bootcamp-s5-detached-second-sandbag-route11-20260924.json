@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Detached isolated S5 retry reaches dry-bank waypoint 11 and stops before wreck sandbags",
+  "scope": "One isolated original-client 1.16.5.0 run, ordinary copied Game DLL, archived post-Conrad-corpse character DB, and only copied objective 1995/1 timer anchor reset. This was a diagnostic, not an uninterrupted original-timer route.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-detached-route11-stop-20260924/manifest.json",
+    "manifest_sha256": "8c21fb82e45011bc3c2e8ce47c41d2d530f8f04a964236a45b1a9e91ae034954",
+    "source_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": ["supervisor-events.jsonl all 7 events", "supervisor-state.json", "driver-second-sandbag.log final 10 lines", "positions.tsv final 8 rows", "focus-second.png captured just before final hold", "commands/ timestamped JSON plus matching result files", "state-after-stop.json", "drive_pre_sandbag.py revised guard"]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor PID 3741791 had PPID 1 and SID 3741791. It owned launcher PID 3741792 and driver PID 3741793. Both remained running for the 302.55-second route until the driver exited 1. This confirms the detached process lived across read-only polling and avoided the prior immediate paired exec-session SIGTERM in this attempt; it does not prove the original signal source or universal stability.",
+      "source_location": "supervisor-events.jsonl; supervisor-state.json; observed ps before terminal"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The client traversed the dry-bank route to waypoint 11. From accepted (-167.89062,91.21875,-16.695312), yaw 0.33373672, the next hold toward (-169.727,95.113,-22.375) produced a stationary packet, then accepted (-168.08594,91.40625,-16.875), yaw 0.31178162. Target distance improved only 0.23 m, below the 0.35 m guard within its 8-second window. The driver stopped before the earlier wreck sandbag positions; no south/right clearance probe or bomb interaction occurred.",
+      "source_location": "driver-second-sandbag.log final 10 lines; positions.tsv final 8 rows"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The final pre-hold focus screenshot shows the player directly beside a steep rock slope, with a sandbag line farther to the right. The screenshot and accepted Y rise of 0.19 m make local terrain interference plausible; they do not establish a fixed collider or prove that 0.23 m was the maximum possible movement. The captured screenshot preceded the final accepted packet by about 1.15 seconds.",
+      "source_location": "focus-second.png (SHA-256 89cdf8b208ab1064cc014c916bf0cd1a95ce168cae38dffe3589aff17e65e89f), mtime 15:09:15.074 local; positions.tsv final packet at 15:09:16.223 local"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Mission 1995 remained state 0, objective 1 active, objectives 2 and 3 complete; SQLite integrity was ok. The timer was reset only in the copied DB and was about five minutes from expiry when the driver stopped.",
+      "source_location": "reset-metadata.json; state-after-stop.json; driver-second-sandbag.log"
+    },
+    {
+      "tier": "observed_tooling",
+      "finding": "The supervisor wrote a normal stop command and observed its result, but immediately sent SIGTERM to the launcher before it had time to exit and write status.json. Launcher exit -15 and absent status.json are therefore caused by this supervisor cleanup race, not evidence of the earlier unexplained SIGTERM. The isolated processes were confirmed absent before DB restoration.",
+      "source_location": "supervisor-events.jsonl terminal_condition through children_terminal; stop command/result files; supervisor-state.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The waypoint 11 stop is both a strict-threshold event and a plausible local rock/slope interference, not a proven hard collision. The last packet's horizontal displacement was about 0.27 m and its target progress 0.23 m; a later hold or lateral heading was not tested. Original-client-derived navmesh queries from this area snap the start 1.4 m in Z and cannot resolve the exact player route. The corrected 8-second guard resolved the previously observed first-packet abort at waypoint 4, but the run did not reach the second sandbag."
+  },
+  "tooling_followup": {
+    "tier": "recommended",
+    "finding": "Before another authorized isolated run, fix supervisor shutdown to wait for launcher exit and status.json after the stop result for a bounded grace period, then terminate only if still alive. At waypoint 11, capture the current view and test a small lateral/heading adjustment under fresh accepted-Move and terrain guards rather than treating the 0.23 m packet as a map defect."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Exact reason for low progress at waypoint 11",
+    "Screen-right passage at the second wreck sandbag",
+    "Original final-live route, timer sufficiency and bomb interaction"
+  ]
+}

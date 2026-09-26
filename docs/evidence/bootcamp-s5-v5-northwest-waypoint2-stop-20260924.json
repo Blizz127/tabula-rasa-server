@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 v5 client route stops beside northwest sandbags after a stationary forward hold",
+  "scope": "One copied original-client 1.16.5.0 run using the ordinary copied Game DLL and post-Conrad-corpse character database. Only the copied mission 1995 objective 1 timer anchor was reset. No live or DIT change occurred.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v5-northwest-waypoint2-stop-20260924/manifest.json",
+    "manifest_sha256": "fe40294d90a454567a6a32182a6f9ae057090cafc18bc722d3357dfc195420fe",
+    "archived_files": 318,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "d6f16a44a8695e79fa1726c161dfde819fe21ae265c2a83afd16024133c24e64",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: final northwest checkpoint 1 through RuntimeError",
+      "output/positions.tsv: final accepted rows",
+      "output/nw-2-1-no-progress.png, SHA-256 b9b13bff779308ea804575d3e40e6e3fa570083c02df6db3247ccb7d9e63fd6e",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_northwest_v5.py: waypoint 2 progress guard"
+    ]
+  },
+  "comparison_source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-rock-slope-v3-northwest-path-20260924/manifest.json",
+    "manifest_sha256": "e5223fa56868fd1593f393d4693579840f611aa14cc59563f2cc460fbcdf9959",
+    "exact_location": "output/driver-second-sandbag.log northwest move 1.3 through move 2.1; output/positions.tsv corresponding accepted rows"
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The v5 client climbed the slope, reached the wreck approach, and advanced through northwest waypoint 1 at (-186.79688,95.015625,-29.53125). Its next accepted movement reached (-187.57812,95.16406,-30.242188) with about 311.9 seconds remaining. A further W hold at that position produced a fresh accepted packet with the same XYZ and a changed yaw from 0.8317052 to 1.535419, so the eight-second progress guard stopped at waypoint 2.1. The screenshot timer showed 05:01 after the guard wait.",
+      "source_location": "output/driver-second-sandbag.log final northwest lines; output/positions.tsv; output/nw-2-1-no-progress.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The screenshot shows the player beside a low sandbag line, with rocky ground rising on the right. It supports local scenery interference as a possibility but does not prove a hard or universal collision from one stationary hold.",
+      "source_location": "output/nw-2-1-no-progress.png"
+    },
+    {
+      "tier": "observed_emulator_comparison",
+      "finding": "The earlier v3 copied-client passage approached the same corridor differently: from (-186.38281,94.79297,-29.046875) it accepted (-188.94531,94.71094,-29.703125) and then (-190.24219,94.72656,-30.042969). Compared with v5's stopped (-187.57812,95.16406,-30.242188), that trajectory remained roughly 0.5 m farther north in Z and lower in Y near the barrier. It is a candidate lateral approach, not proof that the offset alone caused passage.",
+      "source_location": "comparison_source output/driver-second-sandbag.log northwest move 1.3 through move 2.1; this run output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Mission 1995 remained active, objective 1 active, objectives 2 and 3 complete. The copied SQLite database passed integrity check. No bomb approach or interaction occurred in this run.",
+      "source_location": "state-after-stop.json; output/driver-second-sandbag.log"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor stopped at 299.73 seconds after driver exit 1; the copied launcher exited 0 and status.json recorded terminal client, Auth, Game, and display processes.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v4 0.25 m threshold failure was avoided, but v5 encountered a different local obstruction at the sandbags. Repeating the same fixed heading is unlikely to add useful evidence. A future bounded client test should follow the v3 accepted approach or use a guarded lateral adjustment while checking new Move packets, elevation and the timer."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Exact geometry causing this stationary hold",
+    "One uninterrupted route from Conrad through the northwest sandbags to bomb use",
+    "Original final-live route and mission timer sufficiency"
+  ]
+}

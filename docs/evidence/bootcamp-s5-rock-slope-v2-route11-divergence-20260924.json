@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated original-client S5 rock-slope route revision stops at its first local waypoint",
+  "scope": "One copied-client 1.16.5.0 diagnostic using the ordinary copied Game DLL and archived post-Conrad-corpse character database. Only the copied mission 1995 objective 1 timer anchor was reset. This was not a continuous original-timer run.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-rock-slope-v2-route11-divergence-20260924/manifest.json",
+    "manifest_sha256": "b25de24d5eb7c303464dff36bc5468d57984cc4898b41a6ff7ca60bffad47dd8",
+    "archived_files": 203,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "4820393206f5a443a821e1a7c6f55fcb408f387fd021a7bce983516ad680169e",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: move 10 and move 11 lines through final RuntimeError",
+      "output/positions.tsv: final 12 accepted Move rows",
+      "output/focus-second.png",
+      "output/supervisor-events.jsonl: all 6 events",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_pre_sandbag_v2.py: route and progress guard"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The client traversed ordinary movement to pre-route waypoint 10, reaching (-164.78906, 88.34375, -13.7421875), then climbed toward the first inserted local point (-168.54297, 91.46875, -16.929688). Three accepted moves reached (-167.99219, 90.56641, -15.964844).",
+      "source_location": "output/driver-second-sandbag.log move 10 and move 11 lines; output/positions.tsv final rows"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "From (-167.99219, 90.56641, -15.964844), the next forward hold yielded accepted positions (-168.9375, 90.35156, -15.453125) and (-170.3711, 90.81641, -15.8984375). Relative to the first local target, the driver computed target progress -0.417 m and -0.988 m. Its eight-second positive-progress guard stopped the attempt at waypoint 11 before any second sandbag or bomb interaction.",
+      "source_location": "output/driver-second-sandbag.log final RuntimeError; output/positions.tsv final two rows"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "A screenshot before the final accepted moves shows the player on a rocky slope with the mission timer at 06:03 and the target wreck/sandbag area farther ahead. The screenshot does not establish an impassable collision or original final-live intended route.",
+      "source_location": "output/focus-second.png"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor ended after 225.17 seconds because the driver exited 1. It issued a normal stop command, the isolated launcher exited 0, and output/status.json recorded terminal copied Auth, Game, display and client processes. The earlier supervisor shutdown race did not recur.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied database remained SQLite-integrity ok with mission 1995 active, objective 1 active, and objectives 2 and 3 complete. Its saved character position remained the initial checkpoint, so the accepted movement positions must be read from the trace rather than the character row.",
+      "source_location": "state-after-stop.json; output/positions.tsv"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The fixed first local target and yaw adjustment did not reproduce the earlier accepted climb sequence from a slightly different approach position. The negative target progress is a controller route divergence, not proof that the game path is blocked. A future attempt would need a locally adaptive heading or a closer matched approach position under the same accepted-Move and timer guards."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "A client-controlled route past the rocky slope and second wreck sandbag",
+    "Whether the original final-live path used this slope or another route",
+    "Original-timer sufficiency and bomb interaction"
+  ]
+}

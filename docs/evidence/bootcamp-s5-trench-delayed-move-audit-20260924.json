@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 timed corpse-to-wreck trench checkpoint: delayed accepted movement after apparent zero-progress guard",
+  "scope": "Read-only audit of one archived isolated 1.16.5.0 compatibility-client run. No new client run, gameplay edit, live service change, or DIT change.",
+  "observations": [
+    {
+      "tier": "measured",
+      "exact_source": "s5-timed-wreck-collision-stop-20260924/driver.log, move 1 3; positions.tsv rows 1790277630189, 1790277631190 and 1790277634593; run-output/commands/1790277630354881539.json",
+      "finding": "A W hold for 388 ms was issued at timestamp 1790277630354881539. The controller sampled (-105.44531,83.77344,43.03125) at accepted-Move timestamp 1790277631190, unchanged from its previous accepted position at 1790277630189, and raised collision/divergence. The same archived accepted-Move trace contains a later position (-107.19922,83.76953,41.265625), yaw 0.7814674, at timestamp 1790277634593. This is 2.49 m of horizontal progress toward waypoint (-109.168,83.770,39.281) after the zero-progress sample.",
+      "uncertainty": "Accepted movement positions are quantized to about 0.004 m. The 3.403 s gap measures packet timestamps, not the exact input-to-movement latency. The client was later stopped, so the result does not prove passage beyond the waypoint."
+    },
+    {
+      "tier": "observed",
+      "exact_source": "s5-timed-wreck-collision-stop-20260924/02-collision-at-trench.png; run-output/commands/1790277648596176251.json",
+      "finding": "The screenshot was requested at timestamp 1790277648596176251, after the later accepted Move. It shows a metal wall to the player's left and a visible corridor opening on the right, with 00:04:16 remaining on mission 1995 objective 1. It does not establish that the player was blocked at the earlier sampled coordinate."
+    },
+    {
+      "tier": "measured",
+      "exact_source": "s5-timed-wreck-collision-stop-20260924/state-after-stop.json",
+      "finding": "The archived copied-character mission remained active: mission 1995 state 0, objective 1 status 1, original timer anchor 1790277303806 and duration 600000 ms. No bomb interaction occurred."
+    }
+  ],
+  "assessment": "The archived trace contradicts the initial classification of a confirmed wall collision at (-105.44531,83.77344,43.03125). A delayed accepted Move reached (-107.19922,83.76953,41.265625) toward the intended corridor waypoint. The first response may have been sampled before client movement completed or before the relevant accepted packet arrived. No detour or map-placement change is justified from this run.",
+  "next_check": "In one bounded isolated continuation, compare accepted-Move timestamps against the input mark and wait for a new packet after a short W probe before declaring collision. Keep the existing dry high-bank route while checking the next few metres toward (-109.168,83.770,39.281); stop on a repeated no-progress result or timer guard. Do not infer final-live geometry from the emulator diagnostic.",
+  "sources": [
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timed-wreck-collision-stop-20260924/manifest.json",
+      "sha256": "9b3ae39efc25de9e5d0a8f6383675ecbe1660c03c36b71fd5b590b6b303e52b0"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timed-wreck-collision-stop-20260924/positions.tsv",
+      "sha256": "4fd85691e98c53968d48d6f80973a20da352d5a67f8091c887d840de9cda67d4"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timed-wreck-collision-stop-20260924/driver.log",
+      "sha256": "b832e9fe4c4f610b83614effa4a4e197bac3c7d42d10581358c57f84496ad730"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timed-wreck-collision-stop-20260924/02-collision-at-trench.png",
+      "sha256": "39d29c35b2ec6cedb4232b87eb37d24fcdb4304f5ccbed269c974307e5672932"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-timed-wreck-continuation-20260924/run-output/commands/1790277630354881539.json",
+      "sha256": "c77a9a3d2e4d0030e9743b204ce7b6a271566baa5a9f77be2685ca9d4fe1b6ff"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-timed-wreck-continuation-20260924/run-output/commands/1790277648596176251.json",
+      "sha256": "fd408811c74f6d3727b2e87eff5851998fdc85898e757af8c0e6e45c4ffe8dea"
+    }
+  ]
+}

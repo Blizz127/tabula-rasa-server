@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Final-week S5-to-S6 edit reaches the Recruit tier gate, not merely level 4",
+  "decision": "No numeric XP grant or trigger is justified. Retain GAP-S5-HIDDEN-XP and GAP-S5-MISSION-REWARDS. The first Alia Das frame appears to be at the tier-2 eligibility gate; the earlier 10000-11000 estimate in bootcamp-s5-hidden-xp-audit-20260924.json only estimates the level-4 threshold, not the XP needed for the trainer-eligible state. Do not turn that partial estimate into a 1995 mission reward, an exit grant, or an automatic level top-up.",
+  "later_source_exclusion": "docs/evidence/s5-s6-xp-source-exclusion-20260924.json: 1995 is still awaiting ordinary turn-in and 1526 is still an offer at first Alia Das view, after the observed XP jump. Their ordinary turn-in rewards cannot explain that earlier XP; a hidden objective/event, combat or transfer remains possible.",
+  "observations": [
+    {
+      "tier": "observed",
+      "confidence": "high for displayed level, moderate for XP bar fullness because original frames are currently unavailable for reinspection",
+      "source": "docs/evidence/bootcamp-d11-footage-events.json, final-week video 8VXeKzGUv0c, B2-002 at 88.0 s; B2-015 through B2-018 at 98.4 s; docs/character-progression-client-evidence.md, Implementation section lines 244-255",
+      "finding": "The player is level 3 through the last boot-camp frame at 98.333 s, then level 4 at the first Alia Das frame at 98.400 s. The recorded frame audit says the experience bar stays full there. Chat already contains the level-up line tail and message 663, 'You will not advance in level until you visit a trainer and choose a new character class to advance in.' The cut omits the intervening actions."
+    },
+    {
+      "tier": "observed",
+      "confidence": "moderate",
+      "source": "docs/evidence/bootcamp-d11-footage-events.json B2-036/B2-037 at 112.067 s and B2-037 description at 116.3/117.8 s",
+      "finding": "Kincaid's Tier Advancement panel later shows Train bright when Soldier is selected. This is consistent with eligibility, but the recording does not show a completed class-change transaction."
+    },
+    {
+      "tier": "original",
+      "confidence": "high for compatible client protocol, not an original final-server XP rule",
+      "source": "docs/character-progression-client-evidence.md lines 15-55; client/augmentations/npc.pyo Recv_Converse source line 116 and CanTrain line 245; client/ui/tierselect.pyo HandleShowTierSelect line 224 and OnAcceptTrain line 396; generated/client/language/english/playermessagelanguage.pyo key 663, stores 20324/20342",
+      "finding": "The client receives a server-supplied training boolean. Its class-choice request requires that boolean, a living avatar and an immediate-child class. The client does not itself reveal the server XP threshold or the XP award source."
+    },
+    {
+      "tier": "observed",
+      "confidence": "high for the isolated emulator state, no claim about retail payout",
+      "source": "/var/tmp/rasa-s6-after-v14-capture-20260924/char-after-rogers-turnin.db SHA-256 9333c3dd8dcdb88d516b511080c29d74f139eb996d9cc70fdfcc140403c9f5f4, SQLite read-only character and character_mission rows",
+      "finding": "The copied-client Rogers checkpoint completed 1990, 1992, 1994 and 1995, has Training Day 1526 active, and remains Recruit level 2 with 8695 XP. Its 1995 turn-in paid no XP; the current 1995/2005 seed has no reward rows, the S6 transfer has no XP action and Training Day seeds credits plus an item choice without XP."
+    }
+  ],
+  "numeric_reconciliation_using_emulator_table_only": {
+    "provenance_tier": "inferred",
+    "source": "src/Rasa.Game/Data/ExpPerLevel.cs lines 9-13; docs/evidence/bootcamp-s5-hidden-xp-audit-20260924.json observation 4",
+    "table_status": "Emulator thresholds 10500 for level 3, 24000 for level 4, 43000 for level 5; not independently proved final-live values.",
+    "filmed_character": "The previous audit describes the pre-cut level-3 bar as roughly one quarter filled. Treating that as about 13875 cumulative XP gives about 10125 XP to level 4 and about 29125 XP to the level-5 tier gate. Both are rough scenario calculations, not original reward amounts or a reliable interval; unseen kills and an edited transition prevent assigning the delta.",
+    "isolated_checkpoint": "At 8695 XP, the copied checkpoint is 15305 XP below the emulator level-4 threshold and 34305 XP below the emulator Recruit tier gate. Its combat route and XP history differ from the filmed character, so these shortfalls cannot be backfilled as retail rewards."
+  },
+  "source_boundary": {
+    "client_catalog": "docs/evidence/bootcamp-client-catalog.json missions 1995 and 2005: dialogue/objective text bindings only, server_definition_complete=false, rewards among unverified_server_fields. Text 1995 at missiontext stores 101738-101810; 2005 at 102548-102620.",
+    "reward_audit": "docs/evidence/bootcamp-s5-reward-source-audit-20260924.json found no final-live 1995/2005 reward amount in inspected original client, footage, archived mission lists or official notes.",
+    "lost_capture": "The original 8VXeKzGUv0c frames and research sheets previously under /home/blizz/backups are absent. Checked-in event transcript and class-progression audit survive; their frame-level readings cannot currently be independently rechecked."
+  },
+  "current_implementation_locators": [
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampS5ReinforcementsRows.cs mission 1995/2005 rows and content actions; no npc_mission_reward or XP action for either mission",
+    "src/Rasa.DBL/Migrations/BootcampData/BootcampS6ExitToAliaDasRows.cs rule 1985010 actions: transfer and skip-flag only",
+    "src/Rasa.DBL/Migrations/WildernessData/WildernessArrivalTrainingDayRows.cs mission 1526 reward rows: 120 credits and two selectable pistols, no XP",
+    "src/Rasa.Game/Managers/MissionManager.cs CompleteMissionReward 1086-1220: XP comes from RewardExperience",
+    "src/Rasa.Game/Managers/MissionContentRuntime.cs PlanPersistent 190-205: event XP requires explicit GrantRewards action",
+    "src/Rasa.Game/Structures/ClassAdvancement.cs IsAtGate: Recruit level >=4 and experience >= emulator threshold for level 5"
+  ],
+  "next_evidence": "Recover or re-download the final-week source video and inspect frames 98.333 and 98.400 for bar fill and chat history; find an authentic uncut Van Valkenberg/exit/Rogers transition or a final-live reward offer/turn-in capture showing XP. If none survives and the gate blocks playable progression, any provisional grant needs a separate explicitly labelled inferred/analogue amount and trigger with a scope-limited comparison, rather than presenting the scenario calculation as original."
+}

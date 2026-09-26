@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Post-hold settled S5 soldier approach retries and client death timing",
+  "scope": "Five accepted-1995 original client 1.16.5.0 sessions against isolated copied Auth/Game/DB with the private accepted-Move DLL. Ordinary gate combat and movement, no live Game/DIT or gameplay-rule change. These are copied-emulator observations, not final-live coordinates or combat calibration.",
+  "sources": [
+    {
+      "name": "settled_route_soldier_death",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/settled-route-soldier-death/manifest.json",
+      "sha256": "0cc0d185b59968122c52d96ac45dbec9479a91d7995e4b842e137cde52622eab",
+      "exact_location": "output driver.log near 06c through soldier-rightclick, positions.tsv, 10-soldier-target-view.png, 11-soldier-rightclick.png, game.log death line"
+    },
+    {
+      "name": "rapid_branch_pretarget_stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/rapid-branch-pretarget-stop/manifest.json",
+      "sha256": "9bdc1e96a02afcf60234937b799cfc26bf191ca0f06d4cb39384f83363a47951",
+      "exact_location": "output driver.log near 06-near-outpost through final RuntimeError, positions.tsv"
+    },
+    {
+      "name": "north_band_guard_stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-band-guard-stop/manifest.json",
+      "sha256": "060a96d6bffe0937d2e175cb4f3d5244d55006765ceab321f338eb1d7cc30a3c",
+      "exact_location": "output driver.log near 06b-short-outpost-probe-2 and 07-north-strafe-1, positions.tsv"
+    },
+    {
+      "name": "north_start_adaptive_stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-start-adaptive-stop/manifest.json",
+      "sha256": "c4b2ab4be02e8ba4a21363a66b4a9bd0d06166e1d966ab3a17051c7f2bb78f0b",
+      "exact_location": "output driver.log near 06-near-outpost and 07-north-strafe-1, positions.tsv"
+    },
+    {
+      "name": "north_corridor_fourth_probe_boundary",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-corridor-fourth-probe-boundary/manifest.json",
+      "sha256": "7f133b02adf573f61e7a4e54df320728d31dc6af462f1688e6896e0daabcf227",
+      "exact_location": "output driver.log near 06b-short-outpost-probe-1 through -3 and final RuntimeError, positions.tsv"
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source": "settled_route_soldier_death",
+      "finding": "After ordinary gate combat, the copied client moved from (-86.41406,86.25,75.34375) through (-90.81641,85.1875,72.66016), (-94.61328,85.43359,69.40625), (-95.83594,85.84766,73.30469), and (-96.94922,86.26953,75.57031), then reached (-101.01953,85.96875,70.765625). The original client screenshot visibly displayed 'Press [Mouse Button 2] to talk' on the Human. The copied Game logged death by outpost creature 2760 at 2026-09-24 11:30:44.744 local, 0.188 s after the target screenshot command began and 3.276 s before the controller's right-click command. The following screenshot showed Hospital Selection. No soldier dialogue or objective transition occurred in this run.",
+      "limit": "The death reflects this delayed copied-emulator route and hostile pressure. It does not calibrate final-live enemy damage or placement. The screenshot proves a talk prompt just before death, not a completed conversation."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "rapid_branch_pretarget_stop",
+      "finding": "A later route reached near outpost (-91.234375,85.07422,71.859375), D800 to (-94.51172,86.19141,75.67578), and W1000 to (-98.734375,86.01953,72.88281). A private controller guard stopped before target capture because X was just greater than -99. That stop is not a soldier-use result.",
+      "limit": "The position is inside the nominal 5 m client conversation distance from the inferred Human center, but actual target acquisition and line of sight at this coordinate were not observed."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "north_band_guard_stop",
+      "finding": "From (-89.125,85.53906,74.06641), D800 reached (-91.91797,86.35156,77.32031), 0.32031 m beyond the then-current private controller north waypoint cap. The client stopped before the soldier; this is a route-guard outcome.",
+      "limit": "A shorter D hold is inferred from the copied movement rate; this run did not test it."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "north_start_adaptive_stop",
+      "finding": "From (-90.17969,85.40234,73.53125), D800 reached (-94.046875,86.51953,78.03906), again above the route cap. The private controller now chooses D500 when the near-outpost Z is at least 73.0, while retaining D800 for 71.5 to below 73.0 and D1000 below that, except the separate short corridor branch.",
+      "limit": "The D500 choice is an inferred diagnostic duration and has not been client-tested."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "north_corridor_fourth_probe_boundary",
+      "finding": "The copied north fence branch reached approach (-26.253906,93.98828,91.25391), then the early outpost corridor. Three W1800 probes advanced via (-73.93359,87.21484,75.22656) to (-80.609375,86.96875,75.33984); the next route guard stopped. The private controller now allows one guarded W800 probe from X -83..-78 before the north approach.",
+      "limit": "The fourth W800 probe has not been client-tested. The exact hold-to-displacement mapping varies between sessions."
+    }
+  ],
+  "private_controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_soldier_yaw_continue.py",
+    "sha256": "716830ec26d3177e72ff029791c0b3d9f38fb9ab182e2c98f06ab08da6ba59db",
+    "status": "Later private diagnostic revision. It has branch-specific fence guards, strict post-hold telemetry at every movement checkpoint, feedback-guided early outpost movement, an inferred rapid-use path restricted to the prior visible-prompt position/yaw envelope, and persisted timer checks for any future corpse result. The full revision has not completed a client route.",
+    "hash_scope": "Historical revision at this record creation; see bootcamp-s5-corridor-fastprobe-retries-20260924.json for the later private controller hash."
+  },
+  "restoration": "After each copied run, char.db was restored to accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705 and WAL/SHM sidecars removed. No live Game or DIT change.",
+  "status": "One new accepted-1995 run reached the visible Human talk prompt, but the client died before right-click. The other four stopped at bounded route guards. Same-session soldier Continue, objective 2 to 3, and corpse use remain unverified."
+}

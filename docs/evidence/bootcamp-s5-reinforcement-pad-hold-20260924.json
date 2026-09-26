@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-24",
+  "subject": "S5 reinforcement movement after bomb detonation",
+  "source": {
+    "tier": "observed",
+    "video": "8VXeKzGUv0c",
+    "segment": "S5P-05",
+    "ledger": "docs/evidence/bootcamp-d11-footage-events.json event B2-012 (95.4-98.333 s); B1-050 objective completion at 86.8 s",
+    "finding": "The reinforcement group stands on the pad from 95.4 s through the last pre-cut frame at 98.333 s, at least 11.533 s after objective 1995/1 completes. No walk-off is observed before the hard cut at 98.333 s.",
+    "ledger_sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477",
+    "primary_availability": "The original video and cited frame mosaics are currently unavailable locally. The corrected frame ledger is a prior transcription of primary footage and cannot now be revalidated frame by frame in this workspace."
+  },
+  "implementation_conflict": {
+    "tier": "observed_emulator_code",
+    "sources": [
+      "src/Rasa.DBL/Migrations/BootcampData/BootcampScriptedMoveRows.cs rule 1985015, action 14 placements 198681/198682/198680",
+      "src/Rasa.DBL/Migrations/BootcampData/BootcampRetryReinforcementWalkRows.cs rule 1985017, same actions",
+      "src/Rasa.Game/Managers/MissionManager.cs ObjectiveCompleted reaction path",
+      "src/Rasa.Game/Managers/MissionContentRuntime.cs MoveCreatureToLocation action path"
+    ],
+    "finding": "Completing objective 1 triggers the three WalkTo actions immediately. Neither migration has a delay or a later event gate. The original branch contradicts the observed pad hold; the retry branch copied the unsupported timing without a direct original retry capture."
+  },
+  "correction": {
+    "migration": "20260924140000_BootcampReinforcementPadHold",
+    "providers": [
+      "SqliteWorld",
+      "MySqlWorld"
+    ],
+    "removed_rule_ids": [
+      1985015,
+      1985017
+    ],
+    "removed_action_count": 6,
+    "removed_inferred_location_id": 19854,
+    "preserved": [
+      "content_condition 198907 destroyed-wreck fact",
+      "content_placement 198680 Forean Gunner Initiate",
+      "content_placement 198681 Infantryman L2",
+      "content_placement 198682 Infantryman L3",
+      "Van Valkenberg placement 198679 and the original objective transitions"
+    ],
+    "tier": "inferred",
+    "reasoning": "Suppress only the immediate walk mechanic contradicted by direct footage. Stationary placement across the observed window is supported; behavior after 98.333 s remains unknown."
+  },
+  "unverified": [
+    "Whether or when the group departs after the hard cut at 98.333 s",
+    "Any 2005 retry reinforcement movement or its timing",
+    "Exact beam-in timing and reinforcement appearances"
+  ],
+  "supersedes": [
+    "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json immediate walk inference",
+    "docs/evidence/bootcamp-d11-reconstruction-manifest.json GAP-S5-REINFORCEMENT-MOVE closed claim"
+  ],
+  "verification": {
+    "prior_run_limit": "A prior 6/6 ContentSchemaMigrationTests run used the prebuilt test DLL, whose timestamp preceded these source changes; it does not prove the new assertions. The live-base copied-world startup below is the migration integration check.",
+    "focused_test": "A test image based on rasa_net_game:preservation-pad-hold-20260924b copied only ContentSchemaMigrationTests.PadHoldColumnTypes.cs, built Rasa.Test on .NET 5, then ran dotnet vstest with --TestCaseFilter:FullyQualifiedName~PadHoldDataOperationsSpecifyTypesForUnmappedContentTables. Passed 1/1, 0 failed, 57 ms.",
+    "integration": "Disposable DIT image rasa_net_game:dit-pad-hold-20260924b started with --network none and backed-up copies of live SQLite DBs; migration 14:00 applied, Game initialized, target rows removed and squad condition/placements retained.",
+    "limits": "MySQL wrapper compiles and shares the row builder; no MySQL runtime migration was run."
+  },
+  "confidence": "High for the ledger-described pad hold through 98.333 s; limited by current unavailability of its source frames. No evidence for departure after the cut.",
+  "staged_runtime_verification": {
+    "date_utc": "2026-09-24",
+    "image": "rasa_net_game:dit-pad-hold-20260924b",
+    "image_sha256": "dc1d958158d887e6e1c57eaf5f7213c894bdf3daff6ba007997009aac37cbe67",
+    "setup": "Disposable Game container with --network none and SQLite backup copies of live world/character DB; no live DB writes.",
+    "result": "Game initialized and migration 20260924140000 was recorded. Copied world DB had 0 rules 1985015/1985017, 0 corresponding actions, 0 location 19854, condition 198907 present and placements 198680/198681/198682 present.",
+    "initial_failure_and_fix": "First staged image failed before migration because unmapped content_rule_action DeleteData lacked explicit column types. BootcampReinforcementPadHoldRows now specifies types for every data operation. A focused PadHoldDataOperationsSpecifyTypesForUnmappedContentTables test passed 1/1 in a .NET 5 image built from the deployed base."
+  },
+  "live_deployment": {
+    "date_utc": "2026-09-24",
+    "image": "rasa_net_game:dit-pad-hold-20260924b",
+    "image_sha256": "dc1d958158d887e6e1c57eaf5f7213c894bdf3daff6ba007997009aac37cbe67",
+    "command": "docker compose -f docker-compose.yml -f docker-compose.dit.yml up -d --no-deps --no-build game",
+    "predeploy_backup_manifest": "/home/blizz/backups/rasa-net/deploy-20260924-pad-hold/manifest.json",
+    "postdeploy_checks": "Live rasaworld.db has migration 20260924140000 (13:00 Wilderness migration remains unapplied), 0 rules 1985015/1985017, 0 corresponding actions, 0 location 19854, condition 198907 and all three squad placements retained. Game container running, /app/dit mounted, dit/status.json enabled with fresh checkedAtUtc.",
+    "scope": "The image layers only the three pad-hold migration files and unchanged DIT files over rasa_net_game:preservation-20260924c; unrelated worktree changes were excluded.",
+    "build_and_verification_manifest": "/home/blizz/private-artifacts/rasa-pad-hold-deploy-20260924/verification.json",
+    "build_and_verification_sha256": "4e6800c5ded3b83a3d05d94818bbf20fc5d9d6c1aede2757c13b34edb8afff7d"
+  }
+}

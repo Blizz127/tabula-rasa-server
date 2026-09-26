@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 v4 continuation stopped by northwest controller progress threshold",
+  "scope": "One copied original-client 1.16.5.0 run with the ordinary copied Game DLL and post-Conrad-corpse character database. Only the copied mission 1995 objective 1 timer anchor was reset. No live or DIT change occurred.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v4-northwest-progress-threshold-20260924/manifest.json",
+    "manifest_sha256": "a087187bdfbb5b655a288d1893ac3115d08630b587e0ffc7dbefde0ce1b0cb05",
+    "archived_files": 254,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "f1e678f8d596dcb6c5f4783411b6e249fdb9d17ada50f4628036e87cb502e875",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: final move 12, pre route complete, northwest move 0.0, final RuntimeError",
+      "output/positions.tsv: final four accepted rows",
+      "output/02-northwest-route-error.png",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_northwest.py: progress guard"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The client again climbed the rocky slope and reached the wreck approach at (-179.28516,91.44922,-23.589844) with about 348.3 seconds remaining on the reset timer.",
+      "source_location": "output/driver-second-sandbag.log pre route complete; output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The first northwest movement reached (-180.3086,91.67969,-24.300781). The next ordinary forward hold yielded one fresh accepted Move to (-182.71484,92.44531,-25.964844), about 2.9 m horizontally away from the start. The driver's distance to its near waypoint improved by 0.222 m, below its 0.25 m progress threshold, so its eight-second guard stopped. The same end position lies within about 1.35 m of that waypoint's horizontal coordinates, inside the driver's 1.5 m arrival tolerance on a subsequent loop.",
+      "source_location": "output/driver-second-sandbag.log final RuntimeError; output/positions.tsv final rows; drive_northwest.py"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Mission 1995 remained active, objective 1 active, objectives 2 and 3 complete, and the copied SQLite database passed integrity check. No bomb interaction occurred in this run.",
+      "source_location": "state-after-stop.json; output/driver-second-sandbag.log"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor stopped at 268.67 seconds after driver exit 1. The copied launcher exited 0 and status.json recorded terminal client, Auth, Game and display processes.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "This is a controller false stop caused by a strict target-progress threshold at a close waypoint after a substantial accepted movement. It is not evidence of collision or an impassable route. A bounded lower progress threshold with sustained-divergence and local envelope guards is justified for the next copied-client diagnostic."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "One uninterrupted route from Conrad through the northwest passage to bomb use",
+    "Original final-live route and mission timer sufficiency"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Bounded accepted-1995 gate attempt after isolated client harness rebuild",
+  "provenance_tier": "observed",
+  "setup": "Original compatibility client 1.16.5.0 against disposable deployed-derived Auth/Game databases. Mission 1995 was already accepted at the copied checkpoint; no same-session Youngblood acceptance is claimed. The live Game/DIT service was untouched.",
+  "source_manifest": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-corrected1/manifest.json",
+    "sha256": "6e8e11c271395249605d7aa7577c94a251f4612045e9a0f5f6cc1b025702c94c",
+    "files_verified": "70/70"
+  },
+  "followup_harness_attempts": [
+    {
+      "manifest_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-corrected-crop1/manifest.json",
+      "manifest_sha256": "468d66a4952d3ad452977b74ea62edcdd1715bbc79c7f1caec27b08b08e099be",
+      "files_verified": "56/56",
+      "finding": "The original thresholded coordinate crop returned an empty string although /loc visibly showed (60.3,110.3,140.4) after W5. Offline calibration read that text with a tighter unthresholded crop; both start and prior gate screenshots also validated. The client run stopped before aim or fire and the copied database was restored."
+    },
+    {
+      "manifest_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-corrected-crop-loc-fallback1/manifest.json",
+      "manifest_sha256": "5e210a2bf221fe57622d2fa8ee886871243af80aea60946abfbd4dfbab078e9f",
+      "files_verified": "53/53",
+      "finding": "The next W5 screenshot had no /loc coordinates displayed at all despite the command trace. Primary and fallback OCR therefore had no coordinate text to read; the bounded controller stopped before aim or fire. The copied database was restored. This is a command-display/timing boundary, not evidence of a mission or combat rule error."
+    },
+    {
+      "manifest_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-direct-input1/manifest.json",
+      "manifest_sha256": "dc1fe56d1150ddd3c0e74a7fab742f4a1e4a1fcff138722f749af39a19d430c1",
+      "files_verified": "96/96",
+      "finding": "Removing the gate /loc command let the original client acquire 'Thrax Infantry Initiate' immediately after W5. Tab retained its label. Two 4.8-second ordinary rifle holds killed it: copied character XP 8695→8766, credits 360→370; objective 2 remained active. Ordinary movement reached the fence waypoint, where /loc again produced no coordinate overlay; the controller stopped before taking a route branch or reaching the soldier. Copied databases were restored. This verifies the emulator's gate combat path from the accepted-1995 checkpoint, not original final-live combat values."
+    },
+    {
+      "manifest_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-persistent-loc1/manifest.json",
+      "manifest_sha256": "4e769823134502357419cb31630a8b7aa4167d54e656f75a91cc2cd4e2bef1cb",
+      "files_verified": "58/58",
+      "finding": "One-time /loc remained visible after W5 and displayed (59.9,110.3,140.4), confirming the toggle diagnosis. In this run the moving Thrax stayed left of the reticle after the two fixed corrections, so no target label appeared and the controller stopped before fire. No gate or route outcome can be inferred from this aiming miss; copied databases were restored."
+    },
+    {
+      "manifest_path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-gate-sweep-persistent-loc1/manifest.json",
+      "manifest_sha256": "7ee178868d521b0b6bd9573ea6ded2e41dd606b6506f5ba5fc873ca55da28a74",
+      "files_verified": "82/82",
+      "finding": "Persistent /loc showed (60.7,110.2,140.3). Six serial aim screenshots across five +30 camera corrections did not acquire the moving hostile; it remained around x440–490 while the reticle stayed x512. The controller stopped before Tab/fire. The serial capture/OCR/turn loop cannot reliably acquire this melee target, and copied databases were restored. This is an input-controller limit rather than evidence of a gameplay defect."
+    }
+  ],
+  "coordinate_overlay_diagnosis": {
+    "tier": "observed",
+    "source_location": "s5-gate-direct-input1/output/01-start-loc.png and output/03-fence-loc.png with command trace; prior uninterrupted-run waypoint captures 01,02,06–10",
+    "finding": "In the compatibility client, /loc toggles a persistent coordinate overlay. The direct-input run enabled it at start and the later fence command disabled it; older waypoint captures alternate visible and absent after successive /loc commands. The apparent missing display is explained by the test controller issuing the toggle again. Future controller reads should capture the already enabled overlay without repeating /loc.",
+    "limit": "This establishes the recovered client's command behavior in the emulator session; no final-live server fidelity claim follows."
+  },
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "manifest.json: output/02-gate-post-W5-loc.png and output/state-02-gate-post-W5.json",
+      "finding": "After five seconds of ordinary forward movement the original client's /loc displayed approximately (61.7, 110.2, 140.3); objective 2 of 1995 remained active."
+    },
+    {
+      "tier": "observed",
+      "source_location": "manifest.json: output/02a-gate-corrected-aim.png and output/02b-gate-corrected-aim.png",
+      "finding": "The first camera correction did not show the hostile nameplate under the reticle. A further 30-pixel rightward correction did visibly show 'Thrax Infantry Initiate' around screenshot pixels x530–646, y365–395. The client was alive, with the hostile at close range."
+    },
+    {
+      "tier": "observed",
+      "source_location": "manifest.json: drive_s5_gate_corrected.py, drive-s5-gate-corrected.log, target-crop-offline-validation.json",
+      "finding": "The controller's original OCR crop ended at y370 and omitted most of the visible label, so it stopped before Tab or fire. Offline crop 250x110+500+335 reads 'Thrax Infantry Initiate' from the second image and remains negative on the first. This is a test-controller detection defect, not a demonstrated gameplay defect."
+    },
+    {
+      "tier": "observed",
+      "source_location": "manifest.json: captured_state_after_stop and copied_database_hashes_after_restore",
+      "finding": "The run ended before gate combat or soldier/corpse interaction. Copied character database was restored to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705."
+    }
+  ],
+  "unverified": [
+    "Normal-combat gate-to-soldier and soldier-to-corpse uninterrupted route",
+    "Same-session Youngblood turn-in and 1995 acceptance",
+    "Original final-live enemy statistics and exact soldier/corpse placement"
+  ]
+}

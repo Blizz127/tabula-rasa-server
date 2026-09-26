@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Copied-client local backtrack from S5 northwest sandbag stop reaches prior successful approach point",
+  "scope": "One isolated original-client 1.16.5.0 geometry diagnostic. A copied post-Conrad character database was staged explicitly at the v5 accepted stop (-187.57812,95.16406,-30.242188), yaw 1.535419, with only the copied mission 1995 objective 1 timer anchor reset. This cannot establish uninterrupted timer completion or an original final-live route.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v6-local-v3-track-reached-command-race-20260924/manifest.json",
+    "manifest_sha256": "218240bda7a60e5a9f2e81f46d2aa7948ccd4ade41720b945f3139a78b67c2d3",
+    "archived_files": 90,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "3ca629b3edb0eb225809b5d629bee859d81730416549e4726381a9052ae28938",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: staged stop confirmed through final RuntimeError",
+      "output/positions.tsv: all accepted rows",
+      "output/local-0-1.png, SHA-256 7a3b4bb1538c794651a2f204b1b2b6ce3e96dc4fd56c10a5406afb0ae229fabd",
+      "output/commands/1790285828393189047.json and matching result file",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_s5_local_v6.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The client entered gameplay at (-187.57422,95.171875,-30.238281), confirming the staged copied character position within client packet precision. Two ordinary 220 ms W holds reached (-187.57031,94.80469,-29.078125) and then (-186.19922,94.78906,-29.050781), within about 0.18 m horizontally of the v3 successful approach point (-186.38281,94.79297,-29.046875). The reset copied timer showed about 530.5 seconds at that point.",
+      "source_location": "output/driver-second-sandbag.log staged stop and local-0 lines; output/positions.tsv; output/local-0-1.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The first hold toward v3's next point (-188.94531,94.71094,-29.703125) accepted (-186.48828,95.20703,-30.488281), a 0.243 m improvement toward that target. The screenshot still shows a low sandbag line nearby. The next hold was not executed, so the test did not establish a route past that line.",
+      "source_location": "output/driver-second-sandbag.log local-1-0 line; output/local-1-0.png"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The next hold result was `JSONDecodeError: Expecting value: line 1 column 1 (char 0)`. Its archived command JSON is valid after the fact and the copied harness reads command files as soon as they appear. A non-atomic command-file write/read race is the leading explanation; this is a diagnostic control failure, not evidence that client movement or collision failed at the second point.",
+      "source_location": "output/driver-second-sandbag.log final traceback; output/commands/1790285828393189047.json; output/1790285828393189047.result.json; harness.py command polling code in copied harness"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied database passed SQLite integrity check. Mission 1995 and objective 1 remained active, and objectives 2 and 3 complete. No bomb approach or use occurred.",
+      "source_location": "state-after-stop.json"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The detached supervisor stopped after 73.25 seconds with launcher exit 0 and terminal copied client, Auth, Game, and display processes recorded in status.json.",
+      "source_location": "output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v5 stop can be left by ordinary controls with a short backtrack to the earlier successful approach point. Whether a subsequent heading from that point reproduces v3's corridor passage remains unverified. Future diagnostic command publication should be atomic, with a bounded result parse retry, before another local attempt."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Client passage from this staged local point through the next sandbags",
+    "One uninterrupted route from Conrad to bomb use",
+    "Exact original final-live geometry and mission timer sufficiency"
+  ]
+}

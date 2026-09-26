@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Accepted-1995 original-client gate-to-wounded-soldier dialogue boundary",
+  "scope": "Isolated copied Auth/Game/DB and recovered original client 1.16.5.0; normal deployed-derived combat and ordinary client movement/use. The private copied Game DLL logged accepted Move positions only. Live Game and DIT were untouched. All sessions began with mission 1995 already accepted at Youngblood's checkpoint; these sessions do not verify acceptance and soldier interaction in one continuous login.",
+  "source_manifests": [
+    {
+      "run": "continuous_soldier_dialogue",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-north-dialogue1/manifest.json",
+      "sha256": "4e05262a006d394a0e9e8cf527f41b7effab0bffb774f739b00ebf8a3df49b35",
+      "file_count": 200
+    },
+    {
+      "run": "north_overshoot_death",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-continue-north-death1/manifest.json",
+      "sha256": "228833df0903d194e0d0dfb6c079ce8d847e402dd9d38ff2c1dbfffb5fe7df75",
+      "file_count": 211
+    },
+    {
+      "run": "fast_north_target_offset",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-fast-target-offset1/manifest.json",
+      "sha256": "910ed3b31a23010e990e0cefab1d553eb5d861bb7cdc38a22d2e5bff945a62e5",
+      "file_count": 169
+    },
+    {
+      "run": "left_yaw_attempt_stopped_by_north_bound",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-left-branch-overshoot1/manifest.json",
+      "sha256": "7012f57fa8314f06ea431568ef734e9a9572d25c34bfcec3e876fbc0c12f9e2f",
+      "file_count": 153
+    },
+    {
+      "run": "adaptive_continue_attempt_stopped_at_short_strafe",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-adaptive-continue-sandbag-stop1/manifest.json",
+      "sha256": "4ff5b935ef1dee8eca1e8eeb8fadae848f139ebd1a0bc75d72e81df565ab7b2a",
+      "file_count": 155
+    },
+    {
+      "run": "yaw_enabled_initial_chat_stop",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-yaw-chat-focus-stop1/manifest.json",
+      "sha256": "5255555b4e40dc98ad9fc714b6759cb35ef9390bfe54c1f6b5d0e088912179b9",
+      "file_count": 36
+    },
+    {
+      "run": "yaw_enabled_launcher_sigterm",
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-yaw-launcher-sigterm1/manifest.json",
+      "sha256": "81097240789bcb3d96ed732c8b6ee63f4bb3edbf9e769261235fbb7e8939cf74",
+      "file_count": 114
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source_location": "continuous_soldier_dialogue/output/positions.tsv and soldier prompt/dialogue screenshots; copied DB objective rows in manifest",
+      "finding": "In one accepted-1995 original-client session, ordinary rifle fire killed the gate Thrax, north-side ordinary movement reached (-102.043,86.266,70.980), and the client displayed 'Press [Mouse Button 2] to talk'. Ordinary right-click opened the Human Objective Completion dialogue with Conrad/EMP text. The Continue button was visible but the controller's general OCR missed it, so no Continue click occurred; copied objective 1995/2 remained pending. This verifies a continuous gate-to-soldier-dialogue path through the reconstructed encounter, not objective completion."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "north_overshoot_death/output/positions.tsv, output/10-soldier-aim-1.png, copied game log and DB state",
+      "finding": "A later route reached (-103.789,86.652,71.723) after a longer north strafe. The Human was left of the reticle and no talk prompt appeared. Outpost creature 2760 killed the recruit during an aim correction; objective 1995/2 remained pending."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "fast_north_target_offset/output/positions.tsv and output/10-soldier-target-view.png through 10-soldier-aim-1.png",
+      "finding": "A faster branch reached (-103.516,87.367,73.672) alive. The Human and objective marker were left of the reticle; a bounded +40 horizontal mouse correction did not reveal the talk prompt. The controller stopped without right-click; objective 1995/2 remained pending."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "left_yaw_attempt_stopped_by_north_bound/output/positions.tsv and driver log",
+      "finding": "A planned leftward camera correction was not reached. The near-outpost point varied to (-91.066,85.137,72.391), and the first one-second D strafe reached (-94.879,86.270,76.836), 0.336 m beyond the controller's measured north-band cap. The controller stopped safely before soldier interaction; this is a route-controller bound, not evidence of a game mechanic failure."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "adaptive_continue_attempt_stopped_at_short_strafe/output/06-near-outpost-loc.png, output/positions.tsv and driver log; compare continuous_soldier_dialogue north-strafe trace",
+      "finding": "The next accepted-1995 run again killed the gate Thrax. Near the outpost it reached (-94.168,85.215,69.422), then D1 reached (-95.676,85.742,72.629). A following D0.4 yielded only (-95.789,85.766,72.867), so the controller stopped before the soldier. The first D endpoint is about 0.22 m horizontally from the earlier successful D1 endpoint (-95.809,85.766,72.922), where a later D0.5 reached (-97.484,86.270,76.359). The short movement could reflect input or accepted-Move timing, transient contact, or local collision; one probe does not establish a static blocker. No talk prompt or Continue click was attempted, and objective 1995/2 remained pending."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "yaw_enabled_initial_chat_stop/output/01-start-chat-open-0.png through chat-open-retry.png and driver log",
+      "finding": "The private copied Game DLL with accepted-Move yaw telemetry passed copied Auth/Game readiness. A first client attempt reached playable HUD but its initial Return inputs did not open Local chat; the controller stopped before /loc or movement. A later short post-load settle corrected this startup input timing in the next run."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "yaw_enabled_launcher_sigterm/output/positions.tsv, copied game log, launcher session exit 143 and controller log",
+      "finding": "With the post-load settle, the original client submitted /loc, killed the gate Thrax and reached the fence accepted-Move point (-4.832,99.078,125.324) at yaw 1.0596. The copied launcher then exited 143/SIGTERM before the next command result, and the controller timed out; objective 1995/2 remained pending. The copied game log ended with regular Ping traffic and no recorded exception. Accessible journal entries did not identify the signal sender; system/kernel journal visibility was limited. This is an infrastructure interruption, not a gameplay or soldier-route result."
+    }
+  ],
+  "offline_button_check": "The captured Human dialogue's 150x30 crop at screen offset (15,600), enlarged 400%, grayscale threshold 45%, Tesseract psm 11 reads 'Continue'; the pre-dialogue crop reads empty. The candidate click is approximately (75,617), but no continuous-session button click has been verified.",
+  "status": "Gate-to-wounded-soldier dialogue in one accepted-1995 session is verified in the copied emulator. Objective 2 to 3, same-session Conrad use, and final-live soldier placement and combat fidelity remain unverified.",
+  "yaw_telemetry_limit": "The private copied Game DLL SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6 added accepted Move yaw=ViewDirection.X and raw view_y=ViewDirection.Y without gameplay-rule edits. Its one client retry traced yaw only through the fence before unexplained copied-launcher SIGTERM; no north-side yaw correction was tested. The original client and live Game/DIT were not modified.",
+  "next_bounded_check": "At the variable near-outpost start, adapt short D holds to a north waypoint by accepted-Move telemetry. If a single short hold yields little displacement near (-95.7,72.6), capture and recheck with one bounded probe rather than treating static collision as proven; stop on repeated blockage or route divergence. At the soldier, require the original Human talk prompt before right-click; use small measured camera corrections if the actor is visibly off-reticle. If the Conrad/EMP Objective Completion panel and Continue crop appear, click Continue once and verify copied DB objective 2 complete/objective 3 active. Do not infer completion from the dialogue alone."
+}

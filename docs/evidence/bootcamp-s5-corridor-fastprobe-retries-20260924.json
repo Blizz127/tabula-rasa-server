@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 accepted-1995 copied-client corridor controller retries",
+  "scope": "Original client 1.16.5.0 against isolated copied Auth/Game/DB. All route positions and death outcomes are emulator observations, not final-live placements, damage, or mechanics. No production gameplay or live DIT change.",
+  "sources": [
+    {
+      "name": "north-lower-variation",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-lower-variation/manifest.json",
+      "sha256": "2a99e56c05b5be9b0b4c95ffe6fda98c8315ddf35e037403133cc703ad8daf7c",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    },
+    {
+      "name": "corridor-death-before-fastprobe",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/corridor-death-before-fastprobe/manifest.json",
+      "sha256": "e9ee1cf244f9b4a6678cfc928bc351ff6403791005748afb6a69a576ecde9abb",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    },
+    {
+      "name": "gate-range-intermediate-stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/gate-range-intermediate-stop/manifest.json",
+      "sha256": "623cb5069a1aa0f4c52afcdeb536a29288c9a9e3057754b680c6ecef0eba1222",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    },
+    {
+      "name": "fastprobe-corridor-z72-boundary",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/fastprobe-corridor-z72-boundary/manifest.json",
+      "sha256": "c40c7c55ff4738ece45bd2899c617ebc9f3896b71ce546c98fadf703e9b5c267",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    },
+    {
+      "name": "north-corridor-fifth-probe-boundary",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/north-corridor-fifth-probe-boundary/manifest.json",
+      "sha256": "b1fd497b77f07c95e19e2d7b16782f587235e9a7e836e8f2c2572f10e020c9ef",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    },
+    {
+      "name": "early-outpost-x52-guard",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/early-outpost-x52-guard/manifest.json",
+      "sha256": "9a5d20084dc753119b3163b2975364092a55d9d9a63c6f14c895966d6252f2bb",
+      "exact_location": "driver.log, positions.tsv, copied game.log and captured screenshots listed by manifest"
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source": "north-lower-variation",
+      "finding": "Accepted north fence lower point (-14.48047,97.52344,136.91016) stopped at a narrow private checkpoint; no soldier approach.",
+      "limit": "This run stopped before a verified soldier Continue click or corpse use; route guards are private diagnostic constraints."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "corridor-death-before-fastprobe",
+      "finding": "After ordinary gate combat the accepted route reached (-90.46484,85.19141,72.67969). The next held input was rejected by the focus guard as hospital UI appeared under outpost fire, before soldier interaction.",
+      "limit": "This run stopped before a verified soldier Continue click or corpse use; route guards are private diagnostic constraints."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "gate-range-intermediate-stop",
+      "finding": "The accepted W3 gate waypoint (77.14453,109.02734,138.90234) fell between prior private branch guards; no outpost approach.",
+      "limit": "This run stopped before a verified soldier Continue click or corpse use; route guards are private diagnostic constraints."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "fastprobe-corridor-z72-boundary",
+      "finding": "Faster packet-only corridor checks reached (-91.38281,85.171875,72.21875) alive; a private z<=72 guard stopped before the north strafe.",
+      "limit": "This run stopped before a verified soldier Continue click or corpse use; route guards are private diagnostic constraints."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "north-corridor-fifth-probe-boundary",
+      "finding": "A farther initial approach (-26.23438,93.98047,91.33594) led through four guarded W probes to (-78.35938,87.18359,75.35156), then stopped at the fixed probe-count limit before the soldier.",
+      "limit": "This run stopped before a verified soldier Continue click or corpse use; route guards are private diagnostic constraints."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "early-outpost-x52-guard",
+      "finding": "A further ordinary gate and north fence run reached the early outpost point (-52.03906,88.421875,75.390625). The private short-probe branch started only at X<=-55, so its subsequent guard stopped before the soldier.",
+      "limit": "This is a controller boundary from a variable corridor start, not a failed in-game interaction."
+    }
+  ],
+  "private_controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_soldier_yaw_continue.py",
+    "status": "Diagnostic controller after these runs; the early-outpost probe guard now covers X -83 to -45 and permits up to seven bounded probes. This revision has not been client-tested. It is outside the repository and makes no gameplay change.",
+    "sha256": "884e0dafb7e62307ed17cfc2438d097f5865e822c3a29e0048357e8b9281148e"
+  },
+  "restoration": "After each terminal copied run, char.db was restored to accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705 and WAL/SHM removed.",
+  "status": "All six retries stopped at private route guards or copied-client death before a verified soldier Continue click. Same-session objective 2 to 3 and corpse use remain unverified."
+}

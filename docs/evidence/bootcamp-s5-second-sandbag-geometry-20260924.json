@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Read-only route candidate from the second copied-client S5 wreck sandbag stop",
+  "scope": "Original 1.16.5.0 client screenshot and accepted-Move archive, compared with client-derived map navmesh. No new client run, gameplay edit, live deployment, or DIT change.",
+  "sources": [
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/manifest.json", "sha256": "0747ecfc9c238c21ceef9254fd2dd7f2e82be34dc1d69b4ff6430145902ad833"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/positions.tsv", "sha256": "694c16e841a17fd38f8be5a932e2a698c8d5eceb07ff48e78e8d2b74152f0945", "location": "final five accepted Move rows"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/driver-northwest.log", "sha256": "01ea120c7a14b363e4d6409f8d2a6496c2137149da0d8e55e0897200abfac810", "location": "lines 1-11"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/nw-stop.png", "sha256": "9105860852bcadc6b45fa5d1e93df6ec40b9abaa30cca2d1a5535201ce927038"},
+    {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"},
+    {"path": "src/Rasa.NavMesh/bin/Release/net5.0/Rasa.NavMesh.dll", "sha256": "797342d059f3fc29f1d2beb5f1fd6f27c642e4058dd8ff3bc16f1f9242f96f08"}
+  ],
+  "observed_emulator": [
+    "The last accepted Move was (-185.64844,94.3125,-28.242188), yaw 0.7013169. The previous three accepted positions were (-182.03906,92.34375,-26.117188), (-183.64453,93.06641,-25.871094), then the stop. The next 500 ms forward hold toward (-186.8,95.3,-29.6) yielded no fresh accepted Move in the 6.5 s guard.",
+    "nw-stop.png shows sandbags across the character's left/front and apparent open ground to screen right. It shows 00:02:55 on the reset diagnostic timer. The image does not locate the exact collider or prove the open ground is traversable."
+  ],
+  "navmesh_queries": {
+    "method": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Release/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav START_X START_Y START_Z END_X END_Y END_Z, read-only",
+    "tier": "measured_from_client_derived_map_geometry",
+    "results": [
+      {"from": [-185.64844,94.3125,-28.242188], "to": [-202.07,95.773,-35.988], "result": "complete 18.3 m; start snapped upward 0.419 m to Y=94.731; corners (-191.6,94.9,-30.4), (-202.1,96.2,-36.0). This direct corridor disagrees with the attempted forward movement and cannot be used as proof of player clearance."},
+      {"from": [-185.64844,94.3125,-28.242188], "to": [-181.0,95.0,-32.0], "result": "complete 6.1 m; endpoint ground Y=95.311, direct one-corner path. This points approximately toward screen right for yaw 0.701, away from the pictured sandbag face."},
+      {"from": [-185.64844,94.3125,-28.242188], "to": [-178.4,96.5,-35.2], "result": "complete 10.3 m direct path; endpoint ground Y=96.509."},
+      {"from": [-178.4,96.5,-35.2], "to": [-202.07,95.773,-35.988], "result": "complete 27.5 m south-side path via (-178.4,96.9,-38.4), (-183.6,95.9,-39.2), (-192.8,96.1,-38.8), (-195.6,96.1,-38.4), (-202.1,96.2,-36.0)."}
+    ]
+  },
+  "bounded_next_probe": {
+    "tier": "inferred_diagnostic_route_only",
+    "confidence": "low",
+    "action": "In a fresh isolated copied-client checkpoint, first test a short rightward/southeast clearance step from the accepted stop, roughly toward (-183.5,94.8,-30.0), with a 250-500 ms hold. Capture the screen and wait for a fresh accepted Move after the hold, allowing for delayed packets. If position really advances into the visible opening with healthy elevation and no hazard, test the next short point toward (-181.0,95.3,-32.0). Only after client-verified clearance should the longer south-side candidate (-178.4,96.5,-35.2), (-178.4,96.9,-38.4), (-183.6,95.9,-39.2), (-192.8,96.1,-38.8), (-202.1,96.2,-36.0) be attempted. Re-evaluate heading, collision and timer at every point; do not assume the navmesh Y values are exact client ground heights.",
+    "guard": "A single absent packet is inconclusive. If no fresh accepted Move arrives, inspect input focus/client output, wait for a delayed packet and try a small lateral or reverse adjustment once; stop if repeated holds remain stationary or health/timer deteriorates. Do not infer a map defect or alter mission/collision data from this route probe."
+  },
+  "limits": [
+    "The south-side route is a geometry candidate, not observed player traversal from this stop.",
+    "Client-derived navmesh uses emulator Recast agent radius, floor snapping and simplified geometry; it omits some normal-client collision details.",
+    "The copied diagnostic reset only its timer anchor, so its displayed time cannot verify original final-live mission time sufficiency.",
+    "Original final-live route and exact bomb interaction remain unverified by this archive."
+  ]
+}

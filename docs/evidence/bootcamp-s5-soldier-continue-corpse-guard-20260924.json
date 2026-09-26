@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Same-session soldier Continue and guarded corpse approach in copied original client",
+  "scope": "One diagnostic soldier checkpoint at a previously accepted client position, using the ordinary copied Game DLL and original compatibility client. No live or gameplay-rule change.",
+  "archive": {
+    "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-continue-corpse-guard-20260924/manifest.json",
+    "sha256": "41cac722a45c52629b89f6df606540034b292f91f922ab7814f41d70e84fc309",
+    "file_count": 13,
+    "exact_locations": ["game.log lines 138 and 168", "dialogue and Continue-result screenshots", "copied mission-state snapshots"]
+  },
+  "checkpoint": {
+    "tier": "diagnostic",
+    "position": [-100.60547, 86.1875, 72.14453],
+    "yaw": 0.7030426,
+    "limit": "The copied character was placed at this previously accepted coordinate before login; this does not verify the full route from Youngblood."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The original client opened the soldier's Objective Completion dialogue on right-click. Clicking its visible Continue button sent CompleteNPCObjective; copied Game log lines 138 and 168 record the request and completion calls."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "In the same client session on the ordinary copied Game DLL, mission 1995 remained state 0, objective 2 became status 2 (complete), and objective 3 became status 1 (active). Objective 1 timer had not started. Dialogue screenshot SHA-256 a3211bf6010df71b87fa3090d0b0e8874e3349e529e4395734d6cce2b2a1e7b1; Continue result screenshot SHA-256 0aa55135f086680dfe74d5c65dfb34ca4a28826bbf160410edbd14c5beb67099."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "A guarded corpse approach used S1000 to accepted (-97.45703,86.26953,75.85156), then A1650 to (-88.47656,85.12109,68.24219). The latter exceeded the existing X<=-90 private route envelope by 1.52344 m; the screen had no corpse prompt. The controller stopped without a corpse click."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The soldier objective transition works in the copied original client. The corpse approach failed a diagnostic steering guard, not an observed mission or usable interaction. The current reconstructed corpse placement is (-98.0,85.39,67.2), per bootcamp-s5-soldier-corpse-placement-recheck-20260924.json; the older (-102.4,85.69,66.8) seed is obsolete."
+  },
+  "restoration": "All 13 archive files hash-verified. Copied character and private baseline DBs restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; copied Game DLL restored to SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6. No copied WAL/SHM or processes remained; live services and DIT untouched.",
+  "status": "Checkpointed same-session objective 2 to 3 verified. Corpse objective 3 to 1 remains unverified in this session."
+}

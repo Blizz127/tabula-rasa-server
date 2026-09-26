@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Isolated S5 local client continuation reaches the prior northwest passage point",
+  "scope": "One isolated original-client 1.16.5.0 geometry diagnostic. A copied post-Conrad character database was staged at the v6 accepted position (-186.19922,94.78906,-29.050781); the yaw 0.651079 was borrowed explicitly from the nearby v3 accepted point (-186.38281,94.79297,-29.046875), and the copied mission timer anchor was reset. This does not establish an uninterrupted mission route.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v7-local-v3-waypoint2-reached-20260924/manifest.json",
+    "manifest_sha256": "0997a543df6720f5570fa9f40bf57557aeb68c29acc453b922caa734b930f347",
+    "archived_files": 58,
+    "source_character_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_character_db_sha256": "50bfc4c22a0336ea6b5a187ded6be32840c0f03feda1853949bf3e283dfc58d5",
+    "game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/reset-metadata.json",
+      "output/driver-second-sandbag.log: all six lines",
+      "output/positions.tsv: all accepted rows",
+      "output/local-0-1.png, SHA-256 8f09ebdb59f45597c36aae87568a3e1c748085b6ad6c6fb6e2d45e9e3cafbfad",
+      "output/supervisor-events.jsonl",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "state-after-stop.json",
+      "drive_s5_local_v7.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied client loaded near the staged point at (-186.19531,94.796875,-29.046875), yaw 0.651079. Two ordinary 220 ms W holds with focus and fresh-packet guards reached (-187.6289,94.90625,-29.382812), then (-189.01953,94.703125,-29.722656). The latter lies about 0.08 m horizontally from the earlier v3 accepted passage point (-188.94531,94.71094,-29.703125). The copied timer had about 537.6 seconds remaining there.",
+      "source_location": "output/driver-second-sandbag.log; output/positions.tsv; output/local-0-1.png"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The diagnostic driver and copied launcher both exited 0 after 60.08 seconds, and status.json recorded terminal client, Auth, Game and display processes. Atomic command-file publication and bounded result parsing were used; the earlier command JSON read race did not recur in this run.",
+      "source_location": "drive_s5_local_v7.py; output/supervisor-events.jsonl; output/supervisor-state.json; output/status.json"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied SQLite database remained integrity ok with mission 1995 active, objective 1 active, and objectives 2 and 3 complete. This local probe did not approach or use the bomb.",
+      "source_location": "state-after-stop.json"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "A short ordinary-client route from the v6 backtrack point to the earlier v3 northwest passage point is locally reachable when staged with the v3 heading. This supports a guarded fallback candidate after a sandbag stop, but a continuous fallback from the v5 stop without a yaw edit remains unverified."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none after checkpoint",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Continuous fallback from the v5 stop to this point without staging yaw",
+    "Full northwest passage and bomb interaction from this local checkpoint",
+    "Original final-live route and mission timer sufficiency"
+  ]
+}

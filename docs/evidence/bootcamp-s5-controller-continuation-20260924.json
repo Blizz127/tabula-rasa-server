@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Further S5 accepted-1995 client route variation and controller bounds",
+  "scope": "Original compatibility client 1.16.5.0, isolated copied Auth/Game/DB, normal gate combat. No live Game, DIT, or gameplay content changed.",
+  "sources": [
+    {
+      "name": "fence-x3-gap",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/fence-x3-gap/manifest.json",
+      "sha256": "20695e39496cfe7d9199bbb559f471a3b0c2e5681e62f5b097b7a04837107022",
+      "exact_location": "driver.log and positions.tsv; copied game.log/screenshots listed in manifest"
+    },
+    {
+      "name": "gate-x80-intermediate",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/gate-x80-intermediate/manifest.json",
+      "sha256": "751c30252947ce2512c11a8e5e17f29ba903ecd1ce04445b530ce6144d42e6a6",
+      "exact_location": "driver.log and positions.tsv; copied game.log/screenshots listed in manifest"
+    },
+    {
+      "name": "far-outpost-first-probe",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/far-outpost-first-probe/manifest.json",
+      "sha256": "3b13f674e64f5f19783ea93368df89d724dcabf89c6ca9d9856919be5920a6e6",
+      "exact_location": "driver.log and positions.tsv; copied game.log/screenshots listed in manifest"
+    },
+    {
+      "name": "initial-loc-ocr-stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/initial-loc-ocr-stop/manifest.json",
+      "sha256": "32374c664ec7f1326ed85079783fe5e8100a21778761ceb0f1f7cd31296543cb",
+      "exact_location": "driver.log and positions.tsv; copied game.log/screenshots listed in manifest"
+    },
+    {
+      "name": "fence-x26-east-variation",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/fence-x26-east-variation/manifest.json",
+      "sha256": "8f7029dbebd1ac09aaeb1fa96ed7366b071384c47b1e02655db48fab3f9886c4",
+      "exact_location": "driver.log and positions.tsv; copied game.log/screenshots listed in manifest"
+    }
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source": "fence-x3-gap",
+      "finding": "An accepted gate kill led to fence point (3.38281,100.04688,129.76953), between private west and north branch X ranges; no soldier approach.",
+      "limit": "Private copied-client route/controller observation; not final-live movement or combat calibration, and no objective transition."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "gate-x80-intermediate",
+      "finding": "The W3 gate point (80.24609,109.02734,138.63281) fell outside both narrow private gate branches; no gate fight attempted.",
+      "limit": "Private copied-client route/controller observation; not final-live movement or combat calibration, and no objective transition."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "far-outpost-first-probe",
+      "finding": "After ordinary gate kill, the client reached outpost (-46.32422,88.9375,75.375). W1800 advanced to (-48.421875,88.625,75.26953), 2.098 m in X, below the private 3 m minimum and east of its X bound; no soldier attempt.",
+      "limit": "Private copied-client route/controller observation; not final-live movement or combat calibration, and no objective transition."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "initial-loc-ocr-stop",
+      "finding": "The initial /loc screenshot lacked parseable coordinates despite the copied DB at (93.2,115.0,137.5) and initial accepted client Move settling at (93.19922,109.03516,137.5). The controller stopped before movement.",
+      "limit": "Private copied-client route/controller observation; not final-live movement or combat calibration, and no objective transition."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "fence-x26-east-variation",
+      "finding": "After ordinary gate kill, a farther W3 gate point (80.24609,109.02734,138.63281) led to postkill (75.45703,109.02734,139.52734) and fence (25.96484,103.87109,130.29297), outside measured route branches; no soldier attempt.",
+      "limit": "Private copied-client route/controller observation; not final-live movement or combat calibration, and no objective transition."
+    }
+  ],
+  "private_controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_soldier_yaw_continue.py",
+    "sha256": "3df9a1143c7f335f72601843917de2ec92056d1cd218a7219b886894c9da05c0",
+    "status": "After these runs, initial /loc may fall back to DB plus accepted client Move agreement, and early corridor uses up to 18 bounded progress probes. This exact revision reached the farther fence branch but did not reach the soldier."
+  },
+  "restoration": "After every terminal run, copied char.db matched accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705; WAL/SHM sidecars removed.",
+  "assessment": "The fixed control sequence yields materially different gate and fence positions. Further narrow guard extensions would not verify the soldier-to-corpse transition. A feedback-steered route keyed to accepted client positions is needed. The soldier Continue and same-session corpse use remain unverified."
+}

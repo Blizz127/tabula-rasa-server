@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "scope": "Reversible isolated compatible-client diagnostic from the surviving S6 Recruit checkpoint toward Specialist class gear and Alia Das Power Cell purchase",
+  "result": "The client reached Kincaid, trained Specialist, and accepted mission 2011. The copied database saved class 3, level 5 and mission 2011 active. Ordinary movement toward Caufield reached the barracks tent wall at (765.324,293.895,392.242) and did not reach his mission interaction. A nearby marked NPC did not open conversation from that position. The run therefore did not acquire Repair-O-Matic, inspect the vendor, buy template 56, reload, or use the tool. No final-live stock or price claim follows from this diagnostic.",
+  "source_and_staging": {
+    "source_checkpoint": "/home/blizz/private-artifacts/rasa-net-s6-training-day-reward-20260924/capture/completed-run-20260924/databases/char-after.db",
+    "source_sha256": "409cef3d641209a9b1f81aef4f62e7429e9b5781af9be9016334cd3ba3a4bc15",
+    "lost_checkpoint": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/char-after.db",
+    "lost_checkpoint_note": "The prior staged Specialist checkpoint disappeared with the old /home/blizz/backups tree; it was absent when checked on 2026-09-24. No Specialist checkpoint was found under /home/blizz/private-artifacts or the replacement backups tree at that time.",
+    "diagnostic_db_edits": "On a separate copy only, character 1 was set from Recruit level 2/8695 XP to Recruit level 4/43000 XP and placed at (768.0,294.12,386.05) beside Kincaid. This opens the emulator tier gate and is test scaffolding, not earned or original progression.",
+    "staged_before_sha256": "c86dc679eabb2dce2ea8b43558321204381f4bc0f27ee79dbb0d2c81381052c3",
+    "staged_before_integrity": "ok",
+    "client": "1.16.5.0 compatible original client, not independently established as the exact final shutdown build",
+    "isolation": "Copied client, Wine prefix, Auth/Game, databases and output under /home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/harness; bwrap --unshare-all gave a private network/mount namespace. No live Game, DIT or S5 path was mounted writable."
+  },
+  "transport_attempts": [
+    {"archive": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/port-shift-manual-login-stall", "ports": "Auth 2206, interserver 2207, Queue 9001, Game 8202", "result": "Manual login reached server selection. Auth logged AboutToPlay and queue redirect, but the client remained on Sending server request; Game logged no client. Stopped and restored."},
+    {"archive": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/port-shift-direct-login-stall", "ports": "Auth 2206, interserver 2207, Queue 9001, Game 8202", "result": "Direct /server and /character startup reproduced the redirect stall. Stopped and restored."},
+    {"archive": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/queue8001-shifted-auth-game-stall", "ports": "Auth 2206, interserver 2207, Queue 8001, Game 8202", "result": "Direct startup again did not reach Game. Stopped and restored."},
+    {"archive": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/specialist-training-route-stall", "ports": "Auth 2106, interserver 2107, Queue 8001, Game 8102, Xvfb :118; same numbers as known working harness but distinct socket namespace", "result": "Direct startup reached Game and Alia Das, then completed the bounded Specialist training/route diagnostic."}
+  ],
+  "successful_run": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-w2-specialist-vendor-20260924/capture/specialist-training-route-stall/manifest.json",
+    "archive_manifest_sha256": "c6b210adc0b6861c4d087bcffb82795c5474a68a603399f3ea6df87abb5a8bf8",
+    "archived_file_count": 167,
+    "supervisor_pid": 4093750,
+    "elapsed_seconds": 500.73,
+    "shutdown": "Explicit stop command; launcher, Auth, Game and Xvfb exited 0, client terminated -15 during bounded shutdown.",
+    "client_observations": [
+      "output/kincaid-dialogue2.png: Kincaid generic greeting and View Classes topic.",
+      "output/classes2.png, specialist-selected2.png, specialist-confirm2.png: Specialist selected and permanent-class confirmation shown.",
+      "output/specialist-offer.png, specialist-accepted2.png: forced Getting It In Gear: Specialist Class offer and acceptance.",
+      "output/near-tent-wall.png, marker-npc-talk.png: client reached the supply tent wall and could not open the marked NPC's conversation from this point."
+    ],
+    "server_packet_locators": "output/game.log:98 MapLoaded, 185 and 197 RequestNPCConverse for Kincaid, 276 SelectNewCharacterClass, 304 AssignRadioMission; no later RequestNPCConverse or vendor purchase packet in this run.",
+    "accepted_movement": "output/positions.tsv; after class choice, from (768.0,294.148,386.047) via (766.402,293.934,388.246) and (765.395,293.895,391.207) to (765.324,293.895,392.242). Final route controller reported no further accepted progress toward Caufield (760,407).",
+    "before_db": {"class": 1, "level": 4, "experience": 43000, "credits": 480, "mission_1526_state": 4, "mission_2011_present": false, "repair_tool_count": 0, "ammo_template_56_count": 0},
+    "after_db": {"class": 3, "level": 5, "experience": 43000, "credits": 480, "mission_1526_state": 4, "mission_2011_state": 0, "repair_tool_count": 0, "ammo_template_56_count": 0, "saved_position": [765.32421875,293.89453125,392.2421875]},
+    "database_integrity": "ok before and after"
+  },
+  "limits": [
+    "The source character was edited to the tier gate; this run does not verify earned S5/S6 XP or normal progression to class choice.",
+    "The first three queue stalls only establish behavior of the shifted-port diagnostic harness, not a retail protocol restriction. The copied harness's default numeric ports worked inside its private namespace.",
+    "Caufield's objective, class gear reward, vendor stock and price, purchase, reload and repair use remain untested in this continuation. Earlier isolated class-gear results are documented separately in docs/evidence/client-specialist-class-gear.json.",
+    "This verifies current emulator behavior with a compatible client; it does not establish final-live server behavior."
+  ],
+  "cleanup": "Archived the fourth run's output and before/after databases, restored the copied character database to staged-before SHA-256 c86dc679eabb2dce2ea8b43558321204381f4bc0f27ee79dbb0d2c81381052c3, confirmed SQLite integrity and no copied WAL/SHM or W2 supervisor/isolated processes. Live Game and DIT were untouched. Private output command files can contain test credentials and must not be published."
+}

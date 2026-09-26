@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Reusable isolated-client S5 route guards from accepted waypoint9 and waypoint5 packets",
+  "scope": "Research controller only; no world data, gameplay rule, live Game or DIT change. A continuous S5 route using these helpers has not been run.",
+  "source_observations": [
+    {
+      "tier": "observed_emulator",
+      "source": "docs/evidence/bootcamp-s5-v13-waypoint9-threshold-v14-prepared-20260924.json, observations[0]; private archive output/driver-second-sandbag.log terminal waypoint9 exception and output/positions.tsv",
+      "finding": "At waypoint9 a fresh accepted packet moved 0.262 m spatially and gained 0.225 m toward the target; the old 0.35 m guard falsely stopped the controller."
+    },
+    {
+      "tier": "observed_emulator",
+      "source": "docs/evidence/bootcamp-s5-v15-local-waypoint5-north-rejoin-20260924.json, observations[0]; private archive output/driver-second-sandbag.log hold0 and output/positions.tsv",
+      "finding": "From the staged v14 southern stop, one guarded 250 ms forward hold at heading 0.212 radians reached within 0.143 m of the prior accepted northern track."
+    }
+  ],
+  "implementation": {
+    "path": "tools/client_waypoint_steering.py",
+    "functions": ["s5_packet_advances_waypoint", "s5_waypoint5_north_rejoin"],
+    "behavior": "The packet classifier accepts small positive movement at waypoint9 while retaining the earlier 0.35 m guard at waypoints0-8. The northward rejoin is offered only inside a narrow region around the measured v14 stop. Callers must separately check focus, packet freshness, elevation, timer and bounded attempts.",
+    "provenance_tier": "inferred diagnostic controller from observed emulator packets; not a final-live server rule"
+  },
+  "verification": "Two focused Python unittest cases passed for the archived v13 and v15 numeric packets; git diff --check passed. The tests verify the controller functions, not a continuous route or final-live geometry.",
+  "remaining": ["Integrate the helper behavior into the isolated full-route controller", "Run one uninterrupted S5 client check through waypoint9, northwest path and bomb", "Compare route and timing against original final-live footage"]
+}

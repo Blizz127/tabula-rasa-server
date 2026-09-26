@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Diagnostic original-client north strafe near reconstructed S5 outpost sandbags",
+  "scope": "Disposable copy of isolated Auth/Game/DB/Wine harness. The copied character's X/Y/Z and rotation were edited for diagnostic staging; the clean accepted-1995 baseline, live Game/DIT and gameplay source were untouched. This is not a continuous mission route or final-live behavior claim.",
+  "sources": [
+    {
+      "run": "staged_wait_timeout",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-yaw-staged-geometry-wait-timeout1/manifest.json",
+      "sha256": "f574adadc870321987366cd6c87b92d82077f7174264d4c83537bec56116e566",
+      "finding": "Driver's command wait was 45 seconds while playable-HUD timeout was 80 seconds; stopped before D input. No route evidence."
+    },
+    {
+      "run": "staged_north_heading_probe",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-yaw-staged-geometry-pass1/manifest.json",
+      "sha256": "0242ce42a0312023549c0c540cbdda1795b1e8e41c730f47c188b34aaf054f17",
+      "finding": "Original client moved through the sandbag area from staged (-94.16797,85.21484,69.421875) with inferred rotation 1.32 rad. Normal hostiles remained enabled; objective 1995/2 stayed pending."
+    },
+    {
+      "run": "staged_stall_heading_interrupted",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-yaw-staged-stallheading-sigterm1/manifest.json",
+      "sha256": "339396d825f39094093f9a406d0d824dbb9ae9ac6de27a3894fe901b1c2f2120",
+      "finding": "A diagnostic retry with inferred rotation 1.13 rad had no playable HUD or movement result: launcher and controller both exited 143/SIGTERM before D input. Sender unknown."
+    },
+    {
+      "run": "earlier_continuous_strafe_stop",
+      "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-soldier-adaptive-continue-sandbag-stop1/manifest.json",
+      "sha256": "4ff5b935ef1dee8eca1e8eeb8fadae848f139ebd1a0bc75d72e81df565ab7b2a",
+      "finding": "The accepted-1995 continuous run's D400 command began at 1790263120948 ms and its sampled accepted Move row at 1790263124889 ms had no displacement. That post-input zero movement is real in the recorded trace; the staged timing finding does not disprove it."
+    }
+  ],
+  "staging": {
+    "baseline_character": [93.2, 115.0, 137.5, 2.4529311656951904],
+    "diagnostic_character_north_heading": [-94.16797, 85.21484, 69.421875, 1.32],
+    "diagnostic_character_stall_heading": [-94.16797, 85.21484, 69.421875, 1.13],
+    "tier": "inferred_diagnostic",
+    "provenance": "The XYZ is a previous accepted-Move copied-client near-outpost point. The two rotation values are inferred from measured D displacement directions, assuming a local strafe vector approximately (-cos(yaw),+sin(yaw)); neither is a measured original-client yaw at that near-outpost point."
+  },
+  "north_heading_trace": {
+    "private_copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "D1_command_start_ms": 1790264665517,
+    "D1_command_result_utc": "2026-09-24T15:44:31.358Z",
+    "D1_first_row": {"timestamp_ms": 1790264671194, "xyz": [-95.234375, 85.921875, 73.60547], "yaw": 2.890787},
+    "D1_late_row": {"timestamp_ms": 1790264671692, "xyz": [-95.58984, 86.16797, 74.99219], "yaw": 1.3199905},
+    "D400_command_start_ms": 1790264674809,
+    "D400_command_result_utc": "2026-09-24T15:44:39.478Z",
+    "D400_immediately_sampled_row_ms": 1790264671692,
+    "D400_actual_later_row": {"timestamp_ms": 1790264679894, "xyz": [-96.30078, 86.40625, 77.76953], "yaw": 1.3199905},
+    "interpretation": "The immediate D400 sample was 3.117 seconds older than the D400 command start and belonged to D1. Its apparent +1.39 m Z was not a D400 result. The later D400 row advanced +2.77734 m Z from the settled D1 position. The first D1 row's yaw also differed by about pi/2 from the later stable yaw despite no camera turn, so yaw should be read after packet settling."
+  },
+  "controller_fix": "The private diagnostic driver now requires an accepted Move timestamp strictly after each hold command start and boundedly polls until no newer row appears for 0.8 seconds. Its first validation retry was interrupted by SIGTERM before movement, so the timing fix remains code-checked and trace-motivated, not client-validated.",
+  "conclusion": "Original client movement can pass north of the reconstructed sandbags from the staged point at one inferred heading. The prior continuous-run D400 zero movement remains an independent observation. A heading difference, transient collision or input/packet timing could explain the difference; no static map collision defect or retail coordinate is established.",
+  "restoration": "Both the disposable diagnostic character DB and the independent accepted-mission harness character DB were restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705 with no WAL sidecars."
+}

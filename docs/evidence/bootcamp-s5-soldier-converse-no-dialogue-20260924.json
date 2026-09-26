@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "S5 wounded-soldier request with no visible dialogue, compared with a prior successful interaction",
+  "scope": "Read-only audit of one isolated copied-client accepted-1995 route and existing code/data. No live service, game content, DIT files, or copied database were changed for this audit.",
+  "latest_run": {
+    "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-early-north-lower-soldier-request/manifest.json",
+    "manifest_sha256": "56cee9e0744675262d7b7263d8f1d2f6ba33cc858b9d6eb164314f5e48ab9803",
+    "game_log": "same directory/game.log, SHA-256 1b394c7a2584d66c7ed8204da6d6de857ca0b0f51137b490258f3e25dc91dc3d",
+    "screenshot": "same directory/11-soldier-rightclick.png, SHA-256 91863cbdc489dd43e15e88f4e961999463888aa1577735ff032bd157914dda85",
+    "observation": "The accepted client position was (-100.60547, 86.1875, 72.14453). The target view and right-click screenshot show a yellow marker and 'Press [Mouse Button 2] to talk'. Game log line 301 records Alden calling RequestNPCConverse at 2026-09-24 13:44:57.016 local time. No dialogue appeared, and copied character objective 1995/2 remained active. The archived log does not record the request's entity ID or an outgoing Converse packet."
+  },
+  "successful_comparator": {
+    "record": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json, observations citing run 63 and run 66; artifacts array entries for s5-route-probe-66",
+    "source_screenshot_sha256": "276bf5d348c161a3453037a83ad330f9e9cc6d8cdecbeb677e48577bac2f06e8",
+    "continued_screenshot_sha256": "eb5fb7a579c39ba72396c5cb1ccecfa42815b7b57cf3fa433c273195ecc0a7aa",
+    "mission_state_csv_sha256": "66f1222aef945c862a3562c621ecf5b5d69db85b17206552e1f5e6cf101c58c1",
+    "game_log_sha256": "9d123d94bbbaef7de7e690ac3c8923c823c691c011f7c27d5b070d897b55a7d8",
+    "finding": "On a prior deployed-derived copied build, the original compatibility client displayed package-2584 Objective Completion dialogue. Clicking Continue sent CompleteNPCObjective, completed 1995/2, and activated 1995/3. The cited historical artifacts are currently unavailable at their recorded backup paths; this comparison relies on the dated evidence record and its recorded hashes."
+  },
+  "code_and_data_audit": [
+    {
+      "tier": "original",
+      "source": "src/Rasa.DBL/Migrations/MissionClientData/MissionClientObjectiveSkeletonRows.cs, row (1995,2,2584,1,1)",
+      "finding": "The recovered client objective-conversation row binds mission 1995 objective 2 to NPC package 2584, player flag 1, conversation type 1."
+    },
+    {
+      "tier": "inferred",
+      "source": "src/Rasa.DBL/Migrations/BootcampData/BootcampS5ReinforcementsRows.cs, placement 198675 and creature 198509",
+      "finding": "The reconstructed wounded soldier is a creature NPC with package 2584 at (-102.4,86.09,70.0). The latest accepted client coordinate is about 2.8 m from that seed, but the target entity ID was not captured."
+    },
+    {
+      "tier": "observed",
+      "source": "src/Rasa.Game/Managers/NpcManager.cs, RequestNpcConverse lines 98-106 and 233; src/Rasa.Game/Managers/MissionManager.cs, AddMissionConversation lines 1542-1591",
+      "finding": "The server silently returns before sending Converse if the player is not in-world or the requested entity does not resolve to an NPC on the same channel. Otherwise it adds matching active-objective topics and sends Converse, even when the topic dictionary is empty. The request handler itself does not apply the conversation range gate."
+    }
+  ],
+  "assessment": "One received RequestNPCConverse with no visible dialogue does not establish a mission data or gameplay-code defect. A previous copied-client interaction succeeded. The original client uses its current usable entity for the right-click request, and an empty or unsupported Converse dictionary can produce no visible dialogue (bootcamp-s5-converse-client-protocol-20260924.json). The missing target entity ID and outgoing reply trace prevent deciding whether this click selected the reconstructed soldier, hit a silent entity/channel guard, or got a reply without a matching topic. Do not change mission bindings, range, or content on this evidence.",
+  "next_verification": "A later checkpointed copied-client trace (bootcamp-s5-soldier-converse-traced-checkpoint-20260924.json) resolved the soldier and rendered a correct objective-completion reply. The older uninterrupted failure still lacks entity/reply data; verify it only on a future bounded continuous run that actually reaches the soldier."
+}

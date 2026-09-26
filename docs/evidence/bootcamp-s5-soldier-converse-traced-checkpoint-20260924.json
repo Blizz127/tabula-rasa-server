@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Original-client S5 soldier conversation with isolated Game request and reply tracing",
+  "scope": "One diagnostic checkpointed client run against copied Auth/Game/DB, using a temporary copied Game DLL with logging only. Character start coordinates were changed in copied SQLite to the exact previously accepted soldier approach point; this is not an uninterrupted Youngblood-to-soldier route or final-live position evidence.",
+  "archive": {
+    "manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-converse-traced-checkpoint-20260924/manifest.json",
+    "sha256": "8525d953f3077a84b43787d3b77cd5c3914cf9ce2a83eb9c02019d8f2aef9c99",
+    "file_count": 9,
+    "exact_locations": ["game.log lines 144-148", "01-checkpoint-pre-aim.png", "02-after-one-rightclick.png"]
+  },
+  "checkpoint": {
+    "tier": "diagnostic",
+    "source_position": [93.2, 115.0, 137.5],
+    "target_position": [-100.60547, 86.1875, 72.14453],
+    "target_yaw": 0.7030426,
+    "method": "Only copied character id 1 coordinates and rotation, plus a private launch baseline, were temporarily set to a position accepted in the previous ordinary-client route. The original compatibility client then logged in and made one normal right click."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The pre-click original-client screen showed the soldier under the reticle and the talk prompt. The right-click RequestNPCConverse named entity 2759 with Converse action and argument 1; copied Game resolved creature DbId 198509, placement 198675, NPC package 2584, channel instance 2 and context 1985, sameChannel true."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Mission conversation topics contained ObjectiveComplete (1995,2,1), and Game enqueued Converse to entity 2759. The original client displayed Human / Objective Completion with Calling for Reinforcements text and a Continue button. Post-click screenshot SHA-256 f94e07599dc99dab283d72d892c7e072ed15ec2802886ba15eb3b723dd4d3e33."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Continue was deliberately not clicked in this diagnostic. Copied mission 1995 remained state 0 with objective 2 active, as expected before completion."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The server resolves the reconstructed soldier, emits the correct objective topic, and the compatibility client renders its dialogue at the checkpoint. This does not identify why an earlier uninterrupted run sent RequestNPCConverse without visible dialogue, because that older request lacked target and reply tracing. A timing or current-usable difference remains possible; no mission binding or packet implementation change is justified."
+  },
+  "restoration": "All archive file hashes verified. Copied character DB and private baseline restored to SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705; copied Game DLL restored to SHA-256 d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6. No copied WAL/SHM or processes remained; live services and DIT untouched.",
+  "status": "Checkpointed soldier dialogue and correct topic verified. Continue, same-session corpse use, and the earlier continuous-run no-dialogue cause remain unverified."
+}

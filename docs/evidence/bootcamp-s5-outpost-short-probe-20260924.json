@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Continuous copied-client accepted-1995 gate-to-outpost short probe",
+  "provenance_tier": "observed_emulator",
+  "setup": "Restored 1.16.5.0 compatibility client and disposable deployed-derived Auth/Game with copied accepted-1995 character; normal hostile behavior and ordinary client controls. No in-run stat, coordinate, objective, or timer edit. Live Game/DIT untouched.",
+  "source_manifest": {
+    "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-outpost-short-probe-yz1/manifest.json",
+    "sha256": "becd226af28a95e5f37c249e1dda764d3ea374c0c52676026324b0729178eb28",
+    "files_verified": "161/161"
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: drive-s5-outpost-short-probe-yz.log, output/02-gate-after-sweep.png, copied character states",
+      "finding": "W3 primary-fire sweep killed the moving gate Thrax in ordinary client combat; copied XP rose 8695→8766 and credits 360→370. Mission 1995 objective 2 remained active."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: output/03-fence-loc.png, 03a-forward-probe-loc.png, 05-approach-loc.png, 06-near-outpost-loc.png, 07-short-outpost-probe-loc.png, 07-target-view.png",
+      "finding": "A Y/Z-gated short forward probe crossed the original fence and advanced to the outpost. The controller treated ambiguous negative X OCR as untrusted and preserved screenshots rather than fabricating coordinates. The final client target view visibly displays /loc (-87.8,85.9,75.4)."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: output/07-short-outpost-probe-loc.png and 07-target-view.png, copied objective state",
+      "finding": "The recruit was alive near the outpost and receiving red -11 to -15 damage indicators. The wounded-soldier interaction was not attempted in this bounded probe; objective 2 stayed pending. This establishes current emulator pressure at that route point, not original final-live damage or safety."
+    },
+    {
+      "tier": "observed_emulator",
+      "source_location": "manifest: copied_database_hashes_after_wal_safe_reset",
+      "finding": "All isolated copied databases were reset after the run; copied character baseline SHA-256 is c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705. The live service was not relaunched."
+    }
+  ],
+  "assessment": "The accepted-1995 copied client can clear the gate and reach the outpost near the inferred soldier with normal hostile behavior, but objective 2 is not yet completed in this uninterrupted route. This is emulator functionality evidence, not proof of final-live combat or placement fidelity.",
+  "next_check": "Advance in short ordinary movements toward the wounded soldier, bypass original sandbag/corpse collision using the measured checkpointed approach, and verify conversation plus objective 2→3 in the same session before Conrad use."
+}

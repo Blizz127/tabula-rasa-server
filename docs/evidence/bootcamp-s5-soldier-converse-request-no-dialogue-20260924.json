@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "One uninterrupted copied-client S5 route reaches soldier talk prompt but opens no dialogue",
+  "scope": "Original compatibility client against isolated copied Auth/Game/DB; ordinary gate combat and movement from accepted 1995, no live or gameplay-rule change.",
+  "source": {
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-early-north-lower-soldier-request/manifest.json",
+    "sha256": "56cee9e0744675262d7b7263d8f1d2f6ba33cc858b9d6eb164314f5e48ab9803",
+    "file_count": 139,
+    "exact_locations": ["driver.log lines 27-81", "game.log line 301", "11-soldier-rightclick.png", "positions.tsv"]
+  },
+  "controller": {
+    "path": "/var/tmp/rasa-s5-harness-rebuild-20260924/drive_s5_feedback_early_north.py",
+    "sha256": "e9d7ccc226771fcdca069144267d5f4ba95b6465adc5109f662face44638c5cd",
+    "limit": "The new early north fence branch was not exercised because this run naturally entered the lower X2.82 branch."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "Ordinary gate kill yielded XP 8766, credits 370, level 2 and mission 1995 state 0, objective 2 active. Accepted movement reached fence (2.8164062,99.93359,129.0039), lower corridor (-17.21875,96.56641,117.765625), then soldier approach (-100.60547,86.1875,72.14453), yaw 0.7030426."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The client post-right-click frame shows a centered yellow quest marker and 'Press [Mouse Button 2] to talk' prompt, without a conversation or Continue button. The copied Game log at line 301 records RequestNPCConverse at 2026-09-24 13:44:57.016 local time immediately after the controller's click 3."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "No CompleteNPCObjective appears in the copied Game log. Copied DB mission 1995 remained state 0 with objective 2 active. The copied client and services stopped; character DB was restored to accepted-1995 baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705 with no WAL/SHM."
+    }
+  ],
+  "interpretation": {
+    "tier": "inferred",
+    "finding": "The right click reached the Game server. The packet log omits requested EntityId and outgoing Converse, so it does not identify the failure point. A prior copied-client run completed this same soldier conversation; see bootcamp-s5-soldier-converse-no-dialogue-20260924.json for the comparison. The on-screen talk prompt does not prove that the server accepted a valid NPC conversation."
+  },
+  "bounded_retarget_retry": {
+    "tier": "observed_emulator",
+    "archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/soldier-single-retry-fence-x12-stop/manifest.json",
+    "manifest_sha256": "8e23911eb39c21107137e4b7a66d74c21ac5f6668384e03cbfb8e6ccbd604ce7",
+    "file_count": 107,
+    "controller_sha256": "2cdca73ff123a3066cc07daa4ccec5e35a27fa9fcc94d678a30fc878e8d41b90",
+    "finding": "One later isolated run stopped before the soldier at a different X12 fence entry: accepted (12.339844,106.52734,124.66406), W+D400 to (12.375,106.125,127.609375), W800 to (12.335938,106.52734,124.45703). The low-progress guard stopped it with 1995 objective 2 active. It sent no RequestNPCConverse, so the one-click soldier retarget logic was not exercised.",
+    "restoration": "Archive file hashes verified; copied character DB restored to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb60b705 with no WAL/SHM. Live services and DIT untouched."
+  },
+  "status": "The first run reached the soldier but did not open dialogue. A prior copied-client run did; no gameplay fix is justified without request target and reply trace. The bounded retarget retry stopped at the fence before testing conversation. Same-session corpse use remains unverified."
+}

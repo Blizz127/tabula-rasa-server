@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Client-observed short rock-slope climb candidate from detached S5 route11 stop",
+  "scope": "Read-only comparison of two isolated original-client 1.16.5.0 copied-harness traces at the same dry-bank rock slope. Both used reset copied mission timers; neither establishes the original final-live route or timer sufficiency. No new client run or gameplay change.",
+  "sources": [
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-detached-route11-stop-20260924/manifest.json", "sha256": "8c21fb82e45011bc3c2e8ce47c41d2d530f8f04a964236a45b1a9e91ae034954"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-detached-route11-stop-20260924/focus-second.png", "sha256": "89cdf8b208ab1064cc014c916bf0cd1a95ce168cae38dffe3589aff17e65e89f", "location": "last pre-hold view beside steep rock slope"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-detached-route11-stop-20260924/positions.tsv", "sha256": "769510d8146e1713dbf0beb9f01fb41451c53fe2bebc331914ba99745c7414f2", "location": "final eight accepted rows"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/driver-pre.log", "sha256": "218b3968aae2fc27ad0f542371120bb0fe7265f73a57bb966eee7ccae5cca4be", "location": "lines 39-49, prior accepted climb and subsequent wreck-approach movement"},
+    {"path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-sandbag-northwest-diagnostic-20260924/positions.tsv", "sha256": "694c16e841a17fd38f8be5a932e2a698c8d5eceb07ff48e78e8d2b74152f0945", "location": "accepted positions corresponding to driver-pre.log lines 39-49"},
+    {"path": "navmesh/adv_bootcamp.nav", "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52"},
+    {"path": "src/Rasa.NavMesh/bin/Release/net5.0/Rasa.NavMesh.dll", "sha256": "797342d059f3fc29f1d2beb5f1fd6f27c642e4058dd8ff3bc16f1f9242f96f08"}
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The detached run stopped at (-168.08594,91.40625,-16.875) after a 0.23 m target-progress packet. The pre-hold screenshot shows a steep rock face directly ahead/left. This is an approach constraint, not proof that the slope cannot be climbed."
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "An earlier independent copied-client route from nearby (-167.02344,90.80078,-16.042969) accepted (-168.54297,91.46875,-16.929688), then (-170.20312,93.28125,-19.15625), then (-169.96875,94.40234,-20.730469). The first of these lies only about 0.46 m west of the detached stop. That run continued toward (-171.39844,93.859375,-21.339844) and ultimately reached (-179.71875,91.66797,-24.792969), so the slope has been traversed by the normal client in one copied run."
+    },
+    {
+      "tier": "measured_from_client_derived_navmesh",
+      "finding": "Path queries from the detached stop to the prior accepted climb positions return complete paths, with intermediate corners near (-170.4,92.3,-17.6) and (-170.4,93.5,-18.8). But the query snaps the start from (-168.08594,91.40625,-16.875) to (-169.21092,92.46565,-17.15625), about 1.16 m horizontally and 1.06 m upward. Thus the navmesh is a loose geometry cross-check, not reliable evidence that a direct heading from the actual client position will clear the rock."
+    }
+  ],
+  "bounded_next_test": {
+    "tier": "inferred_from_observed_client_trajectory",
+    "confidence": "moderate for local reachability, low for an exact repeat from the new stop",
+    "waypoints": [
+      [-168.54297,91.46875,-16.929688],
+      [-170.20312,93.28125,-19.15625],
+      [-169.96875,94.40234,-20.730469]
+    ],
+    "action": "If a future isolated run reaches the detached stop again, try one very short westward adjustment toward the first prior accepted point. Require a fresh accepted Move and inspect the screenshot/height before continuing. Then aim for the prior accepted climb points in short holds, using a bounded window that examines all fresh packets and positive target progress. If the first point cannot be reached or the player slips downslope, stop; do not assert a hard collision from one small packet. Once the third point is client-verified, resume the earlier accepted route toward (-171.39844,93.859375,-21.339844) and then the wreck corridor."
+  },
+  "limits": [
+    "The earlier copied-client route succeeded locally but is not a retail final-live route capture.",
+    "The first candidate point is under 0.5 m away, near movement telemetry resolution, and may require judging actual clearance by screenshot rather than a 0.35 m target threshold alone.",
+    "No new normal-client test from the detached stop was run; S6 research owns the shared harness currently."
+  ]
+}

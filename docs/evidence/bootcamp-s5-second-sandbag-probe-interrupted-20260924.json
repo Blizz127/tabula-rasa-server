@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Copied-client S5 second-sandbag probe stops early at dry-bank route waypoint 4; delayed accepted Move changes the interpretation",
+  "scope": "One isolated original-client 1.16.5.0 run with ordinary copied Game DLL and archived post-Conrad-corpse character DB. Only the copied objective 1995/1 timer anchor was reset. The planned screen-right second-sandbag probe was not reached.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-second-sandbag-right-probe-aborted-route4-20260924/manifest.json",
+    "manifest_sha256": "fd7ac4eb9f5babf84f4858c6d8b731cee801b64e0708a11ee2992d89c954eb54",
+    "original_post_corpse_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "ordinary_copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": ["driver-second-sandbag.log final 13 lines", "positions.tsv final 6 rows", "route4-divergence.png", "reset-metadata.json", "state-after-stop.json"]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The copied client reached dry-bank route waypoint 4 after the accepted position (-127.87109,83.375,30.285156), aiming for (-135.742,84.769,30.594). The first accepted spatial Move after a forward hold was (-128.15234,83.85156,27.289062), 0.40 m farther from that waypoint. The driver treated this as divergence and ended before the second sandbag.",
+      "source_location": "driver-second-sandbag.log final 13 lines; positions.tsv rows with timestamps 1790279792681 and 1790279793182"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The trace then received a stationary accepted packet followed by (-129.77344,84.16016,27.363281) at timestamp 1790279798381, while the driver was already stopped. Relative to the pre-hold point, this delayed packet had moved about 1.09 m closer to the waypoint, reversing the first-packet conclusion. The screenshot after driver exit shows the route rock and wreckage with full health and about 00:06:50 on the reset timer.",
+      "source_location": "positions.tsv final 3 rows; route4-divergence.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Mission 1995 was still state 0; objective 1 active and objectives 2 and 3 complete. SQLite integrity was ok. No second-sandbag position, bomb prompt or bomb interaction was reached in this run.",
+      "source_location": "state-after-stop.json; driver-second-sandbag.log"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "A single first post-hold Move packet with poor target progress can precede delayed movement toward the waypoint. The early divergence guard was too strict for this client/telemetry timing. It remains unknown whether this delayed movement would have safely completed the dry-bank route; the archive does not test the second sandbag or bomb. A future isolated driver should wait a bounded interval for positive target progress across all fresh accepted packets, while still stopping on sustained wrong-way movement, unsafe elevation, health loss or timer expiry."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Screen-right passage at the second sandbag stop",
+    "Continuous normal-timer corpse-to-bomb traversal in this run",
+    "Original final-live route and exact sandbag collision"
+  ]
+}

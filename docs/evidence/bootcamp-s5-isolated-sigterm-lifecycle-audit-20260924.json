@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Read-only comparison of isolated S5 runner SIGTERM events",
+  "sources": [
+    {"path": "docs/evidence/bootcamp-s5-timed-loc-v6-20260924.json", "location": "termination_investigation; archived V6 captures currently missing"},
+    {"path": "docs/evidence/bootcamp-s5-detached-runner-lifecycle-20260924.json", "location": "result; archived source captures currently missing"},
+    {"path": "docs/evidence/bootcamp-s5-second-sandbag-retry-sigterm-20260924.json", "location": "observations and private archive manifest"},
+    {"path": "/var/tmp/rasa-s5-harness-rebuild-20260924/launch.py", "sha256": "9031d627e202e01315b353eb9373a4677120429332a524078922c410702117a6", "location": "make_args: bwrap --die-with-parent; main: subprocess.run"},
+    {"path": "/var/tmp/rasa-s5-harness-rebuild-20260924/harness.py", "sha256": "feaf0d67c272ed77b202c0622ab2c042c96bbd577f9fc6ff16ccb2816b247c1b", "location": "run and shutdown"}
+  ],
+  "observations": [
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "The new retry's separate launcher and driver exec-session handles both returned 143; process inspection afterward found no isolated harness. Its private archive shows a loading-screen capture at 14:59:40 local, game log last write at 14:59:35, and empty driver log; no route input was made. The runner had no status.json because its normal cleanup path did not complete. This resembles the older V6 record, where the outer runner returned 143 and a valid pending hold command had no result. Neither record identifies the signal sender."
+    },
+    {
+      "tier": "observed_host",
+      "finding": "Read-only user journal query for 19:58:30–20:00:30 UTC showed unrelated user services but no matching kill or OOM message; kernel journal was inaccessible to this user and returned no entries. Available logs do not prove absence of a host-level signal."
+    },
+    {
+      "tier": "prior_record_limited",
+      "finding": "A prior detached setsid/nohup isolated runner, documented in bootcamp-s5-detached-runner-lifecycle-20260924.json, stayed responsive for 3 minutes 43 seconds and stopped normally. Its original capture files are in the missing former backup tree, so the current audit relies on that dated evidence record rather than rehashing the source files."
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "confidence": "moderate",
+    "finding": "The repeated simultaneous 143 exits of outer launcher/controller sessions, combined with bwrap --die-with-parent and no Game exception, make an exec-session/process-group lifetime interruption more plausible than a gameplay crash. The sender and exact mechanism remain unknown; 143 alone cannot distinguish tool cleanup from an external host signal."
+  },
+  "next_action": {
+    "tier": "tooling_recommendation",
+    "finding": "For the next authorized isolated copied-client attempt, run a bounded supervisor detached from the exec PTY with setsid/nohup. The supervisor should own launcher and driver, persist PID/start time/exit codes and logs, enforce the existing 900-second cap, send the normal stop command in finally, and leave the copied DB untouched until both children are confirmed terminal. Poll the persisted PID and output command results from separate read-only tool calls. This does not alter gameplay or the live/DIT server."
+  },
+  "unverified": ["Exact SIGTERM sender", "Whether the detached supervisor prevents all future interruptions", "Second-sandbag route outcome"]
+}

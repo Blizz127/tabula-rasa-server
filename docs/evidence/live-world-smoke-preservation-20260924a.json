@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "Disposable live character world-entry and deletion smoke after DIT preservation deployment",
+  "provenance_tier": "observed",
+  "confidence": "High for this recovered 1.16.5.0 client and existing test account; owner client path and final-live fidelity remain unverified.",
+  "setup": {
+    "server_image": "rasa_net_game:dit-preservation-20260924a",
+    "server_image_id": "sha256:a2e945d97f4ab4d4b9f153fa5235f70b71ee424c7411c1957d55bbaeda3c6493",
+    "client": "Recovered 1.16.5.0 client under Wine/Xvfb :109, cloned isolated prefix, /AuthServer=100.104.53.1:2116",
+    "account": "Existing empty test account id 1; owner account untouched."
+  },
+  "observations": [
+    "Before creation, test account id 1 had zero characters, empty family name, selected_slot 0. The recovered client showed empty Character Select.",
+    "Client created unique disposable character Smokesept Probeonly in slot 1. SQLite reported id 12, map_context_id 1220, num_logins 0 after creation.",
+    "Client Enter Battle reached a playable level-1 HUD in Wilderness (1), near Alia Das. This was the then-running admission configuration and is a progression fidelity issue to investigate; no gameplay interactions were performed.",
+    "Client Logout returned to Character Select. Delete prompt required typing Smokesept; after confirmation, slot 1 showed empty and SQLite character id 12 was gone.",
+    "Deletion left 2 ability drawer, 5 inventory, 5 skills, 1 teleporter and 5 item rows associated with deleted id 12. After a SQLite backup, the test account family/selected slot were restored to their prior values and only those exact orphan rows/item ids 135\u2013139 were deleted. Final audit found zero id12 child/item rows, zero test characters, owner character count three, and no foreign-key violations.",
+    "Source fix now deletes character-owned rows and exclusive items within one transaction. Two focused SDK5 tests and all 86 NewCharacterTests pass. This source fix was not part of the image used in this live smoke."
+  ],
+  "limits": [
+    "The old Game container was recreated before its 06:51\u201306:57 Docker log lines were exported; screenshots, client log, SQLite backup and post-cleanup audit are retained.",
+    "This test does not show a final-live boot camp start or an owner-device login.",
+    "The test account login metadata changed as part of this authorized smoke; its family, selected slot, characters and character-owned content were restored."
+  ],
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/02-selection.png",
+      "sha256": "4ced2510f418c53c939464c87821f9f105f794e9e4617a7f7346659bf7721406"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/12-after-submit.png",
+      "sha256": "abee1d864de394f917487fc9ec0ec66389ca2c70f116b7afddc1b0c351223798"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/14-after-confirm.png",
+      "sha256": "593ad8f9ca92205c23c45074bb259e7fe10d6833aba6365320dc96ac499cce77"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/18-world-55s.png",
+      "sha256": "0145f7f308c1fe626c29d7ef3f09aaa7b33d1aac4bbe97694699e023a172e0aa"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/26-delete-prompt.png",
+      "sha256": "f93cf94eef76d10996a936ff19e225bc4ac734039caa5b7293510c52717b6ad7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/31-after-delete.png",
+      "sha256": "341bca8308288641a451adad9e9c6272e3cb187ff31097e72f99b10f64a4eb88"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/launcher.log",
+      "sha256": "dd2f5b068c6fd2b430789404f58dec69e88a7a6670b04261a7868d7c6e5114ed"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/client.log",
+      "sha256": "d69e987281180a09aa87933cb0e9be862ab5e709be3f730ed67c831d5f9a5924"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/rasachar-before-orphan-cleanup.db",
+      "sha256": "6b6ee29faf7d72ede27f689753660253c0895deb32e8db4e1853a2190591340b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/db-after-cleanup.json",
+      "sha256": "9fd73e8830a54906b1761072cffb1c2a7dd2c06124c5093fb499aabb01b76d8b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/rasa-delete-vstest-sdk5-20260924.log",
+      "sha256": "f495d9ea45c00d826a96522c59382b4a7f58cef591f5297ea3f649bc2d23b018"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/live-world-smoke-preservation-20260924a/rasa-delete-class-sdk5-20260924.log",
+      "sha256": "aada3540405193e2deca808bb51756cc7a91848ec9e079127e78580bd0b56433"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.DBL/Repositories/Char/Character/CharacterRepository.cs",
+      "sha256": "3edaaae690a35061231d8971e7bf033b53ff1fa6b5af634304b91441e7433738"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Game/Managers/CharacterManager.cs",
+      "sha256": "11325575918fb7b1ac216098e8b41cdf4c8161107a41934734e2f4b5601fae6b"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Test/NewCharacterTests.Deletion.cs",
+      "sha256": "c03c0c86de94ddccfb27b5a8d5c9ffe924198e120f6ceac104486954add96c71"
+    }
+  ]
+}

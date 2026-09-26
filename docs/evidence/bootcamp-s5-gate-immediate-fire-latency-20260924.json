@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Bounded accepted-1995 gate acquisition/fire attempt with normal hostile behavior",
+  "provenance_tier": "observed",
+  "setup": "Recovered compatibility client 1.16.5.0 and disposable deployed-derived Game/world copy under /var/tmp. Character started with 1995 already accepted at (93.2,115.0,137.5); no same-session acceptance claim. No player stat, NPC stat, position, mission or timer edit; live Game/DIT untouched.",
+  "observations": [
+    {
+      "tier": "observed",
+      "source_location": "output4/01-start-loc.png, copied char-baseline.db",
+      "finding": "Level-2 client loaded with Calling for Reinforcements objective 2 active, 8695 XP and 360 credits."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output4/02-gate-before-aim.png and drive4-start.log",
+      "finding": "Five seconds of ordinary westward movement reached (61.6,110.2,140.3). The moving hostile was visibly left of the reticle near the player. A visual target coordinate was identified from this screenshot before an attempted immediate camera turn and rifle fire."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output4/command-trace.tar.gz, drive4-fire.log, output4/game.log death line at 07:04:02.522 America/Chicago",
+      "finding": "The -500-pixel camera turn command ran, but the focus guard rejected the subsequent mouse-down because the client was already on the death UI. No StartAutoFire or player Creature hit was logged in this run. The gate hostile killed the player at (61.6,110.2,140.3) from (59.2,110.2,139.3); objective 2 stayed active."
+    },
+    {
+      "tier": "inferred",
+      "source_location": "output4/02-gate-before-aim.png file mtime and game.log death timestamp",
+      "finding": "The screenshot-to-fire control loop took roughly 40 seconds while the hostile remained at melee range. This tests controller latency, not the playability of an immediate human response or final-live enemy balance."
+    },
+    {
+      "tier": "observed",
+      "source_location": "output4/launcher.log, output4/char-after-gate-death.db and restored isolated char DB hash",
+      "finding": "The isolated runner exited 0. The copied char DB was restored byte-for-byte to baseline SHA-256 c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705."
+    }
+  ],
+  "assessment": "The bounded attempt failed at the first gate before firing. It neither tested preemptive outpost engagement nor reached the wounded soldier or Conrad. The earlier separate normal-gate-kill run remains valid emulator functionality evidence; target acquisition needs to occur inside a continuous input loop without the delayed screenshot/review gap. No final-live combat fidelity conclusion follows.",
+  "next_verification": "Run a continuous client controller that acquires the visible moving gate hostile and fires without a screenshot/review pause, checks logged hit/XP, then follows the measured outer path and engages outpost placement 198683 before entering the bunker.",
+  "sources": [
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive4.py",
+      "sha256": "93b8f3170da5453cf9628565f3a849655327ef41bafb6f22b81cd0ba8db024ff"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/launch.py",
+      "sha256": "05fb3e0e5f89464bb4a2db66d90fb6d1387c4ff4ffa093a75dd003c179e0e7d5"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/char-baseline.db",
+      "sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/char-after-gate-death.db",
+      "sha256": "31eb5fa8447af1cd2f5633cc5acf97ebfc79ce1921a5ae2243b9804dccf23d8d"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/game.log",
+      "sha256": "8551026ac2db21c3ef46fc84564ddafb6c1b8a3553aeffeb51ae805cc46ed51e"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/command-trace.tar.gz",
+      "sha256": "1154bfa1173dbe7e402e144c47dd880cc466befa8fcfea3fef717e0b66df7b72"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive4-start.log",
+      "sha256": "c442fd6d586f6591d2af474f47fb8554caf62ea1c5b5c8cdeded2c189f7543e9"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/drive4-fire.log",
+      "sha256": "3a75c23175bc8c51e26ffaa4e80e1772c20189755b8b52b06fa62d85ef4da7be"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/00-playable.png",
+      "sha256": "d31080c88a9faccbfa14fa9228a6fd74e35fa7752628b66f1b1645023969e9ab"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/01-start-loc.png",
+      "sha256": "0609ddc963b2a0c251c99ca784020d91dec10c7a04e2c2366b3c77ce600129a2"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/02-gate-before-aim.png",
+      "sha256": "5395d6f2726e53a39de10706884c5723e6d41e1c8195d9c7e1e443c743231586"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output4/04-gate-death.png",
+      "sha256": "bfd97e101d2ae9355d836655eb6cdcf63afeff2b76a8c54978818b8df49a8c4a"
+    }
+  ]
+}

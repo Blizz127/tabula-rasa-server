@@ -1,0 +1,667 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T10:11:29.327793+00:00",
+  "subject": "V9 detached isolated original-client corpse-to-bomb timed attempt",
+  "setup": "Fresh copied pre-corpse checkpoint; synthetic objective1 status0 row deleted before launch. Detached runner and driver. After corpse use no DB/position/timer edits. Live Game/DIT untouched.",
+  "result": "Corpse use activated objective1 600000ms timer. At +153.1s the measured short bridge sequence started from (-141.6,84.8,29.7). A350, A350, W400 reached (-144.3,84.8,23.7) at +174.6s, safely above Y84.5. Fixed expected-point tolerance 2m rejected that ahead-of-sample reading against (-142.5,84.8,25.2), and the controller stopped normally. Objective1 remained active; no bomb use or timer expiry. This is a controller false divergence; no bridge fall.",
+  "restoration": "Copied DB restored after runner exit: [(2, 2), (3, 1)], PRAGMA integrity_check ok.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-driver-v9-20260924.py",
+      "sha256": "3c8e4f31c1e4ab8f41917b8e806579fc0b3d6a600a402db14575ab562204576f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-timed-loc-v9-20260924.py",
+      "sha256": "724308cb5eea9bee81d486c32abc3225e9a6825265c4c23ffde1ef251af1764b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/v9-detached-launch.log",
+      "sha256": "f36f173461876560065234bbff18f7cbffe9548e54669be664822798f34258f6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/v9-controller.log",
+      "sha256": "b9c1890400af97ca34782d80da0700f075c8867dc0222c70bf19b2efffdeada3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/v9-detached.pid",
+      "sha256": "6533eccb9ff109a798c15b7f94c3c5078c8f2013a2f87d5fd922aa7b4fb9247d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/v9-controller.pid",
+      "sha256": "a3320ee90bfcbadbc4d7b20e3fc8cd3c2a23553df6f70a04cd45c0a2d33d12ca"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/timed-route.jsonl",
+      "sha256": "cbf71119f737e0bb68d28203a6fc6a3d63709d45c847d73172b8846517746544"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/game.log",
+      "sha256": "83eb5f6f34c732dff4e7785961ee566c94fda3567d466f8a31110aae27fefdae"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/char-after-guard-stop.db",
+      "sha256": "22c1f426a23c3c6f0964c5bf871a52cc3b8390c2b49f2819d4a269dd51a1c305"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/objective-after-guard-stop.json",
+      "sha256": "d5ad8444e925e3eb9af527eff90e59beccc9abef65bc3e9a7c312371a006e927"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/client_waypoint_steering-at-run.py",
+      "sha256": "49d803ebd26090e68d41ca86dd233f9b4101f8583665f8fe074751944e0070db"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/tools/client_focus_guard.py",
+      "sha256": "2d36a7e32e59cb0a13deb781c7895aeb960ca532bdee86e14d9a3041c51dd22c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/00-playable.png",
+      "sha256": "af88df365565ac93d1e9c53cdaafbc57d8a1bcce2eb75d858a011f93d76f6a19"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/01-before-corpse.png",
+      "sha256": "5a56f4d0f26111ed687d76a49100afb8e38a1645e11aed6354e28fe5e43fbc1a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/02-corpse-use.png",
+      "sha256": "b3ed1f3a26c0cdfed403a1c4366cf0697d4c39d02d93a2a4c26667a5ee0ceb6d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/03-loc-start.png",
+      "sha256": "70e1bff44519277ee952a3debd51231121224b19308faba6e6e30d8284ac6291"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/focus-probe.png",
+      "sha256": "f9652598b715b15c0f3de40064f3da2ebd4b955096b1564b3bd893fc039b6434"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-000-98dc855d9cf94a68a736337dc34c05ac.png",
+      "sha256": "b7696ced2125c2a166f130be90c4fc9af0ffb50747e87d40fb08977da15cba09"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-001-d5bc429cae3444f689c1ea782765f8ea.png",
+      "sha256": "50a6a6a86734663c80ce7559407ffdcc7e646ceaf161b2b634496a882287cb7d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-002-277913a87ef94d22b63c8d7c810a6a1e.png",
+      "sha256": "53feefd6d35a7fb8188384a6c9204dadd43b6fb3aa6bd31d1ec36fa381d27aff"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-003-dd19377dcf7d4bff8421230d7e1893f5.png",
+      "sha256": "0f943cb13ef49cf69e08583d015d301c3f378d4613b7c0efcd6f54595cd009bc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-004-c388f7f8e652410eb014e854eef2e8f7.png",
+      "sha256": "32a20ba0577b99176a504807b48adb261fe67b1a4a2edd5c6f7269719395229b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-005-8b09926c9e4d4acf90a146aa79ec4fb0.png",
+      "sha256": "42de34165a0a5cc1b4de0f33f0d71e8d08cb29bb78c68c46b4b45fee159870ca"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-006-7a014ede72274dbb938efa41e97aba20.png",
+      "sha256": "4360d31979851dfe8defb9912a3ca12ba8718d982f32799b129aae0e49d7848a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-007-60e06a149a084c96a2c9c39b0b9b15f4.png",
+      "sha256": "d878c06487286766f2dbde96d47f3340cdf150ba20c5e9a963d4ed653b804fe9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-008-d6f46b13fde1469694ae1df3ccc511cb.png",
+      "sha256": "cae0059f3176dbbf31176c4a464dfbcc56537d5697f612fe22bd147b04782c06"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-009-adc68b30b72a4b0382c000c9e20d6059.png",
+      "sha256": "2fd4f51bf431a916dc977d34fb40ed40e7bc25f7a21165289ed3175f944ecc6f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-010-9fc84b574f17472f9834a2df63d114b4.png",
+      "sha256": "9de66a8d68f608accd40d33309bb3003047382d6046090fbe381d4227223621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-011-24c068f51b684a75b219ec03a455633b.png",
+      "sha256": "4536530de57fb2c96fe7c9fdcc84fb6b12e4339e6df4e9c99ad248803efbc76a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-012-af3a4427c0b4446e8db81825639b8920.png",
+      "sha256": "c4e02900ff4066538cee907afd7110af8cc33a80ff6f4bb2995ba50c6c33f08d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-013-93e020259f2d4dd0adf32ec25e325ed9.png",
+      "sha256": "c5c76cdcdb18661dacc4fe60cba69bb669516e81dd3e2980b69e50b0bc9997af"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-014-29f34718a9e5430fa8a8a517bfb82029.png",
+      "sha256": "c7b4c938a74f275f9183b0996d90864c003a221241c2d1ae06cfa0f9f2b33cf9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-015-43b45f0e01c44cd19a314b46d05d082e-bridge-w1.png",
+      "sha256": "c76570fa6768080e20a5815d924d4ffda79523da37d6a3a66e29cea45f1b0f44"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-015-eda87a94c1604bfb96764ca2871740db-bridge-a1.png",
+      "sha256": "b037f145c91868b0b8bb5426f4cc17c1580218bdd70603e9884d5c150b3d029c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/route-015-fc053337fb7e401aa10a276af5786639-bridge-a2.png",
+      "sha256": "5718d7442517249074bfb641ea93d3786d53675e90685e79efb2e62bc0709109"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244418487984974-start_client.json",
+      "sha256": "92a3bc2707adadec06750bc2810011942b53e94785a31219196471125c761ce0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244418688680464-wait_playable.json",
+      "sha256": "da8536dfce4ebf7b69c755c38a88dd38b53c4a9e4182391224566e8993a22fb5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244443441475252-capture.json",
+      "sha256": "bb1f484d6fa8c569bd19f703833987604180edf1af926cb0ac1e093194a442d2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244444951674146-input.json",
+      "sha256": "bb7ce580347948b716d56c7528f80a892ee6368bb0644ba742e4f9f2f27b473d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244445154486512-input.json",
+      "sha256": "73c756f149cb64813076eafd344fd154661cd6b99a3f7c271b547fedc800f3fd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244447456018779-capture.json",
+      "sha256": "e3e0e6d3c6bc9cf1100846f3780896aa069c5aed5363d7cd6c66965dc4cf1174"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244448868569925-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244449072423723-input.json",
+      "sha256": "7543763762fbb50ce8b768ef40f0b7f024a787148ee1e51a4ab3b3077f2c6a84"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244449373290259-input.json",
+      "sha256": "7b3cfe253fda16ce8e8ad62733539c7eede668448764ae5702676b8999aff944"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244450575452691-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244452192502607-capture.json",
+      "sha256": "c491be4476ee4687971751d9aefb61ed8360e8bcbaed6a9e58d5d0f49f145b37"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244454678654965-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244456605811373-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244458214898046-hold.json",
+      "sha256": "9065ebb6d884031db14717edab37d47036367a0715db4e34984a6093c06a9008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244463442457044-capture.json",
+      "sha256": "bc5f209e107af1fe4133b56719d09ab2972310c59acb20138481ac1e56e5419a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244465585760283-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244467295772564-hold.json",
+      "sha256": "0c576ce1850d5a7aeb786b036dbbe35d91dea9e71173311f629c8e22a5b5621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244472119581305-capture.json",
+      "sha256": "e1688d8fef293d43446f0efcafd127199903fc9291ec52ed4f76813bc3891cb3"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244474552487284-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244476156923317-hold.json",
+      "sha256": "9065ebb6d884031db14717edab37d47036367a0715db4e34984a6093c06a9008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244481178198435-capture.json",
+      "sha256": "bb2b6062a2acbbcb18afbb32e8ca7259872b5ad3d93803da42ab0820d3086002"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244483703780552-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244485509096285-hold.json",
+      "sha256": "0c576ce1850d5a7aeb786b036dbbe35d91dea9e71173311f629c8e22a5b5621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244490661023749-capture.json",
+      "sha256": "3f199afed84e10c0758ebcfd0f76b738d1acbc06e7a3133571d9f438fc246e2f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244493059527949-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244494776357611-hold.json",
+      "sha256": "c4902ece2a7e44c2754667b25cf9dca8eef3e41fb7eafc554fda1366331f8b11"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244500116166099-capture.json",
+      "sha256": "8dc9f55388a5d0284183cabe92f0768ff93e6636d3de0b9cad081d6d6cf4042e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244502763836967-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244504469413574-hold.json",
+      "sha256": "9065ebb6d884031db14717edab37d47036367a0715db4e34984a6093c06a9008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244509751195520-capture.json",
+      "sha256": "45d85aa4f874535b533cc8bf881ae98254f60329644073e4014d297495d1122b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244512420974049-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244514029183565-hold.json",
+      "sha256": "9065ebb6d884031db14717edab37d47036367a0715db4e34984a6093c06a9008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244519188142556-capture.json",
+      "sha256": "9fe64534f7a1a825f2fc1d240945913b2340823dc800514e2328607786da5c58"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244521400965599-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244523213252780-hold.json",
+      "sha256": "0c576ce1850d5a7aeb786b036dbbe35d91dea9e71173311f629c8e22a5b5621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244528237386146-capture.json",
+      "sha256": "6868c6f62dc89675a007a57080a7cb69191bd026005407a31d83c55dfa505f2c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244530711546845-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244532340539769-hold.json",
+      "sha256": "2e351b0aa69cb67af1c725e4362c5530cdde918ef9d435a2609cb1bfeb17c98d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244536673904319-capture.json",
+      "sha256": "787ab1df4f395cb7b8765bf1f1b45c9e163c133d844b58732bf67a6de9759bae"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244538862613594-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244540374257885-hold.json",
+      "sha256": "0c576ce1850d5a7aeb786b036dbbe35d91dea9e71173311f629c8e22a5b5621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244545758031002-capture.json",
+      "sha256": "a0f6620c91b9ef5ee14b1a12c02ea72c53e2ca591abcc83194220e1090661bf6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244548025522663-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244549833204356-hold.json",
+      "sha256": "0c576ce1850d5a7aeb786b036dbbe35d91dea9e71173311f629c8e22a5b5621d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244555190580147-capture.json",
+      "sha256": "38c5195edd1e4e4d9bcfcea3c38fcc028f6da8e2ff77f55b87d3b2792ceb8abc"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244557538471115-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244559549561059-hold.json",
+      "sha256": "9065ebb6d884031db14717edab37d47036367a0715db4e34984a6093c06a9008"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244565009132348-capture.json",
+      "sha256": "894b6f9310177d330be22dcaa682931a9dd803c07e405dc8b2e26f4e9c37ccab"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244567526670019-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244569343527565-hold.json",
+      "sha256": "2e351b0aa69cb67af1c725e4362c5530cdde918ef9d435a2609cb1bfeb17c98d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244574097372468-capture.json",
+      "sha256": "2e0c3d0dd73c6bd23177c1f37f1e9d84dd9013facd9c0bbbb5fcf32287d4222a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244577858272098-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244579971084401-hold.json",
+      "sha256": "eb8588112f5a48d92e04fcc41de1ecfae5a91000d904cdd716310d5e491f4f86"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244584716398629-capture.json",
+      "sha256": "4f08c24ca9df56b5dc4170db205402cbf1973869e89077193d6cf0977e3c1d8d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244588452297259-check_focus.json",
+      "sha256": "cc483d7344017b9102762576d5ba639f832d84365b4171367121c35c8d40bf75"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244590371098969-hold.json",
+      "sha256": "2e351b0aa69cb67af1c725e4362c5530cdde918ef9d435a2609cb1bfeb17c98d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244595914233917-capture.json",
+      "sha256": "fc57e7244fba3b6b9f51501e8829adeca27d0eff49e11dcac9ca43fb817555ee"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244598573583229-hold.json",
+      "sha256": "f5a64fea458c2a81147a9d1cfd9f78ddad7b4f7ff6070defca2ef42351ae3999"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244603403445577-capture.json",
+      "sha256": "872010f71d1e13b6f6d229816328e2dc609e641376bd41c3e321e68f2a2c8f29"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244605861993073-hold.json",
+      "sha256": "f5a64fea458c2a81147a9d1cfd9f78ddad7b4f7ff6070defca2ef42351ae3999"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244610077763587-capture.json",
+      "sha256": "6be7bf4b62f9b77d699aa6cd10b950cc834bb680cea74f0742898406ad78e69c"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244612595431322-hold.json",
+      "sha256": "51a517327878219d3817a12cb51abaf0ef2003cb537f6b42344c29015822d3bf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244617454140454-capture.json",
+      "sha256": "caf710dd58ee13b082d6e283fbca3a68140042357ad4491904b543149bc4c142"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/commands/1790244620014350514-stop.json",
+      "sha256": "2bcc337a33841b5a2c00408b09d907a8ee77f6a65fc8dfde007d2d6bccc839dd"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244418487984974-start_client.result.json",
+      "sha256": "a1902111414f58b92fe7d1a60ad41111e81bfe651a9cc6b41682224dbae849e6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244418688680464-wait_playable.result.json",
+      "sha256": "82e0ccfd0ab6fb30712132196d3326d479e4df1ba64d6fd3d9e817c5ade7561d"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244443441475252-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244444951674146-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244445154486512-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244447456018779-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244448868569925-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244449072423723-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244449373290259-input.result.json",
+      "sha256": "b7e66614c7b12185d0e4ec33618ee3e31a2da9f4d207446bca7811ee3e9ae4df"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244450575452691-check_focus.result.json",
+      "sha256": "1a491cb1104dcaeadbf0e17ce68b5a5fd392f243cab2207a4006e9f0077cda62"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244452192502607-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244454678654965-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244456605811373-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244458214898046-hold.result.json",
+      "sha256": "fad6997cbb005ea18b8391ffebbaeb22422da862a9c004c45d9a7bd572cc00b5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244463442457044-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244465585760283-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244467295772564-hold.result.json",
+      "sha256": "f006a898e2749c5da9a98c0537c26933c9847c9bea2da627512b7de71632ac42"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244472119581305-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244474552487284-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244476156923317-hold.result.json",
+      "sha256": "fad6997cbb005ea18b8391ffebbaeb22422da862a9c004c45d9a7bd572cc00b5"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244481178198435-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244483703780552-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244485509096285-hold.result.json",
+      "sha256": "f006a898e2749c5da9a98c0537c26933c9847c9bea2da627512b7de71632ac42"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244490661023749-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244493059527949-check_focus.result.json",
+      "sha256": "21f127ecd2cd5a0dee20d3f1423066d89a357a23f94e9e4d289f58f14e8244f0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244494776357611-hold.result.json",
+      "sha256": "c3cc7e90079f07d2f0c0c81bc7e2b23737bf06b4c88be34ec8acbcf1f752010b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244500116166099-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244502763836967-check_focus.result.json",
+      "sha256": "35ca46d0ee71a0124a8f55d2ee83826a59e2d3e92e5230268283ba298b844158"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244504469413574-hold.result.json",
+      "sha256": "91d326d79aee5f7d71aac928871a19256f447950db847a8234945541a1a08172"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244509751195520-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244512420974049-check_focus.result.json",
+      "sha256": "56bc4a9275b3a7be6eb12acdf0abacc2124f2bad7c407f24db601d457f6994b2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244514029183565-hold.result.json",
+      "sha256": "082a65ffbaec7063c316c4991fd8f599628dd75c00e3b78f3e171f31457c29ec"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244519188142556-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244521400965599-check_focus.result.json",
+      "sha256": "0c87397aa555504ef8bf086541e54f981a6534326c4519bb96408e8e40a11326"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244523213252780-hold.result.json",
+      "sha256": "b39b7ce88583835313c66b6f949d64f05e4b7874db6c8762fa7119dc9bca6674"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244528237386146-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244530711546845-check_focus.result.json",
+      "sha256": "14424145d3c75791229a61dd0315bfa382ea505c156a2a58967baad9c125d5a8"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244532340539769-hold.result.json",
+      "sha256": "c0a5ecfe2b8dac67e1a788789cb17bcd149848e7a9963c3992ddd7c21c3d5ac9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244536673904319-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244538862613594-check_focus.result.json",
+      "sha256": "ede958d500488e69c0d7579fa57e77620f7cb4ef478e6a638219a178f0e60a54"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244540374257885-hold.result.json",
+      "sha256": "e5001efa187cdd952337be0f7c1d745ed498f91be008a5d3b7aed9cfa5d09a67"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244545758031002-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244548025522663-check_focus.result.json",
+      "sha256": "cec3a6a152d61109d7507f8d77ace5f71ff8345c4e7cc89dee3e07a4ceefc0ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244549833204356-hold.result.json",
+      "sha256": "766d782567ad15139396b70ecb862a6145997df90e6a5bbf7642758dd9072e6e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244555190580147-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244557538471115-check_focus.result.json",
+      "sha256": "2c55dc892b4a71f4fa1dc770f25b3f1045be2047da8d2bdcc91c5d3ec6e65f1f"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244559549561059-hold.result.json",
+      "sha256": "1af2b521ef35c9d6787e57826daeb85d9571d69d94626e49b13dab6c23da9a50"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244565009132348-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244567526670019-check_focus.result.json",
+      "sha256": "c247f4af3592afa2ee2b1b6382de7b6f3c9dfb34463862f545253dac96a70f08"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244569343527565-hold.result.json",
+      "sha256": "9f8f370b1388d2ae16a4456b17f1d439c089bd743f23f550552f896658c953b7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244574097372468-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244577858272098-check_focus.result.json",
+      "sha256": "92bc549e04849b93496f31422b5331111d1d4b597a6e8a3346dc9417747a78f1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244579971084401-hold.result.json",
+      "sha256": "3f2b4678df6c728a1fe46cb13f9848e7592e168aaa92ec1992988d2c8dffc875"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244584716398629-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244588452297259-check_focus.result.json",
+      "sha256": "95926ffef52c111865f138736c79f7e2598d98782d0d8e94579c39dad068bd49"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244590371098969-hold.result.json",
+      "sha256": "04738801b6b38f5189a1aecfe580e33a372ebbdb266b18b6e722cf3d52c2c286"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244595914233917-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244598573583229-hold.result.json",
+      "sha256": "6e2a3fc5f1d99e0857f17ebb1ab609b601faf322cf0067172a275c42fa1a99ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244603403445577-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244605861993073-hold.result.json",
+      "sha256": "ec40600a692cff82fd5bdd4749982420376c28172abab71544e02ea2496ac5c6"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244610077763587-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244612595431322-hold.result.json",
+      "sha256": "ca84d9266b699896dc9e7fdcfa70239e524c5cbcc78d309ea67300e35d4bbf3b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244617454140454-capture.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-timed-loc-v9-20260924/1790244620014350514-stop.result.json",
+      "sha256": "9041c959b235ee1971e498c42f8a42cdf5f7189194a7e541200d6e0345eacbd7"
+    }
+  ],
+  "source_snapshot_note": "Historical helper source snapshot is byte-identical to the originally recorded SHA-256; later bridge forward guard additions are excluded."
+}

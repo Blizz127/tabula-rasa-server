@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Read-only upper X12 fence route geometry audit for S5 accepted-1995 copied-client attempts",
+  "scope": "Original-client-derived navmesh, original map prop list, archived screenshots and accepted movement only; no client run, gameplay edit, copied DB or live service change",
+  "sources": [
+    {
+      "path": "navmesh/adv_bootcamp.nav",
+      "sha256": "10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52",
+      "exact_location": "Rasa.NavMesh --path queries from accepted fence positions to (-6.8,98.3,120), (17,106,130), (16,105,131), and (12,104,131)"
+    },
+    {
+      "path": "docs/evidence/bootcamp-s5-feedback-75s-fence-variation-20260924.json",
+      "sha256": "62e604f8bf3e6565490c9a7604d3046240abec52467ffd4519fa548f36156b20",
+      "exact_location": "observations 2-3 and guarded_upper_fence_followup; underlying archives driver.log lines 43-74"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-75s-fence-x12-low-progress/03-feedback-normalize-3-pre-focus.png",
+      "sha256": "1701e59d47c8781dd9b7bb8b1a6c202d3ea4b4c71a46e662b524fb8df912bae9",
+      "exact_location": "HUD at accepted (12.359375,106.52734,124.53516)"
+    },
+    {
+      "path": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-timing-corrected-retries/feedback-upper-fence-d800-blocked/03d-upper-right-strafe-pre-focus.png",
+      "sha256": "763bf78959e35692aefab3840c8a9c01f9276580e05dfe5b2dc239c97bfb07eb",
+      "exact_location": "HUD before guarded D800 at accepted (12.402344,106.42969,126.96094)"
+    },
+    {
+      "path": "mapprops/adv_bootcamp.csv",
+      "sha256": "f6c940ad4d9587eed40859c257f081556802529f991406622d672ff9e8f5bc41",
+      "exact_location": "row 275; only listed prop with center X -5..25 and Z 110..145"
+    }
+  ],
+  "observed_emulator": [
+    "From accepted (17.390625,105.26172,128.01172), W800 at yaw 1.0611312 reached (12.839844,106.52734,125.46875), then W800 reached (12.371094,106.52734,124.68359). The first pulse advanced 4.55 m west but 2.54 m toward lower Z; the second advanced only 0.47 m west. A W+D400 raised Z to 126.96094, and D800 reached only (12.34375,106.19922,127.48047).",
+    "An independent 75-second run went from (16.785156,105.828125,127.28125) to (12.359375,106.52734,124.53516) with two W800 pulses, then W+D400 reached (12.394531,106.1875,127.48047). The repeated X12/Z127.48 limit is an ordinary-client steering and collision observation, not a mission-state result.",
+    "Both archived screenshots show the character on an upper dirt ledge beside a tall ribbed metal wall, with stairs/platform farther screen-left. They do not expose the wall's collision mesh or establish an opening behind it."
+  ],
+  "original_map_measurement": {
+    "tier": "measured",
+    "query": "DOTNET_ROLL_FORWARD=Major dotnet src/Rasa.NavMesh/bin/Debug/net5.0/Rasa.NavMesh.dll --path navmesh/adv_bootcamp.nav 17.390625 105.26172 128.01172 -6.8 98.3 120",
+    "result": "Complete 30.3 m path: (11.2,103.9,130.8), (5.2,101.1,131.2), (2.8,100.1,129.6), (-6.8,98.3,120). The query from the blocked (12.34375,106.19922,127.48047) first snaps X to 12.8 and goes via (12.8,104.5,130.0), then (11.2,103.9,130.8).",
+    "near_start_samples": "From (17.390625,105.26172,128.01172), direct navmesh paths to (17,130), (16,131), and (12,131) XZ are complete, lengths 2.3, 3.7 and 6.3 m. Their snapped floors are 104.25, 103.68 and 103.85 m respectively.",
+    "uncertainty": "Navmesh resolution, nearest-poly snapping and a 0.3-0.4 m systematic navmesh-versus-client Y offset apply. The query does not model every client movement collider or prove a safe player path. These are map walkability measurements, not original final-live route instructions."
+  },
+  "map_prop_boundary": {
+    "tier": "original",
+    "finding": "The only separate map prop centered within X -5..25, Z 110..145 is class 24765 at (19.621,106.526,123.525), row 275. Its listed bounds do not identify the ribbed wall at X about 12, Z about 127. The wall may be part of terrain or a baked map structure; its exact collider cannot be assigned from this CSV and screenshots."
+  },
+  "route_candidate": {
+    "tier": "inferred",
+    "confidence": "medium for an earlier northward steering probe; low for actual collision-free traversal until ordinary-client verification",
+    "finding": "On a new copied-client attempt that reaches the upper fence around X 16-18/Z 127-129, steer toward higher Z before the W-only west pulse drives Z down to 124-125 at X 12. Use short, accepted-feedback-guarded lateral or camera-directed pulses toward X about 16/Z 130-131, then X about 11-12/Z 130-131, and only then west toward the previously successful lower X11 branch. Stop on a repeated accepted position, unexpected Y drop, loss of focus or health. If already at X12/Z127.48, back away toward the X16-18 approach before trying the distinct angle; a longer D hold at X12 was observed to stall. The numeric points are diagnostic navmesh steering targets, not reconstructed final-live waypoints.",
+    "basis": "At X17 the navmesh connects directly to the higher-Z side, while two copied runs used a W bearing that decreased Z and stalled at the X12 wall. A separate copied-client attempt from X10.85/Z129.72 cleared the wall after D400 reached X10.06/Z131.14, camera adjustment and W600 reached X8.01/Z130.47 (bootcamp-s5-feedback-wall-bypass-20260924.json)."
+  },
+  "remaining_gap": "The exact original map wall collider and a continuous ordinary-client upper-X12 to lower-corridor traversal remain unverified. No gameplay seed or mission defect is established by this route audit."
+}

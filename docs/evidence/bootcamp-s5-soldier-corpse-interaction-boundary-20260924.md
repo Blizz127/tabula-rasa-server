@@ -1,0 +1,37 @@
+# S5 wounded soldier and Conrad interaction boundary — 2026-09-24
+
+This audit separates final-week evidence from the reconstructed interaction tested with the required 1.16.5.0 compatibility client. The exact shutdown client build remains unproved. Original video files in the former research backup were unavailable for reinspection; the frame findings below are from the cited retained frame records. No gameplay data or live service changed.
+
+| Claim | Provenance and exact source | Limit |
+| --- | --- | --- |
+| Mission 1995 objective 2 is “Locate the missing AFS soldiers”; objective 3 is “Remove the bomb from Conrad's corpse.” | **Original client:** `data/game.zip:generated/client/missionobjective.pyo` assignment offsets 107417 `(1995,2)` and 107450 `(1995,3)`, text IDs 21556/21557 and 21559/21560; `missiontextlanguage.pyo` offset 565220 gives text 21559. See `bootcamp-client-catalog.json` mission 1995. | These are display and binding data. They do not encode a server placement or completion trigger. |
+| The objective-2 conversation uses NPC package 2584, player flag 1, conversation type 1 and text 21558. The speaker describes an ambush and directs the recruit to Conrad's body for the bomb; he mentions a possible EMP-triggered timer. | **Original client:** `data/game.zip:generated/client/objectiveconversation.pyo` offset 41798 and `language/english/missiontextlanguage.pyo` offset 565184; `bootcamp-client-catalog.json` mission 1995 `objective_dialogues[0]`. | Package 2584 does not identify the NPC's name, entity class, visual model, server position, health, or interaction radius. “Human” in a reconstructed dialogue is not proof that the final-live actor was unnamed. |
+| Indicator labels 435 “Last known location of scout party” and 436 “Conrad's corpse” exist. | **Original client:** `data/game.zip:generated/client/language/english/missionobjectiveindicatorlanguage.pyo` offsets 3872 and 3881; `bootcamp-client-catalog.json` `objective_indicator_names`. | The observed objective-2 handset is associated with 435 by inference from its name and objective text. A label for 436 does not prove its final-live coordinate or even that it appeared in the edited footage. |
+| A yellow handset marker appears over the trench bunker doorway while objective 2 is active. The measured marker point is `(-104.6,86.1,70.5)`, ±1.5 m horizontal and vertical. | **Observed/measured from final-week footage:** `Ycxm8Pa1-v4` 163.233–165.7 s, events C2-20/C2-50/C2-51 in `bootcamp-d11-footage-events.json`; two-recording radar cluster method and anchors in `bootcamp-d11-positions.json` `indicator.1995.2.435`. | This locates a mission indicator, **not** a usable NPC. The original client has separate mission-indicator and creature radar paths (`trpython.zip:client/ui/radarwindow.pyo`, `client/missionlog.pyo`, cited in the position record). The actor is not named, targeted or conversed with in this footage. |
+| The other final-week recording cuts from objective 2 at 80.533 s to objective 1 and a visible countdown of `00:02:06` at 80.600 s. | **Observed:** `8VXeKzGUv0c`, event B1-044 in `bootcamp-d11-footage-events.json`; `bootcamp-d11-reconstruction-manifest.json` transition rows for 1995/2→3 and 3→1. | Both the soldier conversation and corpse pickup are hidden by this edit. Original server transition triggers, corpse use animation/windup, exact timer start and corpse location are not observed. The inferred order 2→3→1 follows the client text and before/after tracker states. |
+
+## Usable reconstructed approach
+
+The **inferred** wounded actor seed is `(-102.4,86.09,70)` with a nominal ±5 m horizontal uncertainty (`bootcamp-d11-positions.json` `npc.wounded_soldier_2584`). The marker itself has no walkable floor in the retained navmesh probe; the seed uses a nearby doorway threshold. In checkpointed compatibility-client runs, forward movement stopped at `(-95.578,85.668,71.699)` amid original sandbag/Forean-corpse scenery; a north-side bypass reached `(-104.520,86.765,72.079)` and displayed a Human target and right-click talk prompt. A later closer approach opened the Objective Completion dialogue. Continue sent `CompleteNPCObjective`, persisted objective 2 status 2 and objective 3 status 1, and changed the tracker to Conrad's corpse (`bootcamp-s5-soldier-approach-20260924.json` runs 49–66). This proves the *current reconstruction* can be used from ordinary movement after a copied checkpoint; it does not locate the final-live actor or prove a continuous Youngblood-to-soldier route.
+
+The effective **inferred** corpse seed is `(-98.0,85.39,67.2)`, still ±30 m horizontally for final-live placement (`client-conrad-corpse-placement.json`). The earlier `(-102.4,85.69,66.8)` was inside ramp geometry and lacked a navmesh floor/path; it is superseded. From a copied soldier checkpoint at `(-102.39453,86.890625,73.4375)`, ordinary movement around the east side reached `(-94.73047,84.99609,65.640625)` with “Press [Mouse Button 2] to use.” A separately checkpointed click from that reached coordinate sent `RequestUseObject`, persisted objective 3 status 2 and objective 1 status 1 with a 600000 ms timer anchor, and displayed `00:09:59` (`bootcamp-s5-corpse-use-20260924.json` runs 03–09). The selected class 21961 and “Salvagable Materials” appearance are analogues, not recovered corpse identity. This is a usable emulator viewpoint, not a final-live pickup coordinate; the successful movement and click were separate runs.
+
+**Decision:** Preserve the current inferred positions and explicit uncertainties. The original evidence supports the conversation binding, objective wording, marker location and broad 2→3→1 sequence; it does not justify a more precise actor/corpse coordinate, exact use radius, corpse model, or final-live server trigger. A synchronized uncut original interaction or server trace would be needed to close those gaps.
+
+## Source identity checked this turn
+
+| Source | SHA-256 |
+| --- | --- |
+| Restored `data/game.zip` | `e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6` |
+| `game.zip:generated/client/objectiveconversation.pyo` | `55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12` |
+| `game.zip:generated/client/missionobjective.pyo` | `330f29153493c512a5a90074f4c0ae4ab45cb3f0d4dfc4b56764a0d95d232d5f` |
+| `game.zip:generated/client/language/english/missiontextlanguage.pyo` | `06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d` |
+| `game.zip:generated/client/language/english/missionobjectiveindicatorlanguage.pyo` | `d37d8f35fcef6b7b93ac1b2a8ae9b222b023608ca43133d49fbac785f08a00fd` |
+| `trpython.zip:client/ui/radarwindow.pyo` | `a364e916560cbeb9a39d7df309690eb232d673b493509e08c0257eade24edf9c` |
+| `trpython.zip:client/missionlog.pyo` | `5e43f82a7bab34c15971a0b74dca9585d5b878abcb332e4eeef1540760aeb375` |
+| `bootcamp-client-catalog.json` | `2d785955863695f78e2eda15d46c35649e239b853e43b6b4a89272862e4d21c9` |
+| `bootcamp-d11-positions.json` | `2a7539fa3e4383531f390dbffd90583cf18aa38a39f4f7f78254b69e043ce8a8` |
+| `bootcamp-d11-footage-events.json` | `72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477` |
+| `bootcamp-s5-soldier-approach-20260924.json` | `b308ac054f6d68281a207a842351d62b555a0bbf7bf932f487ef1bcf1a17cbeb` |
+| `bootcamp-s5-corpse-use-20260924.json` | `729cb2d79e7e94abb9c7f12b640c3d01ddabe075a35499bb3c9c44282fe13635` |
+| `client-conrad-corpse-placement.json` | `dd019e59f0ec432a20aa6909ac036734b8e4c3344948296b7427fa98ae02f965` |

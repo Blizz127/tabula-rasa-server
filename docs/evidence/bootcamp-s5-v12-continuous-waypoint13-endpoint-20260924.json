@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Final continuous copied-client S5 v12 stops at waypoint13 fixed two-hold endpoint guard",
+  "scope": "One isolated original-client 1.16.5.0 continuous S5 attempt from post-Conrad checkpoint. Only copied mission 1995 objective1 timer anchor reset to 600000 ms; no copied position staging. Ordinary controls, accepted Move, focus/elevation/timer guards. No further full attempt in this turn.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v12-continuous-waypoint13-endpoint-guard-20260924/manifest.json",
+    "manifest_sha256": "944b00db1011d817c110f50d9bceda0ad27dd241a0dd4f6cdc8eb900be6768d1",
+    "archived_files": 242,
+    "source_db_sha256": "745f806966f7e19c613fc9143c543930309f2c04a30ae4e032c877f3698cb46d",
+    "staged_db_sha256": "c388eaaa4f7e8c79b95fa29b7335a7ad5ca8ab70e1a5a712448b6f08cb9a4bdd",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/staging.json",
+      "output/driver-second-sandbag.log: waypoint11 through endpoint exception",
+      "output/positions.tsv",
+      "output/13-v11-0.png",
+      "output/13-v11-1.png",
+      "output/13-v11-endpoint-stop.png",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "char-after-stop.db",
+      "drive_pre_sandbag_v12.py"
+    ]
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "Continuous route reached waypoint12 at (-172.36328,93.49219,-20.851562), yaw 1.2197065, about 0.425 m horizontally from measured waypoint12 target (-172.76172,92.99609,-20.703125). This start was about 0.297 m horizontally east of v11 staged start and 0.391 m higher.",
+      "source_location": "output/driver-second-sandbag.log: checkpoint12; output/positions.tsv"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "Verified v11 headings still moved the client. Heading 0.94 with 300 ms W accepted (-172.62110,93.11719,-20.808594), +0.261 m progress. Heading 1.08 with 250 ms W accepted (-173.84766,92.45703,-20.4375), +1.279 m progress. This is 0.907 m horizontally from waypoint13 target (-174.73828,91.984375,-20.265625).",
+      "source_location": "output/driver-second-sandbag.log: v11-heading 0 and 1; output/positions.tsv; output/13-v11-0.png; output/13-v11-1.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "The fixed two-hold postcondition required distance under 0.70 m and stopped despite positive movement. Endpoint screenshot shows the character on the rocky route and mission UI timer 06:07; no visual collision or bomb prompt was observed.",
+      "source_location": "output/driver-second-sandbag.log: terminal exception; output/13-v11-endpoint-stop.png, SHA-256 505c621778be8b85fa8b8dc1717ed9a677de163a49c74bc62b501418ecb9610e"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Supervisor ended after 236.75 s with driver exit 1 and launcher exit 0. Copied DB retained source character coordinates after stop while accepted packet trace reached the endpoint. Mission 1995 state 0, objective1 active, objectives2/3 complete, no S6 mission1526 row. Bomb and S6 did not complete.",
+      "source_location": "output/supervisor-state.json; output/status.json; output/positions.tsv; char-after-stop.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "The v11 heading correction is directionally valid in the continuous run. The next precise obstacle is a controller postcondition sized to the staged start: two short holds were insufficient from v12\u2019s slightly earlier/higher waypoint12 endpoint. A future bounded continuation could allow another guarded small hold when accepted target progress remains positive and the local envelope holds, but this was not tested here."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Continuous reach of waypoint13 and northwest sandbags after flexible short-hold count",
+    "Higher-bank bomb prompt and bomb objective completion in uninterrupted S5",
+    "S6 transition in uninterrupted S5",
+    "Original final-live geometry and timing"
+  ]
+}

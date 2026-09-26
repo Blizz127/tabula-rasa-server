@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T09:34:49.771855+00:00",
+  "subject": "Detached isolated original-client runner lifetime diagnostic",
+  "setup": "Fresh copied untimed pre-corpse checkpoint; setsid nohup Python runner, PID persisted, original client started and made playable. No corpse click, no mission timer; no live Game/DIT changes.",
+  "result": "Detached PID 2175878 became PPID 1, SID 2175878. Responsive capture results at 00:53, 01:56, 03:01 and 03:43 elapsed. Mission objective1 remained status0 with null anchor. Normal stop returned ok, launcher reported harness exited 0, PID absent. This demonstrates detached harness stability for >3 minutes; it supports an exec-session parent lifetime hypothesis for V6 SIGTERM but does not identify the V6 signal sender.",
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/run-s5-lifecycle-v1-20260924.py",
+      "sha256": "e3218b0911146a64d256d067a4115ed26d186f92e2766bc47defc24e704f6ebf"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/lifecycle-v1-detached-launch.log",
+      "sha256": "8521d4547d2ca20cc218c57ded5b23ee77e985f0a0e0ca3e82167da2af301def"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/lifecycle-v1-detached.pid",
+      "sha256": "eca6bb9d1a954b7eb9f4ffc20c5188035be4966ef1c369e96e02dfb749937241"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-polls.jsonl",
+      "sha256": "74445d22f37cbcc33c72b22b8dbd69ea50d8a00b0fb7db2ffa955892fca0baaa"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-exit-observation.json",
+      "sha256": "3980816696b9807b0dee58c2a9a136ed4f640a1c705334b7e0d962ce6dbad1d2"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/launcher.log",
+      "sha256": "951eb0e6e317cc533fd8a0ef2e57158661c4e7d28c13d110b2eec9c85d30774a"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/game.log",
+      "sha256": "091452c5766a4c7ab49d61f84cb1b5ad88dd561a8a5527718ad38d132f92b179"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/auth.log",
+      "sha256": "cbff2e36d390555838f4b4deb382d056219128e27467f6ab211bc72d0ce49c25"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/char-after-lifecycle.db",
+      "sha256": "8c6fd25f2cda844ec51965d2f1317f8efd2a2baafbe1f86b26902fe225d2766b"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-playable.png",
+      "sha256": "44d1026cd4ab3c4a28b787869e53082437da87dabc5e31a8b11a12ff69212bc9"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-t0.png",
+      "sha256": "54d7867e956b6f6c63df7cc7b9f20f50b03714e49b65f700591569ec0060712e"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-t1.png",
+      "sha256": "b2e938f80c062b9793219f8f53b3577286043e3635c5ae1a3b76b70094c44495"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-t2.png",
+      "sha256": "b6b7c915c93a1ecfb44a910aee4cf0ac71026312126cb46fbb02b5f8107730ea"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/s5-lifecycle-v1-20260924/lifecycle-t3.png",
+      "sha256": "eb3baea397e2140e166d63a81e156e7c59e0eb314987a13ca2a83fda1c5b723f"
+    }
+  ]
+}

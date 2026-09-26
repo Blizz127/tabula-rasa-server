@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "checked_at_utc_date": "2026-09-24",
+  "subject": "Availability of checkpointed S5 corpse-use primary artifacts",
+  "record": "docs/evidence/bootcamp-s5-corpse-use-20260924.json",
+  "record_sha256": "729cb2d79e7e94abb9c7f12b640c3d01ddabe075a35499bb3c9c44282fe13635",
+  "check": "Parsed the record's 19 sources[].path values and tested Path.exists() in the current workspace. All 19 paths were absent. Their common /home/blizz/backups/rasa-net/research/20260922-client-playthrough parent is absent. Searched accessible files under /home/blizz, /var/tmp, /mnt, /media, /srv, /root, /tmp and /var/cache, plus local Docker storage, Trash and relevant local archives, for the cited run-s5-corpse-agent-09 source names and game log; no matching primary artifacts were found.",
+  "result": {
+    "listed_sources": 19,
+    "currently_accessible_sources": 0,
+    "missing_parent": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough"
+  },
+  "interpretation": "The checkpointed corpse-use JSON retains its previous observations and hashes, but this workspace cannot currently revalidate its original screenshots, code, copied database or game log. The absence does not establish that the artifacts are permanently lost; an offline backup or unmounted volume may still contain them. Treat the described run as derivative evidence until the primary files are recovered or the isolated client observation is repeated and archived in an accessible private artifact location.",
+  "next_check": "Recover the 19 listed primary artifacts from an available backup, or reproduce the checkpointed original-client use with a copied character and archive source screenshots, Game log and copied DB snapshot with hashes. Keep that separate from the still-unverified same-session soldier-to-corpse route."
+}

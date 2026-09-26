@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Staged local original-client S5 v11 probe crosses v10 waypoint13 with the earlier v3 far-goal heading",
+  "scope": "One isolated local geometry diagnostic staged from v10 archived accepted stop. Copied mission objective timer anchor was reset; no full route, bomb interaction, live Game or DIT change. Two ordinary-client W holds, each under 350 ms, were used.",
+  "source": {
+    "private_archive_manifest": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-v11-local-waypoint13-far-heading-reached-20260924/manifest.json",
+    "manifest_sha256": "987103cf957ac63c99b104ed0b95ab269d6f3b10122fdbf6ae8edc5a7239c3c8",
+    "archived_files": 59,
+    "source_copied_db_sha256": "1468016ec472f50fba1bd6e52a32db5d6a8f4a52e884e461cacc7ff4372c5274",
+    "staged_copied_db_sha256": "2c2953e4196057d76f4c17bf36f201be05310ae657b012b3e4ef05825596d564",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7ef50336d8a6311efde5370a31dbe0d68802b8daad6",
+    "exact_locations": [
+      "output/staging.json",
+      "output/driver-second-sandbag.log",
+      "output/positions.tsv",
+      "output/0-after-hold.png",
+      "output/1-after-hold.png",
+      "output/supervisor-state.json",
+      "output/status.json",
+      "drive_s5_local_v11.py",
+      "char-after-probe.db"
+    ]
+  },
+  "prior_comparison": {
+    "tier": "observed_emulator",
+    "v3_archive": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/rebuilt-harness/s5-rock-slope-v3-northwest-path-20260924/output/driver-second-sandbag.log: lines 44-46",
+    "v3_movement": "From (-172.76172,92.99609,-20.703125), yaw 1.1584432, the v3 driver steered for farther goal (-180.004,92.568,-26.121), then accepted (-174.73828,91.984375,-20.265625), yaw 0.9274832.",
+    "v10_stationary": "From nearby (-172.63281,93.09766,-20.769531), v10 aimed directly at that nearby accepted point and W produced yaw 1.8055913 with unchanged position."
+  },
+  "observations": [
+    {
+      "tier": "observed_emulator",
+      "finding": "The staged v10 stop loaded at (-172.62890,93.10156,-20.765625), yaw 1.8055913. A 300 ms W hold after steering to heading 0.94 yielded fresh Move (-172.88672,92.94141,-20.722656), yaw 0.9368788; positive 0.261 m target progress.",
+      "source_location": "output/driver-second-sandbag.log: hold 0; output/positions.tsv; output/0-after-hold.png"
+    },
+    {
+      "tier": "observed_emulator",
+      "finding": "A 250 ms W hold after steering to heading 1.08 yielded fresh Move (-174.67578,91.99609,-20.253906), yaw 1.0798266; 1.844 m target progress. Endpoint is 0.064 m horizontally from v3 next accepted point. The screenshot shows the character on the sloping rocky route and mission timer 09:04.",
+      "source_location": "output/driver-second-sandbag.log: hold 1; output/positions.tsv; output/1-after-hold.png, SHA-256 fa77b767734c9975ae39610de62c6890447019e29ce03cb24934663fad374f5f"
+    },
+    {
+      "tier": "observed_emulator_infrastructure",
+      "finding": "Driver exited 0 after 59.2s supervisor runtime; copied Auth/Game/client/display reached terminal status. The copied DB retained the staged coordinates after stop, so accepted movement proof is the client packet trace and driver log, not persisted character coordinates.",
+      "source_location": "output/supervisor-state.json; output/status.json; output/positions.tsv; char-after-probe.db"
+    }
+  ],
+  "assessment": {
+    "tier": "inferred",
+    "finding": "Near the v10 waypoint13 stop, steering approximately toward the farther v3 pre-sandbag goal (~0.94 rad), then a second small adjustment (~1.08 rad), can reach the v3 next accepted point with ordinary client movement. A future continuous controller can use these two guarded short holds instead of aiming directly at the nearby point. This staged local result does not prove full route or timer sufficiency."
+  },
+  "restoration": {
+    "copied_character_db_and_baseline_sha256": "c5e103ae4b3ba945a0925784b62eb144ebebb124b4eb4a3348a56cb9eb60b705",
+    "copied_game_dll_sha256": "d0c2bbb28b9ae4734538e7efde5370a31dbe0d68802b8daad6",
+    "wal_shm_residue": "none",
+    "previous_output_restored": true,
+    "isolated_processes_remaining": "none",
+    "live_dit_mounted_and_enabled": true,
+    "live_or_dit_changes": false
+  },
+  "unverified": [
+    "Continuous timed passage through waypoint13 and northwest route",
+    "Bomb prompt/use and S6 transition in a continuous run",
+    "Original final-live exact movement geometry"
+  ]
+}

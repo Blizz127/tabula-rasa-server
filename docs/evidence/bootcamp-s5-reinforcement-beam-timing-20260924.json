@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 reinforcement beam-in timing and current immediate presence gap",
+  "sources": [
+    {
+      "path": "docs/evidence/bootcamp-d11-footage-events.json",
+      "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477"
+    },
+    {
+      "path": "src/Rasa.DBL/Migrations/BootcampData/BootcampS5ReinforcementsRows.cs",
+      "sha256": "5bd22195db7c49a625baee60c74b0248b1e14a4dd218832b2f751a9c4e75547b"
+    },
+    {
+      "path": "src/Rasa.Game/Managers/MissionContentRuntime.cs",
+      "sha256": "e36baebd63d1d421d8eaf1f1f1969c25cf6f924591d08acaed8c8aae6cab7d93"
+    },
+    {
+      "path": "src/Rasa.Game/Managers/ContentMaterializer.cs",
+      "sha256": "9b98e0e9e9e893b74f565d661f3ce805cf91610211e1e9fe7ea9aed59906b78d"
+    },
+    {
+      "path": "src/Rasa.Game/Managers/CreatureManager.cs",
+      "sha256": "348ddb0d05d834a3e6b62ef0d891b47488dc436e790832204bea8234f172144e"
+    },
+    {
+      "path": "src/Rasa.DBL/Services/Preloader/EntityClassPreloader.cs",
+      "sha256": "a6538a8753d367dd3ae76bc988d01c25a094e41fb53c4e979f0a59ab78db5f7d"
+    }
+  ],
+  "original_observation": {
+    "tier": "observed",
+    "video": "8VXeKzGUv0c",
+    "exact_location": "docs/evidence/bootcamp-d11-footage-events.json B1-050 at 86.800 s; B2-009 at 91.667\u201395.800 s; B2-012 at 95.400\u201398.333 s",
+    "finding": "Objective 1995/1 completes at 86.800 s. The first Forean target frame/nameplate appears at 91.667 s over an empty pad, the blue cone begins at 92.000 s, ghost figures appear by 93.000 s, a solid Forean by 93.667\u201394.333 s, and the group looks solid by 95.400 s.",
+    "limit": "The source video and prior frame mosaics are currently unavailable locally. The corrected ledger is a prior primary-frame transcription; it does not reveal original server packet ordering or an effect ID."
+  },
+  "current_emulator": {
+    "tier": "observed_code",
+    "exact_location": "BootcampS5ReinforcementsRows.cs placements 198679\u2013198682 (condition 198907); MissionContentRuntime.cs Apply reaction RefreshPresence; ContentMaterializer.cs RefreshPresence and SpawnCreature; CreatureManager.cs CreateCreatureOnClient",
+    "finding": "The destroyed-wreck fact makes Van Valkenberg and three reinforcements present immediately when objective 1 completes, and regular creature creation has no beam-in visual stage. The first observed Forean nameplate is 4.867 s later in the frame ledger; this does not establish when the original server spawned or made that NPC targetable."
+  },
+  "client_clue": {
+    "tier": "original",
+    "source": "docs/evidence/bootcamp-s5-reinforcement-beam-client-binding-20260924.json; original 1.16.5.0 usabledata.pyo, stringtable.pyo and catalogs.glm",
+    "finding": "Classes 10516 and 26652 have original state-transition animation and fly-in/fly-out/land-beam effect bindings. Neither is a static adv_bootcamp.map entity.",
+    "limit": "The asset bindings do not identify the S5 beam class, placement, state, or timing; do not seed one as an original S5 beam object without further evidence."
+  },
+  "assessment": "A reconnect-safe delayed arrival might address the immediate solid-presence discrepancy, but simply hiding then spawning a solid creature at 91.667 s would still miss the ghost-to-solid visual transition. The first nameplate is not proof of the original spawn or targetability time. Keep exact delay implementation and S5 effect binding open until the client protocol or primary frames constrain the sequence. The pad-hold walk correction is separate and remains valid.",
+  "architecture_decision": "docs/evidence/bootcamp-s5-delayed-presence-architecture-20260924.json",
+  "next_check": "Determine whether either original beam class is server-created for S5, then reproduce a copied-client appearance sequence and compare targetability, cone onset and solid figures against the frame ledger without treating client-visible timing as original packet ordering."
+}

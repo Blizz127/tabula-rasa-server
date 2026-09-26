@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "Original 1.16.5.0 human dropship beam classes and the unresolved S5 scene binding",
+  "scope": "Static, read-only decoding of the recovered 1.16.5.0 compatibility client. The package identifies itself as 1.16.5.0; an official final-live checksum and shutdown revision remain unverified.",
+  "sources": [
+    {
+      "path": "data/game.zip:generated/client/entityclass.pyo",
+      "sha256": "b4e99d0ca61b915487201b4bc75b09b8bed32a0f33127e855ea051883751a8ef"
+    },
+    {
+      "path": "data/game.zip:generated/client/usabledata.pyo",
+      "sha256": "f6bb6fd94c559bd1975ef0bd7cd7fa94eb13e1a499c21b94e1d609240a3304fd"
+    },
+    {
+      "path": "data/game.zip:generated/client/stringtable.pyo",
+      "sha256": "febd2e9a6caffd1b4c6370747924c7d63502a9eff3f363eaf0800ef94150cb5b"
+    },
+    {
+      "path": "data/game.zip:generated/client/constant/objectanimationspecification.pyo",
+      "sha256": "cd9ac688bb93596f03ee4e33ad01c0ccaa407d4028c0ae3d76ce35bf032c021b"
+    },
+    {
+      "path": "data/catalogs.glm",
+      "sha256": "270033c67db4ec3fa8af18e9f6d73530708922a7213f656c9b90aa13d448f748"
+    },
+    {
+      "path": "data/maps/adv_bootcamp/adv_bootcamp.map",
+      "sha256": "2876982ba3473dcb57d5cc4a1b88d75710349a71948d85fafb499b2a8f5106f3"
+    }
+  ],
+  "client_classes": [
+    {
+      "class_id": 10516,
+      "name": "UsableTwoStateHumDropshipBeam",
+      "tier": "original",
+      "entityclass_bytecode_offset": 104647,
+      "base_mesh_asset_id": 18990,
+      "usable_augmentation": 9,
+      "state_transition_bindings": [
+        {"from": 55, "to": 56, "animation_id": 4, "animation_name": "USABLE_STATE_0_TO_STATE_1", "animation_bytecode_offset": 14143, "special_fx_asset_id": 22060, "special_fx_name": "human_dropship_fly_in.pkg", "special_fx_bytecode_offset": 69415},
+        {"from": 55, "to": 97, "animation_id": 52, "animation_name": "USABLE_STATE_0_STATIC", "animation_bytecode_offset": 14170, "special_fx_asset_id": null},
+        {"from": 56, "to": 55, "animation_id": 6, "animation_name": "USABLE_STATE_1_TO_STATE_0", "animation_bytecode_offset": 14197, "special_fx_asset_id": 22062, "special_fx_name": "human_dropship_take_off.pkg", "special_fx_bytecode_offset": 69433},
+        {"from": 56, "to": 97, "animation_id": 5, "animation_name": "USABLE_STATE_1_STATIC", "animation_bytecode_offset": 14224, "special_fx_asset_id": 39485, "special_fx_name": "human_dropship_land_beam_loop.pkg", "special_fx_bytecode_offset": 69451}
+      ],
+      "alternate_mesh": "usabledata.pyo alternateMesh (10516,55,56) at bytecode offset 31051 is asset 18990 vehicle_hum_dropship_v01.geo; (10516,55,97) at 31072 is asset 17263 null_geo.geo",
+      "catalog": {"entry": "class10516.cat", "directory_entry_offset": 21663374, "chunk_offset": 4602880, "chunk_size": 5650, "chunk_sha256": "80563a9f12218a99382d3107dfed79b38c93aa56a497886602ba102a8a390c48", "beam_resources_at_chunk_relative_offsets": {"97": "vfx_vehicle_hum_dropship_teleport_beam.geo", "206": "human_dropship_land_beam_loop.pkg", "592": "vfx_vehicle_hum_dropship_teleport_beam.pfx", "1593": "vfx_vehicle_hum_dropship_teleport_beam_loop.anm", "1661": "vfx_vehicle_hum_dropship_teleport_beam_off.anm", "1728": "vfx_vehicle_hum_dropship_teleport_beam_on.anm"}}
+    },
+    {
+      "class_id": 26652,
+      "name": "UsableTwoStateHumDropshipBeamVertical",
+      "tier": "original",
+      "entityclass_bytecode_offset": 404917,
+      "base_mesh_asset_id": 18990,
+      "usable_augmentation": 9,
+      "state_transition_bindings": [
+        {"from": 55, "to": 56, "animation_id": 122, "animation_name": "USABLE_STATE_0_TO_STATE_1_VER2_", "animation_bytecode_offset": 24646, "special_fx_asset_id": 45608, "special_fx_name": "human_dropship_tunnel_beam_fly_in.pkg", "special_fx_bytecode_offset": 82843},
+        {"from": 55, "to": 97, "animation_id": 124, "animation_name": "USABLE_STATE_0_STATIC_VER2_", "animation_bytecode_offset": 24673, "special_fx_asset_id": null},
+        {"from": 56, "to": 55, "animation_id": 123, "animation_name": "USABLE_STATE_1_TO_STATE_0_VER2_", "animation_bytecode_offset": 24700, "special_fx_asset_id": 45609, "special_fx_name": "human_dropship_tunnel_beam_fly_out.pkg", "special_fx_bytecode_offset": 82861},
+        {"from": 56, "to": 97, "animation_id": 125, "animation_name": "USABLE_STATE_1_STATIC_VER2_", "animation_bytecode_offset": 24727, "special_fx_asset_id": 39485, "special_fx_name": "human_dropship_land_beam_loop.pkg", "special_fx_bytecode_offset": 82879}
+      ],
+      "alternate_mesh": "usabledata.pyo alternateMesh (26652,55,56) at bytecode offset 33970 is asset 18990 vehicle_hum_dropship_v01.geo; (26652,55,97) at 33991 is asset 17263 null_geo.geo",
+      "catalog": {"entry": "class26652.cat", "directory_entry_offset": 21692502, "chunk_offset": 11713536, "chunk_size": 6333, "chunk_sha256": "f0bb56e6cd422e4c8d48f0d2540cd0f45d2ffd2c33b496b944fc4ced539e4515", "beam_resources_at_chunk_relative_offsets": {"97": "vfx_vehicle_hum_dropship_teleport_beam.geo", "160": "human_dropship_land_beam_loop.pkg", "214": "human_dropship_tunnel_beam_fly_in.pkg", "272": "human_dropship_tunnel_beam_fly_out.pkg", "496": "vfx_vehicle_hum_dropship_teleport_beam.pfx", "1773": "vfx_vehicle_hum_dropship_teleport_beam_loop.anm", "1841": "vfx_vehicle_hum_dropship_teleport_beam_off.anm", "1908": "vfx_vehicle_hum_dropship_teleport_beam_on.anm"}}
+    }
+  ],
+  "identifier_resolution": {
+    "tier": "original",
+    "method": "The adjacent key/value constants in stringtable.pyo resolve the usabledata specialFX and alternateMesh asset IDs; its key LOAD_CONST bytecode offsets are listed here. Animation names come from the constant/objectanimationspecification.pyo assignments.",
+    "stringtable_key_bytecode_offsets": {"22060": 61861, "22062": 61879, "39485": 185539, "45608": 217309, "45609": 217318}
+  },
+  "bootcamp_map_check": {
+    "tier": "original",
+    "method": "Parsed all 1,435 static entity records in the original format-2.45 adv_bootcamp.map using the client/gamemap-derived MapFile grammar in src/Rasa.ClientData/MapFile.cs.",
+    "result": "No static entity has class ID 10516, 26652, or the Bane Bay variant 26455. If one of those classes appeared during S5, it was not a static map placement."
+  },
+  "s5_assessment": {
+    "tier": "inferred",
+    "confidence": "low for exact S5 class; high for the client table and archive bindings",
+    "finding": "The client contains working two-state human dropship beam asset families and a visible beam resource for both variants. This materially strengthens their candidacy for the S5 reinforcement flyover and cone, but the static map contains no placement and no source yet binds either class, state, position, creation packet, or transition time to S5.",
+    "unverified": ["Which class, if either, produced the 92.000 s S5 blue cone", "Server-driven spawn and state sequence, position, orientation, timing and removal", "Whether the gradual ghost-to-solid NPC arrival is driven by this usable, an independent effect, or creature spawn presentation"],
+    "implementation_limit": "Do not add a 10516 or 26652 S5 placement or claim its timing is original from these client assets alone."
+  }
+}

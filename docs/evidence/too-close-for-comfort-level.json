@@ -1,0 +1,25 @@
+{
+  "schema": "rasa.wilderness.mission-level-correction.v1",
+  "date": "2026-09-24",
+  "mission_id": 1407,
+  "field": "npc_mission.level",
+  "old_value": 5,
+  "new_value": 4,
+  "tier": "observed",
+  "source": {
+    "kind": "contemporary community mission record",
+    "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json",
+    "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0",
+    "exact_location": "missions['Too Close For Comfort'].fields.Level.value = '4'; set_ts 2007-09-02T13:34:50Z, set_revid 8563; page last_ts 2008-02-28T17:35:43Z"
+  },
+  "client_boundary": {
+    "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/client.json",
+    "sha256": "ec05898b1af50bcbcf5e86ea6a9507295b8795efbd741a67f585e750ffdafa5a",
+    "exact_location": "missions['1407'] contains text, objectives and conversations, but no level field"
+  },
+  "official_source_check": "The cached official Wilderness walkthroughs from May, September and November 2008 and January 2009 mention the mission order but do not give a numeric level. Cached patch notes contain no mission 1407 level change.",
+  "local_source_status_2026_09_24": "The /home/blizz/backups tree disappeared after this record and its source hashes were verified. The cited TaRapedia/client extraction paths are currently unavailable; the field transcription and prior SHA-256 verification remain recorded, but a fresh source read requires recovery or reacquisition.",
+  "implementation": "20260924130000_TooCloseForComfortLevel updates the SQLite and MySQL world seed from the prior inferred 5 to the recorded 4. This field is sent to the client as mission information; MissionManager does not use it as an offer gate.",
+  "confidence": "high for the pre-shutdown recorded level; final-live server level unverified",
+  "unverified": "No original final-live server mission row or final-week HUD capture of mission 1407 level is known. The 2007 value may have changed without a recorded page update."
+}

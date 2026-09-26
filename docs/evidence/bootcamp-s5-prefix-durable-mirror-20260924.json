@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "date_local": "2026-09-24 America/Chicago",
+  "subject": "Durable mirror of five isolated accepted-1995 original-client attempts",
+  "mirror_root": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924",
+  "mirror_index": "/home/blizz/private-artifacts/rasa-net-s5-prefix-20260924/mirror-index.json",
+  "mirror_index_sha256": "ee51379b75ad6905e2287ce7b3337919742e67cbfd0e654f5ac5c2695eb336bb",
+  "verified_files": 633,
+  "source_status": "The earlier /home/blizz/backups/rasa-net/research/20260922-client-playthrough tree and its recovered client/harness were removed externally; they are not in this mirror. This mirror preserves only the five isolated-run artifacts, controllers, copied databases and manifests still available.",
+  "source_manifest_verification": {
+    "bootcamp-s5-accepted-prefix-normal-combat-20260924.json": {
+      "verified": 47,
+      "missing": 1,
+      "missing_paths": [
+        "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/playthrough-harness-courtyard-traced.py"
+      ]
+    },
+    "bootcamp-s5-gate-visual-acquisition-20260924.json": {
+      "verified": 14,
+      "missing": 0
+    },
+    "bootcamp-s5-gate-immediate-fire-latency-20260924.json": {
+      "verified": 13,
+      "missing": 0
+    },
+    "bootcamp-s5-accepted-prefix-fifth-route-divergence-20260924.json": {
+      "verified": 17,
+      "missing": 0
+    }
+  },
+  "note": "The earlier backup tree and its initial durable mirror were removed externally. The 1.16.5.0 compatibility client was reacquired and an isolated harness rebuilt separately (docs/evidence/client-11650-restored-20260924.json and docs/evidence/bootcamp-s5-rebuilt-adaptive-gate-and-target-lock-20260924.json). The original traced harness remains unavailable, so the old run cannot be repeated with byte-identical test tooling. This mirror contains the still-available capture PNGs, process logs, command traces, controller scripts, copied character/world/auth databases and run manifests; each copied file is checked by mirror-index.json."
+}

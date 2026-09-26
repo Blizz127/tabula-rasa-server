@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T07:20:29Z",
+  "subject": "Live deployment of transactional character deletion cleanup with all-new-character boot camp admission",
+  "scope": "Emulator operation and consistency; not proof of final-live 1:1 fidelity",
+  "previous_image": "rasa_net_game:dit-preservation-20260924a (sha256:a2e945d97f4ab4d4b9f153fa5235f70b71ee424c7411c1957d55bbaeda3c6493)",
+  "new_image": "rasa_net_game:dit-preservation-20260924c (sha256:f58c3b8ed122dbcc154504cbaa21e28bb37baf1ad69a31efa1d5de681b15eab8)",
+  "launch_command": "docker compose -f docker-compose.yml -f docker-compose.dit.yml up -d --no-deps --no-build game",
+  "backup": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c",
+  "observed": {
+    "game_state": "running; restart count 0",
+    "dit_mount": "/app/dit present",
+    "dit_status": "enabled=true, failed=false, checkedAtUtc=2026-09-24T07:20:29.1617021+00:00",
+    "startup": "18 content rules, 414 content rows, zero gaps; Boot camp entry: AllNewCharacters; listening port 8102; authenticated with Auth",
+    "database_integrity": "character and world SQLite PRAGMA integrity_check both ok",
+    "new_character_tests": "86/86 passed inside preservation-20260924c .NET 5 image",
+    "deletion_tests": "normal cleanup and forced rollback passed within NewCharacterTests"
+  },
+  "sources": [
+    {"path": "src/Rasa.DBL/Repositories/Char/Character/CharacterRepository.cs", "sha256": "3edaaae690a35061231d8971e7bf033b53ff1fa6b5af634304b91441e7433738"},
+    {"path": "src/Rasa.Game/Managers/CharacterManager.cs", "sha256": "11325575918fb7b1ac216098e8b41cdf4c8161107a41934734e2f4b5601fae6b"},
+    {"path": "src/Rasa.Test/NewCharacterTests.Deletion.cs", "sha256": "c03c0c86de94ddccfb27b5a8d5c9ffe924198e120f6ceac104486954add96c71"},
+    {"path": "docker-compose.dit.yml", "sha256": "2a404ca710016d71284ba07cde5dd73be52254954c6a8d3bd08193871b1858db"},
+    {"path": "appsettings.env.json", "sha256": "ffc05e9b1143faa37f8319a16f393476ef0c54d3c46cbadc93afccad70caeec8"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/rasachar.db", "sha256": "243bce22d308358c12cabb9deb56ca52c3a8c5e39637113a8d0f1ab7e8942c6f"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/rasaworld.db", "sha256": "f0142463b3f850772c3466955487af4fdac58048c87d19a6ac846dfeecf273b5"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/base-build.log", "sha256": "4fb48101fdce6785bcc011f277d65232c024b7e349bf953fe40fd8c826c1db69"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/dit-build.log", "sha256": "b2fb04ccc02517ea4760db05c744831a88b0324e0966f384d9bcb88165398009"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/new-character-tests.log", "sha256": "edff8c188d54c6969ae4e4c5db5f60df8c071a83a0410e682c803b41a0c3d889"},
+    {"path": "/home/blizz/backups/rasa-net/deletion-rollout-20260924c/startup.log", "sha256": "24163a7678660313bd83912be888ea279188519c9cec89cf2d169f963bda5b99"}
+  ],
+  "client_smoke": "Recovered 1.16.5.0 client created id13, reached playable map1985 Luna Cavern/Bootcamp HUD with Initiation offer, logged out, and deleted the exact character through Character Select. All 14 character_id child tables and five owned item rows were absent afterward; see docs/evidence/live-bootcamp-smoke-preservation-20260924c.json.",
+  "remaining_verification": "Recovered client code shows closing a forced radio offer accepts it; the X/Escape input order in this smoke remains ambiguous. See docs/evidence/live-initiation-offer-dismissal-20260924.json. Complete boot camp progression and final-live 1:1 fidelity remain open."
+}

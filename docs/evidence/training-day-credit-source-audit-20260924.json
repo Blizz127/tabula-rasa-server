@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "question": "What credit amount did mission 1526 Training Day pay on the final live Tabula Rasa service?",
+  "result": "Unresolved. The surviving final-week footage transcript reads 120 only partially; an older DaOpa/Ellatha mission listing was previously transcribed as 180. The corresponding original frame and exact archived Ellatha mission page are currently unavailable for independent reinspection. Neither the compatible client package nor an isolated run against this emulator contains independent final-live server reward data.",
+  "sources": [
+    {
+      "tier": "observed, but current access is a derived transcript rather than the original frame",
+      "version_or_date": "Final-week original gameplay; exact recording and client build dates not established",
+      "source": "https://www.youtube.com/watch?v=8VXeKzGUv0c",
+      "exact_location": "B2 segment 98.400 seconds, event B2-023, docs/evidence/bootcamp-d11-footage-events.json:1352-1360; transcript SHA-256 92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84; verification SHA-256 7767bb523e9e0333026caebbd75a8985603fe47076ef0d19dbe1290937286f46",
+      "reported_value": 120,
+      "qualification": "The original transcription explicitly says '[credits icon] 120 (partial)'. Its image/source captures were in the missing backup tree and were not independently re-read in this audit. The video cuts before Kincaid turn-in, so this is an offer-window reading only."
+    },
+    {
+      "tier": "secondary contemporary database; earlier version, inaccessible primary page",
+      "version_or_date": "Described in prior 2026-09-15 Wayback research as early-2008 content, before the live Deployment 11 boot-camp rebuild of 2008-08-15; the exact mission-page capture date is no longer available",
+      "source": "DaOpa/Ellatha Tabula Rasa mission database, as transcribed in docs/progression-preservation-plan.md:1034-1039",
+      "exact_location": "Prior research says Training Day had 180 credits and a Vextronics Pistol or Vextronics Pulse Pistol choice. The cited work/wayback-era-findings.md and captured page are missing; Wayback CDX query https://web.archive.org/cdx/search/cdx?url=ellatha.com/tr/missionsview.asp*&output=json&collapse=urlkey&filter=statuscode:200 returned 37 distinct archived mission-page URL keys on 2026-09-24, none for Training Day. This is a bounded archive search, not proof that no capture exists.",
+      "reported_value": 180,
+      "qualification": "Cannot independently validate the number or establish that this older mission record matched the final live version. The surviving 2008-06-20 archived missions list omits Training Day: https://web.archive.org/web/20080620032053/http://www.ellatha.com/tr/missionslist.asp. Absence from that list is not evidence of the later reward amount."
+    },
+    {
+      "tier": "original compatible client package, limited to client-side definitions",
+      "version_or_date": "1.16.5.0 compatibility build; not proven exact shutdown build",
+      "source": "/home/blizz/private-artifacts/rasa-client-1.16.5.0/extracted/Tabula Rasa 1.16.5.0/data/game.zip",
+      "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+      "exact_location": "ZIP member listing: generated/client/missionconversation.pyo, missionobjective.pyo, missionstate.pyo and English missiontextlanguage.pyo; no mission reward definition member. Mission 1526 text and objectives identify the mission but do not specify credits.",
+      "qualification": "Server reward data cannot be inferred from the client-side mission text or from item names."
+    },
+    {
+      "tier": "emulator behavior, not independent final-live evidence",
+      "version_or_date": "Isolated copied-client run, 2026-09-24",
+      "source": "docs/evidence/s6-training-day-ordinary-route-reward-relog-20260924.json",
+      "exact_location": "run.locators output/kincaid-reward-open.png; saved_state_delta.credit [360,480]",
+      "reported_value": 120,
+      "qualification": "Confirms the currently seeded emulator path and client presentation only. It does not validate the final-live amount."
+    }
+  ],
+  "decision": "Keep the 1526 credit amount explicitly unresolved. Do not promote either 120 or 180 to verified final-live data or modify the deployed seed on this evidence. The currently seeded 120 remains a labelled, partly observed reconstruction, subject to replacement if an original frame, final-live capture, or authoritative versioned server source establishes the amount.",
+  "next_evidence_needed": "Recover or newly capture the original B2-023 reward frame at 98.400 seconds with enough resolution to read all digits, or obtain a versioned final-live Training Day offer/turn-in capture or server reward record."
+}

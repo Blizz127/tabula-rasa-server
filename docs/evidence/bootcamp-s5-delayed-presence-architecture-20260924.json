@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 reinforcement delayed presence: read-only architecture and evidence decision",
+  "status": "design_only_no_gameplay_change",
+  "sources": [
+    {"path": "docs/evidence/bootcamp-d11-footage-events.json", "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477", "location": "B1-050, B2-009, B2-012"},
+    {"path": "docs/evidence/bootcamp-s5-reinforcement-beam-client-binding-20260924.json", "sha256": "0d8f9ef8e6c31862e544593a23b0d8e6ceb3cbe38b4be3ef0d3922e1ae0f4180", "location": "client_classes and s5_assessment"},
+    {"path": "src/Rasa.DBL/Migrations/BootcampData/BootcampS5ReinforcementsRows.cs", "sha256": "5bd22195db7c49a625baee60c74b0248b1e14a4dd218832b2f751a9c4e75547b", "location": "lines 188-220, 252-261"},
+    {"path": "src/Rasa.Game/Managers/MissionContentRuntime.cs", "sha256": "e36baebd63d1d421d8eaf1f1f1969c25cf6f924591d08acaed8c8aae6cab7d93", "location": "lines 169-179, 256-269, 654-676, 1270-1307"},
+    {"path": "src/Rasa.Game/Managers/ContentMaterializer.cs", "sha256": "9b98e0e9e9e893b74f565d661f3ce805cf91610211e1e9fe7ea9aed59906b78d", "location": "lines 61-86"},
+    {"path": "src/Rasa.Game/Managers/MissionManager.cs", "sha256": "2b20cb6b44ffb18fda6757e602490cb9d6e17afb8a5e4dabdc4cfc275d125a8f", "location": "lines 937-1008"},
+    {"path": "src/Rasa.Game/Managers/MapChannelManager.cs", "sha256": "e2c3b241c5f605a71d09edfa7a4d5bcbeb8960eaa7f1464a2fdef3bac2f1ada7", "location": "lines 407-415, 520-528"},
+    {"path": "src/Rasa.Game/Managers/CharacterManager.cs", "sha256": "11325575918fb7b1ac216098e8b41cdf4c8161107a41934734e2f4b5601fae6b", "location": "lines 798-823"},
+    {"path": "src/Rasa.DBL/Structures/Char/CharacterContentFactEntry.cs", "sha256": "64318ded3e6db91c24bf00e5fe03b3b4361ea57762fcc819c9126bc3016293ec", "location": "lines 11-33"}
+  ],
+  "observed_timing": {
+    "tier": "observed_prior_frame_transcription",
+    "compatibility_client": "1.16.5.0; original shutdown client revision unverified",
+    "original_gameplay_video": "8VXeKzGUv0c",
+    "objective_one_complete_video_s": 86.8,
+    "first_forean_nameplate_video_s": 91.667,
+    "difference_ms": 4867,
+    "blue_cone_video_s": 92.0,
+    "ghost_figures_by_video_s": 93.0,
+    "group_solid_by_video_s": 95.4,
+    "limits": "4.867 seconds is subtraction of two frame-ledger timestamps, not a measured original server spawn delay or first moment of targetability. Frame quantization, recognition uncertainty and unknown packet-to-display latency apply. The source video and earlier frame mosaics are unavailable locally for reinspection."
+  },
+  "current_implementation": {
+    "tier": "observed_code",
+    "finding": "Rule 1985007 sets bootcamp.dropship_destroyed when the bomb enters state 115; both missions' objective 1 transition and the fact commit in one character unit of work. Condition 198907 gates all four reinforcement placements 198679-198682 directly on the destroyed fact. After commit, Apply updates the in-memory fact then RefreshPresence spawns all four immediately. On map entry the same refresh rebuilds them from the saved fact.",
+    "clock_gap": "character_content_fact.change_time stores uint Unix seconds, while CharacterManager loads only fact values into Manifestation. This cannot accurately reconstruct a millisecond deadline after reconnect. The completed objective's running timer is cleared in MissionManager; it is not a retained arrival clock.",
+    "tick_gap": "MissionContentManager.DoWork returns early for contexts without areas or companions; a future deadline needs an explicit pending-presence check on the owner map tick or equivalent scheduler. MapChannelManager calls DoWork before DetonateFuses on each tick."
+  },
+  "possible_implementation_if_evidence_supports_delay": {
+    "tier": "inferred_architecture_not_authorized_gameplay_rule",
+    "persistence": "Add a nullable Unix millisecond timestamp to the character fact record or a dedicated per-character deadline row, with SQLite and MySQL character migrations. Stage it atomically with the destroyed fact and objective transition; load it into in-memory content state on login. Keep legacy seconds for compatibility and specify handling of old rows explicitly.",
+    "world_data": "Represent any substantiated arrival delay as optional data for the four S5 placements via SQLite and MySQL world migrations, rather than coding a global delay into unrelated presence conditions. Keep condition 198907 and the failed-objective fact clears for both 1995 and 2005.",
+    "runtime": "Use an injectable UTC millisecond clock for deadline evaluation. RefreshPresence must withhold these creatures before the deadline; an owner-only tick should refresh when due. Existing placement identity and CanMaterializeContentPlacement prevent repeated spawns. Clearing the destroyed fact on failure must cancel pending appearance and remove live creatures through the ordinary presence path.",
+    "reconnect": "A fresh private instance must derive the remaining time from persisted UTC milliseconds. Reconnect before due waits; reconnect after due materializes once. Server restart must not restart the full delay. Any in-memory timer may be an optimization only, never the sole source of truth.",
+    "presentation_boundary": "Delaying an ordinary solid creature spawn cannot reproduce the blue cone, ghost figures or fade to solid. The original S5 beam class, state, coordinates, effect ordering and packet sequence are not established by the available client assets."
+  },
+  "required_tests_if_implemented": [
+    "Detonation transaction commits objective 1 and the timestamped destroyed fact together, and the immediate post-commit RefreshPresence leaves the four placements absent before the substantiated deadline.",
+    "A controlled clock shows no early spawn and one spawn per placement at or after deadline; repeated ticks remain idempotent and do not revive defeated zero-respawn placements.",
+    "Fresh-login private instance before and after deadline, plus Game restart simulation, derives remaining time from persisted character data; another character cannot control owner presence.",
+    "Failure and retry of both mission 1995 and retry mission 2005 clear the fact, cancel a pending arrival, and allow a new arrival anchor on successful detonation.",
+    "SQLite and MySQL world and character migrations apply and preserve existing facts; copied original-client run compares onset, target selection, cone, ghost and solid frames separately against primary footage."
+  ],
+  "decision": "No gameplay delay or beam effect is introduced by this record. The first visible Forean nameplate does not prove when the original server spawned or made the NPC targetable. A delay requires stronger primary evidence or a deliberately labelled reconstruction decision; an exact 4.867-second rule must not be called final-live verified.",
+  "remaining_unverified": [
+    "Original server spawn and targetability times relative to objective 1 completion",
+    "Which client effect and entity class, if any, produced the S5 cone and ghost transition",
+    "Frame-ledger uncertainty and packet-to-display latency",
+    "Whether Van Valkenberg and all three soldiers shared one appearance clock"
+  ]
+}

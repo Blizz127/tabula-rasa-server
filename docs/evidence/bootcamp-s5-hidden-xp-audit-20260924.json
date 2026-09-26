@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "subject": "S5 to S6 level 3 to 4 transition hidden by the original footage cut",
+  "provenance_tier": "observed",
+  "confidence": "High that a level-up occurred inside the cut; low for amount, source and trigger",
+  "observations": [
+    "Original final-week video 8VXeKzGUv0c remains level 3 through B2-002 and the final boot-camp frame 98.333 s. The XP bar does not move through the 86.6 s detonation to 98.333 s.",
+    "The hard edit 98.333 to 98.400 s omits the Van Valkenberg check-in, exit pad/transport, any intervening kills, and any full XP message.",
+    "At the first Alia Das frame B2-016 the player is level 4. The chat already contains the tail of the level-up line, 'points and 2 skill points.' (B2-017), so the level-up predates that frame. Mission 1995 is displayed as '(complete)' (B2-022), which does not establish that a reward was collected.",
+    "The level-3 XP bar in sheet_xpbar_79_99.png is roughly one quarter filled. The emulator threshold table has 10500 cumulative XP for level 3 and 24000 for level 4. With that table, the missing gain is on the order of 10000-11000 XP, but image resolution, unknown preceding XP and unseen kills prevent an exact bound.",
+    "Known seeded fixed gains before 1995 are 1250 (1990), 1250 (1992), 500 (1994 promotion), and 5000 (1994 reward): 8000 total. The original reaches level 3 through observed/unseen combat before the blast; a no-kill emulator route cannot use those combat gains as a fixed S5 grant."
+  ],
+  "source_audit": "The previous focused reward search found no final-live 1995 or 2005 payout in original client tables, surviving footage, TaRapedia/Ellatha mission listings, contemporary notes, or targeted web search. A fresh 2026-09-24 web search for the exact mission title with Van Valkenberg, Youngblood and XP likewise returned no relevant contemporary result.",
+  "decision": "Do not seed a fixed or dynamic XP grant yet. A candidate 10000-11000 grant is only an inferred interval needed to match this edited playthrough, not evidence of a retail mission reward. Its exact value and triggering event (Van Valkenberg objective, exit transfer, unseen kills, or another event) are unknown. A dynamic top-up to level 4 would add a custom catch-up mechanic. Keep GAP-S5-HIDDEN-XP and GAP-S5-MISSION-REWARDS open, and continue implementing independent S6 systems. Revisit when a readable uncut final-live transition or packet capture identifies at least the source and trigger; if a provisional grant becomes necessary for a concrete blocked progression gate, label each field as inferred or analogue and verify its effects on the level curve.",
+  "sources": [
+    { "path": "/home/blizz/backups/rasa-net/research/20260914-bootcamp-s5/work/sheet_xpbar_79_99.png", "sha256": "54e24e2b687ca9b278cbcabd069595a60230c76d88801b15305c2f881ab4b4cd", "exact_location": "79.0-99.0 s XP-bar comparison around the detonation and edit" },
+    { "path": "/home/blizz/servers/rasa-net/docs/evidence/bootcamp-d11-footage-events.json", "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477", "exact_location": "B2-002, B2-015 through B2-022" },
+    { "path": "/home/blizz/servers/rasa-net/docs/evidence/bootcamp-s5-reward-source-audit-20260924.json", "sha256": "13dd9d97e9dc0c7e33a238a285ae760e49dd30a52c0b908eda7cfa715034133d", "exact_location": "inspected sources and unresolved mission payout fields" },
+    { "path": "/home/blizz/servers/rasa-net/src/Rasa.Game/Data/ExpPerLevel.cs", "sha256": "111e9ceaf6857ba3bf3b1f9709ef1e251b86f7010ea5c05ce3e9f4ac94a1b294", "exact_location": "lines 9-12; emulator thresholds, not independently proven final-live table" }
+  ],
+  "remaining_gaps": [
+    "Original final-live XP amount and original XP threshold source",
+    "Whether level-up came from mission/objective XP, combat, a transfer event or another hidden action",
+    "1995/2005 mission reward XP and whether 1995 was merely completeable or rewarded at Alia Das"
+  ],
+  "later_correction": "docs/evidence/s5-s6-tier-gate-xp-followup-20260924.json: the 10000-11000 scenario reaches emulator level 4 only. The final-week frame audit also records a full XP bar, PM 663 and enabled Soldier Train at Alia Das, consistent with the Recruit tier gate. Under the emulator's unverified table, the gap from the estimated pre-cut bar to that gate is roughly 29000 XP; neither value is an original reward amount. docs/evidence/s5-s6-xp-source-exclusion-20260924.json further excludes ordinary 1995 and 1526 turn-in rewards as the source of XP already visible on arrival."
+}

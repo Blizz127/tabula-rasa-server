@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24",
+  "subject": "S5 outpost approach: original fight context versus copied level-2 route death",
+  "scope": "Read-only comparison of final-week frame records, original-map position reconstruction, and existing copied-client route artifacts; no client run or gameplay change",
+  "original_observations": [
+    {
+      "tier": "observed",
+      "exact_location": "docs/evidence/bootcamp-d11-footage-events.json B1-008/B1-010 at 4.267 s, B1-013/B1-016 at 14.067 s and 32.267-33.067 s; original video 8VXeKzGUv0c",
+      "finding": "After the 1994 turn-in the filmed recruit is still level 2 and holds an AccuMax Shotgun. A cut from 14.000 to 14.067 s hides a level-up, after which the recruit is level 3 while fighting multiple Thrax Infantry Initiates; one level-1 target is visible at 32.267-33.067 s. Neither the level-up source nor the shotgun acquisition is shown."
+    },
+    {
+      "tier": "measured",
+      "exact_location": "docs/evidence/bootcamp-d11-positions.json spawn.outpost_1995.thrax_initiate_l1.1, original video 8VXeKzGUv0c at 32.400-32.533 s",
+      "uncertainty": "Player radar position ±2 m; target bearing ±10 degrees; range reading medium confidence; combined hostile-position uncertainty ±3.3 m horizontal, ±0.5 m vertical.",
+      "finding": "The filmed player is near (-75.74,84.21) XZ, heading about 300 degrees, with the level-1 target nameplate reading 12 m. The reconstructed target's engagement position is (-85.0,86.33,91.03), about 11.5 m horizontally from that player point. This is an engagement sample, not a proven spawn or patrol origin."
+    }
+  ],
+  "emulator_comparison": [
+    {
+      "tier": "observed_emulator",
+      "exact_location": "docs/evidence/bootcamp-s5-accepted-prefix-normal-combat-20260924.json observations 1-4; /var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/14-w5.png, 15-w3.png and game.log line 643",
+      "finding": "The copied accepted-1995 recruit began level 2 with 8695 XP and a rifle. At (-82.2,87.2,75.2), about 16.1 m horizontally from the seeded Thrax point, the screenshot already shows an incoming -12 hit. Continued movement to (-94.5,85.2,67.5) ended in death before wounded-soldier dialogue; the server attributed the kill to the seeded Thrax at (-85,86.3,91). The original footage's level-3 shotgun combat cannot calibrate this level-2 rifle run's survivability."
+    },
+    {
+      "tier": "measured_emulator",
+      "exact_location": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json corridor checkpoint (-67.343,87.269,75.242); docs/evidence/bootcamp-d11-positions.json seeded outpost target",
+      "uncertainty": "The corridor coordinate is a copied-client /loc reading; the hostile reference point is ±3.3 m and may move. Visibility and line of sight were not checked from this checkpoint.",
+      "finding": "The earlier east corridor checkpoint is about 23.7 m horizontally from the seeded Thrax engagement point, before the copied route reaches the -82.2 point where damage was visible. It is a bounded place to inspect target visibility and attempt ranged engagement in a future isolated client run. It is not an original recorded player waypoint or a verified safe firing location."
+    }
+  ],
+  "decision": "Do not relocate the Thrax, increase player XP, change weapon, or tune damage from this comparison. The final-week outpost fight contains an edited level-up and weapon change, while the copied route's enemy activation, sightline and combat timing remain unmeasured. The exact original approach from Youngblood to the soldier is still unverified.",
+  "next_check": "In a copied-client normal-hostile run, stop at the already reached corridor point near (-67.34,87.27,75.24), inspect the Thrax target and actual line of sight before moving closer, then aim/fire while recording range, health, enemy movement and mission state. Continue to the soldier only after resolving that encounter. Treat this as emulator route testing, not a recovered original route.",
+  "sources": [
+    {
+      "path": "docs/evidence/bootcamp-d11-footage-events.json",
+      "sha256": "72fcc6dde434bf8b9eb190107857b52442f68253f75828ec79d7bb967249b477"
+    },
+    {
+      "path": "docs/evidence/bootcamp-d11-positions.json",
+      "sha256": "2a7539fa3e4383531f390dbffd90583cf18aa38a39f4f7f78254b69e043ce8a8"
+    },
+    {
+      "path": "docs/evidence/bootcamp-s5-accepted-prefix-normal-combat-20260924.json",
+      "sha256": "eff93e69dc0478162f93107eac2df4c5f704a749987aee73962869c562dd15a5"
+    },
+    {
+      "path": "docs/evidence/bootcamp-s5-soldier-approach-20260924.json",
+      "sha256": "b308ac054f6d68281a207a842351d62b555a0bbf7bf932f487ef1bcf1a17cbeb"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/14-w5.png",
+      "sha256": "954d966967aa90079b2cb6d1c1c8d31670941d0976cc15ef8792031288a3d9b3"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/15-w3.png",
+      "sha256": "60052ea5271089bed72773aec4722427a2b537db491b6bed2f1db6c1a8e801a1"
+    },
+    {
+      "path": "/var/tmp/rasa-s5-prefix-uninterrupted-20260924/output/game.log",
+      "sha256": "0f3a6491624f7521cf5be601b055713651753db331a722ecddd6ef61696087ae"
+    }
+  ],
+  "source_limit": "The original video file in the historical /home/blizz/backups/rasa-net/research tree is currently absent. Original observations rely on the cited verified frame records; no new footage extraction or remeasurement was possible."
+}
