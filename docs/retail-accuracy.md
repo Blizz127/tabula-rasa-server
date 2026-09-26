@@ -1849,3 +1849,29 @@ The gaps are GAP-READY-REDIRECT-COMPLETION, -434-GATE, -408-GATE, -MISSION-ITEM,
 -JORAI-POSITION and GAP-MISSION-LEVEL. Provenance: the manifest rows with migration `EarlyReadyMissions` and
 `docs/evidence/early-ready-missions.json`.
 
+## 2026-09-26 — world placement corrections (`WorldDefectsFix`)
+
+Migration `20260926130000_WorldDefectsFix` (rows in `WorldDefectsFixRows.cs`) corrects the rows two read-only audits
+of the deployed world found wrong. Probes and dated readings: `docs/evidence/world-defects-20260926.json`. Labels:
+the manifest rows for placements 199106/199107 and spawn pools 510137, 510133, 510068, 510118, 510117 and 510085.
+
+- **Treeback Camp.** Field Lt. Bagby (199106) and Lt. Galloway (199107) move from the Palisades overworld (1244) to
+  the Treeback Camp instance (1397) at TaRapedia's own x,y,z. The final client's 1788/1789 logs place them at the camp,
+  and their pages' infoboxes say `Instance=Treeback Camp`. The readings sit 0.12 and 0.02 m off the instance floor and
+  34–40 m under the overworld, so `WorldFloorSweep` had lifted two sourced values; its rows stay as history. Missions
+  1788/1789 still resolve: 1397 is a shared context with its own channel, and map links 21/35 are enabled.
+  Remaining: `GAP-TREEBACK-GALLOWAY-SCRIPTED` and `GAP-TREEBACK-POSITIONS-PRE-D11`.
+- **Warnet Queen.** Spawn pool 520046 is removed (it came from InfiniteRasa's boss preloader and was seeded by a migration
+  the deployed world has run). It was a generic hostile level-28 queen on the Divide's "Foreas Base" label, 0.5 m from
+  the receiver of seeded 1743, and no source places one there or on the Palisades overworld (`GAP-PALISADES-WARNET-QUEEN`).
+- **Marker-stacked receivers.** Valerie Corman: post-D11 TaRapedia plus codex-tr.net, x,z inferred (high). Ranger Jorai:
+  pre-D11 TaRapedia only, medium confidence (`GAP-JORAI-PRE-D11-LOC`). Lieutenant Epp: post-D11 TaRapedia, 2.2 m from the
+  client's hospital marker. For each, y is the navmesh floor (measured). Kearney and Mela have no source and keep
+  upstream's marker positions as analogues (OD-59, `GAP-KEARNEY-POSITION`, `GAP-MELA-POSITION`).
+- **Duplicate Whitaker.** Pool 510085 goes to counts 0/0. Placement 199500 at TaRapedia's one reading stays the giver of
+  640 (`GAP-WHITAKER-NAME-ID`: the client has names 5428 and 8919 for him). Liu's placement comment now names the Eir
+  Crater Field Hospital.
+- **Not moved.** Clark's and Norton's "2008-09-25" coordinates are a template reformat of beta readings (2007-08-17),
+  so neither moves. Clark stands where the navmesh route does not reach (`GAP-CLARK-POSITION`, `GAP-NORTON-POSITION`).
+  Perdu, Obahmi, Franks, Foletto, Nicholson, Orto and Creelig have no post-D11 reading (`GAP-TORDEN-MARKER-POSITIONS`).
+

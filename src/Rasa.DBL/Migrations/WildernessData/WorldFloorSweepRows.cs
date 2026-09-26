@@ -22,9 +22,12 @@ namespace Rasa.Migrations.WildernessData
     /// Three kinds of correction, marked in the comments:
     ///   * <b>snap</b> - the floor is under the body's own x,z; only Y moves, and no sourced coordinate changes.
     ///   * <b>column</b> - nothing was within the query's 8 m vertical reach, so the column at that x,z was
-    ///     scanned. These are the rows whose Y was never sourced: four TaRapedia /loc NPCs whose wiki entry gives
-    ///     x and z only, and whose placeholder Y was out by 14 to 40 m, and the CP Token Banker at the Wilderness
-    ///     landing zone, 10.7 m above the pad.
+    ///     scanned. These were read as rows whose Y was never sourced: four TaRapedia /loc NPCs whose wiki entry
+    ///     was taken to give x and z only, and whose placeholder Y was out by 14 to 40 m, and the CP Token Banker
+    ///     at the Wilderness landing zone, 10.7 m above the pad. Correction 2026-09-26: for Bagby and Galloway
+    ///     (199106, 199107) that reading was wrong - both wiki entries give a Y, and it is the floor of the
+    ///     Treeback Camp instance, not of the Palisades. WorldDefectsFix moves both to map 1397 at the wiki's own
+    ///     x,y,z and supersedes their two rows here, which are left as history.
     ///   * <b>move</b> - no floor in that column either, so the nearest walkable point was taken. Eight are the
     ///     OD-48 analogue ring at Torden Mires, which sat just inside the rock face; one is upstream's Lamna
     ///     Medical Team; one is upstream's Boargar General spawn, buried 15.7 m under the Wilderness terrain.
@@ -41,8 +44,8 @@ namespace Rasa.Migrations.WildernessData
         {
             (199101u, -230.000, 166.000, -462.000, -230.000, 180.241, -462.000), // +14.24 column-far Ranger Urialia (TaRapedia /loc)
             (199103u, -439.000, 166.000, 37.000, -439.000, 186.170, 37.000), // +20.17 column-far Warden Lagori (TaRapedia /loc)
-            (199106u, -337.200, 103.600, 353.700, -337.200, 137.794, 353.700), // +34.19 column-far Field Lt. Bagby (TaRapedia /loc)
-            (199107u, -122.200, 100.300, 128.200, -122.200, 140.442, 128.200), // +40.14 column-far Lt. Galloway (TaRapedia /loc)
+            (199106u, -337.200, 103.600, 353.700, -337.200, 137.794, 353.700), // +34.19 column-far Field Lt. Bagby (TaRapedia /loc); superseded by WorldDefectsFix (map 1397)
+            (199107u, -122.200, 100.300, 128.200, -122.200, 140.442, 128.200), // +40.14 column-far Lt. Galloway (TaRapedia /loc); superseded by WorldDefectsFix (map 1397)
             (199301u, -777.000, 270.000, -552.000, -777.000, 240.902, -552.000), // -29.10 column-far Retread Jeska (TaRapedia /loc)
             (199826u, 642.000, 225.000, 373.000, 643.000, 224.284, 374.732), // -0.72 move Professor Long's area (OD-48 analogue)
             (199827u, 640.876, 225.000, 366.000, 646.672, 224.284, 367.553), // -0.72 move Professor Long's area (OD-48 analogue)

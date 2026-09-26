@@ -398,7 +398,7 @@ placements only — 107 rows — so the 819 spawn pools taken in from upstream h
 
 | | probed | more than 0.5 m off | worst |
 | --- | ---: | ---: | --- |
-| content_placement | 153 | 13 | Lt. Galloway, 40.4 m (a TaRapedia `/loc` with an invented Y) |
+| content_placement | 153 | 13 | Lt. Galloway, 40.4 m (see the 2026-09-26 correction below: her TaRapedia Y was sourced, and the map was wrong) |
 | spawnpool | 819 | 113 | Torcastra Prison vendor, +5.90 m |
 
 Two are deliberate and stay where they are: the boot camp bomb mounted on the wreck hull, and the mini turrets
@@ -407,6 +407,13 @@ air, their Y evidently taken from a map marker rather than from the ground. Both
 hospitals stood +4.72 m up; upstream's Boargar General spawn was 15.66 m *under* the Wilderness terrain.
 Corrections are in `WorldFloorSweep`; no sourced X or Z changes, and the five rows whose column had to be
 scanned are the ones whose Y was never sourced in the first place.
+
+*Correction, 2026-09-26.* Two of those five were not what the sweep took them for. Field Lt. Bagby and Lt.
+Galloway's TaRapedia pages give a Y as well as x and z, and their infoboxes say `Instance=Treeback Camp`: the
+readings are coordinates in the Treeback Camp instance (1397), 0.12 m and 0.02 m off its floor, not in the
+Palisades, where the same x,z is 34–40 m under the terrain. The sweep lifted them onto the overworld; the
+`WorldDefectsFix` migration moves them into the instance at the wiki's own x,y,z (see "World-data defects"
+below).
 
 ### Standing inside the furniture — 7 corrected
 
@@ -706,3 +713,34 @@ survey premises turned out to be wrong and were replaced by what the client actu
   container never entered a state; each now announces the one state its class owns, and the two clan lockboxes
   are driven as clan lockboxes. Teleporter 425's item class is left as an owner decision between two wormhole
   classes.
+
+## World-data defects (2026-09-26)
+
+Two read-only audits of the deployed world (`research/20260926-world-defects`, and the "World-data defects" of
+`research/20260926-torden-missions`) found rows placed wrong by an earlier import or an earlier correction.
+`WorldDefectsFix` corrects the ones with evidence and leaves the rest as named gaps. Replayed against a copy of
+`rasaworld.db` with the rows applied, the five world audits pass: 1,058 bodies probed, no defect, no new suspect.
+The navmesh probes are in `docs/evidence/world-defects-20260926.json`.
+
+| row | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| placement 199106 Field Lt. Bagby | Palisades 1244, lifted to y 137.79 | Treeback Camp 1397 (-337.2, 103.6, 353.7) | client 1788 log "at the Treeback Camp"; TaRapedia 9003 `Instance=Treeback Camp`, rev 22867 (2007-12-20); post-D11 Treeback Camp page rev 32558 (2008-08-30) | map inferred (high); position inferred |
+| placement 199107 Lt. Galloway | Palisades 1244, lifted to y 140.44 | Treeback Camp 1397 (-122.2, 100.3, 128.2) | client 1789 log "out of the Treeback Camp"; TaRapedia 9010 rev 22879 | map inferred (high); position inferred; stationary stands in for a scripted NPC |
+| pool 520046 "Warnet Queen - Palisades" | level-28 hostile boss on the Divide's "Foreas Base" label, 0.5 m from the receiver of seeded 1743 | removed | no source places a Warnet Queen at Foreas Base or on the Palisades overworld (post-D11 Palisades Targets of Opportunity rev 35441 has none) | — |
+| pool 510137 Valerie Corman | ring on the "Cumbria Research Facility" label | (-772.7, 140.17, 774.9) | TaRapedia rev 33050 (2008-09-13) and codex-tr.net POI 1425, 4.1 m apart | x,z inferred (high); y measured |
+| pool 510133 Ranger Jorai | on the "Viands Village" label | (-294.0, 172.707, -577.0) | TaRapedia rev 16456 (2007-11-26), pre-D11 only | x,z inferred (medium); y measured |
+| pool 510068 Lieutenant Epp | on "Waypoint: Nyxroq Post" | (-180.0, 235.229, -244.0) | TaRapedia rev 35626 (2008-11-11), 2.2 m from the client's "Hospital: Nyxroq Post" marker | x,z inferred; y measured |
+| pool 510085 Colonel Whitaker | a second Whitaker 107 m from placement 199500 | counts 0/0 | TaRapedia has one Whitaker, at 199500's reading | inferred |
+
+Missions 1788 and 1789 still resolve their receivers: 1397 is a shared context (`content_map_setting` lists only
+1985), every map in `map_info` gets a channel that materializes its placements, and map links 21/35 join it to
+the Palisades.
+
+Not moved, each with a gap: Field Ranger Kearney and Warrior Mela, for whom no positional source exists, keep
+upstream's marker positions as labelled analogues (OD-59; `GAP-KEARNEY-POSITION`, `GAP-MELA-POSITION`). Science
+Officer Clark and Security Guard Norton look as if they had post-D11 readings, dated 2008-09-25, but those
+revisions only move the pages' 2007-08-17 beta numbers into a new table template. Clark's current spot is probably
+unreachable (the navmesh route from the Wedge Rock crafting station stops 36 m short of him and 31 m below), so `GAP-CLARK-POSITION`
+asks for an owner decision. Perdu, Obahmi, Franks, Foletto, Nicholson, Orto and Creelig have no post-D11 reading
+(`GAP-TORDEN-MARKER-POSITIONS`). The client has two "Colonel Whitaker" names, 5428 and 8919, and which one the
+Irendas Whitaker used is not recorded (`GAP-WHITAKER-NAME-ID`).

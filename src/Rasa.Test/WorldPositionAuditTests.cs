@@ -80,13 +80,13 @@ namespace Rasa.Test
             // Field Dr. Dawson and Receptive Liaison Brice were listed here until 2026-09-17: their /loc readings had no
             // surface on the Wilderness because they are Divide coordinates (MissionAreaLinks moved them; the Divide
             // navmesh has ground 0.1 m under each reading).
-            // Five of the NPCs created from TaRapedia's /loc stand where the map's navmesh has no polygon:
+            // Three of the NPCs created from TaRapedia's /loc stand where the map's navmesh has no polygon:
             // those readings seem to describe places the navmesh does not model rather than wrong spots, and a
-            // capture would settle it. GAP-W3-NPC-POSITION-COVERAGE.
+            // capture would settle it. GAP-W3-NPC-POSITION-COVERAGE. Field Lt. Bagby and Lt. Galloway were listed
+            // here until 2026-09-26: their readings are Treeback Camp coordinates (0.12 and 0.02 m off that
+            // instance's floor), and WorldDefectsFix moved them to map 1397, so they no longer need excusing.
             { "content_placement:Ranger Urialia (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Warden Lagori (TaRapedia /loc)", TaRapediaOutsideNavmesh },
-            { "content_placement:Field Lt. Bagby (TaRapedia /loc)", TaRapediaOutsideNavmesh },
-            { "content_placement:Lt. Galloway (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             { "content_placement:Retread Jeska (TaRapedia /loc)", TaRapediaOutsideNavmesh },
             // OD-48 species clusters: the ring around a mission area can land off the navmesh even when the area's own
             // position is on it (a ledge, a structure floor). The creatures are placed as the decision says; the audit

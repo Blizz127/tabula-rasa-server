@@ -43,7 +43,7 @@ the wormhole teleporters and the AFS arena links. Every mission map in the table
 | 347 Cleansing the Toxins II | Divide | 10 | Horea 199001 → 1148 | same | ok |
 | 796 Behind Closed Doors | Divide | 10 | Dawson 199002 → **1220** | Dawson (wiki: Agent Franz, Foreas Base prison) | **fixed** |
 | 1743 Report to Liaison Noonan | Divide | 10 | Brice 199003 → **1220** | Brice (wiki: Noonan, Foreas Base) | **fixed** |
-| 366, 367, 368, 411, 412, 413, 670, 1788, 1789 | Palisades | 15 | 199100-199107 → 1244 | same | ok |
+| 366, 367, 368, 411, 412, 413, 670, 1788, 1789 | Palisades | 15 | 199100-199107 → 1244; Bagby 199106 and Galloway 199107 belong in Treeback Camp **1397** (TaRapedia `Instance=Treeback Camp`, client 1788/1789 logs) | same | **fixed 2026-09-26** (`WorldDefectsFix`) |
 | 887, 970, 1040, 2016 | Plateau | 20 | 199200-199202, 199205 → 1497 | same | ok |
 | 1068 South Of The Border | Plateau | 20 | Washington 199203 → 1304 (wiki: Colonel Bosley, AFS Camp Resistance, Plateau) | Washington → 1304 (the Snakepit, Pools) | **fixed** |
 | 1541 New Orders From The General | Plateau | 20 | Corman 199204 → 1304 (wiki: Bosley) | Corman → 1304 (Retread Camp, Pools) | **fixed** |
