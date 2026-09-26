@@ -241,6 +241,25 @@
    "url": "https://tabularasa.fandom.com",
    "locator": "research/20260926-torden-missions/work/tarapedia/{missions,npc,related}/*.json (full revision histories fetched 2026-09-26 by tools/fetch_tarapedia.py)",
    "note": "Community transcription. Revisions range from the 2007 closed beta to 2009-02; every citation names its revision id, date and ?oldid= URL, and that date - not this source - is the era of the value. Never an analogue source."
+  },
+  "community_db:tarapedia-reward-history": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-reward-items/work/tarapedia/<mission id>.json - each mission page's full revision history through the MediaWiki API (fetched 2026-09-26; every saved history reaches back to page creation), the RewardItem field tracked per revision",
+   "note": "Community transcription, dated per revision; cited by ?oldid=. A list first recorded after update 1.4 (2008-01-29) is post-1.4 but not proven final: no later wiki content edit or documented patch changed it."
+  },
+  "official_notes:1.4": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "RGTR patch notes 2008-01-29 (update 1.4), https://web.archive.org/web/20080203152047/http://www.rgtr.com/news/patch_notes/patch_notes_and_known_issues_01292008.html; copy research/20260926-reward-items/work/rgtr-patch-1.4-20080129.txt",
+   "note": "\"855 missions have had their rewards re-evaluated and replaced with new items\"; \"Purples have been removed from mission rewards\""
+  },
+  "official_notes:2008-reward-changes": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "TaRapedia Updates/2008-01-29 through Updates/2008-12-20 (transcribed official notes, research/20260926-reward-items/review-work/updates.json) and the archived official D16/16.3/16.4 notes (review-work/d164.html, web.archive.org 20090214230759)",
+   "note": "No general reward replacement after 1.4. 2008-04-28 (1.7): \"roughly 70 mission rewards that previously gave out armor or tools with incorrect requirements ... adjusted and now have the correct requirements\" (missions not named). Notes for D9, D14 and January 2009 (D15.x) may be incomplete."
   }
  },
  "scope": [
@@ -62989,6 +63008,1906 @@
      "reasoning": "SelectableItem (choose one), offered in the wiki's list order; the choice structure is inferred (REVIEW.md claim 5)."
     }
    }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1541,
+    "type": 5,
+    "item_template_id": 120418
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120418,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120418 -> 13924; reqData 13924 level 34; lookup[13924] stack 1; itemTemplateSkillRequirement 120418 -> (30, 1); entityclass.pyo 13924 \"Armor_T2_Hazmat_V03_UNC_Gloves_34_to_38\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120418-120421"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29408 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon/Armor|Dynamo|Hazmat Armor|Gloves|3}}  [lvl 34 color=green]\". The name is client class 13924 Armor_T2_Hazmat_V03_UNC_Gloves_34_to_38 (physicalentityclassnamelanguage \"Hazmat Armor Gloves\"), whose templates are [21229, 21230, 21231, 21232, 120109, 120418]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120418-120421, and 120418 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. A near-duplicate block 120109-120112 (Hazmat Gloves v3, Mech Vest v4, Motor Assist Gloves v6, Reflective Gloves v3) shares three of this list's four classes; only the wiki's \"Stealth Legs v4\" entry (class 19930, template 120421) selects 120418-120421 over it. The client's missiontextlanguage carries each mission name once, so no duplicate-named mission could own that block. The manufacturer prefix \"Dynamo\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120418 -> 13924; reqData 13924 level 34; lookup[13924] stack 1; itemTemplateSkillRequirement 120418 -> (30, 1); entityclass.pyo 13924 \"Armor_T2_Hazmat_V03_UNC_Gloves_34_to_38\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 13924's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1541,
+    "type": 5,
+    "item_template_id": 120419
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120419,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120419 -> 16776; reqData 16776 level 33; lookup[16776] stack 1; itemTemplateSkillRequirement 120419 -> (19, 1); entityclass.pyo 16776 \"Armor_T1_MotorAssist_V06_UNC_Gloves_33_to_37\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120418-120421"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29408 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon/Armor|Teleract|Motor Assist Armor|Gloves|6}}  [lvl 33 color=green]\". The name is client class 16776 Armor_T1_MotorAssist_V06_UNC_Gloves_33_to_37 (physicalentityclassnamelanguage \"Motor Assist Armor Gloves\"), whose templates are [30301, 30302, 30303, 30304, 120111, 120419, 121210]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120418-120421, and 120419 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. A near-duplicate block 120109-120112 (Hazmat Gloves v3, Mech Vest v4, Motor Assist Gloves v6, Reflective Gloves v3) shares three of this list's four classes; only the wiki's \"Stealth Legs v4\" entry (class 19930, template 120421) selects 120418-120421 over it. The client's missiontextlanguage carries each mission name once, so no duplicate-named mission could own that block. The manufacturer prefix \"Teleract\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120419 -> 16776; reqData 16776 level 33; lookup[16776] stack 1; itemTemplateSkillRequirement 120419 -> (19, 1); entityclass.pyo 16776 \"Armor_T1_MotorAssist_V06_UNC_Gloves_33_to_37\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 16776's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1541,
+    "type": 5,
+    "item_template_id": 120420
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120420,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120420 -> 18718; reqData 18718 level 34; lookup[18718] stack 1; itemTemplateSkillRequirement 120420 -> (21, 1); entityclass.pyo 18718 \"Armor_T2_Reflective_V03_UNC_Gloves_34_to_38\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120418-120421"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29408 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon/Armor|Astra|Reflective Armor|Gloves|3}}  [lvl 34 color=green]\". The name is client class 18718 Armor_T2_Reflective_V03_UNC_Gloves_34_to_38 (physicalentityclassnamelanguage \"Reflective Armor Gloves\"), whose templates are [36468, 36469, 36470, 36471, 120112, 120420]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120418-120421, and 120420 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. A near-duplicate block 120109-120112 (Hazmat Gloves v3, Mech Vest v4, Motor Assist Gloves v6, Reflective Gloves v3) shares three of this list's four classes; only the wiki's \"Stealth Legs v4\" entry (class 19930, template 120421) selects 120418-120421 over it. The client's missiontextlanguage carries each mission name once, so no duplicate-named mission could own that block. The manufacturer prefix \"Astra\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120420 -> 18718; reqData 18718 level 34; lookup[18718] stack 1; itemTemplateSkillRequirement 120420 -> (21, 1); entityclass.pyo 18718 \"Armor_T2_Reflective_V03_UNC_Gloves_34_to_38\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 18718's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1541,
+    "type": 5,
+    "item_template_id": 120421
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120421,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120421 -> 19930; reqData 19930 level 35; lookup[19930] stack 1; itemTemplateSkillRequirement 120421 -> (48, 1); entityclass.pyo 19930 \"Armor_T3_Stealth_V04_UNC_Legs_35_to_39\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120418-120421"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29408 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon/Armor|Titan|Stealth Armor|Legs|4}}  [lvl 35 color=green]\". The name is client class 19930 Armor_T3_Stealth_V04_UNC_Legs_35_to_39 (physicalentityclassnamelanguage \"Stealth Armor Legs\"), whose templates are [40482, 40483, 40484, 40485, 119301, 120048, 120052, 120421, 121222]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120418-120421, and 120421 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. A near-duplicate block 120109-120112 (Hazmat Gloves v3, Mech Vest v4, Motor Assist Gloves v6, Reflective Gloves v3) shares three of this list's four classes; only the wiki's \"Stealth Legs v4\" entry (class 19930, template 120421) selects 120418-120421 over it. The client's missiontextlanguage carries each mission name once, so no duplicate-named mission could own that block. The manufacturer prefix \"Titan\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120421 -> 19930; reqData 19930 level 35; lookup[19930] stack 1; itemTemplateSkillRequirement 120421 -> (48, 1); entityclass.pyo 19930 \"Armor_T3_Stealth_V04_UNC_Legs_35_to_39\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 19930's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 5,
+    "item_template_id": 120101
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120101,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120101 -> 14067; reqData 14067 level 39; lookup[14067] stack 1; itemTemplateSkillRequirement 120101 -> (30, 1); entityclass.pyo 14067 \"Armor_T2_Hazmat_V03_UNC_Vest_39_to_43\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120101-120104"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29815 (first recorded 2008-03-17, after update 1.4 of 2008-01-29; still carried unchanged at rev 34762 (2008-10-05)) lists \"{{Icon/Armor|Wellcare|Hazmat Armor|Vest|3}}  [lvl 39 color=green]\". The name is client class 14067 Armor_T2_Hazmat_V03_UNC_Vest_39_to_43 (physicalentityclassnamelanguage \"Hazmat Armor Vest\"), whose templates are [21699, 21700, 21701, 21702, 45797, 119298, 119826, 119878, 120101]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120101-120104, and 120101 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The manufacturer prefix \"Wellcare\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120101 -> 14067; reqData 14067 level 39; lookup[14067] stack 1; itemTemplateSkillRequirement 120101 -> (30, 1); entityclass.pyo 14067 \"Armor_T2_Hazmat_V03_UNC_Vest_39_to_43\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 14067's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 5,
+    "item_template_id": 120102
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120102 -> 18073; reqData 18073 level 35; lookup[18073] stack 1; itemTemplateSkillRequirement 120102 -> (57, 1); entityclass.pyo 18073 \"Armor_T3_Mech_V04_UNC_Vest_35_to_39\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120101-120104"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29815 (first recorded 2008-03-17, after update 1.4 of 2008-01-29; still carried unchanged at rev 34762 (2008-10-05)) lists \"{{Icon/Armor|ChiTech|Mech Armor|Vest|4}}  [lvl 35 color=green]\". The name is client class 18073 Armor_T3_Mech_V04_UNC_Vest_35_to_39 (physicalentityclassnamelanguage \"Mech Armor Vest\"), whose templates are [34483, 34484, 34485, 34486, 119339, 120102, 120110, 120459, 121208]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120101-120104, and 120102 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The manufacturer prefix \"ChiTech\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120102 -> 18073; reqData 18073 level 35; lookup[18073] stack 1; itemTemplateSkillRequirement 120102 -> (57, 1); entityclass.pyo 18073 \"Armor_T3_Mech_V04_UNC_Vest_35_to_39\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 18073's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 5,
+    "item_template_id": 120103
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120103,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120103 -> 16931; reqData 16931 level 38; lookup[16931] stack 1; itemTemplateSkillRequirement 120103 -> (19, 1); entityclass.pyo 16931 \"Armor_T1_MotorAssist_V06_UNC_Vest_38_to_42\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120101-120104"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29815 (first recorded 2008-03-17, after update 1.4 of 2008-01-29; still carried unchanged at rev 34762 (2008-10-05)) lists \"{{Icon/Armor|Prodigy|Motor Assist Armor|Vest|6}}  [lvl 38 color=green]\". The name is client class 16931 Armor_T1_MotorAssist_V06_UNC_Vest_38_to_42 (physicalentityclassnamelanguage \"Motor Assist Armor Vest\"), whose templates are [30782, 30783, 30784, 30785, 119299, 119827, 120103, 121175]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120101-120104, and 120103 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The manufacturer prefix \"Prodigy\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120103 -> 16931; reqData 16931 level 38; lookup[16931] stack 1; itemTemplateSkillRequirement 120103 -> (19, 1); entityclass.pyo 16931 \"Armor_T1_MotorAssist_V06_UNC_Vest_38_to_42\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 16931's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 5,
+    "item_template_id": 120104
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120104,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120104 -> 18861; reqData 18861 level 39; lookup[18861] stack 1; itemTemplateSkillRequirement 120104 -> (21, 1); entityclass.pyo 18861 \"Armor_T2_Reflective_V03_UNC_Vest_39_to_43\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120101-120104"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29815 (first recorded 2008-03-17, after update 1.4 of 2008-01-29; still carried unchanged at rev 34762 (2008-10-05)) lists \"{{Icon/Armor|Titan|Reflective Armor|Vest|3}}  [lvl 39 color=green]\". The name is client class 18861 Armor_T2_Reflective_V03_UNC_Vest_39_to_43 (physicalentityclassnamelanguage \"Reflective Armor Vest\"), whose templates are [36937, 36938, 36939, 36940, 119300, 119828, 119880, 120104]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120101-120104, and 120104 is this entry's member. List shape: 4 armor entries with version, rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The manufacturer prefix \"Titan\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120104 -> 18861; reqData 18861 level 39; lookup[18861] stack 1; itemTemplateSkillRequirement 120104 -> (21, 1); entityclass.pyo 18861 \"Armor_T2_Reflective_V03_UNC_Vest_39_to_43\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 18861's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1040,
+    "type": 5,
+    "item_template_id": 120382
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120382,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120382 -> 27054; reqData 27054 level 33; lookup[27054] stack 1; itemTemplateSkillRequirement 120382 -> (22, 1); entityclass.pyo 27054 \"Weapon_Avatar_MachineGun_Laser_UNC_33_to_37\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120382-120385"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29133 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Shinobi|Laser|Chaingun|rarity=green|level=33}}\". The name is client class 27054 Weapon_Avatar_MachineGun_Laser_UNC_33_to_37 (physicalentityclassnamelanguage \"Laser Chaingun\"), whose templates are [48256, 120382, 120470]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120382-120385, and 120382 is this entry's member. List shape: 4 weapon entries with rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The page's earlier, pre-1.4 lists (rev 5119, 20037/27312) are superseded; the pre-1.4 armor list matches a different run, 96390-96393, which shows only that obsolete runs survive in the table - the dating, not the run, makes this list the later one. The manufacturer prefix \"Shinobi\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120382 -> 27054; reqData 27054 level 33; lookup[27054] stack 1; itemTemplateSkillRequirement 120382 -> (22, 1); entityclass.pyo 27054 \"Weapon_Avatar_MachineGun_Laser_UNC_33_to_37\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27054's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1040,
+    "type": 5,
+    "item_template_id": 120383
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120383,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120383 -> 27074; reqData 27074 level 31; lookup[27074] stack 1; itemTemplateSkillRequirement 120383 -> (55, 1); entityclass.pyo 27074 \"Weapon_Avatar_NetGun_Electric_UNC_31_to_35\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120382-120385"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29133 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Teleract|Electric|Net Gun|rarity=green|level=31}}\". The name is client class 27074 Weapon_Avatar_NetGun_Electric_UNC_31_to_35 (physicalentityclassnamelanguage \"Electric Net Gun\"), whose templates are [15507, 120336, 120383, 121161, 131282]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120382-120385, and 120383 is this entry's member. List shape: 4 weapon entries with rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The page's earlier, pre-1.4 lists (rev 5119, 20037/27312) are superseded; the pre-1.4 armor list matches a different run, 96390-96393, which shows only that obsolete runs survive in the table - the dating, not the run, makes this list the later one. The manufacturer prefix \"Teleract\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120383 -> 27074; reqData 27074 level 31; lookup[27074] stack 1; itemTemplateSkillRequirement 120383 -> (55, 1); entityclass.pyo 27074 \"Weapon_Avatar_NetGun_Electric_UNC_31_to_35\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27074's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1040,
+    "type": 5,
+    "item_template_id": 120384
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120384,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120384 -> 27115; reqData 27115 level 30; lookup[27115] stack 1; itemTemplateSkillRequirement 120384 -> (1, 1); entityclass.pyo 27115 \"Weapon_Avatar_Pistol_Laser_UNC_30_to_34\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120382-120385"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29133 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Shinobi|Laser|Pistol|rarity=green|level=30}}\". The name is client class 27115 Weapon_Avatar_Pistol_Laser_UNC_30_to_34 (physicalentityclassnamelanguage \"Laser Pistol\"), whose templates are [17111, 120384, 121160, 121195]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120382-120385, and 120384 is this entry's member. List shape: 4 weapon entries with rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The page's earlier, pre-1.4 lists (rev 5119, 20037/27312) are superseded; the pre-1.4 armor list matches a different run, 96390-96393, which shows only that obsolete runs survive in the table - the dating, not the run, makes this list the later one. The manufacturer prefix \"Shinobi\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120384 -> 27115; reqData 27115 level 30; lookup[27115] stack 1; itemTemplateSkillRequirement 120384 -> (1, 1); entityclass.pyo 27115 \"Weapon_Avatar_Pistol_Laser_UNC_30_to_34\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27115's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1040,
+    "type": 5,
+    "item_template_id": 120385
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120385,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120385 -> 27157; reqData 27157 level 33; lookup[27157] stack 1; itemTemplateSkillRequirement 120385 -> (58, 1); entityclass.pyo 27157 \"Weapon_Avatar_PolarityGun_Ice_UNC_33_to_37\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120382-120385"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29133 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Shinobi|Endothermic|Polarity Gun|rarity=green|level=33}}\". The name is client class 27157 Weapon_Avatar_PolarityGun_Ice_UNC_33_to_37 (physicalentityclassnamelanguage \"Endothermic Polarity Gun\"), whose templates are [48708, 120385]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120382-120385, and 120385 is this entry's member. List shape: 4 weapon entries with rarity and level: a random level-coherent list of that shape matched a strict consecutive run 0/300 and 0/500 times (REVIEW.md Claim 1, review-work/null.py, null2.py); identity confidence high. The page's earlier, pre-1.4 lists (rev 5119, 20037/27312) are superseded; the pre-1.4 armor list matches a different run, 96390-96393, which shows only that obsolete runs survive in the table - the dating, not the run, makes this list the later one. The manufacturer prefix \"Shinobi\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120385 -> 27157; reqData 27157 level 33; lookup[27157] stack 1; itemTemplateSkillRequirement 120385 -> (58, 1); entityclass.pyo 27157 \"Weapon_Avatar_PolarityGun_Ice_UNC_33_to_37\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27157's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 983,
+    "type": 5,
+    "item_template_id": 120804
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120804,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120804 -> 27094; reqData 27094 level 25; lookup[27094] stack 1; itemTemplateSkillRequirement 120804 -> (1, 1); entityclass.pyo 27094 \"Weapon_Avatar_Pistol_Electric_UNC_25_to_29\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120804-120806"
+      }
+     ],
+     "reasoning": "TaRapedia rev 30043 (first recorded 2008-03-29, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Chitech|Electric|Pistol}}\". The name is client class 27094 Weapon_Avatar_Pistol_Electric_UNC_25_to_29 (physicalentityclassnamelanguage \"Electric Pistol\"), whose templates are [16984, 119742, 120804, 131291]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120804-120806, and 120804 is this entry's member. List shape: 3 weapon entries with names only (no level or rarity): a random list of that shape matched a strict consecutive run 15/300 and 16/500 times, 3-5% (REVIEW.md Claim 1); identity confidence MEDIUM - the match depends on every one of the three entries (one mistranscribed entry would select a different run; 4-16 runs with one wildcard entry), so a capture of the completion window replaces it. The manufacturer prefix \"ChiTech\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120804 -> 27094; reqData 27094 level 25; lookup[27094] stack 1; itemTemplateSkillRequirement 120804 -> (1, 1); entityclass.pyo 27094 \"Weapon_Avatar_Pistol_Electric_UNC_25_to_29\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27094's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 983,
+    "type": 5,
+    "item_template_id": 120805
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120805,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120805 -> 27156; reqData 27156 level 28; lookup[27156] stack 1; itemTemplateSkillRequirement 120805 -> (58, 1); entityclass.pyo 27156 \"Weapon_Avatar_PolarityGun_Ice_UNC_28_to_32\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120804-120806"
+      }
+     ],
+     "reasoning": "TaRapedia rev 30043 (first recorded 2008-03-29, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Animatics|Endothermic|Polarity Gun}}\". The name is client class 27156 Weapon_Avatar_PolarityGun_Ice_UNC_28_to_32 (physicalentityclassnamelanguage \"Endothermic Polarity Gun\"), whose templates are [48704, 119784, 120805, 131306]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120804-120806, and 120805 is this entry's member. List shape: 3 weapon entries with names only (no level or rarity): a random list of that shape matched a strict consecutive run 15/300 and 16/500 times, 3-5% (REVIEW.md Claim 1); identity confidence MEDIUM - the match depends on every one of the three entries (one mistranscribed entry would select a different run; 4-16 runs with one wildcard entry), so a capture of the completion window replaces it. The manufacturer prefix \"Animatics\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120805 -> 27156; reqData 27156 level 28; lookup[27156] stack 1; itemTemplateSkillRequirement 120805 -> (58, 1); entityclass.pyo 27156 \"Weapon_Avatar_PolarityGun_Ice_UNC_28_to_32\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27156's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 983,
+    "type": 5,
+    "item_template_id": 120806
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 120806,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120806 -> 27087; reqData 27087 level 26; lookup[27087] stack 1; itemTemplateSkillRequirement 120806 -> (55, 1); entityclass.pyo 27087 \"Weapon_Avatar_NetGun_Ice_UNC_26_to_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 1 and Claim 3 (independent decode of game.zip sha256 e78b5364...6ca6, review-work/dec.py, match.py): unique strict run 120804-120806"
+      }
+     ],
+     "reasoning": "TaRapedia rev 30043 (first recorded 2008-03-29, after update 1.4 of 2008-01-29) lists \"{{Icon/Weapon|Teleract|Cryogenic|Net Gun}}\". The name is client class 27087 Weapon_Avatar_NetGun_Ice_UNC_26_to_30 (physicalentityclassnamelanguage \"Cryogenic Net Gun\"), whose templates are [48388, 117112, 119785, 120806, 131287, 20000064]; the list's classes, filtered by the wiki's armor version, green = UNC and level (the client reqData level equals the wiki level), form exactly one strict consecutive run in itemTemplateItemClass, 120804-120806, and 120806 is this entry's member. List shape: 3 weapon entries with names only (no level or rarity): a random list of that shape matched a strict consecutive run 15/300 and 16/500 times, 3-5% (REVIEW.md Claim 1); identity confidence MEDIUM - the match depends on every one of the three entries (one mistranscribed entry would select a different run; 4-16 runs with one wildcard entry), so a capture of the completion window replaces it. The manufacturer prefix \"Teleract\" is an item module no client table maps to a template; it is not seeded (GAP-MISSION-REWARD-MODULES). No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change; the 2008-04-28 requirements note is an open risk (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 120806 -> 27087; reqData 27087 level 26; lookup[27087] stack 1; itemTemplateSkillRequirement 120806 -> (55, 1); entityclass.pyo 27087 \"Weapon_Avatar_NetGun_Ice_UNC_26_to_30\""
+      }
+     ],
+     "reasoning": "one item: the wiki entry carries no count and class 27087's stack size is 1"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 970,
+    "type": 5,
+    "item_template_id": 45059
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 45059,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45059 -> 22542; reqData 22542 level 30; lookup[22542] stack 100; entityclass.pyo 22542 \"Consumable_Medpack_06C_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29117 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon|Med Pack|Class VI Advanced Med Pack}} (2)\". The display name \"Class VI Advanced Med Pack\" is exactly one live client class, 22542 Consumable_Medpack_06C_30, and that class has exactly one template, 45059 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45059 -> 22542; reqData 22542 level 30; lookup[22542] stack 100; entityclass.pyo 22542 \"Consumable_Medpack_06C_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 22542's stack size 100 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 970,
+    "type": 5,
+    "item_template_id": 118897
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 118897,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118897 -> 28488; reqData 28488 level 30; lookup[28488] stack 5000; entityclass.pyo 28488 \"Consumable_Restore_Armor_Kit_30_to_34\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29117 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon|Armor Charger|Class VI Armor Charger}} (2)\". The display name \"Class VI Armor Charger\" is exactly one live client class, 28488 Consumable_Restore_Armor_Kit_30_to_34, and that class has exactly one template, 118897 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118897 -> 28488; reqData 28488 level 30; lookup[28488] stack 5000; entityclass.pyo 28488 \"Consumable_Restore_Armor_Kit_30_to_34\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 28488's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 970,
+    "type": 5,
+    "item_template_id": 111037
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 111037,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111037 -> 26287; reqData 26287 level 26; lookup[26287] stack 5000; entityclass.pyo 26287 \"Consumable_Grenade_Fire_06_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29117 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon|Grenade|Class VI Incendiary Grenade}} (4)\". The display name \"Class VI Incendiary Grenade\" is exactly one live client class, 26287 Consumable_Grenade_Fire_06_30, and that class has exactly one template, 111037 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111037 -> 26287; reqData 26287 level 26; lookup[26287] stack 5000; entityclass.pyo 26287 \"Consumable_Grenade_Fire_06_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 26287's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 970,
+    "type": 5,
+    "item_template_id": 111027
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 111027,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111027 -> 26277; reqData 26277 level 26; lookup[26277] stack 5000; entityclass.pyo 26277 \"Consumable_Grenade_EMP_06_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29117 (first recorded 2008-02-23, after update 1.4 of 2008-01-29) lists \"{{Icon|Grenade|Class VI EMP Grenade}} (4)\". The display name \"Class VI EMP Grenade\" is exactly one live client class, 26277 Consumable_Grenade_EMP_06_30, and that class has exactly one template, 111027 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111027 -> 26277; reqData 26277 level 26; lookup[26277] stack 5000; entityclass.pyo 26277 \"Consumable_Grenade_EMP_06_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 26277's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1068,
+    "type": 5,
+    "item_template_id": 45059
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 45059,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45059 -> 22542; reqData 22542 level 30; lookup[22542] stack 100; entityclass.pyo 22542 \"Consumable_Medpack_06C_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29406 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon|Med Pack|Class VI Advanced Med Pack}} (2)\". The display name \"Class VI Advanced Med Pack\" is exactly one live client class, 22542 Consumable_Medpack_06C_30, and that class has exactly one template, 45059 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45059 -> 22542; reqData 22542 level 30; lookup[22542] stack 100; entityclass.pyo 22542 \"Consumable_Medpack_06C_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 22542's stack size 100 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1068,
+    "type": 5,
+    "item_template_id": 118906
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 118906,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118906 -> 28497; reqData 28497 level 30; lookup[28497] stack 5000; entityclass.pyo 28497 \"Consumable_Restore_Power_Kit_30_to_34\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29406 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon|Power Charger|Class VI Power Charger}} (2)\". The display name \"Class VI Power Charger\" is exactly one live client class, 28497 Consumable_Restore_Power_Kit_30_to_34, and that class has exactly one template, 118906 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118906 -> 28497; reqData 28497 level 30; lookup[28497] stack 5000; entityclass.pyo 28497 \"Consumable_Restore_Power_Kit_30_to_34\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 28497's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1068,
+    "type": 5,
+    "item_template_id": 111017
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 111017,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111017 -> 26267; reqData 26267 level 26; lookup[26267] stack 5000; entityclass.pyo 26267 \"Consumable_Grenade_Sonic_06_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29406 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon|Grenade|Class VI Concussion Grenade}} (4)\". The display name \"Class VI Concussion Grenade\" is exactly one live client class, 26267 Consumable_Grenade_Sonic_06_30, and that class has exactly one template, 111017 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111017 -> 26267; reqData 26267 level 26; lookup[26267] stack 5000; entityclass.pyo 26267 \"Consumable_Grenade_Sonic_06_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 26267's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1068,
+    "type": 5,
+    "item_template_id": 111027
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 111027,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111027 -> 26277; reqData 26277 level 26; lookup[26277] stack 5000; entityclass.pyo 26277 \"Consumable_Grenade_EMP_06_30\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29406 (first recorded 2008-03-02, after update 1.4 of 2008-01-29) lists \"{{Icon|Grenade|Class VI EMP Grenade }} (4)\". The display name \"Class VI EMP Grenade\" is exactly one live client class, 26277 Consumable_Grenade_EMP_06_30, and that class has exactly one template, 111027 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111027 -> 26277; reqData 26277 level 26; lookup[26277] stack 5000; entityclass.pyo 26277 \"Consumable_Grenade_EMP_06_30\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 26277's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 5,
+    "item_template_id": 45062
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 45062,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45062 -> 22545; reqData 22545 level 35; lookup[22545] stack 100; entityclass.pyo 22545 \"Consumable_Medpack_07C_35\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29490 / rev 30095 (first recorded 2008-03-05, after update 1.4 of 2008-01-29; restated unchanged at rev 30095 (2008-04-01) and still carried at rev 34827 (2008-10-07)) lists \"{{Icon|Med Pack|Class VII Advanced Med Pack}} (2)\". The display name \"Class VII Advanced Med Pack\" is exactly one live client class, 22545 Consumable_Medpack_07C_35, and that class has exactly one template, 45062 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45062 -> 22545; reqData 22545 level 35; lookup[22545] stack 100; entityclass.pyo 22545 \"Consumable_Medpack_07C_35\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 22545's stack size 100 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 5,
+    "item_template_id": 118898
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 118898,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118898 -> 28489; reqData 28489 level 35; lookup[28489] stack 5000; entityclass.pyo 28489 \"Consumable_Restore_Armor_Kit_35_to_39\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29490 / rev 30095 (first recorded 2008-03-05, after update 1.4 of 2008-01-29; restated unchanged at rev 30095 (2008-04-01) and still carried at rev 34827 (2008-10-07)) lists \"{{Icon|Armor Charger|Class VII Armor Charger}} (2)\". The display name \"Class VII Armor Charger\" is exactly one live client class, 28489 Consumable_Restore_Armor_Kit_35_to_39, and that class has exactly one template, 118898 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 118898 -> 28489; reqData 28489 level 35; lookup[28489] stack 5000; entityclass.pyo 28489 \"Consumable_Restore_Armor_Kit_35_to_39\""
+      }
+     ],
+     "reasoning": "the wiki's \"(2)\" after the entry, read as the stack granted; class 28489's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 5,
+    "item_template_id": 111048
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 111048,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111048 -> 26298; reqData 26298 level 31; lookup[26298] stack 5000; entityclass.pyo 26298 \"Consumable_Grenade_Ice_07_35\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29490 / rev 30095 (first recorded 2008-03-05, after update 1.4 of 2008-01-29; restated unchanged at rev 30095 (2008-04-01) and still carried at rev 34827 (2008-10-07)) lists \"{{Icon|Grenade|Class VII Cryogenic Grenade}} (4)\". The display name \"Class VII Cryogenic Grenade\" is exactly one live client class, 26298 Consumable_Grenade_Ice_07_35, and that class has exactly one template, 111048 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 111048 -> 26298; reqData 26298 level 31; lookup[26298] stack 5000; entityclass.pyo 26298 \"Consumable_Grenade_Ice_07_35\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 26298's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 5,
+    "item_template_id": 45446
+   },
+   "slice": "W3",
+   "migration": "MissionRewardItems",
+   "fields": {
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "choose one (selectable reward, offered in the wiki's order): the wiki lists the entries one per line with no 'all of'; the only surviving completion window of this era, 1390's in video -I1WM5ddg-k at t=1488 (research/20260926-reward-items/work/footage), reads \"Choose one of the following\". For a consumable bundle the wiki does not say whether one or all stacks were granted (GAP-MISSION-REWARD-CHOICE)."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      }
+     ],
+     "reasoning": "an item reward row carries no amount; the mission's credits and experience stay in their own rows"
+    },
+    "item_template_id": {
+     "value": 45446,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45446 -> 22963; reqData 22963 level 31; lookup[22963] stack 5000; entityclass.pyo 22963 \"Consumable_Grenade_Physical_07_35\""
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "research/20260926-reward-items/REVIEW.md Claim 3 (consumable names each map to a single-class, single-template entry)"
+      }
+     ],
+     "reasoning": "TaRapedia rev 29490 / rev 30095 (first recorded 2008-03-05, after update 1.4 of 2008-01-29; restated unchanged at rev 30095 (2008-04-01) and still carried at rev 34827 (2008-10-07)) lists \"{{Icon|Grenade|Class VII Fragmentation Grenade}} (4)\". The display name \"Class VII Fragmentation Grenade\" is exactly one live client class, 22963 Consumable_Grenade_Physical_07_35, and that class has exactly one template, 45446 (no run inference needed); identity confidence high. No client table links a mission to a template (GAP-MISSION-REWARD-TEMPLATE-ID). Final-state basis: post-1.4, no documented later change (GAP-MISSION-REWARD-FINAL-STATE)."
+    },
+    "quantity": {
+     "value": 4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "community_db:tarapedia-reward-history",
+       "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass 45446 -> 22963; reqData 22963 level 31; lookup[22963] stack 5000; entityclass.pyo 22963 \"Consumable_Grenade_Physical_07_35\""
+      }
+     ],
+     "reasoning": "the wiki's \"(4)\" after the entry, read as the stack granted; class 22963's stack size 5000 allows it. No completion window shows whether the count is one stack of the chosen item (GAP-MISSION-REWARD-CHOICE)"
+    }
+   }
   }
  ],
  "omitted": [
@@ -64347,7 +66266,7 @@
   },
   {
    "id": "GAP-W3-HUB-REWARDS",
-   "summary": "The hub chain's experience and item rewards are unresolved. Ellatha records 400 credits for 1390 (seeded) but no experience for it; 1407 Too Close For Comfort's recorded reward is a choice between the Vitalius Leech Gun and the Vextronics Chaingun, with no credits or experience recorded; 1392 and 1393 carry no recorded reward at all. The weapon templates also need the item-name resolution (prefix + base name through weaponclass/quality, see research/20260915-aliadas-hub/work/item-name-structure.md). No value is invented in the meantime: the missions are completable and simply pay what is evidenced.",
+   "summary": "The hub chain's experience and item rewards are unresolved. Ellatha records 400 credits for 1390 (seeded) but no experience for it; 1407 Too Close For Comfort's recorded reward is a choice between the Vitalius Leech Gun and the Vextronics Chaingun, with no credits or experience recorded; 1392 and 1393 carry no recorded reward at all. The weapon templates also need the item-name resolution (prefix + base name through weaponclass/quality, see research/20260915-aliadas-hub/work/item-name-structure.md). No value is invented in the meantime: the missions are completable and simply pay what is evidenced. 2026-09-26: the 1407 weapon pair is Ellatha's pre-1.4 item data (percentage regeneration); TaRapedia replaced it on 2008-02-28 (rev 29339) with two modification recipes, whose templates are server data (GAP-MISSION-REWARD-ITEMS).",
    "closes_with": "needs Ellatha/TaRapedia reward values plus the reward item templates resolved",
    "evidence": [
     "research/20260915-aliadas-hub/work/ellatha-hub-missions.json (1390: 400 credits; 1407: two weapons)",
@@ -65454,15 +67373,19 @@
   },
   {
    "id": "GAP-MISSION-REWARD-ITEMS",
-   "summary": "Item rewards are missing from almost every mission: 54 of the 65 wiki-covered missions seeded here list a reward item and only three carry item rows. They cannot be resolved from the sources we have, and the reason is structural rather than a gap in effort. TaRapedia names reward items by manufacturer (\"Olympia Reflective Armor Vest\", \"Prodigy Motor Assist Armor Boots 5\"); the manufacturer is a modulenamelanguage row whose display pattern is \"Prodigy %(ClassName)s\", the module belongs to the item instance, and no client table maps a template to a module. One armour icon resolves by class family and slot to 492 templates, and narrowing by the class level requirement takes that to three, not to one. Of 400 reward lines across the wiki’s seedable missions, 67 resolve (nearly all consumables, which the client names directly), 6 narrow to a handful, and 305 do not resolve at all.",
+   "summary": "Item rewards are still missing from most seeded missions. The 2026-09-21 conclusion that names cannot be resolved holds for a single name (manufacturer prefixes such as \"Prodigy %(ClassName)s\" are item modules, and one armour icon resolves to hundreds of templates), but not for a mission's whole list: the final client stores mission reward templates as runs of consecutive ids, and a specific 3-4 entry list matches exactly one run (research/20260926-reward-items, independently reviewed). Closed on 2026-09-26 for seven missions by MissionRewardItems: 1541, 1673, 1040, 983, 970, 1068 and 1863, each a post-1.4 TaRapedia list, seeded as one choice at inferred tier (caveats in GAP-MISSION-REWARD-TEMPLATE-ID, GAP-MISSION-REWARD-CHOICE, GAP-MISSION-REWARD-MODULES, GAP-MISSION-REWARD-FINAL-STATE and GAP-MISSION-LEVEL). Held: the 23 Logos missions (1645, 1648-1651, 1654, 1655, 1657-1659, 1661, 1663-1671, 1749, 1750, 1814) - the Logos chain resolves through original client tables, but the shrine already grants the Logos (DynamicObjectManager.LogosRecovery) and completes the objective, the wiki field restates that objective, no completion window shows an item, and the lists predate 1.4, so seeding would duplicate or invent a grant (SeedLogosMissionsRows records the same decision); 1407 Too Close For Comfort, whose post-1.4 list (rev 29339, 2008-02-28) is two recipes, \"Modification: Power Bonus\" and \"Modification: Regen Bonus\", and which Recipe_Modification template teaches either is server data, while the Vitalius Leech Gun / Vextronics Chaingun pair in GAP-W3-HUB-REWARDS is Ellatha's pre-1.4 item data; the partial lists of 411, 412 and 1390 (the EMP Bomb templates are ambiguous, and 1390's post-D8 footage shows Class I EMP Bomb | Class I Armor Charger where the wiki has a Basic Med Pack); every list recorded only before 1.4 (23 missions: 1.4 replaced 855 missions' rewards, and those lists must not become analogues); every 2-entry run (chance matches 6-57%); 25 ambiguous and 4 unresolved missions; 13 with no recorded item. Finding recorded, not acted on: 479 Forming Alliances' vest 13738 is class 16396, a V04 Motor Assist vest (levels 3-7), while its only list (TaRapedia rev 21137, 2007-12-15, pre-1.4) names a Luminar Motor Assist Armor Vest v6 (class 16896: templates 30676, 30677, 96948); its armour 154 matches Ellatha's pre-1.4 stat block, and armour is a class property, so nothing pins the template. The research read the deployed row as unlabelled; in this tree it is WildernessHubFormingAlliances' analogue (docs/evidence/wilderness-forming-alliances-reconstruction.json). It is unchanged here.",
    "evidence": [
     "TaRapedia reward icons, e.g. {{Icon/Armor|Prodigy|Motor Assist Armor|Boots|5}}",
     "client modulenamelanguage: \"Prodigy\" is a module display pattern, not a template",
-    "search of physicalentityclassnamelanguage, itemtemplatelanguage and the 60,004-row stringtable: no hits for Olympia, Pulsar or Vextronics"
+    "search of physicalentityclassnamelanguage, itemtemplatelanguage and the 60,004-row stringtable: no hits for Olympia, Pulsar or Vextronics",
+    "research/20260926-reward-items/README.md, REVIEW.md and reward-items.json (2026-09-26; seven missions approved, the Logos proposal refuted)",
+    "client itemclass.pyo itemTemplateItemClass: post-1.4 reward lists land in consecutive runs within 119014-121295",
+    "src/Rasa.DBL/Migrations/WildernessData/MissionRewardItemsRows.cs"
    ],
-   "closes_with": "a source that names reward items by template, or footage of the reward window",
+   "closes_with": "for each held mission, a dated post-1.4 list that resolves to one run or one single-template class, or footage of its reward window; for the Logos missions, a completion window showing an item",
    "surfaced_by": [
-    "mission text audit and TaRapedia mission mining, 2026-09-21"
+    "mission text audit and TaRapedia mission mining, 2026-09-21",
+    "reward-items research and review, 2026-09-26"
    ],
    "slices": [
     "W1",
@@ -65473,12 +67396,13 @@
   },
   {
    "id": "GAP-MISSION-LEVEL",
-   "summary": "The client carries no mission-level field anywhere - missionconversation, missionobjective, missiongrouptype, campaign and the language tables were all checked. TaRapedia states a level for only 126 of its 926 mission pages, and where both a wiki level and the giver creature’s level are known they differ by up to 8, so the giver’s level is not a substitute. Any batch that seeds missions the wiki does not level needs an owner decision on what that column should hold.",
+   "summary": "The client carries no mission-level field anywhere - missionconversation, missionobjective, missiongrouptype, campaign and the language tables were all checked. TaRapedia states a level for only 126 of its 926 mission pages, and where both a wiki level and the giver creature’s level are known they differ by up to 8, so the giver’s level is not a substitute. Any batch that seeds missions the wiki does not level needs an owner decision on what that column should hold. Seeding the 2026-09-26 reward items exposes a contradiction, recorded here and not resolved by changing levels: the seeded levels of 1541 (20), 1673 (25), 1040 (20), 970 (20), 1068 (20) and 1863 (25) are the zone band, while their reward items require levels 33-35, 35-39, 30-33, 26-30, 26-30 and 31-35 (client reqData), and TaRapedia states level 35 for 1673, \"32 (possibly less)\" for 1040 and 36 for 1863 (none for 1541, 970, 1068). 983 (level 30, rewards 25-28) is consistent.",
    "evidence": [
     "client tables searched for a mission level field: none exists",
     "TaRapedia: 126 of 926 mission pages state a level",
     "EarlyReadyMissions 2026-09-26: 1742, 441 and 434 seeded at the Wilderness band 5 and 408 at the Palisades band 15; no source gives their levels",
-    "TordenConversationMissions (2026-09-26): 1745 at the Palisades band 15, 526/802 at the Incline band 35, 648/1064/1070 at the Plains band 35, 1014 at the Plateau band 20 (all inferred conventions); 1326/1330 in the Pools, which has no band, at 20 from 1068/1541 as an analogue under OD-60 (pending owner review)"
+    "TordenConversationMissions (2026-09-26): 1745 at the Palisades band 15, 526/802 at the Incline band 35, 648/1064/1070 at the Plains band 35, 1014 at the Plateau band 20 (all inferred conventions); 1326/1330 in the Pools, which has no band, at 20 from 1068/1541 as an analogue under OD-60 (pending owner review)",
+    "research/20260926-reward-items/REVIEW.md Claim 3 (world DB level vs wiki Level vs reward requirement levels)"
    ],
    "closes_with": "an owner decision on the level policy, or a source that gives mission levels",
    "surfaced_by": [
@@ -66077,6 +68001,68 @@
     "W3"
    ],
    "status": "open"
+  },
+  {
+   "id": "GAP-MISSION-REWARD-TEMPLATE-ID",
+   "summary": "The 25 reward templates of MissionRewardItems are inferred: no client table links a mission to a template. The equipment ids come from the one strict consecutive run each list matches in itemTemplateItemClass (1541 120418-120421, 1673 120101-120104, 1040 120382-120385, 983 120804-120806); the consumables from names that are one class with one template. Identity confidence: 1541, 1673 and 1040 high (4-entry lists, chance match 0/500); 970, 1068 and 1863 high for the items; 983 medium (a 3-entry, name-only list, chance match 3-5%, depending on all three entries). For 1541 the near-duplicate block 120109-120112 shares three of four classes, and only the wiki's \"Stealth Legs v4\" decides it. A run match proves only that the list existed at some time (obsolete runs survive, e.g. 1040's pre-1.4 96390-96393); the dating makes these the later lists. The seven weapons carry WeaponRowRepair's placeholder itemtemplate_weapon columns, like every weapon without footage; the eight armour pieces take body armour from armorclass (GAP-ITEM-ARMOR-VALUES).",
+   "evidence": [
+    "research/20260926-reward-items/REVIEW.md Claim 1 (run structure, null test by list shape, wildcard robustness) and Claim 3 (spot checks)",
+    "client itemclass.pyo itemTemplateItemClass, reqData, itemTemplateSkillRequirement; entityclass.pyo; physicalentityclassnamelanguage"
+   ],
+   "closes_with": "a capture or screenshot of each completion window or of the owned item with its template; for 983 first",
+   "surfaced_by": [
+    "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-MISSION-REWARD-CHOICE",
+   "summary": "MissionRewardItems offers each mission's items as one choice (type 5) with the wiki's counts (x2 med packs and chargers, x4 grenades). Both are inferred: the wiki gives neither the choice structure nor whether its \"(2)\"/\"(4)\" is the stack granted, and for the consumable bundles it may have been all four stacks. The only direct observation of a reward window in this era is 1390's \"Choose one of the following\" (video -I1WM5ddg-k, t=1488).",
+   "evidence": [
+    "research/20260926-reward-items/README.md 'Choice structure' and work/footage (1390 window)",
+    "REVIEW.md Claim 5"
+   ],
+   "closes_with": "footage or a capture of the completion window of any of the seven missions, or of a comparable consumable-bundle mission",
+   "surfaced_by": [
+    "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-MISSION-REWARD-MODULES",
+   "summary": "The wiki names these rewards with manufacturer prefixes - Dynamo, Teleract, Astra, Titan (1541); Wellcare, ChiTech, Prodigy, Titan (1673); Shinobi, Teleract (1040); ChiTech, Animatics, Teleract (983). A prefix is an item module (modulenamelanguage \"X %(ClassName)s\") and no client table maps a template to a module, so the seeded bare templates show without the prefix and without its bonuses. No module is invented.",
+   "evidence": [
+    "client modulenamelanguage patterns",
+    "research/20260926-reward-items/README.md 'The manufacturer prefix'",
+    "MissionRewardModuleBindings (only 1526 is bound)"
+   ],
+   "closes_with": "a capture of the reward tooltip or of the owned item showing its module tuple",
+   "surfaced_by": [
+    "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-MISSION-REWARD-FINAL-STATE",
+   "summary": "The seven lists are final-state only in the sense \"post-1.4, no documented later change\": each first appeared on TaRapedia between 2008-02-23 and 2008-03-29, after update 1.4 replaced 855 missions' rewards, and no later wiki content edit, TaRapedia update page (2008-02-21 to 2008-12-20) or the official D16/16.3/16.4 notes changes them. Open risk: the 2008-04-28 (1.7) notes say roughly 70 unnamed mission rewards that gave armor or tools with incorrect requirements were adjusted; that postdates every one of these lists (the review singles out 1541, 1040 and 983) and names no mission. Every approved equipment template carries a client skill and level requirement, which fits an in-place fix, but whether any template was swapped is unverified. The notes for D9, D14 and January 2009 (D15.x) may be incomplete.",
+   "evidence": [
+    "official_notes:1.4",
+    "official_notes:2008-reward-changes",
+    "research/20260926-reward-items/REVIEW.md Claim 2"
+   ],
+   "closes_with": "final-era footage or captures of these rewards, or complete notes for D9, D14 and D15.x",
+   "surfaced_by": [
+    "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
   }
  ],
  "non_content_settings": [
@@ -69246,6 +71232,272 @@
     {
      "source": "client_table:game.zip",
      "locator": "generated/client/missionobjective.pyo + missiontextlanguage.pyo: key (1330,1) -> [10904, 10905, None, None, None] (offset 52538) name \"Speak to Amee Corman\" body \"Speak to Amee Corman at the Retread Camp\" "
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1541,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 120418,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120419,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120420,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120421,
+     "quantity": 1
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29408 (first recorded 2008-03-02, after update 1.4 of 2008-01-29); template ids by the unique consecutive client run; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/New_Orders_From_The_General?oldid=29408 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1541.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1673,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 120101,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120102,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120103,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120104,
+     "quantity": 1
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29815 (first recorded 2008-03-17, after update 1.4 of 2008-01-29; still carried unchanged at rev 34762 (2008-10-05)); template ids by the unique consecutive client run; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/It_Lies_in_Ruins?oldid=29815 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1673.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1040,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 120382,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120383,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120384,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120385,
+     "quantity": 1
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29133 (first recorded 2008-02-23, after update 1.4 of 2008-01-29); template ids by the unique consecutive client run; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/Incommunicado?oldid=29133 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1040.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 983,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 120804,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120805,
+     "quantity": 1
+    },
+    {
+     "item_template_id": 120806,
+     "quantity": 1
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 30043 (first recorded 2008-03-29, after update 1.4 of 2008-01-29); template ids by the unique consecutive client run; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/You're_the_Guy?oldid=30043 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/983.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 970,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 45059,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 118897,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 111037,
+     "quantity": 4
+    },
+    {
+     "item_template_id": 111027,
+     "quantity": 4
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29117 (first recorded 2008-02-23, after update 1.4 of 2008-01-29); template ids by single-class, single-template names; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/Lookout_Down_Below?oldid=29117 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/970.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1068,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 45059,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 118906,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 111017,
+     "quantity": 4
+    },
+    {
+     "item_template_id": 111027,
+     "quantity": 4
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29406 (first recorded 2008-03-02, after update 1.4 of 2008-01-29); template ids by single-class, single-template names; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/South_Of_The_Border?oldid=29406 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1068.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionRewardItems",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1863,
+    "type": 5
+   },
+   "field": "item_template_id, quantity",
+   "old": null,
+   "new": [
+    {
+     "item_template_id": 45062,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 118898,
+     "quantity": 2
+    },
+    {
+     "item_template_id": 111048,
+     "quantity": 4
+    },
+    {
+     "item_template_id": 45446,
+     "quantity": 4
+    }
+   ],
+   "tier": "inferred",
+   "reason": "Reward items added as one choice from TaRapedia rev 29490 / rev 30095 (first recorded 2008-03-05, after update 1.4 of 2008-01-29; restated unchanged at rev 30095 (2008-04-01) and still carried at rev 34827 (2008-10-07)); template ids by single-class, single-template names; the mission's level is left unchanged (GAP-MISSION-LEVEL).",
+   "source": "research/20260926-reward-items (README.md, REVIEW.md, reward-items.json)",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=29490 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
+    },
+    {
+     "source": "community_db:tarapedia-reward-history",
+     "locator": "https://tabularasa.fandom.com/wiki/Missing_in_Action?oldid=30095 RewardItem field; saved in research/20260926-reward-items/work/tarapedia/1863.json"
     }
    ]
   }

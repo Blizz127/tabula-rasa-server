@@ -592,6 +592,12 @@ armour icon resolves to 492 templates and narrowing by level requirement reaches
 lines, 67 resolve (nearly all consumables, which the client names directly) and 305 do not.
 **GAP-MISSION-REWARD-ITEMS** (open).
 
+*2026-09-26:* the negative holds for single names but not for whole lists. The client stores mission rewards as runs
+of consecutive template ids, and a specific 3-4 entry list matches exactly one run. Seven missions now carry their
+post-1.4 reward items at `inferred` tier (`MissionRewardItems`: 1541, 1673, 1040, 983, 970, 1068, 1863). The
+manufacturer prefix is still unmapped (**GAP-MISSION-REWARD-MODULES**). The Logos missions stay without an item
+because the shrine grants the Logos. See retail-accuracy.md, 2026-09-26.
+
 ### What the wiki could still give us
 
 859 of its missions are not seeded here. 164 have both giver and receiver already standing in the world, and of

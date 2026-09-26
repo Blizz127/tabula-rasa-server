@@ -27,6 +27,9 @@ namespace Rasa.Test.Reconstruction
             // as does the cross-zone mission-area batch (MissionAreaLinks, 2026-09-17) and the 2026-09-26 ready missions
             // (EarlyReadyMissions, Wilderness and Palisades).
             foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix, "MissionAreaLinks", "EarlyReadyMissions" })
+            // as does the cross-zone mission-area batch (MissionAreaLinks, 2026-09-17) and the mission reward items
+            // (MissionRewardItems, 2026-09-26).
+            foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix, "MissionAreaLinks", "MissionRewardItems" })
             {
                 var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
                     SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, prefix);

@@ -990,6 +990,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
   `GAP-NORTON-POSITION`, `GAP-TORDEN-MARKER-POSITIONS`). Clark is probably unreachable where he stands, which blocks
   seeding 936 until the owner decides. Details: `docs/fidelity-audit.md`, "World-data defects (2026-09-26)".
 
+- **Mission reward items (2026-09-26, `MissionRewardItems`)**: seven seeded missions now offer their reward items:
+  1541 and 1040 on the Plateau, 1673 in the Marshes, 983 in the Mires, and the consumable bundles of 970, 1068 and
+  1863. Each is one choice at `inferred` tier from TaRapedia's post-1.4 list. The templates come from the client's
+  consecutive reward runs or from single-template classes (research/20260926-reward-items, independently reviewed).
+  983 is medium confidence; the rest are high for item identity. Open: `GAP-MISSION-REWARD-TEMPLATE-ID`, `-CHOICE`,
+  `-MODULES` (manufacturer prefixes not seeded) and `-FINAL-STATE` (the 2008-04-28 requirements note).
+  `GAP-MISSION-LEVEL` now records that these missions' seeded levels (20-25) sit below their reward levels (26-39);
+  the levels were not changed. Held: the 23 Logos missions, 1407 (recipes), 411/412/1390, pre-1.4-only lists and
+  2-entry runs (`GAP-MISSION-REWARD-ITEMS`). 479's vest is recorded as contradicting the wiki's v6 and left for its
+  own change.
+
 ## All-missions program (owner goal, 2026-09-15)
 
 Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of

@@ -1914,3 +1914,43 @@ NPCs the world already places. No NPC, placement or package is created or moved.
   pending owner review: Smash and Grab records Level=35 and the rewards require 31–35. `ProvenanceRegistry` now
   lists `npc_mission`, with every column required, so a level can carry that label.
 - **Not verified in-game.** None of the nine has been played with the original client.
+
+## 2026-09-26 — Reward items for seven seeded missions
+
+`MissionRewardItems` (20260926120000) adds the reward items of seven missions that already paid their credits and
+experience. Each list is TaRapedia's post-1.4 `RewardItem` field, offered as one choice (type 5) in the wiki's order:
+
+| Mission | Templates (quantity) | Wiki revision | Identity confidence |
+|---|---|---|---|
+| 1541 New Orders From The General | 120418, 120419, 120420, 120421 | `?oldid=29408` (2008-03-02) | high |
+| 1673 It Lies in Ruins | 120101, 120102, 120103, 120104 | `?oldid=29815` (2008-03-17) | high |
+| 1040 Incommunicado | 120382, 120383, 120384, 120385 | `?oldid=29133` (2008-02-23) | high |
+| 983 You're the Guy | 120804, 120805, 120806 | `?oldid=30043` (2008-03-29) | medium |
+| 970 Lookout Down Below | 45059 x2, 118897 x2, 111037 x4, 111027 x4 | `?oldid=29117` (2008-02-23) | high (items) |
+| 1068 South Of The Border | 45059 x2, 118906 x2, 111017 x4, 111027 x4 | `?oldid=29406` (2008-03-02) | high (items) |
+| 1863 Missing in Action | 45062 x2, 118898 x2, 111048 x4, 45446 x4 | `?oldid=29490`, restated `30095` | high (items) |
+
+- How a name became a template: the final client's `itemTemplateItemClass` stores mission rewards as runs of
+  consecutive ids. Each equipment list matches exactly one strict run whose classes carry the wiki's armor version,
+  rarity and level (the client's `reqData` level equals every wiki level). A random 4-entry list of the same shape
+  matched a run 0 times in 500; 983's 3-entry, name-only list 3-5% of the time, so 983 is medium confidence. The
+  consumable names are each one class with one template. For 1541, block 120109-120112 shares three of its four
+  classes, and only "Stealth Legs v4" picks 120418-120421.
+- Every template id, quantity and the choose-one structure is `inferred` (manifest rows with migration
+  `MissionRewardItems`). No client table links a mission to a template. All 25 templates are in the world seed with
+  their class, stack size and category, and load and deliver through the real `ItemManager`.
+- The final-state basis is "post-1.4, no documented later change". The 2008-04-28 note that about 70 unnamed mission
+  rewards had their armor or tool requirements corrected postdates every list and stays an open risk
+  (`GAP-MISSION-REWARD-FINAL-STATE`; the notes for D9, D14 and January 2009 may be incomplete).
+- Not seeded: the manufacturer prefixes (Dynamo, Teleract, Shinobi and the rest), which are item modules no client
+  table maps (`GAP-MISSION-REWARD-MODULES`); whether a bundle granted one stack or all four (`GAP-MISSION-REWARD-CHOICE`).
+  The mission levels are unchanged although the rewards require 26-39 against seeded levels of 20-25; the
+  contradiction is recorded in `GAP-MISSION-LEVEL`.
+- Held, with reasons in `GAP-MISSION-REWARD-ITEMS`: the 23 Logos missions (the shrine already grants the Logos), 1407
+  (its post-1.4 reward is two modification recipes whose templates are server data), 411/412/1390 (partial), every
+  pre-1.4-only list and every 2-entry run. 479's vest 13738 is a V04 counterpart where the wiki names v6; recorded,
+  not changed.
+- Tests: `ContentSchemaMigrationTests` (forward, rollback and re-apply), `MissionRewardItemsProvenanceTests` (seed
+  against manifest and the approved list), and `BootcampReinforcementsScenarioTests` (the seven missions load their
+  offer from the migrated world, and a turn-in at the seeded receiver delivers the chosen item and stack with the
+  completion).

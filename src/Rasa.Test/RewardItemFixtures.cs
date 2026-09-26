@@ -27,6 +27,10 @@ namespace Rasa.Test
     /// (itemtemplate_requirement_skill), the class-keyed level requirement (itemtemplate_requirement), and the item,
     /// weapon, armor and equipable classes, which the entity-class seed would load. Dispose restores the previous
     /// ItemManager and entity classes.
+    ///
+    /// Since MissionRewardItems (2026-09-26) it also carries the 25 reward templates of missions 1541, 1673, 1040, 983,
+    /// 970, 1068 and 1863 with their deployed world-seed values: class, item-class max_hp and stack size, class level
+    /// requirement, template skill requirement and, for the seven weapons, their weaponclass rows.
     /// </summary>
     public sealed class RewardItemFixtures : IDisposable
     {
@@ -44,7 +48,22 @@ namespace Rasa.Test
             public int Skill;
             public bool Weapon;
             public WeaponClassEntry WeaponClass;
+            public int Level = 5;
+            public uint StackSize = 1;
+            public bool Consumable;
+            public ArmorClassEntry ArmorClass;
         }
+
+        private static ArmorClassEntry Armor(uint id, uint absorbed, int regen) =>
+            new ArmorClassEntry { Id = id, MinDamageAbsorbed = absorbed, MaxDamageAbsorbed = absorbed, RegenRate = regen };
+
+        private static WeaponClassEntry Weapon(uint id, uint template, uint action, uint arg, byte draw, byte reload, uint ammo, uint clip,
+            int damage, byte damageType, uint anim) => new WeaponClassEntry
+        {
+            Id = id, WeaponTemplatId = template, AttackActionId = action, AttackActionArgId = arg, DrawActionId = draw,
+            StowActionId = draw, ReloadActionId = reload, AmmoClassId = ammo, ClipSize = clip, MinDamage = damage,
+            MaxDamage = damage, DamageType = damageType, WeaponAnimConditionCode = anim
+        };
 
         private static WeaponClassEntry MachineGun() => new WeaponClassEntry
         {
@@ -76,6 +95,38 @@ namespace Rasa.Test
             new RewardTemplate { Template = 122869, Class = (EntityClasses)13756, MaxHitPoints = 118, Skill = 30 },
             new RewardTemplate { Template = 122870, Class = (EntityClasses)13618, MaxHitPoints = 71, Skill = 30 },
             new RewardTemplate { Template = 122871, Class = (EntityClasses)12797, MaxHitPoints = 100, Skill = 14, Weapon = true, WeaponClass = RepairTool() }
+        };
+
+        // MissionRewardItems: the reward templates of 1541, 1673, 1040, 983 (equipment) and 970, 1068, 1863 (consumables),
+        // each with its deployed itemtemplate_itemclass, itemclass (max_hp, stack), itemtemplate_requirement level and
+        // itemtemplate_requirement_skill rows, and the weapons' weaponclass rows.
+        private static readonly RewardTemplate[] MissionRewards =
+        {
+            new RewardTemplate { Template = 120418, Class = (EntityClasses)13924, MaxHitPoints = 636, Skill = 30, Level = 34, ArmorClass = Armor(13924, 6364, 35) },
+            new RewardTemplate { Template = 120419, Class = (EntityClasses)16776, MaxHitPoints = 584, Skill = 19, Level = 33, ArmorClass = Armor(16776, 5836, 16) },
+            new RewardTemplate { Template = 120420, Class = (EntityClasses)18718, MaxHitPoints = 849, Skill = 21, Level = 34, ArmorClass = Armor(18718, 8485, 27) },
+            new RewardTemplate { Template = 120421, Class = (EntityClasses)19930, MaxHitPoints = 2313, Skill = 48, Level = 35, ArmorClass = Armor(19930, 23133, 24) },
+            new RewardTemplate { Template = 120101, Class = (EntityClasses)14067, MaxHitPoints = 2944, Skill = 30, Level = 39, ArmorClass = Armor(14067, 29444, 164) },
+            new RewardTemplate { Template = 120102, Class = (EntityClasses)18073, MaxHitPoints = 4164, Skill = 57, Level = 35, ArmorClass = Armor(18073, 41640, 28) },
+            new RewardTemplate { Template = 120103, Class = (EntityClasses)16931, MaxHitPoints = 2700, Skill = 19, Level = 38, ArmorClass = Armor(16931, 27000, 75) },
+            new RewardTemplate { Template = 120104, Class = (EntityClasses)18861, MaxHitPoints = 3926, Skill = 21, Level = 39, ArmorClass = Armor(18861, 39258, 123) },
+            new RewardTemplate { Template = 120382, Class = (EntityClasses)27054, MaxHitPoints = 120, Skill = 22, Level = 33, Weapon = true, WeaponClass = Weapon(27054, 118, 149, 4, 7, 42, 3807, 100, 389, 6, 7) },
+            new RewardTemplate { Template = 120383, Class = (EntityClasses)27074, MaxHitPoints = 120, Skill = 55, Level = 31, Weapon = true, WeaponClass = Weapon(27074, 172, 398, 1, 3, 44, 25938, 3, 460, 13, 3) },
+            new RewardTemplate { Template = 120384, Class = (EntityClasses)27115, MaxHitPoints = 120, Skill = 1, Level = 30, Weapon = true, WeaponClass = Weapon(27115, 75, 1, 67, 1, 51, 25920, 10, 569, 6, 1) },
+            new RewardTemplate { Template = 120385, Class = (EntityClasses)27157, MaxHitPoints = 120, Skill = 58, Level = 33, Weapon = true, WeaponClass = Weapon(27157, 185, 249, 3, 7, 22, 3301, 50, 497, 3, 7) },
+            new RewardTemplate { Template = 120804, Class = (EntityClasses)27094, MaxHitPoints = 120, Skill = 1, Level = 25, Weapon = true, WeaponClass = Weapon(27094, 65, 1, 170, 1, 47, 25920, 10, 654, 13, 1) },
+            new RewardTemplate { Template = 120805, Class = (EntityClasses)27156, MaxHitPoints = 120, Skill = 58, Level = 28, Weapon = true, WeaponClass = Weapon(27156, 185, 249, 3, 7, 22, 3301, 50, 329, 3, 7) },
+            new RewardTemplate { Template = 120806, Class = (EntityClasses)27087, MaxHitPoints = 120, Skill = 55, Level = 26, Weapon = true, WeaponClass = Weapon(27087, 175, 398, 3, 3, 46, 25938, 3, 282, 3, 3) },
+            new RewardTemplate { Template = 45059, Class = (EntityClasses)22542, MaxHitPoints = 100, Level = 30, StackSize = 100, Consumable = true },
+            new RewardTemplate { Template = 118897, Class = (EntityClasses)28488, MaxHitPoints = 100, Level = 30, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 111037, Class = (EntityClasses)26287, MaxHitPoints = 100, Level = 26, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 111027, Class = (EntityClasses)26277, MaxHitPoints = 100, Level = 26, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 118906, Class = (EntityClasses)28497, MaxHitPoints = 100, Level = 30, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 111017, Class = (EntityClasses)26267, MaxHitPoints = 100, Level = 26, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 45062, Class = (EntityClasses)22545, MaxHitPoints = 100, Level = 35, StackSize = 100, Consumable = true },
+            new RewardTemplate { Template = 118898, Class = (EntityClasses)28489, MaxHitPoints = 100, Level = 35, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 111048, Class = (EntityClasses)26298, MaxHitPoints = 100, Level = 31, StackSize = 5000, Consumable = true },
+            new RewardTemplate { Template = 45446, Class = (EntityClasses)22963, MaxHitPoints = 100, Level = 31, StackSize = 5000, Consumable = true }
         };
 
         private readonly object _previousItemManager;
@@ -142,6 +193,14 @@ namespace Rasa.Test
                 Execute(worldConnection, $"INSERT INTO itemtemplate_requirement_skill (id, skill_id, skill_level) VALUES ({template.Template}, {template.Skill}, 1)");
                 Execute(worldConnection, $"INSERT INTO itemtemplate_requirement (id, req_type, req_value) VALUES ({(uint)template.Class}, 1, 5)");
             }
+
+            foreach (var template in MissionRewards)
+            {
+                Execute(worldConnection, $"INSERT INTO itemtemplate_itemclass (itemTemplateId, itemClassId) VALUES ({template.Template}, {(uint)template.Class})");
+                if (template.Skill > 0)
+                    Execute(worldConnection, $"INSERT INTO itemtemplate_requirement_skill (id, skill_id, skill_level) VALUES ({template.Template}, {template.Skill}, 1)");
+                Execute(worldConnection, $"INSERT INTO itemtemplate_requirement (id, req_type, req_value) VALUES ({(uint)template.Class}, 1, {template.Level})");
+            }
         }
 
         public RewardItemFixtures(SqliteConnection worldConnection)
@@ -159,6 +218,8 @@ namespace Rasa.Test
 
             foreach (var template in Gear)
                 RegisterClass(template.Class, template.MaxHitPoints, template.WeaponClass);
+            foreach (var template in MissionRewards)
+                RegisterClass(template.Class, template.MaxHitPoints, template.WeaponClass, template.StackSize, template.Consumable, template.ArmorClass);
 
             Items = (ItemManager)Activator.CreateInstance(typeof(ItemManager), BindingFlags.NonPublic | BindingFlags.Instance, null,
                 new object[] { new Factory(worldConnection) }, null);
@@ -174,17 +235,21 @@ namespace Rasa.Test
             }
         }
 
-        private void RegisterClass(EntityClasses classId, int maxHitPoints, WeaponClassEntry weapon, uint stackSize = 1)
+        private void RegisterClass(EntityClasses classId, int maxHitPoints, WeaponClassEntry weapon, uint stackSize = 1, bool consumable = false,
+            ArmorClassEntry armor = null)
         {
             _previousClasses[classId] = EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(classId, out var previous) ? previous : null;
-            var augmentations = weapon == null
+            var augmentations = consumable
+                ? new List<AugmentationType> { AugmentationType.Item }
+                : weapon == null
                 ? new List<AugmentationType> { AugmentationType.Armor, AugmentationType.Equipable, AugmentationType.Item }
                 : new List<AugmentationType> { AugmentationType.Weapon, AugmentationType.Equipable, AugmentationType.Item };
             EntityClassManager.Instance.LoadedEntityClasses[classId] = new EntityClass((uint)classId, "stand-in for the world-seed class", 0, 0,
                 augmentations, false)
             {
                 ItemClassInfo = new ItemClassInfo(new ItemClassEntry { Id = (uint)classId, MaxHitPoints = maxHitPoints, StackSize = stackSize, LootValue = 500 }),
-                WeaponClassInfo = weapon == null ? null : new WeaponClassInfo(weapon)
+                WeaponClassInfo = weapon == null ? null : new WeaponClassInfo(weapon),
+                ArmorClassInfo = armor == null ? null : new ArmorClassInfo(armor)
             };
         }
 
