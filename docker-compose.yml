@@ -1,6 +1,6 @@
 services:
   auth:
-    image: rasa_net
+    image: rasa_net_auth
     restart: always
     build: .
     command: dotnet run --project src/Rasa.Auth/Rasa.Auth.csproj
@@ -12,11 +12,12 @@ services:
       # (TabulaRasaLaunchPlan.DefaultAuthPort, docs/MARVEL_HEROES_TABULA_RASA.md); Rasa.NET's own
       # default is 2106. Publish both so either client configuration reaches the same listener.
       - "2116:2106"
-      - "2107:2107"
+      # 2107 Communicator is NOT published — internet scanners were connecting as fake
+      # "game servers" and disrupting registration. Game reaches auth:2107 on docker net.
     volumes:
       - ./rasaauth.db:/app/rasaauth.db
   game:
-    image: rasa_net
+    image: rasa_net_game
     restart: always
     build: .
     command: dotnet run --project src/Rasa.Game/Rasa.Game.csproj
@@ -33,4 +34,3 @@ services:
       # this mount ad hoc, so recreating it from this file lost the navmesh and creatures fell back to
       # straight-line movement. The repository copy is byte-identical to the mounted one.
       - ./navmesh:/app/navmesh
-

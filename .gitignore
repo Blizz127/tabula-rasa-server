@@ -242,3 +242,12 @@ out/
 
 # Navmeshes are derived from the client map and mesh assets and stay outside Git (GameDataConfig.NavMeshPath).
 /navmesh/
+
+# Local DIT canary control, credentials, telemetry and compiled deployment artifacts.
+/dit/
+/dit-deploy/*.dll
+/dit-deploy/*.pdb
+
+# Local Python test and client harness bytecode.
+__pycache__/
+*.pyc

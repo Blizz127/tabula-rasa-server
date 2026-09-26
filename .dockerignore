@@ -1,0 +1,19 @@
+# The Dockerfile copies source, evidence JSON and solution files only.
+# Keep local runtime state and large research artifacts out of the build context.
+.git
+.claude
+navmesh
+dit
+dit-deploy
+mapprops
+clientdata
+TestResults
+tools
+*.db
+*.db-shm
+*.db-wal
+**/bin
+**/obj
+**/.vs
+**/.vscode
+**/*.log
