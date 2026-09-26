@@ -1691,7 +1691,9 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnName("placement_id");
 
                     b.Property<bool>("SharedKillCredit")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false)
                         .HasColumnName("shared_kill_credit");
 
                     b.Property<uint>("TargetState")

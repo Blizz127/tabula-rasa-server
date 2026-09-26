@@ -1690,7 +1690,9 @@ namespace Rasa.Migrations.SqliteWorld
                         .HasColumnName("placement_id");
 
                     b.Property<bool>("SharedKillCredit")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue(false)
                         .HasColumnName("shared_kill_credit");
 
                     b.Property<uint>("TargetState")

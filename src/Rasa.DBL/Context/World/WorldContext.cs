@@ -106,6 +106,11 @@ namespace Rasa.Context.World
                 .HasKey(e => new { e.MissionId, e.OrGroup, e.RequiredMissionId });
             modelBuilder.Entity<NpcMissionObjectiveBindingEntry>()
                 .HasKey(e => new { e.MissionId, e.ObjectiveId, e.BindingId });
+            // MissionSharedKillCredit adds the column with DEFAULT 0, so rows written without it (every binding migration
+            // older than it) keep killer-only credit; the model says so too, so a schema built from it matches.
+            modelBuilder.Entity<NpcMissionObjectiveBindingEntry>()
+                .Property(e => e.SharedKillCredit)
+                .HasDefaultValue(false);
             modelBuilder.Entity<NpcMissionObjectiveCounterEntry>()
                 .HasKey(e => new { e.MissionId, e.ObjectiveId, e.CounterId });
             modelBuilder.Entity<NpcMissionObjectiveTimerEntry>()

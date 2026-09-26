@@ -222,9 +222,9 @@ namespace Rasa.Test
                          "INSERT INTO npc_mission_objective (mission_id, objective_id, comment, is_required, ordinal, revealed_on_accept) VALUES " +
                          "(767, 2, 'Get 6 Miasma Goo Samples.', 1, 1, 1), (771, 2, 'Acquire 6 Shield Drone Parts.', 1, 1, 1), (787, 3, 'Acquire 4 Xanx Pincers', 1, 1, 1), " +
                          "(758, 3, 'Acquire 10 Fithik Spleens', NULL, NULL, NULL), (776, 2, 'Acquire 10 Samples of Thrax Blood', NULL, NULL, NULL)",
-                         "INSERT INTO npc_mission_objective_binding (mission_id, objective_id, binding_id, kind, area_id, placement_id, creature_id, action_id, destroying_hit_only, equip_match, item_template_id, drop_chance, item_set_id, target_state, counter_id, comment) VALUES " +
-                         "(767, 2, 0, 6, 0, 0, 88, 0, 0, 0, 0, 0, 0, 0, 0, '767/2 kill creature 88'), (771, 2, 0, 6, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0, '771/2 kill creature 85'), " +
-                         "(787, 3, 0, 6, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 0, '787/3 kill creature 87')",
+                         "INSERT INTO npc_mission_objective_binding (mission_id, objective_id, binding_id, kind, area_id, placement_id, creature_id, action_id, destroying_hit_only, equip_match, item_template_id, drop_chance, item_set_id, target_state, counter_id, shared_kill_credit, comment) VALUES " +
+                         "(767, 2, 0, 6, 0, 0, 88, 0, 0, 0, 0, 0, 0, 0, 0, 0, '767/2 kill creature 88'), (771, 2, 0, 6, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, '771/2 kill creature 85'), " +
+                         "(787, 3, 0, 6, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, '787/3 kill creature 87')",
                          "INSERT INTO npc_mission_objective_counter (mission_id, objective_id, counter_id, initial_value, target_value) VALUES (767, 2, 0, 0, 6), (771, 2, 0, 0, 6), (787, 3, 0, 0, 4)",
                          "INSERT INTO npc_mission_reward (id, type, credits, item_template_id, quantity) VALUES (767, 3, 4000, 0, 0), (767, 1, 600, 0, 0), (771, 1, 300, 0, 0), (787, 3, 4000, 0, 0), (787, 1, 600, 0, 0), (479, 1, 400, 0, 0)"
                      })
