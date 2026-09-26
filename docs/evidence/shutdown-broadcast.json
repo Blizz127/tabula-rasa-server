@@ -1,0 +1,659 @@
+{
+ "schema": "rasa-shutdown-broadcast/1",
+ "purpose": "Provenance of the admin broadcast (AdminMessagePacket, AdminBroadcastManager, console 'announce'/'announcemap', chat '.announce'/'.announcemap') and the operator's shutdown countdown (ShutdownCountdown, console 'shutdown'). ShutdownBroadcastTests reproduces the client contract and every countdown value below from the implementation.",
+ "research_date": "2026-09-26",
+ "sources": {
+  "client_code:trpython.zip": {
+   "kind": "client_code",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/trpython.zip",
+   "sha256": "cd2ffe5a88c5cfd82bcc34cc38cc4ab9aedb479d70fa76c0f4476da7bb7225e6",
+   "path": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/final-client-selected/Tabula Rasa 1.16.5.0/trpython.zip",
+   "members": {
+    "client/communicator.pyo": "8dbfe22826937a3ea28ccbb0d599e73a9a0234245d04ea14eab7448e874cfab9",
+    "client/clientmessagesettings.pyo": "46d79c6e52a63f268414d895aac6cb545be2995d5f9d6124eb88233958b64102",
+    "client/inputstate/game.pyo": "28bb9b05c2eb05791be11c440c478a47cfe293c39259678cafedba7c5924bb9c",
+    "client/inputstate/exitgame.pyo": "c330f8c7f9b9e855d692ef4ea68de14a0f5956bff9456ffe4fb8a5dc2fbb1f3b",
+    "client/inputhandlers.pyo": "586fc0ea303e60dcc7991bf79d6a787b560e186bd3c0b4d86d4cc42993e5c9be"
+   },
+   "zip_mtime": "2009-02-09 21:56:22",
+   "method": "static disassembly only (xdis, research/20260926-segment3-audit/work/trdis.py); nothing executed"
+  },
+  "client_table:game.zip": {
+   "kind": "client_table",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/data/game.zip",
+   "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+   "members": {
+    "generated/client/methodid.pyo": "cc75aa76099de1bf4ea924bf68a4d8277fb3ac1e497ae5127b4e7ee7147412d8",
+    "generated/client/uielement.pyo": "b4f344d8b71bbdd3c394a3ce2d18689626c4b0207e01c3495e8bf6a75a5852a3",
+    "generated/client/clientmessagefilter.pyo": "69b7b2a948f4a6209a66fdbe5ab0919cdd95148dc6c6469e4cb5aa7d9346756f",
+    "generated/client/chatdata.pyo": "dcefbd782e660e2afb45ca304563b25bc190fbed0a88006fd8f586524d8f95fb",
+    "generated/client/slashcommand.pyo": "afe0df7cd1441e52d29f203f67ddf2426c099ec827e2911675ad3b8d00a0431d",
+    "generated/client/language/english/uielementlanguage.pyo": "db0b950f257c62aac9a508eabd99304b0ffdde5b6478326b382a90e5c5ed35ce",
+    "generated/client/language/german/uielementlanguage.pyo": "7cc1745602cb5f3dad28e2954f8e27fc172fcbd5a293bc1634af1f767e00399c"
+   }
+  },
+  "client_exe:tabula_rasa.exe": {
+   "kind": "client_code",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/tabula_rasa.exe",
+   "sha256": "73258cf99a12b653b6d7145e76cb8cf62bdc94d18793f89aead9ae813bd90bc8",
+   "note": "the engine names the input-state callback: ASCII 'GameOnDisconnect' at file offset 0x7df774 (strings -t x)"
+  },
+  "video:fxAtDpxypSw": {
+   "kind": "video",
+   "era": "final_live",
+   "video_id": "fxAtDpxypSw",
+   "url": "https://www.youtube.com/watch?v=fxAtDpxypSw",
+   "title": "Tabula Rasa - Final Minutes before Closing",
+   "uploader": "@matthustonexe",
+   "upload_utc": "2009-03-01T11:53:53Z",
+   "file": "/home/blizz/.cache/rasa-footage/fxAtDpxypSw.mp4",
+   "sha256": "e50fd27db9a9eca24db814945c5d44c8d54e3fdfac54c538a3214d01038f5a06",
+   "resolution": "852x480, 30 fps",
+   "timebase": "t = seconds from the start of the YouTube video; chat lines at the first 1 fps frame showing them (arrival in (t-1, t]); the disconnect at 10 fps",
+   "client_language": "English",
+   "ledger": "/home/blizz/backups/rasa-net/research/20260926-final-minutes/events.json (sha256 31a4947d17e37bba00eaccd006e9bb1a86b35b70c64b17f7218c5c2c9b372902), README.md (sha256 dc11356c2a461b3a9ea27a594ef47aec519ed746e48bd028dd837729e86affaf)",
+   "server": "Centaurus (EU), permanent shutdown, night of 2009-02-28/03-01 (inferred, high)"
+  },
+  "video:_gwh1__XecI": {
+   "kind": "video",
+   "era": "final_live",
+   "video_id": "_gwh1__XecI",
+   "url": "https://www.youtube.com/watch?v=_gwh1__XecI",
+   "title": "\"Tabula Rasa\"  Server Shutdown Event (2021 reupload in better quality)",
+   "uploader": "CommanderGrog",
+   "upload_utc": "2021-01-11T17:38:43Z",
+   "file": "/home/blizz/.cache/rasa-footage/_gwh1__XecI.mp4",
+   "sha256": "6f004a61b9761ea2ea0cef0e5b04f65badf1bb0f681c1627fb37b24eeee228e9",
+   "resolution": "1920x1080 (1680x1050 source), 30 fps",
+   "timebase": "t = seconds in _gwh1__XecI; t(j_4B22Y8z28) = t + 1.07 +- 0.1 s; t = t(fxAtDpxypSw) + 425.8 +- 1 s over 521.0-588.3 s",
+   "client_language": "German",
+   "same_edit_as": "j_4B22Y8z28 (2009-03-06 upload, 720p crop, sha256 91eafb8c8c952fed569c0dd9a54d120cadb437f790a6dba7c914f7a6e789e335)",
+   "ledger": "/home/blizz/backups/rasa-net/research/20260926-shutdown-event-grog/events.json (sha256 f49f6ce6c7423eb3d824614146668cb5c53395f7adea3abde863b6bd9ccb4560), README.md (sha256 7b1df267b3f924d231b314fef084ea92aa19a62668c60b6479cd0d6b83d4837a)",
+   "server": "the same EU server and night as fxAtDpxypSw (both disconnects align within 1 s)"
+  }
+ },
+ "client_contract": {
+  "admin_message": {
+   "method": "AdminMessage",
+   "method_id": 24,
+   "method_id_source": {
+    "source": "client_table:game.zip",
+    "locator": "generated/client/methodid.pyo <module> line 47, offsets 228-231: LOAD_CONST 24, STORE_NAME 'AdminMessage'"
+   },
+   "handler": {
+    "source": "client_code:trpython.zip",
+    "locator": "client/communicator.pyo Recv_AdminMessage(msg, filterId), source line 1046, offsets 0-74: msg = _textfilter.FilterText(msg); gmMsgHeader = BuildModuleText('uielementlanguage', _uielement.ID_CHAT_MESSAGE_HEADER_GM); PostEvent(UI_DISPLAY_CLIENT_MESSAGE, None, gmMsgHeader + msg, filterId)"
+   },
+   "entity": "the communicator system entity (the same module as Recv_SystemMessage, line 1052; SysEntity.CommunicatorId = 8 in the emulator)",
+   "arguments": [
+    "msg: text (sent as a Python unicode string; it is concatenated with the unicode header)",
+    "filterId: clientmessagefilter id"
+   ],
+   "header_text_id": 4146,
+   "header_text_id_source": {
+    "source": "client_table:game.zip",
+    "locator": "generated/client/uielement.pyo line 1661, offsets 9912-9915: ID_CHAT_MESSAGE_HEADER_GM = 4146"
+   },
+   "header_text": {
+    "english": "ADMIN MESSAGE: ",
+    "german": "ADMIN-NACHRICHT: ",
+    "source": {
+     "source": "client_table:game.zip",
+     "locator": "language/english|german/uielementlanguage.pyo lookup[(4146, 1)] and [(4146, 2)], offsets 140080-140107"
+    }
+   },
+   "filter_id": 10000046,
+   "filter_name": "SYSTEM_GM",
+   "filter_source": {
+    "source": "client_table:game.zip",
+    "locator": "generated/client/clientmessagefilter.pyo line 48, offsets 234-237: SYSTEM_GM = 10000046 (SYSTEM_GENERAL = 10000037, line 43)"
+   },
+   "filter_choice": {
+    "value": 10000046,
+    "tier": "inferred",
+    "reasoning": "The filter is the server's argument. Only SYSTEM_GM is given Chat_Yellow by default and the default General tab subscribes to it (client/clientmessagesettings.pyo FillInDefaultColors line 185, CreateDefaultTabs line 100); SYSTEM_GENERAL is Chat_White (line 184). Both videos show the admin lines yellow in the General tab, next to the white SYSTEM_GENERAL line 'You may not issue a command at this time.' (fxAtDpxypSw t=5).",
+    "citations": [
+     {
+      "source": "client_code:trpython.zip",
+      "locator": "client/clientmessagesettings.pyo lines 100, 184, 185"
+     },
+     {
+      "source": "video:fxAtDpxypSw",
+      "t": 122
+     },
+     {
+      "source": "video:fxAtDpxypSw",
+      "t": 5
+     }
+    ]
+   },
+   "payload_is_server_text": {
+    "tier": "observed",
+    "reasoning": "The German client shows 'ADMIN-NACHRICHT: ALERT: PLATEAU IS LOST!' and 'ADMIN-NACHRICHT: Server Shutting Down in 10...': a localized client header before an English payload.",
+    "citations": [
+     {
+      "source": "video:_gwh1__XecI",
+      "t": 116,
+      "frame": "frames/gwh_t116_admin_alert_plateau_is_lost_full.jpg"
+     },
+     {
+      "source": "video:_gwh1__XecI",
+      "t": 546
+     }
+    ]
+   },
+   "client_send_path": "The final client has no way to send one. communicator.SendAdminChat (line 380) calls SendCallUserMethod(chatdata.chatIDToMethodName[SYSTEM], ...), and chatIDToMethodName[8] is None (generated/client/chatdata.pyo offsets 349-352); nothing calls SendAdminChat, and slashcommand.pyo defines no admin or broadcast command. Live staff therefore sent these from outside the player client; the emulator's console and dot commands stand in for that tool, which is not in any artifact (GAP-SHUTDOWN-ADMIN-TOOL)."
+  },
+  "disconnect": {
+   "dialog_text_id": 9,
+   "dialog_text_id_source": {
+    "source": "client_table:game.zip",
+    "locator": "generated/client/uielement.pyo line 2109, offsets 12600-12603: ID_DISCONNECTED = 9"
+   },
+   "dialog_text": {
+    "english": "You have been disconnected from the server",
+    "german": "Ihre Verbindung zum Server wurde getrennt.",
+    "source": {
+     "source": "client_table:game.zip",
+     "locator": "language/english|german/uielementlanguage.pyo lookup[(9, 1)] and [(9, 2)], offsets 292-319"
+    }
+   },
+   "chain": [
+    {
+     "source": "client_exe:tabula_rasa.exe",
+     "locator": "engine calls the current input state's GameOnDisconnect when the game-server connection ends"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/inputstate/game.pyo GameOnDisconnect line 66: drops the network-stats method call, then _exitgame.GameOnDisconnect() (offsets 39-45)"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/inputstate/exitgame.pyo GameOnDisconnect line 109: if not g_requestedRestart, client.inputhandlers.GameOnDisconnect() (offsets 0-16); then _ClearCharacterCache() (line 116), which calls _communicator.ClearChatInfo() (line 128)"
+    },
+    {
+     "source": "client_code:trpython.zip",
+     "locator": "client/inputhandlers.pyo GameOnDisconnect line 102 -> OnDisconnect line 83: SaveCharacterData; message box 'Disconnected', SetModal(True), prompt BuildUIElement(ID_DISCONNECTED), one button ID_OK bound to 'enter' -> OnDisconnectOK (line 95: back to the login input state)"
+    }
+   ],
+   "requested_restart": "exitgame.g_requestedRestart becomes True only in OnLogout (line 80, offset 0-3); a close the player did not ask for always takes the dialog branch. Character selection has the same branch (client/inputstate/characterselection.pyo GameOnDisconnect line 126).",
+   "matches_footage": {
+    "tier": "observed",
+    "reasoning": "Both recordings: the chat window empties (ClearChatInfo) and a modal 'You have been disconnected from the server' / 'Ihre Verbindung zum Server wurde getrennt.' with Ok appears over the still-rendered world; no fade, cinematic or other message first.",
+    "citations": [
+     {
+      "source": "video:fxAtDpxypSw",
+      "t": 159.1,
+      "frame": "frames/t160_disconnected_dialog.jpg"
+     },
+     {
+      "source": "video:_gwh1__XecI",
+      "t": 584.9,
+      "frame": "frames/gwh_t587.8_disconnect_dialog_full.jpg"
+     }
+    ]
+   },
+   "server_side": "Client.Close -> LengthedSocket.Close: Socket.Shutdown(Both) then Close, an orderly end of stream with nothing sent first. ShutdownBroadcastTests checks the peer reads end-of-stream."
+  }
+ },
+ "zone_loss_alert": {
+  "text": {
+   "value": "ALERT: PLATEAU IS LOST!",
+   "tier": "observed",
+   "citations": [
+    {
+     "source": "video:_gwh1__XecI",
+     "t": 116,
+     "frame": "frames/gwh_t116_admin_alert_plateau_is_lost_full.jpg"
+    }
+   ]
+  },
+  "implemented_as": "free text only: an operator can send it with 'announce'. No rule sends it (GAP-SHUTDOWN-ZONE-LOSS-RULE)."
+ },
+ "countdown": {
+  "first_line_format": {
+   "value": "Server Shutting Down in {0}...",
+   "tier": "observed",
+   "citations": [
+    {
+     "source": "video:_gwh1__XecI",
+     "t": 546
+    },
+    {
+     "source": "video:fxAtDpxypSw",
+     "t": 122
+    }
+   ],
+   "note": "Only 10 was ever observed. A uniform countdown from another number uses the same words with its own number (operator's choice, not evidence)."
+  },
+  "later_lines": {
+   "value": "the bare number",
+   "tier": "observed",
+   "citations": [
+    {
+     "source": "video:fxAtDpxypSw",
+     "t": 128
+    },
+    {
+     "source": "video:_gwh1__XecI",
+     "t": 553
+    }
+   ]
+  },
+  "observed_from": 10,
+  "lines": [
+   {
+    "number": 10,
+    "text": {
+     "value": "Server Shutting Down in 10...",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 122,
+       "frame": "frames/chat_t122_admin_shutting_down_in_10_x3.jpg"
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 546,
+       "frame": "frames/gwh_t546-556_chat_admin_shutting_down_in_10.jpg"
+      }
+     ],
+     "reasoning_note": "_gwh1__XecI (1080p source) reads 'Server Shutting Down in 10...'; fxAtDpxypSw (480p) reads the same words with the trailing punctuation unresolved ('10.'). The 1080p reading is taken."
+    },
+    "at_ms": {
+     "value": 0,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 122,
+       "frame": "frames/chat_t122_admin_shutting_down_in_10_x3.jpg"
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 546,
+       "frame": "frames/gwh_t546-556_chat_admin_shutting_down_in_10.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 9,
+    "text": {
+     "value": "9",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 128,
+       "frame": "frames/chat_t129_admin_9_x3.jpg"
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 553,
+       "frame": "frames/gwh_t548-565_chat_bottom_admin_9_8_7.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 6000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 128,
+       "frame": "frames/chat_t129_admin_9_x3.jpg"
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 553,
+       "frame": "frames/gwh_t548-565_chat_bottom_admin_9_8_7.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 8,
+    "text": {
+     "value": "8",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 132
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 557,
+       "frame": "frames/gwh_t548-565_chat_bottom_admin_9_8_7.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 10000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 132
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 557,
+       "frame": "frames/gwh_t548-565_chat_bottom_admin_9_8_7.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 7,
+    "text": {
+     "value": "7",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 135
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 560,
+       "frame": "frames/gwh_t560-572_chat_admin_7_6.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 13000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 135
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 560,
+       "frame": "frames/gwh_t560-572_chat_admin_7_6.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 6,
+    "text": {
+     "value": "6",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 138
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 564,
+       "frame": "frames/gwh_t560-572_chat_admin_7_6.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 16000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 138
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 564,
+       "frame": "frames/gwh_t560-572_chat_admin_7_6.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     },
+     "note": "In _gwh1__XecI '6' was first seen higher in the window at t=564, so it may have arrived at 562-564 (medium confidence)."
+    }
+   },
+   {
+    "number": 5,
+    "text": {
+     "value": "5",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 141
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 19000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 141
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    },
+    "note": "Scrolled out between 1 fps samples in _gwh1__XecI; fxAtDpxypSw is the only reading."
+   },
+   {
+    "number": 4,
+    "text": {
+     "value": "4",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 145
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 570,
+       "frame": "frames/gwh_t566-583_chat_bottom_admin_4_2.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 23000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 145
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 570,
+       "frame": "frames/gwh_t566-583_chat_bottom_admin_4_2.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 3,
+    "text": {
+     "value": "3",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 149
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 27000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 149
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    },
+    "note": "Scrolled out between 1 fps samples in _gwh1__XecI; fxAtDpxypSw is the only reading."
+   },
+   {
+    "number": 2,
+    "text": {
+     "value": "2",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 153
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 579,
+       "frame": "frames/gwh_t566-583_chat_bottom_admin_4_2.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 31000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 153
+      },
+      {
+       "source": "video:_gwh1__XecI",
+       "t": 579,
+       "frame": "frames/gwh_t566-583_chat_bottom_admin_4_2.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    }
+   },
+   {
+    "number": 1,
+    "text": {
+     "value": "1",
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 156,
+       "frame": "frames/chat_t156_admin_1_x3.jpg"
+      }
+     ]
+    },
+    "at_ms": {
+     "value": 34000,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "video:fxAtDpxypSw",
+       "t": 156,
+       "frame": "frames/chat_t156_admin_1_x3.jpg"
+      }
+     ],
+     "uncertainty": {
+      "plus_minus": 1.0,
+      "unit": "s",
+      "method": "1 fps first-seen sampling in fxAtDpxypSw: arrival in (t-1, t]; offset = t - 122 s"
+     }
+    },
+    "note": "Scrolled out between 1 fps samples in _gwh1__XecI; fxAtDpxypSw is the only reading."
+   }
+  ],
+  "disconnect_at_ms": {
+   "value": 37100,
+   "tier": "measured",
+   "citations": [
+    {
+     "source": "video:fxAtDpxypSw",
+     "t": 159.1,
+     "frame": "frames/t157.6-159.5_disconnect_10fps_sheet.jpg"
+    }
+   ],
+   "uncertainty": {
+    "plus_minus": 1.0,
+    "unit": "s",
+    "method": "disconnect at t=159.1 +- 0.1 s (10 fps) minus the first line's 1 fps arrival t=122 (+-1 s); 3.1 +- 1 s after '1'"
+   }
+  },
+  "corroboration": {
+   "source": "video:_gwh1__XecI",
+   "reading": "relative to its own disconnect at t=584.9: '10...' -38.9, '9' -31.9, '8' -27.9, '7' -24.9, '6' <= -20.9, '4' -14.9, '2' -5.9 s (each +-1 s); fxAtDpxypSw gives -37.1, -31.1, -27.1, -24.1, -21.1, -14.1, -6.1 s. Every step agrees within the two readings' combined sampling error.",
+   "not_used_because": "it misses 5, 3 and 1, which scrolled out between samples; fxAtDpxypSw has every line of one continuous take"
+  },
+  "manual_or_scripted": "unknown: the irregular 3-7 s steps read like typing, but nothing shows how they were sent (GAP-SHUTDOWN-CADENCE-ORIGIN). The observed cadence is the default because it is what players saw, and a uniform one is available.",
+  "operator_only": "Only the console command 'shutdown start' starts it. It has no timer, date, player-count or event trigger, and no chat command reaches it."
+ },
+ "after_shutdown": {
+  "observed": "fxAtDpxypSw t=170-186: authentication still worked and all four servers (Cassiopeia US West, Centaurus EU, Hydra US East, Orion US West) were listed OFFLINE.",
+  "implemented_as": "by default the process stops as 'exit' does, after every disconnected client has been removed (saved) or 30 s; 'stay' keeps it running (OD-122).",
+  "citations": [
+   {
+    "source": "video:fxAtDpxypSw",
+    "t": 176
+   }
+  ]
+ },
+ "gaps": [
+  "GAP-SHUTDOWN-NEPH-BROADCAST",
+  "GAP-SHUTDOWN-GROG-CUT-ADMIN-ACTION",
+  "GAP-SHUTDOWN-ZONE-LOSS-RULE",
+  "GAP-SHUTDOWN-LAST-STAND",
+  "GAP-SHUTDOWN-CADENCE-ORIGIN",
+  "GAP-SHUTDOWN-ADMIN-TOOL"
+ ],
+ "decisions": [
+  "OD-120",
+  "OD-121",
+  "OD-122",
+  "OD-123",
+  "OD-124"
+ ]
+}

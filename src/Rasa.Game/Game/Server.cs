@@ -80,6 +80,15 @@ namespace Rasa.Game
         /// </summary>
         private readonly HashSet<uint> _lockedAccounts = new HashSet<uint>();
         private readonly PacketRouter<Server, CommOpcode> _router = new PacketRouter<Server, CommOpcode>();
+
+        /// <summary>The operator's shutdown countdown. Only the console `shutdown start` command starts it.</summary>
+        private readonly ShutdownCountdown _shutdownCountdown;
+
+        /// <summary>Whether the process stops once the countdown has disconnected everyone.</summary>
+        private volatile bool _exitAfterShutdownCountdown;
+
+        /// <summary>Console announcements are handed to the main loop under names of their own.</summary>
+        private int _announcementSequence;
         public Server(
             IHostApplicationLifetime hostApplicationLifetime,
             IClientFactory clientFactory,
@@ -109,6 +118,11 @@ namespace Rasa.Game
             CommandProcessor.RegisterCommand("perf", ProcessPerfCommand);
             CommandProcessor.RegisterCommand("maperrors", ProcessMapErrorsCommand);
             CommandProcessor.RegisterCommand("kb", ProcessKbCommand);
+            CommandProcessor.RegisterCommand("announce", ProcessAnnounceCommand);
+            CommandProcessor.RegisterCommand("announcemap", ProcessAnnounceMapCommand);
+            CommandProcessor.RegisterCommand("shutdown", ProcessShutdownCountdownCommand);
+
+            _shutdownCountdown = new ShutdownCountdown(Timer, text => BroadcastInWorld(text), DisconnectEveryone, OnShutdownCountdownFinished);
         }
 
         ~Server()
@@ -1016,6 +1030,168 @@ namespace Rasa.Game
             }
 
             Logger.WriteLog(LogType.Command, "Invalid reload command!");
+        }
+
+        /// <summary>
+        /// announce &lt;text&gt; - free text to every player in the world as an admin message: the client
+        /// prints its own "ADMIN MESSAGE: " header (German "ADMIN-NACHRICHT: ") and then the text, in
+        /// yellow (AdminMessagePacket). The final night's "ALERT: PLATEAU IS LOST!" was one of these.
+        /// It is handed to the main loop, where the map channels are safe to walk.
+        /// </summary>
+        private void ProcessAnnounceCommand(string[] parts)
+        {
+            var text = parts.Length > 1 ? string.Join(" ", parts[1..]) : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                Logger.WriteLog(LogType.Command, "Usage: announce <text>");
+                return;
+            }
+
+            OnMainLoop(() =>
+            {
+                var sent = BroadcastInWorld(text);
+                Logger.WriteLog(LogType.Command, $"Admin message to {sent} player(s): {text}");
+            });
+        }
+
+        /// <summary>announcemap &lt;mapContextId&gt; &lt;text&gt; - the same, to every instance of one map.</summary>
+        private void ProcessAnnounceMapCommand(string[] parts)
+        {
+            var text = parts.Length > 2 ? string.Join(" ", parts[2..]) : string.Empty;
+
+            if (parts.Length < 3 || !uint.TryParse(parts[1], out var mapContextId) || string.IsNullOrWhiteSpace(text))
+            {
+                Logger.WriteLog(LogType.Command, "Usage: announcemap <mapContextId> <text>");
+                return;
+            }
+
+            OnMainLoop(() =>
+            {
+                int sent;
+
+                lock (Clients)
+                    sent = AdminBroadcastManager.Instance.BroadcastToMap(mapContextId, text);
+
+                Logger.WriteLog(LogType.Command, $"Admin message to {sent} player(s) on map {mapContextId}: {text}");
+            });
+        }
+
+        private void OnMainLoop(Action action)
+        {
+            var sequence = System.Threading.Interlocked.Increment(ref _announcementSequence);
+            Timer.Add($"announce-{sequence}", 0, false, action);
+        }
+
+        private static int BroadcastInWorld(string text)
+        {
+            lock (Clients)
+                return AdminBroadcastManager.Instance.Broadcast(text);
+        }
+
+        private static void DisconnectEveryone()
+        {
+            List<Client> everyone;
+
+            lock (Clients)
+                everyone = Clients.ToList();
+
+            var closed = ShutdownCountdown.DisconnectAll(everyone);
+            Logger.WriteLog(LogType.Command, $"Shutdown countdown: disconnected {closed} client(s).");
+        }
+
+        /// <summary>
+        /// shutdown start [&lt;from&gt; &lt;seconds&gt;] [stay] | shutdown cancel | shutdown status
+        ///
+        /// The shutdown countdown (ShutdownCountdown): "Server Shutting Down in 10..." and then 9 to 1 as
+        /// admin messages, then every connection closed, at the cadence recorded on the EU server's last
+        /// night (measured, docs/evidence/shutdown-broadcast.json) unless a uniform one is given. The
+        /// process then stops as `exit` does, once every disconnected player has been saved and removed;
+        /// "stay" keeps it running. Console only: it is never started by anything else.
+        /// </summary>
+        private void ProcessShutdownCountdownCommand(string[] parts)
+        {
+            var action = parts.Length > 1 ? parts[1].ToLowerInvariant() : string.Empty;
+
+            switch (action)
+            {
+                case "start":
+                    {
+                        if (!ShutdownCountdown.TryParseStart(parts[2..], out var schedule, out var stay, out var error))
+                        {
+                            Logger.WriteLog(LogType.Command, error);
+                            return;
+                        }
+
+                        if (_shutdownCountdown.Running)
+                        {
+                            Logger.WriteLog(LogType.Command, "A shutdown countdown is already running; 'shutdown cancel' stops it.");
+                            return;
+                        }
+
+                        _exitAfterShutdownCountdown = !stay;
+                        _shutdownCountdown.Start(schedule);
+
+                        Logger.WriteLog(LogType.Command,
+                            $"Shutdown countdown started ({schedule.Description}): {schedule.Lines.Count} admin message(s), "
+                            + $"disconnect after {schedule.DisconnectAtMs / 1000.0:0.0} s, then "
+                            + (stay ? "the server keeps running." : "the server stops."));
+                        return;
+                    }
+
+                case "cancel":
+                    Logger.WriteLog(LogType.Command,
+                        _shutdownCountdown.Cancel()
+                            ? "Shutdown countdown cancelled. Nothing was announced about it."
+                            : "No shutdown countdown is running.");
+                    return;
+
+                case "status":
+                    Logger.WriteLog(LogType.Command,
+                        _shutdownCountdown.Running
+                            ? $"Shutdown countdown running ({_shutdownCountdown.Current?.Description})."
+                            : "No shutdown countdown is running.");
+                    return;
+
+                default:
+                    Logger.WriteLog(LogType.Command, "Usage: shutdown start [<from> <seconds>] [stay] | shutdown cancel | shutdown status");
+                    Logger.WriteLog(LogType.Command, "With no numbers it uses the final night's recorded cadence (measured).");
+                    return;
+            }
+        }
+
+        /// <summary>How long the process waits for disconnected players to be saved before it stops anyway.</summary>
+        private const long ShutdownDrainLimitMs = 30000;
+
+        private void OnShutdownCountdownFinished()
+        {
+            if (!_exitAfterShutdownCountdown)
+                return;
+
+            var waited = 0L;
+
+            // The final saves run on this loop through DisconnectedClientQueue, so the process waits for
+            // Clients to empty before it stops the loop - `exit` alone would stop it with them pending.
+            Timer.Add("shutdown-countdown-exit", MainLoopTime, true, () =>
+            {
+                waited += MainLoopTime;
+
+                int remaining;
+
+                lock (Clients)
+                    remaining = Clients.Count;
+
+                if (remaining > 0 && waited < ShutdownDrainLimitMs)
+                    return;
+
+                Timer.Remove("shutdown-countdown-exit");
+
+                if (remaining > 0)
+                    Logger.WriteLog(LogType.Error, $"Shutdown countdown: {remaining} client(s) still not removed after {waited} ms; stopping anyway.");
+
+                Shutdown();
+                _hostApplicationLifetime.StopApplication();
+            });
         }
 
         /*private void ProcessRestartCommand(string[] parts)

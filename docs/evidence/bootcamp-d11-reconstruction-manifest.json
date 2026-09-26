@@ -376,6 +376,12 @@
    "era": "d11_to_shutdown",
    "member": "docs/evidence/creature-loot-footage-ledger.json",
    "note": "Every creature-loot drop visible in the supplied footage with the credited kills around it: 40 final-week drops (7Lrst9SG3pk, 8VXeKzGUv0c, Ycxm8Pa1-v4, from the 2026-09-13 transcripts and verification pass) and 32 Pravus squad-loot entries (A4udsM0rcLo, uploaded 2009-01-21, read by the loot-evidence batch from its chat at 1/4 fps), 20 kill windows, the rates and ranges computed from them, and the hypotheses they settle."
+  },
+  "measurement:shutdown-broadcast": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/shutdown-broadcast.json",
+   "note": "The client's admin-message and disconnect paths decoded statically from the 1.16.5.0 client (member hashes, source lines and offsets), and the shutdown countdown timed from two recordings of the EU server's last minute: fxAtDpxypSw (English client) and CommanderGrog's _gwh1__XecI (German client, the re-render of j_4B22Y8z28). Every value carries its tier, citations and uncertainty."
   }
  },
  "scope": [
@@ -79048,6 +79054,63 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-SHUTDOWN-NEPH-BROADCAST",
+   "summary": "A server-wide message voiced as the Neph or Bane went out shortly before the EU countdown: fxAtDpxypSw opens (t=5) with chat already answering an 'ADMIN'/'bane' demand about prisoners and the planet, and GM Vagabond calls it 'a bold statement by the neph' (t=56). Its wording, sender and time are not in the footage, so nothing sends it; an operator can only type free text with 'announce'.",
+   "evidence": [
+    "docs/evidence/shutdown-broadcast.json (sources video:fxAtDpxypSw)",
+    "research/20260926-final-minutes/events.json t=5, t=56"
+   ],
+   "closes_with": "a capture that shows the broadcast itself (leads: 'Final Moments: Admin Highlights' U0fdU3bkNBo, Raisuly #21 ryufOpnpzRk, KevSniper xz-3Sy0eaXE)",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-SHUTDOWN-GROG-CUT-ADMIN-ACTION",
+   "summary": "CommanderGrog's edit cuts at _gwh1__XecI t=446.97, and the chat after the cut reacts to something an admin said or did ('COs have made a major blunder', 'i cant leave earth!!', 'admin = neph :D', 'the admin is a Neph :O'). What it was is not recorded; nothing is built for it.",
+   "evidence": [
+    "research/20260926-shutdown-event-grog/events.json t=447.0 (frame gwh_t446-449_chat_cut_admin_is_neph.jpg)"
+   ],
+   "closes_with": "footage of the same minute from another viewpoint",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-SHUTDOWN-ZONE-LOSS-RULE",
+   "summary": "'ADMIN MESSAGE: ALERT: PLATEAU IS LOST!' (_gwh1__XecI t=116, German header) is the only zone-loss alert on record. What triggered it is unknown: players claimed zones fell when all four control points went to the Bane and everyone was ejected, which is chat, not evidence. No rule sends zone-loss alerts; the wording for other zones is not generalised.",
+   "evidence": [
+    "docs/evidence/shutdown-broadcast.json zone_loss_alert",
+    "research/20260926-shutdown-event-grog/events.json t=98, t=116"
+   ],
+   "closes_with": "a source for the final event's zone-loss rule (official notes, a GM account or footage of the trigger)",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-SHUTDOWN-LAST-STAND",
+   "summary": "The final night's Earth 'Last Stand' in numbered Empire Sector instances ('Earth 1'-'Earth 5') is only in chat, the official 27 Feb 2009 transmission and secondary accounts. The client does ship context 2375 'Empire Sector: The Last Stand' (map adv_earth_unitedstates_manhattan_01_shared) and uielementlanguage 6121 'Staging Area: The Last Stand', but its spawns, encounter scripting, access route and rewards are not in any artifact read so far. Not built.",
+   "evidence": [
+    "research/20260926-shutdown-event-grog/README.md section 5",
+    "research/20260926-final-minutes/README.md item 7"
+   ],
+   "closes_with": "the Last Stand footage listed in docs/source-sweep-2026-09-13.md read for placements and sequence, plus the context-2375 map data",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-SHUTDOWN-CADENCE-ORIGIN",
+   "summary": "The countdown's 3-7 s steps were measured on one night (fxAtDpxypSw, corroborated by _gwh1__XecI) and may have been typed by hand. Whether live had a scripted shutdown command, and at what cadence, is unknown; the default countdown reproduces the measured night, labelled measured, and a uniform cadence can be given instead.",
+   "evidence": [
+    "docs/evidence/shutdown-broadcast.json countdown"
+   ],
+   "closes_with": "a server-side source or staff account of how the shutdown broadcast was issued",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
+  },
+  {
+   "id": "GAP-SHUTDOWN-ADMIN-TOOL",
+   "summary": "The final client cannot send an admin message: communicator.SendAdminChat resolves chatdata.chatIDToMethodName[SYSTEM], which is None, nothing calls it, and slashcommand.pyo has no admin command. Live staff used a tool outside the player client, and its commands, ranks and targeting (server, map, instance) are unknown. The emulator's console 'announce'/'announcemap' and GameMaster '.announce'/'.announcemap' stand in for it (OD-120).",
+   "evidence": [
+    "docs/evidence/shutdown-broadcast.json client_contract.admin_message.client_send_path"
+   ],
+   "closes_with": "documentation or captures of the live GM tooling",
+   "surfaced_by": "shutdown-broadcast batch 2026-09-26"
   }
  ],
  "non_content_settings": [
@@ -84409,6 +84472,56 @@
    "choice": "Creature 3 (the world's Wilderness Thrax stand-in) takes the Initiate's Thrax Skull and ammunition rows, because the Wilderness Thrax on camera (Thrax Infantry Trainee, 3 skulls and 1 rockets in 4 kills) are not seeded. The Young Forest Boargar (44) takes Boargar Ear at the 2-in-2 measured rate and 1-2 stack despite the sample size (Wilson 34.2-100%), rather than falling back to the stand-in.",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-120",
+   "decision": "Who may send an admin message, and from where",
+   "default": "Console 'announce'/'announcemap' for the operator, and in-game '.announce'/'.announcemap' at GameMaster: it hands nothing out and a restart undoes nothing, and the client names its header for GMs (ID_CHAT_MESSAGE_HEADER_GM)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default. Alternative for the owner: raise the chat commands to Admin, or console only.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
+  },
+  {
+   "id": "OD-121",
+   "decision": "Where the shutdown countdown can be started",
+   "default": "Console only ('shutdown start'); no chat command, timer, date or player-count trigger",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: it disconnects every player, so only the operator at the server console can run it.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
+  },
+  {
+   "id": "OD-122",
+   "decision": "What the server does after the countdown has disconnected everyone",
+   "default": "Stop the process as 'exit' does, once every disconnected player has been removed and saved (30 s at most); 'shutdown start ... stay' keeps it running",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default. The footage shows every server OFFLINE afterwards (fxAtDpxypSw t=176-185); a server left running would let everyone straight back in.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
+  },
+  {
+   "id": "OD-123",
+   "decision": "The shutdown countdown's default cadence",
+   "default": "The measured final-night steps (0, 6, 10, 13, 16, 19, 23, 27, 31, 34 s; disconnect at 37.1 s), labelled measured; 'shutdown start <from> <seconds>' gives a uniform one",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: it is what players saw, even though it may have been typed by hand (GAP-SHUTDOWN-CADENCE-ORIGIN).",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
+  },
+  {
+   "id": "OD-124",
+   "decision": "Who receives an admin message",
+   "default": "Every client standing in a live map channel (shared or instanced); a client at character selection or loading gets none, but the shutdown still disconnects it",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: the footage only shows in-world chat windows, and a client outside the world has none to print into.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#segment-7-shutdown-live-state-status"
   }
  ]
 }

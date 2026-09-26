@@ -990,3 +990,16 @@ that the evidence contradicts.
 **Seen, not seeded.** Schematics, random gear (Wellcare Motor Assist legs, an experimental shotgun), crafting
 resources, holiday snowballs and snowball launchers, and the last patch's player-named red weapons. Squad loot goes
 to one member, with need and greed rolls, and the server has no such distribution. Each has a `GAP-LOOT-*` entry.
+
+## Shutdown broadcast (2026-09-26)
+
+Two recordings of the EU server's last minute (fxAtDpxypSw, _gwh1__XecI) were checked against the 1.16.5.0 client's
+admin-message and disconnect paths before anything was built. Rules, tiers and gaps:
+`docs/evidence/shutdown-broadcast.json`; account: `docs/retail-accuracy.md`, "The shutdown broadcast".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| admin message (`AdminMessage`, 24) | packet defined, never sent | free text to the world or one map, filter SYSTEM_GM; console `announce`/`announcemap`, chat `.announce`/`.announcemap` at GameMaster (OD-120, OD-124) | `communicator.Recv_AdminMessage` prints uielement 4146 before the text; German footage shows a localized header before English text | original contract, observed use; filter inferred |
+| shutdown countdown | none; `exit` only stopped the process | console `shutdown start`: "Server Shutting Down in 10...", 9…1, disconnect at 37.1 s, then stop (OD-121-123) | fxAtDpxypSw t=122-159.1, corroborated by _gwh1__XecI t=546-584.9 | observed text, measured cadence |
+| disconnect presentation | a socket close | unchanged: a close the client did not request is what draws its dialog; the countdown sends nothing before it | `exitgame.GameOnDisconnect` → `inputhandlers.OnDisconnect` (uielement 9), then `ClearChatInfo` | original |
+| zone-loss alert, Neph broadcast, Last Stand | none | none: gaps | only "ALERT: PLATEAU IS LOST!" observed; the rest is chat or off camera | gap |
