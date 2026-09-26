@@ -39,7 +39,11 @@ namespace Rasa.Test.Reconstruction
             // Community databases (TaRapedia's mission infoboxes, the Ellatha/DaOpa mission DB). Dated, era-carrying
             // transcriptions of retail content: usable as leads and for inferred values, never as original data, and
             // the era rules keep a pre-D11 copy out of analogue duty.
-            "community_db"
+            "community_db",
+            // Emulator project data (InfiniteRasa's gameserver_dev_Full.sql dump, the 2023 Rasa.NET world seed): a
+            // community reconstruction, not the original server's. Usable as an analogue counterpart under an owner
+            // decision or as a lead; never as original data (OD-96, 2026-09-26).
+            "emulator_db"
         };
 
         public static readonly string[] Eras = { "final_live", "d11_to_shutdown", "pre_d11", "unknown" };

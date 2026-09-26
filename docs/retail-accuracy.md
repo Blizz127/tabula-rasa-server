@@ -1955,6 +1955,53 @@ experience. Each list is TaRapedia's post-1.4 `RewardItem` field, offered as one
   offer from the migrated world, and a turn-in at the seeded receiver delivers the chosen item and stack with the
   completion).
 
+## 2026-09-26 — one class trainer per hub (`SingleClassTrainers`), and the economy's emulator lineage
+
+Migration `20260926180000_SingleClassTrainers` (rows in `SingleClassTrainersRows.cs`). Evidence decoded from the
+1.16.5.0 client: `docs/evidence/class-trainer-evidence.json`, which also re-derives the lost 2026-09-14 class-trainer
+specification (rules `CT-*`) that `ClassAdvancement` and the managers cite. Research captures:
+`research/20260926-trainers-economy`. Decisions OD-95 to OD-97, all agent-approved and pending owner review.
+
+- **Per-class trainers retired.** `Add_class_trainers` (d717ed1, InfiniteRasa pass) seeded 38 per-class trainers
+  (501001–501038), six of them ringed round Kincaid. They had no package, so they could neither talk nor train. They
+  are also the pre-D12 model. The official D12.5 live notes (2008-09-18, archived) say "Individual trainers for each
+  class have been replaced by one single trainer on maps that had trainers previously". The final client's live maps
+  carry one TRAINER marker per hub. The per-class markers ("Soldier/Specialist Trainer: Alia Das") survive only in the
+  unused wargame template 2269, and the per-class marker texts 973–979 and 1081–1092 are used by no marker. Their
+  pools go to 0/0 and every row stays, so Down only restores the counts.
+- **Training Officer Stratton at Daghda's Urn.** TaRapedia lists him at Daghda's Urn in revision 35503 (2008-11-04,
+  post-D12), and the client's names carry him as 10606, beside Kincaid's 10604. He stands on marker 987 "Class
+  Trainer: Daghda's Urn". The marker's coordinates are original. That he stands on it is inferred: Kincaid is 0.6 m
+  from marker 980. The navmesh path from the Daghda's Urn waypoint is complete. Nothing shows him, so his body
+  (Kincaid's), level 8, 1000 hp and facing 0 are analogues (`GAP-DAGHDA-TRAINER-PRESENTATION`). His client package is
+  unrecovered. The client needs none to train (`npc.CanTrain` reads only `CONVO_TYPE_TRAINING`), so
+  `ClassAdvancement.TrainerCreatureIds` recognises him by creature id. `CreatureManager.ApplyPlacementNpc` gives his
+  package-less placement an NPC record, and `IsClassTrainer` covers conversation, the Train status and the 20 m check.
+- **Not placed: Twin Pillars, Foreas Base, New Cumbria.** No source names their single trainer. TaRapedia's Foreas Base
+  and Cumbria pages list only the 2007 per-class casts, and the Twin Pillars page was last edited in 2007. The Ellatha
+  NPC database and Ten Ton Hammer's guides name none. The client's unassigned "Training Officer" names (Lebowicz,
+  Buckmaster, Delany, Walker, Howell) are candidates and are not used. Buckmaster and Delany share surnames with the
+  pre-D12 trainers of Foreas Base and Cumbria (`GAP-HUB-TRAINER-IDENTITY-TWIN-PILLARS`, `-FOREAS-BASE`,
+  `-NEW-CUMBRIA`). The later hubs' trainers are in `GAP-LATER-HUB-TRAINERS`.
+- **Economy provenance.** The manifest filed `gameserver_dev_Full.sql` as `official_notes`, "the original game
+  server's own schema and seed data". It is InfiniteRasa's emulator dump. The source is now kind `emulator_db`, a new
+  kind that can support no original value. Under OD-96 the seven loot rows (creature_loot 1–21, 84 fields) are
+  re-tiered original → analogue, and every item price from `Regenerate_item_template` is recorded as an analogue.
+  That price rule (buy = loot_value, sell = floor(buy/4)+1) was fitted to the same dump, so it is circular
+  (`GAP-ITEM-PRICES-EMULATOR-DERIVED`). `GAP-W1/W2-ITEM-PRICES` are reopened. Vendor stock has no source either
+  (`GAP-VENDOR-STOCK-UNSOURCED`). No data changed.
+- **Test Vendors: reviewed, one kept.** Pools 21–29 ("Test Vendor 1–9") have spawned nothing since the 2023 seed
+  (counts 0/0), so no migration is needed for them. Pool 36 ("Test Vendor 5", package 10) is kept. It stands 0.15 m
+  from the client's marker 971 "Weapons Vendor: Alia Das", package 10 is a WEAPONS vendor in the client's
+  `vendordata`, and it is Alia Das' only weapons vendor. Its missing name, test body and seed stock are
+  `GAP-ALIA-DAS-WEAPONS-VENDOR`. Everything it sells except the Laser Chaingun (4018) is also sold at Twin Pillars or
+  by the ammo vendor. The hospital "Test Vendor 3" pools 31–35 are left to the hospitals batch
+  (`GAP-WILDERNESS-HOSPITAL-TEST-VENDORS`).
+- Tests: `ContentSchemaMigrationTests` (forward, exact rollback, re-apply), `SeedMigrationParityTests`,
+  `ClassTrainerTests` (a package-less trainer converses, shows Train and trains at Daghda's Urn),
+  `ClassTrainerEvidenceTests` (tree, gates, range, dialogue, trainers and marker against the evidence file) and
+  `MissionContentLoadingTests` (Stratton live in shared 1220).
+
 ## 2026-09-22 to 2026-09-24 — recovered deployed work (documentation reconstructed 2026-09-26)
 
 This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4aa50b3`, `0ed7528`) that were built and deployed live between 2026-09-22 and 2026-09-24 from a VPS checkout that no longer exists. The code, migrations, tests, and evidence JSON files survived (they were recovered onto this branch), but the narrative write-up that would normally accompany each change — the entries this file would otherwise carry — was never committed anywhere and is lost. **There is no earlier version of that narrative to recover.** What follows is reconstructed after the fact strictly from the surviving migration doc-comments, commit messages, tests, and evidence JSON files; it makes no claim beyond what those artifacts state. Three docs cited by code comments from this period (`docs/character-name-evidence.md`, `docs/bootcamp-equip-audit.md`, `docs/bootcamp-opening-movement-audit.md`) were reconstructed the same way and are linked below rather than repeated here.

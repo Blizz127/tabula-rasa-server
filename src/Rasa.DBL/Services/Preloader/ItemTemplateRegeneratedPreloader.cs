@@ -15,8 +15,12 @@ namespace Rasa.Services.Preloader
     /// them priced at 1 credit, so vendors sold everything for a credit, bought everything back
     /// for a credit and repaired for nothing.
     ///
+    /// Provenance (OD-96, 2026-09-26): the prices below are analogues, not recovered values. The "C++ server" is
+    /// InfiniteRasa's emulator and its dump is emulator data, so the 188-row fit shows how the emulator priced items,
+    /// not what the live game charged (GAP-ITEM-PRICES-EMULATOR-DERIVED). loot_value itself is original client data.
+    ///
     /// buy_price is the item class's loot_value. The C++ server's dump carries 188 templates with
-    /// their real prices, and buy_price equals the class's loot_value in all 188, exactly, from 2
+    /// stored prices, and buy_price equals the class's loot_value in all 188, exactly, from 2
     /// credits to 25000; stack size matches the class in all 188 too. Every one of the 9115 item
     /// classes has a non-zero loot_value, so the join prices all 30225 templates. sell_price is
     /// floor(buy_price / 4) + 1, which fits 174 of those 188 - the 14 that miss are visibly

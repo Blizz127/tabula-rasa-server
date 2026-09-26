@@ -1,0 +1,1033 @@
+{
+ "schema": "rasa-class-trainer-evidence/1",
+ "title": "Class trainers and tier advancement, re-derived from the final client",
+ "generated": "2026-09-26",
+ "purpose": "Replaces the lost research/20260914-class-trainer specification (class-trainer-spec.json, rules R1.x-R5.1) that ClassAdvancement, ManifestationManager and CharacterManager cite. Every rule below names the client data it was decoded from, so ClassTrainerEvidenceTests can check the implementation against it.",
+ "research_dir": "/home/blizz/backups/rasa-net/research/20260926-trainers-economy (the marker decoder and this file's generator in work/, TaRapedia revisions in wiki/, the archived official notes in web/, the navmesh probe output work/probe.out)",
+ "client": {
+  "version": "1.16.5.0",
+  "root": "/home/blizz/backups/rasa-net/research/20260912-client-artifacts/final-client-selected/Tabula Rasa 1.16.5.0/",
+  "module_timestamp": "1234238129-1234238148 (2009-02-10 UTC)",
+  "method": "Static only: xdis 6.3.0 (vendored) unmarshals each .pyo; generated literal tables are read with research/20260926-mission-catalog/tools/decode_literal_table.py, uimapmarker.pyo with a stack interpreter over the trdis.py disassembly (research/20260926-segment3-audit/work/trdis.py), code modules by reading their disassembly. No client code was imported or executed. The TRAINER markers agree record for record with research/20260926-segment3-audit/work/trainer-map-markers.json.",
+  "files": {
+   "game/generated/client/uimapmarker.pyo": "c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1",
+   "game/generated/client/gamecontext.pyo": "21171550354785d1cd8d85fa74e2d92a0729a4e04b7ca8ccfd25390a95e3ad36",
+   "game/generated/client/characterclass.pyo": "e7d4148bc03ed4cdded8ab4a222ec9f3615814515b91791cf59171134de5f325",
+   "game/generated/client/vendordata.pyo": "ed4ccbd481de009a7f5aa143651dcf3c5e1c5619af8e224a0cec4e3f06fc1fd7",
+   "game/generated/client/objectiveconversation.pyo": "55b75d207ab585ae16649e2899244be7251326dbe6db578cfeba245ffd208b12",
+   "game/generated/client/language/english/npctrainerdialoglanguage.pyo": "e36e2fd219bc3c5eb4d7cd005a969eece15e999c4489274b8602ca128bfcf017",
+   "game/generated/client/language/english/uimapmarkertextlanguage.pyo": "7230d9d1cab787c00b50f9c7f11f69cf47cad83996dc725b01428fde6bb1e4ab",
+   "game/generated/client/language/english/creaturenamelanguage.pyo": "1fa1ec6c098f3ae2cda4aa37a13ef268f6657bb4fd32cc4e3f5af21ae5126e6c",
+   "game/generated/client/language/english/missiontextlanguage.pyo": "06292bf592ce1ab241771ac3317125e8545c608781822fb345809b70f863bf9d",
+   "game/generated/client/language/english/uielementlanguage.pyo": "db0b950f257c62aac9a508eabd99304b0ffdde5b6478326b382a90e5c5ed35ce",
+   "game/generated/client/language/english/playermessagelanguage.pyo": "b9b27bed2053b422d29069e1a8e97e26bba636512ae328d684bef16eae63fba8",
+   "trpython/client/ui/tierselect.pyo": "84ecd46e76db93b95c42921861462dd144e4a88965a6612692052ab19edd2657",
+   "trpython/client/augmentations/npc.pyo": "d54178e21d838417110afd39b85a40c08b906082965864aed480233e745f3894",
+   "trpython/client/augmentations/actor.pyo": "2ecb129d5071ac588e076415857ea4e5b3ebae08a964e2828b885089ac316c4f",
+   "trpython/client/gameuiutil.pyo": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
+   "trpython/shared/gameconstants.pyo": "e0fc260a81d20fe01023ad79e5460773d46aba3d7feeba7291373cba0026ed40"
+  }
+ },
+ "rules": [
+  {
+   "id": "CT-TREE",
+   "tier": "original",
+   "rule": "Each class trains only into its immediate children.",
+   "value": {
+    "class_ids": {
+     "RECRUIT": 1,
+     "SOLDIER": 2,
+     "SPECIALIST": 3,
+     "COMMANDO": 4,
+     "RANGER": 5,
+     "SAPPER": 6,
+     "BIOTECHNICIAN": 7,
+     "GRENADIER": 8,
+     "GUARDIAN": 9,
+     "SNIPER": 10,
+     "SPY": 11,
+     "DEMOLITIONIST": 12,
+     "ENGINEER": 13,
+     "MEDIC": 14,
+     "EXOBIOLOGIST": 15
+    },
+    "parent": {
+     "2": 1,
+     "3": 1,
+     "4": 2,
+     "5": 2,
+     "6": 3,
+     "7": 3,
+     "8": 4,
+     "9": 4,
+     "10": 5,
+     "11": 5,
+     "12": 6,
+     "13": 6,
+     "14": 7,
+     "15": 7
+    }
+   },
+   "sources": [
+    "characterclass.pyo (constants RECRUIT=1 .. EXOBIOLOGIST=15)",
+    "gameuiutil.pyo g_ClassTree (built at code offsets 1425-1865; Soldier/Specialist under Recruit, Commando/Ranger under Soldier, Sapper/Biotechnician under Specialist, Grenadier/Guardian under Commando, Sniper/Spy under Ranger, Demolitionist/Engineer under Sapper, Medic/Exobiologist under Biotechnician)"
+   ],
+   "implemented_by": "ClassAdvancement.ParentOf / ChildrenOf"
+  },
+  {
+   "id": "CT-GATES",
+   "tier": "original",
+   "rule": "The tier levels are 5, 15 and 30; a trainer is needed to advance there.",
+   "value": {
+    "1": 5,
+    "2": 15,
+    "3": 15,
+    "4": 30,
+    "5": 30,
+    "6": 30,
+    "7": 30
+   },
+   "sources": [
+    "uielementlanguage.pyo (5695,1): \"If you've reached a tier level (5, 15, or 30), you'll want to visit a trainer to select a class advancement. Trainers are located in all major AFS-occupied bases and cities.\"",
+    "official class pages (docs/source-sweep-2026-09-13.md): Recruit 01, Soldier/Specialist 05, tier 3 15, tier 4 30"
+   ],
+   "implemented_by": "ClassAdvancement.GateLevel"
+  },
+  {
+   "id": "CT-GATE-HOLD",
+   "tier": "observed",
+   "rule": "A class is held at the level before its tier level; experience keeps accruing.",
+   "sources": [
+    "video 8VXeKzGUv0c B2 (the Recruit reaches 4, message 663 follows, the experience bar stays full; docs/character-progression-client-evidence.md 'Implementation, 2026-09-14')",
+    "playermessagelanguage.pyo (663,1): \"You will not advance in level until you visit a trainer and choose a new character class to advance in.\""
+   ],
+   "implemented_by": "ClassAdvancement.IsAtGate / IsGatedLevel, ManifestationManager.ApplyLevelUps",
+   "legacy_ids": [
+    "R1.2",
+    "R1.3",
+    "R1.4",
+    "R1.5"
+   ]
+  },
+  {
+   "id": "CT-ANNOUNCE",
+   "tier": "original",
+   "rule": "Reaching the gate sends player message 663 once, then AvailableCharacterClasses.",
+   "sources": [
+    "playermessagelanguage.pyo (663,1)",
+    "video 8VXeKzGUv0c B2 (order after the level-up line)"
+   ],
+   "implemented_by": "ManifestationManager.ApplyLevelUps"
+  },
+  {
+   "id": "CT-CLONE-CREDIT",
+   "tier": "observed",
+   "rule": "One clone credit is granted at the tier choice; the trainer window shows it before training.",
+   "sources": [
+    "video 8VXeKzGUv0c B2 (trainer window shows one credit on the Recruit)",
+    "official Paul Sage guide, 2008-02-01 (a credit at each tier choice; docs/retail-accuracy.md)",
+    "TaRapedia 'Leveling Up' rev 36344 (2009-03-04): 'Just before the training you'll also recieve a Clone Credit'"
+   ],
+   "implemented_by": "ManifestationManager.ApplyLevelUps",
+   "legacy_ids": [
+    "R3.6"
+   ]
+  },
+  {
+   "id": "CT-RANGE",
+   "tier": "original",
+   "rule": "The tier window closes when the player is dead or beyond MAX_MISSION_SHARE_RANGE (20) of the trainer.",
+   "value": 20,
+   "sources": [
+    "gameconstants.pyo MAX_MISSION_SHARE_RANGE = 20 (code offset 1950)",
+    "actor.pyo IsInMissionShareRange: body.InRadiusOf(other.body, MAX_MISSION_SHARE_RANGE)",
+    "tierselect.pyo Update, source lines 202-208: hides when avatar.IsDead() or not avatar.IsInMissionShareRange(actor)"
+   ],
+   "implemented_by": "ClassAdvancement.TrainerRange, ManifestationManager.IsNearClassTrainer"
+  },
+  {
+   "id": "CT-DIALOG",
+   "tier": "original",
+   "rule": "The single trainer speaks the generic group: 337 can train, 339 nothing left to teach, 340 not ready yet.",
+   "value": {
+    "337": "Greetings Soldier! \\r\\n\\r\\nI'm here to train you, regardless of your specialty. Just don't forget to clone. If you clone now, you'll be able to explore a different path later; otherwise you'll be stuck forever with your decision.",
+    "339": "You already know all I can teach you, soldier. Now get out there and put it to use!",
+    "340": "You think you're ready for training? Well you're not - yet. Come back when you've got a little more action under your belt and we'll talk about training you in the ways of AFS."
+   },
+   "sources": [
+    "npctrainerdialoglanguage.pyo keys (337,1), (339,1), (340,1)"
+   ],
+   "implemented_by": "ClassAdvancement.DialogFor"
+  },
+  {
+   "id": "CT-CONVERSE",
+   "tier": "original",
+   "rule": "Training is offered as CONVO_TYPE_TRAINING (bCanTrain, dialogId); the client needs no npc package to converse or train.",
+   "sources": [
+    "npc.pyo CanTrain (source lines 245-254): trainingInfo = convoDataDict.get(CONVO_TYPE_TRAINING); unpacks (bCanTrain, dialogId); returns bCanTrain",
+    "npc.pyo _GetUseAction (source lines 60-66): the CONVERSE action exists whenever convoStatus != CONVO_STATUS_NONE",
+    "npc.pyo Recv_NPCInfo only stores npcPackageId (used for objective dialogue, not training)"
+   ],
+   "implemented_by": "NpcManager.RequestNpcConverse, NpcManager.UpdateConversationStatus (CONVO_STATUS_TRAIN), ClassAdvancement.IsClassTrainer"
+  },
+  {
+   "id": "CT-SELECT",
+   "tier": "original",
+   "rule": "SelectNewCharacterClass(classId) names no trainer: the server checks a living player at the gate, near a trainer, choosing an immediate child.",
+   "sources": [
+    "tierselect.pyo (request shape; docs/character-progression-client-evidence.md)",
+    "CT-TREE",
+    "CT-RANGE"
+   ],
+   "implemented_by": "ManifestationManager.SelectNewCharacterClass",
+   "legacy_ids": [
+    "R3.1",
+    "R3.2",
+    "R3.3"
+   ]
+  },
+  {
+   "id": "CT-CLONE",
+   "tier": "inferred",
+   "rule": "Cloning spends one credit from character selection into an empty pod; attributes and skills reset, Logos kept.",
+   "sources": [
+    "charactercreation.pyo OnCreateCharacter: RequestCloneCharacterToSlot(sourceSlot, destinationSlot, name, gender, height, appearanceData, raceId)",
+    "official live notes 2008-01-29/30 (attribute and skill reset)",
+    "official Wilderness walkthrough (Logos persist through cloning)",
+    "2009-01-25 Beginners Guide (completed missions carried; an undated fan guide disagrees)"
+   ],
+   "implemented_by": "CharacterManager.RequestCloneCharacterToSlot",
+   "legacy_ids": [
+    "R5.1"
+   ],
+   "unverified": "the complete copied-state list, arrival position, and whether a clone made at the gate gets its own tier credit"
+  },
+  {
+   "id": "CT-SINGLE",
+   "tier": "original",
+   "rule": "Since D12 (live 2008-09-18) each hub that had trainers has one single class trainer who trains every class; the per-class trainers are obsolete.",
+   "sources": [
+    "official live notes 'Deployment 12.5: 9/18/2008' (playtr.com/news/patch_notes/deployment_125_9182008.html, Wayback 20081018170941; copy research/20260926-trainers-economy/web/): \"Deployment 12 is on Live! It features a new version of the tier selection process ...\" and, under UI, \"The tier selection process has changed in several ways.  Individual trainers for each class have been replaced by one single trainer on maps that had trainers previously.\"",
+    "the same text on TaRapedia 'Updates/2008-09-18' (pageid 11400, rev 35871): \"The tier selection process has changed in several ways. Individual trainers for each class have been replaced by one single trainer on maps that had trainers previously.\"",
+    "TaRapedia 'Updates/2008-08-14' and 'Updates/2008-08-15' (rev 35870, 32222): \"Many unnecessary class trainers have been removed from all maps. Players should no longer find Tier 4 trainers in maps earlier than Mires, and should no longer find Tier 2 and 3 trainers after Mires.\"",
+    "npctrainerdialoglanguage.pyo (337,1): \"I'm here to train you, regardless of your specialty.\"",
+    "trainer_markers below: one TRAINER marker per hub on every live map; per-class markers only in the unused wargame template 2269"
+   ],
+   "implemented_by": "SingleClassTrainers (retires 501001-501038; places Stratton), ClassAdvancement.TrainerNpcPackages / TrainerCreatureIds"
+  }
+ ],
+ "trainer_markers": [
+  {
+   "map_template": 1306,
+   "game_context": 1148,
+   "context_name": "Adv_Foreas_Concordia_Divide",
+   "context_levels": [
+    11,
+    16
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "132770324754938",
+   "text_id": 513,
+   "text": "Trainer: Foreas Base ",
+   "xyz": [
+    -64.3002,
+    116.365,
+    464.2619
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1306], code offset 16568"
+  },
+  {
+   "map_template": 1378,
+   "game_context": 1220,
+   "context_name": "Adv_Foreas_Concordia_Wilderness",
+   "context_levels": [
+    5,
+    11
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "133079561963284",
+   "text_id": 980,
+   "text": "Class Trainer: Alia Das",
+   "xyz": [
+    765.9673,
+    294.125,
+    386.1204
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1378], code offset 17753"
+  },
+  {
+   "map_template": 1378,
+   "game_context": 1220,
+   "context_name": "Adv_Foreas_Concordia_Wilderness",
+   "context_levels": [
+    5,
+    11
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "133079561963289",
+   "text_id": 981,
+   "text": "Class Trainer: Twin Pillars",
+   "xyz": [
+    -101.0172,
+    220.2702,
+    -516.1014
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1378], code offset 17774"
+  },
+  {
+   "map_template": 1378,
+   "game_context": 1220,
+   "context_name": "Adv_Foreas_Concordia_Wilderness",
+   "context_levels": [
+    5,
+    11
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "133079561963294",
+   "text_id": 987,
+   "text": "Class Trainer: Daghda's Urn",
+   "xyz": [
+    -599.6846,
+    276.605,
+    871.1953
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1378], code offset 17879"
+  },
+  {
+   "map_template": 1402,
+   "game_context": 1244,
+   "context_name": "adv_foreas_concordia_palisades",
+   "context_levels": [
+    16,
+    20
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "133182640965921",
+   "text_id": 1096,
+   "text": "Trainer: New Cumbria ",
+   "xyz": [
+    -763.6543,
+    138.022,
+    604.9778
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1402], code offset 18581"
+  },
+  {
+   "map_template": 1461,
+   "game_context": 1304,
+   "context_name": "adv_foreas_valverde_pools",
+   "context_levels": [
+    33,
+    36
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "133436044037552",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    984.4011,
+    656.4999,
+    346.4135
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1461], code offset 19178"
+  },
+  {
+   "map_template": 1611,
+   "game_context": 1454,
+   "context_name": "adv_foreas_valverde_marshes",
+   "context_levels": [
+    36,
+    38
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134084584059722",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -234.3563,
+    228.0557,
+    45.389
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1611], code offset 20948"
+  },
+  {
+   "map_template": 1654,
+   "game_context": 1497,
+   "context_name": "Adv_Foreas_Valverde_Plateau",
+   "context_levels": [
+    30,
+    33
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134269267738523",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -65.3164,
+    399.397,
+    943.9688
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1654], code offset 22290"
+  },
+  {
+   "map_template": 1734,
+   "game_context": 1734,
+   "context_name": "adv_arieki_ligo_ashendesert",
+   "context_levels": [
+    40,
+    43
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591471701",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -151.3545,
+    296.9875,
+    -791.8498
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1734], code offset 23457"
+  },
+  {
+   "map_template": 1759,
+   "game_context": 1759,
+   "context_name": "adv_arieki_torden_mires",
+   "context_levels": [
+    27,
+    30
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591480951",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -623.029,
+    228.4873,
+    -520.1086
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1759], code offset 24399"
+  },
+  {
+   "map_template": 1761,
+   "game_context": 1761,
+   "context_name": "adv_arieki_torden_incline",
+   "context_levels": [
+    24,
+    27
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591487866",
+   "text_id": 1063,
+   "text": "Trainer: Nyxroq Post",
+   "xyz": [
+    -177.356,
+    234.9451,
+    -234.8386
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1761], code offset 24954"
+  },
+  {
+   "map_template": 1764,
+   "game_context": 1764,
+   "context_name": "adv_arieki_torden_plains",
+   "context_levels": [
+    21,
+    25
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591472354",
+   "text_id": 372,
+   "text": "Class Trainers: Irendas Penal Colony",
+   "xyz": [
+    156.3511,
+    417.5,
+    -262.6709
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1764], code offset 25518"
+  },
+  {
+   "map_template": 1764,
+   "game_context": 1764,
+   "context_name": "adv_arieki_torden_plains",
+   "context_levels": [
+    21,
+    25
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591477900",
+   "text_id": 372,
+   "text": "Class Trainers: Irendas Penal Colony",
+   "xyz": [
+    165.2827,
+    417.5,
+    -253.507
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1764], code offset 25896"
+  },
+  {
+   "map_template": 1764,
+   "game_context": 1764,
+   "context_name": "adv_arieki_torden_plains",
+   "context_levels": [
+    21,
+    25
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591477902",
+   "text_id": 372,
+   "text": "Class Trainers: Irendas Penal Colony",
+   "xyz": [
+    262.4737,
+    417.5493,
+    -263.0391
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1764], code offset 25917"
+  },
+  {
+   "map_template": 1911,
+   "game_context": 1911,
+   "context_name": "adv_arieki_ligo_thunderhead",
+   "context_levels": [
+    42,
+    45
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591474421",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    632.6248,
+    341.386,
+    -546.8319
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[1911], code offset 27188"
+  },
+  {
+   "map_template": 2047,
+   "game_context": 2047,
+   "context_name": "adv_foreas_valverde_descent",
+   "context_levels": [
+    46,
+    48
+   ],
+   "map_kind": "overworld",
+   "marker_entity_id": "134419591469259",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -411.2592,
+    740.3226,
+    -632.9213
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2047], code offset 30727"
+  },
+  {
+   "map_template": 2269,
+   "game_context": 2265,
+   "context_name": "adv_wargame_foreas_concordia_wilderness_revisited",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "133079561963282",
+   "text_id": 977,
+   "text": "Soldier Trainer: Alia Das",
+   "xyz": [
+    764.727,
+    294.1989,
+    379.1216
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2269], code offset 36173"
+  },
+  {
+   "map_template": 2269,
+   "game_context": 2265,
+   "context_name": "adv_wargame_foreas_concordia_wilderness_revisited",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "133079561963283",
+   "text_id": 978,
+   "text": "Specialist Trainer: Alia Das",
+   "xyz": [
+    764.7681,
+    294.1989,
+    385.7595
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2269], code offset 36194"
+  },
+  {
+   "map_template": 2269,
+   "game_context": 2265,
+   "context_name": "adv_wargame_foreas_concordia_wilderness_revisited",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "133079561963284",
+   "text_id": 980,
+   "text": "Class Trainer: Alia Das",
+   "xyz": [
+    785.9673,
+    296.6066,
+    391.0191
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2269], code offset 36215"
+  },
+  {
+   "map_template": 2269,
+   "game_context": 2265,
+   "context_name": "adv_wargame_foreas_concordia_wilderness_revisited",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "133079561963289",
+   "text_id": 981,
+   "text": "Class Trainer: Twin Pillars",
+   "xyz": [
+    -73.5919,
+    220.1847,
+    -533.1462
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2269], code offset 36236"
+  },
+  {
+   "map_template": 2269,
+   "game_context": 2265,
+   "context_name": "adv_wargame_foreas_concordia_wilderness_revisited",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "133079561963294",
+   "text_id": 987,
+   "text": "Class Trainer: Daghda's Urn",
+   "xyz": [
+    -603.3825,
+    276.605,
+    873.9741
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2269], code offset 36341"
+  },
+  {
+   "map_template": 2365,
+   "game_context": 2361,
+   "context_name": "adv_wargame_provinggroundsv002",
+   "context_levels": [
+    45,
+    50
+   ],
+   "map_kind": "wargame battlefield",
+   "marker_entity_id": "134419591466528",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    17.2169,
+    363.5242,
+    -43.7325
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2365], code offset 37028"
+  },
+  {
+   "map_template": 2372,
+   "game_context": 2369,
+   "context_name": "adv_wargame_deadearth",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "134419591466528",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    17.2169,
+    363.5242,
+    -43.7325
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2372], code offset 37391"
+  },
+  {
+   "map_template": 2376,
+   "game_context": 2373,
+   "context_name": "adv_foreas_valverde_plateau_wargame",
+   "context_levels": [
+    null,
+    null
+   ],
+   "map_kind": "wargame, no level range (unused copy)",
+   "marker_entity_id": "134269267738523",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -65.3164,
+    399.397,
+    943.9688
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2376], code offset 38178"
+  },
+  {
+   "map_template": 2377,
+   "game_context": 2374,
+   "context_name": "adv_wargame_edmundrange2",
+   "context_levels": [
+    45,
+    50
+   ],
+   "map_kind": "wargame battlefield",
+   "marker_entity_id": "134419591466528",
+   "text_id": 1365,
+   "text": "Class Trainer",
+   "xyz": [
+    -86.7831,
+    363.5212,
+    -389.4824
+   ],
+   "locator": "uimapmarker.pyo staticmarkers[2377], code offset 38649"
+  }
+ ],
+ "unused_trainer_marker_texts": [
+  {
+   "text_id": 378,
+   "text": "Class Trainer: Mt. Hellas Outpost"
+  },
+  {
+   "text_id": 518,
+   "text": "Trainers: East Listening Post"
+  },
+  {
+   "text_id": 543,
+   "text": "Paludos Trainers"
+  },
+  {
+   "text_id": 973,
+   "text": "Biotechnician Trainer: Alia Das"
+  },
+  {
+   "text_id": 974,
+   "text": "Commando Trainer: Alia Das"
+  },
+  {
+   "text_id": 975,
+   "text": "Ranger Trainer: Alia Das"
+  },
+  {
+   "text_id": 976,
+   "text": "Sapper Trainer: Alia Das"
+  },
+  {
+   "text_id": 979,
+   "text": "Biotechnician Trainer: Twin Pillars"
+  },
+  {
+   "text_id": 1002,
+   "text": "Class Trainers: Thunderhead Base"
+  },
+  {
+   "text_id": 1025,
+   "text": "Class Trainers: Fort Virgil"
+  },
+  {
+   "text_id": 1062,
+   "text": "Trainer: Ortho Base"
+  },
+  {
+   "text_id": 1068,
+   "text": "Class Trainers: Fort Defiance"
+  },
+  {
+   "text_id": 1081,
+   "text": "Spy Trainer"
+  },
+  {
+   "text_id": 1082,
+   "text": "Commando Trainer"
+  },
+  {
+   "text_id": 1083,
+   "text": "Sapper Trainer"
+  },
+  {
+   "text_id": 1084,
+   "text": "Sniper Trainer"
+  },
+  {
+   "text_id": 1085,
+   "text": "Biotechnician Trainer"
+  },
+  {
+   "text_id": 1086,
+   "text": "Guardian Trainer"
+  },
+  {
+   "text_id": 1087,
+   "text": "Grenadier Trainer"
+  },
+  {
+   "text_id": 1088,
+   "text": "Demolitionist Trainer"
+  },
+  {
+   "text_id": 1089,
+   "text": "Medic  Trainer"
+  },
+  {
+   "text_id": 1090,
+   "text": "Exobiologist Trainer"
+  },
+  {
+   "text_id": 1091,
+   "text": "Engineer Trainer"
+  },
+  {
+   "text_id": 1092,
+   "text": "Ranger Trainer"
+  },
+  {
+   "text_id": 1411,
+   "text": "Class Trainer"
+  }
+ ],
+ "per_class_dialog_groups": {
+  "note": "Pre-D12 per-class groups still shipped in npctrainerdialoglanguage (ids 1-336). None names Torden Mires or Ashen Desert. No live marker or seeded NPC uses them.",
+  "groups": {
+   "Biotechnician @ Alia Das": [
+    97,
+    100
+   ],
+   "Biotechnician @ Fort Defiance": [
+    209,
+    212
+   ],
+   "Biotechnician @ Twin Pillars": [
+    101,
+    104
+   ],
+   "Commando @ Alia Das": [
+    105,
+    108
+   ],
+   "Commando @ Fort Defiance": [
+    213,
+    216
+   ],
+   "Commando @ Twin Pillars": [
+    109,
+    112
+   ],
+   "Demolitionist @ Fort Defiance": [
+    217,
+    220
+   ],
+   "Engineer @ Fort Defiance": [
+    221,
+    224
+   ],
+   "Exobiologist @ Fort Defiance": [
+    225,
+    228
+   ],
+   "Grenadier @ Fort Defiance": [
+    229,
+    232
+   ],
+   "Guardian @ Fort Defiance": [
+    233,
+    236
+   ],
+   "Medic @ Fort Defiance": [
+    237,
+    240
+   ],
+   "Ranger @ Alia Das": [
+    113,
+    116
+   ],
+   "Ranger @ Fort Defiance": [
+    241,
+    244
+   ],
+   "Ranger @ Twin Pillars": [
+    117,
+    120
+   ],
+   "Sapper @ Alia Das": [
+    121,
+    124
+   ],
+   "Sapper @ Fort Defiance": [
+    245,
+    248
+   ],
+   "Sapper @ Twin Pillars": [
+    125,
+    128
+   ],
+   "Sniper @ Fort Defiance": [
+    249,
+    252
+   ],
+   "Soldier @ Alia Das": [
+    8
+   ],
+   "Soldier @ Twin Pillars": [
+    12
+   ],
+   "Specialist @ Alia Das": [
+    16
+   ],
+   "Specialist @ Twin Pillars": [
+    20
+   ],
+   "Spy @ Fort Defiance": [
+    253,
+    256
+   ]
+  }
+ },
+ "training_officer_names": {
+  "note": "creaturenamelanguage.pyo 'Training Officer' and 'Class Trainer' names. 10603-10610 are one late block holding Kincaid; the per-class trainer names (123 of them, e.g. 6903 'Soldier Trainer Bukowski', 6909 'Specialist Trainer Hoffman') are the pre-D12 cast.",
+  "names": {
+   "6954": "Training Officer Carter",
+   "6955": "Training Officer Murray",
+   "7056": "Training Officer Hester",
+   "7057": "Training Officer Boone",
+   "7058": "Training Officer Vanek",
+   "7059": "Training Officer Delany",
+   "8929": "Training Officer Fleming",
+   "8935": "Training Officer Rousseau",
+   "8938": "Training Officer McWheeny",
+   "8965": "Training Officer Matrix",
+   "8966": "Training Officer Chaffy",
+   "8967": "Training Officer Walker",
+   "8968": "Training Officer Moyl",
+   "8969": "Training Officer Schoefield",
+   "8970": "Training Officer Albert",
+   "8972": "Training Officer Washington",
+   "8973": "Training Officer Smart",
+   "8974": "Training Officer Pullo",
+   "8975": "Training Officer O'Brian",
+   "8976": "Training Officer Bashir",
+   "8977": "Training Officer Chappel",
+   "9508": "Training Officer Subera",
+   "9837": "Training Officer Redd",
+   "9906": "Training Officer Fernandez",
+   "9930": "Training Officer Metcalf",
+   "10603": "Training Officer",
+   "10604": "Training Officer Kincaid",
+   "10605": "Training Officer Lebowicz",
+   "10606": "Training Officer Stratton",
+   "10607": "Training Officer Buckmaster",
+   "10608": "Training Officer Delany",
+   "10609": "Training Officer Walker",
+   "10610": "Training Officer Howell",
+   "10628": "Training Officer Nelson",
+   "10630": "Training Officer Nelson",
+   "10631": "Training Officer Marsh",
+   "10752": "Class Trainer Darvard"
+  }
+ },
+ "hubs": [
+  {
+   "hub": "Alia Das",
+   "context": 1220,
+   "marker": 980,
+   "status": "placed",
+   "trainer": {
+    "name_id": 10604,
+    "name": "Training Officer Kincaid",
+    "creature": 198515,
+    "placement": 198685,
+    "package": 2588
+   },
+   "identity_sources": [
+    "missiontextlanguage.pyo 13607/13608 ('Trainer Kincaid near the barracks tent at Alia Das')",
+    "objectiveconversation.pyo (1526,1,2588,1,1)",
+    "video 8VXeKzGUv0c B2-036"
+   ],
+   "migration": "WildernessArrivalTrainingDay"
+  },
+  {
+   "hub": "Daghda's Urn",
+   "context": 1220,
+   "marker": 987,
+   "status": "placed",
+   "trainer": {
+    "name_id": 10606,
+    "name": "Training Officer Stratton",
+    "creature": 199604,
+    "placement": 199604,
+    "package": null,
+    "position": [
+     -599.685,
+     276.605,
+     871.195
+    ]
+   },
+   "identity_sources": [
+    "TaRapedia 'Daghda's Urn' (pageid 1978) rev 35503, Chromecat77, 2008-11-04 (post-D12): 'Contacts ... *Training Officer Stratton'; unchanged in the current rev 35509 (2008-11-05)",
+    "creaturenamelanguage.pyo 10606 'Training Officer Stratton'"
+   ],
+   "position_basis": "marker 987 x,y,z (original marker data; standing on it inferred from Kincaid 0.6 m from marker 980). Navmesh surface 276.718 at x,z; complete 82.8 m path from the Daghda's Urn waypoint (Rasa.NavMesh --path, 2026-09-26).",
+   "unverified": "body, level, facing, conversation package (GAP-DAGHDA-TRAINER-PRESENTATION)",
+   "migration": "SingleClassTrainers"
+  },
+  {
+   "hub": "Twin Pillars",
+   "context": 1220,
+   "marker": 981,
+   "status": "gap",
+   "gap": "GAP-HUB-TRAINER-IDENTITY-TWIN-PILLARS",
+   "searched": [
+    "TaRapedia 'Twin Pillars Outpost' (latest rev 21517, 2007-12-16; no trainer)",
+    "TaRapedia full-text search 'Training Officer', 'Class Trainer', each unassigned Training Officer surname (2026-09-26)",
+    "Ten Ton Hammer 'Twin Pillars Missions Guide' (2007-11-07; no trainer)",
+    "Ellatha NPC database (71 NPCs, no trainer)"
+   ]
+  },
+  {
+   "hub": "Foreas Base",
+   "context": 1148,
+   "marker": 513,
+   "status": "gap",
+   "gap": "GAP-HUB-TRAINER-IDENTITY-FOREAS-BASE",
+   "searched": [
+    "TaRapedia 'Foreas Base' (rev 35531, 2008-11-06; its Trainers list is the pre-D12 per-class cast added in 2007: Cross, Bomar, Buckmaster, Seamster, Scott, Bowsworth, Dobson, Vaughn, Goranga, Denth, Barton, Helmut, Valens)",
+    "sources as Twin Pillars"
+   ],
+   "candidate_not_used": "10607 'Training Officer Buckmaster' shares the surname of the pre-D12 'Demolitionist Trainer Buckmaster' of Foreas Base; the surname reuse (Kincaid was 6932 'Sapper Trainer Kincaid') suggests but does not establish him"
+  },
+  {
+   "hub": "New Cumbria",
+   "context": 1244,
+   "marker": 1096,
+   "status": "gap",
+   "gap": "GAP-HUB-TRAINER-IDENTITY-NEW-CUMBRIA",
+   "searched": [
+    "TaRapedia 'Cumbria Research Facility' (rev 35397, 2008-10-25; its Trainers list - Boone, Hester, Vanek, Delany - dates from 2007 and names the facility D12 replaced with New Cumbria)",
+    "official live notes Deployment 12.5 (2008-09-18): New Cumbria built, 'The mission givers, NPCs, vendors, and other support infrastructure from the Cumbria Research Facility have been relocated inside the New Cumbria fortification' - the same deployment that replaced the per-class trainers",
+    "sources as Twin Pillars"
+   ],
+   "candidate_not_used": "10608 'Training Officer Delany' shares the surname of the pre-D12 Cumbria 'Biotech Trainer Delany' (7059); suggestive only"
+  },
+  {
+   "hub": "later hubs (Pools, Marshes, Plateau/Fort Defiance, Ashen Desert, Torden Mires, Incline/Nyxroq Post, Plains/Irendas, Thunderhead, Descent)",
+   "status": "gap",
+   "gap": "GAP-LATER-HUB-TRAINERS",
+   "note": "markers listed above; the per-class rings Add_class_trainers stood at Fort Defiance, Torden Mires and Ashen Desert are retired with the rest. These hubs gate levels 15-30 and beyond, later segments of the progression plan."
+  }
+ ],
+ "retired": {
+  "migration": "SingleClassTrainers",
+  "spawnpools": "501001-501038 (counts 1/1 -> 0/0; creature, appearance and pool rows kept)",
+  "origin": "Add_class_trainers (20260920070000, commit d717ed1, tools/gen_class_trainers.py in the InfiniteRasa data pass)",
+  "why": "pre-D12 per-class model (CT-SINGLE); no npc_package, so they could neither converse nor train; six stood 3-6 m round Kincaid"
+ }
+}

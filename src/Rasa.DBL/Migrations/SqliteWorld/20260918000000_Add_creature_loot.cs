@@ -27,7 +27,7 @@ namespace Rasa.Migrations.SqliteWorld
                     table.PrimaryKey("PK_creature_loot", x => x.id);
                 });
 
-            // The seven rows of the original creature_type_loot that survived, on this world's Thrax soldiers.
+            // The seven rows of InfiniteRasa's emulator creature_type_loot (analogues, OD-96), on this world's Thrax soldiers.
             new CreatureLootPreloader().Preload(migrationBuilder);
         }
 

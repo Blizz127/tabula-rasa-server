@@ -23,11 +23,12 @@ using Rasa.Repositories.UnitOfWork;
 using Rasa.Repositories.World;
 using Rasa.Structures;
 using Rasa.Structures.Char;
+using Rasa.Structures.World;
 
 namespace Rasa.Test
 {
     /// <summary>
-    /// Tier advancement (research/20260914-class-trainer): a Recruit is held at level 4 with its experience
+    /// Tier advancement (docs/evidence/class-trainer-evidence.json, rules CT-*): a Recruit is held at level 4 with its experience
     /// credited; reaching the gate sends PM 663, makes the tier selection pending and grants a clone credit once;
     /// the class trainer offers Train only at the gate; SelectNewCharacterClass near a trainer changes the class
     /// to an immediate child and releases the withheld level.
@@ -240,6 +241,54 @@ namespace Rasa.Test
             // Soldier is held at 14 next; training again now is refused.
             ManifestationManager.Instance.SelectNewCharacterClass(_client, 4);
             Assert.AreEqual(2u, _client.Player.Class);
+        }
+
+        [TestMethod]
+        public void AHubTrainerWithoutAPackageTrainsByItsCreatureId()
+        {
+            // Training Officer Stratton of Daghda's Urn (SingleClassTrainers) has no recovered conversation package.
+            // His placement still gives him an NPC record, and the server knows him as a class trainer by creature id;
+            // a package-less creature that is not a trainer stays a plain creature.
+            var stratton = new Creature
+            {
+                DbId = 199604, MapContextId = 1220, MapChannel = _map, Position = new Vector3(-599.685f, 276.605f, 871.195f), Level = 8,
+                State = CharacterState.Idle, Cells = new uint[,] { { 7 } }
+            };
+            CreatureManager.ApplyPlacementNpc(stratton, new ContentPlacementEntry { CreatureId = 199604, NpcPackageId = 0 });
+            Assert.IsNotNull(stratton.Npc);
+            Assert.AreEqual(0u, stratton.Npc.NpcPackageId);
+            Assert.IsTrue(ClassAdvancement.IsClassTrainer(stratton));
+            Assert.IsTrue(ClassAdvancement.IsClassTrainer(_trainer), "Kincaid is still known by his package");
+
+            var bystander = new Creature { DbId = 501001 };
+            CreatureManager.ApplyPlacementNpc(bystander, new ContentPlacementEntry { CreatureId = 501001 });
+            Assert.IsNull(bystander.Npc);
+            Assert.IsFalse(ClassAdvancement.IsClassTrainer(bystander));
+
+            EntityManager.Instance.RegisterEntity(stratton.EntityId, EntityType.Creature);
+            EntityManager.Instance.RegisterCreature(stratton);
+            try
+            {
+                var npcs = new NpcManager(_factory, new MissionManager(_factory));
+                Gain(33_500);
+                Drain();
+
+                npcs.RequestNpcConverse(_client, new RequestNPCConversePacket { EntityId = stratton.EntityId });
+                var training = (TrainingConverse)Drain().Select(entry => entry.Packet).OfType<ConversePacket>().Single().ConvoDataDict[ConversationType.Training];
+                Assert.AreEqual((true, ClassAdvancement.DialogCanTrain), (training.CanTrain, training.DialogId));
+                npcs.UpdateConversationStatus(_client, stratton);
+                Assert.AreEqual(ConversationStatus.Train, Drain().Select(entry => entry.Packet).OfType<NPCConversationStatusPacket>().Single().ConvoStatusId);
+
+                // At Daghda's Urn, some 1.5 km from Kincaid: Stratton alone is in range, and training succeeds.
+                _client.Player.Position = new Vector3(-598.0f, 276.6f, 872.0f);
+                ManifestationManager.Instance.SelectNewCharacterClass(_client, 3);
+                Assert.AreEqual((3u, (byte)5), (_client.Player.Class, _client.Player.Level));
+            }
+            finally
+            {
+                EntityManager.Instance.UnregisterCreature(stratton.EntityId);
+                EntityManager.Instance.UnregisterEntity(stratton.EntityId);
+            }
         }
     }
 }

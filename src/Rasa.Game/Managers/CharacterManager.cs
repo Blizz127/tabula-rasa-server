@@ -107,7 +107,8 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// Clones a character into an empty pod for one of its clone credits (research/20260914-class-trainer R5.1).
+        /// Clones a character into an empty pod for one of its clone credits (CT-CLONE in
+        /// docs/evidence/class-trainer-evidence.json; R5.1 of the lost research/20260914-class-trainer spec).
         /// The clone keeps level, class, experience, Logos, completed missions and discovered waypoints and
         /// hospitals, and stands where the source stands. It starts with the starter gear, no money, Recruit skills
         /// at rank 1 and unspent attribute and skill points: since the live patch of 2008-01-29 cloning resets both.

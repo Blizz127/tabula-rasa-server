@@ -1084,7 +1084,8 @@ namespace Rasa.Test
                 // is Alia Das's, so he is counted here although he is nowhere near the outpost.
                 // Logos Mentor Ensine (199060) stands at the Alia Caverns since TarapediaMissingNpcBatch.
                 // The Blood Analyzation Terminal (199912) stands in the Twin Pillars hospital since MissionPropSpeakers.
-                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199009, 199020, 199060, 199700, 199701, 199702, 199703, 199803, 199910, 199911, 199912 },
+                // Training Officer Stratton (199604), Daghda's Urn's class trainer, since SingleClassTrainers.
+                CollectionAssert.AreEquivalent(new uint[] { 198684, 198685, 198686, 198687, 199009, 199020, 199060, 199604, 199700, 199701, 199702, 199703, 199803, 199910, 199911, 199912 },
                     aliaDasPlacements.Keys.ToArray(),
                     "Alia Das: " + string.Join(", ", aliaDasPlacements.Keys.OrderBy(id => id)));
                 var rogers = aliaDasPlacements[198684];
@@ -1115,6 +1116,15 @@ namespace Rasa.Test
                     (kincaid.CreatureId, kincaid.NpcPackageId, kincaid.Behavior, kincaid.PresentConditionId, kincaid.AlternateStateConditionId));
                 Assert.AreEqual((765.4, 294.12, 386.05, 1.5708), (kincaid.PosX, kincaid.PosY, kincaid.PosZ, kincaid.Rotation));
                 Assert.IsTrue(ClassAdvancement.TrainerNpcPackages.Contains(kincaid.NpcPackageId));
+
+                // Training Officer Stratton (SingleClassTrainers): Daghda's Urn's single class trainer stands live in shared
+                // Wilderness on the client's "Class Trainer: Daghda's Urn" marker, with no package (none is recovered);
+                // the server knows him by creature id.
+                var stratton = aliaDasPlacements[199604];
+                Assert.AreEqual((199604u, 0u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
+                    (stratton.CreatureId, stratton.NpcPackageId, stratton.Behavior, stratton.PresentConditionId, stratton.AlternateStateConditionId));
+                Assert.AreEqual((-599.685, 276.605, 871.195), (stratton.PosX, stratton.PosY, stratton.PosZ));
+                Assert.IsTrue(ClassAdvancement.IsTrainerCreature(stratton.CreatureId));
 
                 // Training Day: offered over the radio (no giver), completed by the Kincaid conversation, turned in at him, paying
                 // 120 credits and a choice of the two pistols, whose templates load with their weapon rows.

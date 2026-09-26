@@ -157,10 +157,10 @@
    "locator": "research/20260913-bootcamp/map/decoded/adv_foreas_concordia_wilderness-entities.csv (7,622 entities decoded from the client .map, each with entity class and position)"
   },
   "server_sql:gameserver_dev_Full": {
-   "kind": "official_notes",
+   "kind": "emulator_db",
    "era": "unknown",
    "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql",
-   "note": "the original game server's own schema and seed data (creature_type, creature_type_loot, itemtemplate, items, vendors). A development snapshot whose date is unknown, so it is cited as unknown era rather than as final-live data: it is the only surviving record of the loot table's shape and of the seven rows it held."
+   "note": "InfiniteRasa's C++ server emulator: its development SQL dump (2011-2016 lineage; docs/mission-research.md, docs/source-sweep-2026-09-13.md). It is a community reconstruction, not the original game server's schema or data, so it never supports an original value. Until 2026-09-26 this entry was kind official_notes and described as 'the original game server's own schema and seed data', which let the seven creature_type_loot rows (Add_creature_loot) pass as original and made Regenerate_item_template's price rule, fitted to this dump's 188 priced templates, look sourced. Re-tiered under OD-96. Several W3 rows also cite it for 'the world seed's quest NPCs' (creature 100/101 conventions); that world seed is this repository's own 2023 Rasa.NET seed, another emulator artifact."
   },
   "client_map:adv_foreas_concordia_divide": {
    "kind": "client_map",
@@ -260,6 +260,26 @@
    "era": "pre_d11",
    "locator": "TaRapedia Updates/2008-01-29 through Updates/2008-12-20 (transcribed official notes, research/20260926-reward-items/review-work/updates.json) and the archived official D16/16.3/16.4 notes (review-work/d164.html, web.archive.org 20090214230759)",
    "note": "No general reward replacement after 1.4. 2008-04-28 (1.7): \"roughly 70 mission rewards that previously gave out armor or tools with incorrect requirements ... adjusted and now have the correct requirements\" (missions not named). Notes for D9, D14 and January 2009 (D15.x) may be incomplete."
+  },
+  "official_notes:d12.5": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "url": "https://web.archive.org/web/20081018170941/http://www.playtr.com:80/news/patch_notes/deployment_125_9182008.html",
+   "locator": "research/20260926-trainers-economy/web/deployment_125_9182008-20081018170941.html (Deployment 12.5: 9/18/2008, live notes)",
+   "note": "Official live patch notes for Deployment 12 going live: the new tier selection process, one single trainer per map that had trainers, New Cumbria."
+  },
+  "community_db:tarapedia-trainers-20260926": {
+   "kind": "community_db",
+   "era": "d11_to_shutdown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-trainers-economy/wiki/ (MediaWiki API, revision content and histories fetched 2026-09-26)",
+   "note": "The post-D12 TaRapedia revisions the class-trainer work cites; each citation names page id, revision id and date. Older per-class trainer lists on the same pages date from 2007 and are pre-D12."
+  },
+  "measurement:class-trainer-evidence": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/class-trainer-evidence.json",
+   "note": "The class-trainer evidence decoded from the 1.16.5.0 client (markers, names, dialogue, rules) and the Rasa.NavMesh --path probe at marker 987 (repo navmesh built from the 1.16.5.0 maps; research/20260926-trainers-economy/work/probe.out)."
   }
  },
  "scope": [
@@ -271,7 +291,7 @@
      "max": 199911
     }
    },
-   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements."
+   "note": "Creature 198514 (Outpost Commander Rogers, BootcampFixRogersTurnIn) is the 1995/2005 receiver and stands in context 1220 (placement 198684); it is a boot-camp key because it closes the boot-camp missions (GAP-ROGERS). Creature 198515 (Training Officer Kincaid, WildernessArrivalTrainingDay, slice W1) is the 1526 receiver in context 1220 (placement 198685); it continues the reserved keys as Rogers did (OD-36). W3 batch 5: the Divide NPCs created for content (Lt. Sebastian, Shaman Horea, Field Dr. Dawson, Receptive Liaison Brice). W3: the Palisades NPCs created for content (199100-199107). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Valverde plateau and pools NPCs created for content (199200-199205). W3: the Torden plains NPCs created for content (199500-199504). W3: the Torden incline NPCs created for content (199600-199601). W3 batch 16 (MissionAreaLinks, 2026-09-17): Receptive Liaison Noonan 199004, Agent Franz 199005, Colonel Bosley 199206, Receptive Liaison Repp 199505, Private Parsons 199602 and Lt. Gerry 199603, the givers and turn-ins of the cross-zone missions; placements 198686/198687 spawn the world seed's Witherspoon (101) and Moawi (38), whose pools have counts 0/0. W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements. W3 (SingleClassTrainers, 2026-09-26): Training Officer Stratton 199604, Daghda's Urn's class trainer, and his placement."
   },
   {
    "table": "content_area",
@@ -290,7 +310,7 @@
      "max": 199911
     }
    },
-   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements."
+   "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements. W3 (SingleClassTrainers, 2026-09-26): Training Officer Stratton 199604, Daghda's Urn's class trainer, and his placement."
   },
   {
    "table": "content_condition",
@@ -47085,51 +47105,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 28,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 28"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 12.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 12.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 35,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47154,51 +47182,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13066,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13066"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47223,51 +47259,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13096,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13096"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47292,51 +47336,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13126,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13126"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47361,51 +47413,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13156,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13156"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47430,51 +47490,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13186,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13186"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47499,51 +47567,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 44917,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 44917"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 5.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 5.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 3,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47568,51 +47644,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 28,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 28"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 12.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 12.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 35,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47637,51 +47721,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13066,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13066"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47706,51 +47798,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13096,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13096"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47775,51 +47875,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13126,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13126"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47844,51 +47952,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13156,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13156"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47913,51 +48029,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13186,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13186"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -47982,51 +48106,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198507 (Thrax Infantry Initiate L2)."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 44917,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 44917"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 5.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 5.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 3,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48051,51 +48183,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 28,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 28"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 12.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 12.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 35,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48120,51 +48260,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13066,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13066"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48189,51 +48337,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13096,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13096"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48258,51 +48414,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13126,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13126"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48327,51 +48491,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13156,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13156"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48396,51 +48568,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 13186,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 13186"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 0.5,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 0.5"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -48465,51 +48645,59 @@
        "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
       }
      ],
-     "reasoning": "the rows belong to the original trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 198513 (Thrax Infantry Initiate L1 (1995 outpost))."
+     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
     },
     "item_template_id": {
      "value": 44917,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot itemTemplateId 44917"
       }
      ],
-     "reasoning": "the item template the original row names."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "chance": {
      "value": 5.0,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot chance 5.0"
       }
      ],
-     "reasoning": "the original float column, read as a percentage."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_min": {
      "value": 1,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMin"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     },
     "stacksize_max": {
      "value": 3,
-     "tier": "original",
+     "tier": "analogue",
      "citations": [
       {
        "source": "server_sql:gameserver_dev_Full",
        "locator": "creature_type_loot stacksizeMax"
       }
      ],
-     "reasoning": "the original bound."
+     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
+     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
+     "decision": "OD-96"
     }
    }
   },
@@ -64908,6 +65096,311 @@
      ]
     }
    }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199604
+   },
+   "slice": "W3",
+   "migration": "SingleClassTrainers",
+   "fields": {
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo @9338 3846 NPC_Human_Swapset_Male, augmentations [1,12,52,59]"
+      },
+      {
+       "source": "community_db:tarapedia-trainers-20260926",
+       "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+      }
+     ],
+     "counterpart": "Training Officer Kincaid (198515), the one D12 class trainer observed, class 3846 under OD-11/OD-37",
+     "required_because": "a class trainer needs the NPC augmentation to be spoken to; no source shows Stratton's body",
+     "decision": "OD-95"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-trainers-20260926",
+       "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+      }
+     ],
+     "reasoning": "an AFS training officer (the client name's rank) at an AFS-held village"
+    },
+    "level": {
+     "value": 8,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-trainers-20260926",
+       "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+      }
+     ],
+     "counterpart": "Kincaid's level 8 (inferred from footage B2-036), the only trainer level on record",
+     "required_because": "creature.level is required and shown in the target frame; no source records Stratton's",
+     "decision": "OD-95"
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-trainers-20260926",
+       "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+      }
+     ],
+     "counterpart": "Kincaid's 1000 (OD-37)",
+     "required_because": "a placed creature needs health",
+     "decision": "OD-95"
+    },
+    "name_id": {
+     "value": 10606,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo @35156 10606 \"Training Officer Stratton\""
+      }
+     ]
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "a stationary trainer standing on his hub's trainer marker"
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "as run_speed"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:class-trainer-evidence",
+       "locator": "rules[CT-CONVERSE]"
+      }
+     ],
+     "reasoning": "a non-combat class trainer; 0 (no action) is the evidenced value for non-combat NPCs (OD-23)"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Training Officer Stratton",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199604
+   },
+   "slice": "W3",
+   "migration": "SingleClassTrainers",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "a placed creature"
+    },
+    "creature_id": {
+     "value": 199604,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-trainers-20260926",
+       "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+      }
+     ],
+     "reasoning": "the placement instantiates the Stratton row"
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "a creature placement takes its class from the creature row"
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "not usable"
+    },
+    "pos_x": {
+     "value": -599.685,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      },
+      {
+       "source": "measurement:class-trainer-evidence",
+       "locator": "hubs[Daghda's Urn].position_basis"
+      }
+     ],
+     "reasoning": "the client's own TRAINER marker for the hub (original marker data); that the trainer stands on it is inferred: Kincaid's measured spot lies 0.6 m from marker 980 'Class Trainer: Alia Das'",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     }
+    },
+    "pos_y": {
+     "value": 276.605,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      },
+      {
+       "source": "measurement:class-trainer-evidence",
+       "locator": "hubs[Daghda's Urn].position_basis"
+      }
+     ],
+     "reasoning": "the client's own TRAINER marker for the hub (original marker data); that the trainer stands on it is inferred: Kincaid's measured spot lies 0.6 m from marker 980 'Class Trainer: Alia Das'; the navmesh surface under it is 276.718 (0.11 m higher), as Kincaid's 294.12 lies 0.10 m under his",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     }
+    },
+    "pos_z": {
+     "value": 871.195,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      },
+      {
+       "source": "measurement:class-trainer-evidence",
+       "locator": "hubs[Daghda's Urn].position_basis"
+      }
+     ],
+     "reasoning": "the client's own TRAINER marker for the hub (original marker data); that the trainer stands on it is inferred: Kincaid's measured spot lies 0.6 m from marker 980 'Class Trainer: Alia Das'",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.3
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "counterpart": "the neutral facing (0) the NPCs created from TaRapedia readings carry (TarapediaLastNpcs, TarapediaMissingNpcBatch)",
+     "required_because": "content_placement.rotation is required; no source shows which way Stratton faces",
+     "decision": "OD-95"
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "a stationary trainer, as Kincaid"
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "a creature placement has no usable state"
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "health comes from the creature row"
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "no content item set"
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo (sha256 c89fb45e6ad920ebc5fe36e188140f5cfab5dc2711f8fceabfffa82dd0e489b1) staticmarkers[1378], code offset 17879: type 16 (TRAINER), text 987 \"Class Trainer: Daghda's Urn\" at (-599.685, 276.605, 871.195)"
+      }
+     ],
+     "reasoning": "he does not walk with the player"
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1220,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Training Officer Stratton (Class Trainer: Daghda's Urn marker)",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -66020,22 +66513,19 @@
   },
   {
    "id": "GAP-W1-ITEM-PRICES",
-   "summary": "buy_price and sell_price of 116929/116930 are stored as 0 (no price): no vendor stocks them, they sell for nothing and their repair is free. The item flags (Not Tradeable, Not Sellable) are analogues from the equipped AccuMax Shotgun (B2-027); the server does not refuse a vendor sale of a not-sellable item. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0.",
+   "summary": "buy_price and sell_price of 116929/116930 are stored as 0 (no price): no vendor stocks them, they sell for nothing and their repair is free. The item flags (Not Tradeable, Not Sellable) are analogues from the equipped AccuMax Shotgun (B2-027); the server does not refuse a vendor sale of a not-sellable item. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0. Reopened 2026-09-26 (OD-96): the source of those prices is InfiniteRasa's emulator dump and the rule was fitted to it, so the prices are analogues, not recovered values; see GAP-ITEM-PRICES-EMULATOR-DERIVED.",
    "evidence": [
     "footage B2-027",
     "src/Rasa.Game/Managers/NpcManager.cs (sell price, repair cost)"
    ],
-   "closes_with": "closed: the confirming test is ContentSchemaMigrationTests",
+   "closes_with": "the templates' final-era prices (see GAP-ITEM-PRICES-EMULATOR-DERIVED)",
    "surfaced_by": [
     "manifest omitted"
    ],
    "slices": [
     "W1"
    ],
-   "status": "closed",
-   "confirmed_by": [
-    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
-   ]
+   "status": "open"
   },
   {
    "id": "GAP-W1-GEAR-MISSIONS",
@@ -66116,22 +66606,19 @@
   },
   {
    "id": "GAP-W2-ITEM-PRICES",
-   "summary": "The buy/sell prices of the class-gear templates are unrecovered; both are stored 0 (no vendor price), the neutral value the W1 reward pistols use. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0.",
+   "summary": "The buy/sell prices of the class-gear templates are unrecovered; both are stored 0 (no vendor price), the neutral value the W1 reward pistols use. Closed 2026-09-20: Regenerate_item_template (InfiniteRasa 492954a) prices every template from its item class's loot_value, which matches all 188 templates the C++ server dump carries real prices for, and sell_price as floor(buy/4)+1, fitting 174 of them. Derived rather than recovered, but sourced - where this branch had a neutral 0. Reopened 2026-09-26 (OD-96): the source of those prices is InfiniteRasa's emulator dump and the rule was fitted to it, so the prices are analogues, not recovered values; see GAP-ITEM-PRICES-EMULATOR-DERIVED.",
    "evidence": [
     "no surviving source gives an item price",
     "the D11 block rows use a nominal 1"
    ],
-   "closes_with": "closed: the confirming test is ContentSchemaMigrationTests",
+   "closes_with": "the templates' final-era prices (see GAP-ITEM-PRICES-EMULATOR-DERIVED)",
    "surfaced_by": [
     "manifest itemtemplate buy_price/sell_price"
    ],
    "slices": [
     "W2"
    ],
-   "status": "closed",
-   "confirmed_by": [
-    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
-   ]
+   "status": "open"
   },
   {
    "id": "GAP-W2-WEAPON-PLACEHOLDERS",
@@ -66376,10 +66863,10 @@
   },
   {
    "id": "GAP-CREATURE-LOOT",
-   "summary": "Only one creature type's loot survived (the original creature_type_loot's seven rows for type 20). Every other creature in the game had its own table and none of them are in any source - the client carries no loot data at all, and this world's creature table has no drop column. Until those tables appear, creatures without rows keep the emulator's stand-in drop (one stack of item 28 on a coin flip), which is not the original behaviour for any particular creature but is closer to it than dropping nothing.",
+   "summary": "Only one creature type's loot survives in any source, and that source is InfiniteRasa's emulator dump (creature_type_loot, seven rows for type 20), not the original server. Every other creature in the game had its own table and none of them are in any source - the client carries no loot data at all, and this world's creature table has no drop column. Until those tables appear, creatures without rows keep the emulator's stand-in drop (one stack of item 28 on a coin flip), which is not the original behaviour for any particular creature but is closer to it than dropping nothing. Re-tiered 2026-09-26: the seven rows (creature_loot 1-21) are analogues under OD-96, not original data.",
    "closes_with": "the original creature loot tables, or a capture of creature drops per type",
    "evidence": [
-    "gameserver_dev_Full.sql creature_type_loot has seven rows, all creatureTypeId 20",
+    "gameserver_dev_Full.sql (InfiniteRasa emulator dump) creature_type_loot has seven rows, all creatureTypeId 20",
     "no client table carries loot (369 decoded tables checked)"
    ],
    "surfaced_by": [
@@ -68062,6 +68549,149 @@
    "closes_with": "final-era footage or captures of these rewards, or complete notes for D9, D14 and D15.x",
    "surfaced_by": [
     "reward-items research and review, 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-HUB-TRAINER-IDENTITY-TWIN-PILLARS",
+   "summary": "The final client's live Wilderness map has marker 981 'Class Trainer: Twin Pillars' at (-101.02, 220.27, -516.10), and since D12 each hub had one trainer, but no source names or shows the Twin Pillars trainer. None is placed: a character at a tier gate trains with Kincaid (Alia Das) or Stratton (Daghda's Urn). The client's unassigned late names 10605 'Training Officer Lebowicz', 10607 Buckmaster, 10608 Delany, 10609 Walker and 10610 Howell are candidates, not evidence. TaRapedia's Twin Pillars Outpost page was last edited 2007-12-16. Searched 2026-09-26: TaRapedia full-text for 'Training Officer', 'Class Trainer' and every unassigned 'Training Officer' surname; the hub's TaRapedia page history; Ten Ton Hammer's guides; the Ellatha NPC database (71 NPCs, no trainer); the client's mission, greeting and name tables.",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json hubs[Twin Pillars]",
+    "official_notes:d12.5",
+    "research/20260926-trainers-economy/wiki/"
+   ],
+   "closes_with": "a post-D12 source naming the Twin Pillars trainer (footage, screenshot or dated wiki revision)",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLASS-TRAINER-PLACEMENT)",
+    "SingleClassTrainers research 2026-09-26 (research/20260926-trainers-economy)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-HUB-TRAINER-IDENTITY-FOREAS-BASE",
+   "summary": "The Divide's marker 513 'Trainer: Foreas Base' (-64.30, 116.37, 464.26) has no named post-D12 trainer. TaRapedia's Foreas Base page (rev 35531, 2008-11-06) still lists the thirteen pre-D12 per-class trainers added in 2007. 10607 'Training Officer Buckmaster' shares the surname of its pre-D12 'Demolitionist Trainer Buckmaster', and Kincaid was a pre-D12 'Sapper Trainer Kincaid' (6932), which suggests the D12 officers took per-class trainers' surnames, but does not tie Buckmaster to Foreas Base. None is placed. Searched 2026-09-26: TaRapedia full-text for 'Training Officer', 'Class Trainer' and every unassigned 'Training Officer' surname; the hub's TaRapedia page history; Ten Ton Hammer's guides; the Ellatha NPC database (71 NPCs, no trainer); the client's mission, greeting and name tables.",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json hubs[Foreas Base]",
+    "research/20260926-trainers-economy/wiki/cur_ForeasBase.json, history_ForeasBase.json"
+   ],
+   "closes_with": "a post-D12 source naming the Foreas Base trainer",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLASS-TRAINER-PLACEMENT)",
+    "SingleClassTrainers research 2026-09-26 (research/20260926-trainers-economy)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-HUB-TRAINER-IDENTITY-NEW-CUMBRIA",
+   "summary": "The Palisades marker 1096 'Trainer: New Cumbria' (-763.65, 138.02, 604.98) has no named trainer. New Cumbria was built in the same deployment that replaced the per-class trainers (D12.5 notes: Cumbria's 'mission givers, NPCs, vendors' moved inside it). TaRapedia's Cumbria Research Facility page lists the 2007 per-class trainers Boone, Hester, Vanek and Delany; 10608 'Training Officer Delany' shares the surname of 'Biotech Trainer Delany' (7059), suggestive only. None is placed. Searched 2026-09-26: TaRapedia full-text for 'Training Officer', 'Class Trainer' and every unassigned 'Training Officer' surname; the hub's TaRapedia page history; Ten Ton Hammer's guides; the Ellatha NPC database (71 NPCs, no trainer); the client's mission, greeting and name tables.",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json hubs[New Cumbria]",
+    "official_notes:d12.5",
+    "research/20260926-trainers-economy/wiki/cur_CumbriaResearchFacility.json"
+   ],
+   "closes_with": "a post-D12 source naming the New Cumbria trainer",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLASS-TRAINER-PLACEMENT)",
+    "SingleClassTrainers research 2026-09-26 (research/20260926-trainers-economy)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LATER-HUB-TRAINERS",
+   "summary": "The live maps after the Concordia hubs carry TRAINER markers too - Pools (1304), Marshes (1454), Plateau (1497, Fort Defiance), Ashen Desert (1734), Torden Mires (1759), Incline (1761, 'Trainer: Nyxroq Post'), Plains (1764, three 'Class Trainers: Irendas Penal Colony'), Thunderhead (1911) and Descent (2047) - and none has a placed single trainer. SingleClassTrainers retired the per-class rings Add_class_trainers had put at Fort Defiance, Torden Mires and Ashen Desert (they could not train). Post-D12 evidence exists but is thin: 'The trainer in the Irendas Penal Colony is no longer named \"Error 23\"' (TaRapedia Updates/2008-10-15, rev 35872), while TaRapedia's Paludos and Irendas pages (revs 36131/36133, 2009-02-23) still list per-class names, which conflicts with D12 and is taken as stale text. These hubs gate levels 15-30 and later, beyond the current progression segment.",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json trainer_markers",
+    "TaRapedia Updates/2008-10-15 rev 35872"
+   ],
+   "closes_with": "post-D12 sources naming each later hub's trainer",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLASS-TRAINER-PLACEMENT)",
+    "SingleClassTrainers research 2026-09-26 (research/20260926-trainers-economy)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-DAGHDA-TRAINER-PRESENTATION",
+   "summary": "Training Officer Stratton (199604) is named by TaRapedia (rev 35503, 2008-11-04) and the client (10606), and stands on marker 987; nothing shows him. His class 3846 and body (Kincaid's six pieces), level 8, 1000 hp and facing 0 are analogues under OD-95, and his client conversation package is unrecovered (ClassAdvancement recognises him by creature id; the client needs no package to train).",
+   "evidence": [
+    "docs/evidence/class-trainer-evidence.json hubs[Daghda's Urn]",
+    "research/20260926-trainers-economy/wiki/revisions-35503-35871-32222.json"
+   ],
+   "closes_with": "footage or a screenshot of Stratton (appearance, target-frame level, facing), or client data binding a package to him",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-CLASS-TRAINER-PLACEMENT)",
+    "SingleClassTrainers research 2026-09-26 (research/20260926-trainers-economy)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-ITEM-PRICES-EMULATOR-DERIVED",
+   "summary": "Every item template's buy_price and sell_price (Regenerate_item_template, InfiniteRasa 492954a, all 30,225 templates) is emulator-derived: buy = the client itemclass loot_value (itself original client data), sell = floor(buy/4)+1. The rule was fitted to the 188 priced templates of InfiniteRasa's own development dump, whose prices may themselves have been set from loot_value, so the fit is circular and proves nothing about the live game. The client sends no prices of its own (vendorwindow._LoadVendorItems takes them from the server; gameuiutil.GetItemBuybackPrice reads the template tooltip; no price ratio constant exists). Kept as analogues under OD-96 because vendors cannot sell without a price. Buyback (BuyBackPrice never set) and repair are separate open defects (audit SEG3-BUYBACK-REPAIR).",
+   "evidence": [
+    "research/20260926-segment3-audit/gaps.json SEG3-ECONOMY-PROVENANCE",
+    "src/Rasa.DBL/Services/Preloader/ItemTemplateRegeneratedPreloader.cs"
+   ],
+   "closes_with": "final-era vendor windows, tooltips or sell values in footage or screenshots, or an original price table",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-VENDOR-STOCK-UNSOURCED",
+   "summary": "What each vendor sells (vendor_item) comes from the 2023 Rasa.NET world seed (KDRefugee, 564d4e3) and the upstream service-vendor pass; no original stock list survives, and the client's vendordata.pyo maps a package to a vendor type only (ARMOR, GENERAL_GOODS, MEDICAL_SUPPLIES, WEAPONS, ...). Stock is an analogue under OD-96. It matters where a mission needs an item: the Alia Das ammo vendor stocks the ammunition the W1/W2 weapons use.",
+   "evidence": [
+    "client vendordata.pyo (sha256 ed4ccbd4...)",
+    "rasaworld.db vendor/vendor_item"
+   ],
+   "closes_with": "final-era vendor window captures or a dated stock list",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-ALIA-DAS-WEAPONS-VENDOR",
+   "summary": "Spawn pool 36 draws creature 25 'Test Vendor 5' (name id 0, class 3846, package 10) 0.15 m from the final client's marker 971 'Weapons Vendor: Alia Das' (752.60, 293.97, 397.11), and package 10 is a WEAPONS vendor in the client's vendordata. A weapons vendor at that spot is therefore original-backed and is kept (OD-97); its name, body and stock are not: it shows no name, wears a 2023 test body and sells the 2023 seed's list (Standard Grade Cartridges 28, Standard Grade Power Cells 56, Pistol 145/3057/3061, Shotgun 148, Rifle 2229/3315, EMP Rifle 3256, Pulse Chaingun 4017, Laser Chaingun 4018, Chaingun 4019 twice). All but the Laser Chaingun 4018 are also sold by the Twin Pillars weapons vendor (74) and the upstream service vendors, and the ammunition by the Alia Das ammo vendor (73); 4018 has no other seller. Retiring the pool would have left Alia Das without the weapons vendor its own map marks. Pools 21-29 ('Test Vendor 1-9' at x 829-853, z 390) have spawned nothing since the 2023 seed (counts 0/0) and are left as they are.",
+   "evidence": [
+    "client uimapmarker.pyo staticmarkers[1378] code offset 17711 (text 971)",
+    "client vendordata.pyo vendorpackages[10] = (4 WEAPONS, None, 1)",
+    "git 564d4e3 (2023-02-14, SpawnpoolPreloader rows 21-36)"
+   ],
+   "closes_with": "a post-D11 source naming the Alia Das weapons vendor and what he sold",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-WILDERNESS-HOSPITAL-TEST-VENDORS",
+   "summary": "Spawn pools 31-35 stand creature 23 'Test Vendor 3' (name id 0, medical package 86) beside the Twin Pillars, Imperial Valley, Landing Zone, Ranja Gorge and Daghda's Urn hospitals (2023 seed, 564d4e3). Only the Imperial Valley one lies near a client vendor marker ('Medical Vendor: Imperial Valley (Control Point)', 7.9 m); the others are 35-406 m from any vendor marker. Left untouched by this batch (hospitals are another batch's scope); they need the same review pool 36 had.",
+   "evidence": [
+    "rasaworld.db spawnpool 31-35",
+    "client uimapmarker.pyo staticmarkers[1378] vendor markers"
+   ],
+   "closes_with": "a review against the client's vendor markers and a post-D11 source for hospital medical vendors",
+   "surfaced_by": [
+    "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
    ],
    "slices": [
     "W3"
@@ -71547,6 +72177,120 @@
      "locator": "reinforcements remain grouped on the pad through 98.333 s, 11.533 s after 1995 objective 1"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "SingleClassTrainers",
+   "table": "spawnpool",
+   "key": {
+    "ids": "501001-501038"
+   },
+   "field": "creature_1_min_count, creature_1_max_count",
+   "old": [
+    1,
+    1
+   ],
+   "new": [
+    0,
+    0
+   ],
+   "tier": "original",
+   "reason": "Add_class_trainers (d717ed1, InfiniteRasa data pass) seeded 38 per-class trainers - six ringed 3-6 m round Kincaid, six at Twin Pillars, twelve each at Fort Defiance and Torden Mires, two in the Ashen Desert - with no npc_package, so they could neither converse nor train. That is the pre-D12 model: the D12 live notes replace 'individual trainers for each class' with 'one single trainer on maps that had trainers previously', the final client's live maps carry one TRAINER marker per hub, and the per-class markers survive only in the unused wargame template 2269. Retired as pool 92 was; the creature, appearance and pool rows stay.",
+   "citations": [
+    {
+     "source": "official_notes:d12.5",
+     "locator": "UI section: 'Individual trainers for each class have been replaced by one single trainer on maps that had trainers previously.'"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/uimapmarker.pyo staticmarkers: TRAINER markers 980/981/987 (template 1378), 513 (1306), 1096 (1402); 977/978 only in template 2269 (context 2265, no level range)"
+    },
+    {
+     "source": "measurement:class-trainer-evidence",
+     "locator": "rules[CT-SINGLE], retired"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "SingleClassTrainers",
+   "table": "creature_appearance",
+   "key": {
+    "id": 199604
+   },
+   "field": "rows",
+   "old": null,
+   "new": "six body rows (2,4021,22120) (13,27120,1) (14,3672,14404004) (15,4023,13933202) (16,4022,933202) (17,24019,4286886614)",
+   "tier": "analogue",
+   "reason": "Training Officer Stratton needs a body (class 3846 is assembled from clothing pieces); none is recorded, so he wears Kincaid's, the one D12 trainer seen (OD-95, GAP-DAGHDA-TRAINER-PRESENTATION).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-trainers-20260926",
+     "locator": "page \"Daghda's Urn\" (pageid 1978) rev 35503, Chromecat77, 2008-11-04: Contacts \"*Training Officer Stratton\" (still in rev 35509, 2008-11-05)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "Add_creature_loot",
+   "table": "creature_loot",
+   "key": {
+    "ids": "1-21"
+   },
+   "field": "tier of item_template_id, chance, stacksize_min, stacksize_max",
+   "old": "original",
+   "new": "analogue",
+   "reason": "No data changed. The citation source gameserver_dev_Full.sql is InfiniteRasa's emulator dump, which this manifest had filed as official_notes and called the original server's data. An emulator's table cannot support an original value; the rows stay as analogues under OD-96 because no original drop table survives.",
+   "citations": [
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "creature_type_loot, seven rows for creatureTypeId 20"
+    },
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "identified as InfiniteRasa's emulator dump in docs/mission-research.md and docs/source-sweep-2026-09-13.md; audit research/20260926-segment3-audit/gaps.json SEG3-ECONOMY-PROVENANCE"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "Regenerate_item_template",
+   "table": "itemtemplate",
+   "key": {
+    "scope": "all 30225 templates"
+   },
+   "field": "tier of buy_price, sell_price",
+   "old": "presented as sourced (GAP-W1/W2-ITEM-PRICES closed)",
+   "new": "analogue (OD-96, GAP-ITEM-PRICES-EMULATOR-DERIVED)",
+   "reason": "No data changed. buy = itemclass loot_value and sell = floor(buy/4)+1 were fitted to the 188 priced templates of InfiniteRasa's emulator dump; the fit shows only that the emulator priced by loot_value, not what the live game charged. The loot_value column is original client data; its use as a vendor price is not.",
+   "citations": [
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "itemtemplate, 188 priced rows"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "itemclass loot_value"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(manifest)",
+   "table": "sources",
+   "key": {
+    "source": "server_sql:gameserver_dev_Full"
+   },
+   "field": "kind, note",
+   "old": "official_notes, 'the original game server's own schema and seed data'",
+   "new": "emulator_db, InfiniteRasa's emulator dump",
+   "reason": "Provenance correction (audit SEG3-ECONOMY-PROVENANCE): docs/mission-research.md and docs/source-sweep-2026-09-13.md already identify gameserver_dev_Full.sql as InfiniteRasa's C++ emulator dump. The new source kind emulator_db can support no original value.",
+   "citations": [
+    {
+     "source": "server_sql:gameserver_dev_Full",
+     "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -72121,6 +72865,36 @@
    "choice": "1326 Spoils of War and 1330 Retread Planning Part II take level 20, the value PlateauConversationNpc gave 1068 and 1541 - the only seeded missions that turn in at Pools NPCs - labelled analogue under GAP-MISSION-LEVEL. Approved by the batch lead on 2026-09-26 under the AGENTS.md evidence-bounded reconstruction policy (a value is required for the mission to load); no owner choice of this exact level is claimed. Pending owner review: TaRapedia gives the preceding Smash and Grab Level=35 (rev 31925, 2008-08-22) and the Class VII rewards require levels 31-35, both pointing higher than 20.",
    "approved_on": "2026-09-26",
    "record": "docs/retail-accuracy.md (2026-09-26 Torden conversation missions)"
+  },
+  {
+   "id": "OD-95",
+   "decision": "Class trainers after D12: retire the per-class trainers; place a single trainer only where a source names him; label what nobody saw",
+   "default": "Retire the 38 pre-D12 per-class trainers; place hub trainers only with a sourced identity; record a gap elsewhere",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The 38 per-class trainer pools of Add_class_trainers stop drawing (pre-D12 model, and they could not train). Where a post-D12 source names a hub's single trainer he is placed on the client's own TRAINER marker for that hub and trains exactly as Kincaid does: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). What no source shows - his class and body (Kincaid's), level 8, 1000 hp and facing 0 - is recorded as an analogue with Kincaid as counterpart, and since his conversation package is unrecovered the server knows him by creature id. Twin Pillars, Foreas Base and New Cumbria stay without a trainer, each with a named gap; the client's unassigned 'Training Officer' names are not used. The batch instruction of 2026-09-26 authorizes the retirement and the evidence rule; no owner choice of Stratton's presentation is claimed.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-96",
+   "decision": "Economy data of emulator lineage (loot rows, item prices, vendor stock)",
+   "default": "Keep the values, labelled analogue, until original evidence replaces them",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "gameserver_dev_Full.sql is InfiniteRasa's emulator dump, not the original server's data. The seven creature_type_loot rows seeded as creature_loot 1-21, every item template price set by Regenerate_item_template (fitted to that dump) and the vendors' stock (2023 world seed and upstream service vendors) are kept, because loot and vendors cannot function without values and no original drop table, price list or stock list survives, but each is recorded as an analogue with the emulator data as its counterpart. GAP-W1/W2-ITEM-PRICES are reopened. A final-era observation replaces any of them. Pending owner review: whether an emulator-authored optional row (the loot rows) should instead be removed.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-97",
+   "decision": "The Alia Das 'Test Vendor' NPCs",
+   "default": "Retire test vendors that have no source",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Pools 21-29 ('Test Vendor 1-9') have drawn nothing since the 2023 seed and are left as they are. Pool 36 ('Test Vendor 5', weapons package 10) stands on the final client's 'Weapons Vendor: Alia Das' marker and is Alia Das' only weapons vendor, so it is kept; its missing name, test body and seed stock are recorded in GAP-ALIA-DAS-WEAPONS-VENDOR rather than removed. The hospital 'Test Vendor 3' pools 31-35 are left to the batch that owns hospitals (GAP-WILDERNESS-HOSPITAL-TEST-VENDORS).",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }
  ]
 }

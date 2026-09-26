@@ -145,7 +145,7 @@ namespace Rasa.Managers
         private LootDispenser CreateLoot(Client killer, Creature creature, LootDispenser loot)
         {
             // The creature's own loot rows first: each is an item template, a percentage chance and a stack size
-            // range, exactly as the original server's creature_type_loot table held them.
+            // range, in the shape of InfiniteRasa's emulator creature_type_loot table (OD-96).
             var rows = creature?.LootData;
             if (rows != null && rows.Any)
             {
@@ -155,7 +155,7 @@ namespace Rasa.Managers
                     loot.LootQuality = (LootQuality)Roll.Next(1, 7);
 
                     // Each of the creature's rows is rolled on its own chance (CreatureLoot.Roll), exactly as the
-                    // original creature_type_loot table's per-row chance column implies.
+                    // emulator creature_type_loot table's per-row chance column implies.
                     foreach (var drop in CreatureLoot.Roll(rows, () => Roll.NextDouble(), (min, max) => Roll.Next(min, max)))
                     {
                         var item = ItemManager.Instance.CreateFromTemplateId(drop.ItemTemplateId, drop.Count);

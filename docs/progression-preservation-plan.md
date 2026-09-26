@@ -1067,6 +1067,18 @@ character picks up in Alia Das once Training Day and the class choice are behind
   2-entry runs (`GAP-MISSION-REWARD-ITEMS`). 479's vest is recorded as contradicting the wiki's v6 and left for its
   own change.
 
+- **Class trainers (2026-09-26, `SingleClassTrainers`)**: the class choice at 5 and 15 now has the D12 shape. The 38
+  per-class trainers Add_class_trainers had seeded (six round Kincaid, none able to talk or train) are retired. Training
+  Officer Stratton (client name 10606, TaRapedia 2008-11-04) stands on the client's "Class Trainer: Daghda's Urn" marker
+  and trains exactly as Kincaid does. Twin Pillars, Foreas Base and New Cumbria have client trainer markers but no named
+  trainer in any source (`GAP-HUB-TRAINER-IDENTITY-*`), so a character at a gate trains at Alia Das or Daghda's Urn. The
+  lost 2026-09-14 trainer specification is re-derived from the client as `docs/evidence/class-trainer-evidence.json`
+  (OD-95).
+- **Economy provenance (2026-09-26)**: the loot rows and item prices that came from InfiniteRasa's emulator dump are
+  now labelled analogues, not original (OD-96). The source is kind `emulator_db`, and `GAP-W1/W2-ITEM-PRICES` are
+  reopened. Alia Das' unnamed weapons vendor (pool 36) stays, because it stands on the client's "Weapons Vendor: Alia
+  Das" marker (OD-97, `GAP-ALIA-DAS-WEAPONS-VENDOR`). The other "Test Vendor" pools there have never spawned.
+
 ## All-missions program (owner goal, 2026-09-15)
 
 Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of
@@ -1150,6 +1162,9 @@ its evidence tier.
 | OD-63 Moawi's dialogue class (2026-09-24, agent, pending owner review) | `MoawiDialogueClassRows` reassigns creature 38 (Council Elder Moawi) from world-seed class Redshirt_Forean_Elder (6163, augmentation 1,59: creature/harvestable, unable to converse) to original client class 28415, chosen only because it shares the Forean elder mesh, class flags and NPC augmentation 52 needed to hold dialogue package 113. The migration's own comment calls this "an explicit class analogue; Moawi's final-live entity class has not been recovered" |
 | OD-64 Solis identity and placement (2026-09-24, agent, pending owner review) | `SolisCavernsPlacementRows` moves named spawnpool 184 (Council Elder Solis) onto disabled pool 92's original X/Z/rotation and a probed navmesh floor (786.8711, 287.32, 581.46875, rotation 3.0), because pool 184's dated position is obstructed by Moawi's hut geometry in the compatibility client and pool 92 already places an unnamed Forean shaman 2.2 m from the dated report at the same elevation. The migration's own comment calls this binding "inferred... not a recovered final-live server placement." Full provenance and remaining uncertainty in `docs/evidence/solis-caverns-placement.json` |
 | OD-65 Account-authentication 20-second wait (2026-09-22, agent, pending owner review) | `Auth.Client` defers only its first empty `ServerListExt` response for up to 20 seconds (`InitialServerListWaitMs`) so the existing game-registration broadcast can satisfy it, instead of showing a persistent "No servers found" dialog; later refreshes are immediate. `docs/evidence/live-auth-server-list-wait-20260923.json` states plainly this is "an emulator availability fix, not a proven final-live auth timeout," not a recovered original duration |
+| OD-95 Class trainers after D12 (2026-09-26, agent, pending owner review) | The 38 pre-D12 per-class trainer pools (501001-501038) stop drawing. A hub's single trainer is placed only where a post-D12 source names him, on the client's own TRAINER marker: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). His body (Kincaid's), level 8, 1000 hp and facing 0 are analogues with Kincaid as counterpart, and he is recognised by creature id because his package is unrecovered. Twin Pillars, Foreas Base and New Cumbria stay empty with named gaps; the client's unassigned "Training Officer" names are not used |
+| OD-96 Economy data of emulator lineage (2026-09-26, agent, pending owner review) | `gameserver_dev_Full.sql` is InfiniteRasa's emulator dump (source kind `emulator_db`). The seven loot rows (creature_loot 1-21), every `Regenerate_item_template` price and the vendors' stock stay, because loot and vendors need values and no original survives, but they are analogues, not original. Open for the owner: whether the emulator-authored loot rows, which are optional content, should be removed instead |
+| OD-97 The Alia Das "Test Vendor" NPCs (2026-09-26, agent, pending owner review) | Pools 21-29 have drawn nothing since the 2023 seed and stay as they are. Pool 36 ("Test Vendor 5", weapons package 10) stands 0.15 m from the client's "Weapons Vendor: Alia Das" marker and is kept as Alia Das' weapons vendor; its name, body and stock are a gap. The hospital pools 31-35 are left to the hospitals batch |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

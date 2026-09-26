@@ -242,6 +242,10 @@ still needed for those rules.
 
 The class trainer path is implemented from the dated specification in
 `research/20260914-class-trainer/` (`class-trainer-spec.json`, `protocol-shapes.json`, 119 sources).
+That directory no longer exists (2026-09-26); its rules are re-derived from the client, with sources, in
+`docs/evidence/class-trainer-evidence.json` (rules `CT-*`), which `ClassTrainerEvidenceTests` checks the code against.
+Since `SingleClassTrainers` (2026-09-26) Training Officer Stratton of Daghda's Urn trains as well, recognised by
+creature id because his package is unrecovered; the 38 pre-D12 per-class trainers are retired.
 Final-week footage (8VXeKzGUv0c B2) settled the gate: the Recruit levels to 4, message 663 follows at
 once, and the experience bar stays full, so a class is held at the level before its tier level with its
 experience still credited.
