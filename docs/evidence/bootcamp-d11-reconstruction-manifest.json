@@ -214,6 +214,26 @@
    "era": "unknown",
    "locator": "docs/evidence/client-world-admission-orientation.json: heading_conversion; native camera.initial_facing_snapshot and camera.render_basis; original1.16.5.0 playthrough03/04 yaw probes2026-09-22",
    "note": "Original compatibility client on isolated emulator. Calibrates native coordinate convention; not a live-service spawn capture."
+  },
+  "community_db:tarapedia-post-d11": {
+   "kind": "community_db",
+   "era": "d11_to_shutdown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-world-defects/work/tarapedia/ and research/20260926-torden-missions/work/tarapedia/ (MediaWiki API, full revision history with content, fetched 2026-09-26)",
+   "note": "TaRapedia revisions dated after Deployment 11 went live (2008-08-14). A post-D11 edit date shows when a reading was written down, not when it was taken; each citation names the page id, revision id and date."
+  },
+  "measurement:world-defects-20260926": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/world-defects-20260926.json",
+   "note": "Navmesh probes (repo navmesh built from the 1.16.5.0 client maps, NavMeshQuery.GroundHeight/FindPath) behind WorldDefectsFix: floor = surface - 0.276 m, every walkable level in each column, and the path from the nearest entrance or marker."
+  },
+  "community_db:infiniterasa-492954a": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://github.com/InfiniteRasa/Rasa.NET",
+   "locator": "commit 492954a: src/Rasa.DBL/Services/Preloader/MissionNpcSpawnpoolPreloader.cs, BossSpawnpoolPreloader.cs (imported by fork commit d717ed1)",
+   "note": "Another emulator project, not original data. Its mission NPCs stand 'at the map marker of that place, snapped to the walkable navmesh'; the CSVs it mined them from (world/npc_locations.csv, world/boss_spawns.csv) are not in its repository."
   }
  },
  "scope": [
@@ -33328,7 +33348,7 @@
     "id": 199106
    },
    "slice": "W3",
-   "migration": "PalisadesConversationNpc",
+   "migration": "PalisadesConversationNpc; WorldDefectsFix supersedes its map (1244 -> 1397) and WorldFloorSweep's overworld lift",
    "fields": {
     "pos_x": {
      "value": -337.2,
@@ -33336,14 +33356,17 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Field Lt. Bagby page /loc"
+       "locator": "page 'Field Lt. Bagby' (pageid 9003) rev 22867 2007-12-20T07:31:59Z, unchanged to rev 27389 2008-01-18: infobox Zone=Palisades |Instance=Treeback Camp; Location \"just inside entrance\" -337.2 | 103.6 | 353.7; https://tabularasa.fandom.com/wiki/Field_Lt._Bagby?oldid=22867; local research/20260926-world-defects/work/tarapedia/Field_Lt._Bagby.json"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[treeback.bagby]"
       }
      ],
-     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "reasoning": "TaRapedia's /loc for the NPC (pre-D11, GAP-TREEBACK-POSITIONS-PRE-D11); 45.0 m from the map_link 21 arrival at the same x, and 5.5 m from the client map entity ArchBaneIndustrialEntranceV01 ('just inside entrance').",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "horizontal_m": 5.0
      }
     },
     "pos_y": {
@@ -33352,14 +33375,17 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Field Lt. Bagby page /loc"
+       "locator": "page 'Field Lt. Bagby' (pageid 9003) rev 22867 2007-12-20T07:31:59Z, unchanged to rev 27389 2008-01-18: infobox Zone=Palisades |Instance=Treeback Camp; Location \"just inside entrance\" -337.2 | 103.6 | 353.7; https://tabularasa.fandom.com/wiki/Field_Lt._Bagby?oldid=22867; local research/20260926-world-defects/work/tarapedia/Field_Lt._Bagby.json"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[treeback.bagby]"
       }
      ],
-     "reasoning": "as pos_x.",
+     "reasoning": "TaRapedia's own y, sourced rather than a placeholder: the Treeback Camp navmesh floor at this x,z is 103.724 (0.12 m); the Palisades terrain at the same x,z is 138.07, so the reading was never an overworld height.",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "vertical_m": 0.2
      }
     },
     "pos_z": {
@@ -33368,26 +33394,33 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Field Lt. Bagby page /loc"
+       "locator": "page 'Field Lt. Bagby' (pageid 9003) rev 22867 2007-12-20T07:31:59Z, unchanged to rev 27389 2008-01-18: infobox Zone=Palisades |Instance=Treeback Camp; Location \"just inside entrance\" -337.2 | 103.6 | 353.7; https://tabularasa.fandom.com/wiki/Field_Lt._Bagby?oldid=22867; local research/20260926-world-defects/work/tarapedia/Field_Lt._Bagby.json"
       }
      ],
      "reasoning": "as pos_x.",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "horizontal_m": 5.0
      }
     },
     "map_context_id": {
-     "value": 1244,
+     "value": 1397,
      "tier": "inferred",
      "citations": [
       {
+       "source": "client_table:missions",
+       "locator": "missiontextlanguage 17871 (1788 log: 'deliver a bottle of gin to Field Lt. Bagby at the Treeback Camp') and 1505 (551 log: 'Report to Field Lieutenant Bagby behind the Bane Outpost in Southeast Palisades'); research/20260926-mission-catalog/mission-catalog.json"
+      },
+      {
        "source": "community_db:tarapedia",
-       "locator": "Field Lt. Bagby infobox, Zone"
+       "locator": "page 'Field Lt. Bagby' (pageid 9003) rev 22867 2007-12-20T07:31:59Z, unchanged to rev 27389 2008-01-18: infobox Zone=Palisades |Instance=Treeback Camp; Location \"just inside entrance\" -337.2 | 103.6 | 353.7; https://tabularasa.fandom.com/wiki/Field_Lt._Bagby?oldid=22867; local research/20260926-world-defects/work/tarapedia/Field_Lt._Bagby.json"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Treeback Camp' (pageid 6829) rev 32558 2008-08-30T10:16:43Z: Important NPCs Field Lt. Bagby (L20), Lt. Galloway (L23); https://tabularasa.fandom.com/wiki/Treeback_Camp?oldid=32558"
       }
      ],
-     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+     "reasoning": "Treeback Camp instance (client map adv_foreas_concordia_palisades_treebackcamp, reached from the Palisades by map_link 21/35). The final client's own mission log puts the NPC 'at the Treeback Camp', TaRapedia's infobox says Instance=Treeback Camp, and the post-D11 Treeback Camp page lists the NPC. High confidence. Corrected 2026-09-26: the earlier value 1244 read only the infobox Zone."
     }
    }
   },
@@ -33487,7 +33520,7 @@
     "id": 199107
    },
    "slice": "W3",
-   "migration": "PalisadesConversationNpc",
+   "migration": "PalisadesConversationNpc; WorldDefectsFix supersedes its map (1244 -> 1397) and WorldFloorSweep's overworld lift",
    "fields": {
     "pos_x": {
      "value": -122.2,
@@ -33495,14 +33528,17 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Lt. Galloway page /loc"
+       "locator": "page 'Lt. Galloway' (pageid 9010) rev 22879 2007-12-20T08:02:47Z, unchanged to rev 27006 2008-01-13: infobox Instance=Treeback Camp; Location \"mobile; close to the entrance shield\" -122.2 | 100.3 | 128.2; https://tabularasa.fandom.com/wiki/Lt._Galloway?oldid=22879; local research/20260926-world-defects/work/tarapedia/Galloway.json"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[treeback.galloway]"
       }
      ],
-     "reasoning": "TaRapedia's /loc for the NPC, a dated community transcription of an in-game reading.",
+     "reasoning": "TaRapedia's /loc for the NPC (pre-D11, GAP-TREEBACK-POSITIONS-PRE-D11); Galloway is 'mobile' and appears at the entrance shield after in-instance events, which a stationary body only approximates (GAP-TREEBACK-GALLOWAY-SCRIPTED).",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "horizontal_m": 5.0
      }
     },
     "pos_y": {
@@ -33511,14 +33547,17 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Lt. Galloway page /loc"
+       "locator": "page 'Lt. Galloway' (pageid 9010) rev 22879 2007-12-20T08:02:47Z, unchanged to rev 27006 2008-01-13: infobox Instance=Treeback Camp; Location \"mobile; close to the entrance shield\" -122.2 | 100.3 | 128.2; https://tabularasa.fandom.com/wiki/Lt._Galloway?oldid=22879; local research/20260926-world-defects/work/tarapedia/Galloway.json"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[treeback.galloway]"
       }
      ],
-     "reasoning": "as pos_x.",
+     "reasoning": "TaRapedia's own y, sourced rather than a placeholder: the Treeback Camp navmesh floor at this x,z is 100.283 (0.02 m); the Palisades terrain at the same x,z is 140.72.",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "vertical_m": 0.2
      }
     },
     "pos_z": {
@@ -33527,26 +33566,33 @@
      "citations": [
       {
        "source": "community_db:tarapedia",
-       "locator": "Lt. Galloway page /loc"
+       "locator": "page 'Lt. Galloway' (pageid 9010) rev 22879 2007-12-20T08:02:47Z, unchanged to rev 27006 2008-01-13: infobox Instance=Treeback Camp; Location \"mobile; close to the entrance shield\" -122.2 | 100.3 | 128.2; https://tabularasa.fandom.com/wiki/Lt._Galloway?oldid=22879; local research/20260926-world-defects/work/tarapedia/Galloway.json"
       }
      ],
      "reasoning": "as pos_x.",
      "uncertainty": {
       "unit": "m",
-      "horizontal_m": 5.0,
-      "vertical_m": 2.0
+      "horizontal_m": 5.0
      }
     },
     "map_context_id": {
-     "value": 1244,
+     "value": 1397,
      "tier": "inferred",
      "citations": [
       {
+       "source": "client_table:missions",
+       "locator": "missiontextlanguage 17876 (1789 log: 'Lt. Galloway, who is currently operating out of the Treeback Camp'), 4523 (866) and 5617 (1019) in-instance radio turn-ins to Galloway; research/20260926-mission-catalog/mission-catalog.json"
+      },
+      {
        "source": "community_db:tarapedia",
-       "locator": "Lt. Galloway infobox, Zone"
+       "locator": "page 'Lt. Galloway' (pageid 9010) rev 22879 2007-12-20T08:02:47Z, unchanged to rev 27006 2008-01-13: infobox Instance=Treeback Camp; Location \"mobile; close to the entrance shield\" -122.2 | 100.3 | 128.2; https://tabularasa.fandom.com/wiki/Lt._Galloway?oldid=22879; local research/20260926-world-defects/work/tarapedia/Galloway.json"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Treeback Camp' (pageid 6829) rev 32558 2008-08-30T10:16:43Z: Important NPCs Field Lt. Bagby (L20), Lt. Galloway (L23); https://tabularasa.fandom.com/wiki/Treeback_Camp?oldid=32558"
       }
      ],
-     "reasoning": "the map of the zone TaRapedia puts the NPC in."
+     "reasoning": "Treeback Camp instance (client map adv_foreas_concordia_palisades_treebackcamp, reached from the Palisades by map_link 21/35). The final client's own mission log puts the NPC 'at the Treeback Camp', TaRapedia's infobox says Instance=Treeback Camp, and the post-D11 Treeback Camp page lists the NPC. High confidence. Corrected 2026-09-26: the earlier value 1244 read only the infobox Zone."
     }
    }
   },
@@ -58262,6 +58308,378 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510137
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); WorldDefectsFix moves it off the 'Cumbria Research Facility' label",
+   "fields": {
+    "pos_x": {
+     "value": -772.7,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'A Casualty Notification' (pageid 6982) rev 33050 2008-09-13T04:58:52Z (kept in rev 33051): walkthrough 'Valerie Corman Location: -772.7, 140.3, 774.9'; https://tabularasa.fandom.com/wiki/A_Casualty_Notification?oldid=33050; local research/20260926-world-defects/work/tarapedia/A_Casualty_Notification.json"
+      },
+      {
+       "source": "community_db:codex-tr",
+       "locator": "POI 1425 'Valerie Corman' locW=-7740 locS=7710 -> (-774, 771); https://web.archive.org/web/20080112185143id_/http://www.codex-tr.net:80/mapview.php5?mapid=2_1_9&poiid=3; local research/20260926-world-defects/work/codex/mapview_2_1_9.xml"
+      }
+     ],
+     "reasoning": "Two independent readings 4.1 m apart: TaRapedia's post-D11 walkthrough (2008-09-13) and codex-tr.net POI 1425 (captured 2008-01-12). 6.0 m from Lt. Jamison (199089, codex POI 1426) in the same dome. High confidence. Replaces upstream's ring 4.1 m from the client's 'Cumbria Research Facility' region label (-517.07, 141.1, 704.98).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.1
+     }
+    },
+    "pos_y": {
+     "value": 140.17,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[palisades.valerie_corman]"
+      }
+     ],
+     "reasoning": "navmesh floor at (-772.7, 774.9): surface 140.446 - 0.276; TaRapedia's y 140.3 agrees to 0.13 m, and Lt. Jamison stands on the same floor.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.15,
+      "method": "navmesh surface - 0.276 m at the reading's x,z"
+     }
+    },
+    "pos_z": {
+     "value": 774.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'A Casualty Notification' (pageid 6982) rev 33050 2008-09-13T04:58:52Z (kept in rev 33051): walkthrough 'Valerie Corman Location: -772.7, 140.3, 774.9'; https://tabularasa.fandom.com/wiki/A_Casualty_Notification?oldid=33050; local research/20260926-world-defects/work/tarapedia/A_Casualty_Notification.json"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 4.1
+     }
+    }
+   }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510133
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); WorldDefectsFix moves it off the 'Viands Village' label",
+   "fields": {
+    "pos_x": {
+     "value": -294.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Ranger Jorai' (pageid 7125) rev 16456 2007-11-26T04:42:31Z (kept to rev 16577): 'Loc: -294,-577'; https://tabularasa.fandom.com/wiki/Ranger_Jorai?oldid=16456; local research/20260926-world-defects/work/tarapedia/"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Revealing Treeback Experimentation' (pageid 7142) rev 22240 2007-12-18T07:03:25Z (first in rev 16648): 'Viands Village, -294,-577'; local research/20260926-world-defects/work/tarapedia/"
+      },
+      {
+       "source": "client_map:furniture",
+       "locator": "mapprops/adv_foreas_concordia_palisades.csv: ArchForeanStorageSackV01 (-294.39, 171.84, -569.28) and ArchForeanPropPotteryV01 (-300.94, 171.71, -573.00), 7.7-8.5 m away - inside Viands Village's dwellings"
+      }
+     ],
+     "reasoning": "TaRapedia /loc x,z, pre-D11 only (GAP-JORAI-PRE-D11-LOC): medium confidence. The final client map's Forean dwelling props stand 7.7-8.5 m away. Replaces upstream's point exactly on the client's 'Viands Village' static label (-235.15, 178.0, -543.85).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0
+     }
+    },
+    "pos_y": {
+     "value": 172.707,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[palisades.ranger_jorai]"
+      }
+     ],
+     "reasoning": "navmesh floor at (-294, -577): surface 172.983 - 0.276; the only level at that x,z (the 184.25 deck is 4.5 m away).",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at the reading's x,z"
+     }
+    },
+    "pos_z": {
+     "value": -577.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Ranger Jorai' (pageid 7125) rev 16456 2007-11-26T04:42:31Z (kept to rev 16577): 'Loc: -294,-577'; https://tabularasa.fandom.com/wiki/Ranger_Jorai?oldid=16456; local research/20260926-world-defects/work/tarapedia/"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0
+     }
+    }
+   }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510068
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); WorldFloorSweep (y snap); WorldDefectsFix moves it off 'Waypoint: Nyxroq Post'",
+   "fields": {
+    "pos_x": {
+     "value": -180.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Lieutenant Epp' (pageid 6853) rev 35625/35626 2008-11-11T23:03:20Z: '[[Location]] -180 235 -244', added to the standing text 'Lieutenant Epp is in the [[Nyxroq Post]] hospital' (since rev 15216, 2007-11-18); https://tabularasa.fandom.com/wiki/Lieutenant_Epp?oldid=35626; local research/20260926-torden-missions/work/tarapedia/npc/Lieutenant_Epp.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker factionedmarkers ui map 1761 type 3 'Hospital: Nyxroq Post' (-182.22, 235.24, -244.21), 2.2 m from the reading (map-key STORE_SUBSCR offset 25147; research/20260926-torden-missions/work/markers.json)"
+      }
+     ],
+     "reasoning": "TaRapedia's post-D11 /loc (2008-11-11) for the NPC its page has put 'in the Nyxroq Post hospital' since 2007-11-18; the final client's 'Hospital: Nyxroq Post' marker is 2.2 m away. The reading is whole metres. Replaces upstream's point on the client's 'Waypoint: Nyxroq Post' marker, stacked with Field Commander Foletto.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0
+     }
+    },
+    "pos_y": {
+     "value": 235.229,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[incline.lieutenant_epp]"
+      }
+     ],
+     "reasoning": "navmesh floor at (-180, -244): surface 235.505 - 0.276; TaRapedia's y 235 agrees to 0.23 m. A second level at 240.92 is the roof.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at the reading's x,z"
+     }
+    },
+    "pos_z": {
+     "value": -244.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Lieutenant Epp' (pageid 6853) rev 35625/35626 2008-11-11T23:03:20Z: '[[Location]] -180 235 -244', added to the standing text 'Lieutenant Epp is in the [[Nyxroq Post]] hospital' (since rev 15216, 2007-11-18); https://tabularasa.fandom.com/wiki/Lieutenant_Epp?oldid=35626; local research/20260926-torden-missions/work/tarapedia/npc/Lieutenant_Epp.json"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0
+     }
+    }
+   }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510118
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); relabelled by WorldDefectsFix, not moved",
+   "fields": {
+    "pos_x": {
+     "value": -125.1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510118 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Timora Mines (1348): 'Hospital: Timora Mines' (-128.8, 205.61, 517.56), 3.7 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[timora.kearney]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-KEARNEY-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Hospital: Timora Mines' map marker in the Timora Mines instance; TaRapedia only says 'Report in to Field Ranger Kearney when you get into the mines' (6126 rev 30014, 2008-03-27)",
+     "required_because": "Field Ranger Kearney is the receiver of the 'ready' mission 340; a spawnpool cannot spawn without a position, and removing him would leave that mission and his conversation package unreachable.",
+     "decision": "OD-59"
+    },
+    "pos_y": {
+     "value": 205.74,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510118 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Timora Mines (1348): 'Hospital: Timora Mines' (-128.8, 205.61, 517.56), 3.7 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[timora.kearney]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-KEARNEY-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Hospital: Timora Mines' map marker in the Timora Mines instance; TaRapedia only says 'Report in to Field Ranger Kearney when you get into the mines' (6126 rev 30014, 2008-03-27)",
+     "required_because": "Field Ranger Kearney is the receiver of the 'ready' mission 340; a spawnpool cannot spawn without a position, and removing him would leave that mission and his conversation package unreachable.",
+     "decision": "OD-59"
+    },
+    "pos_z": {
+     "value": 517.6,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510118 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Timora Mines (1348): 'Hospital: Timora Mines' (-128.8, 205.61, 517.56), 3.7 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[timora.kearney]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-KEARNEY-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Hospital: Timora Mines' map marker in the Timora Mines instance; TaRapedia only says 'Report in to Field Ranger Kearney when you get into the mines' (6126 rev 30014, 2008-03-27)",
+     "required_because": "Field Ranger Kearney is the receiver of the 'ready' mission 340; a spawnpool cannot spawn without a position, and removing him would leave that mission and his conversation package unreachable.",
+     "decision": "OD-59"
+    }
+   }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510117
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); WorldFloorSweep did not move it; relabelled by WorldDefectsFix, not moved",
+   "fields": {
+    "pos_x": {
+     "value": 282.7,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[divide.mela]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
+     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
+     "decision": "OD-59"
+    },
+    "pos_y": {
+     "value": 170.62,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[divide.mela]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
+     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
+     "decision": "OD-59"
+    },
+    "pos_z": {
+     "value": 1071.8,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:infiniterasa-492954a",
+       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[divide.mela]"
+      }
+     ],
+     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
+     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
+     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
+     "decision": "OD-59"
+    }
+   }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510085
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); WorldDefectsFix sets its counts to 0/0",
+   "fields": {
+    "creature_1_min_count": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Colonel Whitaker' (pageid 7114) revs 16367-16775 (2007-11-25 to 2007-11-27): one Whitaker, 320 / 499 / -47 'Up in the Headquarters tower'; https://tabularasa.fandom.com/wiki/Colonel_Whitaker?oldid=16775; local research/20260926-torden-missions/work/tarapedia/npc/Colonel_Whitaker.json"
+      },
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[plains.whitaker_duplicate]"
+      }
+     ],
+     "reasoning": "Placement 199500 already stands at TaRapedia's one Whitaker reading and gives seeded 640; this pool drew a second Whitaker 106.8 m away at the Irendas 'Crafting Stations' marker. The pool is retired the way SolisCavernsPlacement retired pool 92; its creature row (client name 5428) stays because the client has two 'Colonel Whitaker' names (GAP-WHITAKER-NAME-ID)."
+    },
+    "creature_1_max_count": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:world-defects-20260926",
+       "locator": "probes[plains.whitaker_duplicate]"
+      }
+     ],
+     "reasoning": "as creature_1_min_count."
+    }
+   }
   }
  ],
  "omitted": [
@@ -59624,11 +60042,12 @@
   },
   {
    "id": "GAP-W3-NPC-POSITION-COVERAGE",
-   "summary": "Five of the twenty-two NPCs (seven until 2026-09-17) created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades, plus Retread Jeska (-777, 270, -552) in the marshes. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them. Correction 2026-09-17: Dawson and Brice were on this list because they had been placed on the Wilderness; their readings are Divide coordinates (ground 117.00 and 179.42 on the Divide navmesh) and MissionAreaLinks moved them, so they no longer need excusing.",
+   "summary": "Five of the twenty-two NPCs (seven until 2026-09-17) created for content stand where their map's navmesh has no polygon within reach of TaRapedia's /loc: Ranger Urialia (-230, 166, -462), Warden Lagori (-439, 166, 37), Field Lt. Bagby (-337.2, 103.6, 353.7) and Lt. Galloway (-122.2, 100.3, 128.2) on the Palisades, plus Retread Jeska (-777, 270, -552) in the marshes. Two readings that earlier research cross-checked (Langerman 0.9 m, Standley 1.2 m against the world seed) were accurate, so the likely explanation is that these points sit in parts of the maps the navmesh does not model rather than that the /loc values are wrong. The positions are placed as sourced; WorldPositionAuditTests lists all six with that reason so the check stays strict for everything else, and a capture or a wider navmesh would settle them. Correction 2026-09-17: Dawson and Brice were on this list because they had been placed on the Wilderness; their readings are Divide coordinates (ground 117.00 and 179.42 on the Divide navmesh) and MissionAreaLinks moved them, so they no longer need excusing. Correction 2026-09-26: Bagby and Galloway were on this list because they had been placed on the Palisades overworld; their readings are Treeback Camp coordinates (0.12 m and 0.02 m off that instance's floor), and WorldDefectsFix moved them to map 1397. WorldFloorSweep had lifted them onto the overworld terrain on the mistaken reading that the wiki gave x and z only. Three remain: Urialia, Lagori and Jeska.",
    "closes_with": "needs the map ground under those two points (navmesh coverage or a capture)",
    "evidence": [
     "WorldPositionAuditTests: no walkable surface within reach of either position",
-    "content_placement 199002 and 199003 moved to map 1148 by MissionAreaLinks (2026-09-17)"
+    "content_placement 199002 and 199003 moved to map 1148 by MissionAreaLinks (2026-09-17)",
+    "docs/evidence/world-defects-20260926.json probes[treeback.bagby], probes[treeback.galloway]"
    ],
    "surfaced_by": [
     "world position audit 2026-09-16"
@@ -60825,6 +61244,153 @@
    "slices": [
     "S1",
     "S6"
+   ]
+  },
+  {
+   "id": "GAP-TREEBACK-GALLOWAY-SCRIPTED",
+   "summary": "Lt. Galloway (placement 199107) stands still at TaRapedia's /loc near the Treeback Camp entrance shield. TaRapedia calls her 'mobile' and its Treeback Field Report walkthrough (8775 rev 24442, 2007-12-29) has her show up at the force field after the player fights forward and the in-instance switch and hunter-party events; 866 and 1019 are radio turn-ins to her. The instance's scripted content (862, 866, 869, 1019) is not built, so a stationary body approximates her; the navmesh path from the entrance to her reading is partial, consistent with that gating.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json probes[treeback.galloway]",
+    "research/20260926-world-defects/work/tarapedia/Treeback_Field_Report.json"
+   ],
+   "closes_with": "the Treeback Camp instance script (the shield, switch and hunter-party events) from a capture or the client's own instance data",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-TREEBACK-POSITIONS-PRE-D11",
+   "summary": "Bagby's and Galloway's coordinates are TaRapedia readings from December 2007 to January 2008. The post-D11 Treeback Camp page (6829 rev 32558, 2008-08-30) confirms both stand in the instance but gives no coordinates, so a post-D11 relocation inside the camp cannot be ruled out. Both readings fit the final client's Treeback Camp floor to 0.12 m and 0.02 m.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json tarapedia_dates"
+   ],
+   "closes_with": "a post-D11 capture or reading inside Treeback Camp",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-WARNET-QUEEN",
+   "summary": "No source gives an overworld position for a generic Warnet Queen boss (client name 461). Upstream's pool 520046 'Warnet Queen - Palisades' stood on the Divide's 'Foreas Base' map label beside the receiver of seeded 1743 and was removed (WorldDefectsFix). TaRapedia's post-D11 Palisades Targets of Opportunity (5952 rev 35441, 2008-10-26) lists nine important Bane and no queen; the generic page (8877 rev 22622) says queens are 'found in most areas where Warnets live', and mission 609 implies they come from nests. The Queen Warnet Matriarch (8581) of Warnet Caverns, lured out by mission 396, is a different creature and belongs to that mission's own content work.",
+   "evidence": [
+    "research/20260926-world-defects/README.md section 2",
+    "research/20260926-world-defects/work/ellatha/",
+    "research/20260926-world-defects/work/tarapedia/"
+   ],
+   "closes_with": "an original or dated position for a Warnet Queen spawn, or the nest mechanism mission 609 describes",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-JORAI-PRE-D11-LOC",
+   "summary": "Ranger Jorai (pool 510133) stands at TaRapedia's only reading, '-294,-577' (Ranger Jorai 7125 rev 16456, 2007-11-26; Revealing Treeback Experimentation 7142 to rev 22240, 2007-12-18). Both are pre-D11 and give x,z only; codex-tr.net, Ellatha and Ten Ton Hammer have no Jorai. y is the navmesh floor.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json probes[palisades.ranger_jorai]"
+   ],
+   "closes_with": "a post-D11 reading or capture of Ranger Jorai in Viands Village",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-KEARNEY-POSITION",
+   "summary": "No source gives Field Ranger Kearney's position (pool 510118, Timora Mines 1348). TaRapedia has no NPC page (only 'Report in to Field Ranger Kearney when you get into the mines', 6126 rev 30014, 2008-03-27); Ellatha does not list him; only the Palisades map of codex-tr.net survives. He keeps upstream's ring 3.7 m from the client's 'Hospital: Timora Mines' marker as a labelled analogue (OD-59).",
+   "evidence": [
+    "research/20260926-world-defects/README.md section 3"
+   ],
+   "closes_with": "a reading or capture of Kearney inside Timora Mines",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-MELA-POSITION",
+   "summary": "No source gives Warrior Mela's position (pool 510117, Thoria Das, Divide). TaRapedia has no NPC page (the Thoria Das page, rev 17075, only lists him; Supplies for Thoria Das gives no loc); Ellatha and codex-tr.net have nothing; the Ten Ton Hammer Thoria Das guide (2008-01-29) gives vendor coordinates only. He keeps upstream's ring around the client's 'Medical Vendor: Thoria Das' marker as a labelled analogue (OD-59).",
+   "evidence": [
+    "research/20260926-world-defects/README.md section 3"
+   ],
+   "closes_with": "a reading or capture of Mela in Thoria Das",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-WHITAKER-NAME-ID",
+   "summary": "The final client's creature name table has two 'Colonel Whitaker' entries, 5428 and 8919. Placement 199500 (the Irendas Whitaker, giver of 640) uses 8919; upstream's pool 510085 used 5428 and no longer spawns (WorldDefectsFix). Which id the Irendas Whitaker carried, and whether the other belongs to a second appearance (another place or mission), is not recorded. The displayed name is identical either way.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json client_names",
+    "research/20260926-torden-missions/README.md World-data defects 1"
+   ],
+   "closes_with": "a capture of Whitaker's entity (name id), or client data tying either id to a place or mission",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-CLARK-POSITION",
+   "summary": "Science Officer Clark (pool 510191, Plateau, giver of 936 and receiver of 929) stands 7.6 m from the 'Wedge Rock Outpost' static label about 46 m above the outpost floor, and the navmesh route from the outpost's crafting station to him is partial: he is probably unreachable. TaRapedia's reading (464, 378, 366) lands on the outpost floor with a complete path, but it dates from 2007-08-17 (rev 5265, beta): the 2008-09-25 revisions 34277/34279 only moved the same three numbers into the location-table template. Not moved in this batch, which takes only post-D11 readings.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json probes[plateau.clark_current], probes[plateau.clark_tarapedia], tarapedia_dates",
+    "research/20260926-torden-missions/work/tarapedia/npc/Science_Officer_Clark.json"
+   ],
+   "closes_with": "a post-D11 reading of Clark, or an owner decision to accept the beta reading given that the current position is unreachable",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-NORTON-POSITION",
+   "summary": "Security Guard Norton (pool 510187, Fort Defiance, receiver of 1014) stands 4.1 m from the 'Dropship Transport: Fort Defiance' marker, stacked with Special Agent Perdu; Provost's line puts him 'guarding the supply warehouse at the back of the fort'. TaRapedia's reading (-187, 398, 1016) lands on the floor with a complete path, but it dates from 2007-08-17 (rev 5163, beta); rev 34278 (2008-09-25) is a template reformat of the same numbers. Not moved.",
+   "evidence": [
+    "docs/evidence/world-defects-20260926.json probes[plateau.norton_tarapedia], tarapedia_dates",
+    "research/20260926-torden-missions/work/tarapedia/npc/Security_Guard_Norton.json"
+   ],
+   "closes_with": "a post-D11 reading of Norton",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-TORDEN-MARKER-POSITIONS",
+   "summary": "Upstream placed these Torden and Plateau mission NPCs on a client map marker, and no post-D11 reading exists to move them: Special Agent Perdu (510193; only a beta /loc, -129/398/719, rev 5799 2007-08-19, 157 m away), Gunnery Sergeant Obahmi (510067; pre-D11 /loc 158/233/-268, rev 16788 2007-11-27, 50 m away), Colonel Franks (510084; on the 'Mt. Hellas Outpost' label, TaRapedia 'Wander around on the third floor', no coordinate), Field Commander Foletto (510066; 'in the Nyxroq Post bunker', no coordinate), Major Nicholson (510069; on 'Trainer: Nyxroq Post', 'north of the Hospital', no coordinate), Salvage Master Orto (510074; 6.5 m from 'Control Point: Ortho' while TaRapedia says inside the Ortho hospital, 48 m away, no coordinate) and General Creelig (510089; 1.0 m from 'Crafting Stations: Irendas Penal Colony'). Coordinator Maila (510064) on 'Waypoint: Mires Post' agrees with TaRapedia's 'just south of the Mires Post waypoint'.",
+   "evidence": [
+    "research/20260926-torden-missions/README.md World-data defects 3-5",
+    "research/20260926-torden-missions/dossiers.json world_data_defects"
+   ],
+   "closes_with": "post-D11 readings or captures of each NPC",
+   "surfaced_by": [
+    "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
+   ],
+   "slices": [
+    "W3"
    ]
   }
  ],
@@ -63405,6 +63971,174 @@
      "locator": "generated/client/language/english/missiontextlanguage.pyo texts21665/21666; hit-credit inference in docs/bootcamp-lightning-hit-credit.md"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix",
+   "table": "content_placement",
+   "key": {
+    "id": [
+     199106,
+     199107
+    ]
+   },
+   "field": "map_context_id, pos_y",
+   "old": "map 1244 (Palisades), y 137.794 and 140.442 (WorldFloorSweep's lift)",
+   "new": "map 1397 (Treeback Camp), TaRapedia's own y 103.6 and 100.3",
+   "reason": "Both TaRapedia infoboxes say Instance=Treeback Camp, the final client's 1788/1789 logs place both NPCs 'at'/'out of' the Treeback Camp, and the post-D11 Treeback Camp page lists them. Their readings fit the instance floor to 0.12 m and 0.02 m and lie 34-40 m under the overworld, so the map was the error; WorldFloorSweep's 'wiki gives x and z only' rationale was wrong for these two. Its rows are left as history and superseded; Down restores them.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 17871 (1788 log: 'deliver a bottle of gin to Field Lt. Bagby at the Treeback Camp') and 1505 (551 log: 'Report to Field Lieutenant Bagby behind the Bane Outpost in Southeast Palisades'); research/20260926-mission-catalog/mission-catalog.json"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage 17876 (1789 log: 'Lt. Galloway, who is currently operating out of the Treeback Camp'), 4523 (866) and 5617 (1019) in-instance radio turn-ins to Galloway; research/20260926-mission-catalog/mission-catalog.json"
+    },
+    {
+     "source": "community_db:tarapedia",
+     "locator": "page 'Field Lt. Bagby' (pageid 9003) rev 22867 2007-12-20T07:31:59Z, unchanged to rev 27389 2008-01-18: infobox Zone=Palisades |Instance=Treeback Camp; Location \"just inside entrance\" -337.2 | 103.6 | 353.7; https://tabularasa.fandom.com/wiki/Field_Lt._Bagby?oldid=22867; local research/20260926-world-defects/work/tarapedia/Field_Lt._Bagby.json"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "page 'Treeback Camp' (pageid 6829) rev 32558 2008-08-30T10:16:43Z: Important NPCs Field Lt. Bagby (L20), Lt. Galloway (L23); https://tabularasa.fandom.com/wiki/Treeback_Camp?oldid=32558"
+    },
+    {
+     "source": "measurement:world-defects-20260926",
+     "locator": "probes[treeback.bagby]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix",
+   "table": "spawnpool",
+   "key": {
+    "id": 520046
+   },
+   "field": "row",
+   "old": "Warnet Queen - Palisades, level 28, faction 0, on the Divide 'Foreas Base' label (-42.3, 116.3, 478.7)",
+   "new": null,
+   "reason": "A hostile generic Warnet Queen 0.5 m from Receptive Liaison Noonan (receiver of seeded 1743) on a client map label no source associates with a queen; no source gives a Palisades overworld queen either. Removed, not relocated (GAP-PALISADES-WARNET-QUEEN). The pool comes from a migration's preloader the deployed world has already run, so a new migration removes it; creature 520046 and its stats row stay.",
+   "citations": [
+    {
+     "source": "community_db:infiniterasa-492954a",
+     "locator": "BossSpawnpoolPreloader.cs row 520046"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creaturenamelanguage 461 'Warnet Queen', 8581 'Queen Warnet Matriarch'"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "page 'Palisades Targets of Opportunity' (pageid 5952) rev 35441 2008-10-26: nine important Bane, no Warnet Queen"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix",
+   "table": "spawnpool",
+   "key": {
+    "id": [
+     510137,
+     510133,
+     510068
+    ]
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "upstream map-marker points: 'Cumbria Research Facility' ring (-515.0, 141.62, 701.5), 'Viands Village' label (-235.1, 178.17, -543.8), 'Waypoint: Nyxroq Post' (-238.3, 233.758, -253.5)",
+   "new": "(-772.7, 140.17, 774.9), (-294.0, 172.707, -577.0), (-180.0, 235.229, -244.0): the readings' x,z with the navmesh floor for y",
+   "reason": "Dated readings replace positions upstream derived from a mission sentence: Valerie Corman from TaRapedia's post-D11 walkthrough and codex-tr.net (4.1 m apart); Ranger Jorai from TaRapedia's pre-D11 /loc (medium confidence, GAP-JORAI-PRE-D11-LOC); Lieutenant Epp from TaRapedia's post-D11 /loc, 2.2 m from the client's Nyxroq Post hospital marker. Every point has a complete navmesh path from where the body stood.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "page 'A Casualty Notification' (pageid 6982) rev 33050 2008-09-13T04:58:52Z (kept in rev 33051): walkthrough 'Valerie Corman Location: -772.7, 140.3, 774.9'; https://tabularasa.fandom.com/wiki/A_Casualty_Notification?oldid=33050; local research/20260926-world-defects/work/tarapedia/A_Casualty_Notification.json"
+    },
+    {
+     "source": "community_db:codex-tr",
+     "locator": "POI 1425 'Valerie Corman' locW=-7740 locS=7710 -> (-774, 771); https://web.archive.org/web/20080112185143id_/http://www.codex-tr.net:80/mapview.php5?mapid=2_1_9&poiid=3; local research/20260926-world-defects/work/codex/mapview_2_1_9.xml"
+    },
+    {
+     "source": "community_db:tarapedia",
+     "locator": "page 'Ranger Jorai' (pageid 7125) rev 16456 2007-11-26T04:42:31Z (kept to rev 16577): 'Loc: -294,-577'; https://tabularasa.fandom.com/wiki/Ranger_Jorai?oldid=16456; local research/20260926-world-defects/work/tarapedia/"
+    },
+    {
+     "source": "community_db:tarapedia-post-d11",
+     "locator": "page 'Lieutenant Epp' (pageid 6853) rev 35625/35626 2008-11-11T23:03:20Z: '[[Location]] -180 235 -244', added to the standing text 'Lieutenant Epp is in the [[Nyxroq Post]] hospital' (since rev 15216, 2007-11-18); https://tabularasa.fandom.com/wiki/Lieutenant_Epp?oldid=35626; local research/20260926-torden-missions/work/tarapedia/npc/Lieutenant_Epp.json"
+    },
+    {
+     "source": "measurement:world-defects-20260926",
+     "locator": "probes[incline.lieutenant_epp]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix",
+   "table": "spawnpool",
+   "key": {
+    "id": 510085
+   },
+   "field": "creature_1_min_count, creature_1_max_count",
+   "old": [
+    1,
+    1
+   ],
+   "new": [
+    0,
+    0
+   ],
+   "reason": "A second Colonel Whitaker 106.8 m from placement 199500, which stands at TaRapedia's one Whitaker reading and gives seeded 640. QuestWiringFixes had dropped the pool's duplicate npc_package row but left it spawning. Retired as pool 92 was; the creature row stays (GAP-WHITAKER-NAME-ID).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "page 'Colonel Whitaker' (pageid 7114) rev 16775 2007-11-27: 320 / 499 / -47 'Up in the Headquarters tower'"
+    },
+    {
+     "source": "measurement:world-defects-20260926",
+     "locator": "probes[plains.whitaker_duplicate]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix",
+   "table": "creature, content_placement",
+   "key": {
+    "id": 199510
+   },
+   "field": "comment",
+   "old": "Lieutenant Liu (Irendas Penal Colony)",
+   "new": "Lieutenant Liu (Eir Crater Field Hospital)",
+   "reason": "Cosmetic: she stands at her TaRapedia /loc 'Inside the hospital' of the Eir Crater Field Hospital (7107 rev 16855), which 1063's log calls 'the AFS medical outpost north-east of Irendas Colony'.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "page 'Lieutenant Liu' (pageid 7107) rev 16855 2007-11-27: 700/414/230 'Inside the hospital'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WorldDefectsFix (manifest relabel only; no row changes)",
+   "table": "spawnpool",
+   "key": {
+    "id": [
+     510118,
+     510117
+    ]
+   },
+   "field": "pos_x, pos_y, pos_z (tier)",
+   "old": "unlabelled upstream positions",
+   "new": "analogue under OD-59, counterparts the client's 'Hospital: Timora Mines' and 'Medical Vendor: Thoria Das' markers",
+   "reason": "No positional source exists for Field Ranger Kearney or Warrior Mela; their spawn positions are upstream's marker rings and are now labelled as such (GAP-KEARNEY-POSITION, GAP-MELA-POSITION).",
+   "citations": [
+    {
+     "source": "community_db:infiniterasa-492954a",
+     "locator": "MissionNpcSpawnpoolPreloader.cs rows 510117, 510118"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -63959,6 +64693,16 @@
    "choice": "Use explicitly inferred 1 HP only for Practice Dummy 198652 to reproduce five observed single-hit destructions, including 84 damage. The standing user instruction authorizes labelled closest reconstruction; no separate owner choice of this exact HP is claimed. Original low HP versus forced server destruction is unresolved. Lightning Target Dummy 198653 remains 100 HP because its scene is cut.",
    "approved_on": "2026-09-22",
    "record": "docs/bootcamp-combat-feedback-audit.md"
+  },
+  {
+   "id": "OD-59",
+   "decision": "Mission NPCs with no positional source",
+   "default": "Keep the upstream (InfiniteRasa 492954a) map-marker position, labelled analogue",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Where no source gives a mission NPC's position and the NPC is needed as a giver or receiver, the spawn pool upstream placed at the client map marker of the place a mission names stays where it is, on the navmesh floor, and each coordinate is recorded as an analogue with the marker as its counterpart and a named gap. Applied 2026-09-26 to Field Ranger Kearney (510118) and Warrior Mela (510117). The standing user instruction (AGENTS.md, evidence-bounded reconstruction) and the batch instruction of 2026-09-26 authorize the labelling; no separate owner choice of these positions is claimed. A dated reading replaces the analogue as soon as one appears.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }
  ]
 }

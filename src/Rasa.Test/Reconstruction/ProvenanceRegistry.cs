@@ -176,6 +176,21 @@ namespace Rasa.Test.Reconstruction
                     "name_override_id", "restore_ms", "fuse_ms", "respawn_ms", "present_condition_id", "usable_condition_id"),
                 storage: Cols("map_context_id", "comment")),
 
+            // Existing world-seed table (upstream's preloaders and the original seed): a spawn pool draws its creatures
+            // at one point. The position is required - a pool cannot spawn without one, which is why the upstream
+            // mission NPCs no source places keep their marker positions as labelled analogues (OD-59, WorldDefectsFix).
+            // Slots 2-6 are empty (0) for a single-creature pool.
+            new TableProvenance("spawnpool",
+                keys: Cols("id"),
+                required: Cols("mode", "anim_type", "respown_time", "pos_x", "pos_y", "pos_z", "rotation",
+                    "creature_1_Id", "creature_1_min_count", "creature_1_max_count"),
+                optional: Cols("creature_2_Id", "creature_2_min_count", "creature_2_max_count",
+                    "creature_3_Id", "creature_3_min_count", "creature_3_max_count",
+                    "creature_4_Id", "creature_4_min_count", "creature_4_max_count",
+                    "creature_5_Id", "creature_5_min_count", "creature_5_max_count",
+                    "creature_6_Id", "creature_6_min_count", "creature_6_max_count"),
+                storage: Cols("map_context_id")),
+
             new TableProvenance("content_condition",
                 keys: Cols("condition_id", "or_group", "term_index"),
                 required: Cols("kind", "mission_id", "objective_id", "state", "fact_key", "value", "negate"),

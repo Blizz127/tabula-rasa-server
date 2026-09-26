@@ -954,6 +954,17 @@ character picks up in Alia Das once Training Day and the class choice are behind
     (58 Wilderness), so it is a cross-check for the hub, not the roster expansion the 660 no-giver missions need.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
+- **World-data defects (2026-09-26, `WorldDefectsFix`)**: two audits of the deployed world corrected. Field Lt. Bagby and
+  Lt. Galloway, receivers of the seeded 1788 and 1789, stood 1.3–1.6 km from the Treeback Camp entrance on the Palisades
+  overworld; their TaRapedia readings are Treeback Camp coordinates (infobox `Instance=Treeback Camp`, 0.12/0.02 m off the
+  instance floor), and they now stand in context 1397, which is shared and linked to the Palisades by map links 21/35.
+  Upstream's hostile level-28 "Warnet Queen - Palisades" pool, which stood on the Divide's Foreas Base label beside the
+  receiver of seeded 1743, is removed and left out (`GAP-PALISADES-WARNET-QUEEN`). Valerie Corman, Ranger Jorai and
+  Lieutenant Epp move from upstream's map markers to their dated readings with the navmesh floor for y; the duplicate
+  Colonel Whitaker pool stops spawning. Kearney and Mela keep marker positions as labelled analogues (OD-59); Clark,
+  Norton and seven more Torden NPCs stay on markers until a post-D11 reading exists (`GAP-CLARK-POSITION`,
+  `GAP-NORTON-POSITION`, `GAP-TORDEN-MARKER-POSITIONS`). Clark is probably unreachable where he stands, which blocks
+  seeding 936 until the owner decides. Details: `docs/fidelity-audit.md`, "World-data defects (2026-09-26)".
 
 ## All-missions program (owner goal, 2026-09-15)
 
@@ -1029,6 +1040,7 @@ its evidence tier.
 | OD-44 Trigger radii (2026-09-15, owner) | An objective or area trigger takes a larger radius than a bare reading of the measurement suggests - enough that a player crossing the intended place cannot miss it - but not so large that it fires from outside that place. The radius is a reconstruction parameter and is labelled as one. Applied: S1's two bridge objectives 4 m -> 10 m (the bridge is 16.8 m wide and a recruit crossed it without touching the 4 m sphere; GAP-S1-TRIGGER-RADIUS) and 1994's cave-in trigger 5 m -> 10 m |
 | OD-42 Missions 2010/2011 (2026-09-14, agent, pending owner review) | Held (not seeded) until a class-chosen trigger exists. Superseded for the seeded parts by OD-43 |
 | OD-43 Class-gear missions 2010/2011 (2026-09-15, agent, pending owner review) | Seed 2010/2011 now that the `class_selected` trigger exists and the reward identities are evidenced from the final client (the D11 new-player item block 122859-122871 and its class-owned skills 21/22 and 30/14); keep the world seed's creature 132 as Quartermaster Caufield with dialogue package 133. Use the D11 block's uniform world-seed quality (2) and trade/binding flags, the neutral 0 prices and the world seed's machine-gun/tool `itemtemplate_weapon` family row as labelled analogues; the reward XP/credits, the item prices, the weapon fields, the offer presentation and Caufield's final position stay open (`GAP-W2-*`) |
+| OD-59 Mission NPCs with no positional source (2026-09-26, agent, pending owner review) | Upstream's map-marker spawn position stays, on the navmesh floor, labelled analogue with the marker as counterpart and a named gap; applied to Field Ranger Kearney (510118) and Warrior Mela (510117). A dated reading replaces it |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

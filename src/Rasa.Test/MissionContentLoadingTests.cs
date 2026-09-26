@@ -924,7 +924,7 @@ namespace Rasa.Test
                     // seed is not replayed): the boot-camp map, the S6 destination map and the Power Logos granted by S1.
                     // 1148 is the Divide, where the four NPCs W3 batch 5 creates stand; 1244 Palisades, which the
                     // Liaison missions' receivers are in.
-                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10), (1394, 'adv_foreas_concordia_palisades_devilsden', 327, 0), (1347, 'adv_foreas_concordia_divide_minoscaverns', 293, 4), (1773, 'adv_arieki_torden_plains_attacolony', 274, 0), (2034, 'adv_arieki_torden_plains_penalresearch', 230, 0), (1430, 'adv_foreas_concordia_wilderness_pravusresearch', 555, 0), (1506, 'adv_foreas_concordia_wilderness_cavesofdonn02', 535, 8), (1502, 'adv_foreas_valverde_plateau_ustoryard', 187, 9), (1721, 'adv_foreas_concordia_wilderness_clrf', 290, 0), (1734, 'adv_arieki_ligo_ashendesert', 373, 0), (1830, 'adv_foreas_valverde_plateau_maligobasev3', 144, 0), (1865, 'adv_arieki_torden_incline_ojasaattahive', 222, 0), (2028, 'adv_arieki_torden_abyss', 410, 0), (2051, 'adv_foreas_howlingmaw1', 421, 0), (2115, 'adv_arieki_torden_mires_banefluxitemines', 204, 0)");
+                    context.Database.ExecuteSqlRaw("INSERT INTO map_info (map_context_id, map_name, map_version, base_region) VALUES (1985, 'adv_bootcamp', 783, 4), (1220, 'adv_foreas_concordia_wilderness', 1556, 0), (1148, 'adv_foreas_concordia_divide', 1584, 10), (1244, 'adv_foreas_concordia_palisades', 1584, 10), (1497, 'adv_foreas_valverde_plateau', 1584, 10), (1304, 'adv_foreas_valverde_pools', 1584, 10), (1454, 'adv_foreas_valverde_marshes', 1584, 10), (1759, 'adv_arieki_torden_mires', 1584, 10), (1764, 'adv_arieki_torden_plains', 1584, 10), (1761, 'adv_arieki_torden_incline', 1584, 10), (1394, 'adv_foreas_concordia_palisades_devilsden', 327, 0), (1397, 'adv_foreas_concordia_palisades_treebackcamp', 286, 0), (1347, 'adv_foreas_concordia_divide_minoscaverns', 293, 4), (1773, 'adv_arieki_torden_plains_attacolony', 274, 0), (2034, 'adv_arieki_torden_plains_penalresearch', 230, 0), (1430, 'adv_foreas_concordia_wilderness_pravusresearch', 555, 0), (1506, 'adv_foreas_concordia_wilderness_cavesofdonn02', 535, 8), (1502, 'adv_foreas_valverde_plateau_ustoryard', 187, 9), (1721, 'adv_foreas_concordia_wilderness_clrf', 290, 0), (1734, 'adv_arieki_ligo_ashendesert', 373, 0), (1830, 'adv_foreas_valverde_plateau_maligobasev3', 144, 0), (1865, 'adv_arieki_torden_incline_ojasaattahive', 222, 0), (2028, 'adv_arieki_torden_abyss', 410, 0), (2051, 'adv_foreas_howlingmaw1', 421, 0), (2115, 'adv_arieki_torden_mires_banefluxitemines', 204, 0)");
                     context.Database.ExecuteSqlRaw("INSERT INTO logos (id, class_id, map_context_id, pos_x, pos_y, pos_z, name) VALUES (23, 7302, 1220, 1, 2, 3, 'Power')");
                     // Mission 429 River Recon is a world-seed row, not a migrated one: MissionAreaLinks and
                     // WildernessPinholeNpc only correct it, so without the seed row this migrated world has the
@@ -1059,6 +1059,22 @@ namespace Rasa.Test
                 Assert.AreEqual((198684u, 198514u, 116u, (byte)ContentPlacementBehavior.Stationary, 0u, 0u),
                     (rogers.Id, rogers.CreatureId, rogers.NpcPackageId, rogers.Behavior, rogers.PresentConditionId, rogers.AlternateStateConditionId));
                 Assert.AreEqual((855.84, 294.14, 387.4, 4.3633), (rogers.PosX, rogers.PosY, rogers.PosZ, rogers.Rotation));
+
+                // WorldDefectsFix: Field Lt. Bagby and Lt. Galloway stand in Treeback Camp (1397), a shared context the
+                // Palisades reaches through map link 21, and still receive 1788 and 1789 through their own packages.
+                Assert.AreEqual(MapInstancing.Shared, validation.Catalog.InstancingFor(1397));
+                Assert.IsFalse(validation.WithheldContexts.Contains(1397u));
+                var treeback = ContentMaterializer.PlacementsToSpawn(validation, 1397).ToDictionary(placement => placement.Id);
+                CollectionAssert.AreEquivalent(new uint[] { 199106, 199107 }, treeback.Keys.ToArray());
+                Assert.AreEqual((199106u, 46u, -337.2, 103.6, 353.7), (treeback[199106].CreatureId, treeback[199106].NpcPackageId, treeback[199106].PosX, treeback[199106].PosY, treeback[199106].PosZ));
+                Assert.AreEqual((199107u, 565u, -122.2, 100.3, 128.2), (treeback[199107].CreatureId, treeback[199107].NpcPackageId, treeback[199107].PosX, treeback[199107].PosY, treeback[199107].PosZ));
+                Assert.IsFalse(ContentMaterializer.PlacementsToSpawn(validation, 1244).Any(placement => placement.Id is 199106 or 199107));
+                foreach (var (missionId, receiver, package) in new[] { (1788u, 199106u, 46u), (1789u, 199107u, 565u) })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}");
+                    Assert.AreEqual(receiver, missions.LoadedMissions[missionId].MissionReciver, $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].HasObjectiveConversation(1, package, 1), $"mission {missionId}");
+                }
 
                 // Training Officer Kincaid (WildernessArrivalTrainingDay): the 1526 receiver and class trainer stands live in shared
                 // Alia Das at the measured barracks position with the trainer package, always present.

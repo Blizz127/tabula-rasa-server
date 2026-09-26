@@ -275,7 +275,8 @@ namespace Rasa.Test.Reconstruction
                 "map_info", "content_map_setting", "creature", "npc_mission_prerequisite", "npc_mission_objective_binding",
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
-                "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot", "creature_action"
+                "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot", "creature_action",
+                "spawnpool"
             }, ProvenanceRegistry.Default.Tables.Select(t => t.Table).ToList());
 
             foreach (var table in ProvenanceRegistry.Default.Tables)
@@ -295,6 +296,9 @@ namespace Rasa.Test.Reconstruction
             // An attack needs its damage (WildernessMortarFire): creature_action's columns are all required.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature_action", "min_damage"));
             Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
+            // A spawn pool's position is required (OD-59 keeps unsourced upstream positions as labelled analogues).
+            Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("spawnpool", "pos_x"));
+            Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("spawnpool", "creature_2_Id"));
             // Item templates (WildernessArrivalTrainingDay): sent flags are required, prices and the unsent reuse override optional.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("itemtemplate", "not_tradable_flag"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("itemtemplate", "sell_price"));
@@ -315,7 +319,7 @@ namespace Rasa.Test.Reconstruction
                 typeof(NpcMissionObjectiveBindingEntry), typeof(NpcMissionObjectiveCounterEntry), typeof(NpcMissionObjectiveTimerEntry),
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
                 typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),
-                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry), typeof(CreatureActionEntry)
+                typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry), typeof(CreatureActionEntry), typeof(SpawnPoolEntry)
             };
 
             foreach (var entity in entities)

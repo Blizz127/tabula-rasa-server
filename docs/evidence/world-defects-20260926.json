@@ -1,0 +1,336 @@
+{
+ "schema": "rasa-world-defects/1",
+ "date": "2026-09-26",
+ "purpose": "Navmesh measurements and dated source readings behind the WorldDefectsFix migration (src/Rasa.DBL/Migrations/WildernessData/WorldDefectsFixRows.cs). Cited as measurement:world-defects-20260926 in docs/evidence/bootcamp-d11-reconstruction-manifest.json.",
+ "method": {
+  "navmesh": "repo navmesh/*.nav (built from the client 1.16.5.0 maps), read with src/Rasa.Navigation NavMeshQuery.GroundHeight and FindPath - the calls WorldFloorSweepTests and WorldPositionAuditTests make. Probe console in the agent scratchpad, run in mcr.microsoft.com/dotnet/sdk:5.0 on 2026-09-26.",
+  "floor": "navmesh surface - 0.276 m (WorldPlacementFloorSnapRows.OriginalSpawnOffset, the offset the original server's own creature spawns sit at)",
+  "column": "GroundHeight sampled every 4 m from y-60 to y+60 at the same x,z, to show every walkable level in the column",
+  "audit_replay": "rasaworld.db (sha256 f0142463b3f850772c3466955487af4fdac58048c87d19a6ac846dfeecf273b5) copied, the WorldDefectsFix rows applied, and WorldPositionAuditTests, WorldFloorSweepTests, PlacementHeightAuditTests, PropOverlapAuditTests and MissionLinkAuditTests run against the copy: all pass, 1058 bodies probed, 0 defects, no new suspect."
+ },
+ "research": [
+  "/home/blizz/backups/rasa-net/research/20260926-world-defects/README.md and proposed-row-changes.json (audit, TaRapedia revision copies under work/tarapedia, codex-tr.net capture under work/codex, probes under work/probes)",
+  "/home/blizz/backups/rasa-net/research/20260926-torden-missions/README.md and dossiers.json (world_data_defects; TaRapedia NPC revision histories under work/tarapedia/npc)"
+ ],
+ "probes": [
+  {
+   "key": "treeback.bagby",
+   "row": "content_placement 199106",
+   "map": "adv_foreas_concordia_palisades_treebackcamp (1397)",
+   "point": [
+    -337.2,
+    103.6,
+    353.7
+   ],
+   "surface": 104.0,
+   "floor": 103.724,
+   "levels": [
+    104.0,
+    132.23,
+    137.1
+   ],
+   "path": "complete, 45.4 m from the map_link 21 arrival (-337.4749, 103.7221, 398.6607)",
+   "reading_minus_floor": -0.124
+  },
+  {
+   "key": "treeback.galloway",
+   "row": "content_placement 199107",
+   "map": "adv_foreas_concordia_palisades_treebackcamp (1397)",
+   "point": [
+    -122.2,
+    100.3,
+    128.2
+   ],
+   "surface": 100.559,
+   "floor": 100.283,
+   "levels": [
+    100.56
+   ],
+   "path": "PARTIAL from the arrival: the walkable route stops near Bagby at (-324.0, 103.6, 346.0), consistent with TaRapedia's 'fight your way forward to the large shield'",
+   "reading_minus_floor": 0.017
+  },
+  {
+   "key": "palisades.bagby_overworld",
+   "row": "content_placement 199106 before",
+   "map": "adv_foreas_concordia_palisades (1244)",
+   "point": [
+    -337.2,
+    137.794,
+    353.7
+   ],
+   "surface": 138.07,
+   "floor": 137.794,
+   "levels": [
+    138.07
+   ],
+   "note": "the sourced y 103.6 is 34.2 m under the overworld terrain here"
+  },
+  {
+   "key": "palisades.galloway_overworld",
+   "row": "content_placement 199107 before",
+   "map": "adv_foreas_concordia_palisades (1244)",
+   "point": [
+    -122.2,
+    140.442,
+    128.2
+   ],
+   "surface": 140.718,
+   "floor": 140.442,
+   "levels": [
+    140.72
+   ],
+   "note": "the sourced y 100.3 is 40.1 m under the overworld terrain here"
+  },
+  {
+   "key": "palisades.valerie_corman",
+   "row": "spawnpool 510137",
+   "map": "adv_foreas_concordia_palisades (1244)",
+   "point": [
+    -772.7,
+    140.17,
+    774.9
+   ],
+   "surface": 140.446,
+   "floor": 140.17,
+   "levels": [
+    140.45,
+    145.41,
+    154.22
+   ],
+   "path": "complete, 290.1 m from her old position (-515.0, 141.62, 701.5)",
+   "reading_minus_floor": 0.13
+  },
+  {
+   "key": "palisades.ranger_jorai",
+   "row": "spawnpool 510133",
+   "map": "adv_foreas_concordia_palisades (1244)",
+   "point": [
+    -294.0,
+    172.707,
+    -577.0
+   ],
+   "surface": 172.983,
+   "floor": 172.707,
+   "levels": [
+    172.98,
+    184.25
+   ],
+   "path": "complete, 80.7 m from his old position (-235.1, 178.17, -543.8)",
+   "note": "hints 166, 172.7 and 178 all resolve to 172.98; the 184.25 level is a deck 4.5 m away (hint 185 snaps to (-290.8, 184.2, -580))"
+  },
+  {
+   "key": "incline.lieutenant_epp",
+   "row": "spawnpool 510068",
+   "map": "adv_arieki_torden_incline (1761)",
+   "point": [
+    -180.0,
+    235.229,
+    -244.0
+   ],
+   "surface": 235.505,
+   "floor": 235.229,
+   "levels": [
+    235.51,
+    240.92
+   ],
+   "path": "complete, 60.1 m from her old position (-238.3, 233.758, -253.5)",
+   "reading_minus_floor": -0.229,
+   "note": "client marker 'Hospital: Nyxroq Post' (-182.22, 235.24, -244.21) is 2.2 m away, surface 235.645"
+  },
+  {
+   "key": "plateau.clark_current",
+   "row": "spawnpool 510191 (not moved)",
+   "map": "adv_foreas_valverde_plateau (1497)",
+   "point": [
+    482.3,
+    424.083,
+    421.0
+   ],
+   "surface": 424.359,
+   "floor": 424.083,
+   "levels": [
+    424.36
+   ],
+   "path": "PARTIAL from the Wedge Rock crafting-station marker (485.96, 378.41, 339.17): the route stops at (475.6, 392.9, 404.8), so he is probably unreachable"
+  },
+  {
+   "key": "plateau.clark_tarapedia",
+   "row": "spawnpool 510191 candidate",
+   "map": "adv_foreas_valverde_plateau (1497)",
+   "point": [
+    464.0,
+    378.0,
+    366.0
+   ],
+   "surface": 378.278,
+   "floor": 378.002,
+   "levels": [
+    378.28,
+    383.36
+   ],
+   "path": "complete, 39.7 m from the crafting-station marker",
+   "note": "not applied: the reading dates from 2007-08-17 (beta); see GAP-CLARK-POSITION"
+  },
+  {
+   "key": "plateau.norton_tarapedia",
+   "row": "spawnpool 510187 candidate",
+   "map": "adv_foreas_valverde_plateau (1497)",
+   "point": [
+    -187.0,
+    398.0,
+    1016.0
+   ],
+   "surface": 399.075,
+   "floor": 398.799,
+   "levels": [
+    399.07
+   ],
+   "path": "complete, 231.9 m from MP Lt. Parkman (-72, 404, 951)",
+   "note": "not applied: the reading dates from 2007-08-17 (beta); see GAP-NORTON-POSITION"
+  },
+  {
+   "key": "timora.kearney",
+   "row": "spawnpool 510118 (not moved)",
+   "map": "adv_foreas_concordia_divide_timoramines (1348)",
+   "point": [
+    -125.1,
+    205.74,
+    517.6
+   ],
+   "surface": 205.741,
+   "floor": 205.465,
+   "levels": [
+    205.74
+   ]
+  },
+  {
+   "key": "divide.mela",
+   "row": "spawnpool 510117 (not moved)",
+   "map": "adv_foreas_concordia_divide (1148)",
+   "point": [
+    282.7,
+    170.62,
+    1071.8
+   ],
+   "surface": 170.4,
+   "floor": 170.124,
+   "levels": [
+    168.0,
+    170.4
+   ]
+  },
+  {
+   "key": "plains.whitaker_duplicate",
+   "row": "spawnpool 510085 (counts 0/0)",
+   "map": "adv_arieki_torden_plains (1764)",
+   "point": [
+    386.4,
+    433.2,
+    -98.6
+   ],
+   "surface": 433.2,
+   "floor": 432.924,
+   "levels": [
+    433.2,
+    448.6
+   ],
+   "note": "106.8 m from placement 199500 (320, 499, -47)"
+  },
+  {
+   "key": "plains.whitaker_placement",
+   "row": "content_placement 199500",
+   "map": "adv_arieki_torden_plains (1764)",
+   "point": [
+    320.0,
+    499.0,
+    -47.0
+   ],
+   "surface": 498.8,
+   "floor": 498.524,
+   "levels": [
+    434.2,
+    498.8,
+    503.8
+   ]
+  }
+ ],
+ "tarapedia_dates": [
+  {
+   "npc": "Field Lt. Bagby",
+   "page": 9003,
+   "revisions": "22867 (2007-12-20) to 27389 (2008-01-18)",
+   "reading": "-337.2 | 103.6 | 353.7, 'just inside entrance', infobox Instance=Treeback Camp",
+   "era": "pre_d11"
+  },
+  {
+   "npc": "Lt. Galloway",
+   "page": 9010,
+   "revisions": "22879 (2007-12-20) to 27006 (2008-01-13)",
+   "reading": "-122.2 | 100.3 | 128.2, 'mobile; close to the entrance shield', infobox Instance=Treeback Camp",
+   "era": "pre_d11"
+  },
+  {
+   "npc": "Treeback Camp (place)",
+   "page": 6829,
+   "revisions": "32558 (2008-08-30)",
+   "reading": "Important NPCs: Field Lt. Bagby (L20), Lt. Galloway (L23); no coordinates",
+   "era": "d11_to_shutdown"
+  },
+  {
+   "npc": "Valerie Corman",
+   "page": "6982 A Casualty Notification",
+   "revisions": "33050, 33051 (2008-09-13)",
+   "reading": "Valerie Corman Location: -772.7, 140.3, 774.9",
+   "era": "d11_to_shutdown"
+  },
+  {
+   "npc": "Ranger Jorai",
+   "page": "7125; 7142 Revealing Treeback Experimentation",
+   "revisions": "16456-16577 (2007-11-26); 16648-22240 (to 2007-12-18)",
+   "reading": "Loc: -294,-577; Viands Village, -294,-577",
+   "era": "pre_d11"
+  },
+  {
+   "npc": "Lieutenant Epp",
+   "page": 6853,
+   "revisions": "35625, 35626 (2008-11-11); earlier 15216-24535 carry the text only",
+   "reading": "[[Location]] -180 235 -244; 'in the Nyxroq Post hospital' since 2007-11-18",
+   "era": "d11_to_shutdown"
+  },
+  {
+   "npc": "Science Officer Clark",
+   "page": 3239,
+   "revisions": "5265 (2007-08-17) X=464 Z=378 Y=366; 34277/34279 (2008-09-25) the same three numbers moved into the {{Location}} table template",
+   "reading": "464 / 378 / 366",
+   "era": "pre_d11",
+   "note": "the 2008-09-25 edit is a template reformat, not a new reading"
+  },
+  {
+   "npc": "Security Guard Norton",
+   "page": 3214,
+   "revisions": "5163 (2007-08-17) X=-187 Z=398 Y=1016; 34278 (2008-09-25) the same numbers in the table template",
+   "reading": "-187 / 398 / 1016",
+   "era": "pre_d11",
+   "note": "the 2008-09-25 edit is a template reformat, not a new reading"
+  },
+  {
+   "npc": "Colonel Whitaker",
+   "page": 7114,
+   "revisions": "16367-16775 (2007-11-25 to 2007-11-27)",
+   "reading": "320 / 499 / -47, 'Up in the Headquarters tower'",
+   "era": "pre_d11"
+  }
+ ],
+ "client_names": {
+  "source": "Tabula Rasa 1.16.5.0 generated/client/language/english/creaturenamelanguage.pyo, decoded with research/20260926-ready-missions/tools/decode_literal_table_neg.py",
+  "461": "Warnet Queen",
+  "8581": "Queen Warnet Matriarch",
+  "5428": "Colonel Whitaker",
+  "8919": "Colonel Whitaker",
+  "7031": "Valerie Corman",
+  "2960": "Ranger Jorai",
+  "4419": "Lieutenant Epp",
+  "2996": "Field Ranger Kearney",
+  "3029": "Warrior Mela"
+ }
+}
