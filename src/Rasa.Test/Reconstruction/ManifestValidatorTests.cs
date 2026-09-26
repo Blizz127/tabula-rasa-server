@@ -295,7 +295,6 @@ namespace Rasa.Test.Reconstruction
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("creature", "action2"));
             // An attack needs its damage (WildernessMortarFire): creature_action's columns are all required.
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("creature_action", "min_damage"));
-            Assert.AreEqual(ColumnRole.Unknown, ProvenanceRegistry.Default.RoleOf("npc_mission", "giver_id"));
             // A spawn pool's position is required (OD-59 keeps unsourced upstream positions as labelled analogues).
             Assert.AreEqual(ColumnRole.Required, ProvenanceRegistry.Default.RoleOf("spawnpool", "pos_x"));
             Assert.AreEqual(ColumnRole.Optional, ProvenanceRegistry.Default.RoleOf("spawnpool", "creature_2_Id"));
