@@ -1,42 +1,31 @@
-﻿namespace Rasa.Structures
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Rasa.Structures
 {
-    public class ItemModule
+    /// <summary>A module tooltip definition, distinct from an item's persisted module IDs.</summary>
+    public sealed class ItemModule
     {
-        public int ModuleId { get; set; }
-        public int ModuleLevel { get; set; }
-        public ModuleInfo ModuleInfo { get; set; }
+        public int ModuleId { get; }
+        public int? ModuleLevel { get; }
+        public IReadOnlyList<ModuleInfo> Effects { get; }
 
-        public ItemModule(int moduleId, int moduleLevel, ModuleInfo moduleInfo)
+        public ItemModule(int moduleId, int? moduleLevel, IEnumerable<ModuleInfo> effects)
         {
+            if (effects == null)
+                throw new ArgumentNullException(nameof(effects));
+            var rows = effects.ToArray();
+            if (rows.Any(row => row == null))
+                throw new ArgumentException("A module effect row cannot be null.", nameof(effects));
             ModuleId = moduleId;
-            ModuleLevel = ModuleLevel;
-            ModuleInfo = moduleInfo;
+            ModuleLevel = moduleLevel;
+            Effects = Array.AsReadOnly(rows);
         }
-    }
 
-        public class ModuleInfo
-    {
-        public int EffectId { get; set; }
-        public int SetLevel { get; set; }
-        public int FlatValue { get; set; }
-        public int LinearValue { get; set; }
-        public int ExpValue { get; set; }
-        public int Arg1 { get; set; }
-        public int Arg2 { get; set; }
-        public int Arg3 { get; set; }
-        public int Arg4 { get; set; }
-
-        public ModuleInfo(int effectId, int setLevel, int flatValue, int linearValue, int expValue, int arg1, int arg2, int arg3, int arg4)
+        public ItemModule(int moduleId, int? moduleLevel, ModuleInfo effect)
+            : this(moduleId, moduleLevel, new[] { effect })
         {
-            EffectId = effectId;
-            SetLevel = setLevel;
-            FlatValue = flatValue;
-            LinearValue = linearValue;
-            ExpValue = expValue;
-            Arg1 = arg1;
-            Arg2 = arg2;
-            Arg3 = arg3;
-            Arg4 = Arg4;
         }
     }
 }

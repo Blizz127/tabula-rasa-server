@@ -173,7 +173,7 @@ namespace Rasa.Managers
 
             var template = item.ItemTemplate;
 
-            if (!template.HasSellableFlag || template.BoundToCharacter || template.HasCharacterUniqueFlag)
+            if (!item.IsSellable || !item.IsTradable || template.BoundToCharacter || template.HasCharacterUniqueFlag)
             {
                 CreationFailed(client, packet.ItemEntityId, PlayerMessage.PmAuctionItemCannotBeAuctioned);
                 return;

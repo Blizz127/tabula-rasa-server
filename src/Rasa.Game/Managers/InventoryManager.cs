@@ -168,6 +168,7 @@ namespace Rasa.Managers
                 OwnerSlotId = destinationSlot
             };
             source.StackSize -= (uint)quantity;
+            newItem.RestoreInstanceMetadata(split);
             client.CallMethod(source.EntityId, new SetStackCountPacket(source.StackSize));
             EntityManager.Instance.RegisterEntity(newItem.EntityId, EntityType.Item);
             EntityManager.Instance.RegisterItem(newItem.EntityId, newItem);
@@ -858,7 +859,7 @@ namespace Rasa.Managers
                     var slotItem = EntityManager.Instance.GetItem(client.Player.Inventory.PersonalInventory[itemCategoryOffset + i]);
 
                     // same item template?
-                    if (slotItem.ItemTemplate.ItemTemplateId != item.ItemTemplate.ItemTemplateId)
+                    if (slotItem.ItemTemplate.ItemTemplateId != item.ItemTemplate.ItemTemplateId || !slotItem.HasSameInstanceMetadata(item))
                         continue;
 
                     // calculate how many items we can add to the stack
@@ -929,7 +930,7 @@ namespace Rasa.Managers
                     var slotItem = EntityManager.Instance.GetItem(client.Player.Inventory.ClanInventory[i]);
 
                     // same item template?
-                    if (slotItem.ItemTemplate.ItemTemplateId != item.ItemTemplate.ItemTemplateId)
+                    if (slotItem.ItemTemplate.ItemTemplateId != item.ItemTemplate.ItemTemplateId || !slotItem.HasSameInstanceMetadata(item))
                         continue;
 
                     // calculate how many items we can add to the stack
@@ -1040,6 +1041,8 @@ namespace Rasa.Managers
             foreach (var item in getClanInventoryData)
             {
                 var itemData = unitOfWork.Items.GetItem(item.ItemId);
+                if (itemData == null)
+                    continue;
                 var itemTemplate = ItemManager.Instance.GetItemTemplateById(itemData.ItemTemplateId);
 
                 if (itemTemplate == null)
@@ -1056,6 +1059,19 @@ namespace Rasa.Managers
                         tempItem = existingItem;
                     }
                 }
+
+                if (tempItem == null)
+                {
+                    tempItem = new Item
+                    {
+                        Id = itemData.ItemId, ItemTemplate = itemTemplate, ItemTemplateId = itemData.ItemTemplateId,
+                        StackSize = itemData.StackSize, CurrentHitPoints = itemData.CurrentHitPoints,
+                        Color = itemData.Color, Crafter = itemData.CrafterName, OwnerSlotId = item.SlotId
+                    };
+                    EntityManager.Instance.RegisterEntity(tempItem.EntityId, EntityType.Item);
+                    EntityManager.Instance.RegisterItem(tempItem.EntityId, tempItem);
+                }
+                tempItem.RestoreInstanceMetadata(itemData);
 
                 // check if item is weapon
                 if (tempItem.ItemTemplate.WeaponInfo != null)
@@ -1159,6 +1175,7 @@ namespace Rasa.Managers
                     Id = item.ItemId,
                     Crafter = itemData.CrafterName
                 };
+                newItem.RestoreInstanceMetadata(itemData);
                 // These existing instance fields have no database columns.
                 // Rebuilding network entities must not reset them during travel.
                 if (previousItems.TryGetValue(item.ItemId, out var previousItem))
@@ -1306,10 +1323,16 @@ namespace Rasa.Managers
 
         public void RequestTooltipForModuleId(Client client, int moduleId)
         {
-            Logger.WriteLog(LogType.Debug, $"ToDo: RequestTooltipForModuleId");
-            //var moduleInfo = new ItemModule(moduleId, 1, new ModuleInfo(1, 1, 1, 1, 1, 1, 1, 1, 1));
+            var definition = MissionRewardModuleBindings.DefinitionFor(moduleId);
+            if (definition != null)
+            {
+                client.CallMethod(SysEntity.ClientGameUIManagerId, new ModuleTooltipInfoPacket(definition));
+                return;
+            }
 
-            //client.SendPacket(12, new ModuleTooltipInfoPacket(moduleInfo));
+            // Original gameui caches even empty definitions. Unknown ids stay
+            // unanswered so they cannot be mistaken for known effect-free modules.
+            Logger.WriteLog(LogType.Debug, $"RequestTooltipForModuleId: no supported effect definition for module {moduleId}");
         }
 
         public bool ValidateItemEquip(Client client, Item itemToEquip)

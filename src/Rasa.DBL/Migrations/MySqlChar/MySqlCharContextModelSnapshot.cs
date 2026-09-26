@@ -735,9 +735,21 @@ namespace Rasa.Migrations.MySqlChar
                         .HasColumnType("int unsigned")
                         .HasColumnName("item_template_id");
 
+                    b.Property<string>("LootModulesJson")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("loot_modules");
+
+                    b.Property<bool?>("SellableOverride")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("sellable_override");
+
                     b.Property<uint>("StackSize")
                         .HasColumnType("int unsigned")
                         .HasColumnName("stack_size");
+
+                    b.Property<bool?>("TradableOverride")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("tradable_override");
 
                     b.HasKey("ItemId");
 

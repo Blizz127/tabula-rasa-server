@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Training Day (mission 1526) choice reward module ids and persisted item metadata",
+  "records": [
+    {
+      "mission_id": 1526,
+      "item_template_id": 116929,
+      "item_template_tier": "inferred",
+      "module_id": 900221,
+      "module_tier": "original",
+      "source": "generated/shared/crafting.pyo ModuleClass 900221 @243698; generated/client/language/english/modulenamelanguage.pyo @2045; client/ui/conversationwindow.pyo _CreateItemButtons line 1850; footage B2-026 at 102.267 s",
+      "claim": "The compatible client names a physical pistol with this Vextronics module; the server reward template identity remains inferred."
+    },
+    {
+      "mission_id": 1526,
+      "item_template_id": 116930,
+      "item_template_tier": "inferred",
+      "module_id": 900256,
+      "module_tier": "original",
+      "source": "generated/shared/crafting.pyo ModuleClass 900256 @242778; generated/client/language/english/modulenamelanguage.pyo @2360; client/ui/conversationwindow.pyo _CreateItemButtons line 1850; footage B2-029 at 103.2 s",
+      "claim": "The compatible client names an EMP pulse pistol with this Vextronics module; the server reward template identity remains inferred."
+    }
+  ],
+  "provenance_file": {
+    "path": "/home/blizz/backups/rasa-net/research/20260914-trainingday-items/template-identification.json",
+    "sha256": "cf47e06ac83ef855603b328609a8e77fe1a030a141211a5364db78c41aee5779",
+    "bytes": 9217
+  },
+  "implementation": "src/Rasa.Game/Data/MissionRewardModuleBindings.cs maps the evidenced module IDs to the inferred reward templates. MissionManager includes IDs in the offered RewardItem tuple and persists them as ordered loot-module metadata on the chosen item.",
+  "limits": [
+    "Original final-live server module attachment records and levels are unavailable; persisted module level remains null.",
+    "ModuleTooltipInfo definitions use original effect ids, observed amount and duration, and inferred packet coefficients. The recovered client displays the filmed effect lines for both choices. Combat application and proc chance remain unverified and unimplemented.",
+    "The original final shutdown client revision is not established; 1.16.5.0 is the current compatibility build."
+  ],
+  "verification": {
+    "isolated_client": "Recovered 1.16.5.0 client with the newly built server binaries; copied run-41 character, diagnostically moved near Kincaid at (768.0,294.12,386.05). The isolated world applied the new corpse/bomb migrations at startup and was restored afterward.",
+    "observations": [
+      "The Headquarters Training Day offer showed Vextronics Pistol and Vextronics Pulse Pistol in the choice row (playthrough-48/04-training-module-offer.png).",
+      "The physical pistol hover showed Vextronics Pistol as the tooltip name, but did not show the original footage Reduce Resist line (playthrough-48/05-vextronics-tooltip.png).",
+      "Kincaid turn-in retained both Vextronics names; selecting the physical pistol and completing removed Training Day from the tracker (playthrough-48/07-vextronics-turnin.png and 08-vextronics-complete.png).",
+      "The copied database records mission 1526 state 4, 470 credits, and item template 116929 with ordered loot_modules [{ModuleId:900221,Level:null}] (playthrough-48/char-after.db)."
+    ],
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/04-training-module-offer.png",
+        "sha256": "34909d9c9f5568c766d45017922262960a64e50d34bb1806581f007ed6c4835c",
+        "bytes": 938854
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/05-vextronics-tooltip.png",
+        "sha256": "6706284f47c7f7364f4a6890179083726909a21f89fb129de8165cc709d80558",
+        "bytes": 913856
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/07-vextronics-turnin.png",
+        "sha256": "6193dca1a7c78309513677731c16a8f7682199a3d225a29517497edb5ce419a2",
+        "bytes": 944867
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/08-vextronics-complete.png",
+        "sha256": "d43be45d9ce1a7e188e015102ee15e29d88143f4c0e487bccbf4fde95bf2fbda",
+        "bytes": 1120500
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/game.log",
+        "sha256": "b2c7bdb38b0204474d3454b89d2f734d9d55e97312e2e7db1ca39b6fc7b224f5",
+        "bytes": 20688
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-48/char-after.db",
+        "sha256": "eed9946ba982a15d04c9930ce9c81fb20c610a5ee5836aaf796ff94cee59c417",
+        "bytes": 204800
+      }
+    ]
+  },
+  "tooltip_definitions": [
+    {
+      "module_id": 900221,
+      "effect_id": 9,
+      "effect_id_tier": "original",
+      "effect_source": "generated/client/gameeffectdata.pyo values.byvalue[9]=DEBUFF_PHYSICAL_RESIST_PROC; values.effectClass[9]=gameeffects.proceffect.DebuffPhysicalResistProc; values.tooltip[9]=1722",
+      "tooltip_source": "generated/client/language/english/tooltiplanguage.pyo lookup[1722]=\"Reduce Resist: Physical by %(amount)s for %(arg2)s sec\"",
+      "flat_value": -15,
+      "arg2_duration_seconds": 15,
+      "amount_duration_tier": "observed",
+      "amount_duration_source": "docs/evidence/bootcamp-d11-footage-events.json B2-026 at 102.267 s",
+      "other_tuple_values_tier": "inferred",
+      "other_tuple_values": "setLevel=0; linearValue=0; expValue=0; arg1/arg3/arg4=None; moduleLevel=None"
+    },
+    {
+      "module_id": 900256,
+      "effect_id": 115,
+      "effect_id_tier": "original",
+      "effect_source": "generated/client/gameeffectdata.pyo values.byvalue[115]=DEBUFF_EMP_RESIST_PROC; values.effectClass[115]=gameeffects.proceffect.DebuffEMPResistProc; values.tooltip[115]=1726",
+      "tooltip_source": "generated/client/language/english/tooltiplanguage.pyo lookup[1726]=\"Reduce Resist: EMP by %(amount)s for %(arg2)s sec\"",
+      "flat_value": -15,
+      "arg2_duration_seconds": 15,
+      "amount_duration_tier": "observed",
+      "amount_duration_source": "docs/evidence/bootcamp-d11-footage-events.json B2-029 at 103.2 s",
+      "other_tuple_values_tier": "inferred",
+      "other_tuple_values": "setLevel=0; linearValue=0; expValue=0; arg1/arg3/arg4=None; moduleLevel=None"
+    }
+  ],
+  "client_table_artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_gameeffectdata.pyo.json.gz",
+      "sha256": "392fdbd41ed89101ab16e3fe9a86bed2f02bb865d7d19678e84e049f79d2e2e6",
+      "bytes": 58449
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/list-tables/decoded/generated_client_language_english_tooltiplanguage.pyo.json.gz",
+      "sha256": "d5bb1224e790f4381002ed3932620d674ccab74c4193c39a44172afe48d378fa",
+      "bytes": 53243
+    }
+  ],
+  "combat_behavior_evidence": {
+    "tier": "observed",
+    "source": "Tabula Rasa Wiki archive Talk:Debuff, revision 35500, 2008-11-03T15:45:40Z, page_id 11316; an attributed PlayNC support response quoted by the page author",
+    "archive_path": "/home/blizz/backups/rasa-net/research/20260912-new-character/wiki-before-shutdown.json",
+    "archive_sha256": "cc698402053b4cd163bed2f489259a69f11eac81dc1ac358083c2fa5170088e5",
+    "finding": "The quoted response says each shot has a chance to process a resistance debuff; subsequent shots benefit; a proc refreshes duration; identical debuffs do not stack. The exact chance, final-live applicability and server implementation are not recorded.",
+    "limitations": "The archive reproduces a user-posted support reply; the original support message was not independently authenticated."
+  },
+  "tooltip_verification": {
+    "client": "Recovered 1.16.5.0 with rebuilt isolated server and copied Training Day offer character",
+    "observations": [
+      "Hovering the physical choice sent RequestTooltipForModuleId and displayed [2] Reduce Resist: Physical by -15 for 15 sec.",
+      "Hovering the EMP choice sent RequestTooltipForModuleId and displayed [2] Reduce Resist: EMP by -15 for 15 sec."
+    ],
+    "artifacts": [
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-49/04-physical-tooltip.png",
+        "sha256": "2226c93a6866fe73d0364ab82ea2dd2fd1a022d831c3be9b0cfabaf584b4e2bb",
+        "bytes": 911052
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-49/05-emp-tooltip.png",
+        "sha256": "0480dca5db3d6047b6e0b2a4fb3977147665d134513251ebd8a55dae498311a9",
+        "bytes": 901985
+      },
+      {
+        "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-49/game.log",
+        "sha256": "aef7f52004a3640d8bc3585f252aa2cc9a403007fc9b38a1d91ff989043f0e6f",
+        "bytes": 15593
+      }
+    ]
+  }
+}

@@ -767,6 +767,9 @@ namespace Rasa.Managers
                 return;
             }
 
+            if (!soldItem.IsSellable)
+                return;
+
             var quantity = (uint) Math.Min(packet.Quantity, soldItem.StackSize);
             var sellPrice = Math.Min((long) Math.Max(soldItem.ItemTemplate.SellPrice, 0) * quantity, int.MaxValue);
 
@@ -780,7 +783,8 @@ namespace Rasa.Managers
                 unitOfWork.Items.UpdateItemStackSize(soldItem);
                 client.CallMethod(soldItem.EntityId, new SetStackCountPacket(soldItem.StackSize));
 
-                soldItem = ItemManager.Instance.CreateFromTemplateId(soldItem.ItemTemplate.ItemTemplateId, quantity, soldItem.Crafter);
+                soldItem = ItemManager.Instance.CreateFromTemplateId(soldItem.ItemTemplate.ItemTemplateId, quantity, soldItem.Crafter,
+                    lootModules: soldItem.LootModules, tradableOverride: soldItem.TradableOverride, sellableOverride: soldItem.SellableOverride);
 
                 if (soldItem == null)
                 {

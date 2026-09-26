@@ -50,23 +50,31 @@ namespace Rasa.Managers
             _gameUnitOfWorkFactory = gameUnitOfWorkFactory;
         }
 
-        public Item CreateFromTemplateId(uint itemTemplateId, uint stackSize, string crafter = "")
+        public Item CreateFromTemplateId(uint itemTemplateId, uint stackSize, string crafter = "", uint initialAmmo = 0,
+            IReadOnlyList<ItemLootModule> lootModules = null, bool? tradableOverride = null, bool? sellableOverride = null)
         {
             var itemTemplate = GetItemTemplateById(itemTemplateId);
             if (itemTemplate == null)
                 return null;
 
-            var item = CreateItem(itemTemplate, stackSize, crafter);
+            var item = CreateItem(itemTemplate, stackSize, crafter, initialAmmo, lootModules, tradableOverride, sellableOverride);
 
             return item;
         }
 
-        public Item CreateItem(ItemTemplate itemTemplate, uint stackSize, string crafter)
+        public Item CreateItem(ItemTemplate itemTemplate, uint stackSize, string crafter, uint initialAmmo = 0,
+            IReadOnlyList<ItemLootModule> lootModules = null, bool? tradableOverride = null, bool? sellableOverride = null)
         {
             if (itemTemplate == null)
                 return null;
 
             var classInfo = EntityClassManager.Instance.GetClassInfo(itemTemplate.Class);
+
+            if (initialAmmo > 0 && (classInfo?.WeaponClassInfo == null || initialAmmo > classInfo.WeaponClassInfo.ClipSize))
+            {
+                Logger.WriteLog(LogType.Error, $"Item {itemTemplate.ItemTemplateId}: initial magazine {initialAmmo} exceeds its weapon capacity or the item is not a weapon.");
+                return null;
+            }
 
             // dont create more then max stackSize
             if (classInfo.ItemClassInfo.StackSize < stackSize)
@@ -83,10 +91,16 @@ namespace Rasa.Managers
                 StackSize = stackSize,
                 Crafter = crafter,
                 Color = 2139062144,     // ToDo we will have to find color in game client files
-                CurrentHitPoints = classInfo.ItemClassInfo.MaxHitPoints
+                CurrentHitPoints = classInfo.ItemClassInfo.MaxHitPoints,
+                CurrentAmmo = initialAmmo,
+                LootModules = ItemLootModules.Copy(lootModules),
+                TradableOverride = tradableOverride,
+                SellableOverride = sellableOverride
             };
             //create item in db
             var itemId = unitOfWork.Items.CreateItem(item);
+            if (itemId == 0)
+                return null;
 
             item.Id = itemId;
 

@@ -244,7 +244,7 @@ namespace Rasa.Managers
                 return;
             }
 
-            if (item.ItemTemplate.BoundToCharacter)
+            if (!item.IsTradable || item.ItemTemplate.BoundToCharacter)
             {
                 Decline(client, PlayerMessage.PmTradeItemCanNotBeTraded);
                 return;
@@ -450,7 +450,8 @@ namespace Rasa.Managers
         private static bool StillHolds(Client client, List<ulong> items)
         {
             return items.All(entityId => HoldsInPersonalInventory(client, entityId)
-                                         && EntityManager.Instance.GetItem(entityId) != null);
+                                         && EntityManager.Instance.GetItem(entityId) is Item item &&
+                                         item.IsTradable && !item.ItemTemplate.BoundToCharacter);
         }
 
         /// <summary>

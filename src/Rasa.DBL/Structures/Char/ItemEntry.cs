@@ -22,6 +22,10 @@ namespace Rasa.Structures.Char
             CurrentHitPoints = item.CurrentHitPoints;
             ItemTemplateId = item.ItemTemplateId;
             StackSize = item.StackSize;
+            AmmoCount = item.CurrentAmmo;
+            LootModulesJson = ItemLootModules.Serialize(item.LootModules);
+            TradableOverride = item.TradableOverride;
+            SellableOverride = item.SellableOverride;
             CreatedAt = DateTime.UtcNow;
         }
 
@@ -57,5 +61,14 @@ namespace Rasa.Structures.Char
         [Column("created_at")]
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Column("loot_modules", TypeName = "TEXT")]
+        public string LootModulesJson { get; set; }
+
+        [Column("tradable_override")]
+        public bool? TradableOverride { get; set; }
+
+        [Column("sellable_override")]
+        public bool? SellableOverride { get; set; }
     }
 }

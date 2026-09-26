@@ -182,7 +182,9 @@ namespace Rasa.Repositories.Char.CharacterInventory
             {
                 ItemTemplateId = source.ItemTemplateId, StackSize = quantity,
                 CurrentHitPoints = source.CurrentHitPoints, Color = source.Color,
-                AmmoCount = source.AmmoCount, CrafterName = source.CrafterName, CreatedAt = source.CreatedAt
+                AmmoCount = source.AmmoCount, CrafterName = source.CrafterName, CreatedAt = source.CreatedAt,
+                LootModulesJson = source.LootModulesJson, TradableOverride = source.TradableOverride,
+                SellableOverride = source.SellableOverride
             };
             _charContext.ItemEntries.Add(split);
             _charContext.SaveChanges();

@@ -75,7 +75,13 @@
                             pw.WriteInt(ItemTemplate.EquipableInfo.SkillLevel);
                         }
                         else
+                        {
+                            // Original _AddSkillSlot and _GetClassPowerLevel always
+                            // unpack (skillId, skillLevel), including absent requirements.
+                            pw.WriteTuple(2);
                             pw.WriteNoneStruct();
+                            pw.WriteNoneStruct();
+                        }
 
                         if (ItemTemplate.EquipableInfo != null)                             // resistance data
                         {
@@ -88,7 +94,9 @@
                             }
                         }
                         else
-                            pw.WriteNoneStruct();
+                            // Original gameuiutil._LoadElementalIconForItemTemplate iterates
+                            // this field even for clothing with no skill requirement.
+                            pw.WriteList(0);
 
                         break;
 

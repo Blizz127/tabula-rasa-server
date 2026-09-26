@@ -1,4 +1,7 @@
-﻿namespace Rasa.Packets.MapChannel.Server
+using System;
+using System.Collections.Generic;
+
+namespace Rasa.Packets.MapChannel.Server
 {
     using Data;
     using Memory;
@@ -8,42 +11,55 @@
     {
         public override GameOpcode Opcode { get; } = GameOpcode.ModuleTooltipInfo;
 
-        public int ModuleId { get; set; }
-        public int ModuleLevel { get; set; }
-        public ModuleInfo ModuleInfo { get; set; }
+        public int ModuleId { get; }
+        public int? ModuleLevel { get; }
+        public IReadOnlyList<ModuleInfo> Effects { get; }
 
         public ModuleTooltipInfoPacket(ItemModule module)
         {
+            if (module == null)
+                throw new ArgumentNullException(nameof(module));
             ModuleId = module.ModuleId;
             ModuleLevel = module.ModuleLevel;
-            ModuleInfo = module.ModuleInfo;
+            Effects = module.Effects;
         }
 
-        // ToDo find data types (not working curently)
         public override void Write(PythonWriter pw)
         {
-            pw.WriteTuple(3);           // 3 arguments
-            pw.WriteInt(ModuleId);      // moduleId
-            pw.WriteInt(ModuleLevel);   // moduleLevel
-            pw.WriteTuple(9);       // moduleInfo
-            pw.WriteInt(2);         // effectId
-            pw.WriteInt(5);         // setLevel
-            pw.WriteInt(1);     // flatValue
-            pw.WriteInt(1);     // linearValue
-            pw.WriteInt(1);     // expValue
-            pw.WriteInt(1);  // arg1
-            pw.WriteInt(1);  // arg2
-            pw.WriteInt(1);  // arg3
-            pw.WriteInt(1);  // arg4
-            /*pw.WriteInt(ModuleInfo.EffectId);
-            pw.WriteInt(ModuleInfo.SetLevel);
-            pw.WriteInt(ModuleInfo.FlatValue);
-            pw.WriteInt(ModuleInfo.LinearValue);
-            pw.WriteInt(ModuleInfo.ExpValue);
-            pw.WriteInt(ModuleInfo.Arg1);
-            pw.WriteInt(ModuleInfo.Arg2);
-            pw.WriteInt(ModuleInfo.Arg3);
-            pw.WriteInt(ModuleInfo.Arg4);*/
+            pw.WriteTuple(3);
+            pw.WriteInt(ModuleId);
+            WriteOptionalInt(pw, ModuleLevel);
+            // Original _AddModuleEffects iterates this collection, then unpacks each row.
+            pw.WriteList(Effects.Count);
+            foreach (var effect in Effects)
+            {
+                pw.WriteTuple(9);
+                pw.WriteInt(effect.EffectId);
+                pw.WriteInt(effect.SetLevel);
+                WriteCoefficient(pw, effect.FlatValue);
+                WriteCoefficient(pw, effect.LinearValue);
+                WriteCoefficient(pw, effect.ExpValue);
+                WriteOptionalInt(pw, effect.Arg1);
+                WriteOptionalInt(pw, effect.Arg2);
+                WriteOptionalInt(pw, effect.Arg3);
+                WriteOptionalInt(pw, effect.Arg4);
+            }
+        }
+
+        private static void WriteOptionalInt(PythonWriter pw, int? value)
+        {
+            if (value.HasValue)
+                pw.WriteInt(value.Value);
+            else
+                pw.WriteNoneStruct();
+        }
+
+        private static void WriteCoefficient(PythonWriter pw, double value)
+        {
+            if (value >= int.MinValue && value <= int.MaxValue && value == Math.Truncate(value))
+                pw.WriteInt((int)value);
+            else
+                pw.WriteDouble(value);
         }
     }
 }

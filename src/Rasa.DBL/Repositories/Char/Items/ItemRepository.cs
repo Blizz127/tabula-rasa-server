@@ -117,7 +117,28 @@ namespace Rasa.Repositories.Char.Items
             _charContext.SaveChanges();
         }
 
+        public void UpdateInstanceMetadata(IItemChange item)
+        {
+            var entry = GetWritable(item.Id);
+            if (entry == null)
+                return;
+            entry.LootModulesJson = ItemLootModules.Serialize(item.LootModules);
+            entry.TradableOverride = item.TradableOverride;
+            entry.SellableOverride = item.SellableOverride;
+            _charContext.SaveChanges();
+        }
+
         public bool TryConsumeItemStack(uint accountId, uint characterId, uint inventoryType, uint slotId,
+            uint itemId, uint stackBefore, uint amount)
+        {
+            using var transaction = _charContext.Database.BeginTransaction();
+            if (!StageConsumeItemStack(accountId, characterId, inventoryType, slotId, itemId, stackBefore, amount))
+                return false;
+            transaction.Commit();
+            return true;
+        }
+
+        public bool StageConsumeItemStack(uint accountId, uint characterId, uint inventoryType, uint slotId,
             uint itemId, uint stackBefore, uint amount)
         {
             // Personal inventory belongs to a character; home storage uses owner 0.
@@ -127,7 +148,6 @@ namespace Rasa.Repositories.Char.Items
                 return false;
 
             var remaining = stackBefore - amount;
-            using var transaction = _charContext.Database.BeginTransaction();
             var changed = _charContext.Database.ExecuteSqlInterpolated($@"
                 UPDATE items SET stack_size = {remaining}
                 WHERE item_id = {itemId} AND stack_size = {stackBefore}
@@ -147,7 +167,6 @@ namespace Rasa.Repositories.Char.Items
                 if (removed != 1)
                     return false;
             }
-            transaction.Commit();
             return true;
         }
 

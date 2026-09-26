@@ -1,0 +1,426 @@
+{
+  "schema": "rasa.item-instance-metadata.v1",
+  "recorded_at_utc": "2026-09-22T21:52:31.614011+00:00",
+  "scope": "Generic persistence and item serialization only; no boot-camp module assignment or combat effects",
+  "client_version": "1.16.5.0 compatibility artifact; exact shutdown revision unverified",
+  "original_sources": [
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/gameuiutil.pyo",
+      "member_sha256": "0a6543c60a39f8be64040c598216d606b0c211f9411dff96308b1deaff17df7b",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-gameuiutil.pyo.dis",
+      "disassembly_sha256": "40391b13fd5ccdd81b7bd286b0217957d1c79bcb294579a67d46918f67a5a4c5"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/augmentations/item.pyo",
+      "member_sha256": "1b5995e918b08c7ca2872d07c80ce55686f4f9057da94af636db4c6f27eb8691",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-augmentations-item.pyo.dis",
+      "disassembly_sha256": "5b5a1164e14aad066ddc46c5334a7b853391a58825bb3bd5e017c3d88b48926a"
+    },
+    {
+      "tier": "original",
+      "archive": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/original/Tabula Rasa 1.16.5.0/trpython.zip",
+      "member": "client/ui/tooltipwindow.pyo",
+      "member_sha256": "8817f44925dac632f5b9d4167e45c003d62b68fe9ac41348d4222dbb576b2ec4",
+      "disassembly_path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/dis/trpython-client-ui-tooltipwindow.pyo.dis",
+      "disassembly_sha256": "4e4b1cbf65b6c654975892bacfd98f76da6b0a5617566f6dcc5063e7efe522ff"
+    }
+  ],
+  "original_contract": [
+    {
+      "tier": "original",
+      "member": "client/augmentations/item.pyo",
+      "function": "Item.Recv_ItemInfo",
+      "source_lines": [
+        187,
+        206
+      ],
+      "bytecode_offsets": [
+        45,
+        125
+      ],
+      "fields": {
+        "4": "hasSellableFlag",
+        "8": "classModuleIds",
+        "9": "lootModuleIds",
+        "12": "notTradable"
+      },
+      "meaning": "Flags and module lists arrive for this item instance; notTradable is inverted by the consumer."
+    },
+    {
+      "tier": "original",
+      "member": "client/augmentations/item.pyo",
+      "function": "Item.GetModuleIds / Item.GetName",
+      "source_lines": [
+        344,
+        357
+      ],
+      "bytecode_offsets": {
+        "GetModuleIds": [
+          0,
+          13
+        ],
+        "GetName": [
+          12,
+          33
+        ]
+      },
+      "meaning": "Module lists are concatenated; the loot list is passed to the original name builder."
+    },
+    {
+      "tier": "original",
+      "member": "client/gameuiutil.pyo",
+      "function": "GetItemName",
+      "source_lines": [
+        373,
+        402
+      ],
+      "bytecode_offsets": [
+        87,
+        244
+      ],
+      "meaning": "First module wins equal naming priorities; preserve order."
+    }
+  ],
+  "storage": {
+    "classification": "Emulator implementation, not an original database reconstruction",
+    "migration": "20260922233000_ItemInstanceMetadata",
+    "providers": [
+      "SqliteChar",
+      "MySqlChar"
+    ],
+    "columns": {
+      "loot_modules": {
+        "type": "TEXT",
+        "nullable": true,
+        "shape": "ordered array of {ModuleId: integer, Level: integer or null}",
+        "legacy_default": null
+      },
+      "tradable_override": {
+        "type": "nullable boolean",
+        "null_semantics": "inherit template ItemInfo.Tradable"
+      },
+      "sellable_override": {
+        "type": "nullable boolean",
+        "null_semantics": "inherit template HasSellableFlag"
+      }
+    },
+    "down": "Drops only these columns; metadata cannot survive downgrade. Existing legacy item fields and rows are retained."
+  },
+  "wire": {
+    "tuple_fields": 15,
+    "loot_module_field_index": 9,
+    "shape": "list of module IDs, no per-item level tuple",
+    "class_module_field_index": 8,
+    "class_modules_status": "Unimplemented, empty list",
+    "queued_snapshot": true
+  },
+  "runtime_scope": [
+    "Create and update stored item metadata",
+    "Character/shared-home/clan materialization",
+    "Copy metadata on split and partial vendor sale",
+    "Refuse merging different metadata",
+    "Effective vendor sale, auction creation and player-trade restrictions; final trade recheck"
+  ],
+  "unimplemented": [
+    "Boot-camp module assignment",
+    "Module combat effects",
+    "Recovered final-live per-instance module levels",
+    "Original module configuration for every crate roll",
+    "Class-module persistence",
+    "Auction result module presentation beyond the existing item introduction"
+  ],
+  "validation": {
+    "status": "Parent serial .NET 5 full suite passed",
+    "archive_directory": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final",
+    "artifact_manifest": {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/artifact-manifest.json",
+      "sha256": "8e2a98c143e9d35540c210b66c3b290e3eac423e4300c786eae46b7a53f15b7f"
+    },
+    "artifacts": [
+      {
+        "name": "modules-full.log",
+        "source_path": "/tmp/rasa-retail-20260922-modules-full.log",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/modules-full.log",
+        "bytes": 107397,
+        "sha256": "6f3842e44ef5d84495f4aa50f12fd79f543f3ac0ba9a68f3ca347c0b3088df83"
+      },
+      {
+        "name": "modules-full.trx",
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/modules-full.trx",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/modules-full.trx",
+        "bytes": 1441193,
+        "sha256": "430a5cf7e2b9a0374539ccc1ed73d31e18940519cd16e7d77671a97046e2cd9a"
+      },
+      {
+        "name": "modules-targeted2.log",
+        "source_path": "/tmp/rasa-retail-20260922-modules-targeted2.log",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/modules-targeted2.log",
+        "bytes": 19904,
+        "sha256": "77009f696bcb7e41cabe358799ba8607d2a6e298b7e8d6c1ee653c32faf17e77"
+      },
+      {
+        "name": "modules-targeted2.trx",
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/modules-targeted.trx",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/modules-targeted2.trx",
+        "bytes": 265685,
+        "sha256": "0e4f2498c31e579e67fcce2106101f50c7567339bbd4db22ce5a83cfc7b0c729"
+      },
+      {
+        "name": "metadata-migration.log",
+        "source_path": "/tmp/rasa-retail-20260922-metadata-migration.log",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/metadata-migration.log",
+        "bytes": 1147,
+        "sha256": "89064fba93d080a8317059c06f89f8c06c1ce15247902adc4871c2b800a9a228"
+      },
+      {
+        "name": "metadata-migration.trx",
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/metadata-migration.trx",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/metadata-migration.trx",
+        "bytes": 2369,
+        "sha256": "7f844115f6de50db901aa7b60abe7d5970ce999ef2dc3a6fe883f0408957341c"
+      },
+      {
+        "name": "boss-before.log",
+        "source_path": "/tmp/rasa-retail-20260922-boss-before.log",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/boss-before.log",
+        "bytes": 8827,
+        "sha256": "6c0a03f73522060c5e99313e25c6e5f4a876265e9158e4a5c6970644aa851641"
+      },
+      {
+        "name": "boss-before.trx",
+        "source_path": "/tmp/rasa-retail-20260922-integrated/src/Rasa.Test/TestResults/boss-before.trx",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/boss-before.trx",
+        "bytes": 15609,
+        "sha256": "c0a4edd82f3432d9cde7cac0519bba918a63eff3a3f6e2deadc913961bdfeda0"
+      },
+      {
+        "name": "modules-snapshot.json",
+        "source_path": "/tmp/rasa-retail-20260922-modules-snapshot.json",
+        "archive_path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/verification-modules-final/modules-snapshot.json",
+        "bytes": 314399,
+        "sha256": "08877596c65c761244d9e3062b54b96c2b1632c659300d85e56f4d2ebde7d6cb"
+      }
+    ],
+    "runs": [
+      {
+        "name": "modules-full",
+        "console_duration": {
+          "value": 5.965,
+          "unit": "minutes"
+        },
+        "leaf_results": 1300,
+        "leaf_outcomes": {
+          "Passed": 1300
+        },
+        "raw_trx_counters": {
+          "total": "1444",
+          "executed": "1444",
+          "passed": "1444",
+          "failed": "0",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "failures": []
+      },
+      {
+        "name": "modules-targeted2",
+        "console_duration": {
+          "value": 46.7709,
+          "unit": "seconds"
+        },
+        "leaf_results": 201,
+        "leaf_outcomes": {
+          "Passed": 200,
+          "Failed": 1
+        },
+        "raw_trx_counters": {
+          "total": "222",
+          "executed": "222",
+          "passed": "221",
+          "failed": "1",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "failures": [
+          {
+            "test": "SqliteMigrationPreservesLegacyRowsAndRollsBackThroughTheFrozenModel",
+            "duration": "00:00:00.3985609",
+            "message": "Test method Rasa.Test.ItemInstanceMetadataTests.SqliteMigrationPreservesLegacyRowsAndRollsBackThroughTheFrozenModel threw exception: \r\nSystem.FormatException: Input string was not in a correct format."
+          }
+        ]
+      },
+      {
+        "name": "metadata-migration",
+        "console_duration": {
+          "value": 3.9671,
+          "unit": "seconds"
+        },
+        "leaf_results": 1,
+        "leaf_outcomes": {
+          "Passed": 1
+        },
+        "raw_trx_counters": {
+          "total": "1",
+          "executed": "1",
+          "passed": "1",
+          "failed": "0",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "failures": []
+      },
+      {
+        "name": "boss-before",
+        "console_duration": {
+          "value": 38.1185,
+          "unit": "seconds"
+        },
+        "leaf_results": 3,
+        "leaf_outcomes": {
+          "Failed": 2,
+          "Passed": 1
+        },
+        "raw_trx_counters": {
+          "total": "4",
+          "executed": "4",
+          "passed": "1",
+          "failed": "3",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "failures": [
+          {
+            "test": "SeededFlagBossSatisfiedCounterRecoversOnReconnectExactlyOnce",
+            "duration": "00:00:00.1996606",
+            "message": "Assert.AreEqual failed. Expected:<Completed>. Actual:<Incomplete>. "
+          },
+          {
+            "test": "SeededFlagBossCounterAndObjectiveCommitTogether (True)",
+            "duration": "00:00:00.2289778",
+            "message": "Assert.AreEqual failed. Expected:<0>. Actual:<1>. A failed objective commit must not leave the dead boss persisted as 1/1 while incomplete."
+          }
+        ]
+      }
+    ],
+    "metadata_test_cases": [
+      {
+        "testName": "InventoryPlacementDoesNotEraseModulesOrRestrictionsByMerging (True,False)",
+        "outcome": "Passed",
+        "duration": "00:00:00.0343435"
+      },
+      {
+        "testName": "InventoryPlacementDoesNotEraseModulesOrRestrictionsByMerging (False,True)",
+        "outcome": "Passed",
+        "duration": "00:00:00.0285832"
+      },
+      {
+        "testName": "SqliteMigrationPreservesLegacyRowsAndRollsBackThroughTheFrozenModel",
+        "outcome": "Passed",
+        "duration": "00:00:00.2593761"
+      },
+      {
+        "testName": "InstanceModulesAndRestrictionsSurviveLoginAndDoNotAffectTheSameTemplate",
+        "outcome": "Passed",
+        "duration": "00:00:00.0587501"
+      },
+      {
+        "testName": "SplittingSharedStoragePreservesMetadataWithoutSharingMutableState",
+        "outcome": "Passed",
+        "duration": "00:00:00.0310412"
+      },
+      {
+        "testName": "VendorSaleAndTradeCommitRejectInstanceRestrictions",
+        "outcome": "Passed",
+        "duration": "00:00:00.0288198"
+      },
+      {
+        "testName": "ItemInfoSnapshotsOrderedIdsAndEffectiveFlagsWithoutInventingWireLevels",
+        "outcome": "Passed",
+        "duration": "00:00:00.0024533"
+      },
+      {
+        "testName": "BothProvidersAddOnlyNullableInstanceFieldsAndHaveFrozenTargetModels",
+        "outcome": "Passed",
+        "duration": "00:00:00.0433343"
+      },
+      {
+        "testName": "RepositoryCreatesAndUpdatesInstanceMetadataWithoutChangingTheOtherItemOrAmmo",
+        "outcome": "Passed",
+        "duration": "00:00:00.0432532"
+      }
+    ],
+    "source_verification": {
+      "repository": "/home/blizz/servers/rasa-net",
+      "snapshot": "modules-snapshot.json",
+      "snapshot_entries": 2111,
+      "matched_source_entries": 2071,
+      "source_mismatches": [],
+      "initial_pre_archive_check": "All 2111 entries matched before concurrent post-test documentation updates.",
+      "post_test_documentation_deltas": [
+        {
+          "path": "docs/evidence/bootcamp-shinobi-module-semantics.json",
+          "tested_sha256": "5f522f961e6f68cf8a5bbef122bd515ff43f0c4a5c87d15a7f57559c6bedc9ea",
+          "current_sha256": "09db6a9f734ac0d4f9e2246e65286064e9370ccb2c29ab61914fb00d8e4229ba"
+        },
+        {
+          "path": "docs/evidence/client-capture-the-flag-audit.json",
+          "tested_sha256": "d4d33c2dfa4dda19b0cb8498e34fb097973fc11dfb16632a4fcc217cad30121e",
+          "current_sha256": "57d17bdff26ac36480b5dbf2830a41289151e754e6d254592d4778d58e135cfb"
+        }
+      ],
+      "scope": "Reverified all source hashes during archiving. Documentation deltas are recorded without replacing the tested snapshot."
+    },
+    "counting_note": "MSTest TRX counters also count aggregate data-driven parent results. Leaf UnitTestResult nodes reproduce console totals; both are preserved.",
+    "targeted_failure_resolution": "The sole metadata failure was ExecuteSqlRaw interpreting literal JSON braces as format syntax in the test fixture; a separate parameter corrected the fixture. Production code was unchanged by that correction.",
+    "mysql_scope": "Operation and target-model inspection only, no MySQL execution",
+    "limits": [
+      "Tests verify implementation, not complete original-live fidelity.",
+      "This post-validation edit changes only documentation and evidence.",
+      "No production runtime or database was changed."
+    ]
+  }
+}

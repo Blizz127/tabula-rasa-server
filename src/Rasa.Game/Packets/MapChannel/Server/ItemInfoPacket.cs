@@ -3,6 +3,7 @@
     using Data;
     using Memory;
     using Structures;
+    using System.Linq;
 
     public class ItemInfoPacket : ServerPythonPacket
     {
@@ -13,6 +14,7 @@
         private readonly uint _itemTemplateId;
         private readonly bool _hasSellableFlag, _hasCharacterUniqueFlag, _hasAccountUniqueFlag, _hasBoEFlag;
         private readonly bool _boundToCharacter, _notTradable, _notPlaceableInLockbox;
+        private readonly int[] _lootModuleIds;
 
         public ItemInfoPacket(Item item, EntityClass classInfo)
         {
@@ -21,14 +23,15 @@
             _maxHitPoints = classInfo.ItemClassInfo.MaxHitPoints;
             _crafter = item.Crafter;
             _itemTemplateId = template.ItemTemplateId;
-            _hasSellableFlag = template.HasSellableFlag;
+            _hasSellableFlag = item.IsSellable;
             _hasCharacterUniqueFlag = template.HasCharacterUniqueFlag;
             _hasAccountUniqueFlag = template.HasAccountUniqueFlag;
             _hasBoEFlag = template.HasBoEFlag;
             _qualityId = template.QualityId;
             _boundToCharacter = template.BoundToCharacter;
             // Original Item.Recv_ItemInfo receives notTradable and negates it.
-            _notTradable = !template.ItemInfo.Tradable;
+            _notTradable = !item.IsTradable;
+            _lootModuleIds = item.LootModules.Select(module => module.ModuleId).ToArray();
             _notPlaceableInLockbox = template.NotPlaceableInLockbox;
             _inventoryCategory = (int)template.InventoryCategory;
         }
@@ -48,7 +51,10 @@
             pw.WriteBool(_hasAccountUniqueFlag);
             pw.WriteBool(_hasBoEFlag);
             pw.WriteList(0);                    // 'classModuleIds'         // ToDo
-            pw.WriteList(0);                    // 'lootModuleIds'          // ToDo
+            // Recv_ItemInfo expects IDs here; levels belong to ModuleTooltipInfo.
+            pw.WriteList(_lootModuleIds.Length);
+            foreach (var moduleId in _lootModuleIds)
+                pw.WriteInt(moduleId);
             pw.WriteInt(_qualityId);
             pw.WriteBool(_boundToCharacter);
             pw.WriteBool(_notTradable);

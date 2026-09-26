@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Recovered-client Training Day mission 1526 interaction, pistol turn-in and persistence after relog",
+  "client": "Recovered 1.16.5.0 client; current compatibility build, not proven final shutdown revision",
+  "diagnostic_inputs": [
+    "Run 46 copied the completed mission-1995 run-42 character database and moved the character to (768.0,294.12,386.05), about 3 m from seeded Kincaid. This bypassed normal walking from Rogers.",
+    "Run 47 copied the run-46 post-turn-in character database without a teleport; both runs used the isolated world seed."
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-46/05-training-world.png; playthrough-46/06-kincaid-conversation.png",
+      "finding": "The compatible client showed Kincaid beside the Alia Das barracks with an objective-completion indicator. Right click opened Training Day objective completion text and a Continue button."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-46/07-training-continued.png; playthrough-46/08-training-turnin.png",
+      "finding": "Continue completed objective 1. A second conversation opened mission completion text, showed 120 credits and selectable Pistol and Pulse Pistol rewards."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-46/09-pistol-tooltip.png; playthrough-46/10-pistol-selected.png",
+      "finding": "Hover showed the emulator Pistol tooltip (91 Physical Damage, 20 m optimal range, 115 Physical Melee Damage, Standard Grade Cartridges 12/20, Firearms 1 Novice, minimum level 5). Clicking it enabled Complete Mission. The original B2-026 footage calls this Vextronics Pistol and shows a Reduce Resist module line; the emulator item lacks both server-supplied details."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-46/game.log: CompleteNPCMission at 22:12:54; playthrough-46/char-after.db",
+      "finding": "The client sent CompleteNPCMission. The copied database records mission 1526 state 4, objective 1 status 2, credits 350 to 470, experience unchanged at 8124, and new item 17 of template 116929 in character inventory."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-47/05-post-training-world.png; playthrough-47/char-after.db",
+      "finding": "After relog, the Training Day tracker and Kincaid completion indicator were gone; mission completion, 470 credits and pistol template 116929 persisted."
+    }
+  ],
+  "limitations": [
+    "The tests use the emulator and compatible recovered client; final-live reward values and presentation are not independently proved by this run.",
+    "The source footage B2-023/026/029 and early-2008 archived mission database conflict on credits (120 partly legible in footage versus 180 in the older database); this run verifies the seeded 120, not the final-live amount.",
+    "Kincaid position and pistol template ids remain inferred; normal route from boot-camp exit to trainer was bypassed.",
+    "The run-46 harness received SIGTERM after CompleteNPCMission, before the requested post-completion screenshot. Database state and run-47 relog independently show completion.",
+    "The original B2-026 item-module name and effect survive in footage, but the module id and attachment data were not recovered. The selected item therefore has a visible and possibly mechanical mismatch with the footage."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-42/char-after.db",
+      "sha256": "a2a9a2fc4ad2f23308ba2ed9c965c00ed5ee6f137697a075e6beca72dc2a946d",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/05-training-world.png",
+      "sha256": "3e54d0434007c65b2be5dd16cb28a690a345da1d3fcffe9524ad094d8f23de8f",
+      "bytes": 1125769
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/06-kincaid-conversation.png",
+      "sha256": "607a4e35d45dca5f7b65a6024ea5b6e1e7a08c4bb098d901620c44edfd328d91",
+      "bytes": 926373
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/07-training-continued.png",
+      "sha256": "2f61b2a85f47ef60531fac02ddf53c7c4b3b1375d4a554ace5bef8e00942e711",
+      "bytes": 1125832
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/08-training-turnin.png",
+      "sha256": "a9ad0076507dc4f72e75ab2aac8d0333ffadd9e19c046e83e55c0077e08f024d",
+      "bytes": 939742
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/09-pistol-tooltip.png",
+      "sha256": "fe0acc76fc2b52ed13e86a84f4db7d713ed25d402fc6668ead0c00f7229083a0",
+      "bytes": 911963
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/10-pistol-selected.png",
+      "sha256": "d6035ac87a8ec0271595350abc0f715ab2dc59526bb48ed29a2760c84d7d5e46",
+      "bytes": 909645
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/game.log",
+      "sha256": "0f1b4630e6d811f7f68ed20df90195197d1ef9a39480365b75b49794054cf2da",
+      "bytes": 18119
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-46/char-after.db",
+      "sha256": "8c86670d32261007a2bec08fd18085475d316241c44c84742a2caf2bf4685c2e",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-47/05-post-training-world.png",
+      "sha256": "1442bf379e362f3f91b2d009dc0d95bc6d49d8a1fbe87778ba2ae0b2753438cd",
+      "bytes": 1125269
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-47/game.log",
+      "sha256": "92195404ec59fdd1da34c56538b4086bd409182dd5c483ef73f2df1693f69799",
+      "bytes": 12698
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-47/char-after.db",
+      "sha256": "5c79c91295c05fa464fbbc4fbb67553706ba503128b925932a26b7a621032afe",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    }
+  ]
+}

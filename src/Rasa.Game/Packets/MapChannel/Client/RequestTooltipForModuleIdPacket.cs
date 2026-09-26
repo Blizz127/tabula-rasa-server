@@ -2,6 +2,7 @@
 {
     using Data;
     using Memory;
+    using Protocol;
 
     public class RequestTooltipForModuleIdPacket : ClientPythonPacket
     {
@@ -11,7 +12,9 @@
 
         public override void Read(PythonReader pr)
         {
-            pr.ReadTuple();
+            // Original gameui.OnRequestTooltipForModuleId sends (moduleId,).
+            if (pr.ReadTuple() != 1 || pr.PeekType() != PythonType.Int)
+                throw new InvalidClientMessageException();
             ModuleId = pr.ReadInt();
         }
     }
