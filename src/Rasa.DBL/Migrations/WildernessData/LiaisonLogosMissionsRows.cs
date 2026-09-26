@@ -80,12 +80,12 @@ namespace Rasa.Migrations.WildernessData
         private static readonly string[] BindingColumns =
         {
             "mission_id", "objective_id", "binding_id", "kind", "area_id", "placement_id", "creature_id", "action_id",
-            "destroying_hit_only", "equip_match", "item_template_id", "item_set_id", "target_state", "counter_id", "comment"
+            "destroying_hit_only", "equip_match", "item_template_id", "drop_chance", "item_set_id", "target_state", "counter_id", "comment"
         };
         private static readonly string[] BindingTypes =
         {
             "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER",
-            "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "varchar(50)"
+            "INTEGER", "INTEGER", "INTEGER", "double", "INTEGER", "INTEGER", "INTEGER", "varchar(50)"
         };
         private static readonly string[] RewardColumns = { "id", "type", "credits", "item_template_id", "quantity" };
         private static readonly string[] RewardKeyColumns = { "id", "type", "item_template_id" };
@@ -167,7 +167,7 @@ namespace Rasa.Migrations.WildernessData
             InsertTyped(migrationBuilder, "npc_mission_objective_binding", BindingColumns, BindingTypes,
                 Rows(Objectives.Select(o => new object[]
                 {
-                    o.Mission, o.Objective, (byte)0, LogosRecoveredBinding, 0u, o.Logos, 0u, 0u, false, (byte)0, 0u, 0u, 0u,
+                    o.Mission, o.Objective, (byte)0, LogosRecoveredBinding, 0u, o.Logos, 0u, 0u, false, (byte)0, 0u, 0d, 0u, 0u,
                     NoCounter, $"{o.Mission}/{o.Objective} the {o.Name} shrine"
                 })));
 
