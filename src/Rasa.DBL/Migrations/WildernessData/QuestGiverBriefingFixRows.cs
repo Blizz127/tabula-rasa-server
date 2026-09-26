@@ -17,6 +17,9 @@ namespace Rasa.Migrations.WildernessData
     /// "Apirka's Report detailing your involvement in the case of the deserter, Ranger Milpas" - so the report is
     /// Warrior Apirka's to give, and Rogers is the C.O. it is carried to. The giver becomes creature 43,
     /// <i>Warrior Apirka</i> (client name 2969), who already stands in the Wilderness; the receiver stays Rogers.
+    /// Original Walkabout footage at 24:55 shows Apirka offering Part Two with "Bring the report to Rogers";
+    /// its recording date/build and which Part Two branch ID was offered remain unknown. See
+    /// docs/gameplay-footage-study-20260924.md.
     ///
     /// <b>976, Restraining Order.</b> Ours was given and received by Colonel Li Hua (199802). The client's mission
     /// text (ids 5334-5336) reads "Colonel Bruce wants you to help the ground forces out by taking out 3 Bane

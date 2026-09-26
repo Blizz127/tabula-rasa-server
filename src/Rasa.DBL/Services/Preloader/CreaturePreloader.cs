@@ -89,7 +89,7 @@ namespace Rasa.Services.Preloader
             yield return new object[] { 70, "Council Elder Solis", 7035, 1, 10, 750, 2981, 6708, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             yield return new object[] { 71, "Armor Supply Vendor Twin Pillars", 20975, 1, 6, 555, 182, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             yield return new object[] { 72, "Armor Supply Vendor Alia Das", 20972, 1, 6, 555, 184, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
-            yield return new object[] { 73, "Ammo Supply Vendor Alia Das", 20972, 1, 6, 555, 10790, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
+            yield return new object[] { 73, "Armor Supplier Heffernan (Alia Das)", 20972, 1, 6, 555, 10790, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
             yield return new object[] { 74, "Weapon Supply Twin Pillars", 20972, 1, 6, 555, 10789, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             yield return new object[] { 75, "Archfiend Grenadier Boss", 10612, 0, 15, 2000, 6716, 1, 1, 19, 20, 0, 0, 0, 0, 0, 0 };
             yield return new object[] { 76, "Proctor Fulgor Lightbender Boss", 10857, 0, 15, 2000, 510, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0 };

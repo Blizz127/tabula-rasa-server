@@ -39,7 +39,8 @@ namespace Rasa.Migrations.WildernessData
     /// makes it usable here. 1390 was missing its 2,000 XP the same way. Item rewards are not touched: the wiki
     /// names reward items by manufacturer ("Olympia Reflective Armor Vest") and no client table maps a
     /// manufacturer to a template, so 305 of 400 reward lines cannot be resolved to an item at all. See
-    /// GAP-MISSION-REWARD-ITEMS.
+    /// GAP-MISSION-REWARD-ITEMS. Original Walkabout footage at 24:52 independently shows +2,000 XP for 1390;
+    /// its recording date/build are unknown. See docs/gameplay-footage-study-20260924.md.
     /// </summary>
     public static class QuestWiringFixesRows
     {
