@@ -84,9 +84,36 @@ namespace Rasa.Test
         [TestMethod]
         public void ACreatureWithNoRowsRollsNothingHere()
         {
-            // The dispenser keeps its stand-in drop for these (GAP-CREATURE-LOOT); this roll is only the table.
+            // The dispenser gives these the stand-in drop instead (OD-110); this roll is only the table.
             Assert.AreEqual(0, CreatureLoot.Roll(null, () => 0.0, (min, max) => min).Count);
             Assert.AreEqual(0, CreatureLoot.Roll(new CreatureLootData(), () => 0.0, (min, max) => min).Count);
+        }
+
+        [TestMethod]
+        public void TheStandInIsACoinFlipForThreeCartridgesLabelledAnAnalogue()
+        {
+            // OD-110 option A, the one implemented: heads gives three Standard Grade Cartridges, tails nothing, and the
+            // coin is asked for exactly the range [0, 2).
+            (int Min, int Max) asked = (-1, -1);
+            var heads = CreatureLoot.StandInDrop((min, max) => { asked = (min, max); return 1; });
+            var tails = CreatureLoot.StandInDrop((min, max) => 0);
+
+            Assert.AreEqual((0, 2), asked);
+            Assert.AreEqual(1, heads.Count);
+            Assert.AreEqual((28u, 3u), (heads[0].ItemTemplateId, heads[0].Count));
+            Assert.AreEqual(0, tails.Count);
+            Assert.IsTrue(CreatureLoot.StandInDropEnabled, "OD-110 keeps the stand-in until the owner decides");
+        }
+
+        [TestMethod]
+        public void WithTheStandInSwitchedOffACreatureWithoutEvidenceDropsNothing()
+        {
+            // OD-110 option B: no coin is thrown and nothing drops, whatever the roll would have been.
+            var thrown = false;
+            var drops = CreatureLoot.StandInDrop((min, max) => { thrown = true; return 1; }, enabled: false);
+
+            Assert.AreEqual(0, drops.Count);
+            Assert.IsFalse(thrown);
         }
     }
 }

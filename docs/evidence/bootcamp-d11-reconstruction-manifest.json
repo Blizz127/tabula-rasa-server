@@ -356,6 +356,12 @@
    "era": "final_live",
    "member": "docs/evidence/class-trainer-evidence.json",
    "note": "The class-trainer evidence decoded from the 1.16.5.0 client (markers, names, dialogue, rules) and the Rasa.NavMesh --path probe at marker 987 (repo navmesh built from the 1.16.5.0 maps; research/20260926-trainers-economy/work/probe.out)."
+  },
+  "measurement:creature-loot-ledger": {
+   "kind": "measurement",
+   "era": "d11_to_shutdown",
+   "member": "docs/evidence/creature-loot-footage-ledger.json",
+   "note": "Every creature-loot drop visible in the supplied footage with the credited kills around it: 40 final-week drops (7Lrst9SG3pk, 8VXeKzGUv0c, Ycxm8Pa1-v4, from the 2026-09-13 transcripts and verification pass) and 32 Pravus squad-loot entries (A4udsM0rcLo, uploaded 2009-01-21, read by the loot-evidence batch from its chat at 1/4 fps), 20 kill windows, the rates and ranges computed from them, and the hypotheses they settle."
   }
  },
  "scope": [
@@ -553,6 +559,26 @@
     }
    },
    "note": "Placement 198684 (BootcampFixRogersTurnIn) is scoped to context 1220, not 1985: it is the turn-in NPC of the boot-camp missions 1995/2005, recorded here as the closing step of GAP-ROGERS, as S6 location 19852 records the Alia Das destination. Context 1220 is shared, so the placement carries no presence or alternate-state condition. Placement 198685 (Kincaid, WildernessArrivalTrainingDay) is likewise scoped to shared context 1220 with no presence or alternate-state condition (OD-36). W3 batch 5: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: those NPCs' own placements. W3: mission 430's four mortar launchers (199700-199703). W3 (DevilsDenFransisco, 2026-09-19): Captain Fransisco 199108, in the Palisades block, and his placement. W3 (QuestNpcDialogueBatch, 2026-09-19): Tyler 199006, Petrie 199207, Locke 199208, Kalinowski 199406, Mohindra 199407, Major Ston 199408, Miras 199506, Phenix 199507, and their placements. W3 (TarapediaMissingNpcs, 2026-09-19): the twenty-four NPCs of TaRapedia's remaining giver and reward-giver names, ids 199007-199013, 199109-199111, 199209-199210, 199304-199305, 199409-199413, 199508-199512, and their placements. W3 (EllathaWorldNpcs, 2026-09-20): Captain Burba 199014, Evac Pilot Constant 199015, Information Spec. Johnson 199016, Ranger Nylla 199017, Lieutenant Stone 199018, Lost Forean 199019 and Sgt. Pierre 199020, and their placements. W3 (SingleClassTrainers, 2026-09-26): Training Officer Stratton 199604, Daghda's Urn's class trainer, and his placement."
+  },
+  {
+   "table": "creature_loot",
+   "key_ranges": {
+    "id": {
+     "min": 199400,
+     "max": 199449
+    }
+   },
+   "required": [
+    "creature_id",
+    "item_template_id",
+    "chance",
+    "stacksize_min",
+    "stacksize_max"
+   ],
+   "optional": [
+    "comment"
+   ],
+   "note": "CreatureLootFootage (2026-09-26): creature loot counted in docs/evidence/creature-loot-footage-ledger.json."
   }
  ],
  "rows": [
@@ -47269,83 +47295,6 @@
   {
    "table": "creature_loot",
    "key": {
-    "id": 1
-   },
-   "slice": "W3",
-   "migration": "Add_creature_loot",
-   "fields": {
-    "creature_id": {
-     "value": 3,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot.creatureTypeId = 20"
-      },
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
-      }
-     ],
-     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
-    },
-    "item_template_id": {
-     "value": 28,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot itemTemplateId 28"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "chance": {
-     "value": 12.0,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot chance 12.0"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_min": {
-     "value": 1,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMin"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_max": {
-     "value": 35,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMax"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    }
-   }
-  },
-  {
-   "table": "creature_loot",
-   "key": {
     "id": 2
    },
    "slice": "W3",
@@ -47792,83 +47741,6 @@
     },
     "stacksize_max": {
      "value": 3,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMax"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    }
-   }
-  },
-  {
-   "table": "creature_loot",
-   "key": {
-    "id": 8
-   },
-   "slice": "W3",
-   "migration": "Add_creature_loot",
-   "fields": {
-    "creature_id": {
-     "value": 198507,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot.creatureTypeId = 20"
-      },
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
-      }
-     ],
-     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
-    },
-    "item_template_id": {
-     "value": 28,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot itemTemplateId 28"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "chance": {
-     "value": 12.0,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot chance 12.0"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_min": {
-     "value": 1,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMin"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_max": {
-     "value": 35,
      "tier": "analogue",
      "citations": [
       {
@@ -48347,83 +48219,6 @@
   {
    "table": "creature_loot",
    "key": {
-    "id": 15
-   },
-   "slice": "W3",
-   "migration": "Add_creature_loot",
-   "fields": {
-    "creature_id": {
-     "value": 198513,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot.creatureTypeId = 20"
-      },
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type 20 \"(Raiding) Trainee Thrax Footsoldier\", classId 25580"
-      }
-     ],
-     "reasoning": "the rows belong to the emulator dump's trainee Thrax footsoldier type, whose class is not in this world; they go on its counterpart, creature 3 (Thrax Soldier)."
-    },
-    "item_template_id": {
-     "value": 28,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot itemTemplateId 28"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (itemTemplateId)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "chance": {
-     "value": 12.0,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot chance 12.0"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (chance, read as a percentage)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_min": {
-     "value": 1,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMin"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMin)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    },
-    "stacksize_max": {
-     "value": 35,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "server_sql:gameserver_dev_Full",
-       "locator": "creature_type_loot stacksizeMax"
-      }
-     ],
-     "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
-     "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
-     "decision": "OD-96"
-    }
-   }
-  },
-  {
-   "table": "creature_loot",
-   "key": {
     "id": 16
    },
    "slice": "W3",
@@ -48880,6 +48675,1722 @@
      "counterpart": "InfiniteRasa's emulator dump, creature_type_loot row for type 20 '(Raiding) Trainee Thrax Footsoldier' (stacksizeMax)",
      "required_because": "creature_loot needs every column; without a row the creature falls back to the stand-in drop (GAP-CREATURE-LOOT), and no original drop table survives",
      "decision": "OD-96"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199400
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 41666,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops with item 'Thrax Skull' (25 final-week lines, 16+ Pravus lines)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20307 'Thrax Skull'; itemtemplate_itemclass 41666 -> 20307 (Loot_Junk_Thrax_Skull, loot value 96)"
+      }
+     ],
+     "reasoning": "The loot lines and corpse windows name 'Thrax Skull'. Two client classes carry that name: 20307 Loot_Junk_Thrax_Skull (loot value 96, stack 5000) and 25553 Test_JFord_Thrax_Skull (a test item, loot value 1, stack 6); 41666 is the live class's only template."
+    },
+    "chance": {
+     "value": 52.38,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull: 22 skulls in 42 credited kills, windows KW01-KW15"
+      },
+      {
+       "source": "video:Ycxm8Pa1-v4",
+       "t": 43.8,
+       "locator": "transcript C1-028: 'You received 1 Thrax Skull.' after the use prompt on a Thrax corpse (one of the 22)"
+      }
+     ],
+     "uncertainty": {
+      "min": 37.7,
+      "max": 66.6,
+      "unit": "percent",
+      "method": "Wilson 95% interval of 22/42. A lower bound of the per-corpse chance: a corpse the player never opened counts as a kill without a skull; the continuous windows alone give 13/32 (40.6%), and three of the four corpse windows with their whole contents on screen hold a skull."
+     }
+    },
+    "stacksize_min": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 1,
+      "unit": "items",
+      "method": "every one of the 22 Initiate skull lines (and every Trainee and Pravus line) reads 1"
+     }
+    },
+    "stacksize_max": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 5000,
+      "unit": "items",
+      "method": "largest of 22 observed quantities, all 1; a larger stack is unobserved, up to the class stack size 5000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Thrax Skull 52.38% x1 (measured, 22/42; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199401
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'] (5 drops: F30, P09, P19, P23, P26)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3147 'Standard Grade Cartridges'; itemtemplate_itemclass 28 -> 3147; weaponclass rows name 3147 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Cartridges', the client's standard-grade ammunition class 3147, whose only template is 28. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 117,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 117,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 249,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 249,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Cartridges 1.9% 117-249 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199402
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 56,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'] (4 drops: F07, F14, P08, P14)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3807 'Standard Grade Power Cells'; itemtemplate_itemclass 56 -> 3807; weaponclass rows name 3807 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Power Cells', the client's standard-grade ammunition class 3807, whose only template is 56. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 80,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 80,
+      "unit": "items",
+      "method": "smallest of 4 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 159,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 159,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 4 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Power Cells 1.9% 80-159 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199403
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'] (5 drops: F16, F36, P06, P07, P29)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3181 'Standard Grade Rockets'; itemtemplate_itemclass 30 -> 3181; weaponclass rows name 3181 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Rockets', the client's standard-grade ammunition class 3181, whose only template is 30. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 33,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 33,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 47,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 47,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Rockets 1.9% 33-47 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199404
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'] (2 drops: P13, P28)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3301 'Standard Grade Canister Ammunition'; itemtemplate_itemclass 32 -> 3301; weaponclass rows name 3301 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Canister Ammunition', the client's standard-grade ammunition class 3301, whose only template is 32. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 48,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 48,
+      "unit": "items",
+      "method": "smallest of 2 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 55,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 55,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 2 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Canister Ammunition 1.9% 48-55 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199405
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198507,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F04, F05, F11, F12, F33 (corpse windows 'Thrax Infantry Initiate'); kill_windows KW01-KW15"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "Every corpse window and target frame of the boot-camp Thrax names 'Thrax Infantry Initiate' (ledger drops F04/F05, F11, F12, F33; kill windows KW01-KW15), client creature name 7674; creature 198507 is this world's level-2 row for that name, the level the 10-credit kills show."
+    },
+    "item_template_id": {
+     "value": 636,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'] (3 drops: P05, P10, P20)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 7620 'Standard Grade Pharmaceuticals'; itemtemplate_itemclass 636 -> 7620; weaponclass rows name 7620 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Pharmaceuticals', the client's standard-grade ammunition class 7620, whose only template is 636. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 105,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 105,
+      "unit": "items",
+      "method": "smallest of 3 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 281,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 281,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 3 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Pharmaceuticals 1.9% 105-281 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199406
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 41666,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops with item 'Thrax Skull' (25 final-week lines, 16+ Pravus lines)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20307 'Thrax Skull'; itemtemplate_itemclass 41666 -> 20307 (Loot_Junk_Thrax_Skull, loot value 96)"
+      }
+     ],
+     "reasoning": "The loot lines and corpse windows name 'Thrax Skull'. Two client classes carry that name: 20307 Loot_Junk_Thrax_Skull (loot value 96, stack 5000) and 25553 Test_JFord_Thrax_Skull (a test item, loot value 1, stack 6); 41666 is the live class's only template."
+    },
+    "chance": {
+     "value": 52.38,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull: 22 skulls in 42 credited kills, windows KW01-KW15"
+      },
+      {
+       "source": "video:Ycxm8Pa1-v4",
+       "t": 43.8,
+       "locator": "transcript C1-028: 'You received 1 Thrax Skull.' after the use prompt on a Thrax corpse (one of the 22)"
+      }
+     ],
+     "uncertainty": {
+      "min": 37.7,
+      "max": 66.6,
+      "unit": "percent",
+      "method": "Wilson 95% interval of 22/42. A lower bound of the per-corpse chance: a corpse the player never opened counts as a kill without a skull; the continuous windows alone give 13/32 (40.6%), and three of the four corpse windows with their whole contents on screen hold a skull."
+     }
+    },
+    "stacksize_min": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 1,
+      "unit": "items",
+      "method": "every one of the 22 Initiate skull lines (and every Trainee and Pravus line) reads 1"
+     }
+    },
+    "stacksize_max": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 5000,
+      "unit": "items",
+      "method": "largest of 22 observed quantities, all 1; a larger stack is unobserved, up to the class stack size 5000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Thrax Skull 52.38% x1 (measured, 22/42; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199407
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'] (5 drops: F30, P09, P19, P23, P26)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3147 'Standard Grade Cartridges'; itemtemplate_itemclass 28 -> 3147; weaponclass rows name 3147 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Cartridges', the client's standard-grade ammunition class 3147, whose only template is 28. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 117,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 117,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 249,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 249,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Cartridges 1.9% 117-249 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199408
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 56,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'] (4 drops: F07, F14, P08, P14)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3807 'Standard Grade Power Cells'; itemtemplate_itemclass 56 -> 3807; weaponclass rows name 3807 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Power Cells', the client's standard-grade ammunition class 3807, whose only template is 56. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 80,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 80,
+      "unit": "items",
+      "method": "smallest of 4 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 159,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 159,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 4 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Power Cells 1.9% 80-159 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199409
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'] (5 drops: F16, F36, P06, P07, P29)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3181 'Standard Grade Rockets'; itemtemplate_itemclass 30 -> 3181; weaponclass rows name 3181 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Rockets', the client's standard-grade ammunition class 3181, whose only template is 30. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 33,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 33,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 47,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 47,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Rockets 1.9% 33-47 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199410
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'] (2 drops: P13, P28)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3301 'Standard Grade Canister Ammunition'; itemtemplate_itemclass 32 -> 3301; weaponclass rows name 3301 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Canister Ammunition', the client's standard-grade ammunition class 3301, whose only template is 32. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 48,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 48,
+      "unit": "items",
+      "method": "smallest of 2 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 55,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 55,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 2 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Canister Ammunition 1.9% 48-55 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199411
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 198513,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F13, F33; kill_windows KW09-KW15 (5-credit kills = level 1)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7674 'Thrax Infantry Initiate'"
+      }
+     ],
+     "reasoning": "The level-1 row for the same client name 7674; the 5-credit kills (C1-012, C1-036, B1-037, B1-038, C2-25, C2-31, C2-32) and the level-1 corpse window F33 are level-1 Initiates."
+    },
+    "item_template_id": {
+     "value": 636,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'] (3 drops: P05, P10, P20)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 7620 'Standard Grade Pharmaceuticals'; itemtemplate_itemclass 636 -> 7620; weaponclass rows name 7620 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Pharmaceuticals', the client's standard-grade ammunition class 7620, whose only template is 636. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack."
+    },
+    "stacksize_min": {
+     "value": 105,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 105,
+      "unit": "items",
+      "method": "smallest of 3 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 281,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 281,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 3 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Pharmaceuticals 1.9% 105-281 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199412
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 41666,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops with item 'Thrax Skull' (25 final-week lines, 16+ Pravus lines)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20307 'Thrax Skull'; itemtemplate_itemclass 41666 -> 20307 (Loot_Junk_Thrax_Skull, loot value 96)"
+      }
+     ],
+     "reasoning": "The loot lines and corpse windows name 'Thrax Skull'. Two client classes carry that name: 20307 Loot_Junk_Thrax_Skull (loot value 96, stack 5000) and 25553 Test_JFord_Thrax_Skull (a test item, loot value 1, stack 6); 41666 is the live class's only template."
+    },
+    "chance": {
+     "value": 52.38,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull (22/42) and statistics.thrax_infantry_trainee (3 skulls in 4 kills, Wilson 30.1-95.4%)"
+      }
+     ],
+     "reasoning": "The Initiate's measured rate on the Wilderness Thrax stand-in (OD-112): the Trainee sample, 3 skulls in 4 kills, lies inside the Initiate's interval and is too small for a rate of its own."
+    },
+    "stacksize_min": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 1,
+      "unit": "items",
+      "method": "every one of the 22 Initiate skull lines (and every Trainee and Pravus line) reads 1"
+     }
+    },
+    "stacksize_max": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.thrax_skull.quantity_every_drop = [1]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 5000,
+      "unit": "items",
+      "method": "largest of 22 observed quantities, all 1; a larger stack is unobserved, up to the class stack size 5000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Thrax Skull 52.38% x1 (inferred, Initiate rate; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199413
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'] (5 drops: F30, P09, P19, P23, P26)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3147 'Standard Grade Cartridges'; itemtemplate_itemclass 28 -> 3147; weaponclass rows name 3147 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Cartridges', the client's standard-grade ammunition class 3147, whose only template is 28. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack. Creature 3 takes the Initiate's values (OD-112); the Trainee sample has 1 rockets stack in 4 kills."
+    },
+    "stacksize_min": {
+     "value": 117,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 117,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 249,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Cartridges'].stacks = [117, 121, 137, 180, 249]"
+      }
+     ],
+     "uncertainty": {
+      "min": 249,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Cartridges 1.9% 117-249 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199414
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 56,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'] (4 drops: F07, F14, P08, P14)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3807 'Standard Grade Power Cells'; itemtemplate_itemclass 56 -> 3807; weaponclass rows name 3807 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Power Cells', the client's standard-grade ammunition class 3807, whose only template is 56. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack. Creature 3 takes the Initiate's values (OD-112); the Trainee sample has 1 rockets stack in 4 kills."
+    },
+    "stacksize_min": {
+     "value": 80,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 80,
+      "unit": "items",
+      "method": "smallest of 4 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 159,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Power Cells'].stacks = [80, 117, 131, 159]"
+      }
+     ],
+     "uncertainty": {
+      "min": 159,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 4 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Power Cells 1.9% 80-159 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199415
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 30,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'] (5 drops: F16, F36, P06, P07, P29)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3181 'Standard Grade Rockets'; itemtemplate_itemclass 30 -> 3181; weaponclass rows name 3181 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Rockets', the client's standard-grade ammunition class 3181, whose only template is 30. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack. Creature 3 takes the Initiate's values (OD-112); the Trainee sample has 1 rockets stack in 4 kills."
+    },
+    "stacksize_min": {
+     "value": 33,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 33,
+      "unit": "items",
+      "method": "smallest of 5 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 47,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Rockets'].stacks = [33, 37, 38, 43, 47]"
+      }
+     ],
+     "uncertainty": {
+      "min": 47,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 5 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Rockets 1.9% 33-47 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199416
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 32,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'] (2 drops: P13, P28)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 3301 'Standard Grade Canister Ammunition'; itemtemplate_itemclass 32 -> 3301; weaponclass rows name 3301 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Canister Ammunition', the client's standard-grade ammunition class 3301, whose only template is 32. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack. Creature 3 takes the Initiate's values (OD-112); the Trainee sample has 1 rockets stack in 4 kills."
+    },
+    "stacksize_min": {
+     "value": 48,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 48,
+      "unit": "items",
+      "method": "smallest of 2 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 55,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Canister Ammunition'].stacks = [48, 55]"
+      }
+     ],
+     "uncertainty": {
+      "min": 55,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 2 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Canister Ammunition 1.9% 48-55 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199417
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F34-F37 (Thrax Infantry Trainee, Alia Caverns); kill_windows KW20, KW21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20757 'Thrax Footsoldier' (creature 3's class)"
+      }
+     ],
+     "reasoning": "Creature 3 is this world's Wilderness Thrax stand-in (Thrax Footsoldier body, 26 Wilderness pools, the emulator's '(Raiding) Trainee Thrax Footsoldier' rows). The Wilderness Thrax on camera are Thrax Infantry Trainees (levels 4-6), which this world does not seed (GAP-LOOT-THRAX-TRAINEE-CREATURE); OD-112 puts their loot on creature 3."
+    },
+    "item_template_id": {
+     "value": 636,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'] (3 drops: P05, P10, P20)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 7620 'Standard Grade Pharmaceuticals'; itemtemplate_itemclass 636 -> 7620; weaponclass rows name 7620 as ammo_class_id"
+      }
+     ],
+     "reasoning": "The loot lines name 'Standard Grade Pharmaceuticals', the client's standard-grade ammunition class 7620, whose only template is 636. One row per standard-grade type because the ammunition drop does not follow the killer's weapon (hypothesis H-AMMO-MATCHES-WEAPON refuted, OD-111) and all five types are observed."
+    },
+    "chance": {
+     "value": 1.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.thrax_infantry_initiate.ammo: 4 drops in 42 credited kills (9.52%, Wilson 3.8-22.1%); statistics.ammo_types; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+      }
+     ],
+     "reasoning": "The measured total, 4 ammunition drops in 42 Initiate kills (9.52%), split evenly over the five standard-grade types: the 19 drops of the ledger fall 5/4/5/2/3 and no type follows the killer's weapon (5 of 7 attributable drops are a type the weapon cannot fire). Rolled per row, five rows at 1.9% give 9.2% for at least one stack. Creature 3 takes the Initiate's values (OD-112); the Trainee sample has 1 rockets stack in 4 kills."
+    },
+    "stacksize_min": {
+     "value": 105,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 105,
+      "unit": "items",
+      "method": "smallest of 3 observed stacks; the true lower bound is at most this. Pravus stacks are level 8-12 squad kills; the Initiate's own stacks (117, 159, 38, 249) lie inside every type's range"
+     }
+    },
+    "stacksize_max": {
+     "value": 281,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.ammo_types.by_type['Standard Grade Pharmaceuticals'].stacks = [105, 259, 281]"
+      }
+     ],
+     "uncertainty": {
+      "min": 281,
+      "max": 50000,
+      "unit": "items",
+      "method": "largest of 3 observed stacks; a larger one is unobserved, up to the class stack size 50000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Standard Grade Pharmaceuticals 1.9% 105-281 (OD-111; loot ledger)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature_loot",
+   "key": {
+    "id": 199418
+   },
+   "slice": "W3",
+   "migration": "CreatureLootFootage",
+   "fields": {
+    "creature_id": {
+     "value": 44,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F39, F40; kill_windows KW22, KW23"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "creaturenamelanguage 7803 'Young Forest Boargar'"
+      }
+     ],
+     "reasoning": "The target frame reads 'Young Forest Boargar' (8VXeKzGUv0c B3-027), client creature name 7803; creature 44 is the only world row with that name, level 5 as the 25-credit kill shows."
+    },
+    "item_template_id": {
+     "value": 42296,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "drops F39 (2 Boargar Ear), F40 (1 Boargar Ear)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "physicalentityclassnamelanguage 20877 'Boargar Ear'; itemtemplate_itemclass 42296 -> 20877 (Loot_Junk_Boargar_Ear, loot value 170)"
+      }
+     ],
+     "reasoning": "The loot lines name 'Boargar Ear', client class 20877, whose only template is 42296."
+    },
+    "chance": {
+     "value": 100.0,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.young_forest_boargar.boargar_ear: 2 drops in 2 credited kills (KW22, KW23)"
+      }
+     ],
+     "uncertainty": {
+      "min": 34.2,
+      "max": 100.0,
+      "unit": "percent",
+      "method": "Wilson 95% interval of 2/2, the smallest sample in the ledger (OD-112)"
+     }
+    },
+    "stacksize_min": {
+     "value": 1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.young_forest_boargar.boargar_ear.quantities = [1, 2]"
+      }
+     ],
+     "uncertainty": {
+      "min": 1,
+      "max": 1,
+      "unit": "items",
+      "method": "smallest of 2 observed quantities (1 and 2); a drop is at least one item"
+     }
+    },
+    "stacksize_max": {
+     "value": 2,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:creature-loot-ledger",
+       "locator": "statistics.young_forest_boargar.boargar_ear.quantities = [1, 2]"
+      }
+     ],
+     "uncertainty": {
+      "min": 2,
+      "max": 5000,
+      "unit": "items",
+      "method": "largest of 2 observed quantities; a larger stack is unobserved, up to the class stack size 5000"
+     }
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Boargar Ear 100% 1-2 (measured, 2/2; OD-112; loot ledger)",
+     "role": "comment"
     }
    }
   },
@@ -74717,14 +76228,16 @@
   },
   {
    "id": "GAP-CREATURE-LOOT",
-   "summary": "Only one creature type's loot survives in any source, and that source is InfiniteRasa's emulator dump (creature_type_loot, seven rows for type 20), not the original server. Every other creature in the game had its own table and none of them are in any source - the client carries no loot data at all, and this world's creature table has no drop column. Until those tables appear, creatures without rows keep the emulator's stand-in drop (one stack of item 28 on a coin flip), which is not the original behaviour for any particular creature but is closer to it than dropping nothing. Re-tiered 2026-09-26: the seven rows (creature_loot 1-21) are analogues under OD-96, not original data.",
-   "closes_with": "the original creature loot tables, or a capture of creature drops per type",
+   "summary": "No original per-creature loot table survives in any source, and the client carries no loot data. Re-tiered 2026-09-26: the emulator's seven rows are analogues (OD-96). Narrowed 2026-09-26 (CreatureLootFootage): the footage ledger (docs/evidence/creature-loot-footage-ledger.json) measures Thrax Skull and standard-grade ammunition on the Thrax Infantry Initiate (42 kills) and Boargar Ear on the Young Forest Boargar (2 kills); those rows are seeded, creature 3 takes the Initiate's (OD-112), and the emulator's contradicted cartridge row is removed. Every other creature still has no evidence and keeps the stand-in drop (three cartridges on a coin flip), an analogue under OD-110 pending owner review.",
+   "closes_with": "the original creature loot tables, or counted final-era footage per creature family (loot lines together with the kills that made them)",
    "evidence": [
     "gameserver_dev_Full.sql (InfiniteRasa emulator dump) creature_type_loot has seven rows, all creatureTypeId 20",
-    "no client table carries loot (369 decoded tables checked)"
+    "no client table carries loot (369 decoded tables checked)",
+    "docs/evidence/creature-loot-footage-ledger.json: 40 final-week drops, 32 Pravus squad-loot entries, 20 kill windows (2026-09-26)"
    ],
    "surfaced_by": [
-    "loot mechanism work 2026-09-16"
+    "loot mechanism work 2026-09-16",
+    "segment-3 systems audit SEG3-CREATURE-LOOT (2026-09-26); loot-evidence batch"
    ],
    "slices": [
     "W3"
@@ -77201,6 +78714,127 @@
    "surfaced_by": [
     "segment 3 systems audit 2026-09-26 (research/20260926-segment3-audit, SEG3-ECONOMY-PROVENANCE)"
    ],
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-RANDOM-GEAR",
+   "summary": "Creatures drop gear: Wellcare Motor Assist Armor Legs from a level-1 Initiate corpse (F33), an experimental AccuMax Shotgun (F21, 17 prestige points), Motor Assist Armor Vest need rolls in Pravus (P01-P04). One piece in 42 Initiate kills gives no rate, and the module prefix, quality and level-banding rules are unrecovered. The emulator's 0.5%-a-piece Motor Assist rows stay as analogues (OD-96); nothing else is seeded.",
+   "evidence": [
+    "ledger drops F21, F33; pravus_drops P01-P04"
+   ],
+   "closes_with": "counted gear drops per creature family, or the original loot tables",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-SCHEMATICS",
+   "summary": "Creatures drop schematics: Integrated Circuits (F09) and Class I Concussion Grenade (F23) from Initiates, Dark Purple and Bright Orange Armor Paint in Pravus (P22, P27). Two in 42 Initiate kills gives no per-schematic rate or selection rule; none is seeded.",
+   "evidence": [
+    "ledger drops F09, F23; pravus_drops P22, P27"
+   ],
+   "closes_with": "counted schematic drops per creature family",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-RESOURCES",
+   "summary": "Creatures drop crafting resources: 1534 Mimeomech from an Initiate corpse (F04), 77 Spore Micromech in Pravus (P24). One stack each gives no rate or stack range; none is seeded.",
+   "evidence": [
+    "ledger drops F04; pravus_drops P24"
+   ],
+   "closes_with": "counted resource drops per creature family",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-SEASONAL",
+   "summary": "Event loot in the corpses: 5 Snowball (F29, final week) and two Snowball Launchers (P21, P25, January 2009), and the final patch's player-named red gear ('Xray2ia's Laser Cannon', class 20000080, F13; general chat: 'red items screwed up the drop rate'). Their schedule and rates are unknown and none is seeded; the red gear belongs to the final-events work.",
+   "evidence": [
+    "ledger drops F13, F29; pravus_drops P21, P25; 8VXeKzGUv0c B1-028, B4 chat"
+   ],
+   "closes_with": "the final patch's notes for red gear and the holiday event's dates and rules",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-AMMO-GRADE",
+   "summary": "Every ammunition drop on camera is standard grade (creatures of levels 1-12). The client has Improved, High, Select and Elite grades of all five types; which creature levels drop which grade is unevidenced, so the ammunition rows are seeded only on the level 1-2 Initiates and the level-11 Thrax stand-in.",
+   "evidence": [
+    "ledger statistics.ammo_types (19 drops, all Ammo_*_1_Standard_Grade)"
+   ],
+   "closes_with": "loot lines from kills of higher-level creatures",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-SQUAD-DISTRIBUTION",
+   "summary": "In a squad each drop goes to one member ('Aolon looted 137 Standard Grade Cartridges'), with need rolls on gear ('Start rolling on Motor Assist Armor Vest') and greed rolls on a boss's item ('Area Repair Tool (greed rolls)'). The server gives the whole corpse to the killer.",
+   "evidence": [
+    "ledger pravus_drops P01-P04, P18 and every 'X looted' line"
+   ],
+   "closes_with": "the client's loot-roll protocol decoded and implemented",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-THRAX-TRAINEE-CREATURE",
+   "summary": "The Wilderness Thrax on camera are 'Thrax Infantry Trainee' (Alia Caverns, levels 4 and 6), a creature this world does not seed; creature 3 (Thrax Soldier, level 11, no client name) stands in for them and takes the Initiate's loot rows (OD-112).",
+   "evidence": [
+    "8VXeKzGUv0c B2-063, B3-008; ledger kill_windows KW20, KW21"
+   ],
+   "closes_with": "the Trainee seeded from client data with its own loot evidence",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-JUNK-QUALITY",
+   "summary": "The seeded junk templates (Thrax Skull 41666, Boargar Ear 42296) carry quality 2 in the regenerated item templates while the client's quality table has a separate JUNK value; quality decides auto-loot and the corpse glow (SEG3-CORPSE-QUALITY). The footage transcripts do not record the colour of a junk line.",
+   "evidence": [
+    "research/20260926-segment3-audit/gaps.json SEG3-CORPSE-QUALITY",
+    "generated/client/quality.pyo (MISSION, NORMAL, UNCOMMON, RARE, EPIC, LEGENDARY, JUNK)"
+   ],
+   "closes_with": "a frame reading of a junk item's colour or tooltip",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-RATE-SAMPLES",
+   "summary": "The measured rates rest on small samples: Thrax Skull 22/42 (Wilson 37.7-66.6%, and a lower bound of the per-corpse chance), ammunition 4/42 (3.8-22.1%), Boargar Ear 2/2 (34.2-100%). The per-type ammunition split and stack ranges come from 19 drops over two players and two areas.",
+   "evidence": [
+    "ledger statistics"
+   ],
+   "closes_with": "more counted final-era footage of the same creatures",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
+   "slices": [
+    "W3"
+   ]
+  },
+  {
+   "id": "GAP-LOOT-FINAL-WEEK-VIDEO-COPIES",
+   "summary": "The three final-week video files and their retained frames (research/20260913-bootcamp/footage/) are not on this machine, and the batch was not permitted to download them again. The ledger rests on the frame-by-frame transcripts: A4 and C1 are byte-identical recovered copies, the others working copies of the same session. Re-reading the partial digit of F07's '11[7]' power cells waits for the files.",
+   "evidence": [
+    "ledger sources.transcripts, sources.transcripts_note"
+   ],
+   "closes_with": "the video files restored and the ledger's partial readings re-read",
+   "surfaced_by": "loot-evidence batch 2026-09-26 (SEG3-CREATURE-LOOT)",
    "slices": [
     "W3"
    ]
@@ -81574,6 +83208,83 @@
      "locator": "research/20260912-new-character/upstream-game-server/sql/gameserver_dev_Full.sql"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "CreatureLootFootage",
+   "table": "creature_loot",
+   "key": {
+    "id": 1
+   },
+   "field": "existence",
+   "old": "creature 3, template 28 Standard Grade Cartridges, chance 12, stack 1-35 (Add_creature_loot; analogue under OD-96, counterpart InfiniteRasa's creature_type_loot type 20)",
+   "new": null,
+   "tier": "measured",
+   "reason": "OD-96 kept the emulator rows until a final-era observation replaces them. The footage ledger replaces this one: no observed ammunition stack is under 33 (19 stacks, 33-281), the type is any of the five standard-grade classes rather than always cartridges, and the Initiate's own rate is 4 drops in 42 kills. The five per-type rows of CreatureLootFootage take its place on the same creature.",
+   "citations": [
+    {
+     "source": "measurement:creature-loot-ledger",
+     "locator": "statistics.ammo_types; statistics.thrax_infantry_initiate.ammo; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "CreatureLootFootage",
+   "table": "creature_loot",
+   "key": {
+    "id": 8
+   },
+   "field": "existence",
+   "old": "creature 198507, template 28 Standard Grade Cartridges, chance 12, stack 1-35 (Add_creature_loot; analogue under OD-96, counterpart InfiniteRasa's creature_type_loot type 20)",
+   "new": null,
+   "tier": "measured",
+   "reason": "OD-96 kept the emulator rows until a final-era observation replaces them. The footage ledger replaces this one: no observed ammunition stack is under 33 (19 stacks, 33-281), the type is any of the five standard-grade classes rather than always cartridges, and the Initiate's own rate is 4 drops in 42 kills. The five per-type rows of CreatureLootFootage take its place on the same creature.",
+   "citations": [
+    {
+     "source": "measurement:creature-loot-ledger",
+     "locator": "statistics.ammo_types; statistics.thrax_infantry_initiate.ammo; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "CreatureLootFootage",
+   "table": "creature_loot",
+   "key": {
+    "id": 15
+   },
+   "field": "existence",
+   "old": "creature 198513, template 28 Standard Grade Cartridges, chance 12, stack 1-35 (Add_creature_loot; analogue under OD-96, counterpart InfiniteRasa's creature_type_loot type 20)",
+   "new": null,
+   "tier": "measured",
+   "reason": "OD-96 kept the emulator rows until a final-era observation replaces them. The footage ledger replaces this one: no observed ammunition stack is under 33 (19 stacks, 33-281), the type is any of the five standard-grade classes rather than always cartridges, and the Initiate's own rate is 4 drops in 42 kills. The five per-type rows of CreatureLootFootage take its place on the same creature.",
+   "citations": [
+    {
+     "source": "measurement:creature-loot-ledger",
+     "locator": "statistics.ammo_types; statistics.thrax_infantry_initiate.ammo; hypotheses H-AMMO-MATCHES-WEAPON, H-AMMO-ANY-STANDARD-TYPE"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "(code) CreatureLoot.StandInDrop",
+   "table": "(none: code)",
+   "key": {
+    "code": "src/Rasa.Game/Data/CreatureLoot.cs StandInDrop, StandInDropEnabled"
+   },
+   "field": "tier",
+   "old": "unlabelled stand-in in LootDispenserManager (a coin flip for 3 Standard Grade Cartridges on every creature without rows; GAP-CREATURE-LOOT called it 'closer to [the original] than dropping nothing')",
+   "new": "analogue under OD-110 (pending owner review), switchable by CreatureLoot.StandInDropEnabled",
+   "tier": "analogue",
+   "decision": "OD-110",
+   "reason": "AGENTS.md forbids guessed gameplay presented as original. The ledger shows real corpses dropping creature-specific junk, any standard-grade ammunition in stacks of 33-281, schematics and gear, so the stand-in is not the original behaviour of any creature. Creatures the ledger covers no longer reach it; the rest keep it as a labelled analogue until the owner chooses, because removing it leaves them dropping nothing.",
+   "citations": [
+    {
+     "source": "measurement:creature-loot-ledger",
+     "locator": "fallback; statistics.ammo_types"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -82224,6 +83935,36 @@
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
    "choice": "Pools 21-29 ('Test Vendor 1-9') have drawn nothing since the 2023 seed and are left as they are. Pool 36 ('Test Vendor 5', weapons package 10) stands on the final client's 'Weapons Vendor: Alia Das' marker and is Alia Das' only weapons vendor, so it is kept; its missing name, test body and seed stock are recorded in GAP-ALIA-DAS-WEAPONS-VENDOR rather than removed. The hospital 'Test Vendor 3' pools 31-35 are left to the batch that owns hospitals (GAP-WILDERNESS-HOSPITAL-TEST-VENDORS).",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-110",
+   "decision": "The stand-in drop for creatures without loot evidence",
+   "default": "Keep it, labelled analogue, until evidence covers the creature",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Option A (implemented, the conservative one): a creature without creature_loot rows keeps InfiniteRasa's stand-in - three Standard Grade Cartridges on a coin flip - labelled an analogue; consequence: an invented drop continues on every creature the evidence does not cover. Option B: remove it (CreatureLoot.StandInDropEnabled = false); consequence: those creatures drop nothing but mission items - no corpse income and no ammunition off a corpse outside the Thrax infantry and the Young Forest Boargar. Owner to choose.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-111",
+   "decision": "The creature ammunition drop",
+   "default": "Seed the ammunition the footage shows, at its counted rate",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "The audit's 'ammunition of the killer's weapon' is refuted by the ledger (5 of 7 attributable drops are a type the weapon cannot fire). The drop is modelled as one row per standard-grade weapon ammunition type (the five Ammo_*_1_Standard_Grade classes), each at an even share (1.9%) of the measured total (4 in 42 Initiate kills), with each type's observed stack range (measured over all 19 drops, including Pravus level 8-12 squad kills). The emulator's 12% 1-35 cartridge row on the same creatures is removed.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
+  },
+  {
+   "id": "OD-112",
+   "decision": "Loot on creatures with thin or indirect evidence",
+   "default": "Seed where the evidence names the creature; transfer where the world has only a stand-in",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Creature 3 (the world's Wilderness Thrax stand-in) takes the Initiate's Thrax Skull and ammunition rows, because the Wilderness Thrax on camera (Thrax Infantry Trainee, 3 skulls and 1 rockets in 4 kills) are not seeded. The Young Forest Boargar (44) takes Boargar Ear at the 2-in-2 measured rate and 1-2 stack despite the sample size (Wilson 34.2-100%), rather than falling back to the stand-in.",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions"
   }

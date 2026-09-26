@@ -934,6 +934,8 @@ character picks up in Alia Das once Training Day and the class choice are behind
     and 0.5% each for the five Motor Assist armour pieces - and they now sit on this world's Thrax soldiers (creature 3
     and the boot camp's initiates). Recorded as **OD-49**; every other creature keeps the stand-in drop
     (**GAP-CREATURE-LOOT**), because the client carries no loot data at all (369 decoded tables checked).
+    *Note (2026-09-26, loot-evidence)*: the rows are emulator data (OD-96). The cartridge row is replaced by counts
+    from the footage ledger (`CreatureLootFootage`, below), and the stand-in drop is a labelled analogue (OD-110).
   - **Reconstructed species and placement respawn (2026-09-16)**: with the owner's go-ahead for labelled best-guess
     reconstruction, the Mires got its first reconstructed species. The client's entity class table says what each class
     *is* (augmentation 1 = living creature, 6 = item, 41 = usable object, 52 = NPC), which separates a species from a
@@ -1155,6 +1157,14 @@ character picks up in Alia Das once Training Day and the class choice are behind
   now labelled analogues, not original (OD-96). The source is kind `emulator_db`, and `GAP-W1/W2-ITEM-PRICES` are
   reopened. Alia Das' unnamed weapons vendor (pool 36) stays, because it stands on the client's "Weapons Vendor: Alia
   Das" marker (OD-97, `GAP-ALIA-DAS-WEAPONS-VENDOR`). The other "Test Vendor" pools there have never spawned.
+- **Creature loot from the footage (2026-09-26, `CreatureLootFootage`)**: `docs/evidence/creature-loot-footage-ledger.json`
+  counts every loot drop in the supplied footage against the credited kills around it (40 final-week drops, 32 Pravus
+  squad-loot entries). The boot-camp Thrax Infantry Initiates and the Wilderness Thrax stand-in (creature 3) drop Thrax
+  Skull at 52.38% (22 in 42 kills) and one of the five standard-grade ammunition types at 1.9% each (4 in 42 kills, with
+  the stack range observed for each type). The ammunition does not follow the killer's weapon: 5 of 7 attributable drops
+  are a type that weapon cannot fire (OD-111). The Young Forest Boargar drops Boargar Ear (2 in 2, OD-112). The
+  emulator's contradicted 12% 1-35 cartridge row goes. Every other creature keeps the three-cartridge stand-in, now an
+  analogue, pending the owner's choice between keeping it and dropping nothing (OD-110).
 
 ## All-missions program (owner goal, 2026-09-15)
 
@@ -1296,6 +1306,9 @@ its evidence tier.
 | OD-95 Class trainers after D12 (2026-09-26, agent, pending owner review) | The 38 pre-D12 per-class trainer pools (501001-501038) stop drawing. A hub's single trainer is placed only where a post-D12 source names him, on the client's own TRAINER marker: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). His body (Kincaid's), level 8, 1000 hp and facing 0 are analogues with Kincaid as counterpart, and he is recognised by creature id because his package is unrecovered. Twin Pillars, Foreas Base and New Cumbria stay empty with named gaps; the client's unassigned "Training Officer" names are not used |
 | OD-96 Economy data of emulator lineage (2026-09-26, agent, pending owner review) | `gameserver_dev_Full.sql` is InfiniteRasa's emulator dump (source kind `emulator_db`). The seven loot rows (creature_loot 1-21), every `Regenerate_item_template` price and the vendors' stock stay, because loot and vendors need values and no original survives, but they are analogues, not original. Open for the owner: whether the emulator-authored loot rows, which are optional content, should be removed instead |
 | OD-97 The Alia Das "Test Vendor" NPCs (2026-09-26, agent, pending owner review) | Pools 21-29 have drawn nothing since the 2023 seed and stay as they are. Pool 36 ("Test Vendor 5", weapons package 10) stands 0.15 m from the client's "Weapons Vendor: Alia Das" marker and is kept as Alia Das' weapons vendor; its name, body and stock are a gap. The hospital pools 31-35 are left to the hospitals batch |
+| OD-110 The stand-in drop (2026-09-26, agent, pending owner review) | A creature without loot rows keeps InfiniteRasa's stand-in, three Standard Grade Cartridges on a coin flip, labelled an analogue (`CreatureLoot.StandInDrop`). The alternative, `StandInDropEnabled = false`, means those creatures drop nothing but mission items: no corpse income and no ammunition off a corpse outside the Thrax infantry and the Young Forest Boargar. Owner to choose |
+| OD-111 The creature ammunition drop (2026-09-26, agent, pending owner review) | Weapon-matched ammunition is refuted by the footage ledger (5 of 7 attributable drops mismatch). One row per standard-grade ammunition type at an even share (1.9%) of the measured 4-in-42 Initiate rate, with each type's observed stack range; the emulator's 12% 1-35 cartridge row is removed |
+| OD-112 Loot on thinly evidenced creatures (2026-09-26, agent, pending owner review) | Creature 3, the world's Wilderness Thrax stand-in, takes the Initiate's rows, because the Thrax Infantry Trainee on camera is not seeded. The Young Forest Boargar takes Boargar Ear at the measured 2 in 2 (stack 1-2) despite the sample size |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

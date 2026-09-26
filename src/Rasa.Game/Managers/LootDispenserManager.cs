@@ -145,7 +145,8 @@ namespace Rasa.Managers
         private LootDispenser CreateLoot(Client killer, Creature creature, LootDispenser loot)
         {
             // The creature's own loot rows first: each is an item template, a percentage chance and a stack size
-            // range, in the shape of InfiniteRasa's emulator creature_type_loot table (OD-96).
+            // range, in the shape of InfiniteRasa's emulator creature_type_loot table: the emulator's own rows (OD-96)
+            // and the rates counted in the footage ledger (CreatureLootFootage, OD-111/OD-112).
             var rows = creature?.LootData;
             if (rows != null && rows.Any)
             {
@@ -168,26 +169,27 @@ namespace Rasa.Managers
                 return loot;
             }
 
-
-            int giveLoot;
+            // No rows: the stand-in drop, an analogue under OD-110 (pending owner review) - see
+            // CreatureLoot.StandInDropEnabled for what it is and what switching it off means.
+            List<(uint ItemTemplateId, uint Count)> standIn;
 
             lock (Roll)
             {
-                giveLoot = Roll.Next(0, 2);
                 // Kill credits are paid when the creature dies (KillRewardManager); the corpse
                 // window in the footage offers items only (C2-37).
                 loot.Credits = 0;
                 loot.LootQuality = (LootQuality)Roll.Next(1, 7);
+                standIn = CreatureLoot.StandInDrop((min, max) => Roll.Next(min, max));
             }
 
-            if (giveLoot > 0)
+            foreach (var drop in standIn)
             {
                 // A real item, made now rather than at the moment it is taken. The corpse window
                 // resolves every row to an entity and silently drops the ones it cannot
                 // (corpselootwindow: GetEntity(itemId), continue on None), so a row without an
                 // item behind it is an empty window. It also means what is taken is what was
                 // rolled, rather than a second item built from the same template.
-                var item = ItemManager.Instance.CreateFromTemplateId(28, (uint)giveLoot * 3);
+                var item = ItemManager.Instance.CreateFromTemplateId(drop.ItemTemplateId, drop.Count);
 
                 if (item != null)
                     loot.LootItems.Add(new LootItem(item, killer.Player.EntityId, 0));
