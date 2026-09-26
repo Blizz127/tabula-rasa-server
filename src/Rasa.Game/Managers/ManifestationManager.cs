@@ -615,8 +615,9 @@ namespace Rasa.Managers
         /// <summary>
         /// Levels the player up while the experience allows. A class stops at its tier gate (Recruit at 4): the
         /// experience is still credited, and the first time it reaches the tier level's threshold the player hears
-        /// PM 663, the tier selection becomes pending and a clone credit is granted (class-trainer-spec R1.2-R1.5,
-        /// R3.6). <paramref name="gained"/> tells a new arrival at the gate from experience gained while waiting.
+        /// PM 663, the tier selection becomes pending and a clone credit is granted (CT-GATE-HOLD, CT-ANNOUNCE and
+        /// CT-CLONE-CREDIT in docs/evidence/class-trainer-evidence.json; the lost spec called them R1.2-R1.5, R3.6).
+        /// <paramref name="gained"/> tells a new arrival at the gate from experience gained while waiting.
         /// </summary>
         private void ApplyLevelUps(Client client, uint gained)
         {
@@ -700,7 +701,8 @@ namespace Rasa.Managers
         /// <summary>
         /// SelectNewCharacterClass(classId) from the Tier Advancement window. The request names no trainer, so the
         /// server checks the living player is at the gate, within the window's range of a class trainer, and picks
-        /// an immediate child of the current class. The class changes and the withheld level-ups apply (R3.1-R3.3).
+        /// an immediate child of the current class. The class changes and the withheld level-ups apply (CT-SELECT; the
+        /// lost spec's R3.1-R3.3).
         /// Skill ranks are not granted; the tier-4 signature grant is not implemented (its accounting is open).
         /// </summary>
         public void SelectNewCharacterClass(Client client, uint classId)
@@ -733,7 +735,7 @@ namespace Rasa.Managers
 
         private static bool IsNearClassTrainer(Manifestation player) =>
             EntityManager.Instance.Creatures.Values.Any(creature =>
-                creature.Npc != null && ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId) &&
+                ClassAdvancement.IsClassTrainer(creature) &&
                 creature.State != CharacterState.Dead && creature.MapContextId == player.MapContextId &&
                 (player.MapChannel == null || MapChannelManager.IsOnChannel(creature, player.MapChannel)) &&
                 System.Numerics.Vector3.Distance(creature.Position, player.Position) <= ClassAdvancement.TrainerRange);

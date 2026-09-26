@@ -103,7 +103,7 @@ namespace Rasa.Repositories.World
         }
 
         /// <summary>
-        /// Every creature's loot rows, in the shape the original server's creature_type_loot had.
+        /// Every creature's loot rows, in the shape InfiniteRasa's emulator creature_type_loot has (OD-96).
         /// </summary>
         public List<CreatureLootEntry> GetCreatureLoot()
         {

@@ -318,7 +318,8 @@
       "screenshot",
       "measurement",
       "in_client_calibration",
-      "community_db"
+      "community_db",
+      "emulator_db"
      ]
     },
     "era": {

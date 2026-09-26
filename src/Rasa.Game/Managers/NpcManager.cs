@@ -121,7 +121,7 @@ namespace Rasa.Managers
                 convoDataDict.Add(ConversationType.Clan, true);
 
             // Class trainers: the class list is always viewable, Train only at the tier gate (npc.Recv_Converse).
-            if (ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId))
+            if (ClassAdvancement.IsClassTrainer(creature))
             {
                 var player = client.Player;
                 var canTrain = ClassAdvancement.IsAtGate(player.Class, player.Level, player.Experience) && ClassAdvancement.ChildrenOf(player.Class).Count > 0;
@@ -318,7 +318,7 @@ namespace Rasa.Managers
             }*/
 
             // A class trainer shows the trainer overhead effect (overheadwindow CONVO_STATUS_TRAIN).
-            if (ClassAdvancement.TrainerNpcPackages.Contains(creature.Npc.NpcPackageId) && statusSet == false)
+            if (ClassAdvancement.IsClassTrainer(creature) && statusSet == false)
             {
                 client.CallMethod(creature.EntityId, new NPCConversationStatusPacket(ConversationStatus.Train, new List<uint>()));
                 statusSet = true;

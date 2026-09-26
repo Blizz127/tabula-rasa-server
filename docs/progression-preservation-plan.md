@@ -1144,6 +1144,18 @@ character picks up in Alia Das once Training Day and the class choice are behind
   - Held: 795, 506, 433, 489, 665, 860 and 1449.
   - Details: `docs/retail-accuracy.md`, "Munson's missions withdrawn; the doctors' sample missions collect their items".
 
+- **Class trainers (2026-09-26, `SingleClassTrainers`)**: the class choice at 5 and 15 now has the D12 shape. The 38
+  per-class trainers Add_class_trainers had seeded (six round Kincaid, none able to talk or train) are retired. Training
+  Officer Stratton (client name 10606, TaRapedia 2008-11-04) stands on the client's "Class Trainer: Daghda's Urn" marker
+  and trains exactly as Kincaid does. Twin Pillars, Foreas Base and New Cumbria have client trainer markers but no named
+  trainer in any source (`GAP-HUB-TRAINER-IDENTITY-*`), so a character at a gate trains at Alia Das or Daghda's Urn. The
+  lost 2026-09-14 trainer specification is re-derived from the client as `docs/evidence/class-trainer-evidence.json`
+  (OD-95).
+- **Economy provenance (2026-09-26)**: the loot rows and item prices that came from InfiniteRasa's emulator dump are
+  now labelled analogues, not original (OD-96). The source is kind `emulator_db`, and `GAP-W1/W2-ITEM-PRICES` are
+  reopened. Alia Das' unnamed weapons vendor (pool 36) stays, because it stands on the client's "Weapons Vendor: Alia
+  Das" marker (OD-97, `GAP-ALIA-DAS-WEAPONS-VENDOR`). The other "Test Vendor" pools there have never spawned.
+
 ## All-missions program (owner goal, 2026-09-15)
 
 Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of
@@ -1280,6 +1292,10 @@ its evidence tier.
 | OD-67 Col. Almos and 551 (2026-09-26, open) | Almos's only reading (Ten Ton Hammer, 2007-12-02: -290.0, 178.0, -543.6) is 3.16 m above the only floor under it and never within 0.3 m of a floor inside its 8 m uncertainty, while its y/z equal the client's "Viands Village" label. Default: hold Almos and 551 (GAP-ALMOS-HEIGHT). Alternatives for the owner: stand him on the floor under the reading's x,z (174.567), or at the label point whose floor matches the reading's height; either would be an estimate, not a reading |
 
 | OD-90 Local teleporter pads the final client cannot name (2026-09-26, agent, open, pending owner review) | The 37 seed local pads (ids 537-574) are gained and used under their emulator ids, and the client shows its missing-translation text for their names. The alternative is to leave them unusable until original local-waypoint ids are found. The client's `waypointlanguage` holds no local-teleporter ids apart from magma caverns' 488-490, which the seed does not place (`GAP-LOCAL-TELEPORTER-IDS`) |
+
+| OD-95 Class trainers after D12 (2026-09-26, agent, pending owner review) | The 38 pre-D12 per-class trainer pools (501001-501038) stop drawing. A hub's single trainer is placed only where a post-D12 source names him, on the client's own TRAINER marker: Training Officer Stratton at Daghda's Urn (TaRapedia rev 35503, client name 10606). His body (Kincaid's), level 8, 1000 hp and facing 0 are analogues with Kincaid as counterpart, and he is recognised by creature id because his package is unrecovered. Twin Pillars, Foreas Base and New Cumbria stay empty with named gaps; the client's unassigned "Training Officer" names are not used |
+| OD-96 Economy data of emulator lineage (2026-09-26, agent, pending owner review) | `gameserver_dev_Full.sql` is InfiniteRasa's emulator dump (source kind `emulator_db`). The seven loot rows (creature_loot 1-21), every `Regenerate_item_template` price and the vendors' stock stay, because loot and vendors need values and no original survives, but they are analogues, not original. Open for the owner: whether the emulator-authored loot rows, which are optional content, should be removed instead |
+| OD-97 The Alia Das "Test Vendor" NPCs (2026-09-26, agent, pending owner review) | Pools 21-29 have drawn nothing since the 2023 seed and stay as they are. Pool 36 ("Test Vendor 5", weapons package 10) stands 0.15 m from the client's "Weapons Vendor: Alia Das" marker and is kept as Alia Das' weapons vendor; its name, body and stock are a gap. The hospital pools 31-35 are left to the hospitals batch |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

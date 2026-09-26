@@ -6,16 +6,17 @@ namespace Rasa.Services.Preloader
     using Structures.World;
 
     /// <summary>
-    /// Creature loot, in the shape the original server's <c>creature_type_loot</c> held it.
+    /// Creature loot, in the shape InfiniteRasa's emulator dump (gameserver_dev_Full.sql) gives <c>creature_type_loot</c>.
     ///
-    /// These seven rows are the only loot data that survived, and they belong to one creature type: the original's
-    /// type 20, "(Raiding) Trainee Thrax Footsoldier" (class 25580, Bane_Thrax_Soldier_Pistol_NO_XP). That class is
-    /// not in this world, so the rows go on its counterpart - this world's Thrax soldiers, the generic Thrax Soldier
+    /// These seven rows are the only loot data any source has, and that source is an emulator's development dump, not
+    /// the original server: the rows are analogues under OD-96 (manifest re-tier, 2026-09-26). They belong to one
+    /// creature type, the dump's type 20, "(Raiding) Trainee Thrax Footsoldier" (class 25580,
+    /// Bane_Thrax_Soldier_Pistol_NO_XP). That class is not in this world, so the rows go on its counterpart - this world's Thrax soldiers, the generic Thrax Soldier
     /// (3) and the boot camp's Thrax Infantry Initiates (198507, 198513) - which is an inference, recorded per row.
-    /// The items are the original templates: standard-grade cartridges (28), the five Motor Assist armour pieces
+    /// The items are client templates: standard-grade cartridges (28), the five Motor Assist armour pieces
     /// (13066, 13096, 13126, 13156, 13186) at half a percent each, and Class I Basic Med Packs (44917).
     ///
-    /// Everything else a creature might drop was in the lost server data, so creatures without rows keep the
+    /// Everything else a creature might drop was in the lost original server data, so creatures without rows keep the
     /// emulator's stand-in drop (GAP-CREATURE-LOOT).
     /// </summary>
     public class CreatureLootPreloader : PreloaderBase, IPreloader

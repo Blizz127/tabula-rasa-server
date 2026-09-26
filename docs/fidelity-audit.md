@@ -323,8 +323,8 @@ content. Taken piece by piece instead, and only where upstream is better:
 | Map markers | 307 of them; the map's Acquired / Not Acquired dots had never shown anything |
 | Minions | the nine subordinate commands, carried here by Bot Construction, Spotter and Create Clone (OD-56), which upstream had no abilities to summon |
 | Crafting recipes | 160 recipes, 353 inputs, and fabrication at the Kraftwerks stations |
-| Item templates regenerated | 30,225 rows priced from the item class's loot value, against 4,985 stubs priced at a credit each |
-| Service NPCs, mission NPCs, class trainers, bosses | 324 + 177 + trainers + 62, at the client's own markers |
+| Item templates regenerated | 30,225 rows priced from the item class's loot value, against 4,985 stubs priced at a credit each; the prices are analogues since 2026-09-26 (OD-96), because the rule was fitted to InfiniteRasa's own emulator dump |
+| Service NPCs, mission NPCs, class trainers, bosses | 324 + 177 + trainers + 62, at the client's own markers; the 38 per-class trainers were retired on 2026-09-26 as pre-D12 (`SingleClassTrainers`) |
 | Skill level requirements | a level 1 recruit could train a tier 4 skill and use that class's abilities |
 | Dropship pads, logos shrines | the Crucible pad had no position at all; two shrines had no stone |
 | `tool_type` | every row carried 15, which the client's table does not have, so tooltips printed a damage line on tools and reload modifiers did nothing |
@@ -339,9 +339,12 @@ already placed at TaRapedia's own /loc — ours are the more precise, and a test
 a name with one of ours. The three bosses and one service NPC it puts inside the boot camp, which is per-character
 instanced content here with its own reconstructed cast.
 
-**Superseded of ours.** The 14 item templates we seeded carried prices of 0 (GAP-W1/W2-ITEM-PRICES, now closed) and
+**Superseded of ours.** The 14 item templates we seeded carried prices of 0 (GAP-W1/W2-ITEM-PRICES) and
 analogue flags; upstream's rows are derived from the item class's loot value, matching all 188 templates the C++
-server dump prices, and its flags are the ones that dump and the original server table agree on.
+server dump prices, and its flags are the ones that dump and the original server table agree on. **Corrected
+2026-09-26:** that "C++ server dump" is InfiniteRasa's emulator, not the original server, so matching it proves only
+how the emulator priced items. The prices are analogues (OD-96) and the two gaps are open again; see "Class trainers
+and the economy's lineage (2026-09-26)" below.
 
 ### Creature flags — fixed
 
@@ -872,3 +875,57 @@ Left open with gaps: the local pads' ids have no client names (`GAP-LOCAL-TELEPO
 radius, three type-1 rows that are probably not local teleporters, the dropship hover condition and gain message, the
 shared entrance-hospital waypoint 120 and the Wilderness LZ marker binding. Details: `docs/retail-accuracy.md`,
 "2026-09-26 — Client-contract defects".
+
+## Class trainers and the economy's lineage (2026-09-26)
+
+The segment 3 systems audit (`research/20260926-segment3-audit`, SEG3-CLASS-TRAINER-PLACEMENT and
+SEG3-ECONOMY-PROVENANCE) found two things that looked sourced but were not. Both were re-checked against the 1.16.5.0
+client before anything changed. Evidence: `docs/evidence/class-trainer-evidence.json`; research captures in
+`research/20260926-trainers-economy`. With the rows applied to a copy of `rasaworld.db`, the world audits pass: 1,060
+bodies probed (1,059 before, plus Stratton), no defect, and the one suspect (pool 41, a Boargar spawn) was there before.
+
+**Class trainers: one per hub, as D12 left them (`SingleClassTrainers`).**
+
+| row | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| pools 501001-501038, the per-class trainers | 38 creatures ("Soldier Trainer: Alia Das" ... "Specialist Trainer: Ashen Desert"), six ringed round Kincaid, no package | counts 0/0; rows kept | D12.5 live notes (2008-09-18): per-class trainers "replaced by one single trainer"; one TRAINER marker per hub on every live map; per-class markers only in the unused wargame template 2269 | original |
+| creature and placement 199604, Training Officer Stratton | — | on marker 987 "Class Trainer: Daghda's Urn" (-599.685, 276.605, 871.195) | TaRapedia Daghda's Urn rev 35503 (2008-11-04); client name 10606 | name original; hub inferred (high); position inferred from the marker; body, level, hp, facing analogue (OD-95) |
+
+The upstream generator had read the client's per-class dialogue groups (ids 1-336) and marker texts as the live cast.
+But those texts are either used by no marker (973-979, 1081-1092) or used only on the wargame copy (977/978). None of
+the dialogue groups names Torden Mires or the Ashen Desert, where upstream also stood trainers.
+
+`ClassAdvancement` recognised trainers by npc package, and only Kincaid's (2588) is recovered. The client does not
+need a package to train. `npc.CanTrain` reads only `CONVO_TYPE_TRAINING`, and the Converse action appears for any
+conversation status but NONE. So a trainer whose package is unknown is now recognised by creature id
+(`TrainerCreatureIds`). `CreatureManager.ApplyPlacementNpc` gives his placement an NPC record, and
+`ClassAdvancement.IsClassTrainer` is used for the conversation, the Train status and the 20 m range check.
+
+Not placed, each with a gap: the single trainers of Twin Pillars, Foreas Base and New Cumbria, whom no source names.
+The client's unassigned late names ("Training Officer" Lebowicz, Buckmaster, Delany, Walker, Howell) would fill them
+neatly, but they are candidates, not evidence.
+
+**Economy: emulator data labelled as emulator data (OD-96).** The manifest had filed InfiniteRasa's
+`gameserver_dev_Full.sql` as `official_notes`, "the original game server's own schema and seed data". It is the C++
+emulator's development dump. The manifest now has a source kind `emulator_db`, which can support no original value.
+No data changed, but the labels did:
+
+| data | was labelled | now | why |
+| --- | --- | --- | --- |
+| creature_loot 1-21 (the dump's seven type-20 rows on three Thrax) | item, chance and stack bounds `original` | `analogue`, counterpart the dump's row | an emulator's table; no original drop table survives (`GAP-CREATURE-LOOT`) |
+| every item template's buy/sell price (`Regenerate_item_template`) | "derived but sourced" (GAP-W1/W2-ITEM-PRICES closed) | `analogue`, gaps reopened | buy = loot_value and sell = floor(buy/4)+1 were fitted to the same dump's 188 prices, so the agreement is circular (`GAP-ITEM-PRICES-EMULATOR-DERIVED`) |
+| vendor stock (`vendor_item`) | unlabelled | `analogue` | 2023 world seed and upstream pass; the client's `vendordata` gives each package a type, not a stock (`GAP-VENDOR-STOCK-UNSOURCED`) |
+
+**The "Test Vendors" of Alia Das.** Pools 21-29 ("Test Vendor 1-9", x 829-853) have spawned nothing since the 2023
+seed (counts 0/0). Pool 36 ("Test Vendor 5") is not unsourced in the way that matters. It stands 0.15 m from the
+client's marker 971 "Weapons Vendor: Alia Das", and its package 10 is a WEAPONS vendor in the client's `vendordata`.
+It is kept as Alia Das' weapons vendor, and its missing name, test body and seed stock are `GAP-ALIA-DAS-WEAPONS-VENDOR`
+(OD-97). Removing it would have left the starting hub without the vendor its own map marks. Its Laser Chaingun (4018)
+has no other seller. The five "Test Vendor 3" medical vendors at the other Wilderness hospitals (pools 31-35) need the
+same review (`GAP-WILDERNESS-HOSPITAL-TEST-VENDORS`).
+
+**Seen along the way, not changed here.** Several W3 rows cite the emulator dump for "the world seed's quest NPC"
+conventions (555 hp, run 9, walk 5). `WorldPlacementFloorSnap` and `WorldFloorSweep` take their 0.276 m floor offset
+from "the original server's own 217 creature spawn points". Those are spawn pools of emulator lineage (the world seed
+and the upstream passes), not the original server's. Both are emulator conventions rather than original data and
+deserve the same relabelling.

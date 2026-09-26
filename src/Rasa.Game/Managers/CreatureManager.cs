@@ -249,17 +249,29 @@ namespace Rasa.Managers
             // The placement's npc_package_id overrides the creature's npc_package row
             // binding (the boot-camp NPCs share entity classes but answer for their own
             // objective-conversation packages).
-            if (placement.NpcPackageId != 0)
-            {
-                creature.Npc ??= new Npc();
-                creature.Npc.NpcPackageId = placement.NpcPackageId;
-            }
+            ApplyPlacementNpc(creature, placement);
 
             SetLocation(creature, new Vector3((float)placement.PosX, (float)placement.PosY, (float)placement.PosZ),
                 placement.Rotation, placement.MapContextId);
             ApplyPlacementBehavior(creature, placement);
 
             return creature;
+        }
+
+        /// <summary>
+        /// The NPC record a placement gives its creature. A placement's npc_package_id binds that package; a class
+        /// trainer whose package is unrecovered (Training Officer Stratton, ClassAdvancement.TrainerCreatureIds) gets an
+        /// NPC record without one, which is all the conversation status and the Training topic need.
+        /// </summary>
+        public static void ApplyPlacementNpc(Creature creature, ContentPlacementEntry placement)
+        {
+            if (placement.NpcPackageId != 0)
+            {
+                creature.Npc ??= new Npc();
+                creature.Npc.NpcPackageId = placement.NpcPackageId;
+            }
+            else if (ClassAdvancement.IsTrainerCreature(placement.CreatureId))
+                creature.Npc ??= new Npc();
         }
 
         /// <summary>
