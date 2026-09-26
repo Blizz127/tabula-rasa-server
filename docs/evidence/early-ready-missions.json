@@ -1,0 +1,186 @@
+{
+ "migration": "EarlyReadyMissions",
+ "date": "2026-09-26",
+ "compatibility_client": "1.16.5.0",
+ "scope": "Missions 1742, 441, 434 and 408 from the 2026-09-26 ready-mission dossiers; the npc_package binding 130 -> 212; the dialogue classes of Randolph (130) and Standley (134); the redirect rows kept out of completion.",
+ "dossiers": {
+  "path": "/home/blizz/backups/rasa-net/research/20260926-ready-missions/dossiers.json",
+  "readme": "/home/blizz/backups/rasa-net/research/20260926-ready-missions/README.md",
+  "note": "Per-field value, tier, confidence, reasoning and citations; proposed_rows_for_seedable re-verified on 2026-09-26 against the development tree (recovered 2026-09-22..24 migrations included) and the deployed rasaworld.db, opened read-only."
+ },
+ "reverification": [
+  "npc_mission has no row for 1742, 441, 434 or 408; their client objectives are the NULL-flag skeleton rows (1742/2, 441/1, 434/1, 408/1) with the texts the dossier quotes.",
+  "objective conversation rows as the dossier lists them: 1742 (2,2050); 441 (1,212) completion+reminder, (1,218); 434 (1,208) completion+reminder, (1,212); 408 (1,47).",
+  "npc_package carries 125->218, 199003->2050, 510133->47, 101->208; nothing carries 212.",
+  "creature 130 (Randolph) and 134 (Standley) are class 29423 Redshirt_Human_Soldier_Light_Male, aug_list '1' - no NPC augmentation (52). The dossier's note that the npc_package row alone makes Randolph conversable is true on the server (CreatureManager.BindNpcPackage) but not in the client, which the recovered MissionSpeakerDialogueClasses (2026-09-22) established; hence the class change below.",
+  "Witherspoon 101, Duncan 125, Brice 199003 and Jamison 199089 are on 3846; Jorai 510133 on 7034 NPC_Forean_Spearman (aug 1,52,59).",
+  "549 Failure to Launch is seeded, so 441's gate loads; 432 and 406 are not, so 434's and 408's gates are left out (the loader withholds a prerequisite naming an unknown mission)."
+ ],
+ "speaker_classes": {
+  "134": {
+   "name": "Receptive Liaison Standley",
+   "old_class": 29423,
+   "class_id": {
+    "value": 3846,
+    "tier": "analogue",
+    "decision": "OD-45",
+    "exact_location": "entityclass[3846] NPC_Human_Swapset_Male aug_list 1,12,52,59",
+    "gender_evidence": "missiontextlanguage 16982 'check in with him'"
+   },
+   "appearance": {
+    "tier": "analogue",
+    "decision": "OD-45",
+    "source": "creature_appearance[510094] Senior Quartermaster Hacienda, as MissionSpeakerDialogueClasses copies it",
+    "rows": [
+     [
+      2,
+      4021,
+      4294934528
+     ],
+     [
+      13,
+      6271,
+      1
+     ],
+     [
+      14,
+      9781,
+      4278655809
+     ],
+     [
+      15,
+      4023,
+      4294934528
+     ],
+     [
+      16,
+      4022,
+      4294934528
+     ],
+     [
+      17,
+      24008,
+      4286690539
+     ]
+    ]
+   }
+  },
+  "130": {
+   "name": "Outpost Commander Randolph",
+   "old_class": 29423,
+   "class_id": {
+    "value": 3848,
+    "tier": "analogue",
+    "decision": "OD-45",
+    "exact_location": "entityclass[3848] NPC_Human_Swapset_Female aug_list 1,12,52,59",
+    "gender_evidence": "missiontextlanguage 762 'She can be found at the Landing Zone', 763 'She's a bit of a hard ass... She's a hell of an officer', 764 'I'm a busy woman' (original)"
+   },
+   "appearance": {
+    "tier": "analogue",
+    "decision": "OD-45",
+    "source": "creature_appearance[510069] Major Nicholson (also 510030, 510150): NPC_Clothing_Officer_1 boots/torso/legs, AvatarSwap_Hair_01, AvatarSwap_Face_Asian_Standard_3, as stored after AppearanceSlotRepair",
+    "rows": [
+     [
+      2,
+      4021,
+      22120
+     ],
+     [
+      14,
+      3672,
+      1
+     ],
+     [
+      15,
+      4023,
+      13933202
+     ],
+     [
+      16,
+      4022,
+      13933202
+     ],
+     [
+      17,
+      20824,
+      4286886614
+     ]
+    ]
+   }
+  },
+  "unverified": "final-live class, model and clothing of both NPCs (GAP-READY-SPEAKER-CLASS)",
+  "observed_not_changed": "client text 795 calls the Twin Pillars med-tech 'she'; Medical Assistant Duncan (125) was given the male class 3846 by MissionSpeakerDialogueClasses"
+ },
+ "redirect_rows": {
+  "rule": "Rasa.Data.MissionRedirectConversations, applied in MissionManager.LoadMissions",
+  "rows": [
+   {
+    "mission": 434,
+    "objective": 1,
+    "package": 208,
+    "npc": "Field Sgt. Witherspoon (giver)",
+    "texts": {
+     "completion": [
+      1057,
+      5969
+     ],
+     "reminder": [
+      2768,
+      5996
+     ]
+    },
+    "text": "Listen, I know you helped up here but really, we're good from this point. You need to do your magic down south if we hope to get any aerial support up here.",
+    "completes_at": "Randolph, package 212, text 1056 (offset 6023)"
+   },
+   {
+    "mission": 441,
+    "objective": 1,
+    "package": 212,
+    "npc": "Outpost Commander Randolph (giver)",
+    "texts": {
+     "completion": [
+      1066,
+      6050
+     ],
+     "reminder": [
+      2705,
+      6077
+     ]
+    },
+    "text": "Did you get in touch with the Twin Pillars infirmary yet? I really wish they wouldn't short us at a time like this.",
+    "completes_at": "Duncan, package 218, text 1114 (offset 6104)"
+   }
+  ],
+  "precedent": "Mission 429's (429,4,116) row on Rogers has the same shape and was left loaded by WildernessPinholeNpc/MissionAreaLinks; nothing in the server prevents it completing objective 4 once the recon is done. It is not in the list: changing deployed 429 behaviour is left to the owner.",
+  "tier": "inferred",
+  "basis": "docs/river-recon-client-evidence.md: a completion-type key does not prove the NPC completes the objective; the redirect row must not become an invented alternate completion route",
+  "gap": "GAP-READY-REDIRECT-COMPLETION"
+ },
+ "left_out": {
+  "prerequisites": {
+   "434": "432 Hitting 'em Where It Hurts (GAP-READY-434-GATE)",
+   "408": "406 Gathering Information (GAP-READY-408-GATE)"
+  },
+  "reward_items": {
+   "441": "Class I Fragmentation Grenade 45125 OR Class I Basic Med Pack 44917 - pre-1.4 lists only (TaRapedia 2007-11-09, Ellatha pre-1.4 item data)",
+   "434": "Class I Standard Med Pack x3 44918 OR Class I EMP Bomb (two templates 111247/10000002) - pre-1.4",
+   "gap": "GAP-READY-REWARD-ITEMS"
+  },
+  "carried_items": {
+   "434": "field report: client classes 7348 or 7571",
+   "408": "data pack: client classes 7152 or 10548",
+   "gap": "GAP-READY-MISSION-ITEM"
+  },
+  "positions": {
+   "510133": "Jorai at the Viands Village marker, 67.6 m from TaRapedia's /loc (GAP-READY-JORAI-POSITION)"
+  }
+ },
+ "conventions": {
+  "level": "zone band: 5 for 1742/441/434 (Wilderness), 15 for 408 (Palisades) - GAP-MISSION-LEVEL",
+  "group_type": 1,
+  "category_id": 10000001,
+  "shareable": false,
+  "radio_completeable": false
+ },
+ "manifest": "docs/evidence/bootcamp-d11-reconstruction-manifest.json rows with migration EarlyReadyMissions, changes dated 2026-09-26, gaps GAP-READY-*"
+}

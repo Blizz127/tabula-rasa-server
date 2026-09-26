@@ -593,6 +593,18 @@ of them Logos missions whose only gap is the mission level. That is the next con
 waits on one decision, because **the client has no mission-level field anywhere** and TaRapedia states a level for
 only 126 of 926 pages: **GAP-MISSION-LEVEL** (open).
 
+### Redirect lines on the giver (2026-09-26)
+
+The client stores a COMPLETION-type conversation row, with an identical REMINDER, on some givers' own packages
+whose text sends the player elsewhere. This server completes an objective through *any* row of the speaker's
+package, so each such row is an alternate turn-in the original text argues against. Seeding the ready missions
+found two: 434's on Witherspoon ("we're good from this point. You need to do your magic down south") and 441's on
+Randolph ("Did you get in touch with the Twin Pillars infirmary yet?"), both live the moment the mission is
+accepted. They are kept out of completion by `MissionRedirectConversations`. The same shape already shipped on
+429 (Rogers' 116 row, "Get this new info to Witherspoon") and is still a completion route there after the recon.
+What the original did with these rows - an ambient reminder, which this server never sends, or nothing - is
+unrecorded. **GAP-READY-REDIRECT-COMPLETION** (open).
+
 ## The parallel audit, and what it shipped (2026-09-21)
 
 Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and

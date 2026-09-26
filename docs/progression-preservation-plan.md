@@ -952,6 +952,22 @@ character picks up in Alia Das once Training Day and the class choice are behind
     `research/20260915-aliadas-hub/work/item-name-structure.md`).
   - Ellatha's NPC list was harvested (`tools/ellatha_npc_index.py`, `work/ellatha-npc-index.json`): only **71 NPCs**
     (58 Wilderness), so it is a cross-check for the hub, not the roster expansion the 660 no-giver missions need.
+- **Ready missions (2026-09-26, `EarlyReadyMissions`)**: four conversation missions whose giver and receiver already
+  stand in the world, from the dossiers in `research/20260926-ready-missions/` (each field's tier and citations), each
+  proposed row re-checked against this tree and the deployed world first. **1742 Report to Liaison Brice** (Standley
+  134 -> Brice 199003, 6,000 XP / 600 credits), **441 In Short Supply** (Randolph 130 -> Duncan 125, 3,500 / 700, gated
+  on 549), **434 Rendezvous At The LZ** (Witherspoon 101 -> Randolph 130, 3,000 / 600) and **408 Revealing Treeback
+  Experimentation** (Jamison 199089 -> Jorai 510133, 10,000 / 2,000). Package 212 is bound to Randolph (inferred: only
+  434 and 441 use it and both name her). The re-check found what the dossier had not: Randolph and Standley stood on
+  the Redshirt class without the client's NPC augmentation, so the client could not talk to either; they take NPC
+  swapset classes and outfits as analogues (OD-45), Randolph the female class because the client's own texts call
+  her "she". The client also stores a completion row on each giver's package that only sends the player on (434 on
+  Witherspoon's 208, 441 on Randolph's 212); loaded as-is, the giver would close the objective at once, so the
+  loader keeps those two rows out of completion (`MissionRedirectConversations`) - mission 429's identical row on
+  Rogers was left loaded and still is, pending an owner decision. Left out and recorded: the unseeded gates 432 and
+  406, the pre-1.4 reward items, the carried field report / data pack, Jorai's marker position, the zone-band levels
+  (GAP-READY-434-GATE, -408-GATE, -REWARD-ITEMS, -MISSION-ITEM, -JORAI-POSITION, -SPEAKER-CLASS,
+  -REDIRECT-COMPLETION, GAP-MISSION-LEVEL). Details: `docs/evidence/early-ready-missions.json`.
 - **Order**: implement the chain in play order (1069 → 479 → 1390/1391 → 1392/1393, then the parallel missions), each with
   the W1/W2 discipline: frozen rows + paired migrations, a manifest slice `W3`, and content-loading/scenario tests.
 

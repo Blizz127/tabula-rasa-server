@@ -58262,6 +58262,893 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 130
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "package_id": {
+     "value": 212,
+     "tier": "inferred",
+     "reasoning": "Package 212 is carried by no creature in the world and is used by exactly two client missions, 434 and 441, both of which name Outpost Commander Randolph: 434's completion text on it (1056 \"Who's this, then? Speak up!\") is Randolph's debrief greeting (the objective body 6730 says \"Deliver the field report to Commander Randolph\"), and 441's own log (790) names Randolph as the one who sends the player, whose line the 212 row is. Creature 130 is the only Randolph in the world (spawnpool 208, count 1/1). Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo key (434,1,212,1,1) -> text 1056, store offset 6023; missionobjective.pyo (434,1) -> [1055,6730], offset 8450"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (441,2) -> text 790, offset 8066: \"Outpost Commander Randolph wants you to inform Medical Assistant Duncan...\"; objectiveconversation.pyo (441,1,212,1,1/2) offsets 6050/6077"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 3076 \"Outpost Commander Randolph\", offset 4655; rasaworld.db creature 130 name_id 3076"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1742
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "giver_id": {
+     "value": 134,
+     "tier": "inferred",
+     "reasoning": "Receptive Liaison Standley (world-seed creature 134, spawnpool 212 at -110.0, 220.3, -494.3 in Twin Pillars): TaRapedia's infobox names him as the giver with the client's opening text as his briefing, and Ellatha's Standley page lists the mission. The opening text itself does not name its speaker. Confidence: high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Report to Liaison Brice' rev 14412 infobox MissionGiver=Receptive Liaison Standley, Twin Pillars",
+       "date": "2007-11-12"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Receptive Liaison Standley' rev 14537 mission list",
+       "date": "2007-11-12"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp?key=Receptive+Liaison+Standley&id=44 (lists Report to Liaison Brice; position -110,220,-494), fetched 2026-09-26"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (1742,3) -> text 16998, offset 82334 (opening)"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 199003,
+     "tier": "inferred",
+     "reasoning": "Receptive Liaison Brice (content placement 199003, package 2050): the objective (17004/17005 \"Report to Liaison Brice in Divide\") names him, the mission's only completion row is on his package 2050, and TaRapedia's RewardGiver is Brice. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (1742,2,2050,1,1) -> text 17006, offset 33158; missionobjective.pyo (1742,2) offset 84053"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Report to Liaison Brice' rev 14412 RewardGiver=Receptive Liaison Brice",
+       "date": "2007-11-12"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for this mission; the Wilderness hub (giver) band (5) is the convention every W3 slice uses. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player conversation missions; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag of this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; radio completion is not recorded for this mission. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 441
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "giver_id": {
+     "value": 130,
+     "tier": "inferred",
+     "reasoning": "Outpost Commander Randolph: the client's own log text 790 says \"Outpost Commander Randolph wants you to inform Medical Assistant Duncan...\", the opening 791 is her briefing, TaRapedia's infobox and Wilderness L.Z. mission list name her, and Ellatha's Randolph page lists the mission. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (441,2) -> text 790, offset 8066; (441,3) -> text 791, offset 8084"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'In Short Supply' rev 13991 infobox MissionGiver=Outpost Commander Randolph, Wilderness L.Z.",
+       "date": "2007-11-09"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "npcview.asp?key=Outpost+Commander+Randolph&id=29 (lists In Short Supply), fetched 2026-09-26"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 125,
+     "tier": "inferred",
+     "reasoning": "Medical Assistant Duncan (world-seed creature 125, package 218): the objective body 6804 names her, the completion row is on 218, the finishing text 792 is hers, and TaRapedia's RewardGiver is Duncan. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (441,1,218,1,1) -> text 1114, offset 6104; missionconversation.pyo (441,4) -> text 792, offset 8102"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'In Short Supply' rev 13991 RewardGiver=Medical Assistant Duncan",
+       "date": "2007-11-09"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for this mission; the Wilderness hub band (5) is the convention every W3 slice uses. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player conversation missions; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag of this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; radio completion is not recorded for this mission. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 434
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "giver_id": {
+     "value": 101,
+     "tier": "inferred",
+     "reasoning": "Field Sgt. Witherspoon: the client's log text 762 (\"Field Sergeant Witherspoon wants you to deliver a field report ... to Outpost Commander Randolph\") and her opening briefing 763, Ellatha's legend point 1 and her post-D11 TaRapedia page (rev 33326) all name her. The mission page's infobox \"Recon. Spec. Jennings\" dates from the 2007-07-02 beta-era page creation, was never revised although the same page labels the briefing as Witherspoon's, and Jennings' own page lists only Hitting 'em Where It Hurts, so it is rejected. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (434,2) -> text 762, offset 7886; (434,3) -> text 763, offset 7904"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "missionsview.asp?key=Rendezvous+At+The+LZ&id=37 (legend 1 - Field Sgt. Witherspoon), fetched 2026-09-26"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Field Sgt. Witherspoon' rev 33326 mission list includes Rendezvous At The LZ",
+       "date": "2008-09-16"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Rendezvous At The LZ' rev 20183 infobox MissionGiver=Recon. Spec. Jennings (unchanged since rev 2140, 2007-07-02) - rejected",
+       "date": "2007-12-12"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 130,
+     "tier": "inferred",
+     "reasoning": "Outpost Commander Randolph (world-seed creature 130, spawnpool 208 at 165.0, 163.0, -100.0, equal to Ellatha's reading): the objective body 6730 names her, the finishing text 764 is her voice (\"I'm a busy woman\"), the completion row is on her package 212, and Ellatha marks her as point 2. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (434,1) -> [1055,6730], offset 8450; objectiveconversation.pyo (434,1,212,1,1) -> text 1056, offset 6023; missionconversation.pyo (434,4) -> text 764, offset 7922"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "missionsview.asp?key=Rendezvous+At+The+LZ&id=37 (legend 2 - Outpost Commander Randolph), fetched 2026-09-26"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for this mission; the Wilderness hub band (5) is the convention every W3 slice uses. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player conversation missions; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag of this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; radio completion is not recorded for this mission. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 408
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "giver_id": {
+     "value": 199089,
+     "tier": "inferred",
+     "reasoning": "Lt. Jamison (content placement 199089, Cumbria hydroponics dome): TaRapedia's infobox names him in every revision since 2007-11-26, the client opening text 629 is his briefing on that page, and he is the receiver of the preceding 406 Gathering Information. The client text does not name its speaker. Confidence: high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Revealing Treeback Experimentation' rev 22240 infobox MissionGiver=Lt. Jamison",
+       "date": "2007-12-18"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Gathering Information' rev 16666 RewardGiver=Lt. Jamison, FollowUp=Revealing Treeback Experimentation",
+       "date": "2007-11-26"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (408,3) -> text 629, offset 6104 (opening)"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 510133,
+     "tier": "inferred",
+     "reasoning": "Ranger Jorai (creature 510133, package 47): the objective name 631 \"Return to Jorai\", the only completion row (on 47, \"You have returned! What did the data reveal?\"), the finishing text and TaRapedia's RewardGiver agree. His position is the upstream Viands Village map marker, 67.6 m from TaRapedia's /loc (GAP-READY-JORAI-POSITION). Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (408,1,47,1,1) -> text 632, offset 4943; missionobjective.pyo (408,1) -> [631,7925], offset 6404"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Revealing Treeback Experimentation' rev 22240 RewardGiver=Ranger Jorai, Viands Village",
+       "date": "2007-12-18"
+      }
+     ]
+    },
+    "level": {
+     "value": 15,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for this mission; the Palisades band (15) is the convention every W3 slice uses. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player conversation missions; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag of this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; radio completion is not recorded for this mission. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1742,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "comment": {
+     "value": "Report to Liaison Brice",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (1742,2) -> [17004,17005], offset 84053; the client has no objective 1"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (1742,2) -> [17004,17005], offset 84053; the client has no objective 1"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective, bound by a client conversation; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (1742,2) -> [17004,17005], offset 84053; the client has no objective 1"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (1742,2) -> [17004,17005], offset 84053; the client has no objective 1"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 441,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "comment": {
+     "value": "Inform Duncan.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (441,1) -> [1065,6804], offset 8516"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (441,1) -> [1065,6804], offset 8516"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective, bound by a client conversation; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (441,1) -> [1065,6804], offset 8516"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (441,1) -> [1065,6804], offset 8516"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 434,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "comment": {
+     "value": "Deliver the field report.",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (434,1) -> [1055,6730], offset 8450"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (434,1) -> [1055,6730], offset 8450"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective, bound by a client conversation; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (434,1) -> [1055,6730], offset 8450"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (434,1) -> [1055,6730], offset 8450"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 408,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "comment": {
+     "value": "Return to Jorai",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (408,1) -> [631,7925], offset 6404"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (408,1) -> [631,7925], offset 6404"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective, bound by a client conversation; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (408,1) -> [631,7925], offset 6404"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (408,1) -> [631,7925], offset 6404"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1742,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 6000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in the credits column. The 2026-09-21 audit found all 53 seeded XP figures matching TaRapedia; no post-D11 confirmation for this mission. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Report to Liaison Brice' rev 14412 RewardXP=6,000 (the only revision with an infobox; Ellatha lists no rewards)",
+       "date": "2007-11-12"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1742,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded credits. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Report to Liaison Brice' rev 14412 RewardCredits=600",
+       "date": "2007-11-12"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 441,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 3500,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in the credits column. The 2026-09-21 audit found all 53 seeded XP figures matching TaRapedia; no post-D11 confirmation for this mission. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'In Short Supply' rev 13991 RewardXP=3,500 (single revision; Ellatha lists no XP)",
+       "date": "2007-11-09"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 441,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 700,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded credits and Ellatha's agree. Confidence: medium-high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'In Short Supply' rev 13991 RewardCredits=700",
+       "date": "2007-11-09"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "missionsview.asp?key=In+Short+Supply&id=47 Quest Rewards 700 Credits, fetched 2026-09-26"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 434,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 3000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in the credits column. The 2026-09-21 audit found all 53 seeded XP figures matching TaRapedia; no post-D11 confirmation for this mission. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Rendezvous At The LZ' rev 20183 RewardXP=3000 (present since rev 2140, 2007-07-02)",
+       "date": "2007-12-12"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 434,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded credits and Ellatha's agree. Confidence: medium-high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Rendezvous At The LZ' rev 20183 RewardCredits=600 (since rev 11583, 2007-10-23)",
+       "date": "2007-12-12"
+      },
+      {
+       "source": "community_db:ellatha",
+       "locator": "missionsview.asp?key=Rendezvous+At+The+LZ&id=37 Quest Rewards 600 Credits, fetched 2026-09-26"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 408,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 10000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded experience; both reward kinds carry the amount in the credits column. The 2026-09-21 audit found all 53 seeded XP figures matching TaRapedia; no post-D11 confirmation for this mission. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Revealing Treeback Experimentation' rev 22240 RewardXP=10000 (added rev 16647, 2007-11-26; not in Ellatha's DB)",
+       "date": "2007-12-18"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 408,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "credits": {
+     "value": 2000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's recorded credits. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'Revealing Treeback Experimentation' rev 22240 RewardCredits=2000 (since rev 16644)",
+       "date": "2007-12-18"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "key": {
+    "mission_id": 441,
+    "or_group": 0,
+    "required_mission_id": 549
+   },
+   "slice": "W3",
+   "migration": "EarlyReadyMissions",
+   "fields": {
+    "required_state": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's infobox gives Requirement = Failure to Launch (549, seeded by WildernessHubConversationChain), so the gate can be expressed; state 4 = Completed. Single-revision page, no second source; Randolph's 434 finishing text (\"Wagner or Rodriguez might have something for you. I might have something as well, later on\") is consistent with a gate after Wagner's 549. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "'In Short Supply' rev 13991 infobox Requirement=Failure to Launch",
+       "date": "2007-11-09"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (434,4) -> text 764, offset 7922"
+      }
+     ]
+    }
+   }
   }
  ],
  "omitted": [
@@ -60692,7 +61579,8 @@
    "summary": "The client carries no mission-level field anywhere - missionconversation, missionobjective, missiongrouptype, campaign and the language tables were all checked. TaRapedia states a level for only 126 of its 926 mission pages, and where both a wiki level and the giver creature’s level are known they differ by up to 8, so the giver’s level is not a substitute. Any batch that seeds missions the wiki does not level needs an owner decision on what that column should hold.",
    "evidence": [
     "client tables searched for a mission level field: none exists",
-    "TaRapedia: 126 of 926 mission pages state a level"
+    "TaRapedia: 126 of 926 mission pages state a level",
+    "EarlyReadyMissions 2026-09-26: 1742, 441 and 434 seeded at the Wilderness band 5 and 408 at the Palisades band 15; no source gives their levels"
    ],
    "closes_with": "an owner decision on the level policy, or a source that gives mission levels",
    "surfaced_by": [
@@ -60826,6 +61714,122 @@
     "S1",
     "S6"
    ]
+  },
+  {
+   "id": "GAP-READY-REDIRECT-COMPLETION",
+   "summary": "The client stores a COMPLETION-type (and an identical REMINDER) objectiveconversation row on the giver's own package for 434 (Witherspoon, 208) and 441 (Randolph, 212), with text that sends the player to the NPC who really finishes the objective. This server completes an objective through any loaded row of the speaker's package, so these rows would let the giver close the objective at once. They are excluded from completion by MissionRedirectConversations (the rows themselves stay in the table). What the original server did with such rows - whether it offered them as ambient reminders (the client's HandleShowObjectiveAmbient reads the REMINDER row; this server sends no ambient topic), or not at all - is not recorded, so the player currently sees no redirect line at the giver. Mission 429's (429,4,116) row on Rogers is the same shape and stays loaded as deployed (after the recon, Rogers can close the report objective); applying the same rule to it is an owner decision.",
+   "evidence": [
+    "objectiveconversation.pyo (434,1,208,1,1/2) offsets 5969/5996; (441,1,212,1,1/2) offsets 6050/6077; (429,4,116,1,1/2) offsets 5753/5780",
+    "docs/river-recon-client-evidence.md (package-116 row must not become an alternate completion route)",
+    "MissionManager.CompleteNpcObjective -> Mission.HasObjectiveConversation (any convo type)"
+   ],
+   "closes_with": "a capture of a giver conversation with such a row active, or the original server mission data",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-434-GATE",
+   "summary": "TaRapedia gives 434 Rendezvous At The LZ the requirement Hitting 'em Where It Hurts (client mission 432), which is not seeded (its package is unknown to the world). The content loader rejects a prerequisite naming an unloaded mission, so 434 is offered by Witherspoon without it. Row to add when 432 lands: npc_mission_prerequisite (434, 0, 432, state 4).",
+   "evidence": [
+    "TaRapedia 'Rendezvous At The LZ' rev 20183 (2007-12-12) Requirement",
+    "content loader: a prerequisite naming an unknown mission is withheld"
+   ],
+   "closes_with": "432 seeded, then the prerequisite row",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-408-GATE",
+   "summary": "TaRapedia gives 408 Revealing Treeback Experimentation the requirement Gathering Information (client mission 406), a kill-10-Thrax-Technicians / collect-data-cubes mission that is not seeded. 408 is therefore offered by Lt. Jamison directly. Row to add when 406 lands: npc_mission_prerequisite (408, 0, 406, state 4).",
+   "evidence": [
+    "TaRapedia 'Revealing Treeback Experimentation' rev 22240 (2007-12-18) Requirement; 'Gathering Information' rev 16666 FollowUp"
+   ],
+   "closes_with": "406 seeded, then the prerequisite row",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-MISSION-ITEM",
+   "summary": "434 hands the player a field report (Ellatha shows the counter \"Field Report: Lower Eloh Creek 1/1\") and 408 the decrypted data pack; neither objective collects it, so no gameplay is skipped, but the item is not granted. The client has two field-report classes (7348 \"Field Report : Lower Eloh Creek (14:00 Hours)\", 7571 \"... (22:00 Hours)\") and two data-pack classes (7152 \"Data Pack\", 10548 \"Corman Research Data Pack\"), no table ties either to its mission, and no W3 batch grants items on acceptance, so none is invented.",
+   "evidence": [
+    "physicalentityclassnamelanguage.pyo keys 7348, 7571, 7152, 10548",
+    "missionconversation.pyo (434,3) text 763 \"run this Field Report over\"; (408,2) text 628 \"deliver the data pack\"",
+    "Ellatha missionsview id=37 item counter"
+   ],
+   "closes_with": "a source tying the carried item class to the mission (client table, capture or footage of the inventory)",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-REWARD-ITEMS",
+   "summary": "441 In Short Supply lists \"Class I Fragmentation Grenade OR Class I Basic Med Pack\" (TaRapedia rev 13991, 2007-11-09; Ellatha). Both names resolve to one template each (45125, 44917), but both lists predate update 1.4 (2008-01-29), which replaced the reward items of 855 missions, and Ellatha's item data is pre-1.4 (percentage regeneration), so neither is final-state evidence and the items are left out. 434 lists a Class I Standard Med Pack x3 (44918) or a Class I EMP Bomb, whose class maps to two templates (111247, 10000002), also pre-1.4. The missions pay experience and credits only.",
+   "evidence": [
+    "TaRapedia 'In Short Supply' rev 13991 RewardItem; 'Rendezvous At The LZ' rev 20183",
+    "RGTR patch notes 2008-01-29 (archived 2008-02-03): 855 missions' rewards replaced",
+    "research/20260926-reward-items/README.md (Ellatha equipment data is pre-1.4)"
+   ],
+   "closes_with": "a post-1.4 reward list or footage of the reward window",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-SPEAKER-CLASS",
+   "summary": "Randolph (130) and Standley (134) stood on the Redshirt class 29423, which the client cannot converse with. They now use the original NPC swapset classes (Randolph female 3848, from the client's own \"she\"/\"a busy woman\"; Standley male 3846) and outfits copied from world NPCs, all analogues (OD-45). Their final-live classes, models and clothing are unverified. Observed on the way, not changed: client text 795 calls the Twin Pillars med-tech \"she\", yet MissionSpeakerDialogueClasses gave Medical Assistant Duncan (125) the male class 3846.",
+   "evidence": [
+    "entityclass.pyo 29423 aug [1]; 3846/3848 aug [1,12,52,59]",
+    "docs/evidence/mission-speaker-dialogue-classes.json",
+    "docs/evidence/early-ready-missions.json"
+   ],
+   "closes_with": "footage or a capture of these NPCs",
+   "surfaced_by": [
+    "EarlyReadyMissions 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-READY-JORAI-POSITION",
+   "summary": "Ranger Jorai (510133), 408's receiver, stands at the upstream InfiniteRasa placement, which equals the client's Viands Village map marker (-235.15, 178.0, -543.85) to 0.1 m - a town marker, not a reading of him. TaRapedia puts him at /loc (-294, -577) (Jorai page revs 16456-16577, 2007-11-26; repeated in the 408 walkthrough rev 22240), 67.6 m away. He is reachable in the village either way; the position was not changed in this batch.",
+   "evidence": [
+    "rasaworld.db spawnpool 510133",
+    "uimapmarker Viands Village",
+    "TaRapedia Ranger Jorai rev 16577"
+   ],
+   "closes_with": "a position review (TaRapedia x,z with navmesh y, inferred) or footage",
+   "surfaced_by": [
+    "ready-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
   }
  ],
  "non_content_settings": [
@@ -63403,6 +64407,133 @@
     {
      "source": "client_table:game.zip",
      "locator": "generated/client/language/english/missiontextlanguage.pyo texts21665/21666; hit-credit inference in docs/bootcamp-lightning-hit-credit.md"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "EarlyReadyMissions",
+   "table": "creature",
+   "key": {
+    "id": 134
+   },
+   "field": "class_id",
+   "old": 29423,
+   "new": 3846,
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "Receptive Liaison Standley gives 1742, but the world seed's Redshirt_Human_Soldier_Light_Male (29423) carries only the Creature augmentation, so the client cannot converse with him (docs/evidence/mission-speaker-dialogue-classes.json). The original NPC_Human_Swapset_Male class 3846, with the NPC augmentation, is the class MissionSpeakerDialogueClasses gave twelve such speakers; his exact final-live class and model are unverified (GAP-READY-SPEAKER-CLASS).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 29423 Redshirt_Human_Soldier_Light_Male aug_list [1]; 3846 NPC_Human_Swapset_Male aug_list [1,12,52,59]"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "missionconversation.pyo (1741,3) text 16982 \"Receptive Liaison Standley is stationed in Twin Pillars. Once you get there, make sure you check in with him\""
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "EarlyReadyMissions",
+   "table": "creature_appearance",
+   "key": {
+    "id": 134,
+    "slot_ids": [
+     2,
+     13,
+     14,
+     15,
+     16,
+     17
+    ]
+   },
+   "field": "six outfit rows",
+   "old": null,
+   "new": "(2,4021,4294934528) (13,6271,1) (14,9781,4278655809) (15,4023,4294934528) (16,4022,4294934528) (17,24008,4286690539)",
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "A swapset class is drawn from its appearance rows; without them the NPC renders bare. Copied from Senior Quartermaster Hacienda (creature_appearance[510094]), exactly as MissionSpeakerDialogueClasses copies it for the human speakers. Standley's final-live clothing is unrecorded.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 4021/4023/4022 NPC_Clothing_Officer_1_Boots/Torso/Legs, 6271 Weapon_Human_Redshirt_Pistol_Physical, 9781 AvatarSwap_Hair_05, 24008 AvatarSwap_Face_Caucasian_Long_1; rows from rasaworld.db creature_appearance[510094] (MissionNpcAppearancePreloader)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "EarlyReadyMissions",
+   "table": "creature",
+   "key": {
+    "id": 130
+   },
+   "field": "class_id",
+   "old": 29423,
+   "new": 3848,
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "Outpost Commander Randolph gives 441 and receives 434, but stands on the Redshirt class 29423 without the NPC augmentation. The client's own texts make her a woman (763 \"She's a bit of a hard ass... She's a hell of an officer\", 764 \"I'm a busy woman\"), so the female NPC_Human_Swapset_Female 3848 is used rather than the male class of the male Redshirt seed row. Exact final-live class unverified (GAP-READY-SPEAKER-CLASS).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 3848 NPC_Human_Swapset_Female aug_list [1,12,52,59]"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "missiontextlanguage.pyo texts 762/763/764 (missionconversation.pyo (434,2/3/4) offsets 7886/7904/7922)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "EarlyReadyMissions",
+   "table": "creature_appearance",
+   "key": {
+    "id": 130,
+    "slot_ids": [
+     2,
+     14,
+     15,
+     16,
+     17
+    ]
+   },
+   "field": "five outfit rows",
+   "old": null,
+   "new": "(2,4021,22120) (14,3672,1) (15,4023,13933202) (16,4022,13933202) (17,20824,4286886614)",
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "The female AFS officer outfit (NPC_Clothing_Officer_1 boots, torso and legs - the same clothing family as the male analogue - with hair and face) that the world's Major Nicholson (510069), Lieutenant Sherer (510030) and Quartermaster Olivia (510150) wear, copied from creature_appearance[510069] as stored after AppearanceSlotRepair. Randolph's final-live clothing is unrecorded.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 4021/4023/4022 NPC_Clothing_Officer_1_Boots/Torso/Legs, 3672 AvatarSwap_Hair_01, 20824 AvatarSwap_Face_Asian_Standard_3; rows from rasaworld.db creature_appearance[510069]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "none (server rule Rasa.Data.MissionRedirectConversations, applied by MissionManager.LoadMissions)",
+   "table": "npc_mission_objective_conversation",
+   "key": {
+    "rows": [
+     "434,1,208,1,1",
+     "434,1,208,1,2",
+     "441,1,212,1,1",
+     "441,1,212,1,2"
+    ]
+   },
+   "field": "completion eligibility",
+   "old": "loaded (any row of the NPC package completes the objective)",
+   "new": "not loaded; the rows stay in the table as the client ships them",
+   "tier": "inferred",
+   "reason": "Both are rows on the giver's own package whose text sends the player elsewhere (434: Witherspoon \"we're good from this point. You need to do your magic down south\"; 441: Randolph \"Did you get in touch with the Twin Pillars infirmary yet?\"). Loaded, the server would let the giver complete the objective the moment it is handed out. docs/river-recon-client-evidence.md: a completion-type key does not prove the NPC completes the objective, and a redirect row must not become an invented alternate completion route. The original server's handling is unknown (GAP-READY-REDIRECT-COMPLETION). Mission 429's (429,4,116) row is the same shape and was left loaded; it is not changed here.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "objectiveconversation.pyo (434,1,208,1,1/2) -> texts 1057/2768, offsets 5969/5996; (441,1,212,1,1/2) -> texts 1066/2705, offsets 6050/6077"
     }
    ]
   }

@@ -1811,3 +1811,39 @@ Every timestamp below is from `docs/evidence/gameplay-footage-playlists-20260924
 `spawn.first_login` in `docs/evidence/bootcamp-d11-positions.json` is map 1985 at (387.2, 136.75, -79.09), rotation 2.879793, tier measured. The shipped creation path stores that row as content location 19851 when boot-camp entry is on, and `CharacterRepository.Get` returns the same map, position, rotation, and name on a second load. With entry off, creation still uses the existing wilderness default map 1220 at (894.9, 307.9, 347.1), rotation 0. Those defaults were not given a new footage spawn.
 
 Family name, character name, the five appearance slots, rank-1 skills 1/8/19/49/165, the Lightning and rifle tray, and the starter items already follow `docs/evidence/character-creation-appearance.json`, `docs/evidence/new-character-loadout.json`, and `docs/evidence/race-unlocks.json`. No reward, rate, spawn, movement value, or companion parameter was added. Still open, and left unimplemented: the exact later level and class bonus timing, and the tutorial or skip rewards, recorded in `docs/new-character-client-evidence.md`.
+
+## 2026-09-26 — Four ready conversation missions seeded (EarlyReadyMissions)
+
+`20260926100000_EarlyReadyMissions` (SQLite and MySQL, frozen rows in `WildernessData/EarlyReadyMissionsRows.cs`)
+seeds 1742 Report to Liaison Brice, 441 In Short Supply, 434 Rendezvous At The LZ and 408 Revealing Treeback
+Experimentation from the 2026-09-26 dossiers. Each proposed row was re-checked against the recovered development
+tree and the deployed world first; all still apply. Givers and receivers are inferred from the client's own log and
+opening texts, TaRapedia and Ellatha, with 434's stale beta-era infobox giver (Jennings) rejected. The objectives are
+the client's own rows, and the rewards are TaRapedia's 2007 experience and credits (Ellatha agrees on 434's and 441's
+credits). 441 is gated on 549. Package 212 is bound to Randolph (130).
+
+Two findings changed the batch:
+
+- Randolph (130) and Standley (134) were on `Redshirt_Human_Soldier_Light_Male` (aug `1`), which the client cannot
+  converse with. They now use the original swapset classes, female 3848 for Randolph (client texts 762-764: "she",
+  "a busy woman") and male 3846 for Standley, with outfits copied from world NPCs. Both classes and both outfits
+  are analogues under OD-45.
+- The client keeps a completion row on each giver's package that only redirects the player: (434,1,208) on
+  Witherspoon and (441,1,212) on Randolph. The server completes through any row of the speaker's package, so both
+  would have let the giver close the objective on the spot. `MissionManager.LoadMissions` now leaves them out, via
+  `Rasa.Data.MissionRedirectConversations`, and the table rows are unchanged. 429's (429,4,116) row has the same
+  shape and was left loaded; that is not changed here.
+
+Left out and recorded as gaps:
+
+- the unseeded prerequisites 432 and 406;
+- the reward items, whose only lists predate update 1.4 (441's grenade/med-pack pair resolves to 45125/44917, but
+  it is not final-state evidence);
+- the field report and data pack the player carries, whose client item classes are ambiguous;
+- Jorai's position, which is the Viands Village marker, 67.6 m from TaRapedia's /loc;
+- the mission levels, which are the zone band (5; 408 at 15).
+
+The gaps are GAP-READY-REDIRECT-COMPLETION, -434-GATE, -408-GATE, -MISSION-ITEM, -REWARD-ITEMS, -SPEAKER-CLASS,
+-JORAI-POSITION and GAP-MISSION-LEVEL. Provenance: the manifest rows with migration `EarlyReadyMissions` and
+`docs/evidence/early-ready-missions.json`.
+

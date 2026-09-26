@@ -974,6 +974,36 @@ namespace Rasa.Test
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
                     Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
                 }
+
+                // EarlyReadyMissions (2026-09-26): the four conversation missions of the ready dossiers are offerable.
+                foreach (var missionId in new uint[] { 1742, 441, 434, 408 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual(0, missions.LoadedMissions[missionId].OfferedSelectableRewards.Count + missions.LoadedMissions[missionId].OfferedFixedItems.Count, $"mission {missionId} pays no item");
+                }
+                Assert.IsTrue(missions.LoadedMissions[1742].HasObjectiveConversation(2, 2050, 1));
+                Assert.IsTrue(missions.LoadedMissions[408].HasObjectiveConversation(1, 47, 1));
+                Assert.AreEqual((6000L, 600L), (missions.LoadedMissions[1742].RewardExperience, missions.LoadedMissions[1742].RewardCredits));
+                Assert.AreEqual((10000L, 2000L), (missions.LoadedMissions[408].RewardExperience, missions.LoadedMissions[408].RewardCredits));
+                // The givers' redirect lines (434/1 on Witherspoon's 208, 441/1 on Randolph's 212) are not loaded as
+                // completion routes: Witherspoon cannot close the report she has just handed over, nor Randolph the
+                // errand she has just given. Each objective completes only at the NPC it names.
+                var rendezvous = missions.LoadedMissions[434];
+                Assert.IsTrue(rendezvous.HasObjectiveConversation(1, 212, 1));
+                Assert.IsFalse(rendezvous.HasObjectiveConversation(1, 208, 1));
+                CollectionAssert.AreEquivalent(new uint[] { 212 }, rendezvous.ObjectiveConversations.Select(conversation => conversation.NpcPackageId).ToArray());
+                var inShortSupply = missions.LoadedMissions[441];
+                Assert.IsTrue(inShortSupply.HasObjectiveConversation(1, 218, 1));
+                Assert.IsFalse(inShortSupply.HasObjectiveConversation(1, 212, 1));
+                CollectionAssert.AreEquivalent(new uint[] { 218 }, inShortSupply.ObjectiveConversations.Select(conversation => conversation.NpcPackageId).ToArray());
+                Assert.AreEqual((549u, (byte)4), (inShortSupply.Prerequisites.Single().RequiredMissionId, inShortSupply.Prerequisites.Single().RequiredState));
+                Assert.AreEqual((3500L, 700L), (inShortSupply.RewardExperience, inShortSupply.RewardCredits));
+                Assert.AreEqual((3000L, 600L), (rendezvous.RewardExperience, rendezvous.RewardCredits));
+                Assert.AreEqual(0, rendezvous.Prerequisites.Count);
+                // 429's (429, 4, 116) row on Rogers is the same shape but predates the list and stays loaded.
+                Assert.IsTrue(missions.LoadedMissions[429].HasObjectiveConversation(4, 116, 1));
                 Assert.AreEqual(10346u, missions.LoadedMissions[479].ItemCounterClasses[(1u, (byte)0)]);
                 Assert.AreEqual(12, missions.LoadedMissions[479].Counters[1].Single().TargetValue);
 
