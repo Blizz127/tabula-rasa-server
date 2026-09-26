@@ -663,6 +663,27 @@ The same review corrected three things:
 **Lesson for later batches: check every mission against the D11-to-shutdown patch notes before seeding it, not only
 against its wiki page.**
 
+### The missing givers, and a probe that invented a floor (2026-09-26)
+
+Four mission givers the dossiers called unplaceable have dated `/loc` readings in Ten Ton Hammer's area guides,
+a source no earlier pass had searched (`research/20260926-missing-npcs`). Each reading was checked against the floor
+directly under its x,z, not against the nearest polygon: Simpson's y matches the command-centre floor to 0.10 m,
+Tarina's to 0.015 m, Hanna's to 0.28 m and Warrior Mela's (in the same guide) to 0.09 m, each on a surface a complete
+route joins to the settlement's waypoint (`docs/evidence/missing-mission-givers-navmesh.json`). They are placed or
+moved there (`MissingMissionGivers`); Dekay, who has no coordinate at all, stands at the midpoint of the "between the
+wormhole and waypoint" the guide describes, measured with a 26 m uncertainty.
+
+Col. Almos did not pass. The proposal gave him an "upper level" at 176.12 m, but that level came from
+`NavMeshQuery.GroundHeight`, which snaps to the nearest polygon up to 4 m sideways: under his x,z there is only the
+terrain at 174.84, 3.16 m below the reading. Nowhere within his 8 m uncertainty does the floor come within 0.3 m of
+the reading's 178.0, and the reading's y and z equal the client's "Viands Village" label, so he and 551 are held
+(**GAP-ALMOS-HEIGHT**, OD-67). The earlier "levels" columns of the research probes should be read with that in mind:
+a level listed for a column is not necessarily a surface in that column.
+
+The same pass corrected a date: Dr. Elise Corman's TaRapedia coordinate, cited as "rev 34276, 2008-09-25", has stood
+unchanged since the page was created (rev 983, 2007-06-30); the 2008 revision only renamed headings. Her position
+stands, but it is a pre-D11 reading.
+
 ## The parallel audit, and what it shipped (2026-09-21)
 
 Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and

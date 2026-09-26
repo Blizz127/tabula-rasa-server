@@ -2017,6 +2017,51 @@ consumes the items.
   server-spawned or destructible objects with no recovered positions.
 - **Not verified in-game.** None of this has been played with the original client.
 
+## 2026-09-26 — missing mission givers placed, five missions seeded (`MissingMissionGivers`)
+
+`20260926150000_MissingMissionGivers` (SQLite and MySQL, rows in `WildernessData/MissingMissionGiversRows.cs`) acts on
+`research/20260926-missing-npcs`, which found `/loc` readings for four "unplaceable" givers in Ten Ton Hammer's dated
+area guides. Probes: `docs/evidence/missing-mission-givers-navmesh.json`. Labels: the manifest rows and changes with
+migration `MissingMissionGivers`, checked by `MissingMissionGiversTests`.
+
+| NPC (id) | Where | x, z | y | Level | Class and body |
+| --- | --- | --- | --- | --- | --- |
+| Cmd. Sgt. Simpson (199950, name 127) | Foreas Base command centre, 1148 | TTH 2007-10-23 and TaRapedia 2008-04-16 agree to 0.6 m, inferred | floor 120.924, measured | 20, analogue (Sebastian, OD-11) | 3846, Witherspoon's set (OD-45) |
+| Ranger Tarina (199951, name 135) | Foreas Base, 1148 | TTH 2007-10-23 only, inferred | floor 116.139 | 20, analogue (OD-11) | 7034 Forean Spearman with the rangers' spear (OD-45) |
+| Field Sergeant Hanna (199952, name 4846) | Raintree Post, 1761, package 423 | two TTH guides (2008-03), 4.1 m from the waypoint, inferred | floor 276.008 | 28, TaRapedia | 3848, the vendor set (OD-45) |
+| Sergeant Dekay (199953, name 8908) | Irendas, 1764 | midpoint of the waypoint and wormhole markers the guide names, measured ±26 m | floor 429.924 | 23, TaRapedia | 3846, Witherspoon's set (OD-45) |
+
+- **Bindings.** Standley (134) takes package 2049 and Arizpe (199085) 2025; each package completes one mission only.
+  Receptive Liaison Langerman (133), the 1741 giver, stood on the Redshirt class the client cannot converse with and
+  takes 3846 and Standley's outfit, as EarlyReadyMissions did for Standley (OD-45). Noonan and Arizpe were already on
+  NPC classes.
+- **Mela moved.** Warrior Mela (pool 510117) leaves upstream's marker ring, an OD-59 analogue, for the same guide's
+  2007-10-23 reading (222.9, 977.0) inside Thoria Das, 0.09 m from the floor. GAP-MELA-POSITION is closed.
+- **Seeded.** 1741 Report to Liaison Standley (Langerman -> Standley, level 5, 4,000 XP; TaRapedia's credits read
+  "None", so no credit row), 1744 Report to Liaison Arizpe (Noonan -> Arizpe, 10, 8,000 / 800), 390 Supplies for Thoria
+  Das (Tarina -> Mela, 10, 13,000 / 1,950), 818 Report to Field Sergeant Hanna (Foletto -> Hanna, 35, 15,500 / 2,800)
+  and 1862 The Infensus Garrison Directive (Dekay -> Michan, 35, 12,500 / 2,500 and one of three Class V stacks). The
+  first four amounts are pre-1.4 and labelled so; 1862's are post-1.4 by date. Each mission keeps its one client
+  objective, and every completion row sits on the receiver's own package, so no redirect row is involved.
+- **Held.** Col. Almos and 551: the only surface under his reading is 3.16 m below it, nothing within its 8 m
+  uncertainty comes within 0.3 m of its height, and its y/z repeat the "Viands Village" label (GAP-ALMOS-HEIGHT, OD-67
+  open). The research proposal's second level at 176.12 m was a nearest-polygon artefact. Sergeant Conway and 835: no
+  position, and omission is preferred over marker anchors (GAP-CONWAY-POSITION). 340 (its split from 1905) and the
+  827 arms 833/841 and 842/848 (neither arm can be gated): GAP-827-BRANCH-ARMS.
+- **Gaps opened.** GAP-DEKAY-POSITION, -DEKAY-RIFLEMEN (the formation he paced around), -TARINA-SINGLE-SOURCE,
+  -MISSING-NPC-LEVELS, -LOGOS-CHAIN-START-POST-D11 (1741's giver rests on 2007 sources), -MISSING-GIVER-PRESENTATION,
+  -MISSING-GIVERS-818-GATE (816 unseeded), -MISSING-GIVERS-REWARDS and -MISSING-GIVERS-ACCEPT-ITEMS (the crate and
+  the directive).
+- **Citation corrected.** `CodexNpcCorrectionsRows.cs` dated Dr. Elise Corman's coordinate "TaRapedia rev 34276,
+  2008-09-25". That revision renamed headings; the coordinate has been on the page since rev 983 (2007-06-30), so it
+  is a pre-D11 reading. Only the comment and the manifest record change, and her position stands.
+- **Leads not acted on.** The same guides read Field Ranger Kearney (-136.9, 205.6, 518.2 in Timora Mines; he serves
+  only the held 340), Foletto, Nicholson, Orto and Maila. They are recorded in GAP-KEARNEY-POSITION and
+  GAP-TORDEN-MARKER-POSITIONS.
+- **Checked.** Replayed against a copy of the deployed world with these rows applied, the world audits pass (26 of
+  26, including the walkable-surface, prop-overlap, giver/receiver-spawn and package-carried checks).
+- **Not verified in-game.** None of the five missions or four NPCs has been checked with the original client.
+
 ## 2026-09-22 to 2026-09-24 — recovered deployed work (documentation reconstructed 2026-09-26)
 
 This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4aa50b3`, `0ed7528`) that were built and deployed live between 2026-09-22 and 2026-09-24 from a VPS checkout that no longer exists. The code, migrations, tests, and evidence JSON files survived (they were recovered onto this branch), but the narrative write-up that would normally accompany each change — the entries this file would otherwise carry — was never committed anywhere and is lost. **There is no earlier version of that narrative to recover.** What follows is reconstructed after the fact strictly from the surviving migration doc-comments, commit messages, tests, and evidence JSON files; it makes no claim beyond what those artifacts state. Three docs cited by code comments from this period (`docs/character-name-evidence.md`, `docs/bootcamp-equip-audit.md`, `docs/bootcamp-opening-movement-audit.md`) were reconstructed the same way and are linked below rather than repeated here.

@@ -281,6 +281,19 @@
    "era": "pre_d11",
    "locator": "https://www.ellatha.com/tr/missionsview.asp - DaOpa's mission database pages, research/20260926-collection-missions/work/ellatha/*.html (+ .txt renders) and research/20260926-reward-items/work/ellatha/Droning_On.html",
    "note": "Community transcription of the live game in early 2008 (before update 1.4 changed mission rewards); tracker counters and credit amounts are read from the pages."
+  },
+  "community_db:tentonhammer": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "url": "https://www.tentonhammer.com/guides",
+   "locator": "research/20260926-missing-npcs/work/tth/ (guide HTML and extracted text, fetched 2026-09-26; each guide carries its author and date)",
+   "note": "Ten Ton Hammer area guides, dated 2007-10-23 to 2008-03-11, with /loc readings taken in game. A contemporary community guide, not original data: its readings support inferred positions with their dates and are never an analogue source. Every citation names the guide, its author and date."
+  },
+  "measurement:missing-mission-givers-20260926": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "docs/evidence/missing-mission-givers-navmesh.json",
+   "note": "Navmesh probes behind MissingMissionGivers (repo navmesh built from the 1.16.5.0 client maps): every surface directly under each reading's x,z, floor = surface - 0.276 m, and the route from the settlement's waypoint marker to that surface's own polygon; the Col. Almos re-probe within his 8 m uncertainty."
   }
  },
  "scope": [
@@ -458,6 +471,26 @@
    "optional": [
     "comment"
    ]
+  },
+  {
+   "table": "creature",
+   "key_ranges": {
+    "id": {
+     "min": 199950,
+     "max": 199999
+    }
+   },
+   "note": "W3 (MissingMissionGivers, 2026-09-26): the mission givers Ten Ton Hammer places - Cmd. Sgt. Simpson 199950, Ranger Tarina 199951, Field Sergeant Hanna 199952, Sergeant Dekay 199953. 199954-199999 stay free in this block."
+  },
+  {
+   "table": "content_placement",
+   "key_ranges": {
+    "id": {
+     "min": 199950,
+     "max": 199999
+    }
+   },
+   "note": "W3 (MissingMissionGivers, 2026-09-26): the placements of creatures 199950-199953, same ids."
   }
  ],
  "rows": [
@@ -59611,82 +59644,6 @@
   {
    "table": "spawnpool",
    "key": {
-    "id": 510117
-   },
-   "slice": "W3",
-   "migration": "Add_mission_npcs (upstream preloader); WorldFloorSweep did not move it; relabelled by WorldDefectsFix, not moved",
-   "fields": {
-    "pos_x": {
-     "value": 282.7,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "community_db:infiniterasa-492954a",
-       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
-      },
-      {
-       "source": "client_table:game.zip",
-       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
-      },
-      {
-       "source": "measurement:world-defects-20260926",
-       "locator": "probes[divide.mela]"
-      }
-     ],
-     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
-     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
-     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
-     "decision": "OD-59"
-    },
-    "pos_y": {
-     "value": 170.62,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "community_db:infiniterasa-492954a",
-       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
-      },
-      {
-       "source": "client_table:game.zip",
-       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
-      },
-      {
-       "source": "measurement:world-defects-20260926",
-       "locator": "probes[divide.mela]"
-      }
-     ],
-     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
-     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
-     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
-     "decision": "OD-59"
-    },
-    "pos_z": {
-     "value": 1071.8,
-     "tier": "analogue",
-     "citations": [
-      {
-       "source": "community_db:infiniterasa-492954a",
-       "locator": "MissionNpcSpawnpoolPreloader.cs row 510117 (identical in the fork's copy)"
-      },
-      {
-       "source": "client_table:game.zip",
-       "locator": "generated/client uimapmarker, Divide (1148): 'Medical Vendor: Thoria Das' (278.3, 170.0, 1076.2), 6.2 m away (research/20260926-world-defects/README.md section 3)"
-      },
-      {
-       "source": "measurement:world-defects-20260926",
-       "locator": "probes[divide.mela]"
-      }
-     ],
-     "reasoning": "No source gives this NPC's position (GAP-MELA-POSITION). The value is upstream's ring around the client map marker of the place a mission names; it stands on the navmesh floor.",
-     "counterpart": "the final client's 'Medical Vendor: Thoria Das' map marker in the village TaRapedia's Thoria Das page (rev 17075, 2007-11-29) lists him in",
-     "required_because": "Warrior Mela is the receiver of the 'ready' mission 390; a spawnpool cannot spawn without a position.",
-     "decision": "OD-59"
-    }
-   }
-  },
-  {
-   "table": "spawnpool",
-   "key": {
     "id": 510085
    },
    "slice": "W3",
@@ -66025,6 +65982,2428 @@
      ]
     }
    }
+  },
+  {
+   "table": "spawnpool",
+   "key": {
+    "id": 510117
+   },
+   "slice": "W3",
+   "migration": "Add_mission_npcs (upstream preloader); relabelled by WorldDefectsFix; MissingMissionGivers moves it to Ten Ton Hammer's reading",
+   "fields": {
+    "pos_x": {
+     "value": 222.9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), line 77: 'Find Warrior Mala at 222.9, 167.8, 977.0'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo ui_map_key 1306 (Divide): staticmarkers 'Thoria Das' (269.36, 167.31, 1030.19), 'Weapon Vendor: Thoria Das' (201.68, 166.99, 936.86), 'Armor Vendor: Thoria Das' (177.44, 173.15, 960.67) - the reading lies inside the settlement; research/20260926-ready-missions/work/markers-items.json"
+      }
+     ],
+     "reasoning": "Ten Ton Hammer's /loc for 'Warrior Mala' (the client name is Warrior Mela, 3029), the receiver of Supplies for Thoria Das in the same guide entry. A single pre-D11 reading (2007-10-23), confidence medium; it replaces upstream's marker ring (OD-59 analogue), as OD-59 provides.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.0
+     }
+    },
+    "pos_y": {
+     "value": 167.614,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.mela.surfaces_under_xz[0]"
+      }
+     ],
+     "reasoning": "navmesh surface 167.890 under x,z minus 0.276; the reading says 167.8. The only surface there, joined to the Thoria Das waypoint.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": 977.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), line 77: 'Find Warrior Mala at 222.9, 167.8, 977.0'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.0
+     }
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199950
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "name_id": {
+     "value": 127,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 127 -> 'Cmd. Sgt. Simpson' STORE_SUBSCR offset 38 (sha256 1fa1ec6c098f3ae2..., bytecode 1234238142)"
+      }
+     ],
+     "reasoning": "the client's own creature name table, exact name"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      }
+     ],
+     "reasoning": "an AFS command sergeant in an AFS base (TaRapedia, Ten Ton Hammer); the world gives AFS NPCs faction 1."
+    },
+    "level": {
+     "value": 20,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no creature-level field; creaturenamelanguage.pyo carries the name only (key 127)"
+      }
+     ],
+     "reasoning": "No source records this NPC's level (GAP-MISSING-NPC-LEVELS).",
+     "counterpart": "Lt. Sebastian (creature 199000), level 20, who stands 15.7 m away in the same Foreas Base command centre (DivideConversationNpc, from his TaRapedia infobox)",
+     "required_because": "creature.level is NOT NULL and sent to the client; a creature cannot be created without one",
+     "decision": "OD-11"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo: entityclass.pyo 3846 NPC_Human_Swapset_Male aug_list [1,12,52,59]"
+      }
+     ],
+     "counterpart": "3846 NPC_Human_Swapset_Male, the class the world seed gives AFS human commanders (Outpost Commander Rogers 100, Field Sgt. Witherspoon 101) and every NPC-creation batch gives a male AFS NPC",
+     "required_because": "an entity class carrying the NPC augmentation (52) is mandatory for the creature to exist, be drawn and be talked to, and no source records this NPC's model",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs (555 hit points)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs and every NPC-creation batch (555)",
+     "required_because": "the server needs a hit point maximum and no source gives one for a mission NPC",
+     "decision": "OD-45"
+    },
+    "run_speed": {
+     "value": 9.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "Outpost Commander Rogers (100) and Field Sgt. Witherspoon (101), run 9 / walk 5, the rates every NPC-creation batch copies",
+     "required_because": "creature.run_speed is NOT NULL; the placement is stationary, so the rate is never used to move him",
+     "decision": "OD-45"
+    },
+    "walk_speed": {
+     "value": 5.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "as run_speed (Rogers 100, Witherspoon 101: walk 5)",
+     "required_because": "as run_speed",
+     "decision": "OD-45"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      }
+     ],
+     "reasoning": "a mission giver who does not fight has no attack; 0 is the evidenced value for non-combat NPCs (OD-23)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Cmd. Sgt. Simpson (Foreas Base command center)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199950
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 199950,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      }
+     ],
+     "reasoning": "instantiates the creature row of the same id."
+    },
+    "pos_x": {
+     "value": -34.3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'timora-mines' (Tony \"RadarX\" Jones, dated 2007-10-24): 'see Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/timora-mines; local research/20260926-missing-npcs/work/tth/node13803.txt"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Command Sergeant Simpson' (pageid 10374) rev 30979 2008-05-17T23:36:20Z, Location Foreas Base, in the Command Center, -34.0 | 121.1 | 426.8 (set in rev 30336, 2008-04-16; revs 30334/30335 carried Dr. Elise Corman's template coordinates); https://tabularasa.fandom.com/wiki/Command_Sergeant_Simpson?oldid=30979; local research/20260926-missing-npcs/work/tarapedia/pages/Command_Sergeant_Simpson.json"
+      }
+     ],
+     "reasoning": "the mean of two dated readings 0.6 m apart (Ten Ton Hammer -34.6, 2007-10-23/24; TaRapedia -34.0, 2008-04-16), both in the Foreas Base command centre. Pre-D11; Foreas Base was not rebuilt. Confidence high.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.0
+     }
+    },
+    "pos_y": {
+     "value": 120.924,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.simpson.surfaces_under_xz[1]"
+      }
+     ],
+     "reasoning": "navmesh surface 121.200 under x,z minus the 0.276 m original-spawn offset; the surface joined to the waypoint by a complete route.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": 426.8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'timora-mines' (Tony \"RadarX\" Jones, dated 2007-10-24): 'see Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/timora-mines; local research/20260926-missing-npcs/work/tth/node13803.txt"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Command Sergeant Simpson' (pageid 10374) rev 30979 2008-05-17T23:36:20Z, Location Foreas Base, in the Command Center, -34.0 | 121.1 | 426.8 (set in rev 30336, 2008-04-16; revs 30334/30335 carried Dr. Elise Corman's template coordinates); https://tabularasa.fandom.com/wiki/Command_Sergeant_Simpson?oldid=30979; local research/20260926-missing-npcs/work/tarapedia/pages/Command_Sergeant_Simpson.json"
+      }
+     ],
+     "reasoning": "both readings give 426.8. Confidence high.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.0
+     }
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), Taking Care of Caretakers / Fuel Lake Sabotage / Central Bound Patrol: 'Cmd. Sgt. Simpson in the command center around -34.6, 121.1, 426.8'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt lines 70, 78"
+      }
+     ],
+     "reasoning": "Stationary, as every NPC-creation batch places a mission NPC."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1148,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Cmd. Sgt. Simpson (TTH and TaRapedia /loc)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199951
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "name_id": {
+     "value": 135,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 135 -> 'Ranger Tarina' STORE_SUBSCR offset 110 (sha256 1fa1ec6c098f3ae2..., bytecode 1234238142)"
+      }
+     ],
+     "reasoning": "the client's own creature name table, exact name"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      }
+     ],
+     "reasoning": "a Forean ally in an AFS base; the world gives allied Foreans faction 1 (Mela 510117, Jorai 510133)."
+    },
+    "level": {
+     "value": 20,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no creature-level field; creaturenamelanguage.pyo carries the name only (key 135)"
+      }
+     ],
+     "reasoning": "No source records this NPC's level (GAP-MISSING-NPC-LEVELS).",
+     "counterpart": "Lt. Sebastian (creature 199000), level 20, the Foreas Base NPC nearest in rank TaRapedia gives a level for",
+     "required_because": "creature.level is NOT NULL and sent to the client; a creature cannot be created without one",
+     "decision": "OD-11"
+    },
+    "class_id": {
+     "value": 7034,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo: entityclass.pyo 7034 NPC_Forean_Spearman aug_list [1,52,59]"
+      }
+     ],
+     "counterpart": "7034 NPC_Forean_Spearman, the class of the world's Forean rangers (Mela 510117, Jorai 510133, Cyrida 510131) and of world-seed creature 99, which carried name 135 \"Ranger Tarina\" until EllathaNpcPositions renamed it Ranger Tirna",
+     "required_because": "an entity class carrying the NPC augmentation (52) is mandatory for the creature to exist, be drawn and be talked to, and no source records this NPC's model",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs (555 hit points)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs and every NPC-creation batch (555)",
+     "required_because": "the server needs a hit point maximum and no source gives one for a mission NPC",
+     "decision": "OD-45"
+    },
+    "run_speed": {
+     "value": 9.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "Outpost Commander Rogers (100) and Field Sgt. Witherspoon (101), run 9 / walk 5, the rates every NPC-creation batch copies",
+     "required_because": "creature.run_speed is NOT NULL; the placement is stationary, so the rate is never used to move him",
+     "decision": "OD-45"
+    },
+    "walk_speed": {
+     "value": 5.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "as run_speed (Rogers 100, Witherspoon 101: walk 5)",
+     "required_because": "as run_speed",
+     "decision": "OD-45"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      }
+     ],
+     "reasoning": "a mission giver who does not fight has no attack; 0 is the evidenced value for non-combat NPCs (OD-23)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Ranger Tarina (Foreas Base)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199951
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 199951,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      }
+     ],
+     "reasoning": "instantiates the creature row of the same id."
+    },
+    "pos_x": {
+     "value": -55.1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Foreas Base' (pageid 4126) rev 35531 2008-11-06T15:39:54Z: the NPC list still names Ranger Tarina (added rev 16567, 2007-11-26), no coordinate; https://tabularasa.fandom.com/wiki/Foreas_Base?oldid=35531; local research/20260926-missing-npcs/work/tarapedia/pages/Foreas_Base.json"
+      }
+     ],
+     "reasoning": "the one recorded /loc, from a guide dated 2007-10-23 (closed beta / launch week); the post-D11 Foreas Base page still lists her there. Single source (GAP-TARINA-SINGLE-SOURCE); confidence medium.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.0
+     }
+    },
+    "pos_y": {
+     "value": 116.139,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.tarina.surfaces_under_xz[1]"
+      }
+     ],
+     "reasoning": "navmesh surface 116.415 under x,z minus the 0.276 m original-spawn offset; the surface joined to the waypoint by a complete route.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": 507.7,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Foreas Base' (pageid 4126) rev 35531 2008-11-06T15:39:54Z: the NPC list still names Ranger Tarina (added rev 16567, 2007-11-26), no coordinate; https://tabularasa.fandom.com/wiki/Foreas_Base?oldid=35531; local research/20260926-missing-npcs/work/tarapedia/pages/Foreas_Base.json"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 3.0
+     }
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23): 'Supplies for Thoria Das - This mission begins with Ranger Tarina around -55.1, 116.4, 507.7'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+      }
+     ],
+     "reasoning": "Stationary, as every NPC-creation batch places a mission NPC."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1148,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Ranger Tarina (TTH /loc, 2007-10-23)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199952
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "name_id": {
+     "value": 4846,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 4846 -> 'Field Sergeant Hanna' STORE_SUBSCR offset 6419 (sha256 1fa1ec6c098f3ae2..., bytecode 1234238142)"
+      }
+     ],
+     "reasoning": "the client's own creature name table, exact name"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      }
+     ],
+     "reasoning": "an AFS field sergeant (TaRapedia infobox Faction=AFS)."
+    },
+    "level": {
+     "value": 28,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Field Sergeant Hanna' (pageid 6876) rev 15277 2007-11-18T14:24:29Z: infobox Level=28, Gender=Female, Zone=Incline; local research/20260926-missing-npcs/work/tarapedia/pages/Field_Sergeant_Hanna.json"
+      }
+     ],
+     "reasoning": "TaRapedia infobox Level=28 (2007-11-18, pre-D11; GAP-MISSING-NPC-LEVELS).",
+     "confidence": "medium"
+    },
+    "class_id": {
+     "value": 3848,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo: entityclass.pyo 3848 NPC_Human_Swapset_Female aug_list [1,12,52,59]"
+      }
+     ],
+     "counterpart": "3848 NPC_Human_Swapset_Female, the female counterpart of 3846 the NPC-creation batches give a female AFS NPC (TaRapedia infobox Gender=Female; Ten Ton Hammer \"She\")",
+     "required_because": "an entity class carrying the NPC augmentation (52) is mandatory for the creature to exist, be drawn and be talked to, and no source records this NPC's model",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs (555 hit points)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs and every NPC-creation batch (555)",
+     "required_because": "the server needs a hit point maximum and no source gives one for a mission NPC",
+     "decision": "OD-45"
+    },
+    "run_speed": {
+     "value": 9.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "Outpost Commander Rogers (100) and Field Sgt. Witherspoon (101), run 9 / walk 5, the rates every NPC-creation batch copies",
+     "required_because": "creature.run_speed is NOT NULL; the placement is stationary, so the rate is never used to move him",
+     "decision": "OD-45"
+    },
+    "walk_speed": {
+     "value": 5.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "as run_speed (Rogers 100, Witherspoon 101: walk 5)",
+     "required_because": "as run_speed",
+     "decision": "OD-45"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      }
+     ],
+     "reasoning": "a mission giver who does not fight has no attack; 0 is the evidenced value for non-combat NPCs (OD-23)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Field Sergeant Hanna (Raintree Post)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199952
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 199952,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      }
+     ],
+     "reasoning": "instantiates the creature row of the same id."
+    },
+    "pos_x": {
+     "value": -176.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-nyxroq-post-part-one' (Taea, dated 2008-03-06): 'Relay Terrorist Info to Hanna which involves you making a run out to Raintree Post at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-nyxroq-post-part-one; local research/20260926-missing-npcs/work/tth/node28481.txt"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Field Sergeant Hanna' (pageid 6876) rev 15277 2007-11-18T14:24:29Z: 'Field Sergeant Hanna is next to the Raintree Post waypoint'; https://tabularasa.fandom.com/wiki/Field_Sergeant_Hanna?oldid=15277; local research/20260926-missing-npcs/work/tarapedia/pages/Field_Sergeant_Hanna.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers ui_map_key 1761 entity 134419591485480 'Waypoint: Raintree Post' (-172.42, 276.45, 277.08), 4.1 m from the reading; uimapmarker.pyo (1.16.5.0), extracted in research/20260926-torden-missions/work/markers.json"
+      }
+     ],
+     "reasoning": "two Ten Ton Hammer guides give -176,276,279 (whole metres), 4.1 m from the client's Raintree Post waypoint marker, matching TaRapedia's \"next to the Raintree Post waypoint\". Pre-D11 (2008-03); the post-D11 Raintree Post mission list (rev 33725, 2008-09-19) still names her. Confidence high.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5
+     }
+    },
+    "pos_y": {
+     "value": 276.008,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.hanna.surfaces_under_xz[0]"
+      }
+     ],
+     "reasoning": "navmesh surface 276.284 under x,z minus the 0.276 m original-spawn offset; the surface joined to the waypoint by a complete route.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": 279.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-nyxroq-post-part-one' (Taea, dated 2008-03-06): 'Relay Terrorist Info to Hanna which involves you making a run out to Raintree Post at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-nyxroq-post-part-one; local research/20260926-missing-npcs/work/tth/node28481.txt"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Field Sergeant Hanna' (pageid 6876) rev 15277 2007-11-18T14:24:29Z: 'Field Sergeant Hanna is next to the Raintree Post waypoint'; https://tabularasa.fandom.com/wiki/Field_Sergeant_Hanna?oldid=15277; local research/20260926-missing-npcs/work/tarapedia/pages/Field_Sergeant_Hanna.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo factionedmarkers ui_map_key 1761 entity 134419591485480 'Waypoint: Raintree Post' (-172.42, 276.45, 277.08), 4.1 m from the reading; uimapmarker.pyo (1.16.5.0), extracted in research/20260926-torden-missions/work/markers.json"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5
+     }
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'guide-to-raintree-post' (Taea, dated 2008-03-11): 'Field Sergeant Hanna lounges near the waypoint at -176,276,279'; https://www.tentonhammer.com/guides/guide-to-raintree-post; local research/20260926-missing-npcs/work/tth/guide-to-raintree-post.txt line 45"
+      }
+     ],
+     "reasoning": "Stationary, as every NPC-creation batch places a mission NPC."
+    },
+    "npc_package_id": {
+     "value": 423,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo: every row on package 423 is (818,1,423,1,1)@10262 'Ah, good, Foletto radioed in that you'd be showing up.', (833,1,423,1,1)@10883 and (841,1,423,1,1)@11099 'So, you're the soldier Foletto radioed about, eh?'"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (818,1)/(833,1)/(841,1): 'Report to Field Sergeant Hanna' / 'Give Information to Field Sergeant Hanna'"
+      }
+     ],
+     "reasoning": "Package 423 is carried by no creature in the world and completes only the three objectives that name Field Sergeant Hanna; she is the only Hanna. Confidence high."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1761,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Field Sergeant Hanna (TTH /loc, waypoint)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 199953
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "name_id": {
+     "value": 8908,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 8908 -> 'Sergeant Dekay' STORE_SUBSCR offset 20225 (sha256 1fa1ec6c098f3ae2..., bytecode 1234238142)"
+      }
+     ],
+     "reasoning": "the client's own creature name table, exact name"
+    },
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      }
+     ],
+     "reasoning": "an AFS sergeant (TaRapedia infobox Faction=AFS)."
+    },
+    "level": {
+     "value": 23,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Sergeant Dekay' (pageid 7081) rev 16278 2007-11-25T14:47:41Z: infobox Level=23, Gender=Male, Zone=Plains (the overview text is copied from Field Lt. Brody's page, whose own infobox says Level=15, so the level is Dekay's); local research/20260926-missing-npcs/work/tarapedia/pages/Sergeant_Dekay.json"
+      }
+     ],
+     "reasoning": "TaRapedia infobox Level=23 (2007-11-25, pre-D11; GAP-MISSING-NPC-LEVELS).",
+     "confidence": "medium"
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo: entityclass.pyo 3846 NPC_Human_Swapset_Male aug_list [1,12,52,59]"
+      }
+     ],
+     "counterpart": "3846 NPC_Human_Swapset_Male, the class the world seed gives AFS human commanders (Outpost Commander Rogers 100, Field Sgt. Witherspoon 101) and every NPC-creation batch gives a male AFS NPC",
+     "required_because": "an entity class carrying the NPC augmentation (52) is mandatory for the creature to exist, be drawn and be talked to, and no source records this NPC's model",
+     "decision": "OD-45"
+    },
+    "max_hp": {
+     "value": 555,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "server_sql:gameserver_dev_Full",
+       "locator": "the world seed's quest NPCs (555 hit points)"
+      }
+     ],
+     "counterpart": "the world seed's quest NPCs and every NPC-creation batch (555)",
+     "required_because": "the server needs a hit point maximum and no source gives one for a mission NPC",
+     "decision": "OD-45"
+    },
+    "run_speed": {
+     "value": 9.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "Outpost Commander Rogers (100) and Field Sgt. Witherspoon (101), run 9 / walk 5, the rates every NPC-creation batch copies",
+     "required_because": "creature.run_speed is NOT NULL; the placement is stationary, so the rate is never used to move him",
+     "decision": "OD-45"
+    },
+    "walk_speed": {
+     "value": 5.0,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client: no server movement rate for NPCs"
+      }
+     ],
+     "counterpart": "as run_speed (Rogers 100, Witherspoon 101: walk 5)",
+     "required_because": "as run_speed",
+     "decision": "OD-45"
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      }
+     ],
+     "reasoning": "a mission giver who does not fight has no attack; 0 is the evidenced value for non-combat NPCs (OD-23)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Sergeant Dekay (Irendas Penal Colony)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 199953
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      }
+     ],
+     "reasoning": "a placed creature (ContentPlacementKind.Creature)."
+    },
+    "creature_id": {
+     "value": 199953,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      }
+     ],
+     "reasoning": "instantiates the creature row of the same id."
+    },
+    "pos_x": {
+     "value": 312.3,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo ui_map_key 1764: factionedmarkers 'Waypoint: Irendas Penal Colony' (306.16, 430.59, -166.14) entity 134419591472343; staticmarkers 'Wormhole: Irendas Penal Colony' (318.47, 431.28, -216.12) entity 134419591472353; uimapmarker.pyo (1.16.5.0), extracted in research/20260926-torden-missions/work/markers.json"
+      },
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.dekay (midpoint of the two markers, 51.5 m apart; floor and route)"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Plains Targets of Opportunity' (pageid 6289) rev 32005 2008-08-23T08:53:37Z: note by Lynnx (2008-02-29, kept to the last revision) 'Turn in to Sergant Dekay near wormhole/teleporter'; local research/20260926-missing-npcs/work/tarapedia/pages/Plains_Targets_of_Opportunity.json"
+      }
+     ],
+     "reasoning": "No coordinate for Dekay exists. The guide places him between the Irendas wormhole and waypoint and says he paced; the point is the midpoint of the client's two markers, and the uncertainty is half the 51.5 m segment between them. Derived from a dated observation plus original marker positions, so measured with that uncertainty (GAP-DEKAY-POSITION).",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 26.0,
+      "method": "half the waypoint-wormhole segment the guide describes"
+     }
+    },
+    "pos_y": {
+     "value": 429.924,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.dekay.surfaces_under_xz[0]"
+      }
+     ],
+     "reasoning": "navmesh surface 430.200 under x,z minus the 0.276 m original-spawn offset; the surface joined to the waypoint by a complete route.",
+     "uncertainty": {
+      "unit": "m",
+      "vertical_m": 0.3,
+      "method": "navmesh surface - 0.276 m at x,z"
+     }
+    },
+    "pos_z": {
+     "value": -191.1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/uimapmarker.pyo ui_map_key 1764: factionedmarkers 'Waypoint: Irendas Penal Colony' (306.16, 430.59, -166.14) entity 134419591472343; staticmarkers 'Wormhole: Irendas Penal Colony' (318.47, 431.28, -216.12) entity 134419591472353; uimapmarker.pyo (1.16.5.0), extracted in research/20260926-torden-missions/work/markers.json"
+      },
+      {
+       "source": "measurement:missing-mission-givers-20260926",
+       "locator": "probes.dekay (midpoint of the two markers, 51.5 m apart; floor and route)"
+      },
+      {
+       "source": "community_db:tarapedia-post-d11",
+       "locator": "page 'Plains Targets of Opportunity' (pageid 6289) rev 32005 2008-08-23T08:53:37Z: note by Lynnx (2008-02-29, kept to the last revision) 'Turn in to Sergant Dekay near wormhole/teleporter'; local research/20260926-missing-npcs/work/tarapedia/pages/Plains_Targets_of_Opportunity.json"
+      }
+     ],
+     "reasoning": "as pos_x.",
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 26.0,
+      "method": "half the waypoint-wormhole segment the guide describes"
+     }
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'targets-of-opportunity-torden-plains' (Taea, dated 2008-02-19): 'The Plains Targets of Opportunity mission begins with Sergeant Dekay inside Irendas Penal Facility, between the wormhole and waypoint. Sgt Dekay is easily spotted as the man pacing around a small group of Riflemen in formation.'; https://www.tentonhammer.com/guides/targets-of-opportunity-torden-plains; local research/20260926-missing-npcs/work/tth/node25965.txt"
+      }
+     ],
+     "reasoning": "Stationary, as every NPC-creation batch places a mission NPC - the guide says Dekay paced; the pacing is not reproduced (GAP-DEKAY-RIFLEMEN)."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1764,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Sergeant Dekay (wormhole-waypoint midpoint)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 134
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "package_id": {
+     "value": 2049,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo: the only row on package 2049 is (1741,1,2049,1,1)@33131 'Good, you found your way here.'"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (1741,3)@82244 opening: 'Receptive Liaison Standley is stationed in Twin Pillars. Once you get there, make sure you check in with him'; missionobjective.pyo (1741,1)@84020 'Report to Liaison Standley'"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Standley' (pageid 5886) rev 11590 2007-10-23: RewardGiver=Receptive Liaison Standley, debriefing 'Good, you found your way here.'; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json"
+      }
+     ],
+     "reasoning": "Package 2049 is carried by no creature and completes only 1741, whose objective and opening name Standley; creature 134 is the only Standley. Confidence high."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Receptive Liaison Standley (client package 2049)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199085
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "package_id": {
+     "value": 2025,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo: the only row on package 2025 is (1744,4,2025,1,1)@33212 'Welcome to Palisades soldier. Hope you didnt have troubles finding me.'"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (1744,4)@84119 'Report to Receptive Liaison Arizpe'; missionconversation.pyo (1744,2)@82496 'Report to Receptive Liaison Arizpe on Palisades.'"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01: RewardGiver=Receptive Liaison Arizpe, Cumbria Research Facility; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "Package 2025 is carried by no creature and completes only 1744, which names Arizpe; creature 199085 is the only Arizpe. Confidence high."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Receptive Liaison Arizpe (client package 2025)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1741
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "giver_id": {
+     "value": 133,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Standley' (pageid 5886) revs 11388 (2007-10-18) and 11590 (2007-10-23): MissionGiver=Receptive Liaison Langerman, Alia Das; the briefing equals the client opening (1741,3); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Receptive Liaison Langerman' (pageid 6321) rev 12873 2007-11-06: missions the eight Logos: missions and Report to Liaison Standley, 'your first contact for Logos Missions'; Location 871.4 | 294.2 | 385.4; local research/20260926-missing-npcs/work/tarapedia/pages/Receptive_Liaison_Langerman.json"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo: the liaison missions carry objective ids 1-5 in order - 1741 obj 1 (package 2049), 1742 obj 2 (2050), 1743 obj 3 (2051), 1744 obj 4 (2025), 1745 obj 5 (2026) - and each is given by the previous receiver (1742 Standley, 1743 Brice, 1745 Arizpe), which puts the Alia Das liaison first"
+      },
+      {
+       "source": "client_table:creature-names",
+       "locator": "creaturenamelanguage.pyo key 10010 'Receptive Liaison Langerman' STORE_SUBSCR offset 29837; world-seed creature 133 name_id 10010, spawnpool 211 at (870.96, 294.21, 385.37), 0.4 m from the TaRapedia /loc"
+      }
+     ],
+     "reasoning": "Receptive Liaison Langerman (creature 133, world-seed pool 211 at Alia Das). TaRapedia names him (2007-10) with the client opening as his briefing, and the objective-id chain puts the Alia Das liaison first. Every source is pre-D11; whether D11 moved the start of the liaison chain is undocumented (GAP-LOGOS-CHAIN-START-POST-D11). Confidence high.",
+     "confidence": "high"
+    },
+    "reciver_id": {
+     "value": 134,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Standley' (pageid 5886) revs 11388 (2007-10-18) and 11590 (2007-10-23): MissionGiver=Receptive Liaison Langerman, Alia Das; the briefing equals the client opening (1741,3); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json"
+      }
+     ],
+     "reasoning": "Receptive Liaison Standley (134), bound to package 2049 by this migration: the only completion row, the objective and the opening name him.",
+     "confidence": "high"
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1741: the final client mission tables carry no level; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source found states one for this mission; the Wilderness band (5), the giver's zone (Alia Das); 1742, given by Standley in the Wilderness, has 5 as well is the convention. Recorded under GAP-MISSION-LEVEL, not as a finding.",
+     "confidence": "low"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1741: the final client mission tables carry no group_type; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention for single-player conversation missions (every W3 batch row uses 1); no source records a per-mission group type.",
+     "confidence": "low"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1741: the final client mission tables carry no category_id; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention (GeneralCategory 10000001), as every W3 batch row; not per-mission evidence.",
+     "confidence": "low"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1741: the final client mission tables carry no shareable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; the share flag for this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER context).",
+     "confidence": "low"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1741: the final client mission tables carry no radio_completeable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; radio completion is unrecorded for this mission.",
+     "confidence": "low"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Report to Liaison Standley (W3)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1744
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "giver_id": {
+     "value": 199004,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z (Dashiva, edit summary 'Mission giver'): MissionGiver=Receptive Liaison Noonan, Foreas Base, replacing '?'; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo: liaison objective-id chain 1741..1745 (objective 4 for 1744), each mission given by the previous receiver; 1743 turns in at Noonan"
+      }
+     ],
+     "reasoning": "Receptive Liaison Noonan (placement 199004), already the seeded receiver of 1743 and the next liaison in the objective-id chain; TaRapedia sets him as giver on 2008-01-01. Confidence high. His own position is still the Foreas Base label (GAP-W3-NOONAN-POSITION).",
+     "confidence": "high"
+    },
+    "reciver_id": {
+     "value": 199085,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z (Dashiva, edit summary 'Mission giver'): MissionGiver=Receptive Liaison Noonan, Foreas Base, replacing '?'; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "Receptive Liaison Arizpe (199085), bound to package 2025 by this migration: the only completion row and the objective name him.",
+     "confidence": "high"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1744: the final client mission tables carry no level; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source found states one for this mission; the Divide band (10), the giver's zone (Foreas Base); 1743 Divide 10 and 1745 Palisades 15 use the same rule is the convention. Recorded under GAP-MISSION-LEVEL, not as a finding.",
+     "confidence": "low"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1744: the final client mission tables carry no group_type; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention for single-player conversation missions (every W3 batch row uses 1); no source records a per-mission group type.",
+     "confidence": "low"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1744: the final client mission tables carry no category_id; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention (GeneralCategory 10000001), as every W3 batch row; not per-mission evidence.",
+     "confidence": "low"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1744: the final client mission tables carry no shareable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; the share flag for this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER context).",
+     "confidence": "low"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1744: the final client mission tables carry no radio_completeable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; radio completion is unrecorded for this mission.",
+     "confidence": "low"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Report to Liaison Arizpe (Divide)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 390
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "giver_id": {
+     "value": 199951,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450 2007-12-13T22:13:21Z: MissionGiver=Ranger Tarina, Foreas Base; https://tabularasa.fandom.com/wiki/Supplies_for_Thoria_Das?oldid=20450; local research/20260926-missing-npcs/work/tarapedia/pages/Supplies_for_Thoria_Das.json"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'foreas-base-missions' (dated 2007-10-23), line 77: 'Supplies for Thoria Das - This mission begins with Ranger Tarina ... Find Warrior Mala at 222.9, 167.8, 977.0'; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (390,3)@4664 opening: 'Our brothers need supplies to fight against the Bane! ... Please take this crate of supplies and deliver them to the north.' (a Forean voice in Foreas Base)"
+      }
+     ],
+     "reasoning": "Ranger Tarina (199951, created by this migration). TaRapedia and Ten Ton Hammer name her; the opening is a Forean voice sending the player north to Thoria Das. Confidence high.",
+     "confidence": "high"
+    },
+    "reciver_id": {
+     "value": 510117,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (390,1,190,1,1)@4295 completion 'Human soldier, I'm busy watching over my settlement. Is your need that important?'; missionconversation.pyo (390,4)@4682 finishing 'What? A crate of... food, ammunition, bandages...'"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450: RewardGiver=Warior Mela, Thoria Das; local research/20260926-missing-npcs/work/tarapedia/pages/Supplies_for_Thoria_Das.json"
+      }
+     ],
+     "reasoning": "Warrior Mela (spawnpool 510117, package 190): the only completion row, the finishing text and TaRapedia agree.",
+     "confidence": "high"
+    },
+    "level": {
+     "value": 10,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 390: the final client mission tables carry no level; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source found states one for this mission; the Divide band (10) is the convention. Recorded under GAP-MISSION-LEVEL, not as a finding.",
+     "confidence": "low"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 390: the final client mission tables carry no group_type; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention for single-player conversation missions (every W3 batch row uses 1); no source records a per-mission group type.",
+     "confidence": "low"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 390: the final client mission tables carry no category_id; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention (GeneralCategory 10000001), as every W3 batch row; not per-mission evidence.",
+     "confidence": "low"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 390: the final client mission tables carry no shareable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; the share flag for this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER context).",
+     "confidence": "low"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 390: the final client mission tables carry no radio_completeable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; radio completion is unrecorded for this mission.",
+     "confidence": "low"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Supplies for Thoria Das (Divide)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 818
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "giver_id": {
+     "value": 510066,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940 2007-12-14T23:13:06Z: MissionGiver=Field Commander Foletto, Nyxroq Post; briefing = client opening (818,3); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (818,1,423,1,1)@10262 'Ah, good, Foletto radioed in that you'd be showing up.'; missionconversation.pyo (818,3)@21602 opening 'I'm glad you came 'round, trooper ... Head down the road and report to Field Sergeant Hanna'"
+      }
+     ],
+     "reasoning": "Field Commander Foletto (spawnpool 510066, Nyxroq Post): TaRapedia names him, and Hanna's completion line says Foletto radioed ahead. Confidence high. Foletto stands on upstream's marker placement (GAP-TORDEN-MARKER-POSITIONS).",
+     "confidence": "high"
+    },
+    "reciver_id": {
+     "value": 199952,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo (818,1)@20429 -> [4038, 7162] 'Report to Field Sergeant Hanna'; objectiveconversation.pyo (818,1,423,1,1)@10262"
+      },
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940: RewardGiver=Field Sergeant Hanna, Raintree Post"
+      }
+     ],
+     "reasoning": "Field Sergeant Hanna (199952, created by this migration, placement package 423).",
+     "confidence": "high"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 818: the final client mission tables carry no level; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source found states one for this mission; the Incline band (35) is the convention. Recorded under GAP-MISSION-LEVEL, not as a finding.",
+     "confidence": "low"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 818: the final client mission tables carry no group_type; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention for single-player conversation missions (every W3 batch row uses 1); no source records a per-mission group type.",
+     "confidence": "low"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 818: the final client mission tables carry no category_id; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention (GeneralCategory 10000001), as every W3 batch row; not per-mission evidence.",
+     "confidence": "low"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 818: the final client mission tables carry no shareable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; the share flag for this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER context).",
+     "confidence": "low"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 818: the final client mission tables carry no radio_completeable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; radio completion is unrecorded for this mission.",
+     "confidence": "low"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Report to Field Sergeant Hanna (Incline)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1862
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "giver_id": {
+     "value": 199953,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation.pyo (1862,2)@91406 log 'Deliver the Infensus Garrison Directive to Lieutenant Commander Michan for Sergeant Dekay'"
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166 2008-01-31T23:03:25Z: MissionGiver=Sergeant Dekay, Irendas Penal Colony; https://tabularasa.fandom.com/wiki/The_Infesus_Garrison_Directive?oldid=28166; local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      },
+      {
+       "source": "community_db:tentonhammer",
+       "locator": "guide 'irendas-penal-colony' (Tony \"RadarX\" Jones, dated 2007-12-05): 'Grab the Targets of Opportunity Mission from Sergeant Dekay, and a mission called Infesus Garrison Directive'; local research/20260926-missing-npcs/work/tth/node15385.txt"
+      }
+     ],
+     "reasoning": "Sergeant Dekay (199953, created by this migration): the client log names him, and TaRapedia and Ten Ton Hammer agree. Confidence high.",
+     "confidence": "high"
+    },
+    "reciver_id": {
+     "value": 510090,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objectiveconversation.pyo (1862,1,1280,1,1)@36668 completion 'Great! I've been expecting this for a while.'; missionconversation.pyo (1862,4)@91442 finishing"
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166: RewardGiver=Lieutenant Commander Michan"
+      }
+     ],
+     "reasoning": "Lieutenant Commander Michan (spawnpool 510090, package 1280), whose position equals TaRapedia's hospital /loc to 0.7 m.",
+     "confidence": "high"
+    },
+    "level": {
+     "value": 35,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1862: the final client mission tables carry no level; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source found states one for this mission; the Plains band (35) is the convention. Recorded under GAP-MISSION-LEVEL, not as a finding.",
+     "confidence": "low"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1862: the final client mission tables carry no group_type; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention for single-player conversation missions (every W3 batch row uses 1); no source records a per-mission group type.",
+     "confidence": "low"
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1862: the final client mission tables carry no category_id; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention (GeneralCategory 10000001), as every W3 batch row; not per-mission evidence.",
+     "confidence": "low"
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1862: the final client mission tables carry no shareable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; the share flag for this mission is not recorded anywhere found (GAP-W3-SHARING-OFFER context).",
+     "confidence": "low"
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 1862: the final client mission tables carry no radio_completeable; the value is the W3 slice convention named in the reasoning"
+      }
+     ],
+     "reasoning": "W3 convention false; radio completion is unrecorded for this mission.",
+     "confidence": "low"
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "The Infensus Garrison Directive (Plains)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1741,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "comment": {
+     "value": "Report to Liaison Standley",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1741,1) -> [16985, 16986, None, None, None] (offset 84020) name \"Report to Liaison Standley\""
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1741,1) -> [16985, 16986, None, None, None] (offset 84020) name \"Report to Liaison Standley\""
+      }
+     ],
+     "reasoning": "single objective.",
+     "confidence": "high"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1741,1) -> [16985, 16986, None, None, None] (offset 84020) name \"Report to Liaison Standley\""
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table; a mission completes on its required objectives, so the sole objective must be required.",
+     "confidence": "high"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1741,1) -> [16985, 16986, None, None, None] (offset 84020) name \"Report to Liaison Standley\""
+      }
+     ],
+     "reasoning": "single objective; nothing else could reveal it.",
+     "confidence": "high"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1744,
+    "objective_id": 4
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "comment": {
+     "value": "Report to Receptive Liaison Arizpe",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1744,4) -> [17046, 17047, None, None, None] (offset 84119); the client has objective 4 only name \"Report to Receptive Liaison Arizpe\""
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1744,4) -> [17046, 17047, None, None, None] (offset 84119); the client has objective 4 only name \"Report to Receptive Liaison Arizpe\""
+      }
+     ],
+     "reasoning": "single objective.",
+     "confidence": "high"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1744,4) -> [17046, 17047, None, None, None] (offset 84119); the client has objective 4 only name \"Report to Receptive Liaison Arizpe\""
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table; a mission completes on its required objectives, so the sole objective must be required.",
+     "confidence": "high"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1744,4) -> [17046, 17047, None, None, None] (offset 84119); the client has objective 4 only name \"Report to Receptive Liaison Arizpe\""
+      }
+     ],
+     "reasoning": "single objective; nothing else could reveal it.",
+     "confidence": "high"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 390,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "comment": {
+     "value": "Deliver Crate to Warrior Mela",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (390,1) -> [530, 9260, None, None, None] (offset 4919) name \"Deliver Crate to Warrior Mela\""
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (390,1) -> [530, 9260, None, None, None] (offset 4919) name \"Deliver Crate to Warrior Mela\""
+      }
+     ],
+     "reasoning": "single objective.",
+     "confidence": "high"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (390,1) -> [530, 9260, None, None, None] (offset 4919) name \"Deliver Crate to Warrior Mela\""
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table; a mission completes on its required objectives, so the sole objective must be required.",
+     "confidence": "high"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (390,1) -> [530, 9260, None, None, None] (offset 4919) name \"Deliver Crate to Warrior Mela\""
+      }
+     ],
+     "reasoning": "single objective; nothing else could reveal it.",
+     "confidence": "high"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 818,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "comment": {
+     "value": "Report to Field Sergeant Hanna",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (818,1) -> [4038, 7162, None, None, None] (offset 20429) name \"Report to Field Sergeant Hanna\""
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (818,1) -> [4038, 7162, None, None, None] (offset 20429) name \"Report to Field Sergeant Hanna\""
+      }
+     ],
+     "reasoning": "single objective.",
+     "confidence": "high"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (818,1) -> [4038, 7162, None, None, None] (offset 20429) name \"Report to Field Sergeant Hanna\""
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table; a mission completes on its required objectives, so the sole objective must be required.",
+     "confidence": "high"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (818,1) -> [4038, 7162, None, None, None] (offset 20429) name \"Report to Field Sergeant Hanna\""
+      }
+     ],
+     "reasoning": "single objective; nothing else could reveal it.",
+     "confidence": "high"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1862,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "comment": {
+     "value": "Deliver the Infensus Garrison Directive",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1862,1) -> [19089, 19090, None, None, None] (offset 96164) name \"Deliver the Infensus Garrison Directive\""
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1862,1) -> [19089, 19090, None, None, None] (offset 96164) name \"Deliver the Infensus Garrison Directive\""
+      }
+     ],
+     "reasoning": "single objective.",
+     "confidence": "high"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1862,1) -> [19089, 19090, None, None, None] (offset 96164) name \"Deliver the Infensus Garrison Directive\""
+      }
+     ],
+     "reasoning": "the mission's only objective in the final client table; a mission completes on its required objectives, so the sole objective must be required.",
+     "confidence": "high"
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective.pyo + missiontextlanguage.pyo: key (1862,1) -> [19089, 19090, None, None, None] (offset 96164) name \"Deliver the Infensus Garrison Directive\""
+      }
+     ],
+     "reasoning": "single objective; nothing else could reveal it.",
+     "confidence": "high"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1741,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 4000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Standley' (pageid 5886) rev 11590 2007-10-23T01:50:56Z RewardXP=4,000 (RewardCredits=None); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=4,000 (rev 11590, 2007-10-23). ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Standley' (pageid 5886) rev 11590 2007-10-23T01:50:56Z RewardXP=4,000 (RewardCredits=None); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1744,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 8000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z RewardXP=8,000 (since rev 16584, 2007-11-26); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=8,000. ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z RewardXP=8,000 (since rev 16584, 2007-11-26); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1744,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z RewardCredits=800 (since rev 16582, 2007-11-26); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits=800. ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Liaison Arizpe' (pageid 7134) rev 24864 2008-01-01T02:10:46Z RewardCredits=800 (since rev 16582, 2007-11-26); local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 390,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 13000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450 2007-12-13T22:13:21Z RewardXP=13,000 (since rev 15126, 2007-11-16); local research/20260926-missing-npcs/work/tarapedia/pages/Supplies_for_Thoria_Das.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=13,000. ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450 2007-12-13T22:13:21Z RewardXP=13,000 (since rev 15126, 2007-11-16); local research/20260926-missing-npcs/work/tarapedia/pages/Supplies_for_Thoria_Das.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 390,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 1950,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450 2007-12-13T22:13:21Z RewardCredits=1,950; Ten Ton Hammer foreas-base-missions (2007-10-23): 'Your reward for this mission is 1950 credits'"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits=1,950, corroborated by Ten Ton Hammer (2007-10-23). ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Supplies for Thoria Das' (pageid 6836) rev 20450 2007-12-13T22:13:21Z RewardCredits=1,950; Ten Ton Hammer foreas-base-missions (2007-10-23): 'Your reward for this mission is 1950 credits'"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 818,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 15500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940 2007-12-14T23:13:06Z RewardXP=15,500; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=15,500. ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940 2007-12-14T23:13:06Z RewardXP=15,500; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 818,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 2800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940 2007-12-14T23:13:06Z RewardCredits=2,800; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits=2,800. ERA: pre-Update-1.4 - every TaRapedia revision carrying this amount predates 2008-01-29 (RGTR live notes 2008-01-29 re-evaluated the rewards of 855 missions). Seeded because the earlier W3 batches seeded TaRapedia's recorded experience and credits whatever their date, and labelled so it is not read as final-state evidence (GAP-MISSING-GIVERS-REWARDS). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "pre-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia",
+       "locator": "page 'Report to Field Sergeant Hanna' (pageid 8234) rev 20940 2007-12-14T23:13:06Z RewardCredits=2,800; local research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1862,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 12500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166 2008-01-31T23:03:25Z RewardXP=12,500 (set in rev 28165, 2008-01-31); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "TaRapedia RewardXP=12,500, first recorded 2008-01-31, two days after the 1.4 notes: post-1.4 by date, with no later documented change (GAP-MISSION-REWARD-FINAL-STATE). Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "post-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166 2008-01-31T23:03:25Z RewardXP=12,500 (set in rev 28165, 2008-01-31); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1862,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 2500,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166 2008-01-31T23:03:25Z RewardCredits=2,500 (set in rev 28075, 2008-01-31)"
+      }
+     ],
+     "reasoning": "TaRapedia RewardCredits=2,500, first recorded 2008-01-31: post-1.4 by date. Amount stored in the credits column for either reward type.",
+     "confidence": "medium",
+     "era": "post-1.4"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 28166 2008-01-31T23:03:25Z RewardCredits=2,500 (set in rev 28075, 2008-01-31)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1862,
+    "type": 5,
+    "item_template_id": 45056
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "item_template_id": {
+     "value": 45056,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/physicalentityclassnamelanguage.pyo + world itemtemplate_itemclass: 'Class V Advanced Med Pack' -> class 22539 (name offset 71318) -> templates [45056]"
+      }
+     ],
+     "reasoning": "the one world template of the client item class whose name the wiki lists; list first recorded 2008-01-30, after the 1.4 notes (GAP-MISSION-REWARD-FINAL-STATE).",
+     "confidence": "high"
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "the stack size the wiki lists beside the name.",
+     "confidence": "medium"
+    },
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "choose one of three (SelectableItem), as the post-1.4 consumable lists of 1326/1330 are seeded; the wiki does not state the choice structure (GAP-MISSING-GIVERS-REWARDS).",
+     "confidence": "medium"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1862,
+    "type": 5,
+    "item_template_id": 118812
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "item_template_id": {
+     "value": 118812,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/physicalentityclassnamelanguage.pyo + world itemtemplate_itemclass: 'Class V Adrenaline Booster' -> class 28466 (name offset 123185) -> templates [118812]"
+      }
+     ],
+     "reasoning": "the one world template of the client item class whose name the wiki lists; list first recorded 2008-01-30, after the 1.4 notes (GAP-MISSION-REWARD-FINAL-STATE).",
+     "confidence": "high"
+    },
+    "quantity": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "the stack size the wiki lists beside the name.",
+     "confidence": "medium"
+    },
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "choose one of three (SelectableItem), as the post-1.4 consumable lists of 1326/1330 are seeded; the wiki does not state the choice structure (GAP-MISSING-GIVERS-REWARDS).",
+     "confidence": "medium"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1862,
+    "type": 5,
+    "item_template_id": 45444
+   },
+   "slice": "W3",
+   "migration": "MissingMissionGivers",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "item_template_id": {
+     "value": 45444,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/physicalentityclassnamelanguage.pyo + world itemtemplate_itemclass: 'Class V Fragmentation Grenade' -> class 22961 (name offset 74972) -> templates [45444]"
+      }
+     ],
+     "reasoning": "the one world template of the client item class whose name the wiki lists; list first recorded 2008-01-30, after the 1.4 notes (GAP-MISSION-REWARD-FINAL-STATE).",
+     "confidence": "high"
+    },
+    "quantity": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "the stack size the wiki lists beside the name.",
+     "confidence": "medium"
+    },
+    "type": {
+     "value": 5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926",
+       "locator": "page 'The Infesus Garrison Directive' (pageid 10065) rev 27938 2008-01-30 (kept to rev 28166, 2008-01-31) RewardItem: Class V Advanced Med Pack (2) / Class V Adrenaline Booster (2) / Class V Fragmentation Grenade (3); local research/20260926-torden-missions/work/tarapedia/missions/The_Infesus_Garrison_Directive.json"
+      }
+     ],
+     "reasoning": "choose one of three (SelectableItem), as the post-1.4 consumable lists of 1326/1330 are seeded; the wiki does not state the choice structure (GAP-MISSING-GIVERS-REWARDS).",
+     "confidence": "medium"
+    }
+   }
   }
  ],
  "omitted": [
@@ -66390,6 +68769,48 @@
    "what": "771 experience",
    "reason": "no source records a figure (TaRapedia \"?\" then blank; Ellatha shows none)",
    "gap": "GAP-DOCTOR-CREDITS-CONFLICT",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "what": "818's gate on 816 Kick Crusty in the Jimmy",
+   "reason": "the required mission is unseeded; the loader rejects a gate on an unseeded mission",
+   "gap": "GAP-MISSING-GIVERS-818-GATE",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "1741's credits and the item lists of 390 and 818",
+   "reason": "1741's credits read 'None'; 390's (Olympia Reflective Armor Vest / Vextronics EMP Rifle) and 818's (Class V consumables) lists are recorded only before Update 1.4",
+   "gap": "GAP-MISSING-GIVERS-REWARDS",
+   "slice": "W3"
+  },
+  {
+   "table": "content_rule_action",
+   "what": "accept-time grants of 390's supply crate and 1862's directive",
+   "reason": "no template or grant mechanism evidenced",
+   "gap": "GAP-MISSING-GIVERS-ACCEPT-ITEMS",
+   "slice": "W3"
+  },
+  {
+   "table": "creature, content_placement",
+   "what": "Col. Almos (name 2965), the giver of 551, and 551 itself",
+   "reason": "his only reading is not consistent with any floor within its uncertainty",
+   "gap": "GAP-ALMOS-HEIGHT",
+   "slice": "W3"
+  },
+  {
+   "table": "creature, content_placement",
+   "what": "Sergeant Conway (name 7030), the giver of 835, and 835 itself",
+   "reason": "no position source; omission preferred over the candidate marker anchors",
+   "gap": "GAP-CONWAY-POSITION",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "340, 833, 841, 842 and 848",
+   "reason": "340/1905 escort split unresolved; 833/841 and 842/848 are the two arms of 827, which cannot be gated while 831/840 are unseeded",
+   "gap": "GAP-827-BRANCH-ARMS",
    "slice": "W3"
   }
  ],
@@ -68884,7 +71305,7 @@
   },
   {
    "id": "GAP-KEARNEY-POSITION",
-   "summary": "No source gives Field Ranger Kearney's position (pool 510118, Timora Mines 1348). TaRapedia has no NPC page (only 'Report in to Field Ranger Kearney when you get into the mines', 6126 rev 30014, 2008-03-27); Ellatha does not list him; only the Palisades map of codex-tr.net survives. He keeps upstream's ring 3.7 m from the client's 'Hospital: Timora Mines' marker as a labelled analogue (OD-59).",
+   "summary": "No source gives Field Ranger Kearney's position (pool 510118, Timora Mines 1348). TaRapedia has no NPC page (only 'Report in to Field Ranger Kearney when you get into the mines', 6126 rev 30014, 2008-03-27); Ellatha does not list him; only the Palisades map of codex-tr.net survives. He keeps upstream's ring 3.7 m from the client's 'Hospital: Timora Mines' marker as a labelled analogue (OD-59). Lead (2026-09-26, not acted on: Kearney serves only the held 340 and the unseeded 1905): Ten Ton Hammer's Timora Mines guide (2007-10-24) reads Kearney at -136.9, 205.6, 518.2, 11.8 m from the pool, where the Timora Mines navmesh has a floor at 205.741 joined to the hospital marker.",
    "evidence": [
     "research/20260926-world-defects/README.md section 3"
    ],
@@ -68898,16 +71319,21 @@
   },
   {
    "id": "GAP-MELA-POSITION",
-   "summary": "No source gives Warrior Mela's position (pool 510117, Thoria Das, Divide). TaRapedia has no NPC page (the Thoria Das page, rev 17075, only lists him; Supplies for Thoria Das gives no loc); Ellatha and codex-tr.net have nothing; the Ten Ton Hammer Thoria Das guide (2008-01-29) gives vendor coordinates only. He keeps upstream's ring around the client's 'Medical Vendor: Thoria Das' marker as a labelled analogue (OD-59).",
+   "summary": "No source gives Warrior Mela's position (pool 510117, Thoria Das, Divide). TaRapedia has no NPC page (the Thoria Das page, rev 17075, only lists him; Supplies for Thoria Das gives no loc); Ellatha and codex-tr.net have nothing; the Ten Ton Hammer Thoria Das guide (2008-01-29) gives vendor coordinates only. He keeps upstream's ring around the client's 'Medical Vendor: Thoria Das' marker as a labelled analogue (OD-59). Closed 2026-09-26 by MissingMissionGivers: Ten Ton Hammer's Foreas Base guide (2007-10-23) reads 'Warrior Mala' at 222.9, 167.8, 977.0, inside Thoria Das and 0.09 m from the floor; pool 510117 moves there (inferred x,z, measured y) and the analogue is retired.",
    "evidence": [
     "research/20260926-world-defects/README.md section 3"
    ],
-   "closes_with": "a reading or capture of Mela in Thoria Das",
+   "closes_with": "closed: the confirming test is MissingMissionGiversTests",
    "surfaced_by": [
     "world-data audits 2026-09-26 (research/20260926-world-defects, research/20260926-torden-missions)"
    ],
    "slices": [
     "W3"
+   ],
+   "status": "closed",
+   "confirmed_by": [
+    "MissingMissionGiversTests.EverySeededRowMatchesItsManifestRow",
+    "ContentSchemaMigrationTests.BootcampS1SeedsTheInitiationRowsAndRollsBackToEmptyContentTables"
    ]
   },
   {
@@ -68957,7 +71383,7 @@
   },
   {
    "id": "GAP-TORDEN-MARKER-POSITIONS",
-   "summary": "Upstream placed these Torden and Plateau mission NPCs on a client map marker, and no post-D11 reading exists to move them: Special Agent Perdu (510193; only a beta /loc, -129/398/719, rev 5799 2007-08-19, 157 m away), Gunnery Sergeant Obahmi (510067; pre-D11 /loc 158/233/-268, rev 16788 2007-11-27, 50 m away), Colonel Franks (510084; on the 'Mt. Hellas Outpost' label, TaRapedia 'Wander around on the third floor', no coordinate), Field Commander Foletto (510066; 'in the Nyxroq Post bunker', no coordinate), Major Nicholson (510069; on 'Trainer: Nyxroq Post', 'north of the Hospital', no coordinate), Salvage Master Orto (510074; 6.5 m from 'Control Point: Ortho' while TaRapedia says inside the Ortho hospital, 48 m away, no coordinate) and General Creelig (510089; 1.0 m from 'Crafting Stations: Irendas Penal Colony'). Coordinator Maila (510064) on 'Waypoint: Mires Post' agrees with TaRapedia's 'just south of the Mires Post waypoint'.",
+   "summary": "Upstream placed these Torden and Plateau mission NPCs on a client map marker, and no post-D11 reading exists to move them: Special Agent Perdu (510193; only a beta /loc, -129/398/719, rev 5799 2007-08-19, 157 m away), Gunnery Sergeant Obahmi (510067; pre-D11 /loc 158/233/-268, rev 16788 2007-11-27, 50 m away), Colonel Franks (510084; on the 'Mt. Hellas Outpost' label, TaRapedia 'Wander around on the third floor', no coordinate), Field Commander Foletto (510066; 'in the Nyxroq Post bunker', no coordinate), Major Nicholson (510069; on 'Trainer: Nyxroq Post', 'north of the Hospital', no coordinate), Salvage Master Orto (510074; 6.5 m from 'Control Point: Ortho' while TaRapedia says inside the Ortho hospital, 48 m away, no coordinate) and General Creelig (510089; 1.0 m from 'Crafting Stations: Irendas Penal Colony'). Coordinator Maila (510064) on 'Waypoint: Mires Post' agrees with TaRapedia's 'just south of the Mires Post waypoint'. Leads found 2026-09-26 (Ten Ton Hammer guide to Nyxroq Post part one, Taea, 2008-03-06; not acted on): Foletto 'in a nearby bunker at -247,232,-207', Major Nicholson 'near some crates and sandbags at -171,234,-219', Orto 'in Control Point Ortho at 351,260,17', Maila 'at Mires Post at -331,225,-430' (research/20260926-missing-npcs/work/tth/node28481.txt).",
    "evidence": [
     "research/20260926-torden-missions/README.md World-data defects 3-5",
     "research/20260926-torden-missions/dossiers.json world_data_defects"
@@ -69342,6 +71768,198 @@
    "closes_with": "a post-D11 source for the doctors' mission order, and 795 seeded once a Lightbender exists",
    "surfaced_by": [
     "collection-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-ALMOS-HEIGHT",
+   "summary": "Col. Almos (name 2965), the giver of 551 Treeback Beachhead, is not placed and 551 stays held. His only reading (Ten Ton Hammer, guide to Treeback Camp, 2007-12-02: -290.0, 178.0, -543.6) has y 3.16 m above the only floor under it (174.84). Within the reading's 8 m horizontal uncertainty the floor never comes within 0.3 m of 178.0 - the agreement every other guide reading here has with its floor - and peaks at 176.59; the nearest floor at 178.0 is 12.2 m away. The reading's y and z also equal the client's 'Viands Village' label (-235.15, 178.0, -543.85) to 0.25 m, whose own floor is 178.12, so a transcription slip is likely. The research proposal's 'upper level 176.12' was an artefact of a nearest-polygon probe: no surface exists there. Receiver Bagby now stands in Treeback Camp (WorldDefectsFix), which fits 551's log ('behind the Bane Outpost') and Ten Ton Hammer's 'Just inside ... Field Lt. Bagby ... completes Treeback Beachead'; 551's prerequisite 410 is unseeded as well. Owner decision OD-67.",
+   "evidence": [
+    "docs/evidence/missing-mission-givers-navmesh.json probes.almos",
+    "research/20260926-missing-npcs/work/tth/node15255.txt line 47",
+    "research/20260926-missing-npcs/npcs.json npcs[Col. Almos]"
+   ],
+   "closes_with": "a second reading of Almos, footage of Viands Village, or an owner decision (OD-67)",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-CONWAY-POSITION",
+   "summary": "Sergeant Conway (name 7030), the giver of 835 A Casualty Notification, is known only to be at Delta Outpost (TaRapedia A Casualty Notification rev 33051, 2008-09-13; Ten Ton Hammer Thoria Das & Delta Outpost guide, 2008-01-29). No coordinate exists in TaRapedia, Ten Ton Hammer, Ellatha, codex-tr.net (no Divide capture) or the footage. He is not placed - omission is preferred over the candidate anchors ('Hospital: Delta Outpost' marker 457.09, 81.364, -338.55; 'Delta Outpost' label 481.99, 88.924, -367.86) - and 835 stays held.",
+   "evidence": [
+    "research/20260926-missing-npcs/npcs.json npcs[Sergeant Conway]"
+   ],
+   "closes_with": "a reading or capture of Conway in Delta Outpost",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-DEKAY-POSITION",
+   "summary": "Sergeant Dekay (199953) has no coordinate. He stands at the midpoint of the client's Irendas waypoint and wormhole markers, the two ends of Ten Ton Hammer's 'between the wormhole and waypoint' (2008-02-19), measured with a 26 m uncertainty (half the 51.5 m segment).",
+   "evidence": [
+    "docs/evidence/missing-mission-givers-navmesh.json probes.dekay",
+    "research/20260926-missing-npcs/work/tth/node25965.txt"
+   ],
+   "closes_with": "a reading or capture of Dekay in Irendas",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-DEKAY-RIFLEMEN",
+   "summary": "The guide describes Dekay 'pacing around a small group of Riflemen in formation' (screenshot 'Sgt Dekay With His Troops' no longer served). Neither the formation nor his pacing is in the world; he stands still.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tth/node25965.txt"
+   ],
+   "closes_with": "footage or the guide screenshot",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-TARINA-SINGLE-SOURCE",
+   "summary": "Ranger Tarina's position rests on one reading from a guide dated 2007-10-23 (closed beta / launch week). The post-D11 Foreas Base page (rev 35531, 2008-11-06) still lists her there, without a coordinate.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tth/foreas-base-missions.txt line 77"
+   ],
+   "closes_with": "a second reading or footage of Foreas Base",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSING-NPC-LEVELS",
+   "summary": "Simpson and Tarina have no recorded level and take 20, Lt. Sebastian's level in the same command centre, as an analogue (OD-11). Hanna's 28 and Dekay's 23 are TaRapedia infobox values from 2007-11 (pre-D11), inferred.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tarapedia/pages/Field_Sergeant_Hanna.json",
+    "research/20260926-missing-npcs/work/tarapedia/pages/Sergeant_Dekay.json"
+   ],
+   "closes_with": "nameplate footage or later infobox revisions",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-LOGOS-CHAIN-START-POST-D11",
+   "summary": "1741's giver Langerman rests on 2007 TaRapedia revisions and the client's liaison objective-id chain (1-5). No post-D11 source confirms that the chain still began with him after the D11 new-player rework.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json",
+    "research/20260926-missing-npcs/work/tarapedia/pages/Receptive_Liaison_Langerman.json"
+   ],
+   "closes_with": "a post-D11 record of who gave 1741",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSING-GIVER-PRESENTATION",
+   "summary": "The entity classes, bodies, hit points and movement rates of Simpson, Tarina, Hanna and Dekay, and Langerman's class and outfit, are analogues under OD-45 (NPC_Human_Swapset_Male/Female; NPC_Forean_Spearman for the Forean Tarina). Their facing (rotation 0), idle animations and final-live clothing are unrecorded.",
+   "evidence": [
+    "docs/evidence/mission-speaker-dialogue-classes.json",
+    "src/Rasa.DBL/Migrations/WildernessData/MissingMissionGiversRows.cs"
+   ],
+   "closes_with": "footage or captures of these NPCs",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSING-GIVERS-818-GATE",
+   "summary": "TaRapedia gives 818 Report to Field Sergeant Hanna the requirement 816 Kick Crusty in the Jimmy (rev 20940, 2007-12-14), and Hanna's debrief ('Damn nice stuff you pulled off in the Trench') follows it. 816 is unseeded, so no gate is stored and Foletto offers 818 at once.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json"
+   ],
+   "closes_with": "seeding 816, then its gate",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSING-GIVERS-REWARDS",
+   "summary": "The experience and credits of 1741 (4,000 XP; TaRapedia's credits read 'None', so no credit row), 1744 (8,000/800), 390 (13,000/1,950; Ten Ton Hammer agrees on the credits) and 818 (15,500/2,800) are recorded only before Update 1.4 and are labelled era pre-1.4. The item lists of 390 and 818 are pre-1.4 and not seeded. 1862's amounts and its three-way Class V consumable choice are post-1.4 by date (2008-01-30/31); the choose-one structure and the stack sizes are inferred, with the caveats of GAP-MISSION-REWARD-FINAL-STATE.",
+   "evidence": [
+    "research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Standley.json",
+    "research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Liaison_Arizpe.json",
+    "research/20260926-missing-npcs/work/tarapedia/pages/Supplies_for_Thoria_Das.json",
+    "research/20260926-missing-npcs/work/tarapedia/pages/Report_to_Field_Sergeant_Hanna.json",
+    "research/20260926-torden-missions/dossiers.json missions.1862"
+   ],
+   "closes_with": "post-1.4 records or footage of each completion window",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-MISSING-GIVERS-ACCEPT-ITEMS",
+   "summary": "390 hands over a supply crate (TaRapedia '1 Supply Crate') and 1862 the directive; neither objective collects it, so no gameplay is skipped, but neither item is granted: no table ties a client item class to either mission.",
+   "evidence": [
+    "research/20260926-ready-missions/dossiers.json missions.390",
+    "research/20260926-torden-missions/dossiers.json missions.1862"
+   ],
+   "closes_with": "a source tying the carried item class to the mission",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-827-BRANCH-ARMS",
+   "summary": "827 Interrogation ends in a choice whose two arms continue through 828 Short Fuse -> 840 -> 841 -> 842 and 830 Intelligence Retrieval -> 831 -> 833 -> 848. 833/841 (Foletto -> Hanna, package 423) and 842/848 (Hanna -> Deiley, package 795) are near-identical per-arm missions; with 831/840 unseeded neither arm can be gated, so seeding them would have Foletto and Hanna offer both versions at once. All stay held. 340 stays held on its own split: the final client trimmed it to 'Report to Field Ranger Kearney' while its log and finishing text belong to the escort now in 1905, and no source says whether it was still dispensed.",
+   "evidence": [
+    "research/20260926-torden-missions/README.md (831/840 and 842/848)",
+    "research/20260926-ready-missions/README.md (340)"
+   ],
+   "closes_with": "seeding the 827 arms with their gates; a post-D11 record of 340",
+   "surfaced_by": [
+    "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
    ],
    "slices": [
     "W3"
@@ -72994,6 +75612,123 @@
      "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissingMissionGivers",
+   "table": "creature",
+   "key": {
+    "id": 133
+   },
+   "field": "class_id",
+   "old": 29423,
+   "new": 3846,
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "Receptive Liaison Langerman gives 1741, but the world seed's Redshirt_Human_Soldier_Light_Male (29423) carries only the Creature augmentation, so the client cannot converse with him - the finding EarlyReadyMissions made for his fellow liaison Standley (134). He takes the same original NPC class 3846; his final-live class and model are unverified (GAP-MISSING-GIVER-PRESENTATION).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 29423 Redshirt_Human_Soldier_Light_Male aug_list [1]; 3846 NPC_Human_Swapset_Male aug_list [1,12,52,59]"
+    },
+    {
+     "source": "client_table:missions",
+     "locator": "missionconversation.pyo (1741,3)@82244: the 1741 opening Langerman speaks"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissingMissionGivers",
+   "table": "creature_appearance",
+   "key": {
+    "id": 133,
+    "slot_ids": [
+     2,
+     13,
+     14,
+     15,
+     16,
+     17
+    ]
+   },
+   "field": "six outfit rows",
+   "old": null,
+   "new": "(2,4021,4294934528) (13,6271,1) (14,9781,4278655809) (15,4023,4294934528) (16,4022,4294934528) (17,24008,4286690539)",
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "A swapset class is drawn from its appearance rows. Copied from Senior Quartermaster Hacienda (creature_appearance[510094]), the outfit EarlyReadyMissions gave Standley, so the liaisons dress alike. Langerman's final-live clothing is unrecorded.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 4021/4023/4022 NPC_Clothing_Officer_1_Boots/Torso/Legs, 6271 Weapon_Human_Redshirt_Pistol_Physical, 9781 AvatarSwap_Hair_05, 24008 AvatarSwap_Face_Caucasian_Long_1; rows from rasaworld.db creature_appearance[510094]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissingMissionGivers",
+   "table": "creature_appearance",
+   "key": {
+    "ids": [
+     199950,
+     199951,
+     199952,
+     199953
+    ]
+   },
+   "field": "bodies of the four created givers",
+   "old": null,
+   "new": "Simpson and Dekay: the six-slot set of Field Sgt. Witherspoon (101); Hanna: the five-slot set of General Supply Vendor Twin Pillars (63); Tarina: slot 13 Weapon_Creature_NPC_Forean_Spear (10532), the spear the world's Forean rangers of class 7034 carry",
+   "tier": "analogue",
+   "decision": "OD-45",
+   "reason": "A swapset body without appearance rows renders bare; each takes the set a shipped NPC of the same class wears, the bodies TarapediaMissingNpcBatch copies (OD-45). No source records these NPCs' clothing (GAP-MISSING-GIVER-PRESENTATION).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entityclass.pyo: 10532 Weapon_Creature_NPC_Forean_Spear; rows from rasaworld.db creature_appearance[101], [63] and [510117]"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissingMissionGivers",
+   "table": "spawnpool",
+   "key": {
+    "id": 510117
+   },
+   "field": "pos_x, pos_y, pos_z",
+   "old": "(282.7, 170.62, 1071.8), upstream's ring around the 'Medical Vendor: Thoria Das' marker, analogue under OD-59 (GAP-MELA-POSITION)",
+   "new": "(222.9, 167.614, 977.0), Ten Ton Hammer's 2007-10-23 reading with the navmesh floor for y",
+   "reason": "The research/20260926-missing-npcs pass found the source the world-defects audit had not searched: Ten Ton Hammer's Foreas Base guide gives 'Warrior Mala' at 222.9, 167.8, 977.0 in the same entry that names 390's giver. The reading lies inside Thoria Das between its label and vendor markers and 0.09 m from the floor. OD-59 replaces a marker analogue as soon as a dated reading appears; GAP-MELA-POSITION closes.",
+   "citations": [
+    {
+     "source": "community_db:tentonhammer",
+     "locator": "guide 'foreas-base-missions' (Tony \"RadarX\" Jones, legwork Taea, dated 2007-10-23), line 77: 'Find Warrior Mala at 222.9, 167.8, 977.0'; https://www.tentonhammer.com/guides/foreas-base-missions; local research/20260926-missing-npcs/work/tth/foreas-base-missions.txt"
+    },
+    {
+     "source": "measurement:missing-mission-givers-20260926",
+     "locator": "probes.mela"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "CodexNpcCorrections (citation text only)",
+   "table": "spawnpool",
+   "key": {
+    "id": 510004
+   },
+   "field": "citation of the position (comment text in CodexNpcCorrectionsRows.cs)",
+   "old": "'TaRapedia rev 34276 (2008-09-25)' as the date of Dr. Elise Corman's reading (789.0, 294.3, 369.0)",
+   "new": "TaRapedia page 479, a pre-D11 reading present from the page's first revision (rev 983, 2007-06-30) and only reformatted by revs 2571 (2007-07-06), 6366 (2007-08-22) and 34276 (2008-09-25, 'Updated section headings')",
+   "reason": "The 2008-09-25 revision changed section headings only, so it dated a 2007 reading post-D11 - the same template-reformat error the Clark/Norton finding exposed. The position stands (TaRapedia, Ten Ton Hammer 2007-09-26, Ellatha and codex agree within 4 m) and the deployed migration's data is unchanged; only the comment and this record are corrected. research/20260926-missing-npcs named rev 6366 as the setting revision; the full history shows the same coordinate already in rev 983.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia",
+     "locator": "page 'Dr. Elise Corman' (pageid 479): rev 983 2007-06-30T18:26:46Z X=789.0 |Z=294.3 |Y=369.0; rev 2571 2007-07-06; rev 6366 2007-08-22 (table cells); rev 34276 2008-09-25 'Updated section headings'; local research/20260926-missing-npcs/work/tarapedia/pages/Dr._Elise_Corman.json"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -73588,6 +76323,13 @@
    "choice": "Where the client mission-item class and its template are identified (the MisXeno* block, matched to the objective by name) and the server's item-drop mechanism can carry it, a collection objective is bound as ItemCollected with a creature drop, the counter keyed by item class and the turn-in consuming the items, instead of OD-47's count of the creature's deaths. The drop chance is 100 (inferred) where a dated walkthrough counts kills equal to the client target, otherwise OD-61's 50% analogue. Applied 2026-09-26 to 758, 776, 771 and 787 (WildernessXenobiologySamples); OD-47 stays for objectives whose item is not identified. Approved by the batch lead on 2026-09-26 under the AGENTS.md evidence-bounded reconstruction policy; no owner choice is claimed.",
    "approved_on": "2026-09-26",
    "record": "docs/progression-preservation-plan.md (owner-decision table, OD-66)"
+  },
+  {
+   "id": "OD-67",
+   "decision": "Col. Almos and 551 Treeback Beachhead: where to stand a giver whose only reading does not fit the floor",
+   "default": "Hold Almos and 551 (GAP-ALMOS-HEIGHT) until a second reading appears",
+   "status": "open",
+   "record": "docs/retail-accuracy.md (2026-09-26 missing mission givers)"
   }
  ]
 }

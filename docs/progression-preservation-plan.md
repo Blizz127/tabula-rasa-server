@@ -562,6 +562,16 @@ character picks up in Alia Das once Training Day and the class choice are behind
     (GAP-TORDEN-936-CLARK-UNREACHABLE). Six more (555, 831/840, 842/848, 1862) stay held on a radio trigger, a branch
     pair and two NPCs that do not exist. Open: four gates on unseeded or unknown missions, accept-time items, 1014's
     rewards, 1064's ambush, the pre-1.4 reward era and the Pools level (OD-60, pending owner review).
+  - **W3 missing givers (2026-09-26, `MissingMissionGivers`)**: Ten Ton Hammer's dated area guides, which the earlier
+    dossiers had not searched, place four of the "unplaceable" givers (`research/20260926-missing-npcs`). **Cmd. Sgt.
+    Simpson** and **Ranger Tarina** (Foreas Base), **Field Sergeant Hanna** (Raintree Post, carrying package 423) and
+    **Sergeant Dekay** (Irendas, the wormhole-waypoint midpoint, ±26 m) are created as 199950-199953 on the navmesh floor
+    under the guides' readings. Standley and Arizpe take packages 2049/2025, Langerman leaves the unconversable Redshirt
+    class (OD-45), and Warrior Mela moves from her OD-59 marker analogue to the same guide's Thoria Das reading. Seeded:
+    **1741** (Langerman -> Standley), **1744** (Noonan -> Arizpe), **390** (Tarina -> Mela), **818** (Foletto -> Hanna)
+    and **1862** (Dekay -> Michan). **Held**: Col. Almos and 551, because his reading fits no floor within its
+    uncertainty and repeats the "Viands Village" label's y/z (GAP-ALMOS-HEIGHT, OD-67 open); Sergeant Conway and 835
+    (GAP-CONWAY-POSITION); 340 and the 827 arms 833/841/842/848 (GAP-827-BRANCH-ARMS).
   - **Systems pass, owner goal 2026-09-16 (five items, in order)**: (1) **creature loot** — done, the original
     table's shape with the seven surviving rows (commit `ddcc921`); (2) **escort** — done, `Escort` behavior +
     `escort_mission_id` + the arrival rule, first escort seeded for 1390 (commit `0c288b6`); (3) **mission sharing and
@@ -1171,6 +1181,8 @@ its evidence tier.
 | OD-64 Solis identity and placement (2026-09-24, agent, pending owner review) | `SolisCavernsPlacementRows` moves named spawnpool 184 (Council Elder Solis) onto disabled pool 92's original X/Z/rotation and a probed navmesh floor (786.8711, 287.32, 581.46875, rotation 3.0), because pool 184's dated position is obstructed by Moawi's hut geometry in the compatibility client and pool 92 already places an unnamed Forean shaman 2.2 m from the dated report at the same elevation. The migration's own comment calls this binding "inferred... not a recovered final-live server placement." Full provenance and remaining uncertainty in `docs/evidence/solis-caverns-placement.json` |
 | OD-65 Account-authentication 20-second wait (2026-09-22, agent, pending owner review) | `Auth.Client` defers only its first empty `ServerListExt` response for up to 20 seconds (`InitialServerListWaitMs`) so the existing game-registration broadcast can satisfy it, instead of showing a persistent "No servers found" dialog; later refreshes are immediate. `docs/evidence/live-auth-server-list-wait-20260923.json` states plainly this is "an emulator availability fix, not a proven final-live auth timeout," not a recovered original duration |
 | OD-66 Collection objectives once the client item is identified (2026-09-26, batch lead, pending owner review) | Where the client mission-item class and template are identified (the MisXeno block, matched to the objective by name) and the server's item-drop mechanism can carry it, a collection objective is bound as an item collection with a creature drop, as 479 is, instead of OD-47's kill count. The drop chance is 100 (inferred) where a dated walkthrough counts kills equal to the client target, otherwise OD-61's 50% analogue. Applied to 758, 776, 771 and 787 (`WildernessXenobiologySamples`); OD-47 stays for objectives whose item is not identified |
+
+| OD-67 Col. Almos and 551 (2026-09-26, open) | Almos's only reading (Ten Ton Hammer, 2007-12-02: -290.0, 178.0, -543.6) is 3.16 m above the only floor under it and never within 0.3 m of a floor inside its 8 m uncertainty, while its y/z equal the client's "Viands Village" label. Default: hold Almos and 551 (GAP-ALMOS-HEIGHT). Alternatives for the owner: stand him on the floor under the reading's x,z (174.567), or at the label point whose floor matches the reading's height; either would be an estimate, not a reading |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),
