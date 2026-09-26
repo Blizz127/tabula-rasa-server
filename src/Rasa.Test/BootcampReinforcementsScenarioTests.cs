@@ -52,7 +52,7 @@ namespace Rasa.Test
     /// </summary>
     [TestClass]
     [DoNotParallelize]
-    public class BootcampReinforcementsScenarioTests
+    public partial class BootcampReinforcementsScenarioTests
     {
         private const uint CharacterId = 101;
         private const uint AccountId = 10;
