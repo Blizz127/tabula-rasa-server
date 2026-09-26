@@ -294,6 +294,41 @@
    "era": "final_live",
    "member": "docs/evidence/missing-mission-givers-navmesh.json",
    "note": "Navmesh probes behind MissingMissionGivers (repo navmesh built from the 1.16.5.0 client maps): every surface directly under each reading's x,z, floor = surface - 0.276 m, and the route from the settlement's waypoint marker to that surface's own polygon; the Col. Almos re-probe within his 8 m uncertainty."
+  },
+  "official_notes:1.6": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "Build 1.6 live notes, 2008-03-26: TaRapedia \"Updates/2008-03-26\" pageid 11388 rev 35844 (2009-01-05), transcribing playtr.com patch_notes_and_known_issues_3.html; first on PTS 2008-03-07 (TaRapedia \"Updates/2008-03-07 (test)\" pageid 10270 rev 29604). Saved text: research/20260926-notes-audit/sources/tarapedia/updates_revisions.json[\"Updates/2008-03-26\"] (file sha256 64c8a015f6cfba3df9793a9b803c73e57c097452e974410959dc6adae438cba3)",
+   "sha256": "64c8a015f6cfba3df9793a9b803c73e57c097452e974410959dc6adae438cba3",
+   "note": "Official live notes (transcription of the playtr.com page). Live, not PTS."
+  },
+  "official_notes:1.7": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "1.7 live notes, 2008-04-28: TaRapedia \"Updates/2008-04-28\" pageid 11391 rev 35847 (2009-01-05), transcribing playtr.com patch_notes_and_known_issues_4_1.html; PTS original https://web.archive.org/web/20090122063745id_/http://www.playtr.com:80/news/patch_notes_public_test/patch_notes_and_known_issues_4072008.html, capture research/20260926-notes-audit/sources/wayback-pts/patch_notes_and_known_issues_4072008.html (sha256 e9e95cd16958e7faf2b3137c49e1e2991046194541bbec33367eeabc563d32b3). Saved live text: research/20260926-notes-audit/sources/tarapedia/updates_revisions.json[\"Updates/2008-04-28\"]",
+   "note": "Official live notes (transcription of the playtr.com page); the PTS page of 2008-04-07 carries the same lines."
+  },
+  "official_notes:d8": {
+   "kind": "official_notes",
+   "era": "pre_d11",
+   "locator": "Deployment 8 live notes, 2008-05-14 (live 2008-05-19): TaRapedia \"Updates/2008-05-14\" pageid 11394 rev 35850 (2009-01-05), transcribing playtr.com deployment_8_live.html. Saved text: research/20260926-notes-audit/sources/tarapedia/updates_revisions.json[\"Updates/2008-05-14\"]",
+   "note": "Official live notes (transcription of the playtr.com page); the playtr.com live index omits D8, so the TaRapedia transcription is the copy read."
+  },
+  "official_notes:d12.5": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "url": "https://web.archive.org/web/20090306065823id_/http://www.playtr.com/news/patch_notes/deployment_125_9182008.html",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_125_9182008.html (Deployment 12.5 page, \"Deployment 12 is on Live!\", 2008-09-18); TaRapedia \"Updates/2008-09-18\" pageid 11400 rev 35871",
+   "sha256": "f124670a0e0396e2c0d12ab9c52dce32842f3f6d229671e554db54bfab32e08f",
+   "note": "Official live patch notes, archived."
+  },
+  "official_notes:d14": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "url": "https://web.archive.org/web/20090203215419id_/http://www.playtr.com/news/patch_notes/deployment_14_11112008.html",
+   "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html (Deployment 14 live notes, 2008-11-11)",
+   "sha256": "505ca185d3e20640da360ab8b3990e8c20ce2dbf764b77b0902a83ffe562cd51",
+   "note": "Official live patch notes, archived 2009-02-03."
   }
  },
  "scope": [
@@ -30813,40 +30848,6 @@
    }
   },
   {
-   "table": "npc_mission_objective_binding",
-   "key": {
-    "mission_id": 682,
-    "objective_id": 3,
-    "binding_id": 0
-   },
-   "slice": "W3",
-   "migration": "WildernessHubKillObjective",
-   "fields": {
-    "kind": {
-     "value": 6,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "objective text 682/3"
-      }
-     ],
-     "reasoning": "the objective text names a kill, so the binding is the kill kind the boot camp's Capture the Flag uses."
-    },
-    "creature_id": {
-     "value": 77,
-     "tier": "inferred",
-     "reasoning": "the objective's creature name matched exactly one creature in the world seed, longest name first.",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "objective text"
-      }
-     ]
-    }
-   }
-  },
-  {
    "table": "npc_package",
    "key": {
     "id": 102
@@ -36625,49 +36626,6 @@
       }
      ],
      "reasoning": "TaRapedia records the amount; both reward kinds carry it in this column."
-    }
-   }
-  },
-  {
-   "table": "npc_mission",
-   "key": {
-    "id": 2016
-   },
-   "slice": "W3",
-   "migration": "PlateauConversationNpc",
-   "fields": {
-    "giver_id": {
-     "value": 199205,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "mission 2016 objectiveconversation"
-      }
-     ],
-     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
-    },
-    "reciver_id": {
-     "value": 199205,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "mission 2016 objective texts"
-      }
-     ],
-     "reasoning": "the NPC the last objective ends at."
-    },
-    "level": {
-     "value": 20,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "community_db:tarapedia",
-       "locator": "mission 2016 infobox"
-      }
-     ],
-     "reasoning": "the zone band; TaRapedia records no per-mission level."
     }
    }
   },
@@ -47248,9 +47206,13 @@
       {
        "source": "client_table:missions",
        "locator": "objective text"
+      },
+      {
+       "source": "official_notes:1.6",
+       "locator": "TaRapedia \"Updates/2008-03-26\" pageid 11388 rev 35844 (2009-01-05), transcribing playtr.com patch_notes_and_known_issues_3.html, Mires section: \"Killing any Bane Stalker on Mires will now give credit for \\\"Restraining Order\\\"\""
       }
      ],
-     "reasoning": "the species this batch reconstructs."
+     "reasoning": "the species this batch reconstructs. The binding names the creature, not a placement, so any Stalker the Mires carries counts, as the 1.6 live note requires; every Mires Stalker in the world is this creature (the OD-48 cluster, placements 199860-199865). The same note shows the targets were spread over the Mires rather than clustered by the giver (GAP-NOTES-976-STALKER-DISTRIBUTION)."
     }
    }
   },
@@ -68404,6 +68366,98 @@
      "confidence": "medium"
     }
    }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessHubKillObjective; OfficialNotesCorrections",
+   "fields": {
+    "kind": {
+     "value": 6,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text 682/3"
+      }
+     ],
+     "reasoning": "the objective text names a kill, so the binding is the kill kind the boot camp's Capture the Flag uses."
+    },
+    "creature_id": {
+     "value": 77,
+     "tier": "inferred",
+     "reasoning": "the objective's creature name matched exactly one creature in the world seed, longest name first.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "objective text"
+      }
+     ]
+    },
+    "shared_kill_credit": {
+     "value": true,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "official_notes:1.6",
+       "locator": "TaRapedia \"Updates/2008-03-26\" pageid 11388 rev 35844 (2009-01-05), transcribing playtr.com patch_notes_and_known_issues_3.html, Missions section: \"Fixed Wilderness: Childhood's End so that it no longer matters who kills the Xanx, just that they are killed.\""
+      },
+      {
+       "source": "official_notes:d8",
+       "locator": "TaRapedia \"Updates/2008-05-14\" pageid 11394 rev 35850 (2009-01-05), transcribing playtr.com deployment_8_live.html: \"Players will now receive credit for killing the Xanx in \\\"Childhood's End\\\" on Wilderness, even if they advanced to this objective at the same time as another player.\""
+      }
+     ],
+     "reasoning": "Both live notes name this mission alone, so the rule is this binding's flag, not a general kill-credit change. What the flag does on the server - credit every character on the same map channel whose 682/3 is active and incomplete, whoever killed the Xanx (another player or an NPC) - is the reading of 'just that they are killed'; the notes give no radius or squad condition (GAP-NOTES-682-SHARED-CREDIT-REACH)."
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 2016
+   },
+   "slice": "W3",
+   "migration": "PlateauConversationNpc; OfficialNotesCorrections",
+   "fields": {
+    "giver_id": {
+     "value": 199205,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 2016 objectiveconversation"
+      }
+     ],
+     "reasoning": "the NPC whose dialogue package the client binds this mission to is who hands it out."
+    },
+    "reciver_id": {
+     "value": 199205,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission 2016 objective texts"
+      }
+     ],
+     "reasoning": "the NPC the last objective ends at."
+    },
+    "level": {
+     "value": 50,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "official_notes:d14",
+       "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html, Concordia: Wilderness section: 'Mission: \"A Mystery Unearthed\" - new level 50 mission offered by NPC Archaeologist Wynne Topper at Twin Pillars on Concordia: Wilderness.'"
+      }
+     ],
+     "reasoning": "The Deployment 14 live notes (2008-11-11) introduce the mission as a level 50 mission. Supersedes the Plateau zone band (20, inferred) PlateauConversationNpc seeded because TaRapedia records no level; the same note puts the giver at Twin Pillars in the Wilderness, so the row's comment says Wilderness (the mission ends at General Bailey in Fort Defiance)."
+    }
+   }
   }
  ],
  "omitted": [
@@ -71960,6 +72014,153 @@
    "closes_with": "seeding the 827 arms with their gates; a post-D11 record of 340",
    "surfaced_by": [
     "missing mission givers 2026-09-26 (research/20260926-missing-npcs)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-682-SHARED-CREDIT-REACH",
+   "summary": "682/3's shared credit reaches every character on the same map channel whose objective is active and incomplete. The 1.6 note (\"it no longer matters who kills the Xanx, just that they are killed\") and the D8 note (credit \"even if they advanced to this objective at the same time as another player\") establish that the killer's identity does not matter; neither gives a radius, a squad requirement or a tagging/damage condition, so the channel is the server's reading. A player far across the Wilderness with 682/3 active is credited too.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (682, both rows)",
+    "official_notes:1.6",
+    "official_notes:d8",
+    "src/Rasa.Game/Managers/MissionManager.cs OnSharedKillCredit"
+   ],
+   "closes_with": "footage or a capture of a Childhood's End completion by a player who did not land the kill, showing the distance or squad relation",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-976-STALKER-DISTRIBUTION",
+   "summary": "The 1.6 live note \"Killing any Bane Stalker on Mires will now give credit for \\\"Restraining Order\\\"\" (2008-03-26) shows 976's targets were Stalkers across the Mires map. The world carries none but the OD-48 analogue cluster: six specimens of creature 199812 (placements 199860-199865) within 14 m of Colonel Li Hua (260, 229, 686). The binding already names the creature, so every Mires Stalker counts and nothing in the data changes. The world seed's other Stalker (creature 36, 'Bane Stalkerspawn General', level 8) stands only in the Wilderness (spawn pool 132) and is not bound. No source gives a Mires Stalker spawn, so none is invented.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (976)",
+    "official_notes:1.6",
+    "src/Rasa.DBL/Migrations/WildernessData/MiresReconstructedSpeciesRows.cs",
+    "rasaworld.db (read-only 2026-09-26): content_placement creature_id 199812 and spawnpool 132"
+   ],
+   "closes_with": "a dated reading, capture or footage of Stalker spawns on the Mires; then place them and bind nothing new (the creature binding already covers them)",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-1125-KEYCARD",
+   "summary": "1125 Security Threat hands over one Phanin Research Facility Keycard at acceptance: the client opening (missiontextlanguage 7748) says \"Here is the key to Phanin's facility\", and the 1.7 live note (2008-04-28) \"will no longer drop two Phanin Research Facility Keycards\" fixes the count at one. The item is original: physicalentityclassnamelanguage.pyo names class 24724 (Mis_PlainsIns_Phanin_Keycard) \"Phanin Research Facility Keycard\" (store offset 414488), and itemtemplate 50310 is that class's only template in the world seed. The same opening hands over \"some information Miras gave me\", which matches class 24723 \"Package from Miras\" (template 50308) as a candidate. Neither is granted: the content layer has no accept-time grant (ContentRuleAction.GrantItemSet is declared but not in MissionContentRules.Implemented, so a MissionAccepted rule carrying it is withheld), the same missing mechanism as GAP-TORDEN-ACCEPT-ITEMS. The mission completes through its conversation. Never grant two keycards.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (1125)",
+    "official_notes:1.7",
+    "research/20260926-mission-catalog/mission-catalog.json missions[1125].texts.opening (text 7748)",
+    "research/20260912-client-artifacts/final-client-selected/Tabula Rasa 1.16.5.0/game/generated/client/language/english/physicalentityclassnamelanguage.pyo (sha256 7539a00ef1947e6fc3ec2df5612e8b9f681a6ea6839a7928272a3aa232359e46) keys 24723/24724",
+    "rasaworld.db itemtemplate_itemclass 50310 -> 24724, 50308 -> 24723",
+    "src/Rasa.Game/Data/MissionContentRules.cs Implemented.Actions"
+   ],
+   "closes_with": "an implemented accept-time item grant (GrantItemSet on MissionAccepted, with its tests), then a content_item_set of template 50310 x1 (and 50308 if the Miras package is confirmed) granted on accepting 1125",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-CRF-RELOCATION",
+   "summary": "The D12 live notes (2008-09-18) say \"The mission givers, NPCs, vendors, and other support infrastructure from the Cumbria Research Facility have been relocated inside the New Cumbria fortification.\" Two seeded givers still stand at pre-D12 readings: 1745's Receptive Liaison Arizpe (placement 199085, -538.0/142.095/665.0; TaRapedia rev 25740, 2008-01-05, 'In the building below the waypoint'), 49 m from the old 'Waypoint: Cumbria Research Facility' and 243 m from the final client's 'Waypoint: New Cumbria' (teleporter 512, -767.19/139.20/583.88); and 408's Lt. Jamison (199089, -767.0/140.17/773.0; codex-tr.net POI 1426, undated, and TaRapedia's pre-D12 facility roster where he is a Welcome Tour objective), 189 m north of that waypoint by the hydroponics dome (medium: the dome is still named after D12). No position is changed without a post-D12 reading. A post-D12 reading of another CRF-roster NPC (Base Cmdr. Matlin, TaRapedia rev 36080, 2009-02-17) lands 45 m from the New Cumbria waypoint. The audit lists the other CRF-roster placements to recheck: Sgt. Briggs 199091, Kaven Corman 199090 and Valerie Corman 510137 (TaRapedia 2008-09-13, five days before D12).",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (1745, 408) and zone_findings_unseeded (Palisades npc_relocation)",
+    "official_notes:d12.5",
+    "src/Rasa.DBL/Migrations/WildernessData/CodexNpcCorrectionsRows.cs"
+   ],
+   "closes_with": "a post-2008-09-18 reading (TaRapedia revision, capture or footage) of Arizpe and Jamison inside New Cumbria",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-321-JOHNSON-PERKINS",
+   "summary": "The 1.7 live notes (2008-04-28): \"Pravus Research 'Pirate Radio' - Mission giver Info Specialist Johnson has be relocated to the pillbox area, right next to Lt. Perkins, to create better mission flow. Pre-requisite on 'Pirate Radio' has also been removed.\" Both NPCs stand at Ellatha readings: Field Lt. Perkins (321's receiver, 199008) at -77/31.744/176 since EllathaNpcPositions (no longer the TarapediaMissingNpcs guess, though the placement comment still says GUESS) and Information Spec. Johnson (199016) at -83/33.194/-132 (EllathaWorldNpcs), 308 m apart. Ellatha's readings are undated; its mission pages are byte-identical to Feb-2008 captures, and two NPCs 308 m apart cannot be the post-1.7 layout, so at least Johnson's reading predates 1.7. The note moves Johnson, not Perkins, so Perkins is not moved; Johnson is not moved either, because no reading of him is dated after 1.7 and no seeded mission uses him (323 Pirate Radio is unseeded).",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (321)",
+    "official_notes:1.7",
+    "src/Rasa.DBL/Migrations/WildernessData/EllathaNpcPositionsRows.cs",
+    "src/Rasa.DBL/Migrations/WildernessData/EllathaWorldNpcsRows.cs",
+    "docs/progression-preservation-plan.md (Wayback pass 2026-09-15: Ellatha pages byte-identical to Feb-2008 snapshots)"
+   ],
+   "closes_with": "a post-2008-04-28 reading of Johnson or of the Pravus pillbox; when 323 is seeded, Johnson beside Perkins is the state the note describes (inferred)",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-1390-QUILLAS-POSITION",
+   "summary": "The 1.7 live notes (2008-04-28): \"Elder Quillas on Wilderness has been evicted from his tree hut and now resides further up the hillside path from his previous location.\" Quillas (creature 114, 1390's objective NPC) spawns from upstream pool 192 at (791.01, 298.54, 111.99). Two readings exist and neither is dated after 1.7: Ellatha's npcview 'Elder Quillas' Loc 791, 298, 111 (1.1 m from the pool; undated, early-2008 database) and Ten Ton Hammer's 'Alia Das Missions' (RadarX, dated 2007-09-26): \"Head out of town towards the southeast around 777.4, 115.3 where you'll find Elder Quillas on a platform\" (14 m from the pool, pre-1.7). The pool therefore agrees with readings that are pre-1.7 or undated and is probably the tree-hut spot; the post-1.7 hillside position is unrecorded, so the pool is left where it is.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json seeded_findings (1390)",
+    "official_notes:1.7",
+    "src/Rasa.DBL/Services/Preloader/SpawnpoolPreloader.cs pool 192",
+    "research/20260926-missing-npcs/work/tth/node12515.txt (Ten Ton Hammer 'Alia Das Missions', 2007-09-26)",
+    "community_db:ellatha npcview.asp Elder Quillas (2026-09-20 harvest)"
+   ],
+   "closes_with": "a post-2008-04-28 reading or footage of Quillas on the hillside path",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-983-1041-ALTERNATIVE-COURSES",
+   "summary": "The 1.7 live notes (2008-04-28) removed 983 You're the Guy and 1041 Confidential Delivery from the Mires ToO \"because players that chose an alternate mission course would not be able to complete the requirement\"; D8 (2008-05-19) restates the removal. So a character followed one course or the other, but neither note says what closes the other course: a choice in the preceding mission, accepting one, or completing one. Both follow 982 Can You Handle It? (TaRapedia Requirement fields; 982 is unseeded) and have different givers (Lt. Cockerell 199409 and Captain Gaston 199410) who report to Lt. Foushee. The loader could express an exclusion (an npc_mission_prerequisite with required_state 3, NotAssigned) but the notes do not give the rule, so none is seeded and a character can take and complete both.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json confirmations_and_informational (983, 1041)",
+    "official_notes:1.7",
+    "official_notes:d8",
+    "research/20260926-reward-items/work/tarapedia/983.json rev 30043 and 1041.json rev 29088 (Requirement=Can You Handle It?)",
+    "src/Rasa.Game/Managers/MissionManager.cs PrerequisitesSatisfied/Holds"
+   ],
+   "closes_with": "982 seeded with evidence of its branch (client choice rows or a capture), then the exclusion expressed through prerequisites",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-NOTES-1998-TIME-CAPSULE",
+   "summary": "1998 Time Capsule (\"a Level 12 mission available at Foreas Base on Divide\") was added by the D11 live notes (2008-08-15) with the Soyuz event. The D12 live notes (2008-09-18) remove only the Soyuz Salvage missions (1999, 2006-2009), and no later note says whether Time Capsule was still offered at shutdown. The final client still carries it, which is not evidence of availability. Not seeded; never seed without evidence that it outlived the event.",
+   "evidence": [
+    "research/20260926-notes-audit/findings.json zone_findings_unseeded (Divide, 1998)",
+    "official_notes:d11",
+    "official_notes:d12.5"
+   ],
+   "closes_with": "a post-D12 capture, wiki revision or note showing Time Capsule offered or withdrawn",
+   "surfaced_by": [
+    "official-notes audit 2026-09-26 (research/20260926-notes-audit)"
    ],
    "slices": [
     "W3"
@@ -75729,6 +75930,69 @@
      "locator": "page 'Dr. Elise Corman' (pageid 479): rev 983 2007-06-30T18:26:46Z X=789.0 |Z=294.3 |Y=369.0; rev 2571 2007-07-06; rev 6366 2007-08-22 (table cells); rev 34276 2008-09-25 'Updated section headings'; local research/20260926-missing-npcs/work/tarapedia/pages/Dr._Elise_Corman.json"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "OfficialNotesCorrections",
+   "table": "npc_mission",
+   "key": {
+    "id": 2016
+   },
+   "field": "level",
+   "old": 20,
+   "new": 50,
+   "tier": "original",
+   "reason": "The Deployment 14 live notes (2008-11-11) call A Mystery Unearthed a new level 50 mission. The seeded 20 was the Plateau zone band, inferred because TaRapedia records no level; the note is original evidence and supersedes it. docs/retail-accuracy.md already recorded the level-50 mission, but the seed had not been changed.",
+   "citations": [
+    {
+     "source": "official_notes:d14",
+     "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html, Concordia: Wilderness section: 'Mission: \"A Mystery Unearthed\" - new level 50 mission offered by NPC Archaeologist Wynne Topper at Twin Pillars on Concordia: Wilderness.'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "OfficialNotesCorrections",
+   "table": "npc_mission",
+   "key": {
+    "id": 2016
+   },
+   "field": "comment",
+   "old": "A Mystery Unearthed (Plateau)",
+   "new": "A Mystery Unearthed (Wilderness)",
+   "tier": "original",
+   "reason": "The same D14 note has the mission offered by Archaeologist Wynne Topper at Twin Pillars on Concordia: Wilderness (Topper, 199009, has been its giver since TarapediaMissingNpcs). The Plateau label came from the zone batch that first seeded it; the mission only ends on the Plateau, at General Bailey in Fort Defiance.",
+   "citations": [
+    {
+     "source": "official_notes:d14",
+     "locator": "research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html, Concordia: Wilderness section: 'Mission: \"A Mystery Unearthed\" - new level 50 mission offered by NPC Archaeologist Wynne Topper at Twin Pillars on Concordia: Wilderness.'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "MissionSharedKillCredit; OfficialNotesCorrections",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 682,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "field": "shared_kill_credit",
+   "old": false,
+   "new": true,
+   "tier": "original",
+   "reason": "MissionSharedKillCredit adds the column (default off, so every existing binding keeps killer-only credit on shared maps). The 1.6 (2008-03-26) and D8 (2008-05-19) live notes make the Xanx kill of Childhood's End count for everyone with the objective, whoever kills it and whoever reached the objective first; before this, a player whose 682/3 was active got nothing when another player or an NPC Ranger killed Arioch Xanx (creature 77). The notes describe this one mission, so only this binding carries the flag.",
+   "citations": [
+    {
+     "source": "official_notes:1.6",
+     "locator": "TaRapedia \"Updates/2008-03-26\" pageid 11388 rev 35844 (2009-01-05), transcribing playtr.com patch_notes_and_known_issues_3.html, Missions section: \"Fixed Wilderness: Childhood's End so that it no longer matters who kills the Xanx, just that they are killed.\""
+    },
+    {
+     "source": "official_notes:d8",
+     "locator": "TaRapedia \"Updates/2008-05-14\" pageid 11394 rev 35850 (2009-01-05), transcribing playtr.com deployment_8_live.html: \"Players will now receive credit for killing the Xanx in \\\"Childhood's End\\\" on Wilderness, even if they advanced to this objective at the same time as another player.\""
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -76183,7 +76447,10 @@
    "review_status": "approved-by-agent-pending-owner-review",
    "choice": "No surviving source records a creature spawn: the world seed carries 155 creatures, all Wilderness, the original dump's creature_type has 21 rows and no client table has spawn data. Where a mission names a species the client carries as an entity class (Lasher 7477, Magmonix 6338, Stalker 3781), the species is reconstructed: its class, name and the mission's own numbers are original, but its **positions** are analogues - a cluster of specimens around the area the mission's own sources put it in, one specimen more than the objective asks for, with a respawn so the cluster recovers. Health and respawn delay are analogues too, taken from the world's comparable Bane creatures. Every such field is recorded as an analogue with this decision, and the user authorised this reconstruction on 2026-09-16. The respawn delay is 60000 ms and is documented here rather than on each placement row, because content_placement.respawn_ms is an optional column and the manifest's rule is to leave an optional column out rather than fill it with an analogue.",
    "approved_on": "2026-09-16",
-   "record": "docs/progression-preservation-plan.md#reconstructed-species"
+   "record": "docs/progression-preservation-plan.md#reconstructed-species",
+   "notes": [
+    "2026-09-26 (official-notes audit): the Build 1.6 live note \"Killing any Bane Stalker on Mires will now give credit for \\\"Restraining Order\\\"\" (2008-03-26, TaRapedia Updates/2008-03-26 rev 35844) shows 976's Stalkers lived across the Mires map, not in a cluster near Colonel Li Hua. The Stalker cluster (199860-199865) therefore stands for a map-wide population it does not reproduce; its positions stay analogues and no further spawns are invented. 976/1 binds the creature, so every Mires Stalker counts. See GAP-NOTES-976-STALKER-DISTRIBUTION. The same 1.6 notes also increased the Lasher population on the Mires (\"Lasher Population has been increased on Mires.\"), which bears on the 955 Lasher cluster in the same way."
+   ]
   },
   {
    "id": "OD-49",

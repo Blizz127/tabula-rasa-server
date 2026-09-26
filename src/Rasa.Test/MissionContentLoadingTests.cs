@@ -862,6 +862,23 @@ namespace Rasa.Test
             Assert.AreEqual(0, validation.LiveBindings.Count());
         }
 
+        [TestMethod]
+        public void SharedKillCreditIsAcceptedOnKillBindingsOnly()
+        {
+            // 682/3 (the 1.6 and D8 live notes) marks a kill binding shared; a hit or an area binding cannot carry it.
+            var rows = new Rows();
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+                { MissionId = 900100, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Kill, CreatureId = 7001, CounterId = 255, SharedKillCredit = true });
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+                { MissionId = 900200, ObjectiveId = 1, BindingId = 0, Kind = (byte)ObjectiveBindingKind.Hit, CreatureId = 7001, CounterId = 255, SharedKillCredit = true });
+
+            var validation = rows.Validate(MissionContentRules.Implemented);
+
+            Assert.AreEqual(0, validation.Gaps.Count(gap => gap.OwnerId == 900100), string.Join(" | ", validation.Gaps));
+            AssertGap(validation, NpcMissionObjectiveBindingEntry.TableName, "900200/1/0", "unexpected shared_kill_credit");
+            Assert.IsTrue(validation.LiveBindings.Single().SharedKillCredit);
+        }
+
         /// <summary>
         /// References resolved against a migrated world database: map contexts, creatures, logos and legacy
         /// objects come from its tables, missions from the loaded definitions (as the server's own

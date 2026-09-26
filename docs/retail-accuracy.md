@@ -2062,6 +2062,67 @@ migration `MissingMissionGivers`, checked by `MissingMissionGiversTests`.
   26, including the walkable-surface, prop-overlap, giver/receiver-spawn and package-carried checks).
 - **Not verified in-game.** None of the five missions or four NPCs has been checked with the original client.
 
+## 2026-09-26 — Official live notes checked against the seeded missions
+
+A research pass (`research/20260926-notes-audit`: `findings.json` with verbatim quotes, sources and hashes) read every
+official live note from Update 1.4 (2008-01-29) to D16.5 (2009-02-17) against the 114 seeded missions. PTS notes
+were read separately and are not used as live evidence. Two migrations act on it:
+`MissionSharedKillCredit` (20260926160000, schema) and `OfficialNotesCorrections` (20260926161000, data, both
+providers, frozen rows in `OfficialNotesCorrectionsRows`).
+
+| Mission | Note (live) | Was | Now | Tier |
+| --- | --- | --- | --- | --- |
+| 2016 A Mystery Unearthed | D14, 2008-11-11: "new level 50 mission offered by NPC Archaeologist Wynne Topper at Twin Pillars on Concordia: Wilderness" | level 20 (Plateau band), comment "(Plateau)" | level 50, comment "(Wilderness)" | original |
+| 682 Childhood's End, objective 3 | 1.6, 2008-03-26: "it no longer matters who kills the Xanx, just that they are killed"; D8, 2008-05-19: credit "even if they advanced to this objective at the same time as another player" | killer-only credit on the shared Wilderness | `shared_kill_credit` on the binding | original (flag); reach inferred |
+
+- **Shared kill credit, and why it is not general.** Both notes name Childhood's End and nothing else, and other
+  notes of the period describe other rules for other missions (D8's Predator Hunt requires helping to kill the Alpha
+  Predator). So the rule is a flag on the kill binding, not a server-wide change. When a creature a flagged binding
+  names dies, `MissionManager.OnSharedKillCredit` credits every character on that map channel whose objective is
+  active and incomplete, after the ordinary path has credited the killer (or a per-character instance's owner),
+  so nobody is counted twice. An NPC Ranger's kill now counts too. The kill's experience and credits still go only
+  to a player killer. Before this, a player with 682/3 active got nothing when anyone else killed Arioch Xanx. The
+  notes give no radius or squad condition, so the channel as the reach is the server's reading
+  (`GAP-NOTES-682-SHARED-CREDIT-REACH`). The loader accepts the flag only on kill bindings.
+- **976 Restraining Order** ("Killing any Bane Stalker on Mires will now give credit", 1.6) needs no data change.
+  Its binding names creature 199812, not a placement, and every Stalker on the Mires is that creature. The world's
+  other Stalker (creature 36) stands only in the Wilderness and is not bound. The note does show the Stalkers were
+  spread over the Mires, not clustered by Colonel Li Hua as OD-48 placed them. OD-48 now carries that note, and
+  `GAP-NOTES-976-STALKER-DISTRIBUTION` records it. No spawns are invented.
+- **1125 Security Threat.** The client opening ("Here is the key to Phanin's facility") and the 1.7 note ("will no
+  longer drop two Phanin Research Facility Keycards") give one keycard at accept. The item is in the client: class
+  24724 is named "Phanin Research Facility Keycard" in `physicalentityclassnamelanguage.pyo`, and template 50310 is
+  that class's only template. It is not granted, because the content layer has no accept-time grant
+  (`GrantItemSet` is declared but not implemented). This is the same missing mechanism as GAP-TORDEN-ACCEPT-ITEMS
+  (`GAP-NOTES-1125-KEYCARD`, which also names "Package from Miras", 24723/50308, as a candidate).
+- **Positions recorded, not moved.** No evidence dated after the change each note describes exists:
+  - D12 moved the Cumbria Research Facility's NPCs inside New Cumbria. 1745's giver Arizpe (199085) stands at a
+    2008-01-05 reading 243 m from "Waypoint: New Cumbria", and 408's giver Jamison (199089) 189 m from it
+    (`GAP-NOTES-CRF-RELOCATION`).
+  - 1.7 moved Info Specialist Johnson "right next to Lt. Perkins". Both stand at undated Ellatha readings 308 m
+    apart, so Johnson's reading is pre-1.7. The note moves Johnson, not Perkins, and Perkins is Ellatha's reading
+    rather than the guess the audit assumed. Johnson serves no seeded mission (`GAP-NOTES-321-JOHNSON-PERKINS`).
+  - 1.7 moved Elder Quillas "further up the hillside path". Pool 192 agrees with Ellatha (1.1 m) and with Ten Ton
+    Hammer's 2007-09-26 guide (14 m, "on a platform"), both pre-1.7 or undated, so it is probably the tree-hut spot
+    (`GAP-NOTES-1390-QUILLAS-POSITION`).
+- **983/1041.** The 1.7 and D8 notes call them alternative courses ("players that chose an alternate mission
+  course"). They do not say what closes the other course, so no exclusion is seeded, although prerequisites could
+  express one with state NotAssigned. Both follow the unseeded 982 (`GAP-NOTES-983-1041-ALTERNATIVE-COURSES`).
+- **Confirmed by the notes, unchanged:** 1112 has no gate (D9.6); Richards stands at the Pinhole Falls Caverns
+  entrance (D11); 366-368/411-413 remain available (D10); 771/787 are not withdrawn (D11 names only Dr. Munson's
+  three); Galloway is inside Treeback Camp (1.6); 2016's receiver is Bailey (D15); 1992's text is post-D11.4. No
+  live note from 1.4 to D16.5 changes mission experience or credits, so the pre-1.4 amounts stay open gaps.
+- **Roster.** The never-seed list (751, 780, 769, 691, Soyuz 1999/2006-2009, Welcome Tour, Artificial Iniquity,
+  the PTS-only Epic Gauntlet 2012), the 1998 Time Capsule gap and the missing final-era missions are in
+  `docs/progression-preservation-plan.md`, "Final-state mission roster from the official notes". 767 and the other
+  collection/missing-NPC findings belong to the parallel batches and are not touched here.
+- **Tests:** `ContentSchemaMigrationTests` (forward, rollback of both migrations including the column, re-apply),
+  `OfficialNotesCorrectionsProvenanceTests` (each written value against an original-tier changes entry citing the
+  notes; Down restores the recorded old values; the open gaps), `MissionContentLoadingTests` (the flag only on kill
+  bindings), and `BootcampOpeningTests.SharedKillCredit` (from the migrated world: another player's kill and an NPC's
+  kill credit every character with 682/3 active exactly once; a character not yet at objective 3 and a bystander are
+  not credited; 427/6 Proctor Fulgor stays killer-only). None of this has been checked in play with the original client.
+
 ## 2026-09-22 to 2026-09-24 — recovered deployed work (documentation reconstructed 2026-09-26)
 
 This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4aa50b3`, `0ed7528`) that were built and deployed live between 2026-09-22 and 2026-09-24 from a VPS checkout that no longer exists. The code, migrations, tests, and evidence JSON files survived (they were recovered onto this branch), but the narrative write-up that would normally accompany each change — the entries this file would otherwise carry — was never committed anywhere and is lost. **There is no earlier version of that narrative to recover.** What follows is reconstructed after the fact strictly from the surviving migration doc-comments, commit messages, tests, and evidence JSON files; it makes no claim beyond what those artifacts state. Three docs cited by code comments from this period (`docs/character-name-evidence.md`, `docs/bootcamp-equip-audit.md`, `docs/bootcamp-opening-movement-audit.md`) were reconstructed the same way and are linked below rather than repeated here.

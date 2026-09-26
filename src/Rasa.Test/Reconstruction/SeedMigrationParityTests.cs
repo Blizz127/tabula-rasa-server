@@ -25,10 +25,11 @@ namespace Rasa.Test.Reconstruction
         {
             // Boot-camp slices and the Wilderness arrival (WildernessArrivalTrainingDay) share the frozen-rows contract,
             // as does the cross-zone mission-area batch (MissionAreaLinks, 2026-09-17) and the 2026-09-26 batches: the ready
-            // missions (EarlyReadyMissions), the Torden missions, the mission reward items, the world defect fixes and the
-            // missing mission givers.
+            // missions (EarlyReadyMissions), the Torden missions, the mission reward items, the world defect fixes, the
+            // missing mission givers and the official-notes corrections.
             foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix, "MissionAreaLinks",
-                "EarlyReadyMissions", "TordenConversationMissions", "MissionRewardItems", "WorldDefectsFix", "MissingMissionGivers" })
+                "EarlyReadyMissions", "TordenConversationMissions", "MissionRewardItems", "WorldDefectsFix", "MissingMissionGivers",
+                "OfficialNotesCorrections" })
             {
                 var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
                     SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, prefix);

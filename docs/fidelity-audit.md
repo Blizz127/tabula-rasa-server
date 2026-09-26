@@ -816,3 +816,23 @@ unreachable (the navmesh route from the Wedge Rock crafting station stops 36 m s
 asks for an owner decision. Perdu, Obahmi, Franks, Foletto, Nicholson, Orto and Creelig have no post-D11 reading
 (`GAP-TORDEN-MARKER-POSITIONS`). The client has two "Colonel Whitaker" names, 5428 and 8919, and which one the
 Irendas Whitaker used is not recorded (`GAP-WHITAKER-NAME-ID`).
+
+## Official live notes against the seeded missions (2026-09-26)
+
+Every live note from 1.4 (2008-01-29) to D16.5 (2009-02-17) was compared with the 114 seeded missions
+(`research/20260926-notes-audit`). 73 missions have no note. Of the rest, the audit found:
+
+| Finding | Missions | Action |
+| --- | --- | --- |
+| Seeded value contradicted by a note | 2016 level (D14: 50), 682/3 killer-only credit (1.6, D8) | corrected, `OfficialNotesCorrections`, original tier |
+| Note describes the target population | 976 (1.6: any Mires Stalker) | binding already creature-wide; OD-48 note, gap |
+| Accept item missing | 1125 (1.7: one keycard) | gap; no accept-time grant exists |
+| Position predates the note | 1745 Arizpe and 408 Jamison (D12), Johnson/321 (1.7), Quillas/1390 (1.7) | gaps, nothing moved |
+| Relationship not modelled | 983/1041 alternative courses (1.7, D8) | gap |
+| Consistent | 1112, 422, 366-368/411-413, 771/787, 1789, 2016's receiver, 1992 | none |
+
+Kill credit on shared maps was killer-only for every binding. The notes establish one exception, 682/3, now a
+per-binding flag (`shared_kill_credit`). Any later note that names another mission needs its own flag and citation;
+the flag is not a default. The shared credit reaches the whole map channel, which the notes neither confirm nor
+limit (`GAP-NOTES-682-SHARED-CREDIT-REACH`). Details: `docs/retail-accuracy.md`, "2026-09-26 — Official live notes
+checked against the seeded missions".

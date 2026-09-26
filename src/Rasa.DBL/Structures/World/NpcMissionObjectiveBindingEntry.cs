@@ -73,6 +73,15 @@ namespace Rasa.Structures.World
         [Required]
         public byte CounterId { get; set; }
 
+        /// <summary>
+        /// Kill bindings only: the death credits every character on the map channel who has this objective
+        /// active, whoever landed the blow, not only the killer. Set per binding where the original says so
+        /// (682/3 Childhood's End: official live notes 1.6, 2008-03-26, and D8, 2008-05-19).
+        /// </summary>
+        [Column("shared_kill_credit")]
+        [Required]
+        public bool SharedKillCredit { get; set; }
+
         [Column("comment", TypeName = "varchar(50)")]
         [Required]
         public string Comment { get; set; } = string.Empty;

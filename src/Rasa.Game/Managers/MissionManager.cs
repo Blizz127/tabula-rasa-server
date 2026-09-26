@@ -519,6 +519,46 @@ namespace Rasa.Managers
         }
 
         /// <summary>
+        /// Shared kill credit: a kill binding with shared_kill_credit completes for every character on the map
+        /// channel whose objective is active and incomplete, whoever killed the creature (another player, an NPC).
+        /// The character the ordinary path already credited - the killer, or a per-character instance's owner -
+        /// is skipped so a kill is never counted twice. Only 682/3 Childhood's End carries the flag, from the
+        /// official live notes 1.6 (2008-03-26) and D8 (2008-05-19); the channel as its reach is the server's
+        /// reading of "just that they are killed" (the notes give no radius).
+        /// </summary>
+        public void OnSharedKillCredit(MapChannel mapChannel, Creature creature, Client alreadyCredited)
+        {
+            var clients = mapChannel?.ClientList;
+            if (clients == null || clients.Count == 0 || creature == null)
+                return;
+
+            var shared = LoadedMissions.Values
+                .SelectMany(definition => definition.Bindings)
+                .Where(binding => binding.SharedKillCredit && (ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.Kill &&
+                                  KillBindingNames(binding, creature))
+                .ToList();
+            if (shared.Count == 0)
+                return;
+
+            foreach (var client in clients.ToList())
+            {
+                if (client == null || client == alreadyCredited || !IsInWorld(client))
+                    continue;
+
+                foreach (var binding in shared)
+                {
+                    if (!client.Player.Missions.TryGetValue(binding.MissionId, out var mission) ||
+                        mission.State != MissionState.Active ||
+                        !mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) ||
+                        status != MissionObjectiveState.Incomplete)
+                        continue;
+
+                    Content.OnKillBinding(client, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Kill);
+                }
+            }
+        }
+
+        /// <summary>
         /// True when this character's mission log satisfies the definition's prerequisite
         /// or-groups: at least one group whose required missions are all in the required state.
         /// A definition without prerequisites is always satisfied.
