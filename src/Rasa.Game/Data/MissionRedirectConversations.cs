@@ -22,15 +22,18 @@ namespace Rasa.Data
     /// <item>441 In Short Supply, objective 1, package 212 (Outpost Commander Randolph, the giver): text 1066/2705
     /// "Did you get in touch with the Twin Pillars infirmary yet?..." (store offsets 6050/6077). The objective
     /// ("Inform Medical Assistant Duncan...", text 6804) completes on Duncan's package 218 (text 1114).</item>
+    /// <item>429 River Recon, objective 4, package 116 (Outpost Commander Rogers): text 2263/2767 redirects the player
+    /// to Witherspoon with the Bane sighting; the objective completes on Witherspoon's package 208 (text 2039).
+    /// docs/river-recon-client-evidence.md names this exact row as the one that must not become a completion route.
+    /// Until 2026-09-26 it stayed loaded, so Rogers could close objective 4 himself.</item>
     /// </list>
-    /// What the original server did with such rows is not recorded (GAP-READY-REDIRECT-COMPLETION). Mission 429's
-    /// (429, 4, 116) row on Rogers is the same shape and is <b>not</b> listed: it predates this list and stays as
-    /// deployed until the owner decides it.
+    /// What the original server did with such rows is not recorded (GAP-READY-REDIRECT-COMPLETION).
     /// </summary>
     public static class MissionRedirectConversations
     {
         private static readonly HashSet<(uint MissionId, uint ObjectiveId, uint NpcPackageId)> Redirects = new()
         {
+            (429u, 4u, 116u),
             (434u, 1u, 208u),
             (441u, 1u, 212u)
         };

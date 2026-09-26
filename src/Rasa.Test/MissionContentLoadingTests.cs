@@ -1002,8 +1002,10 @@ namespace Rasa.Test
                 Assert.AreEqual((3500L, 700L), (inShortSupply.RewardExperience, inShortSupply.RewardCredits));
                 Assert.AreEqual((3000L, 600L), (rendezvous.RewardExperience, rendezvous.RewardCredits));
                 Assert.AreEqual(0, rendezvous.Prerequisites.Count);
-                // 429's (429, 4, 116) row on Rogers is the same shape but predates the list and stays loaded.
-                Assert.IsTrue(missions.LoadedMissions[429].HasObjectiveConversation(4, 116, 1));
+                // 429's (429, 4, 116) row on Rogers is the same redirect shape (docs/river-recon-client-evidence.md):
+                // objective 4 completes only at Witherspoon.
+                Assert.IsFalse(missions.LoadedMissions[429].HasObjectiveConversation(4, 116, 1));
+                Assert.IsTrue(missions.LoadedMissions[429].HasObjectiveConversation(4, 208, 1));
                 Assert.AreEqual(10346u, missions.LoadedMissions[479].ItemCounterClasses[(1u, (byte)0)]);
                 Assert.AreEqual(12, missions.LoadedMissions[479].Counters[1].Single().TargetValue);
 

@@ -1831,8 +1831,10 @@ Two findings changed the batch:
 - The client keeps a completion row on each giver's package that only redirects the player: (434,1,208) on
   Witherspoon and (441,1,212) on Randolph. The server completes through any row of the speaker's package, so both
   would have let the giver close the objective on the spot. `MissionManager.LoadMissions` now leaves them out, via
-  `Rasa.Data.MissionRedirectConversations`, and the table rows are unchanged. 429's (429,4,116) row has the same
-  shape and was left loaded; that is not changed here.
+  `Rasa.Data.MissionRedirectConversations`, and the table rows are unchanged. 429's (429,4,116) row on Rogers has the same
+  shape and is excluded too: `docs/river-recon-client-evidence.md` names that exact row as one that must not become
+  a completion route, and while it stayed loaded Rogers could close River Recon's objective 4 himself. Objective 4
+  now completes only at Witherspoon (package 208).
 
 Left out and recorded as gaps:
 
