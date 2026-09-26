@@ -191,6 +191,8 @@ namespace Rasa.Test.Reconstruction
             {
                 "creature:id:198500-199911",
                 "creature_loot:id:1-21",
+                // CreatureLootFootage (2026-09-26): the creature loot counted in the footage ledger.
+                "creature_loot:id:199400-199449",
                 "content_area:id:198600-198649",
                 "content_placement:id:198650-199911",
                 "content_condition:condition_id:198900-198999",

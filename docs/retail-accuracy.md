@@ -2408,3 +2408,54 @@ Decisions OD-115 and OD-116, agent-approved and pending owner review.
   the backpack, footlocker, foreign and non-token items refused, the evidence and manifest checks),
   `ClassTrainerTests.AClonesOwnTierCreditDependsOnWhetherItWasMadeBeforeTheGate`, `ContentSchemaMigrationTests`
   (forward, rollback, re-apply) and `SeedMigrationParityTests`.
+
+## 2026-09-26 — creature loot counted from the footage (`CreatureLootFootage`)
+
+Migration `20260926210000_CreatureLootFootage` (rows in `CreatureLootFootageRows.cs`). Evidence:
+`docs/evidence/creature-loot-footage-ledger.json`, the ledger of every creature-loot drop visible in the supplied
+footage. Audit item SEG3-CREATURE-LOOT (`research/20260926-segment3-audit`). Decisions OD-110 to OD-112, all
+agent-approved and pending owner review.
+
+- **The ledger.** 40 drops in the final-week session (7Lrst9SG3pk, 8VXeKzGUv0c, Ycxm8Pa1-v4), taken from the
+  frame-by-frame transcripts of 2026-09-13 and their verification pass. The A4 and C1 copies are byte-identical to the
+  committed transcripts. There are also 32 squad-loot entries from the January 2009 Pravus run (A4udsM0rcLo, read from
+  its chat at 1/4 fps), and 20 kill windows. A kill counts only if it has a "You received N credits" line. Chat that
+  appears across an edit cut is its own window, with its kills and its drops both counted. The final-week drops are
+  25 Thrax Skull, 5 standard-grade ammunition stacks, 2 Boargar Ear, 2 schematics, 1534 Mimeomech, Wellcare Motor
+  Assist Armor Legs, an experimental AccuMax Shotgun, the player-named "Xray2ia's Laser Cannon", 5 snowballs and a
+  Forming Alliances Thrax Heart.
+- **Thrax Skull on the Initiates.** 22 skulls in 42 credited Thrax Infantry Initiate kills: 52.38% (measured, Wilson
+  95% 37.7–66.6%), always 1. This is a lower bound of the per-corpse chance, because a corpse never opened counts as a
+  kill without a skull. Three of the four corpse windows that show their whole contents hold a skull. Template 41666
+  (Loot_Junk_Thrax_Skull 20307), not the test class 25553 of the same name.
+- **Ammunition does not follow the killer's weapon.** The audit expected weapon-matched ammunition. Of the seven drops
+  whose receiver's weapon is known, five are power cells or rockets. They dropped for a Shinobi Rifle, an AccuMax
+  Shotgun and a Teleract Rifle, and all three fire Standard Grade Cartridges (their own tooltips). In A5 the rifle's
+  reserve did not grow by the 117 cells. The 19 ammunition drops cover all five of the client's standard-grade weapon
+  ammunition classes: cartridges 5, power cells 4, rockets 5, canister 2, pharmaceuticals 3. Each Initiate
+  therefore gets five rows. The total rate, 4 in 42 kills (9.52%), is measured. Splitting it evenly, 1.9% a type, is
+  inferred (OD-111). Stack ranges are measured per type (cartridges 117–249, power cells 80–159, rockets 33–47,
+  canister 48–55, pharmaceuticals 105–281). The Pravus stacks come from level 8–12 kills, and the Initiate's own four
+  stacks fall inside those ranges.
+- **Thrax stand-in and Young Forest Boargar (OD-112).** The Wilderness Thrax on camera are Thrax Infantry Trainees, a
+  creature this world does not seed (3 skulls and 1 rockets stack in 4 kills). Creature 3, the world's Wilderness Thrax
+  stand-in, takes the Initiate's rows (inferred). The Young Forest Boargar (44) gives Boargar Ear in both of its two
+  kills (100% measured, Wilson 34.2–100%, stack 1–2).
+- **Removed.** creature_loot 1, 8 and 15 were the emulator's 12% 1–35 cartridges on the same three creatures. No
+  observed stack is under 33, and the type varies. The emulator's Motor Assist (0.5% each) and med-pack (5%) rows stay
+  as OD-96 analogues. One Motor Assist piece and no med pack in 42 kills neither confirms nor contradicts them.
+- **The stand-in drop (OD-110).** Every creature without rows got three cartridges on a coin flip. The drop was
+  unlabelled, and the old gap called it "closer to [the original] than dropping nothing". It now lives in
+  `CreatureLoot.StandInDrop` and is labelled an analogue. It stays on, because switching it off
+  (`StandInDropEnabled = false`) leaves every creature the evidence does not cover dropping nothing but mission items.
+  The owner chooses. Creatures with rows never reach it.
+- **Not seeded.** Schematics, random gear, crafting resources, seasonal items and the final patch's red gear are seen
+  but not counted (`GAP-LOOT-SCHEMATICS`, `-RANDOM-GEAR`, `-RESOURCES`, `-SEASONAL`). Higher ammunition grades never
+  appear (`GAP-LOOT-AMMO-GRADE`). Squad loot distribution with need and greed rolls is a mechanic of its own
+  (`GAP-LOOT-SQUAD-DISTRIBUTION`). The junk templates' quality 2 against the client's JUNK is open
+  (`GAP-LOOT-JUNK-QUALITY`), and so are the sample sizes (`GAP-LOOT-RATE-SAMPLES`). The final-week video files are not
+  on this machine, so F07's partial "11[7]" cannot be re-read (`GAP-LOOT-FINAL-WEEK-VIDEO-COPIES`).
+
+Provenance: manifest rows with migration `CreatureLootFootage` (19 rows, 4 changes, 10 new gaps, `GAP-CREATURE-LOOT`
+narrowed). `CreatureLootFootageTests` recomputes every seeded rate and stack range from the ledger's own drops and
+kill windows.

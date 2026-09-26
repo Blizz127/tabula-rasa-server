@@ -1,0 +1,3324 @@
+{
+ "schema": "rasa-creature-loot-ledger/1",
+ "research_date": "2026-09-26",
+ "purpose": "Every creature-loot drop visible in the supplied gameplay footage, with the kills around it, as evidence for creature_loot (AGENTS.md evidence-bounded reconstruction). Audit item SEG3-CREATURE-LOOT (research/20260926-segment3-audit/gaps.json).",
+ "method": [
+  "Final week (7Lrst9SG3pk, 8VXeKzGUv0c, Ycxm8Pa1-v4; one player's continuous session and one other player, both Denzil's Caldera boot camp then Concordia Wilderness, recorded the week of 2009-02-26): the frame-by-frame transcripts of segments A3-A5, B1-B3 and C1-C2 made 2026-09-13 (the E1 extract behind docs/evidence/bootcamp-d11-footage-events.json) and their verification pass, recovered from the rescued session logs (sources.transcripts). Every 'You received ...' line other than credits and prestige, every corpse and container window, every kill-reward line and every edit cut was taken from them.",
+  "Kill counting: a credited kill is a 'You received N credits' kill line (the kill credit, KillRewardRules 5 x level); XP-only lines without credits are listed as uncredited and not counted. Chat that becomes visible across an edit cut is its own window (revealed_across_cut): its kills and drops are both counted, because the chat window shows both.",
+  "Pravus (A4udsM0rcLo, uploaded 2009-01-21 by the same Zorlac whose Zorlac Ripslayer plays Ycxm8Pa1-v4 and Pravus): read by this batch from 1/4 fps crops of the chat window (ffmpeg in an alpine:3.20 container, crop 345x170 at 0,28 of the 1152x720 copy, tiled 3x5). A squad of three: drops go to one member ('X looted'), with need/greed rolls. Creature identity is never in the chat, so Pravus supplies ammunition types and stack sizes only.",
+  "Item identities: the English physicalentityclassnamelanguage (15,967 rows) and the world's itemtemplate_itemclass from the 1.16.5.0 client, decoded statically (decode_literal_table.py, never executed)."
+ ],
+ "sources": {
+  "transcripts": [
+   {
+    "segment": "A4",
+    "video_id": "7Lrst9SG3pk",
+    "committed_sha256": "fc67c596e57b55830914ac6d546c9a1ad26528a83f6c536c7adf54105a65d8ca",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/blufq54e4.txt",
+    "recovered_identical": true
+   },
+   {
+    "segment": "A5",
+    "video_id": "7Lrst9SG3pk",
+    "committed_sha256": "90f12f704e2462ae7d8c0eb09e180d45b5ea4091d81649d1d87e6bcec8918b4e",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/buyo3xi0t.txt",
+    "recovered_identical": false
+   },
+   {
+    "segment": "B1",
+    "video_id": "8VXeKzGUv0c",
+    "committed_sha256": "52351ab021e0c655fc7116faec75fe9e5831d9f51071237df8e5522caf44e218",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/subagents/workflows/wf_159fc004-2d6/journal.jsonl",
+    "recovered_identical": false
+   },
+   {
+    "segment": "B2",
+    "video_id": "8VXeKzGUv0c",
+    "committed_sha256": "92ca3775dc1127b947e4811d3cbac0df9655be2dade4b5448ad1f33d01da2f84",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/b0i3mxo3f.txt",
+    "recovered_identical": false
+   },
+   {
+    "segment": "B3",
+    "video_id": "8VXeKzGUv0c",
+    "committed_sha256": "d8a60c8e01eb21633663281e88bb3f6694c79dab3b5d24896173d0ab242798c3",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/br2gcmqlm.txt",
+    "recovered_identical": false
+   },
+   {
+    "segment": "C1",
+    "video_id": "Ycxm8Pa1-v4",
+    "committed_sha256": "d5a449ca45c28193315be32ef27afcb8d0cdfc4c5d93cde4a5b03fea455393ee",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/b2gxitxgz.txt",
+    "recovered_identical": true
+   },
+   {
+    "segment": "C2",
+    "video_id": "Ycxm8Pa1-v4",
+    "committed_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5",
+    "recovered_copy": "/home/blizz/backups/rasa-net/vps-rescue-20260926/claude-projects-rasa-net/-home-blizz-servers-rasa-net/e0bfa9c8-9f84-40dc-887c-cee77ee35407/tool-results/b842r5ou2.txt",
+    "recovered_identical": false
+   }
+  ],
+  "transcripts_note": "The committed transcripts and the retained frames (research/20260913-bootcamp/footage/) are not on this machine. A4 and C1 recovered copies are byte-identical to the committed transcripts; the others are working copies from the same session whose hashes differ, and every event cited from them agrees with the curated footage-events file wherever that file carries it (A4-43, A5-18, B1-028).",
+  "videos": {
+   "7Lrst9SG3pk": {
+    "sha256": "c3783d8c863f6807e8f55a8b47dd33d6f1117c3556906fda94c62a933edf6632",
+    "era": "d11_to_shutdown",
+    "local_copy": false
+   },
+   "8VXeKzGUv0c": {
+    "sha256": "43187d064abf0282f150513a83f5abd07023a3b9db5baab01a6431f1536f63e0",
+    "era": "d11_to_shutdown",
+    "local_copy": false
+   },
+   "Ycxm8Pa1-v4": {
+    "sha256": "0176e9184c5b8bc71533712ca7da0e08044381e10bb90a35948f80b24cc0b62d",
+    "era": "d11_to_shutdown",
+    "local_copy": false
+   },
+   "A4udsM0rcLo": {
+    "sha256": "d1bab24cd6921b18bd57bd9a732deefa09149dab4ce4e2cc3cc4c2b6f178e62c",
+    "file": "~/.cache/rasa-footage/A4udsM0rcLo-720.mp4 (1152x720)",
+    "upload_date": "2009-01-21",
+    "era": "d11_to_shutdown (inferred from the upload date; recording date unstated)",
+    "local_copy": true
+   }
+  },
+  "client": {
+   "member": "Tabula Rasa 1.16.5.0/data/game.zip",
+   "sha256": "e78b53640e75954b6b36e88eccfb780fcc79ec7b7ee51edbd213073e26406ca6",
+   "tables": [
+    "generated/client/language/english/physicalentityclassnamelanguage.pyo",
+    "generated/client/language/english/creaturenamelanguage.pyo",
+    "generated/client/weaponclass.pyo (via world weaponclass)",
+    "generated/client/itemclass.pyo (via world itemtemplate_itemclass, itemclass.loot_value)"
+   ],
+   "loot_tables": "none: quality.pyo holds the quality enum only; no client table carries creature loot (369 tables checked 2026-09-16)"
+  }
+ },
+ "coverage": {
+  "reviewed": [
+   "7Lrst9SG3pk A3-A5 (295-595 s)",
+   "8VXeKzGUv0c B1-B4 (0-606 s)",
+   "Ycxm8Pa1-v4 C1-C2 (0-165.7 s)",
+   "A4udsM0rcLo (0-558 s, chat only)"
+  ],
+  "not_reviewed": [
+   "-I1WM5ddg-k 'Walkabout' (2,959 s, uploaded 2012, recording date unknown)",
+   "pre-D11 cache videos (2006 E3, 2007 beta and launch, 2008 events): obsolete for final-live loot under AGENTS.md"
+  ],
+  "no_loot_on_camera": "8VXeKzGUv0c B3 258-400 s: kills of Forean Machina Mk II and Thrax Infantry Trainees at levels 7-9 (B3-035, B3-047, B3-056) with no loot line - nothing looted on camera; not counted.",
+  "non_creature_containers": [
+   {
+    "id": "X01",
+    "video_id": "7Lrst9SG3pk",
+    "events": [
+     "A3-017",
+     "A3-022",
+     "A3-023"
+    ],
+    "t": 304.733,
+    "what": "boot-camp Supply Crate (mission 1992): Astra Motor Assist Armor Boots, Teleract Motor Assist Armor Gloves and Legs, Hellstrom Motor Assist Armor Vest, Shinobi Rifle",
+    "note": "content_item_set, not creature loot"
+   }
+  ]
+ },
+ "drops": [
+  {
+   "id": "F01",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A4",
+   "events": [
+    "A4-43"
+   ],
+   "t": 480.567,
+   "window": "KW03",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "corrected (text: three single lines)",
+   "chat_text": "You received 1 Thrax Skull (x3, final period not visible)",
+   "tier": "observed"
+  },
+  {
+   "id": "F02",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A4",
+   "events": [
+    "A4-43"
+   ],
+   "t": 480.567,
+   "window": "KW03",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "corrected (text: three single lines)",
+   "chat_text": "You received 1 Thrax Skull (x3, final period not visible)",
+   "tier": "observed"
+  },
+  {
+   "id": "F03",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A4",
+   "events": [
+    "A4-43"
+   ],
+   "t": 480.567,
+   "window": "KW03",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "corrected (text: three single lines)",
+   "chat_text": "You received 1 Thrax Skull (x3, final period not visible)",
+   "tier": "observed"
+  },
+  {
+   "id": "F04",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-14",
+    "A5-15"
+   ],
+   "t": 513.267,
+   "window": "KW04",
+   "visibility": "corpse_window",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "corpse window header 'Thrax Infantry Initiate'; kill 71 XP / 10 credits (A5-11/A5-12) = level 2 (KillRewardRules 5 x level)"
+   },
+   "item": {
+    "text": "Mimeomech",
+    "class_id": 29908,
+    "template_id": 123339,
+    "category": "crafting_resource",
+    "class_name": "Resource_Crafting_Mimeogel",
+    "loot_value": 4
+   },
+   "quantity": 1534,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "A5-14 confirmed, A5-15 corrected (onset 515.133)",
+   "chat_text": "You received 1534 Mimeomech.",
+   "tier": "observed"
+  },
+  {
+   "id": "F05",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-14",
+    "A5-15"
+   ],
+   "t": 513.267,
+   "window": "KW04",
+   "visibility": "corpse_window",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "same corpse as F04"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "A5-14 confirmed, A5-15 corrected",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F06",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-18"
+   ],
+   "t": 522.133,
+   "window": "KW05",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F07",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-18"
+   ],
+   "t": 522.133,
+   "window": "KW05",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Standard Grade Power Cells",
+    "class_id": 3807,
+    "template_id": 56,
+    "category": "ammo",
+    "class_name": "Ammo_Battery_1_Standard_Grade",
+    "loot_value": 3
+   },
+   "quantity": 117,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "tier": "observed",
+   "quantity_reading": "11[7]: last digit partial at 640x480",
+   "note": "The rifle's reserve reads 3/919 before the cut (A5-16) and 17/880 after it (A5-17): the 117 power cells did not join the Shinobi Rifle's cartridges."
+  },
+  {
+   "id": "F08",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-18"
+   ],
+   "t": 522.133,
+   "window": "KW05",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F09",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-18"
+   ],
+   "t": 522.133,
+   "window": "KW05",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Schematic: Integrated Circuits",
+    "class_id": 22602,
+    "template_id": 45113,
+    "category": "schematic",
+    "class_name": "Recipe_Resource_Upgrade_Scrap_5",
+    "loot_value": 200
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F10",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-18"
+   ],
+   "t": 522.133,
+   "window": "KW05",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "population: every target frame in the window is a level-2 Thrax Infantry Initiate (A4-07, A3-079); the loot line names no creature"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You gained 71 experience points. | You received 10 credits. | You received 1 Thrax Skull. | You received 11[7] Standard Grade Power Cells. | You received 1 Thrax Skull. | You received 1 Schematic: Integrated Circuits. | You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F11",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-23",
+    "A5-24"
+   ],
+   "t": 538.067,
+   "window": "KW06",
+   "visibility": "corpse_window",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "corpse window header 'Thrax Infantry Initiate' after the A5-22 kill (71 XP / 10 credits)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only (not in the verification pass)",
+   "chat_text": "Corpse Loot | Thrax Skull | Loot All -> You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F12",
+   "video_id": "7Lrst9SG3pk",
+   "segment": "A5",
+   "events": [
+    "A5-40",
+    "A5-41"
+   ],
+   "t": 588.4,
+   "window": "KW08",
+   "visibility": "corpse_window",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "corpse window header 'Thrax Infantry Initiate' after the A5-38 kill (71 XP / 10 credits)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only (not in the verification pass)",
+   "chat_text": "Corpse Loot | Thrax Skull | Loot All -> You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F13",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-028"
+   ],
+   "t": 47.2,
+   "window": "KW10",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 1,
+    "identification": "kill 66 XP / 5 credits = level 1 (KillRewardRules 5 x level); boot-camp Denzil's Caldera, whose only hostile population on camera is the Thrax Infantry Initiate"
+   },
+   "item": {
+    "text": "Xray2ia's Laser Cannon",
+    "class_id": 20000080,
+    "template_id": null,
+    "category": "named_gear",
+    "class_name": null,
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You gained 66 experience points by Crit Killing. / You gained 66 experience points. / You received 5 credits. / You received 1 Xray2ia's Laser Cannon. / You received 159 Standard Grade Power Cells. / ... / You gained 35 experience points.",
+   "tier": "observed",
+   "note": "A player-named item (class 20000080, far above the client's ordinary class ids). General chat on the same frame: 'red items screwed up the drop rate'; B4 chat calls red gear an addition of the last patch. Final-week event loot, not a creature table row."
+  },
+  {
+   "id": "F14",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-028"
+   ],
+   "t": 47.2,
+   "window": "KW10",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 1,
+    "identification": "kill 66 XP / 5 credits = level 1 (KillRewardRules 5 x level); boot-camp Denzil's Caldera, whose only hostile population on camera is the Thrax Infantry Initiate"
+   },
+   "item": {
+    "text": "Standard Grade Power Cells",
+    "class_id": 3807,
+    "template_id": 56,
+    "category": "ammo",
+    "class_name": "Ammo_Battery_1_Standard_Grade",
+    "loot_value": 3
+   },
+   "quantity": 159,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You gained 66 experience points by Crit Killing. / You gained 66 experience points. / You received 5 credits. / You received 1 Xray2ia's Laser Cannon. / You received 159 Standard Grade Power Cells. / ... / You gained 35 experience points.",
+   "tier": "observed"
+  },
+  {
+   "id": "F15",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-034"
+   ],
+   "t": 61.2,
+   "window": "KW12",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "Streak Bonus] / You received 10 credits. / You received 1 Thrax Skull. / You received 38 Standard Grade Rockets. / [1. General] Vanduke: clap / [1. General] Ethridge: **** your pants / You gained 71 experience points. / You received 10 credits. / You received 1 Thrax Skull. / [1. General] Vanduke: sorry, wrong channel...;]",
+   "tier": "observed"
+  },
+  {
+   "id": "F16",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-034"
+   ],
+   "t": 61.2,
+   "window": "KW12",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Standard Grade Rockets",
+    "class_id": 3181,
+    "template_id": 30,
+    "category": "ammo",
+    "class_name": "Ammo_Rocket_1_Standard_Grade",
+    "loot_value": 10
+   },
+   "quantity": 38,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "Streak Bonus] / You received 10 credits. / You received 1 Thrax Skull. / You received 38 Standard Grade Rockets. / [1. General] Vanduke: clap / [1. General] Ethridge: **** your pants / You gained 71 experience points. / You received 10 credits. / You received 1 Thrax Skull. / [1. General] Vanduke: sorry, wrong channel...;]",
+   "tier": "observed"
+  },
+  {
+   "id": "F17",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-034"
+   ],
+   "t": 61.2,
+   "window": "KW12",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "Streak Bonus] / You received 10 credits. / You received 1 Thrax Skull. / You received 38 Standard Grade Rockets. / [1. General] Vanduke: clap / [1. General] Ethridge: **** your pants / You gained 71 experience points. / You received 10 credits. / You received 1 Thrax Skull. / [1. General] Vanduke: sorry, wrong channel...;]",
+   "tier": "observed"
+  },
+  {
+   "id": "F18",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-043"
+   ],
+   "t": 73.667,
+   "window": "KW13",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F19",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-043"
+   ],
+   "t": 74.4,
+   "window": "KW13",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F20",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B1",
+   "events": [
+    "B1-043"
+   ],
+   "t": 75.2,
+   "window": "KW13",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "boot-camp Denzil's Caldera Thrax Infantry Initiates (target frames L1/L2 throughout B1); kill credits 10 = level 2"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F21",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-005"
+   ],
+   "t": 0.0,
+   "window": "KW14",
+   "visibility": "chat_before_video",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Shotgun (AccuMax, experimental)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Shotgun (class name only; module prefix AccuMax)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 prestige points for reaching max kill streak. | You gained 143 experience points. (71 Base XP) (+100% Kill Streak Bonus) | You received 10 credits. | [1 General] Grainer: I hate tanks though | You received 17 prestige points for obtaining Experimental item AccuMax Shotgun. | You received 1 Shotgun. | You received 1 Thrax Skull. | [1 General] Grainer: Made skirmish ***",
+   "tier": "observed",
+   "note": "Experimental-quality drop announced with 17 prestige points; its class id is not identifiable from the class name alone."
+  },
+  {
+   "id": "F22",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-005"
+   ],
+   "t": 0.0,
+   "window": "KW14",
+   "visibility": "chat_before_video",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 2,
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 prestige points for reaching max kill streak. | You gained 143 experience points. (71 Base XP) (+100% Kill Streak Bonus) | You received 10 credits. | [1 General] Grainer: I hate tanks though | You received 17 prestige points for obtaining Experimental item AccuMax Shotgun. | You received 1 Shotgun. | You received 1 Thrax Skull. | [1 General] Grainer: Made skirmish ***",
+   "tier": "observed"
+  },
+  {
+   "id": "F23",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-017"
+   ],
+   "t": 15.2,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Schematic: Class I Concussion Grenade",
+    "class_id": 26342,
+    "template_id": null,
+    "category": "schematic",
+    "class_name": null,
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 1 Schematic: Class I Concussion Grenade.",
+   "tier": "observed"
+  },
+  {
+   "id": "F24",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-017"
+   ],
+   "t": 15.2,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F25",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-028"
+   ],
+   "t": 43.8,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24); use prompt under a Thrax corpse at 43.0 (C1-027)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F26",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-033"
+   ],
+   "t": 67.5,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24); use prompt under a Thrax corpse (C1-033)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "corrected (onset 67.500)",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F27",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C1",
+   "events": [
+    "C1-039",
+    "C2-08"
+   ],
+   "t": 85.867,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24); use prompt under a Thrax corpse (C1-039, C2-07)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "confirmed",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F28",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-15"
+   ],
+   "t": 97.88,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F29",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-27"
+   ],
+   "t": 126.5,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Snowball",
+    "class_id": 30547,
+    "template_id": 131481,
+    "category": "holiday_consumable",
+    "class_name": "AccountReward_Holiday_Consumable_Snowball",
+    "loot_value": 30
+   },
+   "quantity": 5,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 5 Snowball. / You received 249 Standard Grade Cartridges",
+   "tier": "observed",
+   "note": "A holiday account-reward consumable (class 30547); Pravus (Jan 2009) also drops Snowball Launchers. Seasonal event loot, not a creature table row."
+  },
+  {
+   "id": "F30",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-27"
+   ],
+   "t": 126.5,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Standard Grade Cartridges",
+    "class_id": 3147,
+    "template_id": 28,
+    "category": "ammo",
+    "class_name": "Ammo_Cartridge_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 249,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 5 Snowball. / You received 249 Standard Grade Cartridges",
+   "tier": "observed",
+   "note": "Weapon reserve 17/1438 (126.5) -> 17/1687 (127.5), +249: the stack joined the Shinobi Rifle's cartridges."
+  },
+  {
+   "id": "F31",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-28"
+   ],
+   "t": 127.12,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F32",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-33"
+   ],
+   "t": 133.62,
+   "window": "KW15",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": "1-2",
+    "identification": "Denzil's Caldera; every target frame is a level-1 or level-2 Thrax Infantry Initiate (C1-009, C1-013, C2-04, C2-13, C2-24)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F33",
+   "video_id": "Ycxm8Pa1-v4",
+   "segment": "C2",
+   "events": [
+    "C2-37",
+    "C2-39"
+   ],
+   "t": 141.62,
+   "window": "KW15",
+   "visibility": "corpse_window",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Initiate",
+    "level": 1,
+    "identification": "corpse window header 'Thrax Infantry Initiate', target frame level 1"
+   },
+   "item": {
+    "text": "Motor Assist Armor Legs (Wellcare)",
+    "class_id": 6473,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Motor Assist Armor Legs (module prefix Wellcare, modulenamelanguage 100001)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Shinobi Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "tooltip 'Standard Grade Cartridges 20/20' (7Lrst9SG3pk A3-018, 304.733) and HUD label (A4-02, A5-05; Ycxm8Pa1-v4 C1-006, C2-02)"
+   },
+   "verification": "C2-37 corrected (window from 141.500), C2-39 confirmed",
+   "chat_text": "Corpse Loot | Wellcare Motor Assist Armor Legs | Loot All -> You received 1 Motor Assist Armor Legs.",
+   "tier": "observed",
+   "note": "The only item on this corpse: no Thrax Skull."
+  },
+  {
+   "id": "F34",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B2",
+   "events": [
+    "B2-065"
+   ],
+   "t": 149.0,
+   "window": "KW20",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Trainee",
+    "level": 4,
+    "identification": "Alia Caverns; target frame 'Thrax Infantry Trainee' level 4 (B2-063); kill credits 20 = level 4"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "... You gained 82 experience points. / You received 20 credits. / Jesus Zuniga has joined the clan / You gained 82 experience points. / You received 20 credits. / You received 1 Thrax Skull. / You received 1 Thrax Skull. / You received 33 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "F35",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B2",
+   "events": [
+    "B2-065"
+   ],
+   "t": 149.0,
+   "window": "KW20",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Trainee",
+    "level": 4,
+    "identification": "Alia Caverns; target frame 'Thrax Infantry Trainee' level 4 (B2-063); kill credits 20 = level 4"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "... You gained 82 experience points. / You received 20 credits. / Jesus Zuniga has joined the clan / You gained 82 experience points. / You received 20 credits. / You received 1 Thrax Skull. / You received 1 Thrax Skull. / You received 33 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "F36",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B2",
+   "events": [
+    "B2-065"
+   ],
+   "t": 149.0,
+   "window": "KW20",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Trainee",
+    "level": 4,
+    "identification": "Alia Caverns; target frame 'Thrax Infantry Trainee' level 4 (B2-063); kill credits 20 = level 4"
+   },
+   "item": {
+    "text": "Standard Grade Rockets",
+    "class_id": 3181,
+    "template_id": 30,
+    "category": "ammo",
+    "class_name": "Ammo_Rocket_1_Standard_Grade",
+    "loot_value": 10
+   },
+   "quantity": 33,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "... You gained 82 experience points. / You received 20 credits. / Jesus Zuniga has joined the clan / You gained 82 experience points. / You received 20 credits. / You received 1 Thrax Skull. / You received 1 Thrax Skull. / You received 33 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "F37",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B3",
+   "events": [
+    "B3-012"
+   ],
+   "t": 219.4,
+   "window": "KW21",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Thrax Infantry Trainee",
+    "level": 6,
+    "identification": "Alia Caverns; target frame 'Thrax Infantry Trainee' level 6 (B3-008); kill 94 XP / 30 credits (B3-010)"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Thrax Skull.",
+   "tier": "observed"
+  },
+  {
+   "id": "F38",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B3",
+   "events": [
+    "B3-026"
+   ],
+   "t": 250.2,
+   "window": "KW22",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "unidentified (a Thrax, by the item)",
+    "level": null,
+    "identification": "a 44 XP line with no credits precedes it; 479 Forming Alliances was accepted at 228.867 (B3-016)"
+   },
+   "item": {
+    "text": "Thrax Heart",
+    "class_id": 10346,
+    "template_id": 2285,
+    "category": "mission_item",
+    "class_name": "MisWildernessItemThraxHeart",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "corrected (Hellwolf glyph only)",
+   "chat_text": "... You gained 3000 experience points. / Mission Completed: Logos: Time / You gained 44 experience points. / You received 1 Thrax Heart. / You gained 88 experience points. / You received 25 credits. / You received 2 Boargar Ear.",
+   "tier": "observed",
+   "note": "Mission item of 479 Forming Alliances (template 2285, the heart the seeded 479 binding drops). Supports the drop's existence; the footage gives no rate (OD-61 stays)."
+  },
+  {
+   "id": "F39",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B3",
+   "events": [
+    "B3-026"
+   ],
+   "t": 250.2,
+   "window": "KW22",
+   "visibility": "chat_revealed_across_cut",
+   "receiver": "player",
+   "creature": {
+    "name": "Young Forest Boargar",
+    "level": 5,
+    "identification": "target frame 'Young Forest Boargar' (B3-027); kill 88 XP / 25 credits = level 5"
+   },
+   "item": {
+    "text": "Boargar Ear",
+    "class_id": 20877,
+    "template_id": 42296,
+    "category": "junk",
+    "class_name": "Loot_Junk_Boargar_Ear",
+    "loot_value": 170
+   },
+   "quantity": 2,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "corrected (Hellwolf glyph only)",
+   "chat_text": "... You gained 3000 experience points. / Mission Completed: Logos: Time / You gained 44 experience points. / You received 1 Thrax Heart. / You gained 88 experience points. / You received 25 credits. / You received 2 Boargar Ear.",
+   "tier": "observed"
+  },
+  {
+   "id": "F40",
+   "video_id": "8VXeKzGUv0c",
+   "segment": "B3",
+   "events": [
+    "B3-029"
+   ],
+   "t": 257.4,
+   "window": "KW23",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "Young Forest Boargar",
+    "level": 6,
+    "identification": "target frame 'Young Forest Boargar' level 6 (B3-027); kill 189 XP (94 base) / 30 credits (B3-028)"
+   },
+   "item": {
+    "text": "Boargar Ear",
+    "class_id": 20877,
+    "template_id": 42296,
+    "category": "junk",
+    "class_name": "Loot_Junk_Boargar_Ear",
+    "loot_value": 170
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "AccuMax Shotgun",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "equipped-compare tooltip 'Standard Grade Cartridges 39/45' (8VXeKzGUv0c B2-027, 102.267); HUD label from B1-010 (4.267) to B3-030 (258.4)"
+   },
+   "verification": "transcript only",
+   "chat_text": "You received 1 Boargar Ear.",
+   "tier": "observed"
+  }
+ ],
+ "pravus_drops": [
+  {
+   "id": "P01",
+   "video_id": "A4udsM0rcLo",
+   "sample": 6,
+   "t_approx": 24,
+   "window": "PRAVUS",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Motor Assist Armor Vest (roll)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Motor Assist Armor Vest (squad need roll)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Teleract Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "HUD label 'Teleract Rifle 16/774' (A4udsM0rcLo sample 1/6 fps n=10, t~54); client weaponclass: every standard 'Rifle' class uses ammo class 3147 (17 of 17 rows)"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Start rolling on Motor Assist Armor Vest / You rolled 7? / Ulliuvenn rolled 63 / Aolon rolled 36 / You won the roll!",
+   "tier": "observed"
+  },
+  {
+   "id": "P02",
+   "video_id": "A4udsM0rcLo",
+   "sample": 11,
+   "t_approx": 44,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Motor Assist Armor Vest (roll)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Motor Assist Armor Vest (squad need roll)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Start rolling on Motor Assist Armor Vest / You rolled 15 / Ulliuvenn rolled 99 / Aolon rolled 38 / Ulliuvenn won the roll!",
+   "tier": "observed"
+  },
+  {
+   "id": "P03",
+   "video_id": "A4udsM0rcLo",
+   "sample": 22,
+   "t_approx": 88,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Motor Assist Armor Vest (roll)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Motor Assist Armor Vest (squad need roll)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Start rolling on Motor Assist Armor Vest / You rolled 52 / Ulliuvenn rolled 85 / Aolon rolled 60 / Ulliuvenn won the roll! ... Ulliuvenn looted 1 Motor Assist Armor Vest.",
+   "tier": "observed"
+  },
+  {
+   "id": "P04",
+   "video_id": "A4udsM0rcLo",
+   "sample": 39,
+   "t_approx": 156,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Motor Assist Armor Vest (roll)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Motor Assist Armor Vest (squad need roll)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Start rolling on Motor Assist Armor Vest / You rolled 9 / Ulliuvenn rolled 96 / Aolon rolled 1 / Ulliuvenn won the roll! ... Ulliuvenn looted 1 Motor Assist Armor Vest.",
+   "tier": "observed"
+  },
+  {
+   "id": "P05",
+   "video_id": "A4udsM0rcLo",
+   "sample": 16,
+   "t_approx": 64,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Pharmaceuticals",
+    "class_id": 7620,
+    "template_id": 636,
+    "category": "ammo",
+    "class_name": "Ammo_Pharmaceutical_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 105,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 105 Standard Grade Pharmaceuticals.",
+   "tier": "observed"
+  },
+  {
+   "id": "P06",
+   "video_id": "A4udsM0rcLo",
+   "sample": 20,
+   "t_approx": 80,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Rockets",
+    "class_id": 3181,
+    "template_id": 30,
+    "category": "ammo",
+    "class_name": "Ammo_Rocket_1_Standard_Grade",
+    "loot_value": 10
+   },
+   "quantity": 37,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 37 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "P07",
+   "video_id": "A4udsM0rcLo",
+   "sample": 20,
+   "t_approx": 80,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Rockets",
+    "class_id": 3181,
+    "template_id": 30,
+    "category": "ammo",
+    "class_name": "Ammo_Rocket_1_Standard_Grade",
+    "loot_value": 10
+   },
+   "quantity": 47,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 47 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "P08",
+   "video_id": "A4udsM0rcLo",
+   "sample": 27,
+   "t_approx": 108,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Power Cells",
+    "class_id": 3807,
+    "template_id": 56,
+    "category": "ammo",
+    "class_name": "Ammo_Battery_1_Standard_Grade",
+    "loot_value": 3
+   },
+   "quantity": 131,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 131 Standard Grade Power Cells.",
+   "tier": "observed"
+  },
+  {
+   "id": "P09",
+   "video_id": "A4udsM0rcLo",
+   "sample": 42,
+   "t_approx": 168,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Cartridges",
+    "class_id": 3147,
+    "template_id": 28,
+    "category": "ammo",
+    "class_name": "Ammo_Cartridge_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 137,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 137 Standard Grade Cartridges.",
+   "tier": "observed"
+  },
+  {
+   "id": "P10",
+   "video_id": "A4udsM0rcLo",
+   "sample": 48,
+   "t_approx": 192,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Pharmaceuticals",
+    "class_id": 7620,
+    "template_id": 636,
+    "category": "ammo",
+    "class_name": "Ammo_Pharmaceutical_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 259,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 259 Standard Grade Pharmaceuticals.",
+   "tier": "observed"
+  },
+  {
+   "id": "P11",
+   "video_id": "A4udsM0rcLo",
+   "sample": 56,
+   "t_approx": 224,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Pravus Research Facility: Level 1 Keypass",
+    "class_id": 20000013,
+    "template_id": null,
+    "category": "mission_item",
+    "class_name": "MisWildernessItemPravusKey",
+    "loot_value": 1
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 1 Pravus Research Facility: Level 1 Keypass.",
+   "tier": "observed"
+  },
+  {
+   "id": "P12",
+   "video_id": "A4udsM0rcLo",
+   "sample": 56,
+   "t_approx": 224,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Pravus Research Facility: Level 1 Keypass",
+    "class_id": 20000013,
+    "template_id": null,
+    "category": "mission_item",
+    "class_name": "MisWildernessItemPravusKey",
+    "loot_value": 1
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 1 Pravus Research Facility: Level 1 Keypass.",
+   "tier": "observed"
+  },
+  {
+   "id": "P13",
+   "video_id": "A4udsM0rcLo",
+   "sample": 56,
+   "t_approx": 224,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Canister Ammunition",
+    "class_id": 3301,
+    "template_id": 32,
+    "category": "ammo",
+    "class_name": "Ammo_Canister_1_Standard_Grade",
+    "loot_value": 7
+   },
+   "quantity": 48,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 48 Standard Grade Canister Ammunition.",
+   "tier": "observed"
+  },
+  {
+   "id": "P14",
+   "video_id": "A4udsM0rcLo",
+   "sample": 65,
+   "t_approx": 260,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Power Cells",
+    "class_id": 3807,
+    "template_id": 56,
+    "category": "ammo",
+    "class_name": "Ammo_Battery_1_Standard_Grade",
+    "loot_value": 3
+   },
+   "quantity": 80,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 80 Standard Grade Power Cells.",
+   "tier": "observed"
+  },
+  {
+   "id": "P15",
+   "video_id": "A4udsM0rcLo",
+   "sample": 74,
+   "t_approx": 296,
+   "window": "PRAVUS",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Electroprobe Mechanical Arm",
+    "class_id": 20890,
+    "template_id": 42309,
+    "category": "junk",
+    "class_name": "Loot_Junk_Electroprobe_Mechanical_Arm",
+    "loot_value": 32
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "Teleract Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "HUD label 'Teleract Rifle 16/774' (A4udsM0rcLo sample 1/6 fps n=10, t~54); client weaponclass: every standard 'Rifle' class uses ammo class 3147 (17 of 17 rows)"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received 1 Electroprobe Mechanical Arm.",
+   "tier": "observed"
+  },
+  {
+   "id": "P16",
+   "video_id": "A4udsM0rcLo",
+   "sample": 80,
+   "t_approx": 320,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Thrax Faceplate",
+    "class_id": 20945,
+    "template_id": 42364,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Faceplate",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 1 Thrax Faceplate.",
+   "tier": "observed"
+  },
+  {
+   "id": "P17",
+   "video_id": "A4udsM0rcLo",
+   "sample": 81,
+   "t_approx": 324,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Thrax Faceplate",
+    "class_id": 20945,
+    "template_id": 42364,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Faceplate",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 1 Thrax Faceplate.",
+   "tier": "observed"
+  },
+  {
+   "id": "P18",
+   "video_id": "A4udsM0rcLo",
+   "sample": 93,
+   "t_approx": 372,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Area Repair Tool (greed roll)",
+    "class_id": null,
+    "template_id": null,
+    "category": "gear",
+    "class_name": "Area Repair Tool (squad greed roll, boss Overseer Tarmok)",
+    "loot_value": null
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Start rolling on Area Repair Tool (greed rolls) / You rolled 59 / Ulliuvenn rolled 58 / Aolon rolled 89 / Aolon won the roll / You received 6 prestige points for killing Overseer Tarmok / You received 156 credits",
+   "tier": "observed"
+  },
+  {
+   "id": "P19",
+   "video_id": "A4udsM0rcLo",
+   "sample": 99,
+   "t_approx": 396,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Cartridges",
+    "class_id": 3147,
+    "template_id": 28,
+    "category": "ammo",
+    "class_name": "Ammo_Cartridge_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 180,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 180 Standard Grade Cartridges.",
+   "tier": "observed"
+  },
+  {
+   "id": "P20",
+   "video_id": "A4udsM0rcLo",
+   "sample": 102,
+   "t_approx": 408,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Pharmaceuticals",
+    "class_id": 7620,
+    "template_id": 636,
+    "category": "ammo",
+    "class_name": "Ammo_Pharmaceutical_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 281,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 281 Standard Grade Pharmaceuticals.",
+   "tier": "observed"
+  },
+  {
+   "id": "P21",
+   "video_id": "A4udsM0rcLo",
+   "sample": 102,
+   "t_approx": 408,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Snowball Launcher",
+    "class_id": 30548,
+    "template_id": 131482,
+    "category": "holiday_gear",
+    "class_name": "AccountReward_Weapon_Avatar_Snowball_Launcher",
+    "loot_value": 1
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 1 Snowball Launcher.",
+   "tier": "observed"
+  },
+  {
+   "id": "P22",
+   "video_id": "A4udsM0rcLo",
+   "sample": 103,
+   "t_approx": 412,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Schematic: Dark Purple Armor Paint",
+    "class_id": 26198,
+    "template_id": 110975,
+    "category": "schematic",
+    "class_name": "Recipe_ArmorDye_Crafted_Tertiary_Purples_Dark",
+    "loot_value": 40
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 1 Schematic: Dark Purple Armor Paint.",
+   "tier": "observed"
+  },
+  {
+   "id": "P23",
+   "video_id": "A4udsM0rcLo",
+   "sample": 109,
+   "t_approx": 436,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Cartridges",
+    "class_id": 3147,
+    "template_id": 28,
+    "category": "ammo",
+    "class_name": "Ammo_Cartridge_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 121,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 121 Standard Grade Cartridges.",
+   "tier": "observed"
+  },
+  {
+   "id": "P24",
+   "video_id": "A4udsM0rcLo",
+   "sample": 110,
+   "t_approx": 440,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Spore Micromech",
+    "class_id": 7632,
+    "template_id": 638,
+    "category": "crafting_resource",
+    "class_name": "Ammo_Micromech_1_Spore (no weaponclass uses it)",
+    "loot_value": 5
+   },
+   "quantity": 77,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 77 Spore Micromech.",
+   "tier": "observed",
+   "count_note": "stack reading '77' partial"
+  },
+  {
+   "id": "P25",
+   "video_id": "A4udsM0rcLo",
+   "sample": 112,
+   "t_approx": 448,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Aolon",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Snowball Launcher",
+    "class_id": 30548,
+    "template_id": 131482,
+    "category": "holiday_gear",
+    "class_name": "AccountReward_Weapon_Avatar_Snowball_Launcher",
+    "loot_value": 1
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Aolon looted 1 Snowball Launcher. (a second line, after the Spore Micromech)",
+   "tier": "observed"
+  },
+  {
+   "id": "P26",
+   "video_id": "A4udsM0rcLo",
+   "sample": 113,
+   "t_approx": 452,
+   "window": "PRAVUS",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Cartridges",
+    "class_id": 3147,
+    "template_id": 28,
+    "category": "ammo",
+    "class_name": "Ammo_Cartridge_1_Standard_Grade",
+    "loot_value": 2
+   },
+   "quantity": 117,
+   "player_weapon": {
+    "name": "Teleract Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "HUD label 'Teleract Rifle 16/774' (A4udsM0rcLo sample 1/6 fps n=10, t~54); client weaponclass: every standard 'Rifle' class uses ammo class 3147 (17 of 17 rows)"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received 117 Standard Grade Cartridges.",
+   "tier": "observed"
+  },
+  {
+   "id": "P27",
+   "video_id": "A4udsM0rcLo",
+   "sample": 114,
+   "t_approx": 456,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Schematic: Bright Orange Armor Paint",
+    "class_id": 26194,
+    "template_id": 110971,
+    "category": "schematic",
+    "class_name": "Recipe_ArmorDye_Crafted_Tertiary_Oranges_Bright",
+    "loot_value": 40
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 1 Schematic: Bright Orange Armor Paint.",
+   "tier": "observed"
+  },
+  {
+   "id": "P28",
+   "video_id": "A4udsM0rcLo",
+   "sample": 115,
+   "t_approx": 460,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "Ulliuvenn",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Canister Ammunition",
+    "class_id": 3301,
+    "template_id": 32,
+    "category": "ammo",
+    "class_name": "Ammo_Canister_1_Standard_Grade",
+    "loot_value": 7
+   },
+   "quantity": 55,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "Ulliuvenn looted 55 Standard Grade Canister Ammunition.",
+   "tier": "observed"
+  },
+  {
+   "id": "P29",
+   "video_id": "A4udsM0rcLo",
+   "sample": 129,
+   "t_approx": 516,
+   "window": "PRAVUS",
+   "visibility": "chat_line",
+   "receiver": "player",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Standard Grade Rockets",
+    "class_id": 3181,
+    "template_id": 30,
+    "category": "ammo",
+    "class_name": "Ammo_Rocket_1_Standard_Grade",
+    "loot_value": 10
+   },
+   "quantity": 43,
+   "player_weapon": {
+    "name": "Teleract Rifle",
+    "ammo": "Standard Grade Cartridges",
+    "ammo_class_id": 3147,
+    "source": "HUD label 'Teleract Rifle 16/774' (A4udsM0rcLo sample 1/6 fps n=10, t~54); client weaponclass: every standard 'Rifle' class uses ammo class 3147 (17 of 17 rows)"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received 43 Standard Grade Rockets.",
+   "tier": "observed"
+  },
+  {
+   "id": "P30",
+   "video_id": "A4udsM0rcLo",
+   "sample": 14,
+   "t_approx": 56,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "squad (player 6, Aolon 5, Ulliuvenn 5)",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Thrax Skull",
+    "class_id": 20307,
+    "template_id": 41666,
+    "category": "junk",
+    "class_name": "Loot_Junk_Thrax_Skull",
+    "loot_value": 96
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received 1 Thrax Skull. / Aolon looted 1 Thrax Skull. / Ulliuvenn looted 1 Thrax Skull.",
+   "tier": "observed",
+   "count_note": "at least 16 distinct Thrax Skull lines across samples 14-120 (deduplicated by position in the scrolling log; a lower bound)"
+  },
+  {
+   "id": "P31",
+   "video_id": "A4udsM0rcLo",
+   "sample": 8,
+   "t_approx": 32,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "squad",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Machina Control Chip",
+    "class_id": 24579,
+    "template_id": 50211,
+    "category": "junk",
+    "class_name": "Loot_Junk_Machina_Control_Chip",
+    "loot_value": 8
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received / Aolon looted / Ulliuvenn looted 1 Machina Control Chip.",
+   "tier": "observed",
+   "count_note": "at least 30 distinct lines across samples 8-138 (lower bound); the most frequent drop of the instance"
+  },
+  {
+   "id": "P32",
+   "video_id": "A4udsM0rcLo",
+   "sample": 8,
+   "t_approx": 32,
+   "window": "PRAVUS",
+   "visibility": "squad_chat",
+   "receiver": "squad",
+   "creature": {
+    "name": "unidentified Pravus Research Facility creature (squad kill; the chat names no creature)",
+    "level": null,
+    "identification": "none"
+   },
+   "item": {
+    "text": "Micromech Infected Brain",
+    "class_id": 20296,
+    "template_id": 41655,
+    "category": "junk",
+    "class_name": "Loot_Junk_Micromech_Infected_Brain",
+    "loot_value": 64
+   },
+   "quantity": 1,
+   "player_weapon": {
+    "name": "unknown (squad member)",
+    "ammo": null,
+    "ammo_class_id": null,
+    "source": "not shown"
+   },
+   "verification": "read by this batch from the 1/4 fps chat contact sheets",
+   "chat_text": "You received / Aolon looted / Ulliuvenn looted 1 Micromech Infected Brain.",
+   "tier": "observed",
+   "count_note": "at least 20 distinct lines across samples 8-138 (lower bound)"
+  }
+ ],
+ "kill_windows": [
+  {
+   "id": "KW01",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    395.0,
+    430.467
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 5,
+   "kill_events": [
+    "A4-08",
+    "A4-10",
+    "A4-14",
+    "A4-16",
+    "A4-18"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [],
+   "note": "Camp defence; nothing looted on camera (the corpses are looted inside the 480.5 cut, KW03)."
+  },
+  {
+   "id": "KW02",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    430.533,
+    480.5
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 2,
+   "kill_events": [
+    "A4-28",
+    "A4-33"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [],
+   "note": "Death at 462.0 and hospital respawn at 469.8; nothing looted."
+  },
+  {
+   "id": "KW03",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    480.5,
+    480.567
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "A4-43"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F01",
+    "F02",
+    "F03"
+   ]
+  },
+  {
+   "id": "KW04",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    480.567,
+    522.067
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 2,
+   "kill_events": [
+    "A5-11",
+    "A5-12"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F04",
+    "F05"
+   ]
+  },
+  {
+   "id": "KW05",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    522.067,
+    522.133
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 3,
+   "kill_events": [
+    "A5-18"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F06",
+    "F07",
+    "F08",
+    "F09",
+    "F10"
+   ],
+   "note": "Two '71 XP / 10 credits' pairs plus a leading '10 credits' line whose XP line has scrolled out of the chat window: three kills (the third inferred from the lone credit line)."
+  },
+  {
+   "id": "KW06",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    522.133,
+    540.4
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "A5-22"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F11"
+   ]
+  },
+  {
+   "id": "KW07",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    540.4,
+    551.467
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "A5-28"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [],
+   "note": "The 143 XP / 50 credits line of the same reveal is the boss (Tizzik Gi) kill and is not counted."
+  },
+  {
+   "id": "KW08",
+   "video_id": "7Lrst9SG3pk",
+   "span": [
+    551.467,
+    594.9
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 2,
+   "kill_events": [
+    "A5-35",
+    "A5-38"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F12"
+   ]
+  },
+  {
+   "id": "KW09",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    4.267,
+    47.133
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 2,
+   "kill_events": [
+    "B1-018",
+    "B1-020"
+   ],
+   "uncredited_xp_lines": 1,
+   "drops": [],
+   "note": "A 17 XP line without credits (B1-025) is not a credited kill."
+  },
+  {
+   "id": "KW09a",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    14.0,
+    14.067
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "B1-015"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [],
+   "note": "A lone '10 credits' line at the top of the chat after the 14.067 cut; no loot line follows it."
+  },
+  {
+   "id": "KW10",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    47.133,
+    47.2
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "B1-028"
+   ],
+   "uncredited_xp_lines": 1,
+   "drops": [
+    "F13",
+    "F14"
+   ]
+  },
+  {
+   "id": "KW11",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    47.2,
+    61.133
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 0,
+   "kill_events": [],
+   "uncredited_xp_lines": 2,
+   "drops": []
+  },
+  {
+   "id": "KW12",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    61.133,
+    61.2
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 2,
+   "kill_events": [
+    "B1-034"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F15",
+    "F16",
+    "F17"
+   ]
+  },
+  {
+   "id": "KW13",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    61.2,
+    80.533
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 3,
+   "kill_events": [
+    "B1-037",
+    "B1-038",
+    "B1-041"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F18",
+    "F19",
+    "F20"
+   ]
+  },
+  {
+   "id": "KW14",
+   "video_id": "Ycxm8Pa1-v4",
+   "span": [
+    null,
+    0.0
+   ],
+   "kind": "chat_before_video",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 1,
+   "kill_events": [
+    "C1-005"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F21",
+    "F22"
+   ]
+  },
+  {
+   "id": "KW15",
+   "video_id": "Ycxm8Pa1-v4",
+   "span": [
+    0.0,
+    165.7
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Initiate",
+   "credited_kills": 15,
+   "kill_events": [
+    "C1-012 (x2)",
+    "C1-015",
+    "C1-023",
+    "C1-026 (x2)",
+    "C1-031",
+    "C1-036",
+    "C2-14",
+    "C2-25 (x2)",
+    "C2-31",
+    "C2-32 (x2)",
+    "C2-35"
+   ],
+   "uncredited_xp_lines": 3,
+   "drops": [
+    "F23",
+    "F24",
+    "F25",
+    "F26",
+    "F27",
+    "F28",
+    "F29",
+    "F30",
+    "F31",
+    "F32",
+    "F33"
+   ],
+   "note": "One continuous clip (C1 0-86 and C2 80.5-165.7 overlap at 80.5-86; the overlapping events are counted once). XP-only lines C1-021, C1-030, C1-038 carry no credits."
+  },
+  {
+   "id": "KW20",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    148.933,
+    149.0
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Thrax Infantry Trainee",
+   "credited_kills": 2,
+   "kill_events": [
+    "B2-065"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F34",
+    "F35",
+    "F36"
+   ]
+  },
+  {
+   "id": "KW21",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    195.0,
+    228.8
+   ],
+   "kind": "continuous",
+   "population": "Thrax Infantry Trainee",
+   "credited_kills": 2,
+   "kill_events": [
+    "B3-010",
+    "B3-013"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F37"
+   ]
+  },
+  {
+   "id": "KW22",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    250.133,
+    250.2
+   ],
+   "kind": "revealed_across_cut",
+   "population": "Young Forest Boargar",
+   "credited_kills": 1,
+   "kill_events": [
+    "B3-026"
+   ],
+   "uncredited_xp_lines": 1,
+   "drops": [
+    "F39"
+   ],
+   "note": "The 44 XP line without credits and its Thrax Heart (F38) are not a credited boargar kill."
+  },
+  {
+   "id": "KW23",
+   "video_id": "8VXeKzGUv0c",
+   "span": [
+    250.2,
+    258.4
+   ],
+   "kind": "continuous",
+   "population": "Young Forest Boargar",
+   "credited_kills": 1,
+   "kill_events": [
+    "B3-028"
+   ],
+   "uncredited_xp_lines": 0,
+   "drops": [
+    "F40"
+   ]
+  }
+ ],
+ "statistics": {
+  "thrax_infantry_initiate": {
+   "windows": [
+    "KW01",
+    "KW02",
+    "KW03",
+    "KW04",
+    "KW05",
+    "KW06",
+    "KW07",
+    "KW08",
+    "KW09",
+    "KW09a",
+    "KW10",
+    "KW11",
+    "KW12",
+    "KW13",
+    "KW14",
+    "KW15"
+   ],
+   "credited_kills": 42,
+   "thrax_skull": {
+    "drops": 22,
+    "per_kill_percent": 52.38,
+    "wilson95_percent": [
+     37.7,
+     66.6
+    ],
+    "quantity_every_drop": [
+     1
+    ],
+    "continuous_windows_only": {
+     "kills": 32,
+     "drops": 13,
+     "per_kill_percent": 40.62
+    },
+    "corpse_windows": {
+     "corpses": 4,
+     "with_skull": 3
+    },
+    "reading": "a lower bound of the per-corpse drop chance: a corpse the player never opened is counted as a kill without a skull. The four corpse windows whose whole contents are on screen show a skull on three."
+   },
+   "ammo": {
+    "drops": 4,
+    "per_kill_percent": 9.52,
+    "wilson95_percent": [
+     3.8,
+     22.1
+    ],
+    "stacks": [
+     [
+      "Standard Grade Power Cells",
+      117,
+      "F07"
+     ],
+     [
+      "Standard Grade Power Cells",
+      159,
+      "F14"
+     ],
+     [
+      "Standard Grade Rockets",
+      38,
+      "F16"
+     ],
+     [
+      "Standard Grade Cartridges",
+      249,
+      "F30"
+     ]
+    ]
+   },
+   "other": [
+    [
+     "Mimeomech",
+     1534,
+     "F04"
+    ],
+    [
+     "Schematic: Integrated Circuits",
+     1,
+     "F09"
+    ],
+    [
+     "Xray2ia's Laser Cannon",
+     1,
+     "F13"
+    ],
+    [
+     "Shotgun (AccuMax, experimental)",
+     1,
+     "F21"
+    ],
+    [
+     "Schematic: Class I Concussion Grenade",
+     1,
+     "F23"
+    ],
+    [
+     "Snowball",
+     5,
+     "F29"
+    ],
+    [
+     "Motor Assist Armor Legs (Wellcare)",
+     1,
+     "F33"
+    ]
+   ]
+  },
+  "thrax_infantry_trainee": {
+   "windows": [
+    "KW20",
+    "KW21"
+   ],
+   "credited_kills": 4,
+   "thrax_skull": {
+    "drops": 3,
+    "wilson95_percent": [
+     30.1,
+     95.4
+    ]
+   },
+   "ammo": {
+    "drops": 1
+   },
+   "reading": "consistent with the Initiate intervals; too few kills for a separate rate"
+  },
+  "young_forest_boargar": {
+   "windows": [
+    "KW22",
+    "KW23"
+   ],
+   "credited_kills": 2,
+   "boargar_ear": {
+    "drops": 2,
+    "per_kill_percent": 100.0,
+    "wilson95_percent": [
+     34.2,
+     100.0
+    ],
+    "quantities": [
+     1,
+     2
+    ]
+   }
+  },
+  "ammo_types": {
+   "observations": 19,
+   "by_type": {
+    "Standard Grade Cartridges": {
+     "template_id": 28,
+     "class_id": 3147,
+     "observations": 5,
+     "stacks": [
+      117,
+      121,
+      137,
+      180,
+      249
+     ],
+     "min": 117,
+     "max": 249,
+     "drops": [
+      "F30",
+      "P09",
+      "P19",
+      "P23",
+      "P26"
+     ]
+    },
+    "Standard Grade Power Cells": {
+     "template_id": 56,
+     "class_id": 3807,
+     "observations": 4,
+     "stacks": [
+      80,
+      117,
+      131,
+      159
+     ],
+     "min": 80,
+     "max": 159,
+     "drops": [
+      "F07",
+      "F14",
+      "P08",
+      "P14"
+     ]
+    },
+    "Standard Grade Rockets": {
+     "template_id": 30,
+     "class_id": 3181,
+     "observations": 5,
+     "stacks": [
+      33,
+      37,
+      38,
+      43,
+      47
+     ],
+     "min": 33,
+     "max": 47,
+     "drops": [
+      "F16",
+      "F36",
+      "P06",
+      "P07",
+      "P29"
+     ]
+    },
+    "Standard Grade Canister Ammunition": {
+     "template_id": 32,
+     "class_id": 3301,
+     "observations": 2,
+     "stacks": [
+      48,
+      55
+     ],
+     "min": 48,
+     "max": 55,
+     "drops": [
+      "P13",
+      "P28"
+     ]
+    },
+    "Standard Grade Pharmaceuticals": {
+     "template_id": 636,
+     "class_id": 7620,
+     "observations": 3,
+     "stacks": [
+      105,
+      259,
+      281
+     ],
+     "min": 105,
+     "max": 281,
+     "drops": [
+      "P05",
+      "P10",
+      "P20"
+     ]
+    }
+   },
+   "reading": "All five standard-grade weapon ammunition classes of the client drop (the five Ammo_*_1_Standard_Grade classes named as ammo_class_id by weaponclass rows; Spore Micromech 7632 is named by none and is a crafting resource). Stack size ranges differ by type; no type is heavily favoured (5/4/5/2/3)."
+  },
+  "ammo_weapon_match": {
+   "attributable_drops": 7,
+   "matching_equipped_weapon": 2,
+   "drops": [
+    [
+     "F07",
+     "Standard Grade Power Cells",
+     "Shinobi Rifle",
+     false
+    ],
+    [
+     "F14",
+     "Standard Grade Power Cells",
+     "AccuMax Shotgun",
+     false
+    ],
+    [
+     "F16",
+     "Standard Grade Rockets",
+     "AccuMax Shotgun",
+     false
+    ],
+    [
+     "F30",
+     "Standard Grade Cartridges",
+     "Shinobi Rifle",
+     true
+    ],
+    [
+     "F36",
+     "Standard Grade Rockets",
+     "AccuMax Shotgun",
+     false
+    ],
+    [
+     "P26",
+     "Standard Grade Cartridges",
+     "Teleract Rifle",
+     true
+    ],
+    [
+     "P29",
+     "Standard Grade Rockets",
+     "Teleract Rifle",
+     false
+    ]
+   ],
+   "expected_matches_if_type_uniform": 1.4
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "H-AMMO-MATCHES-WEAPON",
+   "claim": "a creature drops ammunition of the killer's equipped weapon",
+   "verdict": "refuted",
+   "evidence": "5 of the 7 ammunition drops whose receiver's weapon is known are a type that weapon cannot fire: power cells and rockets to a Shinobi Rifle, an AccuMax Shotgun and a Teleract Rifle, all three of which fire Standard Grade Cartridges (their own tooltips and the client weaponclass rows). F07 is corroborated by the rifle's reserve, which did not grow by the 117 cells."
+  },
+  {
+   "id": "H-AMMO-ANY-STANDARD-TYPE",
+   "claim": "a creature's ammunition drop is one stack of any of the five standard-grade weapon ammunition types, independent of the killer's weapon",
+   "verdict": "supported (inferred)",
+   "evidence": "19 ammunition drops across the Thrax Infantry Initiate, the Thrax Infantry Trainee and the Pravus squad kills cover all five types; 2 of 7 attributable drops match the weapon, against 1.4 expected under a uniform type."
+  },
+  {
+   "id": "H-SKULL-ON-THRAX",
+   "claim": "Thrax infantry drop Thrax Skull junk (quantity 1)",
+   "verdict": "supported (measured on the Initiate)",
+   "evidence": "22 of 42 credited Initiate kills; 3 of 4 Trainee kills; every line reads 1."
+  }
+ ],
+ "implementation": {
+  "migration": "CreatureLootFootage",
+  "decisions": [
+   "OD-110",
+   "OD-111",
+   "OD-112"
+  ],
+  "rows": "creature_loot 199400-199418; see the manifest rows for field tiers",
+  "removed": "creature_loot 1, 8, 15 (the emulator's 12% 1-35 Standard Grade Cartridges row on creatures 3, 198507, 198513): contradicted by every observed stack (33-281, and the type varies)",
+  "kept": "creature_loot 2-7, 9-14, 16-21 (emulator Motor Assist armour 0.5% and Class I Basic Med Pack 5%, analogues under OD-96): the footage neither confirms nor contradicts them (1 Motor Assist piece in 42 Initiate kills, 0 med packs; P(0 | 5%, 42) = 0.12)"
+ },
+ "fallback": {
+  "code": "src/Rasa.Game/Data/CreatureLoot.cs StandInDrop (called from LootDispenserManager.CreateLoot)",
+  "behaviour": "a creature without creature_loot rows drops 3 Standard Grade Cartridges (template 28) on a coin flip",
+  "tier": "analogue",
+  "decision": "OD-110",
+  "counterpart": "none original: InfiniteRasa's emulator stand-in. The ledger shows real corpses dropping creature-specific junk, any standard-grade ammunition (33-281 a stack), schematics and gear.",
+  "required_because": "without it every creature the evidence does not cover drops nothing (mission drops aside)",
+  "alternative": "CreatureLoot.StandInDropEnabled = false: creatures without evidence drop nothing but mission items"
+ },
+ "gaps": [
+  "GAP-CREATURE-LOOT",
+  "GAP-LOOT-RANDOM-GEAR",
+  "GAP-LOOT-SCHEMATICS",
+  "GAP-LOOT-RESOURCES",
+  "GAP-LOOT-SEASONAL",
+  "GAP-LOOT-AMMO-GRADE",
+  "GAP-LOOT-SQUAD-DISTRIBUTION",
+  "GAP-LOOT-THRAX-TRAINEE-CREATURE",
+  "GAP-LOOT-JUNK-QUALITY",
+  "GAP-LOOT-RATE-SAMPLES",
+  "GAP-LOOT-FINAL-WEEK-VIDEO-COPIES"
+ ]
+}

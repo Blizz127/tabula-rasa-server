@@ -964,3 +964,27 @@ player guide the official site republished. Its text did not change from 2007-12
 not reset predates the official 1.4 notes that reset them. Still open: the ToO auto-completion for clones
 (`GAP-CLONE-TOO-AUTOCOMPLETE`), friends, ignores, clan and titles (`GAP-CLONE-SOCIAL-STATE`), the token's other flags
 (`GAP-CLONE-TOKEN-FLAGS`) and any clone-credit vendor (`GAP-CLONE-CREDIT-VENDOR`, none found).
+
+## Creature loot against the footage (2026-09-26)
+
+The segment 3 systems audit ranked creature loot first (SEG3-CREATURE-LOOT). Every creature without rows dropped three
+cartridges on a coin flip, and the only rows were an emulator's. The footage was re-read for every loot line and every
+kill around it. The result is `docs/evidence/creature-loot-footage-ledger.json`, and `CreatureLootFootage` is built
+from it. `CreatureLootFootageTests` recomputes each seeded value from the ledger.
+
+| creature | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Thrax Infantry Initiate (198507, 198513) | emulator rows: cartridges 12% 1-35, Motor Assist 0.5% each, med pack 5% | Thrax Skull 52.38% x1; five standard-grade ammunition rows 1.9% each with observed stack ranges; Motor Assist and med pack kept | 22 skulls and 4 ammunition stacks in 42 credited kills | chance measured (ammunition split inferred); stacks measured; kept rows analogue (OD-96) |
+| Thrax Soldier (3), the Wilderness Thrax stand-in | the same emulator rows | the Initiate's rows | Thrax Infantry Trainee: 3 skulls, 1 rockets in 4 kills (not seeded as a creature) | inferred (OD-112) |
+| Young Forest Boargar (44) | stand-in drop | Boargar Ear 100% 1-2 | 2 ears in 2 kills | measured (OD-112) |
+| every other creature | three cartridges on a coin flip, unlabelled | the same, labelled | none | analogue (OD-110, pending owner review) |
+
+**Refuted along the way.** The audit's plan expected ammunition matching the killer's weapon. The ledger shows
+otherwise. Five of the seven ammunition drops whose receiver's weapon is known are power cells or rockets to
+cartridge weapons: a Shinobi Rifle, an AccuMax Shotgun and a Teleract Rifle, each firing Standard Grade Cartridges by
+its own tooltip. All five standard-grade types drop. Implementing weapon-matched ammunition would have invented a rule
+that the evidence contradicts.
+
+**Seen, not seeded.** Schematics, random gear (Wellcare Motor Assist legs, an experimental shotgun), crafting
+resources, holiday snowballs and snowball launchers, and the last patch's player-named red weapons. Squad loot goes
+to one member, with need and greed rolls, and the server has no such distribution. Each has a `GAP-LOOT-*` entry.

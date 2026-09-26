@@ -17,7 +17,8 @@ namespace Rasa.Services.Preloader
     /// (13066, 13096, 13126, 13156, 13186) at half a percent each, and Class I Basic Med Packs (44917).
     ///
     /// Everything else a creature might drop was in the lost original server data, so creatures without rows keep the
-    /// emulator's stand-in drop (GAP-CREATURE-LOOT).
+    /// emulator's stand-in drop (GAP-CREATURE-LOOT, an analogue under OD-110). The cartridge row (1, 8, 15) is removed
+    /// again by CreatureLootFootage: every stack seen in the footage contradicts it (docs/evidence/creature-loot-footage-ledger.json).
     /// </summary>
     public class CreatureLootPreloader : PreloaderBase, IPreloader
     {

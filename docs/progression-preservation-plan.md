@@ -934,6 +934,8 @@ character picks up in Alia Das once Training Day and the class choice are behind
     and 0.5% each for the five Motor Assist armour pieces - and they now sit on this world's Thrax soldiers (creature 3
     and the boot camp's initiates). Recorded as **OD-49**; every other creature keeps the stand-in drop
     (**GAP-CREATURE-LOOT**), because the client carries no loot data at all (369 decoded tables checked).
+    *Note (2026-09-26, loot-evidence)*: the rows are emulator data (OD-96). The cartridge row is replaced by counts
+    from the footage ledger (`CreatureLootFootage`, below), and the stand-in drop is a labelled analogue (OD-110).
   - **Reconstructed species and placement respawn (2026-09-16)**: with the owner's go-ahead for labelled best-guess
     reconstruction, the Mires got its first reconstructed species. The client's entity class table says what each class
     *is* (augmentation 1 = living creature, 6 = item, 41 = usable object, 52 = NPC), which separates a species from a
@@ -1184,6 +1186,15 @@ character picks up in Alia Das once Training Day and the class choice are behind
   - Details: `docs/retail-accuracy.md`, "Kill experience: squad share, danger penalty, crit kills";
     `docs/evidence/kill-rewards.json`.
 
+- **Creature loot from the footage (2026-09-26, `CreatureLootFootage`)**: `docs/evidence/creature-loot-footage-ledger.json`
+  counts every loot drop in the supplied footage against the credited kills around it (40 final-week drops, 32 Pravus
+  squad-loot entries). The boot-camp Thrax Infantry Initiates and the Wilderness Thrax stand-in (creature 3) drop Thrax
+  Skull at 52.38% (22 in 42 kills) and one of the five standard-grade ammunition types at 1.9% each (4 in 42 kills, with
+  the stack range observed for each type). The ammunition does not follow the killer's weapon: 5 of 7 attributable drops
+  are a type that weapon cannot fire (OD-111). The Young Forest Boargar drops Boargar Ear (2 in 2, OD-112). The
+  emulator's contradicted 12% 1-35 cartridge row goes. Every other creature keeps the three-cartridge stand-in, now an
+  analogue, pending the owner's choice between keeping it and dropping nothing (OD-110).
+
 ## All-missions program (owner goal, 2026-09-15)
 
 Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of
@@ -1330,6 +1341,10 @@ its evidence tier.
 
 | OD-115 Where a Clone Credit token can be used (2026-09-26, agent, pending owner review) | Only from the using character's own backpack, where TaRapedia locates it. The client's footlocker and clan-lockbox windows can send the same request; it is ignored without a reply until a source shows the live server honoured it (`GAP-CLONE-TOKEN-LOCKBOX-USE`). Alternative for the owner: accept the account footlocker as well |
 | OD-116 Clone Credit rewards of unseeded missions (2026-09-26, agent, pending owner review) | No reward row ahead of its mission: the Targets of Opportunity and hybrid missions that paid a Clone Credit are unseeded, and a reward row for an undefined mission is dangling content. Each reward's evidence is kept in `docs/evidence/class-trainer-evidence.json` (`clone_credit_sources`) for when its mission is seeded |
+
+| OD-110 The stand-in drop (2026-09-26, agent, pending owner review) | A creature without loot rows keeps InfiniteRasa's stand-in, three Standard Grade Cartridges on a coin flip, labelled an analogue (`CreatureLoot.StandInDrop`). The alternative, `StandInDropEnabled = false`, means those creatures drop nothing but mission items: no corpse income and no ammunition off a corpse outside the Thrax infantry and the Young Forest Boargar. Owner to choose |
+| OD-111 The creature ammunition drop (2026-09-26, agent, pending owner review) | Weapon-matched ammunition is refuted by the footage ledger (5 of 7 attributable drops mismatch). One row per standard-grade ammunition type at an even share (1.9%) of the measured 4-in-42 Initiate rate, with each type's observed stack range; the emulator's 12% 1-35 cartridge row is removed |
+| OD-112 Loot on thinly evidenced creatures (2026-09-26, agent, pending owner review) | Creature 3, the world's Wilderness Thrax stand-in, takes the Initiate's rows, because the Thrax Infantry Trainee on camera is not seeded. The Young Forest Boargar takes Boargar Ear at the measured 2 in 2 (stack 1-2) despite the sample size |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

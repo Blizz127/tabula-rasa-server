@@ -14,9 +14,41 @@ namespace Rasa.Data
     /// one kill usually drops one thing, sometimes nothing.
     ///
     /// Kept apart from the loot dispenser so the semantics can be tested without a client, a map or a corpse.
+    ///
+    /// Rows now come from two sources: the emulator's seven rows (analogues, OD-96) and the rates counted in the
+    /// footage ledger (docs/evidence/creature-loot-footage-ledger.json, CreatureLootFootage): Thrax Skull and
+    /// standard-grade ammunition on the Thrax infantry, Boargar Ear on the Young Forest Boargar.
     /// </summary>
     public static class CreatureLoot
     {
+        /// <summary>
+        /// Whether a creature without loot rows gets the stand-in drop. <b>OD-110, pending owner review.</b>
+        ///
+        /// The stand-in - three Standard Grade Cartridges on a coin flip - is InfiniteRasa's emulator placeholder, not
+        /// an original rule for any creature: the footage ledger shows real corpses giving creature-specific junk, any of
+        /// the five standard-grade ammunition types in stacks of 33-281, schematics and gear. It is kept, labelled an
+        /// analogue, because the alternative leaves every creature the evidence does not yet cover with nothing to drop
+        /// but mission items (no corpse income, no ammunition off a corpse). Setting this to false is that alternative;
+        /// nothing else changes. Creatures with rows (the Thrax infantry, the Young Forest Boargar, and anything later
+        /// evidence covers) never use it.
+        /// </summary>
+        public const bool StandInDropEnabled = true;
+
+        /// <summary>The stand-in: Standard Grade Cartridges (template 28), three of them (analogue, OD-110).</summary>
+        public const uint StandInItemTemplateId = 28, StandInCount = 3;
+
+        /// <summary>
+        /// The stand-in drop for a creature with no loot rows: a coin flip (nextInt(0, 2)) for three cartridges, or
+        /// nothing at all when the stand-in is switched off (OD-110).
+        /// </summary>
+        public static List<(uint ItemTemplateId, uint Count)> StandInDrop(Func<int, int, int> nextInt, bool enabled = StandInDropEnabled)
+        {
+            var drops = new List<(uint, uint)>();
+            if (enabled && nextInt(0, 2) > 0)
+                drops.Add((StandInItemTemplateId, StandInCount));
+            return drops;
+        }
+
         public static List<(uint ItemTemplateId, uint Count)> Roll(CreatureLootData data, Func<double> nextDouble,
             Func<int, int, int> nextInt)
         {
