@@ -947,6 +947,19 @@ namespace Rasa.Managers
                 if (binding.DestroyingHitOnly && !destroyed)
                     continue;
 
+                // An objective that counts destroyed objects ("Infestation Remaining": 323 Pirate Radio destroys two Living
+                // Infestations per dish) advances its counter on each destroying hit, as a kill advances a kill counter.
+                if (destroyed && binding.DestroyingHitOnly && binding.CounterId != 255)
+                {
+                    if (sourceClient?.Player != null &&
+                        sourceClient.Player.Missions.TryGetValue(binding.MissionId, out var mission) &&
+                        mission.State == MissionState.Active &&
+                        mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) &&
+                        status == MissionObjectiveState.Incomplete)
+                        OnKillBinding(sourceClient, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Hit);
+                    continue;
+                }
+
                 Missions.CompleteBoundObjective(sourceClient, binding.MissionId, binding.ObjectiveId, ObjectiveBindingKind.Hit);
             }
         }

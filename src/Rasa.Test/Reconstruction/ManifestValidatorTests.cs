@@ -222,7 +222,13 @@ namespace Rasa.Test.Reconstruction
                 "map_link:id:199250-199299",
                 // WildernessCraterLakeResearchFacility (2026-09-27): the dossier-reserved Crater Lake creature and placement blocks.
                 "creature:id:1721001-1721099",
-                "content_placement:id:1721100-1721499"
+                "content_placement:id:1721100-1721499",
+                // PravusResearchInstance (2026-09-27): the Pravus Research block the instance dossier reserved, and 323 Pirate
+                // Radio, the one seeded mission id below the npc_mission range.
+                "creature:id:1430001-1430099",
+                "content_placement:id:1430100-1430499",
+                "content_area:id:1430500-1430599",
+                "npc_mission:id:323-323"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

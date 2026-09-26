@@ -89,6 +89,13 @@ namespace Rasa.NavMesh
             if (!File.Exists(csv))
                 csv = Path.Combine("src", "Rasa.NavMesh", "data", "entity_meshes.csv");
 
+            var cutsCsv = Path.Combine(AppContext.BaseDirectory, "data", "terrain_cuts.csv");
+
+            if (!File.Exists(cutsCsv))
+                cutsCsv = Path.Combine("src", "Rasa.NavMesh", "data", "terrain_cuts.csv");
+
+            var terrainCuts = TerrainCuts.Load(cutsCsv);
+
             var stopwatch = Stopwatch.StartNew();
             Console.WriteLine($"Indexing mesh archives in {dataDirectory} ...");
             using var meshes = new MeshLibrary(dataDirectory, csv);
@@ -118,8 +125,8 @@ namespace Rasa.NavMesh
 
                 try
                 {
-                    var geometry = MapGeometry.Load(mapDirectory, meshes, settings.TerrainStep, settings.TerrainMaxSlope);
-                    Console.WriteLine($"  terrain {geometry.TerrainTriangles:n0} tris; {geometry.EntitiesWithCollision:n0} entities with collision ({geometry.EntityTriangles:n0} tris), "
+                    var geometry = MapGeometry.Load(mapDirectory, meshes, settings.TerrainStep, settings.TerrainMaxSlope, null, terrainCuts.For(name));
+                    Console.WriteLine($"  terrain {geometry.TerrainTriangles:n0} tris{(geometry.TerrainTrianglesCut > 0 ? $" ({geometry.TerrainTrianglesCut:n0} cut out by terrain_cuts.csv)" : "")}; {geometry.EntitiesWithCollision:n0} entities with collision ({geometry.EntityTriangles:n0} tris), "
                                       + $"{geometry.EntitiesWithoutCollision:n0} without, {geometry.EntitiesWithoutMesh:n0} with no mesh; "
                                       + $"bounds ({geometry.BoundsMin.X:0}, {geometry.BoundsMin.Y:0}, {geometry.BoundsMin.Z:0}) - ({geometry.BoundsMax.X:0}, {geometry.BoundsMax.Y:0}, {geometry.BoundsMax.Z:0})");
 

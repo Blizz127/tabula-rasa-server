@@ -4659,3 +4659,66 @@ and no post-D11 footage exists, so pre-D11 guides are used only for what D11 did
   each squad copy's own shrines, rollback, the deployed world's rows and free ids), the Crater Lake block of
   `MissionContentLoadingTests` (450 and 960 offerable, the four placements every copy materializes) and of
   `ContentSchemaMigrationTests` (rows, rollback), and provider parity.
+
+## 2026-09-27 — Pravus Research Facility: the interior joined, its population, the production and four missions
+
+The Pravus section of the wilderness instance dossiers (`research/20260926-instance-dossiers-wilderness`), seeded after
+the navmesh defect the dossier found was fixed. Migration `PravusResearchInstance` (20260927020000); evidence
+`docs/evidence/pravus-research-instance-20260927.json` (the navmesh diagnosis, every probe, the pool bases, the other
+maps sampled); footage events P1-001 to P1-019 of A4udsM0rcLo in `bootcamp-d11-footage-events.json`; decisions OD-135
+to OD-139, agent-approved and pending owner review. The only footage is one run by a squad of three (Zorlac, uploaded
+2009-01-21, capture undated; no Juggernaut or Predator appears, which D11 removed).
+
+- **The interior was cut off by the terrain, not by doors or tiles.** The dossier found every interior probe partial.
+  The rooms were already joined to each other (tunnel cross to Control Rooms 65 m, to the chamber 170 m, to the prison
+  316 m); what failed was the entrance ramp. The facility plateau's heightmap is a flat 40.27 m, and the ramp's top coil
+  (floor 38.5-40.8 m) runs through it, so Recast saw a ceiling less than an agent height above the ramp. The client walks
+  players down that ramp, so the terrain is not solid inside the building. `Rasa.NavMesh` now leaves out terrain inside
+  the meshes a map lists in `data/terrain_cuts.csv` (`EnclosureIndex`; Pravus lists the Bane industrial modules; 273
+  triangles). The rebuilt navmesh joins the jamb to the halls (107 m), the Control Rooms, the chamber (310 m), the
+  gangplank and the prison chunnel, and the hospital to all of them. The dossier's "control room centre" probes started
+  on the Stasis Chamber's top, a navmesh island; the room's floor was always joined. The cut is not applied generally:
+  over every mesh it also fires under rock overhangs, trees and ponds and cut the camp off from the Frontlines. The
+  Bane Conscript Facility carries the same ramp, and Timora Mines, Torcastra Prison and the Wardenbot Factory show terrain
+  inside tunnels; they are listed, not probed (`GAP-NAVMESH-TERRAIN-CUTS`). Crater Lake's islands are a different defect:
+  its floors are above the terrain, and a cut leaves them as they were.
+- **Population, from the footage's target frames and minimap.** Ten creature rows (1430001-1430010; client names where
+  the frame shows a rank name, classes inferred from the display names, levels observed, health, attack and speed world
+  analogues under OD-135). Five pools on the instance map (1430200-1430204, cloned into every squad copy): the Frontlines
+  assault drawn by Bane dropship as the footage shows it (Forean Machina, Hominis Machina, Thrax Riflemen and Trainees,
+  hostile Forean Gunners), the hill route, the Interior Halls (with a Shield Drone), the Control Rooms (10 m off the
+  module centre, which is the Stasis Chamber top) and the chamber escort. Counts are the fewest individuals the footage
+  shows at once; positions are region-level (+/-30-60 m; the region volumes are lost and the radar was not registered);
+  respawn is the world seed's 20 (OD-136).
+- **Entrance, boss and chamber.** Three Thrax Infantry Trainees in the tunnel mouth (1430101-1430103, +/-10 m) drop the
+  Level 1 Keypass (11505) to whoever kills one while on 575 (two squadmates each looted one, P1-009). Overseer Tarmok,
+  level 9 with a red boss frame, stands at the Control Rooms' chamber side (1430110). The Prototype Forean Machina is not
+  a boss: the footage shows many full-health copies with the normal frame and ordinary kills, so the production is one
+  level-8 placement at the machine that comes back 2.5 s after each death, the kill cadence of t 456-510 (1430121,
+  OD-137). The Production Fueling Capsule (client class 9272) is a destroyable at the chamber centre (1430120). Destroying
+  it does not stop the production: nothing in the content layer can remove a placement from a squad copy
+  (`GAP-PRAVUS-PRODUCTION-STOP`).
+- **NPC fixes.** Information Spec. Johnson (199016) moves to the pillbox beside Perkins, where the 1.7 live notes put him,
+  and carries package 106; Ranger Nylla (199017) carries 420 and gets a second stand on the Control Rooms gangplank at
+  TaRapedia's /loc (1430100), present from entry, because a squad copy has no owner whose mission state a presence
+  condition could test (OD-138); Lt. Cmdr. Parsons (119) carries 450 and stays 84.6 m from the entrance marker, since
+  "sitting outside the door" gives no coordinates (`GAP-PARSONS-POSITION`); Perkins' placement comment loses its "GUESS".
+- **Missions.** 593 The Escapist (Parsons to Nylla, completing on her package), 575 The Means of Production (Nylla to
+  Nylla, shareable as the footage shows it shared; the keypass, entering the chamber and the capsule's destroying hit;
+  575/4 Maulis and 575/5 the ambush stay optional and unrevealed), 323 Pirate Radio (Johnson; two Living Infestations on
+  each of the three original comm dishes, counted on the client's "Infestation Remaining" counters; no prerequisite,
+  as 1.7 removed it) and 924 Logos: Communication, Control, Machine (Standley; the logos rows 51/41/34). Amounts are
+  TaRapedia's pre-1.4 readings, labelled; 1.6's "Fixed reward levels in Pravus Research" postdates them all.
+- **Two server changes the content needed.** A destroying hit on a destroyable whose objective has a counter advances
+  the counter (`MissionContentRuntime.OnContentUsableHit`), as a kill does. The client rows for 575/1-2 on Nylla's
+  package and 323's reminder rows on Johnson's repeat reminders; loaded, they would close those objectives in the first
+  conversation, so `MissionRedirectConversations.BoundElsewhere` withholds them like the redirect rows.
+- **Held.** 574 Machinations: its giver Council Elder Baruhi (client name 3090, Ellatha Loc -45, 207, 70) is not in the
+  world and no Wilderness Forean Machina drops its remains; so 593 is offered without the pre-1.4 prerequisite on 574
+  (OD-139). Maulis, the ambush, Overseer Prion, 1449 objective 40, the entrance force field and switch, the Frontlines'
+  AFS soldiers, Tarmok's loot. Never: a Juggernaut or Predators.
+- Tests: `PravusResearchInstanceTests` (the navmesh joins every room from the jamb and the hospital; every seeded
+  creature on its floor and reachable; two squad copies each with their own five pools; the held content out; store
+  types; every row against its manifest row; rollback), `DestroyablePlacementTests.DestroyedCounter`, the Pravus blocks
+  of `MissionContentLoadingTests` (593/575/323/924 offerable, the withheld rows, the keypass drop only from the entrance
+  guards) and `ContentSchemaMigrationTests`, and provider parity.

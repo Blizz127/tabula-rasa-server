@@ -1053,3 +1053,21 @@ Tiers and gaps: the manifest rows of `WildernessCraterLakeResearchFacility`, OD-
 | 960 Logos: Movement, Around, Chaos | unseeded | shrines 50/45/4, 18,000 XP, 1,500 credits, ungated pen (OD-143) | logosstone; TaRapedia; Ellatha | inferred, pre-1.4 amounts |
 | 1055 terminals | proposed | held: HQ and greenhouse floors are navmesh islands, DT3 reading contradicted | navmesh probes; client map | gap |
 | 1065 escort, radar dish, 489, 1054, population, D11 bosses/crates | proposed or unrecorded | held | loader rule; entityclass 6273 aug 9; D11 notes | gap |
+
+## Pravus Research Facility (2026-09-27)
+
+The Pravus section of the wilderness instance dossiers, checked against the 1.16.5.0 client, the footage and the rebuilt
+navmesh. Tiers and gaps: the manifest rows of `PravusResearchInstance`, OD-135 to OD-139 and
+`docs/evidence/pravus-research-instance-20260927.json`. Account: `docs/retail-accuracy.md`, "Pravus Research Facility".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Pravus navmesh | entrance ramp cut off by the plateau terrain | joined (terrain cut, 273 triangles) | client map and terrain; probes | measured |
+| population | four NPCs | ten creature types in five region pools, per copy (OD-135, OD-136) | A4udsM0rcLo target frames | observed types/levels; positions measured; stats analogue |
+| entrance, Tarmok, production | absent | keypass Trainees, level-9 boss, Prototype every 2.5 s (OD-137) | footage; TTH; TaRapedia | observed/inferred; rate inferred |
+| Johnson | pre-1.7 /loc, no package | beside Perkins, package 106 | 1.7 live notes | inferred; package original row |
+| Nylla, Parsons | no packages | 420, 450; Nylla also on the gangplank (OD-138) | objectiveconversation; TaRapedia | inferred |
+| 593, 575, 323, 924 | unseeded | offerable (575/4-5 held; 593 without 574, OD-139) | client tables; TaRapedia; footage | inferred, pre-1.4 amounts |
+| destroy counters | a destroying hit completed the objective | it advances the objective's counter | client counter "Infestation Remaining" | inferred |
+| 575/1-2 and 323 client rows | would complete on the first conversation | withheld | objectiveconversation texts | inferred |
+

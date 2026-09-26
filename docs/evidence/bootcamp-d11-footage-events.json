@@ -61,6 +61,13 @@
    "video_id": "Ycxm8Pa1-v4",
    "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5",
    "verification_sha256": "401029c9c043143ff2f1443ffb0e652b139ef929eedf4e19511526e4e93299f9"
+  },
+  {
+   "segment": "P1",
+   "video_id": "A4udsM0rcLo",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559",
+   "verification_sha256": "97a231ec90f635701614c7b42ecb71b9689f7c6e2bd54f01c88f99a51963bb8d",
+   "note": "Pravus Research footage read at 1 fps by the 2026-09-26 Wilderness instance dossier (dossiers.json is the reading, work/source_sha256.txt the source hashes); P1-001, P1-003, P1-009, P1-014 and P1-018 re-read from their frames by the PravusResearchInstance batch."
   }
  ],
  "events": [
@@ -1624,6 +1631,196 @@
    "description": "End of video (duration 165.70 s); last frame matches 165.5. Through the end of the video there is no objective completion, no Conrad's corpse or bomb, no bomb timer, no dropship destruction, no Corporal Van Valkenberg, no dropship pad and no exit.",
    "status": "confirmed",
    "transcript_sha256": "a04c65657ea024188e8b282c1e07c1ef1e3c861e9ed977a03b700d8ccf2258a5"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-001",
+   "t": 5.0,
+   "category": "chat",
+   "text": "Sharing The Means of Production with Varko Ulliuvenn / Radmon Aolon is out of range to share The Means of Production / Mission Accepted: The Means of Production",
+   "description": "Squad chat at the AFS Preparation Camp (minimap label), frame f_0006: the player shares 575 with a squadmate before the run.",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-002",
+   "t": 27.0,
+   "category": "npc",
+   "text": "Forean Machina 8-9",
+   "description": "Frontlines target frames, levels 8-9 (f_0028; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-003",
+   "t": 30.0,
+   "category": "other",
+   "text": "Frontlines",
+   "description": "Frame f_0031: two Bane dropships hover over the sandbag line and drop attackers; AFS Guardsman 10 and the turret platform on the left; minimap label Frontlines.",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-004",
+   "t": 48.0,
+   "category": "npc",
+   "text": "Forean Gunner 9-10",
+   "description": "Orange (hostile) target frames 'Forean Gunner' levels 9-10 at the Frontlines (f_0049; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-005",
+   "t": 55.0,
+   "category": "npc",
+   "text": "Hominis Machina 8-10",
+   "description": "Frontlines and hill-route target frames, levels 8-10 (f_0056; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-006",
+   "t": 141.0,
+   "category": "npc",
+   "text": "Thrax Rifleman 9",
+   "description": "Hill route between the Frontlines and the bridge (f_0142; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-007",
+   "t": 157.0,
+   "category": "npc",
+   "text": "Thrax Infantry Trainee 9",
+   "description": "Hill-route group of Trainees (f_0158; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-008",
+   "t": 221.0,
+   "category": "npc",
+   "text": "Thrax Infantry Trainee 7-8",
+   "description": "The facility entrance tunnel with its red force field; Thrax Infantry Trainees 8 and 7 in the tunnel mouth (f_0222; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-009",
+   "t": 228.0,
+   "category": "chat",
+   "text": "Aolon looted 1 Pravus Research Facility: Level 1 Keypass / Ulliuvenn looted 1 Pravus Research Facility: Level 1 Keypass",
+   "description": "Frame f_0229 at the force field and its switch, target 'Thrax Infantry Trainee' level 7: two squadmates each loot a keypass after the Trainee kills; the recorder loots none.",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-010",
+   "t": 261.0,
+   "category": "npc",
+   "text": "Thrax Rifleman 8",
+   "description": "Minimap 'Pravus Interior Halls' (f_0262; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-011",
+   "t": 270.0,
+   "category": "npc",
+   "text": "Thrax Technician 8",
+   "description": "Interior Halls, Technicians levels 7-10 (f_0271; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-012",
+   "t": 296.0,
+   "category": "npc",
+   "text": "Shield Drone 8",
+   "description": "Interior Halls (f_0297; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-013",
+   "t": 356.0,
+   "category": "npc",
+   "text": "Thrax Technician 7",
+   "description": "Minimap 'Pravus Control Rooms' (f_0357; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-014",
+   "t": 366.0,
+   "category": "npc",
+   "text": "Overseer Tarmok 9",
+   "description": "Frame f_0367: red boss target frame '9 Overseer Tarmok' in the Pravus Control Rooms (minimap), the Machina machine visible below; he dies at t 375 for 116 base XP, 6 prestige and 156 credits (dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-015",
+   "t": 381.0,
+   "category": "npc",
+   "text": "Prototype Forean Machina 8",
+   "description": "Production Chamber: full-health copies with the normal orange frame, each an ordinary 50-base-XP kill (f_0382; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-016",
+   "t": 390.0,
+   "category": "npc",
+   "text": "Thrax Infantry Trainee 8",
+   "description": "Production Chamber escort (f_0391; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-017",
+   "t": 394.0,
+   "category": "npc",
+   "text": "Thrax Rifleman 8",
+   "description": "Production Chamber escort (f_0395; dossier reading).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-018",
+   "t": 449.0,
+   "category": "npc",
+   "text": "Prototype Forean Machina 8",
+   "description": "Frame f_0450: Prototypes come out of the machine's door; minimap 'Pravus Production Chamber'.",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "P1",
+   "event_id": "P1-019",
+   "t": 456.0,
+   "category": "other",
+   "text": "You gained ... experience points (50 Base XP)",
+   "description": "Chamber kills at 50-58 base XP arrive every 2-3 s from t 456 to 510 (20 or more), still continuing at t 540-557 when the video ends (dossier chat reading, sheets/cbot_*).",
+   "status": "confirmed",
+   "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
   }
  ],
  "dropped": []

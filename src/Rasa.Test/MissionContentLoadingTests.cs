@@ -967,12 +967,16 @@ namespace Rasa.Test
                 // S2 usable placements: crate 26714 UsableTreasureDispHumCrateV04, dummies 29365 UsableStatelessHumPracticeDummyV01.
                 // S5: Conrad's corpse 21961 UsableStatelessFlightSalvage, bomb 7870 UsableBombHumV01, wreck 24586.
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
+                // PravusResearchInstance: the Production Fueling Capsule 9272 and the Living Infestation 6225.
+                references.Classes.UnionWith(new uint[] { 9272, 6225 });
                 // Placement respawn (2026-09-16): the Mires species clusters rely on it, and the validator treats it
                 // as implemented, so the capability is asserted here rather than described in a gap.
                 // S2 crate item set 19858, with the uncommon armour of BootcampCrateUncommonGear.
                 references.Items.UnionWith(new uint[] { 12209, 15803, 26879, 12208, 13713, 2285 });
                 // The doctors' sample items of WildernessXenobiologySamples: blood 2524, scraps 2527, pincers 2532, spleen 2533.
                 references.Items.UnionWith(new uint[] { 2524, 2527, 2532, 2533 });
+                // PravusResearchInstance: the Level 1 Access Keypass the entrance Trainees drop.
+                references.Items.Add(11505);
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -1132,6 +1136,51 @@ namespace Rasa.Test
                 Assert.AreEqual((520012u, (byte)ContentPlacementBehavior.CreatureAi, 0u, 0u), (craterLake[1721100].CreatureId, craterLake[1721100].Behavior, craterLake[1721100].RespawnMs, craterLake[1721100].PresentConditionId));
                 Assert.AreEqual((1721001u, (byte)ContentPlacementBehavior.CreatureAi, 0u, 0u), (craterLake[1721101].CreatureId, craterLake[1721101].Behavior, craterLake[1721101].RespawnMs, craterLake[1721101].PresentConditionId));
                 Assert.AreEqual(0, ContentMaterializer.UsablesToSpawn(validation, 1721).Count);
+                // PravusResearchInstance: 593, 575, 323 and 924 load offerable; 575 collects the keypass from the entrance
+                // Trainees, completes on the chamber area and the capsule's destroying hit, and none of Nylla's or Johnson's
+                // client rows for those objectives is loaded; 323 counts two destroyed infestations per dish.
+                foreach (var missionId in new uint[] { 593, 575, 323, 924 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                }
+                Assert.IsFalse(missions.LoadedMissions.ContainsKey(574), "574 is held (no Baruhi, no Wilderness Forean Machina)");
+                var escapist = missions.LoadedMissions[593];
+                Assert.AreEqual((119u, 199017u), (escapist.MissionGiver, escapist.MissionReciver));
+                Assert.IsTrue(escapist.HasObjectiveConversation(1, 420, 1));
+                Assert.AreEqual(0, escapist.Prerequisites.Count);
+                var production = missions.LoadedMissions[575];
+                Assert.AreEqual((199017u, 199017u), (production.MissionGiver, production.MissionReciver));
+                CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.AreaEntered, 0u), (2u, ObjectiveBindingKind.Hit, 1430120u), (3u, ObjectiveBindingKind.ItemCollected, 0u) },
+                    production.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId)).ToArray());
+                Assert.IsFalse(production.ObjectiveConversations.Any(conversation => conversation.ObjectiveId is 1 or 2), "575/1 and 575/2 complete through their bindings, not Nylla");
+                Assert.AreEqual(593u, production.Prerequisites.Single().RequiredMissionId);
+                Assert.AreEqual((16000L, 2000L), ((long)production.RewardExperience, (long)production.RewardCredits));
+                var pirateRadio = missions.LoadedMissions[323];
+                Assert.AreEqual(6, pirateRadio.Bindings.Count(binding => (ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.Hit && binding.DestroyingHitOnly));
+                Assert.AreEqual(0, pirateRadio.ObjectiveConversations.Count, "Johnson's reminder rows complete nothing");
+                Assert.AreEqual(0, pirateRadio.Prerequisites.Count, "the 1.7 notes removed Pirate Radio's prerequisite");
+                CollectionAssert.AreEquivalent(new[] { (309u, 2), (310u, 2), (311u, 2) },
+                    pirateRadio.Counters.Select(pair => (pair.Key, pair.Value.Single().TargetValue)).ToArray());
+                var logosPravus = missions.LoadedMissions[924];
+                CollectionAssert.AreEquivalent(new[] { (6u, 51u), (7u, 41u), (8u, 34u) },
+                    logosPravus.Bindings.Select(binding => (binding.ObjectiveId, binding.PlacementId)).ToArray());
+                Assert.AreEqual(MapInstancing.PerSquad, validation.Catalog.InstancingFor(1430));
+                Assert.IsFalse(validation.WithheldContexts.Contains(1430u));
+                var pravus = ContentMaterializer.PlacementsToSpawn(validation, 1430).ToDictionary(placement => placement.Id);
+                CollectionAssert.IsSubsetOf(new uint[] { 199007, 199008, 199016, 199017, 1430100, 1430101, 1430102, 1430103, 1430110, 1430121 }, pravus.Keys.ToArray());
+                Assert.AreEqual((106u, -73.0, 30.55, 179.0), (pravus[199016].NpcPackageId, pravus[199016].PosX, pravus[199016].PosY, pravus[199016].PosZ));
+                Assert.AreEqual(2500u, pravus[1430121].RespawnMs);
+                Assert.IsTrue(pravus.Values.All(placement => placement.PresentConditionId == 0), "a squad copy has no owner to evaluate a presence condition");
+                CollectionAssert.AreEquivalent(new uint[] { 1430120, 1430130, 1430131, 1430132, 1430133, 1430134, 1430135 },
+                    ContentMaterializer.UsablesToSpawn(validation, 1430).Select(placement => placement.Id).ToArray());
+                var keypassCollector = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                var means = new PlayerMission { MissionId = 575, State = MissionState.Active };
+                means.Objectives[3] = MissionObjectiveState.Incomplete;
+                keypassCollector.Player.Missions[575] = means;
+                CollectionAssert.AreEqual(new uint[] { 11505 }, content.RollMissionItemDrops(keypassCollector, new Creature { DbId = 1430010 }, () => 0.999).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(keypassCollector, new Creature { DbId = 1430002 }, () => 0.0).Count(), "only the entrance guards carry the keypass");
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

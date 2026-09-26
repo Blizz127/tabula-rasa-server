@@ -1,0 +1,590 @@
+{
+  "schema": "rasa-pravus-research-instance/1",
+  "date": "2026-09-27",
+  "batch": "PravusResearchInstance (branch seed-pravus)",
+  "sources": {
+    "dossier": "/home/blizz/backups/rasa-net/research/20260926-instance-dossiers-wilderness (dossiers.json sha256 6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559)",
+    "client": "Tabula Rasa 1.16.5.0 (~/backups/rasa-net/vps-private-artifacts-20260926/rasa-client-1.16.5.0); map adv_foreas_concordia_wilderness_pravusresearch.map sha256 ccb6d875ed649cfe2c8a6e48c3224b37b829f0c53a461c016bb5731696ab55c5, terrain t00000633_terrain.glm",
+    "tool": "Rasa.NavMesh --path (repo src/Rasa.NavMesh, Release, run in mcr.microsoft.com/dotnet/sdk:5.0); probes start at the instance hospital marker (-237.95, 6.82, -125.18)"
+  },
+  "navmesh": {
+    "diagnosis": {
+      "defect": "GAP-PRAVUS-INTERIOR-NAVMESH: no path joined the entrance tunnel jamb (176, 41.6, -8) to the interior. The route down the entrance ramp (ArchBaneIndustrialTunnelRamp32mV01 at 208,8,-8, a spiral from the jamb at 41.6 m to the tunnel cross at 9.9 m) stopped at (191.2, 38.1, -19.6), coming up from the interior, and at (204.0, 40.3, -16.2), walking on the terrain from the jamb.",
+      "cause": "The terrain heightmap is a flat 40.27 m plateau over the whole facility (terrain tile t00000633_43, samples at 191,-19.6 / 188,-18 / 185,-15 / 180,-8 / 204,-16 all 40.27). The ramp's top coil (floor 38.5-40.8 m, ceiling 54.6 m) passes through it: under it the terrain is less than the 2 m agent height above the ramp floor, which walls the ramp off, and over the lower coils it is a floating floor inside the tunnel. The client walks players through, so the heightmap is not solid there. Doors, portals and tile boundaries were checked and are not involved: past the ramp the rooms were already joined (tunnel cross -> control floor complete 65.4 m; control floor -> chamber 170.1 m; -> prison 316.1 m; -> gangplank 96.8 m).",
+      "dossier_probe_correction": "The dossier's probes from the 'control room centre' (224, 9.1, 40) start on the top of the Stasis Chamber (UsableInertDestBaneStasisChamber at 224,7.6,40), an island of the navmesh 1.3 m above the floor; every path from it is partial on either navmesh. The floor of the same room (214, 8.07, 40) is joined.",
+      "fix": "MapGeometry.Load leaves out terrain triangles whose centroid has a floor of a terrain-cut mesh straight under it and a ceiling of one straight over it (Rasa.ClientData.EnclosureIndex). The meshes are listed per map in src/Rasa.NavMesh/data/terrain_cuts.csv; Pravus lists arch_bane_industrial_. 273 terrain triangles are cut; the tile and polygon counts are otherwise unchanged (900 tiles, 32,943 polygons, 2,357 under the terrain).",
+      "why_not_general": "Applied to every mesh the test also fires under rock overhangs, trees and pond surfaces: on Pravus it cut terrain across the hills and the camp -> Frontlines route became partial (85 m). Restricted to the Bane industrial modules it cuts only the facility (128 of its sample points on the entrance ramp).",
+      "before_sha256": "03c6daffd91b31fca9eb5edc3d1b13fc1cac8a3c7042e8c6dad74e1ff1cf2023",
+      "after_sha256": "e21ab24dbdb601b8f72d679068a3d6950c1c665da2aafe507cc38b3ba1d9ebdf",
+      "verified_paths_after": {
+        "jamb -> tunnel_cross": "complete, 107.1 m",
+        "jamb -> control floor (214,8,40)": "complete, 141.2 m",
+        "jamb -> chamber (224,8.6,168)": "complete, 309.9 m",
+        "jamb -> prison (312,8,56)": "complete, 456.0 m",
+        "jamb -> gangplank (190,17.9,120)": "complete, 236.6 m",
+        "hospital -> chamber": "complete, 1007.1 m",
+        "hospital -> prison": "complete, 1154.4 m"
+      }
+    },
+    "other_maps": {
+      "method": "terrain sample points every 2 m tested against the arch_* meshes of each map only (the fix's test with the arch_ prefix); counts of points where terrain runs inside a building or tunnel, and the meshes involved. Paths were not probed; a count is a candidate, not a confirmed defect.",
+      "adv_foreas_concordia_wilderness_pravusresearch": {
+        "points": 191,
+        "top": "128 arch_bane_industrial_tunnel_ramp_01_32m_v01 (the defect), 28 outpost wall corner, 11 sandbag bunker"
+      },
+      "adv_foreas_concordia_wilderness_clrf (Crater Lake 1721)": {
+        "points": 24,
+        "top": "13 arch_bane_outpost_tower_v01, 9 chunnel catwalk, 2 trench",
+        "reading": "no interior tunnel under terrain. The Crater Lake batch's islands (the Corman HQ's second floor at 123.4,104.6,-30.9 and the greenhouse floor at 104.2,119.0,-95.5) are not this defect: a build with the terrain cut inside CLRF's arch_ meshes (36 triangles) leaves both probes from the hospital PARTIAL at the same ends (301.0 m and 330.3 m)."
+      },
+      "adv_foreas_concordia_wilderness_cavesofdonn02": {
+        "points": 191,
+        "top": "85 eloh temple stair / cave-of-Donn room, 49 eloh temple, 24 cave-of-Donn room"
+      },
+      "adv_foreas_concordia_divide_timoramines": {
+        "points": 306,
+        "top": "149 arch_bane_industrial_chunnel_entrance_v01, 37 large tower, 34+21 tunnel entrance 32 m"
+      },
+      "adv_foreas_concordia_divide_torcastraprison": {
+        "points": 121,
+        "top": "29 outpost tower, 18 chunnel entrance, 15 tunnel entrance, 7 tunnel straight"
+      },
+      "adv_arieki_torden_abyss_omegalabs": {
+        "points": 42,
+        "top": "24+17 human corridor rooms"
+      },
+      "adv_arieki_ligo_ashendesert_baneconscriptfacility": {
+        "points": 252,
+        "top": "125 arch_bane_industrial_tunnel_ramp_01_32m_v01 (the same ramp as Pravus), 17 prison facade, 15 research HQ, 27 tunnel entrance"
+      },
+      "adv_arieki_torden_incline_wardenbotfactory": {
+        "points": 1021,
+        "top": "800 wardenbot corridor room, 215 corridor room patch"
+      },
+      "adv_foreas_concordia_palisades_devilsden": {
+        "points": 158,
+        "top": "34+16 fithik entrance, 24+12 foundry / service entrance"
+      }
+    }
+  },
+  "probes": {
+    "pool": {
+      "1430200": {
+        "query": [
+          -116.42,
+          26.075,
+          1.57
+        ],
+        "surface": 26.350859,
+        "nearest": [
+          -116.42,
+          26.351,
+          1.57
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 350.4,
+        "floor": 26.075,
+        "old_navmesh_route": "complete"
+      },
+      "1430201": {
+        "query": [
+          12.0,
+          44.661,
+          -20.0
+        ],
+        "surface": 44.937004,
+        "nearest": [
+          12.0,
+          44.937,
+          -20.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 533.5,
+        "floor": 44.661,
+        "old_navmesh_route": "complete"
+      },
+      "1430202": {
+        "query": [
+          224.0,
+          9.61,
+          -24.0
+        ],
+        "surface": 9.88566,
+        "nearest": [
+          224.0,
+          9.886,
+          -24.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 805.6,
+        "floor": 9.61,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430203": {
+        "query": [
+          214.0,
+          7.797,
+          40.0
+        ],
+        "surface": 8.072775,
+        "nearest": [
+          214.0,
+          8.073,
+          40.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 839.7,
+        "floor": 7.797,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430204": {
+        "query": [
+          224.0,
+          8.297,
+          168.0
+        ],
+        "surface": 8.572832,
+        "nearest": [
+          224.0,
+          8.573,
+          168.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1007.1,
+        "floor": 8.297,
+        "old_navmesh_route": "PARTIAL"
+      }
+    },
+    "placement": {
+      "1430100": {
+        "query": [
+          190.0,
+          17.628,
+          120.0
+        ],
+        "surface": 17.903975,
+        "nearest": [
+          190.0,
+          17.904,
+          120.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 934.8,
+        "floor": 17.628,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430101": {
+        "query": [
+          165.0,
+          41.811,
+          -8.0
+        ],
+        "surface": 42.087006,
+        "nearest": [
+          165.0,
+          42.087,
+          -8.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 688.4,
+        "floor": 41.811,
+        "old_navmesh_route": "complete"
+      },
+      "1430102": {
+        "query": [
+          161.0,
+          41.811,
+          -5.0
+        ],
+        "surface": 42.087,
+        "nearest": [
+          161.0,
+          42.087,
+          -6.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 684.5,
+        "floor": 41.811,
+        "old_navmesh_route": "complete"
+      },
+      "1430103": {
+        "query": [
+          161.0,
+          41.811,
+          -11.0
+        ],
+        "surface": 42.195965,
+        "nearest": [
+          160.937,
+          42.196,
+          -9.921
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 684.3,
+        "floor": 41.92,
+        "old_navmesh_route": "complete"
+      },
+      "1430110": {
+        "query": [
+          224.0,
+          9.865,
+          60.0
+        ],
+        "surface": 10.141426,
+        "nearest": [
+          224.0,
+          10.141,
+          60.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 862.0,
+        "floor": 9.865,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430120": {
+        "query": [
+          224.0,
+          8.297,
+          168.0
+        ],
+        "surface": 8.572832,
+        "nearest": [
+          224.0,
+          8.573,
+          168.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1007.1,
+        "floor": 8.297,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430121": {
+        "query": [
+          224.0,
+          8.297,
+          168.0
+        ],
+        "surface": 8.572832,
+        "nearest": [
+          224.0,
+          8.573,
+          168.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1007.1,
+        "floor": 8.297,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430130": {
+        "query": [
+          0.4,
+          47.688,
+          298.7
+        ],
+        "surface": 46.737,
+        "nearest": [
+          0.8,
+          46.737,
+          300.4
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 654.3,
+        "floor": 46.461,
+        "old_navmesh_route": "complete",
+        "note": "probed at x 0.4 (the row is -0.4, 0.8 m away on the same dish top)"
+      },
+      "1430131": {
+        "query": [
+          -5.4,
+          47.688,
+          298.7
+        ],
+        "surface": 47.309982,
+        "nearest": [
+          -7.524,
+          47.31,
+          298.346
+        ],
+        "route_from_hospital": "PARTIAL",
+        "route_m": 663.2,
+        "floor": 47.034,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "1430132": {
+        "query": [
+          -52.1,
+          31.261,
+          163.0
+        ],
+        "surface": 30.937,
+        "nearest": [
+          -47.809,
+          30.937,
+          162.523
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 552.2,
+        "floor": 30.661,
+        "old_navmesh_route": "complete"
+      },
+      "1430133": {
+        "query": [
+          -57.1,
+          31.261,
+          163.0
+        ],
+        "surface": 31.337002,
+        "nearest": [
+          -58.8,
+          31.337,
+          163.2
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 509.5,
+        "floor": 31.061,
+        "old_navmesh_route": "complete"
+      },
+      "1430134": {
+        "query": [
+          -44.8,
+          35.061,
+          -224.1
+        ],
+        "surface": 35.032047,
+        "nearest": [
+          -42.968,
+          35.032,
+          -223.917
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 599.9,
+        "floor": 34.756,
+        "old_navmesh_route": "complete"
+      },
+      "1430135": {
+        "query": [
+          -49.8,
+          35.061,
+          -224.1
+        ],
+        "surface": 34.937004,
+        "nearest": [
+          -51.708,
+          34.937,
+          -224.338
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 588.4,
+        "floor": 34.661,
+        "old_navmesh_route": "complete"
+      },
+      "199016": {
+        "query": [
+          -73.0,
+          30.55,
+          179.0
+        ],
+        "surface": 30.825874,
+        "nearest": [
+          -73.0,
+          30.826,
+          179.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 502.1,
+        "floor": 30.55,
+        "old_navmesh_route": "complete"
+      }
+    },
+    "area": {
+      "1430500": {
+        "query": [
+          224.0,
+          8.297,
+          168.0
+        ],
+        "surface": 8.572832,
+        "nearest": [
+          224.0,
+          8.573,
+          168.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1007.1,
+        "floor": 8.297,
+        "old_navmesh_route": "PARTIAL"
+      }
+    },
+    "room": {
+      "jamb": {
+        "query": [
+          176.0,
+          41.8,
+          -8.0
+        ],
+        "surface": 41.737,
+        "nearest": [
+          176.0,
+          41.737,
+          -8.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 699.3,
+        "floor": 41.461,
+        "old_navmesh_route": "complete"
+      },
+      "tunnel_cross": {
+        "query": [
+          224.0,
+          9.9,
+          -24.0
+        ],
+        "surface": 9.88566,
+        "nearest": [
+          224.0,
+          9.886,
+          -24.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 805.6,
+        "floor": 9.61,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "control_floor": {
+        "query": [
+          214.0,
+          8.1,
+          40.0
+        ],
+        "surface": 8.072775,
+        "nearest": [
+          214.0,
+          8.073,
+          40.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 839.7,
+        "floor": 7.797,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "control_stasis_top": {
+        "query": [
+          224.0,
+          9.1,
+          40.0
+        ],
+        "surface": 9.137001,
+        "nearest": [
+          224.0,
+          9.137,
+          40.0
+        ],
+        "route_from_hospital": "PARTIAL",
+        "route_m": 846.6,
+        "floor": 8.861,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "chamber": {
+        "query": [
+          224.0,
+          8.6,
+          168.0
+        ],
+        "surface": 8.572832,
+        "nearest": [
+          224.0,
+          8.573,
+          168.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1007.1,
+        "floor": 8.297,
+        "old_navmesh_route": "PARTIAL"
+      },
+      "prison": {
+        "query": [
+          312.0,
+          9.9,
+          56.0
+        ],
+        "surface": 9.911008,
+        "nearest": [
+          312.0,
+          9.911,
+          56.0
+        ],
+        "route_from_hospital": "complete",
+        "route_m": 1154.4,
+        "floor": 9.635,
+        "old_navmesh_route": "PARTIAL"
+      }
+    }
+  },
+  "pools": {
+    "note": "Every pool stands at the region the minimap names in A4udsM0rcLo at the time its creatures are targeted, on the rebuilt navmesh floor; counts are the fewest distinct individuals the footage shows at once (dossier target-frame readings).",
+    "frontlines": {
+      "point": [
+        -116.42,
+        26.075,
+        1.57
+      ],
+      "basis": "the client's Frontlines label, 32 m east of the sandbag line (-148, 28, 10) and turret platform (-145.4, 27.3, 17.9) where the dropships unload (P1-003)",
+      "uncertainty_m": 30
+    },
+    "hill": {
+      "point": [
+        12.0,
+        44.661,
+        -20.0
+      ],
+      "basis": "the Bane wall cluster between the Frontlines and the bridge (P1-006, P1-007)",
+      "uncertainty_m": 60
+    },
+    "halls": {
+      "point": [
+        224.0,
+        9.61,
+        -24.0
+      ],
+      "basis": "the tunnel cross below the entrance ramp (P1-010..P1-012)",
+      "uncertainty_m": 40
+    },
+    "control": {
+      "point": [
+        214.0,
+        7.797,
+        40.0
+      ],
+      "basis": "the control room module floor, 10 m west of the module centre (the Stasis Chamber top is a navmesh island) (P1-013)",
+      "uncertainty_m": 40
+    },
+    "chamber": {
+      "point": [
+        224.0,
+        8.297,
+        168.0
+      ],
+      "basis": "the chamber centre (P1-016, P1-017)",
+      "uncertainty_m": 40
+    }
+  },
+  "parsons_position_check": {
+    "creature": 119,
+    "spawnpool": 197,
+    "position": [
+      -701.8,
+      202.6,
+      65.8
+    ],
+    "pravus_entrance_marker": [
+      -786.2,
+      233.6,
+      71.6
+    ],
+    "horizontal_m": 84.6,
+    "below_m": 31.0,
+    "route": "PARTIAL 35.6 m on the Wilderness navmesh (the marker stands on a ledge)",
+    "reading": "post-D11 TaRapedia rev 33452: 'sitting outside the door'; no coordinates, so he is kept (GAP-PARSONS-POSITION)"
+  },
+  "radar_registration": "not attempted in this batch; the interior uncertainties stay at the dossier's region-level +/-35-60 m (GAP-PRAVUS-INTERIOR-LAYOUT)"
+}

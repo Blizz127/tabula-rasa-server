@@ -501,6 +501,27 @@ Seeded on 2026-09-27 from the wilderness instance dossiers (`research/20260926-i
   experience and post-1.4 amounts. Owner client check (enter a copy, speak to Velns for 450, draw the three Logos,
   kill Casper and Tyryd) is still to do.
 
+## Pravus Research status
+
+Seeded on 2026-09-27 from the wilderness instance dossiers (`research/20260926-instance-dossiers-wilderness`). Account:
+`docs/retail-accuracy.md`, 2026-09-27 "Pravus Research Facility".
+
+- **Navmesh:** the entrance ramp is joined to the interior (terrain cut inside the Bane industrial modules,
+  `src/Rasa.NavMesh/data/terrain_cuts.csv`); closes `GAP-PRAVUS-INTERIOR-NAVMESH`. Other maps with terrain inside
+  buildings are listed, not rebuilt (`GAP-NAVMESH-TERRAIN-CUTS`).
+- **Built:** the population (creatures 1430001-1430010, pools 1430200-1430204), the entrance keypass Trainees, Overseer
+  Tarmok, the capsule, the Prototype production, the six infestations, Nylla's gangplank stand, Johnson beside Perkins,
+  the packages of Johnson, Nylla and Parsons, and 593, 575 (objectives 1-3), 323 and 924 (`PravusResearchInstance`).
+  Decisions: OD-135 creature and object statistics as world analogues; OD-136 region-level pools with the observed
+  minimum counts and the world respawn; OD-137 the production as one placement returning 2.5 s after each death; OD-138
+  Nylla's gangplank stand present from entry; OD-139 593 offered without its 574 prerequisite. All agent-approved,
+  pending owner review.
+- **Open:** 574 (Baruhi and the Wilderness Machina), 575/4-5, the capsule stopping the production, the force field,
+  the Frontlines allies, Prion, radar registration of the interior groups, squad credit for destroyed infestations and
+  the keypass, post-1.6 rewards. The continuations hGS00lxVgQg and RrHLjmYK-YI would settle most of these. Owner client
+  check (enter a copy, take 593 and 575, collect the keypass, reach the chamber, destroy the capsule, clear a dish) is
+  still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in

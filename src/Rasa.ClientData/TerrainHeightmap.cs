@@ -125,9 +125,15 @@ namespace Rasa.ClientData
         /// the cliff face runs straight through the tunnel mesh behind it. A navmesh builder that saw
         /// that face would wall the tunnel off. Nobody can walk on a cliff face anyway, so dropping
         /// it costs nothing - the walkable terrain on either side still ends at a ledge.
+        ///
+        /// <paramref name="keep"/>, when given, is asked about every triangle that passes the slope
+        /// test with the triangle's centroid; a triangle it rejects is left out too. Returns how
+        /// many triangles <paramref name="keep"/> rejected.
         /// </summary>
-        public void AppendTriangles(int step, List<float> vertices, List<int> triangles, float maxSlopeDegrees = 90f)
+        public int AppendTriangles(int step, List<float> vertices, List<int> triangles, float maxSlopeDegrees = 90f, Func<Vector3, bool> keep = null)
         {
+            var rejected = 0;
+
             if (step < 1)
                 step = 1;
 
@@ -187,6 +193,20 @@ namespace Rasa.ClientData
                 if (length > 0 && ny / length < minNormalY)
                     return;
 
+                if (keep != null)
+                {
+                    var centroid = new Vector3(
+                        (vertices[i0 * 3] + vertices[i1 * 3] + vertices[i2 * 3]) / 3f,
+                        (vertices[i0 * 3 + 1] + vertices[i1 * 3 + 1] + vertices[i2 * 3 + 1]) / 3f,
+                        (vertices[i0 * 3 + 2] + vertices[i1 * 3 + 2] + vertices[i2 * 3 + 2]) / 3f);
+
+                    if (!keep(centroid))
+                    {
+                        rejected++;
+                        return;
+                    }
+                }
+
                 triangles.Add(i0); triangles.Add(i1); triangles.Add(i2);
             }
 
@@ -207,6 +227,8 @@ namespace Rasa.ClientData
                     AddIfWalkable(b, c, d);
                 }
             }
+
+            return rejected;
         }
     }
 }

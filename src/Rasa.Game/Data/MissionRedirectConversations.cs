@@ -38,9 +38,39 @@ namespace Rasa.Data
             (441u, 1u, 212u)
         };
 
+        /// <summary>
+        /// Rows on an NPC the player meets before the objective is done, whose objective the server completes through a
+        /// content binding instead. Loaded, the row would finish the objective from the first conversation.
+        /// <list type="bullet">
+        /// <item>575 The Means of Production, objectives 1 and 2, package 420 (Ranger Nylla, the giver): completion
+        /// texts 1866/1868 and reminders 2745/2746, all "Human, have you freed my people from this terror?"
+        /// (objectiveconversation.pyo). Nylla gives 575 at her camp, so the row would close "Find the source of the
+        /// Forean Machina" and "Destroy Fueling Capsule" on acceptance. They complete on entering the Production
+        /// Chamber (content_area 1430500) and on destroying the Production Fueling Capsule (placement 1430120),
+        /// PravusResearchInstance, GAP-PRAVUS-OBJ1-TRIGGER.</item>
+        /// <item>323 Pirate Radio, objectives 309, 310 and 311, package 106 (Information Spec. Johnson, the giver):
+        /// reminder rows only (texts 20000052, 20000055, 20000058, "So, what did you manage to find?"). The objectives
+        /// count the destroyed Living Infestations on each dish (PravusResearchInstance).</item>
+        /// </list>
+        /// </summary>
+        private static readonly HashSet<(uint MissionId, uint ObjectiveId, uint NpcPackageId)> ContentBound = new()
+        {
+            (575u, 1u, 420u),
+            (575u, 2u, 420u),
+            (323u, 309u, 106u),
+            (323u, 310u, 106u),
+            (323u, 311u, 106u)
+        };
+
         public static bool IsRedirect(uint missionId, uint objectiveId, uint npcPackageId)
             => Redirects.Contains((missionId, objectiveId, npcPackageId));
 
+        /// <summary>A row MissionManager.LoadMissions leaves out: a redirect, or an objective a content binding completes.</summary>
+        public static bool IsWithheld(uint missionId, uint objectiveId, uint npcPackageId)
+            => Redirects.Contains((missionId, objectiveId, npcPackageId)) || ContentBound.Contains((missionId, objectiveId, npcPackageId));
+
         public static IReadOnlyCollection<(uint MissionId, uint ObjectiveId, uint NpcPackageId)> All => Redirects;
+
+        public static IReadOnlyCollection<(uint MissionId, uint ObjectiveId, uint NpcPackageId)> BoundElsewhere => ContentBound;
     }
 }

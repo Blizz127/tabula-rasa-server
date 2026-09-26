@@ -25,6 +25,9 @@ namespace Rasa.ClientData
         public int EntitiesWithoutMesh { get; private set; }
         public int EntitiesWithoutCollision { get; private set; }
 
+        /// <summary>Terrain triangles left out because they cross the inside of a terrain-cut mesh (see <see cref="EnclosureIndex"/>).</summary>
+        public int TerrainTrianglesCut { get; private set; }
+
         public int TriangleCount => Triangles.Count / 3;
 
         /// <summary>The map's heightmap, or null for a map without a terrain archive (indoor instances).</summary>
@@ -38,7 +41,10 @@ namespace Rasa.ClientData
         /// <param name="terrainStep">heightmap samples per terrain quad edge (1 = every metre)</param>
         /// <param name="terrainMaxSlope">terrain triangles steeper than this many degrees are dropped (see <see cref="TerrainHeightmap.AppendTriangles"/>)</param>
         /// <param name="skip">classes whose geometry must not go in (null for none)</param>
-        public static MapGeometry Load(string mapDirectory, MeshLibrary meshes, int terrainStep, float terrainMaxSlope = 90f, Func<int, string, bool> skip = null)
+        /// <param name="terrainCut">meshes the terrain must not run through (null for none): a terrain triangle with one
+        /// of their floors straight under it and one of their ceilings straight over it is left out (see <see cref="EnclosureIndex"/>)</param>
+        public static MapGeometry Load(string mapDirectory, MeshLibrary meshes, int terrainStep, float terrainMaxSlope = 90f, Func<int, string, bool> skip = null,
+            Func<string, bool> terrainCut = null)
         {
             var name = Path.GetFileName(mapDirectory);
             var mapPath = Path.Combine(mapDirectory, name + ".map");
@@ -51,7 +57,9 @@ namespace Rasa.ClientData
             {
                 var terrain = new TerrainHeightmap(terrainPath);
                 var before = geometry.Triangles.Count;
-                terrain.AppendTriangles(terrainStep, geometry.Vertices, geometry.Triangles, terrainMaxSlope);
+                var enclosures = terrainCut == null ? null : CutIndex(map, meshes, skip, terrainCut);
+                geometry.TerrainTrianglesCut = terrain.AppendTriangles(terrainStep, geometry.Vertices, geometry.Triangles, terrainMaxSlope,
+                    enclosures == null ? null : p => !enclosures.IsEnclosed(p));
                 geometry.TerrainTriangles = (geometry.Triangles.Count - before) / 3;
                 geometry.Terrain = terrain;
             }
@@ -89,6 +97,26 @@ namespace Rasa.ClientData
             geometry.ComputeBounds();
 
             return geometry;
+        }
+
+        /// <summary>The collision of the placed terrain-cut meshes alone, or null when the map places none.</summary>
+        private static EnclosureIndex CutIndex(MapFile map, MeshLibrary meshes, Func<int, string, bool> skip, Func<string, bool> terrainCut)
+        {
+            var cut = new MapGeometry();
+
+            foreach (var entity in map.Entities)
+            {
+                if (!meshes.TryGetMeshName(entity.ClassId, out var meshName) || !terrainCut(meshName) ||
+                    (skip != null && skip(entity.ClassId, meshName)))
+                    continue;
+
+                var mesh = meshes.Get(meshName);
+
+                if (mesh != null && mesh.HasCollision)
+                    cut.Append(mesh, entity);
+            }
+
+            return cut.TriangleCount == 0 ? null : new EnclosureIndex(cut.Vertices, cut.Triangles);
         }
 
         private void Append(GeoMesh mesh, MapFile.Entity entity)

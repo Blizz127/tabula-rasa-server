@@ -133,7 +133,7 @@ namespace Rasa.Managers
                     objectivelessConversations++;
                 // A giver's line that sends the player elsewhere is not a way to finish the objective
                 // (MissionRedirectConversations, GAP-READY-REDIRECT-COMPLETION).
-                else if (MissionRedirectConversations.IsRedirect(conversation.MissionId, conversation.ObjectiveId, conversation.NpcPackageId))
+                else if (MissionRedirectConversations.IsWithheld(conversation.MissionId, conversation.ObjectiveId, conversation.NpcPackageId))
                     redirectConversations++;
                 else
                     mission.ObjectiveConversations.Add(new MissionObjectiveConversation
@@ -152,7 +152,7 @@ namespace Rasa.Managers
                 Logger.WriteLog(LogType.Initialize, $"LoadMissions: {orphanConversations} objective conversation rows have no npc_mission row and {objectivelessConversations} reference unknown objectives (client skeleton, definition pending)");
 
             if (redirectConversations > 0)
-                Logger.WriteLog(LogType.Initialize, $"LoadMissions: {redirectConversations} objective conversation rows redirect to another NPC and complete nothing (MissionRedirectConversations)");
+                Logger.WriteLog(LogType.Initialize, $"LoadMissions: {redirectConversations} objective conversation rows redirect to another NPC or belong to a content-bound objective and complete nothing (MissionRedirectConversations)");
 
             foreach (var transition in unitOfWork.NpcMissionObjectives.GetTransitions())
             {

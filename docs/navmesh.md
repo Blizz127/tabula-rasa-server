@@ -21,7 +21,8 @@ dotnet run -c Release --project src\Rasa.NavMesh -- --client "C:\Games\Tabula Ra
 Options: `--map <name>` (repeatable) builds only those maps; `--threads N`; `--terrain-step 2`
 (heightmap samples per terrain quad; 1 uses every metre and quadruples the terrain triangles);
 `--cell 0.4`, `--radius 0.6`, `--climb 0.9`, `--slope 50` change the Recast parameters;
-`--obj` also writes the input geometry as `<map>.obj` for a mesh viewer.
+`--obj` also writes the input geometry as `<map>.obj` for a mesh viewer. `data/terrain_cuts.csv` is read on every
+build (see below).
 
 A 2 km zone takes two to three minutes on four cores and produces an 11 MB `.nav`. Rebuild when
 `entity_meshes.csv`, the build parameters, or the tool's geometry handling change; the client
@@ -49,6 +50,25 @@ treats the heightmap as a surface to stand on, not a solid: cave mouths are cut 
 the cliff face continues straight through the tunnel mesh behind it. Rasterized, that face would
 wall the tunnel off a few metres in. Nobody can stand on a 60 degree face, so leaving it out
 loses nothing; the walkable ground on either side still ends at a ledge.
+
+## Terrain inside buildings sunk into it
+
+The heightmap also runs on through the buildings and tunnels placed into a hill. On Pravus Research the facility
+plateau is a flat 40.27 m, and the entrance ramp (`arch_bane_industrial_tunnel_ramp_01_32m_v01` at 208, 8, -8) climbs
+from the interior at 8 m to the tunnel jamb at 41.6 m through it: under the terrain the ramp's top coil had less than an
+agent height of room, so no path joined the entrance to the interior, and over the lower coils the terrain was a
+floor floating in the tunnel. The client walks players through, so the terrain is not solid there.
+
+`src/Rasa.NavMesh/data/terrain_cuts.csv` lists, per map, the mesh families whose inside the terrain must not cross
+(`map,mesh_prefix,reason`). For those meshes only, `Rasa.ClientData.EnclosureIndex` leaves out every terrain triangle
+whose centroid has one of their floors straight under it and one of their ceilings straight over it; the build log
+says how many (273 on Pravus). The list is per map on purpose: over every placed mesh the same test also fires under
+rock overhangs, trees and pond surfaces, where the terrain is real ground, and on Pravus it cut the AFS camp off from
+the Frontlines. A map not in the list builds exactly as before. Only Pravus is listed; the Bane Conscript Facility
+carries the same ramp and Timora Mines, Torcastra Prison and the Wardenbot Factory show terrain inside tunnels and
+buildings, unprobed (`GAP-NAVMESH-TERRAIN-CUTS`, `docs/evidence/pravus-research-instance-20260927.json`). Crater
+Lake's islands (the Corman HQ's upper floors, the greenhouse) are not this defect: its floors are above the terrain,
+and cutting the terrain inside its `arch_` meshes leaves both probes where they were.
 
 ## Polygons under the terrain
 
