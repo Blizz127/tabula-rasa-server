@@ -11,6 +11,26 @@ namespace Rasa.Test
     [TestClass]
     public class MissionSerializationTests
     {
+        [TestMethod]
+        public void ItemCounterUpdateUsesTheRecoveredClientFiveArgumentShape()
+        {
+            var packet = new UpdateObjectiveItemCounterPacket(479, 1, 10346, 7, 12);
+            Assert.AreEqual(Rasa.Data.GameOpcode.UpdateObjectiveItemCounter, packet.Opcode);
+
+            using var stream = new MemoryStream();
+            using var writer = new PythonWriter(new BinaryWriter(stream));
+            packet.Write(writer);
+            stream.Position = 0;
+            using var reader = new PythonReader(new BinaryReader(stream));
+            Assert.AreEqual(5, reader.ReadTuple());
+            Assert.AreEqual(479U, reader.ReadUInt());
+            Assert.AreEqual(1U, reader.ReadUInt());
+            Assert.AreEqual(10346U, reader.ReadUInt());
+            Assert.AreEqual(7U, reader.ReadUInt());
+            Assert.AreEqual(12U, reader.ReadUInt());
+            Assert.AreEqual(stream.Length, stream.Position);
+        }
+
         [DataTestMethod]
         [DataRow(0U)]
         [DataRow(30U)]

@@ -34,9 +34,9 @@ namespace Rasa.Migrations.WildernessData
     /// Vextronics Chaingun; neither template is resolved yet, so 1407 gets no reward rows and both item and credits
     /// stay gaps. 1392/1393 carry no recorded reward at all.
     ///
-    /// <b>Prerequisites</b> are deliberately not seeded: the content loader rejects a prerequisite naming a mission
-    /// without a definition, and this chain's earlier links (479 Forming Alliances, 1391 Part One) are not seeded
-    /// yet. The intended gates are recorded in the manifest and land with those missions.
+    /// <b>Prerequisites</b> were not seeded in this historical migration because 479 Forming Alliances had no
+    /// definition then. Later migrations add 479 and its 1390 gate. Client mission 1391 is Bug Em, unrelated to this
+    /// chain; the earlier "1391 Part One" note was wrong. See wilderness-conscientious-gate.json.
     /// </summary>
     public static class WildernessHubConscientiousObjectorRows
     {

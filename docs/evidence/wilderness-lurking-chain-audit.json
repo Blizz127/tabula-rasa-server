@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "W3 Alia Das progression to mission 427 Lurking In The Shadows, Proctor Fulgor position, kill transition, and missing shipment behavior",
+  "observations": [
+    {
+      "tier": "original",
+      "source": "Recovered client 1.16.5.0, work/client.json missions[\"427\"].objectives and objconv",
+      "finding": "The compatible client has exactly three visible objectives: Speak to Oliver (1), Kill Proctor Fulgor (6), Return to Caufield (7). Its objective text says to retrieve and deliver the Ammo Shipment for Alia Das. These client rows do not identify a shipment item template or a death-failure rule."
+    },
+    {
+      "tier": "inferred",
+      "source": "Original world seed rasaworld.db spawnpool(157), creature(76); this is older emulator data rather than a direct final-live capture",
+      "finding": "The world seed places creature 76 at (230.96484,261.53516,591.1875), level 15, 2000 HP. The boss level and HP are not verified as final-live values."
+    },
+    {
+      "tier": "original",
+      "source": "Official RGTR Wilderness Walkthrough, captured 2007-12-13, local HTML paragraph beginning 'Talk to Commander Rogers' through 'Forming Alliances'",
+      "finding": "The official early Wilderness walkthrough orders Too Close For Comfort, Receptive Reception, then Forming Alliances. This is original 2007 guidance; applicability to the final-live 2009 sequence remains unverified."
+    },
+    {
+      "tier": "observed",
+      "source": "work/tarapedia.json missions[\"Forming Alliances\"].fields.Requirement, 2007-09-03 revision 8739; missions[\"Lurking In The Shadows\"].fields.Requirement, 2007-07-11 revision 2949",
+      "finding": "The historical mission pages give Receptive Reception as Forming Alliances' requirement and Forming Alliances as Lurking In The Shadows' requirement. These pages predate shutdown; final-live gate persistence is not independently proven."
+    },
+    {
+      "tier": "observed",
+      "source": "work/tarapedia.json missions[\"Lurking In The Shadows\"], last pre-shutdown revision 27764 at 2008-01-27T00:47:13Z; text_excerpt Objectives and Walkthrough sections",
+      "finding": "The historical walkthrough names the Ammo Shipment for Alia Das item, says it is retrieved after killing Fulgor, and says death while carrying it fails the mission, leaving a worthless item in the backpack. No matching final-live item template or exact failure trigger has been identified."
+    },
+    {
+      "tier": "observed",
+      "source": "DaOpa's Tabula Rasa FanSite, https://www.ellatha.com/tr/bossnpcview.asp?key=Proctor+Fulgor, /loc and image; screenshot capture date not stated",
+      "finding": "The named boss entry identifies Fulgor as a Lightbender at /loc (231,265,591) and shows him on a raised circular surface. It lists his level as unavailable. The /loc's Y is 3.465 metres above the world-seed spawn Y and may refer to a different walkable layer; the exact original spawn Y is unresolved."
+    },
+    {
+      "tier": "measured",
+      "source": "Original navmesh adv_foreas_concordia_wilderness.nav queried with Rasa.Navigation.NavMeshQuery; probe-output.txt; coordinates rounded to 0.01 m in output; algorithm's nearest-poly selection and mesh resolution determine uncertainty",
+      "finding": "At seed spawn (230.96484,261.53516,591.1875), the nearest walkable Y is 261.71783 (0.183 m higher). Querying near the fan-site /loc (231,265,591) selects a walkable Y of 266.23642. These are distinct local layers; this does not establish which layer was final-live Fulgor's intended platform."
+    },
+    {
+      "tier": "observed",
+      "source": "Isolated recovered-client playthrough-63/01-fulgor-approach.png, 02-fulgor-camera-sweep.png, game.log:160, char-after.db; run copied playthrough-58 mission-427 state and diagnostically positioned the level-5 Specialist at (237,265,591)",
+      "finding": "Creature 76 spawned as entity 4776 at (231,261.7,591.2) and killed the diagnostic character at (237,266.6,591). The mission stayed active with objective 6 incomplete. This verifies spawn and hostility in the emulator, not that combat or elevation matches final live."
+    },
+    {
+      "tier": "observed",
+      "source": "src/Rasa.Test/BootcampOpeningTests.WildernessFulgor.cs; .NET 5 focused seeded scenario test passed 1/1 on 2026-09-23",
+      "finding": "The server kill handler completes objective 6 on creature 76's death, reveals objective 7 Return to Caufield, leaves the mission active, and does not pay the reward early or repeat completion on a duplicate kill notification. This validates current server behavior only."
+    }
+  ],
+  "current_gaps": [
+    "GAP-W3-ALIA-DAS-GATES: Mission 427 is currently offered without the historical Forming Alliances prerequisite. Mission 479 Forming Alliances is unseeded because its Thrax Heart collection/item wiring is missing. Applying the gate alone would make 427 unreachable. Final-live gate persistence remains unverified.",
+    "GAP-W3-427-SHIPMENT: Client text and a 2008 walkthrough describe a shipment; current mission has no quest item grant, collection, turn-in consumption, or death-failure behavior. Exact final-live item template and rule are unknown.",
+    "GAP-W3-FULGOR-LEVEL: World seed level 15 has not been verified against a final-live source; the named fan-site boss page lists level unavailable.",
+    "GAP-W3-FULGOR-Y: Original world-seed spawn and historical /loc align in X/Z but differ in Y across two navmesh layers; current client spawn and hostility are verified, final-live platform unverified.",
+    "Recovered-client combat victory, return to Caufield, reward presentation, and relog persistence remain unverified."
+  ],
+  "artifacts": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/client.json", "sha256": "ec05898b1af50bcbcf5e86ea6a9507295b8795efbd741a67f585e750ffdafa5a", "bytes": 3084220},
+    {"path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json", "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0", "bytes": 4630136},
+    {"path": "/home/blizz/backups/rasa-net/research/20260913-source-sweep/guides/raw/rgtr/20071213221313__www.rgtr.com_game_intel_official_guides_the_wilderness_walkthrough.html", "sha256": "20349eeeb86888d48dd9d1bff8b8ccbff4c6c52000c0036b1d036dda6cd9c1c9", "bytes": 16085},
+    {"path": "/home/blizz/backups/rasa-net/research/20260923-fulgor-navmesh/Proctor_Fulgor.jpg", "sha256": "5a37141e1939091bc62d59c0fa15f31343b11554153173541e115072dc7729c0", "bytes": 35820},
+    {"path": "/home/blizz/servers/rasa-net/navmesh/adv_foreas_concordia_wilderness.nav", "sha256": "a417669c715c2a32ba4e407479f5731fa9ec81622b63c8b9727da1ea8cc1abba", "bytes": 14045288},
+    {"path": "/home/blizz/backups/rasa-net/research/20260923-fulgor-navmesh/probe-output.txt", "sha256": "ae9a3004df817bd8f2915eeb9de86a7a190912180d9e76da64855f87bf9a6a38", "bytes": 446},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-63/01-fulgor-approach.png", "sha256": "a37115c3ed3566f863477785e6618e410c94ac16dec5802fed182e5ee5131a03", "bytes": 791560},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-63/02-fulgor-camera-sweep.png", "sha256": "fb89e50cd340da14dc5a17c46999635f83f308f5cd428bfababc0a44e7274bdc", "bytes": 690563},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-63/game.log", "sha256": "903baafd08b60f57ff575eaaf01baec1ab3db938ec3f1b2c2270bcfc88f5ef25", "bytes": 15006},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-63/char-after.db", "sha256": "e32015355377aeb6d9c3758af59c2bb54ff5da3e2222780f6a3c0ef4736d1c95", "bytes": 204800}
+  ]
+}

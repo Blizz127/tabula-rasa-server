@@ -360,6 +360,24 @@ namespace Rasa.Structures.Content
                                 gap("logos binding needs a shrine id");
                             break;
 
+                        case ObjectiveBindingKind.ItemCollected:
+                            used.Add("item_template_id");
+                            if (binding.ItemTemplateId == 0 || !_references.ItemTemplateExists(binding.ItemTemplateId))
+                                gap("item collection binding needs a known item template");
+                            if (binding.CounterId == 255)
+                                gap("item collection binding needs a counter");
+                            if (binding.CreatureId != 0 || binding.DropChance != 0)
+                            {
+                                used.Add("creature_id");
+                                used.Add("drop_chance");
+                                if (!_references.CreatureExists(binding.CreatureId))
+                                    gap("item drop needs a known creature");
+                                if (binding.DropChance <= 0 || binding.DropChance > 100 ||
+                                    double.IsNaN(binding.DropChance) || double.IsInfinity(binding.DropChance))
+                                    gap("item drop chance must be within (0, 100]");
+                            }
+                            break;
+
                         case ObjectiveBindingKind.UseCompleted:
                         case ObjectiveBindingKind.LootAll:
                             used.Add("placement_id");
@@ -436,7 +454,8 @@ namespace Rasa.Structures.Content
                     CheckUnused(gap, used,
                         ("area_id", binding.AreaId != 0), ("placement_id", binding.PlacementId != 0), ("creature_id", binding.CreatureId != 0),
                         ("action_id", binding.ActionId != 0), ("destroying_hit_only", binding.DestroyingHitOnly), ("equip_match", binding.EquipMatch != 0),
-                        ("item_template_id", binding.ItemTemplateId != 0), ("item_set_id", binding.ItemSetId != 0), ("target_state", binding.TargetState != 0));
+                        ("item_template_id", binding.ItemTemplateId != 0), ("drop_chance", binding.DropChance != 0),
+                        ("item_set_id", binding.ItemSetId != 0), ("target_state", binding.TargetState != 0));
                 }
             }
 

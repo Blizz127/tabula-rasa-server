@@ -26,6 +26,8 @@ namespace Rasa.Structures
         public Dictionary<uint, NpcMissionObjectiveTimerEntry> Timers { get; } = new();
         // Live objective counters and map indicators (MissionContentManager.Load), per objective id, in key order.
         public Dictionary<uint, List<NpcMissionObjectiveCounterEntry>> Counters { get; } = new();
+        // The item class sent to the client for each persistent item counter.
+        public Dictionary<(uint ObjectiveId, byte CounterId), uint> ItemCounterClasses { get; } = new();
         public Dictionary<uint, List<NpcMissionObjectiveIndicatorEntry>> Indicators { get; } = new();
 
         /// <summary>

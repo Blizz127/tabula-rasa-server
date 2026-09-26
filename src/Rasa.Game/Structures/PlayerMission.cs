@@ -25,6 +25,9 @@ namespace Rasa.Structures
 
         public bool IsCompleteable(Mission definition)
         {
+            if (definition.MissionId == MissionBranchRules.Mission)
+                return MissionBranchRules.IsCompleteable(this);
+
             // Fail closed: a definition with nothing required never completes by itself.
             if (State != MissionState.Active || !definition.Objectives.Values.Any(objective => objective.IsRequired == true))
                 return false;
@@ -83,6 +86,7 @@ namespace Rasa.Structures
                         ? timer.SecondsRemaining(nowMs)
                         : null,
                     CounterDict = CounterDict(definition, objective.ObjectiveId),
+                    ItemCounters = ItemCounterDict(definition, objective.ObjectiveId),
                     IndicatorList = IndicatorList(definition, objective.ObjectiveId, mapContextId)
                 });
             }
@@ -109,13 +113,34 @@ namespace Rasa.Structures
 
             if (definition.Counters.TryGetValue(objectiveId, out var rows))
                 foreach (var row in rows)
+                {
+                    if (definition.ItemCounterClasses.ContainsKey((objectiveId, row.CounterId)))
+                        continue;
                     counters[row.CounterId] = new MissionObjectiveGenericCounter
                     {
                         Count = Counters.TryGetValue((objectiveId, row.CounterId), out var value) ? value : row.InitialValue,
                         InitialCount = row.InitialValue,
                         TargetCount = row.TargetValue
                     };
+                }
 
+            return counters;
+        }
+
+        private Dictionary<uint, MissionObjectiveCounter> ItemCounterDict(Mission definition, uint objectiveId)
+        {
+            var counters = new Dictionary<uint, MissionObjectiveCounter>();
+            if (!definition.Counters.TryGetValue(objectiveId, out var rows))
+                return counters;
+
+            foreach (var row in rows)
+                if (definition.ItemCounterClasses.TryGetValue((objectiveId, row.CounterId), out var itemClassId))
+                    counters[itemClassId] = new MissionObjectiveCounter
+                    {
+                        Count = (uint)System.Math.Max(0, Counters.TryGetValue((objectiveId, row.CounterId), out var value)
+                            ? value : row.InitialValue),
+                        MaxCount = (uint)System.Math.Max(0, row.TargetValue)
+                    };
             return counters;
         }
 

@@ -1,0 +1,196 @@
+{
+  "migration": "MissionSpeakerDialogueClasses",
+  "date": "2026-09-22",
+  "compatibility_client": "1.16.5.0",
+  "scope": "Twelve creatures named by seeded mission giver/receiver or objective-conversation roles use original assigned client classes without NPC augmentation",
+  "human_speakers": {
+    "creature_ids": [
+      103,
+      104,
+      115,
+      120,
+      125,
+      132,
+      137,
+      138,
+      140
+    ],
+    "missions": {
+      "103": [
+        427
+      ],
+      "115": [
+        549
+      ],
+      "125": [
+        442
+      ],
+      "132": [
+        427,
+        2010,
+        2011
+      ],
+      "138": [
+        431
+      ],
+      "104": [
+        430,
+        549
+      ],
+      "120": [
+        421
+      ],
+      "137": [
+        836
+      ],
+      "140": [
+        442,
+        444
+      ]
+    },
+    "class_id": {
+      "value": 3846,
+      "tier": "analogue",
+      "source": "original client entityclass table",
+      "exact_location": "entityclass[29423] Redshirt_Human_Soldier_Light_Male, aug_list=1; entityclass[3846] NPC_Human_Swapset_Male, aug_list=1,12,52,59",
+      "confidence": "high for NPC augmentation requirement; low for exact final-live class",
+      "unverified": "exact final-live class and model"
+    },
+    "appearance": {
+      "value": "six slots copied from creature_appearance[510094]",
+      "tier": "analogue",
+      "source": "preloaded AFS Senior Quartermaster Hacienda appearance, original class/item assets but emulator assembled outfit",
+      "exact_location": "MissionNpcAppearancePreloader.cs rows for creature 510094, slots 2,13,14,15,16,17",
+      "confidence": "low",
+      "unverified": "each speaker's final-live clothing and colors",
+      "rows": [
+        {
+          "slot_id": 2,
+          "class_id": 4021,
+          "color": 4294934528,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 2"
+        },
+        {
+          "slot_id": 13,
+          "class_id": 6271,
+          "color": 1,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 13"
+        },
+        {
+          "slot_id": 14,
+          "class_id": 9781,
+          "color": 4278655809,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 14"
+        },
+        {
+          "slot_id": 15,
+          "class_id": 4023,
+          "color": 4294934528,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 15"
+        },
+        {
+          "slot_id": 16,
+          "class_id": 4022,
+          "color": 4294934528,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 16"
+        },
+        {
+          "slot_id": 17,
+          "class_id": 24008,
+          "color": 4286690539,
+          "tier": "analogue",
+          "source_location": "MissionNpcAppearancePreloader.cs creature 510094 slot 17"
+        }
+      ]
+    }
+  },
+  "brann_speakers": {
+    "creature_ids": [
+      199407,
+      199506,
+      199508
+    ],
+    "missions": {
+      "199407": [
+        969
+      ],
+      "199506": [
+        1119
+      ],
+      "199508": [
+        1118
+      ]
+    },
+    "class_id": {
+      "value": 7776,
+      "tier": "analogue",
+      "source": "original client entityclass table",
+      "exact_location": "entityclass[7253] Redshirt_Brann_Male, mesh_id=18706, aug_list=1,59; entityclass[7776] NPC_Brann_Swapset_Male, mesh_id=18706, aug_list=1,52,59",
+      "confidence": "high for matching mesh and dialogue ability; low for exact final-live class",
+      "unverified": "exact final-live class"
+    },
+    "appearance": {
+      "value": "five slots copied from creature_appearance[199026]",
+      "tier": "analogue",
+      "source": "reconstructed Coordinator Vash appearance with original client item classes",
+      "exact_location": "creature_appearance[199026], slots 2,3,15,16,17 in rasaworld.db",
+      "confidence": "low",
+      "unverified": "each speaker's final-live clothing and colors",
+      "rows": [
+        {
+          "slot_id": 2,
+          "class_id": 7259,
+          "color": 4286611584,
+          "tier": "analogue",
+          "source_location": "rasaworld.db creature_appearance[199026,2]"
+        },
+        {
+          "slot_id": 3,
+          "class_id": 7258,
+          "color": 4286611584,
+          "tier": "analogue",
+          "source_location": "rasaworld.db creature_appearance[199026,3]"
+        },
+        {
+          "slot_id": 15,
+          "class_id": 7256,
+          "color": 4286611584,
+          "tier": "analogue",
+          "source_location": "rasaworld.db creature_appearance[199026,15]"
+        },
+        {
+          "slot_id": 16,
+          "class_id": 7257,
+          "color": 4286611584,
+          "tier": "analogue",
+          "source_location": "rasaworld.db creature_appearance[199026,16]"
+        },
+        {
+          "slot_id": 17,
+          "class_id": 7690,
+          "color": 1,
+          "tier": "analogue",
+          "source_location": "rasaworld.db creature_appearance[199026,17]"
+        }
+      ]
+    }
+  },
+  "unresolved_packages": {
+    "creature_ids": [
+      104,
+      120,
+      137,
+      140,
+      199508
+    ],
+    "tier": "inferred",
+    "source": "rasaworld.db npc_package and npc_mission rows, 2026-09-22",
+    "exact_location": "npc_package has no rows for these five ids; npc_mission references them as giver or receiver",
+    "effect": "NPC class enables client interaction, but original conversation package and greeting lines remain unverified"
+  }
+}

@@ -37,5 +37,28 @@ namespace Rasa.Test
             Assert.AreEqual(1, objectives[5].IndicatorList.Count);
             Assert.AreEqual(0, objectives[4].CounterDict.Count + objectives[4].IndicatorList.Count);
         }
+
+        [TestMethod]
+        public void CollectedItemProgressUsesItemClassDictionaryAndSurvivesMissionLogReload()
+        {
+            var definition = _missions.LoadedMissions[MissionId];
+            definition.Counters[5] = new() { new NpcMissionObjectiveCounterEntry
+            {
+                MissionId = MissionId, ObjectiveId = 5, CounterId = 0, InitialValue = 0, TargetValue = 12
+            } };
+            definition.ItemCounterClasses[(5, 0)] = 10346;
+
+            Accept();
+            var initial = Drain().OfType<MissionGainedPacket>().Single().MissionInfo.ObjectivesList.Single();
+            Assert.AreEqual(0, initial.CounterDict.Count);
+            Assert.AreEqual(0U, initial.ItemCounters[10346].Count);
+            Assert.AreEqual(12U, initial.ItemCounters[10346].MaxCount);
+
+            _client.Player.Missions[MissionId].Counters[(5, 0)] = 7;
+            var restored = _client.Player.Missions[MissionId].ToMissionInfo(definition)
+                .ObjectivesList.Single(objective => objective.ObjectiveId == 5);
+            Assert.AreEqual(0, restored.CounterDict.Count);
+            Assert.AreEqual(7U, restored.ItemCounters[10346].Count);
+        }
     }
 }

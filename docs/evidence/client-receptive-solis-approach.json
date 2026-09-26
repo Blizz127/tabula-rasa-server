@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-23",
+  "tier": "observed",
+  "scope": "isolated original-client continuation after Receptive Reception Enhance shrine",
+  "client": "original compatibility client 1.16.5.0 under Wine in isolated Xvfb",
+  "diagnostic_setup": "Copied synthetic-account Alden checkpoint from playthrough 68, mission 1069 objective 1 complete and objective 2 active. Three disposable position/heading trials were used: (814.7,302.1,502.0,4.71), (809.3,302.1,509.0,0.0), and (809.3,302.1,509.0,1.57). These bypassed normal travel. No live character or world data was changed.",
+  "source_positions": [
+    {"tier": "inferred", "source": "legacy emulator world seed, not a final-live server capture", "exact_location": "rasaworld.db spawnpool id 184, creature_1_Id 42", "value": [809.3008,302.09375,503.76562], "interpretation": "Council Elder Solis as currently seeded; final-live position unverified"},
+    {"tier": "inferred", "source": "legacy emulator world seed, not a final-live server capture", "exact_location": "rasaworld.db spawnpool id 64, creature_1_Id 38", "value": [812.0,302.09375,505.1953], "interpretation": "Council Elder Moawi as currently seeded; final-live position unverified"},
+    {"tier": "observed", "source": "TaRapedia Council Elder Solis page revision 12872, 2007-11-06, as archived in GAP-SOLIS-SEED-POSITION", "exact_location": "docs/evidence/bootcamp-d11-reconstruction-manifest.json gap GAP-SOLIS-SEED-POSITION", "value": [784.7,287.2,581.1], "interpretation": "older direct location report; final-live applicability unverified"}
+  ],
+  "observation": "The first position displayed a wall immediately ahead. The second and third displayed the courtyard edge and walls/props near the camera, but no acquired Solis talk prompt. The game log for run 71 contains no RequestNPCConverse, and the stopped copied character database retained objective 2 active. These input trials do not prove that the seeded Solis is inaccessible or that the server rejects his conversation.",
+  "artifacts": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-69-receptive-solis/02-solis-world.png", "sha256": "87737347e033edbbe18da89231f6893d49bbb1f669d7437f3abdbabc624dc5b3"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-70-receptive-solis-court/01-solis-court.png", "sha256": "93eb8f8b2e1ce5bd7078f62f577a4d04ecc169dcae743a119fb55f973df102de"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-71-receptive-solis-aim/02-solis-world.png", "sha256": "edb5c6339629678badac588fde30025750819ab2408875092ab647baaafc50b7"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-71-receptive-solis-aim/game.log", "sha256": "a8cb6748ecb0797a9ce20ca1953bbcd6684feeafab1c37973c1751b1ec613ee8"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-71-receptive-solis-aim/char-after.db", "sha256": "9a0cd332f9f1a272a2236d310e547eb1ffb4ce22838f1e4570581d4c1624f334"}
+  ],
+  "later_navmesh_finding": {
+    "date": "2026-09-23",
+    "tier": "measured",
+    "source": "current game container's adv_foreas_concordia_wilderness.nav, queried with the preserved NavProbe binary; exact final-live map revision unverified",
+    "exact_location": "playthrough-76 Moawi evidence record and /home/blizz/backups/rasa-net/research/20260923-solis-nav/results.txt x810z499, x810z503, solis, and approach.txt",
+    "observation": "The navmesh has walkable floor 302.12 at (810,499) and at the seeded Solis position (809.3008,503.76562); NavProbe returns a path between them. A later original-client replay reached the hut from this approach and completed adjacent Moawi's objective conversation. Solis's objective conversation was not captured."
+  },
+  "next_verification": "At the inferred Alia Caverns-side placement now recorded in docs/evidence/solis-caverns-placement.json, capture Solis's talk prompt, RequestNPCConverse, dialogue and saved objective transition for 1407/10 and 1069/2. Continue checking the placement against final-live evidence."
+}

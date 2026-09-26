@@ -1666,6 +1666,10 @@ namespace Rasa.Migrations.MySqlWorld
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("destroying_hit_only");
 
+                    b.Property<double>("DropChance")
+                        .HasColumnType("double")
+                        .HasColumnName("drop_chance");
+
                     b.Property<byte>("EquipMatch")
                         .HasColumnType("tinyint unsigned")
                         .HasColumnName("equip_match");

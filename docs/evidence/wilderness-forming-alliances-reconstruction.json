@@ -1,0 +1,513 @@
+{
+  "schema": "rasa.wilderness.forming-alliances.reconstruction.v1",
+  "date": "2026-09-23",
+  "mission_id": 479,
+  "compatibility_client": "1.16.5.0; exact shutdown revision unverified",
+  "status": "source seed candidate; estimated fields remain subject to final-live verification",
+  "rows": [
+    {
+      "table": "npc_mission",
+      "key": {
+        "id": 479
+      },
+      "values": {
+        "id": 479,
+        "giver_id": 43,
+        "reciver_id": 43,
+        "level": 5,
+        "group_type": 1,
+        "category_id": 10000001,
+        "shareable": false,
+        "radio_completeable": false,
+        "comment": "Forming Alliances (estimated drop and vest)"
+      },
+      "provenance": [
+        {
+          "fields": [
+            "id"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .id"
+        },
+        {
+          "fields": [
+            "giver_id",
+            "reciver_id"
+          ],
+          "tier": "observed",
+          "source": "pre-shutdown TaRapedia: tarapedia.json missions[Forming Alliances] .fields.MissionGiver/.RewardGiver; rasaworld.db creature[43]"
+        },
+        {
+          "fields": [
+            "level"
+          ],
+          "tier": "inferred",
+          "source": "rasaworld.db npc_mission[1069] level 4 and npc_mission[427] level 5",
+          "reason": "Placed at level 5 between the two chain missions; final live required level unverified"
+        },
+        {
+          "fields": [
+            "group_type",
+            "category_id"
+          ],
+          "tier": "analogue",
+          "source": "rasaworld.db npc_mission[1069,427]",
+          "reason": "Same Wilderness hub mission category and group type"
+        },
+        {
+          "fields": [
+            "shareable",
+            "radio_completeable"
+          ],
+          "tier": "inferred",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .text.opening/.text.finishing",
+          "reason": "NPC giver and receiver; sharing rule itself unverified"
+        },
+        {
+          "fields": [
+            "comment"
+          ],
+          "tier": "inferred",
+          "source": "migration annotation; storage only"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_objective",
+      "key": {
+        "mission_id": 479,
+        "objective_id": 1
+      },
+      "values": {
+        "mission_id": 479,
+        "objective_id": 1,
+        "comment": "Collect twelve Thrax hearts",
+        "is_required": true,
+        "ordinal": 1,
+        "revealed_on_accept": true
+      },
+      "provenance": [
+        {
+          "fields": [
+            "mission_id",
+            "objective_id",
+            "comment"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .objectives[1]; rasaworld.db npc_mission_objective[479,1]"
+        },
+        {
+          "fields": [
+            "is_required",
+            "ordinal",
+            "revealed_on_accept"
+          ],
+          "tier": "inferred",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .objectives[1] is the sole collection objective",
+          "reason": "Client carries no server flags"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_prerequisite",
+      "key": {
+        "mission_id": 479,
+        "or_group": 0,
+        "required_mission_id": 1069
+      },
+      "values": {
+        "mission_id": 479,
+        "or_group": 0,
+        "required_mission_id": 1069,
+        "required_state": 4,
+        "comment": "Receptive Reception completed"
+      },
+      "provenance": [
+        {
+          "fields": [
+            "mission_id",
+            "required_mission_id"
+          ],
+          "tier": "observed",
+          "source": "pre-shutdown TaRapedia: tarapedia.json missions[Forming Alliances] .fields.Requirement"
+        },
+        {
+          "fields": [
+            "or_group"
+          ],
+          "tier": "inferred",
+          "source": "single historical requirement; npc_mission_prerequisite schema"
+        },
+        {
+          "fields": [
+            "required_state"
+          ],
+          "tier": "inferred",
+          "source": "Rasa.Data.MissionState.Completed = 4; historical mission order"
+        },
+        {
+          "fields": [
+            "comment"
+          ],
+          "tier": "inferred",
+          "source": "migration annotation; storage only"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_prerequisite",
+      "key": {
+        "mission_id": 427,
+        "or_group": 0,
+        "required_mission_id": 479
+      },
+      "values": {
+        "mission_id": 427,
+        "or_group": 0,
+        "required_mission_id": 479,
+        "required_state": 4,
+        "comment": "Forming Alliances completed"
+      },
+      "provenance": [
+        {
+          "fields": [
+            "mission_id",
+            "required_mission_id"
+          ],
+          "tier": "observed",
+          "source": "pre-shutdown TaRapedia Lurking In The Shadows Requirement; docs/evidence/wilderness-lurking-chain-audit.json"
+        },
+        {
+          "fields": [
+            "or_group"
+          ],
+          "tier": "inferred",
+          "source": "single historical requirement; npc_mission_prerequisite schema"
+        },
+        {
+          "fields": [
+            "required_state"
+          ],
+          "tier": "inferred",
+          "source": "Rasa.Data.MissionState.Completed = 4; historical mission order"
+        },
+        {
+          "fields": [
+            "comment"
+          ],
+          "tier": "inferred",
+          "source": "migration annotation; storage only"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_objective_counter",
+      "key": {
+        "mission_id": 479,
+        "objective_id": 1,
+        "counter_id": 0
+      },
+      "values": {
+        "mission_id": 479,
+        "objective_id": 1,
+        "counter_id": 0,
+        "initial_value": 0,
+        "target_value": 12
+      },
+      "provenance": [
+        {
+          "fields": [
+            "mission_id",
+            "objective_id",
+            "target_value"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .objectives[1] title and .text.log"
+        },
+        {
+          "fields": [
+            "counter_id",
+            "initial_value"
+          ],
+          "tier": "inferred",
+          "source": "client missionlog itemCountDict and npc_mission_objective_counter schema",
+          "reason": "First counter starts empty"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_objective_binding",
+      "key": {
+        "mission_id": 479,
+        "objective_id": 1,
+        "binding_id": 0
+      },
+      "values": {
+        "mission_id": 479,
+        "objective_id": 1,
+        "binding_id": 0,
+        "kind": 9,
+        "area_id": 0,
+        "placement_id": 0,
+        "creature_id": 3,
+        "action_id": 0,
+        "destroying_hit_only": false,
+        "equip_match": 0,
+        "item_template_id": 2285,
+        "drop_chance": 50.0,
+        "item_set_id": 0,
+        "target_state": 0,
+        "counter_id": 0,
+        "comment": "Thrax Soldier heart, estimated 50%"
+      },
+      "provenance": [
+        {
+          "fields": [
+            "mission_id",
+            "objective_id"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .objectives[1]"
+        },
+        {
+          "fields": [
+            "binding_id",
+            "kind",
+            "counter_id"
+          ],
+          "tier": "inferred",
+          "source": "src/Rasa.Game/Data/MissionContent.cs ItemCollected=9; first binding/counter of sole objective"
+        },
+        {
+          "fields": [
+            "creature_id"
+          ],
+          "tier": "inferred",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .text.log names Thrax Soldiers; rasaworld.db creature[3] and Wilderness spawnpool rows"
+        },
+        {
+          "fields": [
+            "item_template_id"
+          ],
+          "tier": "inferred",
+          "source": "rasaworld.db itemtemplate_itemclass[2285,16540] both class 10346; 2285 adjacent to other mission-item templates 2286..2293",
+          "reason": "Final server template unrecorded; lower mission-item group chosen"
+        },
+        {
+          "fields": [
+            "drop_chance"
+          ],
+          "tier": "analogue",
+          "source": "Ten Ton Hammer 2007 Alia Das guide reports random drops but gives no rate; tentonhammer-alia-das-2007.txt:52",
+          "reason": "50% is an estimated 1-in-2 quest roll; uncertainty is the entire 0–100% range"
+        },
+        {
+          "fields": [
+            "area_id",
+            "placement_id",
+            "action_id",
+            "destroying_hit_only",
+            "equip_match",
+            "item_set_id",
+            "target_state"
+          ],
+          "tier": "inferred",
+          "source": "NpcMissionObjectiveBindingEntry typed-column neutral values; these fields do not apply to ItemCollected"
+        },
+        {
+          "fields": [
+            "comment"
+          ],
+          "tier": "inferred",
+          "source": "migration annotation; storage only"
+        }
+      ]
+    },
+    {
+      "table": "itemtemplate_armor",
+      "key": {
+        "id": 13738
+      },
+      "values": {
+        "id": 13738,
+        "armor_value": 154
+      },
+      "provenance": [
+        {
+          "fields": [
+            "id"
+          ],
+          "tier": "analogue",
+          "source": "rasaworld.db itemtemplate_itemclass[13738] class 16396; EntityClassPreloader.cs class 16396 Armor_T1_MotorAssist_V04_UNC_Vest_03_to_07",
+          "reason": "Closest original uncommon Motor Assist Vest for the observed minimum level 3; final reward template unknown"
+        },
+        {
+          "fields": [
+            "armor_value"
+          ],
+          "tier": "observed",
+          "source": "contemporary Ellatha capture: ellatha-hub-missions.json missions[Forming Alliances], page m10.html .rewards[1].stats Body Armor: 154",
+          "reason": "Contemporary source; final-live item stats unverified"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_reward",
+      "key": {
+        "id": 479,
+        "type": 3,
+        "item_template_id": 0
+      },
+      "values": {
+        "id": 479,
+        "type": 3,
+        "credits": 4000,
+        "item_template_id": 0,
+        "quantity": 0
+      },
+      "provenance": [
+        {
+          "fields": [
+            "id"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .id"
+        },
+        {
+          "fields": [
+            "type"
+          ],
+          "tier": "inferred",
+          "source": "src/Rasa.Game/Data/NpcMissionRewardType.cs reward-row encoding"
+        },
+        {
+          "fields": [
+            "credits"
+          ],
+          "tier": "observed",
+          "source": "pre-shutdown TaRapedia: tarapedia.json missions[Forming Alliances] .fields.RewardXP"
+        },
+        {
+          "fields": [
+            "item_template_id",
+            "quantity"
+          ],
+          "tier": "inferred",
+          "source": "npc_mission_reward currency/experience rows use zero item fields"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_reward",
+      "key": {
+        "id": 479,
+        "type": 1,
+        "item_template_id": 0
+      },
+      "values": {
+        "id": 479,
+        "type": 1,
+        "credits": 400,
+        "item_template_id": 0,
+        "quantity": 0
+      },
+      "provenance": [
+        {
+          "fields": [
+            "id"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .id"
+        },
+        {
+          "fields": [
+            "type"
+          ],
+          "tier": "inferred",
+          "source": "src/Rasa.Game/Data/NpcMissionRewardType.cs reward-row encoding"
+        },
+        {
+          "fields": [
+            "credits"
+          ],
+          "tier": "observed",
+          "source": "pre-shutdown TaRapedia: tarapedia.json missions[Forming Alliances] .fields.RewardCredits"
+        },
+        {
+          "fields": [
+            "item_template_id",
+            "quantity"
+          ],
+          "tier": "inferred",
+          "source": "npc_mission_reward currency/experience rows use zero item fields"
+        }
+      ]
+    },
+    {
+      "table": "npc_mission_reward",
+      "key": {
+        "id": 479,
+        "type": 4,
+        "item_template_id": 13738
+      },
+      "values": {
+        "id": 479,
+        "type": 4,
+        "credits": 0,
+        "item_template_id": 13738,
+        "quantity": 1
+      },
+      "provenance": [
+        {
+          "fields": [
+            "id"
+          ],
+          "tier": "original",
+          "source": "original client 1.16.5.0 extract: client.json missions[479] .id"
+        },
+        {
+          "fields": [
+            "type"
+          ],
+          "tier": "inferred",
+          "source": "src/Rasa.Game/Data/NpcMissionRewardType.cs reward-row encoding"
+        },
+        {
+          "fields": [
+            "credits"
+          ],
+          "tier": "inferred",
+          "source": "npc_mission_reward fixed-item row has no currency amount"
+        },
+        {
+          "fields": [
+            "item_template_id"
+          ],
+          "tier": "analogue",
+          "source": "rasaworld.db itemtemplate_itemclass[13738] class 16396; pre-shutdown TaRapedia RewardItem Luminar Motor Assist Armor Vest",
+          "reason": "Closest original class/level counterpart; missing Luminar module effects remain a gap"
+        },
+        {
+          "fields": [
+            "quantity"
+          ],
+          "tier": "inferred",
+          "source": "pre-shutdown TaRapedia: tarapedia.json missions[Forming Alliances] .fields.RewardItem names one vest"
+        }
+      ]
+    }
+  ],
+  "known_gaps": [
+    "The final-live heart drop rate and template id are unrecorded.",
+    "The exact Luminar vest template and module tuple are unrecorded. Template 13738 is an analogue; its base regen does not yet reproduce the observed 8%/sec and it lacks the observed Laser-resistance effect.",
+    "Whether already held hearts counted before acceptance and the original timing of heart consumption remain unverified."
+  ],
+  "source_artifacts": [
+    "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/client.json",
+    "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json",
+    "/home/blizz/backups/rasa-net/research/20260915-aliadas-hub/work/ellatha-hub-missions.json",
+    "/home/blizz/backups/rasa-net/research/20260915-aliadas-hub/work/tentonhammer-alia-das-2007.txt",
+    "rasaworld.db",
+    "src/Rasa.DBL/Services/Preloader/EntityClassPreloader.cs"
+  ]
+}

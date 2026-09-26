@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-23",
+  "compatibility_client": "1.16.5.0",
+  "migration": "20260923014000_WildernessHubConscientiousGate",
+  "row": {
+    "table": "npc_mission_prerequisite",
+    "values": {
+      "mission_id": 1390,
+      "or_group": 0,
+      "required_mission_id": 479,
+      "required_state": 4,
+      "comment": "Forming Alliances completed"
+    },
+    "fields": {
+      "mission_id": { "tier": "original", "source": "original client mission census and objective skeleton", "exact_location": "rasaworld.db npc_mission_objective[1390,1]; /home/blizz/backups/rasa-net/research/20260913-source-sweep/mission-tables/work/mission_census.tsv:685" },
+      "or_group": { "tier": "inferred", "source": "single required predecessor under the implemented prerequisite schema", "exact_location": "src/Rasa.Game/Managers/MissionManager.cs PrerequisitesSatisfied; src/Rasa.DBL/Structures/World/NpcMissionPrerequisiteEntry.cs" },
+      "required_mission_id": { "tier": "observed", "source": "pre-shutdown TaRapedia Conscientious Objector mission record", "exact_location": "tarapedia.json missions['Conscientious Objector'].fields.Requirement = 'Forming Alliances', set 2007-09-02T13:57:29Z revision 8570; client mission 479 is Forming Alliances" },
+      "required_state": { "tier": "inferred", "source": "historical Requirement field, interpreted as completed predecessor", "exact_location": "tarapedia.json missions['Conscientious Objector'].fields.Requirement; src/Rasa.Game/Data/MissionState.cs Completed = 4" },
+      "comment": { "tier": "inferred", "source": "human-readable description of the recorded gate", "exact_location": "this manifest row required_mission_id and required_state" }
+    }
+  },
+  "source_artifact": {
+    "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json",
+    "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0"
+  },
+  "deployment": {
+    "image": "rasa-dit-test:20260923d",
+    "date": "2026-09-23",
+    "backup": "/home/blizz/backups/rasa-net/20260923T082039Z-conscientious-gate",
+    "verification": "SQLite PRAGMA integrity_check returned ok; migration 20260923014000 applied; game connected to auth, reached Server ready!, and loaded 17 content rules (402 rows, 0 gaps). The content schema migration test and three provenance tests passed."
+  },
+  "corroboration": "https://www.ellatha.com/tr/missionsview.asp?key=Conscientious+Objector describes Apirka's opening as following the player's becoming a friend of the tribe, but does not state a mission ID.",
+  "conflict_resolved": "Client mission 1391 is Bug Em with objectives at Quasso Station (/home/blizz/backups/rasa-net/research/20260913-source-sweep/mission-tables/work/mission_census.tsv:686; rasaworld.db npc_mission_objective[1391,1..5]), not an alternate Conscientious Objector branch. The two Part Two IDs are 1392 and 1393; their branch-selection rule remains unverified.",
+  "unverified": [
+    "No shutdown-era server gate capture or original-client offer test has been recovered.",
+    "The exact branch selection and completion gates for missions 1392 and 1393 remain unresolved."
+  ]
+}

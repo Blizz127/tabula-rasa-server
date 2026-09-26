@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-23",
+  "tier": "observed",
+  "scope": "Council Elder Moawi mission 1407 objective 1, isolated original-client replay",
+  "client": "original compatibility client 1.16.5.0 under Wine in isolated Xvfb",
+  "server": "deployed 20260923e binaries with a copied migrated world database; no live character or world data changed",
+  "diagnostic_setup": "Copied the stopped playthrough-61 synthetic Alden character database into the isolated server's configured /work/server/databases/char database. Mission 1407 objective 1 was active. Set character position (812,302.12,499), orientation 3.14, before client startup. The world kept Moawi creature 38 class 28415 and content placement 198687 at (812,302.09375,505.1953). This bypassed normal travel and quest acceptance.",
+  "position_provenance": [
+    {
+      "tier": "measured",
+      "source": "Wilderness navmesh from the current game container's /app/navmesh/adv_foreas_concordia_wilderness.nav; exact final-live map revision unverified",
+      "exact_location": "navprobe output results.txt, x812z499 and x812z503: walkable floor 302.12",
+      "interpretation": "Valid approach floor for client interaction test; not proof of final-live NPC placement"
+    },
+    {
+      "tier": "inferred",
+      "source": "legacy emulator world seed and current content migration, not a final-live server capture",
+      "exact_location": "rasaworld.db spawnpool 64 creature 38; content placement 198687; docs/evidence/moawi-dialogue-class.json",
+      "interpretation": "Moawi's test location and class 28415 are reconstruction values"
+    }
+  ],
+  "observation": "The client rendered Moawi's yellow overhead objective marker. At close range it displayed 'Press [Mouse Button 2] to talk'. Right-click opened the named 'Too Close For Comfort' Objective Completion dialogue with Moawi's original client text; Continue displayed 'Check on Elder Solis.' The game log records RequestNPCConverse and CompleteNPCObjective. The stopped copied character database records mission 1407 objective 1 status 2 and objective 10 status 1; SQLite integrity_check returned ok. The adjacent Solis objective was not completed in this replay.",
+  "confidence": "high that the current Moawi implementation functions with client 1.16.5.0; low that class 28415 is his exact final-live entity class",
+  "unverified": "Exact final-live Moawi class and placement, normal quest acceptance and travel, and the follow-up Solis conversation.",
+  "artifacts": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260923-solis-nav/adv_foreas_concordia_wilderness.nav", "sha256": "a417669c715c2a32ba4e407479f5731fa9ec81622b63c8b9727da1ea8cc1abba"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260923-solis-nav/results.txt", "sha256": "bb6d791b13c15ff24c4ac8798c47331b4e3661af469abf7a8a1106dc321e6d70"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-76-moawi-valid/04-moawi-close.png", "sha256": "9d5e021b27d32795120a128e7c7a32a2368db16444616c9b16bc9221c6f0b190"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-76-moawi-valid/05-moawi-conversation.png", "sha256": "108a1976ad398981aa2444f126875c26f3618c54169fdfd061892918f8440188"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-76-moawi-valid/06-moawi-completed.png", "sha256": "0f02a2ab32e2f05e55c887fc7de2b58922424282b5186f079e962f37eda51c9a"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-76-moawi-valid/game.log", "sha256": "6214950f34d18bd09cd3f40df5cbcd418474d7b74b1c3968dc12dc50ee57c549", "exact_location": "05:22:43.660 RequestNPCConverse; 05:23:07.499 CompleteNPCObjective"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-76-moawi-valid/char-after.db", "sha256": "2a0f1d386eee2a046b4882e34d58d2c2f4cfeefa929875cdde345d64f1725739", "exact_location": "character_mission_objective mission_id=1407"}
+  ]
+}

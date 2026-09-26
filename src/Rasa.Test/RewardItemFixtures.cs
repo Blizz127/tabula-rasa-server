@@ -130,6 +130,9 @@ namespace Rasa.Test
         public static void SeedOriginalTemplateRows(SqliteConnection worldConnection)
         {
             Execute(worldConnection, "INSERT INTO itemtemplate_itemclass (itemTemplateId, itemClassId) VALUES (116929, 27121), (116930, 27100)");
+            // Original client mappings used by Forming Alliances: Thrax Heart and the
+            // reconstructed level-range Motor Assist Vest counterpart.
+            Execute(worldConnection, "INSERT INTO itemtemplate_itemclass (itemTemplateId, itemClassId) VALUES (2285, 10346), (13738, 16396)");
             Execute(worldConnection, "INSERT INTO itemtemplate_requirement_skill (id, skill_id, skill_level) VALUES (116929, 1, 1), (116930, 1, 1)");
             Execute(worldConnection, "INSERT INTO itemtemplate_requirement (id, req_type, req_value) VALUES (27121, 1, 5), (27100, 1, 5)");
 
@@ -151,6 +154,8 @@ namespace Rasa.Test
             // client itemclass max_hp and stack 1, the machine gun and repair tool with their weaponclass values.
             RegisterClass(PistolClass, 120, new WeaponClassEntry { Id = 27121, WeaponTemplatId = 1, AttackActionId = 1, AttackActionArgId = 133, DrawActionId = 1, StowActionId = 1, ReloadActionId = 1, AmmoClassId = 3147, ClipSize = 20, MinDamage = 91, MaxDamage = 91, DamageType = 1, WeaponAnimConditionCode = 1 });
             RegisterClass(PulsePistolClass, 120, new WeaponClassEntry { Id = 27100, WeaponTemplatId = 77, AttackActionId = 1, AttackActionArgId = 135, DrawActionId = 1, StowActionId = 1, ReloadActionId = 49, AmmoClassId = 3807, ClipSize = 10, MinDamage = 106, MaxDamage = 106, DamageType = 5, WeaponAnimConditionCode = 1 });
+            RegisterClass((EntityClasses)10346, 0, null, 12);
+            RegisterClass((EntityClasses)16396, 130, null);
 
             foreach (var template in Gear)
                 RegisterClass(template.Class, template.MaxHitPoints, template.WeaponClass);
@@ -169,7 +174,7 @@ namespace Rasa.Test
             }
         }
 
-        private void RegisterClass(EntityClasses classId, int maxHitPoints, WeaponClassEntry weapon)
+        private void RegisterClass(EntityClasses classId, int maxHitPoints, WeaponClassEntry weapon, uint stackSize = 1)
         {
             _previousClasses[classId] = EntityClassManager.Instance.LoadedEntityClasses.TryGetValue(classId, out var previous) ? previous : null;
             var augmentations = weapon == null
@@ -178,7 +183,7 @@ namespace Rasa.Test
             EntityClassManager.Instance.LoadedEntityClasses[classId] = new EntityClass((uint)classId, "stand-in for the world-seed class", 0, 0,
                 augmentations, false)
             {
-                ItemClassInfo = new ItemClassInfo(new ItemClassEntry { Id = (uint)classId, MaxHitPoints = maxHitPoints, StackSize = 1, LootValue = 500 }),
+                ItemClassInfo = new ItemClassInfo(new ItemClassEntry { Id = (uint)classId, MaxHitPoints = maxHitPoints, StackSize = stackSize, LootValue = 500 }),
                 WeaponClassInfo = weapon == null ? null : new WeaponClassInfo(weapon)
             };
         }

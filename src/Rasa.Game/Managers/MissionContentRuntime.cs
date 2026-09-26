@@ -74,7 +74,10 @@ namespace Rasa.Managers
             _areaBindings = new Dictionary<(uint, uint), List<ContentAreaEntry>>();
 
             foreach (var mission in missions.Values)
+            {
                 mission.Bindings.Clear();
+                mission.ItemCounterClasses.Clear();
+            }
 
             foreach (var binding in Content.LiveBindings)
             {
@@ -82,6 +85,10 @@ namespace Rasa.Managers
                     continue;
 
                 mission.Bindings.Add(binding);
+
+                if ((ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.ItemCollected &&
+                    ItemManager.Instance.ItemTemplateItemClass.TryGetValue(binding.ItemTemplateId, out var itemClass))
+                    mission.ItemCounterClasses[(binding.ObjectiveId, binding.CounterId)] = (uint)itemClass;
 
                 if ((ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.AreaEntered && liveAreas.TryGetValue(binding.AreaId, out var area))
                 {
@@ -972,8 +979,13 @@ namespace Rasa.Managers
                 ? current + 1
                 : counter.InitialValue + 1;
 
-            var state = new ContentState(player);
-            state.PlanCounter(missionId, objectiveId, counter.CounterId, value);
+            if (value >= counter.TargetValue)
+            {
+                // The final kill and its objective/reveals must commit together. A separate
+                // counter save could strand a dead, nonrespawning boss at an incomplete 1/1.
+                Missions.CompleteBoundObjective(sourceClient, missionId, objectiveId, kind, counter, value);
+                return;
+            }
 
             try
             {
@@ -993,9 +1005,104 @@ namespace Rasa.Managers
 
             sourceClient.CallMethod(player.EntityId, new UpdateObjectiveCounterPacket(
                 missionId, objectiveId, counter.CounterId, value, counter.InitialValue, counter.TargetValue));
+        }
 
-            if (value >= counter.TargetValue)
-                Missions.CompleteBoundObjective(sourceClient, missionId, objectiveId, kind);
+        /// <summary>Advance item-class progress only after the item has entered the player's inventory.</summary>
+        public void OnItemCollected(Client client, uint itemTemplateId, uint quantity)
+        {
+            if (client?.Player == null || quantity == 0)
+                return;
+            if (!ItemManager.Instance.ItemTemplateItemClass.TryGetValue(itemTemplateId, out var collectedClass))
+                return;
+
+            var player = client.Player;
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.ItemCollected)
+                .Where(entry => ItemManager.Instance.ItemTemplateItemClass.TryGetValue(entry.ItemTemplateId, out var boundClass) &&
+                    boundClass == collectedClass)
+                .GroupBy(entry => (entry.MissionId, entry.ObjectiveId, entry.CounterId))
+                .Select(group => group.First()))
+            {
+                if (!Missions.LoadedMissions.TryGetValue(binding.MissionId, out var definition) ||
+                    !player.Missions.TryGetValue(binding.MissionId, out var mission) ||
+                    mission.State != MissionState.Active ||
+                    !mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) ||
+                    status != MissionObjectiveState.Incomplete ||
+                    !definition.ItemCounterClasses.TryGetValue((binding.ObjectiveId, binding.CounterId), out var itemClassId))
+                    continue;
+
+                var counter = Content.Catalog.Counters.FirstOrDefault(entry =>
+                    entry.MissionId == binding.MissionId && entry.ObjectiveId == binding.ObjectiveId &&
+                    entry.CounterId == binding.CounterId);
+                if (counter == null)
+                    continue;
+
+                var current = mission.Counters.TryGetValue((binding.ObjectiveId, binding.CounterId), out var saved)
+                    ? saved : counter.InitialValue;
+                var value = (int)Math.Min((long)counter.TargetValue, (long)current + quantity);
+                if (value <= current)
+                    continue;
+
+                if (value >= counter.TargetValue)
+                {
+                    Missions.CompleteBoundObjective(client, binding.MissionId, binding.ObjectiveId,
+                        ObjectiveBindingKind.ItemCollected, counter, value);
+                    continue;
+                }
+
+                try
+                {
+                    using var unitOfWork = Missions.GameUnitOfWorkFactoryForContent.CreateChar();
+                    unitOfWork.CharacterMissions.UpsertCounter(player.Id, binding.MissionId,
+                        binding.ObjectiveId, binding.CounterId, value);
+                    unitOfWork.Complete();
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteLog(LogType.Error, $"OnItemCollected: could not save counter {binding.MissionId}/{binding.ObjectiveId}/{binding.CounterId} for character {player.Id}");
+                    Logger.WriteLog(LogType.Error, e);
+                    continue;
+                }
+
+                mission.Counters[(binding.ObjectiveId, binding.CounterId)] = value;
+                client.CallMethod(player.EntityId, new UpdateObjectiveItemCounterPacket(
+                    binding.MissionId, binding.ObjectiveId, itemClassId, (uint)value, (uint)counter.TargetValue));
+            }
+        }
+
+        /// <summary>
+        /// Roll quest items alongside ordinary corpse loot. A row is eligible only while its owner is
+        /// actively collecting that item; another player's corpse cannot supply quest progress.
+        /// </summary>
+        public IEnumerable<uint> RollMissionItemDrops(Client killer, Creature creature, Func<double> nextDouble)
+        {
+            if (killer?.Player == null || creature == null || nextDouble == null)
+                yield break;
+
+            foreach (var binding in BindingsOfKind(ObjectiveBindingKind.ItemCollected)
+                .Where(entry => entry.CreatureId == creature.DbId && entry.DropChance > 0))
+            {
+                if (!killer.Player.Missions.TryGetValue(binding.MissionId, out var mission) ||
+                    mission.State != MissionState.Active ||
+                    !mission.Objectives.TryGetValue(binding.ObjectiveId, out var status) ||
+                    (status != MissionObjectiveState.Incomplete && status != MissionObjectiveState.Completed))
+                    continue;
+
+                // The server may have marked the objective complete before the player sold or lost
+                // its physical items. Keep the source available until the turn-in can actually be paid.
+                if (status == MissionObjectiveState.Completed)
+                {
+                    var counter = Content.Catalog.Counters.FirstOrDefault(entry =>
+                        entry.MissionId == binding.MissionId && entry.ObjectiveId == binding.ObjectiveId &&
+                        entry.CounterId == binding.CounterId);
+                    if (counter == null ||
+                        !ItemManager.Instance.ItemTemplateItemClass.TryGetValue(binding.ItemTemplateId, out var itemClass) ||
+                        InventoryManager.Instance.CountItemsByClass(killer, itemClass) >= counter.TargetValue)
+                        continue;
+                }
+
+                if (nextDouble() * 100.0 < binding.DropChance)
+                    yield return binding.ItemTemplateId;
+            }
         }
 
         /// <summary>

@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-23",
+  "compatibility_client": "1.16.5.0",
+  "status": "deployed in rasa-dit-test:20260923e; isolated original-client release-choice interaction passed; complete routes pending",
+  "client_check": "docs/evidence/client-conscientious-choice.json",
+  "deployment": {
+    "date": "2026-09-23",
+    "image": "rasa-dit-test:20260923e",
+    "backup": "/home/blizz/backups/rasa-net/20260923T084534Z-conscientious-branches",
+    "verification": "1,322/1,322 .NET 5 tests passed; both-provider migration parity, forward/rollback and two branch-flow cases passed; SQLite PRAGMA integrity_check returned ok; the server connected to auth, reached Server ready!, and loaded 17 content rules (404 rows, 0 gaps)."
+  },
+  "source_artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/client.json",
+      "sha256": "ec05898b1af50bcbcf5e86ea6a9507295b8795efbd741a67f585e750ffdafa5a",
+      "locations": "missions['1390'] objectives, objconv and text; missions['1392'] and ['1393'] text"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json",
+      "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0",
+      "locations": "missions['Conscientious Objector - Part Two'].fields.Requirement, RewardXP, RewardCredits"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260913-bootcamp/client-code/verify/src/client-ui-conversationwindow.py",
+      "locations": "HandleShowObjectiveChoice:575-610; OnConversationChoiceSelected:1081-1105"
+    }
+  ],
+  "rules": [
+    {
+      "name": "choice_index_1",
+      "values": { "mission_id": 1390, "source_objective_id": 1, "choice_index": 1, "selected_objective_id": 2, "escort_objective_id": 8, "return_objective_id": 11, "part_two_mission_id": 1393 },
+      "provenance": [
+        { "fields": ["mission_id", "source_objective_id", "choice_index"], "tier": "original", "source": "original client choice and conversation tables", "exact_location": "client.json missions['1390'].objconv objective 1 CHOICE1 text 'Tell him that Milpas is free to leave Alia Das.'; client-ui-conversationwindow.py:595-607 choiceIdx=1" },
+        { "fields": ["selected_objective_id", "escort_objective_id", "return_objective_id", "part_two_mission_id"], "tier": "inferred", "source": "original client objective and Part Two text establish a unique release route", "exact_location": "client.json missions['1390'].objectives[2,8,11] and objconv[2,11]; missions['1393'].text.log says deserter set free" }
+      ]
+    },
+    {
+      "name": "choice_index_2",
+      "values": { "mission_id": 1390, "source_objective_id": 1, "choice_index": 2, "selected_objective_id": 3, "escort_objective_id": 4, "return_objective_id": 10, "part_two_mission_id": 1392 },
+      "provenance": [
+        { "fields": ["mission_id", "source_objective_id", "choice_index"], "tier": "original", "source": "original client choice and conversation tables", "exact_location": "client.json missions['1390'].objconv objective 1 CHOICE2 text 'Tell him that you must do your duty and arrest Milpas.'; client-ui-conversationwindow.py:595-607 choiceIdx=2" },
+        { "fields": ["selected_objective_id", "escort_objective_id", "return_objective_id", "part_two_mission_id"], "tier": "inferred", "source": "original client objective and Part Two text establish a unique arrest route", "exact_location": "client.json missions['1390'].objectives[3,4,10] and objconv[3,10]; missions['1392'].text.log says deserter arrested" }
+      ]
+    }
+  ],
+  "world_changes": [
+    {
+      "table": "npc_mission_objective_transition",
+      "deleted": [[1390,2,4],[1390,2,10],[1390,3,8],[1390,3,10],[1390,8,10]],
+      "inserted": [[1390,2,8],[1390,8,11]],
+      "fields": ["mission_id", "completed_objective_id", "revealed_objective_id"],
+      "tier": "inferred",
+      "source": "branch-specific original-client objective bodies; previous cross-links contradicted them",
+      "exact_location": "client.json missions['1390'].objectives[2,3,4,8,10,11] and objconv[2,3,10,11]; rasaworld.db npc_mission_objective_transition[1390] before migration"
+    },
+    {
+      "table": "npc_mission_objective",
+      "key": { "mission_id": 1390, "objective_id": 10 },
+      "values": { "is_required": false },
+      "provenance": { "tier": "inferred", "source": "objective 10 belongs only to the arrest route; server checks each route's final objective", "exact_location": "client.json missions['1390'].objconv[10,11]; src/Rasa.Game/Data/MissionBranchRules.cs IsCompleteable" }
+    },
+    {
+      "table": "npc_mission_prerequisite",
+      "rows": [
+        { "mission_id": 1392, "or_group": 0, "required_mission_id": 1390, "required_state": 4, "comment": "Arrest Milpas and complete Conscientious Objector" },
+        { "mission_id": 1393, "or_group": 0, "required_mission_id": 1390, "required_state": 4, "comment": "Free Milpas and complete Conscientious Objector" }
+      ],
+      "provenance": [
+        { "fields": ["mission_id", "required_mission_id"], "tier": "original", "source": "original client mission identifiers and Part Two text", "exact_location": "client.json missions['1390'],['1392'],['1393']" },
+        { "fields": ["or_group", "required_state", "comment"], "tier": "inferred", "source": "pre-shutdown Part Two requirement interpreted as completed Part One; text labels the choice", "exact_location": "tarapedia.json missions['Conscientious Objector - Part Two'].fields.Requirement set 2007-11-07 revision 13120; client.json missions['1392'],['1393'].text.log" }
+      ]
+    },
+    {
+      "table": "npc_mission_reward",
+      "rows": [
+        { "id": 1392, "type": 3, "credits": 8000, "item_template_id": 0, "quantity": 0 },
+        { "id": 1392, "type": 1, "credits": 800, "item_template_id": 0, "quantity": 0 },
+        { "id": 1393, "type": 3, "credits": 8000, "item_template_id": 0, "quantity": 0 },
+        { "id": 1393, "type": 1, "credits": 800, "item_template_id": 0, "quantity": 0 }
+      ],
+      "provenance": [
+        { "fields": ["id", "credits"], "tier": "observed", "source": "pre-shutdown TaRapedia Part Two reward fields, applied to both client branch IDs", "exact_location": "tarapedia.json missions['Conscientious Objector - Part Two'].fields.RewardXP and RewardCredits set 2007-10-18 revision 11395; client.json missions['1392'],['1393']" },
+        { "fields": ["type", "item_template_id", "quantity"], "tier": "inferred", "source": "emulator reward schema encodes XP as 3 and credits as 1; no item reward seeded", "exact_location": "src/Rasa.Game/Managers/MissionManager.cs BuildRewardInfo and PayOut; this migration" }
+      ]
+    }
+  ],
+  "unverified": [
+    "The exact final-live server branch transition packet sequence and objective required flags have not been captured.",
+    "Whether the two historical Part Two reward amounts remained unchanged at shutdown is not established.",
+    "Part Two item reward choice and report item transfer remain unimplemented; the observed item names have no resolved final template/module tuple."
+  ]
+}

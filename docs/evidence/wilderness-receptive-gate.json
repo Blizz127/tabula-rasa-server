@@ -1,0 +1,15 @@
+{
+  "migration": "20260923010000_WildernessHubReceptiveGate",
+  "date": "2026-09-23",
+  "compatibility_client": "1.16.5.0",
+  "row": "npc_mission_prerequisite[1069,0,1407]",
+  "fields": {
+    "mission_id": { "value": 1069, "tier": "original", "source": "original client mission objective data, mission 1069; seeded definition in WildernessHubReceptiveReceptionRows.cs" },
+    "or_group": { "value": 0, "tier": "inferred", "source": "single requirement in TaRapedia Receptive Reception revision 8665", "confidence": "high" },
+    "required_mission_id": { "value": 1407, "tier": "observed", "source": "TaRapedia Receptive Reception, Requirement=[[Too Close For Comfort]], field set 2007-09-02T19:41:40Z revision 8665; original client mission 1407 objective skeleton", "confidence": "high for the historical chain" },
+    "required_state": { "value": 4, "tier": "inferred", "source": "TaRapedia Requirement implies completion; client missionstate 4 is completed", "confidence": "high" },
+    "comment": { "value": "Too Close For Comfort", "tier": "observed", "source": "TaRapedia Receptive Reception, Requirement field revision 8665" }
+  },
+  "source_artifact": { "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json", "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0", "bytes": 4630136, "exact_location": "missions['Receptive Reception'].fields.Requirement" },
+  "unverified": "No captured final-live server prerequisite table is available. This 2007 requirement may have changed before the final live shutdown. Blizz had already completed 1407 and accepted 1069 before this gate was added, so that saved character does not validate a fresh offer sequence."
+}

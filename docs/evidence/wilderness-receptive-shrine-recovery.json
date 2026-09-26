@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-23",
+  "scope": "mission 1069 objective 1, Enhance Logos shrine recovery",
+  "compatibility_client": "1.16.5.0",
+  "original_objective": {
+    "tier": "original",
+    "source": "original client mission text and objective data",
+    "artifact": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/client.json",
+    "sha256": "ec05898b1af50bcbcf5e86ea6a9507295b8795efbd741a67f585e750ffdafa5a",
+    "bytes": 3084220,
+    "exact_location": "missions['1069'].text.log and objectives; mission objective 1 is Locate the Logos shrine, followed by Return to Solis",
+    "confidence": "high"
+  },
+  "source_entity_match": {
+    "tier": "inferred",
+    "source": "current server use/recovery action correlation; not a recovered final-live server rule",
+    "exact_location": "src/Rasa.Game/Managers/DynamicObjectManager.cs RequestUseObjectPacket Logos branch sets ActionData.SourceId to the used entity; ActorActionManager.cs UseObject recovery arg 6; DynamicObjectManager.cs LogosRecovery now selects that same entity",
+    "reason": "Before correction, LogosRecovery handled the first dynamic object triggered by the actor, even if the action named a different shrine. The wrong object's pending use could be consumed or unlocked.",
+    "confidence": "high for the server defect and fix, unverified for the original server's implementation"
+  },
+  "verification": {
+    "tier": "observed",
+    "source": "src/Rasa.Test/BootcampOpeningTests.ReceptiveReception.cs; focused .NET 5 test passed 2026-09-23",
+    "finding": "With another shrine pending first in the channel, the Enhance action consumes only the Enhance pending use, completes mission 1069 objective 1, persists it, and reveals objective 2. This verifies server code with the migrated seed."
+  },
+  "deployment": {
+    "date": "2026-09-23",
+    "image": "rasa-dit-test:20260923b",
+    "result": "Live game service connected to auth, reached Server ready!, and loaded 397 content rows with 0 gaps. Migrated SQLite world and saved character state were preserved."
+  },
+  "client_check": {
+    "date": "2026-09-23",
+    "tier": "observed",
+    "client": "original compatibility client 1.16.5.0 under Wine in isolated Xvfb",
+    "server": "deployed rasa-dit-test:20260923e binaries and migrated world copied into isolated harness; Rasa.Game.dll sha256 cc7f383d643f7b593d9e77128bf0e2987a6347486ccdc81dc84c39da45808997; world.db sha256 57f78cdb2154d52a408fc885a1314dfcb550f92f2cdee6d23670e84443201f34",
+    "diagnostic_setup": "Copied synthetic-account character Alden (id 1) had 1407 marked complete, 1069 accepted with objective 1 active, and was positioned at (832.0,161.838,965.5) about 5.5 m from original world-seed Enhance shrine logos row 10. This bypassed natural mission acceptance and travel. Live character data was untouched.",
+    "observation": "After approaching and aiming at the shrine, right-click displayed the Logos Element 'Enhance' use action. The client sent RequestUseObject; after its windup it displayed 'Added Logos Element Enhance to Tabula.' The copied character database records character_logos(1,10), mission 1069 objective 1 status 2, and objective 2 status 1 ('Return to Solis'). SQLite integrity_check returned ok.",
+    "artifacts": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-68-receptive-shrine/14-shrine-after-click.png", "sha256": "459b07d50c88a2397699974abf8815ce5ca446481536b63119ee2a37307555da", "location": "Logos Element 'Enhance' action and blue windup bar"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-68-receptive-shrine/15-shrine-result.png", "sha256": "5eee52e765ffd4b78e85964fda11cde94fe5ef86991958f464c353b043173fc7", "location": "chat line 'Added Logos Element Enhance to Tabula.' and active objective icon"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-68-receptive-shrine/game.log", "sha256": "0159e92cdb3367395e32da5a8036b28fcc57c21e4eb5199b2dd44e607280bcf5", "location": "04:28:15.944 RequestUseObject"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-68-receptive-shrine/char-after.db", "sha256": "94545283e71b80c127aa525dd737fa684edca91a275ccc117589b10c2ec0d473", "location": "character_logos WHERE character_id=1; character_mission_objective WHERE character_id=1 AND mission_id=1069"}
+    ]
+  },
+  "unverified": "Natural mission acceptance, the full Alia Caverns route, and Solis/Apirka conversations have not been replayed. The exact final-live server implementation of shrine action matching is unavailable."
+}

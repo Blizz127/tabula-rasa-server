@@ -1,0 +1,42 @@
+{
+  "migration": "MoawiDialogueClass",
+  "row": "creature/38/class_id",
+  "previous_value": 6163,
+  "value": 28415,
+  "tier": "analogue",
+  "source": "original client entityclass table, version 1.16.5.0; rasaworld.db entityclass rows 6163 and 28415; original client objectiveconversation row 1407/1",
+  "exact_location": "entityclass[6163] aug_list=1,59 mesh_id=16970; entityclass[28415] aug_list=1,52 mesh_id=16970; objectiveconversation[1407,1] npc_package_id=113",
+  "reason": "Moawi's world-seed class has no NPC augmentation, so the client cannot open his objective conversation. Class 28415 preserves his original elder mesh and class flags and adds the original client NPC augmentation.",
+  "confidence": "high that an NPC augmentation is required; medium that 28415 matches Moawi's visible robe and staff; low that 28415 was Moawi's final-live class",
+  "unverified": "Moawi's exact final-live entity class, placement and class-specific behavior. Isolated run 76 has now verified the current 28415 class's client talk prompt, objective dialogue and saved transition to objective 10; see docs/evidence/client-moawi-nav-verification.json. The live Blizz character database separately records both mission 1407 objectives complete on 2026-09-22 23:28:30 UTC, but that interaction was not captured.",
+  "appearance_comparison": {
+    "tier": "observed",
+    "source": "DaOpa's Tabula Rasa FanSite, Council Elder Moawi NPC page, https://www.ellatha.com/tr/npcview.asp?id=6&key=Council+Elder+Moawi, image https://www.ellatha.com/tr/images/NPC/Council_Elder_Moawi.jpg; screenshot capture date not stated",
+    "finding": "The named Moawi image shows a dark red robe, gold shoulder piece, green face and crystal-tipped staff. Isolated run 60/02-moawi-interaction.png renders those visible features with client class 28415. This supports the analogue's appearance, not its exact final-live class or conversation behavior.",
+    "artifacts": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260923-moawi-source/Council_Elder_Moawi.jpg", "sha256": "9326b33acd2d7a011d94150311aa7f64875b24e2d8264860354fea542434ef29", "bytes": 20828},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-60/02-moawi-interaction.png", "sha256": "56412699a4ededec573299c296c05376b7d4d265ec0b15aaf7f2b68a3b280b16", "bytes": 949694}
+    ]
+  },
+  "additional_client_replay": {
+    "date": "2026-09-23",
+    "tier": "observed",
+    "diagnostic_input": "Isolated original-client run 67 restored the run-61 copied character at (816.0,302.1,505.2), with mission 1407 objective 1 active, and used the deployed 20260923e server binaries and current copied world database.",
+    "observation": "Moawi again rendered with a yellow objective marker. A right-click and camera-targeting attempts did not produce the client's 'Press [Mouse Button 2] to talk' prompt. The server log contains no RequestNPCConverse and the copied character objective remained active, so this does not establish a server-side conversation failure or completion.",
+    "artifacts": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-67-moawi-click/02-moawi-before-click.png", "sha256": "751739cdb51298a3fba6e9a834e3d2c3967ec86f38500430c683134a865b51dc"},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-67-moawi-click/game.log", "sha256": "894ecb6e1ff83f029b6907229dd8f3e4c975d8b83f047c771e9c72a47a77bbad"}
+    ]
+  },
+  "client_replay": {
+    "date": "2026-09-23",
+    "tier": "observed",
+    "diagnostic_input": "Isolated Specialist character copied from playthrough-59, with mission 1407 objective 1 injected active and position set to (816.0,302.1,505.2), rotation 4.71, near world-seed Moawi spawnpool 64; original world seed restored after the run.",
+    "observation": "A yellow objective marker appeared over the nearby Forean elder. The game log has no RequestNPCConverse call from scripted clicks, and the mission objective remained active. Objective completion was not demonstrated by this replay.",
+    "artifacts": [
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-61/01-before-center-click.png", "sha256": "b8477b17745f6b10dfa8831a87bc7289e84c73afeb97e0277073ee657e58cbcd", "bytes": 903981},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-61/char-after.db", "sha256": "ee40d5db538177ccf4e5d948ccfabfd0648ee51a415cef472ecf6b0da14c3f58", "bytes": 204800},
+      {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-61/game.log", "sha256": "fa0dab4de02990da562c886d4b91ef53ae5c4d0fa3d26932cdfa2bd8f9f83242", "bytes": 25419}
+    ]
+  }
+}

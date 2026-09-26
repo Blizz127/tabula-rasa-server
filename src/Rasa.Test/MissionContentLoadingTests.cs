@@ -275,7 +275,8 @@ namespace Rasa.Test
             CollectionAssert.AreEquivalent(new[] { ContentPlacementKind.Creature, ContentPlacementKind.Usable }, implemented.PlacementKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentPlacementBehavior.Stationary, ContentPlacementBehavior.CreatureAi,
                 // W3: the escort objectives ("Take Milpas to Apirka").
-                ContentPlacementBehavior.Escort }, implemented.PlacementBehaviors.ToArray());
+                ContentPlacementBehavior.Escort,
+                ContentPlacementBehavior.CombatCompanion }, implemented.PlacementBehaviors.ToArray());
             CollectionAssert.AreEquivalent(new[] { ContentUsableKind.Container, ContentUsableKind.Destroyable, ContentUsableKind.Bomb, ContentUsableKind.GenericUse, ContentUsableKind.Structure }, implemented.UsableKinds.ToArray());
             CollectionAssert.AreEquivalent(new[] { MapInstancing.Shared, MapInstancing.PerCharacter }, implemented.Instancing.ToArray());
             Assert.IsTrue(implemented.Counters);
@@ -796,6 +797,71 @@ namespace Rasa.Test
             Assert.AreEqual(1, validation.LiveBindings.Count());
         }
 
+        [TestMethod]
+        public void MissionItemDropsRequireActiveObjectiveMatchingCreatureAndSuccessfulRoll()
+        {
+            var rows = new Rows();
+            rows.Counters.Add(new NpcMissionObjectiveCounterEntry
+                { MissionId = 900100, ObjectiveId = 1, CounterId = 0, InitialValue = 0, TargetValue = 12 });
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+            {
+                MissionId = 900100, ObjectiveId = 1, BindingId = 0,
+                Kind = (byte)ObjectiveBindingKind.ItemCollected, CounterId = 0,
+                ItemTemplateId = 17131, CreatureId = 7001, DropChance = 50
+            });
+            var validation = rows.Validate(MissionContentRules.Implemented);
+            Assert.AreEqual(0, validation.Gaps.Count, string.Join(" | ", validation.Gaps));
+
+            var content = new MissionContentManager(null);
+            typeof(MissionContentManager).GetProperty(nameof(MissionContentManager.Content))?.SetValue(content, validation);
+            var client = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+            var mission = new PlayerMission { MissionId = 900100, State = MissionState.Active };
+            mission.Objectives[1] = MissionObjectiveState.Incomplete;
+            client.Player.Missions[900100] = mission;
+
+            CollectionAssert.AreEqual(new uint[] { 17131 }, content.RollMissionItemDrops(client,
+                new Creature { DbId = 7001 }, () => 0.49).ToArray());
+            Assert.AreEqual(0, content.RollMissionItemDrops(client, new Creature { DbId = 7001 }, () => 0.50).Count());
+            Assert.AreEqual(0, content.RollMissionItemDrops(client, new Creature { DbId = 7002 }, () => 0.00).Count());
+            mission.Objectives[1] = MissionObjectiveState.Completed;
+            Assert.AreEqual(0, content.RollMissionItemDrops(client, new Creature { DbId = 7001 }, () => 0.00).Count());
+
+            // A player who lost the carried hearts after completion must still be able to
+            // obtain replacements for a turn-in that consumes physical items.
+            var templates = ItemManager.Instance.ItemTemplateItemClass;
+            var hadTemplate = templates.TryGetValue(17131, out var oldClass);
+            try
+            {
+                templates[17131] = (EntityClasses)10346;
+                CollectionAssert.AreEqual(new uint[] { 17131 }, content.RollMissionItemDrops(client,
+                    new Creature { DbId = 7001 }, () => 0.00).ToArray());
+            }
+            finally
+            {
+                if (hadTemplate) templates[17131] = oldClass;
+                else templates.Remove(17131);
+            }
+        }
+
+        [TestMethod]
+        public void MissionItemDropWithInvalidChanceIsWithheld()
+        {
+            var rows = new Rows();
+            rows.Counters.Add(new NpcMissionObjectiveCounterEntry
+                { MissionId = 900100, ObjectiveId = 1, CounterId = 0, InitialValue = 0, TargetValue = 12 });
+            rows.Bindings.Add(new NpcMissionObjectiveBindingEntry
+            {
+                MissionId = 900100, ObjectiveId = 1, BindingId = 0,
+                Kind = (byte)ObjectiveBindingKind.ItemCollected, CounterId = 0,
+                ItemTemplateId = 17131, CreatureId = 7001, DropChance = 101
+            });
+
+            var validation = rows.Validate(MissionContentRules.Implemented);
+            AssertGap(validation, NpcMissionObjectiveBindingEntry.TableName, "900100/1/0",
+                "item drop chance must be within (0, 100]");
+            Assert.AreEqual(0, validation.LiveBindings.Count());
+        }
+
         /// <summary>
         /// References resolved against a migrated world database: map contexts, creatures, logos and legacy
         /// objects come from its tables, missions from the loaded definitions (as the server's own
@@ -884,7 +950,7 @@ namespace Rasa.Test
                 // Placement respawn (2026-09-16): the Mires species clusters rely on it, and the validator treats it
                 // as implemented, so the capability is asserted here rather than described in a gap.
                 // S2 crate item set 19858, with the uncommon armour of BootcampCrateUncommonGear.
-                references.Items.UnionWith(new uint[] { 12209, 15803, 26879, 12208, 13713 });
+                references.Items.UnionWith(new uint[] { 12209, 15803, 26879, 12208, 13713, 2285 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -892,7 +958,7 @@ namespace Rasa.Test
                 // Drone 85, Bane Xanx 87 and Bane Miasma 88 (W3 batch 14).
                 // MissionAreaLinks places two world-seed NPCs the Wilderness missions turn in at, because their
                 // spawnpool slots never drew them: Field Sgt. Witherspoon (101) and Council Elder Moawi (38).
-                references.Creatures.UnionWith(new uint[] { 76, 77, 85, 87, 88, 101, 38 });
+                references.Creatures.UnionWith(new uint[] { 3, 76, 77, 85, 87, 88, 101, 38 });
 
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);
@@ -902,12 +968,14 @@ namespace Rasa.Test
                 Assert.IsFalse(validation.WithheldContexts.Contains(1985u));
                 Assert.AreEqual(MapInstancing.PerCharacter, validation.Catalog.InstancingFor(1985));
 
-                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011, 430 })
+                foreach (var missionId in new uint[] { 1990, 1992, 1994, 1995, 2005, 1526, 2010, 2011, 430, 479 })
                 {
                     Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
                     CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
                     Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
                 }
+                Assert.AreEqual(10346u, missions.LoadedMissions[479].ItemCounterClasses[(1u, (byte)0)]);
+                Assert.AreEqual(12, missions.LoadedMissions[479].Counters[1].Single().TargetValue);
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

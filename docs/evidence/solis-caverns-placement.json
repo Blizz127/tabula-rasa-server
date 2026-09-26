@@ -1,0 +1,94 @@
+{
+  "date": "2026-09-23",
+  "migration": "SolisCavernsPlacement",
+  "scope": "Wilderness spawnpool 184 (named Council Elder Solis, creature 42) and spawnpool 92 (unnamed Forean shaman, creature 52)",
+  "decision": "Move the named Solis pool to the original-seed shaman's Alia Caverns-side position and disable the unnamed duplicate pool. The identity match is inferred from a dated named location report, a second location pin, the original seed and original-client visibility checks. The exact final-live placement remains unverified.",
+  "field_provenance": [
+    {
+      "row": "spawnpool/184/pos_x",
+      "before": 809.3008,
+      "after": 786.8711,
+      "tier": "inferred",
+      "source": "original-seed spawnpool 92 X paired with the dated Solis location report",
+      "exact_location": "rasaworld.db spawnpool id 92 pos_x; TaRapedia Council Elder Solis rev 12872 (2007-11-06), (784.7,287.2,581.1), as transcribed in docs/evidence/bootcamp-d11-reconstruction-manifest.json GAP-SOLIS-SEED-POSITION",
+      "uncertainty": "2.2 m horizontal offset from the reported point; final-live revision unknown"
+    },
+    {
+      "row": "spawnpool/184/pos_y",
+      "before": 302.09375,
+      "after": 287.32,
+      "tier": "measured",
+      "source": "original Wilderness navmesh probe at seed pool 92 X/Z",
+      "exact_location": "old-location-results.txt seed92: floor 287.32; seed pool 92 stores 287.23828 and TaRapedia rev 12872 reports 287.2",
+      "uncertainty": "navmesh and seed height differ by 0.08 m; exact final-live actor base height unknown"
+    },
+    {
+      "row": "spawnpool/184/pos_z",
+      "before": 503.76562,
+      "after": 581.46875,
+      "tier": "inferred",
+      "source": "original-seed spawnpool 92 Z paired with the dated Solis location report",
+      "exact_location": "rasaworld.db spawnpool id 92 pos_z; TaRapedia Council Elder Solis rev 12872 (2007-11-06), (784.7,287.2,581.1), as transcribed in GAP-SOLIS-SEED-POSITION",
+      "uncertainty": "0.37 m Z difference from report; final-live revision unknown"
+    },
+    {
+      "row": "spawnpool/184/rotation",
+      "before": 5.54,
+      "after": 3.0,
+      "tier": "analogue",
+      "source": "unnamed original-seed Forean shaman at the selected position; no direct Solis facing capture",
+      "exact_location": "rasaworld.db spawnpool id 92 rotation"
+    },
+    {
+      "row": "spawnpool/92/creature_1_min_count",
+      "before": 1,
+      "after": 0,
+      "tier": "inferred",
+      "source": "avoid two Forean shaman bodies at the same position after binding the named Solis pool",
+      "exact_location": "rasaworld.db spawnpools 92 and 184; docs/evidence/bootcamp-d11-reconstruction-manifest.json GAP-SOLIS-SEED-POSITION"
+    },
+    {
+      "row": "spawnpool/92/creature_1_max_count",
+      "before": 1,
+      "after": 0,
+      "tier": "inferred",
+      "source": "same duplicate-body decision as creature_1_min_count",
+      "exact_location": "rasaworld.db spawnpools 92 and 184; GAP-SOLIS-SEED-POSITION"
+    }
+  ],
+  "corroboration": [
+    {
+      "tier": "observed",
+      "source": "TaRapedia Council Elder Solis revision 12872, dated 2007-11-06; transcribed in the repository's prior research",
+      "exact_location": "docs/evidence/bootcamp-d11-reconstruction-manifest.json GAP-SOLIS-SEED-POSITION; (784.7,287.2,581.1), 'back side of Alia Das near Alia Caverns'",
+      "limitation": "pre-shutdown report; final-live location may have changed"
+    },
+    {
+      "tier": "observed",
+      "source": "codex-tr.net map pin read 2026-09-22 in prior research",
+      "exact_location": "docs/evidence/bootcamp-d11-reconstruction-manifest.json GAP-SOLIS-SEED-POSITION; (781,577)",
+      "limitation": "undated pin; 5.6 m from TaRapedia report"
+    },
+    {
+      "tier": "observed",
+      "source": "isolated original-client runs 77-79 using compatibility client 1.16.5.0",
+      "exact_location": "run 77 05-solis-far-west.png; run 78 01-solis-old-location.png; run 79 02-solis-tab.png",
+      "finding": "The seeded named pool was behind Moawi's hut stonework from the tested walkable front approaches. In a disposable copy with named creature 42 substituted at seed pool 92, Solis rendered at the waterfall-side location with a yellow objective marker for 1407/10. The conversation was not captured; this is visual and route evidence only."
+    }
+  ],
+  "unverified": "Solis's exact final-live position and facing, whether pool 92 was his unnamed body, whether pool 184 represented a different patch state, normal travel, and the client dialogue and saved transition for 1407/10 and 1069/2.",
+  "deployment": {
+    "date": "2026-09-23",
+    "image": "rasa-dit-test:20260923f",
+    "image_id": "sha256:76e4ed12c1bbd271ef13f23b74073e0013b847b2247e2c07cd1e12b499715b99",
+    "verification": "The game connected to auth and reached Server ready! with 404 content rows and 0 gaps. The mounted rasaworld.db reports migration 20260923020000_SolisCavernsPlacement, pool 92 count 0/0, pool 184 at (786.8711,287.32,581.46875) rotation 3.0, and SQLite integrity_check ok. The live character database was not modified for this diagnostic work.",
+    "backup": {"path": "/home/blizz/backups/rasa-net/research/20260923-solis-nav/rasaworld-before-solis-deploy.db", "sha256": "fc82d6933464253ea908256c2628d8828aaea97b11f70f6270bd9439e17be785"}
+  },
+  "artifacts": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260923-solis-nav/old-location-results.txt", "sha256": "fabd319aecc502cefd79c0cc507fffe594ba1af771ffc64b21b2e512f7969d3c"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-77-solis-handoff/05-solis-far-west.png", "sha256": "1ad3612e8ec0b7bcedd6aae7d67a5ea46874d0b813fc725eb1b762487ea10393"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-78-solis-old-location/01-solis-old-location.png", "sha256": "d1e825c90e627f1a9150aba6742ca386d8484e1f8efd42c4a9f615d7c0b3222b"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-79-solis-face/02-solis-tab.png", "sha256": "b76a94eb1505bced05fc8af74b1f24d239517aa2ff418b3e662b447e85aedf26"},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-77-solis-handoff/world-before-old-location.db", "sha256": "fc82d6933464253ea908256c2628d8828aaea97b11f70f6270bd9439e17be785"}
+  ]
+}

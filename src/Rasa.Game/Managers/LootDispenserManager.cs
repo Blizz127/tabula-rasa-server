@@ -164,6 +164,7 @@ namespace Rasa.Managers
                     }
                 }
 
+                AddMissionDrops(killer, creature, loot);
                 return loot;
             }
 
@@ -192,7 +193,22 @@ namespace Rasa.Managers
                     loot.LootItems.Add(new LootItem(item, killer.Player.EntityId, 0));
             }
 
+            AddMissionDrops(killer, creature, loot);
             return loot;
+        }
+
+        private static void AddMissionDrops(Client killer, Creature creature, LootDispenser loot)
+        {
+            // Quest rolls supplement the creature's regular table or fallback; they never replace it.
+            lock (Roll)
+                foreach (var templateId in MissionContentManager.Instance.RollMissionItemDrops(killer, creature, Roll.NextDouble))
+                {
+                    var item = ItemManager.Instance.CreateFromTemplateId(templateId, 1);
+                    if (item != null)
+                        loot.LootItems.Add(new LootItem(item, killer.Player.EntityId, 0));
+                    else
+                        Logger.WriteLog(LogType.Error, $"Mission item drop template {templateId} could not be built for creature {creature.DbId}");
+                }
         }
 
         internal void Loot(Client client, Creature creature)
@@ -432,6 +448,9 @@ namespace Rasa.Managers
             if (lootItem.Taken || lootItem.Item == null)
                 return false;
 
+            // Inventory stacking may consume and zero the source item's quantity.
+            var itemTemplateId = lootItem.Item.ItemTemplateId;
+            var quantity = lootItem.Item.StackSize;
             var placed = destSlot.HasValue
                 ? InventoryManager.Instance.AddItemToInventory(client, lootItem.Item, destSlot.Value)
                 : InventoryManager.Instance.AddItemToInventory(client, lootItem.Item);
@@ -444,6 +463,8 @@ namespace Rasa.Managers
             }
 
             lootItem.Taken = true;
+
+            MissionContentManager.Instance.OnItemCollected(client, itemTemplateId, quantity);
 
             client.CallMethod(loot.EntityId, new ActorGotLootPacket(loot));
             client.CallMethod(loot.EntityId, new TakenInfoPacket(client.Player.EntityId, Taken(loot)));

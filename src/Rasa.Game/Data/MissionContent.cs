@@ -24,7 +24,9 @@ namespace Rasa.Data
         /// table (LogosManager.LogosInit) rather than content placements, so this binding's placement_id holds
         /// the logos row id and DynamicObjectManager.LogosRecovery fires it with the id it resolved.
         /// </summary>
-        LogosRecovered = 8
+        LogosRecovered = 8,
+        /// <summary>A successfully looted item advances the objective's item-class counter.</summary>
+        ItemCollected = 9
     }
 
     public enum ContentAreaShape : byte

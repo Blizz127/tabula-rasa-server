@@ -16,10 +16,8 @@ namespace Rasa.Migrations.WildernessData
     /// World seed (original): creature 42 is "Council Elder Solis"; the `logos` table places the Enhance
     /// shrine (class 7364 UsableItemDispElohLogosEnhanceV01) at 832.0/161.838/960.0 on map context 1220.
     ///
-    /// The mission is offered by Solis (giver) and turned in at Apirka (its last objective). Its TaRapedia
-    /// requirement (1407 "Too Close For Comfort") is not enforced yet: 1407 has no definition, and a
-    /// prerequisite naming an unknown mission is rejected by the content loader, so the gate is
-    /// GAP-W3-1069-GATE and lands with 1407's slice.
+    /// The mission is offered by Solis (giver) and turned in at Apirka (its last objective).
+    /// WildernessHubReceptiveGate adds the requirement after 1407's definition is seeded.
     /// </summary>
     public static class WildernessHubReceptiveReceptionRows
     {
@@ -66,7 +64,8 @@ namespace Rasa.Migrations.WildernessData
                 });
 
             // ── npc_mission ──
-            // level: inferred (the hub's first mission; TaRapedia's requirement chain starts here).
+            // Initial level 5 was inferred. WildernessHubReceptiveLevel later corrects it to
+            // the dated TaRapedia level 4; retain this historical row for migration order.
             // category 10000001: the Wilderness hub category the Training Day row uses.
             migrationBuilder.InsertData(
                 table: "npc_mission",
@@ -119,12 +118,7 @@ namespace Rasa.Migrations.WildernessData
                     "1069/1 the Enhance shrine in Alia Caverns"
                 });
 
-            // ── the prerequisite ──
-            // Deferred: TaRapedia gates 1069 on "Too Close For Comfort" (1407), but 1407 has no npc_mission row yet
-            // and the content loader rejects a prerequisite naming an unknown mission ("unknown required mission").
-            // The gate is recorded as GAP-W3-1069-GATE and lands with 1407's own slice; until then Solis offers 1069
-            // directly. The row to add when 1407 exists:
-            //   npc_mission_prerequisite (1069, or_group 0, required_mission_id 1407, required_state 4, "Too Close For Comfort")
+            // The historical prerequisite is added in WildernessHubReceptiveGate, after 1407 exists.
 
             // ── rewards ──
             migrationBuilder.InsertData(

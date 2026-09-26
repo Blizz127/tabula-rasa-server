@@ -91,8 +91,8 @@ namespace Rasa.Managers
 
         public void PerformNPCChoice(Client client, PerformNPCChoicePacket packet)
         {
-            // CONVO_TYPE_OBJECTIVECHOICE conversations have no server data yet.
-            Logger.WriteLog(LogType.Debug, $"PerformNPCChoice: mission {packet.MissionId}/{packet.ObjectiveId} choice {packet.ChoiceIdx} not implemented");
+            _missions.PerformNpcChoice(client, packet.EntityId, packet.MissionId, packet.ObjectiveId,
+                packet.PlayerFlagId, packet.ChoiceIdx);
         }
 
         public void RequestNpcConverse(Client client, RequestNPCConversePacket packet)

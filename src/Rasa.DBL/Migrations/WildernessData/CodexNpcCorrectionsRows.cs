@@ -190,7 +190,8 @@ namespace Rasa.Migrations.WildernessData
             // unnamed NPC_Forean_Shaman, already stands 2.2 m from that spot at the wiki's own height, and the
             // seed places Solis 3.1 m from Council Elder Moawi at an identical y, which reads as a deliberate
             // pairing. Whether 92 is Solis under a generic class, and whether 184 should join him or be retired,
-            // is an owner decision, not a coordinate correction. Recorded in the manifest as a gap.
+            // was kept as an evidence gap in this migration. A later original-client obstruction check
+            // and the user's evidence-bounded reconstruction choice led to SolisCavernsPlacement.
         };
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace Rasa.Managers
     using Packets.MapChannel.Server;
     using Packets.Mission.Server;
     using Repositories.Char.CharacterMission;
+    using Repositories.Char.Items;
     using Repositories.UnitOfWork;
     using Structures;
     using Structures.Char;
@@ -256,6 +257,7 @@ namespace Rasa.Managers
                             Quantity = reward.Quantity,
                             QualityId = itemTemplate.QualityId
                         };
+                        rewardItem.ModuleIds.AddRange(MissionRewardModuleBindings.For(mission.MissionId, reward.ItemTemplateId));
 
                         if (type == NpcMissionRewardType.FixedItem)
                         {
@@ -320,7 +322,7 @@ namespace Rasa.Managers
         }
 
         /// <summary>
-        /// Reveals objectives that saved progress lacks because the definition
+        /// Repairs interrupted final-kill progress and reveals objectives that saved progress lacks because the definition
         /// changed after the mission was accepted: objectives revealed on
         /// acceptance, and transitions from objectives already completed.
         /// Without this an active mission could never become completeable.
@@ -334,6 +336,18 @@ namespace Rasa.Managers
                 if (mission.State != MissionState.Active || !LoadedMissions.TryGetValue(mission.MissionId, out var definition))
                     continue;
 
+                // Older kill handling saved the last counter before the objective. Repair
+                // that interrupted commit from explicit saved progress, without another kill.
+                foreach (var objectiveId in mission.Objectives
+                    .Where(entry => entry.Value == MissionObjectiveState.Incomplete)
+                    .Select(entry => entry.Key).ToArray())
+                {
+                    if (definition.Bindings.Any(binding => binding.ObjectiveId == objectiveId && binding.Kind == (byte)ObjectiveBindingKind.Kill) &&
+                        definition.Counters.TryGetValue(objectiveId, out var counters) && counters.Count > 0 &&
+                        counters.All(counter => mission.Counters.TryGetValue((objectiveId, counter.CounterId), out var value) && value >= counter.TargetValue))
+                        CompleteBoundObjective(client, mission.MissionId, objectiveId, ObjectiveBindingKind.Kill);
+                }
+
                 var known = new HashSet<uint>(mission.Objectives.Keys);
                 var added = new List<uint>();
 
@@ -344,10 +358,18 @@ namespace Rasa.Managers
                 var completed = new Queue<uint>(mission.Objectives.Where(entry => entry.Value == MissionObjectiveState.Completed).Select(entry => entry.Key));
 
                 while (completed.Count > 0)
-                    if (definition.Transitions.TryGetValue(completed.Dequeue(), out var revealed))
+                {
+                    var sourceObjective = completed.Dequeue();
+                    // The original client sends a choice index for 1390/1. The selected
+                    // objective was persisted at choice time; replaying both ordinary
+                    // transitions would resurrect the rejected ethical branch.
+                    if (mission.MissionId == MissionBranchRules.Mission && sourceObjective == 1)
+                        continue;
+                    if (definition.Transitions.TryGetValue(sourceObjective, out var revealed))
                         foreach (var next in revealed)
                             if (definition.Objectives.ContainsKey(next) && known.Add(next))
                                 added.Add(next);
+                }
 
                 if (added.Count == 0)
                     continue;
@@ -496,9 +518,10 @@ namespace Rasa.Managers
         public bool PrerequisitesSatisfied(Manifestation player, Mission definition)
         {
             if (definition.Prerequisites.Count == 0)
-                return true;
+                return MissionBranchRules.PartTwoAvailable(player, definition.MissionId);
 
-            return definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup).Any(group => group.All(prerequisite => Holds(player, prerequisite)));
+            return definition.Prerequisites.GroupBy(prerequisite => prerequisite.OrGroup).Any(group => group.All(prerequisite => Holds(player, prerequisite))) &&
+                   MissionBranchRules.PartTwoAvailable(player, definition.MissionId);
         }
 
         // NotAssigned means the character has no row for the required mission at all.
@@ -764,16 +787,55 @@ namespace Rasa.Managers
             if (!definition.HasObjectiveConversation(objectiveId, creature.Npc.NpcPackageId, playerFlagId))
                 return;
 
+            // A choice body is completed by PerformNPCChoice, which carries the
+            // selected index. Completing it as a plain objective loses the branch.
+            if (definition.ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objectiveId &&
+                    conversation.NpcPackageId == creature.Npc.NpcPackageId && conversation.PlayerFlagId == playerFlagId &&
+                    conversation.ConvoType == 3))
+                return;
+
             if (!IsInConversationRange(player, creature))
                 return;
 
+            if (MissionBranchRules.IsAlternativeBlocked(mission, missionId, objectiveId))
+                return;
+
             CommitObjectiveProgress(client, definition, mission, objectiveId);
+        }
+
+        public void PerformNpcChoice(Client client, ulong npcEntityId, uint missionId, uint objectiveId,
+            uint playerFlagId, int choiceIndex)
+        {
+            if (!TryResolveNpc(client, npcEntityId, out var creature) ||
+                !LoadedMissions.TryGetValue(missionId, out var definition) ||
+                !client.Player.Missions.TryGetValue(missionId, out var mission) ||
+                mission.State != MissionState.Active ||
+                !mission.Objectives.TryGetValue(objectiveId, out var status) || status != MissionObjectiveState.Incomplete ||
+                !IsInConversationRange(client.Player, creature) ||
+                !MissionBranchRules.TryChoiceOutcome(missionId, objectiveId, choiceIndex, out var outcome))
+                return;
+
+            // CHOICEBODY=3 and CHOICE1/2/3=4/5/6 in the recovered client table.
+            if (!definition.ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objectiveId &&
+                    conversation.NpcPackageId == creature.Npc.NpcPackageId && conversation.PlayerFlagId == playerFlagId &&
+                    conversation.ConvoType == 3) ||
+                !definition.ObjectiveConversations.Any(conversation => conversation.ObjectiveId == objectiveId &&
+                    conversation.NpcPackageId == creature.Npc.NpcPackageId && conversation.PlayerFlagId == playerFlagId &&
+                    conversation.ConvoType == (uint)(choiceIndex + 3)) ||
+                !definition.Objectives.ContainsKey(outcome))
+                return;
+
+            CommitObjectiveProgress(client, definition, mission, objectiveId, choiceOutcome: outcome);
         }
 
         /// <summary>
         /// Completes an objective through one of its content bindings (area, use, kill...), once.
         /// </summary>
         public void CompleteBoundObjective(Client client, uint missionId, uint objectiveId, ObjectiveBindingKind kind)
+            => CompleteBoundObjective(client, missionId, objectiveId, kind, null, 0);
+
+        internal void CompleteBoundObjective(Client client, uint missionId, uint objectiveId, ObjectiveBindingKind kind,
+            NpcMissionObjectiveCounterEntry counter, int counterValue)
         {
             if (!IsInWorld(client) || !LoadedMissions.TryGetValue(missionId, out var definition))
             {
@@ -795,7 +857,10 @@ namespace Rasa.Managers
                 return;
             }
 
-            CommitObjectiveProgress(client, definition, mission, objectiveId);
+            if (MissionBranchRules.IsAlternativeBlocked(mission, missionId, objectiveId))
+                return;
+
+            CommitObjectiveProgress(client, definition, mission, objectiveId, counter: counter, counterValue: counterValue);
         }
 
         /// <summary>
@@ -838,7 +903,9 @@ namespace Rasa.Managers
         /// Completes a validated incomplete objective: its reveals and the content reactions commit together,
         /// then memory and the client follow in the client's expected order.
         /// </summary>
-        private void CommitObjectiveProgress(Client client, Mission definition, PlayerMission mission, uint objectiveId, ContentEvent? trigger = null)
+        private void CommitObjectiveProgress(Client client, Mission definition, PlayerMission mission, uint objectiveId,
+            ContentEvent? trigger = null, NpcMissionObjectiveCounterEntry counter = null, int counterValue = 0,
+            uint? choiceOutcome = null)
         {
             var player = client.Player;
             var missionId = definition.MissionId;
@@ -849,7 +916,9 @@ namespace Rasa.Managers
             if (mission.Timers.TryGetValue(objectiveId, out var runningTimer) && runningTimer.HasExpired(nowMs))
                 return;
 
-            if (definition.Transitions.TryGetValue(objectiveId, out var next))
+            if (choiceOutcome is uint selected)
+                revealed.Add(selected);
+            else if (definition.Transitions.TryGetValue(objectiveId, out var next))
                 foreach (var revealedId in next)
                     if (!mission.Objectives.ContainsKey(revealedId) && !revealed.Contains(revealedId))
                         revealed.Add(revealedId);
@@ -859,6 +928,8 @@ namespace Rasa.Managers
             var timers = StartTimers(definition, revealed, nowMs);
 
             var state = new ContentState(player);
+            if (counter != null)
+                state.PlanCounter(missionId, objectiveId, counter.CounterId, counterValue);
             state.PlanObjective(missionId, objectiveId, MissionObjectiveState.Completed);
             foreach (var revealedId in revealed)
                 state.PlanObjective(missionId, revealedId, MissionObjectiveState.Incomplete);
@@ -877,6 +948,8 @@ namespace Rasa.Managers
                 // Planned after the trigger's actions are staged, so its conditions see their fact changes.
                 reaction = Content.Plan(new ContentEvent(ContentRuleEvent.ObjectiveCompleted, player.MapContextId, missionId, objectiveId), state);
 
+                if (counter != null)
+                    unitOfWork.CharacterMissions.UpsertCounter(player.Id, missionId, objectiveId, counter.CounterId, counterValue);
                 unitOfWork.CharacterMissions.UpdateObjectiveStatus(player.Id, missionId, objectiveId, (uint)MissionObjectiveState.Completed);
                 if (runningTimer != null)
                     unitOfWork.CharacterMissions.SetObjectiveTimer(player.Id, missionId, objectiveId, null, null, false);
@@ -901,6 +974,16 @@ namespace Rasa.Managers
                 mission.Timers[revealedId] = timer;
             mission.ChangeTime = changeTime;
 
+            if (counter != null)
+            {
+                mission.Counters[(objectiveId, counter.CounterId)] = counterValue;
+                if (definition.ItemCounterClasses.TryGetValue((objectiveId, counter.CounterId), out var itemClassId))
+                    client.CallMethod(player.EntityId, new UpdateObjectiveItemCounterPacket(
+                        missionId, objectiveId, itemClassId, (uint)counterValue, (uint)counter.TargetValue));
+                else
+                    client.CallMethod(player.EntityId, new UpdateObjectiveCounterPacket(
+                        missionId, objectiveId, counter.CounterId, counterValue, counter.InitialValue, counter.TargetValue));
+            }
             client.CallMethod(player.EntityId, new ObjectiveCompletedPacket(missionId, objectiveId));
 
             // Recv_MissionCompleteable acts only on a change, and ObjectiveRevealed
@@ -1021,9 +1104,19 @@ namespace Rasa.Managers
             if (selectable.Count > 0)
                 itemRewards.Add(selectable[selectionIdx.Value]);
 
+            // Collection objectives carry actual items. Keep those items and the mission reward in
+            // one transaction: a failed payout must leave the character able to turn in again.
+            var consumption = PlanMissionItemConsumption(player, definition, mission);
+            if (consumption == null)
+            {
+                Logger.WriteLog(LogType.Debug, $"{caller}: collection items missing for mission {missionId}; turn-in refused for character {player.Id}");
+                return;
+            }
+
             // Every item needs its own free slot in its inventory category before anything commits:
             // a full category refuses the turn-in rather than consuming the mission without the item.
-            var placements = PlanRewardSlots(player, itemRewards);
+            var placements = PlanRewardSlots(player, missionId, itemRewards,
+                consumption.Where(change => change.Amount == change.StackBefore).Select(change => change.Slot).ToHashSet());
 
             if (placements == null)
             {
@@ -1059,7 +1152,12 @@ namespace Rasa.Managers
 
                 // Mission state and currency/experience commit together so a crash
                 // can neither pay twice nor consume the mission unpaid.
-                using var transaction = placements.Count > 0 ? unitOfWork.BeginTransaction() : null;
+                using var transaction = placements.Count > 0 || consumption.Count > 0 ? unitOfWork.BeginTransaction() : null;
+
+                foreach (var change in consumption)
+                    if (!unitOfWork.Items.StageConsumeItemStack(client.AccountEntry.Id, player.Id,
+                        (uint)InventoryType.Personal, change.Slot, change.Item.Id, change.StackBefore, change.Amount))
+                        throw new InvalidOperationException($"collection item {change.Item.Id} changed before mission {missionId} turn-in");
 
                 // Item rows get their ids inside the transaction; nothing is visible unless all of it commits.
                 foreach (var placement in placements)
@@ -1088,6 +1186,20 @@ namespace Rasa.Managers
 
             mission.State = MissionState.Completed;
             mission.ChangeTime = changeTime;
+
+            foreach (var change in consumption)
+            {
+                change.Item.StackSize = change.StackBefore - change.Amount;
+                if (change.Item.StackSize == 0)
+                {
+                    player.Inventory.PersonalInventory[(int)change.Slot] = 0;
+                    EntityManager.Instance.DestroyPhysicalEntity(client, change.Item.EntityId, EntityType.Item);
+                    client.CallMethod(SysEntity.ClientInventoryManagerId,
+                        new InventoryRemoveItemPacket(InventoryType.Personal, change.Item.EntityId));
+                }
+                else
+                    client.CallMethod(change.Item.EntityId, new SetStackCountPacket(change.Item.StackSize));
+            }
 
             if (credits != 0)
             {
@@ -1179,11 +1291,62 @@ namespace Rasa.Managers
             public uint Slot;
         }
 
+        private sealed class ItemConsumption
+        {
+            public Item Item;
+            public uint Slot;
+            public uint StackBefore;
+            public uint Amount;
+        }
+
+        /// <summary>Plan the actual item-class stacks required by completed collection objectives.</summary>
+        private static List<ItemConsumption> PlanMissionItemConsumption(Manifestation player, Mission definition, PlayerMission mission)
+        {
+            var result = new List<ItemConsumption>();
+            var requirements = definition.ItemCounterClasses
+                .Where(entry => mission.Objectives.TryGetValue(entry.Key.ObjectiveId, out var status) &&
+                    status == MissionObjectiveState.Completed)
+                .Select(entry => new
+                {
+                    ItemClass = entry.Value,
+                    Target = definition.Counters.TryGetValue(entry.Key.ObjectiveId, out var counters)
+                        ? counters.FirstOrDefault(counter => counter.CounterId == entry.Key.CounterId)?.TargetValue ?? 0 : 0
+                })
+                .GroupBy(entry => entry.ItemClass)
+                .Select(group => (ItemClass: group.Key, Target: group.Sum(entry => (long)entry.Target)));
+
+            foreach (var requirement in requirements)
+            {
+                var remaining = requirement.Target;
+                var stacks = player.Inventory.PersonalInventory
+                    .Select((entityId, slot) => (Item: EntityManager.Instance.GetItem(entityId), Slot: (uint)slot))
+                    .Where(entry => entry.Item?.ItemTemplate != null &&
+                        (uint)entry.Item.ItemTemplate.Class == requirement.ItemClass && entry.Item.StackSize > 0)
+                    .OrderBy(entry => entry.Item.StackSize);
+
+                foreach (var stack in stacks)
+                {
+                    if (remaining <= 0)
+                        break;
+                    var amount = (uint)Math.Min(remaining, stack.Item.StackSize);
+                    result.Add(new ItemConsumption
+                    {
+                        Item = stack.Item, Slot = stack.Slot, StackBefore = stack.Item.StackSize, Amount = amount
+                    });
+                    remaining -= amount;
+                }
+                if (remaining > 0)
+                    return null;
+            }
+            return result;
+        }
+
         /// <summary>
         /// A free personal-inventory slot in each reward's category (0-49 equipment ... 200-249 misc), lowest first,
         /// with the item built but not yet saved; null when any reward does not fit.
         /// </summary>
-        private static List<RewardPlacement> PlanRewardSlots(Manifestation player, IReadOnlyList<NpcMissionRewardEntry> rewards)
+        private static List<RewardPlacement> PlanRewardSlots(Manifestation player, uint missionId,
+            IReadOnlyList<NpcMissionRewardEntry> rewards, ISet<uint> vacatedSlots)
         {
             var placements = new List<RewardPlacement>();
             var taken = new HashSet<uint>();
@@ -1201,7 +1364,7 @@ namespace Rasa.Managers
                 uint? slot = null;
 
                 for (var candidate = offset; candidate < offset + 50 && candidate < inventory.Count; candidate++)
-                    if (inventory[(int)candidate] == 0 && taken.Add(candidate))
+                    if ((inventory[(int)candidate] == 0 || vacatedSlots.Contains(candidate)) && taken.Add(candidate))
                     {
                         slot = candidate;
                         break;
@@ -1220,7 +1383,9 @@ namespace Rasa.Managers
                         StackSize = reward.Quantity,
                         CurrentHitPoints = classInfo.MaxHitPoints,
                         Crafter = "",
-                        Color = 2139062144
+                        Color = 2139062144,
+                        LootModules = MissionRewardModuleBindings.For(missionId, reward.ItemTemplateId)
+                            .Select(moduleId => new ItemLootModule(moduleId, null)).ToArray()
                     }
                 });
             }
@@ -1381,6 +1546,7 @@ namespace Rasa.Managers
             var dispensable = new Dictionary<uint, MissionInfo>();
             var completeable = new Dictionary<uint, RewardInfo>();
             var objectives = new List<CompleteableObjectives>();
+            var choices = new List<CompleteableObjectives>();
 
             foreach (var definition in LoadedMissions.Values)
             {
@@ -1401,11 +1567,20 @@ namespace Rasa.Managers
                 if (definition.MissionReciver == creature.DbId && progress.IsCompleteable(definition))
                     completeable.Add(definition.MissionId, definition.MissionConstantData.RewardInfo);
 
-                foreach (var conversation in definition.ObjectiveConversations)
-                    if (conversation.NpcPackageId == creature.Npc.NpcPackageId &&
-                        progress.Objectives.TryGetValue(conversation.ObjectiveId, out var status) &&
-                        status == MissionObjectiveState.Incomplete)
-                        objectives.Add(new CompleteableObjectives((int)definition.MissionId, (int)conversation.ObjectiveId, (int)conversation.PlayerFlagId));
+                foreach (var conversation in definition.ObjectiveConversations.Where(conversation =>
+                             conversation.NpcPackageId == creature.Npc.NpcPackageId &&
+                             progress.Objectives.TryGetValue(conversation.ObjectiveId, out var status) &&
+                             status == MissionObjectiveState.Incomplete &&
+                             !MissionBranchRules.IsAlternativeBlocked(progress, definition.MissionId, conversation.ObjectiveId))
+                         .GroupBy(conversation => (conversation.ObjectiveId, conversation.PlayerFlagId)))
+                {
+                    var topic = new CompleteableObjectives((int)definition.MissionId,
+                        (int)conversation.Key.ObjectiveId, (int)conversation.Key.PlayerFlagId);
+                    if (conversation.Any(row => row.ConvoType == 3))
+                        choices.Add(topic);
+                    else
+                        objectives.Add(topic);
+                }
             }
 
             if (dispensable.Count > 0)
@@ -1416,6 +1591,9 @@ namespace Rasa.Managers
 
             if (objectives.Count > 0)
                 convoDataDict.Add(ConversationType.ObjectiveComplete, objectives);
+
+            if (choices.Count > 0)
+                convoDataDict.Add(ConversationType.ObjectiveChoice, choices);
         }
 
         /// <summary>
@@ -1449,7 +1627,8 @@ namespace Rasa.Managers
                 if (definition.ObjectiveConversations.Any(conversation =>
                         conversation.NpcPackageId == creature.Npc.NpcPackageId &&
                         progress.Objectives.TryGetValue(conversation.ObjectiveId, out var objectiveStatus) &&
-                        objectiveStatus == MissionObjectiveState.Incomplete))
+                        objectiveStatus == MissionObjectiveState.Incomplete &&
+                        !MissionBranchRules.IsAlternativeBlocked(progress, definition.MissionId, conversation.ObjectiveId)))
                     objective.Add(definition.MissionId);
             }
 

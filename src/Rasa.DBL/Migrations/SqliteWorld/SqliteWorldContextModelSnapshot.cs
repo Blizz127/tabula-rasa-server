@@ -1665,6 +1665,10 @@ namespace Rasa.Migrations.SqliteWorld
                         .HasColumnType("INTEGER")
                         .HasColumnName("destroying_hit_only");
 
+                    b.Property<double>("DropChance")
+                        .HasColumnType("REAL")
+                        .HasColumnName("drop_chance");
+
                     b.Property<byte>("EquipMatch")
                         .HasColumnType("INTEGER")
                         .HasColumnName("equip_match");

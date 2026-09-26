@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "Recovered-client first objective of Wilderness mission 427, Lurking In The Shadows",
+  "client": "Recovered 1.16.5.0 client against isolated compatible emulator; final shutdown revision unverified",
+  "diagnostic_inputs": [
+    "Run 58 copied run 57's Specialist character with mission 427 active and moved it from Caufield to (537.0,289.27734,517.19) near original world-seed Arms Supplier Oliver spawnpool 180. This position edit is test scaffolding, not earned travel.",
+    "The isolated world database was restored to the original run-24 seed after the run; the live mounted databases were not modified."
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-58/02-oliver-world.png; original world seed spawnpool(180), creature(103); playthrough-58/game.log",
+      "finding": "Oliver appeared beside the diagnostically moved character with a visible objective marker and right-click talk prompt while the tracker showed Speak to Oliver."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-58/03-oliver-dialogue.png",
+      "finding": "Right-click opened the Arms Supplier Oliver mission 427 Objective Completion window. Its text directed the player toward Proctor Fulgor and taking the ammunition shipment back to Caufield."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-58/04-oliver-objective-advanced.png; playthrough-58/char-after.db character_mission_objective where character_id=1 and mission_id=427",
+      "finding": "Continue closed the conversation and displayed New Objective: Kill Proctor Fulgor. The saved database records objective 1 status 2 (complete) and objective 6 status 1 (active), with mission 427 still active."
+    }
+  ],
+  "limitations": [
+    "This verifies compatible-client and emulator behavior only; final-live server behavior and quest gating are not independently established.",
+    "The character reached Oliver by a diagnostic position edit. Normal combat-zone travel was not exercised.",
+    "The Proctor Fulgor kill, return to Caufield, rewards and relog persistence remain unverified in this run."
+  ],
+  "artifacts": [
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-58/02-oliver-world.png", "sha256": "eb659fd960fa6b1e880eb91197ce7ee63976b43f554cd7d971e8bd88d7a66758", "bytes": 959980},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-58/03-oliver-dialogue.png", "sha256": "1a6ba5afcf4ce141d42584c6004fef268dea751cf51525bf331fc85abbbfe61c", "bytes": 892214},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-58/04-oliver-objective-advanced.png", "sha256": "ccc1200a4ed2156e34bda5223394bb45713fd105c5484ddff9b505ef8985c012", "bytes": 994350},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-58/char-after.db", "sha256": "a330b1f16b7a239fd4d8cd06a6e034990f40e1300e3623d6c13d0c7c5b3c970b", "bytes": 204800},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-58/game.log", "sha256": "121f1a034272b872ab839bf700922a47343e7994d8111905dc57257025224438", "bytes": 13317},
+    {"path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db", "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50", "bytes": 4308992}
+  ]
+}

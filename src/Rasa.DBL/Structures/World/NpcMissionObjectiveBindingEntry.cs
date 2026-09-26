@@ -56,6 +56,11 @@ namespace Rasa.Structures.World
         [Required]
         public uint ItemTemplateId { get; set; }
 
+        /// <summary>Chance in percent for an active item-collection objective to drop this template from CreatureId.</summary>
+        [Column("drop_chance")]
+        [Required]
+        public double DropChance { get; set; }
+
         [Column("item_set_id")]
         [Required]
         public uint ItemSetId { get; set; }

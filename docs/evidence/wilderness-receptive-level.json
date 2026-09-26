@@ -1,0 +1,14 @@
+{
+  "migration": "20260923011000_WildernessHubReceptiveLevel",
+  "date": "2026-09-23",
+  "row": "npc_mission[1069].level",
+  "previous_value": 5,
+  "value": 4,
+  "tier": "observed",
+  "source": "TaRapedia Receptive Reception pre-shutdown revision",
+  "exact_location": "missions['Receptive Reception'].fields.Level: value 4, set_ts 2008-01-26T01:30:50Z, set_revid 27740; last pre-shutdown page revision 2008-03-07T11:33:11Z",
+  "source_artifact": { "path": "/home/blizz/backups/rasa-net/research/20260915-wilderness-bulk/work/tarapedia.json", "sha256": "d47217995c4bf15a7fb285078ebb72d010e53909c2ca731e8f35296d208834e0", "bytes": 4630136 },
+  "confidence": "high for the January–March 2008 listing; medium for the shutdown target because no later captured mission level has been found",
+  "deployment": { "date": "2026-09-23", "method": "matching data update and migration-history row applied to mounted SQLite world; game service restarted", "result": "npc_mission[1069].level=4; image rasa-dit-test:20260923b connected to auth, reached Server ready!, and loaded 397 content rows with 0 gaps" },
+  "unverified": "The final-live server mission level and whether the level field affected offer eligibility or only display are not directly captured. The original client mission text does not provide a level."
+}

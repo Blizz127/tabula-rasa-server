@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-23",
+  "tier": "observed",
+  "client": "original compatibility client 1.16.5.0 under Wine in an isolated Xvfb harness",
+  "server": {
+    "source": "deployed rasa-dit-test:20260923e binaries copied into the isolated harness",
+    "game_dll_sha256": "cc7f383d643f7b593d9e77128bf0e2987a6347486ccdc81dc84c39da45808997",
+    "world_db_sha256": "57f78cdb2154d52a408fc885a1314dfcb550f92f2cdee6d23670e84443201f34"
+  },
+  "diagnostic_setup": "A copied test character, Alden (id 1), had mission 1390 objective 1 inserted active and was positioned at (792, 298.5, 115) near world-seed Elder Quillas. This bypasses normal acceptance and travel. No live character data was changed.",
+  "observation": "The client rendered Quillas's yellow objective marker and 'Conscientious Objector' Objective Completion window with the two original choice lines. Clicking 'Tell him that Milpas is free to leave Alia Das.' closed the dialogue and displayed New Objective: 'Speak to Quillas again.' The server log records RequestNPCConverse and PerformNPCChoice. The stopped copied character database records mission 1390 objective 1 status 2 and objective 2 status 1, with no arrest-route objective 3. SQLite integrity_check returned ok.",
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-64-conscientious/09-quillas-dialogue.png",
+      "sha256": "91513db8baced70ae22c6b69e385f8a14ad8581fd09e633ec0cfe02cbb04ad44",
+      "location": "left dialogue window, choice lines at image y 461 and 478"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-64-conscientious/10-release-choice.png",
+      "sha256": "f95b39adcb2cf084a096696d9b4f793bdf2edb1d7b9424f26a5ba6b3cddf10ec",
+      "location": "New Objective text at image y 197-233"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-64-conscientious/game.log",
+      "sha256": "ced682a20898b9a92a0e3d73024b75372d677aa9cb47ce6ed25be39fc3017ef7",
+      "location": "04:03:01.179 RequestNPCConverse; 04:03:16.878 PerformNPCChoice"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-64-conscientious/char-after.db",
+      "sha256": "7af4e0627f720cf78a09f0095f895b00e0d97a65550e465e2bb5be9ec4fc7ab1",
+      "location": "character_mission_objective WHERE character_id=1 AND mission_id=1390"
+    }
+  ],
+  "unverified": [
+    "Natural mission acceptance and travel to Quillas were bypassed by the diagnostic setup.",
+    "The arrest choice and both complete escort and Part Two routes still need original-client playthroughs.",
+    "Original final-live server packets and reward amounts remain unavailable."
+  ]
+}
