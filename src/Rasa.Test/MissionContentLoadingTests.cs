@@ -1108,6 +1108,23 @@ namespace Rasa.Test
                     Assert.IsTrue(missions.LoadedMissions[missionId].HasObjectiveConversation(1, package, 1), $"mission {missionId}");
                 }
 
+                // MissingMissionGivers: the four givers Ten Ton Hammer places stand live in their shared maps as stationary NPCs,
+                // Hanna with her client package 423; 1741, 1744, 390 and 818 are offerable through the receivers' own packages
+                // (1862's reward templates are not loaded here; MissingMissionGiversTests covers it).
+                var givers = new[] { (1148u, 199950u, 0u), (1148u, 199951u, 0u), (1761u, 199952u, 423u), (1764u, 199953u, 0u) };
+                foreach (var (map, id, package) in givers)
+                {
+                    var placement = ContentMaterializer.PlacementsToSpawn(validation, map).SingleOrDefault(candidate => candidate.Id == id);
+                    Assert.IsNotNull(placement, $"giver {id} spawns on {map}");
+                    Assert.AreEqual((id, package, (byte)ContentPlacementBehavior.Stationary, 0u), (placement.CreatureId, placement.NpcPackageId, placement.Behavior, placement.PresentConditionId), $"giver {id}");
+                }
+                foreach (var (missionId, objectiveId, package) in new[] { (1741u, 1u, 2049u), (1744u, 4u, 2025u), (390u, 1u, 190u), (818u, 1u, 423u) })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].HasObjectiveConversation(objectiveId, package, 1), $"mission {missionId}");
+                }
+
                 // Training Officer Kincaid (WildernessArrivalTrainingDay): the 1526 receiver and class trainer stands live in shared
                 // Alia Das at the measured barracks position with the trainer package, always present.
                 var kincaid = aliaDasPlacements[198685];

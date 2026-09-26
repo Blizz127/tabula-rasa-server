@@ -1,0 +1,294 @@
+{
+ "purpose": "Navmesh probes behind MissingMissionGivers (2026-09-26): the floor under each new mission giver's reading, whether that floor is joined to the settlement's waypoint, the re-probe that holds Col. Almos, and Warrior Mela's move to a dated reading.",
+ "date": "2026-09-26",
+ "migration": "MissingMissionGivers",
+ "navmesh_files": {
+  "adv_foreas_concordia_divide.nav": {
+   "sha256": "c5e9a352fcf78cb0c2f1a313dbd5d442da8c355564a4dbfce3b9e22983516ede"
+  },
+  "adv_foreas_concordia_palisades.nav": {
+   "sha256": "a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f"
+  },
+  "adv_arieki_torden_incline.nav": {
+   "sha256": "14ba6399defe9bddb1f2bca31e1978fc510d34f22e1de06c2dd43144146ddf34"
+  },
+  "adv_arieki_torden_plains.nav": {
+   "sha256": "033b7c68a9dfd1476d855c9adbe74c9dd13404c430b567812ec3700fd208e41b"
+  }
+ },
+ "method": {
+  "floor": "surface - 0.276 m (WorldPlacementFloorSnapRows.OriginalSpawnOffset), as every placement since WorldPlacementFloorSnap",
+  "surfaces_under_xz": "every polygon directly under the exact (x, z): DtNavMeshQuery.FindNearestPoly with half-extents (0.05, 0.3, 0.05) stepped 0.25 m through the listed height band, keeping only results flagged over the polygon, height from GetPolyHeight at (x, z). Unlike NavMeshQuery.GroundHeight (extents 4, 8, 4) this cannot report a neighbouring polygon's height as a level of the column.",
+  "route": "DtNavMeshQuery.FindPath from the polygon under the route_from marker to that surface's own polygon; complete when the corridor ends on it.",
+  "tool": "a console over src/Rasa.Navigation (DotRecast.Detour 2026.3.1), run in mcr.microsoft.com/dotnet/sdk:5.0; research/20260926-missing-npcs/tools/navprobe is the GroundHeight-based predecessor whose \"levels\" column produced the 176.12 artefact"
+ },
+ "probes": {
+  "simpson": {
+   "map_context_id": 1148,
+   "navmesh": "adv_foreas_concordia_divide.nav",
+   "reading": {
+    "xyz": [
+     -34.3,
+     121.1,
+     426.8
+    ],
+    "basis": "mean of TTH (-34.6, 121.1, 426.8; 2007-10-23/24) and TaRapedia (-34.0, 121.1, 426.8; rev 30336 2008-04-16)"
+   },
+   "route_from": {
+    "label": "Waypoint: Foreas Base (uimapmarker)",
+    "xyz": [
+     -33.55,
+     116.18,
+     564.44
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": -34.3,
+     "z": 426.8,
+     "surface": 116.133,
+     "floor": 115.857,
+     "path": "PARTIAL",
+     "path_polys": 25
+    },
+    {
+     "x": -34.3,
+     "z": 426.8,
+     "surface": 121.2,
+     "floor": 120.924,
+     "path": "complete",
+     "path_polys": 25
+    },
+    {
+     "x": -34.3,
+     "z": 426.8,
+     "surface": 144.6,
+     "floor": 144.324,
+     "path": "PARTIAL",
+     "path_polys": 69
+    }
+   ],
+   "note": "Three stacked surfaces under x,z; the reading's 121.1 is the command-centre floor at 121.200 (0.10 m), the only one of the three joined to the waypoint. Placed at floor 120.924."
+  },
+  "tarina": {
+   "map_context_id": 1148,
+   "navmesh": "adv_foreas_concordia_divide.nav",
+   "reading": {
+    "xyz": [
+     -55.1,
+     116.4,
+     507.7
+    ],
+    "basis": "TTH foreas-base-missions (2007-10-23), the only reading"
+   },
+   "route_from": {
+    "label": "Waypoint: Foreas Base (uimapmarker)",
+    "xyz": [
+     -33.55,
+     116.18,
+     564.44
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": -55.1,
+     "z": 507.7,
+     "surface": 69.0,
+     "floor": 68.724,
+     "path": "PARTIAL",
+     "path_polys": 10
+    },
+    {
+     "x": -55.1,
+     "z": 507.7,
+     "surface": 116.415,
+     "floor": 116.139,
+     "path": "complete",
+     "path_polys": 9
+    }
+   ],
+   "note": "The reading's 116.4 is the surface at 116.415 (0.015 m), joined to the waypoint; the 69.0 surface is a lower level with a partial route. Placed at floor 116.139."
+  },
+  "mela": {
+   "map_context_id": 1148,
+   "navmesh": "adv_foreas_concordia_divide.nav",
+   "reading": {
+    "xyz": [
+     222.9,
+     167.8,
+     977.0
+    ],
+    "basis": "TTH foreas-base-missions (2007-10-23): \"Find Warrior Mala at 222.9, 167.8, 977.0\""
+   },
+   "route_from": {
+    "label": "Waypoint: Thoria Das (uimapmarker)",
+    "xyz": [
+     265.45,
+     167.69,
+     1110.51
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": 222.9,
+     "z": 977.0,
+     "surface": 167.89,
+     "floor": 167.614,
+     "path": "complete",
+     "path_polys": 22
+    }
+   ],
+   "note": "One surface at 167.890 (reading 167.8, 0.09 m), joined to the Thoria Das waypoint (and to the Foreas Base waypoint, 210 polygons). Between the client's \"Thoria Das\" label (269.36, 1030.19) and its weapon/armour vendor markers (201.68, 936.86 / 177.44, 960.67). Pool 510117 moves here, floor 167.614."
+  },
+  "hanna": {
+   "map_context_id": 1761,
+   "navmesh": "adv_arieki_torden_incline.nav",
+   "reading": {
+    "xyz": [
+     -176.0,
+     276.0,
+     279.0
+    ],
+    "basis": "TTH guide-to-raintree-post (2008-03-11) and guide-to-nyxroq-post-part-one (2008-03-06): -176,276,279"
+   },
+   "route_from": {
+    "label": "Waypoint: Raintree Post (uimapmarker), 4.1 m away",
+    "xyz": [
+     -172.42,
+     276.45,
+     277.08
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": -176.0,
+     "z": 279.0,
+     "surface": 276.284,
+     "floor": 276.008,
+     "path": "complete",
+     "path_polys": 1
+    }
+   ],
+   "note": "One surface at 276.284 (reading 276, 0.28 m), on the waypoint's own polygon. Placed at floor 276.008."
+  },
+  "dekay": {
+   "map_context_id": 1764,
+   "navmesh": "adv_arieki_torden_plains.nav",
+   "reading": {
+    "xyz": [
+     312.3,
+     null,
+     -191.1
+    ],
+    "basis": "No coordinate exists. TTH targets-of-opportunity-torden-plains (2008-02-19): \"between the wormhole and waypoint ... pacing around a small group of Riflemen\"; the point is the midpoint of the client markers Waypoint: Irendas Penal Colony [306.16, 430.59, -166.14] and Wormhole: Irendas Penal Colony [318.47, 431.28, -216.12]; uncertainty is half the 51.5 m segment, 25.7 m."
+   },
+   "route_from": {
+    "label": "Waypoint: Irendas Penal Colony (uimapmarker)",
+    "xyz": [
+     306.16,
+     430.59,
+     -166.14
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": 312.3,
+     "z": -191.1,
+     "surface": 430.2,
+     "floor": 429.924,
+     "path": "complete",
+     "path_polys": 5
+    }
+   ],
+   "note": "One surface at 430.200 at the midpoint, joined to the waypoint. Placed at floor 429.924. The courtyard inside the 26 m radius is flat at 430.2 apart from raised structures (431.3-438.2)."
+  },
+  "almos": {
+   "map_context_id": 1244,
+   "navmesh": "adv_foreas_concordia_palisades.nav",
+   "reading": {
+    "xyz": [
+     -290.0,
+     178.0,
+     -543.6
+    ],
+    "basis": "TTH guide-to-treeback-camp (RadarX, 2007-12-02): \"Colonel Almos around -290.0, 178.0, -543.6\", the only reading"
+   },
+   "route_from": {
+    "label": "Waypoint: Viands Village (uimapmarker)",
+    "xyz": [
+     -264.82,
+     176.62,
+     -457.75
+    ]
+   },
+   "surfaces_under_xz": [
+    {
+     "x": -290.0,
+     "z": -543.6,
+     "surface": 174.843,
+     "floor": 174.567,
+     "path": "complete",
+     "path_polys": 19
+    }
+   ],
+   "within_8m": {
+    "grid_step_m": 1.0,
+    "points": 197,
+    "points_with_more_than_one_surface": 0,
+    "surface_range": [
+     172.73,
+     176.585
+    ],
+    "highest": {
+     "x": -287.0,
+     "z": -536.6,
+     "surface": 176.585,
+     "path": "complete"
+    },
+    "all_routes_complete": true,
+    "points_within_0_3_m_of_reading_y": 0,
+    "points_within_1_5_m_of_reading_y": 5
+   },
+   "nearest_floor_at_reading_height": {
+    "tolerance_m": 0.3,
+    "search_radius_m": 16,
+    "first": {
+     "x": -297.0,
+     "z": -533.6,
+     "surface": 177.728,
+     "path": "complete"
+    },
+    "distance_m": 12.21
+   },
+   "viands_village_label": {
+    "xyz": [
+     -235.15,
+     178.0,
+     -543.85
+    ],
+    "surfaces_under_xz": [
+     {
+      "x": -235.15,
+      "z": -543.85,
+      "surface": 178.118,
+      "floor": 177.842,
+      "path": "complete",
+      "path_polys": 33
+     }
+    ],
+    "note": "uimapmarker staticmarkers ui_map_key 1244-area label \"Viands Village\"; the reading's y (178.0) and z (-543.6) equal the label's to 0.25 m, and the label point has a floor at the reading's height (178.118)."
+   },
+   "correction_to_proposal": "research/20260926-missing-npcs proposed y 175.844 from an \"upper level 176.12\" at x,z. That level came from NavMeshQuery.GroundHeight probes at other heights, which snap to the nearest polygon within 4 m sideways; no surface exists at 176.12 directly under (-290, -543.6). The only surface there is 174.843, 3.16 m below the reading.",
+   "verdict": "hold: under x,z the only floor is 3.16 m below the reading; within the reading's 8 m horizontal uncertainty the floor never comes within 0.3 m of 178.0 (a /loc y matches its floor to 0.3 m or better for every other giver here: Simpson 0.10, Tarina 0.015, Hanna 0.28, Mela 0.09) and reaches only 176.59, 1.4 m low; the nearest floor at 178.0 +/- 0.3 is 12.2 m away. Together with the y/z match to the \"Viands Village\" label this is consistent with a transcription slip, so no walkable floor consistent with the whole reading is confirmed within +/-8 m (GAP-ALMOS-HEIGHT)."
+  }
+ },
+ "sources": {
+  "research": "research/20260926-missing-npcs (README.md, npcs.json, work/tth/, work/tarapedia/pages/)",
+  "markers": "research/20260926-ready-missions/work/markers-items.json and research/20260926-torden-missions/work/markers.json (client uimapmarker.pyo, 1.16.5.0)"
+ },
+ "audit_replay": {
+  "date": "2026-09-26",
+  "method": "a copy of the deployed rasaworld.db with MissingMissionGivers' rows applied, mounted as the repository root, and the world audits run against it (WorldPositionAudit, PlacementHeightAudit, PropOverlapAudit, MissionLinkAudit, WorldFloorSweep, MissionMapIndicator)",
+  "result": "26 of 26 passed, among them EveryBodyInTheWorldStandsOnTheWalkableSurface, NoBodyStandsInsideAProp, EveryMissionGiverAndReceiverIsACreatureThatSpawns and EveryObjectiveConversationPackageIsCarriedByASpawnedCreature"
+ }
+}

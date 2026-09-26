@@ -210,7 +210,10 @@ namespace Rasa.Test.Reconstruction
                 // mission ids run from the hub's 427 to the boot camp's 2011; the package ids from Elder Moawi's 38
                 // to Lt. Gerry's 199603 (MissionAreaLinks, 2026-09-17), which is what the range below covers.
                 "npc_package:id:38-199911",
-                "npc_mission:id:332-2016"
+                "npc_mission:id:332-2016",
+                // MissingMissionGivers (W3, 2026-09-26): the four mission givers Ten Ton Hammer places and their placements.
+                "creature:id:199950-199999",
+                "content_placement:id:199950-199999"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

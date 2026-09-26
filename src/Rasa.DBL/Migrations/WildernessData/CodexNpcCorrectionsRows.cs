@@ -30,8 +30,11 @@ namespace Rasa.Migrations.WildernessData
     ///     Codex's (-754, -279) lands 2.2 m from original-seed Dr. Eleanan Corman (creature 94, y 170.98) and
     ///     8.7 m from Dr. Soji, i.e. inside the family cluster our own seed already places, and its z matches
     ///     Waypoint: Ranja Gorge (z -279.5) to 0.5 m. The corroboration is this world's own seed data.
-    ///   * <b>Dr. Elise Corman</b> (spawnpool 510004, InfiniteRasa, no provenance). TaRapedia rev 34276
-    ///     (2008-09-25) gives (789.0, 294.3, 369.0), "in the hospital tent" at Alia Das; codex gives
+    ///   * <b>Dr. Elise Corman</b> (spawnpool 510004, InfiniteRasa, no provenance). TaRapedia (page 479) gives
+    ///     (789.0, 294.3, 369.0), "in the hospital tent" at Alia Das - a pre-D11 reading: present from the page's
+    ///     first revision, rev 983 (2007-06-30), and only reformatted by revs 2571 (2007-07-06), 6366 (2007-08-22)
+    ///     and 34276 (2008-09-25, section headings; this comment first cited it as the reading's date, corrected
+    ///     2026-09-26); codex gives
     ///     (785, 369), 4.0 m away. The wiki's y of 294.3 is the y our own Medical Vendor Static stands on
     ///     4.1 m from the new spot (294.33), so this is a lateral move on a floor we already hold.
     ///   * <b>Lieutenant Burke</b> (spawnpool 171, creature 96, ORIGINAL SEED). <b>This overrules the seed.</b>
@@ -179,7 +182,8 @@ namespace Rasa.Migrations.WildernessData
             // George Corman, creature 510005, InfiniteRasa. Codex read 2026-09-21; the floor hint is original-seed
             // Dr. Eleanan Corman (spawnpool 173) 2.2 m away at y 170.98. NO SOURCE Y, PROBE.
             ("spawnpool", 510005u, 1220u, -721.200, 226.021, -423.000, 1220u, -754.000, 170.842, -279.000),
-            // Dr. Elise Corman, creature 510004, InfiniteRasa. TaRapedia rev 34276 2008-09-25 (789.0, 294.3, 369.0);
+            // Dr. Elise Corman, creature 510004, InfiniteRasa. TaRapedia page 479 (789.0, 294.3, 369.0), pre-D11: set in rev 983
+            // 2007-06-30, reformatted in revs 2571/6366/34276 (34276 2008-09-25 was cited here before 2026-09-26 as its date);
             // codex 4.0 m away; our Medical Vendor Static stands 4.1 m off at y 294.33. Y is the navmesh floor, probed 2026-09-22.
             ("spawnpool", 510004u, 1220u, 810.900, 294.710, 391.700, 1220u, 789.000, 294.360, 369.000),
             // Lieutenant Burke, creature 96, ORIGINAL SEED - overruled, see the comment above.
