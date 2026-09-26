@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-09-24T06:41:51.265563+00:00",
+  "subject": "Live Game rollout of current evidence-bounded preservation source using DIT overlay",
+  "scope": "Implementation deployment, not evidence of final-live 1:1 fidelity",
+  "previous_image": {
+    "tag": "rasa_net_game:dit-relationships-20260923",
+    "id": "sha256:2f4709d450b9740fba9315796b3acb3f66601d591bf8557d4fc60643488be5d8"
+  },
+  "new_image": {
+    "tag": "rasa_net_game:dit-preservation-20260924a",
+    "id": "sha256:a2e945d97f4ab4d4b9f153fa5235f70b71ee424c7411c1957d55bbaeda3c6493"
+  },
+  "launch_command": "docker compose -f docker-compose.yml -f docker-compose.dit.yml up -d --no-deps --no-build game",
+  "backup": {
+    "method": "Stopped Game, sqlite3 .backup for character/world, copied prior overlay compose; both backups passed PRAGMA integrity_check",
+    "directory": "/home/blizz/backups/rasa-net/live-rollout-20260924a"
+  },
+  "observed": {
+    "game_running": true,
+    "restart_count": 0,
+    "mount_destinations": [
+      "/app/dit",
+      "/app/navmesh",
+      "/app/rasachar.db",
+      "/app/rasaworld.db",
+      "/app/src/Rasa.Game/appsettings.env.json"
+    ],
+    "dit_enabled": true,
+    "dit_checked_at_utc": "2026-09-24T06:41:48.4645266+00:00",
+    "character_integrity": "ok",
+    "world_integrity": "ok",
+    "world_latest_migrations": [
+      "20260924120000_BootcampLightningHitCredit",
+      "20260924090000_BootcampRetryReinforcementWalk",
+      "20260923060000_BootcampCourtyardForeanWarrior"
+    ],
+    "s5_retry_rule": [
+      [
+        1985017,
+        3,
+        2005,
+        1
+      ]
+    ],
+    "s5_retry_actions": [
+      [
+        0,
+        14,
+        198681,
+        19854
+      ],
+      [
+        1,
+        14,
+        198682,
+        19854
+      ],
+      [
+        2,
+        14,
+        198680,
+        19854
+      ]
+    ],
+    "s2_lightning_hit_binding": [
+      [
+        1992,
+        8,
+        0,
+        0
+      ]
+    ],
+    "startup_log": "Game ready; 18 content rules/414 rows/0 content gaps; navmeshes 76/78; auth authenticated. See startup-excerpt.log."
+  },
+  "verification": {
+    "full_suite": "1,335/1,335 .NET 5 tests passed before image build; overlay image focused DIT/boot-camp test subset 11/11 passed",
+    "client_login": "Recovered compatibility client reached Character Select through VPS Tailscale auth port 2116; see docs/evidence/live-login-preservation-20260924a.json. World entry and owner client unverified."
+  },
+  "sources": [
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/rasachar.db",
+      "sha256": "8273b24c0eed6265c31fc2f499025990ce8878a75a7fd8859a9e6b76cc94b0d1"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/rasaworld.db",
+      "sha256": "a2ab6aa40d5b4efab16ec0aee3c1b627532d3e2683392eba834ec8b43cea2030"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/docker-compose.dit.yml",
+      "sha256": "2d59d5de6c71283b461806723b5c4b7822b842759bec3acbed11d9e43eecc107"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/base-build.log",
+      "sha256": "86f466831eb8edb446853ed0fe7bba904225bdce61e44f4ddedaa839a3f862b7"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/dit-build.log",
+      "sha256": "38dcd58bbc70dd1a5632d0080153719497cbc10fac83baaf62bc6192e5106928"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/full-tests.log",
+      "sha256": "d181549f015cc7e56e3341d973ad1d718ae001e0168d8f1116bc27d55f5e3de0"
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/live-rollout-20260924a/startup-excerpt.log",
+      "sha256": "592b0fef25131c4117fb5162d815ab3fcdba7c9c37c813f2e76e3633f9fead43"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/.dockerignore",
+      "sha256": "49ad83e0d89ee45dbb46298843034c701a66e4b7de049817cc40995e22f1492d"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/docker-compose.dit.yml",
+      "sha256": "a106485f9e006e2345199e270eb7b4315579220d1833a574483124298fb0a952"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Game/Dit/DitBotManager.cs",
+      "sha256": "9a04891dd92bd898e87158ae86fcb294ace40ef2a493305a1e9346606d2b896d"
+    },
+    {
+      "path": "/home/blizz/servers/rasa-net/src/Rasa.Test/DitBotTests.cs",
+      "sha256": "40a8e33853a129ec1affaf8bfd19dd90de074dcc6eccecf5c99a7b64c194d22e"
+    }
+  ],
+  "limits": [
+    "Original shutdown client revision and final-live server data remain unproven.",
+    "Automated tests and successful startup do not prove gameplay fidelity.",
+    "Boot-camp complete timed route and normal S4 combat remain open."
+  ]
+}

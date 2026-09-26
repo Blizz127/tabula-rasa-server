@@ -129,7 +129,7 @@ namespace Rasa.Test.Reconstruction
             new TableProvenance("npc_mission_objective_binding",
                 keys: Cols("mission_id", "objective_id", "binding_id"),
                 required: Cols("kind", "area_id", "creature_id", "action_id", "destroying_hit_only", "equip_match",
-                    "item_template_id", "item_set_id", "target_state"),
+                    "item_template_id", "item_set_id", "target_state", "drop_chance"),
                 optional: Cols("placement_id", "counter_id"),
                 storage: Cols("comment")),
 
@@ -201,7 +201,7 @@ namespace Rasa.Test.Reconstruction
             new TableProvenance("content_item_set",
                 keys: Cols("item_set_id", "item_template_id"),
                 required: Cols("quantity"),
-                optional: Cols(),
+                optional: Cols("initial_ammo"),
                 storage: Cols()),
 
             // map_context_id here is the destination context, not a scope column.

@@ -38,6 +38,53 @@ namespace Rasa.Test.Reconstruction
         }
 
         [TestMethod]
+        public void BootcampEquipCorrectionOnlyChangesItsBindingAndRestoresItOnRollback()
+        {
+            var up = new MigrationBuilder(SeedMigrationParity.SqliteProvider);
+            var down = new MigrationBuilder(SeedMigrationParity.SqliteProvider);
+            Rasa.Migrations.BootcampData.BootcampEquipCrateGearRows.InsertData(up);
+            Rasa.Migrations.BootcampData.BootcampEquipCrateGearRows.DeleteData(down);
+
+            foreach (var builder in new[] { up, down })
+            {
+                Assert.AreEqual(1, builder.Operations.Count);
+                var update = (Microsoft.EntityFrameworkCore.Migrations.Operations.UpdateDataOperation)builder.Operations.Single();
+                Assert.AreEqual("npc_mission_objective_binding", update.Table);
+                CollectionAssert.AreEqual(new[] { "mission_id", "objective_id", "binding_id" }, update.KeyColumns);
+                CollectionAssert.AreEqual(new object[] { 1992u, 2u, (byte)0 }, update.KeyValues.Cast<object>().ToArray());
+                CollectionAssert.AreEqual(new[] { "equip_match", "item_set_id", "comment" }, update.Columns);
+                CollectionAssert.AreEqual(builder == up
+                    ? new object[] { (byte)2, 19858u, "1992/2 equip crate gear" }
+                    : new object[] { (byte)0, 0u, "1992/2 equip any" }, update.Values.Cast<object>().ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void McAllisterWalkCorrectionIsNarrowAndRestoresItsPreviousRows()
+        {
+            foreach (var rollback in new[] { false, true })
+            {
+                var builder = new MigrationBuilder(SeedMigrationParity.SqliteProvider);
+                if (rollback) Rasa.Migrations.BootcampData.BootcampMcAllisterWalkRows.DeleteData(builder);
+                else Rasa.Migrations.BootcampData.BootcampMcAllisterWalkRows.InsertData(builder);
+                Assert.AreEqual(2, builder.Operations.Count);
+                var updates = builder.Operations.Cast<Microsoft.EntityFrameworkCore.Migrations.Operations.UpdateDataOperation>().ToArray();
+                var speed = updates.Single(update => update.Table == "creature");
+                CollectionAssert.AreEqual(new[] { "id" }, speed.KeyColumns);
+                Assert.AreEqual(198500u, speed.KeyValues[0, 0]);
+                CollectionAssert.AreEqual(new[] { "walk_speed" }, speed.Columns);
+                Assert.AreEqual(rollback ? 0d : 2.5d, speed.Values[0, 0]);
+                var rule = updates.Single(update => update.Table == "content_rule");
+                CollectionAssert.AreEqual(new[] { "id" }, rule.KeyColumns);
+                Assert.AreEqual(1985014u, rule.KeyValues[0, 0]);
+                CollectionAssert.AreEqual(new[] { "event", "mission_id", "comment" }, rule.Columns);
+                CollectionAssert.AreEqual(rollback
+                    ? new object[] { (byte)6, 1990u, "1990 turned in -> McAllister walks to the gear" }
+                    : new object[] { (byte)2, 1992u, "1992 accepted -> McAllister walks to the gear" }, rule.Values.Cast<object>().ToArray());
+            }
+        }
+
+        [TestMethod]
         public void DiscoveryReadsTheRealWorldMigrationNamespacesAndRunsUp()
         {
             // Guards against a scan that passes only because it finds nothing: the real

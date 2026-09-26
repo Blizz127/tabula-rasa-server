@@ -6,7 +6,8 @@
     "xpinfo": "trpython.zip:shared/xpinfo.pyo: tuple (total, gained, baseGained, groupMod, streakMod, boosterMod, wasCritKill, wasTeamCritKill); ApplyModifier sets gained = int(gained * mod)",
     "manifestation": "trpython.zip:client/augmentations/manifestation.pyo Recv_ExperienceChanged composes 'You gained %(xp)s experience points.' plus ' [%(base)s Base XP]' and ' (+%(streakMod)s%% Kill Streak Bonus)' when streakMod > 1",
     "clientmethod": "trpython.zip:client/clientmethod.pyo Recv_SetKillStreak(count); Recv_GotLoot(creatureEntityId, items, moneyAmount) prints PM 262 'You received %(amount)s credits.'",
-    "footage": "research/20260913-bootcamp/footage/analysis transcripts (7Lrst9SG3pk A, 8VXeKzGUv0c B: final week; Ycxm8Pa1-v4 C: pre-D16.5, used only as corroboration)"
+    "footage": "research/20260913-bootcamp/footage/analysis transcripts (7Lrst9SG3pk A, 8VXeKzGUv0c B: final week; Ycxm8Pa1-v4 C: pre-D16.5, used only as corroboration)",
+    "tarapedia_experience": "TaRapedia Experience page rev 34776, 2008-10-06T14:43:33Z, Monster Experience section; archived SHA-256 94fd2c3efd3ad75add3680b3aa7bb312b3e2c54bf6bef10b275c952a70688ad1. Describes hidden creature-type XP multipliers; not an exact Tizzik Gi value."
   },
   "rules": [
     { "id": "xp.base", "value": "base10 = 625 + 42*L + 2*L^2 (i.e. 62.5 + 4.2*L + 0.2*L^2), L = creature level; gained = floor(base10 * streakMod / 10); baseGained = floor(base10 / 10)", "tier": "measured", "citations": ["observations below", "gameconstants BASE_KILL_XP 62.5 (the intercept)", "xpinfo.ApplyModifier int(gained * mod)"], "reasoning": "Two coefficients fit ten integer constraints across levels 1-9, including four streak-doubled values that only fit if the modifier is applied before truncation. Valid range observed: creature levels 1-9 with player levels 2-10; higher levels are an extrapolation." },
@@ -29,6 +30,7 @@
   ],
   "unexplained": [
     { "event": "B3-060/B4-006", "summary": "Player level 10: [101 Base XP] with 40 credits. 40 credits means level 8 (base 108), so a level-difference modifier (player 2 levels above) or a different credit source is involved. Not modelled." },
+    { "event": "A5-28", "summary": "The cut after the Tizzik Gi objective contains both 143 XP / 50 credits and 71 XP / 10 credits. The boss kill is not shown. A 1.15 hidden type multiplier applied before truncation to the fitted level-10 base 124.5 gives 143, but pair attribution, multiplier and reward order remain unverified; see bootcamp-tizzik-xp-source-reconciliation-20260924.json." },
     { "event": "B1-025, B1-032, B1-033, C1-021, C1-038, C2-05", "summary": "Plain 17, 33 and 35 experience with no credits: exactly one half or one quarter of the level 1/2 base. Probably shared-damage or ally kill credit. Not modelled." },
     { "event": "B1-028, C1-015", "summary": "Crit kills add a separate 'by Crit Killing' line equal to the base. Kill-shot criticals are not modelled." },
     { "event": "C1-030", "summary": "Pre-D16.5: a streak-annotated line whose gain equals its base. Not reproduced." }

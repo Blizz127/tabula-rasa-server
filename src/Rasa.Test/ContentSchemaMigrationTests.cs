@@ -20,7 +20,7 @@ namespace Rasa.Test
     /// rollback, and the new tables start empty.
     /// </summary>
     [TestClass]
-    public class ContentSchemaMigrationTests
+    public partial class ContentSchemaMigrationTests
     {
         private const string PreviousWorldMigration = "20260913180000_Add_map_link";
         private const string PreviousCharMigration = "20260913025737_MissionObjectiveProgress";
@@ -144,6 +144,35 @@ namespace Rasa.Test
         private const string ContentRuleBarkMigration = "20260920330000_ContentRuleBark";
         private const string ClientNamesForItemsMigration = "20260920340000_ClientNamesForItems";
         private const string CodexNpcCorrectionsMigration = "20260920370000_CodexNpcCorrections";
+        private const string RecruitLoadoutFlagsMigration = "20260922110000_RecruitLoadoutFlags";
+        private const string BootcampEquipCrateGearMigration = "20260922180000_BootcampEquipCrateGear";
+        private const string CreatureFractionalMovementRatesMigration = "20260922190000_CreatureFractionalMovementRates";
+        private const string BootcampMcAllisterWalkMigration = "20260922190100_BootcampMcAllisterWalk";
+        private const string ContentItemSetInitialAmmoMigration = "20260922200000_ContentItemSetInitialAmmo";
+        private const string BootcampCrateLoadedRifleMigration = "20260922200100_BootcampCrateLoadedRifle";
+        private const string BootcampPracticeDummyHealthMigration = "20260922210000_BootcampPracticeDummyHealth";
+        private const string BootcampFirstLoginYawMigration = "20260922220000_BootcampFirstLoginYaw";
+        private const string BootcampCrateRifleRangeMigration = "20260922230000_BootcampCrateRifleRange";
+        private const string MoawiDialogueClassMigration = "20260922234000_MoawiDialogueClass";
+        private const string MissionSpeakerDialogueClassesMigration = "20260922234500_MissionSpeakerDialogueClasses";
+        private const string BootcampRifleMeleeMigration = "20260922235000_BootcampRifleMelee";
+        private const string BootcampConradCorpsePlacementMigration = "20260922235500_BootcampConradCorpsePlacement";
+        private const string BootcampBombHullPlacementMigration = "20260922235600_BootcampBombHullPlacement";
+        private const string WildernessHubReceptiveGateMigration = "20260923010000_WildernessHubReceptiveGate";
+        private const string WildernessHubReceptiveLevelMigration = "20260923011000_WildernessHubReceptiveLevel";
+        private const string MissionItemDropChanceMigration = "20260923012000_MissionItemDropChance";
+        private const string WildernessHubFormingAlliancesMigration = "20260923013000_WildernessHubFormingAlliances";
+        private const string WildernessHubConscientiousGateMigration = "20260923014000_WildernessHubConscientiousGate";
+        private const string WildernessHubConscientiousBranchesMigration = "20260923015000_WildernessHubConscientiousBranches";
+        private const string SolisCavernsPlacementMigration = "20260923020000_SolisCavernsPlacement";
+        private const string BootcampDeSimoneCampPlacementMigration = "20260923030000_BootcampDeSimoneCampPlacement";
+        private const string BootcampCampGunnerCompanionMigration = "20260923040000_BootcampCampGunnerCompanion";
+        private const string BootcampCampArcherShamanCompanionsMigration = "20260923050000_BootcampCampArcherShamanCompanions";
+        private const string BootcampCourtyardForeanWarriorMigration = "20260923060000_BootcampCourtyardForeanWarrior";
+        private const string BootcampRetryReinforcementWalkMigration = "20260924090000_BootcampRetryReinforcementWalk";
+        private const string BootcampLightningHitCreditMigration = "20260924120000_BootcampLightningHitCredit";
+        private const string TooCloseForComfortLevelMigration = "20260924130000_TooCloseForComfortLevel";
+        private const string BootcampReinforcementPadHoldMigration = "20260924140000_BootcampReinforcementPadHold";
 
         public static readonly string[] WorldTables =
         {
@@ -225,7 +254,7 @@ namespace Rasa.Test
             foreach (var migration in context.Database.GetMigrations().TakeWhile(id => id != ContentLayerMigration))
                 context.Database.ExecuteSqlRaw("INSERT INTO \"__EFMigrationsHistory\" VALUES ({0}, '5.0.1')", migration);
             CollectionAssert.AreEqual(
-                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration },
+                new[] { ContentLayerMigration, BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration, RecruitLoadoutFlagsMigration, BootcampEquipCrateGearMigration, CreatureFractionalMovementRatesMigration, BootcampMcAllisterWalkMigration, ContentItemSetInitialAmmoMigration, BootcampCrateLoadedRifleMigration, BootcampPracticeDummyHealthMigration, BootcampFirstLoginYawMigration, BootcampCrateRifleRangeMigration, MoawiDialogueClassMigration, MissionSpeakerDialogueClassesMigration, BootcampRifleMeleeMigration, BootcampConradCorpsePlacementMigration, BootcampBombHullPlacementMigration, WildernessHubReceptiveGateMigration, WildernessHubReceptiveLevelMigration, MissionItemDropChanceMigration, WildernessHubFormingAlliancesMigration, WildernessHubConscientiousGateMigration, WildernessHubConscientiousBranchesMigration, SolisCavernsPlacementMigration, BootcampDeSimoneCampPlacementMigration, BootcampCampGunnerCompanionMigration, BootcampCampArcherShamanCompanionsMigration, BootcampCourtyardForeanWarriorMigration, BootcampRetryReinforcementWalkMigration, BootcampLightningHitCreditMigration, TooCloseForComfortLevelMigration, BootcampReinforcementPadHoldMigration },
                 context.Database.GetPendingMigrations().ToArray());
             Assert.AreEqual(PreviousWorldMigration, context.Database.GetAppliedMigrations().Last());
         }
@@ -248,7 +277,7 @@ namespace Rasa.Test
 
             context.Database.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration, RecruitLoadoutFlagsMigration, BootcampEquipCrateGearMigration, CreatureFractionalMovementRatesMigration, BootcampMcAllisterWalkMigration, ContentItemSetInitialAmmoMigration, BootcampCrateLoadedRifleMigration, BootcampPracticeDummyHealthMigration, BootcampFirstLoginYawMigration, BootcampCrateRifleRangeMigration, MoawiDialogueClassMigration, MissionSpeakerDialogueClassesMigration, BootcampRifleMeleeMigration, BootcampConradCorpsePlacementMigration, BootcampBombHullPlacementMigration, WildernessHubReceptiveGateMigration, WildernessHubReceptiveLevelMigration, MissionItemDropChanceMigration, WildernessHubFormingAlliancesMigration, WildernessHubConscientiousGateMigration, WildernessHubConscientiousBranchesMigration, SolisCavernsPlacementMigration, BootcampDeSimoneCampPlacementMigration, BootcampCampGunnerCompanionMigration, BootcampCampArcherShamanCompanionsMigration, BootcampCourtyardForeanWarriorMigration, BootcampRetryReinforcementWalkMigration, BootcampLightningHitCreditMigration, TooCloseForComfortLevelMigration, BootcampReinforcementPadHoldMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
             {
@@ -281,6 +310,14 @@ namespace Rasa.Test
             // Two of the seven entityclass rows EntityClassClientFidelity corrects, as the old import left them.
             context.Database.ExecuteSqlRaw("INSERT INTO entityclass (id, class_name, mesh_id, class_collision_role, target_flag, aug_list) VALUES (21307, 'UsableItemDispElohLogos0V01', 0, 1, 1, '')");
             context.Database.ExecuteSqlRaw("INSERT INTO entityclass (id, class_name, mesh_id, class_collision_role, target_flag, aug_list) VALUES (20684, 'MisCavesofDonn_DyingForean', 30264, 1, 1, '8')");
+            context.Database.ExecuteSqlRaw("INSERT INTO creature (id, comment, class_id, faction, level, max_hp, name_id, run_speed, walk_speed, action1, action2, action3, action4, action5, action6, action7, action8) VALUES (38, 'Council Elder Moawi', 6163, 1, 9, 400, 2970, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+            context.Database.ExecuteSqlRaw("INSERT INTO creature (id, comment, class_id, faction, level, max_hp, name_id, run_speed, walk_speed, action1, action2, action3, action4, action5, action6, action7, action8) VALUES (132, 'AFS Quartermaster Caufield', 29423, 1, 5, 400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+
+            // Original-seed spawn pools 184 (named Council Elder Solis, creature 42) and 92 (an unnamed Forean
+            // shaman, creature 52), as the world seed places them before SolisCavernsPlacement.
+            context.Database.ExecuteSqlRaw("INSERT INTO spawnpool (id, mode, anim_type, respown_time, pos_x, pos_y, pos_z, rotation, map_context_id, creature_1_Id, creature_1_min_count, creature_1_max_count, creature_2_Id, creature_2_min_count, creature_2_max_count, creature_3_Id, creature_3_min_count, creature_3_max_count, creature_4_Id, creature_4_min_count, creature_4_max_count, creature_5_Id, creature_5_min_count, creature_5_max_count, creature_6_Id, creature_6_min_count, creature_6_max_count) VALUES " +
+                "(184, 0, 0, 20, 809.3008, 302.09375, 503.76562, 5.54, 1220, 42, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), " +
+                "(92, 0, 0, 100, 786.8711, 287.23828, 581.46875, 3.0, 1220, 52, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 
             context.Database.Migrate();
             Assert.AreEqual(0, context.Database.GetPendingMigrations().Count());
@@ -367,11 +404,11 @@ namespace Rasa.Test
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198600, 198601) AND radius = 10"));
 
             // WildernessHubConscientiousObjector seeds the hub's conversation chain: four missions, their
-            // packages, every objective flagged, the branch transitions and 1390's credits.
+            // packages, every objective flagged, the corrected branch transitions and 1390's credits.
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id IN (1390, 1392, 1393, 1407)"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id IN (114, 38) AND package_id IN (1646, 113)"));
             Assert.AreEqual(8L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1390 AND ordinal IS NOT NULL"));
-            Assert.AreEqual(9L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1390 AND type = 1 AND credits = 400"));
             // WildernessHubConversationChain: five more Wilderness missions whose objectives the client fully binds
             // with conversations, with the experience and credits TaRapedia records.
@@ -628,6 +665,11 @@ namespace Rasa.Test
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 444 AND reciver_id = 94"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 451 AND reciver_id = 91"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1407 AND giver_id = 198514"));
+            // The first objective is a conversation with Moawi. His seed class has no client NPC
+            // augmentation, so a package and server-side marker alone cannot make him speakable.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 38 AND class_id = 28415"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 132 AND class_id = 3846"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM creature_appearance WHERE id = 132"));
 
             // QuestNpcDialogueBatch: eight NPCs at TaRapedia's own /loc, each carrying the package its objective completes
             // through, and Captain Reyko moved off the console's line (1213) onto his own (1200).
@@ -748,20 +790,24 @@ namespace Rasa.Test
             // The amount lives in the credits column for both reward types: TaRapedia's experience restored.
             Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id IN (431, 442, 549, 836) AND type = 3 AND credits > 0"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 431 AND type = 3 AND credits = 2500"));
-            // WildernessHubConscientiousObjectorPath makes the client's unbound escort steps optional and reveals
-            // Apirka from either answer, so 1390 offers through the conversations the client actually defines.
-            // Only the two conversation steps the client binds stay required (1 question Quillas, 10 speak to
-            // Apirka); the escort and technical objectives are optional and 10 is revealed from either answer.
-            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1390 AND is_required = 1"));
-            Assert.AreEqual(9L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390"));
+            // The branch-aware runtime requires the selected escort and return sequence.
+            // Objective 1 is the shared required step; the two route endings are alternative requirements.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1390 AND is_required = 1"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390"));
 
             // BootcampEscortDestinationGround lifts the scripted escort destination onto the walkable surface.
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE id = 19853 AND pos_y = 120.75"));
 
 
-            // BootcampPlacementGroundSnap lifts Delessio, the crate and DeSimone onto the walkable surface.
-            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id IN (198655, 198651, 198657) AND pos_y > 120"));
+            // Delessio and the crate remain above y=120. DeSimone's later
+            // camp-placement correction puts him on the lower camp floor.
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id IN (198655, 198651, 198657) AND pos_y > 120"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id IN (198655, 198651) AND pos_y = 122.1"));
+
+            // The separately observed level-2 Forean Warrior is staged on the
+            // courtyard floor only during the 1994 cave-fight condition.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198519 AND class_id = 6043 AND level = 2 AND action1 = 5 AND action2 = 0"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198691 AND creature_id = 198519 AND pos_x = 294 AND pos_y = 120.5 AND pos_z = 65 AND behavior = 2 AND present_condition_id = 198914"));
 
             // BootcampRemainingTriggerHeight puts the two sphere triggers on the player's level as cylinders.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_area WHERE id IN (198602, 198603) AND shape = 2 AND half_height = 25"));
@@ -776,11 +822,38 @@ namespace Rasa.Test
             // ContentRuleActionDamage adds the column and BootcampDetonationDamage fills the blast's -21 into it.
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985007 AND sequence = 3 AND action = 15 AND damage = 21"));
 
-            // BootcampScriptedMoves seeds the two scripted NPC walks the content layer could not express before.
-            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE purpose = 3 AND map_context_id = 1985"));
-            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985014, 1985015)"));
-            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985014, 1985015) AND action = 14"));
+            // BootcampScriptedMoves seeded two scripted NPC walks. McAllister's remains; BootcampReinforcementPadHold
+            // later removes the reinforcements' walk-off (1985015) and its retry copy (1985017) together with their
+            // inferred destination 19854, because B2-012 shows the three still on the pad 11.5 s after 1995/1.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE purpose = 3 AND map_context_id = 1985"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500 AND walk_speed = 2.5 AND run_speed = 0"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985014 AND event = 2 AND mission_id = 1992"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985014, 1985015)"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985014, 1985015) AND action = 14"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985014 AND placement_id = 198650 AND location_id = 19853"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id IN (1985015, 1985017)"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985015, 1985017) OR location_id = 19854"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE id = 19854"));
+            // Rolling the pad hold back restores both walk-offs: the 1995 original and the retry copy that
+            // BootcampRetryReinforcementWalk added for 2005, where the same destroyed-wreck fact reveals the three.
+            context.GetService<IMigrator>().Migrate(TooCloseForComfortLevelMigration);
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE id = 19854 AND purpose = 3 AND map_context_id = 1985 AND pos_x = -215 AND pos_y = 100 AND pos_z = -62"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985015 AND event = 3 AND mission_id = 1995 AND objective_id = 1"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985017 AND event = 3 AND mission_id = 2005 AND objective_id = 1"));
+            Assert.AreEqual(6L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id IN (1985015, 1985017) AND action = 14 AND location_id = 19854 AND placement_id IN (198680, 198681, 198682)"));
+            context.GetService<IMigrator>().Migrate(BootcampLightningHitCreditMigration);
+            // TooCloseForComfortLevel sets 1407 to TaRapedia's pre-shutdown level 4; its rollback restores 5.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1407 AND level = 5"));
+            context.GetService<IMigrator>().Migrate(BootcampRetryReinforcementWalkMigration);
+            // BootcampLightningHitCredit's rollback makes 1992/8 wait for a destroying hit again.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 1992 AND objective_id = 8 AND binding_id = 0 AND destroying_hit_only = 1"));
+            context.GetService<IMigrator>().Migrate(BootcampCourtyardForeanWarriorMigration);
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985017"));
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM content_rule_action WHERE rule_id = 1985015 AND location_id = 19854"));
+            context.Database.Migrate();
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1407 AND level = 4"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 1992 AND objective_id = 8 AND binding_id = 0 AND destroying_hit_only = 0"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE id = 19854"));
 
             // BootcampObjectiveIndicators gives 1990's objectives the world markers the footage shows.
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_indicator WHERE mission_id = 1990 AND indicator_id IN (430, 431)"));
@@ -790,20 +863,97 @@ namespace Rasa.Test
             // its first objective waits on the Enhance shrine, and "Too Close For Comfort" gates it.
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id = 42 AND package_id = 168"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_package WHERE id = 43 AND package_id = 112"));
-            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1069 AND giver_id = 42 AND reciver_id = 43 AND level = 5"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1069 AND giver_id = 42 AND reciver_id = 43 AND level = 4"));
             Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1069 AND is_required = 1 AND ordinal BETWEEN 1 AND 3"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 1069 AND objective_id = 1 AND revealed_on_accept = 1"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1069"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 1069 AND objective_id = 1 AND kind = 8 AND placement_id = 10"));
-            // 1069's TaRapedia requirement (1407) is not seeded yet: see GAP-W3-1069-GATE.
-            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id = 1069"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id = 1069 AND or_group = 0 AND required_mission_id = 1407 AND required_state = 4"));
             Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 1069 AND ((type = 3 AND credits = 4000) OR (type = 1 AND credits = 600))"));
+
+            // Forming Alliances restores the early chain with a class-keyed collection
+            // counter and a mission-only Thrax Soldier drop; each estimate is in its manifest.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 479 AND giver_id = 43 AND reciver_id = 43 AND level = 5"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective WHERE mission_id = 479 AND objective_id = 1 AND is_required = 1 AND ordinal = 1 AND revealed_on_accept = 1"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id = 479 AND required_mission_id = 1069 AND required_state = 4"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id = 427 AND required_mission_id = 479 AND required_state = 4"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id = 1390 AND required_mission_id = 479 AND required_state = 4"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_prerequisite WHERE mission_id IN (1392,1393) AND required_mission_id = 1390 AND required_state = 4"));
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id IN (1392,1393) AND ((type = 3 AND credits = 8000) OR (type = 1 AND credits = 800))"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390 AND completed_objective_id = 2 AND revealed_objective_id = 8"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390 AND completed_objective_id = 8 AND revealed_objective_id = 11"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_transition WHERE mission_id = 1390 AND ((completed_objective_id = 2 AND revealed_objective_id IN (4,10)) OR (completed_objective_id = 3 AND revealed_objective_id IN (8,10)))"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_counter WHERE mission_id = 479 AND objective_id = 1 AND counter_id = 0 AND target_value = 12"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 479 AND objective_id = 1 AND kind = 9 AND creature_id = 3 AND item_template_id = 2285 AND drop_chance = 50"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate_armor WHERE id = 13738 AND armor_value = 154"));
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_reward WHERE id = 479 AND ((type = 3 AND credits = 4000) OR (type = 1 AND credits = 400) OR (type = 4 AND item_template_id = 13738 AND quantity = 1))"));
+
+            // TooCloseForComfortLevel: TaRapedia's pre-shutdown page records 1407 at level 4.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission WHERE id = 1407 AND level = 4"));
+
+            // SolisCavernsPlacement binds the named Solis pool (184) to pool 92's original X/Z/rotation on the
+            // probed floor, and empties pool 92 so the body is not duplicated. Inferred identity, not a retail row.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM spawnpool WHERE id = 184 AND pos_x = 786.8711 AND pos_y = 287.32 AND pos_z = 581.46875 AND rotation = 3 AND creature_1_Id = 42"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM spawnpool WHERE id = 92 AND creature_1_min_count = 0 AND creature_1_max_count = 0 AND creature_1_Id = 52"));
+
+            // RecruitLoadoutFlags: the four new-character items are neither sellable nor tradable.
+            Assert.AreEqual(4L, Scalar(connection, "SELECT COUNT(*) FROM itemtemplate WHERE id IN (122854, 122855, 122856, 122875) AND has_sellable_flag = 0 AND not_tradable_flag = 1"));
+
+            // BootcampEquipCrateGear: Gearing Up's crate-gear step matches the crate set 19858, not the worn Recruit outfit.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM npc_mission_objective_binding WHERE mission_id = 1992 AND objective_id = 2 AND binding_id = 0 AND equip_match = 2 AND item_set_id = 19858"));
+
+            // BootcampFirstLoginYaw: the measured 345 degree heading as original-client yaw 165 degrees.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_location WHERE id = 19851 AND rotation = 2.879793"));
+
+            // BootcampConradCorpsePlacement and BootcampBombHullPlacement move the two S5 usables to reachable faces.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198676 AND pos_x = -98 AND pos_y = 85.39 AND pos_z = 67.2"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198677 AND pos_x = -221.95 AND pos_z = -70.5"));
+
+            // BootcampDeSimoneCampPlacement moves the 1992 receiver / 1994 giver to the camp-pylon handoff area.
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198657 AND pos_x = 390.5 AND pos_y = 119.55 AND pos_z = 156"));
+
+            // BootcampCampGunnerCompanion and BootcampCampArcherShamanCompanions: the three named level-3 Forean
+            // Initiates at the camp pylon, combat companions (behavior 4) on 1994 while condition 198914 holds.
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id IN (198516, 198517, 198518) AND faction = 1 AND level = 3 AND max_hp = 555 AND run_speed = 9 AND walk_speed = 5"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198516 AND class_id = 6239 AND name_id = 7938 AND action1 = 27"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198517 AND class_id = 7036 AND name_id = 7986 AND action1 = 28"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198518 AND class_id = 7035 AND name_id = 7890 AND action1 = 46"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature_action WHERE id = 46 AND action_id = 1 AND action_arg_id = 146 AND cooldown = 2500 AND min_damage = 15 AND max_damage = 28"));
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM creature_appearance WHERE slot_id = 13 AND ((id = 198516 AND class_id = 6238) OR (id = 198517 AND class_id = 10529) OR (id = 198518 AND class_id = 10533))"));
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_condition WHERE condition_id = 198914 AND kind = 2 AND mission_id = 1994 AND state = 1"));
+            Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id IN (198688, 198689, 198690) AND map_context_id = 1985 AND behavior = 4 AND escort_mission_id = 1994 AND present_condition_id = 198914"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198688 AND creature_id = 198516 AND pos_x = 385.2 AND pos_y = 119.5 AND pos_z = 152.3"));
 
             // Add_map_region (upstream PR #91) creates the region table and preloads 373 volumes on 58 maps:
             // the Wilderness ones (context 1220) cover Alia Das and the caverns.
             Assert.AreEqual(373L, Scalar(connection, "SELECT COUNT(*) FROM map_region"));
             Assert.AreEqual(21L, Scalar(connection, "SELECT COUNT(*) FROM map_region WHERE map_context_id = 1220"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM map_region WHERE map_context_id = 1220 AND region_id = 18 AND shape = 1 AND underground = 2 AND enabled = 1"));
+
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_item_set WHERE initial_ammo <> 0 AND item_set_id = 19858 AND item_template_id = 13713 AND initial_ammo = 20"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_item_set WHERE initial_ammo <> 0"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198652 AND hit_points = 1 AND restore_ms = 930"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id = 198653 AND hit_points = 100 AND restore_ms = 930"));
+            context.GetService<IMigrator>().Migrate(BootcampCrateLoadedRifleMigration);
+            Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM content_placement WHERE id IN (198652, 198653) AND hit_points = 100 AND restore_ms = 930"));
+            context.GetService<IMigrator>().Migrate(ContentItemSetInitialAmmoMigration);
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM content_item_set WHERE initial_ammo <> 0"));
+            context.GetService<IMigrator>().Migrate(BootcampMcAllisterWalkMigration);
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM pragma_table_info('content_item_set') WHERE name = 'initial_ammo'"));
+            context.Database.Migrate();
+
+            // Execute the new schema/data rollback before the older content rollbacks.
+            context.GetService<IMigrator>().Migrate(BootcampEquipCrateGearMigration);
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 38 AND class_id = 6163"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 132 AND class_id = 29423"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM creature_appearance WHERE id = 132"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500 AND walk_speed = 0 AND run_speed = 0"));
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM content_rule WHERE id = 1985014 AND event = 6 AND mission_id = 1990"));
+            // Unlike single-precision FLOAT, DOUBLE retains even the largest former uint.
+            context.Database.ExecuteSqlRaw("UPDATE creature SET run_speed = 4294967295 WHERE id = 198500");
+            context.Database.Migrate();
+            Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM creature WHERE id = 198500 AND walk_speed = 2.5 AND run_speed = 4294967295"));
+            context.Database.ExecuteSqlRaw("UPDATE creature SET run_speed = 0 WHERE id = 198500");
 
             // Rolling W2 back removes every class-gear row and restores the NULL-flag objective skeleton it replaced.
             context.GetService<IMigrator>().Migrate(WildernessArrivalTrainingDayMigration);
@@ -876,7 +1026,7 @@ namespace Rasa.Test
             // Rolling back the pair removes every seeded row and leaves the content tables empty again.
             context.GetService<IMigrator>().Migrate(ContentLayerMigration);
             CollectionAssert.AreEqual(
-                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration },
+                new[] { BootcampS1Migration, ObjectiveColumnsMigration, ObjectiveSkeletonMigration, BootcampS2Migration, BootcampFixNpcAppearanceMigration, KraftwerksMigration, BootcampS3Migration, BootcampS4Migration, BootcampS5Migration, BootcampS6Migration, BootcampFixRogersTurnInMigration, WildernessArrivalTrainingDayMigration, WildernessClassGearMigration, AddMapRegionMigration, BootcampAreaVerticalExtentMigration, WildernessHubReceptiveReceptionMigration, BootcampObjectiveIndicatorsMigration, BootcampScriptedMovesMigration, ContentRuleActionDamageMigration, BootcampDetonationDamageMigration, BootcampObjectiveAreaRadiusMigration, BootcampCaveInTriggerRadiusMigration, BootcampObjectiveAreaHeightMigration, BootcampRemainingTriggerHeightMigration, BootcampPlacementGroundSnapMigration, BootcampPlatformTopCorrectionMigration, BootcampEscortDestinationGroundMigration, WildernessHubConscientiousObjectorMigration, WildernessHubConscientiousObjectorPathMigration, WildernessHubConversationChainMigration, WildernessHubConversationChainRewardsMigration, WildernessHubKillObjectiveMigration, DivideConversationNpcMigration, PalisadesConversationNpcMigration, PlateauConversationNpcMigration, MarshesConversationNpcMigration, MiresConversationNpcMigration, PlainsConversationNpcMigration, AddActionsMigration, InclineConversationNpcMigration, TordenNpcGroundSnapMigration, WildernessMortarByNumbersMigration, AddCreatureClassFlagMigration, WildernessCollectionDropMigration, WildernessGiverFixMigration, MiresReconstructedSpeciesMigration, AddCreatureLootMigration, ContentPlacementEscortMigration, WildernessEscortMilpasMigration, MissionAreaLinksMigration, WildernessPinholeNpcMigration, WorldPlacementFloorSnapMigration, WildernessDialogueBindingMigration, BootcampTargetDummyLaneMigration, EntityClassClientFidelityMigration, BootcampCrateUncommonGearMigration, WildernessMortarCreatureMigration, WildernessMortarFireMigration, DevilsDenFransiscoMigration, BootcampTargetDummyFrontMigration, ContentNpcAppearanceMigration, QuestNpcDialogueBatchMigration, TarapediaGiverAuditMigration, TarapediaMissingNpcsMigration, TarapediaMachineClassMigration, BootcampRetryIndicatorsMigration, AddMapMarkerMigration, AddRecipeMigration, RegenerateItemTemplateMigration, AddServiceNpcsMigration, AddMissionNpcsMigration, AddClassTrainersMigration, AddBossSpawnsMigration, PlaceDropshipPadsMigration, FixLogosShrinesMigration, PlaceRemainingLogosMigration, AddSkillCharacterMigration, RetuneWeaponToolTypeMigration, EllathaNpcPositionsMigration, EllathaWorldNpcsMigration, WorldFloorSweepMigration, QuestGiverBriefingFixMigration, PropOverlapFixMigration, TarapediaNpcPositionsMigration, WorldSweepCorrectionsMigration, TarapediaMissingNpcBatchMigration, PhostBenonFloorMigration, TarapediaLastNpcsMigration, QuestWiringFixesMigration, CodexPlacementFixesMigration, MissionSpeakersMigration, AppearanceSlotRepairMigration, SeedLogosMissionsMigration, MissionPropSpeakersMigration, WeaponRowRepairMigration, ContentRuleBarkMigration, ClientNamesForItemsMigration, CodexNpcCorrectionsMigration, RecruitLoadoutFlagsMigration, BootcampEquipCrateGearMigration, CreatureFractionalMovementRatesMigration, BootcampMcAllisterWalkMigration, ContentItemSetInitialAmmoMigration, BootcampCrateLoadedRifleMigration, BootcampPracticeDummyHealthMigration, BootcampFirstLoginYawMigration, BootcampCrateRifleRangeMigration, MoawiDialogueClassMigration, MissionSpeakerDialogueClassesMigration, BootcampRifleMeleeMigration, BootcampConradCorpsePlacementMigration, BootcampBombHullPlacementMigration, WildernessHubReceptiveGateMigration, WildernessHubReceptiveLevelMigration, MissionItemDropChanceMigration, WildernessHubFormingAlliancesMigration, WildernessHubConscientiousGateMigration, WildernessHubConscientiousBranchesMigration, SolisCavernsPlacementMigration, BootcampDeSimoneCampPlacementMigration, BootcampCampGunnerCompanionMigration, BootcampCampArcherShamanCompanionsMigration, BootcampCourtyardForeanWarriorMigration, BootcampRetryReinforcementWalkMigration, BootcampLightningHitCreditMigration, TooCloseForComfortLevelMigration, BootcampReinforcementPadHoldMigration },
                 context.Database.GetPendingMigrations().ToArray());
             foreach (var table in WorldTables)
                 Assert.AreEqual(0L, Scalar(connection, $"SELECT COUNT(*) FROM {table}"), table);
@@ -906,6 +1056,13 @@ namespace Rasa.Test
                 Assert.AreEqual(0, context.Database.GetPendingMigrations().Count());
                 Assert.IsTrue(TableExists(connection, "character_content_fact"));
                 Assert.IsTrue(TableExists(connection, "character_mission_objective_counter"));
+                // AccountRaceUnlocks: one (account, race) row per earned hybrid; BackfillRaceUnlocks found no
+                // completed 1861/1851/1899 here, so it grants nothing (RaceUnlockTests covers a positive backfill).
+                Assert.IsTrue(TableExists(connection, "account_race_unlock"));
+                Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM account_race_unlock"));
+                Assert.AreEqual(2L, Scalar(connection, "SELECT COUNT(*) FROM pragma_table_info('account_race_unlock') WHERE name IN ('account_id', 'race_id') AND pk > 0"));
+                // ItemInstanceMetadata: three nullable columns, so existing items keep their template defaults.
+                Assert.AreEqual(3L, Scalar(connection, "SELECT COUNT(*) FROM pragma_table_info('items') WHERE name IN ('loot_modules', 'tradable_override', 'sellable_override') AND \"notnull\" = 0"));
             }
 
             using (var reloaded = Char(connection))
@@ -922,6 +1079,8 @@ namespace Rasa.Test
             }
 
             Assert.IsFalse(TableExists(connection, "character_mission_objective_counter"));
+            Assert.IsFalse(TableExists(connection, "account_race_unlock"));
+            Assert.AreEqual(0L, Scalar(connection, "SELECT COUNT(*) FROM pragma_table_info('items') WHERE name IN ('loot_modules', 'tradable_override', 'sellable_override')"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM character_mission WHERE character_id = 101 AND mission_id = 429 AND change_time = 5"));
             Assert.AreEqual(1L, Scalar(connection, "SELECT COUNT(*) FROM character_mission_objective WHERE character_id = 101 AND mission_id = 429 AND status = 1"));
         }

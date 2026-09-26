@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-22",
+  "scope": "Recovered-client Soldier class selection and class-gear mission 2010 handoff at Kincaid and Quartermaster Caufield",
+  "client": "Recovered 1.16.5.0 client; current compatibility build, not proven final shutdown revision",
+  "diagnostic_inputs": [
+    "Run 50 copied the run-48 Training Day-complete character, set Recruit level 4 and 43,000 XP, and moved it to (768.0,294.12,386.05) beside seeded Kincaid. The level/XP and teleport were test scaffolding, not earned progression.",
+    "Run 53 copied the run-50 post-selection character and moved it to (760.0,293.97,407.07), facing seeded Caufield at (756.8828,293.96875,407.07422). Runs 51 and 52 tried less suitable placements and did not complete a conversation.",
+    "Each run used the isolated original world seed, not the live deployed database.",
+    "Run 54 copied the run-53 post-turn-in character database without further changes and relogged into the isolated world seed."
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-50/06-view-classes.png; playthrough-50/08-soldier-details.png; playthrough-50/09-train-soldier.png",
+      "finding": "Kincaid View Classes opened Tier Advancement. Selecting Soldier enabled Train; clicking it displayed the permanent-class confirmation and warned a clone could be made in the current class."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-50/10-after-soldier-train.png",
+      "finding": "Confirming Soldier made the client show level 5, 3 attribute points and 4 skill points, and immediately opened the Headquarters Getting It In Gear: Soldier Class offer. Decline appeared disabled."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-50/11-gear-mission-accepted.png; playthrough-50/char-after.db",
+      "finding": "Accepting the offer added Report to Quartermaster Caufield to the tracker. The copied character database persisted class 2, level 5, 43,000 XP and active mission 2010."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-53/02-caufield-direct.png; playthrough-53/03-caufield-conversation.png",
+      "finding": "The original client rendered the seeded Quartermaster Caufield inside the supply tent, with a completion icon and talk prompt. Right-click opened his conversation, including a Getting It In Gear: Soldier Class topic. The generic body text displayed ERROR: ?: No greeting."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-53/04-caufield-objective.png; playthrough-53/07-caufield-rewards.png",
+      "finding": "The mission topic showed So, you have picked the Soldier class? Let us get you geared up, shall we? and the report objective. Continue completed the objective; a second conversation showed the six fixed rewards: Reflective Armor Helmet, Vest, Gloves, Legs, Boots, and Rage-O-Matic. No XP or credits were displayed."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-53/08-after-class-gear.png; playthrough-53/10-class-gear-backpack.png; playthrough-53/char-after.db",
+      "finding": "Completing the mission removed its tracker entry. The backpack showed eleven items and 470 credits. The copied database records mission 2010 completed, unchanged 43,000 XP and 470 credits, and newly created items 18 through 23 with templates 122859, 122860, 122862, 122863, 122864 and 122865."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-53/11-helmet-tooltip.png",
+      "finding": "The Reflective Armor Helmet rendered as an unusable red item at level 5 because it required Reflective Armor 1: Novice; the compatible client showed Body Armor 126 and minimum level 5. Skill allocation and equip were not tested."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-54/01-relog.png; playthrough-54/02-caufield-after-relog.png; playthrough-54/char-after.db",
+      "finding": "After relog, the class-gear tracker entry was gone and no class-gear offer reappeared. Right-click on Caufield instead displayed the separate Lurking In The Shadows offer. Mission 2010 remained completed, its six items persisted, and no mission 427 row existed because the new offer was not accepted."
+    }
+  ],
+  "limitations": [
+    "The run verifies the current emulator through the compatible original client; it does not independently prove final-live server timing, reward values, generic greeting, item stats, or placement.",
+    "The seed lacks a greeting for Caufield, yielding a visible client error. The authentic generic greeting text/id is unrecovered; this remains GAP-W2-CAUFIELD-GREETING rather than an invented line.",
+    "Only Soldier mission 2010 was exercised in this original-client run; Specialist mission 2011 remains covered by server tests only.",
+    "The normal XP path to Kincaid and route through the hub were bypassed, but relog and Caufield interaction checked repeat-offer behavior only at that hub moment."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/06-view-classes.png",
+      "sha256": "7f2ac0c981df8e482f140c1913187ba44c16d996f390213f9fb0f123b242eea7",
+      "bytes": 860442
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/08-soldier-details.png",
+      "sha256": "fee44a73ab5c0a66d719e959282dc692608dee60277d01016458062f8449f516",
+      "bytes": 860357
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/09-train-soldier.png",
+      "sha256": "227004b966899b380d07d5cee784a222a384210ae079f712c327745b85ce7d8c",
+      "bytes": 844592
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/10-after-soldier-train.png",
+      "sha256": "2cfe2128bfee121ab164ecb047f36e9358f110c74008297e3498865c9bab9fd7",
+      "bytes": 941859
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/11-gear-mission-accepted.png",
+      "sha256": "cb9f791827307d848b87d19daf36e627ec23bd6ddd8eca2a138b3e9d4d99bf60",
+      "bytes": 1128272
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/char-after.db",
+      "sha256": "3a93587c605292b4f61bdf4f248f5c5d19c568117488457c516ada0c53ad9171",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-50/game.log",
+      "sha256": "42ef64c782db3643a5141ac42f6876eeed989c52b32e8cdb1b72515519d9b2e6",
+      "bytes": 25030
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/02-caufield-direct.png",
+      "sha256": "2064560b2bed8e5e8bcad9941f0dd58538634989a83c20d340002f93feb0434a",
+      "bytes": 1029707
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/03-caufield-conversation.png",
+      "sha256": "bde92982e22bef0dc7955b1e29e5029aedf3781129b93e183d17e0917ac92eba",
+      "bytes": 889802
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/04-caufield-objective.png",
+      "sha256": "7c1af00f124a2f94f98b77bf071d92838b38741c2a50f96db97f25d8845c6c3c",
+      "bytes": 890793
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/07-caufield-rewards.png",
+      "sha256": "6e1c9051cd86f9310beed32333b230cb259aae9d8ffae95cf99f52dd11cb9a66",
+      "bytes": 903492
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/08-after-class-gear.png",
+      "sha256": "c7926b5a92cabd13f05a6c047dc4f4c23f5fa3a818734e15ff53e3419a6b5cc8",
+      "bytes": 1018433
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/10-class-gear-backpack.png",
+      "sha256": "48d10303e2c6877d2d20805ca00df66d22eda08ccc000a4221a1a26a491dea59",
+      "bytes": 905014
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/11-helmet-tooltip.png",
+      "sha256": "5be4d07d7c3e0b659ffe0ae79b8bf5dd69c40c2b34bef0f6d1773b3ad3c20adb",
+      "bytes": 884506
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/char-after.db",
+      "sha256": "a3e27878c29a1cb3f63c203446d2a68443d3de8379e5c0088188c521cbc1307b",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-53/game.log",
+      "sha256": "6ffa0487abd716ccc7cc9d50cf924b87588642611d275bce9d96d1a2d98a1110",
+      "bytes": 27887
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-54/01-relog.png",
+      "sha256": "6baec1934953dd4595efefed672c332f7a0630d16d90e765b256eef611334297",
+      "bytes": 1026181
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-54/02-caufield-after-relog.png",
+      "sha256": "bf4c58b2d4daa09c01c77820a98054063d3668b7f556e4044aa4a47a1bc8e2b8",
+      "bytes": 898082
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-54/char-after.db",
+      "sha256": "7270eddaf5d55c523f987e6d15b032daef310eab06b027a719d056f8924ef9dc",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-54/game.log",
+      "sha256": "03b2c2e9248611bcdeef6af1acb7971f23e31ab128498dbc7c8fb077ae01438f",
+      "bytes": 13475
+    }
+  ]
+}

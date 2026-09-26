@@ -276,6 +276,36 @@
    "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
   },
   {
+   "segment": "A2",
+   "event_id": "A2-056",
+   "t": 296.2,
+   "category": "player_action",
+   "text": "",
+   "description": "Mission Available window for Gearing Up for Battle closes (open at 296.133, gone at 296.2), consistent with clicking Accept Mission. Acceptance lines follow at 296.6.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-057",
+   "t": 296.6,
+   "category": "chat_line",
+   "text": "Mission Accepted: Gearing Up for Battle",
+   "description": "Yellow system chat line.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
+   "segment": "A2",
+   "event_id": "A2-060",
+   "t": 297.0,
+   "category": "npc",
+   "text": "",
+   "description": "Camera swings behind the player (not an edit: HUD and chat are continuous). McAllister, in dark fatigues with the use prompt still showing, turns and moves off across the grass beside the curved stone platform edge. The player follows at a run (299-301) while other dark-clad soldiers stand nearby. No bark text appears.",
+   "status": "confirmed",
+   "transcript_sha256": "17a96bf4477fa5f366a0b4d78c7d289ed80ae6fd9fb9d9098c6ba8f3686b19ed"
+  },
+  {
    "segment": "A3",
    "event_id": "A3-010",
    "t": 296.6,
@@ -287,22 +317,32 @@
   },
   {
    "segment": "A3",
-   "event_id": "A3-019",
-   "t": 304.733,
-   "category": "inventory_or_character_window",
-   "text": "BACKPACK | 0/50 | Equipment | Credit | 100",
-   "description": "BACKPACK window: counter '0/50', 'Equipment' tab, empty grid, and 'Credit' with '100'. The credit glyph is a blue trident/psi-shaped symbol, not a round icon. It is the same glyph as the 1990 reward '100' (288.467) and the 1992 offer '200' (295.0).",
-   "status": "corrected",
-   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
-  },
-  {
-   "segment": "A3",
    "event_id": "A3-017",
    "t": 304.733,
    "category": "loot_or_container_window",
    "text": "Supply Crate | Loot | Tel[?]ract Motor Assist Armor Gloves | Tel[?]ract Motor Assist Armor Legs | H[?]llstrom Motor Assist Armor Vest | Shinobi Rifle | Loot All | Press [Mouse Button 2] to use",
    "description": "Supply Crate object: open box highlighted yellow-green with a vertical green light beam above it; nameplate 'Supply Crate' with a use icon; prompt 'Press [Mouse Button 2] to use'. Loot window titled 'Supply Crate' / 'Loot' with a scrollable list (first view): Tel[?]ract Motor Assist Armor Gloves; Tel[?]ract Motor Assist Armor Legs; H[?]llstrom Motor Assist Armor Vest; Shinobi Rifle; button 'Loot All'. No quantities shown per row (chat later says 1 of each).",
    "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-018",
+   "t": 304.733,
+   "category": "loot_or_container_window",
+   "text": "Shinobi Rifle | Primary | 106 Physical Damage | Optimal Range: 60m | Alt Fire: | 82 Physical Melee Damage | Standard Grade Cartridges 20/20 | Condition: 100% | Not Tradeable | Not Sellable | [4] Armor Piercing: +8% | [2] Resist: Laser +12 | Requirements: | Firearms 1: Novice | Min Level: 1 | <Right Click to Add to Inventory>",
+   "description": "Item tooltip for the Shinobi Rifle in the loot window.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-019",
+   "t": 304.733,
+   "category": "inventory_or_character_window",
+   "text": "BACKPACK | 0/50 | Equipment | Credit | 100",
+   "description": "BACKPACK window: counter '0/50', 'Equipment' tab, empty grid, and 'Credit' with '100'. The credit glyph is a blue trident/psi-shaped symbol, not a round icon. It is the same glyph as the 1990 reward '100' (288.467) and the 1992 offer '200' (295.0).",
+   "status": "corrected",
    "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
   },
   {
@@ -347,11 +387,31 @@
   },
   {
    "segment": "A3",
+   "event_id": "A3-028",
+   "t": 310.2,
+   "category": "npc",
+   "text": "10 Captain Delessio | Press [Mouse Button 2] to talk",
+   "description": "Target frame shows 'Captain Delessio', level 10, portrait; prompt 'Press [Mouse Button 2] to talk' under the olive-uniformed NPC by the crate (camp tents/crates and an armoured soldier behind). No overhead icon visible while the equip objective is active. The player does not talk to him before the cut at 314.4.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
    "event_id": "A3-034",
    "t": 319.6,
    "category": "inventory_or_character_window",
    "text": "BACKPACK | 5/50 | Equipment || Telaract Motor Assist Armor Gloves | Gloves | Body Armor: 28 | Regen Rate: 1 per sec | Condition: 100% | [0] Regen Armor +28 HP/sec (grey, partial) | Requirements: | Motor Assist Armor 1: Novice | Min Level: 1 | <Right Click to Equip> | Credit 100",
    "description": "BACKPACK window opened (UI mode): counter '5/50', Equipment tab; first row holds boots, gloves, legs, vest, rifle icons; Credit 100. Tooltip for the gloves (320.467).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-035",
+   "t": 321.467,
+   "category": "inventory_or_character_window",
+   "text": "EQUIPPED | Recruit Boots | Shoes | Not Tradeable | Not Sellable | Requirements: | Min Level: 1 || Astra Motor Assist Armor Boots | Shoes | Body Armor: 42 | Regen Rate: 1 per sec | Condition: 100% | [0] Sp[?]r[?]t: +3 (grey, uncertain) | Requirements: | Motor Assist Armor 1: Novice | Min Level: 1 | <Right Click to Equip>",
+   "description": "Comparison tooltip on the boots: left 'EQUIPPED' Recruit Boots, right Astra Motor Assist Armor Boots.",
    "status": "confirmed",
    "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
   },
@@ -387,6 +447,26 @@
   },
   {
    "segment": "A3",
+   "event_id": "A3-040",
+   "t": 324.467,
+   "category": "inventory_or_character_window",
+   "text": "EQUIPPED | Recruit Legs | Legs | Not Tradeable | Not Sellable || Telaract Motor Assist Armor Legs | Legs | Body Armor: 70 | Regen Rate: 2 per sec | Condition: 100% | [0] Mind: +3 (grey, partial) | Requirements: Motor Assist Armor 1: Novice | Min Level: 1 | <Right Click to Equip>",
+   "description": "Comparison tooltip on the legs.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-046",
+   "t": 332.467,
+   "category": "inventory_or_character_window",
+   "text": "EQUIPPED | Recruit Vest | Torso | Not Tradeable | Not Sellable | Requirements: Min Level: 1 || Hallstrom Motor Assist Armor Vest | Torso | Body Armor: 84 | Regen Rate: 2 per sec | Condition: 100% | [0] Resist: Fire +15 (grey, partial) | Requirements: Motor Assist Armor 1: Novice | Min Level: 1 | <Right Click to Equip>",
+   "description": "Comparison tooltip on the vest; vest equipped by 333.467 (player torso dark).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
    "event_id": "A3-056",
    "t": 343.467,
    "category": "npc",
@@ -407,6 +487,16 @@
   },
   {
    "segment": "A3",
+   "event_id": "A3-059",
+   "t": 347.333,
+   "category": "system_message",
+   "text": "Objective Completed / Gearing Up for Battle / Shoot the Practice Dummy",
+   "description": "Banner 'Objective Completed' / 'Gearing Up for Battle' / 'Shoot the Practice Dummy' after a few rifle hits (red damage number over the dummy).",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
    "event_id": "A3-060",
    "t": 347.333,
    "category": "tracker",
@@ -417,21 +507,21 @@
   },
   {
    "segment": "A3",
-   "event_id": "A3-066",
-   "t": 362.133,
-   "category": "chat_line",
-   "text": "You gained 1250 experience points. / Mission Completed: Gearing Up for Battle / Mission Accepted: Capture the Flag / You gained 500 experience points. / You gained a level! You are now level 2. You gained 3 attribute points and 2 skill points.",
-   "description": "System lines visible in chat after the cut, in order (earlier General lines above them: '... and mod new armor' / 'Cebals: full cormen with officer hat is best while u get new armor' / 'Cebals: change as fast as possible').",
-   "status": "confirmed",
-   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
-  },
-  {
-   "segment": "A3",
    "event_id": "A3-065",
    "t": 362.133,
    "category": "other",
    "text": null,
    "description": "CUT (edit): 362.067 = firing range, level 1, tracker 'Speak to Corporal Hartmann'; 362.133 = different part of the camp, level 2, tracker on mission 1994, chat showing the 1992 completion. Hartmann's objective(s), the Lightning/Target Dummy objective, the 1992 turn-in (log text names Corporal DeSimone) and the 1994 offer are not shown.",
+   "status": "confirmed",
+   "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
+  },
+  {
+   "segment": "A3",
+   "event_id": "A3-066",
+   "t": 362.133,
+   "category": "chat_line",
+   "text": "You gained 1250 experience points. / Mission Completed: Gearing Up for Battle / Mission Accepted: Capture the Flag / You gained 500 experience points. / You gained a level! You are now level 2. You gained 3 attribute points and 2 skill points.",
+   "description": "System lines visible in chat after the cut, in order (earlier General lines above them: '... and mod new armor' / 'Cebals: full cormen with officer hat is best while u get new armor' / 'Cebals: change as fast as possible').",
    "status": "confirmed",
    "transcript_sha256": "530d0351c2ee9457f48a2ec7a6dde7f6cb7848c5631f7243f616d14f7261f5a7"
   },

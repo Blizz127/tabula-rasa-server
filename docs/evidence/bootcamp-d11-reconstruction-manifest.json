@@ -3,7 +3,7 @@
  "policy": "AGENTS.md#evidence-bounded-reconstruction-user-decision-2026-09-13",
  "segment": {
   "id": "bootcamp-d11",
-  "description": "Deployment-11 rebuilt boot camp, context 1985 adv_bootcamp. S0 evidence contract: no content rows are seeded yet.",
+  "description": "Deployment-11 rebuilt boot camp, context 1985 adv_bootcamp, plus the immediate Wilderness arrival. This manifest records seeded S1-S6 content and subsequent evidence-bounded corrections.",
   "map_context_ids": [
    1985
   ],
@@ -202,6 +202,18 @@
    "url": "https://web.archive.org/web/*/codex-tr.net/*",
    "locator": "research/20260920-codex and scratchpad agent-codex/agent-codex2 extractions - a period pin-map, POI contents surviving for Concordia Wilderness and Palisades only (248 of 2,207 POIs, final census 2009-02-23)",
    "note": "Coordinates are stored times ten: pos_x = locW/10, pos_z = locS/10 in world metres, no heights; proven by 21 of 22 Logos stones agreeing with our own logos rows to under 2 m. Contributors sometimes read positions inside instances and filed them under the parent zone; French/German re-entries sit 10-90 m from the English pin."
+  },
+  "measurement:practice-dummy-cycles": {
+   "kind": "measurement",
+   "era": "d11_to_shutdown",
+   "member": "docs/evidence/bootcamp-practice-dummy-observations.json",
+   "note": "Native 15 fps extraction of 7Lrst9SG3pk 343–362.067 s. Five single-round hits and disappearance intervals; original maximum HP and nominal server restore timer remain unknown."
+  },
+  "calibration:original-client-yaw": {
+   "kind": "in_client_calibration",
+   "era": "unknown",
+   "locator": "docs/evidence/client-world-admission-orientation.json: heading_conversion; native camera.initial_facing_snapshot and camera.render_basis; original1.16.5.0 playthrough03/04 yaw probes2026-09-22",
+   "note": "Original compatibility client on isolated emulator. Calibrates native coordinate convention; not a live-service spawn capture."
   }
  },
  "scope": [
@@ -388,7 +400,7 @@
     "id": 19851
    },
    "slice": "S1",
-   "migration": "BootcampS1Initiation",
+   "migration": "BootcampS1Initiation; BootcampFirstLoginYaw",
    "fields": {
     "purpose": {
      "value": 1,
@@ -457,18 +469,23 @@
      }
     },
     "rotation": {
-     "value": 6.02139,
+     "value": 2.879793,
      "tier": "measured",
      "citations": [
       {
        "source": "measurement:bootcamp-positions",
        "position_key": "spawn.first_login"
+      },
+      {
+       "source": "calibration:original-client-yaw",
+       "locator": "heading_conversion: compass345deg -> native165deg; pi->+Z, pi/2->-X"
       }
      ],
      "uncertainty": {
       "unit": "deg",
       "plus_minus": 15
-     }
+     },
+     "reasoning": "Preserves measured compass heading345deg and +/-15deg uncertainty; raw native yaw = wrap(compassheading-pi), established by original-client controlled axis probes. Original frame238.133 follows slight movement; exact initial facing remains unverified."
     }
    },
    "storage_fields": {
@@ -555,19 +572,35 @@
        "t": 274.467
       }
      ],
-     "reasoning": "McAllister stands still in the footage, so he is a stationary placement with no run rate"
+     "reasoning": "No running is observed for McAllister. This unused rate remains zero; his scripted departure uses walk_speed."
     },
     "walk_speed": {
-     "value": 0,
-     "tier": "inferred",
+     "value": 2.5,
+     "tier": "analogue",
      "citations": [
       {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entitymovementrate.pyo lookup[3846]=(0.0,2.5,6.5), assignment offset 110, SHA256 a1afe0abd4d3504cda9d2542778b706e1af9adbcab12e3614bbbc67b3d825660; client/playermovementmgr.pyo PlayerMovementMgr.__init__ original line 124 offsets 172-203 unpacks stoppedRate, walkAnimRate, runAnimRate"
+      },
+      {
        "source": "video:7Lrst9SG3pk",
-       "event": "A2-040",
-       "t": 274.467
+       "event": "A2-056",
+       "t": 296.2
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-057",
+       "t": 296.6
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
       }
      ],
-     "reasoning": "as run_speed; the NPC does not walk in the footage"
+     "counterpart": "The original animation walk reference rate of reconstructed human male NPC class 3846 (OD-11); not the lost McAllister server movement speed.",
+     "required_because": "A nonzero walking rate is required for the observed departure to execute. The original footage proves walking but does not establish its world-space pace.",
+     "decision": "OD-57"
     }
    },
    "storage_fields": {
@@ -808,8 +841,14 @@
        "source": "video:7Lrst9SG3pk",
        "event": "A2-044",
        "t": 285.333
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-019",
+       "t": 304.733
       }
-     ]
+     ],
+     "reasoning": "The completion window shows 100 beside a blue trident/psi-shaped glyph; A3-019 directly labels the same glyph Credit in the backpack. The amount and currency type are observed. Starting credit balance and exact credit delta remain unverified."
     },
     "item_template_id": {
      "value": 0,
@@ -3067,9 +3106,14 @@
        "source": "video:7Lrst9SG3pk",
        "event": "A2-050",
        "t": 289.8
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-019",
+       "t": 304.733
       }
      ],
-     "reasoning": "the offer window shows 'reward 200'"
+     "reasoning": "The offer window shows 200 beside the same blue trident/psi-shaped glyph directly labelled Credit in the A3-019 backpack view. The advertised 200-credit reward is observed; its actual payout remains unverified in this frame."
     }
    }
   },
@@ -4063,7 +4107,7 @@
     "binding_id": 0
    },
    "slice": "S2",
-   "migration": "BootcampS2GearingUp",
+   "migration": "BootcampEquipCrateGear",
    "fields": {
     "kind": {
      "value": 4,
@@ -4083,16 +4127,48 @@
      "reasoning": "the first equip completes the objective while the gloves slot is still empty"
     },
     "equip_match": {
-     "value": 0,
+     "value": 2,
      "tier": "inferred",
      "citations": [
       {
        "source": "video:7Lrst9SG3pk",
+       "event": "A3-027",
+       "t": 308.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
        "event": "A3-036",
        "t": 321.667
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-037",
+       "t": 322.267
       }
      ],
-     "reasoning": "any equip completes; the first item was the boots"
+     "reasoning": "A3-027 leaves the equip objective open with Recruit gear already equipped; A3-036 replaces Recruit Boots with crate boots and A3-037 completes it. Matching any member of crate item set 19858 is inferred. Only crate boots are observed to satisfy this step; the original server predicate and other item matches remain unverified."
+    },
+    "item_set_id": {
+     "value": 19858,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-027",
+       "t": 308.533
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-036",
+       "t": 321.667
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-037",
+       "t": 322.267
+      }
+     ],
+     "reasoning": "A3-027 leaves the equip objective open with Recruit gear already equipped; A3-036 replaces Recruit Boots with crate boots and A3-037 completes it. Matching any member of crate item set 19858 is inferred. Only crate boots are observed to satisfy this step; the original server predicate and other item matches remain unverified."
     }
    }
   },
@@ -4196,15 +4272,15 @@
      "reasoning": "the Target Dummy placement per OD-13"
     },
     "destroying_hit_only": {
-     "value": true,
+     "value": false,
      "tier": "inferred",
      "citations": [
       {
        "source": "client_table:game.zip",
-       "locator": "generated/client/missiontextlanguage.pyo; text 21666"
+       "locator": "generated/client/missiontextlanguage.pyo text 21666; objectiveconversation for 1992/9 package 2563 text 21665"
       }
      ],
-     "reasoning": "a Lightning use on the dummy completes it; destroying-only matches the practice-dummy precedent"
+     "reasoning": "The original text instructs use/fire of Lightning on the Target Dummy without naming destruction. First damaging hit is inferred because the filmed lesson is cut; docs/bootcamp-lightning-hit-credit.md records the source limit. Normal rank-1 Lightning one-shots the 100-HP analogue target, so the distinction affects surviving-hit cases."
     },
     "action_id": {
      "value": 194,
@@ -4229,26 +4305,19 @@
    "fields": {
     "item_template_id": {
      "value": 12209,
-     "tier": "analogue",
+     "tier": "inferred",
      "citations": [
       {
        "source": "video:7Lrst9SG3pk",
-       "event": "A3-022",
-       "t": 306.467
-      },
-      {
-       "source": "video:7Lrst9SG3pk",
-       "event": "A3-034",
-       "t": 319.6
+       "event": "A3-035",
+       "t": 321.467
       },
       {
        "source": "client_table:game.zip",
-       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass[12209]=16692, assignment offset 412085; itemTemplateSkillRequirement[12209]=(19,1), offset 682925; generated/client/armorclass.pyo lookup[16692]=(422,422,1), assignment offset 19604"
       }
      ],
-     "counterpart": "template 12209 (Astra Motor Assist Armor Boots): V06 UNC boots, level-1 band, no level requirement (13066 requires level 30); the band is taken from the gloves, whose tooltip is observed",
-     "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-54"
+     "reasoning": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 42, Regen Rate 1/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16692 matches. Template 12209 remains inferred, not uniquely identified: the same original class also belongs to templates 30058, 50241. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes."
     },
     "quantity": {
      "value": 1,
@@ -4292,7 +4361,7 @@
        "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
       }
      ],
-     "reasoning": "The gloves tooltip reads Body Armor 28, Motor Assist Armor 1, Min Level 1. Body armour is armorclass absorption / 10, and 15803 (Armor_T1_MotorAssist_V06_UNC_Gloves_01_to_02) is the only Motor Assist gloves template on the server absorbing 281 without a level requirement; V04/V05/V07 require levels 22/15/49. The maker name is a runtime module prefix and does not select a template."
+     "reasoning": "The gloves tooltip reads Body Armor 28, Motor Assist Armor 1, Min Level 1. Body armour is armorclass absorption / 10, and 15803 (Armor_T1_MotorAssist_V06_UNC_Gloves_01_to_02) is the only Motor Assist gloves template on the server absorbing 281 without a level requirement; V04/V05/V07 require levels 22/15/49. The maker name is a runtime module prefix and does not select a template. Original-client cross-check 2026-09-22: itemTemplateItemClass also maps templates 30211 and 50242 to the same class 16742; the earlier uniqueness claim concerns the emulator subset, not all original templates. The selected template remains inferred."
     },
     "quantity": {
      "value": 1,
@@ -4319,26 +4388,19 @@
    "fields": {
     "item_template_id": {
      "value": 26879,
-     "tier": "analogue",
+     "tier": "inferred",
      "citations": [
       {
        "source": "video:7Lrst9SG3pk",
-       "event": "A3-022",
-       "t": 306.467
-      },
-      {
-       "source": "video:7Lrst9SG3pk",
-       "event": "A3-034",
-       "t": 319.6
+       "event": "A3-040",
+       "t": 324.467
       },
       {
        "source": "client_table:game.zip",
-       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass[26879]=16592, assignment offset 442487; itemTemplateSkillRequirement[26879]=(19,1), offset 729590; generated/client/armorclass.pyo lookup[16592]=(703,703,2), assignment offset 19208"
       }
      ],
-     "counterpart": "template 26879 (Teleract Motor Assist Armor Legs): V05 UNC legs, level-1 band, no level requirement (V06 legs 15801 requires level 8); the band is taken from the gloves, whose tooltip is observed",
-     "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-54"
+     "reasoning": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 70, Regen Rate 2/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16592 matches. Template 26879 remains inferred, not uniquely identified: the same original class also belongs to templates 29751, 50239, 111158, 130434. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes."
     },
     "quantity": {
      "value": 1,
@@ -4365,26 +4427,19 @@
    "fields": {
     "item_template_id": {
      "value": 12208,
-     "tier": "analogue",
+     "tier": "inferred",
      "citations": [
       {
        "source": "video:7Lrst9SG3pk",
-       "event": "A3-022",
-       "t": 306.467
-      },
-      {
-       "source": "video:7Lrst9SG3pk",
-       "event": "A3-034",
-       "t": 319.6
+       "event": "A3-046",
+       "t": 332.467
       },
       {
        "source": "client_table:game.zip",
-       "locator": "armorclass max_damage_absorbed; itemclass reqData and itemTemplateSkillRequirement for the Motor Assist 01_to_02 rows"
+       "locator": "generated/client/itemclass.pyo itemTemplateItemClass[12208]=16642, assignment offset 412076; itemTemplateSkillRequirement[12208]=(19,1), offset 682910; generated/client/armorclass.pyo lookup[16642]=(844,844,2), assignment offset 19406"
       }
      ],
-     "counterpart": "template 12208 (Hellstrom Motor Assist Armor Vest): V05 UNC vest, level-1 band, no level requirement (V06 vest 26997 requires level 34); the band is taken from the gloves, whose tooltip is observed",
-     "required_because": "the loot_all binding must grant real items for the objective to function",
-     "decision": "OD-54"
+     "reasoning": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 84, Regen Rate 2/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16642 matches. Template 12208 remains inferred, not uniquely identified: the same original class also belongs to templates 29905, 50240, 111156. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes."
     },
     "quantity": {
      "value": 1,
@@ -4438,6 +4493,17 @@
       }
      ],
      "reasoning": "chat shows 'You received 1 ...' five times"
+    },
+    "initial_ammo": {
+     "value": 20,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-018",
+       "t": 304.733
+      }
+     ]
     }
    }
   },
@@ -6453,7 +6519,7 @@
        "locator": "docs/evidence/kill-rewards.json rule credits = 5 x creature level"
       }
      ],
-     "reasoning": "the kill-cut chat shows \"You gained 143 experience points.\" / \"You received 50 credits.\" (A5-28); if those lines are the boss kill (synthesis inference) the measured credit rule (5 x creature level) gives level 10. Seeded per owner decision OD-24. CONFLICT: 143 XP is neither the level-10 base (124) nor its streak value (249), and the line carries no streak annotation; level-difference modifiers are unmodelled (GAP-S4-BOSS, GAP-KILL-REWARDS)"
+     "reasoning": "the kill-cut chat shows 143 XP / 50 credits and a separate 71 XP / 10 credits (A5-28); if the 50 credits belong to the boss (synthesis inference), the measured rule (5 x creature level) gives level 10. Seeded per owner decision OD-24. CONFLICT: 143 XP is neither the fitted level-10 base (124) nor its streak value (249). TaRapedia Experience rev 34776 records hidden creature-type XP multipliers, and 1.15 applied before truncation to base 124.5 would give 143; this is only a candidate because the boss kill is hidden by the cut and no boss multiplier is known. See docs/evidence/bootcamp-tizzik-xp-source-reconciliation-20260924.json (GAP-S4-BOSS, GAP-KILL-REWARDS)"
     },
     "max_hp": {
      "value": 1000,
@@ -6612,7 +6678,7 @@
        "locator": "generated/client/entityclass.pyo @514031 29769 Bane_Thrax_Soldier_Grunt_Pistol (mesh 49675, augmentations [1,59])"
       }
      ],
-     "counterpart": "the emulator world data's default mobile-creature health (555, e.g. level-2 boargar row 35, Bane Thrax Technician row 47, Grenadier row 57). CAVEAT: emulator-authored; could be replaced by a measurement (damage numbers summed against the nameplate health bar, e.g. the stationary target 397.5-401.533)",
+     "counterpart": "the emulator world data's default mobile-creature health (555, e.g. level-2 boargar row 35, Bane Thrax Technician row 47, Grenadier row 57). CAVEAT: emulator-authored, not a verified retail value. Frame review at 395-401.2 seconds could not measure maximum health because no numeric HP appears and multiple same-name targets and allies make the damage sequence ambiguous; see docs/evidence/bootcamp-thrax-health-audit.json",
      "required_because": "a killable creature needs health; no client table records it",
      "decision": "OD-11"
     },
@@ -56364,6 +56430,1838 @@
      }
     }
    }
+  },
+  {
+   "table": "content_rule",
+   "key": {
+    "id": 1985014
+   },
+   "slice": "S1",
+   "migration": "BootcampMcAllisterWalk",
+   "fields": {
+    "event": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-056",
+       "t": 296.2
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-057",
+       "t": 296.6
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Map MissionAccepted expresses the observed departure after acceptance; the exact original server callback is unknown."
+    },
+    "mission_id": {
+     "value": 1992,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-056",
+       "t": 296.2
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-057",
+       "t": 296.6
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "The accepted mission is Gearing Up for Battle; McAllister remains at the conversation spot throughout its offer."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1992 accepted -> McAllister walks to the gear",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198651
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; subsequent platform/ground/target-lane corrections",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Placed usable prop."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Usable takes its class directly, not from a creature row."
+    },
+    "entity_class_id": {
+     "value": 26714,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class26714, augmentation64 TreasureDispenser"
+      }
+     ],
+     "decision": "OD-12",
+     "counterpart": "Original UsableTreasureDispHumCrateV04 class26714, a TreasureDispenser crate; exact original spawn class not recovered.",
+     "required_because": "The observed loot crate needs a usable client entity class."
+    },
+    "usable_kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-017",
+       "t": 304.733
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-022",
+       "t": 306.467
+      }
+     ],
+     "reasoning": "Observed five-item Loot All window is represented by a content container."
+    },
+    "pos_x": {
+     "value": 397.3,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 122.1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 173.7,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 200,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/usabledata.pyo USE_TD_STATE_CLOSED@423; usableaugmentationstate[64]@2963"
+      }
+     ],
+     "reasoning": "Chosen crate class begins closed; original usabledata USE_TD_STATE_CLOSED=200 offset423 and augmentation64 states200/201/202 offset2963. Original footage first shows the already-open crate."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "loot_item_set_id": {
+     "value": 19858,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-023",
+       "t": 308.067
+      }
+     ],
+     "reasoning": "Binds the five reconstructed item templates to the observed crate."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.supply_crate"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "usable_condition_id": {
+     "value": 198800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-024",
+       "t": 308.4
+      }
+     ],
+     "reasoning": "The crate is enabled while1992/1 Get your gear is incomplete; the original client missionActivated behavior supports this gating, exact original predicate inferred."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1992 supply crate",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198652
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; subsequent platform/ground/target-lane corrections; BootcampPracticeDummyHealth",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Placed usable prop."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Usable takes its class directly, not from a creature row."
+    },
+    "entity_class_id": {
+     "value": 29365,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class29365 UsableStatelessHumPracticeDummyV01"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-056",
+       "t": 343.467
+      }
+     ],
+     "reasoning": "Original named practice-dummy class matches the filmed target; second Lightning dummy identity is inferred under OD-13."
+    },
+    "usable_kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-059",
+       "t": 347.333
+      }
+     ],
+     "reasoning": "The target takes combat damage and restores after destruction."
+    },
+    "pos_x": {
+     "value": 384.7,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 119.4,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 186.8,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 1.5,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 110,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/usabledata.pyo USE_IDES_STATE_INTACT=110"
+      }
+     ],
+     "reasoning": "Usable class begins intact (USE_IDES_STATE_INTACT); this encodes the filmed standing target."
+    },
+    "hit_points": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:practice-dummy-cycles",
+       "locator": "cycles1–5; five-shot-damage-nearest.png; third hit355.266667–355.466667 reads84"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "t": 355.266667,
+       "locator": "Third single-round hit displays84, then target disappears; magazine18→17."
+      }
+     ],
+     "decision": "OD-58",
+     "reasoning": "Minimal positive integer HP reproduces five observed single-hit destructions through existing damage handling. 1 HP is not recovered original health. Assuming ordinary damage-driven destruction, no concurrent damage and no forced server script, the clear 84-damage hit bounds then-current health at 84; it does not establish maximum HP. Low HP and scripted destruction remain indistinguishable. This replaces the contradicted 100-HP placeholder only for the filmed Practice Dummy."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.practice_dummy"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "restore_ms": {
+     "value": 930,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:practice-dummy-cycles",
+       "locator": "cycles1–5:347.133333→348.066667,350.933333→351.666667,355.266667→356.266667,357.733333→358.866667,360.333333→361.200000"
+      }
+     ],
+     "uncertainty": {
+      "unit": "ms",
+      "plus_minus": 270,
+      "observed_range_ms": [
+       733,
+       1133
+      ],
+      "frame_quantization_ms": 67
+     },
+     "reasoning": "Retained nominal 930 ms approximates five visible intervals averaging 933 ms. Sample range 733–1133 ms, plus ±67 ms interval quantization at 15 fps, requires about ±270 ms around 930. These are visual disappearance intervals affected by presentation/network timing, not recovery of the original server timer. The earlier four-cycle ±70 ms claim omitted a reset and used a late second-return boundary."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1992 practice dummy",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198653
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; subsequent platform/ground/target-lane corrections",
+   "fields": {
+    "kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Placed usable prop."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Usable takes its class directly, not from a creature row."
+    },
+    "entity_class_id": {
+     "value": 29365,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class29365 UsableStatelessHumPracticeDummyV01"
+      },
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-056",
+       "t": 343.467
+      }
+     ],
+     "reasoning": "Original named practice-dummy class matches the filmed target; second Lightning dummy identity is inferred under OD-13."
+    },
+    "usable_kind": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-059",
+       "t": 347.333
+      }
+     ],
+     "reasoning": "The target takes combat damage and restores after destruction."
+    },
+    "pos_x": {
+     "value": 379.21,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "BootcampTargetDummyFront: copy the measured practice dummy stance1.45m left of lane center386.15 into adjacent original-map lane center380.66; Z186.8 is in front of its sandbag face186.9. Identity, chosen lane and stance are inferred; original Lightning practice lies inside the362.067–362.133 footage cut."
+    },
+    "pos_y": {
+     "value": 119.4,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "BootcampTargetDummyFront: copy the measured practice dummy stance1.45m left of lane center386.15 into adjacent original-map lane center380.66; Z186.8 is in front of its sandbag face186.9. Identity, chosen lane and stance are inferred; original Lightning practice lies inside the362.067–362.133 footage cut."
+    },
+    "pos_z": {
+     "value": 186.8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "BootcampTargetDummyFront: copy the measured practice dummy stance1.45m left of lane center386.15 into adjacent original-map lane center380.66; Z186.8 is in front of its sandbag face186.9. Identity, chosen lane and stance are inferred; original Lightning practice lies inside the362.067–362.133 footage cut."
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 110,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/usabledata.pyo USE_IDES_STATE_INTACT=110"
+      }
+     ],
+     "reasoning": "Usable class begins intact (USE_IDES_STATE_INTACT); this encodes the filmed standing target."
+    },
+    "hit_points": {
+     "value": 100,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-059",
+       "t": 347.333
+      }
+     ],
+     "decision": "OD-13",
+     "counterpart": "Existing reconstructed damageable training prop100-HP placeholder; no recovered original HP counterpart. Confidence low; E6 damage-sum reconstruction remains open.",
+     "required_because": "Damageable practice must have positive HP to accept hits and restore.100 is retained as an explicitly unverified functioning estimate, not original health."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "object.target_dummy"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "restore_ms": {
+     "value": 930,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-065",
+       "t": 362.133
+      }
+     ],
+     "reasoning": "Shares the reconstructed nominal 930 ms Practice Dummy recovery; the five filmed practice intervals span 733–1133 ms plus ±67 ms frame quantization. Original Lightning segment is hidden by a cut, so neither this target’s timing nor its 100 HP estimate is newly verified."
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "1992 target dummy",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198655
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; subsequent platform/ground/target-lane corrections",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Placed NPC creature."
+    },
+    "creature_id": {
+     "value": 198501,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Instantiates the reconstructed named NPC row."
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "pos_x": {
+     "value": 398.9,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 122.1,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 173.3,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.5,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.delessio"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "npc_package_id": {
+     "value": 2560,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo lookup[(1992,4,2560,1,1)]=[21484] assignment40745; (1992,5,2560,1,1)=[21487] assignment40772"
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Delessio",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198656
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; subsequent platform/ground/target-lane corrections",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Placed NPC creature."
+    },
+    "creature_id": {
+     "value": 198502,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Instantiates the reconstructed named NPC row."
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "pos_x": {
+     "value": 385.7,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_y": {
+     "value": 119.4,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 166.7,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 2.0,
+      "vertical_m": 0.5
+     }
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.hartmann"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "npc_package_id": {
+     "value": 2563,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo lookup[(1992,6,2563,1,1)]=[21491] assignment40799; objectives7/9 assignments40826/40853"
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "Hartmann",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_placement",
+   "key": {
+    "id": 198657
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp; BootcampDeSimoneCampPlacement supersedes the earlier inferred position",
+   "fields": {
+    "kind": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Placed NPC creature."
+    },
+    "creature_id": {
+     "value": 198504,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Instantiates the reconstructed named NPC row."
+    },
+    "entity_class_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "usable_kind": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "pos_x": {
+     "value": 390.5,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "DeSimone remains unseen across the A3-065/A3-066 edit. The first post-handoff player and Forean Initiates are at the north camp around (389,155); this inferred point is near them. Exact final-live NPC coordinate is unverified; see evidence/bootcamp-desimone-camp-placement.json."
+    },
+    "pos_y": {
+     "value": 119.55,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5.0,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 156.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "DeSimone remains unseen across the A3-065/A3-066 edit. The first post-handoff player and Forean Initiates are at the north camp around (389,155); this inferred point is near them. Exact final-live NPC coordinate is unverified; see evidence/bootcamp-desimone-camp-placement.json."
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Facing not recovered; neutral world +Z orientation is an explicit estimate."
+    },
+    "behavior": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Stationary reconstruction; no autonomous movement for this placement is established."
+    },
+    "initial_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "hit_points": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "loot_item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "escort_mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "npc.desimone"
+      }
+     ],
+     "reasoning": "Neutral value for an unused field in this placement kind."
+    },
+    "npc_package_id": {
+     "value": 2562,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/objectiveconversation.pyo lookup[(1994,4,2562,1,1)]=[21694] assignment41771"
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "map_context_id": {
+     "value": 1985,
+     "role": "scope"
+    },
+    "comment": {
+     "value": "DeSimone (position inferred, not observed)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198501
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp",
+   "fields": {
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10576] assignment34886: Captain Delessio"
+      }
+     ],
+     "reasoning": "AFS officer identity; AFS faction1 follows the same reconstructed camp officers."
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10576] assignment34886: Captain Delessio"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10576] assignment34886: Captain Delessio"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10576] assignment34886: Captain Delessio"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "name_id": {
+     "value": 10576,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10576] assignment34886: Captain Delessio"
+      }
+     ]
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Original generic human male NPC class3846, as used by shipped AFS officers.",
+     "required_because": "The named NPC must have a client creature/NPC class; exact original spawn class is unavailable."
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Existing reconstructed level10 AFS commander counterpart (McAllister/Rogers officer row).",
+     "required_because": "A placed creature needs positive health; exact original NPC HP is unavailable."
+    },
+    "level": {
+     "value": 10,
+     "tier": "observed",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-028",
+       "t": 310.2
+      }
+     ]
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Captain Delessio",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198502
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp",
+   "fields": {
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10578] assignment34904: Corporal Hartmann"
+      }
+     ],
+     "reasoning": "AFS officer identity; AFS faction1 follows the same reconstructed camp officers."
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10578] assignment34904: Corporal Hartmann"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10578] assignment34904: Corporal Hartmann"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10578] assignment34904: Corporal Hartmann"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "name_id": {
+     "value": 10578,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10578] assignment34904: Corporal Hartmann"
+      }
+     ]
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Original generic human male NPC class3846, as used by shipped AFS officers.",
+     "required_because": "The named NPC must have a client creature/NPC class; exact original spawn class is unavailable."
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Existing reconstructed level10 AFS commander counterpart (McAllister/Rogers officer row).",
+     "required_because": "A placed creature needs positive health; exact original NPC HP is unavailable."
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-028",
+       "t": 310.2
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Captain Delessio, observed level10 in the same camp.",
+     "required_because": "A placed NPC requires a level; these two original levels are not observed."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Corporal Hartmann",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "creature",
+   "key": {
+    "id": 198504
+   },
+   "slice": "S2",
+   "migration": "BootcampS2GearingUp",
+   "fields": {
+    "faction": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10579] assignment34913: Corporal DeSimone"
+      }
+     ],
+     "reasoning": "AFS officer identity; AFS faction1 follows the same reconstructed camp officers."
+    },
+    "run_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10579] assignment34913: Corporal DeSimone"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "walk_speed": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10579] assignment34913: Corporal DeSimone"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "action1": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10579] assignment34913: Corporal DeSimone"
+      }
+     ],
+     "reasoning": "Stationary noncombat training NPC; no attack or movement is established."
+    },
+    "name_id": {
+     "value": 10579,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/language/english/creaturenamelanguage.pyo lookup[10579] assignment34913: Corporal DeSimone"
+      }
+     ]
+    },
+    "class_id": {
+     "value": 3846,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Original generic human male NPC class3846, as used by shipped AFS officers.",
+     "required_because": "The named NPC must have a client creature/NPC class; exact original spawn class is unavailable."
+    },
+    "max_hp": {
+     "value": 1000,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/entityclass.pyo class3846 NPC_Human_Swapset_Male"
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Existing reconstructed level10 AFS commander counterpart (McAllister/Rogers officer row).",
+     "required_because": "A placed creature needs positive health; exact original NPC HP is unavailable."
+    },
+    "level": {
+     "value": 10,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A3-028",
+       "t": 310.2
+      }
+     ],
+     "decision": "OD-11",
+     "counterpart": "Captain Delessio, observed level10 in the same camp.",
+     "required_because": "A placed NPC requires a level; these two original levels are not observed."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Corporal DeSimone",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_location",
+   "key": {
+    "id": 19853
+   },
+   "slice": "S1",
+   "migration": "BootcampScriptedMoves; BootcampEscortDestinationGround",
+   "fields": {
+    "purpose": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "reasoning": "Existing inferred scripted walk destination; original endpoint not observed."
+    },
+    "map_context_id": {
+     "value": 1985,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "reasoning": "Existing inferred scripted walk destination; original endpoint not observed."
+    },
+    "pos_x": {
+     "value": 390.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "reasoning": "Existing inferred scripted walk destination; original endpoint not observed."
+    },
+    "pos_y": {
+     "value": 120.75,
+     "tier": "measured",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "uncertainty": {
+      "unit": "m",
+      "horizontal_m": 5,
+      "vertical_m": 0.5
+     }
+    },
+    "pos_z": {
+     "value": 172.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "reasoning": "Existing inferred scripted walk destination; original endpoint not observed."
+    },
+    "rotation": {
+     "value": 0.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "measurement:bootcamp-positions",
+       "position_key": "walk.mcallister_gear"
+      }
+     ],
+     "reasoning": "Existing inferred scripted walk destination; original endpoint not observed."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "McAllister escort destination (inferred)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "content_rule_action",
+   "key": {
+    "rule_id": 1985014,
+    "sequence": 0
+   },
+   "slice": "S1",
+   "migration": "BootcampScriptedMoves",
+   "fields": {
+    "action": {
+     "value": 14,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "mission_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "forced": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "greeting_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "npc_name_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "tutorial_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "logos_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "logos_protocol": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "experience": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "placement_id": {
+     "value": 198650,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "state_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "fact_key": {
+     "value": "",
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "fact_value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "location_id": {
+     "value": 19853,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    },
+    "audio_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "video:7Lrst9SG3pk",
+       "event": "A2-060",
+       "t": 297.0
+      }
+     ],
+     "reasoning": "Scripted move uses placement198650 and destination19853; other action payload fields are unused."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "McAllister walks to the gear",
+     "role": "comment"
+    }
+   }
   }
  ],
  "omitted": [
@@ -56412,7 +58310,7 @@
   {
    "table": "content_placement",
    "what": "allied Forean Gunner/Archer/Shaman Initiates (L3; names 7938/7986/7890), Forean Warrior (L2), AFS Shotgunner L2/L3 (8718), Rifleman L2 (8717), Infantryman L3 (8716), Field Gunner L3 (8720) and the teleport-in soldier",
-   "reason": "optional allies seeded only with owner approval; one measured camp position (ally.forean_initiates.camp); the escorts follow the player, which has no mechanism",
+   "reason": "deployed world omits these allies; one measured camp position (ally.forean_initiates.camp). Three named camp companions and follow/combat support are staged in the worktree, with incomplete continuous-route verification (docs/evidence/bootcamp-courtyard-escort-combat-rules.json)",
    "gap": "GAP-S4-ALLY-ESCORT",
    "slice": "S4"
   },
@@ -56587,7 +58485,7 @@
   {
    "table": "itemtemplate",
    "what": "reward and item module ids 900221 (Vextronics Pistol) and 900256 (Vextronics Pulse Pistol)",
-   "reason": "no world table stores per-template or per-reward modules, so the \"Vextronics\" name and the [2] Reduce Resist line cannot be sent",
+   "reason": "mission rewards now assign the original-client module ids 900221/900256 to the offer and persisted item, using the inferred 116929/116930 template pairing. inferred ModuleTooltipInfo definitions now reproduce the filmed [2] Reduce Resist lines for both choices in recovered-client run 49; combat proc chance and application remain absent",
    "gap": "GAP-W1-REWARD-MODULES",
    "slice": "W1"
   },
@@ -56686,13 +58584,14 @@
   },
   {
    "id": "GAP-ESCORT",
-   "summary": "Partly closed by BootcampScriptedMoves (2026-09-15): the content layer can now move an NPC (ContentRuleAction.MoveCreatureToLocation, expressed through the emulator's own path-following action), and McAllister walks to the S2 gear area when mission 1990 is turned in - the same event whose line is \"Follow me over to the ...\" (footage A2-044 at 285.333); the destination is inferred (+/-5 m) from the gear crate placement's own position. Still open: Captain Youngblood does not walk into the camp on arrival (his placement already stands at his post) and no mechanism follows the player, so this is a walk to a place rather than a follow.",
+   "summary": "Partly corrected 2026-09-22 by BootcampMcAllisterWalk: the old path was queued on 1990 turn-in but zero walk_speed prevented any movement. A2-056/057/060 shows McAllister remains during the 1992 offer, then walks after acceptance. Trigger now uses MissionAccepted1992; pace2.5 m/s is an explicit analogue of class3846 animation reference, not the original server rate. Destination19853 remains inferred +/-5m horizontally with navmesh ground height120.75. Exact pace, route, stop point and original reconnect positioning remain unverified. Youngblood entry and player-follow behavior remain unresolved.",
    "evidence": [
-    "footage A2-044 (Mission Completion: \"Follow me over to the ...\")",
-    "content_rule 1985014 + action 14 (placement 198650 -> location 19853)",
-    "src/Rasa.Game/Managers/BehaviorManager.cs WalkTo"
+    "7Lrst9SG3pk A2-056296.2s, A2-057296.6s, A2-060297-301s; s295_pf.png and walk_297_299.png reinspection2026-09-22",
+    "Original generated/client/entitymovementrate.pyo lookup[3846] assignment110: walk animation reference2.5 (analogue server pace)",
+    "content_rule1985014 and content_rule_action(1985014,0); BehaviorManager.WalkTo/FollowPath",
+    "docs/bootcamp-opening-movement-audit.md"
    ],
-   "closes_with": "partly closed by BootcampScriptedMoves 2026-09-15 (McAllister's walk; Youngblood and follow remain)",
+   "closes_with": "Original pace/route/stop/reconnect evidence and verification of Youngblood arrival and player-follow behavior.",
    "surfaced_by": [
     "manifest omitted"
    ],
@@ -57003,7 +58902,7 @@
   },
   {
    "id": "GAP-S4-ALLY-ESCORT",
-   "summary": "The allied Forean Initiates (Gunner/Archer/Shaman L3, Warrior L2), the AFS Shotgunner/Rifleman/Infantryman/Field Gunner defenders and the teleport-in soldier are not seeded; the escorts follow the recruit (\"I'm sending some of our top soldiers along with you\", text 21237), which no mechanism supports.",
+   "summary": "The deployed world still omits the allied Forean Initiates (Gunner/Archer/Shaman L3, Warrior L2), the AFS Shotgunner/Rifleman/Infantryman/Field Gunner defenders and the teleport-in soldier. A mission-scoped follow and combat implementation for the three named level-3 camp companions is staged but not deployed (docs/evidence/bootcamp-courtyard-escort-combat-rules.json). Original escort travel, courtyard defender identities and encounter timing remain unverified.",
    "evidence": [
     "footage A3-070, A5-10, A5-17, A5-31, A5-34",
     "research/20260914-bootcamp-s4/work/pips_7L_362_595.jsonl (orange radar icons trailing the player 385-594)",
@@ -57153,12 +59052,13 @@
   },
   {
    "id": "GAP-S5-REINFORCEMENT-MOVE",
-   "summary": "Closed by BootcampScriptedMoves (2026-09-15): the three placed reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) walk to a point 15 m north-east of the dropship pad when 1995 objective 1 completes (the wreck destroyed), the direction the footage records them walking (S5P-05). The destination is inferred (+/-5 m); the pad is area 198603 at (-225.35, 99.6, -70.52).",
+   "summary": "Closed for the observed 1995 branch by BootcampScriptedMoves (2026-09-15), and for the inferred 2005 retry by BootcampRetryReinforcementWalk (2026-09-24): the three placed reinforcements (Infantryman L2, Infantryman L3 and the Forean Gunner Initiate) walk to a point 15 m north-east of the dropship pad after the relevant bomb objective completes. Only the 1995 walk-off is observed in footage (S5P-05). The destination is inferred (+/-5 m); the pad is area 198603 at (-225.35, 99.6, -70.52).",
    "evidence": [
     "footage S5P-05 (reinforcements walk north-east off the pad at 98.0)",
-    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854)"
+    "content_rule 1985015 + three action-14 rows (placements 198681, 198682, 198680 -> location 19854)",
+    "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json: inferred retry rule 1985017 with the same three placements and destination"
    ],
-   "closes_with": "closed by BootcampScriptedMoves 2026-09-15",
+   "closes_with": "1995 branch: BootcampScriptedMoves 2026-09-15; 2005 retry: BootcampRetryReinforcementWalk 2026-09-24",
    "surfaced_by": [
     "manifest"
    ],
@@ -57384,7 +59284,7 @@
   },
   {
    "id": "GAP-W1-REWARD-MODULES",
-   "summary": "The reward and item module ids 900221/900256 cannot be stored or sent, so the offer and tooltips read \"Pistol\"/\"Pulse Pistol\" without the \"Vextronics\" name and the [2] Reduce Resist line (observed -15 for 15 sec).",
+   "summary": "The original-client module ids 900221/900256 are now assigned to the Training Day offer and persisted reward items via the inferred template pairing. Recovered-client run 48 displays the Vextronics names in the offer and turn-in, and saves module 900221 on the selected physical pistol; Recovered-client run 49 displays the filmed [2] Reduce Resist tooltip lines from original-client effect IDs 9/115 and inferred flat coefficients; combat proc chance and application remain open.",
    "evidence": [
     "footage B2-026",
     "footage B2-029",
@@ -57595,11 +59495,11 @@
   },
   {
    "id": "GAP-S2-PLACEMENT-PROVENANCE",
-   "summary": "The S2 slice's placements have no manifest rows. content_placement 198651 (supply crate), 198652 (practice dummy), 198653 (target dummy), 198655 (Delessio), 198656 (Hartmann) and 198657 (DeSimone) are seeded by BootcampS2CaptureTheFlag and scoped to this manifest (ids 198650-198899) but are absent from its rows, so their provenance lives only in the migration's comments. The height audit made this visible: the Delessio/crate Y was a static's origin rather than a measured surface, and nothing in the manifest could have flagged it. Their XZ tiers and their now-measured Y (the navmesh surface) should be written as rows, and the validator's scope check should be tightened to require every placement in the declared range.",
-   "closes_with": "needs GAP-S2 rows plus a scope check that requires every placement in range",
+   "summary": "2026-09-22: all six S2 placement rows198651/652/653/655/656/657 and their three NPC creature rows now have per-field provenance; measured platform height records corrected from static origin114.0 to deck122.1. Exact estimated identity/HP/rotation remain labelled. Scope-completeness beyond this earliest slice remains open. BootcampS2ProvenanceTests now reconstructs these9seed rows with later corrections and checks every required evidence field against current values.",
+   "closes_with": "Broader reserved-range completeness beyond this covered S2 slice.",
    "evidence": [
-    "manifest rows: content_placement covers 198650, 198658-198684, 198685 but not 198651-198657",
-    "BootcampS2CaptureTheFlag seeds those placements with their provenance only in code comments"
+    "BootcampS2GearingUpRows and its later ground/platform/target-front corrections",
+    "docs/evidence/bootcamp-d11-positions.json and current manifest rows"
    ],
    "surfaced_by": [
     "placement height audit 2026-09-15"
@@ -58850,7 +60750,8 @@
     "codex-tr.net poi (781, 577)",
     "rasaworld.db spawnpool 92 NPC_Forean_Shaman at y 287.24; spawnpool 184 at y 302.09 beside Moawi"
    ],
-   "closes_with": "an owner decision: retire 184, name 92, or move 184 and accept the stack",
+   "closes_with": "final-live placement evidence resolving whether the reconstructed caverns position remained valid at shutdown",
+   "reconstruction_update": "SolisCavernsPlacement (2026-09-23) moved named pool 184 to pool 92's caverns-side coordinates and disabled unnamed pool 92. The user authorized an evidence-bounded best estimate where final-live server placements are missing. Original-client checks found the previous hut-side Solis obscured by stonework and rendered the named Solis with objective marker at the tested caverns-side location. Exact final-live position and the conversation transition remain unverified; see docs/evidence/solis-caverns-placement.json.",
    "surfaced_by": [
     "codex reconciliation, 2026-09-22"
    ],
@@ -58894,6 +60795,37 @@
     "W3"
    ],
    "status": "open"
+  },
+  {
+   "id": "GAP-S2-CRATE-RECOVERY",
+   "summary": "Original reconnect behavior is unrecorded. Runtime now reconstructs single-piece mission container contents from remaining ownership in backpack/equipment/weapon drawer, preventing a repeated issued piece after private-map loss. An entirely held set can recover objective completion on use without a nonexistent loot row to click. This extends the existing ownership-settlement inference; it is not observed retail reconnect behavior. Destroyed or transferred items and consumable stack replenishment remain outside this rule.",
+   "evidence": [
+    "7Lrst9SG3pk A3-022306.467 and A3-023308.067 show one five-piece grant",
+    "MissionContentRuntime OpenContentContainer/SettleContainerDispenser; docs/bootcamp-crate-state-audit.md"
+   ],
+   "closes_with": "Original partial-loot reconnect/abandon/transfer capture or final server data.",
+   "surfaced_by": [
+    "crate recovery audit2026-09-22"
+   ],
+   "slices": [
+    "S2"
+   ]
+  },
+  {
+   "id": "GAP-NATIVE-YAW-OTHER-LOCATIONS",
+   "summary": "Original-client admission probes show that raw actor yaw differs from compass heading by pi. Only first-login location19851 has been converted. Other measured content_location/placement rotations and shared server facing calculations require an ordered audit; no bulk conversion is justified without checking each field consumer. Exact first-arrival heading remains measured from slightly later footage.",
+   "evidence": [
+    "docs/evidence/client-world-admission-orientation.json",
+    "docs/client-world-admission-orientation.md"
+   ],
+   "closes_with": "Compare later progression locations and each rotation consumer against original client and footage; retain original measurement uncertainty.",
+   "surfaced_by": [
+    "manifest"
+   ],
+   "slices": [
+    "S1",
+    "S6"
+   ]
   }
  ],
  "non_content_settings": [
@@ -61054,6 +62986,425 @@
      "locator": "revs 25740, 27661, 35394, 27616, 27920 per row"
     }
    ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampEquipCrateGear",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1992,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "field": "equip_match",
+   "old": 0,
+   "new": 2,
+   "reason": "A3-027 leaves the equip objective open with Recruit gear already equipped; A3-036 replaces Recruit Boots with crate boots and A3-037 completes it. Matching any member of crate item set 19858 is inferred. Only crate boots are observed to satisfy this step; the original server predicate and other item matches remain unverified.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-027",
+     "t": 308.533
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-036",
+     "t": 321.667
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-037",
+     "t": 322.267
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampEquipCrateGear",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1992,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "field": "item_set_id",
+   "old": 0,
+   "new": 19858,
+   "reason": "A3-027 leaves the equip objective open with Recruit gear already equipped; A3-036 replaces Recruit Boots with crate boots and A3-037 completes it. Matching any member of crate item set 19858 is inferred. Only crate boots are observed to satisfy this step; the original server predicate and other item matches remain unverified.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-027",
+     "t": 308.533
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-036",
+     "t": 321.667
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-037",
+     "t": 322.267
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampCrateUncommonGear (evidence refinement only)",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 12209
+   },
+   "field": "item_template_id.provenance",
+   "old": "analogue: band borrowed from glove tooltip",
+   "new": "inferred: own observed tooltip matches client class; template identity nonunique",
+   "reason": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 42, Regen Rate 1/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16692 matches. Template 12209 remains inferred, not uniquely identified: the same original class also belongs to templates 30058, 50241. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-035",
+     "t": 321.467
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/itemclass.pyo itemTemplateItemClass[12209]=16692, assignment offset 412085; itemTemplateSkillRequirement[12209]=(19,1), offset 682925; generated/client/armorclass.pyo lookup[16692]=(422,422,1), assignment offset 19604"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampCrateUncommonGear (evidence refinement only)",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 26879
+   },
+   "field": "item_template_id.provenance",
+   "old": "analogue: band borrowed from glove tooltip",
+   "new": "inferred: own observed tooltip matches client class; template identity nonunique",
+   "reason": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 70, Regen Rate 2/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16592 matches. Template 26879 remains inferred, not uniquely identified: the same original class also belongs to templates 29751, 50239, 111158, 130434. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-040",
+     "t": 324.467
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/itemclass.pyo itemTemplateItemClass[26879]=16592, assignment offset 442487; itemTemplateSkillRequirement[26879]=(19,1), offset 729590; generated/client/armorclass.pyo lookup[16592]=(703,703,2), assignment offset 19208"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampCrateUncommonGear (evidence refinement only)",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 12208
+   },
+   "field": "item_template_id.provenance",
+   "old": "analogue: band borrowed from glove tooltip",
+   "new": "inferred: own observed tooltip matches client class; template identity nonunique",
+   "reason": "2026-09-22 crop reinspection confirms this piece directly: Body Armor 84, Regen Rate 2/sec, Motor Assist Armor 1 and Min Level 1. Original client class 16642 matches. Template 12208 remains inferred, not uniquely identified: the same original class also belongs to templates 29905, 50240, 111156. Maker/module identity remains unrecovered. This replaces the earlier claim that no tooltip for this piece survived; no seeded value changes.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-046",
+     "t": 332.467
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/itemclass.pyo itemTemplateItemClass[12208]=16642, assignment offset 412076; itemTemplateSkillRequirement[12208]=(19,1), offset 682910; generated/client/armorclass.pyo lookup[16642]=(844,844,2), assignment offset 19406"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampMcAllisterWalk",
+   "table": "creature",
+   "key": {
+    "id": 198500
+   },
+   "field": "walk_speed",
+   "old": 0,
+   "new": 2.5,
+   "reason": "Original footage shows McAllister waits through the 1992 offer then walks after acceptance. Previously a path was queued at 1990 turn-in but zero speed prevented movement. Pace is a labelled analogue; see docs/bootcamp-opening-movement-audit.md.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-056",
+     "t": 296.2
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-057",
+     "t": 296.6
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-060",
+     "t": 297.0
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/entitymovementrate.pyo lookup[3846]=(0.0,2.5,6.5), assignment offset 110, SHA256 a1afe0abd4d3504cda9d2542778b706e1af9adbcab12e3614bbbc67b3d825660; client/playermovementmgr.pyo PlayerMovementMgr.__init__ original line 124 offsets 172-203 unpacks stoppedRate, walkAnimRate, runAnimRate"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampMcAllisterWalk",
+   "table": "content_rule",
+   "key": {
+    "id": 1985014
+   },
+   "field": "event",
+   "old": 6,
+   "new": 2,
+   "reason": "Original footage shows McAllister waits through the 1992 offer then walks after acceptance. Previously a path was queued at 1990 turn-in but zero speed prevented movement. Pace is a labelled analogue; see docs/bootcamp-opening-movement-audit.md.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-056",
+     "t": 296.2
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-057",
+     "t": 296.6
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-060",
+     "t": 297.0
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampMcAllisterWalk",
+   "table": "content_rule",
+   "key": {
+    "id": 1985014
+   },
+   "field": "mission_id",
+   "old": 1990,
+   "new": 1992,
+   "reason": "Original footage shows McAllister waits through the 1992 offer then walks after acceptance. Previously a path was queued at 1990 turn-in but zero speed prevented movement. Pace is a labelled analogue; see docs/bootcamp-opening-movement-audit.md.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-056",
+     "t": 296.2
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-057",
+     "t": 296.6
+    },
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A2-060",
+     "t": 297.0
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampCrateLoadedRifle",
+   "table": "content_item_set",
+   "key": {
+    "item_set_id": 19858,
+    "item_template_id": 13713
+   },
+   "field": "initial_ammo",
+   "old": 0,
+   "new": 20,
+   "reason": "Original loot-window rifle tooltip shows20/20 before receipt. Stored on the item at creation, independent of reserve ammo.",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "event": "A3-018",
+     "t": 304.733
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampPracticeDummyHealth",
+   "table": "content_placement",
+   "key": {
+    "id": 198652
+   },
+   "field": "hit_points",
+   "old": 100,
+   "new": 1,
+   "reason": "Five continuous single-round shots each destroy the filmed target, including a clear 84-damage hit. 1 is an explicit minimal reconstruction, not recovered original HP; the unfilmed Lightning target remains unchanged. Timing evidence corrects the missed fifth cycle and second return without changing nominal 930 ms.",
+   "citations": [
+    {
+     "source": "measurement:practice-dummy-cycles",
+     "locator": "cycles1–5; five-shot-damage-nearest.png; third hit355.266667–355.466667 reads84"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-22",
+   "migration": "BootcampFirstLoginYaw",
+   "table": "content_location",
+   "key": {
+    "id": 19851
+   },
+   "field": "rotation",
+   "old": 6.02139,
+   "new": 2.879793,
+   "reason": "Correct compass-to-native yaw conversion after original-client probes established pi->+Z and pi/2->-X. Measured345deg +/-15deg is unchanged; native representation is165deg. No existing character rotations or other destination rows are modified.",
+   "citations": [
+    {
+     "source": "measurement:bootcamp-positions",
+     "position_key": "spawn.first_login"
+    },
+    {
+     "source": "calibration:original-client-yaw",
+     "locator": "heading_conversion; playthrough03/04 runtime probes"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-23",
+   "migration": "BootcampDeSimoneCampPlacement",
+   "table": "content_placement",
+   "key": {
+    "id": 198657
+   },
+   "field": "pos_x,pos_y,pos_z",
+   "old": [
+    387.2,
+    127.7,
+    40.0
+   ],
+   "new": [
+    390.5,
+    119.55,
+    156.0
+   ],
+   "tier": "inferred",
+   "reason": "The previous southern position had no original frame; the edited 1992/1994 handoff resumes beside the north camp pylon. Exact DeSimone position remains unseen.",
+   "source": "docs/evidence/bootcamp-desimone-camp-placement.json",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "locator": "362.133-362.7 s post-edit north camp; DeSimone himself unseen"
+    },
+    {
+     "source": "client_map:adv_bootcamp",
+     "locator": "adv_bootcamp.nav floor near (390.5,156); see docs/evidence/bootcamp-desimone-camp-placement.json"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-23",
+   "migration": "BootcampCampGunnerCompanion",
+   "table": "creature,creature_appearance,content_condition,content_placement",
+   "key": {
+    "creature_id": 198516,
+    "placement_id": 198688,
+    "condition_id": 198914
+   },
+   "field": "new rows",
+   "old": null,
+   "new": "Staged level-3 Forean Gunner Initiate combat companion",
+   "tier": "mixed: original/observed/measured/inferred/analogue per field",
+   "reason": "Original final-week footage shows a named camp Gunner and Forean allies fighting beside the recruit, while client text sends soldiers along. Individual position and combat numbers remain estimated.",
+   "source": "docs/evidence/bootcamp-camp-gunner-companion.json",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "locator": "362.7-391.5 s camp Gunner target and allied combat; see companion field provenance"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-23",
+   "migration": "BootcampCampArcherShamanCompanions",
+   "table": "creature_action,creature,creature_appearance,content_placement",
+   "key": {
+    "creature_ids": [
+     198517,
+     198518
+    ],
+    "placement_ids": [
+     198689,
+     198690
+    ],
+    "action_id": 46
+   },
+   "field": "new rows",
+   "old": null,
+   "new": "Staged level-3 Forean Archer and Shaman Initiate camp combat companions",
+   "tier": "mixed: original/observed/measured/inferred/analogue per field",
+   "reason": "Final-week footage A3-070 directly names both with the Gunner in the camp group. Individual positions, attack parameters and most stats remain estimates.",
+   "source": "docs/evidence/bootcamp-camp-archer-shaman-companions.json",
+   "citations": [
+    {
+     "source": "video:7Lrst9SG3pk",
+     "locator": "362.133-384.933 s A3-070 Archer/Shaman target frames; see companion field provenance"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "migration": "BootcampRetryReinforcementWalk",
+   "table": "content_rule,content_rule_action",
+   "key": {
+    "rule_id": 1985017,
+    "placement_ids": [
+     198681,
+     198682,
+     198680
+    ],
+    "location_id": 19854
+   },
+   "field": "new rule and three move actions",
+   "old": null,
+   "new": "On completion of 2005 objective 1, the three reconstructed reinforcements walk to the existing inferred endpoint.",
+   "tier": "inferred",
+   "reason": "The original final-week footage observes the squad walking after 1995 detonates the same wreck; the original client defines 2005 as the retry bomb objective. No original retry walk-off capture is known.",
+   "source": "docs/evidence/bootcamp-s5-retry-reinforcement-walk.json",
+   "citations": [
+    {
+     "source": "video:8VXeKzGUv0c",
+     "locator": "87.4-98.333 s S5P-05 / B2-012 1995 reinforcement walk-off; 2005 retry inferred"
+    },
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/missionobjective.pyo @108737 (2005,1); missiontextlanguage.pyo @565436 text21566"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "migration": "BootcampLightningHitCredit",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1992,
+    "objective_id": 8,
+    "binding_id": 0
+   },
+   "field": "destroying_hit_only",
+   "old": true,
+   "new": false,
+   "tier": "inferred",
+   "reason": "Original text 21665/21666 teaches use/fire of Lightning, not destruction; the filmed completion event is cut. Credit the first damaging hit on target placement 198653 with action 194; docs/bootcamp-lightning-hit-credit.md records the 100-HP analogue and runtime hit notification fix.",
+   "source": "docs/bootcamp-lightning-hit-credit.md",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client/language/english/missiontextlanguage.pyo texts21665/21666; hit-credit inference in docs/bootcamp-lightning-hit-credit.md"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -61406,7 +63757,7 @@
    "default": "Templates 116929/116930 with labelled analogue item fields",
    "status": "approved",
    "review_status": "approved-by-agent-pending-owner-review",
-   "choice": "Templates 116929 (Vextronics Pistol, class 27121) and 116930 (Vextronics Pulse Pistol, class 27100), inferred; 121053/121086 recorded as the alternative. Item rows: observed range 20, alt damage 115/122 physical, AE type 0; inferred quality 3, inventory category 1, ammo per shot 1, windup/recovery/refire 0/250/150 and 0/250/100, attack type 2; analogue flags Not Tradeable/Not Sellable and no Bound/BoE/Unique from the equipped AccuMax Shotgun tooltip (B2-027), lockbox placeable from the client default; the remaining sent weapon fields keep the emulator placeholder as labelled analogues; prices 0 with GAP-W1-ITEM-PRICES; module ids 900221/900256 cannot be stored (GAP-W1-REWARD-MODULES).",
+   "choice": "Templates 116929 (Vextronics Pistol, class 27121) and 116930 (Vextronics Pulse Pistol, class 27100), inferred; 121053/121086 recorded as the alternative. Item rows: observed range 20, alt damage 115/122 physical, AE type 0; inferred quality 3, inventory category 1, ammo per shot 1, windup/recovery/refire 0/250/150 and 0/250/100, attack type 2; analogue flags Not Tradeable/Not Sellable and no Bound/BoE/Unique from the equipped AccuMax Shotgun tooltip (B2-027), lockbox placeable from the client default; the remaining sent weapon fields keep the emulator placeholder as labelled analogues; prices 0 with GAP-W1-ITEM-PRICES; module ids 900221/900256 assigned to offer and reward instances; original-client effect IDs 9/115 and inferred coefficients reproduce filmed tooltip lines, while combat proc chance/application remain open (GAP-W1-REWARD-MODULES).",
    "approved_on": "2026-09-14",
    "record": "docs/progression-preservation-plan.md#boot-camp-owner-decisions (Wilderness arrival, 2026-09-14): decided by the agent on the owner's behalf; pending owner review"
   },
@@ -61588,6 +63939,26 @@
    "choice": "The owner answered 'build them labelled' (2026-09-19). The summons use world-seed creatures in place of the lost creature-variant table - the AFS mini turret (creature 9) for Turret and Trap, the friendly Hominis Machina (8) for Bot Construction, the military-surplus soldier (10) for Spotter, the human NPC of the player's gender (4 or 6) wearing their appearance for Create Clone; Crab Mines and Hortimunculus act without a creature; Polymorph lends the faction without the creature body. Critical hits follow TaRapedia 'Critical Hit' (2008-10-19): +50% against creatures, +25% against players, Spirit 0.065% a point, with a 5% base chance - later found to be the client's own BASE_CRITICAL_CHANCE, so not a stand-in.",
    "approved_on": "2026-09-19",
    "record": "docs/fidelity-audit.md"
+  },
+  {
+   "id": "OD-57",
+   "decision": "McAllister walking pace when no original server rate survives",
+   "default": "Original reconstructed class animation reference as an explicit analogue",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Use 2.5 m/s, the client walk animation reference for the already reconstructed class 3846, to make the observed walk functional. This is an analogue, not a measured original McAllister pace. Fractional storage avoids rounding it. The current user instruction authorizes closest evidenced estimates; no separate owner choice of this exact rate is claimed.",
+   "approved_on": "2026-09-22",
+   "record": "docs/bootcamp-opening-movement-audit.md"
+  },
+  {
+   "id": "OD-58",
+   "decision": "Practice Dummy single-hit behavior with unrecovered original HP",
+   "default": "Minimal positive HP through existing damage handling",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Use explicitly inferred 1 HP only for Practice Dummy 198652 to reproduce five observed single-hit destructions, including 84 damage. The standing user instruction authorizes labelled closest reconstruction; no separate owner choice of this exact HP is claimed. Original low HP versus forced server destruction is unresolved. Lightning Target Dummy 198653 remains 100 HP because its scene is cut.",
+   "approved_on": "2026-09-22",
+   "record": "docs/bootcamp-combat-feedback-audit.md"
   }
  ]
 }

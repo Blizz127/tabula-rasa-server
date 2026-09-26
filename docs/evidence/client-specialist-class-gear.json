@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-23",
+  "scope": "Recovered-client Specialist class selection, mission 2011, class skill allocation, equipment, and relog handoff to the first Alia Das mission",
+  "client": "Recovered 1.16.5.0 client; compatible emulator build, not proven final shutdown revision",
+  "diagnostic_inputs": [
+    "Run 55 copied the run-48 Training Day-complete Recruit and set level 4, 43,000 XP, and (768.0,294.12,386.05) by Kincaid; these are test scaffolding, not earned progression.",
+    "Run 56 copied the accepted run-55 character and moved it to (760.0,293.97,407.07), facing the seeded Caufield at spawnpool 210. Run 57 copied the post-turn-in and trained character without modifying it.",
+    "Each run used the isolated original world seed; the live deployed database was untouched."
+  ],
+  "observations": [
+    {
+      "tier": "observed",
+      "source": "playthrough-55/04-specialist-selected.png; playthrough-55/05-specialist-confirm.png; playthrough-55/06-specialist-offer.png",
+      "finding": "Selecting Specialist at Kincaid enabled Train and showed the permanent-class/clone confirmation. Confirming raised the character to level 5 with 3 attribute and 4 skill points, then immediately opened Headquarters mission 2011 Getting It In Gear: Specialist Class, with disabled Decline and six visible fixed rewards."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-55/07-specialist-accepted.png; playthrough-55/char-after.db",
+      "finding": "Accepting the forced offer added Report to Quartermaster Caufield to the tracker. The saved character became class 3 level 5 with 43,000 XP, 470 credits and mission 2011 active."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-56/03-specialist-caufield-conversation.png; playthrough-56/04-specialist-objective.png; playthrough-56/05-specialist-rewards.png",
+      "finding": "Caufield was talkable. His generic dialogue again showed ERROR: ?: No greeting and a Specialist class-gear topic. The objective completed through that topic, and a second interaction showed Hazmat Armor Helmet, Vest, Gloves, Legs, Boots and Repair-O-Matic as fixed rewards."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-56/06-specialist-completed.png; playthrough-56/char-after.db",
+      "finding": "Turn-in completed mission 2011 and created items 18\u201323 of templates 122866\u2013122871. XP remained 43,000 and credits remained 470."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-56/07-specialist-skills.png; playthrough-56/08-hazmat-queued.png; playthrough-56/09-hazmat-trained.png; playthrough-56/10-specialist-backpack-trained.png",
+      "finding": "The Specialist Skills UI showed 8 unspent training points in this diagnostic character. Spending one on Hazmat Armor changed its five reward icons from unusable red to normal. Training Tools changed Repair-O-Matic from red to usable. Both skill levels persisted as 1 in character_skills."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-56/12-hazmat-helmet-action.png; playthrough-56/13-hazmat-armor-equipped.png; playthrough-56/15-repair-tool-equipped.png; playthrough-56/char-after.db",
+      "finding": "Right-click equipped all five Hazmat pieces in equipment inventory slots 1,15,3,16,2 and Repair-O-Matic in tool inventory slot 0. The tool displayed 0/0 ammo and triggered Out Of Ammo tutorial."
+    },
+    {
+      "tier": "inferred",
+      "source": "src/Rasa.DBL/Services/Preloader/WeaponClassPreloader.cs:651; world seed weaponclass(12797), itemtemplate_itemclass(122871) and itemtemplate_itemclass(56)",
+      "finding": "The emulator preloader and world seed encode weapon class 12797 for Repair-O-Matic with ammo class 3807 and clip size 10; template 56 maps to ammo class 3807. This supports a separate-ammo explanation for the 0/0 UI, but the raw original client row and final-live class-gear ammo grant need direct verification."
+    },
+    {
+      "tier": "observed",
+      "source": "Michael Zenke, 'Adventures From the Back Row: the Specialist and her tools', Engadget, 2007-11-26, https://www.engadget.com/2007-11-26-adventures-from-the-back-row-the-specialist-and-her-tools.html, paragraphs beginning 'This simply-named class feature' and 'The repair tool operates'",
+      "finding": "A contemporary firsthand gameplay account reports that Tools Rank I allows a repair tool and that repair tools consume Power Cells when applied to damaged armor. This corroborates the Power Cells ammo interpretation, but describes 2007 play and does not establish the final-live mission 2011 ammo grant."
+    },
+    {
+      "tier": "observed",
+      "source": "playthrough-57/02-specialist-relog-world.png; playthrough-57/03-caufield-after-specialist.png; playthrough-57/char-after.db",
+      "finding": "After relog, mission 2011 remained completed, skills 14 and 30 were level 1, and all six rewards remained equipped. Caufield offered the separate Lurking In The Shadows mission rather than class gear. The run accepted that next mission, recorded as mission 427 active in the saved database."
+    }
+  ],
+  "limitations": [
+    "This checks emulator behavior through the compatible original client, not independent final-live server behavior.",
+    "The character entered the class gate by diagnostic level/XP editing and reached Caufield by diagnostic position editing. Normal earned progression and travel were not tested here.",
+    "The authentic Caufield generic greeting remains unrecovered (GAP-W2-CAUFIELD-GREETING).",
+    "No original final-live capture establishes whether class gear supplied ammo template 56, a filled tool clip, or neither. The 0/0 UI is verified for this emulator character, not established as an original quirk or defect.",
+    "The 2007 firsthand Specialist account predates shutdown by more than a year and does not specify initial tool ammunition; final-live applicability is unverified.",
+    "The exact original itemtemplate_weapon values and reward economy remain estimated or unverified per OD-43; the run establishes only current client/server behavior."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/01-specialist-gate.png",
+      "sha256": "b54cc82ab02d46d3b3b81ebb093e1f19dba6612a5f6df074f35a30f6d87ce15c",
+      "bytes": 1118892
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/04-specialist-selected.png",
+      "sha256": "c4db303d16ecd6990fb7c717ccc1a5cae76b2587d4f90df88e47fc84c61f4352",
+      "bytes": 867434
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/05-specialist-confirm.png",
+      "sha256": "4fac03d1c46abe2d76501eddf30b9376299e8195b89eb222fa48c8e9780c02fe",
+      "bytes": 845456
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/06-specialist-offer.png",
+      "sha256": "d96ab6c5de883b7e84d0a76216c89169f6d9784fe3afde7df455f9a479af638b",
+      "bytes": 938811
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/07-specialist-accepted.png",
+      "sha256": "42e06096c94b17c7d166f70d9771d907ddfc954de8bfe1ab9803f08641064160",
+      "bytes": 1128402
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/char-after.db",
+      "sha256": "a6af4dd40ccd6f27dfa2dcc9eaf144da9b340faaf7eb942add26113cfbd183ba",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-55/game.log",
+      "sha256": "6becc44f57403d3e78f47e2a77e9fb0b68ecdb4368fc3e0f1cd3185f9cae4273",
+      "bytes": 22536
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/02-caufield-specialist-world.png",
+      "sha256": "4bf6b58031b67564fb833ef1ec553a25f5921388dcef8c28e05fc34bfaf3f483",
+      "bytes": 1030341
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/03-specialist-caufield-conversation.png",
+      "sha256": "d04586d311e327a533f3de03850dad4fd9fc99dec515265a842b0ac2fc6ce234",
+      "bytes": 893258
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/04-specialist-objective.png",
+      "sha256": "9759369961a7801c25889f928b3b07d5e018a6bc6bbb3acfec58315c23a8603e",
+      "bytes": 890954
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/05-specialist-rewards.png",
+      "sha256": "74f1cdad64d12c5c11777d760e1682d119b15a1dc16ccbc56123c4ae2be56d35",
+      "bytes": 902550
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/06-specialist-completed.png",
+      "sha256": "f8509cc22e4af7e7ab9c20a00d0255af0dfc80a08de472b37f5a90f943a75375",
+      "bytes": 1021791
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/07-specialist-skills.png",
+      "sha256": "1de5d2edf61370dbd385b7462e7f16fac0325305b9469b6e42354b1b7a17c731",
+      "bytes": 898217
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/08-hazmat-queued.png",
+      "sha256": "269f25e4f1208f86780e5c16ab2ddccb867fc06d0ae2fc3a74da87d2295acd48",
+      "bytes": 896122
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/09-hazmat-trained.png",
+      "sha256": "a0a295becc596fcdd885dd0312260e029cf55f979a1958956be0a33896f4f647",
+      "bytes": 894847
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/10-specialist-backpack-trained.png",
+      "sha256": "e53d5f98d37b3d15e409ee3a90927c49f5146668d3cc5ab08d509f6daf802819",
+      "bytes": 900477
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/12-hazmat-helmet-action.png",
+      "sha256": "aa5fe1cd64f731c627e68aa7fd9afc7b621f8d6d42a88b6b19a449894e50979b",
+      "bytes": 893422
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/13-hazmat-armor-equipped.png",
+      "sha256": "ed7017140ef1c905e9819a9ce6a7211a43e855cfae125757275586575c3e36af",
+      "bytes": 893154
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/14-tools-trained.png",
+      "sha256": "49b7d13ca3aee1963bbf621d5a4432e460eb4fe3e5ba2d6b371bcb6978c88b06",
+      "bytes": 896284
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/15-repair-tool-equipped.png",
+      "sha256": "2441ad4b3f7be7c1d06f5c6d13974e0d447e75eb4f91e6983e3a4592cf1c118c",
+      "bytes": 878949
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/char-after.db",
+      "sha256": "202ef28b451097b191b0abeb11d543672c5a3d25155bc413471a215ab3a2e785",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-56/game.log",
+      "sha256": "c43213495bdba3f417bff4c36620eab433c1dd2f503b9c435622d7d0c0e7d65d",
+      "bytes": 46424
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-57/02-specialist-relog-world.png",
+      "sha256": "ac41aa2f513ee0f8edb45c9bf07bd1377d4df36579db119eb0de49695ec3654b",
+      "bytes": 1029229
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-57/03-caufield-after-specialist.png",
+      "sha256": "d5e6137ca69f6f444d81dd629cb8a5edfedbeab787ec9d17d8b3217608162b29",
+      "bytes": 900538
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-57/04-lurking-accepted.png",
+      "sha256": "6166eb32cf54fb9a1dc02d98e9532efbc5ac74fff5351b63baaaface48dcc4a6",
+      "bytes": 1031011
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-57/char-after.db",
+      "sha256": "c0082855b9aaf0b76ae4631fef5f709bd9791166781651454e155e5f9a0c7052",
+      "bytes": 204800
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-57/game.log",
+      "sha256": "2bd04454be67c84e019e402fc83c0e079043ac78e50698fe5b84e87093d8d859",
+      "bytes": 18285
+    },
+    {
+      "path": "/home/blizz/backups/rasa-net/research/20260922-client-playthrough/rifle-melee-playthrough/playthrough-24-seed/world-before.db",
+      "sha256": "394aea1050daf43666719b31d730565d09529c1573249bdff891537c70682c50",
+      "bytes": 4308992
+    }
+  ]
+}

@@ -8,13 +8,14 @@
    "x": 387.2,
    "y": 136.75,
    "z": -79.09,
-   "rotation": 6.02139,
+   "rotation": 2.879793,
    "tier": "measured",
    "uncertainty": {
     "horizontal_m": 1.5,
-    "vertical_m": 1.5
+    "vertical_m": 1.5,
+    "rotation_degrees": 15
    },
-   "method": "X,Z: radar texture matching on 7Lrst9SG3pk 224.8-237.467 (adv_bootcamp radar, gamecontextuiradarinfo (1985,0)=(790,408,103,-58)), identical across the whole arrival hold; +/-1.5 m. Y: the decoded bootcamp map heightmap (Tabula Rasa 1.16.5.0 data/maps/adv_bootcamp/t000007c1_terrain.glm, a stitched 1152x1152 tile grid; 0x7c1 = context 1985; .thd header origin (-512,0,-512), 1 m spacing) sampled at (X,Z). The same decode reproduces a static prop base to 0.03 m (ArchForeanTorchV01 at (398.5,2.5), base 118.34 vs decoded 118.31), so the vertical uncertainty is the 0.25 m height quantum plus slack, +/-1.5 m. rotation: camera heading 345 deg clockwise from +Z toward +X at 238.133 (empirical arrow template score 0.94), low confidence; the server sends the character yaw as radians, so this value is the measured heading, not a verified server convention.",
+   "method": "X,Z: radar texture matching on 7Lrst9SG3pk 224.8-237.467 (adv_bootcamp radar, gamecontextuiradarinfo (1985,0)=(790,408,103,-58)), identical across the whole arrival hold; +/-1.5 m. Y: the decoded bootcamp map heightmap (Tabula Rasa 1.16.5.0 data/maps/adv_bootcamp/t000007c1_terrain.glm, a stitched 1152x1152 tile grid; 0x7c1 = context 1985; .thd header origin (-512,0,-512), 1 m spacing) sampled at (X,Z). The same decode reproduces a static prop base to 0.03 m (ArchForeanTorchV01 at (398.5,2.5), base 118.34 vs decoded 118.31), so the vertical uncertainty is the 0.25 m height quantum plus slack, +/-1.5 m. rotation: measured camera heading 345 deg clockwise from +Z toward +X at 238.133 (empirical arrow template score 0.94), low confidence, +/-15 deg. The original-client runtime probes on 2026-09-22 establish raw actor yaw pi -> +Z and pi/2 -> -X; therefore raw yaw = wrap(compass heading - pi), giving 165 deg = 2.879793 rad. See docs/evidence/client-world-admission-orientation.json for native offsets and playthrough-03/04 captures/logs. This converts the existing measured heading; the frame follows approximately 1.8 m of motion and does not prove exact first-arrival facing.",
    "frames": [
     {
      "video": "7Lrst9SG3pk",
@@ -132,14 +133,14 @@
    "position_key": "object.supply_crate",
    "map_context_id": 1985,
    "x": 397.3,
-   "y": 114.0,
+   "y": 122.1,
    "z": 173.7,
    "tier": "measured",
    "uncertainty": {
     "horizontal_m": 2.0,
     "vertical_m": 0.5
    },
-   "method": "X,Z: the Supply Crate's yellow objective icon, radar texture matching on 7Lrst9SG3pk (icon bbox centre 396.6,173.8 at 305.467), +/-2.0 m; no static crate prop at this spot, so the crate was server-spawned. Y: the deck of the static platform ArchHumBaseGatesystemPlatform16Mx24M (map entity at (405,114,166), AABB Y 113.99-...) the crate stands on; the loot happened on that deck, +/-0.5 m.",
+   "method": "X,Z: the Supply Crate's yellow objective icon, radar texture matching on 7Lrst9SG3pk (icon bbox centre 396.6,173.8 at 305.467), +/-2.0 m; no static crate prop at this spot, so the crate was server-spawned. Y: the deck of the static platform ArchHumBaseGatesystemPlatform16Mx24M (map entity at (405,114,166), AABB Y 113.99-...) the crate stands on; the loot happened on that deck, +/-0.5 m. CORRECTION2026-09-22: the former114.0 was the platform static origin, not its deck. Existing2026-09-15 layered navmesh probe puts the platform top122.11; seed rounds to122.1. navmesh/adv_bootcamp.nav SHA25610a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; 2026-09-15 PlacementHeightAudit / BootcampPlatformTopCorrectionRows",
    "frames": [
     {
      "video": "7Lrst9SG3pk",
@@ -157,14 +158,14 @@
    "position_key": "npc.delessio",
    "map_context_id": 1985,
    "x": 398.9,
-   "y": 114.0,
+   "y": 122.1,
    "z": 173.3,
    "tier": "measured",
    "uncertainty": {
-    "horizontal_m": 2.0,
+    "horizontal_m": 2.5,
     "vertical_m": 0.5
    },
-   "method": "X,Z: Captain Delessio's radar mission icon while 'Speak to Captain Delessio' was active, radar pip offset + visual bbox + 3D view on 7Lrst9SG3pk, +/-2.5 m. Y: the same platform deck as the crate (he stands by it on the platform), +/-0.5 m.",
+   "method": "X,Z: Captain Delessio's radar mission icon while 'Speak to Captain Delessio' was active, radar pip offset + visual bbox + 3D view on 7Lrst9SG3pk, +/-2.5 m. Y: the same platform deck as the crate (he stands by it on the platform), +/-0.5 m. CORRECTION2026-09-22: the former114.0 was the platform static origin, not its deck. Existing2026-09-15 layered navmesh probe puts the platform top122.11; seed rounds to122.1. navmesh/adv_bootcamp.nav SHA25610a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; 2026-09-15 PlacementHeightAudit / BootcampPlatformTopCorrectionRows",
    "frames": [
     {
      "video": "7Lrst9SG3pk",
@@ -1446,6 +1447,42 @@
    ],
    "client": "1.16.5.0",
    "session_date": "2009-02 (about 2009-02-26)"
+  },
+  {
+   "position_key": "npc.desimone",
+   "map_context_id": 1985,
+   "x": 390.5,
+   "y": 119.55,
+   "z": 156.0,
+   "tier": "inferred",
+   "reasoning": "DeSimone remains unseen across the A3-065/A3-066 edit. Immediately after the 1992 turn-in and 1994 acceptance, the filmed player is near (389,155) beside the measured Forean Initiate camp group at (385.2,152.3), while the previous estimate (387.2,127.7,40) is about 115 m south and forces a return trip. Placing the receiver 1-3 m from the post-edit player position is an inference, not a recovered retail coordinate. Supersedes the previous estimate with horizontal uncertainty +/-5 m and vertical +/-0.5 m.",
+   "method": "7Lrst9SG3pk 362.067-362.7 s and ally.forean_initiates.camp (same file); navmesh/adv_bootcamp.nav SHA256 10a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52 floor 119.97 at (390.5,156), minus calibrated 0.42 m map height bias; complete nav path from camp to cave trigger measured 2026-09-23",
+   "client": "1.16.5.0",
+   "session_date": "2026-09-23"
+  },
+  {
+   "position_key": "walk.mcallister_gear",
+   "map_context_id": 1985,
+   "x": 390.0,
+   "y": 120.75,
+   "z": 172.0,
+   "tier": "inferred",
+   "reasoning": "Existing inferred approach to the measured supply crate, horizontal uncertainty\u00b15m; Y is the2026-09-15 navmesh surface at the chosen XZ. Exact original endpoint and route unknown.",
+   "method": "navmesh/adv_bootcamp.nav SHA25610a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; 2026-09-15 PlacementHeightAudit / BootcampPlatformTopCorrectionRows",
+   "client": "1.16.5.0",
+   "session_date": "2026-09-22"
+  },
+  {
+   "position_key": "object.target_dummy",
+   "map_context_id": 1985,
+   "x": 379.21,
+   "y": 119.4,
+   "z": 186.8,
+   "tier": "inferred",
+   "reasoning": "BootcampTargetDummyFront: copy the measured practice dummy stance1.45m left of lane center386.15 into adjacent original-map lane center380.66; Z186.8 is in front of its sandbag face186.9. Identity, chosen lane and stance are inferred; original Lightning practice lies inside the362.067\u2013362.133 footage cut.",
+   "method": "navmesh/adv_bootcamp.nav SHA25610a6fd9a1fa9ef88d89befe9b757cacdefb6584cc584ce2462393178f85b2f52; 2026-09-15 PlacementHeightAudit / BootcampPlatformTopCorrectionRows",
+   "client": "1.16.5.0",
+   "session_date": "2026-09-22"
   }
  ]
 }
