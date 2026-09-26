@@ -1955,6 +1955,68 @@ experience. Each list is TaRapedia's post-1.4 `RewardItem` field, offered as one
   offer from the migrated world, and a turn-in at the seeded receiver delivers the chosen item and stack with the
   completion).
 
+## 2026-09-26 — Munson's missions withdrawn; the doctors' sample missions collect their items
+
+Two migrations, from the collection-mission dossiers (`research/20260926-collection-missions`). Every field's tier and
+citation is in the manifest under migrations `WildernessMunsonWithdrawal` and `WildernessXenobiologySamples`, and
+`WildernessXenobiologySamplesTests` checks the seed against it.
+
+**Withdrawn at D11 (tier original).** The official Deployment 11 live notes ("Deployment 11.6: 8/15/2008", "Deployment
+11 is on Live!", rgtr capture SHA-256 `3dfe1626…`, the bytes `docs/bootcamp-client-evidence.md` cites) say Dr.
+Munson's three sample missions, "Boargar, Treelurkers and Miasmas", "are no longer available", and "Mission:
+Predatory: This mission has been permanently disabled". So **751 Boargar Acquisition, 780 Treelurker Samples, 767
+Mighty Miasma and 769 Predatory are intentionally never offered in the final state**. 767 had been seeded
+(`WildernessCollectionDrop`, 2026-09-17). `WildernessMunsonWithdrawal` (20260926140000) removes its definition, kill
+binding, counter and rewards, and returns its client objective row to the NULL-flag skeleton. Dr. Munson and the Bane
+Miasma stay in the world. The in-progress clause is not modelled: a player with a Munson mission already in the log
+could finish it, and an in-log Predatory failed on its own (`GAP-D11-WITHDRAWN-IN-PROGRESS`).
+
+The rest of those notes, checked against this tree:
+
+- Nothing else they withdraw is seeded. Body Count (Caves of Donn) is not seeded. No Predator or Juggernaut spawns
+  in the Wilderness, CLRF or Pravus Research contexts.
+- Richards already stands at the Pinhole Falls Caverns entrance.
+- Mama Miasma's client target is already the D11 value of 3, and the mission is not seeded.
+- The trainer cull ("no Tier 4 trainers before Mires, no Tier 2 and 3 after") is superseded by D12's single class
+  trainers (`docs/character-progression-client-evidence.md`). It was flagged, not acted on.
+
+**Sample missions** (`WildernessXenobiologySamples`, 20260926141000). The objectives use 479's item mechanism: the
+counter is keyed by the client item class, it advances only when the item enters the inventory, and the turn-in
+consumes the items.
+
+| Mission | Doctor | Item (class, template) | Source creature | Drop | Rewards | Gate |
+|---|---|---|---|---|---|---|
+| 758 Fithikally Challenged (new) | Soji 111 | Fithik Spleen 11161, 2533 | Fithik 1 | 100, inferred | 4,000 XP / 600 | 771 |
+| 776 Soldier's Blood (new) | Ojy 110 | Thrax Blood Sample 11150, 2524 | Thrax Soldier 3 | 50, analogue (OD-61) | 4,000 XP / 600 | none |
+| 771 Droning On (was a kill count) | Ojy 110 | Shield Drone Scraps 11153, 2527 | Bane Shield Drone 85 | 50, analogue (OD-61) | 600 (was 300) | none |
+| 787 Xanx For the Help (was a kill count) | Soji 111 | Xanx Pincers 11160, 2532 | Bane Xanx 87 | 100, inferred | unchanged | 758 (new) |
+
+- **What is original.** The objective texts and targets, and the item classes: the MisXeno block of entityclass,
+  named in physicalentityclassnamelanguage and matched to each objective by name, as 479 was. Each class maps to two
+  identical templates, and the lower one is taken by 479's rule (`GAP-COLLECTION-TEMPLATE-CHOICE`).
+- **Inferred.** Givers, receivers, gates, experience and credits come from the client logs and dated TaRapedia and
+  Ellatha records. The 787 gate comes from the client's own 787 opening: "you really hooked me up with those Fithik
+  spleens". Levels use the Wilderness band of 5 (`GAP-MISSION-LEVEL`).
+- **Credit conflicts.** For 776 and 771, Ellatha (early 2008) records 600 and TaRapedia's 2007 pages record 300. The
+  later record is taken, as for 479 (`GAP-DOCTOR-CREDITS-CONFLICT`). 771 still pays no experience, because no source
+  gives a figure.
+- **Drop chance.** No rate survives for any mission item (`GAP-COLLECTION-DROP-CHANCE`).
+  - 758 and 787 drop on every kill. TaRapedia's walkthroughs count kills equal to the client target: "Kill ten
+    collect item" (rev 15141, 2007-11-16) and "Travel South Kill 4 Xanx" (revs 15143/22864). This is weak pre-D11
+    evidence, so the tier is inferred at low confidence. For 787 it plays the same as the kill count it replaces.
+  - 776 and 771 have no such line. They repeat 479's 50% as analogues under OD-61, which is now in the manifest,
+    pending owner review. This makes 771 slower than its old kill count, which never failed to count.
+  - Moving collection objectives from OD-47 kill counts to item drops once the item is identified is OD-66.
+- **Geography.** The sources put 758's Fithik in Ranja Cavern. There the seed has only the Hive Monarch boss. The
+  nearest ordinary Fithik pool (141, Gellman Meadow) is 392 m from Soji (`GAP-758-FITHIK-GEOGRAPHY`). 776 drops from
+  the Thrax Soldier only (`GAP-776-BLOOD-SOURCES`).
+- **Left out.** Reward items: every list predates 1.4 (`GAP-MISSION-REWARD-ITEMS`). 771's TaRapedia gate on 795
+  Lightbender Glands is held, because the seed has no ordinary Lightbender (`GAP-DOCTOR-CHAIN-GATES`). The manifest's
+  771 counter row named item class 24084, which is the Shield Drone creature. It now names 11153 Shield Drone Scraps.
+- **Held.** 795, 506, 433, 489, 665, 860 and 1449 are held for the dossier's reasons: missing creatures, and
+  server-spawned or destructible objects with no recovered positions.
+- **Not verified in-game.** None of this has been played with the original client.
+
 ## 2026-09-22 to 2026-09-24 — recovered deployed work (documentation reconstructed 2026-09-26)
 
 This section covers six commits (`af0a9bb`, `234d703`, `9afd210`, `f30d9aa`, `4aa50b3`, `0ed7528`) that were built and deployed live between 2026-09-22 and 2026-09-24 from a VPS checkout that no longer exists. The code, migrations, tests, and evidence JSON files survived (they were recovered onto this branch), but the narrative write-up that would normally accompany each change — the entries this file would otherwise carry — was never committed anywhere and is lost. **There is no earlier version of that narrative to recover.** What follows is reconstructed after the fact strictly from the surviving migration doc-comments, commit messages, tests, and evidence JSON files; it makes no claim beyond what those artifacts state. Three docs cited by code comments from this period (`docs/character-name-evidence.md`, `docs/bootcamp-equip-audit.md`, `docs/bootcamp-opening-movement-audit.md`) were reconstructed the same way and are linked below rather than repeated here.

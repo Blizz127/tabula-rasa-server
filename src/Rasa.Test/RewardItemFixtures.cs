@@ -184,6 +184,9 @@ namespace Rasa.Test
             // Original client mappings used by Forming Alliances: Thrax Heart and the
             // reconstructed level-range Motor Assist Vest counterpart.
             Execute(worldConnection, "INSERT INTO itemtemplate_itemclass (itemTemplateId, itemClassId) VALUES (2285, 10346), (13738, 16396)");
+            // The Wilderness doctors' sample items (WildernessXenobiologySamples): Thrax Blood Sample, Shield Drone Scraps,
+            // Xanx Pincers and Fithik Spleen, each the lower of its two client templates.
+            Execute(worldConnection, "INSERT INTO itemtemplate_itemclass (itemTemplateId, itemClassId) VALUES (2524, 11150), (2527, 11153), (2532, 11160), (2533, 11161)");
             Execute(worldConnection, "INSERT INTO itemtemplate_requirement_skill (id, skill_id, skill_level) VALUES (116929, 1, 1), (116930, 1, 1)");
             Execute(worldConnection, "INSERT INTO itemtemplate_requirement (id, req_type, req_value) VALUES (27121, 1, 5), (27100, 1, 5)");
 
@@ -214,6 +217,8 @@ namespace Rasa.Test
             RegisterClass(PistolClass, 120, new WeaponClassEntry { Id = 27121, WeaponTemplatId = 1, AttackActionId = 1, AttackActionArgId = 133, DrawActionId = 1, StowActionId = 1, ReloadActionId = 1, AmmoClassId = 3147, ClipSize = 20, MinDamage = 91, MaxDamage = 91, DamageType = 1, WeaponAnimConditionCode = 1 });
             RegisterClass(PulsePistolClass, 120, new WeaponClassEntry { Id = 27100, WeaponTemplatId = 77, AttackActionId = 1, AttackActionArgId = 135, DrawActionId = 1, StowActionId = 1, ReloadActionId = 49, AmmoClassId = 3807, ClipSize = 10, MinDamage = 106, MaxDamage = 106, DamageType = 5, WeaponAnimConditionCode = 1 });
             RegisterClass((EntityClasses)10346, 0, null, 12);
+            foreach (var sampleClass in new uint[] { 11150, 11153, 11160, 11161 })
+                RegisterClass((EntityClasses)sampleClass, 0, null, 1000);
             RegisterClass((EntityClasses)16396, 130, null);
 
             foreach (var template in Gear)

@@ -260,6 +260,27 @@
    "era": "pre_d11",
    "locator": "TaRapedia Updates/2008-01-29 through Updates/2008-12-20 (transcribed official notes, research/20260926-reward-items/review-work/updates.json) and the archived official D16/16.3/16.4 notes (review-work/d164.html, web.archive.org 20090214230759)",
    "note": "No general reward replacement after 1.4. 2008-04-28 (1.7): \"roughly 70 mission rewards that previously gave out armor or tools with incorrect requirements ... adjusted and now have the correct requirements\" (missions not named). Notes for D9, D14 and January 2009 (D15.x) may be incomplete."
+  },
+  "official_notes:d11-rgtr-20081220": {
+   "kind": "official_notes",
+   "era": "d11_to_shutdown",
+   "url": "http://www.rgtr.com/news/patch_notes/deployment_116_8152008.html (Wayback id_ capture 2008-12-20)",
+   "path": "research/20260926-collection-missions/work/patchnotes/d116.html (text render d116.txt)",
+   "sha256": "3dfe1626d2e031c2eb88e38459caf0bfa9e6c49e34c698fbb179d557271dd7d8",
+   "note": "Official live patch notes \"Deployment 11.6: 8/15/2008\" (\"Deployment 11 is on Live!\"), the same notes as official_notes:d11 (playtr.com capture of 2009-02-03); these bytes are the 2008-12-20 capture recorded in docs/bootcamp-client-evidence.md."
+  },
+  "community_db:tarapedia-revisions-20260926-collection": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260926-collection-missions/work/tarapedia/{missions,npc,creature,item,related}/*.json (full revision histories with content, fetched 2026-09-26 through the MediaWiki API)",
+   "note": "Community transcription. Revisions range from the 2007 closed beta to 2008-10; every citation names its page id, revision id and date (?oldid=<rev>), and that date - not this source - is the era of the value. Never an analogue source."
+  },
+  "community_db:ellatha-20260926-collection": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "locator": "https://www.ellatha.com/tr/missionsview.asp - DaOpa's mission database pages, research/20260926-collection-missions/work/ellatha/*.html (+ .txt renders) and research/20260926-reward-items/work/ellatha/Droning_On.html",
+   "note": "Community transcription of the live game in early 2008 (before update 1.4 changed mission rewards); tracker counters and credit amounts are read from the pages."
   }
  },
  "scope": [
@@ -43946,95 +43967,6 @@
   {
    "table": "npc_mission",
    "key": {
-    "id": 767
-   },
-   "slice": "W3",
-   "migration": "WildernessCollectionDrop",
-   "fields": {
-    "giver_id": {
-     "value": 109,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "community_db:tarapedia",
-       "locator": "mission 767 infobox, giver"
-      }
-     ],
-     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries."
-    },
-    "level": {
-     "value": 5,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "community_db:tarapedia",
-       "locator": "mission 767 infobox"
-      }
-     ],
-     "reasoning": "the Wilderness band, as every hub slice uses."
-    }
-   }
-  },
-  {
-   "table": "npc_mission_objective_binding",
-   "key": {
-    "mission_id": 767,
-    "objective_id": 2,
-    "binding_id": 0
-   },
-   "slice": "W3",
-   "migration": "WildernessCollectionDrop",
-   "fields": {
-    "kind": {
-     "value": 6,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "objective text 767/2"
-      }
-     ],
-     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
-    },
-    "creature_id": {
-     "value": 88,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "objective text 767/2"
-      }
-     ],
-     "reasoning": "the objective names Bane Miasma, which the world seed carries as creature 88."
-    }
-   }
-  },
-  {
-   "table": "npc_mission_objective_counter",
-   "key": {
-    "mission_id": 767,
-    "objective_id": 2,
-    "counter_id": 0
-   },
-   "slice": "W3",
-   "migration": "WildernessCollectionDrop",
-   "fields": {
-    "target_value": {
-     "value": 6,
-     "tier": "inferred",
-     "citations": [
-      {
-       "source": "client_table:missions",
-       "locator": "objective name text 767/2"
-      }
-     ],
-     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11162 (Miasma Goo)."
-    }
-   }
-  },
-  {
-   "table": "npc_mission",
-   "key": {
     "id": 771
    },
    "slice": "W3",
@@ -44072,29 +44004,154 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessCollectionDrop",
+   "migration": "WildernessCollectionDrop; WildernessXenobiologySamples",
    "fields": {
     "kind": {
-     "value": 6,
+     "value": 9,
      "tier": "inferred",
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective asks for a quantity of a client mission item with a tracker counter, the shape of 479; the counter advances only when the item enters the inventory and the turn-in consumes it. Replaces the OD-47 kill count of WildernessCollectionDrop (2026-09-26, OD-66); Ellatha's tracker reads \"Shield Drone Scraps 0/6\".",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "objective text 771/2"
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "research/20260926-reward-items/work/ellatha/Droning_On.html tracker \"Shield Drone Scraps 0/6\""
       }
-     ],
-     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
+     ]
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; an item binding names no area.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; the drop is from any instance of the creature.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
     },
     "creature_id": {
      "value": 85,
      "tier": "inferred",
+     "reasoning": "the objective names Shield Drone parts and the world seed carries the Bane Shield Drone as creature 85 (unchanged from WildernessCollectionDrop). Confidence: medium.",
      "citations": [
       {
        "source": "client_table:missions",
-       "locator": "objective text 771/2"
+       "locator": "missionobjective (771,2) -> [3741, 7812]; missiontextlanguage 3741 \"Acquire 6 Shield Drone Parts.\""
       }
-     ],
-     "reasoning": "the objective names Bane Shield Drone, which the world seed carries as creature 85."
+     ]
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "item_template_id": {
+     "value": 2527,
+     "tier": "inferred",
+     "reasoning": "the objective collects the client item class 11153 \"Shield Drone Scraps\", matched to it by name as 479's objective was matched to 10346 \"Thrax Heart\" (the client objective rows carry only text ids). The class maps to two identical templates (2527 and 16575, the same itemtemplate row values); the lower one, inside the consecutive MisXeno block 2521-2539, is taken by 479's rule (2285 over 16540). Which template the final-live server dropped is unrecorded (GAP-COLLECTION-TEMPLATE-CHOICE). Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+      }
+     ]
+    },
+    "drop_chance": {
+     "value": 50.0,
+     "tier": "analogue",
+     "reasoning": "No drop rate survives and no walkthrough ties kills to samples one-for-one, so the value repeats 479's 50% estimate (the lead's rule of 2026-09-26). Uncertainty: the whole (0, 100] range (GAP-COLLECTION-DROP-CHANCE).",
+     "counterpart": "479 Forming Alliances' Thrax Heart drop (WildernessHubFormingAlliancesRows.HeartDropChance = 50, docs/evidence/wilderness-forming-alliances-reconstruction.json), the only other seeded mission-item drop - itself an OD-61 estimate, not an original rate. No original drop rate for any mission item survives (TaRapedia mission, item and creature pages and their revision histories, Ellatha, the TTH 2007 levelling guide and a web search, research/20260926-collection-missions)",
+     "required_because": "an ItemCollected binding that names a creature must carry a drop chance in (0, 100] (MissionContentCatalog ItemCollected validation), or the mission is withheld; without a drop the objective cannot be completed.",
+     "decision": "OD-61",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
+      }
+     ]
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the objective's only counter.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+      }
+     ]
     }
    }
   },
@@ -44115,9 +44172,13 @@
       {
        "source": "client_table:missions",
        "locator": "objective name text 771/2"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
       }
      ],
-     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 24084 (Shield Drone)."
+     "reasoning": "the number the objective's own text asks for; the item it counts is the client entity class 11153 \"Shield Drone Scraps\" (MisXenoShieldDroneParts, templates 2527/16575). Corrected 2026-09-26: this row previously named class 24084, which is the Shield Drone creature, not the item. Since WildernessXenobiologySamples the counter counts collected items, not kills."
     }
    }
   },
@@ -44138,7 +44199,7 @@
        "locator": "mission 787 infobox, giver"
       }
      ],
-     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries."
+     "reasoning": "the doctor the mission sources name as the giver, which the world seed carries. Since WildernessXenobiologySamples 787 is gated on 758 (npc_mission_prerequisite 787/0/758)."
     },
     "level": {
      "value": 5,
@@ -44161,29 +44222,148 @@
     "binding_id": 0
    },
    "slice": "W3",
-   "migration": "WildernessCollectionDrop",
+   "migration": "WildernessCollectionDrop; WildernessXenobiologySamples",
    "fields": {
     "kind": {
-     "value": 6,
+     "value": 9,
      "tier": "inferred",
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective asks for a quantity of a client mission item with a tracker counter, the shape of 479; the counter advances only when the item enters the inventory and the turn-in consumes it. Replaces the OD-47 kill count of WildernessCollectionDrop (2026-09-26, OD-66).",
      "citations": [
       {
-       "source": "client_table:missions",
-       "locator": "objective text 787/3"
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11160 \"MisXenoXanxPincers\" (repo EntityClassPreloader.cs:3717), physicalentityclassnamelanguage 11160 \"Xanx Pincers\", itemclass 11160 stack 1000 (ItemClassPrelaoder.cs:1310); itemTemplateItemClass 2532 -> 11160 and 16580 -> 11160 (ItemTemplateItemClassPreloader.cs:1015, 2900)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
       }
-     ],
-     "reasoning": "the objective collects a creature drop; with no drop data it is counted as that creature's deaths (OD-47)."
+     ]
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; an item binding names no area.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; the drop is from any instance of the creature.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
     },
     "creature_id": {
      "value": 87,
      "tier": "inferred",
+     "reasoning": "the objective names Xanx and the world seed carries the Bane Xanx as creature 87 (unchanged from WildernessCollectionDrop). Confidence: medium.",
      "citations": [
       {
        "source": "client_table:missions",
-       "locator": "objective text 787/3"
+       "locator": "missionobjective (787,3) -> [3823, 7832]; missiontextlanguage 3823 \"Acquire 4 Xanx Pincers\""
       }
-     ],
-     "reasoning": "the objective names Bane Xanx, which the world seed carries as creature 87."
+     ]
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "item_template_id": {
+     "value": 2532,
+     "tier": "inferred",
+     "reasoning": "the objective collects the client item class 11160 \"Xanx Pincers\", matched to it by name as 479's objective was matched to 10346 \"Thrax Heart\" (the client objective rows carry only text ids). The class maps to two identical templates (2532 and 16580, the same itemtemplate row values); the lower one, inside the consecutive MisXeno block 2521-2539, is taken by 479's rule (2285 over 16540). Which template the final-live server dropped is unrecorded (GAP-COLLECTION-TEMPLATE-CHOICE). Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11160 \"MisXenoXanxPincers\" (repo EntityClassPreloader.cs:3717), physicalentityclassnamelanguage 11160 \"Xanx Pincers\", itemclass 11160 stack 1000 (ItemClassPrelaoder.cs:1310); itemTemplateItemClass 2532 -> 11160 and 16580 -> 11160 (ItemTemplateItemClassPreloader.cs:1015, 2900)"
+      }
+     ]
+    },
+    "drop_chance": {
+     "value": 100.0,
+     "tier": "inferred",
+     "reasoning": "Every Bane Xanx kill yields a pincer. TaRapedia's walkthrough (rev 15143, 2007-11-16, kept to rev 22864, 2007-12-20) reads \"Take Way Point to Daghda's Urn / Travel South Kill 4 Xanx / Way point back and done.\" - four kills for the client objective's four pincers, the same evidence shape as 758. Pre-D11 community text, not a measured rate; inferred at low confidence (GAP-COLLECTION-DROP-CHANCE). Equal in play to the OD-47 kill count it replaces.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Xanx_For_the_Help.json page 6491 rev 15143 (?oldid=15143) and rev 22864 (?oldid=22864) Walkthrough \"Travel South Kill 4 Xanx\"",
+       "date": "2007-11-16..2007-12-20"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (787,3) -> [3823, 7832]; missiontextlanguage 3823 \"Acquire 4 Xanx Pincers\""
+      }
+     ]
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the objective's only counter.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11160 \"MisXenoXanxPincers\" (repo EntityClassPreloader.cs:3717), physicalentityclassnamelanguage 11160 \"Xanx Pincers\", itemclass 11160 stack 1000 (ItemClassPrelaoder.cs:1310); itemTemplateItemClass 2532 -> 11160 and 16580 -> 11160 (ItemTemplateItemClassPreloader.cs:1015, 2900)"
+      }
+     ]
     }
    }
   },
@@ -44206,7 +44386,7 @@
        "locator": "objective name text 787/3"
       }
      ],
-     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11160 (Xanx Pincers)."
+     "reasoning": "the number the objective's own text asks for; the item it stands for is the client entity class 11160 (Xanx Pincers). Since WildernessXenobiologySamples the counter counts collected items, not kills."
     }
    }
   },
@@ -64908,6 +65088,943 @@
      ]
     }
    }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 758
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "giver_id": {
+     "value": 111,
+     "tier": "inferred",
+     "reasoning": "Dr. Soji (world creature 111, spawnpool 189 at -748.7, 171.0, -272.0 in Ranja Gorge, within 2 m of TaRapedia's /loc -750, 170, -270): TaRapedia names her as MissionGiver in every revision and Ellatha's legend puts \"1 - Dr. Soji\" at the start; the client opening (3674) is Soji's self-introduction, and the seeded 787 already uses 111. Confidence: high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 MissionGiver=Dr. Soji, MissionGiverLocation=Ranja Gorge, rev 13996 (?oldid=13996) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Fithikally_Challenged.html legend \"1 - Dr. Soji\""
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (758,2) -> text 3673 \"Bring 10 Fithik spleens to Dr. Soji at Ranja Gorge.\"; (758,3) -> 3674 Soji's opening; (758,4) -> 3675 finishing text"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 111,
+     "tier": "inferred",
+     "reasoning": "the client log text names Dr. Soji at Ranja Gorge as the one the spleens are brought to; world creature 111 is the only Dr. Soji. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (758,2) -> text 3673 \"Bring 10 Fithik spleens to Dr. Soji at Ranja Gorge.\"; (758,3) -> 3674 Soji's opening; (758,4) -> 3675 finishing text"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for 758; the Wilderness band (5) the seeded doctors' missions 771 and 787 use. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player missions, as the seeded 771/787; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "the finishing text is spoken by the doctor in person; radio completion is not recorded. Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 776
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "giver_id": {
+     "value": 110,
+     "tier": "inferred",
+     "reasoning": "Dr. Ojy (world creature 110, spawnpool 188 at 155, 163, -91, exactly TaRapedia's /loc): TaRapedia names him as MissionGiver in every revision (closed beta to post-D11), Ellatha's legend has \"1 - Dr. Ojy\", and the client opening (3766) is in Ojy's rhyme; the seeded 771 already uses 110. Confidence: high.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Soldier's_Blood.json page 3434 MissionGiver=Dr. Ojy, rev 5870 (?oldid=5870) to rev 35141 (?oldid=35141)",
+       "date": "2007-08-19..2008-10-16"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Soldier_s_Blood.html legend \"1 - Dr. Ojy\""
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (776,2) -> text 3765 \"Bring 10 samples of Thrax blood to Dr. Ojy in the Wilderness LZ.\"; (776,3) -> 3766 Ojy's rhyming opening"
+      }
+     ]
+    },
+    "reciver_id": {
+     "value": 110,
+     "tier": "inferred",
+     "reasoning": "the client log text names Dr. Ojy in the Wilderness LZ as the recipient; world creature 110 is the only Dr. Ojy. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (776,2) -> text 3765 \"Bring 10 samples of Thrax blood to Dr. Ojy in the Wilderness LZ.\"; (776,3) -> 3766 Ojy's rhyming opening"
+      }
+     ]
+    },
+    "level": {
+     "value": 5,
+     "tier": "inferred",
+     "reasoning": "GAP-MISSION-LEVEL: the client has no mission-level field and no source states one for 776; the Wilderness band (5) the seeded doctors' missions 771 and 787 use. A convention, not a finding. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no mission-level field in missionconversation/missionobjective/missiongrouptype (GAP-MISSION-LEVEL)"
+      }
+     ]
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "W3 convention for single-player missions, as the seeded 771/787; no source records a per-mission group type. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missiongrouptype enum only; no per-mission row"
+      }
+     ]
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "reasoning": "W3 convention (general category 10000001, as every W3 batch row); not per-mission evidence. Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "mission category table"
+      }
+     ]
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "W3 convention; the share flag is not recorded anywhere found (GAP-W3-SHARING-OFFER). Confidence: low.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no share flag in the client mission tables"
+      }
+     ]
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "the finishing text is spoken by the doctor in person; radio completion is not recorded. Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "no radio flag in the client mission tables"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 758,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "comment": {
+     "value": "Acquire 10 Fithik Spleens",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 758,
+    "objective_id": 3,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "initial_value": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a collection counter starts empty, as 479's does.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    },
+    "target_value": {
+     "value": 10,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Fithikally_Challenged.html tracker \"Fithik Spleen 0/10\""
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 776,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "comment": {
+     "value": "Acquire 10 Samples of Thrax Blood",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      }
+     ]
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "the mission's only objective in the final client table.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      }
+     ]
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; a mission completes on its required objectives, so the sole objective must be required.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      }
+     ]
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "reasoning": "the only objective; nothing else could reveal it.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 776,
+    "objective_id": 2,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "initial_value": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a collection counter starts empty, as 479's does.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      }
+     ]
+    },
+    "target_value": {
+     "value": 10,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (776,2) -> [3768, 7816]; missiontextlanguage 3768 \"Acquire 10 Samples of Thrax Blood\"; objectiveconversation has no 776 key"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Soldier_s_Blood.html objective \"Acquire 10 Samples of Thrax Blood\""
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 758,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "kind": {
+     "value": 9,
+     "tier": "inferred",
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective asks for a quantity of a client mission item with a tracker counter, the shape of 479; the counter advances only when the item enters the inventory and the turn-in consumes it.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11161 \"MixXenoFithikSpleen\" (repo EntityClassPreloader.cs:3718), physicalentityclassnamelanguage 11161 \"Fithik Spleen\", itemclass 11161 stack 1000 (ItemClassPrelaoder.cs:1311); itemTemplateItemClass 2533 -> 11161 and 16581 -> 11161 (ItemTemplateItemClassPreloader.cs:1016, 2901)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
+      }
+     ]
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; an item binding names no area.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; the drop is from any instance of the creature.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "creature_id": {
+     "value": 1,
+     "tier": "inferred",
+     "reasoning": "Bane_Fithik_Winged (world creature 1, class 4313, level 5), the only ordinary Fithik in the Wilderness seed; the client text names Fithik. The Ranja Cavern region (map_region 5, region 33) holds only the Hive Monarch boss (89, spawnpool 168), which is not bound. Where the original Fithik stood is GAP-758-FITHIK-GEOGRAPHY. Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (758,2) -> text 3673 \"Bring 10 Fithik spleens to Dr. Soji at Ranja Gorge.\"; (758,3) -> 3674 Soji's opening; (758,4) -> 3675 finishing text"
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json rev 15141 walkthrough \"Follow your left hand side you should enter a cave.\"",
+       "date": "2007-11-16"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Fithikally_Challenged.html DaOpa's tip \"Fithik are found near by in Ranja Caverns\""
+      }
+     ]
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "item_template_id": {
+     "value": 2533,
+     "tier": "inferred",
+     "reasoning": "the objective collects the client item class 11161 \"Fithik Spleen\", matched to it by name as 479's objective was matched to 10346 \"Thrax Heart\" (the client objective rows carry only text ids). The class maps to two identical templates (2533 and 16581, the same itemtemplate row values); the lower one, inside the consecutive MisXeno block 2521-2539, is taken by 479's rule (2285 over 16540). Which template the final-live server dropped is unrecorded (GAP-COLLECTION-TEMPLATE-CHOICE). Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11161 \"MixXenoFithikSpleen\" (repo EntityClassPreloader.cs:3718), physicalentityclassnamelanguage 11161 \"Fithik Spleen\", itemclass 11161 stack 1000 (ItemClassPrelaoder.cs:1311); itemTemplateItemClass 2533 -> 11161 and 16581 -> 11161 (ItemTemplateItemClassPreloader.cs:1016, 2901)"
+      }
+     ]
+    },
+    "drop_chance": {
+     "value": 100.0,
+     "tier": "inferred",
+     "reasoning": "Every Fithik kill yields a spleen. TaRapedia's only walkthrough (rev 15141, 2007-11-16) reads \"The monster you have to kill is located their. Kill ten collect item return to the doctor.\" - ten kills for the client objective's ten spleens. A pre-D11 community line, not a measured rate; inferred at low confidence (GAP-COLLECTION-DROP-CHANCE). The lead's rule of 2026-09-26: 100 when the client target equals the walkthrough's kill count.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 rev 15141 (?oldid=15141) Walkthrough \"Kill ten collect item return to the doctor.\"",
+       "date": "2007-11-16"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionobjective (758,3) -> [3676, 6511]; missiontextlanguage 3676 \"Acquire 10 Fithik Spleens\"; objectiveconversation has no 758 key"
+      }
+     ]
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the objective's only counter.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11161 \"MixXenoFithikSpleen\" (repo EntityClassPreloader.cs:3718), physicalentityclassnamelanguage 11161 \"Fithik Spleen\", itemclass 11161 stack 1000 (ItemClassPrelaoder.cs:1311); itemTemplateItemClass 2533 -> 11161 and 16581 -> 11161 (ItemTemplateItemClassPreloader.cs:1016, 2901)"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 776,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "kind": {
+     "value": 9,
+     "tier": "inferred",
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective asks for a quantity of a client mission item with a tracker counter, the shape of 479; the counter advances only when the item enters the inventory and the turn-in consumes it.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11150 \"MisXenoThraxBlood\" (repo EntityClassPreloader.cs:3708), physicalentityclassnamelanguage 11150 \"Thrax Blood Sample\", itemclass 11150 stack 1000 (ItemClassPrelaoder.cs:1302); itemTemplateItemClass 2524 -> 11150 and 16572 -> 11150 (ItemTemplateItemClassPreloader.cs:1007, 2892)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
+      }
+     ]
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; an item binding names no area.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value; the drop is from any instance of the creature.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "creature_id": {
+     "value": 3,
+     "tier": "inferred",
+     "reasoning": "Thrax Soldier (world creature 3, class 20757), 479's drop source: TaRapedia's item page says \"kill Thrax soldiers, collect ten blood samples from their corpses\" and Ojy's finishing text calls them \"just common soldiers\". Whether grenadiers (57) or technicians (47) also yielded blood is unverified; the client has a separate MisXenoTechnicianSample class 11166 (GAP-776-BLOOD-SOURCES). Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "item/Thrax_Blood_Sample.json rev 5888 (?oldid=5888)",
+       "date": "2007-08-20"
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Soldier's_Blood.json rev 35141 (?oldid=35141) walkthrough \"collect blood samples from the fallen ... near the Memory Tree Hill\"",
+       "date": "2008-10-16"
+      },
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (776,4) -> text 3767 finishing text \"the Thrax are just common soldiers\""
+      }
+     ]
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "item_template_id": {
+     "value": 2524,
+     "tier": "inferred",
+     "reasoning": "the objective collects the client item class 11150 \"Thrax Blood Sample\", matched to it by name as 479's objective was matched to 10346 \"Thrax Heart\" (the client objective rows carry only text ids). The class maps to two identical templates (2524 and 16572, the same itemtemplate row values); the lower one, inside the consecutive MisXeno block 2521-2539, is taken by 479's rule (2285 over 16540). Which template the final-live server dropped is unrecorded (GAP-COLLECTION-TEMPLATE-CHOICE). Confidence: medium.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11150 \"MisXenoThraxBlood\" (repo EntityClassPreloader.cs:3708), physicalentityclassnamelanguage 11150 \"Thrax Blood Sample\", itemclass 11150 stack 1000 (ItemClassPrelaoder.cs:1302); itemTemplateItemClass 2524 -> 11150 and 16572 -> 11150 (ItemTemplateItemClassPreloader.cs:1007, 2892)"
+      }
+     ]
+    },
+    "drop_chance": {
+     "value": 50.0,
+     "tier": "analogue",
+     "reasoning": "No drop rate survives and no walkthrough ties kills to samples one-for-one, so the value repeats 479's 50% estimate (the lead's rule of 2026-09-26). Uncertainty: the whole (0, 100] range (GAP-COLLECTION-DROP-CHANCE).",
+     "counterpart": "479 Forming Alliances' Thrax Heart drop (WildernessHubFormingAlliancesRows.HeartDropChance = 50, docs/evidence/wilderness-forming-alliances-reconstruction.json), the only other seeded mission-item drop - itself an OD-61 estimate, not an original rate. No original drop rate for any mission item survives (TaRapedia mission, item and creature pages and their revision histories, Ellatha, the TTH 2007 levelling guide and a web search, research/20260926-collection-missions)",
+     "required_because": "an ItemCollected binding that names a creature must carry a drop chance in (0, 100] (MissionContentCatalog ItemCollected validation), or the mission is withheld; without a drop the objective cannot be completed.",
+     "decision": "OD-61",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11150 \"MisXenoThraxBlood\" (repo EntityClassPreloader.cs:3708), physicalentityclassnamelanguage 11150 \"Thrax Blood Sample\", itemclass 11150 stack 1000 (ItemClassPrelaoder.cs:1302); itemTemplateItemClass 2524 -> 11150 and 16572 -> 11150 (ItemTemplateItemClassPreloader.cs:1007, 2892)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "no client table carries a mission-item drop source or rate; the item side is original (entityclass MisXeno* 11146-11167, itemclass, itemTemplateItemClass); the binding is the server mechanism of 479 (MissionContentCatalog ItemCollected, MissionContentRuntime.RollMissionItemDrops)"
+      }
+     ]
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "neutral value.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "unused by an ItemCollected binding (MissionContentCatalog ItemCollected uses item_template_id, counter_id, creature_id and drop_chance)"
+      }
+     ]
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "the objective's only counter.",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "entityclass 11150 \"MisXenoThraxBlood\" (repo EntityClassPreloader.cs:3708), physicalentityclassnamelanguage 11150 \"Thrax Blood Sample\", itemclass 11150 stack 1000 (ItemClassPrelaoder.cs:1302); itemTemplateItemClass 2524 -> 11150 and 16572 -> 11150 (ItemTemplateItemClassPreloader.cs:1007, 2892)"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "key": {
+    "mission_id": 758,
+    "or_group": 0,
+    "required_mission_id": 771
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "required_state": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's Requirement is [[Droning On]] from rev 14003 (2007-11-09) to the last revision 27572 (2008-01-20), and Droning On's FollowUp is Fithikally Challenged (rev 18436); 771 is seeded, so the gate can be expressed; state 4 = Completed. Pre-D11 wiki only; the final-live gate is unverified (GAP-DOCTOR-CHAIN-GATES). Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 Requirement=[[Droning On]], rev 14003 (?oldid=14003) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Droning_On.json page 3817 rev 18436 (?oldid=18436)",
+       "date": "2007-12-06"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "key": {
+    "mission_id": 787,
+    "or_group": 0,
+    "required_mission_id": 758
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "required_state": {
+     "value": 4,
+     "tier": "inferred",
+     "reasoning": "the client's own 787 opening presupposes 758: \"Oh, say, you really hooked me up with those Fithik spleens. Apparently that was a good thing. Now they want pincers...\"; TaRapedia's Requirement agrees from rev 14001 (2007-11-09) to rev 22864. State 4 = Completed. Confidence: high.",
+     "citations": [
+      {
+       "source": "client_table:missions",
+       "locator": "missionconversation (787,3) -> text 3821 \"Oh, say, you really hooked me up with those Fithik spleens.\""
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Xanx_For_the_Help.json page 6491 Requirement=Fithikally Challenged, rev 14001 (?oldid=14001) to rev 22864 (?oldid=22864)",
+       "date": "2007-11-09..2007-12-20"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 758,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "credits": {
+     "value": 4000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's RewardXP=4,000, first in rev 14000 (2007-11-09) and unchanged to rev 27572 (2008-01-20); the only source; both reward kinds carry the amount in the credits column. Pre-1.4 page; 1.4 replaced items, no recorded XP change. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 RewardXP=4,000 rev 14000 (?oldid=14000) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      }
+     ]
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 RewardXP=4,000 rev 14000 (?oldid=14000) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 758,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "reasoning": "TaRapedia (RewardCredits=600 in every revision) and Ellatha (\"600 Credits\") agree. Confidence: medium.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 RewardCredits=600 rev 13996 (?oldid=13996) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      },
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Fithikally_Challenged.html Quest Rewards \"600 Credits\""
+      }
+     ]
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Fithikally_Challenged.json page 6601 RewardCredits=600 rev 13996 (?oldid=13996) to rev 27572 (?oldid=27572)",
+       "date": "2007-11-09..2008-01-20"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 776,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "credits": {
+     "value": 4000,
+     "tier": "inferred",
+     "reasoning": "TaRapedia's RewardXP=4,000, first in the closed-beta rev 5891 (2007-08-20) and never changed to the post-D11 rev 35141 (2008-10-16); the only source. Confidence: low.",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Soldier's_Blood.json page 3434 RewardXP=4,000 rev 5891 (?oldid=5891) to rev 35141 (?oldid=35141)",
+       "date": "2007-08-20..2008-10-16"
+      }
+     ]
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Soldier's_Blood.json page 3434 RewardXP=4,000 rev 5891 (?oldid=5891) to rev 35141 (?oldid=35141)",
+       "date": "2007-08-20..2008-10-16"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 776,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessXenobiologySamples",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "reasoning": "CONFLICT: Ellatha (early 2008) records 600, TaRapedia 300 from its closed-beta page (rev 5870, 2007-08-19), never re-checked through rev 35141. The later record is taken, the rule 479 used for its conflicting figures (GAP-DOCTOR-CREDITS-CONFLICT). Confidence: low.",
+     "citations": [
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Soldier_s_Blood.html Quest Rewards \"600 Credits\""
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "missions/Soldier's_Blood.json page 3434 RewardCredits=300 rev 5870 (?oldid=5870) to rev 35141 (?oldid=35141)",
+       "date": "2007-08-19..2008-10-16"
+      }
+     ]
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)",
+     "citations": [
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "Soldier_s_Blood.html Quest Rewards \"600 Credits\""
+      }
+     ]
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 771,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "WildernessCollectionDrop; WildernessXenobiologySamples",
+   "fields": {
+    "credits": {
+     "value": 600,
+     "tier": "inferred",
+     "reasoning": "CONFLICT: Ellatha (early 2008) records 600, TaRapedia 300 from its 2007 pages (rev 7277, 2007-08-25, to rev 18436, 2007-12-06). WildernessCollectionDrop seeded 300; the later Ellatha record is taken, the rule 479 used (GAP-DOCTOR-CREDITS-CONFLICT). 771 pays no experience: neither source records a figure (TaRapedia \"?\" then blank). Confidence: low.",
+     "citations": [
+      {
+       "source": "community_db:ellatha-20260926-collection",
+       "locator": "research/20260926-reward-items/work/ellatha/Droning_On.html Quest Rewards \"600 Credits\""
+      },
+      {
+       "source": "community_db:tarapedia-revisions-20260926-collection",
+       "locator": "research/20260926-collection-missions dossier: missions/Droning_On.json page 3817 RewardCredits=300 rev 7277 (?oldid=7277) to rev 18436 (?oldid=18436)",
+       "date": "2007-08-25..2007-12-06"
+      }
+     ]
+    }
+   }
   }
  ],
  "omitted": [
@@ -65224,6 +66341,55 @@
    "what": "accept-time grants of the 526 aid packages, 802 field report and 1064 data disc",
    "reason": "no template or grant mechanism evidenced",
    "gap": "GAP-TORDEN-ACCEPT-ITEMS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "751 Boargar Acquisition",
+   "reason": "intentionally never offered in the final state: Dr. Munson's Boargar sample mission, withdrawn by the official Deployment 11 live notes (2008-08-15)",
+   "gap": "GAP-D11-WITHDRAWN-IN-PROGRESS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "780 Treelurker Samples",
+   "reason": "intentionally never offered in the final state: Dr. Munson's Treelurker sample mission, withdrawn by the official Deployment 11 live notes (2008-08-15)",
+   "gap": "GAP-D11-WITHDRAWN-IN-PROGRESS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "767 Mighty Miasma",
+   "reason": "intentionally never offered in the final state: Dr. Munson's Miasma sample mission (seeded 2026-09-17, withdrawn by WildernessMunsonWithdrawal), withdrawn by the official Deployment 11 live notes (2008-08-15)",
+   "gap": "GAP-D11-WITHDRAWN-IN-PROGRESS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "769 Predatory",
+   "reason": "intentionally never offered in the final state: Dr. Soji's Predator mission (\"permanently disabled\"; the Wilderness Predators were removed too), withdrawn by the official Deployment 11 live notes (2008-08-15)",
+   "gap": "GAP-D11-WITHDRAWN-IN-PROGRESS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "item rewards of 758 and 776",
+   "reason": "every list (TaRapedia, Ellatha) predates update 1.4 (2008-01-29), which replaced 855 missions' rewards",
+   "gap": "GAP-MISSION-REWARD-ITEMS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "what": "771 requires 795 Lightbender Glands",
+   "reason": "795 is held: the world seed has no ordinary Lightbender",
+   "gap": "GAP-DOCTOR-CHAIN-GATES",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "771 experience",
+   "reason": "no source records a figure (TaRapedia \"?\" then blank; Ellatha shows none)",
+   "gap": "GAP-DOCTOR-CREDITS-CONFLICT",
    "slice": "W3"
   }
  ],
@@ -67376,7 +68542,7 @@
   },
   {
    "id": "GAP-MISSION-REWARD-ITEMS",
-   "summary": "Item rewards are still missing from most seeded missions. The 2026-09-21 conclusion that names cannot be resolved holds for a single name (manufacturer prefixes such as \"Prodigy %(ClassName)s\" are item modules, and one armour icon resolves to hundreds of templates), but not for a mission's whole list: the final client stores mission reward templates as runs of consecutive ids, and a specific 3-4 entry list matches exactly one run (research/20260926-reward-items, independently reviewed). Closed on 2026-09-26 for seven missions by MissionRewardItems: 1541, 1673, 1040, 983, 970, 1068 and 1863, each a post-1.4 TaRapedia list, seeded as one choice at inferred tier (caveats in GAP-MISSION-REWARD-TEMPLATE-ID, GAP-MISSION-REWARD-CHOICE, GAP-MISSION-REWARD-MODULES, GAP-MISSION-REWARD-FINAL-STATE and GAP-MISSION-LEVEL). Held: the 23 Logos missions (1645, 1648-1651, 1654, 1655, 1657-1659, 1661, 1663-1671, 1749, 1750, 1814) - the Logos chain resolves through original client tables, but the shrine already grants the Logos (DynamicObjectManager.LogosRecovery) and completes the objective, the wiki field restates that objective, no completion window shows an item, and the lists predate 1.4, so seeding would duplicate or invent a grant (SeedLogosMissionsRows records the same decision); 1407 Too Close For Comfort, whose post-1.4 list (rev 29339, 2008-02-28) is two recipes, \"Modification: Power Bonus\" and \"Modification: Regen Bonus\", and which Recipe_Modification template teaches either is server data, while the Vitalius Leech Gun / Vextronics Chaingun pair in GAP-W3-HUB-REWARDS is Ellatha's pre-1.4 item data; the partial lists of 411, 412 and 1390 (the EMP Bomb templates are ambiguous, and 1390's post-D8 footage shows Class I EMP Bomb | Class I Armor Charger where the wiki has a Basic Med Pack); every list recorded only before 1.4 (23 missions: 1.4 replaced 855 missions' rewards, and those lists must not become analogues); every 2-entry run (chance matches 6-57%); 25 ambiguous and 4 unresolved missions; 13 with no recorded item. Finding recorded, not acted on: 479 Forming Alliances' vest 13738 is class 16396, a V04 Motor Assist vest (levels 3-7), while its only list (TaRapedia rev 21137, 2007-12-15, pre-1.4) names a Luminar Motor Assist Armor Vest v6 (class 16896: templates 30676, 30677, 96948); its armour 154 matches Ellatha's pre-1.4 stat block, and armour is a class property, so nothing pins the template. The research read the deployed row as unlabelled; in this tree it is WildernessHubFormingAlliances' analogue (docs/evidence/wilderness-forming-alliances-reconstruction.json). It is unchanged here.",
+   "summary": "Item rewards are still missing from most seeded missions. The 2026-09-21 conclusion that names cannot be resolved holds for a single name (manufacturer prefixes such as \"Prodigy %(ClassName)s\" are item modules, and one armour icon resolves to hundreds of templates), but not for a mission's whole list: the final client stores mission reward templates as runs of consecutive ids, and a specific 3-4 entry list matches exactly one run (research/20260926-reward-items, independently reviewed). Closed on 2026-09-26 for seven missions by MissionRewardItems: 1541, 1673, 1040, 983, 970, 1068 and 1863, each a post-1.4 TaRapedia list, seeded as one choice at inferred tier (caveats in GAP-MISSION-REWARD-TEMPLATE-ID, GAP-MISSION-REWARD-CHOICE, GAP-MISSION-REWARD-MODULES, GAP-MISSION-REWARD-FINAL-STATE and GAP-MISSION-LEVEL). Held: the 23 Logos missions (1645, 1648-1651, 1654, 1655, 1657-1659, 1661, 1663-1671, 1749, 1750, 1814) - the Logos chain resolves through original client tables, but the shrine already grants the Logos (DynamicObjectManager.LogosRecovery) and completes the objective, the wiki field restates that objective, no completion window shows an item, and the lists predate 1.4, so seeding would duplicate or invent a grant (SeedLogosMissionsRows records the same decision); 1407 Too Close For Comfort, whose post-1.4 list (rev 29339, 2008-02-28) is two recipes, \"Modification: Power Bonus\" and \"Modification: Regen Bonus\", and which Recipe_Modification template teaches either is server data, while the Vitalius Leech Gun / Vextronics Chaingun pair in GAP-W3-HUB-REWARDS is Ellatha's pre-1.4 item data; the partial lists of 411, 412 and 1390 (the EMP Bomb templates are ambiguous, and 1390's post-D8 footage shows Class I EMP Bomb | Class I Armor Charger where the wiki has a Basic Med Pack); every list recorded only before 1.4 (23 missions: 1.4 replaced 855 missions' rewards, and those lists must not become analogues); every 2-entry run (chance matches 6-57%); 25 ambiguous and 4 unresolved missions; 13 with no recorded item. Finding recorded, not acted on: 479 Forming Alliances' vest 13738 is class 16396, a V04 Motor Assist vest (levels 3-7), while its only list (TaRapedia rev 21137, 2007-12-15, pre-1.4) names a Luminar Motor Assist Armor Vest v6 (class 16896: templates 30676, 30677, 96948); its armour 154 matches Ellatha's pre-1.4 stat block, and armour is a class property, so nothing pins the template. The research read the deployed row as unlabelled; in this tree it is WildernessHubFormingAlliances' analogue (docs/evidence/wilderness-forming-alliances-reconstruction.json). It is unchanged here. 758 Fithikally Challenged and 776 Soldier's Blood (WildernessXenobiologySamples, 2026-09-26) pay no item: their only lists (Class I EMP Bomb x2 / Class I Advanced Med Pack x4; Class 1 Fragmentation Grenade x6 / Class 1 Basic Med Pack against TaRapedia's \"None\") predate 1.4.",
    "evidence": [
     "TaRapedia reward icons, e.g. {{Icon/Armor|Prodigy|Motor Assist Armor|Boots|5}}",
     "client modulenamelanguage: \"Prodigy\" is a module display pattern, not a template",
@@ -67405,7 +68571,8 @@
     "TaRapedia: 126 of 926 mission pages state a level",
     "EarlyReadyMissions 2026-09-26: 1742, 441 and 434 seeded at the Wilderness band 5 and 408 at the Palisades band 15; no source gives their levels",
     "TordenConversationMissions (2026-09-26): 1745 at the Palisades band 15, 526/802 at the Incline band 35, 648/1064/1070 at the Plains band 35, 1014 at the Plateau band 20 (all inferred conventions); 1326/1330 in the Pools, which has no band, at 20 from 1068/1541 as an analogue under OD-60 (pending owner review)",
-    "research/20260926-reward-items/REVIEW.md Claim 3 (world DB level vs wiki Level vs reward requirement levels)"
+    "research/20260926-reward-items/REVIEW.md Claim 3 (world DB level vs wiki Level vs reward requirement levels)",
+    "WildernessXenobiologySamples (2026-09-26): 758 and 776 at the Wilderness band 5 (inferred convention, as the seeded 771/787)"
    ],
    "closes_with": "an owner decision on the level policy, or a source that gives mission levels",
    "surfaced_by": [
@@ -68066,6 +69233,120 @@
    "slices": [
     "W3"
    ]
+  },
+  {
+   "id": "GAP-D11-WITHDRAWN-IN-PROGRESS",
+   "summary": "The official Deployment 11 live notes (2008-08-15) withdraw Dr. Munson's three sample missions (751 Boargar Acquisition, 780 Treelurker Samples, 767 Mighty Miasma) and permanently disable 769 Predatory, so none of the four is offered in the final state (767 was seeded and is withdrawn by WildernessMunsonWithdrawal; the other three were never seeded and must not be). Two clauses are not modelled: a player who already had a Munson mission could still finish it, and an in-log Predatory failed automatically. No character of this server can carry a 2008 log entry, and an orphaned log entry without its definition is handled by the server's generic missing-definition path. Treelurkers (client class 6039) and the Wilderness Predators are absent from the seed; the notes remove the Predators from the Wilderness, CLRF and Pravus Research, and the seed has none there.",
+   "evidence": [
+    "official_notes:d11-rgtr-20081220 Maps and Missions > Concordia Wilderness (Munson and Predatory lines)",
+    "TaRapedia 2008-09-16 banners on the Munson mission pages and Dr. Munson's page",
+    "rasaworld.db: no Predator, Juggernaut or Treelurker creature in contexts 1220, 1721 or 1430"
+   ],
+   "closes_with": "nothing to seed; closes if the in-progress behaviour is ever needed (for example for imported character data)",
+   "surfaced_by": [
+    "collection-mission dossiers, research/20260926-collection-missions (2026-09-26)"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-COLLECTION-DROP-CHANCE",
+   "summary": "No drop rate survives for any mission item: 479 Thrax Heart (50, analogue under OD-61), 776 Thrax Blood Sample (50, analogue, OD-61), 771 Shield Drone Scraps (50, analogue, OD-61), 758 Fithik Spleen (100, inferred) and 787 Xanx Pincers (100, inferred). The 100s rest on TaRapedia walkthroughs whose kill counts equal the client targets (\"Kill ten collect item\", rev 15141; \"Travel South Kill 4 Xanx\", revs 15143/22864), which is weak, pre-D11 evidence. Each value's uncertainty is the whole (0, 100] range.",
+   "evidence": [
+    "research/20260926-collection-missions/README.md \"Drop chance\" (TaRapedia pages and histories, Ellatha, TTH 2007 guide, web search)",
+    "docs/evidence/wilderness-forming-alliances-reconstruction.json (479)"
+   ],
+   "closes_with": "a capture, footage or dated account that shows kills against samples collected for any of these missions",
+   "surfaced_by": [
+    "WildernessXenobiologySamples 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-COLLECTION-TEMPLATE-CHOICE",
+   "summary": "Each MisXeno sample class maps to two identical item templates (2524/16572 blood, 2527/16575 scraps, 2532/16580 pincers, 2533/16581 spleen); the lower template, inside the consecutive block 2521-2539, is dropped by 479's rule (2285 over 16540). Which template final-live servers dropped is unrecorded; the counter is keyed by item class, so the choice does not change progress.",
+   "evidence": [
+    "ItemTemplateItemClassPreloader.cs lines 1007-1017 and 2892-2901",
+    "rasaworld.db itemtemplate rows identical for each pair"
+   ],
+   "closes_with": "a capture or item link showing the template id of a dropped sample",
+   "surfaced_by": [
+    "WildernessXenobiologySamples 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-758-FITHIK-GEOGRAPHY",
+   "summary": "TaRapedia's walkthrough (\"Travel south ... you should enter a cave\") and Ellatha (\"Fithik are found near by in Ranja Caverns\", with a spawn legend) put 758's Fithik in Ranja Cavern (map_region 5, region 33, box centre -550, -415). The world seed has no ordinary Fithik there - only the Hive Monarch boss 89 (spawnpool 168 at -620, -452). The nearest ordinary Fithik pool is 141 in Gellman Meadow (-357.5, 166.4, -243.3), 392 m (x/z) from Dr. Soji's pool 189; the next is 144 at 659 m. The binding works on creature 1 wherever it spawns; the spawn geography is upstream emulator data, not original evidence, and the final-live positions are unrecovered (the Wilderness client map has no creature spawn points).",
+   "evidence": [
+    "rasaworld.db spawnpool 141, 144, 168, 189 and map_region 5 (read 2026-09-26)",
+    "research/20260926-collection-missions/work/client-map (no spawn entities)",
+    "TaRapedia Fithikally Challenged rev 15141; Ellatha Fithikally_Challenged.html"
+   ],
+   "closes_with": "dated positions (footage, /loc readings or a map legend measurement) of the Ranja Cavern Fithik, as an OD-48-style placement",
+   "surfaced_by": [
+    "collection-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-776-BLOOD-SOURCES",
+   "summary": "Soldier's Blood drops only from the Thrax Soldier (creature 3), as 479 does. Whether grenadiers (57), technicians (47) or other Thrax also yielded blood is unverified; the client's separate MisXenoTechnicianSample class (11166) argues against technicians. Both 479 and 776 roll independently on a Thrax Soldier kill.",
+   "evidence": [
+    "TaRapedia item/Thrax_Blood_Sample rev 5888 (\"kill Thrax soldiers\")",
+    "EntityClassPreloader.cs:3723 MisXenoTechnicianSample 11166"
+   ],
+   "closes_with": "a dated account or capture of blood samples from another Thrax type",
+   "surfaced_by": [
+    "collection-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-DOCTOR-CREDITS-CONFLICT",
+   "summary": "Credits for 776 Soldier's Blood and 771 Droning On conflict: Ellatha's early-2008 pages say 600, TaRapedia's 2007 pages (closed beta for 776) say 300. Both are seeded at the later 600, the rule 479 used; neither source is final-live. 771 pays no experience because neither source records a figure; 758, 776 and 787 pay TaRapedia's 4,000.",
+   "evidence": [
+    "Ellatha Soldier_s_Blood.html and Droning_On.html",
+    "TaRapedia Soldier's Blood revs 5870-35141, Droning On revs 7277-18436"
+   ],
+   "closes_with": "a post-1.4 capture or footage of either mission's completion window",
+   "surfaced_by": [
+    "collection-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
+  },
+  {
+   "id": "GAP-DOCTOR-CHAIN-GATES",
+   "summary": "The doctors' chain gates are pre-D11 wiki readings: 758 requires 771 (TaRapedia 2007-11-09..2008-01-20) and 787 requires 758 (also the client's own 787 opening). TaRapedia gates 771 on 795 Lightbender Glands, which is held (no ordinary Lightbender in the seed), so 771 stays ungated; 776 has no gate although Ojy's opening (\"Munson said you'd be here\") refers to Munson's withdrawn line. 787's follow-up 769 Predatory is disabled. Whether D11 re-linked the chain is unrecorded.",
+   "evidence": [
+    "TaRapedia Fithikally Challenged, Xanx For the Help, Droning On and Soldier's Blood revision histories",
+    "client missionconversation (776,3) text 3766 and (787,3) text 3821"
+   ],
+   "closes_with": "a post-D11 source for the doctors' mission order, and 795 seeded once a Lightbender exists",
+   "surfaced_by": [
+    "collection-mission dossiers 2026-09-26"
+   ],
+   "slices": [
+    "W3"
+   ],
+   "status": "open"
   }
  ],
  "non_content_settings": [
@@ -71547,6 +72828,172 @@
      "locator": "reinforcements remain grouped on the pad through 98.333 s, 11.533 s after 1995 objective 1"
     }
    ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessMunsonWithdrawal",
+   "table": "npc_mission,npc_mission_objective,npc_mission_objective_binding,npc_mission_objective_counter,npc_mission_reward",
+   "key": {
+    "mission_id": 767
+   },
+   "field": "existence",
+   "old": "npc_mission 767 (Dr. Munson 109 -> 109, level 5, \"Mighty Miasma (Wilderness)\"), objective 767/2 required/first/revealed, kill binding 767/2/0 on Bane Miasma 88 with counter target 6, rewards 4,000 XP and 600 credits (WildernessCollectionDrop, 2026-09-17, OD-47)",
+   "new": null,
+   "tier": "original",
+   "reason": "The official Deployment 11 live notes withdraw Dr. Munson's three sample missions - 751 Boargar Acquisition, 780 Treelurker Samples and 767 Mighty Miasma - and permanently disable 769 Predatory. 767 was the only one seeded; its definition, binding, counter and rewards are removed and its client objective row returns to the NULL-flag skeleton. The notes' in-progress clause is not modelled (GAP-D11-WITHDRAWN-IN-PROGRESS).",
+   "citations": [
+    {
+     "source": "official_notes:d11-rgtr-20081220",
+     "locator": "Maps and Missions > Concordia Wilderness: \"'Xenobiologist' Missions - The three missions from 'Dr. Munson' to gather biological samples from Boargar, Treelurkers and Miasmas are no longer available, As Dr. Munson has more samples than he could ever use! (Note: they can still be finished if a player already has one in progress.)\""
+    },
+    {
+     "source": "official_notes:d11-rgtr-20081220",
+     "locator": "Maps and Missions > Concordia Wilderness: \"Mission: Predatory: This mission has been permanently disabled. The mission will fail automatically if it is in your Mission Log.\""
+    },
+    {
+     "source": "official_notes:d11",
+     "locator": "the same Deployment 11.6 page, playtr.com capture of 2009-02-03, Maps and Missions > Concordia Wilderness"
+    },
+    {
+     "source": "community_db:tarapedia-revisions-20260926-collection",
+     "locator": "missions/Mighty_Miasma.json rev 33273 (?oldid=33273): \"no longer available as of deployment 11.6\" banner added",
+     "date": "2008-09-16"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessXenobiologySamples",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 771,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "field": "kind, item_template_id, drop_chance",
+   "old": [
+    6,
+    0,
+    0.0
+   ],
+   "new": [
+    9,
+    2527,
+    50.0
+   ],
+   "tier": "analogue",
+   "decision": "OD-61",
+   "reason": "Droning On collects its client item, Shield Drone Scraps (11153, template 2527), from the Bane Shield Drone instead of counting six kills (OD-47 stand-in, now OD-66). No drop rate survives and no walkthrough ties kills to parts one-for-one (\"Destroy shield drones to collect their parts. Need 6 parts\"), so the drop repeats 479's 50% estimate. In play this makes 771 slower than the kill count, which was effectively a certain drop.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+    },
+    {
+     "source": "community_db:tarapedia-revisions-20260926-collection",
+     "locator": "missions/Droning_On.json page 3817 rev 6674 (?oldid=6674) walkthrough",
+     "date": "2007-08-23"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessXenobiologySamples",
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 787,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "field": "kind, item_template_id, drop_chance",
+   "old": [
+    6,
+    0,
+    0.0
+   ],
+   "new": [
+    9,
+    2532,
+    100.0
+   ],
+   "tier": "inferred",
+   "reason": "Xanx For the Help collects its client item, Xanx Pincers (11160, template 2532), from the Bane Xanx instead of counting four kills (OD-47 stand-in, now OD-66). TaRapedia's walkthrough counts four kills for four pincers, so every kill drops one (inferred, low confidence) - equal in play to the kill count.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 11160 \"MisXenoXanxPincers\" (repo EntityClassPreloader.cs:3717), physicalentityclassnamelanguage 11160 \"Xanx Pincers\", itemclass 11160 stack 1000 (ItemClassPrelaoder.cs:1310); itemTemplateItemClass 2532 -> 11160 and 16580 -> 11160 (ItemTemplateItemClassPreloader.cs:1015, 2900)"
+    },
+    {
+     "source": "community_db:tarapedia-revisions-20260926-collection",
+     "locator": "missions/Xanx_For_the_Help.json page 6491 rev 15143 (?oldid=15143) \"Travel South Kill 4 Xanx\"",
+     "date": "2007-11-16"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessXenobiologySamples",
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 771,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "field": "credits",
+   "old": 300,
+   "new": 600,
+   "tier": "inferred",
+   "reason": "Ellatha's early-2008 page records 600 credits against TaRapedia's 2007 figure of 300; the later record is taken, as for 479 and 776 (GAP-DOCTOR-CREDITS-CONFLICT).",
+   "citations": [
+    {
+     "source": "community_db:ellatha-20260926-collection",
+     "locator": "research/20260926-reward-items/work/ellatha/Droning_On.html \"600 Credits\""
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessXenobiologySamples",
+   "table": "npc_mission_prerequisite",
+   "key": {
+    "mission_id": 787,
+    "or_group": 0,
+    "required_mission_id": 758
+   },
+   "field": "existence",
+   "old": null,
+   "new": {
+    "required_state": 4
+   },
+   "tier": "inferred",
+   "reason": "The client's 787 opening presupposes Fithikally Challenged (\"you really hooked me up with those Fithik spleens\"); with 758 seeded the gate can be expressed.",
+   "citations": [
+    {
+     "source": "client_table:missions",
+     "locator": "missionconversation (787,3) -> text 3821"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-26",
+   "migration": "WildernessXenobiologySamples",
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 771,
+    "objective_id": 2,
+    "counter_id": 0
+   },
+   "field": "manifest reasoning (target_value): item class",
+   "old": "client entity class 24084 (Shield Drone)",
+   "new": "client entity class 11153 (Shield Drone Scraps)",
+   "tier": "original",
+   "reason": "Manifest citation correction only; no seeded value changes. 24084 is the Shield Drone creature class; the item the objective counts is the mission-item class 11153 MisXenoShieldDroneParts, display name \"Shield Drone Scraps\", which Ellatha's tracker also shows.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "entityclass 11153 \"MisXenoShieldDroneParts\" (repo EntityClassPreloader.cs:3711), physicalentityclassnamelanguage 11153 \"Shield Drone Scraps\", itemclass 11153 stack 1000 (ItemClassPrelaoder.cs:1305); itemTemplateItemClass 2527 -> 11153 and 16575 -> 11153 (ItemTemplateItemClassPreloader.cs:1010, 2895)"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -72121,6 +73568,26 @@
    "choice": "1326 Spoils of War and 1330 Retread Planning Part II take level 20, the value PlateauConversationNpc gave 1068 and 1541 - the only seeded missions that turn in at Pools NPCs - labelled analogue under GAP-MISSION-LEVEL. Approved by the batch lead on 2026-09-26 under the AGENTS.md evidence-bounded reconstruction policy (a value is required for the mission to load); no owner choice of this exact level is claimed. Pending owner review: TaRapedia gives the preceding Smash and Grab Level=35 (rev 31925, 2008-08-22) and the Class VII rewards require levels 31-35, both pointing higher than 20.",
    "approved_on": "2026-09-26",
    "record": "docs/retail-accuracy.md (2026-09-26 Torden conversation missions)"
+  },
+  {
+   "id": "OD-61",
+   "decision": "Forming Alliances reward estimates, and the mission-item drop chance where no rate survives",
+   "default": "A labelled 50% drop estimate so the item can be collected at all",
+   "status": "approved",
+   "review_status": "pending owner review",
+   "choice": "Mission 479's reward is seeded as a labelled estimate, not recovered final-live data: 50% drop chance, heart template 2285, reward level 5 and vest counterpart 13738 (docs/evidence/wilderness-forming-alliances-research.json implementation_gaps / reward_vest_gap; the vest also conflicts with the 2026-09-26 reward-items reading of the wiki as v6). On 2026-09-26 the batch lead extended the 50% estimate, as an analogue under this decision, to the Wilderness doctors' sample drops with no rate evidence - 776 Soldier's Blood and 771 Droning On (WildernessXenobiologySamples); where a TaRapedia walkthrough counts kills equal to the client target (758, 787) the drop is 100 at inferred tier instead. Recorded in docs/progression-preservation-plan.md (agent, 2026-09-24); no owner choice of these values is claimed.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md (owner-decision table, OD-61)"
+  },
+  {
+   "id": "OD-66",
+   "decision": "Collection objectives once the client item is identified",
+   "default": "Bind the objective as an item collection (the 479 mechanism) instead of OD-47's kill count",
+   "status": "approved",
+   "review_status": "pending owner review",
+   "choice": "Where the client mission-item class and its template are identified (the MisXeno* block, matched to the objective by name) and the server's item-drop mechanism can carry it, a collection objective is bound as ItemCollected with a creature drop, the counter keyed by item class and the turn-in consuming the items, instead of OD-47's count of the creature's deaths. The drop chance is 100 (inferred) where a dated walkthrough counts kills equal to the client target, otherwise OD-61's 50% analogue. Applied 2026-09-26 to 758, 776, 771 and 787 (WildernessXenobiologySamples); OD-47 stays for objectives whose item is not identified. Approved by the batch lead on 2026-09-26 under the AGENTS.md evidence-bounded reconstruction policy; no owner choice is claimed.",
+   "approved_on": "2026-09-26",
+   "record": "docs/progression-preservation-plan.md (owner-decision table, OD-66)"
   }
  ]
 }

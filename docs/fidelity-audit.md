@@ -638,6 +638,31 @@ inferred in structure and quantity (GAP-TORDEN-1326-1330-ITEM-CHOICE). Their lev
 Pools has no band, and the value is 1068/1541's under OD-60, pending owner review. To allow that label the provenance
 registry now classifies `npc_mission`, whose columns are all required.
 
+### Seeded content the final live game had withdrawn (2026-09-26)
+
+Some seeded content was never in the final game. 767 Mighty Miasma, seeded 2026-09-16 at Dr. Munson under the OD-47
+kill-count rule, is one of the three Munson sample missions that the official Deployment 11 live notes (2008-08-15)
+say "are no longer available". The same notes permanently disable 769 Predatory. The earlier batch had checked the
+mission's sources, TaRapedia and Ellatha, which are mostly pre-D11. It had not checked the patch notes that retired
+the mission. `WildernessMunsonWithdrawal` removes 767, and 751, 780 and 769 are recorded as never to be offered.
+
+The rest of those notes, checked against this tree:
+
+- Body Count is not seeded.
+- There are no Predators or Juggernaut in the named maps.
+- Richards is already at the Pinhole entrance.
+- Mama Miasma's client target is already 3.
+- The trainer cull is superseded by D12.
+
+The same review corrected three things:
+
+- 771's manifest row named creature class 24084 where the item is 11153 Shield Drone Scraps.
+- 771's seeded 300 credits are a 2007 beta figure. Ellatha's later page says 600.
+- 787 had no gate, although its own client opening presupposes 758.
+
+**Lesson for later batches: check every mission against the D11-to-shutdown patch notes before seeding it, not only
+against its wiki page.**
+
 ## The parallel audit, and what it shipped (2026-09-21)
 
 Fifteen investigations ran at once over the client's own data, the wiki's full history, a recovered pin-map and

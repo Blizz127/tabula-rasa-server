@@ -951,6 +951,8 @@ namespace Rasa.Test
                 // as implemented, so the capability is asserted here rather than described in a gap.
                 // S2 crate item set 19858, with the uncommon armour of BootcampCrateUncommonGear.
                 references.Items.UnionWith(new uint[] { 12209, 15803, 26879, 12208, 13713, 2285 });
+                // The doctors' sample items of WildernessXenobiologySamples: blood 2524, scraps 2527, pincers 2532, spleen 2533.
+                references.Items.UnionWith(new uint[] { 2524, 2527, 2532, 2533 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -959,6 +961,8 @@ namespace Rasa.Test
                 // MissionAreaLinks places two world-seed NPCs the Wilderness missions turn in at, because their
                 // spawnpool slots never drew them: Field Sgt. Witherspoon (101) and Council Elder Moawi (38).
                 references.Creatures.UnionWith(new uint[] { 3, 76, 77, 85, 87, 88, 101, 38 });
+                // WildernessXenobiologySamples drops the Fithik spleen from the Wilderness Fithik (creature 1).
+                references.Creatures.Add(1);
 
                 var content = new MissionContentManager(new Factory(connection)) { Missions = missions };
                 content.Load(() => new BootcampConfig(), references, missions.LoadedMissions, MissionContentRules.Implemented);
@@ -1008,6 +1012,47 @@ namespace Rasa.Test
                 Assert.IsTrue(missions.LoadedMissions[429].HasObjectiveConversation(4, 208, 1));
                 Assert.AreEqual(10346u, missions.LoadedMissions[479].ItemCounterClasses[(1u, (byte)0)]);
                 Assert.AreEqual(12, missions.LoadedMissions[479].Counters[1].Single().TargetValue);
+
+                // WildernessMunsonWithdrawal: 767 is not offered (withdrawn at D11), nor are 751, 780 and 769.
+                foreach (var withdrawn in new uint[] { 751, 767, 769, 780 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(withdrawn), $"mission {withdrawn} was withdrawn at D11");
+                // WildernessXenobiologySamples: the doctors' sample missions collect their client item class, keyed by the
+                // template's class, and load offerable with their gates and rewards.
+                foreach (var (missionId, objectiveId, itemClass, target) in new (uint, uint, uint, int)[]
+                    { (758, 3, 11161, 10), (776, 2, 11150, 10), (771, 2, 11153, 6), (787, 3, 11160, 4) })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    var sample = missions.LoadedMissions[missionId];
+                    CollectionAssert.AreEqual(Array.Empty<string>(), sample.DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(sample.IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual(itemClass, sample.ItemCounterClasses[(objectiveId, (byte)0)], $"mission {missionId}");
+                    Assert.AreEqual(target, sample.Counters[objectiveId].Single().TargetValue, $"mission {missionId}");
+                    Assert.AreEqual(ObjectiveBindingKind.ItemCollected, (ObjectiveBindingKind)sample.Bindings.Single().Kind, $"mission {missionId}");
+                    Assert.AreEqual(0, sample.OfferedSelectableRewards.Count + sample.OfferedFixedItems.Count, $"mission {missionId} pays no item");
+                }
+                Assert.AreEqual((4000L, 600L), (missions.LoadedMissions[758].RewardExperience, missions.LoadedMissions[758].RewardCredits));
+                Assert.AreEqual((4000L, 600L), (missions.LoadedMissions[776].RewardExperience, missions.LoadedMissions[776].RewardCredits));
+                Assert.AreEqual(600L, (long)missions.LoadedMissions[771].RewardCredits);
+                Assert.AreEqual((771u, (byte)4), (missions.LoadedMissions[758].Prerequisites.Single().RequiredMissionId, missions.LoadedMissions[758].Prerequisites.Single().RequiredState));
+                Assert.AreEqual((758u, (byte)4), (missions.LoadedMissions[787].Prerequisites.Single().RequiredMissionId, missions.LoadedMissions[787].Prerequisites.Single().RequiredState));
+                Assert.AreEqual(0, missions.LoadedMissions[776].Prerequisites.Count);
+                Assert.AreEqual(0, missions.LoadedMissions[771].Prerequisites.Count);
+                // The drops roll on the seeded source creatures: every Fithik (1) and Bane Xanx (87) kill yields its item
+                // (100, inferred from the walkthrough kill counts); a Thrax Soldier (3) or Bane Shield Drone (85) kill
+                // yields one below the 50% estimate (analogue, OD-61) and none at it.
+                var collector = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                foreach (var (missionId, objectiveId) in new (uint, uint)[] { (758, 3), (776, 2), (771, 2), (787, 3) })
+                {
+                    var active = new PlayerMission { MissionId = missionId, State = MissionState.Active };
+                    active.Objectives[objectiveId] = MissionObjectiveState.Incomplete;
+                    collector.Player.Missions[missionId] = active;
+                }
+                CollectionAssert.AreEqual(new uint[] { 2533 }, content.RollMissionItemDrops(collector, new Creature { DbId = 1 }, () => 0.999).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 2532 }, content.RollMissionItemDrops(collector, new Creature { DbId = 87 }, () => 0.999).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 2524 }, content.RollMissionItemDrops(collector, new Creature { DbId = 3 }, () => 0.49).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(collector, new Creature { DbId = 3 }, () => 0.50).Count());
+                CollectionAssert.AreEqual(new uint[] { 2527 }, content.RollMissionItemDrops(collector, new Creature { DbId = 85 }, () => 0.49).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(collector, new Creature { DbId = 85 }, () => 0.50).Count());
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];
