@@ -107,6 +107,10 @@ namespace Rasa.Managers
             Commands.Add(name, new ChatCommand(level, handler));
         }
 
+        /// <summary>The account level a registered command needs, or null if there is no such command.</summary>
+        public GmLevel? RequiredLevel(string name)
+            => Commands.TryGetValue(name, out var registered) ? registered.Level : (GmLevel?)null;
+
         public void RemoveCommand(string name)
         {
             if (Commands.ContainsKey(name))
@@ -115,6 +119,10 @@ namespace Rasa.Managers
 
         public void RegisterChatCommands()
         {
+            // Once per process: Server.Start calls this, and so may a test that needs the table.
+            if (Commands.Count > 0)
+                return;
+
             // Observer: reads the world, changes nothing in it.
             RegisterCommand(".minion", GmLevel.GameMaster, MinionCommand);
             RegisterCommand(".getdistance", GmLevel.Observer, GetDistanceCommand);
@@ -157,6 +165,13 @@ namespace Rasa.Managers
             RegisterCommand(".tele", GmLevel.GameMaster, TeleCommand);
             RegisterCommand(".teleport", GmLevel.GameMaster, TeleportCommand);
             RegisterCommand(".teleup", GmLevel.GameMaster, TeleUpCommand);
+
+            // Speaks to other players, as the client's own "ADMIN MESSAGE: " line. GameMaster: it hands
+            // nothing out and changes nothing a restart would not undo, and the client names the header
+            // for GMs (ID_CHAT_MESSAGE_HEADER_GM). The shutdown countdown is not here: it disconnects
+            // everyone, so it is the console's alone.
+            RegisterCommand(".announce", GmLevel.GameMaster, AnnounceCommand);
+            RegisterCommand(".announcemap", GmLevel.GameMaster, AnnounceMapCommand);
 
             // Admin: hands out progression, changes who a player is, reloads server data.
             // A restart does not undo these.
@@ -446,6 +461,39 @@ namespace Rasa.Managers
 
             communicator.SystemMessage(_client,
                 flags.Clear(flag) ? $"{flag} is now clear for everyone." : $"{flag} was already clear.");
+        }
+
+        /// <summary>
+        /// .announce &lt;text&gt; - free text to every player in the world through the client's admin-message
+        /// path (AdminBroadcastManager); .announcemap &lt;text&gt; - the same, to every instance of the map the
+        /// caller stands in. The text goes exactly as typed after the command.
+        /// </summary>
+        private void AnnounceCommand(string[] parts)
+        {
+            var text = parts.Length > 1 ? string.Join(" ", parts[1..]) : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                CommunicatorManager.Instance.SystemMessage(_client, "usage: .announce <text>");
+                return;
+            }
+
+            AdminBroadcastManager.Instance.Broadcast(text);
+        }
+
+        private void AnnounceMapCommand(string[] parts)
+        {
+            var text = parts.Length > 1 ? string.Join(" ", parts[1..]) : string.Empty;
+            var map = _client.Player?.MapChannel?.MapInfo;
+
+            if (string.IsNullOrWhiteSpace(text) || map == null)
+            {
+                CommunicatorManager.Instance.SystemMessage(_client,
+                    map == null ? "You are not on a map." : "usage: .announcemap <text>");
+                return;
+            }
+
+            AdminBroadcastManager.Instance.BroadcastToMap(map.MapContextId, text);
         }
 
         private void MessageCommand(string[] parts)

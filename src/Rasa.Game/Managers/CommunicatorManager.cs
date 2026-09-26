@@ -47,7 +47,7 @@ namespace Rasa.Managers
          *      Comunicator Handlers:
          * - AddFriendAck
          * - AddIgnoreAck
-         * - AdminMessage
+         * - AdminMessage                     => implemented (AdminBroadcastManager)
          * - ChatChannelJoined
          * - ChatChannelLeft
          * - DisplayClientMessage

@@ -2069,6 +2069,27 @@ character picks up in Alia Das once Training Day and the class choice are behind
   emulator's contradicted 12% 1-35 cartridge row goes. Every other creature keeps the three-cartridge stand-in, now an
   analogue, pending the owner's choice between keeping it and dropping nothing (OD-110).
 
+## Segment 7 (shutdown live state) status
+
+Segment 7 is not yet the current segment. This note records one shared piece, built on 2026-09-26 while its evidence
+was fresh: the shutdown broadcast. Two recordings of the EU server's last minute, fxAtDpxypSw and CommanderGrog's
+_gwh1__XecI, show the sequence. The final client's own paths reproduce it (`docs/evidence/shutdown-broadcast.json`;
+account in `docs/retail-accuracy.md`, 2026-09-26 "The shutdown broadcast").
+
+- **Built:** admin messages through the client's `Recv_AdminMessage`. The client supplies the "ADMIN MESSAGE: "
+  header; the server sends the text with filter SYSTEM_GM. Console `announce` / `announcemap`, chat `.announce` /
+  `.announcemap` at GameMaster (OD-120, OD-124). The operator's countdown, console `shutdown start`: "Server Shutting
+  Down in 10...", then 9 to 1 at the measured final-night cadence (OD-123), or a uniform one; then every connection
+  closed, which the client shows as its "You have been disconnected from the server" dialog; then the process
+  stops unless `stay` is given (OD-121, OD-122). It never starts by itself.
+- **Open:** the Neph broadcast before the countdown (`GAP-SHUTDOWN-NEPH-BROADCAST`), the admin action inside Grog's
+  edit cut (`GAP-SHUTDOWN-GROG-CUT-ADMIN-ACTION`), the zone-loss alert's trigger (only "ALERT: PLATEAU IS LOST!" is
+  observed; no rule is built, `GAP-SHUTDOWN-ZONE-LOSS-RULE`), how live issued the countdown
+  (`GAP-SHUTDOWN-CADENCE-ORIGIN`) and with what tool (`GAP-SHUTDOWN-ADMIN-TOOL`), and the Earth Last Stand instance
+  content (context 2375 exists in the client; spawns, scripting, route and rewards do not, `GAP-SHUTDOWN-LAST-STAND`).
+  The final event itself is not built: footage from both viewpoints shows the event state differed by zone and
+  server, so no "all bases lost" final state is seeded.
+
 ## All-missions program (owner goal, 2026-09-15)
 
 Goal: implement every mission of the final build (client 1.16.5.0 / D16.5), evidence-bounded, instead of
@@ -2219,6 +2240,11 @@ its evidence tier.
 | OD-110 The stand-in drop (2026-09-26, agent, pending owner review) | A creature without loot rows keeps InfiniteRasa's stand-in, three Standard Grade Cartridges on a coin flip, labelled an analogue (`CreatureLoot.StandInDrop`). The alternative, `StandInDropEnabled = false`, means those creatures drop nothing but mission items: no corpse income and no ammunition off a corpse outside the Thrax infantry and the Young Forest Boargar. Owner to choose |
 | OD-111 The creature ammunition drop (2026-09-26, agent, pending owner review) | Weapon-matched ammunition is refuted by the footage ledger (5 of 7 attributable drops mismatch). One row per standard-grade ammunition type at an even share (1.9%) of the measured 4-in-42 Initiate rate, with each type's observed stack range; the emulator's 12% 1-35 cartridge row is removed |
 | OD-112 Loot on thinly evidenced creatures (2026-09-26, agent, pending owner review) | Creature 3, the world's Wilderness Thrax stand-in, takes the Initiate's rows, because the Thrax Infantry Trainee on camera is not seeded. The Young Forest Boargar takes Boargar Ear at the measured 2 in 2 (stack 1-2) despite the sample size |
+| OD-120 Who may send an admin message (2026-09-26, agent, pending owner review) | The operator from the console (`announce`, `announcemap`) and GameMaster accounts in game (`.announce`, `.announcemap`): a message hands nothing out and the client names its header for GMs. The final client has no sender of its own (`GAP-SHUTDOWN-ADMIN-TOOL`). Alternative for the owner: Admin only, or console only |
+| OD-121 Where the shutdown countdown starts (2026-09-26, agent, pending owner review) | Console only (`shutdown start`); no chat command, timer, date or player-count trigger |
+| OD-122 After the countdown (2026-09-26, agent, pending owner review) | The process stops as `exit` does, once every disconnected player has been removed and saved (30 s at most), matching the OFFLINE server list after the EU shutdown (fxAtDpxypSw t=176-185); `stay` keeps it running |
+| OD-123 The countdown's default cadence (2026-09-26, agent, pending owner review) | The measured final night (lines at 0, 6, 10, 13, 16, 19, 23, 27, 31, 34 s; disconnect at 37.1 s), though it may have been typed by hand; `shutdown start <from> <seconds>` gives a uniform one |
+| OD-124 Who hears an admin message (2026-09-26, agent, pending owner review) | Clients in a live map channel; a client at character selection or loading gets no line, and the countdown still disconnects it |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

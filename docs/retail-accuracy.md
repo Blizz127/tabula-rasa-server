@@ -4411,3 +4411,56 @@ boundary labels) and `docs/evidence/footage-fanout-20260926/{fxAtDpxypSw,j_4B22Y
 2026-09-25 file's convention of grouping observations by research folder rather than one file per video id).
 `FootageLedgerSupplied20260926Tests` recomputes every `cite:` string and boundary flag from these files and asserts
 each appears in this section.
+
+## 2026-09-26 — The shutdown broadcast: admin messages, the countdown and the disconnect (segment 7)
+
+Two independent recordings of the EU server's last minute were studied on 2026-09-26: fxAtDpxypSw (English client,
+480p) and CommanderGrog's _gwh1__XecI (German client, the 1080p re-render of j_4B22Y8z28). Both show the same
+sequence: an admin countdown and then every client's disconnect dialog over the still-rendered world. Research is in
+`research/20260926-final-minutes/` and `research/20260926-shutdown-event-grog/`. The client was decoded statically
+from the 1.16.5.0 bytecode. Code only; no migration. Provenance: `docs/evidence/shutdown-broadcast.json`. Decisions
+OD-120 to OD-124, agent-approved and pending owner review.
+
+- **The admin message is a client path, and only its text is the server's.** `communicator.Recv_AdminMessage(msg,
+  filterId)` (method 24, `communicator.pyo` line 1046) filters the text and prints uielementlanguage 4146
+  `ID_CHAT_MESSAGE_HEADER_GM` in front of it. That is "ADMIN MESSAGE: " in English and "ADMIN-NACHRICHT: " in
+  German. The German footage shows "ADMIN-NACHRICHT: ALERT: PLATEAU IS LOST!", a localized header before an English
+  payload (observed). The emulator already had an `AdminMessagePacket` with the right shape, a unicode string and an
+  int, but nothing sent it. The filter is the server's argument. SYSTEM_GM (10000046) is chosen (inferred): it is the
+  only filter the client colours `Chat_Yellow` by default, and the default General tab subscribes to it
+  (`clientmessagesettings` lines 100 and 185). The footage's admin lines are yellow in the General tab, next to the
+  white SYSTEM_GENERAL line "You may not issue a command at this time."
+- **The final client cannot send one.** `SendAdminChat` resolves `chatIDToMethodName[SYSTEM]`, which is `None`,
+  nothing calls it, and `slashcommand.pyo` has no admin command. Live staff used a tool outside the player client.
+  In its place (`GAP-SHUTDOWN-ADMIN-TOOL`, OD-120): console `announce <text>` and `announcemap <mapContextId> <text>`,
+  and in game `.announce <text>` and `.announcemap <text>` at GameMaster. The chat commands send the text exactly as
+  typed, and a Player- or Observer-level account gets the usual refusal. Recipients are the clients in a live map
+  channel (OD-124). `AdminBroadcastManager`.
+- **The countdown** (console `shutdown start`, `ShutdownCountdown`, OD-121). It sends "Server Shutting Down in 10..."
+  and then the bare numbers 9 to 1, as observed. The wording of the first line is the 1080p reading; the 480p copy
+  leaves the trailing dots unresolved. The default cadence is fxAtDpxypSw's continuous take, measured ±1 s per line:
+  lines at 0, 6, 10, 13, 16, 19, 23, 27, 31 and 34 s, and the disconnect at 37.1 s (fx t = 122 … 156 and 159.1).
+  _gwh1__XecI agrees within the two readings' sampling error for every line it kept (10, 9, 8, 7, 6, 4, 2, and its
+  drop at 38.9 s). The steps are 3–7 s, not 1 s, and read like typing (`GAP-SHUTDOWN-CADENCE-ORIGIN`), so the
+  measured night is the default (OD-123). `shutdown start <from> <seconds>` gives a uniform countdown instead;
+  `cancel` and `status` exist. By default the process then stops as `exit` does, once every disconnected player has
+  been removed and saved (30 s at most). The footage shows all four servers OFFLINE afterwards. `stay` keeps it
+  running (OD-122). Nothing else starts the countdown: no timer, date, player count or chat command.
+- **The disconnect dialog is the client's reaction to a close it did not ask for.** When the connection ends, the
+  engine calls the input state's `GameOnDisconnect`. From the game state that is `exitgame.GameOnDisconnect` (line
+  109). Unless the player logged out (`g_requestedRestart`, set only in `OnLogout`), it runs
+  `inputhandlers.OnDisconnect`: a modal "Disconnected" box with uielement 9, "You have been disconnected from the
+  server" / "Ihre Verbindung zum Server wurde getrennt.", and Ok back to login. It then calls `ClearChatInfo`, which
+  is the blank chat in both videos. Character selection takes the same branch. The countdown's disconnect therefore
+  sends nothing and just closes every connection: `Client.Close` shuts the socket down in order.
+- **Recorded, not built.** The Neph/"bold statement" broadcast before the EU countdown, whose text is not in the
+  footage (`GAP-SHUTDOWN-NEPH-BROADCAST`). The admin action hidden by Grog's edit cut at t≈447, after which players
+  say "admin = neph" (`GAP-SHUTDOWN-GROG-CUT-ADMIN-ACTION`). What triggered the Plateau alert: players claimed
+  "hold all FOUR CPS", which is chat, not evidence. The text can be sent by hand, and no zone-loss rule exists
+  (`GAP-SHUTDOWN-ZONE-LOSS-RULE`). The Earth Last Stand: the client ships context 2375 "Empire Sector: The Last
+  Stand", but no artifact read so far has its spawns, scripting, route or rewards (`GAP-SHUTDOWN-LAST-STAND`).
+- Tests: `ShutdownBroadcastTests`. They cover the packet's wire shape (2-tuple, unicode text, SYSTEM_GM, no header
+  in the payload), broadcast recipients, command gating (`.announce` at GameMaster; no `.shutdown` chat command),
+  the measured cadence tick by tick, disconnect of every client only at 37.1 s and once, cancel, the uniform
+  variant and argument checks, an orderly end of stream on a real loopback socket, and the evidence file and
+  manifest against the implementation.
