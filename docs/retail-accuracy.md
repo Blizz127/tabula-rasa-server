@@ -1811,3 +1811,43 @@ Every timestamp below is from `docs/evidence/gameplay-footage-playlists-20260924
 `spawn.first_login` in `docs/evidence/bootcamp-d11-positions.json` is map 1985 at (387.2, 136.75, -79.09), rotation 2.879793, tier measured. The shipped creation path stores that row as content location 19851 when boot-camp entry is on, and `CharacterRepository.Get` returns the same map, position, rotation, and name on a second load. With entry off, creation still uses the existing wilderness default map 1220 at (894.9, 307.9, 347.1), rotation 0. Those defaults were not given a new footage spawn.
 
 Family name, character name, the five appearance slots, rank-1 skills 1/8/19/49/165, the Lightning and rifle tray, and the starter items already follow `docs/evidence/character-creation-appearance.json`, `docs/evidence/new-character-loadout.json`, and `docs/evidence/race-unlocks.json`. No reward, rate, spawn, movement value, or companion parameter was added. Still open, and left unimplemented: the exact later level and class bonus timing, and the tutorial or skip rewards, recorded in `docs/new-character-client-evidence.md`.
+
+## 2026-09-26 — Torden conversation missions: nine seeded, 936 held
+
+`TordenConversationMissions` (20260926110000) seeds nine missions from the Torden dossiers
+(`research/20260926-torden-missions`), each completable through the final client's own objectiveconversation rows on
+NPCs the world already places. No NPC, placement or package is created or moved.
+
+| Mission | Giver → receiver | Level | Rewards seeded |
+| --- | --- | --- | --- |
+| 1745 Report to Liaison Repp | Arizpe 199085 → Repp 199505 | 15 (Palisades band) | 10,500 XP / 1,050 cr, pre-1.4 |
+| 526 Aid Packages | Epp 510068 → Epp (Maila, Orto deliveries) | 35 (Incline) | 33,000 / 4,350, pre-1.4 |
+| 648 Speak to Colonel Franks | Xeniol 199045 → Franks 510084 | 35 (Plains) | 12,500 / 2,500, pre-1.4 |
+| 802 Deliver Mire Station Field Report | Obahmi 510067 → Foletto 510066 | 35 (Incline) | 14,500 / 2,700, pre-1.4 |
+| 1014 Blue Flu | Parkman 199069 → Norton 510187, Provost first | 20 (Plateau) | none (beta-only XP left out) |
+| 1064 Incriminating Delivery | Liu 199510 → Franks 510084, after 1063 | 35 (Plains) | 50,000 / 5,000, pre-1.4 |
+| 1070 Go to Incline, Young Soldier | Franks 510084 → Obahmi 510067 | 35 (Plains) | 12,500 / 2,500, pre-1.4 |
+| 1326 Spoils of War | Chester 510198 → Snake 199203 | 20 (analogue, OD-59) | 32,500 / 3,600 and one of four Class VII stacks, post-1.4 |
+| 1330 Retread Planning Part II | Hermit 199075 → Amee Corman 199204 | 20 (analogue, OD-59) | 30,000 / 3,500 and one of four Class VII stacks, post-1.4 |
+
+- **Evidence.** Objective texts are original (missionobjective). Givers and receivers are inferred from the client's
+  texts and dated TaRapedia revisions. The objective flags, 1014's order (CID HQ, then the warehouse, revealed by
+  a 2 → 1 transition) and the 887/1063 gates are inferred. Every field is in the manifest with its tier and citation,
+  under migration `TordenConversationMissions`, and `TordenConversationMissionsTests` checks the seed against it.
+- **Reward era.** Six missions' amounts are recorded only before Update 1.4 (2008-01-29). They are seeded as the
+  earlier W3 batches seeded TaRapedia's amounts, labelled `era: pre-1.4` in their rows (GAP-TORDEN-REWARD-ERA).
+  Pre-1.4 item lists are never seeded (GAP-TORDEN-REWARD-ITEMS). 1326/1330's post-1.4 consumables resolve one name
+  to one template, but the choose-one structure and the ×2/×4 quantities are inferred; the 1.7 requirement change and
+  the incomplete D9/D14/January 2009 notes stay open risks (GAP-TORDEN-1326-1330-ITEM-CHOICE).
+- **Held.** 936: Science Officer Clark (510191) stands on a surface the Plateau navmesh does not connect to the Wedge
+  Rock outpost. Every path from the waypoint, the hospital, the crafting station and Fort Defiance is partial,
+  while TaRapedia's 2008-09-25 /loc is reachable (`docs/evidence/torden-conversation-missions-navmesh.json`,
+  GAP-TORDEN-936-CLARK-UNREACHABLE). He is left for the world-placement batch. Also held: 555 (radio dispense on the
+  unseeded 867), the 831/840 and 842/848 branch pairs, and 1862 (Sergeant Dekay cannot be placed).
+- **Gaps opened.** Unseeded or unknown gates for 526 (804), 648, 1326 (1324) and 1330 (563). Items handed over at
+  accept are not granted (526, 802, 1064). Also open: 1014's rewards, 1064's scripted ambush, Norton's unconscious
+  pose, and the marker-stacked NPC positions these missions use (GAP-TORDEN-NPC-POSITIONS).
+- **Pools level.** The Pools has no band. 1326/1330 take 20 from 1068/1541 as an analogue under OD-59, which is
+  pending owner review: Smash and Grab records Level=35 and the rewards require 31–35. `ProvenanceRegistry` now
+  lists `npc_mission`, with every column required, so a level can carry that label.
+- **Not verified in-game.** None of the nine has been played with the original client.
