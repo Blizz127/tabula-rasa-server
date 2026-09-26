@@ -78,6 +78,60 @@ shutdown date of **28 February 2009** is also recorded on
 date must not be substituted for the shutdown time. Exact regional shutdown
 timestamps and the immediately preceding event state still require evidence.
 
+## Final night as filmed
+
+Three player recordings of the EU Centaurus shutdown night (2009-02-28/03-01) supply direct,
+`observed`-tier evidence of the shutdown sequence and the closing Earth Last Stand, cross-checked
+against each other and against the recovered 1.16.5.0 client tables. Full citations, timestamps and
+uncertainties are in [retail-accuracy.md](retail-accuracy.md)'s 2026-09-26 supplied footage ledger
+and `docs/evidence/footage-fanout-20260926/`.
+
+- **The countdown.** The server broadcasts yellow, unprefixed text: `ADMIN MESSAGE: Server Shutting
+  Down in 10.`, then bare numbers 9 down to 1 with no further wording. The step cadence is irregular,
+  about 3-7 s per step (mean 3.8 s, +/-1 s per reading from 1 fps sampling) — it is **not** one number
+  per second. This is confirmed from two independent viewpoints/uploads of the same EU Centaurus
+  night within about 1 s of each other, and separately cross-checked against a bystander's own
+  closure timer.
+- **The disconnect.** A modal dialog appears: English client "You have been disconnected from the
+  server" / Ok; German client "Ihre Verbindung zum Server wurde getrennt." / Ok — the same client
+  string (`uielementlanguage` 9), read from two different client languages. The game world, mission
+  tracker, squad frames and minimap stay rendered behind the dialog. No attack, explosion, fireworks,
+  cinematic or fade is shown before the drop.
+- **Servers OFFLINE.** After disconnecting, the server selection list shows all four servers
+  (Cassiopeia, Centaurus, Hydra, Orion) as OFFLINE, and stays that way after a manual refresh. This is
+  the post-shutdown state only; it must not be seeded as a live server-list condition.
+- **The admin broadcast.** A German-client capture shows `ADMIN-NACHRICHT: ALERT: PLATEAU IS LOST!`
+  — the German UI prefix (`uielementlanguage` 4146) wraps an English payload, proving zone-loss
+  broadcasts are server-sent free text rather than a fixed client string. Only this one alert was
+  captured; whether other zone losses trigger the same broadcast is unverified.
+- **The Earth Last Stand.** The closing event plays out in numbered instances of context 2375
+  ("Empire Sector: The Last Stand" / German "Das letzte Gefecht", map
+  `adv_earth_unitedstates_manhattan_01_shared`): Bane Stalker-type walkers, Thrax riflemen, a
+  ballistic mini-turret, and dozens of level-50 players fighting at named New York locations
+  (Madison Square Park, 28th Street Station, a sandbagged street line). Chat in one recording claims
+  "Earth 2" (a different numbered instance) had its Empire Sector re-taken shortly before shutdown;
+  this is a player claim, not a server message, and is not proof of the outcome in every instance.
+- **The Neph-led offensive.** Target frames show a level-50 "Neph Waven" combatant carrying seven
+  player-style buff icons, fought alongside ordinary AFS defenders at Dybukkar Forward Camp and
+  Charon's Crossing. This suggests a staff- or event-controlled Neph combatant; it is an inference,
+  not a confirmed GM avatar.
+- **Explicit do-not-implement list**, confirmed verbatim from the shutdown-night research READMEs:
+  - **Fireworks, explosions, a nuclear detonation or "shockwave".** A running player chat joke
+    ("The day Earth exploded b'cuz of fireworks XD") in both recordings; no such effect is visible in
+    either. Do not implement any of these as a shutdown effect.
+  - **Bases turned permanently Bane-held on Centaurus.** In the last roughly 2.5 minutes of the EU
+    Centaurus recording, Foreas Base in Concordia Divide was held and normal. Secondary claims of
+    bases falling are from other, US-server accounts and must not be generalized into an "all bases
+    Bane-held" final state.
+  - **Player mechs outside Edmund.** A large armoured bipedal figure appears among posing players
+    during the pre-shutdown gathering, with chat asking "where is freemech?" and "mechs for
+    everyone". The D16.4 notes confine mechs to Edmund, so a player mech elsewhere conflicts with
+    that. This is an unresolved, low-confidence lead; do not implement mechs outside Edmund from this
+    footage alone.
+  - **Auto-promotion to level 50.** A player's chat claim, "for some reason I was auto promoted to
+    level 50 / well all my alts were anyway," is explicitly unverified against any official or client
+    evidence and must not be implemented as a mechanic.
+
 ## Preserved original evidence
 
 The raw HTML was retrieved with Wayback's `id_` modifier and saved outside the

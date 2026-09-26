@@ -1,0 +1,155 @@
+{
+  "worker": "events",
+  "videos": [
+    {
+      "videoId": "_gwh1__XecI",
+      "title": "\"Tabula Rasa\" Server Shutdown Event (2021 reupload in better quality)",
+      "url": "https://www.youtube.com/watch?v=_gwh1__XecI",
+      "uploadDate": "20210111",
+      "durationSeconds": 591,
+      "sourceClass": "final-night-eu-centaurus-shutdown-recording",
+      "reviewMethod": "yt-dlp download of CommanderGrog's 2021 re-encode (formats 137+251, 1920x1080 pillarboxed from a 1680x1050 source); ffmpeg 1 fps stills over the full 591 s plus 5-10 fps around key moments; manual reading of German-client chat crops. Used for all chat text because it shows the full aspect ratio (the original j_4B22Y8z28 720p render crops the chat tab bar). Time offset t(j_4B22Y8z28) = t(_gwh1__XecI) + 1.07 +/-0.1 s. Trimmed from /home/blizz/backups/rasa-net/research/20260926-shutdown-event-grog/events.json (~40 events) to the rows load-bearing for final-live preservation.",
+      "localCopySha256": "6f004a61b9761ea2ea0cef0e5b04f65badf1bb0f681c1627fb37b24eeee228e9",
+      "observations": [
+        {
+          "tSeconds": 24,
+          "tier": "observed",
+          "text": "German-client chat: 'Stormshock ruft: You've heard GM, get down' / '[1. Allgemein] Yx: Wilderness - Foreas Base' — a GM-directed pre-shutdown gathering at Foreas Base (map 1148, Divide).",
+          "limit": "The GM's own broadcast line is not itself on screen, only player reactions to it."
+        },
+        {
+          "tSeconds": 76,
+          "tier": "observed",
+          "text": "Fighting at 'Kontrollpunkt: Außenposten Wasserkraftwerk' (uielement 1496 EN 'Hydro Plant Outpost (CP)'), target frame 'Episch: 1 / Jager' (creaturenamelanguage 392 'Hunter'); players level 23-50.",
+          "limit": "No capture-rule mechanics (timers, thresholds) are shown, only the fight itself."
+        },
+        {
+          "tSeconds": 116,
+          "tier": "observed",
+          "text": "ADMIN broadcast, German client: 'ADMIN-NACHRICHT: ALERT: PLATEAU IS LOST!'. The German prefix (uielementlanguage 4146) wraps an English payload, proving the payload is server-sent free text, not a client string.",
+          "limit": "Only this one zone-loss alert is captured; whether other zones triggered the same broadcast is unverified."
+        },
+        {
+          "tSeconds": 98,
+          "tier": "observed",
+          "text": "Player chat immediately before the admin alert: 'Fort Defiance has been lost!' / 'We have lost plateau' / 'Plateau is lost' / 'everyone just got kicked from plateau i think' / 'NOOO! Guys, you MUST hold all FOUR CPS'.",
+          "limit": "The 'hold all four CPs or get kicked' rule is a player claim, not observed mechanics; do not seed it as a confirmed capture rule."
+        },
+        {
+          "tSeconds": 202,
+          "tier": "observed",
+          "text": "Fighting at 'Vorgeschobene Einsatzbasis Dybukkar' (uielement 4501 'Control Point: Dybukkar Forward Camp') then Charon's Crossing (Abyss); target frames 'Sovi Sov' (level 50, human) and '50 Neph Waven' (level 50, Neph portrait, seven player-style buff icons) — the Neph-led offensive.",
+          "limit": "'Neph Waven' at level 50 with player buffs suggests a staff- or event-controlled Neph combatant (inferred, low confidence); no confirmation this was a GM avatar."
+        },
+        {
+          "tSeconds": 300,
+          "tier": "observed",
+          "text": "Arrival in Empire Sector: minimap label 'Madison Square Park' (uielement 5969), red Bane-infested ground and spires — the Earth Last Stand phase begins.",
+          "limit": "The specific numbered instance/context (2375) is inferred from the client's gamecontext table, not read on screen."
+        },
+        {
+          "tSeconds": 310,
+          "tier": "observed",
+          "text": "'[1. Allgemein] Stauffer: for some reason I was auto promoted to level 50' / 'well all my alts were anyway' — a player claim of automatic level-50 promotion during the event.",
+          "limit": "Unverified against any official or client evidence. Do not implement auto-promotion to level 50 as a mechanic."
+        },
+        {
+          "tSeconds": 425,
+          "tier": "observed",
+          "text": "Empire Sector street battle at a sandbag line (minimap 'New York City'): Bane Stalker-type walkers, Thrax riflemen, a ballistic mini-turret, many level-50 players; player titles including 'Heulschlot-Berserker' (uielement 4835 'The Howling Gremlin').",
+          "limit": "Spawn counts, AI and timers are not observable from a single player's viewpoint."
+        },
+        {
+          "tSeconds": 35,
+          "tier": "observed",
+          "text": "A large armoured bipedal figure (dark plates, glowing orange seams) stands among posing players during the pre-shutdown gathering, HUD hidden. Later chat ('mechs for everyone', 'where is freemech?', German 'wie zum teufel bekommen die einen mech anzug her?') makes a player-used mech plausible.",
+          "limit": "Identity unconfirmed; D16.4 notes confine mechs to Edmund, so a mech elsewhere conflicts with that and remains an unresolved, low-confidence lead. Do not implement player mechs outside Edmund from this footage alone."
+        },
+        {
+          "tSeconds": 502,
+          "tier": "observed",
+          "text": "A.F.S. Outpost E34 (uielement 5983): a red Bane spire and red force fields (Epic 'Thrax-Bedranger', creaturename 10778 'Thrax Coercer') turn white/blue by t=515 — the AFS retakes the outpost, consistent with mission text 22231 'Regain Control of A.F.S. Outpost E34'.",
+          "limit": "The mission-tracker link to id 22231 is inferred; no tracker entry for it is shown on screen."
+        },
+        {
+          "tSeconds": 521,
+          "tier": "observed",
+          "text": "'[1. Allgemein] Twinsen: 0 hours, 00 minutes, 47 seconds until Tabula Rasa EU server closes' — continuous footage from here to the disconnect cross-confirms the countdown seen independently in fxAtDpxypSw.",
+          "limit": "Twinsen's countdown is a player's own clock, not a server message."
+        },
+        {
+          "tSeconds": 546,
+          "tier": "observed",
+          "text": "'ADMIN-NACHRICHT: Server Shutting Down in 10...' — the same wording as fxAtDpxypSw's English client, confirming the countdown text from a second, independent viewpoint.",
+          "limit": "'5', '3' and '1' scrolled out of the sampled frames and are not directly visible in this recording; recovered only via the cadence cross-check below."
+        },
+        {
+          "tSeconds": 584.9,
+          "tier": "observed",
+          "text": "Disconnect at t=584.9 (+/-0.1 s): chat empties, modal dialog reads (German client) 'Ihre Verbindung zum Server wurde getrennt.' / 'Ok' — the same client string as fxAtDpxypSw's English 'You have been disconnected from the server' (uielementlanguage 9), just a different client language. World, mission display, squad frames and minimap stay rendered behind it. No explosion, fireworks, cinematic or fade before the drop.",
+          "limit": "None; corroborated independently by fxAtDpxypSw."
+        },
+        {
+          "tSeconds": 584.9,
+          "tier": "measured",
+          "text": "Countdown cadence measured from continuous footage (521.0-588.3 s): steps at -38.9, -31.9, -27.9, -24.9, <=-20.9, -14.9, -5.9 s before the disconnect (each +/-1 s). fxAtDpxypSw gives -37.1, -31.1, -27.1, -24.1, -21.1, -14.1, -6.1 s from the same server, a different viewpoint. Both agree within 1 s sampling: the cadence is about 3-7 s per step, not 1 s.",
+          "limit": "Sampling uncertainty +/-1 s per reading."
+        }
+      ]
+    },
+    {
+      "videoId": "j_4B22Y8z28",
+      "title": "Tabula Rasa Server Shutdown Event HD",
+      "url": "https://www.youtube.com/watch?v=j_4B22Y8z28",
+      "uploadDate": "20090306",
+      "durationSeconds": 591,
+      "sourceClass": "final-night-eu-centaurus-shutdown-recording",
+      "reviewMethod": "yt-dlp download of CommanderGrog's original 2009 upload (formats 136+251, 1280x720 cropped/zoomed render of the 1680x1050 source); 1 fps stills. Corrects docs/source-sweep-2026-09-13.md, which previously grouped this with P40g1AEuLlY and CUnkvStC93o as the same uploader's shutdown footage.",
+      "localCopySha256": "91eafb8c8c952fed569c0dd9a54d120cadb437f790a6dba7c914f7a6e789e335",
+      "observations": [
+        {
+          "tSeconds": 455,
+          "tier": "observed",
+          "text": "Immediately after an edit cut, the player runs into a subway station; floating label and minimap read 'U-Bahn-Station: 28th Street' (uielement 5981 '28th Street Station') with capture-point brackets — part of the Earth Last Stand's Empire Sector fighting.",
+          "limit": "j_4B22Y8z28's cropped render was used here because this segment's 720p framing is clearer than the equivalent moment in _gwh1__XecI's letterboxed re-encode."
+        }
+      ]
+    },
+    {
+      "videoId": "CUnkvStC93o",
+      "title": "Goodbye Tabula Rasa",
+      "url": "https://www.youtube.com/watch?v=CUnkvStC93o",
+      "uploadDate": "20090220",
+      "durationSeconds": 547,
+      "sourceClass": "final-week-corroboration-not-shutdown-night",
+      "reviewMethod": "yt-dlp download (formats 135+140, 640x480, 15 fps); reviewed while studying the shutdown-event-grog folder because docs/source-sweep-2026-09-13.md misattributed it to CommanderGrog. Recorded 2009-02-20, 3 days after D16.5 went live and 8 days before the shutdown night: within the final live patch window, but not shutdown-sequence evidence.",
+      "localCopySha256": "0286a4dbe81cb2b447a5ab34c9ac81ee1db822ff945d8338c2161f28c5645a09",
+      "observations": [
+        {
+          "tSeconds": 134,
+          "tier": "observed",
+          "text": "Kill-XP messages with four stacked bonuses: 'You gained 50967 experience points. [659 Base XP] [+84% Group Bonus] [+100% Kill Streak Bonus] [+2000% Booster Bonus]' (and two more lines). Across three lines total/base = 77.27-77.34, matching 1.84 x 2 x 21 = 77.28: the bonuses multiply, they do not add.",
+          "limit": "Recorded 8 days before the shutdown, not final-night footage. The +2000% booster is plausibly the D16.4 Hyper-EXP token, unverified."
+        }
+      ]
+    },
+    {
+      "videoId": "P40g1AEuLlY",
+      "title": "Tabula Rasa (Intro)",
+      "url": "https://www.youtube.com/watch?v=P40g1AEuLlY",
+      "uploadDate": "20101220",
+      "durationSeconds": 112,
+      "sourceClass": "cinematic-only-not-gameplay",
+      "reviewMethod": "yt-dlp download (formats 298+251-20, 1280x720, 60 fps); reviewed while studying the shutdown-event-grog folder because docs/source-sweep-2026-09-13.md misattributed it to CommanderGrog shutdown footage.",
+      "localCopySha256": "cb739d61615934c38a3605d3133d8dea39778fb8f0c8c4926beb22aa268e6cbf",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Whole video is the game's opening cinematic (suburban house, Bane invasion, exodus through the Eloh wormhole, AFS arrival on Foreas, title card \"Richard Garriott's Tabula Rasa\"). No gameplay, no shutdown content of any kind.",
+          "limit": "Uploaded by EnciclopediaLusa in 2010, unrelated to CommanderGrog; kept in this file only to record the correction."
+        }
+      ]
+    }
+  ]
+}

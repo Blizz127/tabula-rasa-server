@@ -1,0 +1,71 @@
+{
+  "worker": "events",
+  "videos": [
+    {
+      "videoId": "fxAtDpxypSw",
+      "title": "Tabula Rasa - Final Minutes before Closing",
+      "url": "https://www.youtube.com/watch?v=fxAtDpxypSw",
+      "uploadDate": "20090301",
+      "durationSeconds": 186.39,
+      "sourceClass": "final-night-eu-centaurus-shutdown-recording",
+      "reviewMethod": "yt-dlp download of formats 231+140 (852x480, 30 fps); ffmpeg 1 fps stills over the full 186 s plus 10 fps around the disconnect (157.6-159.5 s); 3x lanczos crops of chat/tracker/UI text read manually. Trimmed from /home/blizz/backups/rasa-net/research/20260926-final-minutes/events.json (65 events) to the rows load-bearing for final-live preservation.",
+      "localCopySha256": "e50fd27db9a9eca24db814945c5d44c8d54e3fdfac54c538a3214d01038f5a06",
+      "observations": [
+        {
+          "tSeconds": 5,
+          "tier": "observed",
+          "text": "Gameplay opens on Concordia Divide (minimap 'Concordia Divide') with the mission tracker showing 'Wilderness Targets of Opportunity' (Kill 200 Thrax Soldiers! 7/200, Visit All Wilderness Caves! 1, etc.), matching client mission 1449 objectives 58/5/8/48/55. Chat is already replying to an ADMIN/Neph server-wide message ('SCREW U ADMIN XD', 'EARTH WILL NEVER BE YOURS') that is not itself in the footage.",
+          "limit": "The triggering broadcast's exact wording, sender and timing are an evidence gap; only the player replies are on screen (gap: pre-t=5 admin/Neph broadcast text)."
+        },
+        {
+          "tSeconds": 56,
+          "tier": "observed",
+          "text": "'[1. General] GM Vagabond: That was a bold statement by the neph, I think it was encouragement to kick their butts' — confirms a GM account active and narrating the Neph broadcast in real time.",
+          "limit": "GM name's internal separator ('GM Vagabond' vs 'GM_Vagabond') is not resolvable at this resolution."
+        },
+        {
+          "tSeconds": 80,
+          "tier": "observed",
+          "text": "'[1. General] Kaz: Earth 2 empire sector re-taken, for what it's worth :]' — a numbered Earth instance's Empire Sector held by the AFS shortly before shutdown.",
+          "limit": "Player claim, not a server message; not proof of the general Earth Last Stand outcome across all instances."
+        },
+        {
+          "tSeconds": 106,
+          "tier": "observed",
+          "text": "'[1. General] Agne: The day Earth exploded b'cuz of fireworks XD' — a running player joke about fireworks/an explosion at shutdown.",
+          "limit": "No fireworks, explosion or shockwave is visible anywhere in the recorder's view. Do not implement fireworks/explosions as a shutdown effect."
+        },
+        {
+          "tSeconds": 122,
+          "tier": "observed",
+          "text": "First shutdown broadcast, yellow text, no channel prefix: 'ADMIN MESSAGE: Server Shutting Down in 10.' Recorder is standing at Foreas Base ('HQ2157'), no hostile Bane visible.",
+          "limit": "Trailing punctuation after '10' is uncertain at this resolution."
+        },
+        {
+          "tSeconds": 156,
+          "tier": "observed",
+          "text": "Final countdown broadcast: 'ADMIN MESSAGE: 1'. Across 10->1 the admin cadence is irregular (6,4,3,3,3,4,4,4,3 s between steps, mean 3.8 s +/-1 s each) — the countdown is NOT one number per second.",
+          "limit": "Per-step timing is +/-1 s from 1 fps sampling."
+        },
+        {
+          "tSeconds": 159.1,
+          "tier": "observed",
+          "text": "At t=159.1 (+/-0.1 s) the chat blanks and a modal dialog reads 'You have been disconnected from the server' with an 'Ok' button. The world stays rendered behind the dialog: no Bane attack, explosion, fireworks or fade before the drop.",
+          "limit": "The disconnect came about 3 s after 'ADMIN MESSAGE: 1' in this recording; UTC clock time is not established on screen."
+        },
+        {
+          "tSeconds": 176,
+          "tier": "observed",
+          "text": "Server selection list, all four servers OFFLINE: Cassiopeia US (West), Centaurus EU, Hydra US (East), Orion US (West). Recorder clicks Refresh; still all OFFLINE to the end of the clip (t=185).",
+          "limit": "This is the post-shutdown state only; do not seed it as a live server-list condition."
+        },
+        {
+          "tSeconds": 144.5,
+          "tier": "measured",
+          "text": "Cross-check of the admin countdown against a player's (Twinsen) own EU-closure timer: five independent readings all converge on the timer reaching zero at t~144-145, consistent with the admin countdown's own cadence.",
+          "limit": "Uncertainty +/-1 s; the offset between Twinsen's personal clock and the server clock is unknown."
+        }
+      ]
+    }
+  ]
+}

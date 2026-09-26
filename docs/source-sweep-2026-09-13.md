@@ -49,7 +49,7 @@ evidence base as a citation.
 | --- | --- | --- |
 | `itemtemplate_armor`'s original values are `352/234/469/586/703` | **False.** Those numbers appear nowhere in the decoded client tables. | See §5. Verified figures are given there. |
 | The five hardcoded armor ids "have no name in the original client" | **False for two of five.** `13066` = "Bio Armor Helmet", `13096` = "Bio Armor Vest". | Three ids are genuinely absent; two are present. |
-| `ePEbTUrfQ0o` is CommanderGrog's shutdown video | **False.** It is *"'UDAAN' – Installation X Tabula Rasa"*, a 2023 art piece. | Real shutdown footage: `j_4B22Y8z28`, `P40g1AEuLlY`, `CUnkvStC93o`. |
+| `ePEbTUrfQ0o` is CommanderGrog's shutdown video | **False.** It is *"'UDAAN' – Installation X Tabula Rasa"*, a 2023 art piece. | Real shutdown footage: `j_4B22Y8z28` (CommanderGrog's original 2009-03-06 upload) and its 2021 re-upload `_gwh1__XecI`. `P40g1AEuLlY` is the game's opening cinematic (2010, uploader EnciclopediaLusa) and `CUnkvStC93o` is "Goodbye Tabula Rasa" (2009-02-20, final-week corroboration, not shutdown-night footage); neither is CommanderGrog's shutdown recording. See docs/retail-accuracy.md's 2026-09-26 supplied footage ledger. |
 | `C2rGwo6fLw0` is the Russian "Ландыши – Мать (13.02.2009)" video | **False.** It is Raisuly episode #17. | The Russian video's id is **unresolved**. |
 | EU has 12 classes vs US 15 (a roster divergence) | **False.** Derived from a truncated 12-row sample. | 38 `afs_class` slugs across de/en/fr are one roster translated. US final-live roster is **15**, confirmed from `/game_intel/abilities/` captured 2009-01-07. |
 | DE `mikrobiologe` vs `xenobiologe` is a stale duplicate | **False.** Two distinct tier-4 classes, both level 30, same 2009-01-06 crawl. | DE `mikrobiologe` = EN **`medic`**; DE `xenobiologe` = EN **`exobiologist`**. Explains why US has `exobiologist.html` and no `microbiologist.html`. |
@@ -2038,15 +2038,25 @@ documented final live events. **Caveat:** episode #01 is explicitly **Closed Bet
 i.e. pre-retail, and `AGENTS.md` warns against treating obsolete pre-release rules as
 final — beta-era and live-era episodes must not be merged into one timeline.
 
-**Shutdown and farewell evidence:** `j_4B22Y8z28` / `P40g1AEuLlY` / `CUnkvStC93o`
-"Tabula Rasa Server Shutdown Event HD" (CommanderGrog, uploaded 2009-03-05);
+**Shutdown and farewell evidence:** `j_4B22Y8z28`
+"Tabula Rasa Server Shutdown Event HD" (CommanderGrog, uploaded 2009-03-06), and its verified
+2021 re-upload in better quality `_gwh1__XecI`. **Correction (2026-09-26):** `P40g1AEuLlY` and
+`CUnkvStC93o` were previously grouped here as the same CommanderGrog shutdown upload; they are
+not. `P40g1AEuLlY` is *"Tabula Rasa (Intro)"*, the game's opening cinematic (uploader
+EnciclopediaLusa, 2010-12-20), with no gameplay or shutdown content. `CUnkvStC93o` is *"Goodbye
+Tabula Rasa"* (uploaded 2009-02-20), recorded 8 days before the shutdown night — final-week
+corroboration, not shutdown-sequence footage. See docs/retail-accuracy.md's 2026-09-26 supplied
+footage ledger for both files' provenance and their observations.
 `i1IkD1KM4mc` "Tabula Rasa Forever Clan - Empire Sector The Last Stand" (VWAndi1981,
 2009-02-16); `xz-3Sy0eaXE` "Tabula Rasa The Last Moments" (KevSniper, 2009-03-02);
 `ryufOpnpzRk` Raisuly #21 (2009-03-01). Plus `archive.org/details/TabulaRasa-TheFinalStand`
 (Max "Sigoya" Taha), a 213.9 s 1280×720 WMV described as the 28 Feb 2009 AFS last
 stand in New York's shattered streets, *"Thanks to the live team for the final
 stand"*. **The Russian "Ландыши - Мать (Tabula Rasa 13.02.2009)" video's id remains
-unresolved.**
+unresolved.** **Unreviewed leads (2026-09-26):** `xXerhmFdqqE` "Tabula Rasa Server Shutdown
+Event HD,good" (astrofans98, 2013-03-07) and `U0fdU3bkNBo` "Tabula Rasa's Final Moments: Admin
+Highlights" — the latter's title suggests it may hold the admin/Neph broadcast text missing from
+`fxAtDpxypSw` and `_gwh1__XecI`, but neither has been downloaded or reviewed yet.
 
 Also relevant: `Q-wyrlaxf6M` "General British (Richard Garriott) Tabula Rasa Q&A"
 (2007-09-23); three `gamesradararchive` closed-beta walkthroughs (09-05-07) and its

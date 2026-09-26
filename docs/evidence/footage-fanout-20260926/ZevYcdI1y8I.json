@@ -1,0 +1,35 @@
+{
+  "worker": "events",
+  "videos": [
+    {
+      "videoId": "ZevYcdI1y8I",
+      "title": "Tabula Rasa: End of Eloh Vale",
+      "url": "https://www.youtube.com/watch?v=ZevYcdI1y8I",
+      "uploadDate": "20071113",
+      "durationSeconds": 204,
+      "sourceClass": "launch-era-obsolete-eloh-vale",
+      "reviewMethod": "yt-dlp download (formats 243+251, 480x360, 25 fps, best available); ffmpeg scene-change detection plus manual crops of chat/tracker/hospital text. Client cross-check against the selected 1.16.5.0 client's decoded tables (gamecontext.pyo, gamecontextlanguage.pyo, maptemplate.pyo, uielementlanguage.pyo, graveyardlanguage.pyo, playermessagelanguage.pyo). Trimmed from /home/blizz/backups/rasa-net/research/20260926-end-of-eloh-vale/events.json (17 events) to the rows load-bearing for final-live preservation.",
+      "localCopySha256": "2f91d1db84da9569ce3a20613b33ef882cc1244f63a2bae32a2b29d2c9cf5fa4",
+      "observations": [
+        {
+          "tSeconds": 0,
+          "tier": "observed",
+          "text": "Squad of four (levels 20-28) runs a map region-labelled 'Eloh Bridge' -> 'Eloh Shield Gate' -> 'Eloh Cave' -> 'Eloh Sanctuary'. Client cross-check: maptemplate.pyo[1555] = adv_foreas_concordia_divide_elohvale, and gamecontextlanguage.pyo[1398] = 'Eloh Vale (OLD)' with no row 1398 in the final client's gamecontext.pyo — this map and context are retired.",
+          "limit": "Squad member levels read from blurred 480x360 digits; could be off by a similar-looking digit. Player names are not preserved content."
+        },
+        {
+          "tSeconds": 159.5,
+          "tier": "observed",
+          "text": "'/rave' typed in Squad chat; the emote result line 'You swing your glow sticks for all to see. The music, she will set you free. ' is a byte-identical match (plus trailing space) to the final 1.16.5.0 client's playermessagelanguage 976.",
+          "limit": "No character animation for the emote is clearly visible in third-person view."
+        },
+        {
+          "tSeconds": 202,
+          "tier": "observed",
+          "text": "Player dies falling into a whirlpool; the Hospital Selection window lists group 'Eloh Vale' with 'AFS Medical', 'gy_eloh_vale', 'gy_pyramid' — raw, untranslated internal graveyard names. The final client's graveyardlanguage.pyo has no 'gy_eloh_vale'/'gy_pyramid' rows; the final Eloh Vale (gamecontext 2084) instead has graveyard 279 'Hospital: Forean Pyramid' and 280 'Forward Recon Medic'.",
+          "limit": "Video ends at 204.0 s before a hospital is chosen. This confirms the obsolete map's graveyard naming was replaced, not what the rebuilt map's own spawn/reward layout should be."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "worker": "events",
+  "videos": [
+    {
+      "videoId": "ikIRxsE9HhU",
+      "title": "Tabula Rasa: Welcome to Foreas",
+      "url": "https://www.youtube.com/watch?v=ikIRxsE9HhU",
+      "uploadDate": "20080812",
+      "durationSeconds": 237,
+      "sourceClass": "pre-d11-live-bootcamp-and-early-content",
+      "reviewMethod": "yt-dlp download (formats 135+251, 640x480, 30 fps, best available); ffmpeg 1 fps stills over the full 237 s, contact sheets and 3-5x lanczos crops of chat/tracker/target/minimap text. Trimmed from /home/blizz/backups/rasa-net/research/20260926-welcome-to-foreas/events.json (21 events) to the rows load-bearing for final-live preservation.",
+      "localCopySha256": "3ba79873d131d14c32679f86b11d7fcd52a310d07ca4f064ca6115b60c869cee",
+      "observations": [
+        {
+          "tSeconds": 0.1,
+          "tier": "observed",
+          "text": "Boot camp login of character Luther Amasacia (level 1): 'Mission Accepted: Basic Training 101' -> 'You gained 2500 experience points.' -> 'Mission Completed: Basic Training 101' -> 'Mission Accepted: Obstruction Destruction'. Recorded 2008-08-08..12, three days before Deployment 11 went live (2008-08-15).",
+          "limit": "This is the pre-rebuild boot camp (Basic Training 101, Obstruction Destruction, A Tale of Elements, The Last Stand at Denzil's Caldera/Luna Cavern). AGENTS.md forbids using it as an analogue for the D11-rebuilt boot camp; it must not seed D11 missions 1990-1995."
+        },
+        {
+          "tSeconds": 222,
+          "tier": "observed",
+          "text": "Level-3 kill in the obsolete boot camp: 'You gained 153 experience points. [76 Base XP] [+100% Kill Streak Bonus]' / 'You received 15 credits.' This exactly fits the final-era kill-rewards.json formula for creature level 3 (15 credits = 5x3; base10=769, floor(76.9)=76, streak x2 -> floor(1538/10)=153).",
+          "limit": "Pre-D11 evidence only; corroborates that the fitted final-era formula already held at level 3 before D11, it is not itself a final-live observation."
+        },
+        {
+          "tSeconds": 48,
+          "tier": "observed",
+          "text": "Level-17 character vs Hominis Machine Mk III: kill streak rises to +200% ('You gained 494 experience points. [164 Base XP] [+200% Kill Streak Bonus]'), with 'You received 1 prestige points for reaching max kill streak.' printed before the +200% XP line. Supports kill-rewards.json streak.max (clamp(ceil(level/10),1,5): level 17 -> +200%) and streak.prestige ordering, the first observed instance above +100%.",
+          "limit": "Pre-D11 only, a mechanism observation rather than a content value. An immediate plain 107-XP kill right after is unexplained (GAP)."
+        },
+        {
+          "tSeconds": 25,
+          "tier": "observed",
+          "text": "Level-17-19 kills in Concordia Divide give XP/credit combinations (e.g. 75 credits for 88 base XP, 80 credits for 189 base XP) that do NOT fit the final-era xp.base formula, which is fitted only for creature levels 1-9.",
+          "limit": "Flagged as an unexplained pre-D11 data point (GAP); it neither supports nor refutes the final-era extrapolation above level 9, and does not overturn the final-era rule."
+        },
+        {
+          "tSeconds": 186,
+          "tier": "observed",
+          "text": "Tracker shows 'Boargar Acquisition' with 'Acquire 8 Boargar Cell Samples' as an active mission in Wilderness-tier content (Crater Lake/Pravus).",
+          "limit": "Boargar Acquisition (751) was withdrawn by the Deployment 11 live notes (2008-08-15). This is pre-withdrawal footage; AGENTS.md forbids using it as evidence the mission should be offered in the final client."
+        },
+        {
+          "tSeconds": 98,
+          "tier": "observed",
+          "text": "Squad fights targets labelled 'Predator' and 'Juggernaut' in the Pravus Research Facility.",
+          "limit": "The D11 live notes removed Predator spawns; the final client seeds no Predator/Juggernaut in Wilderness, CLRF or Pravus Research. This is pre-D11 evidence of content that was removed; it must never be used to seed those spawns."
+        },
+        {
+          "tSeconds": 213,
+          "tier": "observed",
+          "text": "Two-member squad kill: 'You gained 280 experience points. [78 Base XP] (+84% Group Bonus) [+100% Kill Streak Bonus]'. Confirms kill-rewards.json's group-bonus display format and the '[base] (+N% Group Bonus) [+M% Kill Streak Bonus]' message order.",
+          "limit": "Numeric mismatch: no combination of the repo's fitted integer-level base and the documented rounding order reproduces 280 for n=2 at streak x2. Pre-D11, so this does not overturn the client-derived rule; left open as GAP-XP-MODIFIER-ORDER / GAP-XP-SQUAD-* pending final-era squad footage."
+        }
+      ]
+    }
+  ]
+}

@@ -4357,3 +4357,57 @@ The live server moved from the OVH VPS to banshee-ax41 (65.109.31.181) on 2026-0
   objective … is never revealed") are withheld as incomplete. 955/969 are Mires missions seeded before 2026-09-22; why
   their required objective is never revealed is open.
 - **Not yet verified**: no client has logged in to the new build.
+
+## 2026-09-26 — supplied footage ledger: final night, Eloh Vale and pre-D11 Foreas
+
+Every timestamp below is from `docs/evidence/gameplay-footage-supplied-20260926.json` or
+`docs/evidence/footage-fanout-20260926/`. Missing evidence is not 100% retail accuracy. `launch-era` and `pre-d11`
+rows are boundaries and are not final-live rules; they predate the Deployment 11 boot camp/content rebuild and must
+not seed it. `final-night`, `final-week` and `cinematic-only` rows are not boundaries: they are primary evidence of
+actual final-live behaviour (or, for `cinematic-only`, carry no mechanics to disclaim), not a pre-final-live state.
+
+- cite:fxAtDpxypSw@5 gap: pre-t=5 admin/Neph broadcast text not captured. Concordia Divide mission tracker shows Wilderness Targets of Opportunity (client mission 1449); chat is already reacting to a server-wide ADMIN/Neph message that never appears on screen.
+- cite:fxAtDpxypSw@56 GM Vagabond narrates the Neph broadcast in `[1. General]`, confirming a live GM account active during the final night.
+- cite:fxAtDpxypSw@80 Player claim that Earth 2's Empire Sector was re-taken shortly before shutdown; not a server message, and not proof of the outcome in every numbered Earth instance.
+- cite:fxAtDpxypSw@106 gap: a running player joke about fireworks/an explosion at shutdown. No fireworks, explosion or shockwave is visible in the recording. Do not implement fireworks or an explosion as a shutdown effect.
+- cite:fxAtDpxypSw@122 First shutdown broadcast, yellow text, no channel prefix: "ADMIN MESSAGE: Server Shutting Down in 10."
+- cite:fxAtDpxypSw@156 Final countdown broadcast "ADMIN MESSAGE: 1"; the 10-to-1 cadence is irregular (about 3-7 s per step, mean 3.8 s +/-1 s), not one number per second.
+- cite:fxAtDpxypSw@159.1 Disconnect at t=159.1 (+/-0.1 s): modal dialog "You have been disconnected from the server" / Ok. World stays rendered behind the dialog; no attack, explosion, fireworks or fade before the drop.
+- cite:fxAtDpxypSw@176 Server selection list, all four servers OFFLINE (Cassiopeia, Centaurus, Hydra, Orion), refreshed and still OFFLINE. Post-shutdown state only; do not seed it as a live server-list condition.
+- cite:fxAtDpxypSw@144.5 measured: cross-check of the admin countdown against a bystander's own closure timer; both converge on zero at t~144-145, +/-1 s.
+- cite:_gwh1__XecI@24 GM-directed pre-shutdown gathering at Foreas Base (map 1148, Divide); the GM's own broadcast line is not itself on screen.
+- cite:_gwh1__XecI@76 Fighting at Hydro Plant Outpost (CP), target frame "Episch: 1 / Jager" (Hunter); players level 23-50. No capture-rule mechanics are shown.
+- cite:_gwh1__XecI@116 ADMIN broadcast, German client: "ADMIN-NACHRICHT: ALERT: PLATEAU IS LOST!" — the German prefix wraps an English payload, proving the payload is server-sent free text, not a client string.
+- cite:_gwh1__XecI@98 gap: player chat claims "you MUST hold all FOUR CPS" or get kicked from Plateau. This capture-rule wording is a player claim, not observed mechanics; do not seed it as a confirmed rule.
+- cite:_gwh1__XecI@202 Fighting at Dybukkar Forward Camp then Charon's Crossing; target frames include "50 Neph Waven" (level 50, Neph portrait, seven player-style buff icons) — the Neph-led offensive.
+- cite:_gwh1__XecI@300 Arrival in Empire Sector (minimap "Madison Square Park"), red Bane-infested ground and spires — the Earth Last Stand phase begins. The specific numbered instance/context (2375) is inferred from the client table, not read on screen.
+- cite:_gwh1__XecI@310 gap: "[1. Allgemein] Stauffer: for some reason I was auto promoted to level 50 / well all my alts were anyway" — a player claim of automatic level-50 promotion. Unverified against any official or client evidence. Do not implement auto-promotion to level 50.
+- cite:_gwh1__XecI@425 Empire Sector street battle at a sandbag line (minimap "New York City"): Bane Stalker-type walkers, Thrax riflemen, a ballistic mini-turret, many level-50 players.
+- cite:_gwh1__XecI@35 gap: a large armoured bipedal figure stands among posing players during the pre-shutdown gathering; chat includes "mechs for everyone" / "where is freemech?". Identity unconfirmed; D16.4 notes confine mechs to Edmund, so this conflicts with that and remains unresolved and low confidence. Do not implement player mechs outside Edmund from this footage alone.
+- cite:_gwh1__XecI@502 A.F.S. Outpost E34's red Bane spire and force fields turn white/blue by t=515 — the AFS retakes the outpost, consistent with mission text 22231 "Regain Control of A.F.S. Outpost E34". gap: the tracker-entry link to id 22231 is inferred; no tracker entry for it is shown on screen.
+- cite:_gwh1__XecI@521 "[1. Allgemein] Twinsen: 0 hours, 00 minutes, 47 seconds until Tabula Rasa EU server closes" — a player's own clock, not a server message; cross-confirms the countdown seen independently in fxAtDpxypSw.
+- cite:_gwh1__XecI@546 "ADMIN-NACHRICHT: Server Shutting Down in 10..." — the same wording as fxAtDpxypSw's English client, from a second independent viewpoint.
+- cite:_gwh1__XecI@584.9 Disconnect at t=584.9 (+/-0.1 s): German dialog "Ihre Verbindung zum Server wurde getrennt." / Ok — the same client string as fxAtDpxypSw's English disconnect dialog, a different client language. No explosion, fireworks, cinematic or fade before the drop.
+- cite:_gwh1__XecI@584.9 measured: countdown cadence from continuous footage (521.0-588.3 s) agrees within 1 s with fxAtDpxypSw's independently sampled cadence; both show about 3-7 s per step, not 1 s per step.
+- cite:j_4B22Y8z28@455 "U-Bahn-Station: 28th Street" (28th Street Station) with capture-point brackets — part of the Earth Last Stand's Empire Sector fighting.
+- cite:CUnkvStC93o@134 Stacked kill-XP bonuses ("[659 Base XP] [+84% Group Bonus] [+100% Kill Streak Bonus] [+2000% Booster Bonus]") show the bonuses multiply (1.84 x 2 x 21 = 77.28, matching the observed total/base ratio), they do not add. Recorded 2009-02-20, 8 days before the shutdown night: final-week corroboration, not shutdown-sequence evidence. gap: the +2000% booster is plausibly the D16.4 Hyper-EXP token, unverified.
+- cite:P40g1AEuLlY@0 The whole video is the game's opening cinematic; no gameplay and no shutdown content of any kind. Kept only to correct its earlier misattribution as CommanderGrog shutdown footage.
+- cite:ZevYcdI1y8I@0 boundary: launch-era. not a final-live rule. gap: a squad runs the obsolete Eloh Bridge/Eloh Shield Gate/Eloh Cave/Eloh Sanctuary region (`maptemplate.pyo[1555]` = `adv_foreas_concordia_divide_elohvale`; `gamecontextlanguage.pyo[1398]` = "Eloh Vale (OLD)", retired from the final client's `gamecontext.pyo`). Must not seed the D11-rebuilt Eloh Vale (context 2084).
+- cite:ZevYcdI1y8I@159.5 boundary: launch-era. not a final-live rule. "/rave" in Squad chat produces a byte-identical match (plus trailing space) to the final 1.16.5.0 client's `playermessagelanguage` 976, confirming this emote's text survived unchanged from launch to final.
+- cite:ZevYcdI1y8I@202 boundary: launch-era. not a final-live rule. gap: death by whirlpool shows the Hospital Selection window listing raw, untranslated graveyard names "gy_eloh_vale"/"gy_pyramid"; the final client has no such rows, and the rebuilt Eloh Vale (context 2084) instead has graveyards 279 "Hospital: Forean Pyramid" and 280 "Forward Recon Medic". This confirms the obsolete map's graveyard naming was replaced, not what the rebuilt map's own spawn/reward layout should be.
+- cite:ikIRxsE9HhU@0.1 boundary: pre-d11. not a final-live rule. Boot camp login runs "Basic Training 101" (+2500 XP) into "Obstruction Destruction", recorded 2008-08-08..12, three days before Deployment 11 (2008-08-15). This is the pre-rebuild boot camp; must not seed D11 missions 1990-1995.
+- cite:ikIRxsE9HhU@222 boundary: pre-d11. not a final-live rule. A level-3 kill ("[76 Base XP] [+100% Kill Streak Bonus]", 15 credits) exactly fits the final-era kill-rewards.json formula for creature level 3, corroborating that formula already held before D11.
+- cite:ikIRxsE9HhU@48 boundary: pre-d11. not a final-live rule. A level-17 kill shows the first observed +200% kill-streak bonus, with "You received 1 prestige points for reaching max kill streak" printed before the +200% XP line — supports kill-rewards.json's streak clamp and message ordering. gap: an immediate plain 107-XP kill right after is unexplained.
+- cite:ikIRxsE9HhU@25 boundary: pre-d11. not a final-live rule. gap: level 17-19 kills in Concordia Divide give XP/credit combinations that do not fit the final-era xp.base formula, which is fitted only for creature levels 1-9 (`GAP-XP-PREDX11-LEVELS`). This neither supports nor refutes the final-era extrapolation above level 9.
+- cite:ikIRxsE9HhU@186 boundary: pre-d11. not a final-live rule. Tracker shows "Boargar Acquisition" (751) active. This mission was withdrawn by the Deployment 11 live notes; must not be offered in the final client.
+- cite:ikIRxsE9HhU@98 boundary: pre-d11. not a final-live rule. Squad fights "Predator" and "Juggernaut" targets in the Pravus Research Facility. D11 live notes removed Predator spawns; the final client seeds no Predator/Juggernaut in Wilderness, CLRF or Pravus Research. Must never be used to seed those spawns.
+- cite:ikIRxsE9HhU@213 boundary: pre-d11. not a final-live rule. gap: a two-member squad kill ("[78 Base XP] (+84% Group Bonus) [+100% Kill Streak Bonus]" = 280 XP) confirms the group-bonus display format and message order, but no combination of the repo's fitted base and documented rounding order reproduces 280 for n=2 at streak x2 (`GAP-XP-MODIFIER-ORDER`, `GAP-XP-SQUAD-BONUS-VALUE`). Pre-D11, so this does not overturn the client-derived rule; left open pending final-era squad footage.
+
+Corrections carried into `docs/source-sweep-2026-09-13.md`: `P40g1AEuLlY` (2010 opening-cinematic upload by EnciclopediaLusa) and `CUnkvStC93o` ("Goodbye Tabula Rasa", 2009-02-20, final-week corroboration) are not CommanderGrog shutdown footage; `_gwh1__XecI` is CommanderGrog's verified 2021 re-upload of `j_4B22Y8z28` in better quality; `xXerhmFdqqE` and `U0fdU3bkNBo` are added as unreviewed leads.
+
+Provenance: `docs/evidence/gameplay-footage-supplied-20260926.json` (7 videos, private-copy SHA-256s, era verdicts,
+boundary labels) and `docs/evidence/footage-fanout-20260926/{fxAtDpxypSw,j_4B22Y8z28,ZevYcdI1y8I,ikIRxsE9HhU}.json`
+(the second file carries `_gwh1__XecI`, `j_4B22Y8z28`, `CUnkvStC93o` and `P40g1AEuLlY` together, following the
+2026-09-25 file's convention of grouping observations by research folder rather than one file per video id).
+`FootageLedgerSupplied20260926Tests` recomputes every `cite:` string and boundary flag from these files and asserts
+each appears in this section.
