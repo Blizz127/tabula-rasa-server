@@ -4836,3 +4836,33 @@ allocated: the dossier's reserved 1244xxx blocks were for the held Skive Base mi
   ids), the Palisades block of `MissionContentLoadingTests` (the five offerable, bindings, transitions, rewards, the
   bosses' 60 s respawn and drops only to a player on the mission) and of `ContentSchemaMigrationTests` (rows, rollback),
   the reward templates in `RewardItemFixtures`, provider parity. Full suite 1523/1523.
+
+## 2026-09-27 UTC — Deploy: development 53b3fcb on banshee-ax41
+
+Development 53b3fcb (squad instancing, instance travel, Crater Lake, Pravus, the Divide operations and Palisades,
+all merged 2026-09-26/27) replaced dae1a33 on banshee-ax41 at 06:07 UTC. The owner approved the deploy; each host
+command was approved individually in default permission mode.
+
+- **Backups** (on ax41, `~/backups/rasa-net/predeploy-20260927T045545Z/`): the three SQLite databases taken with
+  `sqlite3 .backup` while Game ran (integrity_check ok on all three), both compose files and appsettings, a tarball
+  of the working tree (without `.claude/worktrees`), the git bundle deployed, and the DIT overlay (`Dit/`,
+  `DitBotTests.cs`, `dit-overlay.patch`: the same hunks and files as the 2026-09-26 overlay, in a different file
+  order). Previous images are tagged `rasa_net_game:rollback-20260927` (58fc6f122287, the dit-20260926 image) and
+  `rasa_net_auth:rollback-20260927` (94b28b5aa862); the 2026-09-26 rollback tags are kept. Rollback = restore the
+  three databases, re-pin `docker-compose.dit.yml` to the rollback tag (its previous copy is
+  `docker-compose.dit.yml.before-20260927`), and bring auth and game back up.
+- **Checkout**: the overlay patch was reversed, the bundle fetched into branch `deploy-20260927` and checked out at
+  53b3fcb, then the overlay files and patch re-applied (6 files, +38 lines).
+- **Images**: the base `rasa_net_game:latest` and `rasa_net_auth` (both 61da4d3c7573) were built from
+  `git archive 53b3fcb`, so they carry no DIT code; `rasa_net_game:dit-20260927` (2c86c498fd39) from the checkout
+  with the overlay applied, with 0 compiler errors. `docker-compose.dit.yml` now pins `dit-20260927`; auth was
+  relaunched, then Game with both compose files.
+- **Startup**: the world database applied everything through `20260927050000_PalisadesDossierMissions` (157
+  migrations; the char database 16, through `ItemInstanceMetadata`, unchanged); 146 `npc_mission` rows; 16 content
+  rules, 551 rows, 0 gaps; navmeshes for 75 of 75 maps. The count was "76 of 78" before because the instance-travel
+  batch retired map_info 1991, 2233 and 1737. Game authenticated with Auth, which advertises 65.109.31.181; ports
+  2106, 2116, 8102 and 8001 are listening; `dit/status.json` is enabled and fresh (06:08:08 UTC), with `/app/dit`
+  mounted. XP rates and server events are unchanged, so `dit/server-status.json` was not edited.
+- **Logged at load, not new**: missions 321, 955 and 969 are still withheld as incomplete, as on 2026-09-26.
+- **Not yet verified**: no client has logged in to the new build, so squad copies, the new doors, Pravus, the Divide
+  operations and the Palisades missions have not been played in the real client.
