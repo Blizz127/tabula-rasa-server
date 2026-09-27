@@ -102950,6 +102950,857 @@
      "role": "comment"
     }
    }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 2
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4021,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 2 piece 4021",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 2 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 13
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 6271,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 13 piece 6271",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 13 colour 1",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 14
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 9781,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 14 piece 9781",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4278655809,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 14 colour 4278655809",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 15
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4023,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 15 piece 4023",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 15 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 16
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4022,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 16 piece 4022",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 16 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348001,
+    "slot_id": 17
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 24008,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 17 piece 24008",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4286690539,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 17 colour 4286690539",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 2
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4021,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 2 piece 4021",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 2 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 13
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 6271,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 13 piece 6271",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 13 colour 1",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 14
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 9781,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 14 piece 9781",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4278655809,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 14 colour 4278655809",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 15
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4023,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 15 piece 4023",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 15 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 16
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4022,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 16 piece 4022",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 16 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1348002,
+    "slot_id": 17
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 24008,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 17 piece 24008",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4286690539,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the same operation's AFS ranger: slot 17 colour 4286690539",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 2
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4021,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 2 piece 4021",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 2 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 13
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 6271,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 13 piece 6271",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 1,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 13 colour 1",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 14
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 9781,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 14 piece 9781",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4278655809,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 14 colour 4278655809",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 15
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4023,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 15 piece 4023",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 15 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 16
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4022,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 16 piece 4022",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4294934528,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 16 colour 4294934528",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349001,
+    "slot_id": 17
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 24008,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 17 piece 24008",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4286690539,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "MissionNpcAppearancePreloader 510118 Field Ranger Kearney: slots 2/13/14/15/16/17 = 4021/6271/9781/4023/4022/24008"
+      }
+     ],
+     "counterpart": "Field Ranger Kearney (510118), the Divide operations' shipped AFS NPC set: slot 17 colour 4286690539",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349003,
+    "slot_id": 2
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 4021,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 2 piece 4021",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 266553,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 2 colour 266553",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349003,
+    "slot_id": 14
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 25255,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 14 piece 25255",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 266553,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 14 colour 266553",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349003,
+    "slot_id": 15
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 19296,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 15 piece 19296",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 266553,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 15 colour 266553",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349003,
+    "slot_id": 16
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 19250,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 16 piece 19250",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 266553,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 16 colour 266553",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
+  },
+  {
+   "table": "creature_appearance",
+   "key": {
+    "id": 1349003,
+    "slot_id": 17
+   },
+   "slice": "W3",
+   "migration": "DivideOperationsInstances",
+   "fields": {
+    "Class_id": {
+     "value": 24019,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 17 piece 24019",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    },
+    "color": {
+     "value": 4286886614,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "emulator_db:rasa-mission-npc-preloaders",
+       "locator": "creature_appearance 199061 Captain Velns (TarapediaMissingNpcBatch): slots 2/14/15/16/17 = 4021/25255/19296/19250/24019"
+      }
+     ],
+     "counterpart": "Captain Velns (199061), a female AFS officer on class 3848: slot 17 colour 4286886614",
+     "required_because": "NPC_Human_Swapset_Male/Female is assembled from clothing pieces and renders bare, head included, without creature_appearance rows; ContentSchemaMigrationTests (ContentNpcAppearance block) requires every class-3846 creature to carry them. No source shows this NPC's gear (GAP-DIVIDE-NPC-APPEARANCE)",
+     "decision": "OD-145"
+    }
+   }
   }
  ],
  "omitted": [
@@ -108564,7 +109415,7 @@
   },
   {
    "id": "GAP-DIVIDE-NPC-APPEARANCE",
-   "summary": "No source shows the new AFS NPCs' gear. A swapset body renders bare without creature_appearance rows (ContentNpcAppearance), so Morrow, Sanchez and Cisco wear Field Ranger Kearney's shipped set (MissionNpcAppearancePreloader 510118: 4021/6271/9781/4023/4022/24008) and Ferme Captain Velns' female set (4021/25255/19296/19250/24019), analogues under OD-145 kept out of the manifest rows as ContentNpcAppearance's are (GAP-NPC-BODY). Scout Horlo wears the Forean class's own body.",
+   "summary": "No source shows the new AFS NPCs' gear. A swapset body renders bare without creature_appearance rows (ContentNpcAppearance), so Morrow, Sanchez and Cisco wear Field Ranger Kearney's shipped set (MissionNpcAppearancePreloader 510118: 4021/6271/9781/4023/4022/24008) and Ferme Captain Velns' female set (4021/25255/19296/19250/24019), analogues under OD-145, labelled in the manifest's creature_appearance rows. The original clothing of all four is unrecorded. Scout Horlo wears the Forean class's own body.",
    "evidence": [
     "research/20260926-instance-dossiers-divide/dossiers.json",
     "docs/evidence/divide-operations-instances-20260927.json"

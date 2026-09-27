@@ -305,7 +305,7 @@ namespace Rasa.Test.Reconstruction
                 "npc_mission_objective_counter", "npc_mission_objective_timer", "npc_mission_objective_indicator",
                 "content_area", "content_placement", "content_condition", "content_rule", "content_rule_action",
                 "content_item_set", "content_location", "itemtemplate", "itemtemplate_weapon", "creature_loot", "creature_action",
-                "spawnpool", "map_link"
+                "spawnpool", "map_link", "creature_appearance"
             }, ProvenanceRegistry.Default.Tables.Select(t => t.Table).ToList());
 
             foreach (var table in ProvenanceRegistry.Default.Tables)
@@ -356,7 +356,7 @@ namespace Rasa.Test.Reconstruction
                 typeof(NpcMissionObjectiveIndicatorEntry), typeof(ContentAreaEntry), typeof(ContentPlacementEntry), typeof(ContentConditionEntry),
                 typeof(ContentRuleEntry), typeof(ContentRuleActionEntry), typeof(ContentItemSetEntry), typeof(ContentLocationEntry),
                 typeof(ItemTemplateEntry), typeof(ItemTemplateWeaponEntry), typeof(CreatureLootEntry), typeof(CreatureActionEntry), typeof(SpawnPoolEntry),
-                typeof(MapLinkEntry)
+                typeof(MapLinkEntry), typeof(CreatureAppearanceEntry)
             };
 
             foreach (var entity in entities)

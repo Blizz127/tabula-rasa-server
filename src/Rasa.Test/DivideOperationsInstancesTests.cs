@@ -171,8 +171,6 @@ namespace Rasa.Test
                         .Select((column, columnIndex) => (column, value: operation.Values[index, columnIndex]))
                         .ToDictionary(pair => pair.column, pair => pair.value))))
                 .Where(row => row.Table != "npc_mission_objective" || row.Values["is_required"] != null)
-                // The swapset bodies are analogue sets outside the manifest's registry, as ContentNpcAppearance's (GAP-DIVIDE-NPC-APPEARANCE).
-                .Where(row => row.Table != "creature_appearance")
                 .ToList();
 
             using var document = JsonDocument.Parse(File.ReadAllText(EvidenceLocator.EvidenceFile("bootcamp-d11-reconstruction-manifest.json")));
@@ -180,6 +178,7 @@ namespace Rasa.Test
             var evidence = root.GetProperty("rows").EnumerateArray()
                 .Where(row => row.GetProperty("migration").GetString() == DivideOperationsInstancesRows.Migration).ToList();
             Assert.AreEqual(inserted.Count, evidence.Count, "every inserted row needs exactly one manifest row");
+            Assert.AreEqual(23, evidence.Count(row => row.GetProperty("table").GetString() == "creature_appearance"), "the four NPCs' clothing rows");
 
             foreach (var row in evidence)
             {
@@ -211,6 +210,10 @@ namespace Rasa.Test
                     Assert.AreEqual("analogue", fields.GetProperty("max_hp").GetProperty("tier").GetString(), $"{key}.max_hp");
                 if (table == "npc_mission_reward")
                     Assert.AreEqual("pre-1.4", fields.GetProperty("credits").GetProperty("era").GetString());
+                // The swapset clothing is a borrowed set, never presented as the NPC's own (GAP-DIVIDE-NPC-APPEARANCE).
+                if (table == "creature_appearance")
+                    foreach (var column in new[] { "Class_id", "color" })
+                        Assert.AreEqual(("analogue", "OD-145"), (fields.GetProperty(column).GetProperty("tier").GetString(), fields.GetProperty(column).GetProperty("decision").GetString()), $"{key}.{column}");
             }
 
             // The pools, Hamilton's package, Tyler's escort, the flags and both navmeshes are recorded changes.

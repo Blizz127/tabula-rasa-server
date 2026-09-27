@@ -104,6 +104,15 @@ namespace Rasa.Test.Reconstruction
             // action1 is required (owner decision OD-23, 2026-09-14): a creature that exists to fight cannot
             // function without an attack, so its first action may carry a labelled analogue. 0 stays the
             // correct, evidenced value for non-combat NPCs. action2..8 remain optional extra attacks.
+            // Existing table (DivideOperationsInstances, 2026-09-27): a swapset NPC's clothing pieces. NPC_Human_Swapset_Male/Female
+            // is assembled from them and renders bare - head included - without them (ContentNpcAppearance), so the piece and
+            // its colour are required and an unsourced set may carry a labelled analogue (OD-145).
+            new TableProvenance("creature_appearance",
+                keys: Cols("id", "slot_id"),
+                required: Cols("Class_id", "color"),
+                optional: Cols(),
+                storage: Cols()),
+
             new TableProvenance("creature",
                 keys: Cols("id"),
                 required: Cols("class_id", "faction", "level", "max_hp", "name_id", "run_speed", "walk_speed", "action1"),
