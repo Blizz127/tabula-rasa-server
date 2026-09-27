@@ -5069,5 +5069,10 @@ as at 15:19 UTC.
   relaunched. Rollback: re-pin `rasa_net_game:dit-20260927b` (eedce7a6bd48) and relaunch Game.
 - **Startup**: identical to 15:19 UTC (navmeshes 75/75, 16 rules, 573 rows, 0 gaps, the same three withheld
   missions), Auth authenticated, `dit/status.json` enabled and fresh, `/app/dit` mounted.
-- **Not yet verified**: a human taking map link 11 with the pair following. The expected log is "DIT Mira followed
-  through map link 11: 1220 -> 1148" and the same for Tavin, with no empty-IP disconnect.
+- **Verified live** at 16:35 UTC (11:35 CDT). The owner (Legira) took map link 11 at 16:35:28.614. The log then
+  showed "DIT Mira followed through map link 11: 1220 -> 1148 at <496.48, 184.44, 1198.65>" at 16:35:32.553 and
+  Tavin at 16:35:32.749 (<500.48, 184.27, 1198.65>): about 4 s later, 2 m either side of the arrival point. There
+  were no empty-IP disconnects in the window. `dit/status.json` at 16:35:42 had both bots on map 1148, Ingame, in
+  party 1. The Divide → Wilderness trip at 16:34:50 came before the pair had spawned (they spawn only beside a
+  Wilderness leader), so no follow was expected there. The "saved mission 767 has no definition" errors on each map
+  load predate this deploy.
