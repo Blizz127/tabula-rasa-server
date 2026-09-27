@@ -5045,3 +5045,29 @@ The second deploy of the day, with the owner's approval ("merge and deploy"). It
   before.
 - **Not yet verified**: no client login, so the new populations and the eight newly finishable missions have not
   been played in the real client.
+
+## 2026-09-27 16:32 UTC (11:32 CDT) — Deploy: DIT map-link follow fix on banshee-ax41
+
+The owner's go came through Devbox Coordinator (task 25a0880e3b9f: "do the fixes for war and rasa"). This deploy
+changes only the DIT overlay, not the repository: the development code (da8b161) and the world data are the same
+as at 15:19 UTC.
+
+- **Cause** (found from the live log): on "Legira took map link 11 (wilderness -> divide)" at 15:24:12 UTC, the
+  two DIT bots were closed 214 ms later ("Client disconnected! Ip: " with no address). The bots' leader check
+  required the human to be in game on the bots' own map, and ChangeMap puts the human in Loading on the new map.
+  The DIT session's fix (`~/scratch/tr-fixes/maplink-bots` on ax41, copied to
+  `~/backups/rasa-net/research/20260927-dit-maplink-bots`) keeps the leader through a shared-map change and moves
+  each bot through the same link 1–4 s later. It adds a seventh hook file: `MapLinkManager.Worker` skips
+  `IsDitBot`, and `Fire` calls `Dit.DitBotManager.TookMapLink`.
+- **Verification before deploy**: the full suite with the world database, on development 82ceb83 plus the new
+  overlay, gave 1551 passed, 0 skipped, including 16 DitBotTests.
+- **Backups** (`~/backups/rasa-net/predeploy-20260927T163219Z/`): the three databases (integrity_check ok), compose
+  files and appsettings, the previous overlay (`dit-overlay-previous/`) and the new one (`dit-overlay-new/`). The
+  deploy checkout now carries the new overlay (7 hook files, +45 lines).
+- **Image**: `rasa_net_game:dit-20260927c` 1a1f5c564cda, built from `git archive da8b161` with the new overlay;
+  0 compiler errors. `docker-compose.dit.yml` pins it (`.before-20260927c` keeps the previous pin). Only Game was
+  relaunched. Rollback: re-pin `rasa_net_game:dit-20260927b` (eedce7a6bd48) and relaunch Game.
+- **Startup**: identical to 15:19 UTC (navmeshes 75/75, 16 rules, 573 rows, 0 gaps, the same three withheld
+  missions), Auth authenticated, `dit/status.json` enabled and fresh, `/app/dit` mounted.
+- **Not yet verified**: a human taking map link 11 with the pair following. The expected log is "DIT Mira followed
+  through map link 11: 1220 -> 1148" and the same for Tavin, with no empty-IP disconnect.
