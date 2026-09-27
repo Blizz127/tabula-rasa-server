@@ -27,7 +27,7 @@ services:
     # databases, navmesh, dit and kb-articles.json resolve where they did under `dotnet run`.
     command: dotnet src/Rasa.Game/Rasa.Game.dll
     # Guardrail: a runaway Game is stopped (and restarted by `restart: always`) instead of starving the host.
-    mem_limit: 3g
+    mem_limit: 4g
     stdin_open: true
     tty: true
     ports:

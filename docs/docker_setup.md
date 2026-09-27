@@ -73,7 +73,7 @@ src/Rasa.Test`). The runtime image cannot run tests, so recipes that ran `dotnet
 work. `global.json` is in `.dockerignore`, so a checkout that pins a newer SDK still builds with .NET 5. Stay on
 .NET 5: rolling forward breaks the EF Core 5 queries.
 
-`docker-compose.yml` caps memory at 3 GB for Game and 512 MB for Auth (`mem_limit`). If a process hits the cap,
+`docker-compose.yml` caps memory at 4 GB for Game (live Debug reached 2.1 GB after hours of play; the guardrail rule is at least current use plus 1 GB) and 512 MB for Auth (`mem_limit`). If a process hits the cap,
 the container is killed and restarted by `restart: always`, instead of pushing the host into swap. Game is
 already on workstation GC (no `ServerGarbageCollection`), so `DOTNET_gcServer=0` changes nothing.
 `DOTNET_GCConserveMemory` needs .NET 6 or later. `DOTNET_gcConcurrent=0` and `DOTNET_GCgen0size=0x1000000`
