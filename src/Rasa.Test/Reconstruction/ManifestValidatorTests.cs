@@ -244,7 +244,10 @@ namespace Rasa.Test.Reconstruction
                 // dossiers reserved them, and the Uherum Pass exit area.
                 "creature:id:1148001-1148099",
                 "creature:id:1244001-1244099",
-                "content_area:id:1244500-1244599"
+                "content_area:id:1244500-1244599",
+                // FootageAmbientPopulations (2026-09-27): the Torden Plains and Torden Mires ambient creatures, keyed by map.
+                "creature:id:1764001-1764099",
+                "creature:id:1759001-1759099"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

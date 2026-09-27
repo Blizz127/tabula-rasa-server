@@ -5116,3 +5116,58 @@ The owner was offline; the Devbox Coordinator relayed the go for the post-logoff
 - **Startup**: navmeshes 75/75, 16 rules, 573 rows, 0 gaps, Auth authenticated, `dit/status.json` enabled and fresh,
   `/app/dit` mounted.
 - **Not yet verified in play**: a key rebind and the bots' party-chat lines.
+
+## 2026-09-27 — Torden Plains, Torden Mires and Palisades from footage: ambient populations and 1067
+
+Owner decisions of 2026-09-27 (OD-161, extended as OD-176): populate the zones beyond the Wilderness, footage first,
+then text, then labelled stand-ins. The owner approved the Raisuly downloads (research/20260927-footage-study); this
+batch reads them. Migration `FootageAmbientPopulations` (20260927080000). Every field's tier and citation is in the
+manifest; registrations, probes and sources in `docs/evidence/footage-ambient-populations-20260927.json`; the research
+record (readings, verification, crop sheets, probes, TaRapedia histories) is `research/20260927-seed-populations-2`.
+Decisions OD-177 to OD-181 are the batch's, agent-approved, pending owner review.
+
+- **Footage and era.** Raisuly's French-client captures at 1440x1080: #10 Nsz75UOlZz0 (2008-11-22, Palisades), #12
+  IDAug5iUa9c (2008-12-13, Cumbria Weald), #16 rCt23ux-kyU (2009-02-01, Torden Plains), #17 C2rGwo6fLw0 (2009-02-27,
+  Torden Mires). Palisades was rebuilt by D12 (2008-09-18) and parts of the Plains by D13.4 (2008-10-15, "Certain parts of
+  Torden Plains have had to be rebuilt due to Bane activity"); no note rebuilds the Mires. All four recordings are later:
+  final-era. D15.7 (2008-12-13) pulled "heavy hitter troops" out of several zones; no ordinary troop is named.
+- **Species and levels** are read by eye from each target frame on crop sheets (56 footage events RS10/RS12/RS16/RS17,
+  `observed`); every OCR level of the study was checked and its Flaregasher "29" refuted (it reads 25). French names map to
+  the client's creaturenamelanguage ids (`original`); Striders and the plain Atta Harvester show the class name (name id 0).
+- **Places** are the player's radar position, template-matched to the zone's radar mosaic (validated against the Logos
+  dispenser static and the Divide wormhole/waypoint), averaged over the fight: `measured`, player +/-15 m, group +/-50 m.
+  Every pool stands on the navmesh floor minus 0.276 m and is reached from Hightower, Irendas Penal Colony or Baylor Base.
+- **Counts** are the fewest the footage shows (OD-177): one per species targeted in a fight, four Treemites and two
+  Plains Technicians in view, TaRapedia's Mires Scavenger pair. Health, attacks, movement and the 2 s respawn are
+  world-seed analogues (OD-178).
+
+  | zone | pools (creatures) | pool position | species slots | count slots | creature level | name |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | Palisades (new) | 6 (16) | 6 measured | 14 observed | 12 observed, 2 inferred | 9 observed | 9 original |
+  | Torden Plains | 11 (18) | 11 measured | 17 observed | 17 observed | 16 observed | 13 original, 3 inferred (0) |
+  | Torden Mires | 8 (13) | 8 measured | 12 observed | 11 observed, 1 inferred | 6 observed | 6 original |
+
+  Every height is `measured`; every class `inferred`; every health, attack, speed and respawn `analogue`.
+- **Palisades analogues replaced** (manifest change entries, old -> new): 1244001 Boargar 15 -> 18, name 0 -> 7805 Mature
+  Forest Boargar (IDAug5iUa9c t=94); 1244002 Warnet 15 -> 16, 460 -> 7957 Irate Warnet Soldier (Nsz75UOlZz0 t=30); 1244004
+  Hunter 15 -> 16, 0 -> 8249 Hunter Corporal (t=278); 1244005 Technician 15 -> 17, 9106 -> 8057 Thrax Technician PFC (t=45;
+  one also at 18, t=400); pool 1244201 from the analogue (60, 50) to the Forean Ruins group (419.2, 109.767, 368.8), 3 -> 1
+  Warnet (OD-179; 368's Warnets are now about 560 m from Kogari, GAP-PALISADES-368-WARNET-DISTANCE). Fithik (1244003) was
+  not filmed and stays analogue. Executor Gantic's seeded level 18 matches his frame (t=141): no change. Overseer Qraal
+  (level 23, Shard Impact Site) did not register and no mission names him: not seeded.
+- **1067 Can't Survive Without My Radio** (Major Ston, Fort Haroun): objectives 1 and 2 collect the Lightbender
+  Communicator (45012) and Caretaker Communicator (45013), the only templates of the client's mission classes 22101/22102,
+  from the two Mires comm officers; TaRapedia's walkthrough puts them near (540, -10) and (461, -37), within 40 m of the
+  footage's (532, -35) and (478, -73). 66,000 XP and 5,800 credits (TaRapedia rev 33372, 2008-09-16, first written after
+  Update 1.4); no item (only "Modifications"); level 30 (OD-181); drop 50% (OD-61); offered without 975 Flight Salvage,
+  which is unseeded (OD-180).
+- **Held** (evidence file and GAP-FOOTAGE-UNPLACED-SPECIES): species without a registered position (Plains Corporals,
+  Caretaker Medico, Crab Mine, Bane Light Ordnance, Class X Predator, the Class V Shield Drone whose dome is not modelled;
+  the Mires Iapyx Warrant Officers, Demon Pup Howlers and Pharmacologists; the Palisades Shard Impact Site), the Torden
+  Abyss, Valverde Plateau and Howling Maw (species and levels only), 952 Party Gashers, 1587, the Plains and Mires Targets
+  of Opportunity (their other objectives), 627 and 1016.
+- **Also:** the footage ledger `docs/evidence/gameplay-footage-playlists-20260924.json` gains the study's 23 downloads,
+  and `docs/source-sweep-2026-09-13.md` §11.7 records the public BradyGames scan (archive.org, scanned 2026-09-19).
+- Tests: `FootageAmbientPopulationsTests` (navmesh floor and paths, species per zone, the replacements, what stays out,
+  store types, manifest rows and change entries, rollback), the Footage blocks of `MissionContentLoadingTests` (1067
+  offerable, drops) and `ContentSchemaMigrationTests` (rows, rollback), provider parity, manifest scope.

@@ -82,6 +82,34 @@
    "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
    "verification_sha256": "1f9c83f810e0dd295dee8f84c71a5c16005a301beb700e674de2c19e47249c25",
    "note": "Divide footage read by the ConcordiaAmbientPopulations batch from the DIT retail pass's cited stills (research/20260927-seed-populations/work/footage-readings.json and footage-verification.json)."
+  },
+  {
+   "segment": "RS10",
+   "video_id": "Nsz75UOlZz0",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca",
+   "verification_sha256": "84cb0263162e4c6a66a692a39b7808a013d0f852e9fb522ceccef8323bc0e5e5",
+   "note": "Raisuly capture read by eye by the FootageAmbientPopulations batch from 1 fps frames on banshee-ax41 (research/20260927-seed-populations-2/work/footage-readings.json, footage-verification.json, crop sheets in work/frames)."
+  },
+  {
+   "segment": "RS12",
+   "video_id": "IDAug5iUa9c",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca",
+   "verification_sha256": "84cb0263162e4c6a66a692a39b7808a013d0f852e9fb522ceccef8323bc0e5e5",
+   "note": "Raisuly capture read by eye by the FootageAmbientPopulations batch from 1 fps frames on banshee-ax41 (research/20260927-seed-populations-2/work/footage-readings.json, footage-verification.json, crop sheets in work/frames)."
+  },
+  {
+   "segment": "RS16",
+   "video_id": "rCt23ux-kyU",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca",
+   "verification_sha256": "84cb0263162e4c6a66a692a39b7808a013d0f852e9fb522ceccef8323bc0e5e5",
+   "note": "Raisuly capture read by eye by the FootageAmbientPopulations batch from 1 fps frames on banshee-ax41 (research/20260927-seed-populations-2/work/footage-readings.json, footage-verification.json, crop sheets in work/frames)."
+  },
+  {
+   "segment": "RS17",
+   "video_id": "C2rGwo6fLw0",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca",
+   "verification_sha256": "84cb0263162e4c6a66a692a39b7808a013d0f852e9fb522ceccef8323bc0e5e5",
+   "note": "Raisuly capture read by eye by the FootageAmbientPopulations batch from 1 fps frames on banshee-ax41 (research/20260927-seed-populations-2/work/footage-readings.json, footage-verification.json, crop sheets in work/frames)."
   }
  ],
  "events": [
@@ -1928,6 +1956,566 @@
    "description": "A group of three Thrax at a Bane base (the DIT pass reads 'groups of 3-4 Thrax near hive door' over 2:48-3:06). (still 3nZ7eca_vRA_0300.jpg)",
    "status": "confirmed",
    "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "RS10",
+   "event_id": "RS10-001",
+   "t": 30.0,
+   "category": "target",
+   "text": "16 Irate Warnet Soldier",
+   "description": "Target frame 'Soldat pterreur irascible' level 16 (client name 7957), beside the Forean Ruins Logos dispenser; radar label 'Ruines de Foreas'. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS10",
+   "event_id": "RS10-002",
+   "t": 28.0,
+   "category": "group",
+   "text": "one Warnet Soldier in view",
+   "description": "The Warnet the player fights is the only creature on screen at t=25-28. (work/frames/full_pal1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS10",
+   "event_id": "RS10-003",
+   "t": 124.0,
+   "category": "group",
+   "text": "four Treemites in view",
+   "description": "Three Treemites approach while a fourth (targeted) is at the player; Cumbria Weald (radar label). (work/frames/z_treemite.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS10",
+   "event_id": "RS10-004",
+   "t": 125.0,
+   "category": "target",
+   "text": "16 Selenous Treemite",
+   "description": "Target frame 'Ecorceur hypochlorique' level 16 (client name 7861). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS10",
+   "event_id": "RS10-005",
+   "t": 132.0,
+   "category": "target",
+   "text": "15 Malonic Treemite",
+   "description": "Target frame 'Ecorceur malonique' level 15 (client name 7860). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-001",
+   "t": 38.0,
+   "category": "target",
+   "text": "17 Thrax Infantry Private First Class",
+   "description": "Target frame 'Premiere classe thrax' level 17 (7677); Cumbria Weald. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-002",
+   "t": 40.0,
+   "category": "target",
+   "text": "17 Caretaker Butcher",
+   "description": "Target frame 'Archiatre decoupeur' level 17 (8219), fighting beside a Thrax (z_grpA). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-003",
+   "t": 45.0,
+   "category": "target",
+   "text": "17 Thrax Technician Private First Class",
+   "description": "Target frame 'Premiere classe du genie thrax' level 17 (8057). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-004",
+   "t": 92.0,
+   "category": "group",
+   "text": "one Mature Forest Boargar in view",
+   "description": "A single Boargar on the path, targeted; no other creature on screen. (work/frames/full_pal2.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-005",
+   "t": 94.0,
+   "category": "target",
+   "text": "18 Mature Forest Boargar",
+   "description": "Target frame 'Vieux phacocheur de forets' level 18 (7805). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-006",
+   "t": 141.0,
+   "category": "target",
+   "text": "18 Executor Gantic",
+   "description": "Target frame 'Executant Gantic' level 18 (10602). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-007",
+   "t": 163.0,
+   "category": "target",
+   "text": "17 Thrax Infantry Private First Class",
+   "description": "Target frame 'Premiere classe thrax' level 17 during the Gantic fight. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-008",
+   "t": 278.0,
+   "category": "target",
+   "text": "16 Hunter Corporal",
+   "description": "Target frame 'Caporal veneur' level 16 (8249); a Thrax and a Howler are on screen with it (group of three). (work/frames/full_pal2.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-009",
+   "t": 283.0,
+   "category": "target",
+   "text": "16 Thrax Infantry Private First Class",
+   "description": "Target frame 'Premiere classe thrax' level 16. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-010",
+   "t": 288.0,
+   "category": "target",
+   "text": "16 Alpha Beast Howler",
+   "description": "Target frame 'Hurleur bestial alpha' level 16 (8153). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-011",
+   "t": 326.0,
+   "category": "target",
+   "text": "16 Thrax Infantry Private First Class",
+   "description": "Target frame 'Premiere classe thrax' level 16. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-012",
+   "t": 328.0,
+   "category": "target",
+   "text": "15 Thrax Infantry Private",
+   "description": "Target frame 'Fantassin thrax' level 15 (7676). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-013",
+   "t": 329.0,
+   "category": "target",
+   "text": "15 Caretaker Healer",
+   "description": "Target frame 'Archiatre soigneur' level 15 (362). (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-014",
+   "t": 332.0,
+   "category": "target",
+   "text": "15 Thrax Infantry Private First Class",
+   "description": "Target frame 'Premiere classe thrax' level 15. (work/frames/sheet_pal.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS12",
+   "event_id": "RS12-015",
+   "t": 400.0,
+   "category": "target",
+   "text": "18 Thrax Technician Private First Class",
+   "description": "Target frame level 18 (no position registered). (work/frames/sheet_x.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-001",
+   "t": 30.0,
+   "category": "group",
+   "text": "one Flaregasher in view",
+   "description": "A single Flaregasher on the slope ahead; Geyser Chimney Basin (radar label). (work/frames/full_pla1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-002",
+   "t": 36.0,
+   "category": "target",
+   "text": "20 Flaregasher",
+   "description": "Target frame 'Pyrosaure' level 20 (9372). (work/frames/sheet_x.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-003",
+   "t": 40.0,
+   "category": "tracker",
+   "text": "Cibles possibles des plaines: Tuer 100 Pyrosaures 14/100; Tuer 100 Electraies 31/100",
+   "description": "Mission tracker: Plains Targets of Opportunity counting Flaregasher and Beam Manta kills. (work/frames/full_pla1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-004",
+   "t": 52.0,
+   "category": "target",
+   "text": "25 Flaregasher",
+   "description": "Target frame 'Pyrosaure' level 25; the OCR's '29' at t=55-71 reads 25 by eye (t=58, t=70). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-005",
+   "t": 98.0,
+   "category": "target",
+   "text": "20 Strider",
+   "description": "Target frame 'Faucheur' level 20 (class name, Vehicle_Bane_Strider). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-006",
+   "t": 113.0,
+   "category": "target",
+   "text": "21 Class V Shield Drone",
+   "description": "Target frame 'Drone protecteur classe V' level 21, no portrait; its yellow shield dome covers the Bane group (t=112-126). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-007",
+   "t": 116.0,
+   "category": "target",
+   "text": "22 Hunter Sergeant",
+   "description": "Target frame 'Sergent veneur' level 22 (8250). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-008",
+   "t": 118.0,
+   "category": "target",
+   "text": "22 Thrax Infantry Specialist",
+   "description": "Target frame \"Technicien d'infanterie thrax\" level 22 (7678). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-009",
+   "t": 126.0,
+   "category": "group",
+   "text": "a Bane group under a shield dome",
+   "description": "A Howler (targeted) and three more Bane figures inside the drone's dome. (work/frames/full_pla1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-010",
+   "t": 130.0,
+   "category": "target",
+   "text": "22 Fiend Pup Howler",
+   "description": "Target frame 'Chien hurleur malefique' level 22 (8154). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-011",
+   "t": 146.0,
+   "category": "group",
+   "text": "one Beam Manta in view",
+   "description": "A single Beam Manta in flight at Lightning Fields. (work/frames/full_pla1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-012",
+   "t": 152.0,
+   "category": "target",
+   "text": "21 Beam Manta Wafter",
+   "description": "Target frame 'Electraie affleurante' level 21 (8018). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-013",
+   "t": 200.0,
+   "category": "target",
+   "text": "20 Flaregasher",
+   "description": "Target frame 'Pyrosaure' level 20, Lightning Fields. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-014",
+   "t": 287.0,
+   "category": "target",
+   "text": "22 Beam Manta Wafter",
+   "description": "Target frame 'Electraie affleurante' level 22. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-015",
+   "t": 725.0,
+   "category": "target",
+   "text": "25 Atta Harvester Gatherer",
+   "description": "Target frame 'Moissonneur atta rassembleur' level 25 (8071); Atta Territory. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-016",
+   "t": 738.0,
+   "category": "target",
+   "text": "23 Atta Harvester Feeder",
+   "description": "Target frame 'Moissonneur atta nourrisseur' level 23 (8070). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-017",
+   "t": 757.0,
+   "category": "target",
+   "text": "24 Atta Soldier Conscript",
+   "description": "Target frame 'Soldat atta conscrit' level 24 (8095). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-018",
+   "t": 761.0,
+   "category": "target",
+   "text": "21 Atta Harvester Feeder",
+   "description": "Target frame 'Moissonneur atta nourrisseur' level 21. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-019",
+   "t": 914.0,
+   "category": "group",
+   "text": "two Thrax Technicians in view",
+   "description": "Two Thrax Technicians and a deployed device on the ridge ahead. (work/frames/z_tech.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-020",
+   "t": 927.0,
+   "category": "target",
+   "text": "21 Thrax Technician Specialist",
+   "description": "Target frame 'Technicien du genie thrax' level 21 (8058). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-021",
+   "t": 1113.0,
+   "category": "target",
+   "text": "23 Strider",
+   "description": "Target frame 'Faucheur' level 23, Firefall Point. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-022",
+   "t": 1179.0,
+   "category": "target",
+   "text": "20 Atta Harvester",
+   "description": "Target frame 'Moissonneur atta' level 20 (class name). (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS16",
+   "event_id": "RS16-023",
+   "t": 1199.0,
+   "category": "target",
+   "text": "24 Atta Harvester Feeder",
+   "description": "Target frame 'Moissonneur atta nourrisseur' level 24. (work/frames/sheet_pla.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-001",
+   "t": 10.0,
+   "category": "target",
+   "text": "29 Thrax Technician Sergeant",
+   "description": "Target frame 'Sergent du genie thrax' level 29 (8060), mission-target icon; Torden Mires. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-002",
+   "t": 19.0,
+   "category": "group",
+   "text": "a Thrax Scavenger and a Thrax Technician Sergeant together",
+   "description": "Two nameplates over the Bane pair the player fights. (work/frames/full_mir1.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-003",
+   "t": 20.0,
+   "category": "target",
+   "text": "30 Thrax Scavenger",
+   "description": "Target frame 'Pillard thrax' level 30 (8746). (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-004",
+   "t": 124.0,
+   "category": "target",
+   "text": "29 Kael Master Sergeant",
+   "description": "Target frame 'Sergent-chef kael' level 29 (7728). (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-005",
+   "t": 194.0,
+   "category": "target",
+   "text": "29 Kael Master Sergeant",
+   "description": "Target frame level 29. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-006",
+   "t": 253.0,
+   "category": "target",
+   "text": "29 Kael Master Sergeant",
+   "description": "Target frame level 29. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-007",
+   "t": 262.0,
+   "category": "target",
+   "text": "28 Thrax Scavenger",
+   "description": "Target frame 'Pillard thrax' level 28. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-008",
+   "t": 270.0,
+   "category": "target",
+   "text": "28 Thrax Scavenger",
+   "description": "Target frame level 28. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-009",
+   "t": 304.0,
+   "category": "target",
+   "text": "29 Caretaker Comm Officer",
+   "description": "Target frame 'Archiatre officier comm' level 29 (8851). (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-010",
+   "t": 316.0,
+   "category": "target",
+   "text": "30 Thrax Scavenger",
+   "description": "Target frame level 30. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-011",
+   "t": 346.0,
+   "category": "target",
+   "text": "29 Kael Master Sergeant",
+   "description": "Target frame level 29. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-012",
+   "t": 391.0,
+   "category": "target",
+   "text": "29 Caretaker Comm Officer",
+   "description": "Target frame level 29. (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
+  },
+  {
+   "segment": "RS17",
+   "event_id": "RS17-013",
+   "t": 443.0,
+   "category": "target",
+   "text": "30 Lightbender Comm Officer",
+   "description": "Target frame 'Officier comm lurailleur' level 30 (8852). (work/frames/sheet_mir.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca"
   }
  ],
  "dropped": []

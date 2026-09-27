@@ -582,6 +582,26 @@ ambient populations"; evidence `docs/evidence/concordia-ambient-populations-2026
   in `GAP-CONCORDIA-FOOTAGE-DOWNLOADS`. Owner client check (358 at Sebastian, 371 -> 372 via Kerr and Mayes, 774 -> 755
   via Kibner and Sherman, 342 at Yorma Brown, 1808 at Tayros, 368 at Kogari) is still to do.
 
+## Footage ambient populations status
+
+Seeded on 2026-09-27 under OD-161/OD-176 from the owner-approved Raisuly captures (1440x1080, recorded 2008-11-22 to
+2009-02-27, all after Palisades D12 and the Plains D13.4 rebuild; the Mires has no recorded rebuild): Torden Plains 1764,
+Torden Mires 1759 and six more Palisades 1244 groups. Account: `docs/retail-accuracy.md`, 2026-09-27 "Torden Plains, Torden
+Mires and Palisades from footage"; evidence `docs/evidence/footage-ambient-populations-20260927.json`.
+
+- **Built:** 31 creature rows (1244006-1244014, 1764001-1764016, 1759001-1759006) and 25 pools (1244208-1244213,
+  1764200-1764210, 1759200-1759207, 47 creatures): species and level read by eye from each target frame (observed), each
+  pool at its fight's radar-registered position (measured, +/-50 m) on the navmesh floor, reached from Hightower, Irendas
+  Penal Colony or Baylor Base. The previous batch's Palisades analogues are replaced where filmed: Boargar 18 (Mature
+  Forest Boargar), Warnet 16 (Irate Warnet Soldier) with pool 1244201 moved to the Forean Ruins group, Hunter 16 (Hunter
+  Corporal), Technician 17 (PFC). Mission 1067 Can't Survive Without My Radio at Major Ston (`FootageAmbientPopulations`).
+  Decisions OD-176 (owner) and OD-177 to OD-181 (agent, pending owner review).
+- **Open:** group sizes are lower bounds, health/attacks/respawn analogues; species without a registered position (Plains
+  Corporals, Medico, Crab Mine, Light Ordnance, Predator, Shield Drone; the Mires Iapyx Warrant Officers; the Shard Impact
+  Site, Overseer Qraal), Torden Abyss, Valverde Plateau and Howling Maw (species and levels recorded only); 975, 952,
+  1587 and the Targets of Opportunity; 368's Warnets now ~560 m from Kogari. Owner client check (1067 at Major Ston;
+  hunting at each site) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
@@ -2420,6 +2440,12 @@ its evidence tier.
 | OD-168 368 Searching for Acceptance's kill (2026-09-27, agent, pending owner review) | Count five Palisades Warnet kills and withhold Kogari's objective-1 row (text 2741) in MissionRedirectConversations; the five-minute timer stays held, a timed failure needing a retry path (GAP-PALISADES-368-KILL-TIMER). Supersedes OD-157 for the kill. |
 | OD-169 1808 Clear Your Uherum's traverse (2026-09-27, agent, pending owner review) | 'Traverse Uherum Pass' completes on reaching the east mouth (area 1244500 at the original entrance piece); the client's bodiless Start/Middle/End are optional and unrevealed (GAP-1808-TRAVERSE). Alternative: hold 1808. |
 | OD-170 342 Noise Pollution's pre-D12 Boargar reading east of the fortification line (2026-09-27, agent, pending owner review) | Use it: TaRapedia rev 11642 (2007-10-23) puts the Boargar beside the Eloh obelisk the final map still carries, north of the New Cumbria perimeter and outside the destroyed facility; no D12 note names the area (GAP-PALISADES-342-OBELISK-ERA). Alternative: hold 342. |
+| OD-176 Ambient populations of Torden Plains, Torden Mires and the filmed Palisades sites (2026-09-27, owner) | The owner's decisions of 2026-09-27 (OD-161 extended to the zones beyond; footage first, then stand-ins): each group the Raisuly captures fight is seeded at its radar-registered position (measured, +/-50 m), species and level read from the target frame (observed). Plains was last rebuilt in D13.4 (2008-10-15) and the Mires has no recorded rebuild, so the footage is final-era. |
+| OD-177 Group sizes and levels where the footage shows part of a group (2026-09-27, agent, pending owner review) | The fewest the footage shows, as a lower bound: one per species targeted in a fight, the counts read by hand where a group is on screen (four Treemites, two Plains Technicians, one Warnet), TaRapedia's Scavenger pair; one creature row per (species, level) seen (GAP-FOOTAGE-POOL-COUNTS). Alternative: analogue counts of three. |
+| OD-178 Health, attacks, movement and respawn of the footage populations (2026-09-27, agent, pending owner review) | Labelled world-seed analogues (the OD-163/OD-164 convention): same-class rows where they exist, else 555 hp with the nearest world attack; Striders the Bane vehicle row's 600; run 9 / walk 5; respown_time 20 (GAP-FOOTAGE-CREATURE-STATS, GAP-FOOTAGE-POOL-RESPAWN). |
+| OD-179 The Palisades Warnet pool 1244201 (2026-09-27, agent, pending owner review) | Moved from the analogue valley east of Hightower to the filmed Forean Ruins group (419.2, 368.8), one Warnet (the study's instruction). 368's Warnets are now ~560 m from Kogari; with no timer the mission stays finishable (GAP-PALISADES-368-WARNET-DISTANCE). Alternative: keep an analogue pool near Hightower as well. |
+| OD-180 1067 while 975 Flight Salvage is held (2026-09-27, agent, pending owner review) | Offer 1067 without its prerequisite (the OD-165 rule); 975's salvage object is not placed (GAP-1067-PREREQUISITE). Alternative: hold 1067. |
+| OD-181 Mission level of 1067 (2026-09-27, agent, pending owner review) | 30, the level of the Mires missions already seeded (955, 956, 976; the OD-167 rule); Ston is TaRapedia level 31. The comm devices drop at OD-61's 50%. Alternative: 31. |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

@@ -1765,7 +1765,23 @@ a **Dutch** promo page: Benelux marketing existed without an NL locale section.
 (BR) times out; `tabula-rasa.xf.cz` (CZ/SK) 404s. `tabularasamemorial.org` is a
 post-shutdown fan memorial cited by es.wiki.
 
-### 11.7 The official manuals, and the missing strategy guide
+### 11.7 The official manuals, and the strategy guide
+
+**Update 2026-09-27: a public scan now exists.** The guide was scanned to
+archive.org on 2026-09-19 as item
+`richard_garriotts_tabula_rasa_bradygames_strategy_guide` (PDF sha256
+`053ff587a6a8516f3a216833efd8ca59d61bb8dfdce57a11269b7f2015368441`, archive sha1
+`4e984ea196135b073034af85d1d7ab4fca8ad9e7`), with archive.org's own tesseract OCR
+text. It is a legitimate public upload; the "no public full text or scan" finding
+below was true on 2026-09-13 and is superseded. The launch-era dating stands: the
+guide describes 2007-10 content, so it is obsolete for the Wilderness (D11) and for
+the Palisades facility D12 destroyed, and it gives species by area and group habits,
+never counts. Readings cite leaf (0-based PDF page) and are `inferred` at best.
+Extracted text and page images for Divide (leaf 115-128), Palisades (129-141),
+Torden Plains (142-146) and Torden Incline (147-153) are under
+`research/20260927-footage-study/brady/`; the OCR text is
+`research/20260927-zone-footage-search/search/brady_djvu.txt` (sha256
+`f74446a2eaf5fde25154080a4081fe8098e3356ba44c8a7ca0d3e484994c1b21`).
 
 The official guide is **BradyGames**, not Prima: *Richard Garriott's Tabula Rasa
 Official Strategy Guide*, Open Library work `OL8455997W` / edition `OL10724849M`,
@@ -1773,7 +1789,7 @@ publisher `BRADY GAMES`, **2007-10-23**, ISBN-10 `074400943X` / ISBN-13
 `9780744009439`, **272 pp.**, author credit `['BradyGames']`. No Prima-published TR
 guide was found in any catalogue queried — treat "Prima" as a mis-attribution.
 
-**No public full text or scan exists.** `archive.org` `q=tabula+rasa+AND+bradygames`
+**As of 2026-09-13, no public full text or scan existed.** `archive.org` `q=tabula+rasa+AND+bradygames`
 → numFound **0**; `q="tabula rasa" AND "strategy guide"` → **0**; `q=9780744009439`
 → 2 hits, both `mediatype:data` Better World Books donation manifests
 (`BWB-2019-12-24`, `bwb_daily_pallets_2020-01-03_PFS`) — metadata only;

@@ -983,6 +983,8 @@ namespace Rasa.Test
                 references.Items.UnionWith(new uint[] { 123352, 118803 });
                 // ConcordiaAmbientPopulations: Xanx Skin Sample 435, Hominis Machina Scraping 436, Caretaker Fluid 2526, Stalker Scraps 2537.
                 references.Items.UnionWith(new uint[] { 435, 436, 2526, 2537 });
+                // FootageAmbientPopulations: the Lightbender Communicator 45012 and Caretaker Communicator 45013.
+                references.Items.UnionWith(new uint[] { 45012, 45013 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -1357,6 +1359,31 @@ namespace Rasa.Test
                 sampler.Player.Missions[371] = xanx;
                 CollectionAssert.AreEqual(new uint[] { 435 }, content.RollMissionItemDrops(sampler, new Creature { DbId = 1148001 }, () => 0.0).ToArray());
                 Assert.AreEqual(0, content.RollMissionItemDrops(sampler, new Creature { DbId = 1148001 }, () => 0.999).Count(), "a 50% drop misses on a high roll");
+
+                // FootageAmbientPopulations (2026-09-27): 1067 Can't Survive Without My Radio loads offerable at Major Ston - the two
+                // comm devices drop from the Mires comm officers the footage places - without its unseeded prerequisite 975 (OD-180).
+                Assert.IsFalse(validation.MissionGaps.ContainsKey(1067), string.Join(" | ", validation.MissionGaps.GetValueOrDefault(1067u) ?? Array.Empty<string>()));
+                var radio = missions.LoadedMissions[1067];
+                CollectionAssert.AreEqual(Array.Empty<string>(), radio.DefinitionGaps());
+                Assert.IsTrue(radio.IsDispensable);
+                Assert.AreEqual((199408u, 199408u), (radio.MissionGiver, radio.MissionReciver));
+                CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.ItemCollected, 1759006u, 45012u), (2u, ObjectiveBindingKind.ItemCollected, 1759005u, 45013u) },
+                    radio.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId, binding.ItemTemplateId)).ToArray());
+                Assert.AreEqual(1, radio.Counters[1].Single().TargetValue);
+                Assert.AreEqual(1, radio.Counters[2].Single().TargetValue);
+                Assert.AreEqual((66000L, 5800L), ((long)radio.RewardExperience, (long)radio.RewardCredits));
+                Assert.AreEqual(0, radio.Prerequisites.Count, "975 is not seeded (OD-180)");
+                Assert.AreEqual(0, radio.OfferedSelectableRewards.Count + radio.OfferedFixedItems.Count, "1067 pays no item");
+                foreach (var held in new uint[] { 952, 1587, 1619, 1829, 1585, 627, 1016, 975 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(held), $"mission {held} is held");
+                var radioman = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                var radioMission = new PlayerMission { MissionId = 1067, State = MissionState.Active };
+                radioMission.Objectives[1] = MissionObjectiveState.Incomplete;
+                radioMission.Objectives[2] = MissionObjectiveState.Incomplete;
+                radioman.Player.Missions[1067] = radioMission;
+                CollectionAssert.AreEqual(new uint[] { 45012 }, content.RollMissionItemDrops(radioman, new Creature { DbId = 1759006 }, () => 0.0).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 45013 }, content.RollMissionItemDrops(radioman, new Creature { DbId = 1759005 }, () => 0.0).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(radioman, new Creature { DbId = 1759004 }, () => 0.0).Count(), "a Kael carries no comm device");
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

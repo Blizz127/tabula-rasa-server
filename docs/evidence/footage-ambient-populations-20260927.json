@@ -1,0 +1,2203 @@
+{
+ "schema": "rasa-footage-ambient-populations/1",
+ "date": "2026-09-27",
+ "batch": "FootageAmbientPopulations (branch seed-populations-2)",
+ "decision": "OD-176 (owner, 2026-09-27): footage first, then text, then labelled stand-ins; OD-177 to OD-181",
+ "sources": {
+  "study": "/home/blizz/backups/rasa-net/research/20260927-footage-study",
+  "research": "/home/blizz/backups/rasa-net/research/20260927-seed-populations-2",
+  "readings": "/home/blizz/backups/rasa-net/research/20260927-seed-populations-2/work/footage-readings.json (sha256 0459792293d62bf3ebdec5d7fa1f292c2d234f9a41d0b0632571295bdfcf05ca)",
+  "verification": "/home/blizz/backups/rasa-net/research/20260927-seed-populations-2/work/footage-verification.json (sha256 84cb0263162e4c6a66a692a39b7808a013d0f852e9fb522ceccef8323bc0e5e5)",
+  "registrations": "/home/blizz/backups/rasa-net/research/20260927-seed-populations-2/work/encounters_rows.rebuilt.json (sha256 27d9cb17e20cf17468622b3d0d7601aa2d86dcc6555f3d210f884329aa28a981); built by research/20260927-footage-study/build_encounters.py after copying the finished ax41 ~/footage/rasa/reg/*.jsonl (rCt23ux-kyU Plains to t=1245, oePbrAeDiwk Palisades, C2rGwo6fLw0 Mires to t=458, Ez7Vb6vdjl0 Plains)",
+  "tarapedia": "/home/blizz/backups/rasa-net/research/20260927-seed-populations-2/work/tarapedia (fetched 2026-09-27)",
+  "videos": {
+   "Nsz75UOlZz0": "a24d9fb482a624cca85e4bc305ba36e5731ce3907cab815e40a51f43c5a0d5b2",
+   "IDAug5iUa9c": "e8168e54bf6a9c4c68128d1847fd3cb33f7ba1d4ed0b5730e5107d2b0db18e6f",
+   "rCt23ux-kyU": "b219cc3ad5d14ad07cd2861bf69b36552c4a0e11edf9a7d5cf9c69e3f6854ed4",
+   "C2rGwo6fLw0": "e0f33445f1b3b51fd003afb0589fcc0f8265f3907a687b04c8855efe3a77f30f"
+  }
+ },
+ "rebuild_history": {
+  "Torden Plains": "D9 (2008-06): Lightning Fields CP expanded; D13.4 live (2008-10-15): 'Certain parts of Torden Plains have had to be rebuilt due to Bane activity'; D14 (2008-11-11): more lootable chests. The Plains footage (#12 2008-12-13, #13 2008-12-18, #15 2009-01-30, #16 2009-02-01, #18 2009-02-28) is after the last rebuild: final-era.",
+  "Torden Mires": "No rebuild recorded; D13.8 (2008-10-24) swaps a ToO target (Deddarlink -> Defiler Jemmert); D14 adds chests. #17 (2009-02-27) is final-era.",
+  "Concordia Palisades": "D12/D12.5 (2008-09-18) rebuilt Cumbria and thinned spawns; #10-#14 (2008-11-22..12-30) are after it.",
+  "caveat": "D15.7 (2008-12-13): 'pulling a lot of their heavy hitter troops out of several combat zones' - #12 is recorded that day; bosses may differ, ordinary troops are not named.",
+  "source": "research/20260926-notes-audit/sources/wayback-live (deployment_134_10152008.html, deployment_138_10242008.html, deployment_14_11112008.html, deployment_157_12132008.html, d9_live.html)"
+ },
+ "navmesh": {
+  "adv_foreas_concordia_palisades.nav": "a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f",
+  "adv_arieki_torden_plains.nav": "033b7c68a9dfd1476d855c9adbe74c9dd13404c430b567812ec3700fd208e41b",
+  "adv_arieki_torden_mires.nav": "cdeaa9ae377884c5b6ca1265890d5861076c973d1b8d5d6cb6093ba7e55162be"
+ },
+ "reference_points": {
+  "1244": "Waypoint: Hightower Outpost (-72.45, 147.59, 70.52)",
+  "1764": "Waypoint: Irendas Penal Colony (306.16, 430.59, -166.14)",
+  "1759": "Baylor Base (-647.09, 219.99, -504.9)"
+ },
+ "probe_output": "research/20260927-seed-populations-2/work/probes/p2.out (sha256 854bcd9f34a415724adf92a219c0cd4bdc4ea706a8fc792635d56cd3ef687680)",
+ "probes": {
+  "1244201": {
+   "surface": "110.043",
+   "floor": "109.767",
+   "nearest": "(419.20,110.04,368.80) d=0.00",
+   "levels": "[107.05,110.04]",
+   "underground": "False",
+   "path": "complete len=610.1 end=(419.2,110.04,368.8) endGap=0.0"
+  },
+  "1244208": {
+   "surface": "174.203",
+   "floor": "173.927",
+   "nearest": "(-258.30,174.20,857.20) d=0.00",
+   "levels": "[173.38,174.2]",
+   "underground": "False",
+   "path": "complete len=908.5 end=(-258.3,174.20,857.2) endGap=0.0"
+  },
+  "1244209": {
+   "surface": "124.599",
+   "floor": "124.323",
+   "nearest": "(-130.70,124.60,470.20) d=1.40",
+   "levels": "[124.6,125.99]",
+   "underground": "False",
+   "path": "complete len=424.8 end=(-130.7,124.60,470.2) endGap=0.0"
+  },
+  "1244210": {
+   "surface": "136.346",
+   "floor": "136.070",
+   "nearest": "(-174.00,136.35,525.20) d=0.27",
+   "levels": "[136.35]",
+   "underground": "False",
+   "path": "complete len=491.7 end=(-174.0,136.35,525.2) endGap=0.0"
+  },
+  "1244211": {
+   "surface": "119.003",
+   "floor": "118.727",
+   "nearest": "(-63.98,119.00,597.00) d=0.22",
+   "levels": "[118.08,119,119.65]",
+   "underground": "False",
+   "path": "complete len=549.5 end=(-64.0,119.00,597.0) endGap=0.2"
+  },
+  "1244212": {
+   "surface": "142.240",
+   "floor": "141.964",
+   "nearest": "(-58.30,142.24,720.40) d=0.21",
+   "levels": "[142.24,142.45]",
+   "underground": "False",
+   "path": "complete len=692.9 end=(-58.3,142.24,720.4) endGap=0.0"
+  },
+  "1244213": {
+   "surface": "143.083",
+   "floor": "142.807",
+   "nearest": "(-224.40,143.08,768.70) d=0.00",
+   "levels": "[143.05,143.08]",
+   "underground": "False",
+   "path": "complete len=749.1 end=(-224.4,143.08,768.7) endGap=0.0"
+  },
+  "1764200": {
+   "surface": "435.441",
+   "floor": "435.165",
+   "nearest": "(-123.90,435.44,120.90) d=0.62",
+   "levels": "[428.8,435.44]",
+   "underground": "False",
+   "path": "complete len=560.6 end=(-123.9,435.44,120.9) endGap=0.0"
+  },
+  "1764201": {
+   "surface": "435.754",
+   "floor": "435.478",
+   "nearest": "(-71.80,435.75,216.80) d=0.00",
+   "levels": "[435.75]",
+   "underground": "False",
+   "path": "complete len=569.0 end=(-71.8,435.75,216.8) endGap=0.0"
+  },
+  "1764202": {
+   "surface": "438.405",
+   "floor": "438.129",
+   "nearest": "(-67.90,438.40,232.30) d=0.00",
+   "levels": "[435.45,438.4,439.2]",
+   "underground": "False",
+   "path": "complete len=577.0 end=(-67.9,438.40,232.3) endGap=0.0"
+  },
+  "1764203": {
+   "surface": "431.086",
+   "floor": "430.810",
+   "nearest": "(-244.50,431.09,557.80) d=1.09",
+   "levels": "[431.09]",
+   "underground": "False",
+   "path": "complete len=984.8 end=(-244.5,431.09,557.8) endGap=0.0"
+  },
+  "1764204": {
+   "surface": "420.600",
+   "floor": "420.324",
+   "nearest": "(-158.70,420.60,610.80) d=0.00",
+   "levels": "[420.54,420.6]",
+   "underground": "False",
+   "path": "complete len=986.9 end=(-158.7,420.60,610.8) endGap=0.0"
+  },
+  "1764205": {
+   "surface": "431.183",
+   "floor": "430.907",
+   "nearest": "(-88.00,431.18,575.00) d=1.18",
+   "levels": "[431.18]",
+   "underground": "False",
+   "path": "complete len=899.2 end=(-88.0,431.18,575.0) endGap=0.0"
+  },
+  "1764206": {
+   "surface": "446.816",
+   "floor": "446.540",
+   "nearest": "(-538.10,446.82,114.30) d=0.00",
+   "levels": "[446.82,453.4]",
+   "underground": "False",
+   "path": "complete len=951.2 end=(-538.1,446.82,114.3) endGap=0.0"
+  },
+  "1764207": {
+   "surface": "472.130",
+   "floor": "471.854",
+   "nearest": "(-691.30,472.13,136.00) d=0.00",
+   "levels": "[471.53,472.13]",
+   "underground": "False",
+   "path": "complete len=1110.1 end=(-691.3,472.13,136.0) endGap=0.0"
+  },
+  "1764208": {
+   "surface": "448.474",
+   "floor": "448.198",
+   "nearest": "(-852.70,448.47,-110.30) d=0.00",
+   "levels": "[448.47]",
+   "underground": "False",
+   "path": "complete len=1308.4 end=(-852.7,448.47,-110.3) endGap=0.0"
+  },
+  "1764209": {
+   "surface": "430.000",
+   "floor": "429.724",
+   "nearest": "(-669.50,430.00,-235.50) d=0.00",
+   "levels": "[430]",
+   "underground": "False",
+   "path": "complete len=1064.7 end=(-669.5,430.00,-235.5) endGap=0.0"
+  },
+  "1764210": {
+   "surface": "427.623",
+   "floor": "427.347",
+   "nearest": "(-672.00,427.62,-307.50) d=2.38",
+   "levels": "[422.32,425.8,427.61,427.62]",
+   "underground": "False",
+   "path": "complete len=1044.4 end=(-672.0,427.62,-307.5) endGap=0.0"
+  },
+  "1759200": {
+   "surface": "261.683",
+   "floor": "261.407",
+   "nearest": "(810.30,261.68,221.80) d=0.00",
+   "levels": "[261.68,285.76]",
+   "underground": "False",
+   "path": "complete len=1992.8 end=(810.3,261.68,221.8) endGap=0.0"
+  },
+  "1759201": {
+   "surface": "233.760",
+   "floor": "233.484",
+   "nearest": "(842.10,233.76,88.50) d=0.00",
+   "levels": "[233.76,261.7,261.81]",
+   "underground": "False",
+   "path": "complete len=1808.3 end=(842.1,233.76,88.5) endGap=0.0"
+  },
+  "1759202": {
+   "surface": "235.050",
+   "floor": "234.774",
+   "nearest": "(816.90,235.05,-18.80) d=0.16",
+   "levels": "[235.05]",
+   "underground": "False",
+   "path": "complete len=1726.5 end=(816.9,235.05,-18.8) endGap=0.0"
+  },
+  "1759203": {
+   "surface": "235.360",
+   "floor": "235.084",
+   "nearest": "(700.70,235.36,-60.00) d=0.00",
+   "levels": "[235.36]",
+   "underground": "False",
+   "path": "complete len=1583.9 end=(700.7,235.36,-60.0) endGap=0.0"
+  },
+  "1759204": {
+   "surface": "235.360",
+   "floor": "235.084",
+   "nearest": "(671.30,235.36,-60.80) d=0.00",
+   "levels": "[235.36]",
+   "underground": "False",
+   "path": "complete len=1554.5 end=(671.3,235.36,-60.8) endGap=0.0"
+  },
+  "1759205": {
+   "surface": "236.124",
+   "floor": "235.848",
+   "nearest": "(597.80,236.12,-53.20) d=0.00",
+   "levels": "[236.12]",
+   "underground": "False",
+   "path": "complete len=1482.5 end=(597.8,236.12,-53.2) endGap=0.0"
+  },
+  "1759206": {
+   "surface": "241.130",
+   "floor": "240.854",
+   "nearest": "(532.10,241.13,-35.10) d=0.00",
+   "levels": "[240.38,241.13,241.76]",
+   "underground": "False",
+   "path": "complete len=1458.6 end=(532.1,241.13,-35.1) endGap=0.0"
+  },
+  "1759207": {
+   "surface": "234.289",
+   "floor": "234.013",
+   "nearest": "(478.30,234.29,-73.10) d=0.00",
+   "levels": "[234.29,235.22]",
+   "underground": "False",
+   "path": "complete len=1366.7 end=(478.3,234.29,-73.1) endGap=0.0"
+  }
+ },
+ "pools": {
+  "1244208": {
+   "map": 1244,
+   "site": "Treemites, Cumbria Weald",
+   "registrations": [
+    {
+     "t0": 123,
+     "t1": 128,
+     "species": "Selenous Treemite",
+     "x": -257.8,
+     "z": 856.5,
+     "n": 3,
+     "spread_m": 8.0
+    },
+    {
+     "t0": 129,
+     "t1": 135,
+     "species": "Malonic Treemite",
+     "x": -258.8,
+     "z": 858.0,
+     "n": 4,
+     "spread_m": 5.0
+    }
+   ]
+  },
+  "1244209": {
+   "map": 1244,
+   "site": "Mature Forest Boargar, Cumbria Weald",
+   "registrations": [
+    {
+     "t0": 91,
+     "t1": 98,
+     "species": "Mature Forest Boargar",
+     "x": -130.7,
+     "z": 470.2,
+     "n": 6,
+     "spread_m": 57.0
+    }
+   ]
+  },
+  "1244210": {
+   "map": 1244,
+   "site": "Bane squad, Cumbria Weald (-174, 525)",
+   "registrations": [
+    {
+     "t0": 38,
+     "t1": 39,
+     "species": "Thrax Infantry Private First Class",
+     "x": -169.1,
+     "z": 533.3,
+     "n": 5,
+     "spread_m": 26.0
+    },
+    {
+     "t0": 40,
+     "t1": 40,
+     "species": "Caretaker Butcher",
+     "x": -168.5,
+     "z": 530.5,
+     "n": 4,
+     "spread_m": 19.0
+    },
+    {
+     "t0": 41,
+     "t1": 41,
+     "species": "Thrax Technician Private First Class",
+     "x": -168.5,
+     "z": 530.5,
+     "n": 4,
+     "spread_m": 19.0
+    },
+    {
+     "t0": 42,
+     "t1": 43,
+     "species": "Caretaker Butcher",
+     "x": -171.3,
+     "z": 527.3,
+     "n": 5,
+     "spread_m": 23.0
+    },
+    {
+     "t0": 44,
+     "t1": 47,
+     "species": "Thrax Technician Private First Class",
+     "x": -174.1,
+     "z": 524.5,
+     "n": 5,
+     "spread_m": 22.0
+    },
+    {
+     "t0": 49,
+     "t1": 49,
+     "species": "Caretaker Butcher",
+     "x": -178.2,
+     "z": 520.0,
+     "n": 4,
+     "spread_m": 9.0
+    },
+    {
+     "t0": 50,
+     "t1": 54,
+     "species": "Thrax Infantry Private First Class",
+     "x": -177.8,
+     "z": 520.5,
+     "n": 6,
+     "spread_m": 9.0
+    },
+    {
+     "t0": 57,
+     "t1": 59,
+     "species": "Caretaker Butcher",
+     "x": -176.7,
+     "z": 521.9,
+     "n": 5,
+     "spread_m": 4.0
+    },
+    {
+     "t0": 60,
+     "t1": 65,
+     "species": "Thrax Technician Private First Class",
+     "x": -178.8,
+     "z": 519.5,
+     "n": 6,
+     "spread_m": 8.0
+    },
+    {
+     "t0": 71,
+     "t1": 73,
+     "species": "Thrax Infantry Private First Class",
+     "x": -177.1,
+     "z": 521.7,
+     "n": 5,
+     "spread_m": 15.0
+    }
+   ]
+  },
+  "1244211": {
+   "map": 1244,
+   "site": "Thrax with Executor Gantic",
+   "registrations": [
+    {
+     "t0": 158,
+     "t1": 159,
+     "species": "Thrax Infantry Private First Class",
+     "x": -63.8,
+     "z": 597.2,
+     "n": 3,
+     "spread_m": 2.0
+    },
+    {
+     "t0": 163,
+     "t1": 163,
+     "species": "Thrax Infantry Private First Class",
+     "x": -64.5,
+     "z": 596.5,
+     "n": 3,
+     "spread_m": 0.0
+    }
+   ]
+  },
+  "1244212": {
+   "map": 1244,
+   "site": "Hunter, Thrax and Howler, Cumbria Weald",
+   "registrations": [
+    {
+     "t0": 277,
+     "t1": 279,
+     "species": "Hunter Corporal",
+     "x": -55.7,
+     "z": 711.5,
+     "n": 5,
+     "spread_m": 38.0
+    },
+    {
+     "t0": 280,
+     "t1": 287,
+     "species": "Thrax Infantry Private First Class",
+     "x": -56.8,
+     "z": 720.5,
+     "n": 6,
+     "spread_m": 29.0
+    },
+    {
+     "t0": 288,
+     "t1": 288,
+     "species": "Alpha Beast Howler",
+     "x": -62.3,
+     "z": 729.1,
+     "n": 5,
+     "spread_m": 28.0
+    }
+   ]
+  },
+  "1244213": {
+   "map": 1244,
+   "site": "Thrax and Healer, Cumbria Weald (-224, 769)",
+   "registrations": [
+    {
+     "t0": 325,
+     "t1": 327,
+     "species": "Thrax Infantry Private First Class",
+     "x": -229.5,
+     "z": 765.2,
+     "n": 4,
+     "spread_m": 21.0
+    },
+    {
+     "t0": 328,
+     "t1": 328,
+     "species": "Thrax Infantry Private",
+     "x": -226.5,
+     "z": 769.2,
+     "n": 3,
+     "spread_m": 19.0
+    },
+    {
+     "t0": 329,
+     "t1": 329,
+     "species": "Caretaker Healer",
+     "x": -226.5,
+     "z": 769.2,
+     "n": 3,
+     "spread_m": 19.0
+    },
+    {
+     "t0": 330,
+     "t1": 331,
+     "species": "Thrax Infantry Private",
+     "x": -226.5,
+     "z": 769.2,
+     "n": 3,
+     "spread_m": 19.0
+    },
+    {
+     "t0": 332,
+     "t1": 332,
+     "species": "Thrax Infantry Private First Class",
+     "x": -221.5,
+     "z": 770.5,
+     "n": 2,
+     "spread_m": 8.0
+    },
+    {
+     "t0": 333,
+     "t1": 333,
+     "species": "Caretaker Healer",
+     "x": -221.5,
+     "z": 770.5,
+     "n": 2,
+     "spread_m": 8.0
+    },
+    {
+     "t0": 334,
+     "t1": 337,
+     "species": "Thrax Infantry Private",
+     "x": -217.5,
+     "z": 771.5,
+     "n": 1,
+     "spread_m": 0.0
+    }
+   ]
+  },
+  "1764200": {
+   "map": 1764,
+   "site": "Flaregashers, Geyser Chimney Basin",
+   "registrations": [
+    {
+     "t0": 31,
+     "t1": 74,
+     "species": "Flaregasher",
+     "x": -123.9,
+     "z": 120.9,
+     "n": 12,
+     "spread_m": 49.0
+    }
+   ]
+  },
+  "1764201": {
+   "map": 1764,
+   "site": "Strider, Geyser Chimney Basin",
+   "registrations": [
+    {
+     "t0": 95,
+     "t1": 101,
+     "species": "Strider",
+     "x": -71.8,
+     "z": 216.8,
+     "n": 4,
+     "spread_m": 35.0
+    }
+   ]
+  },
+  "1764202": {
+   "map": 1764,
+   "site": "Bane group, Geyser Chimney Basin",
+   "registrations": [
+    {
+     "t0": 115,
+     "t1": 117,
+     "species": "Hunter Sergeant",
+     "x": -69.2,
+     "z": 224.8,
+     "n": 3,
+     "spread_m": 4.0
+    },
+    {
+     "t0": 118,
+     "t1": 118,
+     "species": "Thrax Infantry Specialist",
+     "x": -68.5,
+     "z": 225.5,
+     "n": 2,
+     "spread_m": 4.0
+    },
+    {
+     "t0": 120,
+     "t1": 124,
+     "species": "Hunter Sergeant",
+     "x": -67.5,
+     "z": 237.2,
+     "n": 4,
+     "spread_m": 28.0
+    },
+    {
+     "t0": 126,
+     "t1": 134,
+     "species": "Fiend Pup Howler",
+     "x": -66.5,
+     "z": 241.8,
+     "n": 3,
+     "spread_m": 24.0
+    }
+   ]
+  },
+  "1764203": {
+   "map": 1764,
+   "site": "Beam Manta, Lightning Fields",
+   "registrations": [
+    {
+     "t0": 147,
+     "t1": 157,
+     "species": "Beam Manta Wafter",
+     "x": -244.5,
+     "z": 557.8,
+     "n": 4,
+     "spread_m": 38.0
+    }
+   ]
+  },
+  "1764204": {
+   "map": 1764,
+   "site": "Flaregasher, Lightning Fields",
+   "registrations": [
+    {
+     "t0": 190,
+     "t1": 211,
+     "species": "Flaregasher",
+     "x": -158.7,
+     "z": 610.8,
+     "n": 6,
+     "spread_m": 42.0
+    }
+   ]
+  },
+  "1764205": {
+   "map": 1764,
+   "site": "Beam Manta, east of Lightning Fields",
+   "registrations": [
+    {
+     "t0": 284,
+     "t1": 290,
+     "species": "Beam Manta Wafter",
+     "x": -88.0,
+     "z": 575.0,
+     "n": 2,
+     "spread_m": 23.0
+    }
+   ]
+  },
+  "1764206": {
+   "map": 1764,
+   "site": "Atta, Atta Territory",
+   "registrations": [
+    {
+     "t0": 723,
+     "t1": 727,
+     "species": "Atta Harvester Gatherer",
+     "x": -535.5,
+     "z": 119.0,
+     "n": 2,
+     "spread_m": 15.0
+    },
+    {
+     "t0": 735,
+     "t1": 741,
+     "species": "Atta Harvester Feeder",
+     "x": -541.5,
+     "z": 111.5,
+     "n": 1,
+     "spread_m": 0.0
+    },
+    {
+     "t0": 754,
+     "t1": 760,
+     "species": "Atta Soldier Conscript",
+     "x": -534.5,
+     "z": 119.5,
+     "n": 1,
+     "spread_m": 0.0
+    },
+    {
+     "t0": 761,
+     "t1": 761,
+     "species": "Atta Harvester Feeder",
+     "x": -534.5,
+     "z": 119.5,
+     "n": 1,
+     "spread_m": 0.0
+    },
+    {
+     "t0": 762,
+     "t1": 765,
+     "species": "Atta Soldier Conscript",
+     "x": -539.0,
+     "z": 113.5,
+     "n": 2,
+     "spread_m": 12.0
+    },
+    {
+     "t0": 775,
+     "t1": 780,
+     "species": "Atta Harvester Feeder",
+     "x": -543.5,
+     "z": 107.5,
+     "n": 1,
+     "spread_m": 0.0
+    }
+   ]
+  },
+  "1764207": {
+   "map": 1764,
+   "site": "Thrax Technicians, west Plains ridge",
+   "registrations": [
+    {
+     "t0": 915,
+     "t1": 940,
+     "species": "Thrax Technician Specialist",
+     "x": -691.3,
+     "z": 136.0,
+     "n": 6,
+     "spread_m": 22.0
+    }
+   ]
+  },
+  "1764208": {
+   "map": 1764,
+   "site": "Strider, Firefall Point",
+   "registrations": [
+    {
+     "t0": 1105,
+     "t1": 1122,
+     "species": "Strider",
+     "x": -852.7,
+     "z": -110.3,
+     "n": 5,
+     "spread_m": 51.0
+    }
+   ]
+  },
+  "1764209": {
+   "map": 1764,
+   "site": "Atta Harvester, south Atta Territory",
+   "registrations": [
+    {
+     "t0": 1177,
+     "t1": 1181,
+     "species": "Atta Harvester",
+     "x": -669.5,
+     "z": -235.5,
+     "n": 1,
+     "spread_m": 0.0
+    }
+   ]
+  },
+  "1764210": {
+   "map": 1764,
+   "site": "Atta Harvester Feeder, south Atta Territory",
+   "registrations": [
+    {
+     "t0": 1196,
+     "t1": 1202,
+     "species": "Atta Harvester Feeder",
+     "x": -672.0,
+     "z": -307.5,
+     "n": 2,
+     "spread_m": 2.0
+    }
+   ]
+  },
+  "1759200": {
+   "map": 1759,
+   "site": "Thrax pair, east Mires (810, 222)",
+   "registrations": [
+    {
+     "t0": 3,
+     "t1": 17,
+     "species": "Thrax Technician Sergeant",
+     "x": 808.5,
+     "z": 221.3,
+     "n": 5,
+     "spread_m": 38.0
+    },
+    {
+     "t0": 20,
+     "t1": 20,
+     "species": "Thrax Scavenger",
+     "x": 811.5,
+     "z": 216.5,
+     "n": 3,
+     "spread_m": 18.0
+    },
+    {
+     "t0": 52,
+     "t1": 55,
+     "species": "Thrax Scavenger",
+     "x": 808.5,
+     "z": 231.5,
+     "n": 3,
+     "spread_m": 50.0
+    },
+    {
+     "t0": 57,
+     "t1": 58,
+     "species": "Thrax Technician Sergeant",
+     "x": 812.5,
+     "z": 218.0,
+     "n": 2,
+     "spread_m": 19.0
+    }
+   ]
+  },
+  "1759201": {
+   "map": 1759,
+   "site": "Kael, east Mires (842, 89)",
+   "registrations": [
+    {
+     "t0": 119,
+     "t1": 130,
+     "species": "Kael Master Sergeant",
+     "x": 841.3,
+     "z": 95.7,
+     "n": 5,
+     "spread_m": 26.0
+    },
+    {
+     "t0": 142,
+     "t1": 159,
+     "species": "Kael Master Sergeant",
+     "x": 842.8,
+     "z": 81.2,
+     "n": 6,
+     "spread_m": 62.0
+    }
+   ]
+  },
+  "1759202": {
+   "map": 1759,
+   "site": "Kael, east Mires (817, -19)",
+   "registrations": [
+    {
+     "t0": 167,
+     "t1": 221,
+     "species": "Kael Master Sergeant",
+     "x": 816.9,
+     "z": -18.8,
+     "n": 13,
+     "spread_m": 78.0
+    }
+   ]
+  },
+  "1759203": {
+   "map": 1759,
+   "site": "Kael and Scavenger (701, -60)",
+   "registrations": [
+    {
+     "t0": 248,
+     "t1": 258,
+     "species": "Kael Master Sergeant",
+     "x": 710.2,
+     "z": -57.8,
+     "n": 4,
+     "spread_m": 38.0
+    },
+    {
+     "t0": 261,
+     "t1": 261,
+     "species": "Kael Master Sergeant",
+     "x": 691.2,
+     "z": -62.2,
+     "n": 3,
+     "spread_m": 27.0
+    },
+    {
+     "t0": 262,
+     "t1": 262,
+     "species": "Thrax Scavenger",
+     "x": 686.0,
+     "z": -64.0,
+     "n": 2,
+     "spread_m": 23.0
+    }
+   ]
+  },
+  "1759204": {
+   "map": 1759,
+   "site": "Thrax Scavengers (671, -61)",
+   "registrations": [
+    {
+     "t0": 264,
+     "t1": 276,
+     "species": "Thrax Scavenger",
+     "x": 675.9,
+     "z": -60.9,
+     "n": 5,
+     "spread_m": 39.0
+    },
+    {
+     "t0": 281,
+     "t1": 285,
+     "species": "Thrax Scavenger",
+     "x": 652.0,
+     "z": -57.5,
+     "n": 4,
+     "spread_m": 47.0
+    }
+   ]
+  },
+  "1759205": {
+   "map": 1759,
+   "site": "Comm Officer squad (598, -53)",
+   "registrations": [
+    {
+     "t0": 294,
+     "t1": 314,
+     "species": "Caretaker Comm Officer",
+     "x": 599.8,
+     "z": -53.6,
+     "n": 7,
+     "spread_m": 41.0
+    },
+    {
+     "t0": 315,
+     "t1": 317,
+     "species": "Thrax Scavenger",
+     "x": 590.8,
+     "z": -52.8,
+     "n": 3,
+     "spread_m": 13.0
+    },
+    {
+     "t0": 318,
+     "t1": 375,
+     "species": "Kael Master Sergeant",
+     "x": 602.9,
+     "z": -53.3,
+     "n": 14,
+     "spread_m": 112.0
+    }
+   ]
+  },
+  "1759206": {
+   "map": 1759,
+   "site": "Caretaker Comm Officer (532, -35)",
+   "registrations": [
+    {
+     "t0": 384,
+     "t1": 398,
+     "species": "Caretaker Comm Officer",
+     "x": 532.1,
+     "z": -35.1,
+     "n": 5,
+     "spread_m": 29.0
+    }
+   ]
+  },
+  "1759207": {
+   "map": 1759,
+   "site": "Lightbender Comm Officer (478, -73)",
+   "registrations": [
+    {
+     "t0": 437,
+     "t1": 450,
+     "species": "Lightbender Comm Officer",
+     "x": 478.3,
+     "z": -73.1,
+     "n": 5,
+     "spread_m": 28.0
+    }
+   ]
+  }
+ },
+ "palisades_replacements": [
+  {
+   "table": "creature",
+   "id": 1244001,
+   "column": "level",
+   "old": 15,
+   "new": 18
+  },
+  {
+   "table": "creature",
+   "id": 1244001,
+   "column": "name_id",
+   "old": 0,
+   "new": 7805
+  },
+  {
+   "table": "creature",
+   "id": 1244002,
+   "column": "level",
+   "old": 15,
+   "new": 16
+  },
+  {
+   "table": "creature",
+   "id": 1244002,
+   "column": "name_id",
+   "old": 460,
+   "new": 7957
+  },
+  {
+   "table": "creature",
+   "id": 1244004,
+   "column": "level",
+   "old": 15,
+   "new": 16
+  },
+  {
+   "table": "creature",
+   "id": 1244004,
+   "column": "name_id",
+   "old": 0,
+   "new": 8249
+  },
+  {
+   "table": "creature",
+   "id": 1244005,
+   "column": "level",
+   "old": 15,
+   "new": 17
+  },
+  {
+   "table": "creature",
+   "id": 1244005,
+   "column": "name_id",
+   "old": 9106,
+   "new": 8057
+  },
+  {
+   "table": "spawnpool",
+   "id": 1244201,
+   "column": "pos_x",
+   "old": 60.0,
+   "new": 419.2
+  },
+  {
+   "table": "spawnpool",
+   "id": 1244201,
+   "column": "pos_y",
+   "old": 113.235,
+   "new": 109.767
+  },
+  {
+   "table": "spawnpool",
+   "id": 1244201,
+   "column": "pos_z",
+   "old": 50.0,
+   "new": 368.8
+  },
+  {
+   "table": "spawnpool",
+   "id": 1244201,
+   "column": "creature_1_min_count",
+   "old": 3,
+   "new": 1
+  },
+  {
+   "table": "spawnpool",
+   "id": 1244201,
+   "column": "creature_1_max_count",
+   "old": 3,
+   "new": 1
+  }
+ ],
+ "corroborations": {
+  "Executor Gantic 199054": "IDAug5iUa9c t=119-206: level 18 (target frame read by eye, RS12-006) at the registered (-64, 597); the seeded row (TarapediaMissingNpcBatch: level 18 at (-60, 118.5, 597)) already agrees - no change.",
+  "1067 comm officers": "TaRapedia's walkthrough (rev 35552, 2008-11-09): Caretaker Comm Officer approx. (540, -10), Lightbender approx. (461, -37); the footage's (532, -35) and (478, -73) agree within 40 m.",
+  "Plains Targets of Opportunity": "rCt23ux-kyU t=40 (RS16-003): the tracker counts 'Tuer 100 Pyrosaures' and 'Tuer 100 Electraies' - the final 1619/1829 objectives 56/57 - while the player kills Geyser Chimney Basin Flaregashers.",
+  "OCR refuted": "encounters.json's Flaregasher level 29 (rCt23ux-kyU t=55-71) reads 25 by eye (t=58, t=70); not used."
+ },
+ "overseer_qraal": "oePbrAeDiwk t=37-52: Overseer Qraal (6689) level 23 at the Shard Impact Site; the radar did not register (margin < 0.15) and no catalog mission names him: not seeded.",
+ "unplaced_species": {
+  "Concordia Palisades (Shard Impact Site; then Devil's Den / Fithik Hatchery instances)": {
+   "Caretaker": {
+    "levels_observed(frame_counts)": {
+     "19": 6,
+     "20": 5
+    },
+    "sightings": [
+     "oePbrAeDiwk@29-29s",
+     "oePbrAeDiwk@53-54s",
+     "oePbrAeDiwk@60-62s",
+     "oePbrAeDiwk@71-74s",
+     "oePbrAeDiwk@77-77s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Overseer Qraal": {
+    "levels_observed(frame_counts)": {
+     "23": 16
+    },
+    "sightings": [
+     "oePbrAeDiwk@37-52s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Harmox": {
+    "levels_observed(frame_counts)": {
+     "20": 14
+    },
+    "sightings": [
+     "oePbrAeDiwk@58-59s",
+     "oePbrAeDiwk@63-70s",
+     "oePbrAeDiwk@78-81s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Foreas Howling Maw (Ingruo Valley, Devil's Den/Dead Zone, Cuthah Scout Post)": {
+   "Ferocious Warnet Soldier": {
+    "levels_observed(frame_counts)": {
+     "48": 11,
+     "49": 15
+    },
+    "sightings": [
+     "FpevZX2qIT8@3258-3264s",
+     "FpevZX2qIT8@3273-3283s",
+     "FpevZX2qIT8@3285-3285s",
+     "FpevZX2qIT8@3304-3306s",
+     "FpevZX2qIT8@3315-3321s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Filcher Embezzler": {
+    "levels_observed(frame_counts)": {
+     "49": 19
+    },
+    "sightings": [
+     "FpevZX2qIT8@3325-3330s",
+     "FpevZX2qIT8@3346-3358s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Xanx Slayer": {
+    "levels_observed(frame_counts)": {
+     "47": 4
+    },
+    "sightings": [
+     "FpevZX2qIT8@3369-3374s",
+     "FpevZX2qIT8@3377-3378s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Amoeboid Putrescence": {
+    "levels_observed(frame_counts)": {
+     "53": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@3463-3465s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Neurosurgeon": {
+    "levels_observed(frame_counts)": {
+     "53": 4
+    },
+    "sightings": [
+     "FpevZX2qIT8@3469-3471s",
+     "FpevZX2qIT8@3478-3478s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class X Shield Drone": {
+    "levels_observed(frame_counts)": {
+     "51": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@3665-3665s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Nitroglazer": {
+    "levels_observed(frame_counts)": {
+     "52": 2
+    },
+    "sightings": [
+     "FpevZX2qIT8@3887-3887s",
+     "FpevZX2qIT8@3889-3889s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Torden Abyss": {
+   "Copper Barb Tick": {
+    "levels_observed(frame_counts)": {
+     "25": 7
+    },
+    "sightings": [
+     "Ez7Vb6vdjl0@32-38s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Nickel Barb Tick": {
+    "levels_observed(frame_counts)": {
+     "24": 14,
+     "23": 16,
+     "22": 5
+    },
+    "sightings": [
+     "Ez7Vb6vdjl0@41-49s",
+     "Ez7Vb6vdjl0@51-54s",
+     "Ez7Vb6vdjl0@56-61s",
+     "Ez7Vb6vdjl0@65-70s",
+     "Ez7Vb6vdjl0@77-88s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Crab Mine": {
+    "levels_observed(frame_counts)": {
+     "23": 5
+    },
+    "sightings": [
+     "Ez7Vb6vdjl0@50-50s",
+     "Ez7Vb6vdjl0@55-55s",
+     "Ez7Vb6vdjl0@62-64s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Beam Manta": {
+    "levels_observed(frame_counts)": {
+     "20": 12
+    },
+    "sightings": [
+     "Ez7Vb6vdjl0@114-125s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Torden Mires": {
+   "Thrax Technician Sergeant": {
+    "levels_observed(frame_counts)": {
+     "29": 16
+    },
+    "sightings": [
+     "C2rGwo6fLw0@3-17s",
+     "C2rGwo6fLw0@57-58s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      808.5,
+      221.3
+     ],
+     [
+      812.5,
+      218.0
+     ]
+    ]
+   },
+   "Thrax Scavenger": {
+    "levels_observed(frame_counts)": {
+     "30": 24,
+     "28": 7
+    },
+    "sightings": [
+     "C2rGwo6fLw0@20-20s",
+     "C2rGwo6fLw0@52-55s",
+     "C2rGwo6fLw0@262-262s",
+     "C2rGwo6fLw0@264-276s",
+     "C2rGwo6fLw0@281-285s",
+     "C2rGwo6fLw0@315-317s",
+     "FpevZX2qIT8@252-260s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      811.5,
+      216.5
+     ],
+     [
+      808.5,
+      231.5
+     ],
+     [
+      686.0,
+      -64.0
+     ],
+     [
+      675.9,
+      -60.9
+     ],
+     [
+      652.0,
+      -57.5
+     ],
+     [
+      590.8,
+      -52.8
+     ]
+    ]
+   },
+   "Kael Master Sergeant": {
+    "levels_observed(frame_counts)": {
+     "29": 148
+    },
+    "sightings": [
+     "C2rGwo6fLw0@119-130s",
+     "C2rGwo6fLw0@142-159s",
+     "C2rGwo6fLw0@167-221s",
+     "C2rGwo6fLw0@248-258s",
+     "C2rGwo6fLw0@261-261s",
+     "C2rGwo6fLw0@318-375s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      841.3,
+      95.7
+     ],
+     [
+      842.8,
+      81.2
+     ],
+     [
+      816.9,
+      -18.8
+     ],
+     [
+      710.2,
+      -57.8
+     ],
+     [
+      691.2,
+      -62.2
+     ],
+     [
+      602.9,
+      -53.3
+     ]
+    ]
+   },
+   "Caretaker Comm Officer": {
+    "levels_observed(frame_counts)": {
+     "29": 30,
+     "28": 6
+    },
+    "sightings": [
+     "C2rGwo6fLw0@294-314s",
+     "C2rGwo6fLw0@384-398s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      599.8,
+      -53.6
+     ],
+     [
+      532.1,
+      -35.1
+     ]
+    ]
+   },
+   "Lightbender Comm Officer": {
+    "levels_observed(frame_counts)": {
+     "30": 14
+    },
+    "sightings": [
+     "C2rGwo6fLw0@437-450s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      478.3,
+      -73.1
+     ]
+    ]
+   },
+   "Beam Manta Drifter": {
+    "levels_observed(frame_counts)": {
+     "31": 16
+    },
+    "sightings": [
+     "FpevZX2qIT8@229-244s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Torden Mires (Iapyx CP / Fort Haroun)": {
+   "Flaregasher": {
+    "levels_observed(frame_counts)": {
+     "28": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@4459-4461s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Light Bender": {
+    "levels_observed(frame_counts)": {
+     "28": 7
+    },
+    "sightings": [
+     "FpevZX2qIT8@4471-4477s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Demon Pup Howler": {
+    "levels_observed(frame_counts)": {
+     "36": 55,
+     "35": 25,
+     "34": 33
+    },
+    "sightings": [
+     "FpevZX2qIT8@4505-4511s",
+     "FpevZX2qIT8@4517-4518s",
+     "FpevZX2qIT8@4527-4527s",
+     "FpevZX2qIT8@4529-4535s",
+     "FpevZX2qIT8@5369-5369s",
+     "FpevZX2qIT8@5372-5372s",
+     "FpevZX2qIT8@5387-5387s",
+     "FpevZX2qIT8@5421-5422s",
+     "FpevZX2qIT8@5652-5660s",
+     "FpevZX2qIT8@5667-5667s",
+     "FpevZX2qIT8@5669-5672s",
+     "FpevZX2qIT8@5699-5699s",
+     "FpevZX2qIT8@5713-5716s",
+     "FpevZX2qIT8@5778-5779s",
+     "FpevZX2qIT8@5816-5816s",
+     "FpevZX2qIT8@5876-5890s",
+     "FpevZX2qIT8@5894-5898s",
+     "FpevZX2qIT8@5918-5918s",
+     "FpevZX2qIT8@5930-5930s",
+     "FpevZX2qIT8@6068-6069s",
+     "FpevZX2qIT8@6075-6076s",
+     "FpevZX2qIT8@6089-6096s",
+     "FpevZX2qIT8@6099-6099s",
+     "FpevZX2qIT8@6120-6120s",
+     "FpevZX2qIT8@6169-6175s",
+     "FpevZX2qIT8@6189-6196s",
+     "FpevZX2qIT8@6219-6226s",
+     "FpevZX2qIT8@6233-6237s",
+     "FpevZX2qIT8@6239-6246s",
+     "FpevZX2qIT8@6257-6257s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Hunter Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 25,
+     "36": 26,
+     "34": 47
+    },
+    "sightings": [
+     "FpevZX2qIT8@4512-4512s",
+     "FpevZX2qIT8@4522-4522s",
+     "FpevZX2qIT8@4528-4528s",
+     "FpevZX2qIT8@4690-4694s",
+     "FpevZX2qIT8@4706-4710s",
+     "FpevZX2qIT8@4844-4844s",
+     "FpevZX2qIT8@4857-4860s",
+     "FpevZX2qIT8@5283-5284s",
+     "FpevZX2qIT8@5295-5295s",
+     "FpevZX2qIT8@5351-5351s",
+     "FpevZX2qIT8@5419-5419s",
+     "FpevZX2qIT8@5668-5668s",
+     "FpevZX2qIT8@5677-5678s",
+     "FpevZX2qIT8@5719-5719s",
+     "FpevZX2qIT8@5724-5729s",
+     "FpevZX2qIT8@5731-5731s",
+     "FpevZX2qIT8@5742-5743s",
+     "FpevZX2qIT8@5753-5753s",
+     "FpevZX2qIT8@5799-5802s",
+     "FpevZX2qIT8@5810-5810s",
+     "FpevZX2qIT8@5822-5822s",
+     "FpevZX2qIT8@5824-5824s",
+     "FpevZX2qIT8@5852-5857s",
+     "FpevZX2qIT8@5872-5875s",
+     "FpevZX2qIT8@5891-5893s",
+     "FpevZX2qIT8@5986-5992s",
+     "FpevZX2qIT8@6044-6046s",
+     "FpevZX2qIT8@6058-6058s",
+     "FpevZX2qIT8@6072-6073s",
+     "FpevZX2qIT8@6086-6086s",
+     "FpevZX2qIT8@6100-6109s",
+     "FpevZX2qIT8@6131-6131s",
+     "FpevZX2qIT8@6134-6134s",
+     "FpevZX2qIT8@6142-6142s",
+     "FpevZX2qIT8@6155-6156s",
+     "FpevZX2qIT8@6158-6158s",
+     "FpevZX2qIT8@6160-6161s",
+     "FpevZX2qIT8@6163-6165s",
+     "FpevZX2qIT8@6209-6215s",
+     "FpevZX2qIT8@6227-6230s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Jack Frost": {
+    "levels_observed(frame_counts)": {
+     "35": 4,
+     "34": 5
+    },
+    "sightings": [
+     "FpevZX2qIT8@4519-4519s",
+     "FpevZX2qIT8@4843-4843s",
+     "FpevZX2qIT8@4846-4847s",
+     "FpevZX2qIT8@5909-5909s",
+     "FpevZX2qIT8@5994-5997s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Infantry Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 33,
+     "36": 93,
+     "34": 78,
+     "38": 2
+    },
+    "sightings": [
+     "FpevZX2qIT8@4520-4521s",
+     "FpevZX2qIT8@4523-4526s",
+     "FpevZX2qIT8@4850-4850s",
+     "FpevZX2qIT8@4862-4862s",
+     "FpevZX2qIT8@5273-5274s",
+     "FpevZX2qIT8@5279-5282s",
+     "FpevZX2qIT8@5285-5294s",
+     "FpevZX2qIT8@5296-5311s",
+     "FpevZX2qIT8@5366-5368s",
+     "FpevZX2qIT8@5370-5371s",
+     "FpevZX2qIT8@5377-5382s",
+     "FpevZX2qIT8@5384-5386s",
+     "FpevZX2qIT8@5388-5418s",
+     "FpevZX2qIT8@5420-5420s",
+     "FpevZX2qIT8@5649-5650s",
+     "FpevZX2qIT8@5675-5676s",
+     "FpevZX2qIT8@5679-5690s",
+     "FpevZX2qIT8@5697-5698s",
+     "FpevZX2qIT8@5700-5712s",
+     "FpevZX2qIT8@5717-5718s",
+     "FpevZX2qIT8@5720-5723s",
+     "FpevZX2qIT8@5730-5730s",
+     "FpevZX2qIT8@5732-5740s",
+     "FpevZX2qIT8@5744-5747s",
+     "FpevZX2qIT8@5750-5752s",
+     "FpevZX2qIT8@5754-5762s",
+     "FpevZX2qIT8@5780-5780s",
+     "FpevZX2qIT8@5789-5789s",
+     "FpevZX2qIT8@5792-5798s",
+     "FpevZX2qIT8@5804-5805s",
+     "FpevZX2qIT8@5807-5807s",
+     "FpevZX2qIT8@5814-5815s",
+     "FpevZX2qIT8@5817-5817s",
+     "FpevZX2qIT8@5819-5819s",
+     "FpevZX2qIT8@5825-5828s",
+     "FpevZX2qIT8@5830-5831s",
+     "FpevZX2qIT8@5846-5848s",
+     "FpevZX2qIT8@5851-5851s",
+     "FpevZX2qIT8@5924-5929s",
+     "FpevZX2qIT8@5984-5985s",
+     "FpevZX2qIT8@5993-5993s",
+     "FpevZX2qIT8@6070-6071s",
+     "FpevZX2qIT8@6074-6074s",
+     "FpevZX2qIT8@6110-6116s",
+     "FpevZX2qIT8@6123-6123s",
+     "FpevZX2qIT8@6132-6132s",
+     "FpevZX2qIT8@6135-6135s",
+     "FpevZX2qIT8@6140-6141s",
+     "FpevZX2qIT8@6145-6146s",
+     "FpevZX2qIT8@6162-6162s",
+     "FpevZX2qIT8@6168-6168s",
+     "FpevZX2qIT8@6231-6231s",
+     "FpevZX2qIT8@6250-6256s",
+     "FpevZX2qIT8@6258-6258s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Pharmacologist": {
+    "levels_observed(frame_counts)": {
+     "35": 3,
+     "36": 9,
+     "34": 7
+    },
+    "sightings": [
+     "FpevZX2qIT8@4646-4647s",
+     "FpevZX2qIT8@5651-5651s",
+     "FpevZX2qIT8@5741-5741s",
+     "FpevZX2qIT8@5803-5803s",
+     "FpevZX2qIT8@5808-5808s",
+     "FpevZX2qIT8@5836-5840s",
+     "FpevZX2qIT8@5849-5849s",
+     "FpevZX2qIT8@5866-5870s",
+     "FpevZX2qIT8@5960-5960s",
+     "FpevZX2qIT8@6232-6232s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class IX Shield Drone": {
+    "levels_observed(frame_counts)": {
+     "35": 2,
+     "34": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@4854-4855s",
+     "FpevZX2qIT8@5900-5902s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Sudar": {
+    "levels_observed(frame_counts)": {
+     "33": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@5634-5638s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Gears": {
+    "levels_observed(frame_counts)": {
+     "34": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@5664-5664s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Kael Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "34": 25,
+     "36": 6,
+     "35": 8
+    },
+    "sightings": [
+     "FpevZX2qIT8@5777-5777s",
+     "FpevZX2qIT8@5788-5788s",
+     "FpevZX2qIT8@5791-5791s",
+     "FpevZX2qIT8@5809-5809s",
+     "FpevZX2qIT8@5811-5811s",
+     "FpevZX2qIT8@5821-5821s",
+     "FpevZX2qIT8@5904-5907s",
+     "FpevZX2qIT8@5913-5917s",
+     "FpevZX2qIT8@5921-5923s",
+     "FpevZX2qIT8@5956-5959s",
+     "FpevZX2qIT8@5961-5969s",
+     "FpevZX2qIT8@6143-6144s",
+     "FpevZX2qIT8@6147-6152s",
+     "FpevZX2qIT8@6154-6154s",
+     "FpevZX2qIT8@6218-6218s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Crab Mine": {
+    "levels_observed(frame_counts)": {
+     "29": 4,
+     "35": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@5818-5818s",
+     "FpevZX2qIT8@5903-5903s",
+     "FpevZX2qIT8@5941-5941s",
+     "FpevZX2qIT8@5943-5943s",
+     "FpevZX2qIT8@6238-6238s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Amoeboid Sleaze": {
+    "levels_observed(frame_counts)": {
+     "34": 2
+    },
+    "sightings": [
+     "FpevZX2qIT8@5919-5920s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Amoeboid Spawn": {
+    "levels_observed(frame_counts)": {
+     "34": 2
+    },
+    "sightings": [
+     "FpevZX2qIT8@5940-5940s",
+     "FpevZX2qIT8@5942-5942s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Light Bender Lt.": {
+    "levels_observed(frame_counts)": {
+     "34": 10
+    },
+    "sightings": [
+     "FpevZX2qIT8@5945-5955s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Physician": {
+    "levels_observed(frame_counts)": {
+     "33": 12
+    },
+    "sightings": [
+     "FpevZX2qIT8@6052-6057s",
+     "FpevZX2qIT8@6059-6063s",
+     "FpevZX2qIT8@6067-6067s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Alpha Fiend Howler": {
+    "levels_observed(frame_counts)": {
+     "33": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@6087-6088s",
+     "FpevZX2qIT8@6137-6137s",
+     "FpevZX2qIT8@6157-6157s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Infantry Master Sergeant": {
+    "levels_observed(frame_counts)": {
+     "33": 14
+    },
+    "sightings": [
+     "FpevZX2qIT8@6117-6119s",
+     "FpevZX2qIT8@6121-6122s",
+     "FpevZX2qIT8@6124-6130s",
+     "FpevZX2qIT8@6136-6136s",
+     "FpevZX2qIT8@6166-6167s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Torden Plains": {
+   "Nitroglazer": {
+    "levels_observed(frame_counts)": {
+     "22": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@315-318s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Technician Specialist": {
+    "levels_observed(frame_counts)": {
+     "22": 4,
+     "24": 10,
+     "23": 1,
+     "21": 26
+    },
+    "sightings": [
+     "FpevZX2qIT8@319-331s",
+     "rCt23ux-kyU@354-355s",
+     "rCt23ux-kyU@366-366s",
+     "rCt23ux-kyU@915-940s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Intern": {
+    "levels_observed(frame_counts)": {
+     "21": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@1617-1617s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Infantry Specialist": {
+    "levels_observed(frame_counts)": {
+     "22": 8,
+     "24": 19
+    },
+    "sightings": [
+     "FpevZX2qIT8@1619-1625s",
+     "FpevZX2qIT8@1628-1631s",
+     "rCt23ux-kyU@118-118s",
+     "rCt23ux-kyU@297-300s",
+     "rCt23ux-kyU@352-353s",
+     "rCt23ux-kyU@356-365s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -68.5,
+      225.5
+     ]
+    ]
+   },
+   "Class X Predator": {
+    "levels_observed(frame_counts)": {
+     "22": 7
+    },
+    "sightings": [
+     "FpevZX2qIT8@1632-1638s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Flaregasher": {
+    "levels_observed(frame_counts)": {
+     "20": 39,
+     "25": 22,
+     "29": 5
+    },
+    "sightings": [
+     "FpevZX2qIT8@1665-1670s",
+     "rCt23ux-kyU@31-74s",
+     "rCt23ux-kyU@190-211s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -123.9,
+      120.9
+     ],
+     [
+      -158.7,
+      610.8
+     ]
+    ]
+   },
+   "Strider": {
+    "levels_observed(frame_counts)": {
+     "23": 32,
+     "20": 6
+    },
+    "sightings": [
+     "FpevZX2qIT8@1681-1694s",
+     "rCt23ux-kyU@95-101s",
+     "rCt23ux-kyU@1105-1122s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -71.8,
+      216.8
+     ]
+    ]
+   },
+   "Thrax Infantry Corporal": {
+    "levels_observed(frame_counts)": {
+     "25": 7,
+     "26": 35,
+     "27": 29,
+     "22": 4
+    },
+    "sightings": [
+     "FpevZX2qIT8@1735-1735s",
+     "FpevZX2qIT8@1754-1754s",
+     "FpevZX2qIT8@1762-1762s",
+     "FpevZX2qIT8@1766-1767s",
+     "FpevZX2qIT8@1773-1773s",
+     "FpevZX2qIT8@1782-1784s",
+     "rCt23ux-kyU@319-319s",
+     "rCt23ux-kyU@321-332s",
+     "rCt23ux-kyU@343-343s",
+     "rCt23ux-kyU@367-371s",
+     "rCt23ux-kyU@374-378s",
+     "rCt23ux-kyU@410-410s",
+     "rCt23ux-kyU@412-425s",
+     "rCt23ux-kyU@431-431s",
+     "rCt23ux-kyU@435-445s",
+     "rCt23ux-kyU@447-449s",
+     "rCt23ux-kyU@451-451s",
+     "rCt23ux-kyU@455-456s",
+     "rCt23ux-kyU@458-459s",
+     "rCt23ux-kyU@471-476s",
+     "rCt23ux-kyU@478-500s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Technician Corporal": {
+    "levels_observed(frame_counts)": {
+     "25": 1,
+     "27": 7,
+     "26": 5
+    },
+    "sightings": [
+     "FpevZX2qIT8@1747-1751s",
+     "FpevZX2qIT8@1755-1758s",
+     "rCt23ux-kyU@372-373s",
+     "rCt23ux-kyU@429-430s",
+     "rCt23ux-kyU@434-434s",
+     "rCt23ux-kyU@450-450s",
+     "rCt23ux-kyU@460-464s",
+     "rCt23ux-kyU@470-470s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class VI Shield Drone": {
+    "levels_observed(frame_counts)": {
+     "25": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@1779-1781s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class V Shield Drone": {
+    "levels_observed(frame_counts)": {
+     "21": 1
+    },
+    "sightings": [
+     "rCt23ux-kyU@113-113s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -70.5,
+      223.5
+     ]
+    ]
+   },
+   "Hunter Sergeant": {
+    "levels_observed(frame_counts)": {
+     "22": 8
+    },
+    "sightings": [
+     "rCt23ux-kyU@115-117s",
+     "rCt23ux-kyU@120-124s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -69.2,
+      224.8
+     ],
+     [
+      -67.5,
+      237.2
+     ]
+    ]
+   },
+   "Fiend Pup Howler": {
+    "levels_observed(frame_counts)": {
+     "22": 8
+    },
+    "sightings": [
+     "rCt23ux-kyU@126-134s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -66.5,
+      241.8
+     ]
+    ]
+   },
+   "Beam Manta Wafter": {
+    "levels_observed(frame_counts)": {
+     "21": 10,
+     "22": 7
+    },
+    "sightings": [
+     "rCt23ux-kyU@147-157s",
+     "rCt23ux-kyU@284-290s"
+    ],
+    "measured_player_positions_xz": [
+     [
+      -244.5,
+      557.8
+     ],
+     [
+      -88.0,
+      575.0
+     ]
+    ]
+   },
+   "Crab Mine": {
+    "levels_observed(frame_counts)": {
+     "25": 3
+    },
+    "sightings": [
+     "rCt23ux-kyU@347-347s",
+     "rCt23ux-kyU@446-446s",
+     "rCt23ux-kyU@1215-1215s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Atta Harvester Gatherer": {
+    "levels_observed(frame_counts)": {
+     "25": 5
+    },
+    "sightings": [
+     "rCt23ux-kyU@723-727s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Atta Harvester Feeder": {
+    "levels_observed(frame_counts)": {
+     "21": 34,
+     "23": 19,
+     "22": 1,
+     "24": 8
+    },
+    "sightings": [
+     "rCt23ux-kyU@735-741s",
+     "rCt23ux-kyU@743-744s",
+     "rCt23ux-kyU@752-753s",
+     "rCt23ux-kyU@761-761s",
+     "rCt23ux-kyU@775-780s",
+     "rCt23ux-kyU@785-790s",
+     "rCt23ux-kyU@797-820s",
+     "rCt23ux-kyU@852-858s",
+     "rCt23ux-kyU@1031-1031s",
+     "rCt23ux-kyU@1196-1202s",
+     "rCt23ux-kyU@1206-1206s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Atta Soldier Conscript": {
+    "levels_observed(frame_counts)": {
+     "20": 6,
+     "24": 39
+    },
+    "sightings": [
+     "rCt23ux-kyU@742-742s",
+     "rCt23ux-kyU@745-751s",
+     "rCt23ux-kyU@754-760s",
+     "rCt23ux-kyU@762-765s",
+     "rCt23ux-kyU@821-851s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Bane Light Ordnance": {
+    "levels_observed(frame_counts)": {
+     "22": 21
+    },
+    "sightings": [
+     "rCt23ux-kyU@1016-1030s",
+     "rCt23ux-kyU@1032-1037s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Atta Harvester": {
+    "levels_observed(frame_counts)": {
+     "20": 23,
+     "29": 1
+    },
+    "sightings": [
+     "rCt23ux-kyU@1177-1181s",
+     "rCt23ux-kyU@1203-1205s",
+     "rCt23ux-kyU@1208-1214s",
+     "rCt23ux-kyU@1216-1225s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Torden Plains (Irendas)": {
+   "Strider": {
+    "levels_observed(frame_counts)": {
+     "23": 1
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@0-0s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Intern": {
+    "levels_observed(frame_counts)": {
+     "21": 2
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@1-1s",
+     "g5TA6gy7Rb4@13-13s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Brann": {
+    "levels_observed(frame_counts)": {
+     "20": 2
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@216-217s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Pyroglazer Slayer": {
+    "levels_observed(frame_counts)": {
+     "30": 1
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@225-225s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Shield Drone Slayer": {
+    "levels_observed(frame_counts)": {
+     "30": 2
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@226-227s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Felorr": {
+    "levels_observed(frame_counts)": {
+     "30": 1
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@229-229s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Nitroglazer Slayer": {
+    "levels_observed(frame_counts)": {
+     "30": 5
+    },
+    "sightings": [
+     "g5TA6gy7Rb4@242-246s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Valverde Plateau": {
+   "Class V Stalker": {
+    "levels_observed(frame_counts)": {
+     "33": 3
+    },
+    "sightings": [
+     "FpevZX2qIT8@2421-2421s",
+     "FpevZX2qIT8@2434-2435s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class X Stalker": {
+    "levels_observed(frame_counts)": {
+     "33": 1,
+     "34": 19
+    },
+    "sightings": [
+     "FpevZX2qIT8@2423-2423s",
+     "FpevZX2qIT8@2539-2543s",
+     "FpevZX2qIT8@2549-2552s",
+     "FpevZX2qIT8@2555-2562s",
+     "FpevZX2qIT8@2575-2575s",
+     "FpevZX2qIT8@2580-2580s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Bane Howitzer": {
+    "levels_observed(frame_counts)": {
+     "33": 19
+    },
+    "sightings": [
+     "FpevZX2qIT8@2449-2461s",
+     "FpevZX2qIT8@2464-2469s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Kael Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 5,
+     "36": 12
+    },
+    "sightings": [
+     "FpevZX2qIT8@2481-2485s",
+     "FpevZX2qIT8@2610-2621s",
+     "FpevZX2qIT8@2626-2626s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Infantry Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 1,
+     "37": 10
+    },
+    "sightings": [
+     "FpevZX2qIT8@2487-2487s",
+     "FpevZX2qIT8@2494-2501s",
+     "FpevZX2qIT8@2503-2507s",
+     "FpevZX2qIT8@2523-2524s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Hunter Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@2488-2488s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Caretaker Pharmacologist": {
+    "levels_observed(frame_counts)": {
+     "35": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@2493-2493s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class X Shield Drone": {
+    "levels_observed(frame_counts)": {
+     "37": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@2509-2509s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Thrax Technician Warrant Officer": {
+    "levels_observed(frame_counts)": {
+     "35": 1
+    },
+    "sightings": [
+     "FpevZX2qIT8@2521-2521s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Class IX Stalker": {
+    "levels_observed(frame_counts)": {
+     "34": 6
+    },
+    "sightings": [
+     "FpevZX2qIT8@2553-2554s",
+     "FpevZX2qIT8@2576-2579s"
+    ],
+    "measured_player_positions_xz": []
+   },
+   "Outraged Warnet Soldier": {
+    "levels_observed(frame_counts)": {
+     "35": 11
+    },
+    "sightings": [
+     "FpevZX2qIT8@2563-2573s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  },
+  "Warnet Caverns (Palisades instance; radar 'Research Base Camp'/'Upper Chambers')": {
+   "Irate Warnet Soldier": {
+    "levels_observed(frame_counts)": {
+     "19": 7,
+     "18": 39
+    },
+    "sightings": [
+     "Nsz75UOlZz0@157-186s",
+     "Nsz75UOlZz0@191-206s"
+    ],
+    "measured_player_positions_xz": []
+   }
+  }
+ },
+ "unplaced_note": "Species and levels only (OCR, not all verified by eye). Torden Abyss (#13), Valverde Plateau/Eloh Forum (#18, shutdown day), Howling Maw (#18) and the unregistered Plains/Mires/Palisades sightings are recorded here for later; none is seeded.",
+ "held": [
+  "Plains Corporals, Caretaker Medico, Crab Mine, Bane Light Ordnance, Class X Predator and the Class V Shield Drone; Mires Warrant Officers, Demon Pup Howlers, Caretaker Pharmacologists",
+  "Torden Abyss, Valverde Plateau and Howling Maw ambient species",
+  "Overseer Qraal (level 23, Shard Impact Site)",
+  "952 Party Gashers, 1587 Manta Beam Hill, 1619/1829 Plains and 1585 Mires Targets of Opportunity, 627 Mine Layer Hunt, 1016 Pretty, Shiny Things",
+  "1067's item reward ('Modifications')"
+ ]
+}

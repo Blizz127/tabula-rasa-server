@@ -1141,3 +1141,20 @@ Palisades".
 | 342, 1808 (Palisades) | unseeded | defined; Boargar + Shahrbaraz; twenty Fithik and the east mouth | client objectives; TaRapedia | inferred (OD-169, OD-170) |
 | 368 | skipped its Warnet kill in Kogari's first conversation | counts five Warnets; row withheld; timer still held | client 368/1 counter; TaRapedia; Brady | inferred (OD-168) |
 | Hominis Machina, Amoeboids, Predators, 1582 | - | held | no place / no final-era source | gap |
+## Torden Plains, Torden Mires and Palisades from footage (2026-09-27)
+
+Built under OD-176 from the Raisuly 1080p captures #10, #12, #16 and #17 (2008-11-22 to 2009-02-27), read by eye on
+crop sheets, with radar registrations for places. Tiers and gaps: the manifest rows and changes of
+`FootageAmbientPopulations` and OD-176 to OD-181. Account: `docs/retail-accuracy.md`, "Torden Plains, Torden Mires and
+Palisades from footage".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Torden Plains ambient creatures | none (vendors, NPCs, upstream bosses only) | 11 pools, 18 creatures: Flaregashers, Striders, a Hunter/Thrax/Howler group, Beam Mantas, Atta Harvesters and a Soldier, Thrax Technicians | rCt23ux-kyU target frames and radar | species/levels observed, places measured +/-50 m |
+| Torden Mires ambient creatures | none | 8 pools, 13 creatures: Thrax Technician Sergeant, Scavengers, Kael Master Sergeants, Caretaker and Lightbender Comm Officers | C2rGwo6fLw0; TaRapedia Thrax Soldier (Scavenger pairs) | observed/measured; one count inferred |
+| Palisades new sites | none | 6 pools, 16 creatures: Treemites, three Cumbria Weald Bane squads, a Boargar, Gantic's escort | Nsz75UOlZz0, IDAug5iUa9c | observed/measured; Treemite split inferred |
+| Palisades analogue levels/names (1244001/2/4/5) | 15, generic names (OD-162) | 18/16/16/17, Mature Forest Boargar, Irate Warnet Soldier, Hunter Corporal, Thrax Technician PFC | target frames | observed; names original |
+| Palisades Warnet pool 1244201 | analogue place east of Hightower, 3 | Forean Ruins (419.2, 368.8), 1 | Nsz75UOlZz0 t=27-34 | measured, observed (OD-179) |
+| creature stats, respawn, group sizes | - | world-seed counterparts; 20; the fewest the footage shows | OD-177, OD-178 | analogue / observed lower bound |
+| 1067 Can't Survive Without My Radio | unseeded | defined at Major Ston; comm devices from the two officers; 66,000 XP / 5,800 cr | client objectives; TaRapedia rev 33372 (post-1.4), walkthrough spots | inferred; level and drop analogue |
+| unregistered species, Abyss, Plateau, Howling Maw | - | recorded in the evidence file, not seeded | footage study | gap |
