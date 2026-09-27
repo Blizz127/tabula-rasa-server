@@ -5093,3 +5093,26 @@ after a teleport of 40 m or more on the same map.
   Rollback: re-pin `rasa_net_game:dit-20260927c` (`docker-compose.dit.yml.before-20260927d`) and relaunch Game.
 - **Startup**: navmeshes 75/75, 16 rules, 573 rows, 0 gaps; Auth authenticated; `dit/status.json` enabled and
   fresh; `/app/dit` mounted.
+
+## 2026-09-27 22:04 UTC (17:04 CDT) — Deploy: the unbound-key fix and DIT party chat on banshee-ax41
+
+The owner was offline; the Devbox Coordinator relayed the go for the post-logoff deploy.
+
+- **The keybinding disconnect**: rebinding autorun made the client send the cleared binding as the empty unicode
+  string (0x50). `PythonReader.ReadUnicodeString` returns null for it, and `SaveUserOptions` failed on
+  `user_option.value`'s NOT NULL constraint ("SQLite Error 19" at 21:43:46 and 21:45:07 UTC), and the packet handler
+  dropped the session. Development 77504e4 reads it as an empty string; `UserOptionsPacketTests` covers it (full
+  suite 1536/1536 with the world database).
+- **DIT party chat** (`~/scratch/tr-fixes/party-chat`, copied to
+  `~/backups/rasa-net/research/20260927-dit-party-chat`): `DitBanter.cs` plus two try/catch-guarded hooks in
+  `CreatureManager.HandleCreatureKill` and `DynamicObjectManager.CaptureControlPointRecovery`; the overlay now
+  covers 9 files. The full suite with the world database and the overlay gave 1589/1589.
+- **Images**: base `rasa_net_game:latest` / `rasa_net_auth` 4eb62cd73539 from `git archive 77504e4` (auth was not
+  restarted; its code is unchanged); `rasa_net_game:dit-20260927f` 0d66f45a0e5a from branch `deploy-20260927e` with
+  the overlay; 0 compiler errors. Only Game was relaunched.
+- **Backups**: `~/backups/rasa-net/predeploy-20260927T215822Z/` holds the three databases (integrity_check ok),
+  compose files, appsettings, and the previous overlay. Rollback: re-pin `rasa_net_game:dit-20260927d`
+  (`docker-compose.dit.yml.before-20260927f`) and relaunch Game.
+- **Startup**: navmeshes 75/75, 16 rules, 573 rows, 0 gaps, Auth authenticated, `dit/status.json` enabled and fresh,
+  `/app/dit` mounted.
+- **Not yet verified in play**: a key rebind and the bots' party-chat lines.
